@@ -5,49 +5,41 @@
  * RFP response tracking, and win/loss analysis.
  */
 
-import React, { useState } from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
+import { cn } from '@/utils/cn';
 import {
-  Target,
-  TrendingUp,
-  DollarSign,
-  Users,
-  FileText,
   Award,
-  XCircle,
-  Clock,
-  CheckCircle2,
   BarChart3,
-  PieChart,
   Calendar,
-  Send,
-  Edit,
-  Eye,
-  Download,
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  FileText,
   Plus,
-  ArrowUpRight,
-  Filter,
-  Search
+  Search,
+  Target,
+  Users,
+  XCircle
 } from 'lucide-react';
+import React, { useState } from 'react';
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
+  Legend,
+  Line,
+  LineChart,
   Pie,
   PieChart as RechartPieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
-  Legend,
-  Line,
-  LineChart
+  YAxis
 } from 'recharts';
 
 // ============================================================================
@@ -141,7 +133,6 @@ export const BusinessDevelopment: React.FC = () => {
   const chartColors = ChartColorService.getPalette(mode);
   const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<'leads' | 'pitches' | 'rfps' | 'analysis'>('leads');
-  const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
   // Mock data
   const leads: Lead[] = [
@@ -338,7 +329,6 @@ export const BusinessDevelopment: React.FC = () => {
   ];
 
   // Calculate metrics
-  const totalLeads = leads.length;
   const activeLeads = leads.filter(l => !['Won', 'Lost'].includes(l.status)).length;
   const pipelineValue = leads
     .filter(l => !['Won', 'Lost'].includes(l.status))
@@ -419,9 +409,9 @@ export const BusinessDevelopment: React.FC = () => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     lead.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    lead.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    lead.status === 'Proposal' || lead.status === 'Negotiation' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                      lead.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                        lead.status === 'Proposal' || lead.status === 'Negotiation' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                   )}>
                     {lead.status}
                   </span>
@@ -498,9 +488,9 @@ export const BusinessDevelopment: React.FC = () => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     pitch.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    pitch.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    pitch.status === 'Completed' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                      pitch.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                        pitch.status === 'Completed' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                   )}>
                     {pitch.status}
                   </span>
@@ -580,9 +570,9 @@ export const BusinessDevelopment: React.FC = () => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     rfp.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    rfp.status === 'Lost' || rfp.status === 'Declined' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    rfp.status === 'Submitted' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                      rfp.status === 'Lost' || rfp.status === 'Declined' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                        rfp.status === 'Submitted' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                   )}>
                     {rfp.status}
                   </span>
@@ -647,9 +637,9 @@ export const BusinessDevelopment: React.FC = () => {
                       <span className={cn(
                         "px-2 py-0.5 rounded text-xs",
                         section.status === 'Complete' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                        section.status === 'Review' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                        section.status === 'In Progress' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                        "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+                          section.status === 'Review' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                            section.status === 'In Progress' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                              "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
                       )}>
                         {section.status}
                       </span>

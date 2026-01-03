@@ -53,45 +53,49 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Open Drawer</Button>
-        <Drawer
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Case Details"
-        >
-          <div className="space-y-4">
-            <p>This is a drawer panel from the right side.</p>
-            <p>Add any content here.</p>
-          </div>
-        </Drawer>
-      </div>
-    );
-  },
+const DefaultComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Open Drawer</Button>
+      <Drawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Case Details"
+      >
+        <div className="space-y-4">
+          <p>This is a drawer panel from the right side.</p>
+          <p>Add any content here.</p>
+        </div>
+      </Drawer>
+    </div>
+  );
 };
 
-export const Wide: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Open Wide Drawer</Button>
-        <Drawer
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Filters"
-          width="max-w-2xl"
-        >
-          <div className="space-y-4">
-            <p>This is a wider drawer panel.</p>
-            <p>Great for more complex content.</p>
-          </div>
-        </Drawer>
-      </div>
-    );
-  },
+export const Default: Story = {
+  render: () => <DefaultComponent />,
+};
+
+const LargeContentComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Open Large Drawer</Button>
+      <Drawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Filters"
+        width="max-w-2xl"
+      >
+        <div className="space-y-4">
+          <p>This is a wider drawer panel.</p>
+          <p>Great for more complex content.</p>
+        </div>
+      </Drawer>
+    </div>
+  );
+};
+
+export const LargeContent: Story = {
+  render: () => <LargeContentComponent />,
 };

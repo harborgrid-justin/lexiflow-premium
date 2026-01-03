@@ -10,44 +10,41 @@
  * - Client acquisition (new clients, retention, lifetime value)
  */
 
-import React, { useState, useMemo } from 'react';
+import { ChartCard } from '@/components/dashboard/widgets/ChartCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import {
-  Briefcase,
-  DollarSign,
-  Users,
-  UserPlus,
-  TrendingUp,
   BarChart3,
-  PieChart,
-  Activity,
+  Briefcase,
   Calendar,
+  DollarSign,
+  TrendingUp,
+  UserPlus,
+  Users,
 } from 'lucide-react';
+import React, { useMemo } from 'react';
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  AreaChart,
   Area,
-  BarChart,
+  AreaChart,
   Bar,
-  PieChart as RechartsPieChart,
-  Pie,
+  BarChart,
+  CartesianGrid,
   Cell,
   ComposedChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
   Legend,
-  RadarChart,
-  PolarGrid,
+  Line,
+  Pie,
   PolarAngleAxis,
+  PolarGrid,
   PolarRadiusAxis,
   Radar,
+  RadarChart,
+  PieChart as RechartsPieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
-import { ChartCard } from '@/components/dashboard/widgets/ChartCard';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -219,13 +216,12 @@ const PIE_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
 // ============================================================================
 
 export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
-  dateRange,
   isLoading = false,
   onRefresh,
   selectedWidgets,
   className,
 }) => {
-  const { theme } = useTheme();
+  useTheme();
 
   // Generate mock data
   const caseTrends = useMemo(() => generateCaseTrendData(), []);

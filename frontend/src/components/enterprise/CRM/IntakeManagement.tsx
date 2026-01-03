@@ -5,30 +5,28 @@
  * intake form builder, engagement letter automation, and fee agreement tracking.
  */
 
-import React, { useState } from 'react';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import {
-  UserPlus,
-  FileText,
   AlertTriangle,
   CheckCircle2,
   Clock,
   DollarSign,
-  Shield,
-  Search,
-  Send,
+  Download,
   Edit,
   Eye,
-  Download,
-  Upload,
-  XCircle,
+  FileText,
   Plus,
+  Save,
+  Search,
+  Send,
+  Shield,
   Trash2,
-  Save
+  UserPlus,
+  XCircle
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -89,19 +87,6 @@ interface FeeAgreement {
   version: number;
 }
 
-interface EngagementLetter {
-  id: string;
-  intakeId: string;
-  templateId: string;
-  templateName: string;
-  content: string;
-  status: 'Draft' | 'Review' | 'Sent' | 'Signed' | 'Declined';
-  sentDate?: string;
-  signedDate?: string;
-  signedBy?: string;
-  version: number;
-}
-
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -109,7 +94,6 @@ interface EngagementLetter {
 export const IntakeManagement: React.FC = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'requests' | 'forms' | 'conflicts' | 'agreements'>('requests');
-  const [selectedIntake, setSelectedIntake] = useState<string | null>(null);
   const [showFormBuilder, setShowFormBuilder] = useState(false);
 
   // Mock data
@@ -255,9 +239,9 @@ export const IntakeManagement: React.FC = () => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     request.urgency === 'Critical' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    request.urgency === 'High' ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400" :
-                    request.urgency === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                    "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                      request.urgency === 'High' ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400" :
+                        request.urgency === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                          "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                   )}>
                     {request.urgency} Priority
                   </span>
@@ -269,8 +253,8 @@ export const IntakeManagement: React.FC = () => {
                 <span className={cn(
                   "px-3 py-1 rounded-full text-sm font-medium",
                   request.status === 'Approved' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                  request.status === 'Rejected' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                  "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    request.status === 'Rejected' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                 )}>
                   {request.status}
                 </span>
@@ -494,8 +478,8 @@ export const IntakeManagement: React.FC = () => {
               <span className={cn(
                 "px-3 py-1 rounded-full text-sm font-medium",
                 result.riskLevel === 'High' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                result.riskLevel === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                  result.riskLevel === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                    "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
               )}>
                 {result.riskLevel} Risk
               </span>
@@ -569,9 +553,9 @@ export const IntakeManagement: React.FC = () => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     agreement.status === 'Signed' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    agreement.status === 'Sent' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                    agreement.status === 'Declined' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+                      agreement.status === 'Sent' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                        agreement.status === 'Declined' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                          "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
                   )}>
                     {agreement.status}
                   </span>

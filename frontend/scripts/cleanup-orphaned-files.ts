@@ -154,7 +154,7 @@ function expandGlob(pattern: string): string[] {
       { encoding: "utf-8" }
     );
     return result.split("\n").filter(Boolean);
-  } catch (error) {
+  } catch {
     return [];
   }
 }

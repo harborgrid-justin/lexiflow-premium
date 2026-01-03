@@ -179,37 +179,38 @@ const mockExhibits: Exhibit[] = [
   }
 ];
 
-const mockExhibitLists: ExhibitList[] = [
-  {
-    id: '1',
-    name: 'Opening Statement Exhibits',
-    description: 'Key exhibits for opening statement presentation',
-    createdDate: new Date('2025-11-15'),
-    updatedDate: new Date('2025-12-01'),
-    exhibits: ['1', '3'],
-    trialDate: new Date('2026-01-15'),
-    purpose: 'opening'
-  },
-  {
-    id: '2',
-    name: 'Plaintiff Direct Examination',
-    description: 'Exhibits for plaintiff\'s direct examination',
-    createdDate: new Date('2025-11-20'),
-    updatedDate: new Date('2025-12-10'),
-    exhibits: ['1', '2'],
-    trialDate: new Date('2026-01-16'),
-    purpose: 'direct'
-  },
-  {
-    id: '3',
-    name: 'Defense Case Exhibits',
-    description: 'All defense exhibits',
-    createdDate: new Date('2025-11-25'),
-    updatedDate: new Date('2025-12-15'),
-    exhibits: ['4'],
-    purpose: 'general'
-  }
-];
+// Commented out unused mock data
+// const mockExhibitLists: ExhibitList[] = [
+//   {
+//     id: '1',
+//     name: 'Opening Statement Exhibits',
+//     description: 'Key exhibits for opening statement presentation',
+//     createdDate: new Date('2025-11-15'),
+//     updatedDate: new Date('2025-12-01'),
+//     exhibits: ['1', '3'],
+//     trialDate: new Date('2026-01-15'),
+//     purpose: 'opening'
+//   },
+//   {
+//     id: '2',
+//     name: 'Plaintiff Direct Examination',
+//     description: 'Exhibits for plaintiff\'s direct examination',
+//     createdDate: new Date('2025-11-20'),
+//     updatedDate: new Date('2025-12-10'),
+//     exhibits: ['1', '2'],
+//     trialDate: new Date('2026-01-16'),
+//     purpose: 'direct'
+//   },
+//   {
+//     id: '3',
+//     name: 'Defense Case Exhibits',
+//     description: 'All defense exhibits',
+//     createdDate: new Date('2025-11-25'),
+//     updatedDate: new Date('2025-12-15'),
+//     exhibits: ['4'],
+//     purpose: 'general'
+//   }
+// ];
 
 // ============================================================================
 // COMPONENT
@@ -220,7 +221,6 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
 }) => {
   const { theme } = useTheme();
   const [exhibits, setExhibits] = useState<Exhibit[]>(mockExhibits);
-  const [selectedExhibit, setSelectedExhibit] = useState<Exhibit | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [presentationMode, setPresentationMode] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

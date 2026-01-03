@@ -22,7 +22,7 @@ type ViewMode = 'dashboard' | 'analytics' | 'combined';
 export const EnterpriseDemoPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('combined');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedWidgets, setSelectedWidgets] = useState<string[]>([
+  const [selectedWidgets] = useState<string[]>([
     'case-trends',
     'billing-trends',
     'attorney-utilization',

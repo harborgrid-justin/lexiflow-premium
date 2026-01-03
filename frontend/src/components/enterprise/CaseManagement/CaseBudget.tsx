@@ -13,14 +13,20 @@
  * @module components/enterprise/CaseManagement/CaseBudget
  */
 
-import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import {
-  DollarSign, TrendingUp, TrendingDown, AlertTriangle,
-  CheckCircle, Clock, Calendar, Download,
-  Plus, Edit, Trash2, BarChart3, PieChart,
-  Bell, Settings, Filter, ArrowUpRight, ArrowDownRight
+  AlertTriangle,
+  Bell,
+  CheckCircle, Clock,
+  DollarSign,
+  Download,
+  Edit,
+  Plus,
+  Settings,
+  Trash2,
+  TrendingUp
 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -136,28 +142,22 @@ const getBurnRate = (actual: number, days: number): number => {
 // ============================================================================
 
 export const CaseBudget: React.FC<CaseBudgetProps> = ({
-  caseId,
   totalBudget,
   totalActual,
   categories = DEFAULT_CATEGORIES,
   alerts = DEFAULT_ALERTS,
   expenses = [],
-  periods = [],
-  onUpdateBudget,
-  onAddExpense,
   onApproveExpense,
   onRejectExpense,
-  onUpdateAlert,
   allowEdit = false,
   className,
 }) => {
   const [activeView, setActiveView] = useState<'overview' | 'categories' | 'expenses' | 'alerts'>('overview');
-  const [showAddExpense, setShowAddExpense] = useState(false);
 
   // Calculate metrics
   const metrics = useMemo(() => {
     const utilized = calculatePercentage(totalActual, totalBudget);
-console.log('metrics data:', metrics);
+    console.log('metrics data:', metrics);
     const remaining = totalBudget - totalActual;
     const variance = calculateVariance(totalActual, totalBudget);
     const totalForecasted = categories.reduce((sum, cat) => sum + (cat.forecasted || cat.actual), 0);
@@ -349,9 +349,9 @@ console.log('metrics data:', metrics);
                   <div
                     className={cn('h-3 rounded-full transition-all',
                       metrics.utilized >= 90 ? 'bg-red-600' :
-                      metrics.utilized >= 75 ? 'bg-orange-500' :
-                      metrics.utilized >= 50 ? 'bg-yellow-500' :
-                      'bg-green-500'
+                        metrics.utilized >= 75 ? 'bg-orange-500' :
+                          metrics.utilized >= 50 ? 'bg-yellow-500' :
+                            'bg-green-500'
                     )}
                     style={{ width: `${Math.min(metrics.utilized, 100)}%` }}
                   />

@@ -5,33 +5,28 @@
  * relationship mapping, contact management, and opportunity pipeline.
  */
 
-import React, { useState } from 'react';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
+import type { Client } from '@/types';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import {
-  Users,
-  Building2,
-  TrendingUp,
-  DollarSign,
   ArrowUpRight,
-  Phone,
+  Award,
+  Building2,
+  Calendar,
+  DollarSign,
+  FileText,
   Mail,
   MapPin,
-  Calendar,
-  FileText,
   MessageSquare,
-  Clock,
-  Target,
-  Briefcase,
-  Award,
-  AlertCircle,
-  CheckCircle2
+  Phone,
+  TrendingUp,
+  Users
 } from 'lucide-react';
-import type { Client } from '@/types';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -60,35 +55,12 @@ interface Opportunity {
   lastActivity: string;
 }
 
-interface ContactPerson {
-  id: string;
-  clientId: string;
-  name: string;
-  title: string;
-  email: string;
-  phone: string;
-  isPrimary: boolean;
-  role: 'Decision Maker' | 'Influencer' | 'User' | 'Technical Contact';
-  lastContact?: string;
-}
-
-interface ClientActivity {
-  id: string;
-  clientId: string;
-  type: 'Call' | 'Meeting' | 'Email' | 'Document' | 'Note' | 'Task';
-  subject: string;
-  description: string;
-  timestamp: string;
-  userId: string;
-  userName: string;
-}
-
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const EnterpriseCRM: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'list' | '360'>('list');
 
@@ -160,8 +132,8 @@ export const EnterpriseCRM: React.FC = () => {
 
   const selectedClient = selectedClientId
     ? clientsArray.find((c: unknown) =>
-        typeof c === 'object' && c !== null && 'id' in c && c.id === selectedClientId
-      ) as Client | undefined
+      typeof c === 'object' && c !== null && 'id' in c && c.id === selectedClientId
+    ) as Client | undefined
     : null;
 
   // ============================================================================
@@ -424,8 +396,8 @@ export const EnterpriseCRM: React.FC = () => {
                       <span className={cn(
                         "px-2 py-1 rounded text-xs",
                         opp.stage === 'Closed Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                        opp.stage === 'Closed Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                        "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                          opp.stage === 'Closed Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                            "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                       )}>
                         {opp.stage}
                       </span>

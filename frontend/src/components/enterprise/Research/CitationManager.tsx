@@ -87,12 +87,11 @@ export interface CitationManagerProps {
 
 export const CitationManager: React.FC<CitationManagerProps> = ({
   citations: initialCitations = [],
-  onUpdateCitation,
   onDeleteCitation,
   onValidateCitations,
   onExport,
   className = '' }) => {
-  const [citations, setCitations] = useState<Citation[]>(
+  const [citations] = useState<Citation[]>(
     initialCitations.length > 0
       ? initialCitations
       : [
@@ -140,14 +139,6 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
   const [selectedFormat, setSelectedFormat] = useState<CitationFormat>('bluebook');
   const [searchQuery, setSearchQuery] = useState('');
-
-  const formatCitation = (citation: Omit<Citation, 'id' | 'formattedCitation'>, style: CitationStyle): string => {
-    // Basic citation formatting
-    if (style === 'bluebook') {
-      return `${citation.title}, ${citation.court || ''} (${citation.year || 'n.d.'})`;
-    }
-    return `${citation.title} (${citation.year || 'n.d.'})`;
-  };
 
   const [filterType, setType] = useState<CitationType | 'all'>('all');
 
@@ -211,11 +202,6 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   const handleValidateAll = () => {
     onValidateCitations?.(citations);
     // TODO: Update citation statuses based on validation results
-  };
-
-  const handleAutoFormat = (citation: Citation) => {
-    // TODO: Implement auto-formatting logic
-    onUpdateCitation?.(citation.id, { formatted: citation.text });
   };
 
   const citationStats = {

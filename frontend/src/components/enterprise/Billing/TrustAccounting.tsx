@@ -86,27 +86,11 @@ interface TrustAccountingProps {
 
 export const TrustAccounting: React.FC<TrustAccountingProps> = ({
   accountId: initialAccountId,
-  onReconcile,
-  onTransactionCreate,
 }) => {
   const [selectedTab, setSelectedTab] = useState<'overview' | 'ledgers' | 'transactions' | 'reconciliation' | 'compliance'>('overview');
   const [selectedAccount, setSelectedAccount] = useState<string>(initialAccountId || '');
-  const [showNewTransaction, setShowNewTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
-
-  const handleReconcile = (reconciliation: ThreeWayReconciliation) => {
-    if (onReconcile) {
-      onReconcile(reconciliation);
-    }
-  };
-
-  const handleCreateTransaction = (transaction: Partial<TrustTransaction>) => {
-    if (onTransactionCreate) {
-      onTransactionCreate(transaction);
-      setShowNewTransaction(false);
-    }
-  };
 
   // Mock data
   const trustAccounts: TrustAccount[] = [
@@ -474,8 +458,8 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
               key={tab}
               onClick={() => setSelectedTab(tab)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -535,8 +519,8 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
                         {transaction.clientName}
                       </h4>
                       <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${transaction.type === 'deposit'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                         }`}>
                         {transaction.type.toUpperCase()}
                       </span>
@@ -550,8 +534,8 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
                   </div>
                   <div className="text-right">
                     <p className={`text-lg font-semibold ${transaction.amount >= 0
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-red-600 dark:text-red-400'
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-red-600 dark:text-red-400'
                       }`}>
                       {transaction.amount >= 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
                     </p>
@@ -713,12 +697,12 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
               <div
                 key={alert.id}
                 className={`rounded-lg border p-4 ${alert.resolved
-                    ? 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'
-                    : alert.severity === 'critical'
-                      ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20'
-                      : alert.severity === 'warning'
-                        ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20'
-                        : 'border-blue-200 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20'
+                  ? 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'
+                  : alert.severity === 'critical'
+                    ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20'
+                    : alert.severity === 'warning'
+                      ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20'
+                      : 'border-blue-200 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20'
                   }`}
               >
                 <div className="flex items-start gap-3">

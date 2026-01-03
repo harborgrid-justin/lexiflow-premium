@@ -65,8 +65,6 @@ interface InvoiceBuilderProps {
 }
 
 export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
-  clientId,
-  matterId,
   onSave,
   onSend,
   onPreview,
@@ -237,13 +235,6 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       updateLineItem(itemId, 'rate', rateCard.discountedRate || rateCard.standardRate);
     }
     setShowRateCardSelector(false);
-  };
-
-  const filterByClientMatter = () => {
-    // Filter line items based on clientId and matterId
-    if (clientId || matterId) {
-      console.log(`Filtering for client: ${clientId}, matter: ${matterId}`);
-    }
   };
 
   return (

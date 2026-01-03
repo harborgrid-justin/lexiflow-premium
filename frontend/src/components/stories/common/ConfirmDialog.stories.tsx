@@ -62,47 +62,51 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const DeleteConfirmationComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button variant="danger" onClick={() => setIsOpen(true)}>Delete Case</Button>
+      <ConfirmDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={() => {
+          console.log('Confirmed');
+          setIsOpen(false);
+        }}
+        title="Delete Case"
+        message="Are you sure you want to delete this case? This action cannot be undone."
+        confirmText="Delete"
+        variant="danger"
+      />
+    </div>
+  );
+};
+
 export const DeleteConfirmation: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button variant="danger" onClick={() => setIsOpen(true)}>Delete Case</Button>
-        <ConfirmDialog
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          onConfirm={() => {
-            console.log('Confirmed');
-            setIsOpen(false);
-          }}
-          title="Delete Case"
-          message="Are you sure you want to delete this case? This action cannot be undone."
-          confirmText="Delete"
-          variant="danger"
-        />
-      </div>
-    );
-  },
+  render: () => <DeleteConfirmationComponent />,
+};
+
+const BasicConfirmationComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Submit Form</Button>
+      <ConfirmDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={() => {
+          console.log('Confirmed');
+          setIsOpen(false);
+        }}
+        title="Confirm Submission"
+        message="Are you ready to submit this form?"
+        confirmText="Submit"
+      />
+    </div>
+  );
 };
 
 export const BasicConfirmation: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Submit Form</Button>
-        <ConfirmDialog
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          onConfirm={() => {
-            console.log('Confirmed');
-            setIsOpen(false);
-          }}
-          title="Confirm Submission"
-          message="Are you ready to submit this form?"
-          confirmText="Submit"
-        />
-      </div>
-    );
-  },
+  render: () => <BasicConfirmationComponent />,
 };

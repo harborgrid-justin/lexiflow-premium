@@ -5,31 +5,29 @@
  * invoice viewing/payment, secure messaging, and appointment scheduling.
  */
 
-import React, { useState } from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import {
-  FileText,
-  Download,
-  Upload,
-  Lock,
-  Shield,
-  Calendar,
-  MessageSquare,
-  CreditCard,
-  Eye,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  Send,
-  Paperclip,
-  Video,
-  Phone,
-  Mail,
-  Briefcase
-} from 'lucide-react';
 import type { Client } from '@/types';
+import { cn } from '@/utils/cn';
+import {
+  AlertCircle,
+  Briefcase,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  CreditCard,
+  Download,
+  Eye,
+  FileText,
+  Lock,
+  MessageSquare,
+  Paperclip,
+  Phone,
+  Send,
+  Shield,
+  Upload,
+  Video
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -99,10 +97,9 @@ interface AppointmentSlot {
 // COMPONENT
 // ============================================================================
 
-export const ClientPortal: React.FC<{ client?: Client }> = ({ client }) => {
+export const ClientPortal: React.FC<{ client?: Client }> = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'documents' | 'cases' | 'invoices' | 'messages' | 'appointments'>('documents');
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
   const [messageText, setMessageText] = useState('');
 
   // Mock data
@@ -306,8 +303,8 @@ export const ClientPortal: React.FC<{ client?: Client }> = ({ client }) => {
                 <span className={cn(
                   "px-2 py-1 rounded text-xs",
                   doc.status === 'Available' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                  doc.status === 'Pending Review' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                  "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                    doc.status === 'Pending Review' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
                 )}>
                   {doc.status}
                 </span>
@@ -343,8 +340,8 @@ export const ClientPortal: React.FC<{ client?: Client }> = ({ client }) => {
             <span className={cn(
               "px-3 py-1 rounded-full text-sm font-medium",
               caseUpdate.status === 'Active' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-              caseUpdate.status === 'Pending' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-              "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+                caseUpdate.status === 'Pending' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                  "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
             )}>
               {caseUpdate.status}
             </span>
@@ -436,9 +433,9 @@ export const ClientPortal: React.FC<{ client?: Client }> = ({ client }) => {
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
                     invoice.status === 'Paid' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    invoice.status === 'Overdue' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                    invoice.status === 'Partial' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                    "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                      invoice.status === 'Overdue' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                        invoice.status === 'Partial' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                          "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                   )}>
                     {invoice.status}
                   </span>

@@ -90,7 +90,6 @@ export interface SearchFilters {
 
 export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   resources: initialResources = [],
-  onSearch,
   onDownload,
   onUpload,
   onShare,

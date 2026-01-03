@@ -3,21 +3,17 @@
  * Advanced financial reporting with profitability analysis, realization rates, and revenue forecasting
  */
 
-import React, { useState } from 'react';
 import {
+  Activity,
   BarChart3,
-  TrendingUp,
-  TrendingDown,
   DollarSign,
-  Clock,
-  Users,
-  FileText,
   Download,
-  Calendar,
   Filter,
   PieChart,
-  Activity,
+  TrendingDown,
+  TrendingUp,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Types
 interface ProfitabilityMetrics {
@@ -90,8 +86,6 @@ interface FinancialReportsProps {
 }
 
 export const FinancialReports: React.FC<FinancialReportsProps> = ({
-  firmId,
-  dateRange,
   onExport,
 }) => {
   const [selectedTab, setSelectedTab] = useState<'profitability' | 'realization' | 'wip' | 'forecasting' | 'performance'>('profitability');
@@ -261,11 +255,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                selectedTab === tab
+              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
                   ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+                }`}
             >
               {tab === 'wip' ? 'WIP' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -626,13 +619,12 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                       {period.actualRevenue > 0 ? formatCurrency(period.actualRevenue) : '-'}
                     </td>
-                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${
-                      period.variance > 0
+                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variance > 0
                         ? 'text-green-600 dark:text-green-400'
                         : period.variance < 0
-                        ? 'text-red-600 dark:text-red-400'
-                        : 'text-gray-500'
-                    }`}>
+                          ? 'text-red-600 dark:text-red-400'
+                          : 'text-gray-500'
+                      }`}>
                       {period.variance !== 0 ? (
                         <>
                           {period.variance > 0 ? '+' : ''}
@@ -640,13 +632,12 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                         </>
                       ) : '-'}
                     </td>
-                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${
-                      period.variancePercent > 0
+                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variancePercent > 0
                         ? 'text-green-600 dark:text-green-400'
                         : period.variancePercent < 0
-                        ? 'text-red-600 dark:text-red-400'
-                        : 'text-gray-500'
-                    }`}>
+                          ? 'text-red-600 dark:text-red-400'
+                          : 'text-gray-500'
+                      }`}>
                       {period.variancePercent !== 0 ? (
                         <>
                           {period.variancePercent > 0 ? '+' : ''}

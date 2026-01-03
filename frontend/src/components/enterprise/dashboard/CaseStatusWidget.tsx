@@ -8,7 +8,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 export interface CaseStatusData {
@@ -42,10 +42,6 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const toggleExpanded = useCallback(() => {
-    setExpanded(prev => !prev);
-  }, []);
 
   interface TooltipPayload {
     payload: CaseStatusData;

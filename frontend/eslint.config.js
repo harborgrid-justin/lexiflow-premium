@@ -29,6 +29,13 @@ export default tseslint.config(
             "vite.config.ts",
             "eslint.config.js",
             "tailwind.config.ts",
+            ".storybook/main.ts",
+            ".storybook/preview.ts",
+            ".storybook/vitest.setup.ts",
+            "cypress.config.ts",
+            "react-router.config.ts",
+            "scripts/cleanup-orphaned-files.ts",
+            "scripts/refactor-services.ts",
           ],
           defaultProject: "./tsconfig.json",
         },
@@ -66,6 +73,7 @@ export default tseslint.config(
       "build/**",
       "coverage/**",
       "**/*.js", // Note: If you want to lint JS configs, remove this or move it
+      "**/*.cjs", // Exclude CommonJS files
       "**/*.d.ts",
       "__tests__/**",
       "archived/**",

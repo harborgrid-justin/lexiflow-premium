@@ -5,53 +5,46 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import React, { useState } from 'react';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
+import { cn } from '@/utils/cn';
 import {
-  TrendingUp,
-  DollarSign,
-  Users,
-  AlertTriangle,
-  ThumbsUp,
-  Star,
-  PieChart,
-  BarChart3,
-  Target,
-  Award,
-  TrendingDown,
   Activity,
-  CheckCircle2
+  AlertTriangle,
+  Award,
+  CheckCircle2,
+  DollarSign,
+  Star,
+  ThumbsUp,
+  TrendingDown,
+  TrendingUp
 } from 'lucide-react';
+import React, { useState } from 'react';
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
+  Legend,
+  Line,
+  LineChart,
   Pie,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
   PieChart as RechartPieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
-  Legend,
-  Line,
-  LineChart,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar
+  YAxis
 } from 'recharts';
-import type { Client } from '@/types';
 
 // ============================================================================
 // TYPES
@@ -128,11 +121,9 @@ export const ClientAnalytics: React.FC = () => {
   const chartColors = ChartColorService.getPalette(mode);
   const chartTheme = getChartTheme(mode);
   const [activeTab, setActiveTab] = useState<'profitability' | 'ltv' | 'risk' | 'satisfaction'>('profitability');
-  const [selectedClient, setSelectedClient] = useState<string | null>(null);
 
   // Data queries
-  const { data: clients = [] } = useQuery(['clients', 'all'], () => DataService.clients.getAll());
-  const clientsArray = Array.isArray(clients) ? clients : [];
+  useQuery(['clients', 'all'], () => DataService.clients.getAll());
 
   // Mock analytics data
   const profitabilityData: ClientProfitability[] = [
@@ -324,8 +315,8 @@ export const ClientAnalytics: React.FC = () => {
                 <span className={cn(
                   "px-3 py-1 rounded-full text-sm font-medium",
                   client.profitMargin >= 35 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                  client.profitMargin >= 20 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                  "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                    client.profitMargin >= 20 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
                 )}>
                   {client.profitMargin}% Margin
                 </span>
@@ -533,9 +524,9 @@ export const ClientAnalytics: React.FC = () => {
                 <span className={cn(
                   "px-3 py-1 rounded-full text-sm font-medium",
                   client.overallRisk === 'Critical' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                  client.overallRisk === 'High' ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400" :
-                  client.overallRisk === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                  "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                    client.overallRisk === 'High' ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400" :
+                      client.overallRisk === 'Medium' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                        "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                 )}>
                   {client.overallRisk} Risk ({client.riskScore}/100)
                 </span>
@@ -554,8 +545,8 @@ export const ClientAnalytics: React.FC = () => {
                           className={cn(
                             "h-full rounded transition-all",
                             score >= 70 ? "bg-red-600" :
-                            score >= 40 ? "bg-yellow-600" :
-                            "bg-green-600"
+                              score >= 40 ? "bg-yellow-600" :
+                                "bg-green-600"
                           )}
                           style={{ width: `${score}%` }}
                         />
@@ -579,8 +570,8 @@ export const ClientAnalytics: React.FC = () => {
                   <p className={cn(
                     "text-lg font-bold",
                     client.daysOutstanding > 60 ? "text-red-600" :
-                    client.daysOutstanding > 30 ? "text-yellow-600" :
-                    theme.text.primary
+                      client.daysOutstanding > 30 ? "text-yellow-600" :
+                        theme.text.primary
                   )}>
                     {client.daysOutstanding} days
                   </p>
@@ -636,8 +627,8 @@ export const ClientAnalytics: React.FC = () => {
                       <p className={cn(
                         "text-2xl font-bold",
                         client.nps >= 70 ? "text-green-600" :
-                        client.nps >= 30 ? "text-yellow-600" :
-                        "text-red-600"
+                          client.nps >= 30 ? "text-yellow-600" :
+                            "text-red-600"
                       )}>
                         {client.nps}
                       </p>
@@ -647,8 +638,8 @@ export const ClientAnalytics: React.FC = () => {
                       <p className={cn(
                         "text-2xl font-bold",
                         client.csat >= 80 ? "text-green-600" :
-                        client.csat >= 60 ? "text-yellow-600" :
-                        "text-red-600"
+                          client.csat >= 60 ? "text-yellow-600" :
+                            "text-red-600"
                       )}>
                         {client.csat}%
                       </p>

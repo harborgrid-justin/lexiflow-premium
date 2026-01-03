@@ -81,7 +81,6 @@ export interface LegalResearchHubProps {
 export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSearch,
   onSaveResult,
-  onCreateAnnotation,
   onExport,
   className = '' }) => {
   const [searchQuery, setSearchQuery] = useState('');

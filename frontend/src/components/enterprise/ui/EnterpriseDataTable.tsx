@@ -46,10 +46,10 @@ import { cn } from '@/utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 
-export interface Column<T = any> {
+export interface Column<T = Record<string, unknown>> {
   id: string;
   header: string;
-  accessor: keyof T | ((row: T) => any);
+  accessor: keyof T | ((row: T) => unknown);
   width?: number;
   minWidth?: number;
   maxWidth?: number;
@@ -57,14 +57,14 @@ export interface Column<T = any> {
   filterable?: boolean;
   resizable?: boolean;
   reorderable?: boolean;
-  cell?: (value: any, row: T) => React.ReactNode;
+  cell?: (value: unknown, row: T) => React.ReactNode;
 }
 
 export interface FilterConfig {
   columnId: string;
   operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'gt' | 'lt' | 'between';
-  value: any;
-  value2?: any; // For 'between' operator
+  value: unknown;
+  value2?: unknown; // For 'between' operator
 }
 
 export interface SavedView {
@@ -77,7 +77,7 @@ export interface SavedView {
   columnWidths?: Record<string, number>;
 }
 
-export interface EnterpriseDataTableProps<T = any> {
+export interface EnterpriseDataTableProps<T = Record<string, unknown>> {
   data: T[];
   columns: Column<T>[];
   rowHeight?: number;
@@ -139,12 +139,12 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   // DATA PROCESSING
   // ============================================================================
 
-  const getCellValue = (row: T, column: Column<T>) => {
+  const getCellValue = useCallback((row: T, column: Column<T>) => {
     if (typeof column.accessor === 'function') {
       return column.accessor(row);
     }
     return row[column.accessor];
-  };
+  }, []);
 
   // Apply filters
   const filteredData = useMemo(() => {
@@ -193,7 +193,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     });
 
     return result;
-  }, [data, filters, searchQuery, columns]);
+  }, [data, filters, searchQuery, columns, getCellValue]);
 
   // Apply sorting
   const sortedData = useMemo(() => {
@@ -211,7 +211,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
       const comparison = aVal > bVal ? 1 : -1;
       return sortOrder === 'asc' ? comparison : -comparison;
     });
-  }, [filteredData, sortBy, sortOrder, columns]);
+  }, [filteredData, sortBy, sortOrder, columns, getCellValue]);
 
   // ============================================================================
   // EVENT HANDLERS
@@ -270,7 +270,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     link.href = URL.createObjectURL(blob);
     link.download = `${exportFileName}.csv`;
     link.click();
-  }, [columns, sortedData, exportFileName]);
+  }, [columns, sortedData, exportFileName, getCellValue]);
 
   const exportToPDF = useCallback(() => {
     const doc = new jsPDF();
@@ -309,7 +309,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     });
 
     doc.save(`${exportFileName}.pdf`);
-  }, [columns, sortedData, exportFileName]);
+  }, [columns, sortedData, exportFileName, getCellValue]);
 
   // ============================================================================
   // SAVED VIEWS

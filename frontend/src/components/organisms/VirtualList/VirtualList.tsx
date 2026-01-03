@@ -91,10 +91,7 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     return () => observer.disconnect();
   }, []);
 
-  const safeItems = deferredItems || [];
-  const totalItemsHeight = safeItems.length * itemHeight;
-
-  // Safety check for invalid height calculations
+  // Safety check for invalid height calculations - must be before hooks
   if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
     console.error('[VirtualList] Invalid itemHeight:', itemHeight);
     return (
@@ -108,9 +105,10 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     );
   }
 
+  const safeItems = useMemo(() => deferredItems || [], [deferredItems]);
+
   const overscan = 5;
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  // Use measured height if available, otherwise use a large default to render all items initially
   const safeHeight = containerHeight > 0 ? containerHeight : 2000;
   const visibleNodeCount = Math.ceil(safeHeight / itemHeight) + 2 * overscan;
   const endIndex = Math.min(safeItems.length, startIndex + visibleNodeCount);
@@ -126,6 +124,22 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     }
     return visible;
   }, [safeItems, startIndex, endIndex, itemHeight]);
+
+  // Safety check for invalid height calculations
+  if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
+    console.error('[VirtualList] Invalid itemHeight:', itemHeight);
+    return (
+      <div
+        ref={containerRef}
+        className={cn("flex items-center justify-center text-sm h-full overflow-hidden", className, theme.text.tertiary)}
+        style={{ height: typeof height === 'number' ? `${height}px` : height }}
+      >
+        Error: Invalid item height
+      </div>
+    );
+  }
+
+  const totalItemsHeight = safeItems.length * itemHeight;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;

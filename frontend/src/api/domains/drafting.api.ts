@@ -534,7 +534,9 @@ export class DraftingValidationService {
         const referencedVars = new Set<string>();
         const matches = dto.content.matchAll(/\{\{(\w+)\}\}/g);
         for (const match of matches) {
-          referencedVars.add(match[1]);
+          if (match[1]) {
+            referencedVars.add(match[1]);
+          }
         }
 
         dto.variables.forEach((v) => {

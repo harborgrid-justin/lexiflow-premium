@@ -4,7 +4,7 @@
  * Handles user authentication with email/password
  */
 
-import { useAuthActions } from '@/providers/AuthProvider';
+import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 

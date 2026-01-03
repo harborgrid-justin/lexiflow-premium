@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { useScheduleController } from '@/hooks/useScheduleController';
 
 // Internal Dependencies - Services & Utils

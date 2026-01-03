@@ -192,7 +192,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                 <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                   <Form method="post" className="inline-flex gap-2">
                     <input type="hidden" name="id" value={expense.id} />
-                    {expense.status === 'Submitted' && (
+                    {(expense.status as string) === 'Submitted' && (
                       <button
                         type="submit"
                         name="intent"

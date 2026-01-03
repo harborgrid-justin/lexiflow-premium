@@ -29,7 +29,7 @@ import { CitationDetail } from './CitationDetail';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

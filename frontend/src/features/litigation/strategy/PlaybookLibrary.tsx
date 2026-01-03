@@ -23,7 +23,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Components
 import { VirtualGrid } from '@/components/organisms/VirtualGrid';

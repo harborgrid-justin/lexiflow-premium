@@ -10,7 +10,7 @@ import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Sh
 import React, { useState } from 'react';
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { cn } from '@/utils/cn';
 
 import { Button } from '@/components/ui/atoms/Button';

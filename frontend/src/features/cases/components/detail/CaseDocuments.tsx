@@ -18,7 +18,7 @@ import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils

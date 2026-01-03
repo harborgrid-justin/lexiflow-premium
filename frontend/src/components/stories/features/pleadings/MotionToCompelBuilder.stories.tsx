@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MotionToCompelBuilder } from '@features/litigation/discovery/MotionToCompelBuilder';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 import { CaseId } from '@/types';
 
 const meta = {

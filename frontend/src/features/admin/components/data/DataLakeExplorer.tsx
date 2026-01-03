@@ -8,7 +8,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DataLakeItem } from '@/types';
 import { cn } from '@/utils/cn';

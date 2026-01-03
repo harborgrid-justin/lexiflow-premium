@@ -22,7 +22,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { useInterval } from '@/hooks/useInterval';
 import { Conversation, Attachment } from '@/hooks/useSecureMessenger';
 

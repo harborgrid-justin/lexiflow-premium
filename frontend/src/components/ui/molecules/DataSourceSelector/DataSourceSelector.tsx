@@ -83,7 +83,7 @@ export function DataSourceSelector() {
     } finally {
       setIsRefreshing(false);
     }
-  };
+  }, [refresh]);
 
   const getStatusIcon = () => {
     if (!isAvailable) return <WifiOff className="h-4 w-4 text-rose-500" />;

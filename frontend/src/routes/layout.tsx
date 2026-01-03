@@ -23,8 +23,8 @@ import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkey
 import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { useAuthState } from '@/contexts/auth/AuthProvider';
 import { useAppController } from '@/hooks/core';
-import { useAuthState } from '@/providers/AuthProvider';
 import type { GlobalSearchResult } from '@/services/search/searchService';
 import type { AppView } from '@/types';
 import type { IntentResult } from '@/types/intelligence';

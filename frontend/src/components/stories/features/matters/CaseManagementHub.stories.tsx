@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import CaseManagementHub from '@/features/cases/components/list/CaseManagementHub';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 
 /**
  * CaseManagementHub is the centralized case creation and management interface

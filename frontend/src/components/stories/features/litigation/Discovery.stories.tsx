@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '@features/litigation/discovery/DiscoveryPlatform';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 
 /**
  * Discovery components provide comprehensive tools for managing the discovery process

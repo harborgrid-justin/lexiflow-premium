@@ -2,9 +2,8 @@
  * ThemeContext Type Definitions
  */
 
-import type { ReactNode } from 'react';
-import { ThemeMode } from '@theme/tokens';
-import { tokens } from '@theme/tokens';
+import { ThemeMode, tokens } from "@theme/tokens";
+import type { ReactNode } from "react";
 
 // Theme type with colors compatibility layer
 type ThemeWithColors = typeof tokens.colors.light & {

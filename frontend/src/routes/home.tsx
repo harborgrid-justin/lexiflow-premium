@@ -15,6 +15,7 @@
 
 import { api } from '@/api';
 import Dashboard from '@/features/dashboard/components/Dashboard';
+import { useAppController } from '@/hooks/core';
 import { Suspense } from 'react';
 import { useNavigate } from 'react-router';
 import type { Route } from "./+types/home";
@@ -106,24 +107,26 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
 
 export default function HomeRoute({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
+  const { currentUser } = useAppController();
   const { metrics, recentCases, upcomingTasks } = loaderData;
 
   const handleSelectCase = (caseId: string) => {
     navigate(`/cases/${caseId}`);
   };
 
-  // Pass data to the Dashboard feature component
-  // Note: Dashboard component might need to be updated to accept props instead of fetching internally
-  // For now, we'll assume it can accept initialData or we just render it as is
-  // If Dashboard fetches its own data, we might be double fetching, but loader ensures data is ready for SSR
+  // Show loading state if currentUser is not available yet
+  if (!currentUser) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
       <Dashboard
-        // @ts-expect-error - Dashboard component might not accept these props yet, but we're preparing for it
-        metrics={metrics}
-        recentCases={recentCases}
-        upcomingTasks={upcomingTasks}
+        currentUser={currentUser}
         onSelectCase={handleSelectCase}
       />
     </Suspense>

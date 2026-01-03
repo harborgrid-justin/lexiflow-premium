@@ -9,7 +9,7 @@ import { EvidenceAdmissibility } from '../../../../features/litigation/evidence/
 import { EvidenceForensics } from '../../../../features/litigation/evidence/EvidenceForensics';
 import { EvidenceDetail } from '../../../../features/litigation/evidence/EvidenceDetail';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 
 /**
  * Evidence components provide comprehensive tools for managing physical and digital evidence

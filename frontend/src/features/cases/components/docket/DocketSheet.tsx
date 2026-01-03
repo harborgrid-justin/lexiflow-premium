@@ -34,7 +34,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

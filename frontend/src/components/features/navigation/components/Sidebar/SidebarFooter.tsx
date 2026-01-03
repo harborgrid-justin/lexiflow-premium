@@ -18,7 +18,7 @@ import { ChevronDown, LogOut, Settings } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Components
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';

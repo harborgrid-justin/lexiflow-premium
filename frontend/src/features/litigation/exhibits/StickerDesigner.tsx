@@ -19,7 +19,7 @@ import React, { useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';

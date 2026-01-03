@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { Link, Form } from 'react-router';
-import { Clock, DollarSign, Filter, Check, X } from 'lucide-react';
+import { Clock, DollarSign, Filter, Check } from 'lucide-react';
 import type { TimeEntry } from '@/types/financial';
 
 interface TimeEntryListProps {

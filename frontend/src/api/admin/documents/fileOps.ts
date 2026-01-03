@@ -28,7 +28,12 @@ export async function bulkUpload(files: File[], metadata: Record<string, string>
   try {
     const formData = new FormData();
     files.forEach(f => formData.append('files', f));
-    Object.keys(metadata).forEach(k => formData.append(k, metadata[k]));
+    Object.keys(metadata).forEach(k => {
+      const value = metadata[k];
+      if (value !== undefined && value !== null) {
+        formData.append(k, value);
+      }
+    });
 
     const token = localStorage.getItem('lexiflow_auth_token');
     const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};

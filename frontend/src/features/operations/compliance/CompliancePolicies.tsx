@@ -9,7 +9,7 @@ import { cn } from '@/utils/cn';
 import { Calendar, Download, Eye, FileText } from 'lucide-react';
 import { memo } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 
 interface PolicyItem {

@@ -34,9 +34,9 @@ import type { Route } from "./+types/root";
 import "./index.css";
 
 // Import providers
+import { AuthProvider } from "@/contexts/auth/AuthProvider";
+import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
 import { AppProviders } from "@/providers/AppProviders";
-import { AuthProvider } from "@/providers/AuthProvider";
-import { QueryClientProvider } from "@/providers/QueryClientProvider";
 
 // ============================================================================
 // Meta Tags

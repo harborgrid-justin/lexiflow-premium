@@ -50,13 +50,13 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   const { theme } = useTheme();
 
   const activeParentTab = useMemo(() => {
-    const found = tabConfig.find(p => p.subTabs.some(s => s.id === activeTabId));
+    const found = tabConfig.find(p => p.subTabs?.some(s => s.id === activeTabId));
     return found || tabConfig[0] || { id: '', label: '', icon: () => null, subTabs: [] };
   }, [activeTabId, tabConfig]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = tabConfig.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
+    if (parent && parent.subTabs && parent.subTabs.length > 0) {
       const newTabId = parent.subTabs[0].id;
       onTabChange(newTabId);
     }
@@ -91,7 +91,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        {activeParentTab.subTabs.length > 0 && (
+        {activeParentTab.subTabs && activeParentTab.subTabs.length > 0 && (
           <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
               <button

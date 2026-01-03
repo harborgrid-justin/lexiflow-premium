@@ -3,7 +3,7 @@ import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { cn } from '@/utils/cn';
 import { MoreVertical } from 'lucide-react';
 import React from 'react';

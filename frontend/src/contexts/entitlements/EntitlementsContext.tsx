@@ -44,15 +44,14 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ childr
         // 1. Derive basic entitlements from User Role
         let plan: Plan = "free";
         let canUseAdminTools = false;
+        let maxCases = 10;
+        let storageLimitGB = 5;
 
         // Map from UserRole type: 'Senior Partner' | 'Associate' | 'Paralegal' | 'Administrator' | 'Client User' | 'Guest'
         if (auth.user.role === "Administrator") {
           plan = "enterprise";
           canUseAdminTools = true;
         } else if (auth.user.role === "Senior Partner" || auth.user.role === "Associate") {
-          let maxCases = 10;
-          let storageLimitGB = 5;
-
           if (auth.user.orgId) {
             try {
               const org = await apiClient.get<Organization>(`/organizations/${auth.user.orgId}`);
@@ -66,24 +65,24 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ childr
               console.warn("Could not fetch organization details", e);
             }
           }
-
-          setEntitlements({
-            plan,
-            canUseAdminTools,
-            maxCases,
-            storageLimitGB
-          });
-
-        } catch (err) {
-          console.error("Failed to calculate entitlements", err);
-          // Fallback to defaults or derived from role only
-        } finally {
-          setIsLoading(false);
         }
-      };
 
-      fetchEntitlements();
-    }, [auth.status, auth.user]);
+        setEntitlements({
+          plan,
+          canUseAdminTools,
+          maxCases,
+          storageLimitGB
+        });
+      } catch (err) {
+        console.error("Failed to calculate entitlements", err);
+        // Fallback to defaults or derived from role only
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEntitlements();
+  }, [auth.status, auth.user]);
 
   const value = useMemo(() => ({ entitlements, isLoading }), [entitlements, isLoading]);
 };

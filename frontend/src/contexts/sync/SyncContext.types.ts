@@ -2,9 +2,9 @@
  * SyncContext Type Definitions
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-export type SyncStatus = 'idle' | 'syncing' | 'offline' | 'error';
+export type SyncStatus = "idle" | "syncing" | "offline" | "error";
 
 // BP2: Narrow interface - read-only state
 export interface SyncStateValue {
@@ -16,7 +16,11 @@ export interface SyncStateValue {
 
 // BP2: Narrow interface - actions only
 export interface SyncActionsValue {
-  performMutation: <T = unknown>(type: string, payload: T, apiCall: () => Promise<T>) => Promise<void>;
+  performMutation: <T = unknown>(
+    type: string,
+    payload: T,
+    apiCall: () => Promise<T>
+  ) => Promise<void>;
   retryFailed: () => void;
 }
 

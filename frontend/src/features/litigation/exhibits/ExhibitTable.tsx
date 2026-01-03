@@ -19,7 +19,7 @@ import React from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Components
 import { EmptyListState, StatusBadge } from '@/components/organisms/_legacy/RefactoredCommon';

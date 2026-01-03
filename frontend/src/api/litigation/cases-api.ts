@@ -189,8 +189,8 @@ export class CasesApiService {
         ...transformed,
         client: transformed.client || 'Unknown Client',
         matterType: transformed.matterType || transformed.practiceArea || 'General',
-        filingDate: transformed.filingDate || new Date().toISOString().split('T')[0],
-      };
+        filingDate: transformed.filingDate ?? new Date().toISOString().split('T')[0],
+      } as Case;
     });
   }
 

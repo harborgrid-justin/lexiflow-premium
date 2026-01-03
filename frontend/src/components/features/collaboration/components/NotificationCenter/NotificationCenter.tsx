@@ -19,7 +19,7 @@ import { DataService } from '@/services/data/dataService';
 // Hooks & Context
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useToast } from '@/providers/ToastContext';
+import { useToast } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';

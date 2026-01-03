@@ -14,7 +14,7 @@ import { DollarSign, Clock, CheckCircle, TrendingUp, ExternalLink } from 'lucide
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

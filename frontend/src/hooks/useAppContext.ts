@@ -39,8 +39,8 @@ import { DataService } from "@/services/data/dataService";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 // Hooks & Context
+import { useAuthState } from "@/contexts/auth/AuthProvider";
 import { useToast } from "@/providers";
-import { useAuthState } from "@/providers/AuthProvider";
 import { useUsers } from "./useDomainData";
 import { useSessionStorage } from "./useSessionStorage";
 
@@ -112,7 +112,13 @@ export function useAppContext(): UseAppControllerReturn {
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const { addToast } = useToast();
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // Sidebar should be open by default on desktop (>=768px), closed on mobile
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768;
+    }
+    return true; // Default to open for SSR
+  });
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch] = useState("");
   const [, startTransition] = useTransition();

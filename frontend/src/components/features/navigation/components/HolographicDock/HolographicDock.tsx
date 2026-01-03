@@ -18,7 +18,7 @@ import { Maximize2, X, Layers } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

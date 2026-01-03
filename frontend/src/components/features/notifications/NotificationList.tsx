@@ -146,7 +146,7 @@ export function NotificationList({
           </div>
         );
     }
-  };
+  }, []);
 
   if (isLoading) {
     return (

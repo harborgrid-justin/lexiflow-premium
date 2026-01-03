@@ -9,7 +9,7 @@ import { ResearchInput } from './ResearchInput';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { performSearch } from './research.utils';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { queryClient } from '@/services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {

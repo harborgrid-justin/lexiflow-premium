@@ -64,6 +64,7 @@ export const tokens = {
         primary: 'text-slate-900',
         secondary: 'text-slate-600',
         tertiary: 'text-slate-500',
+        muted: 'text-slate-400',
         inverse: 'text-white',
         link: 'text-blue-600 hover:text-blue-700',
         code: 'text-pink-600',
@@ -162,7 +163,8 @@ export const tokens = {
       text: {
         primary: 'text-slate-50',
         secondary: 'text-slate-400',
-        tertiary: 'text-slate-600',
+        tertiary: 'text-slate-500',
+        muted: 'text-slate-600',
         inverse: 'text-slate-900',
         link: 'text-blue-400 hover:text-blue-300',
         code: 'text-pink-400',

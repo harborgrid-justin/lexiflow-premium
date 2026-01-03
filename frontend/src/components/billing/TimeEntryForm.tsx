@@ -4,7 +4,7 @@
  * Includes LEDES code support and validation
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-router';
 import { RunningTimer } from './RunningTimer';
 

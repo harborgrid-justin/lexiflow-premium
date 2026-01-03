@@ -22,7 +22,7 @@ import { MotionModal } from './MotionModal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

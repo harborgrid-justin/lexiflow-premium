@@ -3,7 +3,7 @@ import { fn, expect, userEvent, within } from 'storybook/test';
 import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
 import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 
 /**
  * DocketEntryBuilder provides a comprehensive form for creating and editing

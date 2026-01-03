@@ -132,7 +132,7 @@ export class NotificationsApiService {
     try {
       const response = await apiClient.get<PaginatedResponse<ApiNotification>>(this.baseUrl, filters as Record<string, unknown>);
       return response.data;
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.getAll] Error:', error);
       throw new Error('Failed to fetch notifications');
     }
@@ -149,7 +149,7 @@ export class NotificationsApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<ApiNotification>(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.getById] Error:', error);
       throw new Error(`Failed to fetch notification with id: ${id}`);
     }
@@ -175,7 +175,7 @@ export class NotificationsApiService {
     }
     try {
       return await apiClient.post<ApiNotification>(this.baseUrl, data);
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.create] Error:', error);
       throw new Error('Failed to create notification');
     }
@@ -192,7 +192,7 @@ export class NotificationsApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.delete] Error:', error);
       throw new Error(`Failed to delete notification with id: ${id}`);
     }
@@ -213,7 +213,7 @@ export class NotificationsApiService {
     this.validateId(id, 'markAsRead');
     try {
       return await apiClient.patch<ApiNotification>(`${this.baseUrl}/${id}/read`, { read: true });
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.markAsRead] Error:', error);
       throw new Error(`Failed to mark notification as read: ${id}`);
     }
@@ -230,7 +230,7 @@ export class NotificationsApiService {
     this.validateId(id, 'markAsUnread');
     try {
       return await apiClient.patch<ApiNotification>(`${this.baseUrl}/${id}/read`, { read: false });
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.markAsUnread] Error:', error);
       throw new Error(`Failed to mark notification as unread: ${id}`);
     }
@@ -245,7 +245,7 @@ export class NotificationsApiService {
   async markAllAsRead(): Promise<void> {
     try {
       await apiClient.post(`${this.baseUrl}/mark-all-read`, {});
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.markAllAsRead] Error:', error);
       throw new Error('Failed to mark all notifications as read');
     }
@@ -261,7 +261,7 @@ export class NotificationsApiService {
     try {
       const response = await apiClient.get<{ count: number }>(`${this.baseUrl}/unread-count`);
       return response.count;
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.getUnreadCount] Error:', error);
       throw new Error('Failed to fetch unread notification count');
     }
@@ -286,7 +286,7 @@ export class NotificationsApiService {
   async deleteAllRead(): Promise<void> {
     try {
       await apiClient.post(`${this.baseUrl}/delete-all-read`, {});
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.deleteAllRead] Error:', error);
       throw new Error('Failed to delete all read notifications');
     }
@@ -335,7 +335,7 @@ export class NotificationsApiService {
   async clearAll(): Promise<void> {
     try {
       await apiClient.post(`${this.baseUrl}/clear-all`, {});
-    } catch () {
+    } catch (error) {
       console.error('[NotificationsApiService.clearAll] Error:', error);
       throw new Error('Failed to clear all notifications');
     }

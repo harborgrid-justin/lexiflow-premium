@@ -69,7 +69,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       loginSchema.parse(formData);
       setErrors({});
       return true;
-    } catch () {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: FormErrors = {};
         error.issues.forEach((err: z.ZodIssue) => {
@@ -87,7 +87,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       mfaSchema.parse({ code: mfaCode });
       setErrors({});
       return true;
-    } catch () {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors({ code: error.issues[0]?.message || 'Invalid code' });
       }

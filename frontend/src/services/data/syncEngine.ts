@@ -83,7 +83,7 @@ import { isBackendApiEnabled } from '@/config/network/api.config';
  *   try {
  *     await api.sync(mutation);
  *     SyncEngine.dequeue(); // Remove on success
- *   } catch () {
+ *   } catch (error) {
  *     SyncEngine.update(mutation.id, {
  *       status: 'failed',
  *       lastError: error.message,

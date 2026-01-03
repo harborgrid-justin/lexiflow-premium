@@ -143,7 +143,7 @@ export class TrialApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<Trial[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.getAll] Error:', error);
       throw new Error('Failed to fetch trials');
     }
@@ -160,7 +160,7 @@ export class TrialApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<Trial>(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.getById] Error:', error);
       throw new Error(`Failed to fetch trial with id: ${id}`);
     }
@@ -192,7 +192,7 @@ export class TrialApiService {
     }
     try {
       return await apiClient.post<Trial>(this.baseUrl, data);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.create] Error:', error);
       throw new Error('Failed to create trial');
     }
@@ -211,7 +211,7 @@ export class TrialApiService {
     this.validateObject(data, 'data', 'update');
     try {
       return await apiClient.put<Trial>(`${this.baseUrl}/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.update] Error:', error);
       throw new Error(`Failed to update trial with id: ${id}`);
     }
@@ -232,7 +232,7 @@ export class TrialApiService {
     }
     try {
       return await apiClient.patch<Trial>(`${this.baseUrl}/${id}/status`, { status });
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.updateStatus] Error:', error);
       throw new Error(`Failed to update status for trial with id: ${id}`);
     }
@@ -249,7 +249,7 @@ export class TrialApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.delete] Error:', error);
       throw new Error(`Failed to delete trial with id: ${id}`);
     }
@@ -274,7 +274,7 @@ export class TrialApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}/events?${queryString}` : `${this.baseUrl}/events`;
       return await apiClient.get<unknown[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.getEvents] Error:', error);
       throw new Error('Failed to fetch trial events');
     }
@@ -303,7 +303,7 @@ export class TrialApiService {
     }
     try {
       return await apiClient.post<unknown>(`${this.baseUrl}/events`, data);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.createEvent] Error:', error);
       throw new Error('Failed to create trial event');
     }
@@ -327,7 +327,7 @@ export class TrialApiService {
     this.validateObject(data, 'data', 'updateEvent');
     try {
       return await apiClient.put<unknown>(`${this.baseUrl}/events/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.updateEvent] Error:', error);
       throw new Error(`Failed to update trial event with id: ${id}`);
     }
@@ -344,7 +344,7 @@ export class TrialApiService {
     this.validateId(id, 'deleteEvent');
     try {
       await apiClient.delete(`${this.baseUrl}/events/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.deleteEvent] Error:', error);
       throw new Error(`Failed to delete trial event with id: ${id}`);
     }
@@ -369,7 +369,7 @@ export class TrialApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}/witness-prep?${queryString}` : `${this.baseUrl}/witness-prep`;
       return await apiClient.get<unknown[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.getWitnessPrep] Error:', error);
       throw new Error('Failed to fetch witness preparation records');
     }
@@ -399,7 +399,7 @@ export class TrialApiService {
     }
     try {
       return await apiClient.post<unknown>(`${this.baseUrl}/witness-prep`, data);
-    } catch () {
+    } catch (error) {
       console.error('[TrialApiService.createWitnessPrep] Error:', error);
       throw new Error('Failed to create witness preparation record');
     }

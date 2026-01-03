@@ -167,7 +167,7 @@ function addRecentSearch(query: string): void {
     const recent = getRecentSearches();
     const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
     localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-  } catch () {
+  } catch (error) {
     // Ignore localStorage errors
   }
 }

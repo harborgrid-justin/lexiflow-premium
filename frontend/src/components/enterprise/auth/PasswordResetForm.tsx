@@ -86,7 +86,7 @@ const PasswordResetFormComponent: React.FC<PasswordResetFormProps> = ({
 
       setErrors({});
       return true;
-    } catch () {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: FormErrors = {};
         error.issues.forEach((err: z.ZodIssue) => {
@@ -113,7 +113,7 @@ const PasswordResetFormComponent: React.FC<PasswordResetFormProps> = ({
       await authService.resetPassword(token, formData.password);
       setStep('success');
       onSuccess?.();
-    } catch () {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '';
       // Check if token is expired or invalid
       if (

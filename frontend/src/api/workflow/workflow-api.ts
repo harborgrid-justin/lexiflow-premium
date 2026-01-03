@@ -200,7 +200,7 @@ export class WorkflowApiService {
             const url = queryString ? `${this.baseUrl}/templates?${queryString}` : `${this.baseUrl}/templates`;
             
             return await apiClient.get<WorkflowTemplate[]>(url);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getTemplates] Error:', error);
             throw new Error('Failed to fetch workflow templates');
         }
@@ -221,7 +221,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.get<WorkflowTemplate>(`${this.baseUrl}/templates/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getTemplateById] Error:', error);
             throw new Error(`Failed to fetch workflow template with id: ${id}`);
         }
@@ -257,7 +257,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.post<WorkflowTemplate>(`${this.baseUrl}/templates`, data);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.createTemplate] Error:', error);
             throw new Error('Failed to create workflow template');
         }
@@ -281,7 +281,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.put<WorkflowTemplate>(`${this.baseUrl}/templates/${id}`, data);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.updateTemplate] Error:', error);
             throw new Error(`Failed to update workflow template with id: ${id}`);
         }
@@ -299,7 +299,7 @@ export class WorkflowApiService {
 
         try {
             await apiClient.delete(`${this.baseUrl}/templates/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.deleteTemplate] Error:', error);
             throw new Error(`Failed to delete workflow template with id: ${id}`);
         }
@@ -361,7 +361,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.get<WorkflowInstance>(`${this.baseUrl}/instances/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getInstanceById] Error:', error);
             throw new Error(`Failed to fetch workflow instance with id: ${id}`);
         }
@@ -387,7 +387,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.post<WorkflowInstance>(`${this.baseUrl}/instances`, { templateId, ...context });
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.startWorkflow] Error:', error);
             throw new Error('Failed to start workflow');
         }
@@ -408,7 +408,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.post<WorkflowInstance>(`${this.baseUrl}/instances/${id}/pause`, {});
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.pauseWorkflow] Error:', error);
             throw new Error(`Failed to pause workflow with id: ${id}`);
         }
@@ -429,7 +429,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.post<WorkflowInstance>(`${this.baseUrl}/instances/${id}/resume`, {});
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.resumeWorkflow] Error:', error);
             throw new Error(`Failed to resume workflow with id: ${id}`);
         }
@@ -450,7 +450,7 @@ export class WorkflowApiService {
 
         try {
             return await apiClient.post<WorkflowInstance>(`${this.baseUrl}/instances/${id}/cancel`, {});
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.cancelWorkflow] Error:', error);
             throw new Error(`Failed to cancel workflow with id: ${id}`);
         }
@@ -474,7 +474,7 @@ export class WorkflowApiService {
     async syncEngine(): Promise<{ success: boolean; message: string }> {
         try {
             return await apiClient.post<{ success: boolean; message: string }>(`${this.baseUrl}/sync`, {});
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.syncEngine] Error:', error);
             throw new Error('Failed to synchronize workflow engine');
         }
@@ -491,7 +491,7 @@ export class WorkflowApiService {
         this.validateId(id, 'getEnhanced');
         try {
             return await apiClient.get<EnhancedWorkflowInstance>(`${this.baseUrl}/advanced/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getEnhanced] Error:', error);
             throw new Error(`Failed to fetch enhanced workflow instance with id: ${id}`);
         }
@@ -506,7 +506,7 @@ export class WorkflowApiService {
             return await apiClient.get<WorkflowAnalytics>(
                 `${this.baseUrl}/advanced/${id}/analytics?start=${params.start}&end=${params.end}`
             );
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getAnalytics] Error:', error);
             throw new Error(`Failed to fetch workflow analytics for id: ${id}`);
         }
@@ -519,7 +519,7 @@ export class WorkflowApiService {
         this.validateId(id, 'getAISuggestions');
         try {
             return await apiClient.get<AIWorkflowSuggestion[]>(`${this.baseUrl}/advanced/${id}/ai/suggestions`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getAISuggestions] Error:', error);
             throw new Error(`Failed to fetch AI suggestions for workflow id: ${id}`);
         }
@@ -536,7 +536,7 @@ export class WorkflowApiService {
                 `${this.baseUrl}/advanced/${workflowId}/ai/suggestions/${suggestionId}/apply`,
                 {}
             );
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.applyAISuggestion] Error:', error);
             throw new Error('Failed to apply AI suggestion');
         }
@@ -552,7 +552,7 @@ export class WorkflowApiService {
                 `${this.baseUrl}/advanced/${workflowId}/snapshots`,
                 data
             );
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.createSnapshot] Error:', error);
             throw new Error('Failed to create workflow snapshot');
         }
@@ -569,7 +569,7 @@ export class WorkflowApiService {
                 `${this.baseUrl}/advanced/${workflowId}/rollback`,
                 { snapshotId }
             );
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.rollbackToSnapshot] Error:', error);
             throw new Error('Failed to rollback workflow');
         }
@@ -582,7 +582,7 @@ export class WorkflowApiService {
         this.validateId(workflowId, 'getVersions');
         try {
             return await apiClient.get<WorkflowVersion[]>(`${this.baseUrl}/advanced/${workflowId}/versions`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getVersions] Error:', error);
             throw new Error(`Failed to fetch workflow versions for id: ${workflowId}`);
         }
@@ -595,7 +595,7 @@ export class WorkflowApiService {
         this.validateId(workflowId, 'getSLAStatuses');
         try {
             return await apiClient.get<SLAStatus[]>(`${this.baseUrl}/advanced/${workflowId}/sla/statuses`);
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.getSLAStatuses] Error:', error);
             throw new Error(`Failed to fetch SLA statuses for workflow id: ${workflowId}`);
         }
@@ -625,7 +625,7 @@ export class WorkflowApiService {
                 `${this.baseUrl}/advanced/${workflowId}/triggers/webhook`,
                 config
             );
-        } catch () {
+        } catch (error) {
             console.error('[WorkflowApiService.createWebhookTrigger] Error:', error);
             throw new Error('Failed to create webhook trigger');
         }

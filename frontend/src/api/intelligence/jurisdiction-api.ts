@@ -99,7 +99,7 @@ export const JurisdictionAPI = {
       
       const url = `/jurisdictions${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
       return await apiClient.get<Jurisdiction[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch jurisdictions:', error);
       return [];
     }
@@ -108,7 +108,7 @@ export const JurisdictionAPI = {
   async getById(id: string): Promise<Jurisdiction | null> {
     try {
       return await apiClient.get<Jurisdiction>(`/jurisdictions/${id}`);
-    } catch () {
+    } catch (error) {
       console.error(`Failed to fetch jurisdiction ${id}:`, error);
       return null;
     }
@@ -117,7 +117,7 @@ export const JurisdictionAPI = {
   async getFederal(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/federal');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch federal courts:', error);
       return [];
     }
@@ -126,7 +126,7 @@ export const JurisdictionAPI = {
   async getState(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/state');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch state courts:', error);
       return [];
     }
@@ -135,7 +135,7 @@ export const JurisdictionAPI = {
   async getRegulatory(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/regulatory');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch regulatory bodies:', error);
       return [];
     }
@@ -144,7 +144,7 @@ export const JurisdictionAPI = {
   async getInternational(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/international');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch international treaties:', error);
       return [];
     }
@@ -153,7 +153,7 @@ export const JurisdictionAPI = {
   async getArbitration(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/arbitration');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch arbitration providers:', error);
       return [];
     }
@@ -162,7 +162,7 @@ export const JurisdictionAPI = {
   async getLocal(): Promise<Jurisdiction[]> {
     try {
       return await apiClient.get<Jurisdiction[]>('/jurisdictions/local');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch local rules:', error);
       return [];
     }
@@ -171,7 +171,7 @@ export const JurisdictionAPI = {
   async getMapNodes(): Promise<unknown[]> {
     try {
       return await apiClient.get<unknown[]>('/jurisdictions/map-nodes');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch jurisdiction map nodes:', error);
       return [];
     }
@@ -180,7 +180,7 @@ export const JurisdictionAPI = {
   async create(data: CreateJurisdictionDto): Promise<Jurisdiction | null> {
     try {
       return await apiClient.post<Jurisdiction>('/jurisdictions', data);
-    } catch () {
+    } catch (error) {
       console.error('Failed to create jurisdiction:', error);
       return null;
     }
@@ -189,7 +189,7 @@ export const JurisdictionAPI = {
   async update(id: string, data: Partial<CreateJurisdictionDto>): Promise<Jurisdiction | null> {
     try {
       return await apiClient.put<Jurisdiction>(`/jurisdictions/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error(`Failed to update jurisdiction ${id}:`, error);
       return null;
     }
@@ -199,7 +199,7 @@ export const JurisdictionAPI = {
     try {
       await apiClient.delete(`/jurisdictions/${id}`);
       return true;
-    } catch () {
+    } catch (error) {
       console.error(`Failed to delete jurisdiction ${id}:`, error);
       return false;
     }
@@ -215,7 +215,7 @@ export const JurisdictionAPI = {
         return await apiClient.get<JurisdictionRule[]>(`/jurisdictions/${jurisdictionId}/rules`);
       }
       return await apiClient.get<JurisdictionRule[]>('/jurisdictions/rules');
-    } catch () {
+    } catch (error) {
       console.error('Failed to fetch jurisdiction rules:', error);
       return [];
     }
@@ -224,7 +224,7 @@ export const JurisdictionAPI = {
   async getRuleById(id: string): Promise<JurisdictionRule | null> {
     try {
       return await apiClient.get<JurisdictionRule>(`/jurisdictions/rules/${id}`);
-    } catch () {
+    } catch (error) {
       console.error(`Failed to fetch rule ${id}:`, error);
       return null;
     }
@@ -236,7 +236,7 @@ export const JurisdictionAPI = {
       if (jurisdictionId) params.append('jurisdictionId', jurisdictionId);
       
       return await apiClient.get<JurisdictionRule[]>(`/jurisdictions/rules/search?${params.toString()}`);
-    } catch () {
+    } catch (error) {
       console.error('Failed to search jurisdiction rules:', error);
       return [];
     }
@@ -245,7 +245,7 @@ export const JurisdictionAPI = {
   async createRule(data: CreateJurisdictionRuleDto): Promise<JurisdictionRule | null> {
     try {
       return await apiClient.post<JurisdictionRule>('/jurisdictions/rules', data);
-    } catch () {
+    } catch (error) {
       console.error('Failed to create jurisdiction rule:', error);
       return null;
     }
@@ -254,7 +254,7 @@ export const JurisdictionAPI = {
   async updateRule(id: string, data: Partial<Omit<CreateJurisdictionRuleDto, 'jurisdictionId'>>): Promise<JurisdictionRule | null> {
     try {
       return await apiClient.put<JurisdictionRule>(`/jurisdictions/rules/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error(`Failed to update rule ${id}:`, error);
       return null;
     }
@@ -264,7 +264,7 @@ export const JurisdictionAPI = {
     try {
       await apiClient.delete(`/jurisdictions/rules/${id}`);
       return true;
-    } catch () {
+    } catch (error) {
       console.error(`Failed to delete rule ${id}:`, error);
       return false;
     }

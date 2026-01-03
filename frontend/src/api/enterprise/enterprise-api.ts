@@ -258,7 +258,7 @@ export class EnterpriseApiClient {
   private getAuthToken(): string | null {
     try {
       return localStorage.getItem(this.authTokenKey);
-    } catch () {
+    } catch (error) {
       console.error("[EnterpriseApiClient] Failed to get auth token:", error);
       return null;
     }
@@ -273,7 +273,7 @@ export class EnterpriseApiClient {
       if (refreshToken) {
         localStorage.setItem(this.refreshTokenKey, refreshToken);
       }
-    } catch () {
+    } catch (error) {
       console.error("[EnterpriseApiClient] Failed to set auth tokens:", error);
       throw new ValidationError("Failed to store authentication tokens");
     }
@@ -286,7 +286,7 @@ export class EnterpriseApiClient {
     try {
       localStorage.removeItem(this.authTokenKey);
       localStorage.removeItem(this.refreshTokenKey);
-    } catch () {
+    } catch (error) {
       console.error(
         "[EnterpriseApiClient] Failed to clear auth tokens:",
         error
@@ -393,7 +393,7 @@ export class EnterpriseApiClient {
         );
 
         return processedData;
-      } catch () {
+      } catch (error) {
         clearTimeout(timeoutId);
         const parsedError = parseApiError(error);
 

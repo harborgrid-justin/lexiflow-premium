@@ -285,7 +285,7 @@ export function saveColumnWidths(
 ): void {
   try {
     localStorage.setItem(`column-widths-${key}`, JSON.stringify(widths));
-  } catch () {
+  } catch (error) {
     console.error('Failed to save column widths:', error);
   }
 }
@@ -297,7 +297,7 @@ export function loadColumnWidths(key: string): Record<string, number> | null {
   try {
     const stored = localStorage.getItem(`column-widths-${key}`);
     return stored ? JSON.parse(stored) : null;
-  } catch () {
+  } catch (error) {
     console.error('Failed to load column widths:', error);
     return null;
   }

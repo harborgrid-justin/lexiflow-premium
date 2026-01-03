@@ -25,7 +25,7 @@ export const WarRoomService = {
     if (!caseId) return null;
     try {
       return await api.warRoom.getWarRoomData(caseId);
-    } catch (_error) {
+    } catch (error) {
       console.warn('[WarRoomService] Failed to fetch data, returning mock:', error);
       return {
         caseId,
@@ -48,7 +48,8 @@ export const WarRoomService = {
   getAdvisors: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getAdvisors(query);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.getAdvisors] Error:', error);
       return [];
     }
   },
@@ -56,7 +57,8 @@ export const WarRoomService = {
   createAdvisor: async (data: CreateAdvisorDto) => {
     try {
       return await api.warRoom.createAdvisor(data);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.createAdvisor] Error:', error);
       return { id: 'mock-advisor', ...data };
     }
   },
@@ -64,7 +66,8 @@ export const WarRoomService = {
   deleteAdvisor: async (id: string) => {
     try {
       return await api.warRoom.deleteAdvisor(id);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.deleteAdvisor] Error:', error);
       return true;
     }
   },
@@ -73,7 +76,8 @@ export const WarRoomService = {
   getExperts: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getExperts(query);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.getExperts] Error:', error);
       return [];
     }
   },
@@ -81,7 +85,8 @@ export const WarRoomService = {
   createExpert: async (data: CreateExpertDto) => {
     try {
       return await api.warRoom.createExpert(data);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.createExpert] Error:', error);
       return { id: 'mock-expert', ...data };
     }
   },
@@ -89,7 +94,8 @@ export const WarRoomService = {
   deleteExpert: async (id: string) => {
     try {
       return await api.warRoom.deleteExpert(id);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.deleteExpert] Error:', error);
       return true;
     }
   },
@@ -98,7 +104,8 @@ export const WarRoomService = {
   getStrategy: async (caseId: string) => {
     try {
       return await api.warRoom.getStrategy(caseId);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.getStrategy] Error:', error);
       return { theme: 'Mock Theme', narrative: 'Mock Narrative' };
     }
   },
@@ -106,7 +113,8 @@ export const WarRoomService = {
   updateStrategy: async (caseId: string, data: UpdateStrategyDto) => {
     try {
       return await api.warRoom.updateStrategy(caseId, data);
-    } catch (_error) {
+    } catch (error) {
+      console.error('[WarRoomService.updateStrategy] Error:', error);
       return { ...data };
     }
   },

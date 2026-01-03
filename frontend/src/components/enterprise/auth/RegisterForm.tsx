@@ -117,7 +117,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
 
       setErrors({});
       return true;
-    } catch () {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: FormErrors = {};
         error.issues.forEach((err: z.ZodIssue) => {
@@ -152,7 +152,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       });
-    } catch () {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Registration failed. Please try again.';
       setErrors({
         general: errorMessage,

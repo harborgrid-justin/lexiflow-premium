@@ -196,7 +196,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           const results = await onSearch(query);
           setSearchResults(results);
         }
-      } catch () {
+      } catch (error) {
         console.error('Search error:', error);
         setSearchResults([]);
       } finally {

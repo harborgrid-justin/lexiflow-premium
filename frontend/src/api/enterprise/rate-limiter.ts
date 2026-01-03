@@ -261,7 +261,7 @@ export class RateLimiter {
         try {
           const result = await request.execute();
           request.resolve(result);
-        } catch () {
+        } catch (error) {
           request.reject(error);
         }
       } else {

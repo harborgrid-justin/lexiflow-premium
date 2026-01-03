@@ -18,7 +18,7 @@ export async function getByCaseId(caseId: string): Promise<LegalDocument[]> {
 export async function getFolders(): Promise<unknown[]> {
   try {
     return await apiClient.get<unknown[]>('/documents/folders/list');
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.getFolders] Error:', error);
     throw new Error('Failed to fetch document folders');
   }
@@ -30,7 +30,7 @@ export async function getContent(id: string): Promise<string> {
   try {
     const response = await apiClient.get<{ content: string }>(`/documents/${id}/content`);
     return response.content;
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.getContent] Error:', error);
     throw new Error(`Failed to fetch content for document with id: ${id}`);
   }

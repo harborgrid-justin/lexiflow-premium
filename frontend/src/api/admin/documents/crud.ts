@@ -12,7 +12,7 @@ export async function getAll(filters?: { caseId?: string; type?: string; status?
   try {
     const response = await apiClient.get<PaginatedResponse<LegalDocument>>('/documents', filters);
     return response.data;
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.getAll] Error:', error);
     throw new Error('Failed to fetch documents');
   }
@@ -23,7 +23,7 @@ export async function getById(id: string): Promise<LegalDocument> {
   validateId(id, 'getById');
   try {
     return await apiClient.get<LegalDocument>(`/documents/${id}`);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.getById] Error:', error);
     throw new Error(`Failed to fetch document with id: ${id}`);
   }
@@ -44,7 +44,7 @@ export async function add(doc: Omit<LegalDocument, 'id' | 'createdAt' | 'updated
 
   try {
     return await apiClient.post<LegalDocument>('/documents', createDto);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.add] Error:', error);
     throw new Error('Failed to create document');
   }
@@ -56,7 +56,7 @@ export async function update(id: string, doc: Partial<LegalDocument>): Promise<L
   validateObject(doc, 'doc', 'update');
   try {
     return await apiClient.put<LegalDocument>(`/documents/${id}`, doc);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.update] Error:', error);
     throw new Error(`Failed to update document with id: ${id}`);
   }
@@ -67,7 +67,7 @@ export async function deleteDoc(id: string): Promise<void> {
   validateId(id, 'delete');
   try {
     await apiClient.delete(`/documents/${id}`);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.delete] Error:', error);
     throw new Error(`Failed to delete document with id: ${id}`);
   }

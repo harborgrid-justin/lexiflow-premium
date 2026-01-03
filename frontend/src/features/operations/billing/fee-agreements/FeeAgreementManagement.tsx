@@ -58,7 +58,7 @@ export const FeeAgreementManagement: React.FC = () => {
       createModal.close();
       setFormData({});
       notify.success('Fee agreement created successfully');
-    } catch (_error) {
+    } catch (error) {
       notify.error('Failed to create fee agreement');
     }
   };
@@ -72,7 +72,7 @@ export const FeeAgreementManagement: React.FC = () => {
       setSelectedAgreement(null);
       setFormData({});
       notify.success('Fee agreement updated successfully');
-    } catch (_error) {
+    } catch (error) {
       notify.error('Failed to update fee agreement');
     }
   };
@@ -85,7 +85,7 @@ export const FeeAgreementManagement: React.FC = () => {
       deleteModal.close();
       setSelectedAgreement(null);
       notify.success('Fee agreement deleted successfully');
-    } catch (_error) {
+    } catch (error) {
       notify.error('Failed to delete fee agreement');
     }
   };
@@ -95,7 +95,7 @@ export const FeeAgreementManagement: React.FC = () => {
       await DataService.feeAgreements.update(agreement.id, { status: newStatus });
       await refetch();
       notify.success(`Agreement status updated to ${newStatus}`);
-    } catch (_error) {
+    } catch (error) {
       notify.error('Failed to update agreement status');
     }
   };

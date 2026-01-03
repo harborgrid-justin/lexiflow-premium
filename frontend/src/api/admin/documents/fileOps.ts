@@ -13,7 +13,7 @@ export async function upload(file: File, metadata: Record<string, unknown>): Pro
   validateObject(metadata, 'metadata', 'upload');
   try {
     return await apiClient.upload<LegalDocument>('/documents/upload', file, metadata);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.upload] Error:', error);
     throw new Error('Failed to upload document');
   }
@@ -41,7 +41,7 @@ export async function bulkUpload(files: File[], metadata: Record<string, string>
     const response = await fetch(`${apiClient.getBaseUrl()}/documents/bulk-upload`, { method: 'POST', headers, body: formData });
     if (!response.ok) throw new Error(`Bulk upload failed: ${response.status}`);
     return await response.json();
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.bulkUpload] Error:', error);
     throw new Error('Failed to bulk upload documents');
   }
@@ -54,7 +54,7 @@ export async function download(id: string): Promise<Blob> {
     const response = await fetch(`${apiClient.getBaseUrl()}/documents/${id}/download`, { headers: apiClient['getHeaders']() });
     if (!response.ok) throw new Error(`Download failed: ${response.status}`);
     return await response.blob();
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.download] Error:', error);
     throw new Error(`Failed to download document with id: ${id}`);
   }
@@ -66,7 +66,7 @@ export async function preview(id: string): Promise<string> {
   try {
     const response = await apiClient.get<{ url: string }>(`/documents/${id}/preview`);
     return response.url;
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.preview] Error:', error);
     throw new Error(`Failed to generate preview for document with id: ${id}`);
   }

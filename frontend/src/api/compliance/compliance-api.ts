@@ -147,7 +147,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.post<ComplianceCheck>(`${this.baseUrl}/checks`, data);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.runCheck] Error:', error);
             throw new Error('Failed to run compliance check');
         }
@@ -177,7 +177,7 @@ export class ComplianceApiService {
             const url = queryString ? `${this.baseUrl}/checks?${queryString}` : `${this.baseUrl}/checks`;
             
             return await apiClient.get<ComplianceCheck[]>(url);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.getChecks] Error:', error);
             throw new Error('Failed to fetch compliance checks');
         }
@@ -198,7 +198,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.get<ComplianceCheck>(`${this.baseUrl}/checks/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.getCheckById] Error:', error);
             throw new Error(`Failed to fetch compliance check with id: ${id}`);
         }
@@ -220,7 +220,7 @@ export class ComplianceApiService {
     async getEthicalWalls(): Promise<EthicalWall[]> {
         try {
             return await apiClient.get<EthicalWall[]>(`${this.baseUrl}/ethical-walls`);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.getEthicalWalls] Error:', error);
             throw new Error('Failed to fetch ethical walls');
         }
@@ -241,7 +241,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.get<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.getEthicalWallById] Error:', error);
             throw new Error(`Failed to fetch ethical wall with id: ${id}`);
         }
@@ -274,7 +274,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls`, data);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.createEthicalWall] Error:', error);
             throw new Error('Failed to create ethical wall');
         }
@@ -294,7 +294,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.put<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`, data);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.updateEthicalWall] Error:', error);
             throw new Error(`Failed to update ethical wall with id: ${id}`);
         }
@@ -315,7 +315,7 @@ export class ComplianceApiService {
 
         try {
             return await apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}/lift`, {});
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.liftEthicalWall] Error:', error);
             throw new Error(`Failed to lift ethical wall with id: ${id}`);
         }
@@ -333,7 +333,7 @@ export class ComplianceApiService {
 
         try {
             await apiClient.delete(`${this.baseUrl}/ethical-walls/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[ComplianceApiService.deleteEthicalWall] Error:', error);
             throw new Error(`Failed to delete ethical wall with id: ${id}`);
         }

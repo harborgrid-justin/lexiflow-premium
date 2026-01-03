@@ -56,7 +56,7 @@ export const WebhookManagement: React.FC = () => {
       createModal.close();
       setFormData({ events: [] });
       notify.success('Webhook created successfully');
-    } catch (_error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -70,7 +70,7 @@ export const WebhookManagement: React.FC = () => {
       webhookSelection.deselect();
       setFormData({ events: [] });
       notify.success('Webhook updated successfully');
-    } catch (_error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -83,7 +83,7 @@ export const WebhookManagement: React.FC = () => {
       deleteModal.close();
       webhookSelection.deselect();
       notify.success('Webhook deleted successfully');
-    } catch (_error) {
+    } catch (error) {
       console.error(error);
     }
   };

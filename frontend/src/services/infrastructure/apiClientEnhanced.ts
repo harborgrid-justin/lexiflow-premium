@@ -26,7 +26,7 @@
  * - POST mutations require explicit retry flag
  */
 
-import { apiClient, type ApiError } from './apiClient';
+import { apiClient } from './apiClient';
 import {
   ApiTimeoutError,
   ExternalServiceError,

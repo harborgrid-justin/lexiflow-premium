@@ -150,7 +150,7 @@ export class BillingApiService {
             }
             const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries');
             return Array.isArray(response) ? response : (response.data || []);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.getTimeEntries] Error:', error);
             throw new Error('Failed to fetch time entries');
         }
@@ -168,7 +168,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.getTimeEntryById] Error:', error);
             throw new Error(`Failed to fetch time entry with id: ${id}`);
         }
@@ -229,7 +229,7 @@ export class BillingApiService {
             });
 
             return await apiClient.post<TimeEntry>('/billing/time-entries', createDto);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.addTimeEntry] Error:', error);
             throw new Error('Failed to create time entry');
         }
@@ -247,7 +247,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<TimeEntry[]>('/billing/time-entries/bulk', { entries });
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.addBulkTimeEntries] Error:', error);
             throw new Error('Failed to create bulk time entries');
         }
@@ -267,7 +267,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}`, entry);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.updateTimeEntry] Error:', error);
             throw new Error(`Failed to update time entry with id: ${id}`);
         }
@@ -285,7 +285,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}/approve`, {});
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.approveTimeEntry] Error:', error);
             throw new Error(`Failed to approve time entry with id: ${id}`);
         }
@@ -305,7 +305,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}/bill`, { invoiceId });
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.billTimeEntry] Error:', error);
             throw new Error(`Failed to bill time entry with id: ${id}`);
         }
@@ -324,7 +324,7 @@ export class BillingApiService {
         try {
             const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/case/${caseId}/unbilled`);
             return response.data;
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.getUnbilledTimeEntries] Error:', error);
             throw new Error(`Failed to fetch unbilled time entries for case: ${caseId}`);
         }
@@ -342,7 +342,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.get<{ total: number; billable: number; unbilled: number }>(`/billing/time-entries/case/${caseId}/totals`);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.getTimeEntryTotals] Error:', error);
             throw new Error(`Failed to fetch time entry totals for case: ${caseId}`);
         }
@@ -360,7 +360,7 @@ export class BillingApiService {
 
         try {
             await apiClient.delete(`/billing/time-entries/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.deleteTimeEntry] Error:', error);
             throw new Error(`Failed to delete time entry with id: ${id}`);
         }
@@ -399,7 +399,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<unknown>('/billing/invoices', data);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.createInvoice] Error:', error);
             throw new Error('Failed to create invoice');
         }
@@ -419,7 +419,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<unknown>(`/billing/invoices/${id}`, data);
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.updateInvoice] Error:', error);
             throw new Error(`Failed to update invoice with id: ${id}`);
         }
@@ -437,7 +437,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<unknown>(`/billing/invoices/${id}/send`, {});
-        } catch () {
+        } catch (error) {
             console.error('[BillingApiService.sendInvoice] Error:', error);
             throw new Error(`Failed to send invoice with id: ${id}`);
         }

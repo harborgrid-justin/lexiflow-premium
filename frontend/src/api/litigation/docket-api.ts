@@ -129,7 +129,7 @@ export class DocketApiService {
         "/docket",
         params
       );
-    } catch () {
+    } catch (error) {
       console.error("[DocketApiService.getAll] Error:", error);
       throw new Error("Failed to fetch docket entries");
     }
@@ -147,7 +147,7 @@ export class DocketApiService {
 
     try {
       return await apiClient.get<DocketEntry>(`/docket/${id}`);
-    } catch () {
+    } catch (error) {
       console.error("[DocketApiService.getById] Error:", error);
       throw new Error(`Failed to fetch docket entry with id: ${id}`);
     }
@@ -211,7 +211,7 @@ export class DocketApiService {
       });
 
       return await apiClient.post<DocketEntry>("/docket", createDto);
-    } catch () {
+    } catch (error) {
       console.error("[DocketApiService.add] Error:", error);
       throw new Error("Failed to create docket entry");
     }
@@ -231,7 +231,7 @@ export class DocketApiService {
 
     try {
       return await apiClient.patch<DocketEntry>(`/docket/${id}`, entry);
-    } catch () {
+    } catch (error) {
       console.error("[DocketApiService.update] Error:", error);
       throw new Error(`Failed to update docket entry with id: ${id}`);
     }
@@ -249,7 +249,7 @@ export class DocketApiService {
 
     try {
       await apiClient.delete(`/docket/${id}`);
-    } catch () {
+    } catch (error) {
       console.error("[DocketApiService.delete] Error:", error);
       throw new Error(`Failed to delete docket entry with id: ${id}`);
     }

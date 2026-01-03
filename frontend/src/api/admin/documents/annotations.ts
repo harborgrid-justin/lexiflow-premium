@@ -12,7 +12,7 @@ export async function getAnnotations(documentId: string): Promise<Annotation[]> 
   validateId(documentId, 'getAnnotations');
   try {
     return await apiClient.get<Annotation[]>(`/documents/${documentId}/annotations`);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.getAnnotations] Error:', error);
     throw new Error(`Failed to fetch annotations for document: ${documentId}`);
   }
@@ -25,7 +25,7 @@ export async function addAnnotation(documentId: string, annotation: Omit<Annotat
 
   try {
     return await apiClient.post<Annotation>(`/documents/${documentId}/annotations`, annotation);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.addAnnotation] Error:', error);
     throw new Error(`Failed to add annotation to document: ${documentId}`);
   }
@@ -38,7 +38,7 @@ export async function deleteAnnotation(documentId: string, annotationId: string)
 
   try {
     await apiClient.delete(`/documents/${documentId}/annotations/${annotationId}`);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.deleteAnnotation] Error:', error);
     throw new Error(`Failed to delete annotation: ${annotationId}`);
   }
@@ -52,7 +52,7 @@ export async function updateAnnotation(documentId: string, annotationId: string,
 
   try {
     return await apiClient.put<Annotation>(`/documents/${documentId}/annotations/${annotationId}`, updates);
-  } catch () {
+  } catch (error) {
     console.error('[DocumentsApiService.updateAnnotation] Error:', error);
     throw new Error(`Failed to update annotation: ${annotationId}`);
   }

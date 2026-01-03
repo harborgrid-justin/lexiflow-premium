@@ -250,7 +250,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
       try {
         await onAutoSave(formData);
         setLastSaved(new Date());
-      } catch () {
+      } catch (error) {
         console.error('Auto-save error:', error);
       } finally {
         setIsSaving(false);
@@ -355,7 +355,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
       setIsSubmitting(true);
       try {
         await onSubmit(formData);
-      } catch () {
+      } catch (error) {
         console.error('Form submission error:', error);
       } finally {
         setIsSubmitting(false);

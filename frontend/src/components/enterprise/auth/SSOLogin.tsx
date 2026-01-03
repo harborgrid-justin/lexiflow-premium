@@ -146,7 +146,7 @@ export const SSOLogin: React.FC<SSOLoginProps> = ({
           window.location.href = ssoUrl;
         }
       }
-    } catch () {
+    } catch (error) {
       onError?.(error as Error);
       setIsLoading(null);
     }

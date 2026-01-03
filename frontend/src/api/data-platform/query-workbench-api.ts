@@ -58,7 +58,7 @@ export class QueryWorkbenchApiService {
   async executeQuery(query: string): Promise<QueryResult> {
     try {
       return await apiClient.post<QueryResult>('/query-workbench/execute', { query });
-    } catch () {
+    } catch (error) {
       console.error('[QueryWorkbenchApi] Error executing query:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return {
@@ -78,7 +78,7 @@ export class QueryWorkbenchApiService {
   async explainQuery(query: string): Promise<{ success: boolean; plan?: unknown; error?: string }> {
     try {
       return await apiClient.post('/query-workbench/explain', { query });
-    } catch () {
+    } catch (error) {
       console.error('[QueryWorkbenchApi] Error explaining query:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return { success: false, error: errorMessage };
@@ -91,7 +91,7 @@ export class QueryWorkbenchApiService {
   async getHistory(limit = 100): Promise<QueryHistoryItem[]> {
     try {
       return await apiClient.get<QueryHistoryItem[]>('/query-workbench/history', { limit });
-    } catch () {
+    } catch (error) {
       console.error('[QueryWorkbenchApi] Error fetching history:', error);
       return [];
     }
@@ -103,7 +103,7 @@ export class QueryWorkbenchApiService {
   async getSavedQueries(): Promise<SavedQuery[]> {
     try {
       return await apiClient.get<SavedQuery[]>('/query-workbench/saved');
-    } catch () {
+    } catch (error) {
       console.error('[QueryWorkbenchApi] Error fetching saved queries:', error);
       return [];
     }

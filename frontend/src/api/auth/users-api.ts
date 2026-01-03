@@ -131,7 +131,7 @@ export class UsersApiService {
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       const response = await apiClient.get<PaginatedResponse<User>>(url);
       return response.data;
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.getAll] Error:', error);
       throw new Error('Failed to fetch users');
     }
@@ -149,7 +149,7 @@ export class UsersApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<User>(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.getById] Error:', error);
       throw new Error(`Failed to fetch user with id: ${id}`);
     }
@@ -177,7 +177,7 @@ export class UsersApiService {
     }
     try {
       return await apiClient.post<User>(this.baseUrl, data);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.create] Error:', error);
       throw new Error('Failed to create user');
     }
@@ -200,7 +200,7 @@ export class UsersApiService {
     }
     try {
       return await apiClient.patch<User>(`${this.baseUrl}/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.update] Error:', error);
       throw new Error(`Failed to update user with id: ${id}`);
     }
@@ -218,7 +218,7 @@ export class UsersApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.delete] Error:', error);
       throw new Error(`Failed to delete user with id: ${id}`);
     }
@@ -248,7 +248,7 @@ export class UsersApiService {
     }
     try {
       await apiClient.post(`${this.baseUrl}/${id}/change-password`, data);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.changePassword] Error:', error);
       throw new Error('Failed to change password');
     }
@@ -266,7 +266,7 @@ export class UsersApiService {
     this.validateId(id, 'activate');
     try {
       return await apiClient.post<User>(`${this.baseUrl}/${id}/activate`, {});
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.activate] Error:', error);
       throw new Error(`Failed to activate user with id: ${id}`);
     }
@@ -284,7 +284,7 @@ export class UsersApiService {
     this.validateId(id, 'deactivate');
     try {
       return await apiClient.post<User>(`${this.baseUrl}/${id}/deactivate`, {});
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.deactivate] Error:', error);
       throw new Error(`Failed to deactivate user with id: ${id}`);
     }
@@ -303,7 +303,7 @@ export class UsersApiService {
   async getStatistics(): Promise<UserStatistics> {
     try {
       return await apiClient.get<UserStatistics>(`${this.baseUrl}/statistics`);
-    } catch () {
+    } catch (error) {
       console.error('[UsersApiService.getStatistics] Error:', error);
       throw new Error('Failed to fetch user statistics');
     }

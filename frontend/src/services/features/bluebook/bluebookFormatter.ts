@@ -290,7 +290,7 @@ class BluebookFormatterClass {
             break;
           }
 
-        default:
+        default: {
           const existingSecondary = toa.secondary.find(s => s.citation === formatted);
           if (existingSecondary) {
             if (!existingSecondary.pages.includes(page)) {
@@ -299,6 +299,8 @@ class BluebookFormatterClass {
           } else {
             toa.secondary.push({ citation: formatted, pages: [page] });
           }
+          break;
+        }
       }
     });
 

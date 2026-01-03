@@ -137,7 +137,7 @@ export class ClientsApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<Client[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getAll] Error:', error);
       throw new Error('Failed to fetch clients');
     }
@@ -155,7 +155,7 @@ export class ClientsApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<Client>(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getById] Error:', error);
       throw new Error(`Failed to fetch client with id: ${id}`);
     }
@@ -179,7 +179,7 @@ export class ClientsApiService {
     }
     try {
       return await apiClient.post<Client>(this.baseUrl, data);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.create] Error:', error);
       throw new Error('Failed to create client');
     }
@@ -202,7 +202,7 @@ export class ClientsApiService {
     }
     try {
       return await apiClient.put<Client>(`${this.baseUrl}/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.update] Error:', error);
       throw new Error(`Failed to update client with id: ${id}`);
     }
@@ -220,7 +220,7 @@ export class ClientsApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.delete] Error:', error);
       throw new Error(`Failed to delete client with id: ${id}`);
     }
@@ -239,7 +239,7 @@ export class ClientsApiService {
   async getVipClients(): Promise<Client[]> {
     try {
       return await apiClient.get<Client[]>(`${this.baseUrl}/vip`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getVipClients] Error:', error);
       throw new Error('Failed to fetch VIP clients');
     }
@@ -267,7 +267,7 @@ export class ClientsApiService {
     this.validateId(id, 'runConflictCheck');
     try {
       return await apiClient.post(`${this.baseUrl}/${id}/conflict-check`, {});
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.runConflictCheck] Error:', error);
       throw new Error(`Failed to run conflict check for client: ${id}`);
     }
@@ -294,7 +294,7 @@ export class ClientsApiService {
         retainerBalance,
         hasRetainer: retainerAmount > 0,
       });
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.updateRetainer] Error:', error);
       throw new Error(`Failed to update retainer for client: ${id}`);
     }
@@ -313,7 +313,7 @@ export class ClientsApiService {
   async getStatistics(): Promise<ClientStatistics> {
     try {
       return await apiClient.get<ClientStatistics>(`${this.baseUrl}/statistics`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getStatistics] Error:', error);
       throw new Error('Failed to fetch client statistics');
     }
@@ -331,7 +331,7 @@ export class ClientsApiService {
     this.validateId(id, 'getCases');
     try {
       return await apiClient.get<unknown[]>(`${this.baseUrl}/${id}/cases`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getCases] Error:', error);
       throw new Error(`Failed to fetch cases for client: ${id}`);
     }
@@ -349,7 +349,7 @@ export class ClientsApiService {
     this.validateId(id, 'getInvoices');
     try {
       return await apiClient.get<unknown[]>(`${this.baseUrl}/${id}/invoices`);
-    } catch () {
+    } catch (error) {
       console.error('[ClientsApiService.getInvoices] Error:', error);
       throw new Error(`Failed to fetch invoices for client: ${id}`);
     }

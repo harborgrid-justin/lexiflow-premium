@@ -202,7 +202,7 @@ export class CasesApiService {
     async getStats(): Promise<CaseStats> {
         try {
             return await apiClient.get<CaseStats>('/cases/stats');
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.getStats] Error:', error);
             throw new Error('Failed to fetch case statistics');
         }
@@ -224,7 +224,7 @@ export class CasesApiService {
         try {
             const backendCase = await apiClient.get<Case>(`/cases/${id}`);
             return this.transformCase(backendCase);
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.getById] Error:', error);
             throw new Error(`Failed to fetch case with id: ${id}`);
         }
@@ -300,7 +300,7 @@ export class CasesApiService {
 
             const backendCase = await apiClient.post<Case>('/cases', createDto);
             return this.transformCase(backendCase);
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.add] Error:', error);
             throw new Error('Failed to create case');
         }
@@ -321,7 +321,7 @@ export class CasesApiService {
         try {
             const backendCase = await apiClient.put<Case>(`/cases/${id}`, caseData);
             return this.transformCase(backendCase);
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.update] Error:', error);
             throw new Error(`Failed to update case with id: ${id}`);
         }
@@ -339,7 +339,7 @@ export class CasesApiService {
 
         try {
             await apiClient.delete(`/cases/${id}`);
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.delete] Error:', error);
             throw new Error(`Failed to delete case with id: ${id}`);
         }
@@ -357,7 +357,7 @@ export class CasesApiService {
 
         try {
             return await apiClient.post<unknown>('/cases/import/parse', { content, options });
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.parse] Error:', error);
             throw new Error('Failed to parse case data');
         }
@@ -376,7 +376,7 @@ export class CasesApiService {
         try {
             const backendCase = await apiClient.post<Case>(`/cases/${id}/archive`, {});
             return this.transformCase(backendCase);
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.archive] Error:', error);
             throw new Error(`Failed to archive case with id: ${id}`);
         }
@@ -399,7 +399,7 @@ export class CasesApiService {
         try {
             const response = await apiClient.get<PaginatedResponse<Case>>('/cases', { search: query, ...filters });
             return response.data.map(c => this.transformCase(c));
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.search] Error:', error);
             throw new Error('Failed to search cases');
         }
@@ -432,7 +432,7 @@ export class CasesApiService {
                     outcome: c.status
                 }));
             }
-        } catch () {
+        } catch (error) {
             console.error('[CasesApiService.getArchived] Error:', error);
             throw new Error('Failed to get archived cases');
         }

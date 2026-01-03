@@ -58,7 +58,7 @@ export function SSOLoginOptions({ providers = DEFAULT_PROVIDERS, onProviderClick
       } else {
         await loginWithSSO(provider.id);
       }
-    } catch () {
+    } catch (error) {
       console.error('SSO login failed:', error);
     } finally {
       setIsLoading(null);

@@ -145,7 +145,7 @@ export class CorrespondenceApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<Correspondence[]>(url);
-    } catch () {
+    } catch (error) {
       console.error('[CorrespondenceApiService.getAll] Error:', error);
       throw new Error('Failed to fetch correspondence');
     }
@@ -162,7 +162,7 @@ export class CorrespondenceApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<Correspondence>(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[CorrespondenceApiService.getById] Error:', error);
       throw new Error(`Failed to fetch correspondence with id: ${id}`);
     }
@@ -198,7 +198,7 @@ export class CorrespondenceApiService {
     }
     try {
       return await apiClient.post<Correspondence>(this.baseUrl, data);
-    } catch () {
+    } catch (error) {
       console.error('[CorrespondenceApiService.create] Error:', error);
       throw new Error('Failed to create correspondence');
     }
@@ -227,7 +227,7 @@ export class CorrespondenceApiService {
     }
     try {
       return await apiClient.put<Correspondence>(`${this.baseUrl}/${id}`, data);
-    } catch () {
+    } catch (error) {
       console.error('[CorrespondenceApiService.update] Error:', error);
       throw new Error(`Failed to update correspondence with id: ${id}`);
     }
@@ -244,7 +244,7 @@ export class CorrespondenceApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch () {
+    } catch (error) {
       console.error('[CorrespondenceApiService.delete] Error:', error);
       throw new Error(`Failed to delete correspondence with id: ${id}`);
     }

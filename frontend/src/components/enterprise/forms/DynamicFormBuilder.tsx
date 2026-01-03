@@ -134,7 +134,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
       try {
         await onSubmit(formState.data as TFormData);
         config.onSuccess?.();
-      } catch () {
+      } catch (error) {
         config.onError?.(error as Error);
       }
     },

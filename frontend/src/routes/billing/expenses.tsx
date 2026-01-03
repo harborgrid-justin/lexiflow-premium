@@ -13,7 +13,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return createListMeta({
     entityType: 'Expenses',
     count: data?.expenses?.length,
@@ -141,7 +141,7 @@ export default function ExpensesRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

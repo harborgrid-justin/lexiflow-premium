@@ -3,17 +3,25 @@
  * Attorney utilization, billable hours, and efficiency metrics
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/productivity";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
-import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
-} from 'recharts';
+import { ChartCard, DateRangeSelector, MetricCard } from '@/components/enterprise/analytics';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useLoaderData } from 'react-router';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
 
 export function meta() {
   return createMeta({
@@ -35,7 +43,7 @@ export async function loader() {
 }
 
 export default function ProductivityAnalyticsRoute() {
-  const { metrics } = loaderData;
+  const { metrics } = useLoaderData<typeof loader>();
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 30),
@@ -191,9 +199,12 @@ export default function ProductivityAnalyticsRoute() {
               <Tooltip />
               <Bar
                 dataKey="hours"
-                fill={(entry) => entry.billable ? '#10B981' : '#9CA3AF'}
                 name="Hours"
-              />
+              >
+                {activityBreakdown.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.billable ? '#10B981' : '#9CA3AF'} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

@@ -8,13 +8,12 @@ import { TrustAccountDashboard } from '@/features/operations/billing/trust/Trust
 import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/trust";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return createListMeta({
     entityType: 'Trust Accounts',
     count: data?.accounts?.length,
@@ -26,7 +25,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const clientId = url.searchParams.get('clientId');
   const status = url.searchParams.get('status');
@@ -36,7 +35,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   try {
     const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as string) || undefined,
+      status: (status as any) || undefined,
     });
 
     return {
@@ -56,7 +55,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const trustApi = new TrustAccountsApiService();
@@ -66,7 +65,7 @@ export async function action({ request }: Route.ActionArgs) {
       const depositAccountId = formData.get("accountId") as string;
       const depositData = {
         amount: parseFloat(formData.get("amount") as string),
-        transactionDate: new Date(formData.get("date") as string),
+        transactionDate: formData.get("date") as string,
         description: formData.get("description") as string,
         checkNumber: formData.get("checkNumber") as string || undefined,
         payorName: formData.get("payorName") as string,
@@ -84,7 +83,7 @@ export async function action({ request }: Route.ActionArgs) {
       const withdrawAccountId = formData.get("accountId") as string;
       const withdrawData = {
         amount: parseFloat(formData.get("amount") as string),
-        transactionDate: new Date(formData.get("date") as string),
+        transactionDate: formData.get("date") as string,
         description: formData.get("description") as string,
         checkNumber: formData.get("checkNumber") as string || undefined,
         payeeName: formData.get("payeeName") as string,

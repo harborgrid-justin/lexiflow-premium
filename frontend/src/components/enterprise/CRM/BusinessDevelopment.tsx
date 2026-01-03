@@ -699,8 +699,8 @@ export const BusinessDevelopment: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: unknown) => {
-                    const { source, count } = (props as any).payload || props;
+                  label={(props: { payload: { source: string; count: number }; source?: string; count?: number }) => {
+                    const { source, count } = props.payload || props;
                     return source && count !== undefined ? `${source}: ${count}` : '';
                   }}
                 >

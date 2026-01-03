@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
@@ -8,6 +8,9 @@ import React, { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
+import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
+import { CaseRepository } from '@/services/data/repositories/IntegratedCaseRepository';
+import { DocketRepository } from '@/services/data/repositories/IntegratedDocketRepository';
 import { DocketEntry } from '@/types';
 
 interface ContextPanelProps {
@@ -34,7 +37,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: caseData, isLoading: caseLoading } = useQuery(
     ['cases', caseId],
     async () => {
-      const cases = DataService.cases as any;
+      const cases = DataService.cases as CaseRepository;
       return cases.getById(caseId);
     }
   );
@@ -43,7 +46,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: evidence = [], isLoading: evidenceLoading } = useQuery<unknown[]>(
     ['evidence', caseId],
     async () => {
-      const evidenceService = DataService.evidence as any;
+      const evidenceService = DataService.evidence as EvidenceRepository;
       return evidenceService.getByCaseId(caseId);
     }
   );
@@ -52,7 +55,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: docketEntries = [], isLoading: docketLoading } = useQuery<DocketEntry[]>(
     ['docket', caseId],
     async () => {
-      const docketService = DataService.docket as any;
+      const docketService = DataService.docket as DocketRepository;
       return docketService.getByCaseId(caseId);
     }
   );

@@ -308,8 +308,9 @@ const enforceCacheLimit = () => {
     // Remove oldest 20% of entries
     const toRemove = Math.floor(size * 0.2);
     for (let i = 0; i < toRemove && i < entries.length; i++) {
-      if (entries[i]) {
-        processedCache.delete(entries[i][0]);
+      const entry = entries[i];
+      if (entry) {
+        processedCache.delete(entry[0]);
       }
     }
 

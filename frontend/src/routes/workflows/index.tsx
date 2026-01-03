@@ -31,7 +31,7 @@ export function meta({ data }: Route.MetaArgs) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  const status = url.searchParams.get('status') as any;
+  const status = url.searchParams.get('status') as WorkflowStatus;
   const category = url.searchParams.get('category') || undefined;
 
   const [templates, instances] = await Promise.all([

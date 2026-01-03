@@ -15,8 +15,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import {
   loginSchema,
-  type LoginFormData,
   mfaCodeSchema,
+  type LoginFormData,
 } from '@/services/validation/authSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormEvent, useState } from 'react';
@@ -25,8 +25,7 @@ import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
-  const { mfaRequired: _mfaRequired } = useAuth();
+  const { mfaRequired: _mfaRequired, login, clearError, error: authError } = useAuth() as any;
 
   const [showMfa, setShowMfa] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
@@ -40,7 +39,7 @@ console.log('useNavigate:', navigate);
     formState: { errors },
     getValues,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as any,
     defaultValues: {
       email: '',
       password: '',
@@ -88,7 +87,7 @@ console.log('useNavigate:', navigate);
     // Validate MFA code
     const validation = mfaCodeSchema.safeParse(mfaCode);
     if (!validation.success) {
-      setMfaError(validation.error.errors[0].message);
+      setMfaError(validation.error.issues[0].message);
       return;
     }
 

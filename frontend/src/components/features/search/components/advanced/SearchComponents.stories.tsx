@@ -17,6 +17,6 @@ export const Default: Story = {
   args: {
     "activeCategory": undefined,
     onCategoryChange: () => { },
-    "theme": {} as unknown as any
+    "theme": { text: { secondary: '', primary: '' }, surface: { highlight: '' } }
   },
 };

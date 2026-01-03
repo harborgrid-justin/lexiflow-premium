@@ -160,7 +160,7 @@ export default function DocumentsIndexRoute() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = documents.find((d: any) => d.id === id)?.title || 'document.pdf';
+      a.download = documents.find((d: LegalDocument) => d.id === id)?.title || 'document.pdf';
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {

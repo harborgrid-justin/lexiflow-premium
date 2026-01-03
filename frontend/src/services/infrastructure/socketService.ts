@@ -49,7 +49,6 @@ export interface SocketEventHandlers {
 
 class SocketService {
   private socket: Socket | null = null;
-  private config: SocketConfig | null = null;
   private handlers: SocketEventHandlers = {};
   private isConnecting = false;
   private reconnectAttempts = 0;
@@ -72,7 +71,6 @@ class SocketService {
     }
 
     this.isConnecting = true;
-    this.config = config;
     this.handlers = handlers;
 
     try {

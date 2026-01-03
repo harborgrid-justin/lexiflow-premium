@@ -3,15 +3,16 @@
  * Complete audit log viewer with filtering and search
  */
 
-import React, { useState } from 'react';
-import { } from 'react-router';
-import type { Route } from "./+types/index";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
 import { DateRangeSelector } from '@/components/enterprise/analytics';
-import { Search, Download, Shield, User, AlertCircle } from 'lucide-react';
 import type { AuditLog } from '@/types/analytics-enterprise';
 import { subDays } from 'date-fns';
+import { AlertCircle, Download, Search, Shield, User } from 'lucide-react';
+import { useState } from 'react';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+
+import { useLoaderData } from 'react-router';
+import type { Route } from './+types/index';
 
 export function meta() {
   return createMeta({
@@ -121,7 +122,7 @@ export async function loader() {
 }
 
 export default function AuditTrailRoute() {
-  const { logs } = loaderData;
+  const { logs } = useLoaderData<typeof loader>();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState('all');
@@ -133,7 +134,7 @@ export default function AuditTrailRoute() {
     label: 'Last 30 Days',
   });
 
-  const filteredLogs = logs.filter(log => {
+  const filteredLogs = logs.filter((log: AuditLog) => {
     const matchesSearch =
       log.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -321,7 +322,7 @@ export default function AuditTrailRoute() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {filteredLogs.map((log) => (
+              {filteredLogs.map((log: AuditLog) => (
                 <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                     {new Date(log.timestamp).toLocaleString()}
@@ -397,19 +398,19 @@ export default function AuditTrailRoute() {
         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Unique Users</p>
           <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {new Set(filteredLogs.map(log => log.userId)).size}
+            {new Set(filteredLogs.map((log: AuditLog) => log.userId)).size}
           </p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Critical Events</p>
           <p className="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">
-            {filteredLogs.filter(log => log.severity === 'critical').length}
+            {filteredLogs.filter((log: AuditLog) => log.severity === 'critical').length}
           </p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Security Events</p>
           <p className="mt-1 text-2xl font-bold text-orange-600 dark:text-orange-400">
-            {filteredLogs.filter(log => log.category === 'security').length}
+            {filteredLogs.filter((log: AuditLog) => log.category === 'security').length}
           </p>
         </div>
       </div>
@@ -421,10 +422,16 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}
-      title="Failed to Load Audit Trail"
-      message="We couldn't load the audit logs. Please try again."
-      backTo="/"
-      backLabel="Back to Dashboard"
+      title="Audit Log Error"
+      message="Failed to load audit logs. Please try again later."
     />
+  );
+}
+error = { error }
+title = "Failed to Load Audit Trail"
+message = "We couldn't load the audit logs. Please try again."
+backTo = "/"
+backLabel = "Back to Dashboard"
+  />
   );
 }

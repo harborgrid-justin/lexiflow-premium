@@ -16,24 +16,24 @@ import React, { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { NexusGraph } from '@features/visual';
-import { Card } from '@/components/ui/molecules/Card/Card';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { NexusGraph } from '@features/visual';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types
-import { LegalEntity, EntityRelationship } from '@/types';
+import { Case, EntityRelationship, LegalEntity, Party } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
@@ -52,8 +52,8 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
   const { theme } = useTheme();
 
   const { data: relationships = [], isLoading } = useQuery<EntityRelationship[]>(
-      ['relationships', 'all'],
-      () => DataService.entities.getAllRelationships()
+    ['relationships', 'all'],
+    () => DataService.entities.getAllRelationships()
   );
 
   const { nodes, links: _links, components } = useMemo(() => {
@@ -95,27 +95,25 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
   return (
     <div className="h-full flex gap-6">
-        <div className="flex-1 border rounded-xl overflow-hidden shadow-sm">
-            <NexusGraph caseData={{title: 'Entity Network'} as any} parties={nodes as any} evidence={[]} onNodeClick={handleNodeClick} />
+      <div className="flex-1 border rounded-xl overflow-hidden shadow-sm">
+        <NexusGraph caseData={{ title: 'Entity Network' } as unknown as Case} parties={nodes as unknown as Party[]} evidence={[]} onNodeClick={handleNodeClick} />
+      </div>
+      <div className={cn("w-80 space-y-4", theme.surface.default, theme.border.default)}>
+        <h3 className={cn("p-4 font-bold border-b", theme.text.primary, theme.border.default)}>Conflict Clusters</h3>
+        <div className="p-4 space-y-3 overflow-y-auto">
+          {components.map((comp) => (
+            <Card key={i} className={cn(comp.length > 2 ? "border-l-4 border-l-red-500" : "")}>
+              <h4 className={cn("font-bold text-sm mb-2", theme.text.primary)}>Cluster {i + 1}</h4>
+              <ul className="text-xs space-y-1">
+                {comp.map(id => {
+                  const entity = entities.find(e => e.id === id);
+                  return <li key={id} className={cn("truncate", theme.text.secondary)}>{entity?.name || id}</li>
+                })}
+              </ul>
+            </Card>
+          ))}
         </div>
-        <div className={cn("w-80 space-y-4", theme.surface.default, theme.border.default)}>
-             <h3 className={cn("p-4 font-bold border-b", theme.text.primary, theme.border.default)}>Conflict Clusters</h3>
-             <div className="p-4 space-y-3 overflow-y-auto">
-                {components.map((comp) => (
-                    <Card key={i} className={cn(comp.length > 2 ? "border-l-4 border-l-red-500" : "")}>
-                         <h4 className={cn("font-bold text-sm mb-2", theme.text.primary)}>Cluster {i+1}</h4>
-                         <ul className="text-xs space-y-1">
-                             {comp.map(id => {
-                                 const entity = entities.find(e => e.id === id);
-                                 return <li key={id} className={cn("truncate", theme.text.secondary)}>{entity?.name || id}</li>
-                             })}
-                         </ul>
-                    </Card>
-                ))}
-             </div>
-        </div>
+      </div>
     </div>
   );
 };
-
-

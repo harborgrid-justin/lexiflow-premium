@@ -9,22 +9,22 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Users } from 'lucide-react';
+import React from 'react';
 
 // Internal Dependencies - Components
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button';
-import { MatterInfo } from './MatterInfo';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
-import { OverviewSidebar } from './OverviewSidebar';
-import { CaseOverviewStats } from './CaseOverviewStats';
 import { CaseOverviewModals } from './CaseOverviewModals';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { CaseOverviewStats } from './CaseOverviewStats';
+import { MatterInfo } from './MatterInfo';
+import { OverviewSidebar } from './OverviewSidebar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -32,7 +32,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, TimeEntry, Party } from '@/types';
+import { Case, Party, TimeEntry } from '@/types';
 
 interface CaseOverviewProps {
   caseData: Case;
@@ -55,9 +55,9 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
   } = useCaseOverview(caseData, onTimeEntryAdded, onNavigateToCase);
 
   const { data: parties = [] } = useQuery<Party[]>(
-      ['cases', caseData.id, 'parties'],
-      () => DataService.cases.getParties(caseData.id),
-      { initialData: caseData.parties || [] }
+    ['cases', caseData.id, 'parties'],
+    () => DataService.cases.getParties(caseData.id),
+    { initialData: caseData.parties || [] }
   );
 
   const activeProjects = caseData.projects?.filter(p => p.status === 'In Progress') || [];
@@ -65,58 +65,57 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
   return (
     <div className="space-y-6">
       <CaseOverviewModals
-          caseData={caseData}
-          showTimeModal={showTimeModal} setShowTimeModal={setShowTimeModal}
-          showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal}
-          showTransferModal={showTransferModal} setShowTransferModal={setShowTransferModal}
-          availableCases={availableCases}
-          onSaveTime={(entry) => handleSaveTime(entry as any)}
-          onLinkCase={handleLinkCase}
-          onTransfer={handleTransferToAppeal}
+        caseData={caseData}
+        showTimeModal={showTimeModal} setShowTimeModal={setShowTimeModal}
+        showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal}
+        showTransferModal={showTransferModal} setShowTransferModal={setShowTransferModal}
+        availableCases={availableCases}
+        onSaveTime={(entry) => handleSaveTime(entry as TimeEntry)}
+        onLinkCase={handleLinkCase}
+        onTransfer={handleTransferToAppeal}
       />
 
       <CaseOverviewStats />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-1 md:col-span-2 space-y-6">
-            <MatterInfo caseData={caseData} />
-            <ActiveWorkstreams activeProjects={activeProjects} />
+          <MatterInfo caseData={caseData} />
+          <ActiveWorkstreams activeProjects={activeProjects} />
 
-            <div className={cn("p-6 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
-                        <Users className={cn("h-5 w-5 mr-2", theme.text.secondary)}/> Key Parties
-                    </h3>
-                    <Button variant="ghost" size="sm" className={theme.primary.text}>View All</Button>
-                </div>
-                <TableContainer responsive="card" className="shadow-none border-0 rounded-none">
-                    <TableHeader><TableHead>Role</TableHead><TableHead>Entity Name</TableHead><TableHead>Type</TableHead></TableHeader>
-                    <TableBody>
-                        {parties.slice(0, 4).map(p => (
-                            <TableRow key={p.id}>
-                                <TableCell className={cn("text-sm font-medium", theme.text.primary)}>{p.role}</TableCell>
-                                <TableCell className={cn("text-sm", theme.text.secondary)}>{p.name}</TableCell>
-                                <TableCell><span className={cn("inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium", theme.surface.highlight, theme.text.secondary)}>{p.type}</span></TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </TableContainer>
-                {(!parties || parties.length === 0) && <div className={cn("text-center py-4 italic text-sm", theme.text.tertiary)}>No parties listed.</div>}
+          <div className={cn("p-6 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
+                <Users className={cn("h-5 w-5 mr-2", theme.text.secondary)} /> Key Parties
+              </h3>
+              <Button variant="ghost" size="sm" className={theme.primary.text}>View All</Button>
             </div>
+            <TableContainer responsive="card" className="shadow-none border-0 rounded-none">
+              <TableHeader><TableHead>Role</TableHead><TableHead>Entity Name</TableHead><TableHead>Type</TableHead></TableHeader>
+              <TableBody>
+                {parties.slice(0, 4).map(p => (
+                  <TableRow key={p.id}>
+                    <TableCell className={cn("text-sm font-medium", theme.text.primary)}>{p.role}</TableCell>
+                    <TableCell className={cn("text-sm", theme.text.secondary)}>{p.name}</TableCell>
+                    <TableCell><span className={cn("inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium", theme.surface.highlight, theme.text.secondary)}>{p.type}</span></TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </TableContainer>
+            {(!parties || parties.length === 0) && <div className={cn("text-center py-4 italic text-sm", theme.text.tertiary)}>No parties listed.</div>}
+          </div>
         </div>
 
         <div className="space-y-6">
-            <OverviewSidebar
-                caseData={caseData}
-                linkedCases={linkedCases}
-                onShowTimeModal={() => setShowTimeModal(true)}
-                onShowLinkModal={() => setShowLinkModal(true)}
-                onShowTransferModal={() => setShowTransferModal(true)}
-                onNavigateToCase={onNavigateToCase}
-            />
+          <OverviewSidebar
+            caseData={caseData}
+            linkedCases={linkedCases}
+            onShowTimeModal={() => setShowTimeModal(true)}
+            onShowLinkModal={() => setShowLinkModal(true)}
+            onShowTransferModal={() => setShowTransferModal(true)}
+            onNavigateToCase={onNavigateToCase}
+          />
         </div>
       </div>
     </div>
   );
 };
-

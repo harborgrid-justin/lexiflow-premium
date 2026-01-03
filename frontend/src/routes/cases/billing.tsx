@@ -41,7 +41,7 @@ interface Invoice {
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   const caseTitle = data?.caseData?.title || 'Case Billing';
   return [
     { title: `Billing - ${caseTitle} | LexiFlow` },
@@ -53,7 +53,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: any) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -376,7 +376,7 @@ export default function CaseBillingRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -5,7 +5,7 @@
 
 import { InvoicesApiService } from '@/api/billing';
 import { InvoiceList } from '@/components/billing/InvoiceList';
-import { Link } from 'react-router';
+import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -13,7 +13,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return createListMeta({
     entityType: 'Invoices',
     count: data?.invoices?.length,
@@ -215,7 +215,7 @@ export default function InvoicesRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

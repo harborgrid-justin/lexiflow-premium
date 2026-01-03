@@ -54,7 +54,8 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
   const period = url.searchParams.get("period") || "30d";
 
   // TODO: Replace with real API calls
@@ -86,7 +87,7 @@ export default function AnalyticsIndexRoute() {
     end: new Date(),
     label: 'Last 30 Days',
   });
-  
+
   useDeferredValue(dateRange);
 
   const metrics = {
@@ -99,7 +100,7 @@ export default function AnalyticsIndexRoute() {
     collectionRate: 88.7,
     utilizationRate: 76.4,
   };
-console.log('metrics data:', metrics);
+  console.log('metrics data:', metrics);
 
   // Mock data for charts
   const revenueData = [
@@ -345,7 +346,7 @@ console.log('metrics data:', metrics);
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) => `${name} ${(percent ? percent * 100 : 0).toFixed(0)}%`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"

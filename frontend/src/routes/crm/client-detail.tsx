@@ -6,6 +6,7 @@
  * @module routes/crm/client-detail
  */
 
+import type { Client } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -16,7 +17,7 @@ import type { Route } from "./+types/client-detail";
 // ============================================================================
 
 export function meta({ data }: Route.MetaArgs) {
-  const item = (data as any)?.item;
+  const item = (data as { item: Client } | undefined)?.item;
   return createDetailMeta({
     entityType: 'Client',
     entityName: item?.name ?? 'Unknown Client',

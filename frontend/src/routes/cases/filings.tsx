@@ -13,6 +13,7 @@
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { FilingsTable, type Filing } from '@/components/features/cases/components/FilingsTable';
 import { DataService } from '@/services/data/dataService';
+import type { DocketEntry } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // import type { Route } from "./+types/filings";
@@ -51,7 +52,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   // Transform docket entries to filings format
-  const filings: Filing[] = docketEntries.map((entry: any) => ({
+  const filings: Filing[] = docketEntries.map((entry: DocketEntry) => ({
     id: entry.id,
     title: entry.title || entry.description || 'Untitled Filing',
     type: entry.type || 'Document',

@@ -9,12 +9,12 @@
  */
 
 // External Dependencies
+import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'lucide-react';
 import React from 'react';
-import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge, BadgeProps } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
@@ -48,12 +48,12 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
   };
 
   const getConferralBadge = (status?: string) => {
-      switch(status) {
-          case 'Agreed': return <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold border border-green-200">Agreed</span>;
-          case 'Impasse': return <span className="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold border border-red-200">Impasse</span>;
-          case 'Scheduled': return <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold border border-blue-200">Scheduled</span>;
-          default: return <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold border border-amber-200">Required</span>;
-      }
+    switch (status) {
+      case 'Agreed': return <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold border border-green-200">Agreed</span>;
+      case 'Impasse': return <span className="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold border border-red-200">Impasse</span>;
+      case 'Scheduled': return <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold border border-blue-200">Scheduled</span>;
+      default: return <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold border border-amber-200">Required</span>;
+    }
   };
 
   return (
@@ -76,17 +76,17 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 <TableCell className={cn("font-medium flex items-center", theme.text.primary)}>
                   <Gavel className={cn("h-4 w-4 mr-2", theme.text.tertiary)} />
                   <div>
-                      {motion.title}
-                      {motion.documents && motion.documents.length > 0 && (
-                          <div className={cn("text-[10px] flex items-center mt-0.5", theme.text.link)}>
-                              <FileText className="h-3 w-3 mr-1"/> {motion.documents.length} Exhibits Linked
-                          </div>
-                      )}
+                    {motion.title}
+                    {motion.documents && motion.documents.length > 0 && (
+                      <div className={cn("text-[10px] flex items-center mt-0.5", theme.text.link)}>
+                        <FileText className="h-3 w-3 mr-1" /> {motion.documents.length} Exhibits Linked
+                      </div>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>{motion.type}</TableCell>
                 <TableCell>
-                  <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
+                  <Badge variant={getStatusColor(motion.status) as BadgeProps['variant']}>{motion.status}</Badge>
                 </TableCell>
                 <TableCell>
                   {motion.hearingDate ? (
@@ -103,12 +103,12 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                   </div>
                 </TableCell>
                 <TableCell>
-                    <div className="flex flex-col gap-1">
-                        {getConferralBadge(motion.conferralStatus)}
-                        <button className={cn("text-[10px] hover:underline flex items-center", theme.text.link)}>
-                            <MessageSquare className="h-3 w-3 mr-1"/> Log Session
-                        </button>
-                    </div>
+                  <div className="flex flex-col gap-1">
+                    {getConferralBadge(motion.conferralStatus)}
+                    <button className={cn("text-[10px] hover:underline flex items-center", theme.text.link)}>
+                      <MessageSquare className="h-3 w-3 mr-1" /> Log Session
+                    </button>
+                  </div>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
@@ -136,22 +136,22 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 <Gavel className={cn("h-4 w-4", theme.text.link)} />
                 {motion.title}
               </h4>
-              <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
+              <Badge variant={getStatusColor(motion.status) as BadgeProps['variant']}>{motion.status}</Badge>
             </div>
             <div className={cn("text-xs mb-3", theme.text.secondary)}>{motion.type} • Filed: {motion.filingDate || 'Draft'}</div>
 
             <div className={cn("flex justify-between items-center mb-3 p-2 rounded", theme.surface.highlight)}>
-                <div className="flex items-center text-xs">
-                    <Users className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
-                    <span className={cn("mr-2", theme.text.secondary)}>Conferral:</span>
-                    {getConferralBadge(motion.conferralStatus)}
-                </div>
+              <div className="flex items-center text-xs">
+                <Users className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
+                <span className={cn("mr-2", theme.text.secondary)}>Conferral:</span>
+                {getConferralBadge(motion.conferralStatus)}
+              </div>
             </div>
 
             {motion.hearingDate && (
               <div className={cn("p-3 rounded border space-y-2 mb-3", theme.surface.highlight, theme.border.subtle)}>
                 <div className="flex items-center justify-between text-xs">
-                  <span className={cn("font-medium flex items-center", theme.text.secondary)}><Calendar className="h-3 w-3 mr-1"/> Hearing</span>
+                  <span className={cn("font-medium flex items-center", theme.text.secondary)}><Calendar className="h-3 w-3 mr-1" /> Hearing</span>
                   <span className={cn("font-bold", theme.text.primary)}>{motion.hearingDate}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">

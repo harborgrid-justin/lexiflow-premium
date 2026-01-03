@@ -21,6 +21,7 @@
 
 import { CaseDetail } from '@/components/features/cases/pages/CaseDetailPage';
 import { DataService } from '@/services/data/dataService';
+import { LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
 import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -243,12 +244,12 @@ export default function CaseDetailRoute() {
         resolve={documents}
         errorElement={<StreamedDataLoading label="documents (error)" />}
       >
-        {(resolvedDocuments: any) => (
+        {(resolvedDocuments: LegalDocument[]) => (
           <Await
             resolve={parties}
             errorElement={<StreamedDataLoading label="parties (error)" />}
           >
-            {(resolvedParties: any) => (
+            {(resolvedParties: Party[]) => (
               <CaseDetail
                 caseData={caseData}
                 initialDocuments={resolvedDocuments}

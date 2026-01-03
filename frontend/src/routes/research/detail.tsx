@@ -6,6 +6,7 @@
  * @module routes/research/detail
  */
 
+import type { ResearchSession } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -18,8 +19,8 @@ import type { Route } from "./+types/detail";
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'Research',
-    entityName: (data as any)?.item?.title,
-    entityId: (data as any)?.item?.id,
+    entityName: (data as { item: ResearchSession } | undefined)?.item?.query, // Assuming query is the title/name
+    entityId: (data as { item: ResearchSession } | undefined)?.item?.id,
   });
 }
 

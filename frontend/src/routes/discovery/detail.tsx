@@ -6,6 +6,7 @@
  * @module routes/discovery/detail
  */
 
+import type { DiscoveryRequest } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -16,7 +17,7 @@ import type { Route } from "./+types/detail";
 // ============================================================================
 
 export function meta({ data }: Route.MetaArgs) {
-  const item = data?.item as Record<string, any> | null;
+  const item = (data as { item: DiscoveryRequest } | undefined)?.item;
   return createDetailMeta({
     entityType: 'Discovery',
     entityName: item?.title,

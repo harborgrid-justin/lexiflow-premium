@@ -80,7 +80,7 @@ export async function action({ request }: Route.ActionArgs) {
           // Default values for required fields
           sequenceNumber: 0,
           docketNumber: 'PENDING'
-        } as any);
+        });
 
         return { success: true, message: "Motion filed successfully" };
       }

@@ -8,13 +8,12 @@ import { TimeEntryList } from '@/components/billing/TimeEntryList';
 import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/time";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return createListMeta({
     entityType: 'Time Entries',
     count: data?.entries?.length,
@@ -26,7 +25,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
   console.log('case ID:', caseId);
@@ -40,7 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const entries = await timeApi.getAll({
       caseId: caseId || undefined,
       userId: userId || undefined,
-      status: (status as string) || undefined,
+      status: (status as any) || undefined,
       billable: billable === 'true' ? true : billable === 'false' ? false : undefined,
     });
 

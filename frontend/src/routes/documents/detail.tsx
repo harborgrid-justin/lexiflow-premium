@@ -13,6 +13,7 @@ import {
   MetadataPanel,
   VersionHistory
 } from '@/components/features/documents/components';
+import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -136,8 +137,8 @@ export default function DocumentDetailRoute() {
 
   const handleCompare = async (v1: number, v2: number) => {
     try {
-      const version1 = versions.find((v: any) => v.versionNumber === v1);
-      const version2 = versions.find((v: any) => v.versionNumber === v2);
+      const version1 = versions.find((v: DocumentVersion) => v.versionNumber === v1);
+      const version2 = versions.find((v: DocumentVersion) => v.versionNumber === v2);
       if (!version1 || !version2) throw new Error('Versions not found');
 
       const result = await documentsApi.compareVersions(
@@ -317,7 +318,6 @@ export default function DocumentDetailRoute() {
                     console.error('Failed to delete annotation:', error);
                     alert('Failed to delete annotation');
                   }
-                }}
                 }}
               />
             </div>

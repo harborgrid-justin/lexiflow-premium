@@ -12,7 +12,7 @@
 
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
-import type { LegalDocument } from '@/types';
+import type { Case, LegalDocument } from '@/types';
 import { useState } from 'react';
 import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -21,7 +21,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: any }) {
+export function meta({ data }: { data: { caseData: Case } }) {
   const caseTitle = data?.caseData?.title || 'Case Documents';
   return [
     { title: `Documents - ${caseTitle} | LexiFlow` },

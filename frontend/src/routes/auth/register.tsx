@@ -12,17 +12,17 @@
 import { AuthApiService } from '@/api/auth/auth-api';
 import {
   registerSchema,
-  type RegisterFormData,
   validatePasswordStrength,
+  type RegisterFormData,
 } from '@/services/validation/authSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [passwordStrength, setPasswordStrength] = useState<{
@@ -36,7 +36,7 @@ console.log('useNavigate:', navigate);
     formState: { errors },
     watch,
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema) as any,
     defaultValues: {
       email: '',
       password: '',
@@ -45,7 +45,7 @@ console.log('useNavigate:', navigate);
       lastName: '',
       phone: '',
       organizationName: '',
-      acceptTerms: false,
+      acceptTerms: false as any,
     },
   });
 

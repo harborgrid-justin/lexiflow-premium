@@ -207,7 +207,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [formData, setFormData] = useState<Record<string, any>>(initialData);
+  const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

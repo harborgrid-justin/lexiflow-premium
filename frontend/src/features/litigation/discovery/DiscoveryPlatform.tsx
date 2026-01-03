@@ -151,7 +151,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   });
 
   const handleSaveResponse = async (reqId: string) => {
-    const discovery = DataService.discovery as any;
+    const discovery = DataService.discovery as unknown as DiscoveryRepository;
     await discovery.updateRequestStatus(reqId, 'Responded');
     queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
     alert(`Response saved for ${reqId}. Status updated to Responded.`);

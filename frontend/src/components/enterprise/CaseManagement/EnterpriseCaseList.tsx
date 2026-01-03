@@ -181,7 +181,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
         const bValue = (b as unknown as Record<string, unknown>)[sortConfig.field];
 
         if (aValue === bValue) return 0;
-        const comparison = (aValue as any) > (bValue as any) ? 1 : -1;
+        const comparison = (aValue as string | number) > (bValue as string | number) ? 1 : -1;
         return sortConfig.direction === 'asc' ? comparison : -comparison;
       });
     }

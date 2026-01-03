@@ -13,6 +13,7 @@
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
 import { DataService } from '@/services/data/dataService';
+import type { Case } from '@/types';
 import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // import type { Route } from "./+types/parties";
@@ -21,7 +22,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: any }) {
+export function meta({ data }: { data: { caseData: Case } }) {
   const caseTitle = data?.caseData?.title || 'Case Parties';
   return [
     { title: `Parties - ${caseTitle} | LexiFlow` },

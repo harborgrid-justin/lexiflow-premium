@@ -509,12 +509,12 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                     border: '1px solid #e5e7eb',
                     borderRadius: '8px',
                   }}
-                  formatter={((value: number, name: string) => {
-                    if (name === 'value') {
+                  formatter={(value: number | string | Array<number | string>, name: string | number) => {
+                    if (name === 'value' && typeof value === 'number') {
                       return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
                     }
                     return [value, 'Cases'];
-                  }) as unknown as any}
+                  }}
                 />
                 <Legend />
                 <Bar dataKey="count" name="Cases" radius={[8, 8, 0, 0]}>

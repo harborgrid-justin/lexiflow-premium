@@ -12,7 +12,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return [
     { title: `Invoice ${data?.invoice?.invoiceNumber || ''} | LexiFlow` },
     { name: 'description', content: `View invoice details and record payments` },
@@ -166,7 +166,7 @@ export default function InvoiceDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

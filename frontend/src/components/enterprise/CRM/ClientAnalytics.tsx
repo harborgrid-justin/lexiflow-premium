@@ -368,8 +368,8 @@ export const ClientAnalytics: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: unknown) => {
-                    const { segment, revenue } = (props as any).payload || props;
+                  label={(props: { payload: { segment: string; revenue: number }; segment?: string; revenue?: number }) => {
+                    const { segment, revenue } = props.payload || props;
                     return segment && revenue ? `${segment}: $${(revenue / 1000).toFixed(0)}k` : '';
                   }}
                 >

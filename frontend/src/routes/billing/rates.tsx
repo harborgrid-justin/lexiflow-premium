@@ -14,7 +14,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: any) {
   return createListMeta({
     entityType: 'Rate Tables',
     count: data?.rateTables?.length,
@@ -74,7 +74,7 @@ export default function RateTablesRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -7,7 +7,6 @@ import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryForm } from '@/components/billing/TimeEntryForm';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/time.new";
 
 // ============================================================================
 // Meta Tags
@@ -24,7 +23,7 @@ export function meta() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const timeApi = new TimeEntriesApiService();
 
@@ -37,7 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
       rate: parseFloat(formData.get("rate") as string),
       description: formData.get("description") as string,
       billable: formData.get("billable") === "true",
-      status: (formData.get("status") as string) || 'Draft',
+      status: ((formData.get("status") as string) || 'Draft') as any,
       taskCode: formData.get("taskCode") as string || undefined,
       activityType: formData.get("activityType") as string || undefined,
     };

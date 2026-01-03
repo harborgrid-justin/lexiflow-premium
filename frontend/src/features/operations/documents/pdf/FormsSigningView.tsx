@@ -3,10 +3,10 @@ import { SignaturePad } from '@/components/features/discovery/components/Signatu
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { LegalDocument } from '@/types';
@@ -130,10 +130,10 @@ export const FormsSigningView = () => {
 
     const handleSend = async () => {
         if (selectedDocument) {
-            const updatedDoc = { ...selectedDocument, status: 'Sent' as any };
+            const updatedDoc = { ...selectedDocument, status: 'Sent' };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            setSelectedDocument(updatedDoc as any);
+            setSelectedDocument(updatedDoc);
             sendModal.close();
             notify.success(`'${selectedDocument.title}' sent for signature.`);
         }

@@ -134,8 +134,14 @@ export class IntegrationEventPublisher {
  * ) {}
  * ```
  */
+interface RepositoryInterface {
+  add(item: any): Promise<any>;
+  update(id: string, updates: any): Promise<any>;
+  delete(id: string): Promise<any>;
+}
+
 export function createIntegratedRepository<
-  TBase extends new (...args: any[]) => object,
+  TBase extends new (...args: any[]) => RepositoryInterface,
 >(
   Repository: TBase,
   publishAdd?: (item: unknown) => Promise<void>,
@@ -143,7 +149,7 @@ export function createIntegratedRepository<
   publishDelete?: (id: string) => Promise<void>
 ) {
   return class IntegratedRepository extends Repository {
-    constructor(...args: unknown[]) {
+    constructor(...args: any[]) {
       super(...args);
     }
 

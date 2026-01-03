@@ -12,10 +12,10 @@
 
 import { api } from '@/api';
 import NewCase from '@/features/cases/components/create/NewCase';
+import { requireAuthentication } from '@/utils/route-guards';
 import { redirect } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/create";
 
 // ============================================================================
 // Meta Tags
@@ -35,7 +35,7 @@ export function meta() {
 /**
  * Pre-fetch reference data for case creation form
  */
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: any) {
   // Auth check
   requireAuthentication(request);
 

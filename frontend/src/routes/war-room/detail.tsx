@@ -6,6 +6,7 @@
  * @module routes/war-room/detail
  */
 
+import type { Case } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -18,8 +19,8 @@ import type { Route } from "./+types/detail";
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'War Room',
-    entityName: (data as any)?.item?.name,
-    entityId: (data as any)?.item?.id,
+    entityName: (data as { item: Case } | undefined)?.item?.title, // Case has title, not name
+    entityId: (data as { item: Case } | undefined)?.item?.id,
   });
 }
 

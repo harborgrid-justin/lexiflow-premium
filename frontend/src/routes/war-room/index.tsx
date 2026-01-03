@@ -117,7 +117,7 @@ export default function WarRoomIndexRoute({ loaderData }: Route.ComponentProps) 
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item: any) => (
+          {items.map((item: Case) => (
             <div key={item.id} className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
               <div className="p-6">
                 <div className="flex items-center justify-between">

@@ -27,7 +27,7 @@ interface ChartData {
   id: string;
   type: string;
   title: string;
-  data: any[];
+  data: Record<string, unknown>[];
 }
 
 export function meta({ params }: Route.MetaArgs) {

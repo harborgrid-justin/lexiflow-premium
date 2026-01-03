@@ -24,12 +24,9 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // Components
 import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';
-const UserAvatar = ({ user, className }: { user?: { name?: string; [key: string]: any }; className?: string }) => (
-  <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center", className)}>
-    {user?.name?.[0] || 'U'}
-  </div>
-);
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
+import { NotificationCenter } from '@/components/ui/molecules/NotificationCenter';
+import { UserAvatar } from '@/components/ui/molecules/UserAvatar';
 
 // Services & Data
 import { GlobalSearchResult } from '@/services/search/searchService';
@@ -129,11 +126,31 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         <ConnectivityHUD />
-        
-        <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surface.highlight} hover:${theme.text.secondary}`)}>
-            <Bell className="h-5 w-5" />
-            <span className={cn("absolute top-2 right-2 h-2 w-2 rounded-full border-2 animate-pulse", theme.status.error.icon, theme.border.default)}></span>
-        </button>
+
+        <NotificationCenter
+          notifications={[
+            {
+              id: '1',
+              type: 'info',
+              title: 'New Case Assigned',
+              message: 'Smith v. Johnson case has been assigned to you.',
+              timestamp: new Date(Date.now() - 5 * 60000),
+              read: false,
+            },
+            {
+              id: '2',
+              type: 'warning',
+              title: 'Deadline Approaching',
+              message: 'Discovery deadline in 3 days for Case #2024-001',
+              timestamp: new Date(Date.now() - 30 * 60000),
+              read: false,
+            },
+          ]}
+          onNotificationClick={(notification) => console.log('Notification clicked:', notification)}
+          onNotificationDismiss={(id) => console.log('Dismiss notification:', id)}
+          onMarkAllRead={() => console.log('Mark all as read')}
+          onClearAll={() => console.log('Clear all notifications')}
+        />
 
         <div className={cn("h-8 w-px mx-1", theme.border.default)}></div>
 
@@ -146,7 +163,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{currentUser?.name || 'Guest'}</p>
                 <p className={cn("text-[10px] uppercase font-medium tracking-wide", theme.text.secondary)}>{currentUser?.role || 'User'}</p>
             </div>
-            <UserAvatar user={currentUser} className="shadow-sm" />
+            <UserAvatar user={currentUser} size="sm" showStatus={true} isOnline={true} className="shadow-sm" />
         </button>
       </div>
     </header>

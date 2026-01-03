@@ -17,6 +17,64 @@ export interface AuthUser {
   role: "admin" | "attorney" | "paralegal" | "staff";
   avatarUrl?: string;
   permissions: string[];
+  mfaEnabled?: boolean;
+  accountLocked?: boolean;
+  passwordExpiresAt?: Date;
+  lastLoginAt?: Date;
+  failedLoginAttempts?: number;
+}
+
+/**
+ * Session information
+ */
+export interface SessionInfo {
+  expiresAt: Date;
+  lastActivityAt: Date;
+  warningShown: boolean;
+}
+
+/**
+ * MFA Setup data
+ */
+export interface MFASetup {
+  qrCode: string;
+  secret: string;
+  backupCodes?: string[];
+}
+
+/**
+ * Password policy requirements
+ */
+export interface PasswordPolicy {
+  minLength: number;
+  requireUppercase: boolean;
+  requireLowercase: boolean;
+  requireNumbers: boolean;
+  requireSpecialChars: boolean;
+  expiryDays?: number;
+  preventReuse?: number;
+}
+
+/**
+ * Authentication event for audit logging
+ */
+export interface AuthEvent {
+  type: 'login' | 'logout' | 'mfa_enabled' | 'mfa_disabled' | 'password_changed' | 'token_refresh' | 'session_expired' | 'access_denied';
+  timestamp: Date;
+  userId?: string;
+  metadata?: Record<string, any>;
+}
+
+/**
+ * SSO Provider configuration
+ */
+export interface SSOProvider {
+  id: string;
+  name: string;
+  type: 'saml' | 'oauth' | 'oidc';
+  enabled: boolean;
+  loginUrl: string;
+  logoUrl?: string;
 }
 
 /**
@@ -31,6 +89,12 @@ export interface AuthStateValue {
   isAuthenticated: boolean;
   /** Authentication error message */
   error: string | null;
+  /** Current session information */
+  session: SessionInfo | null;
+  /** MFA verification required */
+  requiresMFA: boolean;
+  /** Password policy */
+  passwordPolicy: PasswordPolicy;
 }
 
 /**
@@ -39,6 +103,8 @@ export interface AuthStateValue {
 export interface AuthActionsValue {
   /** Login with credentials */
   login: (email: string, password: string) => Promise<boolean>;
+  /** Verify MFA code during login */
+  verifyMFA: (code: string) => Promise<boolean>;
   /** Logout current user */
   logout: () => Promise<void>;
   /** Refresh authentication token */
@@ -47,4 +113,16 @@ export interface AuthActionsValue {
   hasPermission: (permission: string) => boolean;
   /** Check if user has any of the specified roles */
   hasRole: (...roles: AuthUser["role"][]) => boolean;
+  /** Enable MFA for current user */
+  enableMFA: () => Promise<MFASetup>;
+  /** Disable MFA for current user */
+  disableMFA: () => Promise<void>;
+  /** Change password */
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  /** Initiate SSO login */
+  loginWithSSO: (providerId: string) => Promise<void>;
+  /** Log authentication event */
+  logAuthEvent: (event: AuthEvent) => void;
+  /** Extend current session */
+  extendSession: () => Promise<void>;
 }

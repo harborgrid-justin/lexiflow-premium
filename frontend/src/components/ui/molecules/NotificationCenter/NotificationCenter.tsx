@@ -68,7 +68,7 @@ const getNotificationIcon = (type: NotificationType) => {
   }
 };
 
-const getNotificationColor = (type: NotificationType, theme: any) => {
+const getNotificationColor = (type: NotificationType, theme: unknown) => {
   switch (type) {
     case 'success':
       return 'text-green-600 dark:text-green-400';

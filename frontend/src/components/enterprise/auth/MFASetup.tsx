@@ -12,9 +12,9 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState, useEffect } from 'react';
-import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
+import React, { useState } from 'react';
+import { z } from 'zod';
 
 const verificationSchema = z.object({
   code: z.string().length(6, 'Verification code must be 6 digits').regex(/^\d+$/, 'Code must contain only numbers'),
@@ -47,12 +47,6 @@ export const MFASetup: React.FC<MFASetupProps> = ({
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
 
   const authService = new AuthApiService();
-
-  useEffect(() => {
-    if (!isEnabled) {
-      initializeMFASetup();
-    }
-  }, [isEnabled]);
 
   const initializeMFASetup = async () => {
     setIsLoading(true);
@@ -134,7 +128,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       await navigator.clipboard.writeText(text);
       setCopiedItem(label);
       setTimeout(() => setCopiedItem(null), 2000);
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to copy to clipboard');
     }
   };

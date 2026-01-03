@@ -1,3 +1,10 @@
-import { cn } from '@/utils/cn';
+import { cn } from "@/utils/cn";
 
-export const getSuccessStyles = (theme: unknown) => cn((theme as any).status.success.text, (theme as any).status.success.bg, (theme as any).status.success.border);
+interface ThemeStatus {
+  success: { text: string; bg: string; border: string };
+}
+
+export const getSuccessStyles = (theme: unknown) => {
+  const status = (theme as { status: ThemeStatus }).status;
+  return cn(status.success.text, status.success.bg, status.success.border);
+};

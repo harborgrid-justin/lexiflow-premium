@@ -5,7 +5,7 @@
  * Displays comprehensive performance metrics with benchmarks and trends
  */
 
-import React, { useState, useMemo, memo, useCallback } from 'react';
+import React, { useState, useMemo} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp,
@@ -19,8 +19,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   AlertCircle,
-  LucideIcon,
-} from 'lucide-react';
+  LucideIcon} from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { PerformanceMetric, BaseDashboardProps } from '@/types/dashboard';
@@ -45,27 +44,22 @@ const STATUS_CONFIG: Record<
     color: 'text-emerald-600 dark:text-emerald-400',
     bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
     icon: Award,
-    label: 'Excellent',
-  },
+    label: 'Excellent'},
   good: {
     color: 'text-blue-600 dark:text-blue-400',
     bgColor: 'bg-blue-100 dark:bg-blue-900/30',
     icon: TrendingUp,
-    label: 'Good',
-  },
+    label: 'Good'},
   fair: {
     color: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-100 dark:bg-amber-900/30',
     icon: Minus,
-    label: 'Fair',
-  },
+    label: 'Fair'},
   poor: {
     color: 'text-rose-600 dark:text-rose-400',
     bgColor: 'bg-rose-100 dark:bg-rose-900/30',
     icon: TrendingDown,
-    label: 'Poor',
-  },
-};
+    label: 'Poor'}};
 
 /**
  * PerformanceMetricsGrid - Comprehensive performance metrics display
@@ -81,8 +75,7 @@ export const PerformanceMetricsGrid: React.FC<PerformanceMetricsGridProps> = ({
   sortOrder = 'asc',
   className,
   isLoading = false,
-  error,
-}) => {
+  error}) => {
   const { theme } = useTheme();
   const [filterStatus, setFilterStatus] = useState<MetricStatus | 'all'>('all');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());

@@ -128,7 +128,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     { id: 'save', label: 'Save', icon: FolderCheck },
   ];
 
-  const generatePreview = async () => {
+  const generatePreview = useCallback(async () => {
     if (!selectedTemplate) return '';
 
     try {
@@ -173,7 +173,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       addToast('Failed to generate preview', 'error');
       return '';
     }
-  };
+  }, [selectedTemplate, selectedClauses, availableClauses, variableValues, selectedCaseId, cases, addToast]);
 
   const validateCurrentStep = async (): Promise<boolean> => {
     setValidationErrors({});

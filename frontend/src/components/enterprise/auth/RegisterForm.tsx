@@ -13,11 +13,11 @@
  * - GDPR-compliant data collection
  */
 
-import React, { useState, memo, useCallback } from 'react';
-import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
-import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 import type { User } from '@/types';
+import React, { memo, useState } from 'react';
+import { z } from 'zod';
+import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 
 // Validation schemas
 const registerSchema = z.object({
@@ -212,9 +212,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                   autoComplete="given-name"
                   aria-invalid={!!errors.firstName}
                   aria-describedby={errors.firstName ? 'firstName-error' : undefined}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.firstName ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.firstName ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="John"
                   disabled={isLoading}
                   required
@@ -241,9 +240,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                   autoComplete="family-name"
                   aria-invalid={!!errors.lastName}
                   aria-describedby={errors.lastName ? 'lastName-error' : undefined}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.lastName ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.lastName ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Doe"
                   disabled={isLoading}
                   required
@@ -272,9 +270,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                 autoComplete="email"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="you@company.com"
                 disabled={isLoading}
                 required
@@ -308,9 +305,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                   autoComplete="new-password"
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'password-error' : undefined}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.password ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Create a strong password"
                   disabled={isLoading}
                   required
@@ -361,9 +357,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                   autoComplete="new-password"
                   aria-invalid={!!errors.confirmPassword}
                   aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Confirm your password"
                   disabled={isLoading}
                   required
@@ -404,9 +399,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = ({
                   onChange={handleInputChange('agreeToTerms')}
                   aria-invalid={!!errors.agreeToTerms}
                   aria-describedby={errors.agreeToTerms ? 'agreeToTerms-error' : undefined}
-                  className={`h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded ${
-                    errors.agreeToTerms ? 'border-red-500' : ''
-                  }`}
+                  className={`h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded ${errors.agreeToTerms ? 'border-red-500' : ''
+                    }`}
                   disabled={isLoading}
                   required
                 />

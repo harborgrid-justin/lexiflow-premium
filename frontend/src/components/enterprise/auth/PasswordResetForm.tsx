@@ -12,9 +12,9 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState, useEffect, memo, useCallback } from 'react';
-import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
+import React, { memo, useEffect, useState } from 'react';
+import { z } from 'zod';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 
 const resetPasswordSchema = z.object({
@@ -288,9 +288,8 @@ const PasswordResetFormComponent: React.FC<PasswordResetFormProps> = ({
                   autoComplete="new-password"
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'password-error' : undefined}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.password ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Enter your new password"
                   disabled={isLoading}
                   required
@@ -342,9 +341,8 @@ const PasswordResetFormComponent: React.FC<PasswordResetFormProps> = ({
                   autoComplete="new-password"
                   aria-invalid={!!errors.confirmPassword}
                   aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Confirm your new password"
                   disabled={isLoading}
                   required

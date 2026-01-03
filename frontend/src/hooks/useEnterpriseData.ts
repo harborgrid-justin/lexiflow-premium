@@ -53,36 +53,43 @@ export const enterpriseQueryKeys = {
   cases: {
     all: () => ["enterprise", "cases"] as const,
     byId: (id: string) => ["enterprise", "cases", id] as const,
-    byStatus: (status: string) => ["enterprise", "cases", "status", status] as const,
+    byStatus: (status: string) =>
+      ["enterprise", "cases", "status", status] as const,
   },
   // Documents
   documents: {
     all: () => ["enterprise", "documents"] as const,
     byId: (id: string) => ["enterprise", "documents", id] as const,
-    byCase: (caseId: string) => ["enterprise", "documents", "case", caseId] as const,
+    byCase: (caseId: string) =>
+      ["enterprise", "documents", "case", caseId] as const,
   },
   // Docket
   docket: {
     all: () => ["enterprise", "docket"] as const,
-    byCase: (caseId: string) => ["enterprise", "docket", "case", caseId] as const,
+    byCase: (caseId: string) =>
+      ["enterprise", "docket", "case", caseId] as const,
   },
   // Tasks
   tasks: {
     all: () => ["enterprise", "tasks"] as const,
     byId: (id: string) => ["enterprise", "tasks", id] as const,
-    byCase: (caseId: string) => ["enterprise", "tasks", "case", caseId] as const,
-    byAssignee: (userId: string) => ["enterprise", "tasks", "assignee", userId] as const,
+    byCase: (caseId: string) =>
+      ["enterprise", "tasks", "case", caseId] as const,
+    byAssignee: (userId: string) =>
+      ["enterprise", "tasks", "assignee", userId] as const,
   },
   // Evidence
   evidence: {
     all: () => ["enterprise", "evidence"] as const,
     byId: (id: string) => ["enterprise", "evidence", id] as const,
-    byCase: (caseId: string) => ["enterprise", "evidence", "case", caseId] as const,
+    byCase: (caseId: string) =>
+      ["enterprise", "evidence", "case", caseId] as const,
   },
   // Exhibits
   exhibits: {
     all: () => ["enterprise", "exhibits"] as const,
-    byCase: (caseId: string) => ["enterprise", "exhibits", "case", caseId] as const,
+    byCase: (caseId: string) =>
+      ["enterprise", "exhibits", "case", caseId] as const,
   },
   // Users
   users: {
@@ -109,8 +116,7 @@ export function useCasesQuery(filters?: { status?: string }) {
     filters?.status
       ? enterpriseQueryKeys.cases.byStatus(filters.status)
       : enterpriseQueryKeys.cases.all(),
-    (signal) =>
-      enterpriseApi.get<Case[]>("/cases", filters, { signal }),
+    (signal) => enterpriseApi.get<Case[]>("/cases", filters, { signal }),
     { staleTime: 30000 }
   );
 }
@@ -227,7 +233,7 @@ export function useDocumentsQuery(caseId?: string) {
 export function useUploadDocumentMutation() {
   return useMutation<
     LegalDocument,
-    { file: File; metadata?: Record<string, any> }
+    { file: File; metadata?: Record<string, unknown> }
   >(
     async ({ file, metadata }) =>
       enterpriseApi.upload<LegalDocument>("/documents/upload", file, metadata),
@@ -275,7 +281,8 @@ export function useTasksQuery(filters?: {
 
   return useQuery<WorkflowTask[]>(
     queryKey,
-    (signal) => enterpriseApi.get<WorkflowTask[]>("/tasks", filters, { signal }),
+    (signal) =>
+      enterpriseApi.get<WorkflowTask[]>("/tasks", filters, { signal }),
     { staleTime: 30000 }
   );
 }
@@ -384,7 +391,11 @@ export function useExhibitsQuery(caseId: string) {
   return useQuery<TrialExhibit[]>(
     enterpriseQueryKeys.exhibits.byCase(caseId),
     (signal) =>
-      enterpriseApi.get<TrialExhibit[]>(`/trial/exhibits`, { caseId }, { signal }),
+      enterpriseApi.get<TrialExhibit[]>(
+        `/trial/exhibits`,
+        { caseId },
+        { signal }
+      ),
     { staleTime: 60000 }
   );
 }
@@ -449,8 +460,7 @@ export function useCreateClientMutation() {
  */
 export function useUpdateClientMutation() {
   return useMutation<Client, { id: string; data: Partial<Client> }>(
-    async ({ id, data }) =>
-      enterpriseApi.patch<Client>(`/clients/${id}`, data),
+    async ({ id, data }) => enterpriseApi.patch<Client>(`/clients/${id}`, data),
     {
       onSuccess: (data, { id }) => {
         queryClient.setQueryData(enterpriseQueryKeys.clients.byId(id), data);
@@ -471,7 +481,8 @@ export function usePrefetchCase(id: string) {
   return () => {
     queryClient.fetch(
       enterpriseQueryKeys.cases.byId(id),
-      (signal) => enterpriseApi.get<Case>(`/cases/${id}`, undefined, { signal }),
+      (signal) =>
+        enterpriseApi.get<Case>(`/cases/${id}`, undefined, { signal }),
       0
     );
   };

@@ -7,9 +7,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Circle } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -50,9 +49,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   size = 'md',
   animated = false,
   showDot = true,
-  className,
-}) => {
+  className}) => {
   const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   const variants: Record<StatusVariant, string> = {
     success: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
@@ -62,8 +61,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     pending: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
     active: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
     inactive: 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700',
-    neutral: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
-  };
+    neutral: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'};
 
   const dotColors: Record<StatusVariant, string> = {
     success: 'bg-emerald-500',
@@ -73,20 +71,17 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     pending: 'bg-slate-400',
     active: 'bg-emerald-500',
     inactive: 'bg-slate-400',
-    neutral: 'bg-slate-400',
-  };
+    neutral: 'bg-slate-400'};
 
   const sizes = {
     sm: 'px-2 py-0.5 text-xs',
     md: 'px-2.5 py-1 text-sm',
-    lg: 'px-3 py-1.5 text-base',
-  };
+    lg: 'px-3 py-1.5 text-base'};
 
   const dotSizes = {
     sm: 'h-1.5 w-1.5',
     md: 'h-2 w-2',
-    lg: 'h-2.5 w-2.5',
-  };
+    lg: 'h-2.5 w-2.5'};
 
   const content = (
     <span
@@ -103,7 +98,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {status}
     </span>
   );
-console.log('content data:', content);
+  console.log('content data:', content);
 
   if (animated) {
     return (

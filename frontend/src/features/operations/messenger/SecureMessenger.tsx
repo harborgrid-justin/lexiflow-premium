@@ -17,8 +17,8 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useSecureMessenger } from '@/hooks/domain';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useSecureMessenger } from '@/hooks/domain';
 
 // Components
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
@@ -112,7 +112,7 @@ export const SecureMessenger = ({ initialTab }: SecureMessengerProps) => {
       )}>
         {activeTab === 'contacts' && (
           <MessengerContacts
-            contacts={contacts as any[]}
+            contacts={contacts as Array<{ id: string; name: string; email: string }>}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             onMessageClick={() => setActiveTab('chats')}

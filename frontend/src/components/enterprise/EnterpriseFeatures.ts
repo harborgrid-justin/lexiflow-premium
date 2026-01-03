@@ -32,16 +32,16 @@
  */
 export enum LicenseTier {
   /** Basic tier - Individual practitioners and small firms */
-  Basic = 'basic',
+  Basic = "basic",
 
   /** Professional tier - Small to medium firms */
-  Professional = 'professional',
+  Professional = "professional",
 
   /** Enterprise tier - Large firms and legal departments */
-  Enterprise = 'enterprise',
+  Enterprise = "enterprise",
 
   /** Ultimate tier - Enterprise+ with all features */
-  Ultimate = 'ultimate',
+  Ultimate = "ultimate",
 }
 
 /**
@@ -64,41 +64,41 @@ export interface LicenseTierInfo {
 export const LICENSE_TIERS: Record<LicenseTier, LicenseTierInfo> = {
   [LicenseTier.Basic]: {
     tier: LicenseTier.Basic,
-    name: 'Basic',
-    description: 'Essential legal practice management for solo practitioners',
+    name: "Basic",
+    description: "Essential legal practice management for solo practitioners",
     maxUsers: 5,
     maxCases: 100,
-    maxStorage: '100GB',
+    maxStorage: "100GB",
     monthlyPrice: 49,
     annualPrice: 470, // ~20% discount
   },
   [LicenseTier.Professional]: {
     tier: LicenseTier.Professional,
-    name: 'Professional',
-    description: 'Advanced features for growing law firms',
+    name: "Professional",
+    description: "Advanced features for growing law firms",
     maxUsers: 50,
     maxCases: 1000,
-    maxStorage: '1TB',
+    maxStorage: "1TB",
     monthlyPrice: 99,
     annualPrice: 950,
   },
   [LicenseTier.Enterprise]: {
     tier: LicenseTier.Enterprise,
-    name: 'Enterprise',
-    description: 'Enterprise-grade platform for large organizations',
+    name: "Enterprise",
+    description: "Enterprise-grade platform for large organizations",
     maxUsers: null, // unlimited
     maxCases: null, // unlimited
-    maxStorage: '10TB',
+    maxStorage: "10TB",
     monthlyPrice: 199,
     annualPrice: 1910,
   },
   [LicenseTier.Ultimate]: {
     tier: LicenseTier.Ultimate,
-    name: 'Ultimate',
-    description: 'Complete platform with all features and premium support',
+    name: "Ultimate",
+    description: "Complete platform with all features and premium support",
     maxUsers: null, // unlimited
     maxCases: null, // unlimited
-    maxStorage: 'unlimited',
+    maxStorage: "unlimited",
     monthlyPrice: 299,
     annualPrice: 2870,
   },
@@ -113,109 +113,109 @@ export const LICENSE_TIERS: Record<LicenseTier, LicenseTierInfo> = {
  */
 export enum EnterpriseFeature {
   // Authentication & Security
-  SSO = 'sso',
-  SAML = 'saml',
-  MFA = 'mfa',
-  RBAC = 'rbac',
-  API_KEYS = 'api_keys',
-  AUDIT_LOGS = 'audit_logs',
-  IP_WHITELISTING = 'ip_whitelisting',
-  SESSION_MANAGEMENT = 'session_management',
+  SSO = "sso",
+  SAML = "saml",
+  MFA = "mfa",
+  RBAC = "rbac",
+  API_KEYS = "api_keys",
+  AUDIT_LOGS = "audit_logs",
+  IP_WHITELISTING = "ip_whitelisting",
+  SESSION_MANAGEMENT = "session_management",
 
   // Dashboard & Analytics
-  EXECUTIVE_DASHBOARD = 'executive_dashboard',
-  ADVANCED_ANALYTICS = 'advanced_analytics',
-  CUSTOM_REPORTS = 'custom_reports',
-  DATA_EXPORT = 'data_export',
-  REAL_TIME_METRICS = 'real_time_metrics',
-  PREDICTIVE_ANALYTICS = 'predictive_analytics',
+  EXECUTIVE_DASHBOARD = "executive_dashboard",
+  ADVANCED_ANALYTICS = "advanced_analytics",
+  CUSTOM_REPORTS = "custom_reports",
+  DATA_EXPORT = "data_export",
+  REAL_TIME_METRICS = "real_time_metrics",
+  PREDICTIVE_ANALYTICS = "predictive_analytics",
 
   // Case Management
-  UNLIMITED_CASES = 'unlimited_cases',
-  CASE_TEMPLATES = 'case_templates',
-  MASS_CASE_OPERATIONS = 'mass_case_operations',
-  CASE_BUDGETING = 'case_budgeting',
-  CASE_TEAM_COLLABORATION = 'case_team_collaboration',
-  CASE_TIMELINE = 'case_timeline',
+  UNLIMITED_CASES = "unlimited_cases",
+  CASE_TEMPLATES = "case_templates",
+  MASS_CASE_OPERATIONS = "mass_case_operations",
+  CASE_BUDGETING = "case_budgeting",
+  CASE_TEAM_COLLABORATION = "case_team_collaboration",
+  CASE_TIMELINE = "case_timeline",
 
   // Document Management
-  VERSION_CONTROL = 'version_control',
-  DOCUMENT_WORKFLOW = 'document_workflow',
-  ELECTRONIC_SIGNATURE = 'electronic_signature',
-  DOCUMENT_TEMPLATES = 'document_templates',
-  BULK_DOCUMENT_OPERATIONS = 'bulk_document_operations',
-  DOCUMENT_AUDIT_TRAIL = 'document_audit_trail',
-  OCR = 'ocr',
+  VERSION_CONTROL = "version_control",
+  DOCUMENT_WORKFLOW = "document_workflow",
+  ELECTRONIC_SIGNATURE = "electronic_signature",
+  DOCUMENT_TEMPLATES = "document_templates",
+  BULK_DOCUMENT_OPERATIONS = "bulk_document_operations",
+  DOCUMENT_AUDIT_TRAIL = "document_audit_trail",
+  OCR = "ocr",
 
   // eDiscovery & Evidence
-  EDISCOVERY = 'ediscovery',
-  PRIVILEGE_LOG = 'privilege_log',
-  PRODUCTION_MANAGEMENT = 'production_management',
-  EVIDENCE_CHAIN_CUSTODY = 'evidence_chain_custody',
-  EXHIBIT_ORGANIZER = 'exhibit_organizer',
-  LEGAL_HOLDS = 'legal_holds',
+  EDISCOVERY = "ediscovery",
+  PRIVILEGE_LOG = "privilege_log",
+  PRODUCTION_MANAGEMENT = "production_management",
+  EVIDENCE_CHAIN_CUSTODY = "evidence_chain_custody",
+  EXHIBIT_ORGANIZER = "exhibit_organizer",
+  LEGAL_HOLDS = "legal_holds",
 
   // Billing & Finance
-  LEDES_BILLING = 'ledes_billing',
-  TRUST_ACCOUNTING = 'trust_accounting',
-  ADVANCED_INVOICING = 'advanced_invoicing',
-  PAYMENT_PROCESSING = 'payment_processing',
-  FINANCIAL_REPORTS = 'financial_reports',
-  BUDGET_TRACKING = 'budget_tracking',
-  TIME_TRACKING = 'time_tracking',
+  LEDES_BILLING = "ledes_billing",
+  TRUST_ACCOUNTING = "trust_accounting",
+  ADVANCED_INVOICING = "advanced_invoicing",
+  PAYMENT_PROCESSING = "payment_processing",
+  FINANCIAL_REPORTS = "financial_reports",
+  BUDGET_TRACKING = "budget_tracking",
+  TIME_TRACKING = "time_tracking",
 
   // CRM & Client Management
-  CLIENT_PORTAL = 'client_portal',
-  INTAKE_MANAGEMENT = 'intake_management',
-  CLIENT_ANALYTICS = 'client_analytics',
-  BUSINESS_DEVELOPMENT = 'business_development',
-  CONFLICT_CHECKING = 'conflict_checking',
+  CLIENT_PORTAL = "client_portal",
+  INTAKE_MANAGEMENT = "intake_management",
+  CLIENT_ANALYTICS = "client_analytics",
+  BUSINESS_DEVELOPMENT = "business_development",
+  CONFLICT_CHECKING = "conflict_checking",
 
   // Research & Knowledge
-  AI_RESEARCH_ASSISTANT = 'ai_research_assistant',
-  CITATION_MANAGEMENT = 'citation_management',
-  KNOWLEDGE_BASE = 'knowledge_base',
-  RESEARCH_MEMO = 'research_memo',
-  STATUTORY_MONITORING = 'statutory_monitoring',
+  AI_RESEARCH_ASSISTANT = "ai_research_assistant",
+  CITATION_MANAGEMENT = "citation_management",
+  KNOWLEDGE_BASE = "knowledge_base",
+  RESEARCH_MEMO = "research_memo",
+  STATUTORY_MONITORING = "statutory_monitoring",
 
   // Collaboration & Communication
-  TEAM_COLLABORATION = 'team_collaboration',
-  REAL_TIME_NOTIFICATIONS = 'real_time_notifications',
-  VIDEO_CONFERENCING = 'video_conferencing',
-  SECURE_MESSAGING = 'secure_messaging',
+  TEAM_COLLABORATION = "team_collaboration",
+  REAL_TIME_NOTIFICATIONS = "real_time_notifications",
+  VIDEO_CONFERENCING = "video_conferencing",
+  SECURE_MESSAGING = "secure_messaging",
 
   // Data & Integration
-  ADVANCED_DATA_GRID = 'advanced_data_grid',
-  CUSTOM_FIELDS = 'custom_fields',
-  API_ACCESS = 'api_access',
-  WEBHOOKS = 'webhooks',
-  THIRD_PARTY_INTEGRATIONS = 'third_party_integrations',
-  DATA_IMPORT_EXPORT = 'data_import_export',
+  ADVANCED_DATA_GRID = "advanced_data_grid",
+  CUSTOM_FIELDS = "custom_fields",
+  API_ACCESS = "api_access",
+  WEBHOOKS = "webhooks",
+  THIRD_PARTY_INTEGRATIONS = "third_party_integrations",
+  DATA_IMPORT_EXPORT = "data_import_export",
 
   // Administration
-  CUSTOM_BRANDING = 'custom_branding',
-  MULTI_TENANT = 'multi_tenant',
-  BACKUP_RESTORE = 'backup_restore',
-  COMPLIANCE_REPORTING = 'compliance_reporting',
-  SLA_GUARANTEES = 'sla_guarantees',
-  DEDICATED_SUPPORT = 'dedicated_support',
+  CUSTOM_BRANDING = "custom_branding",
+  MULTI_TENANT = "multi_tenant",
+  BACKUP_RESTORE = "backup_restore",
+  COMPLIANCE_REPORTING = "compliance_reporting",
+  SLA_GUARANTEES = "sla_guarantees",
+  DEDICATED_SUPPORT = "dedicated_support",
 }
 
 /**
  * Feature category for organization
  */
 export enum FeatureCategory {
-  Authentication = 'authentication',
-  Dashboard = 'dashboard',
-  CaseManagement = 'case_management',
-  Documents = 'documents',
-  Discovery = 'discovery',
-  Billing = 'billing',
-  CRM = 'crm',
-  Research = 'research',
-  Collaboration = 'collaboration',
-  Data = 'data',
-  Administration = 'administration',
+  Authentication = "authentication",
+  Dashboard = "dashboard",
+  CaseManagement = "case_management",
+  Documents = "documents",
+  Discovery = "discovery",
+  Billing = "billing",
+  CRM = "crm",
+  Research = "research",
+  Collaboration = "collaboration",
+  Data = "data",
+  Administration = "administration",
 }
 
 /**
@@ -403,7 +403,7 @@ export function getUpgradeFeatures(
   const currentFeatures = new Set(getAvailableFeatures(currentTier));
   const targetFeatures = getAvailableFeatures(targetTier);
 
-  return targetFeatures.filter(feature => !currentFeatures.has(feature));
+  return targetFeatures.filter((feature) => !currentFeatures.has(feature));
 }
 
 /**
@@ -413,11 +413,18 @@ export function getUpgradeFeatures(
  * @returns Minimum license tier that includes all features
  */
 export function getRequiredTier(features: EnterpriseFeature[]): LicenseTier {
-  const tiers = features.map(feature => FEATURE_AVAILABILITY[feature]);
-  const maxTierLevel = Math.max(...tiers.map(tier => TIER_HIERARCHY[tier]));
+  if (features.length === 0) {
+    return "Starter";
+  }
 
-  return Object.entries(TIER_HIERARCHY)
-    .find(([_, level]) => level === maxTierLevel)?.[0] as LicenseTier;
+  const tiers = features.map((feature) => FEATURE_AVAILABILITY[feature]);
+  const maxTierLevel = Math.max(
+    ...tiers.map((requiredTier) => TIER_HIERARCHY[requiredTier])
+  );
+
+  return Object.entries(TIER_HIERARCHY).find(
+    ([_, level]) => level === maxTierLevel
+  )?.[0] as LicenseTier;
 }
 
 /**
@@ -445,40 +452,75 @@ export function getFeaturesByCategory(
   };
 
   // Categorize features
-  features.forEach(feature => {
+  features.forEach((feature) => {
     const featureName = feature.toString();
 
     // Simple categorization based on feature name
-    if (featureName.includes('sso') || featureName.includes('saml') || featureName.includes('mfa') ||
-        featureName.includes('rbac') || featureName.includes('audit') || featureName.includes('session')) {
+    if (
+      featureName.includes("sso") ||
+      featureName.includes("saml") ||
+      featureName.includes("mfa") ||
+      featureName.includes("rbac") ||
+      featureName.includes("audit") ||
+      featureName.includes("session")
+    ) {
       grouped[FeatureCategory.Authentication].push(feature);
-    } else if (featureName.includes('dashboard') || featureName.includes('analytics') ||
-               featureName.includes('report') || featureName.includes('metric')) {
+    } else if (
+      featureName.includes("dashboard") ||
+      featureName.includes("analytics") ||
+      featureName.includes("report") ||
+      featureName.includes("metric")
+    ) {
       grouped[FeatureCategory.Dashboard].push(feature);
-    } else if (featureName.includes('case')) {
+    } else if (featureName.includes("case")) {
       grouped[FeatureCategory.CaseManagement].push(feature);
-    } else if (featureName.includes('document')) {
+    } else if (featureName.includes("document")) {
       grouped[FeatureCategory.Documents].push(feature);
-    } else if (featureName.includes('discovery') || featureName.includes('evidence') ||
-               featureName.includes('exhibit') || featureName.includes('privilege')) {
+    } else if (
+      featureName.includes("discovery") ||
+      featureName.includes("evidence") ||
+      featureName.includes("exhibit") ||
+      featureName.includes("privilege")
+    ) {
       grouped[FeatureCategory.Discovery].push(feature);
-    } else if (featureName.includes('billing') || featureName.includes('invoice') ||
-               featureName.includes('payment') || featureName.includes('trust') ||
-               featureName.includes('financial') || featureName.includes('budget') ||
-               featureName.includes('time_tracking')) {
+    } else if (
+      featureName.includes("billing") ||
+      featureName.includes("invoice") ||
+      featureName.includes("payment") ||
+      featureName.includes("trust") ||
+      featureName.includes("financial") ||
+      featureName.includes("budget") ||
+      featureName.includes("time_tracking")
+    ) {
       grouped[FeatureCategory.Billing].push(feature);
-    } else if (featureName.includes('client') || featureName.includes('intake') ||
-               featureName.includes('conflict') || featureName.includes('business_development')) {
+    } else if (
+      featureName.includes("client") ||
+      featureName.includes("intake") ||
+      featureName.includes("conflict") ||
+      featureName.includes("business_development")
+    ) {
       grouped[FeatureCategory.CRM].push(feature);
-    } else if (featureName.includes('research') || featureName.includes('citation') ||
-               featureName.includes('knowledge') || featureName.includes('statutory')) {
+    } else if (
+      featureName.includes("research") ||
+      featureName.includes("citation") ||
+      featureName.includes("knowledge") ||
+      featureName.includes("statutory")
+    ) {
       grouped[FeatureCategory.Research].push(feature);
-    } else if (featureName.includes('collaboration') || featureName.includes('notification') ||
-               featureName.includes('messaging') || featureName.includes('video')) {
+    } else if (
+      featureName.includes("collaboration") ||
+      featureName.includes("notification") ||
+      featureName.includes("messaging") ||
+      featureName.includes("video")
+    ) {
       grouped[FeatureCategory.Collaboration].push(feature);
-    } else if (featureName.includes('api') || featureName.includes('webhook') ||
-               featureName.includes('integration') || featureName.includes('data') ||
-               featureName.includes('custom_field')) {
+    } else if (
+      featureName.includes("api") ||
+      featureName.includes("webhook") ||
+      featureName.includes("integration") ||
+      featureName.includes("data") ||
+      featureName.includes("custom_field")
+    ) {
       grouped[FeatureCategory.Data].push(feature);
     } else {
       grouped[FeatureCategory.Administration].push(feature);
@@ -514,7 +556,7 @@ export interface FeatureFlags {
  * Default feature flags (development mode)
  */
 export const DEFAULT_FEATURE_FLAGS: FeatureFlags = {
-  enableAllFeatures: process.env.NODE_ENV === 'development',
+  enableAllFeatures: process.env.NODE_ENV === "development",
   overrides: {},
   enableBetaFeatures: false,
   enableTelemetry: true,
@@ -551,8 +593,4 @@ export function isFeatureEnabled(
 // EXPORTS
 // ============================================================================
 
-export type {
-  FeatureFlags,
-  FeatureInfo,
-  LicenseTierInfo,
-};
+export type { FeatureFlags, FeatureInfo, LicenseTierInfo };

@@ -11,9 +11,9 @@
  * - WCAG 2.1 AA compliant
  */
 
+import { AuthApiService } from '@/api/auth/auth-api';
 import React, { useState } from 'react';
 import { z } from 'zod';
-import { AuthApiService } from '@/api/auth/auth-api';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -70,7 +70,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
       await authService.forgotPassword(formData.email);
       setStep('success');
       onSuccess?.();
-    } catch (err) {
+    } catch (_err) {
       // For security, don't reveal if email exists or not
       // Show success message anyway to prevent email enumeration
       setStep('success');
@@ -205,9 +205,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               autoComplete="email"
               aria-invalid={!!error}
               aria-describedby={error ? 'email-error' : undefined}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                error ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="you@company.com"
               disabled={isLoading}
               required

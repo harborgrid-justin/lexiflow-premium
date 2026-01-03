@@ -21,10 +21,10 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
@@ -137,7 +137,7 @@ const BillingWIPComponent: React.FC = () => {
             // Validate all entries before invoicing
             const validationErrors: string[] = [];
             selectedEntries.forEach((entry, index) => {
-                const result = validateTimeEntrySafe(entry as any);
+                const result = validateTimeEntrySafe(entry as Record<string, unknown>);
                 if (!result.valid) {
                     validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
                 }

@@ -1,8 +1,8 @@
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { ComplianceMetrics } from '@/types';
 import { cn } from '@/utils/cn';
@@ -23,7 +23,7 @@ export const ComplianceOverview = memo(() => {
 
     const { data: riskData = [], isLoading: loadingRiskData } = useQuery<RiskChartData[]>(
         ['compliance', 'riskStats'],
-        () => DataService.compliance.getRiskStats(mode) as any
+        () => DataService.compliance.getRiskStats(mode) as Promise<unknown>
     );
 
     const { data: metrics, isLoading: loadingMetrics } = useQuery<ComplianceMetrics>(

@@ -4,8 +4,8 @@
  * @description Dashboard metrics API service for fetching KPIs, analytics, and dashboard data
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Activity, Deadline } from '@/components/dashboard/widgets';
+import type { Activity, Deadline } from "@/components/dashboard/widgets";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 // ============================================================================
 // TYPES
@@ -16,20 +16,20 @@ export interface DashboardKPIs {
     value: number;
     previousValue: number;
     change: number;
-    trend: 'up' | 'down' | 'neutral';
+    trend: "up" | "down" | "neutral";
   };
   billableHours: {
     value: number;
     previousValue: number;
     change: number;
-    trend: 'up' | 'down' | 'neutral';
+    trend: "up" | "down" | "neutral";
     target?: number;
   };
   revenue: {
     value: number;
     previousValue: number;
     change: number;
-    trend: 'up' | 'down' | 'neutral';
+    trend: "up" | "down" | "neutral";
     target?: number;
   };
   upcomingDeadlines: {
@@ -92,35 +92,45 @@ export interface DashboardFilters {
 // ============================================================================
 
 export class DashboardMetricsService {
-  private readonly baseUrl = '/api/dashboard';
+  private readonly baseUrl = "/api/dashboard";
 
   /**
    * Get executive summary KPIs
    */
   async getKPIs(filters?: DashboardFilters): Promise<DashboardKPIs> {
-    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    const params = filters
+      ? new URLSearchParams(filters as unknown as Record<string, string>)
+      : undefined;
     return apiClient.get<DashboardKPIs>(
-      `${this.baseUrl}/kpis${params ? `?${params}` : ''}`
+      `${this.baseUrl}/kpis${params ? `?${params}` : ""}`
     );
   }
 
   /**
    * Get case status breakdown
    */
-  async getCaseStatusBreakdown(filters?: DashboardFilters): Promise<CaseStatusBreakdown[]> {
-    const params = filters ? new URLSearchParams(filters as any) : undefined;
+  async getCaseStatusBreakdown(
+    filters?: DashboardFilters
+  ): Promise<CaseStatusBreakdown[]> {
+    const params = filters
+      ? new URLSearchParams(filters as unknown as Record<string, string>)
+      : undefined;
     return apiClient.get<CaseStatusBreakdown[]>(
-      `${this.baseUrl}/cases/status-breakdown${params ? `?${params}` : ''}`
+      `${this.baseUrl}/cases/status-breakdown${params ? `?${params}` : ""}`
     );
   }
 
   /**
    * Get billing overview
    */
-  async getBillingOverview(filters?: DashboardFilters): Promise<BillingOverview[]> {
-    const params = filters ? new URLSearchParams(filters as any) : undefined;
+  async getBillingOverview(
+    filters?: DashboardFilters
+  ): Promise<BillingOverview[]> {
+    const params = filters
+      ? new URLSearchParams(filters as unknown as Record<string, string>)
+      : undefined;
     return apiClient.get<BillingOverview[]>(
-      `${this.baseUrl}/billing/overview${params ? `?${params}` : ''}`
+      `${this.baseUrl}/billing/overview${params ? `?${params}` : ""}`
     );
   }
 
@@ -136,13 +146,17 @@ export class DashboardMetricsService {
   /**
    * Get upcoming deadlines
    */
-  async getUpcomingDeadlines(filters?: { days?: number; priority?: string[] }): Promise<UpcomingDeadline[]> {
+  async getUpcomingDeadlines(filters?: {
+    days?: number;
+    priority?: string[];
+  }): Promise<UpcomingDeadline[]> {
     const params = new URLSearchParams();
-    if (filters?.days) params.append('days', String(filters.days));
-    if (filters?.priority) filters.priority.forEach(p => params.append('priority', p));
+    if (filters?.days) params.append("days", String(filters.days));
+    if (filters?.priority)
+      filters.priority.forEach((p) => params.append("priority", p));
 
     return apiClient.get<UpcomingDeadline[]>(
-      `${this.baseUrl}/deadlines/upcoming${params.toString() ? `?${params}` : ''}`
+      `${this.baseUrl}/deadlines/upcoming${params.toString() ? `?${params}` : ""}`
     );
   }
 
@@ -150,27 +164,36 @@ export class DashboardMetricsService {
    * Get team performance metrics
    */
   async getTeamMetrics(filters?: DashboardFilters): Promise<TeamMetrics[]> {
-    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    const params = filters
+      ? new URLSearchParams(filters as unknown as Record<string, string>)
+      : undefined;
     return apiClient.get<TeamMetrics[]>(
-      `${this.baseUrl}/team/metrics${params ? `?${params}` : ''}`
+      `${this.baseUrl}/team/metrics${params ? `?${params}` : ""}`
     );
   }
 
   /**
    * Get role-specific dashboard data
    */
-  async getRoleDashboard(role: 'attorney' | 'paralegal' | 'admin' | 'partner'): Promise<any> {
+  async getRoleDashboard(
+    role: "attorney" | "paralegal" | "admin" | "partner"
+  ): Promise<Record<string, unknown>> {
     return apiClient.get(`${this.baseUrl}/role/${role}`);
   }
 
   /**
    * Export dashboard data
    */
-  async exportDashboard(format: 'pdf' | 'excel' | 'csv', filters?: DashboardFilters): Promise<Blob> {
-    const params = filters ? new URLSearchParams(filters as any) : undefined;
+  async exportDashboard(
+    format: "pdf" | "excel" | "csv",
+    filters?: DashboardFilters
+  ): Promise<Blob> {
+    const params = filters
+      ? new URLSearchParams(filters as unknown as Record<string, string>)
+      : undefined;
     return apiClient.get<Blob>(
-      `${this.baseUrl}/export/${format}${params ? `?${params}` : ''}`,
-      { responseType: 'blob' }
+      `${this.baseUrl}/export/${format}${params ? `?${params}` : ""}`,
+      { responseType: "blob" }
     );
   }
 }

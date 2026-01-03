@@ -170,7 +170,7 @@ export default function AdminIndexRoute() {
             {auditLogs.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">No recent activity</p>
             ) : (
-              auditLogs.map((log: any) => (
+              auditLogs.map((log: { id: string; severity: string }) => (
                 <div key={log.id} className="flex items-start gap-3">
                   <div className={`mt-0.5 rounded-full p-1.5 ${log.severity === 'high' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
                     log.severity === 'medium' ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' :
@@ -248,7 +248,16 @@ export default function AdminIndexRoute() {
   );
 }
 
-function MetricCard({ title, value, icon: Icon, trend, trendUp, color }: any) {
+interface MetricCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  trend?: string;
+  trendUp?: boolean;
+  color: string;
+}
+
+function MetricCard({ title, value, icon: Icon, trend, trendUp, color }: MetricCardProps) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
       <div className="flex items-center justify-between">

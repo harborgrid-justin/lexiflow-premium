@@ -3,11 +3,11 @@
  * Form to create a new time entry with timer
  */
 
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/time.new";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryForm } from '@/components/billing/TimeEntryForm';
+import { useNavigate } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import type { Route } from "./+types/time.new";
 
 // ============================================================================
 // Meta Tags
@@ -37,7 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
       rate: parseFloat(formData.get("rate") as string),
       description: formData.get("description") as string,
       billable: formData.get("billable") === "true",
-      status: formData.get("status") as any || 'Draft',
+      status: (formData.get("status") as string) || 'Draft',
       taskCode: formData.get("taskCode") as string || undefined,
       activityType: formData.get("activityType") as string || undefined,
     };
@@ -50,10 +50,11 @@ export async function action({ request }: Route.ActionArgs) {
       entryId: created.id,
       redirect: '/billing/time'
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to create time entry";
     return {
       success: false,
-      error: error.message || "Failed to create time entry"
+      error: errorMessage
     };
   }
 }

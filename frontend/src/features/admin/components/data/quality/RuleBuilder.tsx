@@ -126,7 +126,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                         {['Critical', 'High', 'Medium', 'Low'].map(s => (
                                             <button
                                                 key={s}
-                                                onClick={() => setRule({ ...rule, severity: s as any })}
+                                                onClick={() => setRule({ ...rule, severity: s as string })}
                                                 className={cn(
                                                     "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                                     rule.severity === s
@@ -144,7 +144,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                     <select
                                         className={cn("w-full p-2 border rounded-md text-sm outline-none", theme.border.default, theme.surface.default, theme.text.primary)}
                                         value={rule.action}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRule({ ...rule, action: e.target.value as any })}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRule({ ...rule, action: e.target.value as string })}
                                     >
                                         <option value="Block">Block Operation</option>
                                         <option value="Warn">Warning Only</option>

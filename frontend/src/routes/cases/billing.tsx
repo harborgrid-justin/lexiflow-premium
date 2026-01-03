@@ -10,11 +10,11 @@
  * @module routes/cases/billing
  */
 
+import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/billing";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
+import type { Route } from "./+types/billing";
 
 // ============================================================================
 // Meta Tags
@@ -52,10 +52,13 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   // Calculate totals
-  const totalHours = timeEntries.reduce((sum: number, entry: any) => sum + (entry.hours || 0), 0);
-  const totalBilled = timeEntries.reduce((sum: number, entry: any) => sum + (entry.amount || 0), 0);
-  const totalExpenses = expenses.reduce((sum: number, entry: any) => sum + (entry.amount || 0), 0);
-  const totalInvoiced = invoices.reduce((sum: number, inv: any) => sum + (inv.total || 0), 0);
+  interface TimeEntry { hours?: number; amount?: number }
+  interface ExpenseEntry { amount?: number }
+  interface Invoice { total?: number }
+  const totalHours = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.hours || 0), 0);
+  const totalBilled = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.amount || 0), 0);
+  const totalExpenses = expenses.reduce((sum: number, entry: ExpenseEntry) => sum + (entry.amount || 0), 0);
+  const totalInvoiced = invoices.reduce((sum: number, inv: Invoice) => sum + (inv.total || 0), 0);
 
   return {
     caseData,
@@ -93,7 +96,7 @@ function formatHours(hours: number): string {
 export default function CaseBillingRoute() {
   const { caseData, timeEntries, invoices, expenses, totals } = loaderData;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   // Calculate budget utilization
   const budgetAmount = caseData.budget?.amount || 0;
@@ -219,15 +222,14 @@ console.log('useNavigate:', navigate);
             {/* Progress Bar */}
             <div className="mb-4 h-4 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
               <div
-                className={`h-full transition-all ${
-                  budgetUtilization >= 100
+                className={`h-full transition-all ${budgetUtilization >= 100
                     ? 'bg-red-500'
                     : budgetUtilization >= 80
-                    ? 'bg-orange-500'
-                    : budgetUtilization >= 60
-                    ? 'bg-yellow-500'
-                    : 'bg-green-500'
-                }`}
+                      ? 'bg-orange-500'
+                      : budgetUtilization >= 60
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
+                  }`}
                 style={{ width: `${Math.min(budgetUtilization, 100)}%` }}
               />
             </div>
@@ -248,9 +250,8 @@ console.log('useNavigate:', navigate);
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Remaining</p>
-                <p className={`mt-1 text-xl font-semibold ${
-                  budgetRemaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-white'
-                }`}>
+                <p className={`mt-1 text-xl font-semibold ${budgetRemaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-white'
+                  }`}>
                   {formatCurrency(budgetRemaining)}
                 </p>
               </div>

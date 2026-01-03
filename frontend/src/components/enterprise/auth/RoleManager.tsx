@@ -13,9 +13,9 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState, useEffect } from 'react';
 import { PermissionsApiService } from '@/api/auth/access-rights-api';
 import type { Permission } from '@/types';
+import React, { useState } from 'react';
 
 export interface RoleManagerProps {
   roleId: string;
@@ -61,10 +61,6 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
   const [editMode, setEditMode] = useState(false);
 
   const permissionsService = new PermissionsApiService();
-
-  useEffect(() => {
-    loadPermissions();
-  }, [roleId]);
 
   const loadPermissions = async () => {
     setIsLoading(true);
@@ -285,9 +281,8 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
                   >
                     <div className="flex items-center">
                       <svg
-                        className={`w-5 h-5 text-gray-500 transition-transform ${
-                          isExpanded ? 'transform rotate-90' : ''
-                        }`}
+                        className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'transform rotate-90' : ''
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -335,9 +330,8 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
                                       type="button"
                                       onClick={() => editMode && togglePermission(categoryKey, action.value)}
                                       disabled={!editMode}
-                                      className={`inline-flex items-center justify-center ${
-                                        editMode ? 'cursor-pointer hover:opacity-75' : 'cursor-default'
-                                      } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded`}
+                                      className={`inline-flex items-center justify-center ${editMode ? 'cursor-pointer hover:opacity-75' : 'cursor-default'
+                                        } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded`}
                                       aria-label={`${action.label} permission for ${categoryKey}: ${state}`}
                                       title={editMode ? 'Click to toggle permission' : state}
                                     >

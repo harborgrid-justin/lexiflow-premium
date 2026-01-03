@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { ServiceJob, UserId } from '@/types';
@@ -109,7 +109,7 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
                             aria-label="Select case"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.caseId || ''}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, caseId: e.target.value as any })}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, caseId: e.target.value as string })}
                         >
                             <option value="">Select Case...</option>
                             {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}

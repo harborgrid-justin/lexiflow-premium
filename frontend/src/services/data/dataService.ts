@@ -99,100 +99,98 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Routing & Integration Infrastructure
-import { DataSourceRouter } from './routing/DataSourceRouter';
-import { IntegrationEventPublisher, createIntegratedRepository } from './integration/IntegrationEventPublisher';
-import { RepositoryRegistry } from './repositories/RepositoryRegistry';
+import {
+  IntegrationEventPublisher,
+  createIntegratedRepository,
+} from "./integration/IntegrationEventPublisher";
+import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
+import { DataSourceRouter } from "./routing/DataSourceRouter";
 
 // Backend API Layer (Primary Data Source)
-import { api, isBackendApiEnabled } from '@/api';
+import { api, isBackendApiEnabled } from "@/api";
 
 // Legacy Database (Fallback Only - DEPRECATED)
-import { STORES } from './db';
+import { STORES } from "./db";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                        BACKEND DOMAIN REPOSITORIES
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Core Domain Services (Backend-First)
-import { CaseRepository, PhaseRepository } from '@/services/domain/CaseDomain';
-import { DocketRepository } from '@/services/domain/DocketDomain';
-import { KnowledgeRepository } from '@/services/domain/KnowledgeDomain';
-import { CalendarService } from '@/services/domain/CalendarDomain';
+import { CalendarService } from "@/services/domain/CalendarDomain";
+import { CaseRepository, PhaseRepository } from "@/services/domain/CaseDomain";
+import { DocketRepository } from "@/services/domain/DocketDomain";
+import { KnowledgeRepository } from "@/services/domain/KnowledgeDomain";
 
 // Compliance & Security Services
-import { ComplianceService } from '@/services/domain/ComplianceDomain';
-import { SecurityService } from '@/services/domain/SecurityDomain';
+import { ComplianceService } from "@/services/domain/ComplianceDomain";
+import { SecurityService } from "@/services/domain/SecurityDomain";
 
 // Operations & Administration
-import { AdminService } from '@/services/domain/AdminDomain';
-import { OperationsService } from '@/services/domain/OperationsDomain';
+import { AdminService } from "@/services/domain/AdminDomain";
+import { OperationsService } from "@/services/domain/OperationsDomain";
 
 // Communication & Collaboration
-import { CorrespondenceService } from '@/services/domain/CommunicationDomain';
+import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
 
 // Data Management Services
-import { DataQualityService } from '@/services/domain/DataQualityDomain';
-import { DataCatalogService } from '@/services/domain/DataCatalogDomain';
-import { BackupService } from '@/services/domain/BackupDomain';
+import { BackupService } from "@/services/domain/BackupDomain";
+import { DataCatalogService } from "@/services/domain/DataCatalogDomain";
+import { DataQualityService } from "@/services/domain/DataQualityDomain";
 
 // Business Intelligence
-import { AnalyticsService } from '@/services/domain/AnalyticsDomain';
-import { CRMService } from '@/services/domain/CRMDomain';
+import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
+import { CRMService } from "@/services/domain/CRMDomain";
 
 // Enterprise Features
-import { ProfileDomain } from '@/services/domain/ProfileDomain';
-import { MarketingService } from '@/services/domain/MarketingDomain';
-import { JurisdictionService } from '@/services/domain/JurisdictionDomain';
+import { JurisdictionService } from "@/services/domain/JurisdictionDomain";
+import { MarketingService } from "@/services/domain/MarketingDomain";
+import { ProfileDomain } from "@/services/domain/ProfileDomain";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                       MODULAR REPOSITORY LAYER
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Document Management
-import { DocumentRepository } from './repositories/DocumentRepository';
-import { EvidenceRepository } from './repositories/EvidenceRepository';
-import { PleadingRepository } from './repositories/PleadingRepository';
+import { DocumentRepository } from "./repositories/DocumentRepository";
+import { EvidenceRepository } from "./repositories/EvidenceRepository";
+import { PleadingRepository } from "./repositories/PleadingRepository";
 
 // Workflow & Task Management
-import { TaskRepository } from './repositories/TaskRepository';
-import { WorkflowRepository } from './repositories/WorkflowRepository';
-import { ProjectRepository } from './repositories/ProjectRepository';
+import { ProjectRepository } from "./repositories/ProjectRepository";
+import { TaskRepository } from "./repositories/TaskRepository";
+import { WorkflowRepository } from "./repositories/WorkflowRepository";
 
 // Legal Operations
-import { TrialRepository } from './repositories/TrialRepository';
-import { MotionRepository } from './repositories/MotionRepository';
-import { DiscoveryRepository } from './repositories/DiscoveryRepository';
+import { DiscoveryRepository } from "./repositories/DiscoveryRepository";
+import { MotionRepository } from "./repositories/MotionRepository";
+import { TrialRepository } from "./repositories/TrialRepository";
 
 // Financial Management
-import { BillingRepository } from './repositories/BillingRepository';
+import { BillingRepository } from "./repositories/BillingRepository";
 
 // Human Resources
-import { HRRepository } from './repositories/HRRepository';
+import { HRRepository } from "./repositories/HRRepository";
 
 // Entity Management
-import { ClientRepository } from './repositories/ClientRepository';
-import { OrganizationRepository } from './repositories/OrganizationRepository';
-import { WitnessRepository } from './repositories/WitnessRepository';
-import { EntityRepository } from './repositories/EntityRepository';
+import { ClientRepository } from "./repositories/ClientRepository";
+import { EntityRepository } from "./repositories/EntityRepository";
+import { OrganizationRepository } from "./repositories/OrganizationRepository";
+import { WitnessRepository } from "./repositories/WitnessRepository";
 
 // Analytics & Research
-import { AnalysisRepository } from './repositories/AnalysisRepository';
-import { CitationRepository } from './repositories/CitationRepository';
-import { RiskRepository } from './repositories/RiskAssessmentRepository';
+import { AnalysisRepository } from "./repositories/AnalysisRepository";
+import { CitationRepository } from "./repositories/CitationRepository";
+import { RiskRepository } from "./repositories/RiskAssessmentRepository";
 // NOTE: DashboardService and WarRoomService use dynamic imports to avoid circular dependencies
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
-import type {
-  Case,
-  DocketEntry,
-  LegalDocument,
-  TimeEntry
-} from '@/types';
+import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
 
-import { MOCK_JUDGES } from '@/api/types/judgeProfile';
+import { MOCK_JUDGES } from "@/api/types/judgeProfile";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                      INTEGRATED REPOSITORIES
@@ -206,17 +204,22 @@ import { MOCK_JUDGES } from '@/api/types/judgeProfile';
 
 const IntegratedCaseRepository = createIntegratedRepository(
   CaseRepository,
-  async (item: unknown) => await IntegrationEventPublisher.publishCaseCreated(item as Case)
+  async (item: unknown) =>
+    await IntegrationEventPublisher.publishCaseCreated(item as Case)
 );
 
 const IntegratedDocketRepository = createIntegratedRepository(
   DocketRepository,
-  async (item: unknown) => await IntegrationEventPublisher.publishDocketIngested(item as DocketEntry)
+  async (item: unknown) =>
+    await IntegrationEventPublisher.publishDocketIngested(item as DocketEntry)
 );
 
 const IntegratedDocumentRepository = createIntegratedRepository(
   DocumentRepository,
-  async (item: unknown) => await IntegrationEventPublisher.publishDocumentUploaded(item as LegalDocument)
+  async (item: unknown) =>
+    await IntegrationEventPublisher.publishDocumentUploaded(
+      item as LegalDocument
+    )
 );
 
 class IntegratedBillingRepository extends BillingRepository {
@@ -239,81 +242,141 @@ class IntegratedBillingRepository extends BillingRepository {
 
 // Core Integrated Repositories
 const getIntegratedCaseRepository = () =>
-  RepositoryRegistry.getOrCreate('IntegratedCaseRepository', () => new IntegratedCaseRepository());
+  RepositoryRegistry.getOrCreate(
+    "IntegratedCaseRepository",
+    () => new IntegratedCaseRepository()
+  );
 
 const getIntegratedDocketRepository = () =>
-  RepositoryRegistry.getOrCreate('IntegratedDocketRepository', () => new IntegratedDocketRepository());
+  RepositoryRegistry.getOrCreate(
+    "IntegratedDocketRepository",
+    () => new IntegratedDocketRepository()
+  );
 
 const getIntegratedDocumentRepository = () =>
-  RepositoryRegistry.getOrCreate('IntegratedDocumentRepository', () => new IntegratedDocumentRepository());
+  RepositoryRegistry.getOrCreate(
+    "IntegratedDocumentRepository",
+    () => new IntegratedDocumentRepository()
+  );
 
 const getIntegratedBillingRepository = () =>
-  RepositoryRegistry.getOrCreate('IntegratedBillingRepository', () => new IntegratedBillingRepository());
+  RepositoryRegistry.getOrCreate(
+    "IntegratedBillingRepository",
+    () => new IntegratedBillingRepository()
+  );
 
 // Standard Repositories
 const getEvidenceRepository = () =>
-  RepositoryRegistry.getOrCreate('EvidenceRepository', () => new EvidenceRepository());
+  RepositoryRegistry.getOrCreate(
+    "EvidenceRepository",
+    () => new EvidenceRepository()
+  );
 
 const getDiscoveryRepository = () =>
-  RepositoryRegistry.getOrCreate('DiscoveryRepository', () => new DiscoveryRepository());
+  RepositoryRegistry.getOrCreate(
+    "DiscoveryRepository",
+    () => new DiscoveryRepository()
+  );
 
 const getTrialRepository = () =>
-  RepositoryRegistry.getOrCreate('TrialRepository', () => new TrialRepository());
+  RepositoryRegistry.getOrCreate(
+    "TrialRepository",
+    () => new TrialRepository()
+  );
 
 const getPleadingRepository = () =>
-  RepositoryRegistry.getOrCreate('PleadingRepository', () => new PleadingRepository());
+  RepositoryRegistry.getOrCreate(
+    "PleadingRepository",
+    () => new PleadingRepository()
+  );
 
 const getKnowledgeRepository = () =>
-  RepositoryRegistry.getOrCreate('KnowledgeRepository', () => new KnowledgeRepository());
+  RepositoryRegistry.getOrCreate(
+    "KnowledgeRepository",
+    () => new KnowledgeRepository()
+  );
 
 const getAnalysisRepository = () =>
-  RepositoryRegistry.getOrCreate('AnalysisRepository', () => new AnalysisRepository());
+  RepositoryRegistry.getOrCreate(
+    "AnalysisRepository",
+    () => new AnalysisRepository()
+  );
 
 const getPhaseRepository = () =>
-  RepositoryRegistry.getOrCreate('PhaseRepository', () => new PhaseRepository());
+  RepositoryRegistry.getOrCreate(
+    "PhaseRepository",
+    () => new PhaseRepository()
+  );
 
 const getDataQualityService = () =>
-  RepositoryRegistry.getOrCreate('DataQualityService', () => new DataQualityService());
+  RepositoryRegistry.getOrCreate(
+    "DataQualityService",
+    () => new DataQualityService()
+  );
 
 const getHRRepository = () =>
-  RepositoryRegistry.getOrCreate('HRRepository', () => HRRepository);
+  RepositoryRegistry.getOrCreate("HRRepository", () => HRRepository);
 
 const getWorkflowRepository = () =>
-  RepositoryRegistry.getOrCreate('WorkflowRepository', () => WorkflowRepository);
+  RepositoryRegistry.getOrCreate(
+    "WorkflowRepository",
+    () => WorkflowRepository
+  );
 
 const getTasksRepository = () =>
-  RepositoryRegistry.getOrCreate('TasksRepository', () => new TaskRepository());
+  RepositoryRegistry.getOrCreate("TasksRepository", () => new TaskRepository());
 
 const getProjectsRepository = () =>
-  RepositoryRegistry.getOrCreate('ProjectsRepository', () => new ProjectRepository());
+  RepositoryRegistry.getOrCreate(
+    "ProjectsRepository",
+    () => new ProjectRepository()
+  );
 
 const getRisksRepository = () =>
-  RepositoryRegistry.getOrCreate('RisksRepository', () => new RiskRepository());
+  RepositoryRegistry.getOrCreate("RisksRepository", () => new RiskRepository());
 
 const getMotionsRepository = () =>
-  RepositoryRegistry.getOrCreate('MotionsRepository', () => new MotionRepository());
+  RepositoryRegistry.getOrCreate(
+    "MotionsRepository",
+    () => new MotionRepository()
+  );
 
 const getClientsRepository = () =>
-  RepositoryRegistry.getOrCreate('ClientsRepository', () => new ClientRepository());
+  RepositoryRegistry.getOrCreate(
+    "ClientsRepository",
+    () => new ClientRepository()
+  );
 
 const getCitationsRepository = () =>
-  RepositoryRegistry.getOrCreate('CitationsRepository', () => new CitationRepository());
+  RepositoryRegistry.getOrCreate(
+    "CitationsRepository",
+    () => new CitationRepository()
+  );
 
 const getEntitiesRepository = () =>
-  RepositoryRegistry.getOrCreate('EntitiesRepository', () => new EntityRepository());
+  RepositoryRegistry.getOrCreate(
+    "EntitiesRepository",
+    () => new EntityRepository()
+  );
 
 const getOrganizationsRepository = () =>
-  RepositoryRegistry.getOrCreate('OrganizationsRepository', () => new OrganizationRepository());
+  RepositoryRegistry.getOrCreate(
+    "OrganizationsRepository",
+    () => new OrganizationRepository()
+  );
 
 const getWitnessesRepository = () =>
-  RepositoryRegistry.getOrCreate('WitnessesRepository', () => new WitnessRepository());
+  RepositoryRegistry.getOrCreate(
+    "WitnessesRepository",
+    () => new WitnessRepository()
+  );
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                     LEGACY INTEGRATION (Deprecated)
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { analyticsApi } from '@/api/domains/analytics.api';
-import { repositoryRegistry as legacyRepositoryRegistry } from '@/services/core/RepositoryFactory';
+import { analyticsApi } from "@/api/domains/analytics.api";
+import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                          ╔═══════════════════════╗
@@ -330,7 +393,6 @@ import { repositoryRegistry as legacyRepositoryRegistry } from '@/services/core/
 const DataServiceBase: any = {};
 
 Object.defineProperties(DataServiceBase, {
-
   // ═════════════════════════════════════════════════════════════════════════
   //                        BACKEND SERVICES (PRIMARY)
   //                       100% Production-Ready APIs
@@ -345,21 +407,30 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.cases (PostgreSQL + NestJS)
    * @features CRUD, search, analytics, assignments, status tracking
    */
-  cases: DataSourceRouter.createPropertyDescriptor('cases', getIntegratedCaseRepository),
+  cases: DataSourceRouter.createPropertyDescriptor(
+    "cases",
+    getIntegratedCaseRepository
+  ),
 
   /**
    * Docket API - Court document tracking and management
    * @backend api.docket
    * @features Filing tracking, deadlines, court entries
    */
-  docket: DataSourceRouter.createPropertyDescriptor('docket', getIntegratedDocketRepository),
+  docket: DataSourceRouter.createPropertyDescriptor(
+    "docket",
+    getIntegratedDocketRepository
+  ),
 
   /**
    * Documents API - Legal document management system
    * @backend api.documents
    * @features Upload, version control, OCR, metadata extraction
    */
-  documents: DataSourceRouter.createPropertyDescriptor('documents', getIntegratedDocumentRepository),
+  documents: DataSourceRouter.createPropertyDescriptor(
+    "documents",
+    getIntegratedDocumentRepository
+  ),
 
   /**
    * Drafting API - Document drafting and assembly
@@ -373,14 +444,20 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.pleadings
    * @features Drafting, filing, template management
    */
-  pleadings: DataSourceRouter.createPropertyDescriptor('pleadings', getPleadingRepository),
+  pleadings: DataSourceRouter.createPropertyDescriptor(
+    "pleadings",
+    getPleadingRepository
+  ),
 
   /**
    * Motions API - Motion tracking and management
    * @backend api.motions
    * @features Motion filing, responses, hearings, rulings
    */
-  motions: DataSourceRouter.createPropertyDescriptor('motions', getMotionsRepository),
+  motions: DataSourceRouter.createPropertyDescriptor(
+    "motions",
+    getMotionsRepository
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // DISCOVERY & EVIDENCE MANAGEMENT
@@ -391,63 +468,91 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.evidence
    * @features Intake, cataloging, authentication, exhibits
    */
-  evidence: DataSourceRouter.createPropertyDescriptor('evidence', getEvidenceRepository),
+  evidence: DataSourceRouter.createPropertyDescriptor(
+    "evidence",
+    getEvidenceRepository
+  ),
 
   /**
    * Legal Holds API - Litigation hold management
    * @backend api.legalHolds
    * @features Hold notices, custodian tracking, compliance
    */
-  legalHolds: DataSourceRouter.createPropertyDescriptor('legalHolds', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>(STORES.LEGAL_HOLDS)),
+  legalHolds: DataSourceRouter.createPropertyDescriptor("legalHolds", () =>
+    legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+      STORES.LEGAL_HOLDS
+    )
+  ),
 
   /**
    * Depositions API - Deposition scheduling and tracking
    * @backend api.depositions
    * @features Scheduling, transcripts, exhibit management
    */
-  depositions: DataSourceRouter.createPropertyDescriptor('depositions', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>('depositions')),
+  depositions: DataSourceRouter.createPropertyDescriptor("depositions", () =>
+    legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+      "depositions"
+    )
+  ),
 
   /**
    * Discovery Requests API - Discovery request/response management
    * @backend api.discoveryRequests
    * @features Interrogatories, RFPs, RFAs, responses
    */
-  discoveryRequests: DataSourceRouter.createPropertyDescriptor('discoveryRequests', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>('discoveryRequests')),
+  discoveryRequests: DataSourceRouter.createPropertyDescriptor(
+    "discoveryRequests",
+    () =>
+      legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+        "discoveryRequests"
+      )
+  ),
 
   /**
    * ESI Sources API - Electronic source tracking
    * @backend api.esiSources
    * @features Data source identification, preservation
    */
-  esiSources: DataSourceRouter.createPropertyDescriptor('esiSources', () => legacyRepositoryRegistry.getOrCreate('esiSources')),
+  esiSources: DataSourceRouter.createPropertyDescriptor("esiSources", () =>
+    legacyRepositoryRegistry.getOrCreate("esiSources")
+  ),
 
   /**
    * Privilege Log API - Attorney-client privilege tracking
    * @backend api.privilegeLog
    * @features Privilege assertions, log generation
    */
-  privilegeLog: DataSourceRouter.createPropertyDescriptor('privilegeLog', () => legacyRepositoryRegistry.getOrCreate(STORES.PRIVILEGE_LOG)),
+  privilegeLog: DataSourceRouter.createPropertyDescriptor("privilegeLog", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.PRIVILEGE_LOG)
+  ),
 
   /**
    * Productions API - Document production management
    * @backend api.productions
    * @features Production sets, Bates numbering, delivery
    */
-  productions: DataSourceRouter.createPropertyDescriptor('productions', () => legacyRepositoryRegistry.getOrCreate('productions')),
+  productions: DataSourceRouter.createPropertyDescriptor("productions", () =>
+    legacyRepositoryRegistry.getOrCreate("productions")
+  ),
 
   /**
    * Custodian Interviews API - Custodian interview tracking
    * @backend api.custodianInterviews
    * @features Interview scheduling, questionnaires, notes
    */
-  custodianInterviews: DataSourceRouter.createPropertyDescriptor('custodianInterviews', () => legacyRepositoryRegistry.getOrCreate('custodianInterviews')),
+  custodianInterviews: DataSourceRouter.createPropertyDescriptor(
+    "custodianInterviews",
+    () => legacyRepositoryRegistry.getOrCreate("custodianInterviews")
+  ),
 
   /**
    * Custodians API - Custodian management
    * @backend api.custodians
    * @features Custodian profiles, data sources, holds
    */
-  custodians: DataSourceRouter.createPropertyDescriptor('custodians', () => legacyRepositoryRegistry.getOrCreate('custodians')),
+  custodians: DataSourceRouter.createPropertyDescriptor("custodians", () =>
+    legacyRepositoryRegistry.getOrCreate("custodians")
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // TRIAL MANAGEMENT
@@ -458,28 +563,35 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.trial
    * @features Trial calendar, witness lists, exhibits
    */
-  trial: DataSourceRouter.createPropertyDescriptor('trial', getTrialRepository),
+  trial: DataSourceRouter.createPropertyDescriptor("trial", getTrialRepository),
 
   /**
    * Exhibits API - Trial exhibit management
    * @backend api.exhibits
    * @features Exhibit lists, authentication, presentation
    */
-  exhibits: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.EXHIBITS)),
+  exhibits: DataSourceRouter.createPropertyDescriptor(null, () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.EXHIBITS)
+  ),
 
   /**
    * Witnesses API - Witness management
    * @backend api.witnesses
    * @features Witness profiles, availability, testimony prep
    */
-  witnesses: DataSourceRouter.createPropertyDescriptor('witnesses', getWitnessesRepository),
+  witnesses: DataSourceRouter.createPropertyDescriptor(
+    "witnesses",
+    getWitnessesRepository
+  ),
 
   /**
    * Examinations API - Witness examination tracking
    * @backend api.examinations
    * @features Direct/cross examination, transcripts
    */
-  examinations: DataSourceRouter.createPropertyDescriptor('examinations', () => legacyRepositoryRegistry.getOrCreate('examinations')),
+  examinations: DataSourceRouter.createPropertyDescriptor("examinations", () =>
+    legacyRepositoryRegistry.getOrCreate("examinations")
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // FINANCIAL MANAGEMENT
@@ -490,56 +602,76 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.billing
    * @features Time tracking, invoicing, payments, reporting
    */
-  billing: DataSourceRouter.createPropertyDescriptor('billing', getIntegratedBillingRepository),
+  billing: DataSourceRouter.createPropertyDescriptor(
+    "billing",
+    getIntegratedBillingRepository
+  ),
 
   /**
    * Time Entries API - Time tracking and management
    * @backend api.timeEntries
    * @features Time capture, timers, approvals
    */
-  timeEntries: DataSourceRouter.createPropertyDescriptor('timeEntries', () => legacyRepositoryRegistry.getOrCreate(STORES.BILLING)),
+  timeEntries: DataSourceRouter.createPropertyDescriptor("timeEntries", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.BILLING)
+  ),
 
   /**
    * Invoices API - Invoice generation and management
    * @backend api.invoices
    * @features Invoice creation, delivery, payment tracking
    */
-  invoices: DataSourceRouter.createPropertyDescriptor('invoices', () => legacyRepositoryRegistry.getOrCreate('invoices')),
+  invoices: DataSourceRouter.createPropertyDescriptor("invoices", () =>
+    legacyRepositoryRegistry.getOrCreate("invoices")
+  ),
 
   /**
    * Expenses API - Expense tracking and reimbursement
    * @backend api.expenses
    * @features Expense capture, approvals, reimbursements
    */
-  expenses: DataSourceRouter.createPropertyDescriptor('expenses', () => legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES)),
+  expenses: DataSourceRouter.createPropertyDescriptor("expenses", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES)
+  ),
 
   /**
    * Fee Agreements API - Fee arrangement management
    * @backend api.feeAgreements
    * @features Retainer, contingency, hourly agreements
    */
-  feeAgreements: DataSourceRouter.createPropertyDescriptor('feeAgreements', () => legacyRepositoryRegistry.getOrCreate('feeAgreements')),
+  feeAgreements: DataSourceRouter.createPropertyDescriptor(
+    "feeAgreements",
+    () => legacyRepositoryRegistry.getOrCreate("feeAgreements")
+  ),
 
   /**
    * Rate Tables API - Billing rate management
    * @backend api.rateTables
    * @features Attorney rates, paralegal rates, rate changes
    */
-  rateTables: DataSourceRouter.createPropertyDescriptor('rateTables', () => legacyRepositoryRegistry.getOrCreate('rateTables')),
+  rateTables: DataSourceRouter.createPropertyDescriptor("rateTables", () =>
+    legacyRepositoryRegistry.getOrCreate("rateTables")
+  ),
 
   /**
    * Trust Accounts API - IOLTA/trust account management
    * @backend api.trustAccounts
    * @features Trust accounting, disbursements, compliance
    */
-  trustAccounts: DataSourceRouter.createPropertyDescriptor('trustAccounts', () => legacyRepositoryRegistry.getOrCreate('trustAccounts')),
+  trustAccounts: DataSourceRouter.createPropertyDescriptor(
+    "trustAccounts",
+    () => legacyRepositoryRegistry.getOrCreate("trustAccounts")
+  ),
 
   /**
    * Billing Analytics API - Financial analytics and reporting
    * @backend api.billingAnalytics
    * @features Revenue analysis, realization rates, aging
    */
-  billingAnalytics: DataSourceRouter.createPropertyDescriptor('billingAnalytics', () => legacyRepositoryRegistry.getOrCreate('billingAnalytics')),
+  billingAnalytics: DataSourceRouter.createPropertyDescriptor(
+    "billingAnalytics",
+    () => legacyRepositoryRegistry.getOrCreate("billingAnalytics")
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // CLIENT & ENTITY MANAGEMENT
@@ -550,28 +682,39 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.clients
    * @features Client profiles, contacts, matter assignments
    */
-  clients: DataSourceRouter.createPropertyDescriptor('clients', getClientsRepository),
+  clients: DataSourceRouter.createPropertyDescriptor(
+    "clients",
+    getClientsRepository
+  ),
 
   /**
    * Parties API - Case party management
    * @backend api.parties
    * @features Plaintiffs, defendants, interested parties
    */
-  parties: DataSourceRouter.createPropertyDescriptor('parties', () => legacyRepositoryRegistry.getOrCreate('parties')),
+  parties: DataSourceRouter.createPropertyDescriptor("parties", () =>
+    legacyRepositoryRegistry.getOrCreate("parties")
+  ),
 
   /**
    * Organizations API - Organization management
    * @backend api.organizations
    * @features Corporate entities, opposing counsel firms
    */
-  organizations: DataSourceRouter.createPropertyDescriptor('organizations', getOrganizationsRepository),
+  organizations: DataSourceRouter.createPropertyDescriptor(
+    "organizations",
+    getOrganizationsRepository
+  ),
 
   /**
    * Legal Entities API - Legal entity management
    * @backend api.legalEntities
    * @features Entity structures, relationships, hierarchies
    */
-  entities: DataSourceRouter.createPropertyDescriptor('legalEntities', getEntitiesRepository),
+  entities: DataSourceRouter.createPropertyDescriptor(
+    "legalEntities",
+    getEntitiesRepository
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // WORKFLOW & TASK MANAGEMENT
@@ -582,14 +725,17 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.tasks
    * @features Task assignment, deadlines, dependencies, tracking
    */
-  tasks: DataSourceRouter.createPropertyDescriptor('tasks', getTasksRepository),
+  tasks: DataSourceRouter.createPropertyDescriptor("tasks", getTasksRepository),
 
   /**
    * Projects API - Project management
    * @backend api.projects
    * @features Project planning, milestones, resource allocation
    */
-  projects: DataSourceRouter.createPropertyDescriptor(null, getProjectsRepository),
+  projects: DataSourceRouter.createPropertyDescriptor(
+    null,
+    getProjectsRepository
+  ),
 
   /**
    * Workflow API - Automated workflow management
@@ -597,8 +743,11 @@ Object.defineProperties(DataServiceBase, {
    * @features Workflow templates, automation, triggers
    */
   workflow: {
-    get: () => isBackendApiEnabled() && api.workflow ? api.workflow : getWorkflowRepository(),
-    enumerable: true
+    get: () =>
+      isBackendApiEnabled() && api.workflow
+        ? api.workflow
+        : getWorkflowRepository(),
+    enumerable: true,
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -613,7 +762,7 @@ Object.defineProperties(DataServiceBase, {
    */
   compliance: {
     get: () => ComplianceService,
-    enumerable: true
+    enumerable: true,
   },
 
   /**
@@ -621,42 +770,56 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.conflictChecks
    * @features Client conflicts, matter conflicts, waivers
    */
-  conflictChecks: DataSourceRouter.createPropertyDescriptor('conflictChecks', () => legacyRepositoryRegistry.getOrCreate('conflictChecks')),
+  conflictChecks: DataSourceRouter.createPropertyDescriptor(
+    "conflictChecks",
+    () => legacyRepositoryRegistry.getOrCreate("conflictChecks")
+  ),
 
   /**
    * Ethical Walls API - Information barrier management
    * @backend api.ethicalWalls
    * @features Wall creation, access restrictions, monitoring
    */
-  ethicalWalls: DataSourceRouter.createPropertyDescriptor('ethicalWalls', () => legacyRepositoryRegistry.getOrCreate('ethicalWalls')),
+  ethicalWalls: DataSourceRouter.createPropertyDescriptor("ethicalWalls", () =>
+    legacyRepositoryRegistry.getOrCreate("ethicalWalls")
+  ),
 
   /**
    * Audit Logs API - System audit trail
    * @backend api.auditLogs
    * @features Activity tracking, compliance reporting, forensics
    */
-  auditLogs: DataSourceRouter.createPropertyDescriptor('auditLogs', () => legacyRepositoryRegistry.getOrCreate('auditLogs')),
+  auditLogs: DataSourceRouter.createPropertyDescriptor("auditLogs", () =>
+    legacyRepositoryRegistry.getOrCreate("auditLogs")
+  ),
 
   /**
    * Permissions API - Access control management
    * @backend api.permissions
    * @features Role-based access, permissions, groups
    */
-  permissions: DataSourceRouter.createPropertyDescriptor('permissions', () => legacyRepositoryRegistry.getOrCreate('permissions')),
+  permissions: DataSourceRouter.createPropertyDescriptor("permissions", () =>
+    legacyRepositoryRegistry.getOrCreate("permissions")
+  ),
 
   /**
    * RLS Policies API - Row-level security policies
    * @backend api.rlsPolicies
    * @features Data isolation, multi-tenancy, security rules
    */
-  rlsPolicies: DataSourceRouter.createPropertyDescriptor('rlsPolicies', () => legacyRepositoryRegistry.getOrCreate(STORES.POLICIES)),
+  rlsPolicies: DataSourceRouter.createPropertyDescriptor("rlsPolicies", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.POLICIES)
+  ),
 
   /**
    * Compliance Reporting API - Regulatory compliance reports
    * @backend api.complianceReporting
    * @features Compliance dashboards, certifications, filings
    */
-  complianceReporting: DataSourceRouter.createPropertyDescriptor('complianceReporting', () => legacyRepositoryRegistry.getOrCreate('complianceReports')),
+  complianceReporting: DataSourceRouter.createPropertyDescriptor(
+    "complianceReporting",
+    () => legacyRepositoryRegistry.getOrCreate("complianceReports")
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // ANALYTICS & INTELLIGENCE
@@ -668,8 +831,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Legal research, case law database, insights
    */
   knowledge: {
-    get: () => isBackendApiEnabled() ? analyticsApi.knowledge : getKnowledgeRepository(),
-    enumerable: true
+    get: () =>
+      isBackendApiEnabled() ? analyticsApi.knowledge : getKnowledgeRepository(),
+    enumerable: true,
   },
 
   /**
@@ -677,7 +841,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.citations
    * @features Bluebook formatting, citation extraction, validation
    */
-  citations: DataSourceRouter.createPropertyDescriptor(null, getCitationsRepository),
+  citations: DataSourceRouter.createPropertyDescriptor(
+    null,
+    getCitationsRepository
+  ),
 
   /**
    * Analytics API - Business intelligence and analytics
@@ -691,10 +858,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.judgeStats
    * @features Judge history, ruling patterns, scheduling preferences
    */
-  judgeStats: DataSourceRouter.createPropertyDescriptor('judgeStats', () => ({
+  judgeStats: DataSourceRouter.createPropertyDescriptor("judgeStats", () => ({
     getAll: async () => MOCK_JUDGES,
-    getById: async (id: string) => MOCK_JUDGES.find(j => j.id === id),
-    search: async (query: string) => MOCK_JUDGES.filter(j => j.name.toLowerCase().includes(query.toLowerCase()))
+    getById: async (id: string) => MOCK_JUDGES.find((j) => j.id === id),
+    search: async (query: string) =>
+      MOCK_JUDGES.filter((j) =>
+        j.name.toLowerCase().includes(query.toLowerCase())
+      ),
   })),
 
   /**
@@ -702,15 +872,18 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.outcomePredictions
    * @features ML predictions, confidence scores, risk factors
    */
-  outcomePredictions: DataSourceRouter.createPropertyDescriptor('outcomePredictions', () => ({
-    predict: async (caseId: string) => ({
-      caseId,
-      prediction: 'unavailable',
-      confidence: 0,
-      factors: []
-    }),
-    getHistory: async () => []
-  })),
+  outcomePredictions: DataSourceRouter.createPropertyDescriptor(
+    "outcomePredictions",
+    () => ({
+      predict: async (caseId: string) => ({
+        caseId,
+        prediction: "unavailable",
+        confidence: 0,
+        factors: [],
+      }),
+      getHistory: async () => [],
+    })
+  ),
 
   /**
    * Risks API - Risk assessment and management
@@ -728,7 +901,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.communications
    * @features Email tracking, call logs, correspondence
    */
-  communications: DataSourceRouter.createPropertyDescriptor('communications', () => legacyRepositoryRegistry.getOrCreate('communications')),
+  communications: DataSourceRouter.createPropertyDescriptor(
+    "communications",
+    () => legacyRepositoryRegistry.getOrCreate("communications")
+  ),
 
   /**
    * Correspondence API - Document correspondence tracking
@@ -742,7 +918,9 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.messaging
    * @features Team chat, notifications, alerts
    */
-  messaging: DataSourceRouter.createPropertyDescriptor('messaging', () => legacyRepositoryRegistry.getOrCreate('messages')),
+  messaging: DataSourceRouter.createPropertyDescriptor("messaging", () =>
+    legacyRepositoryRegistry.getOrCreate("messages")
+  ),
 
   /**
    * Notifications API - System notification management
@@ -750,8 +928,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Push notifications, email alerts, reminders
    */
   notifications: {
-    get: () => import('../domain/NotificationDomain').then(m => m.NotificationService),
-    enumerable: true
+    get: () =>
+      import("../domain/NotificationDomain").then((m) => m.NotificationService),
+    enumerable: true,
   },
 
   /**
@@ -761,7 +940,7 @@ Object.defineProperties(DataServiceBase, {
    */
   calendar: {
     get: () => CalendarService,
-    enumerable: true
+    enumerable: true,
   },
 
   /**
@@ -770,8 +949,11 @@ Object.defineProperties(DataServiceBase, {
    * @features Document sharing, comments, real-time editing
    */
   collaboration: {
-    get: () => import('../domain/CollaborationDomain').then(m => m.CollaborationService),
-    enumerable: true
+    get: () =>
+      import("../domain/CollaborationDomain").then(
+        (m) => m.CollaborationService
+      ),
+    enumerable: true,
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -783,9 +965,12 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.ocr
    * @features Document OCR, text extraction, indexing
    */
-  ocr: DataSourceRouter.createPropertyDescriptor('ocr', () => ({
-    processDocument: async () => ({ success: false, message: 'Backend required' }),
-    getStatus: async () => ({ status: 'unavailable' })
+  ocr: DataSourceRouter.createPropertyDescriptor("ocr", () => ({
+    processDocument: async () => ({
+      success: false,
+      message: "Backend required",
+    }),
+    getStatus: async () => ({ status: "unavailable" }),
   })),
 
   /**
@@ -794,7 +979,7 @@ Object.defineProperties(DataServiceBase, {
    * @features Strategy, advisory board, opposition intel
    */
   warRoom: DataSourceRouter.createPropertyDescriptor(null, async () => {
-    const { WarRoomService } = await import('@/services/domain/WarRoomDomain');
+    const { WarRoomService } = await import("@/services/domain/WarRoomDomain");
     return WarRoomService;
   }),
 
@@ -803,23 +988,29 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.processingJobs
    * @features Job queues, status tracking, scheduling
    */
-  processingJobs: DataSourceRouter.createPropertyDescriptor('processingJobs', () => legacyRepositoryRegistry.getOrCreate(STORES.PROCESSING_JOBS)),
+  processingJobs: DataSourceRouter.createPropertyDescriptor(
+    "processingJobs",
+    () => legacyRepositoryRegistry.getOrCreate(STORES.PROCESSING_JOBS)
+  ),
 
   /**
    * Document Versions API - Document version control
    * @backend api.documentVersions
    * @features Version tracking, diffs, rollback
    */
-  documentVersions: DataSourceRouter.createPropertyDescriptor('documentVersions', () => {
-    const repo = legacyRepositoryRegistry.getOrCreate('documentVersions');
-    return {
-      ...repo,
-      delete: async (id: string) => {
-        await repo.delete(id);
-        return { success: true, id };
-      }
-    };
-  }),
+  documentVersions: DataSourceRouter.createPropertyDescriptor(
+    "documentVersions",
+    () => {
+      const repo = legacyRepositoryRegistry.getOrCreate("documentVersions");
+      return {
+        ...repo,
+        delete: async (id: string) => {
+          await repo.delete(id);
+          return { success: true, id };
+        },
+      };
+    }
+  ),
 
   /**
    * Search API - Full-text search service
@@ -827,8 +1018,8 @@ Object.defineProperties(DataServiceBase, {
    * @features Document search, case search, entity search
    */
   search: {
-    get: () => import('../domain/SearchDomain').then(m => m.SearchService),
-    enumerable: true
+    get: () => import("../domain/SearchDomain").then((m) => m.SearchService),
+    enumerable: true,
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -841,8 +1032,8 @@ Object.defineProperties(DataServiceBase, {
    * @features Employee records, onboarding, performance tracking
    */
   hr: {
-    get: () => isBackendApiEnabled() && api.hr ? api.hr : getHRRepository(),
-    enumerable: true
+    get: () => (isBackendApiEnabled() && api.hr ? api.hr : getHRRepository()),
+    enumerable: true,
   },
 
   /**
@@ -850,28 +1041,36 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.users
    * @features User profiles, authentication, roles
    */
-  users: DataSourceRouter.createPropertyDescriptor('users', () => legacyRepositoryRegistry.getOrCreate(STORES.USERS)),
+  users: DataSourceRouter.createPropertyDescriptor("users", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.USERS)
+  ),
 
   /**
    * Groups API - User group management
    * @backend api.groups
    * @features Team groups, practice groups, permissions
    */
-  groups: DataSourceRouter.createPropertyDescriptor('groups', () => legacyRepositoryRegistry.getOrCreate('groups')),
+  groups: DataSourceRouter.createPropertyDescriptor("groups", () =>
+    legacyRepositoryRegistry.getOrCreate("groups")
+  ),
 
   /**
    * Case Teams API - Case team composition
    * @backend api.caseTeams
    * @features Attorney assignments, paralegal assignments, roles
    */
-  caseTeams: DataSourceRouter.createPropertyDescriptor('caseTeams', () => legacyRepositoryRegistry.getOrCreate('caseTeams')),
+  caseTeams: DataSourceRouter.createPropertyDescriptor("caseTeams", () =>
+    legacyRepositoryRegistry.getOrCreate("caseTeams")
+  ),
 
   /**
    * Case Phases API - Case phase management
    * @backend api.casePhases
    * @features Discovery phase, trial phase, appeals
    */
-  casePhases: DataSourceRouter.createPropertyDescriptor('casePhases', () => legacyRepositoryRegistry.getOrCreate(STORES.PHASES)),
+  casePhases: DataSourceRouter.createPropertyDescriptor("casePhases", () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.PHASES)
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // ADMINISTRATIVE & SYSTEM SERVICES
@@ -889,7 +1088,9 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.reports
    * @features Custom reports, templates, scheduling
    */
-  reports: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.REPORTERS)),
+  reports: DataSourceRouter.createPropertyDescriptor(null, () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.REPORTERS)
+  ),
 
   /**
    * Quality API - Data quality management
@@ -918,7 +1119,8 @@ Object.defineProperties(DataServiceBase, {
    * @features Custom dashboards, widgets, layouts
    */
   dashboard: DataSourceRouter.createPropertyDescriptor(null, async () => {
-    const { DashboardService } = await import('@/services/domain/DashboardDomain');
+    const { DashboardService } =
+      await import("@/services/domain/DashboardDomain");
     return DashboardService;
   }),
 
@@ -927,9 +1129,9 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.metrics
    * @features Performance metrics, health checks, SLA monitoring
    */
-  metrics: DataSourceRouter.createPropertyDescriptor('metrics', () => ({
+  metrics: DataSourceRouter.createPropertyDescriptor("metrics", () => ({
     getSystem: async () => ({ cpu: 0, memory: 0, disk: 0, network: 0 }),
-    getApplication: async () => ({ requests: 0, errors: 0, responseTime: 0 })
+    getApplication: async () => ({ requests: 0, errors: 0, responseTime: 0 }),
   })),
 
   /**
@@ -937,7 +1139,9 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.serviceJobs
    * @features Scheduled jobs, cron tasks, maintenance
    */
-  serviceJobs: DataSourceRouter.createPropertyDescriptor('serviceJobs', () => legacyRepositoryRegistry.getOrCreate('serviceJobs')),
+  serviceJobs: DataSourceRouter.createPropertyDescriptor("serviceJobs", () =>
+    legacyRepositoryRegistry.getOrCreate("serviceJobs")
+  ),
 
   // ─────────────────────────────────────────────────────────────────────────
   // BUSINESS DEVELOPMENT & STRATEGY
@@ -970,8 +1174,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Goals, KPIs, strategic initiatives
    */
   strategy: {
-    get: () => import('../domain/StrategyDomain').then(m => m.StrategyService),
-    enumerable: true
+    get: () =>
+      import("../domain/StrategyDomain").then((m) => m.StrategyService),
+    enumerable: true,
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -984,8 +1189,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Case law, statutes, regulations, secondary sources
    */
   research: {
-    get: () => import('../domain/ResearchDomain').then(m => m.ResearchService),
-    enumerable: true
+    get: () =>
+      import("../domain/ResearchDomain").then((m) => m.ResearchService),
+    enumerable: true,
   },
 
   /**
@@ -993,14 +1199,18 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.playbooks
    * @features Template library, best practices, workflows
    */
-  playbooks: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES)),
+  playbooks: DataSourceRouter.createPropertyDescriptor(null, () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES)
+  ),
 
   /**
    * Clauses API - Contract clause library
    * @backend api.clauses
    * @features Clause templates, versions, approval status
    */
-  clauses: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES)),
+  clauses: DataSourceRouter.createPropertyDescriptor(null, () =>
+    legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES)
+  ),
 
   /**
    * Rules API - Court rules and procedures
@@ -1012,9 +1222,9 @@ Object.defineProperties(DataServiceBase, {
     get: () => ({
       getAll: async () => {
         try {
-          return await api.jurisdiction?.getRules?.() || [];
+          return (await api.jurisdiction?.getRules?.()) || [];
         } catch (error) {
-          console.error('[DataService.rules] Failed to fetch rules:', error);
+          console.error("[DataService.rules] Failed to fetch rules:", error);
           return [];
         }
       },
@@ -1022,31 +1232,38 @@ Object.defineProperties(DataServiceBase, {
         try {
           return await api.jurisdiction?.getRuleById?.(id);
         } catch (error) {
-          console.error('[DataService.rules] Failed to fetch rule:', error);
+          console.error("[DataService.rules] Failed to fetch rule:", error);
           return undefined;
         }
       },
       search: async (query: string, jurisdictionId?: string) => {
         try {
-          return await api.jurisdiction?.searchRules?.(query, jurisdictionId) || [];
+          return (
+            (await api.jurisdiction?.searchRules?.(query, jurisdictionId)) || []
+          );
         } catch (error) {
-          console.error('[DataService.rules] Failed to search rules:', error);
+          console.error("[DataService.rules] Failed to search rules:", error);
           return [];
         }
       },
       add: async (rule: unknown) => {
         try {
-          return await api.jurisdiction?.createRule?.(rule as any);
+          return await api.jurisdiction?.createRule?.(
+            rule as Record<string, unknown>
+          );
         } catch (error) {
-          console.error('[DataService.rules] Failed to create rule:', error);
+          console.error("[DataService.rules] Failed to create rule:", error);
           throw error;
         }
       },
       update: async (id: string, updates: unknown) => {
         try {
-          return await api.jurisdiction?.updateRule?.(id, updates as Record<string, unknown>);
+          return await api.jurisdiction?.updateRule?.(
+            id,
+            updates as Record<string, unknown>
+          );
         } catch (error) {
-          console.error('[DataService.rules] Failed to update rule:', error);
+          console.error("[DataService.rules] Failed to update rule:", error);
           throw error;
         }
       },
@@ -1054,12 +1271,12 @@ Object.defineProperties(DataServiceBase, {
         try {
           await api.jurisdiction?.deleteRule?.(id);
         } catch (error) {
-          console.error('[DataService.rules] Failed to delete rule:', error);
+          console.error("[DataService.rules] Failed to delete rule:", error);
           throw error;
         }
-      }
+      },
     }),
-    enumerable: true
+    enumerable: true,
   },
 
   /**
@@ -1078,7 +1295,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.dataSources
    * @features Third-party integrations, API connections, sync
    */
-  dataSourcesIntegration: DataSourceRouter.createPropertyDescriptor('dataSources', () => legacyRepositoryRegistry.getOrCreate('dataSources')),
+  dataSourcesIntegration: DataSourceRouter.createPropertyDescriptor(
+    "dataSources",
+    () => legacyRepositoryRegistry.getOrCreate("dataSources")
+  ),
 
   /**
    * Organization API - Multi-org management
@@ -1086,8 +1306,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Org settings, multi-tenancy, subsidiaries
    */
   organization: {
-    get: () => import('../domain/OrganizationDomain').then(m => m.OrganizationService),
-    enumerable: true
+    get: () =>
+      import("../domain/OrganizationDomain").then((m) => m.OrganizationService),
+    enumerable: true,
   },
 
   /**
@@ -1096,8 +1317,9 @@ Object.defineProperties(DataServiceBase, {
    * @features M&A, real estate, corporate transactions
    */
   transactions: {
-    get: () => import('../domain/TransactionDomain').then(m => m.TransactionService),
-    enumerable: true
+    get: () =>
+      import("../domain/TransactionDomain").then((m) => m.TransactionService),
+    enumerable: true,
   },
 
   /**
@@ -1106,8 +1328,9 @@ Object.defineProperties(DataServiceBase, {
    * @features SMS, chat platforms, unified messaging
    */
   messenger: {
-    get: () => import('../domain/MessengerDomain').then(m => m.MessengerService),
-    enumerable: true
+    get: () =>
+      import("../domain/MessengerDomain").then((m) => m.MessengerService),
+    enumerable: true,
   },
 
   /**
@@ -1116,8 +1339,8 @@ Object.defineProperties(DataServiceBase, {
    * @features File storage, media library, CDN
    */
   assets: {
-    get: () => import('../domain/AssetDomain').then(m => m.AssetService),
-    enumerable: true
+    get: () => import("../domain/AssetDomain").then((m) => m.AssetService),
+    enumerable: true,
   },
 
   /**
@@ -1126,8 +1349,9 @@ Object.defineProperties(DataServiceBase, {
    * @features Source configuration, connectors, ETL
    */
   sources: {
-    get: () => import('../domain/DataSourceDomain').then(m => m.DataSourceService),
-    enumerable: true
+    get: () =>
+      import("../domain/DataSourceDomain").then((m) => m.DataSourceService),
+    enumerable: true,
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -1146,11 +1370,14 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.tokenBlacklist
    * @features Token revocation, logout, session management
    */
-  tokenBlacklist: DataSourceRouter.createPropertyDescriptor('tokenBlacklistAdmin', () => ({
-    getAll: async () => [],
-    add: async () => ({ success: false }),
-    remove: async () => ({ success: false })
-  })),
+  tokenBlacklist: DataSourceRouter.createPropertyDescriptor(
+    "tokenBlacklistAdmin",
+    () => ({
+      getAll: async () => [],
+      add: async () => ({ success: false }),
+      remove: async () => ({ success: false }),
+    })
+  ),
 
   /**
    * Operations API - Operational management
@@ -1164,9 +1391,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.production
    * @features Environment management, deployments, configs
    */
-  production: DataSourceRouter.createPropertyDescriptor('productions', () => ({
-    getStatus: async () => ({ environment: 'development', version: '1.0.0', healthy: true }),
-    deploy: async () => ({ success: false, message: 'Backend required' })
+  production: DataSourceRouter.createPropertyDescriptor("productions", () => ({
+    getStatus: async () => ({
+      environment: "development",
+      version: "1.0.0",
+      healthy: true,
+    }),
+    deploy: async () => ({ success: false, message: "Backend required" }),
   })),
 
   // ═════════════════════════════════════════════════════════════════════════
@@ -1201,15 +1432,18 @@ Object.defineProperties(DataServiceBase, {
    * @fallback IndexedDB repository
    * @removal v2.0.0
    */
-  discoveryMain: DataSourceRouter.createPropertyDescriptor('discovery', () => legacyRepositoryRegistry.getOrCreate('discovery')),
+  discoveryMain: DataSourceRouter.createPropertyDescriptor("discovery", () =>
+    legacyRepositoryRegistry.getOrCreate("discovery")
+  ),
 
   /**
    * @deprecated Compliance Main (Local) - Legacy compliance system
    * @fallback IndexedDB repository
    * @removal v2.0.0
    */
-  complianceMain: DataSourceRouter.createPropertyDescriptor('compliance', () => legacyRepositoryRegistry.getOrCreate('complianceReports')),
-
+  complianceMain: DataSourceRouter.createPropertyDescriptor("compliance", () =>
+    legacyRepositoryRegistry.getOrCreate("complianceReports")
+  ),
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1261,9 +1495,9 @@ export function cleanupDataService(): void {
   try {
     RepositoryRegistry.clear();
     legacyRepositoryRegistry.clear();
-    console.log('[DataService] ✅ All repositories and listeners cleared');
+    console.log("[DataService] ✅ All repositories and listeners cleared");
   } catch (error) {
-    console.error('[DataService.cleanupDataService] ❌ Error:', error);
+    console.error("[DataService.cleanupDataService] ❌ Error:", error);
     throw error;
   }
 }
@@ -1300,7 +1534,7 @@ export function getDataServiceMemoryStats() {
       estimatedMemoryKB: (singletonCount + registryStats.repositoryCount) * 2, // ~2KB per repo
     };
   } catch (error) {
-    console.error('[DataService.getDataServiceMemoryStats] ❌ Error:', error);
+    console.error("[DataService.getDataServiceMemoryStats] ❌ Error:", error);
     return {
       refactoredSingletons: 0,
       refactoredKeys: [],
@@ -1308,7 +1542,7 @@ export function getDataServiceMemoryStats() {
       totalListeners: 0,
       totalRepositories: 0,
       estimatedMemoryKB: 0,
-      repositories: []
+      repositories: [],
     };
   }
 }
@@ -1348,7 +1582,7 @@ export function getDataServiceMemoryStats() {
 export function logDataServiceMemory(): void {
   try {
     const stats = getDataServiceMemoryStats();
-    console.group('[DataService] 📊 Memory Usage');
+    console.group("[DataService] 📊 Memory Usage");
     console.log(`Total Repositories: ${stats.totalRepositories}`);
     console.log(`├─ Backend Singletons: ${stats.refactoredSingletons}`);
     console.log(`└─ Legacy Repositories: ${stats.legacyRepositories}`);
@@ -1356,17 +1590,17 @@ export function logDataServiceMemory(): void {
     console.log(`Estimated Memory: ${stats.estimatedMemoryKB} KB`);
 
     if (stats.repositories?.length > 0) {
-      console.log('\nRepository Details:');
+      console.log("\nRepository Details:");
       console.table(stats.repositories);
     }
 
     if (stats.refactoredKeys?.length > 0) {
-      console.log('\nActive Backend Repositories:', stats.refactoredKeys);
+      console.log("\nActive Backend Repositories:", stats.refactoredKeys);
     }
 
     console.groupEnd();
   } catch (error) {
-    console.error('[DataService.logDataServiceMemory] ❌ Error:', error);
+    console.error("[DataService.logDataServiceMemory] ❌ Error:", error);
   }
 }
 

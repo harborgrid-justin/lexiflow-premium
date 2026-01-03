@@ -17,17 +17,17 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceDetailSkeleton, EvidenceInventorySkeleton } from './EvidenceSkeleton';
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 
 // Context & Utils
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Config & Types
@@ -104,7 +104,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
             selectedItem={selectedItem}
             handleBack={handleBack}
             activeTab={activeTab}
-            setActiveTab={(tab) => setActiveTab(tab as any)}
+            setActiveTab={(tab) => setActiveTab(tab as string)}
             onNavigateToCase={onNavigateToCase}
             onCustodyUpdate={handleCustodyUpdate}
           />

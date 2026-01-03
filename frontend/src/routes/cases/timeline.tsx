@@ -63,7 +63,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       user: caseData.leadAttorneyId || 'System',
     },
     // Docket entries as events
-    ...docketEntries.map((entry: any) => ({
+    ...docketEntries.map((entry: { id: string; title?: string; description: string; filingDate?: string; createdAt: string; filedBy: string; docketNumber?: string }) => ({
       id: entry.id,
       type: 'filing' as const,
       title: entry.title || entry.description,
@@ -75,7 +75,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       },
     })),
     // Document events
-    ...documents.slice(0, 10).map((doc: any) => ({
+    ...documents.slice(0, 10).map((doc: { id: string; title: string; description: string; createdAt: string; createdBy: string; type: string }) => ({
       id: doc.id,
       type: 'document' as const,
       title: `Document Added: ${doc.title}`,
@@ -110,7 +110,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function CaseTimelineRoute() {
   const { caseData, events } = loaderData;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="min-h-full bg-gray-50 dark:bg-gray-900">

@@ -29,15 +29,14 @@ import {
   BellOff,
   Trash2,
   Check,
-  ExternalLink,
-} from 'lucide-react';
+  ExternalLink} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import {} from '@/components/ui/atoms//';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -102,22 +101,19 @@ const ToastNotification: React.FC<{
     success: CheckCircle2,
     error: XCircle,
     warning: AlertTriangle,
-    info: Info,
-  };
+    info: Info};
 
   const colors = {
     success: 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-100',
     error: 'bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-900/20 dark:border-rose-800 dark:text-rose-100',
     warning: 'bg-amber-50 border-amber-200 text-amber-900 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-100',
-    info: 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100',
-  };
+    info: 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100'};
 
   const iconColors = {
     success: 'text-emerald-600 dark:text-emerald-400',
     error: 'text-rose-600 dark:text-rose-400',
     warning: 'text-amber-600 dark:text-amber-400',
-    info: 'text-blue-600 dark:text-blue-400',
-  };
+    info: 'text-blue-600 dark:text-blue-400'};
 
   const Icon = icons[notification.type];
 
@@ -195,8 +191,7 @@ export const NotificationCenter: React.FC<{
     success: CheckCircle2,
     error: XCircle,
     warning: AlertTriangle,
-    info: Info,
-  };
+    info: Info};
 
   if (!isOpen) return null;
 
@@ -401,8 +396,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         ...notification,
         id,
         timestamp: new Date(),
-        read: false,
-      };
+        read: false};
 
       setNotifications((prev) => [newNotification, ...prev]);
 
@@ -473,8 +467,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     markAsRead,
     markAllAsRead,
     clearAll,
-    unreadCount,
-  };
+    unreadCount};
 
   return (
     <NotificationContext.Provider value={contextValue}>
@@ -554,8 +547,7 @@ export const useToast = () => {
     warning: (title: string, message?: string, options?: Partial<Notification>) =>
       addNotification({ type: 'warning', title, message, duration: 6000, ...options }),
     info: (title: string, message?: string, options?: Partial<Notification>) =>
-      addNotification({ type: 'info', title, message, duration: 5000, ...options }),
-  };
+      addNotification({ type: 'info', title, message, duration: 5000, ...options })};
 };
 
 export default NotificationProvider;

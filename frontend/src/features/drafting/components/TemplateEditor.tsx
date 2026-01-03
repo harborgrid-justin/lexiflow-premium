@@ -135,8 +135,8 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       };
 
       const saved = template
-        ? await draftingApi.updateTemplate(template.id, dto as any)
-        : await draftingApi.createTemplate(dto as any);
+        ? await draftingApi.updateTemplate(template.id, dto as Record<string, unknown>)
+        : await draftingApi.createTemplate(dto as Record<string, unknown>);
 
       addToast(`Template ${template ? 'updated' : 'created'} successfully`, 'success');
       onSave(saved);
@@ -363,7 +363,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <div className="flex items-center space-x-2">
                       <select
                         value={variable.type}
-                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as any })}
+                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as string })}
                         className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                       >
                         <option value="text">Text</option>

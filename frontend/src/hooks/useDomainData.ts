@@ -60,7 +60,7 @@ export interface UseQueryResult<T> extends QueryState<T> {
  */
 export function useCases(): UseQueryResult<Case[]> {
   return useQuery<Case[]>(queryKeys.cases.all(), () =>
-    (DataService.cases as any).getAll()
+    (DataService.cases as unknown as { getAll: () => Promise<Case[]> }).getAll()
   );
 }
 
@@ -69,7 +69,11 @@ export function useCases(): UseQueryResult<Case[]> {
  */
 export function useDocuments(): UseQueryResult<LegalDocument[]> {
   return useQuery<LegalDocument[]>(queryKeys.documents.all(), () =>
-    (DataService.documents as any).getAll()
+    (
+      DataService.documents as unknown as {
+        getAll: () => Promise<LegalDocument[]>;
+      }
+    ).getAll()
   );
 }
 
@@ -78,7 +82,9 @@ export function useDocuments(): UseQueryResult<LegalDocument[]> {
  */
 export function useDocket(): UseQueryResult<DocketEntry[]> {
   return useQuery<DocketEntry[]>(queryKeys.docket.all(), () =>
-    (DataService.docket as any).getAll()
+    (
+      DataService.docket as unknown as { getAll: () => Promise<DocketEntry[]> }
+    ).getAll()
   );
 }
 
@@ -87,7 +93,9 @@ export function useDocket(): UseQueryResult<DocketEntry[]> {
  */
 export function useTasks(): UseQueryResult<WorkflowTask[]> {
   return useQuery<WorkflowTask[]>(queryKeys.tasks.all(), () =>
-    (DataService.tasks as any).getAll()
+    (
+      DataService.tasks as unknown as { getAll: () => Promise<WorkflowTask[]> }
+    ).getAll()
   );
 }
 
@@ -96,7 +104,11 @@ export function useTasks(): UseQueryResult<WorkflowTask[]> {
  */
 export function useEvidence(): UseQueryResult<EvidenceItem[]> {
   return useQuery<EvidenceItem[]>(queryKeys.evidence.all(), () =>
-    (DataService.evidence as any).getAll()
+    (
+      DataService.evidence as unknown as {
+        getAll: () => Promise<EvidenceItem[]>;
+      }
+    ).getAll()
   );
 }
 
@@ -106,7 +118,12 @@ export function useEvidence(): UseQueryResult<EvidenceItem[]> {
 export function useExhibits(caseId?: string): UseQueryResult<TrialExhibit[]> {
   return useQuery<TrialExhibit[]>(
     queryKeys.exhibits.byCaseId(caseId || "all"),
-    () => (DataService.trial as any).getExhibits(caseId)
+    () =>
+      (
+        DataService.trial as unknown as {
+          getExhibits: (caseId?: string) => Promise<TrialExhibit[]>;
+        }
+      ).getExhibits(caseId)
   );
 }
 
@@ -115,7 +132,9 @@ export function useExhibits(caseId?: string): UseQueryResult<TrialExhibit[]> {
  */
 export function useStaff(): UseQueryResult<User[]> {
   return useQuery<User[]>(queryKeys.staff.all(), () =>
-    (DataService.hr as any).getStaff()
+    (
+      DataService.hr as unknown as { getStaff: () => Promise<User[]> }
+    ).getStaff()
   );
 }
 
@@ -124,7 +143,9 @@ export function useStaff(): UseQueryResult<User[]> {
  */
 export function useClients(): UseQueryResult<Client[]> {
   return useQuery<Client[]>(queryKeys.clients.all(), () =>
-    (DataService.clients as any).getAll()
+    (
+      DataService.clients as unknown as { getAll: () => Promise<Client[]> }
+    ).getAll()
   );
 }
 
@@ -133,7 +154,7 @@ export function useClients(): UseQueryResult<Client[]> {
  */
 export function useUsers(): UseQueryResult<User[]> {
   return useQuery<User[]>(queryKeys.users.all(), () =>
-    (DataService.users as any).getAll()
+    (DataService.users as unknown as { getAll: () => Promise<User[]> }).getAll()
   );
 }
 
@@ -142,7 +163,11 @@ export function useUsers(): UseQueryResult<User[]> {
  */
 export function useProjects(caseId: string): UseQueryResult<Project[]> {
   return useQuery<Project[]>(queryKeys.projects.byCaseId(caseId), () =>
-    (DataService.projects as any).getByCaseId(caseId)
+    (
+      DataService.projects as unknown as {
+        getByCaseId: (caseId: string) => Promise<Project[]>;
+      }
+    ).getByCaseId(caseId)
   );
 }
 
@@ -151,7 +176,11 @@ export function useProjects(caseId: string): UseQueryResult<Project[]> {
  */
 export function useConversations(): UseQueryResult<Conversation[]> {
   return useQuery<Conversation[]>(["conversations", "all"], () =>
-    (DataService.messenger as any).getConversations()
+    (
+      DataService.messenger as unknown as {
+        getConversations: () => Promise<Conversation[]>;
+      }
+    ).getConversations()
   );
 }
 
@@ -160,7 +189,11 @@ export function useConversations(): UseQueryResult<Conversation[]> {
  */
 export function useResearchHistory(): UseQueryResult<ResearchSession[]> {
   return useQuery<ResearchSession[]>(["research", "history"], () =>
-    (DataService.research as any).getHistory()
+    (
+      DataService.research as unknown as {
+        getHistory: () => Promise<ResearchSession[]>;
+      }
+    ).getHistory()
   );
 }
 
@@ -171,7 +204,11 @@ export function useResearchHistory(): UseQueryResult<ResearchSession[]> {
  */
 export function useSchemaTables(): UseQueryResult<SchemaTable[]> {
   return useQuery<SchemaTable[]>(["schema", "tables"], () =>
-    (DataService.catalog as any).getSchemaTables()
+    (
+      DataService.catalog as unknown as {
+        getSchemaTables: () => Promise<SchemaTable[]>;
+      }
+    ).getSchemaTables()
   );
 }
 
@@ -180,7 +217,11 @@ export function useSchemaTables(): UseQueryResult<SchemaTable[]> {
  */
 export function usePipelines(): UseQueryResult<PipelineJob[]> {
   return useQuery<PipelineJob[]>(["admin", "pipelines"], () =>
-    (DataService.admin as any).getPipelines()
+    (
+      DataService.admin as unknown as {
+        getPipelines: () => Promise<PipelineJob[]>;
+      }
+    ).getPipelines()
   );
 }
 
@@ -189,7 +230,11 @@ export function usePipelines(): UseQueryResult<PipelineJob[]> {
  */
 export function useConnectors(): UseQueryResult<Connector[]> {
   return useQuery<Connector[]>(["admin", "connectors"], () =>
-    (DataService.admin as any).getConnectors()
+    (
+      DataService.admin as unknown as {
+        getConnectors: () => Promise<Connector[]>;
+      }
+    ).getConnectors()
   );
 }
 
@@ -198,6 +243,10 @@ export function useConnectors(): UseQueryResult<Connector[]> {
  */
 export function useDataDictionary(): UseQueryResult<DataDictionaryItem[]> {
   return useQuery<DataDictionaryItem[]>(["catalog", "dictionary"], () =>
-    (DataService.catalog as any).getDictionary()
+    (
+      DataService.catalog as unknown as {
+        getDictionary: () => Promise<DataDictionaryItem[]>;
+      }
+    ).getDictionary()
   );
 }

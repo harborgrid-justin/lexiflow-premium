@@ -103,8 +103,9 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
       );
 
       // Date.now() OK here - inside useEffect, not during render phase
-      if (cached?.data && (cached.data as any).expiresAt > Date.now()) {
-        setVerifyData((cached.data as any).data);
+      interface CachedData { expiresAt: number; data: unknown }
+      if (cached?.data && (cached.data as CachedData).expiresAt > Date.now()) {
+        setVerifyData((cached.data as CachedData).data);
         setVerificationStatus('verified');
       }
     };

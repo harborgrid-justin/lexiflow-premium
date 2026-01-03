@@ -3,21 +3,19 @@
  * IOLTA trust accounting with client ledgers and three-way reconciliation
  */
 
-import React, { useState } from 'react';
 import {
-  Shield,
   AlertTriangle,
+  Calendar,
   CheckCircle,
-  TrendingUp,
-  TrendingDown,
   DollarSign,
-  Users,
-  FileText,
   Download,
+  FileText,
   Plus,
   Search,
-  Calendar,
+  Shield,
+  Users
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Types
 interface TrustAccount {
@@ -87,13 +85,28 @@ interface TrustAccountingProps {
 }
 
 export const TrustAccounting: React.FC<TrustAccountingProps> = ({
-  accountId,
+  accountId: initialAccountId,
   onReconcile,
   onTransactionCreate,
 }) => {
   const [selectedTab, setSelectedTab] = useState<'overview' | 'ledgers' | 'transactions' | 'reconciliation' | 'compliance'>('overview');
-  const [selectedAccount, setSelectedAccount] = useState<string>('');
+  const [selectedAccount, setSelectedAccount] = useState<string>(initialAccountId || '');
   const [showNewTransaction, setShowNewTransaction] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+
+  const handleReconcile = (reconciliation: ThreeWayReconciliation) => {
+    if (onReconcile) {
+      onReconcile(reconciliation);
+    }
+  };
+
+  const handleCreateTransaction = (transaction: Partial<TrustTransaction>) => {
+    if (onTransactionCreate) {
+      onTransactionCreate(transaction);
+      setShowNewTransaction(false);
+    }
+  };
 
   // Mock data
   const trustAccounts: TrustAccount[] = [
@@ -270,6 +283,67 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Search and Actions Bar */}
+      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-3 flex-1">
+          <Search className="h-5 w-5 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search transactions, clients..."
+            className="flex-1 border-none bg-transparent focus:outline-none text-sm text-gray-700 dark:text-gray-300"
+          />
+          <Calendar className="h-5 w-5 text-gray-400" />
+          <input
+            type="date"
+            value={dateFilter.from}
+            onChange={(e) => setDateFilter({ ...dateFilter, from: e.target.value })}
+            className="border border-gray-300 rounded px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-700"
+          />
+          <span className="text-gray-500">to</span>
+          <input
+            type="date"
+            value={dateFilter.to}
+            onChange={(e) => setDateFilter({ ...dateFilter, to: e.target.value })}
+            className="border border-gray-300 rounded px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-700"
+          />
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowNewTransaction(true)}
+            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            <Plus className="h-4 w-4" />
+            New Transaction
+          </button>
+          <button
+            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          >
+            <Download className="h-4 w-4" />
+            Export
+          </button>
+        </div>
+      </div>
+
+      {/* Account Selection */}
+      <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Select Trust Account
+        </label>
+        <select
+          value={selectedAccount}
+          onChange={(e) => setSelectedAccount(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+        >
+          <option value="">Select an account</option>
+          {trustAccounts.map(account => (
+            <option key={account.id} value={account.id}>
+              {account.accountName} - {account.accountNumber}
+            </option>
+          ))}
+        </select>
+      </div>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -399,11 +473,10 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                selectedTab === tab
+              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
                   ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+                }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -461,11 +534,10 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
                       <h4 className="font-medium text-gray-900 dark:text-gray-100">
                         {transaction.clientName}
                       </h4>
-                      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                        transaction.type === 'deposit'
+                      <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${transaction.type === 'deposit'
                           ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                           : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                      }`}>
+                        }`}>
                         {transaction.type.toUpperCase()}
                       </span>
                     </div>
@@ -477,11 +549,10 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-semibold ${
-                      transaction.amount >= 0
+                    <p className={`text-lg font-semibold ${transaction.amount >= 0
                         ? 'text-green-600 dark:text-green-400'
                         : 'text-red-600 dark:text-red-400'
-                    }`}>
+                      }`}>
                       {transaction.amount >= 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
                     </p>
                   </div>
@@ -641,15 +712,14 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
             {complianceAlerts.map((alert) => (
               <div
                 key={alert.id}
-                className={`rounded-lg border p-4 ${
-                  alert.resolved
+                className={`rounded-lg border p-4 ${alert.resolved
                     ? 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'
                     : alert.severity === 'critical'
-                    ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20'
-                    : alert.severity === 'warning'
-                    ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20'
-                    : 'border-blue-200 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20'
-                }`}
+                      ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20'
+                      : alert.severity === 'warning'
+                        ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20'
+                        : 'border-blue-200 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/20'
+                  }`}
               >
                 <div className="flex items-start gap-3">
                   {getAlertIcon(alert.severity)}

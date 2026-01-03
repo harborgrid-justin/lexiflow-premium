@@ -1,15 +1,15 @@
 /**
  * IntegrationEventPublisher
- * 
+ *
  * Responsibility: Publish domain events to the integration orchestrator
  * Pattern: Publisher/Event Emitter with domain-specific methods
- * 
+ *
  * This module decouples data operations from integration events, allowing
  * repositories to trigger cross-domain workflows without tight coupling.
  */
 
-import { SystemEventType } from '@/types/integration-types';
-import type { Case, DocketEntry, LegalDocument, TimeEntry } from '@/types';
+import type { Case, DocketEntry, LegalDocument, TimeEntry } from "@/types";
+import { SystemEventType } from "@/types/integration-types";
 
 type EventHandler = (payload: unknown) => Promise<void>;
 
@@ -34,7 +34,7 @@ export class IntegrationEventPublisher {
    */
   static async publishCaseCreated(caseData: Case): Promise<void> {
     await this.publish(SystemEventType.CASE_CREATED, {
-      caseData
+      caseData,
     });
   }
 
@@ -44,7 +44,7 @@ export class IntegrationEventPublisher {
   static async publishDocketIngested(entry: DocketEntry): Promise<void> {
     await this.publish(SystemEventType.DOCKET_INGESTED, {
       entry,
-      caseId: entry.caseId
+      caseId: entry.caseId,
     });
   }
 
@@ -53,7 +53,7 @@ export class IntegrationEventPublisher {
    */
   static async publishDocumentUploaded(document: LegalDocument): Promise<void> {
     await this.publish(SystemEventType.DOCUMENT_UPLOADED, {
-      document
+      document,
     });
   }
 
@@ -62,7 +62,7 @@ export class IntegrationEventPublisher {
    */
   static async publishTimeLogged(entry: TimeEntry): Promise<void> {
     await this.publish(SystemEventType.TIME_LOGGED, {
-      entry
+      entry,
     });
   }
 
@@ -77,7 +77,7 @@ export class IntegrationEventPublisher {
     await this.publish(SystemEventType.DATA_SOURCE_CONNECTED, {
       connectionId,
       provider,
-      name
+      name,
     });
   }
 
@@ -86,10 +86,21 @@ export class IntegrationEventPublisher {
    */
   static async publish(
     eventType: SystemEventType,
-    payload: { caseData: Case } | { matter: unknown } | { leadId: string; stage: string; clientName: string; value: string } | { entry: DocketEntry; caseId: string } | { task: unknown } | { document: LegalDocument } | { entry: TimeEntry } | { invoice: unknown } | { connectionId: string; provider: string; name: string } | { citation: unknown; queryContext: string } | Record<string, unknown>
+    payload:
+      | { caseData: Case }
+      | { matter: unknown }
+      | { leadId: string; stage: string; clientName: string; value: string }
+      | { entry: DocketEntry; caseId: string }
+      | { task: unknown }
+      | { document: LegalDocument }
+      | { entry: TimeEntry }
+      | { invoice: unknown }
+      | { connectionId: string; provider: string; name: string }
+      | { citation: unknown; queryContext: string }
+      | Record<string, unknown>
   ): Promise<void> {
     const handlers = this.listeners.get(eventType) || [];
-    await Promise.all(handlers.map(h => h(payload)));
+    await Promise.all(handlers.map((h) => h(payload)));
   }
 }
 
@@ -114,18 +125,20 @@ export class IntegrationEventPublisher {
  * ) {}
  * ```
  */
-export function createIntegratedRepository<TBase extends new (...args: any[]) => any>(
+export function createIntegratedRepository<
+  TBase extends new (...args: unknown[]) => InstanceType<TBase>,
+>(
   Repository: TBase,
   publishAdd?: (item: unknown) => Promise<void>,
   publishUpdate?: (id: string, item: unknown) => Promise<void>,
   publishDelete?: (id: string) => Promise<void>
 ) {
   return class IntegratedRepository extends Repository {
-    constructor(...args: any[]) {
+    constructor(...args: unknown[]) {
       super(...args);
     }
 
-    async add(item: any): Promise<any> {
+    async add(item: unknown): Promise<unknown> {
       const result = await super.add(item);
       if (publishAdd) {
         await publishAdd(result);
@@ -133,7 +146,7 @@ export function createIntegratedRepository<TBase extends new (...args: any[]) =>
       return result;
     }
 
-    async update(id: string, updates: any): Promise<any> {
+    async update(id: string, updates: unknown): Promise<unknown> {
       const result = await super.update(id, updates);
       if (publishUpdate) {
         await publishUpdate(id, result);
@@ -141,7 +154,7 @@ export function createIntegratedRepository<TBase extends new (...args: any[]) =>
       return result;
     }
 
-    async delete(id: string): Promise<any> {
+    async delete(id: string): Promise<unknown> {
       const result = await super.delete(id);
       if (publishDelete) {
         await publishDelete(id);

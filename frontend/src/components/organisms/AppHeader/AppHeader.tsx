@@ -16,7 +16,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import React, { useState } from 'react';
-import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react';
+import { Menu, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -135,16 +135,14 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               title: 'New Case Assigned',
               message: 'Smith v. Johnson case has been assigned to you.',
               timestamp: new Date(Date.now() - 5 * 60000),
-              read: false,
-            },
+              read: false},
             {
               id: '2',
               type: 'warning',
               title: 'Deadline Approaching',
               message: 'Discovery deadline in 3 days for Case #2024-001',
               timestamp: new Date(Date.now() - 30 * 60000),
-              read: false,
-            },
+              read: false},
           ]}
           onNotificationClick={(notification) => console.log('Notification clicked:', notification)}
           onNotificationDismiss={(id) => console.log('Dismiss notification:', id)}

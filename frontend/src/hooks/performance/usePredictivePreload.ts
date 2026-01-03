@@ -8,7 +8,11 @@ export function usePredictivePreload(preloadFn: () => void) {
   const handleInteraction = useCallback(() => {
     // Use requestIdleCallback if available to not block main thread
     if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(() => {
+      (
+        window as Window & {
+          requestIdleCallback: (callback: () => void) => void;
+        }
+      ).requestIdleCallback(() => {
         preloadFn();
       });
     } else {

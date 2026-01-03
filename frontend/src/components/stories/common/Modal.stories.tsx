@@ -58,66 +58,73 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const BasicModalStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Basic Modal"
+      >
+        <p>This is a basic modal with title and content.</p>
+      </Modal>
+    </div>
+  );
+};
+
 export const Basic: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Basic Modal"
-        >
-          <p>This is a basic modal with title and content.</p>
-        </Modal>
-      </div>
-    );
-  },
+  render: () => <BasicModalStory />,
+};
+
+const WithFooterModalStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Open Modal with Footer</Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Confirm Action"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button onClick={() => setIsOpen(false)}>Confirm</Button>
+          </div>
+        }
+      >
+        <p>Are you sure you want to proceed with this action?</p>
+      </Modal>
+    </div>
+  );
 };
 
 export const WithFooter: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Open Modal with Footer</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Confirm Action"
-          footer={
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
-              <Button onClick={() => setIsOpen(false)}>Confirm</Button>
-            </div>
-          }
-        >
-          <p>Are you sure you want to proceed with this action?</p>
-        </Modal>
-      </div>
-    );
-  },
+  render: () => <WithFooterModalStory />,
+};
+
+const LargeModalStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <Button onClick={() => setIsOpen(true)}>Open Large Modal</Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Large Modal"
+        size="lg"
+      >
+        <div className="space-y-4">
+          <p>This is a large modal with more content space.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+      </Modal>
+    </div>
+  );
 };
 
 export const Large: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-      <div>
-        <Button onClick={() => setIsOpen(true)}>Open Large Modal</Button>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title="Large Modal"
-          size="lg"
-        >
-          <div className="space-y-4">
-            <p>This is a large modal with more content space.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          </div>
-        </Modal>
-      </div>
-    );
-  },
+  render: () => <LargeModalStory />,
+};
 };

@@ -1,8 +1,8 @@
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/ui/atoms/Button/Button';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
@@ -41,7 +41,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     // Optimistic mutation for archiving with exponential backoff retry
     const { mutate: archiveItem, isLoading: isArchiving } = useMutation(
         async (id: string) => {
-            const correspondence = DataService.correspondence as any;
+            const correspondence = DataService.correspondence as unknown as { archive: (id: string) => Promise<void> };
             return correspondence.archive(id);
         },
         {
@@ -66,7 +66,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     // Optimistic mutation for service job updates
     const { mutate: updateServiceJob, isLoading: isUpdating } = useMutation(
         async (updates: Partial<ServiceJob> & { id: string }) => {
-            const correspondence = DataService.correspondence as any;
+            const correspondence = DataService.correspondence as unknown as { updateServiceJob: (id: string, updates: Partial<ServiceJob>) => Promise<void> };
             await correspondence.updateServiceJob(updates.id, updates);
         },
         {
@@ -85,7 +85,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     );
 
     const handleCreateTask = async (task: WorkflowTask) => {
-        const tasks = DataService.tasks as any;
+        const tasks = DataService.tasks as unknown as { add: (task: WorkflowTask) => Promise<void> };
         await tasks.add(task);
         notify.success('Follow-up task created.');
     };
@@ -110,7 +110,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const documents = DataService.documents as any;
+            const documents = DataService.documents as unknown as { add: (doc: LegalDocument) => Promise<void> };
             await documents.add(doc);
             notify.success('Correspondence saved to Case Documents.');
         } catch (e) {
@@ -139,7 +139,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const docket = DataService.docket as any;
+            const docket = DataService.docket as unknown as { add: (entry: DocketEntry) => Promise<void> };
             await docket.add(entry);
             notify.success('Service Proof linked to Docket.');
         } catch (e) {
@@ -181,7 +181,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const evidence = DataService.evidence as any;
+            const evidence = DataService.evidence as unknown as { add: (proof: EvidenceItem) => Promise<void> };
             await evidence.add(proof);
             notify.success('Return Receipt added to Evidence Vault.');
         } catch (e) {
@@ -197,8 +197,8 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
                     isOpen={true}
                     onClose={() => setIsTaskModalOpen(false)}
                     initialTitle={`Follow up on: ${correspondenceItem.type === 'communication'
-                            ? correspondenceItem.item.subject
-                            : correspondenceItem.item.documentTitle
+                        ? correspondenceItem.item.subject
+                        : correspondenceItem.item.documentTitle
                         }`}
                     relatedModule={correspondenceItem.type === 'communication' ? 'Correspondence' : 'Service'}
                     relatedItemId={correspondenceItem.item.id}

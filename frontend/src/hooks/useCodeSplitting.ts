@@ -22,17 +22,26 @@
  * ```
  */
 
-import { useState, useEffect, useCallback, lazy, ComponentType, LazyExoticComponent } from 'react';
+import {
+  ComponentType,
+  lazy,
+  LazyExoticComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 /**
  * Component import function type
  */
-export type ComponentImportFunc<T = any> = () => Promise<{ default: ComponentType<T> }>;
+export type ComponentImportFunc<T = Record<string, unknown>> = () => Promise<{
+  default: ComponentType<T>;
+}>;
 
 /**
  * Lazy component loading state
  */
-export interface LazyComponentState<T = any> {
+export interface LazyComponentState<T = Record<string, unknown>> {
   /** Loaded component (null if not loaded) */
   Component: ComponentType<T> | null;
   /** Loading state */
@@ -48,7 +57,7 @@ export interface LazyComponentState<T = any> {
 /**
  * Preloadable component interface
  */
-export interface PreloadableComponent<T = any> {
+export interface PreloadableComponent<T = Record<string, unknown>> {
   /** Lazy component */
   Component: LazyExoticComponent<ComponentType<T>>;
   /** Preload function */
@@ -81,8 +90,8 @@ export interface PreloadableComponent<T = any> {
  * }
  * ```
  */
-export function useLazyComponent<T = any>(
-  importFunc: ComponentImportFunc<T>,
+export function useLazyComponent<T = Record<string, unknown>>(
+  importFunc: ComponentImportFunc<T>
 ): LazyExoticComponent<ComponentType<T>> {
   const [Component] = useState(() => lazy(importFunc));
   return Component;
@@ -119,7 +128,7 @@ export function useLazyComponent<T = any>(
  * }
  * ```
  */
-export function useLazyComponentWithState<T = any>(
+export function useLazyComponentWithState<T = Record<string, unknown>>(
   importFunc: ComponentImportFunc<T>,
   options: {
     /** Auto-load on mount */
@@ -128,7 +137,7 @@ export function useLazyComponentWithState<T = any>(
     retryOnError?: boolean;
     /** Retry delay in ms */
     retryDelay?: number;
-  } = {},
+  } = {}
 ): LazyComponentState<T> {
   const { autoLoad = false, retryOnError = false, retryDelay = 1000 } = options;
 
@@ -146,7 +155,8 @@ export function useLazyComponentWithState<T = any>(
       const module = await importFunc();
       setComponent(() => module.default);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to load component');
+      const error =
+        err instanceof Error ? err : new Error("Failed to load component");
       setError(error);
 
       // Retry if enabled
@@ -209,8 +219,8 @@ export function useLazyComponentWithState<T = any>(
  * }
  * ```
  */
-export function usePreloadableComponent<T = any>(
-  importFunc: ComponentImportFunc<T>,
+export function usePreloadableComponent<T = Record<string, unknown>>(
+  importFunc: ComponentImportFunc<T>
 ): PreloadableComponent<T> {
   const [isPreloaded, setIsPreloaded] = useState(false);
   const promiseRef = useState<Promise<void> | null>(null)[0];
@@ -224,7 +234,7 @@ export function usePreloadableComponent<T = any>(
       await importFunc();
       setIsPreloaded(true);
     } catch (error) {
-      console.error('Failed to preload component:', error);
+      console.error("Failed to preload component:", error);
     }
   }, [importFunc, isPreloaded, promiseRef]);
 
@@ -265,8 +275,10 @@ export function usePreloadableComponent<T = any>(
  * }
  * ```
  */
-export function useRouteComponents<T extends Record<string, ComponentImportFunc>>(
-  routes: T,
+export function useRouteComponents<
+  T extends Record<string, ComponentImportFunc>,
+>(
+  routes: T
 ): {
   [K in keyof T]: PreloadableComponent;
 } {
@@ -330,12 +342,12 @@ export function useRouteComponents<T extends Record<string, ComponentImportFunc>
  */
 export function loadWithTimeout<T>(
   importFunc: ComponentImportFunc<T>,
-  timeout: number = 10000,
+  timeout: number = 10000
 ): Promise<{ default: ComponentType<T> }> {
   return Promise.race([
     importFunc(),
     new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Component load timeout')), timeout)
+      setTimeout(() => reject(new Error("Component load timeout")), timeout)
     ),
   ]);
 }
@@ -364,20 +376,20 @@ export function loadWithTimeout<T>(
 export async function loadWithRetry<T>(
   importFunc: ComponentImportFunc<T>,
   maxRetries: number = 3,
-  baseDelay: number = 1000,
+  baseDelay: number = 1000
 ): Promise<{ default: ComponentType<T> }> {
-  let lastError: Error = new Error('Max retries exceeded');
+  let lastError: Error = new Error("Max retries exceeded");
 
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await importFunc();
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error('Import failed');
+      lastError = error instanceof Error ? error : new Error("Import failed");
 
       if (i < maxRetries - 1) {
         // Exponential backoff
         const delay = baseDelay * Math.pow(2, i);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
@@ -406,9 +418,9 @@ export async function loadWithRetry<T>(
  * ```
  */
 export async function prefetchComponents(
-  importFuncs: ComponentImportFunc[],
+  importFuncs: ComponentImportFunc[]
 ): Promise<void> {
-  await Promise.allSettled(importFuncs.map(func => func()));
+  await Promise.allSettled(importFuncs.map((func) => func()));
 }
 
 /**
@@ -426,22 +438,25 @@ export async function prefetchComponents(
  * );
  * ```
  */
-export function useIdleLazyComponent<T = any>(
-  importFunc: ComponentImportFunc<T>,
+export function useIdleLazyComponent<T = Record<string, unknown>>(
+  importFunc: ComponentImportFunc<T>
 ): LazyExoticComponent<ComponentType<T>> {
   const [Component] = useState(() =>
-    lazy(() => new Promise<{ default: ComponentType<T> }>((resolve) => {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          void importFunc().then(resolve);
-        });
-      } else {
-        // Fallback for browsers without requestIdleCallback
-        setTimeout(() => {
-          void importFunc().then(resolve);
-        }, 1);
-      }
-    }))
+    lazy(
+      () =>
+        new Promise<{ default: ComponentType<T> }>((resolve) => {
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(() => {
+              void importFunc().then(resolve);
+            });
+          } else {
+            // Fallback for browsers without requestIdleCallback
+            setTimeout(() => {
+              void importFunc().then(resolve);
+            }, 1);
+          }
+        })
+    )
   );
 
   return Component;

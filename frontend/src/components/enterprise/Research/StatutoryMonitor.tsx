@@ -4,35 +4,30 @@
  * @description Legislative tracking, regulatory updates, and alert management system
  */
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Bell,
-  BookOpen,
-  Calendar,
-  Search,
-  Filter,
-  TrendingUp,
+  Activity,
   AlertCircle,
+  Bell,
+  Bookmark,
+  BookOpen,
+  Building,
+  Calendar,
   CheckCircle2,
   Clock,
-  MapPin,
-  Tag,
   ExternalLink,
-  Plus,
-  Settings,
-  Bookmark,
-  Mail,
-  Download,
-  FileText,
-  Scale,
-  Building,
-  Gavel,
-  ChevronRight,
-  Star,
   Eye,
-  Activity,
+  FileText,
+  Gavel,
+  MapPin,
+  Plus,
+  Scale,
+  Search,
+  Settings,
+  Star,
+  Tag,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -113,153 +108,153 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   alerts: initialAlerts = [],
   rules: initialRules = [],
   onTrackUpdate,
-  onCreateRule,
+  _onCreateRule,
   onMarkRead,
-  onExport,
+  _onExport,
   className = '',
 }) => {
   const [activeTab, setActiveTab] = useState<'updates' | 'alerts' | 'tracking'>('updates');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+  const [_showFilters, _setShowFilters] = useState(false);
   const [filterType, setFilterType] = useState<UpdateType | 'all'>('all');
   const [filterJurisdiction, setFilterJurisdiction] = useState<string>('all');
-  const [selectedUpdate, setSelectedUpdate] = useState<LegislativeUpdate | null>(null);
-  const [selectedAlert, setSelectedAlert] = useState<RegulatoryAlert | null>(null);
-  const [showRuleDialog, setShowRuleDialog] = useState(false);
+  const [_selectedUpdate, setSelectedUpdate] = useState<LegislativeUpdate | null>(null);
+  const [_selectedAlert, setSelectedAlert] = useState<RegulatoryAlert | null>(null);
+  const [_showRuleDialog, setShowRuleDialog] = useState(false);
 
   // Mock data for demonstration
   const [updates] = useState<LegislativeUpdate[]>(
     initialUpdates.length > 0
       ? initialUpdates
       : [
-          {
-            id: '1',
-            title: 'Privacy Protection and Data Security Act',
-            description: 'Comprehensive data privacy legislation requiring enhanced security measures',
-            type: 'bill',
-            status: 'proposed',
-            jurisdiction: 'Federal',
-            chamber: 'senate',
-            billNumber: 'S. 2847',
-            sponsor: 'Sen. Smith',
-            introducedDate: new Date('2024-01-15'),
-            lastActionDate: new Date('2024-01-20'),
-            summary:
-              'This bill establishes comprehensive data privacy protections, requiring businesses to implement enhanced security measures and provide consumers with greater control over their personal information.',
-            impact:
-              'High impact on technology companies, data brokers, and businesses handling consumer data. May require significant compliance investments.',
-            tags: ['privacy', 'data security', 'consumer protection', 'technology'],
-            tracking: true,
-            priority: 'high',
-            url: 'https://example.com/bill/s2847',
-          },
-          {
-            id: '2',
-            title: 'Employment Classification Amendment',
-            description: 'Updates to worker classification standards for gig economy',
-            type: 'amendment',
-            status: 'active',
-            jurisdiction: 'California',
-            billNumber: 'AB 5',
-            introducedDate: new Date('2024-01-10'),
-            lastActionDate: new Date('2024-01-18'),
-            effectiveDate: new Date('2024-07-01'),
-            summary:
-              'Amends existing employment classification law to provide clearer standards for independent contractor status in the gig economy.',
-            impact:
-              'Significant impact on gig economy platforms and companies using independent contractors.',
-            tags: ['employment', 'gig economy', 'labor law', 'classification'],
-            tracking: true,
-            priority: 'high',
-          },
-          {
-            id: '3',
-            title: 'Environmental Compliance Regulation Updates',
-            description: 'New EPA standards for industrial emissions',
-            type: 'regulation',
-            status: 'enacted',
-            jurisdiction: 'Federal',
-            introducedDate: new Date('2023-12-01'),
-            lastActionDate: new Date('2024-01-15'),
-            effectiveDate: new Date('2024-03-01'),
-            summary:
-              'EPA issues final rule updating emissions standards for industrial facilities.',
-            impact:
-              'Moderate impact on manufacturing and industrial sectors. Compliance required by March 2024.',
-            tags: ['environmental', 'EPA', 'emissions', 'compliance'],
-            tracking: false,
-            priority: 'medium',
-          },
-        ]
+        {
+          id: '1',
+          title: 'Privacy Protection and Data Security Act',
+          description: 'Comprehensive data privacy legislation requiring enhanced security measures',
+          type: 'bill',
+          status: 'proposed',
+          jurisdiction: 'Federal',
+          chamber: 'senate',
+          billNumber: 'S. 2847',
+          sponsor: 'Sen. Smith',
+          introducedDate: new Date('2024-01-15'),
+          lastActionDate: new Date('2024-01-20'),
+          summary:
+            'This bill establishes comprehensive data privacy protections, requiring businesses to implement enhanced security measures and provide consumers with greater control over their personal information.',
+          impact:
+            'High impact on technology companies, data brokers, and businesses handling consumer data. May require significant compliance investments.',
+          tags: ['privacy', 'data security', 'consumer protection', 'technology'],
+          tracking: true,
+          priority: 'high',
+          url: 'https://example.com/bill/s2847',
+        },
+        {
+          id: '2',
+          title: 'Employment Classification Amendment',
+          description: 'Updates to worker classification standards for gig economy',
+          type: 'amendment',
+          status: 'active',
+          jurisdiction: 'California',
+          billNumber: 'AB 5',
+          introducedDate: new Date('2024-01-10'),
+          lastActionDate: new Date('2024-01-18'),
+          effectiveDate: new Date('2024-07-01'),
+          summary:
+            'Amends existing employment classification law to provide clearer standards for independent contractor status in the gig economy.',
+          impact:
+            'Significant impact on gig economy platforms and companies using independent contractors.',
+          tags: ['employment', 'gig economy', 'labor law', 'classification'],
+          tracking: true,
+          priority: 'high',
+        },
+        {
+          id: '3',
+          title: 'Environmental Compliance Regulation Updates',
+          description: 'New EPA standards for industrial emissions',
+          type: 'regulation',
+          status: 'enacted',
+          jurisdiction: 'Federal',
+          introducedDate: new Date('2023-12-01'),
+          lastActionDate: new Date('2024-01-15'),
+          effectiveDate: new Date('2024-03-01'),
+          summary:
+            'EPA issues final rule updating emissions standards for industrial facilities.',
+          impact:
+            'Moderate impact on manufacturing and industrial sectors. Compliance required by March 2024.',
+          tags: ['environmental', 'EPA', 'emissions', 'compliance'],
+          tracking: false,
+          priority: 'medium',
+        },
+      ]
   );
 
   const [alerts] = useState<RegulatoryAlert[]>(
     initialAlerts.length > 0
       ? initialAlerts
       : [
-          {
-            id: '1',
-            agency: 'SEC',
-            title: 'Proposed Amendments to Cybersecurity Disclosure Rules',
-            type: 'proposed',
-            published: new Date('2024-01-12'),
-            commentDeadline: new Date('2024-02-28'),
-            jurisdiction: 'Federal',
-            summary:
-              'The Securities and Exchange Commission proposes amendments to enhance cybersecurity incident disclosure requirements for public companies.',
-            impact:
-              'Public companies will need to disclose material cybersecurity incidents within 4 business days.',
-            federalRegisterNumber: '2024-00123',
-            cfr: '17 CFR 229.106',
-            read: false,
-            bookmarked: true,
-          },
-          {
-            id: '2',
-            agency: 'FTC',
-            title: 'Final Rule on Consumer Privacy Protection',
-            type: 'final',
-            published: new Date('2024-01-08'),
-            effectiveDate: new Date('2024-06-01'),
-            jurisdiction: 'Federal',
-            summary:
-              'Federal Trade Commission issues final rule on consumer privacy protections and data security requirements.',
-            impact:
-              'All businesses collecting consumer data must implement new privacy safeguards and disclosure requirements.',
-            federalRegisterNumber: '2024-00089',
-            read: true,
-            bookmarked: false,
-          },
-        ]
+        {
+          id: '1',
+          agency: 'SEC',
+          title: 'Proposed Amendments to Cybersecurity Disclosure Rules',
+          type: 'proposed',
+          published: new Date('2024-01-12'),
+          commentDeadline: new Date('2024-02-28'),
+          jurisdiction: 'Federal',
+          summary:
+            'The Securities and Exchange Commission proposes amendments to enhance cybersecurity incident disclosure requirements for public companies.',
+          impact:
+            'Public companies will need to disclose material cybersecurity incidents within 4 business days.',
+          federalRegisterNumber: '2024-00123',
+          cfr: '17 CFR 229.106',
+          read: false,
+          bookmarked: true,
+        },
+        {
+          id: '2',
+          agency: 'FTC',
+          title: 'Final Rule on Consumer Privacy Protection',
+          type: 'final',
+          published: new Date('2024-01-08'),
+          effectiveDate: new Date('2024-06-01'),
+          jurisdiction: 'Federal',
+          summary:
+            'Federal Trade Commission issues final rule on consumer privacy protections and data security requirements.',
+          impact:
+            'All businesses collecting consumer data must implement new privacy safeguards and disclosure requirements.',
+          federalRegisterNumber: '2024-00089',
+          read: true,
+          bookmarked: false,
+        },
+      ]
   );
 
   const [rules] = useState<MonitoringRule[]>(
     initialRules.length > 0
       ? initialRules
       : [
-          {
-            id: '1',
-            name: 'Privacy & Data Security Tracking',
-            keywords: ['privacy', 'data security', 'GDPR', 'CCPA'],
-            jurisdictions: ['Federal', 'California'],
-            types: ['bill', 'regulation'],
-            alertMethod: 'both',
-            frequency: 'immediate',
-            active: true,
-            createdAt: new Date('2024-01-01'),
-          },
-          {
-            id: '2',
-            name: 'Employment Law Updates',
-            keywords: ['employment', 'labor', 'discrimination', 'wage'],
-            jurisdictions: ['Federal', 'New York', 'California'],
-            types: ['bill', 'regulation', 'ruling'],
-            alertMethod: 'email',
-            frequency: 'daily',
-            active: true,
-            createdAt: new Date('2024-01-05'),
-          },
-        ]
+        {
+          id: '1',
+          name: 'Privacy & Data Security Tracking',
+          keywords: ['privacy', 'data security', 'GDPR', 'CCPA'],
+          jurisdictions: ['Federal', 'California'],
+          types: ['bill', 'regulation'],
+          alertMethod: 'both',
+          frequency: 'immediate',
+          active: true,
+          createdAt: new Date('2024-01-01'),
+        },
+        {
+          id: '2',
+          name: 'Employment Law Updates',
+          keywords: ['employment', 'labor', 'discrimination', 'wage'],
+          jurisdictions: ['Federal', 'New York', 'California'],
+          types: ['bill', 'regulation', 'ruling'],
+          alertMethod: 'email',
+          frequency: 'daily',
+          active: true,
+          createdAt: new Date('2024-01-05'),
+        },
+      ]
   );
 
   const filteredUpdates = updates.filter((update) => {
@@ -404,11 +399,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
         <div className="flex gap-2 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveTab('updates')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'updates'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'updates'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -417,11 +411,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('alerts')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'alerts'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'alerts'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
@@ -430,11 +423,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('tracking')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'tracking'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'tracking'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -572,11 +564,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                           e.stopPropagation();
                           onTrackUpdate?.(update.id, !update.tracking);
                         }}
-                        className={`rounded-md px-3 py-1 text-xs font-medium ${
-                          update.tracking
+                        className={`rounded-md px-3 py-1 text-xs font-medium ${update.tracking
                             ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
-                        }`}
+                          }`}
                       >
                         {update.tracking ? 'Tracking' : 'Track'}
                       </button>
@@ -629,11 +620,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                     setSelectedAlert(alert);
                     if (!alert.read) onMarkRead?.(alert.id);
                   }}
-                  className={`cursor-pointer rounded-lg border bg-white p-6 transition-all hover:shadow-md dark:bg-gray-800 ${
-                    alert.read
+                  className={`cursor-pointer rounded-lg border bg-white p-6 transition-all hover:shadow-md dark:bg-gray-800 ${alert.read
                       ? 'border-gray-200 dark:border-gray-700'
                       : 'border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-900/10'
-                  }`}
+                    }`}
                 >
                   <div className="mb-3 flex items-start justify-between">
                     <div className="flex items-start gap-3">
@@ -646,13 +636,12 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                             {alert.agency}
                           </span>
                           <span
-                            className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                              alert.type === 'proposed'
+                            className={`rounded-full px-2 py-0.5 text-xs font-medium ${alert.type === 'proposed'
                                 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
                                 : alert.type === 'final'
                                   ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                                   : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                            }`}
+                              }`}
                           >
                             {alert.type}
                           </span>
@@ -730,11 +719,10 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                           {rule.name}
                         </h3>
                         <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                            rule.active
+                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${rule.active
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                               : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300'
-                          }`}
+                            }`}
                         >
                           {rule.active ? 'Active' : 'Inactive'}
                         </span>

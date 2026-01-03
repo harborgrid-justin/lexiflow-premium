@@ -4,29 +4,28 @@
  * @description Citation management with Bluebook formatting, validation, and graph visualization
  */
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Link2,
-  CheckCircle2,
-  XCircle,
   AlertTriangle,
-  Network,
-  FileText,
+  BarChart3,
+  BookOpen,
+  CheckCircle2,
   Copy,
+  Download,
   Edit3,
-  Trash2,
+  FileCode,
+  FileText,
+  GitBranch,
+  Link2,
+  Network,
   Plus,
   Search,
-  Filter,
-  Download,
+  Trash2,
   Upload,
-  BookOpen,
-  FileCode,
-  Zap,
-  BarChart3,
-  GitBranch,
+  XCircle,
+  Zap
 } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -93,51 +92,46 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   onDeleteCitation,
   onValidateCitations,
   onExport,
-  className = '',
-}) => {
+  className = ''}) => {
   const [citations, setCitations] = useState<Citation[]>(
     initialCitations.length > 0
       ? initialCitations
       : [
-          {
-            id: '1',
-            text: 'Hadley v. Baxendale',
-            formatted: 'Hadley v. Baxendale, 9 Ex. 341, 156 Eng. Rep. 145 (1854).',
-            type: 'case',
-            status: 'valid',
-            format: 'bluebook',
-            footnoteNumber: 1,
-            metadata: {
-              court: 'Court of Exchequer',
-              year: '1854',
-              volume: '9',
-              reporter: 'Ex.',
-              page: '341',
-            },
-            connections: ['2'],
-          },
-          {
-            id: '2',
-            text: 'UCC § 2-714',
-            formatted: 'U.C.C. § 2-714 (2023).',
-            type: 'statute',
-            status: 'valid',
-            format: 'bluebook',
-            footnoteNumber: 2,
-            connections: ['1', '3'],
-          },
-          {
-            id: '3',
-            text: 'Restatement (Second) of Contracts',
-            formatted: 'Restatement (Second) of Contracts § 351 (1981).',
-            type: 'book',
-            status: 'warning',
-            format: 'bluebook',
-            footnoteNumber: 3,
-            validationMessages: ['Check if latest edition is cited'],
-            connections: ['2'],
-          },
-        ]
+        {
+          id: '1',
+          text: 'Hadley v. Baxendale',
+          formatted: 'Hadley v. Baxendale, 9 Ex. 341, 156 Eng. Rep. 145 (1854).',
+          type: 'case',
+          status: 'valid',
+          format: 'bluebook',
+          footnoteNumber: 1,
+          metadata: {
+            court: 'Court of Exchequer',
+            year: '1854',
+            volume: '9',
+            reporter: 'Ex.',
+            page: '341'},
+          connections: ['2']},
+        {
+          id: '2',
+          text: 'UCC § 2-714',
+          formatted: 'U.C.C. § 2-714 (2023).',
+          type: 'statute',
+          status: 'valid',
+          format: 'bluebook',
+          footnoteNumber: 2,
+          connections: ['1', '3']},
+        {
+          id: '3',
+          text: 'Restatement (Second) of Contracts',
+          formatted: 'Restatement (Second) of Contracts § 351 (1981).',
+          type: 'book',
+          status: 'warning',
+          format: 'bluebook',
+          footnoteNumber: 3,
+          validationMessages: ['Check if latest edition is cited'],
+          connections: ['2']},
+      ]
   );
 
   const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
@@ -145,15 +139,46 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [filterType, setFilterType] = useState<CitationType | 'all'>('all');
+
+  const handleAddCitation = useCallback((citation: Omit<Citation, 'id'>) => {
+    const newCitation: Citation = {
+      ...citation,
+      id: `cite-${Date.now()}`,
+      formattedCitation: formatCitation(citation, selectedStyle)};
+    setCitations(prev => [...prev, newCitation]);
+    setShowAddDialog(false);
+    if (onAddCitation) {
+      onAddCitation(newCitation);
+    }
+  }, [onAddCitation, selectedStyle]);
+
+  const handleAutoFormat = useCallback(() => {
+    setCitations(prev => prev.map(cite => ({
+      ...cite,
+      formattedCitation: formatCitation(cite, selectedStyle)})));
+  }, [selectedStyle]);
+
+  const formatCitation = (citation: Omit<Citation, 'id' | 'formattedCitation'>, style: CitationStyle): string => {
+    // Basic citation formatting
+    if (style === 'bluebook') {
+      return `${citation.title}, ${citation.court || ''} (${citation.year || 'n.d.'})`;
+    }
+    return `${citation.title} (${citation.year || 'n.d.'})`;
+  };
+
+  const handleCitationSelect = (citationId: string) => {
+    const citation = citations.find(c => c.id === citationId) || null;
+    setSelectedCitation(citation);
+  };
+  const [filterType, setType] = useState<CitationType | 'all'>('all');
 
   const filteredCitations = citations.filter((citation) => {
     const matchesSearch =
       searchQuery === '' ||
       citation.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
       citation.formatted.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filterType === 'all' || citation.type === filterType;
-    return matchesSearch && matchesFilter;
+    const matches= filterType === 'all' || citation.type === filterType;
+    return matchesSearch && matches;
   });
 
   const getStatusIcon = (status: CitationStatus) => {
@@ -218,8 +243,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
     total: citations.length,
     valid: citations.filter((c) => c.status === 'valid').length,
     warnings: citations.filter((c) => c.status === 'warning').length,
-    errors: citations.filter((c) => c.status === 'error').length,
-  };
+    errors: citations.filter((c) => c.status === 'error').length};
 
   return (
     <div className={`flex h-full flex-col ${className}`}>
@@ -284,11 +308,10 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
         <div className="mt-4 flex gap-2 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveView('list')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeView === 'list'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'list'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -297,11 +320,10 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           </button>
           <button
             onClick={() => setActiveView('graph')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeView === 'graph'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'graph'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <Network className="h-4 w-4" />
@@ -310,11 +332,10 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           </button>
           <button
             onClick={() => setActiveView('footnotes')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeView === 'footnotes'
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'footnotes'
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
@@ -339,7 +360,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           </div>
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value as CitationType | 'all')}
+            onChange={(e) => setType(e.target.value as CitationType | 'all')}
             className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
           >
             <option value="all">All Types</option>

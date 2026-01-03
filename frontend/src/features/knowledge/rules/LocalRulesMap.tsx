@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
@@ -19,7 +19,7 @@ export const LocalRulesMap: React.FC = () => {
     );
 
     // Transform flat list into grouped state structure dynamically
-    const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions as any[]), [jurisdictions]);
+    const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions as Array<{ state: string }>), [jurisdictions]);
 
     return (
         <div className="h-full flex flex-col space-y-6 animate-fade-in">

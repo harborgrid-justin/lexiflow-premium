@@ -3,19 +3,19 @@
  * LEDES 1998B/2000 format support with UTBMS code management and e-billing integration
  */
 
-import React, { useState } from 'react';
 import {
-  FileText,
-  Download,
-  Upload,
-  CheckCircle,
   AlertCircle,
-  Search,
-  Filter,
-  Settings,
-  Send,
+  CheckCircle,
   Database,
+  Download,
+  FileText,
+  Filter,
+  Search,
+  Send,
+  Settings,
+  Upload,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Types
 interface LEDESFormat {
@@ -90,6 +90,22 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFormat, setSelectedFormat] = useState<'1998B' | '2000'>('1998B');
   const [showValidation, setShowValidation] = useState(false);
+  const [validationResults, setValidationResults] = useState<LEDESValidation | null>(null);
+
+  const handleExport = async (invoiceId: string) => {
+    const format = ledesFormats.find(f => f.version === selectedFormat);
+    if (format && onExport) {
+      onExport(format, invoiceId);
+    }
+  };
+
+  const handleValidate = async (data: any) => {
+    if (onValidate) {
+      const results = await onValidate(data);
+      setValidationResults(results);
+      setShowValidation(true);
+    }
+  };
 
   // Mock data
   const ledesFormats: LEDESFormat[] = [
@@ -195,6 +211,65 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Action Bar */}
+      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-3">
+          <FileText className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            LEDES Format: {selectedFormat}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleValidate({})}
+            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          >
+            <AlertCircle className="h-4 w-4" />
+            Validate
+          </button>
+          <button
+            onClick={() => handleExport('invoice-123')}
+            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            <Send className="h-4 w-4" />
+            Send to Portal
+          </button>
+        </div>
+      </div>
+
+      {/* Validation Results */}
+      {showValidation && validationResults && (
+        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Validation Results
+            </h3>
+            <button
+              onClick={() => setShowValidation(false)}
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              ×
+            </button>
+          </div>
+          <div className="space-y-2">
+            {validationResults.isValid ? (
+              <div className="flex items-center gap-2 text-green-600">
+                <AlertCircle className="h-5 w-5" />
+                <span>All validations passed</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {validationResults.errors.map((error, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-red-600">
+                    <AlertCircle className="h-5 w-5 mt-0.5" />
+                    <span className="text-sm">Line {error.line}: {error.message}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -232,11 +307,10 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
           {ledesFormats.map((format) => (
             <div
               key={format.id}
-              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${
-                selectedFormat === format.version
+              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${selectedFormat === format.version
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                   : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-              }`}
+                }`}
               onClick={() => setSelectedFormat(format.version)}
             >
               <div className="flex items-start justify-between">
@@ -264,11 +338,10 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                selectedTab === tab
+              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
                   ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+                }`}
             >
               {tab === 'utbms' ? 'UTBMS Codes' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -330,13 +403,12 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                         <span
-                          className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                            code.category === 'Task'
+                          className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${code.category === 'Task'
                               ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                               : code.category === 'Activity'
-                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                              : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
-                          }`}
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                            }`}
                         >
                           {code.category}
                         </span>
@@ -467,11 +539,10 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <span
-                        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                          portal.status === 'active'
+                        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${portal.status === 'active'
                             ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                             : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                        }`}
+                          }`}
                       >
                         {portal.status.toUpperCase()}
                       </span>

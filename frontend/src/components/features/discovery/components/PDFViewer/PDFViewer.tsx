@@ -181,7 +181,8 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
     if (renderTaskRef.current) {
       try {
         renderTaskRef.current.cancel();
-      } catch (e) {
+      } catch (error) {
+        console.error('PDF load error:', error);
         // Ignore cancellation errors
       }
     }

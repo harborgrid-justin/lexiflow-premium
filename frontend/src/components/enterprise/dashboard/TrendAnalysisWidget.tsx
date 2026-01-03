@@ -5,33 +5,33 @@
  * Displays historical trends with AI-powered predictions
  */
 
-import React, { useState, useMemo, memo, useCallback } from 'react';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import type { BaseDashboardProps, TimeSeriesDataPoint, TrendData } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  LineChart,
-  Line,
-  AreaChart,
+  Activity,
+  AlertCircle,
+  Calendar,
+  Info,
+  TrendingDown,
+  TrendingUp,
+  Zap,
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
   Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ReferenceLine,
 } from 'recharts';
-import {
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Calendar,
-  Zap,
-  AlertCircle,
-  Info,
-} from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import type { TrendData, TimeSeriesDataPoint, BaseDashboardProps } from '@/types/dashboard';
 
 export interface TrendAnalysisWidgetProps extends BaseDashboardProps {
   title: string;
@@ -51,7 +51,7 @@ export interface TrendAnalysisWidgetProps extends BaseDashboardProps {
  * TrendAnalysisWidget - Advanced trend analysis with predictions
  * Shows historical data with AI-powered forecasting
  */
-const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
+export const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
   title,
   data,
   predictions = [],
@@ -460,11 +460,11 @@ const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
                 className={cn(
                   'p-3 rounded-lg border text-sm',
                   insight.type === 'positive' &&
-                    'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200',
+                  'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200',
                   insight.type === 'negative' &&
-                    'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200',
+                  'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200',
                   insight.type === 'neutral' &&
-                    'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200'
+                  'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200'
                 )}
               >
                 {insight.message}

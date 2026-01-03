@@ -81,6 +81,11 @@ export function AuditTrail({
 
   // Filter events
   const filteredEvents = events.filter(event => {
+    // Document ID filter
+    if (documentId && event.documentId !== documentId) {
+      return false;
+    }
+
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -374,9 +379,8 @@ export function AuditTrail({
               return (
                 <div
                   key={event.id}
-                  className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${
-                    isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                  }`}
+                  className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                    }`}
                 >
                   <div className="flex items-start gap-4">
                     {/* Checkbox */}

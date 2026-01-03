@@ -22,11 +22,11 @@ import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
@@ -162,11 +162,11 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                         actions={
                             <div className="flex gap-2">
                                 <Button variant="outline" icon={Filter}>Filter</Button>
-                                <Button 
-                                    variant="primary" 
-                                    icon={Plus} 
-                                    onClick={() => { 
-                                        setComposeInitialData(undefined); 
+                                <Button
+                                    variant="primary"
+                                    icon={Plus}
+                                    onClick={() => {
+                                        setComposeInitialData(undefined);
                                         if (activeTab === 'communications') {
                                             composeModal.open();
                                         } else {
@@ -242,7 +242,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                                 <CorrespondenceDetail
                                     correspondenceItem={{
                                         type: activeTab === 'communications' ? 'communication' : 'service',
-                                        item: itemSelection.selected as any
+                                        item: itemSelection.selected as Record<string, unknown>
                                     }}
                                     onClose={() => inspectorToggle.close()}
                                     onReply={(item) => handleReply(item)}

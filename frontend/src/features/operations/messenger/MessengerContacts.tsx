@@ -1,11 +1,11 @@
-import { MessageSquare } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
+import { MessageSquare } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -30,10 +30,10 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
     <div className="w-full flex flex-col h-full">
       <div className={cn("p-4 border-b", theme.border.default)}>
         <SearchToolbar
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search directory..."
-            className="border-none shadow-none p-0"
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search directory..."
+          className="border-none shadow-none p-0"
         />
       </div>
       <div className="overflow-auto flex-1">
@@ -49,7 +49,7 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
             {contacts.map(c => (
               <TableRow key={c.id}>
                 <TableCell className={cn("font-medium flex items-center gap-3", theme.text.primary)}>
-                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as any}/> {c.name}
+                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as string} /> {c.name}
                 </TableCell>
                 <TableCell>{c.role}</TableCell>
                 <TableCell>{c.department}</TableCell>

@@ -13,37 +13,34 @@
  */
 
 // ============================================================================
-// EXTERNAL DEPENDENCIES
+// ETERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { FixedSizeList as List } from 'react-window';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import jsPDF from 'jspdf';
 import {
-  ArrowUpDown,
-  ArrowUp,
   ArrowDown,
-  Filter,
-  Download,
-  Settings,
-  Save,
-  Trash2,
-  GripVertical,
+  ArrowUp,
+  ArrowUpDown,
   CheckSquare,
-  Square,
-  X,
-  Search,
   FileSpreadsheet,
   FileText,
+  Filter,
+  GripVertical,
+  Save,
+  Search,
+  Square,
+  Trash2
 } from 'lucide-react';
-import jsPDF from 'jspdf';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FixedSizeList as List } from 'react-window';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -120,14 +117,19 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   onSaveView,
   onDeleteView,
   className,
-  loading = false,
-}: EnterpriseDataTableProps<T>) => {
+  loading = false}: EnterpriseDataTableProps<T>) => {
   const { theme } = useTheme();
 
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
   const [columns, setColumns] = useState<Column<T>[]>(initialColumns);
+
+  const handleColumnResize = (columnId: string, newWidth: number) => {
+    setColumns(prev => prev.map(col =>
+      col.id === columnId ? { ...col, width: newWidth } : col
+    ));
+  };
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState<FilterConfig[]>([]);
@@ -138,6 +140,22 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   const [searchQuery, setSearchQuery] = useState('');
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
+
+  const handleColumnDragStart = (columnId: string) => {
+    setDraggedColumn(columnId);
+  };
+
+  const handleColumnDragEnd = () => {
+    setDraggedColumn(null);
+  };
+
+  const handleResizeStart = (columnId: string) => {
+    setResizingColumn(columnId);
+  };
+
+  const handleResizeEnd = () => {
+    setResizingColumn(null);
+  };
 
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -258,7 +276,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   }, [selectedRows, sortedData, onSelectionChange]);
 
   // ============================================================================
-  // EXPORT FUNCTIONS
+  // EPORT FUNCTIONS
   // ============================================================================
 
   const exportToCSV = useCallback(() => {
@@ -332,8 +350,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
       sortBy: sortBy || undefined,
       sortOrder,
       columnOrder: columns.map((col) => col.id),
-      columnWidths,
-    };
+      columnWidths};
 
     onSaveView?.(newView);
   }, [filters, sortBy, sortOrder, columns, columnWidths, onSaveView]);

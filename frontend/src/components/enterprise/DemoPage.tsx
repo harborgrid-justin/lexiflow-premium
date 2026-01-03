@@ -12,10 +12,10 @@
  * for testing purposes.
  */
 
+import { Activity, BarChart3, LineChart } from 'lucide-react';
 import React, { useState } from 'react';
-import { EnterpriseDashboard } from './EnterpriseDashboard';
 import { AnalyticsWidgets } from './AnalyticsWidgets';
-import { BarChart3, LineChart, Activity } from 'lucide-react';
+import { EnterpriseDashboard } from './EnterpriseDashboard';
 
 type ViewMode = 'dashboard' | 'analytics' | 'combined';
 
@@ -43,8 +43,16 @@ export const EnterpriseDemoPage: React.FC = () => {
   };
 
   const handleConfigureWidgets = () => {
-    console.log('Opening widget configuration...');
-    // Implement widget configuration modal
+    console.log('Opening widget configuration...', selectedWidgets);
+    // Toggle a widget selection modal
+  };
+
+  const handleToggleWidget = (widgetId: string) => {
+    setSelectedWidgets(prev =>
+      prev.includes(widgetId)
+        ? prev.filter(id => id !== widgetId)
+        : [...prev, widgetId]
+    );
   };
 
   const dateRange = {
@@ -71,33 +79,30 @@ export const EnterpriseDemoPage: React.FC = () => {
             <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
               <button
                 onClick={() => setViewMode('dashboard')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'dashboard'
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'dashboard'
                     ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
-                }`}
+                  }`}
               >
                 <BarChart3 className="h-4 w-4" />
                 Dashboard
               </button>
               <button
                 onClick={() => setViewMode('analytics')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'analytics'
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'analytics'
                     ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
-                }`}
+                  }`}
               >
                 <LineChart className="h-4 w-4" />
                 Analytics
               </button>
               <button
                 onClick={() => setViewMode('combined')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'combined'
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'combined'
                     ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
-                }`}
+                  }`}
               >
                 <Activity className="h-4 w-4" />
                 Combined

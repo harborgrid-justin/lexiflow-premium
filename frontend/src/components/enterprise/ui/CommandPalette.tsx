@@ -28,12 +28,9 @@ import {
   HelpCircle,
   ChevronRight,
   Hash,
-  TrendingUp,
   BarChart,
   Calendar,
-  Folder,
-  ArrowRight,
-} from 'lucide-react';
+  Folder} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -104,8 +101,7 @@ const getIconForType = (type: string): React.ElementType => {
     task: Calendar,
     settings: Settings,
     help: HelpCircle,
-    analytics: BarChart,
-  };
+    analytics: BarChart};
   return iconMap[type] || Hash;
 };
 
@@ -119,8 +115,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   placeholder = 'Search or type a command...',
   recentItems = [],
   maxRecent = 5,
-  className,
-}) => {
+  className}) => {
   const { theme } = useTheme();
 
   // ============================================================================

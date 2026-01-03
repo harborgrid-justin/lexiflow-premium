@@ -8,30 +8,24 @@ import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
-  Folder,
   FileText,
   BookOpen,
   Lightbulb,
   Star,
   Tag,
-  Calendar,
   User,
   Download,
   Share2,
   Eye,
   Filter,
-  SortAsc,
   Grid3x3,
   List,
   Upload,
-  Plus,
   Clock,
-  TrendingUp,
   Archive,
   Lock,
   Users,
-  Award,
-} from 'lucide-react';
+  Award} from 'lucide-react';
 
 // ============================================================================
 // Types & Interfaces
@@ -99,8 +93,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   onDownload,
   onUpload,
   onShare,
-  className = '',
-}) => {
+  className = ''}) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeCategory, setActiveCategory] = useState<ResourceCategory | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -131,8 +124,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             practiceArea: 'Civil Litigation',
             jurisdiction: 'Federal',
             confidential: false,
-            access: 'firm',
-          },
+            access: 'firm'},
           {
             id: '2',
             title: 'Employment Agreement - Executive Level',
@@ -150,8 +142,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             fileSize: '68 KB',
             practiceArea: 'Employment Law',
             confidential: true,
-            access: 'team',
-          },
+            access: 'team'},
           {
             id: '3',
             title: 'Research Memo: Implied Warranty Analysis',
@@ -170,8 +161,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             practiceArea: 'Commercial Law',
             jurisdiction: 'Multi-State',
             confidential: false,
-            access: 'firm',
-          },
+            access: 'firm'},
           {
             id: '4',
             title: 'Best Practices: Discovery Response Protocol',
@@ -189,8 +179,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             fileSize: '25 KB',
             practiceArea: 'Litigation',
             confidential: false,
-            access: 'firm',
-          },
+            access: 'firm'},
         ]
   );
 

@@ -4,35 +4,31 @@
  * @description Research memo creation with AI summarization, collaboration, and version history
  */
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  FileText,
-  Save,
-  Share2,
-  Download,
-  Printer,
-  Sparkles,
-  Users,
+  AlertCircle,
+  Bold,
+  CheckCircle2,
   Clock,
-  MessageSquare,
+  Code,
+  Download,
   Edit3,
   Eye,
   GitBranch,
-  ChevronRight,
-  User,
-  CheckCircle2,
-  AlertCircle,
-  Plus,
-  Bold,
   Italic,
-  List,
   Link2,
+  List,
+  MessageSquare,
+  Plus,
   Quote,
-  Code,
-  Undo,
   Redo,
+  Save,
+  Sparkles,
+  Undo,
+  User,
+  Users,
 } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -112,8 +108,8 @@ export interface ResearchMemoProps {
 export const ResearchMemo: React.FC<ResearchMemoProps> = ({
   memo: initialMemo,
   onSave,
-  onExport,
-  onShare,
+  _onExport,
+  _onShare,
   onAISummarize,
   className = '',
 }) => {
@@ -280,44 +276,40 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
           <div className="flex gap-2">
             <button
               onClick={() => setActiveView('edit')}
-              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                activeView === 'edit'
+              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'edit'
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+                }`}
             >
               <Edit3 className="h-4 w-4" />
               Edit
             </button>
             <button
               onClick={() => setActiveView('preview')}
-              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                activeView === 'preview'
+              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'preview'
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+                }`}
             >
               <Eye className="h-4 w-4" />
               Preview
             </button>
             <button
               onClick={() => setActiveView('versions')}
-              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                activeView === 'versions'
+              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'versions'
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+                }`}
             >
               <GitBranch className="h-4 w-4" />
               Versions ({memo.versions.length})
             </button>
             <button
               onClick={() => setActiveView('comments')}
-              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                activeView === 'comments'
+              className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'comments'
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+                }`}
             >
               <MessageSquare className="h-4 w-4" />
               Comments ({memo.comments.length})
@@ -372,11 +364,10 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
                   <button
                     key={section.id}
                     onClick={() => setSelectedSection(section.id)}
-                    className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors ${
-                      selectedSection === section.id
+                    className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors ${selectedSection === section.id
                         ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                         : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                   >
                     <span className="font-medium">{section.title}</span>
                     {section.content && (

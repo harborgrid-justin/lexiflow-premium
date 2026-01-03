@@ -9,7 +9,7 @@
 
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { format, formatDistanceToNow, isBefore, differenceInDays } from 'date-fns';
+import { format, isBefore, differenceInDays } from 'date-fns';
 
 export interface Filing {
   id: string;
@@ -47,29 +47,23 @@ function getFilingStatusBadge(status: Filing['status']): {
     draft: {
       bgColor: 'bg-gray-50 dark:bg-gray-900/20',
       textColor: 'text-gray-700 dark:text-gray-400',
-      icon: '📝',
-    },
+      icon: '📝'},
     pending: {
       bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
       textColor: 'text-yellow-700 dark:text-yellow-400',
-      icon: '⏳',
-    },
+      icon: '⏳'},
     filed: {
       bgColor: 'bg-green-50 dark:bg-green-900/20',
       textColor: 'text-green-700 dark:text-green-400',
-      icon: '✅',
-    },
+      icon: '✅'},
     rejected: {
       bgColor: 'bg-red-50 dark:bg-red-900/20',
       textColor: 'text-red-700 dark:text-red-400',
-      icon: '❌',
-    },
+      icon: '❌'},
     withdrawn: {
       bgColor: 'bg-gray-50 dark:bg-gray-900/20',
       textColor: 'text-gray-600 dark:text-gray-500',
-      icon: '🚫',
-    },
-  };
+      icon: '🚫'}};
 
   return statusMap[status];
 }
@@ -86,8 +80,7 @@ function getDeadlineUrgency(deadline: string | undefined): {
     return {
       level: 'none',
       color: 'text-gray-500 dark:text-gray-400',
-      bgColor: 'bg-gray-50 dark:bg-gray-900/20',
-    };
+      bgColor: 'bg-gray-50 dark:bg-gray-900/20'};
   }
 
   const deadlineDate = new Date(deadline);
@@ -98,39 +91,34 @@ function getDeadlineUrgency(deadline: string | undefined): {
     return {
       level: 'overdue',
       color: 'text-red-700 dark:text-red-400',
-      bgColor: 'bg-red-100 dark:bg-red-900/30',
-    };
+      bgColor: 'bg-red-100 dark:bg-red-900/30'};
   }
 
   if (daysUntilDeadline <= 3) {
     return {
       level: 'critical',
       color: 'text-red-700 dark:text-red-400',
-      bgColor: 'bg-red-50 dark:bg-red-900/20',
-    };
+      bgColor: 'bg-red-50 dark:bg-red-900/20'};
   }
 
   if (daysUntilDeadline <= 7) {
     return {
       level: 'high',
       color: 'text-orange-700 dark:text-orange-400',
-      bgColor: 'bg-orange-50 dark:bg-orange-900/20',
-    };
+      bgColor: 'bg-orange-50 dark:bg-orange-900/20'};
   }
 
   if (daysUntilDeadline <= 14) {
     return {
       level: 'medium',
       color: 'text-yellow-700 dark:text-yellow-400',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
-    };
+      bgColor: 'bg-yellow-50 dark:bg-yellow-900/20'};
   }
 
   return {
     level: 'low',
     color: 'text-blue-700 dark:text-blue-400',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-  };
+    bgColor: 'bg-blue-50 dark:bg-blue-900/20'};
 }
 
 /**
@@ -152,8 +140,7 @@ export function FilingsTable({
   filings,
   onSelectFiling,
   showActions = true,
-  className,
-}: FilingsTableProps) {
+  className}: FilingsTableProps) {
   const [sortField, setSortField] = useState<keyof Filing>('filingDate');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filterStatus, setFilterStatus] = useState<Filing['status'] | 'all'>('all');

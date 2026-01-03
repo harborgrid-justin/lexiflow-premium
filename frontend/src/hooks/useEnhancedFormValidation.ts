@@ -14,38 +14,42 @@
  * - Smart re-validation
  */
 
-import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
+import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 import type {
+  FieldCondition,
   FieldSchema,
+  FieldState,
   FormSchema,
+  FormState,
   ValidationResult,
   ValidationRule,
-  FieldCondition,
-  FieldState,
-  FormState,
-} from '@/types/forms';
+} from "@/types/forms";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-export interface UseEnhancedFormValidationOptions<TFormData extends Record<string, unknown>> {
+export interface UseEnhancedFormValidationOptions<
+  TFormData extends Record<string, unknown>,
+> {
   /** Form schema with field definitions */
   schema: FormSchema<TFormData>;
   /** Initial form values */
   initialValues: TFormData;
   /** Validation mode */
-  validationMode?: 'onChange' | 'onBlur' | 'onSubmit' | 'all';
+  validationMode?: "onChange" | "onBlur" | "onSubmit" | "all";
   /** Re-validate mode after first validation */
-  revalidateMode?: 'onChange' | 'onBlur' | 'onSubmit';
+  revalidateMode?: "onChange" | "onBlur" | "onSubmit";
   /** Global debounce delay for async validations */
   debounceDelay?: number;
   /** Validate on mount */
   validateOnMount?: boolean;
 }
 
-export interface UseEnhancedFormValidationReturn<TFormData extends Record<string, unknown>> {
+export interface UseEnhancedFormValidationReturn<
+  TFormData extends Record<string, unknown>,
+> {
   /** Current form state */
   formState: FormState<TFormData>;
   /** Get field state */
@@ -108,34 +112,39 @@ function evaluateCondition<TFormData extends Record<string, unknown>>(
   const fieldValue = formData[condition.field];
 
   switch (condition.operator) {
-    case 'equals':
+    case "equals":
       return fieldValue === condition.value;
-    case 'notEquals':
+    case "notEquals":
       return fieldValue !== condition.value;
-    case 'contains':
-      if (typeof fieldValue === 'string' && typeof condition.value === 'string') {
+    case "contains":
+      if (
+        typeof fieldValue === "string" &&
+        typeof condition.value === "string"
+      ) {
         return fieldValue.includes(condition.value);
       }
       if (Array.isArray(fieldValue)) {
         return fieldValue.includes(condition.value);
       }
       return false;
-    case 'greaterThan':
-      return typeof fieldValue === 'number' && typeof condition.value === 'number'
+    case "greaterThan":
+      return typeof fieldValue === "number" &&
+        typeof condition.value === "number"
         ? fieldValue > condition.value
         : false;
-    case 'lessThan':
-      return typeof fieldValue === 'number' && typeof condition.value === 'number'
+    case "lessThan":
+      return typeof fieldValue === "number" &&
+        typeof condition.value === "number"
         ? fieldValue < condition.value
         : false;
-    case 'isEmpty':
+    case "isEmpty":
       if (fieldValue === null || fieldValue === undefined) return true;
-      if (typeof fieldValue === 'string') return fieldValue.trim().length === 0;
+      if (typeof fieldValue === "string") return fieldValue.trim().length === 0;
       if (Array.isArray(fieldValue)) return fieldValue.length === 0;
       return false;
-    case 'isNotEmpty':
+    case "isNotEmpty":
       if (fieldValue === null || fieldValue === undefined) return false;
-      if (typeof fieldValue === 'string') return fieldValue.trim().length > 0;
+      if (typeof fieldValue === "string") return fieldValue.trim().length > 0;
       if (Array.isArray(fieldValue)) return fieldValue.length > 0;
       return true;
     default:
@@ -147,13 +156,18 @@ function evaluateCondition<TFormData extends Record<string, unknown>>(
  * Evaluate multiple conditions (AND logic)
  */
 function evaluateConditions<TFormData extends Record<string, unknown>>(
-  conditions: FieldCondition<TFormData> | FieldCondition<TFormData>[] | undefined,
+  conditions:
+    | FieldCondition<TFormData>
+    | FieldCondition<TFormData>[]
+    | undefined,
   formData: TFormData
 ): boolean {
   if (!conditions) return true;
 
   const conditionArray = Array.isArray(conditions) ? conditions : [conditions];
-  return conditionArray.every(condition => evaluateCondition(condition, formData));
+  return conditionArray.every((condition) =>
+    evaluateCondition(condition, formData)
+  );
 }
 
 /**
@@ -165,14 +179,14 @@ function getFieldSchema(
 ): FieldSchema | undefined {
   // Check flat fields
   if (schema.fields) {
-    const field = schema.fields.find(f => f.name === fieldName);
+    const field = schema.fields.find((f) => f.name === fieldName);
     if (field) return field;
   }
 
   // Check sections
   if (schema.sections) {
     for (const section of schema.sections) {
-      const field = section.fields.find(f => f.name === fieldName);
+      const field = section.fields.find((f) => f.name === fieldName);
       if (field) return field;
     }
   }
@@ -195,8 +209,8 @@ async function executeValidationRule<T>(
     console.error(`Validation error for rule "${rule.name}":`, error);
     return {
       valid: false,
-      message: rule.message || 'Validation failed',
-      severity: 'error',
+      message: rule.message || "Validation failed",
+      severity: "error",
     };
   }
 }
@@ -205,11 +219,13 @@ async function executeValidationRule<T>(
 // HOOK
 // ============================================================================
 
-export function useEnhancedFormValidation<TFormData extends Record<string, unknown>>({
+export function useEnhancedFormValidation<
+  TFormData extends Record<string, unknown>,
+>({
   schema,
   initialValues,
-  validationMode = 'onChange',
-  revalidateMode = 'onChange',
+  validationMode = "onChange",
+  revalidateMode = "onChange",
   debounceDelay = SEARCH_DEBOUNCE_MS,
   validateOnMount = false,
 }: UseEnhancedFormValidationOptions<TFormData>): UseEnhancedFormValidationReturn<TFormData> {
@@ -218,9 +234,11 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   const initialValuesRef = useRef(initialValues);
 
   // Field states
-  const [fieldStates, setFieldStates] = useState<Record<keyof TFormData, FieldState>>(() => {
+  const [fieldStates, setFieldStates] = useState<
+    Record<keyof TFormData, FieldState>
+  >(() => {
     const states = {} as Record<keyof TFormData, FieldState>;
-    Object.keys(initialValues).forEach(key => {
+    Object.keys(initialValues).forEach((key) => {
       states[key as keyof TFormData] = {
         value: initialValues[key as keyof TFormData],
         touched: false,
@@ -242,14 +260,19 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   const validatedFields = useRef<Set<keyof TFormData>>(new Set());
 
   // Debounced validators per field
-  const debouncedValidators = useRef<Map<keyof TFormData, ReturnType<typeof debounce>>>(new Map());
+  const debouncedValidators = useRef<
+    Map<keyof TFormData, ReturnType<typeof debounce>>
+  >(new Map());
 
   /**
    * Check if field is visible based on conditions
    */
   const isFieldVisible = useCallback(
     (fieldName: keyof TFormData): boolean => {
-      const fieldSchema = getFieldSchema(schema as any, fieldName as string);
+      const fieldSchema = getFieldSchema(
+        schema as FormSchema<TFormData>,
+        fieldName as string
+      );
       if (!fieldSchema?.showWhen) return true;
 
       return evaluateConditions(fieldSchema.showWhen, formData);
@@ -261,7 +284,9 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    * Get all visible fields
    */
   const getVisibleFields = useCallback((): Array<keyof TFormData> => {
-    return (Object.keys(formData) as Array<keyof TFormData>).filter(isFieldVisible);
+    return (Object.keys(formData) as Array<keyof TFormData>).filter(
+      isFieldVisible
+    );
   }, [formData, isFieldVisible]);
 
   /**
@@ -269,11 +294,14 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const validateFieldImmediate = useCallback(
     async <K extends keyof TFormData>(field: K): Promise<boolean> => {
-      const fieldSchema = getFieldSchema(schema as any, field as string);
+      const fieldSchema = getFieldSchema(
+        schema as FormSchema<TFormData>,
+        field as string
+      );
       const fieldValue = formData[field];
 
       // Mark field as validating
-      setFieldStates(prev => ({
+      setFieldStates((prev) => ({
         ...prev,
         [field]: { ...prev[field], validating: true },
       }));
@@ -286,7 +314,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
         const isEmpty =
           fieldValue === null ||
           fieldValue === undefined ||
-          (typeof fieldValue === 'string' && fieldValue.trim().length === 0) ||
+          (typeof fieldValue === "string" && fieldValue.trim().length === 0) ||
           (Array.isArray(fieldValue) && fieldValue.length === 0);
 
         if (isEmpty) {
@@ -297,13 +325,17 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
       // Run field-level validations
       if (!error && fieldSchema?.validationRules) {
         for (const rule of fieldSchema.validationRules) {
-          const result = await executeValidationRule(rule as any, fieldValue, formData);
+          const result = await executeValidationRule(
+            rule as ValidationRule<TFormData>,
+            fieldValue,
+            formData
+          );
 
           if (!result.valid) {
-            if (result.severity === 'warning') {
-              warning = result.message || rule.message || 'Validation warning';
+            if (result.severity === "warning") {
+              warning = result.message || rule.message || "Validation warning";
             } else {
-              error = result.message || rule.message || 'Validation failed';
+              error = result.message || rule.message || "Validation failed";
               break; // Stop on first error
             }
           }
@@ -315,8 +347,9 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
         for (const crossRule of schema.crossFieldValidations) {
           if (crossRule.fields.includes(field)) {
             const result = await crossRule.validator(formData);
-            if (!result.valid && result.severity !== 'warning') {
-              error = result.message || crossRule.message || 'Validation failed';
+            if (!result.valid && result.severity !== "warning") {
+              error =
+                result.message || crossRule.message || "Validation failed";
               break;
             }
           }
@@ -324,7 +357,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
       }
 
       // Update field state
-      setFieldStates(prev => ({
+      setFieldStates((prev) => ({
         ...prev,
         [field]: {
           ...prev[field],
@@ -356,8 +389,10 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const validateAll = useCallback(async (): Promise<boolean> => {
     const visibleFields = getVisibleFields();
-    const results = await Promise.all(visibleFields.map(field => validateFieldImmediate(field)));
-    return results.every(result => result);
+    const results = await Promise.all(
+      visibleFields.map((field) => validateFieldImmediate(field))
+    );
+    return results.every((result) => result);
   }, [getVisibleFields, validateFieldImmediate]);
 
   /**
@@ -365,8 +400,8 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const setValue = useCallback(
     <K extends keyof TFormData>(field: K, value: TFormData[K]) => {
-      setFormData(prev => ({ ...prev, [field]: value }));
-      setFieldStates(prev => ({
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      setFieldStates((prev) => ({
         ...prev,
         [field]: {
           ...prev[field],
@@ -377,21 +412,27 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
 
       // Trigger validation based on mode
       const shouldValidate =
-        validationMode === 'onChange' ||
-        validationMode === 'all' ||
-        (validatedFields.current.has(field) && revalidateMode === 'onChange');
+        validationMode === "onChange" ||
+        validationMode === "all" ||
+        (validatedFields.current.has(field) && revalidateMode === "onChange");
 
       if (shouldValidate) {
         // Use debounced validation for async validators
-        const fieldSchema = getFieldSchema(schema as any, field as string);
+        const fieldSchema = getFieldSchema(
+          schema as FormSchema<TFormData>,
+          field as string
+        );
         const hasAsyncValidation = fieldSchema?.validationRules?.some(
-          rule => rule.debounce !== undefined
+          (rule) => rule.debounce !== undefined
         );
 
         if (hasAsyncValidation) {
           let validator = debouncedValidators.current.get(field);
           if (!validator) {
-            validator = debounce(() => validateFieldImmediate(field), debounceDelay);
+            validator = debounce(
+              () => validateFieldImmediate(field),
+              debounceDelay
+            );
             debouncedValidators.current.set(field, validator);
           }
           validator();
@@ -400,7 +441,13 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
         }
       }
     },
-    [validationMode, revalidateMode, schema, debounceDelay, validateFieldImmediate]
+    [
+      validationMode,
+      revalidateMode,
+      schema,
+      debounceDelay,
+      validateFieldImmediate,
+    ]
   );
 
   /**
@@ -408,10 +455,10 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const setValues = useCallback(
     (values: Partial<TFormData>) => {
-      setFormData(prev => ({ ...prev, ...values }));
-      setFieldStates(prev => {
+      setFormData((prev) => ({ ...prev, ...values }));
+      setFieldStates((prev) => {
         const newStates = { ...prev };
-        Object.keys(values).forEach(key => {
+        Object.keys(values).forEach((key) => {
           const field = key as keyof TFormData;
           newStates[field] = {
             ...prev[field],
@@ -423,9 +470,10 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
       });
 
       // Validate changed fields if needed
-      const shouldValidate = validationMode === 'onChange' || validationMode === 'all';
+      const shouldValidate =
+        validationMode === "onChange" || validationMode === "all";
       if (shouldValidate) {
-        Object.keys(values).forEach(key => {
+        Object.keys(values).forEach((key) => {
           validateFieldImmediate(key as keyof TFormData);
         });
       }
@@ -436,27 +484,36 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   /**
    * Set field touched state
    */
-  const setTouched = useCallback(<K extends keyof TFormData>(field: K, touched = true) => {
-    setFieldStates(prev => ({
-      ...prev,
-      [field]: { ...prev[field], touched },
-    }));
+  const setTouched = useCallback(
+    <K extends keyof TFormData>(field: K, touched = true) => {
+      setFieldStates((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], touched },
+      }));
 
-    // Validate on blur if configured
-    if (touched && (validationMode === 'onBlur' || validationMode === 'all')) {
-      validateFieldImmediate(field);
-    }
-  }, [validationMode, validateFieldImmediate]);
+      // Validate on blur if configured
+      if (
+        touched &&
+        (validationMode === "onBlur" || validationMode === "all")
+      ) {
+        validateFieldImmediate(field);
+      }
+    },
+    [validationMode, validateFieldImmediate]
+  );
 
   /**
    * Set field error manually
    */
-  const setError = useCallback(<K extends keyof TFormData>(field: K, error: string | null) => {
-    setFieldStates(prev => ({
-      ...prev,
-      [field]: { ...prev[field], error },
-    }));
-  }, []);
+  const setError = useCallback(
+    <K extends keyof TFormData>(field: K, error: string | null) => {
+      setFieldStates((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], error },
+      }));
+    },
+    []
+  );
 
   /**
    * Reset form
@@ -464,9 +521,9 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   const reset = useCallback((newValues?: TFormData) => {
     const values = newValues || initialValuesRef.current;
     setFormData(values);
-    setFieldStates(prev => {
+    setFieldStates((prev) => {
       const resetStates = { ...prev };
-      Object.keys(values).forEach(key => {
+      Object.keys(values).forEach((key) => {
         const field = key as keyof TFormData;
         resetStates[field] = {
           value: values[field],
@@ -497,9 +554,9 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
 
   // Update field visibility based on conditions
   useEffect(() => {
-    setFieldStates(prev => {
+    setFieldStates((prev) => {
       const newStates = { ...prev };
-      Object.keys(formData).forEach(key => {
+      Object.keys(formData).forEach((key) => {
         const field = key as keyof TFormData;
         const visible = isFieldVisible(field);
         if (newStates[field].visible !== visible) {
@@ -539,11 +596,15 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   }, [fieldStates]);
 
   const isValid = useMemo(() => {
-    return Object.values(fieldStates).every((state: FieldState) => !state.error);
+    return Object.values(fieldStates).every(
+      (state: FieldState) => !state.error
+    );
   }, [fieldStates]);
 
   const isValidating = useMemo(() => {
-    return Object.values(fieldStates).some((state: FieldState) => state.validating);
+    return Object.values(fieldStates).some(
+      (state: FieldState) => state.validating
+    );
   }, [fieldStates]);
 
   const isDirty = useMemo(() => {

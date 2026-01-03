@@ -14,7 +14,6 @@ import {
   BookmarkPlus,
   History,
   Sparkles,
-  Filter,
   SlidersHorizontal,
   ChevronRight,
   Highlighter,
@@ -22,8 +21,7 @@ import {
   Share2,
   Download,
   Star,
-  Clock,
-} from 'lucide-react';
+  Clock} from 'lucide-react';
 
 // ============================================================================
 // Types & Interfaces
@@ -59,7 +57,7 @@ export interface Annotation {
   timestamp: Date;
 }
 
-export interface SearchFilters {
+export interface Searchs {
   jurisdiction?: string[];
   dateRange?: { from: Date; to: Date };
   court?: string[];
@@ -68,7 +66,7 @@ export interface SearchFilters {
 }
 
 export interface LegalResearchHubProps {
-  onSearch?: (query: string, filters: SearchFilters) => void;
+  onSearch?: (query: string, filters: Searchs) => void;
   onSaveResult?: (result: ResearchResult) => void;
   onCreateAnnotation?: (resultId: string, annotation: Annotation) => void;
   onExport?: (results: ResearchResult[]) => void;
@@ -84,14 +82,13 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSaveResult,
   onCreateAnnotation,
   onExport,
-  className = '',
-}) => {
+  className = ''}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'search' | 'sessions' | 'saved'>('search');
-  const [showFilters, setShowFilters] = useState(false);
+  const [shows, setShows] = useState(false);
   const [showAIAssist, setShowAIAssist] = useState(false);
   const [selectedResult, setSelectedResult] = useState<ResearchResult | null>(null);
-  const [filters, setFilters] = useState<SearchFilters>({});
+  const [filters, sets] = useState<Searchs>({});
   const [isSearching, setIsSearching] = useState(false);
 
   // Mock data for demonstration
@@ -102,16 +99,14 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       query: 'breach of contract damages',
       timestamp: new Date('2024-01-15'),
       resultsCount: 42,
-      saved: true,
-    },
+      saved: true},
     {
       id: '2',
       title: 'Employment Discrimination',
       query: 'Title VII discrimination workplace',
       timestamp: new Date('2024-01-14'),
       resultsCount: 28,
-      saved: false,
-    },
+      saved: false},
   ]);
 
   const [results] = useState<ResearchResult[]>([
@@ -124,8 +119,7 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       type: 'case',
       snippet: 'The damages which the other party ought to receive in respect of such breach of contract should be such as may fairly and reasonably be considered either arising naturally...',
       relevanceScore: 0.95,
-      highlighted: ['breach of contract', 'damages'],
-    },
+      highlighted: ['breach of contract', 'damages']},
     {
       id: '2',
       title: 'Uniform Commercial Code § 2-714',
@@ -133,8 +127,7 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       type: 'statute',
       snippet: 'Where the buyer has accepted goods and given notification (subsection (3) of Section 2-607) he may recover as damages for any non-conformity of tender the loss resulting...',
       relevanceScore: 0.88,
-      highlighted: ['damages', 'buyer'],
-    },
+      highlighted: ['damages', 'buyer']},
   ]);
 
   const handleSearch = useCallback(() => {
@@ -272,9 +265,9 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
                       />
                       <div className="absolute right-2 top-2 flex gap-2">
                         <button
-                          onClick={() => setShowFilters(!showFilters)}
+                          onClick={() => setShows(!shows)}
                           className="rounded-md p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600"
-                          title="Filters"
+                          title="s"
                         >
                           <SlidersHorizontal className="h-5 w-5" />
                         </button>
@@ -288,8 +281,8 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
                       </div>
                     </div>
 
-                    {/* Filters Panel */}
-                    {showFilters && (
+                    {/*s Panel */}
+                    {shows && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}

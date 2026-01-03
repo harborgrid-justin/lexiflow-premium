@@ -63,18 +63,19 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function CasePartiesRoute() {
   const { caseData, parties } = loaderData;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   // Count parties by type
-  const plaintiffCount = parties.filter((p: any) =>
+  interface Party { type: string }
+  const plaintiffCount = parties.filter((p: Party) =>
     p.type === 'Plaintiff' || p.type === 'Petitioner' || p.type === 'Appellant'
   ).length;
 
-  const defendantCount = parties.filter((p: any) =>
+  const defendantCount = parties.filter((p: Party) =>
     p.type === 'Defendant' || p.type === 'Respondent' || p.type === 'Appellee'
   ).length;
 
-  const witnessCount = parties.filter((p: any) =>
+  const witnessCount = parties.filter((p: Party) =>
     p.type === 'Witness' || p.type === 'Expert Witness'
   ).length;
 

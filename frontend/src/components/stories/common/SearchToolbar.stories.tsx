@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 /**
@@ -90,5 +90,8 @@ const SearchToolbarWithActionsStory = () => {
       }
     />
   );
-},
+};
+
+export const WithButtons: Story = {
+  render: () => <WithButtonsStory />,
 };

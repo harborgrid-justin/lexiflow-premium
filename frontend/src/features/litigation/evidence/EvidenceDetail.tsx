@@ -20,9 +20,9 @@ import { EvidenceOverview } from './EvidenceOverview';
 import { EvidenceStructure } from './EvidenceStructure';
 
 // Context & Utils
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
@@ -77,7 +77,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
     async () => {
       // 1. Create Exhibit
       const exhibit: TrialExhibit = {
-        id: `ex-${Date.now()}` as any,
+        id: `ex-${Date.now()}` as string,
         caseId: selectedItem.caseId,
         exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
         title: selectedItem.title,

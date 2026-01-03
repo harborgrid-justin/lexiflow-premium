@@ -66,11 +66,14 @@
  * ```
  */
 
-import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
-import { EventHandlerRegistry } from './handlers';
-import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
-import { SystemEventType } from '@/types/integration-types';
-import { ValidationError } from '@/services/core/errors';
+import { ValidationError } from "@/services/core/errors";
+import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
+import type {
+  IntegrationResult,
+  SystemEventPayloads,
+} from "@/types/integration-types";
+import { SystemEventType } from "@/types/integration-types";
+import { EventHandlerRegistry } from "./handlers";
 
 // =============================================================================
 // VALIDATION (Private)
@@ -82,7 +85,9 @@ import { ValidationError } from '@/services/core/errors';
  */
 function validateEventType(type: string, methodName: string): void {
   if (!type || false) {
-    throw new ValidationError(`[IntegrationOrchestrator.${methodName}] Invalid event type parameter`);
+    throw new ValidationError(
+      `[IntegrationOrchestrator.${methodName}] Invalid event type parameter`
+    );
   }
 }
 
@@ -90,9 +95,15 @@ function validateEventType(type: string, methodName: string): void {
  * Validate event payload parameter
  * @private
  */
-function validatePayload(payload: unknown, type: string, methodName: string): void {
+function validatePayload(
+  payload: unknown,
+  type: string,
+  methodName: string
+): void {
   if (payload === undefined || payload === null) {
-    throw new ValidationError(`[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`);
+    throw new ValidationError(
+      `[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`
+    );
   }
 }
 
@@ -114,13 +125,19 @@ export class IntegrationOrchestrator {
     if (this.initialized) return;
 
     // Subscribe to all known event types and track cleanup functions
-    Object.values(SystemEventType).forEach(type => {
-      const unsubscribe = IntegrationEventPublisher.subscribe(type, ((payload: any) => this.publish(type as SystemEventType, payload)) as any);
-      this.subscriptionCleanups.push(unsubscribe as any);
+    Object.values(SystemEventType).forEach((type) => {
+      const unsubscribe = IntegrationEventPublisher.subscribe(type, ((
+        payload: unknown
+      ) => this.publish(type as SystemEventType, payload)) as (
+        payload: unknown
+      ) => void);
+      this.subscriptionCleanups.push(unsubscribe as () => void);
     });
 
     this.initialized = true;
-    console.log('[IntegrationOrchestrator] Initialized and subscribed to events');
+    console.log(
+      "[IntegrationOrchestrator] Initialized and subscribed to events"
+    );
   }
 
   /**
@@ -128,13 +145,13 @@ export class IntegrationOrchestrator {
    * Call this when shutting down the orchestrator to prevent memory leaks
    */
   static cleanup() {
-    console.log('[IntegrationOrchestrator] Cleaning up event subscriptions');
+    console.log("[IntegrationOrchestrator] Cleaning up event subscriptions");
 
-    this.subscriptionCleanups.forEach(unsubscribe => {
+    this.subscriptionCleanups.forEach((unsubscribe) => {
       try {
         unsubscribe();
       } catch (error) {
-        console.error('[IntegrationOrchestrator] Error during cleanup:', error);
+        console.error("[IntegrationOrchestrator] Error during cleanup:", error);
       }
     });
 
@@ -149,65 +166,71 @@ export class IntegrationOrchestrator {
     eventType: T,
     payload: SystemEventPayloads[T]
   ): Promise<IntegrationResult> {
-        try {
-            const eventTypeStr = String(eventType);
-            validateEventType(eventTypeStr, 'publish');
-            validatePayload(payload, eventTypeStr, 'publish');
+    try {
+      const eventTypeStr = String(eventType);
+      validateEventType(eventTypeStr, "publish");
+      validatePayload(payload, eventTypeStr, "publish");
 
-            console.log(`[IntegrationOrchestrator] Received event: ${eventTypeStr}`);
+      console.log(`[IntegrationOrchestrator] Received event: ${eventTypeStr}`);
 
-            // Get handler from registry
-            const handler = EventHandlerRegistry.getHandler(eventTypeStr);
+      // Get handler from registry
+      const handler = EventHandlerRegistry.getHandler(eventTypeStr);
 
-            if (!handler) {
-                console.warn(`[IntegrationOrchestrator] No handler registered for event: ${eventTypeStr}`);
-                return {
-                    success: true,
-                    triggeredActions: [],
-                    errors: [`No handler registered for ${eventTypeStr}`]
-                };
-            }
+      if (!handler) {
+        console.warn(
+          `[IntegrationOrchestrator] No handler registered for event: ${eventTypeStr}`
+        );
+        return {
+          success: true,
+          triggeredActions: [],
+          errors: [`No handler registered for ${eventTypeStr}`],
+        };
+      }
 
-            // Execute handler with error isolation
-            const result = await handler.execute(payload);
+      // Execute handler with error isolation
+      const result = await handler.execute(payload);
 
-            console.log(`[IntegrationOrchestrator] Event ${eventTypeStr} completed:`, {
-                success: result.success,
-                actions: result.triggeredActions.length,
-                errors: result.errors?.length ?? 0
-            });
-
-            return result;
-
-        } catch (error: unknown) {
-            const errorMsg = error instanceof Error ? error.message : String(error);
-            console.error(`[IntegrationOrchestrator] Fatal error processing ${String(eventType)}:`, errorMsg);
-
-            return {
-                success: false,
-                triggeredActions: [],
-                errors: [errorMsg]
-            };
+      console.log(
+        `[IntegrationOrchestrator] Event ${eventTypeStr} completed:`,
+        {
+          success: result.success,
+          actions: result.triggeredActions.length,
+          errors: result.errors?.length ?? 0,
         }
-    }
+      );
 
-    /**
-     * Get integration statistics
-     * Returns handler count and registration info
-     *
-     * @returns Object - Statistics from handler registry
-     *
-     * @example
-     * const stats = IntegrationOrchestrator.getStats();
-     * console.log(`Handlers: ${stats.handlerCount}`);
-     */
-    static getStats() {
-        try {
-            return EventHandlerRegistry.getStats();
-        } catch (error) {
-            console.error('[IntegrationOrchestrator.getStats] Error:', error);
-            return { handlerCount: 0, handlers: [] };
-        }
+      return result;
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[IntegrationOrchestrator] Fatal error processing ${String(eventType)}:`,
+        errorMsg
+      );
+
+      return {
+        success: false,
+        triggeredActions: [],
+        errors: [errorMsg],
+      };
     }
+  }
+
+  /**
+   * Get integration statistics
+   * Returns handler count and registration info
+   *
+   * @returns Object - Statistics from handler registry
+   *
+   * @example
+   * const stats = IntegrationOrchestrator.getStats();
+   * console.log(`Handlers: ${stats.handlerCount}`);
+   */
+  static getStats() {
+    try {
+      return EventHandlerRegistry.getStats();
+    } catch (error) {
+      console.error("[IntegrationOrchestrator.getStats] Error:", error);
+      return { handlerCount: 0, handlers: [] };
+    }
+  }
 }
-

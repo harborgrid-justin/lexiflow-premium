@@ -114,7 +114,7 @@ export function useAppContext(): UseAppControllerReturn {
 
   // Sidebar should be open by default on desktop (>=768px), closed on mobile
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return window.innerWidth >= 768;
     }
     return true; // Default to open for SSR
@@ -150,7 +150,7 @@ export function useAppContext(): UseAppControllerReturn {
         email: authUser.email,
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
-        role: authUser.role as any,
+        role: authUser.role as string,
         avatarUrl: authUser.avatarUrl,
         permissions: authUser.permissions || [],
         createdAt: new Date().toISOString(),

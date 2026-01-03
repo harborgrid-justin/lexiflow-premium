@@ -14,7 +14,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { ChevronDown, ExternalLink } from 'lucide-react';
 
@@ -121,8 +121,7 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
   onNavigate,
   className,
   disabled = false,
-  showFeatured = true,
-}) => {
+  showFeatured = true}) => {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -156,8 +155,7 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
             return false;
           }
           return item.allowedRoles.includes(currentUserRole);
-        }),
-      }))
+        })}))
       .filter(section => section.items.length > 0);
   }, [sections, currentUserRole]);
 

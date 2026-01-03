@@ -17,7 +17,7 @@ export interface UserAvatarProps {
     name?: string;
     avatar?: string;
     email?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   /** Additional CSS classes */
   className?: string;

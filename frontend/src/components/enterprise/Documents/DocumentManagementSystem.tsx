@@ -9,8 +9,8 @@
  * - Metadata management
  */
 
+import type { LegalDocument } from '@/types/documents';
 import { useState } from 'react';
-import type { LegalDocument, DocumentVersion } from '@/types/documents';
 
 interface DocumentNode {
   id: string;
@@ -71,6 +71,13 @@ export function DocumentManagementSystem({
   const [showMetadataEditor, setShowMetadataEditor] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
+
+  const handleUpdateMetadata = async (metadata: Record<string, unknown>) => {
+    if (selectedDocument && onUpdateMetadata) {
+      await onUpdateMetadata(selectedDocument.id, metadata);
+      setShowMetadataEditor(false);
+    }
+  };
 
   // Build tree structure from flat document list
   function buildTreeStructure(docs: readonly LegalDocument[]): DocumentNode[] {
@@ -216,9 +223,8 @@ export function DocumentManagementSystem({
     return (
       <div
         key={node.id}
-        className={`flex items-center gap-2 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${
-          isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-        }`}
+        className={`flex items-center gap-2 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+          }`}
         style={{ paddingLeft: `${paddingLeft}px` }}
         onClick={() => handleDocumentClick(doc)}
       >
@@ -341,9 +347,8 @@ export function DocumentManagementSystem({
                   <div
                     key={doc.id}
                     onClick={() => handleDocumentClick(doc)}
-                    className={`p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                      isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                    }`}
+                    className={`p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
@@ -376,11 +381,10 @@ export function DocumentManagementSystem({
                   <div
                     key={doc.id}
                     onClick={() => handleDocumentClick(doc)}
-                    className={`p-4 border rounded-lg cursor-pointer hover:shadow-md ${
-                      isSelected
+                    className={`p-4 border rounded-lg cursor-pointer hover:shadow-md ${isSelected
                         ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                         : 'border-gray-200 dark:border-gray-700'
-                    }`}
+                      }`}
                   >
                     <div className="flex flex-col items-center text-center">
                       <svg className="h-12 w-12 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -9,8 +9,8 @@
  * - Workflow templates
  */
 
-import { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
+import { useState } from 'react';
 
 type WorkflowStatus = 'draft' | 'pending_review' | 'in_review' | 'approved' | 'rejected' | 'completed';
 
@@ -119,6 +119,43 @@ export function DocumentWorkflow({
 
   // Submit step action
   const submitStepAction = async () => {
+    if (!activeStepId) return;
+
+    try {
+      if (actionType === 'approve' && onStepComplete) {
+        await onStepComplete(activeStepId, comment);
+      } else if (actionType === 'reject' && onStepReject) {
+        await onStepReject(activeStepId, comment);
+      }
+      setShowCommentDialog(false);
+      setComment('');
+    } catch (error) {
+      console.error('Failed to submit step action:', error);
+    }
+  };
+
+  const handleCreateWorkflow = async (templateId: string, reviewers: string[]) => {
+    if (onWorkflowCreate) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        await onWorkflowCreate({
+          templateId,
+          title: template.name,
+          assignedReviewers: reviewers.filter(r => availableReviewers.includes(r)),
+        });
+        setShowCreateDialog(false);
+      }
+    }
+  };
+
+  const handleUpdateWorkflow = async (updates: Partial<DocumentWorkflowData>) => {
+    if (workflow && onWorkflowUpdate) {
+      await onWorkflowUpdate(workflow.id, updates);
+    }
+  };
+
+  // Submit step action
+  const submitStepAction = async () => {
     if (!workflow || !activeStepId) return;
 
     try {
@@ -215,22 +252,20 @@ export function DocumentWorkflow({
                 {workflow.dueDate && (
                   <div className="flex items-center gap-1">
                     <svg
-                      className={`h-4 w-4 ${
-                        isOverdue(workflow.dueDate) ? 'text-red-600' :
-                        isDeadlineApproaching(workflow.dueDate) ? 'text-orange-600' :
-                        'text-gray-400'
-                      }`}
+                      className={`h-4 w-4 ${isOverdue(workflow.dueDate) ? 'text-red-600' :
+                          isDeadlineApproaching(workflow.dueDate) ? 'text-orange-600' :
+                            'text-gray-400'
+                        }`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className={`text-sm ${
-                      isOverdue(workflow.dueDate) ? 'text-red-600 font-medium' :
-                      isDeadlineApproaching(workflow.dueDate) ? 'text-orange-600 font-medium' :
-                      'text-gray-600 dark:text-gray-400'
-                    }`}>
+                    <span className={`text-sm ${isOverdue(workflow.dueDate) ? 'text-red-600 font-medium' :
+                        isDeadlineApproaching(workflow.dueDate) ? 'text-orange-600 font-medium' :
+                          'text-gray-600 dark:text-gray-400'
+                      }`}>
                       Due: {formatDate(workflow.dueDate)}
                       {isOverdue(workflow.dueDate) && ' (Overdue)'}
                       {isDeadlineApproaching(workflow.dueDate) && !isOverdue(workflow.dueDate) && ' (Soon)'}
@@ -260,18 +295,16 @@ export function DocumentWorkflow({
           <div className="space-y-6">
             {/* Current Step Alert */}
             {currentStep && (
-              <div className={`p-4 rounded-lg border-l-4 ${
-                isOverdue(currentStep.dueDate) ? 'bg-red-50 border-red-500 dark:bg-red-900/20' :
-                isDeadlineApproaching(currentStep.dueDate) ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20' :
-                'bg-blue-50 border-blue-500 dark:bg-blue-900/20'
-              }`}>
+              <div className={`p-4 rounded-lg border-l-4 ${isOverdue(currentStep.dueDate) ? 'bg-red-50 border-red-500 dark:bg-red-900/20' :
+                  isDeadlineApproaching(currentStep.dueDate) ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20' :
+                    'bg-blue-50 border-blue-500 dark:bg-blue-900/20'
+                }`}>
                 <div className="flex items-start gap-3">
                   <svg
-                    className={`h-6 w-6 flex-shrink-0 ${
-                      isOverdue(currentStep.dueDate) ? 'text-red-600' :
-                      isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-600' :
-                      'text-blue-600'
-                    }`}
+                    className={`h-6 w-6 flex-shrink-0 ${isOverdue(currentStep.dueDate) ? 'text-red-600' :
+                        isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-600' :
+                          'text-blue-600'
+                      }`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -279,18 +312,16 @@ export function DocumentWorkflow({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="flex-1">
-                    <h3 className={`font-medium ${
-                      isOverdue(currentStep.dueDate) ? 'text-red-900 dark:text-red-100' :
-                      isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-900 dark:text-orange-100' :
-                      'text-blue-900 dark:text-blue-100'
-                    }`}>
+                    <h3 className={`font-medium ${isOverdue(currentStep.dueDate) ? 'text-red-900 dark:text-red-100' :
+                        isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-900 dark:text-orange-100' :
+                          'text-blue-900 dark:text-blue-100'
+                      }`}>
                       Current Step: {currentStep.name}
                     </h3>
-                    <p className={`text-sm mt-1 ${
-                      isOverdue(currentStep.dueDate) ? 'text-red-800 dark:text-red-200' :
-                      isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-800 dark:text-orange-200' :
-                      'text-blue-800 dark:text-blue-200'
-                    }`}>
+                    <p className={`text-sm mt-1 ${isOverdue(currentStep.dueDate) ? 'text-red-800 dark:text-red-200' :
+                        isDeadlineApproaching(currentStep.dueDate) ? 'text-orange-800 dark:text-orange-200' :
+                          'text-blue-800 dark:text-blue-200'
+                      }`}>
                       Assigned to: {currentStep.assigneeName}
                       {currentStep.dueDate && ` • Due: ${formatDate(currentStep.dueDate)}`}
                     </p>
@@ -313,29 +344,26 @@ export function DocumentWorkflow({
                   return (
                     <div
                       key={step.id}
-                      className={`relative flex items-start gap-4 p-4 rounded-lg border ${
-                        isActive
+                      className={`relative flex items-start gap-4 p-4 rounded-lg border ${isActive
                           ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                           : isCompleted
-                          ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
-                          : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'
-                      }`}
+                            ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+                            : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800'
+                        }`}
                     >
                       {/* Timeline Line */}
                       {index < workflow.steps.length - 1 && (
-                        <div className={`absolute left-8 top-14 bottom-0 w-0.5 ${
-                          isCompleted ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
-                        }`} />
+                        <div className={`absolute left-8 top-14 bottom-0 w-0.5 ${isCompleted ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
+                          }`} />
                       )}
 
                       {/* Step Icon */}
-                      <div className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full ${
-                        isCompleted
+                      <div className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full ${isCompleted
                           ? 'bg-green-600 text-white'
                           : isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
-                      }`}>
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                        }`}>
                         {isCompleted ? (
                           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -363,11 +391,10 @@ export function DocumentWorkflow({
                           </div>
                           {step.dueDate && (
                             <div className="text-xs text-right">
-                              <div className={`${
-                                isOverdue(step.dueDate) && !isCompleted ? 'text-red-600 font-medium' :
-                                isDeadlineApproaching(step.dueDate) && !isCompleted ? 'text-orange-600 font-medium' :
-                                'text-gray-500 dark:text-gray-400'
-                              }`}>
+                              <div className={`${isOverdue(step.dueDate) && !isCompleted ? 'text-red-600 font-medium' :
+                                  isDeadlineApproaching(step.dueDate) && !isCompleted ? 'text-orange-600 font-medium' :
+                                    'text-gray-500 dark:text-gray-400'
+                                }`}>
                                 {formatDate(step.dueDate)}
                               </div>
                               {isOverdue(step.dueDate) && !isCompleted && (
@@ -554,11 +581,10 @@ export function DocumentWorkflow({
               <button
                 onClick={submitStepAction}
                 disabled={actionType === 'reject' && !comment.trim()}
-                className={`flex-1 px-4 py-2 text-sm font-medium text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed ${
-                  actionType === 'approve'
+                className={`flex-1 px-4 py-2 text-sm font-medium text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed ${actionType === 'approve'
                     ? 'bg-green-600 hover:bg-green-700'
                     : 'bg-red-600 hover:bg-red-700'
-                }`}
+                  }`}
               >
                 {actionType === 'approve' ? 'Approve' : 'Reject'}
               </button>

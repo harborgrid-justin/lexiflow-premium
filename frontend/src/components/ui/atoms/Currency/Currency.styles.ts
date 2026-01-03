@@ -1,3 +1,8 @@
-import { cn } from '@/utils/cn';
+import { cn } from "@/utils/cn";
 
-export const currencyStyles = (theme: unknown) => cn('font-mono tracking-tight', (theme as any).text.primary);
+interface Theme {
+  text: { primary: string };
+}
+
+export const currencyStyles = (theme: unknown) =>
+  cn("font-mono tracking-tight", (theme as Theme).text.primary);

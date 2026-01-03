@@ -14,10 +14,10 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState, useEffect } from 'react';
-import { z } from 'zod';
 import { ApiKeysApiService } from '@/api/auth/security-credentials-api';
 import type { ApiKey } from '@/types';
+import React, { useState } from 'react';
+import { z } from 'zod';
 
 const apiKeySchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
@@ -64,10 +64,6 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
   const [revokingKeyId, setRevokingKeyId] = useState<string | null>(null);
 
   const apiKeysService = new ApiKeysApiService();
-
-  useEffect(() => {
-    loadData();
-  }, []);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -196,7 +192,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       await navigator.clipboard.writeText(key);
       setCopiedKeyId(keyId);
       setTimeout(() => setCopiedKeyId(null), 2000);
-    } catch (err) {
+    } catch (_err) {
       setErrors({ general: 'Failed to copy to clipboard' });
     }
   };
@@ -352,9 +348,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
                     value={formData.name}
                     onChange={handleInputChange('name')}
                     placeholder="e.g., Production Server, Mobile App"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     disabled={isCreating}
                     required
                   />

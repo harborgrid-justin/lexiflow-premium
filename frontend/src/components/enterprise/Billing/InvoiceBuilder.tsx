@@ -3,21 +3,17 @@
  * Enterprise invoice creation with rate cards, fee arrangements, and multi-currency support
  */
 
-import React, { useState } from 'react';
 import {
-  Plus,
-  Minus,
   Calendar,
-  DollarSign,
-  Percent,
-  FileText,
-  Save,
-  Send,
-  Eye,
-  Trash2,
   Copy,
+  Eye,
+  FileText,
   Globe,
+  Plus,
+  Save,
+  Send
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Types
 interface InvoiceLineItem {
@@ -226,6 +222,30 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
     return `${getCurrencySymbol()}${amount.toFixed(2)}`;
   };
 
+  const handleCopyLineItem = (item: InvoiceLineItem) => {
+    const copiedItem: InvoiceLineItem = {
+      ...item,
+      id: `item-${Date.now()}`,
+      description: `${item.description} (Copy)`,
+    };
+    setLineItems([...lineItems, copiedItem]);
+  };
+
+  const applyRateCard = (rateCardId: string, itemId: string) => {
+    const rateCard = rateCards.find(rc => rc.id === rateCardId);
+    if (rateCard) {
+      updateLineItem(itemId, 'rate', rateCard.discountedRate || rateCard.standardRate);
+    }
+    setShowRateCardSelector(false);
+  };
+
+  const filterByClientMatter = () => {
+    // Filter line items based on clientId and matterId
+    if (clientId || matterId) {
+      console.log(`Filtering for client: ${clientId}, matter: ${matterId}`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -283,6 +303,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <Calendar className="inline-block h-4 w-4 mr-1" />
               Invoice Date
             </label>
             <div className="relative mt-1">
@@ -363,11 +384,10 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
           {feeArrangements.map((arrangement) => (
             <div
               key={arrangement.id}
-              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${
-                selectedFeeArrangement === arrangement.id
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-              }`}
+              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${selectedFeeArrangement === arrangement.id
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+                }`}
               onClick={() => setSelectedFeeArrangement(arrangement.id)}
             >
               <h4 className="font-medium text-gray-900 dark:text-gray-100">
@@ -426,20 +446,29 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
             </div>
           ) : (
             <div className="space-y-4">
-              {lineItems.map((item, index) => (
+              {lineItems.map((item) => (
                 <div key={item.id} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
                   <div className="grid gap-4 sm:grid-cols-6">
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Description
                       </label>
-                      <input
-                        type="text"
-                        value={item.description}
-                        onChange={(e) => updateLineItem(item.id, 'description', e.target.value)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                        placeholder="Description of service"
-                      />
+                      <div className="mt-1 flex gap-2">
+                        <input
+                          type="text"
+                          value={item.description}
+                          onChange={(e) => updateLineItem(item.id, 'description', e.target.value)}
+                          className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                          placeholder="Description of service"
+                        />
+                        <button
+                          onClick={() => handleCopyLineItem(item)}
+                          className="rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          title="Copy line item"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
 
                     <div>
@@ -473,6 +502,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <DollarSign className="inline-block h-4 w-4 mr-1" />
                         Rate
                       </label>
                       <input
@@ -498,8 +528,9 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                         <button
                           onClick={() => removeLineItem(item.id)}
                           className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          title="Remove item"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Minus className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -519,6 +550,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <Percent className="inline-block h-4 w-4 mr-1" />
                         Discount %
                       </label>
                       <input
@@ -635,6 +667,43 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
           />
         </div>
       </div>
+
+      {/* Rate Card Selector Modal */}
+      {showRateCardSelector && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="max-w-2xl w-full mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Select Rate Card
+                </h3>
+                <button
+                  onClick={() => setShowRateCardSelector(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-6 max-h-96 overflow-y-auto">
+              <div className="space-y-3">
+                {rateCards.map((rc) => (
+                  <button
+                    key={rc.id}
+                    onClick={() => applyRateCard(rc.id, lineItems[0]?.id)}
+                    className="w-full text-left p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-600 dark:hover:bg-blue-900/20"
+                  >
+                    <div className="font-medium text-gray-900 dark:text-gray-100">{rc.name}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      {rc.timekeeperLevel}: {formatCurrency(rc.standardRate)}/hr
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

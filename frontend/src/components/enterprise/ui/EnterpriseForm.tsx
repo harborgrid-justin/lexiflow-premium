@@ -25,6 +25,7 @@ import {
   Info,
   Eye,
   EyeOff,
+  ChevronRight,
 } from 'lucide-react';
 
 // ============================================================================

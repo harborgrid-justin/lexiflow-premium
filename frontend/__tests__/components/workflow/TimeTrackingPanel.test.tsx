@@ -21,7 +21,7 @@ jest.mock('@/utils/cn', () => ({
   cn: (...args: any[]) => args.filter(Boolean).join(' '),
 }));
 
-jest.mock('@/services/dataService', () => ({
+jest.mock('@/services/data/dataService', () => ({
   DataService: {
     billing: {
       getTimeEntries: jest.fn().mockResolvedValue([]),

@@ -3,6 +3,15 @@
  * Verifies all exports are accessible from providers index
  */
 
+// Mock backendDiscovery to avoid import.meta issues in Jest
+jest.mock('@/services/integration/backendDiscovery', () => ({
+  backendDiscovery: {
+    getStatus: jest.fn(() => ({ available: true, healthy: true })),
+    subscribe: jest.fn(() => () => {}),
+    checkHealth: jest.fn(() => Promise.resolve(true)),
+  },
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //                    PROVIDER EXPORTS VALIDATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -156,8 +165,53 @@ function testEnvironmentConfigs() {
 
 export const ALL_IMPORTS_VALIDATED = true;
 
-console.log('✅ All provider exports are accessible');
-console.log('✅ All repository exports are accessible');
-console.log('✅ All configuration exports are accessible');
-console.log('✅ All error exports are accessible');
-console.log('✅ Import/export chain is complete');
+// ═══════════════════════════════════════════════════════════════════════════
+//                    TEST SUITE
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('Import Validation', () => {
+  it('should have all provider hooks accessible', () => {
+    const hooks = testProviderHooks();
+    expect(hooks.useDataSource).toBeDefined();
+    expect(hooks.useTheme).toBeDefined();
+    expect(hooks.useToast).toBeDefined();
+    expect(hooks.useSync).toBeDefined();
+    expect(hooks.useWindow).toBeDefined();
+  });
+
+  it('should have all repository types accessible', () => {
+    const types = testRepositoryTypes();
+    expect(types.repo).toBeDefined();
+    expect(types.registry).toBeDefined();
+  });
+
+  it('should have configuration accessible', () => {
+    const config = testConfiguration();
+    expect(config.config).toBeDefined();
+    expect(config.testConfig).toBeDefined();
+    expect(config.builder).toBeDefined();
+    expect(config.DEFAULT_TIMEOUTS).toBeDefined();
+    expect(config.DEFAULT_RETRY).toBeDefined();
+  });
+
+  it('should have error classes accessible', () => {
+    const errors = testErrors();
+    expect(errors.error).toBeInstanceOf(UnauthorizedError);
+    expect(errors.notFound).toBeInstanceOf(NotFoundError);
+    expect(errors.validation).toBeInstanceOf(ValidationError);
+    expect(errors.isRepoError).toBeDefined();
+    expect(errors.isRetryable).toBeDefined();
+    expect(errors.message).toBeDefined();
+    expect(errors.severity).toBeDefined();
+  });
+
+  it('should have environment configs accessible', () => {
+    const configs = testEnvironmentConfigs();
+    expect(configs.devConfig).toBeDefined();
+    expect(configs.prodConfig).toBeDefined();
+  });
+
+  it('should validate all imports successfully', () => {
+    expect(ALL_IMPORTS_VALIDATED).toBe(true);
+  });
+});

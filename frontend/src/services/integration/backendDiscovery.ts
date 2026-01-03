@@ -235,8 +235,8 @@ class BackendDiscoveryService {
 // Export singleton instance
 export const backendDiscovery = new BackendDiscoveryService();
 
-// HMR Cleanup
-if (import.meta.hot) {
+// HMR Cleanup - wrapped for Jest compatibility
+if (typeof import.meta !== 'undefined' && import.meta.hot) {
   import.meta.hot.dispose(() => {
     console.log("[BackendDiscovery] HMR dispose: stopping service");
     backendDiscovery.stop();

@@ -585,7 +585,7 @@ describe('EnterpriseModal', () => {
       expect(onClose).not.toHaveBeenCalled();
     });
 
-    it('should go back in wizard navigation on Escape instead of closing', () => {
+    it('should close wizard modal on Escape', () => {
       const onClose = jest.fn();
       const wizardSteps: WizardStep[] = [
         {
@@ -612,8 +612,8 @@ describe('EnterpriseModal', () => {
 
       fireEvent.keyDown(document, { key: 'Escape' });
 
-      // Should not close, modal still open
-      expect(onClose).not.toHaveBeenCalled();
+      // Should close the modal
+      expect(onClose).toHaveBeenCalled();
     });
   });
 

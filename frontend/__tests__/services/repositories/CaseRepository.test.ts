@@ -3,10 +3,10 @@
  * Tests for the CaseRepository domain service
  */
 
-import { CaseRepository, PhaseRepository } from '@services/domains/CaseDomain';
+import { CaseRepository, PhaseRepository } from '@services/domain/CaseDomain';
 
 // Mock dependencies
-jest.mock('@services/db', () => ({
+jest.mock('@services/data/db', () => ({
   STORES: {
     CASES: 'cases',
     CASE_PHASES: 'casePhases',

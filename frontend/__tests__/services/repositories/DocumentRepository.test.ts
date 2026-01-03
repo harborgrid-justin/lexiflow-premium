@@ -3,10 +3,10 @@
  * Tests for the DocumentRepository
  */
 
-import { DocumentRepository } from '@services/repositories/DocumentRepository';
+import { DocumentRepository } from '@services/data/repositories/DocumentRepository';
 
 // Mock dependencies
-jest.mock('@services/db', () => ({
+jest.mock('@services/data/db', () => ({
   STORES: {
     DOCUMENTS: 'documents',
   },

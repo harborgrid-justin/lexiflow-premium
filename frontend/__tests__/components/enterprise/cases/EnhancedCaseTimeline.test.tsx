@@ -134,14 +134,14 @@ describe('EnhancedCaseTimeline', () => {
       render(<EnhancedCaseTimeline {...defaultProps} />);
 
       // Check that events are rendered
-      expect(screen.getByText(/Filed Complaint/i)).toBeInTheDocument();
+      expect(screen.getByText('Complaint Filed')).toBeInTheDocument();
     });
 
     it('should show status badges for completed events', () => {
       render(<EnhancedCaseTimeline {...defaultProps} />);
 
       // Check that completed events are shown
-      expect(screen.getByText(/Filed Complaint/i)).toBeInTheDocument();
+      expect(screen.getByText('Complaint Filed')).toBeInTheDocument();
     });
 
     it('should display critical priority badge', () => {
@@ -185,7 +185,7 @@ describe('EnhancedCaseTimeline', () => {
 
       await waitFor(() => {
         // Timeline should still show events
-        expect(screen.getByText(/Filed Complaint/i)).toBeInTheDocument();
+        expect(screen.getByText('Complaint Filed')).toBeInTheDocument();
       });
     });
 
@@ -211,7 +211,7 @@ describe('EnhancedCaseTimeline', () => {
 
       await waitFor(() => {
         // Timeline should still show events
-        expect(screen.getByText(/Filed Complaint/i)).toBeInTheDocument();
+        expect(screen.getByText('Complaint Filed')).toBeInTheDocument();
       });
     });
 
@@ -459,7 +459,7 @@ describe('EnhancedCaseTimeline', () => {
       render(<EnhancedCaseTimeline {...defaultProps} />);
 
       // Check that high priority events are displayed
-      expect(screen.getByText(/Filed Complaint/i)).toBeInTheDocument();
+      expect(screen.getByText('Complaint Filed')).toBeInTheDocument();
     });
   });
 

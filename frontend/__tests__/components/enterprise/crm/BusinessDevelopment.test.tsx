@@ -82,9 +82,9 @@ describe('BusinessDevelopment Component', () => {
     test('renders leads tab by default', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      expect(screen.getByText('TechVentures Inc.')).toBeInTheDocument();
-      expect(screen.getByText('BioHealth Solutions')).toBeInTheDocument();
-      expect(screen.getByText('Global Manufacturing LLC')).toBeInTheDocument();
+      expect(screen.getByText('Sarah Chen - TechVentures Inc.')).toBeInTheDocument();
+      expect(screen.getByText('Michael Rodriguez - BioHealth Solutions')).toBeInTheDocument();
+      expect(screen.getByText('Emma Wilson - Global Manufacturing LLC')).toBeInTheDocument();
     });
 
     test('displays lead information with contact details', () => {
@@ -97,9 +97,12 @@ describe('BusinessDevelopment Component', () => {
     test('shows lead status badges', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      expect(screen.getByText('Proposal')).toBeInTheDocument();
-      expect(screen.getByText('Qualified')).toBeInTheDocument();
-      expect(screen.getByText('Won')).toBeInTheDocument();
+      const proposalBadges = screen.getAllByText('Proposal');
+      expect(proposalBadges.length).toBeGreaterThan(0);
+      const qualifiedBadges = screen.getAllByText('Qualified');
+      expect(qualifiedBadges.length).toBeGreaterThan(0);
+      const wonBadges = screen.getAllByText('Won');
+      expect(wonBadges.length).toBeGreaterThan(0);
     });
 
     test('displays estimated value for each lead', () => {
@@ -121,9 +124,12 @@ describe('BusinessDevelopment Component', () => {
     test('displays lead source information', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      expect(screen.getByText('Referral')).toBeInTheDocument();
-      expect(screen.getByText('Conference')).toBeInTheDocument();
-      expect(screen.getByText('Website')).toBeInTheDocument();
+      const referralElements = screen.getAllByText('Referral');
+      expect(referralElements.length).toBeGreaterThan(0);
+      const conferenceElements = screen.getAllByText('Conference');
+      expect(conferenceElements.length).toBeGreaterThan(0);
+      const websiteElements = screen.getAllByText('Website');
+      expect(websiteElements.length).toBeGreaterThan(0);
     });
 
     test('shows next action items for leads', () => {
@@ -202,8 +208,10 @@ describe('BusinessDevelopment Component', () => {
       const pitchesTab = screen.getByText('Pitches');
       fireEvent.click(pitchesTab);
 
-      expect(screen.getByText('Presenters')).toBeInTheDocument();
-      expect(screen.getByText('Attendees')).toBeInTheDocument();
+      const presenterElements = screen.getAllByText('Presenters');
+      expect(presenterElements.length).toBeGreaterThan(0);
+      const attendeeElements = screen.getAllByText('Attendees');
+      expect(attendeeElements.length).toBeGreaterThan(0);
       expect(screen.getByText(/John Smith, Senior Partner/)).toBeInTheDocument();
     });
 
@@ -262,8 +270,10 @@ describe('BusinessDevelopment Component', () => {
       const rfpsTab = screen.getByText('RFPs');
       fireEvent.click(rfpsTab);
 
-      expect(screen.getByText('In Progress')).toBeInTheDocument();
-      expect(screen.getByText('Go/No-Go')).toBeInTheDocument();
+      const inProgressElements = screen.getAllByText('In Progress');
+      expect(inProgressElements.length).toBeGreaterThan(0);
+      const goNoGoElements = screen.getAllByText('Go/No-Go');
+      expect(goNoGoElements.length).toBeGreaterThan(0);
     });
 
     test('displays progress bars for RFPs', () => {
@@ -272,7 +282,8 @@ describe('BusinessDevelopment Component', () => {
       const rfpsTab = screen.getByText('RFPs');
       fireEvent.click(rfpsTab);
 
-      expect(screen.getByText('Completion Progress')).toBeInTheDocument();
+      const completionProgressElements = screen.getAllByText('Completion Progress');
+      expect(completionProgressElements.length).toBeGreaterThan(0);
       expect(screen.getByText('65%')).toBeInTheDocument();
       expect(screen.getByText('5%')).toBeInTheDocument();
     });
@@ -283,8 +294,10 @@ describe('BusinessDevelopment Component', () => {
       const rfpsTab = screen.getByText('RFPs');
       fireEvent.click(rfpsTab);
 
-      expect(screen.getByText('Received')).toBeInTheDocument();
-      expect(screen.getByText('Due Date')).toBeInTheDocument();
+      const receivedElements = screen.getAllByText('Received');
+      expect(receivedElements.length).toBeGreaterThan(0);
+      const dueDateElements = screen.getAllByText('Due Date');
+      expect(dueDateElements.length).toBeGreaterThan(0);
     });
 
     test('displays team lead and contributors', () => {
@@ -293,9 +306,12 @@ describe('BusinessDevelopment Component', () => {
       const rfpsTab = screen.getByText('RFPs');
       fireEvent.click(rfpsTab);
 
-      expect(screen.getByText('Team Lead')).toBeInTheDocument();
-      expect(screen.getByText('Contributors')).toBeInTheDocument();
-      expect(screen.getByText('John Smith')).toBeInTheDocument();
+      const teamLeadElements = screen.getAllByText('Team Lead');
+      expect(teamLeadElements.length).toBeGreaterThan(0);
+      const contributorsElements = screen.getAllByText('Contributors');
+      expect(contributorsElements.length).toBeGreaterThan(0);
+      const johnSmithElements = screen.getAllByText('John Smith');
+      expect(johnSmithElements.length).toBeGreaterThan(0);
     });
 
     test('shows section status for in-progress RFPs', () => {
@@ -304,10 +320,12 @@ describe('BusinessDevelopment Component', () => {
       const rfpsTab = screen.getByText('RFPs');
       fireEvent.click(rfpsTab);
 
-      expect(screen.getByText('Section Status')).toBeInTheDocument();
+      const sectionStatusElements = screen.getAllByText('Section Status');
+      expect(sectionStatusElements.length).toBeGreaterThan(0);
       expect(screen.getByText('Executive Summary')).toBeInTheDocument();
       expect(screen.getByText('Firm Overview')).toBeInTheDocument();
-      expect(screen.getByText('Complete')).toBeInTheDocument();
+      const completeElements = screen.getAllByText('Complete');
+      expect(completeElements.length).toBeGreaterThan(0);
     });
 
     test('displays go/no-go decision badge', () => {
@@ -343,10 +361,11 @@ describe('BusinessDevelopment Component', () => {
     test('switches to analysis tab when clicked', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
-      expect(screen.getByText('Win/Loss Analysis')).toBeInTheDocument();
+      const winLossElements = screen.getAllByText('Win/Loss Analysis');
+      expect(winLossElements.length).toBeGreaterThan(0);
     });
 
     test('displays win and loss outcomes with icons', () => {
@@ -394,10 +413,11 @@ describe('BusinessDevelopment Component', () => {
     test('displays lessons learned', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
-      expect(screen.getByText('Lessons Learned')).toBeInTheDocument();
+      const lessonsLearnedElements = screen.getAllByText('Lessons Learned');
+      expect(lessonsLearnedElements.length).toBeGreaterThan(0);
       expect(screen.getByText(/Quick turnaround on proposal was key/)).toBeInTheDocument();
       expect(screen.getByText(/Need more fintech expertise/)).toBeInTheDocument();
     });
@@ -417,7 +437,7 @@ describe('BusinessDevelopment Component', () => {
     test('displays conversion trend chart', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
       expect(screen.getByText('Conversion Trend')).toBeInTheDocument();
@@ -428,7 +448,7 @@ describe('BusinessDevelopment Component', () => {
     test('shows leads by source pie chart', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
       expect(screen.getByText('Leads by Source')).toBeInTheDocument();
@@ -439,19 +459,20 @@ describe('BusinessDevelopment Component', () => {
     test('displays key metrics summary', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
       expect(screen.getByText('Key Metrics Summary')).toBeInTheDocument();
       expect(screen.getByText('Total Pipeline Value')).toBeInTheDocument();
-      expect(screen.getByText('Win Rate')).toBeInTheDocument();
+      const winRateElements = screen.getAllByText('Win Rate');
+      expect(winRateElements.length).toBeGreaterThan(0);
       expect(screen.getByText('Avg Sales Cycle')).toBeInTheDocument();
     });
 
     test('calculates and displays win rate percentage', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const analysisTab = screen.getByText('Win/Loss Analysis');
+      const analysisTab = screen.getByRole('button', { name: /Win\/Loss Analysis/i });
       fireEvent.click(analysisTab);
 
       // Win rate should be calculated from leads data
@@ -491,7 +512,7 @@ describe('BusinessDevelopment Component', () => {
     test('highlights active tab', () => {
       renderWithProviders(<BusinessDevelopment />);
 
-      const leadsTab = screen.getByText('Leads').closest('button');
+      const leadsTab = screen.getByRole('button', { name: /Leads/i });
       expect(leadsTab).toHaveClass('border-blue-600');
     });
 
@@ -499,18 +520,18 @@ describe('BusinessDevelopment Component', () => {
       renderWithProviders(<BusinessDevelopment />);
 
       // Leads tab (default)
-      expect(screen.getByText('TechVentures Inc.')).toBeInTheDocument();
+      expect(screen.getByText('Sarah Chen - TechVentures Inc.')).toBeInTheDocument();
 
       // Pitches tab
-      fireEvent.click(screen.getByText('Pitches'));
+      fireEvent.click(screen.getByRole('button', { name: /Pitches/i }));
       expect(screen.getByText('Pitch Activities')).toBeInTheDocument();
 
       // RFPs tab
-      fireEvent.click(screen.getByText('RFPs'));
+      fireEvent.click(screen.getByRole('button', { name: /RFPs/i }));
       expect(screen.getByText('RFP Tracker')).toBeInTheDocument();
 
       // Analysis tab
-      fireEvent.click(screen.getByText('Win/Loss Analysis'));
+      fireEvent.click(screen.getByRole('button', { name: /Win\/Loss Analysis/i }));
       expect(screen.getByText('Conversion Trend')).toBeInTheDocument();
     });
   });

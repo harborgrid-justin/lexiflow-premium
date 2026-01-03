@@ -387,7 +387,7 @@ describe('EnterpriseCaseList', () => {
       render(<EnterpriseCaseList {...defaultProps} savedViews={mockSavedViews} />);
 
       // Component should render with saved views prop
-      expect(screen.getByText(/Case List/i)).toBeInTheDocument();
+      expect(screen.getByText('Select View')).toBeInTheDocument();
     });
 
     it('should load saved view when selected', async () => {
@@ -395,7 +395,7 @@ describe('EnterpriseCaseList', () => {
 
       // Component should render with saved views
       // Since the exact implementation may vary, just verify the component renders
-      expect(screen.getByText(/Case List/i)).toBeInTheDocument();
+      expect(screen.getByText('Select View')).toBeInTheDocument();
     });
 
     it('should call onSaveView when Save View clicked', async () => {
@@ -447,7 +447,7 @@ describe('EnterpriseCaseList', () => {
 
       // Component should render properly
       // Column configuration may not be fully implemented, so just verify rendering
-      expect(screen.getByText(/Case List/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search cases/i)).toBeInTheDocument();
     });
 
     it('should toggle column visibility', async () => {

@@ -3,10 +3,10 @@
  * Tests for the EvidenceRepository
  */
 
-import { EvidenceRepository } from '@services/repositories/EvidenceRepository';
+import { EvidenceRepository } from '@services/data/repositories/EvidenceRepository';
 
 // Mock dependencies
-jest.mock('@services/db', () => ({
+jest.mock('@services/data/db', () => ({
   STORES: {
     EVIDENCE: 'evidence',
   },

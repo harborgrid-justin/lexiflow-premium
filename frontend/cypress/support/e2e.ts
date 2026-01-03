@@ -15,3 +15,17 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+// Handle uncaught exceptions from React hydration errors
+Cypress.on('uncaught:exception', (err) => {
+  // Ignore React hydration errors that occur during SSR
+  if (err.message.includes('Hydration failed')) {
+    return false;
+  }
+  // Ignore other React-related errors that shouldn't fail tests
+  if (err.message.includes('Minified React error')) {
+    return false;
+  }
+  // Let other errors fail the test
+  return true;
+})

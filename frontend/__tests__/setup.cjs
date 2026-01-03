@@ -3,6 +3,55 @@
  * Configures global mocks and test utilities
  */
 
+// Import jest-dom matchers
+require('@testing-library/jest-dom');
+
+// Set environment variables for tests (import.meta.env is transformed to process.env)
+process.env.VITE_ENV = 'test';
+process.env.MODE = 'test';
+process.env.DEV = 'true';
+process.env.PROD = 'false';
+process.env.SSR = 'false';
+process.env.VITE_API_URL = 'http://localhost:3001';
+process.env.VITE_APP_NAME = 'LexiFlow';
+process.env.VITE_AUTH_TOKEN_KEY = 'lexiflow_auth_token';
+
+// Suppress console warnings in tests
+const originalError = console.error;
+const originalWarn = console.warn;
+
+beforeAll(() => {
+  console.error = jest.fn((...args) => {
+    // Allow through actual test failures but suppress React warnings
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('Warning:') ||
+       args[0].includes('Not implemented:') ||
+       args[0].includes('Could not parse CSS'))
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  });
+
+  console.warn = jest.fn((...args) => {
+    // Suppress common warnings
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('componentWillReceiveProps') ||
+       args[0].includes('componentWillMount'))
+    ) {
+      return;
+    }
+    originalWarn.call(console, ...args);
+  });
+});
+
+afterAll(() => {
+  console.error = originalError;
+  console.warn = originalWarn;
+});
+
 // Mock crypto.randomUUID
 Object.defineProperty(global, 'crypto', {
   value: {

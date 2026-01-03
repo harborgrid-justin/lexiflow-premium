@@ -117,19 +117,13 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   onSaveView,
   onDeleteView,
   className,
-  loading = false}: EnterpriseDataTableProps<T>) => {
+  loading = false }: EnterpriseDataTableProps<T>) => {
   const { theme } = useTheme();
 
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
   const [columns, setColumns] = useState<Column<T>[]>(initialColumns);
-
-  const handleColumnResize = (columnId: string, newWidth: number) => {
-    setColumns(prev => prev.map(col =>
-      col.id === columnId ? { ...col, width: newWidth } : col
-    ));
-  };
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState<FilterConfig[]>([]);
@@ -138,24 +132,6 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [showViewsPanel, setShowViewsPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [resizingColumn, setResizingColumn] = useState<string | null>(null);
-  const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
-
-  const handleColumnDragStart = (columnId: string) => {
-    setDraggedColumn(columnId);
-  };
-
-  const handleColumnDragEnd = () => {
-    setDraggedColumn(null);
-  };
-
-  const handleResizeStart = (columnId: string) => {
-    setResizingColumn(columnId);
-  };
-
-  const handleResizeEnd = () => {
-    setResizingColumn(null);
-  };
 
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -350,7 +326,8 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
       sortBy: sortBy || undefined,
       sortOrder,
       columnOrder: columns.map((col) => col.id),
-      columnWidths};
+      columnWidths
+    };
 
     onSaveView?.(newView);
   }, [filters, sortBy, sortOrder, columns, columnWidths, onSaveView]);

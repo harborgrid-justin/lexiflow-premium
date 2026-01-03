@@ -28,7 +28,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { useCallback, useDeferredValue, useMemo, useState, useTransition } from 'react';
+import { useDeferredValue, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -85,13 +85,6 @@ export function NotificationCenter({
 
   // Defer search query for better input responsiveness
   const deferredSearchQuery = useDeferredValue(searchQuery);
-
-  // Handle search with transition
-  const handleSearchChange = useCallback((value: string) => {
-    startTransition(() => {
-      setSearchQuery(value);
-    });
-  }, []);
 
   // Get notification icon
   const getNotificationIcon = (notification: UINotification) => {
@@ -165,7 +158,7 @@ export function NotificationCenter({
   // Calculate stats
   const unreadCount = notifications.filter((n) => !n.read).length;
   const totalCount = notifications.length;
-console.log('total count:', totalCount);
+  console.log('total count:', totalCount);
 
   // Selection handlers
   const toggleSelection = (id: string) => {

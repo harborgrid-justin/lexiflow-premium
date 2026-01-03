@@ -12,52 +12,41 @@
  * - Custom widget system
  */
 
-import React, { useState, useMemo } from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  DollarSign,
-  Briefcase,
-  Clock,
-  TrendingUp,
-  Users,
-  Target,
-  Calendar,
-  AlertCircle,
-  BarChart3,
-  PieChart,
-  Activity as ActivityIcon,
-  FileText,
-  CheckCircle2,
-  XCircle,
-  Minus,
-  Filter,
-  RefreshCw,
-  Download,
-  Settings,
-} from 'lucide-react';
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  PieChart as RechartsPieChart,
-  Pie,
-  Cell,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-} from 'recharts';
-import { KPICard } from '@/components/dashboard/widgets/KPICard';
 import { ActivityFeed } from '@/components/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/components/dashboard/widgets/ChartCard';
+import { KPICard } from '@/components/dashboard/widgets/KPICard';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { Activity } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
+import {
+  Activity as ActivityIcon,
+  AlertCircle,
+  BarChart3,
+  Briefcase,
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  Download,
+  RefreshCw,
+  Settings,
+  Target,
+  Users,
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -303,8 +292,6 @@ const generateFinancialSummary = (): FinancialSummary => ({
 // ============================================================================
 
 export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
-  userId,
-  dateRange,
   isLoading = false,
   error = null,
   onRefresh,

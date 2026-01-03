@@ -5,24 +5,25 @@
  * Displays comprehensive performance metrics with benchmarks and trends
  */
 
-import React, { useState, useMemo} from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Award,
-  Target,
   Activity,
+  AlertCircle,
+  ArrowDownRight,
+  ArrowUpRight,
+  Award,
   BarChart3,
   Filter,
-  ArrowUpRight,
-  ArrowDownRight,
-  AlertCircle,
-  LucideIcon} from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import type { PerformanceMetric, BaseDashboardProps } from '@/types/dashboard';
+  LucideIcon,
+  Minus,
+  Target,
+  TrendingDown,
+  TrendingUp
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 export interface PerformanceMetricsGridProps extends BaseDashboardProps {
   metrics: PerformanceMetric[];
@@ -44,22 +45,27 @@ const STATUS_CONFIG: Record<
     color: 'text-emerald-600 dark:text-emerald-400',
     bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
     icon: Award,
-    label: 'Excellent'},
+    label: 'Excellent'
+  },
   good: {
     color: 'text-blue-600 dark:text-blue-400',
     bgColor: 'bg-blue-100 dark:bg-blue-900/30',
     icon: TrendingUp,
-    label: 'Good'},
+    label: 'Good'
+  },
   fair: {
     color: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-100 dark:bg-amber-900/30',
     icon: Minus,
-    label: 'Fair'},
+    label: 'Fair'
+  },
   poor: {
     color: 'text-rose-600 dark:text-rose-400',
     bgColor: 'bg-rose-100 dark:bg-rose-900/30',
     icon: TrendingDown,
-    label: 'Poor'}};
+    label: 'Poor'
+  }
+};
 
 /**
  * PerformanceMetricsGrid - Comprehensive performance metrics display
@@ -75,7 +81,7 @@ export const PerformanceMetricsGrid: React.FC<PerformanceMetricsGridProps> = ({
   sortOrder = 'asc',
   className,
   isLoading = false,
-  error}) => {
+  error }) => {
   const { theme } = useTheme();
   const [filterStatus, setFilterStatus] = useState<MetricStatus | 'all'>('all');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
@@ -372,7 +378,7 @@ export const PerformanceMetricsGrid: React.FC<PerformanceMetricsGridProps> = ({
                 </button>
               )}
               <AnimatePresence>
-                {(groupBy === 'none' || expandedCategories.has(category) || true) && (
+                {(groupBy === 'none' || expandedCategories.has(category)) && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}

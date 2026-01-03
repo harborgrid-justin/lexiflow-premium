@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useState, useEffect, useMemo, useDeferredValue } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -39,9 +39,9 @@ interface VirtualGridProps<T> {
 /**
  * VirtualGrid - React 18 optimized with React.memo
  */
-export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>) => {
-  const { 
-    items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height, getItemKey 
+export const VirtualGrid = React.memo(<T = Record<string, unknown>>(props: VirtualGridProps<T>) => {
+  const {
+    items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height, getItemKey
   } = props;
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,28 +52,28 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
 
   useEffect(() => {
     if (!containerRef.current) return;
-    
+
     const observer = new ResizeObserver((entries) => {
       // Debounce resize updates with RAF to prevent thrashing
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      
+
       rafRef.current = requestAnimationFrame(() => {
-          for (const entry of entries) {
-            setContainerSize({ width: entry.contentRect.width, height: entry.contentRect.height });
-          }
+        for (const entry of entries) {
+          setContainerSize({ width: entry.contentRect.width, height: entry.contentRect.height });
+        }
       });
     });
-    
+
     observer.observe(containerRef.current);
     // Init
-    setContainerSize({ 
-        width: containerRef.current.clientWidth, 
-        height: containerRef.current.clientHeight 
+    setContainerSize({
+      width: containerRef.current.clientWidth,
+      height: containerRef.current.clientHeight
     });
-    
+
     return () => {
-        observer.disconnect();
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      observer.disconnect();
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
@@ -93,8 +93,8 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
   // Virtualization Math
   const overscan = 2; // Render 2 rows above/below viewport
   const startRow = Math.max(0, Math.floor(scrollTop / (safeItemHeight + safeGap)) - overscan);
-  const visibleRows = safeHeight > 0 
-    ? Math.ceil(safeHeight / (safeItemHeight + safeGap)) + 2 * overscan 
+  const visibleRows = safeHeight > 0
+    ? Math.ceil(safeHeight / (safeItemHeight + safeGap)) + 2 * overscan
     : 5; // Default to 5 rows if container not yet measured
   const endRow = Math.min(totalRows, startRow + visibleRows);
 
@@ -107,7 +107,7 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
           // Centering Logic
           const totalRowWidth = columnCount * safeItemWidth + (columnCount - 1) * safeGap;
           const offsetX = (safeWidth - totalRowWidth) / 2;
-          
+
           rendered.push({
             index,
             data: deferredItems[index],
@@ -136,11 +136,11 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
   };
 
   if (deferredItems.length === 0) {
-     return <div className={cn("flex items-center justify-center h-full text-slate-400", theme.text.tertiary)}>{emptyMessage}</div>;
+    return <div className={cn("flex items-center justify-center h-full text-slate-400", theme.text.tertiary)}>{emptyMessage}</div>;
   }
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll h-full", className)}
       style={{ height: typeof height === 'number' ? `${height}px` : height }}

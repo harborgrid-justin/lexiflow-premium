@@ -84,6 +84,10 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
     }
   };
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const handleInputChange = (field: keyof ApiKeyFormData) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -192,8 +196,9 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       await navigator.clipboard.writeText(key);
       setCopiedKeyId(keyId);
       setTimeout(() => setCopiedKeyId(null), 2000);
-    } catch (_err) {
+    } catch (error) {
       setErrors({ general: 'Failed to copy to clipboard' });
+      console.error('Clipboard error:', error);
     }
   };
 

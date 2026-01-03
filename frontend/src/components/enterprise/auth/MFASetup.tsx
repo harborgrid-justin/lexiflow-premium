@@ -65,6 +65,10 @@ export const MFASetup: React.FC<MFASetupProps> = ({
     }
   };
 
+  useEffect(() => {
+    initializeMFASetup();
+  }, []);
+
   const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -128,7 +132,8 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       await navigator.clipboard.writeText(text);
       setCopiedItem(label);
       setTimeout(() => setCopiedItem(null), 2000);
-    } catch (_err) {
+    } catch (error) {
+      console.error('Clipboard error:', error);
       setError('Failed to copy to clipboard');
     }
   };

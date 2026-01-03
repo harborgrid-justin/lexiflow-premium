@@ -3,8 +3,8 @@
  * PDF and document preview with annotation support
  */
 
-import { useState } from 'react';
 import type { LegalDocument } from '@/types/documents';
+import { useState } from 'react';
 
 interface DocumentViewerProps {
   document: LegalDocument;
@@ -12,16 +12,35 @@ interface DocumentViewerProps {
   onAddAnnotation?: (annotation: { page: number; text: string; x: number; y: number }) => void;
 }
 
-export function DocumentViewer({ document, showAnnotations = false, onAddAnnotation }: DocumentViewerProps) {
+export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: DocumentViewerProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [zoom, setZoom] = useState(100);
   const totalPages = document.pageCount || 1;
+
+  const handleAnnotationAdd = () => {
+    if (onAddAnnotation && showAnnotations) {
+      onAddAnnotation({
+        page: currentPage,
+        text: 'New annotation',
+        x: 100,
+        y: 100
+      });
+    }
+  };
 
   const zoomIn = () => setZoom(prev => Math.min(prev + 25, 200));
   const zoomOut = () => setZoom(prev => Math.max(prev - 25, 50));
 
   return (
     <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-900">
+      {showAnnotations && (
+        <button
+          onClick={handleAnnotationAdd}
+          className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700"
+        >
+          Add Annotation
+        </button>
+      )}
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-4">

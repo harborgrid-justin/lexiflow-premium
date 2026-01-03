@@ -8,7 +8,7 @@
  */
 
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow, format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 
 export interface TimelineEvent {
   id: string;
@@ -150,6 +150,9 @@ export function CaseTimeline({
   );
 
   const groupedEvents = groupEventsByDate(sortedEvents);
+
+  // Log grouped events for debugging
+  console.log('Grouped timeline events:', groupedEvents);
 
   if (events.length === 0) {
     return (

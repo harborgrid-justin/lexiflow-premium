@@ -4,28 +4,29 @@
  * @description Firm knowledge repository with work product search, templates, and best practices
  */
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Search,
-  FileText,
+  Archive,
+  Award,
   BookOpen,
-  Lightbulb,
-  Star,
-  Tag,
-  User,
+  Clock,
   Download,
-  Share2,
   Eye,
+  FileText,
   Filter,
   Grid3x3,
+  Lightbulb,
   List,
-  Upload,
-  Clock,
-  Archive,
   Lock,
-  Users,
-  Award} from 'lucide-react';
+  Search,
+  Share2,
+  Star,
+  Tag,
+  Upload,
+  User,
+  Users
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -93,7 +94,7 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
   onDownload,
   onUpload,
   onShare,
-  className = ''}) => {
+  className = '' }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeCategory, setActiveCategory] = useState<ResourceCategory | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -106,81 +107,85 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
     initialResources.length > 0
       ? initialResources
       : [
-          {
-            id: '1',
-            title: 'Motion for Summary Judgment Template',
-            description:
-              'Comprehensive template for federal summary judgment motions with annotations and best practices.',
-            type: 'template',
-            category: 'litigation',
-            author: { name: 'Sarah Johnson', avatar: 'SJ' },
-            createdAt: new Date('2024-01-10'),
-            updatedAt: new Date('2024-01-15'),
-            downloads: 245,
-            views: 1203,
-            rating: 4.8,
-            tags: ['summary judgment', 'federal court', 'civil litigation'],
-            fileSize: '45 KB',
-            practiceArea: 'Civil Litigation',
-            jurisdiction: 'Federal',
-            confidential: false,
-            access: 'firm'},
-          {
-            id: '2',
-            title: 'Employment Agreement - Executive Level',
-            description:
-              'Detailed executive employment agreement with equity provisions and non-compete clauses.',
-            type: 'contract',
-            category: 'employment',
-            author: { name: 'Michael Chen', avatar: 'MC' },
-            createdAt: new Date('2024-01-08'),
-            updatedAt: new Date('2024-01-12'),
-            downloads: 178,
-            views: 892,
-            rating: 4.6,
-            tags: ['employment', 'executive', 'non-compete', 'equity'],
-            fileSize: '68 KB',
-            practiceArea: 'Employment Law',
-            confidential: true,
-            access: 'team'},
-          {
-            id: '3',
-            title: 'Research Memo: Implied Warranty Analysis',
-            description:
-              'In-depth analysis of implied warranty claims under UCC Article 2 with recent case law.',
-            type: 'memo',
-            category: 'corporate',
-            author: { name: 'Emily Rodriguez', avatar: 'ER' },
-            createdAt: new Date('2024-01-05'),
-            updatedAt: new Date('2024-01-05'),
-            downloads: 89,
-            views: 456,
-            rating: 4.9,
-            tags: ['UCC', 'warranty', 'contracts', 'commercial law'],
-            fileSize: '120 KB',
-            practiceArea: 'Commercial Law',
-            jurisdiction: 'Multi-State',
-            confidential: false,
-            access: 'firm'},
-          {
-            id: '4',
-            title: 'Best Practices: Discovery Response Protocol',
-            description:
-              'Firm-wide protocol for responding to discovery requests with quality control checklists.',
-            type: 'best-practice',
-            category: 'litigation',
-            author: { name: 'David Park', avatar: 'DP' },
-            createdAt: new Date('2024-01-03'),
-            updatedAt: new Date('2024-01-14'),
-            downloads: 312,
-            views: 1567,
-            rating: 5.0,
-            tags: ['discovery', 'best practices', 'litigation management'],
-            fileSize: '25 KB',
-            practiceArea: 'Litigation',
-            confidential: false,
-            access: 'firm'},
-        ]
+        {
+          id: '1',
+          title: 'Motion for Summary Judgment Template',
+          description:
+            'Comprehensive template for federal summary judgment motions with annotations and best practices.',
+          type: 'template',
+          category: 'litigation',
+          author: { name: 'Sarah Johnson', avatar: 'SJ' },
+          createdAt: new Date('2024-01-10'),
+          updatedAt: new Date('2024-01-15'),
+          downloads: 245,
+          views: 1203,
+          rating: 4.8,
+          tags: ['summary judgment', 'federal court', 'civil litigation'],
+          fileSize: '45 KB',
+          practiceArea: 'Civil Litigation',
+          jurisdiction: 'Federal',
+          confidential: false,
+          access: 'firm'
+        },
+        {
+          id: '2',
+          title: 'Employment Agreement - Executive Level',
+          description:
+            'Detailed executive employment agreement with equity provisions and non-compete clauses.',
+          type: 'contract',
+          category: 'employment',
+          author: { name: 'Michael Chen', avatar: 'MC' },
+          createdAt: new Date('2024-01-08'),
+          updatedAt: new Date('2024-01-12'),
+          downloads: 178,
+          views: 892,
+          rating: 4.6,
+          tags: ['employment', 'executive', 'non-compete', 'equity'],
+          fileSize: '68 KB',
+          practiceArea: 'Employment Law',
+          confidential: true,
+          access: 'team'
+        },
+        {
+          id: '3',
+          title: 'Research Memo: Implied Warranty Analysis',
+          description:
+            'In-depth analysis of implied warranty claims under UCC Article 2 with recent case law.',
+          type: 'memo',
+          category: 'corporate',
+          author: { name: 'Emily Rodriguez', avatar: 'ER' },
+          createdAt: new Date('2024-01-05'),
+          updatedAt: new Date('2024-01-05'),
+          downloads: 89,
+          views: 456,
+          rating: 4.9,
+          tags: ['UCC', 'warranty', 'contracts', 'commercial law'],
+          fileSize: '120 KB',
+          practiceArea: 'Commercial Law',
+          jurisdiction: 'Multi-State',
+          confidential: false,
+          access: 'firm'
+        },
+        {
+          id: '4',
+          title: 'Best Practices: Discovery Response Protocol',
+          description:
+            'Firm-wide protocol for responding to discovery requests with quality control checklists.',
+          type: 'best-practice',
+          category: 'litigation',
+          author: { name: 'David Park', avatar: 'DP' },
+          createdAt: new Date('2024-01-03'),
+          updatedAt: new Date('2024-01-14'),
+          downloads: 312,
+          views: 1567,
+          rating: 5.0,
+          tags: ['discovery', 'best practices', 'litigation management'],
+          fileSize: '25 KB',
+          practiceArea: 'Litigation',
+          confidential: false,
+          access: 'firm'
+        },
+      ]
   );
 
   const categories = [
@@ -314,11 +319,10 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id as ResourceCategory | 'all')}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                activeCategory === category.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
-              }`}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${activeCategory === category.id
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                }`}
             >
               {category.name}
               {category.count > 0 && (
@@ -349,21 +353,19 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('grid')}
-              className={`rounded-md p-2 ${
-                viewMode === 'grid'
-                  ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`rounded-md p-2 ${viewMode === 'grid'
+                ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               <Grid3x3 className="h-4 w-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`rounded-md p-2 ${
-                viewMode === 'list'
-                  ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`rounded-md p-2 ${viewMode === 'list'
+                ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               <List className="h-4 w-4" />
             </button>

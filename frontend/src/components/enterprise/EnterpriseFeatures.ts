@@ -385,7 +385,13 @@ export function canUpgradeTo(
  */
 export function getAvailableFeatures(tier: LicenseTier): EnterpriseFeature[] {
   return Object.entries(FEATURE_AVAILABILITY)
-    .filter(([_, requiredTier]) => hasFeature(tier, _ as EnterpriseFeature))
+    .filter(([feature, requiredTier]) => {
+      const tierLevel = TIER_HIERARCHY[requiredTier];
+      return (
+        tierLevel !== undefined &&
+        hasFeature(tier, feature as EnterpriseFeature)
+      );
+    })
     .map(([feature]) => feature as EnterpriseFeature);
 }
 

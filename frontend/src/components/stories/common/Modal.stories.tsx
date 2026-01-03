@@ -127,4 +127,3 @@ const LargeModalStory = () => {
 export const Large: Story = {
   render: () => <LargeModalStory />,
 };
-};

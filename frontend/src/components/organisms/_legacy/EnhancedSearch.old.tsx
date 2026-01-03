@@ -2,7 +2,7 @@
  * @module components/common/EnhancedSearch
  * @category Common
  * @description Context-aware search with autocomplete, fuzzy matching, and keyboard navigation.
- * 
+ *
  * FEATURES:
  * - Real-time suggestions from recent searches and entities
  * - Fuzzy matching for typo tolerance
@@ -13,13 +13,13 @@
  * - Recent searches history
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Search, Clock, X, Command, TrendingUp, Hash, Calendar, Tag } from 'lucide-react';
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
-import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
+import { Calendar, Clock, Command, Hash, Search, Tag, TrendingUp, X } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -74,23 +74,23 @@ export interface EnhancedSearchProps {
 function fuzzyMatch(query: string, text: string): number {
   const lowerQuery = query.toLowerCase();
   const lowerText = text.toLowerCase();
-  
+
   // Exact match
   if (lowerText.includes(lowerQuery)) {
     return 1.0;
   }
-  
+
   // Character-by-character match
   let score = 0;
   let queryIndex = 0;
-  
+
   for (let i = 0; i < lowerText.length && queryIndex < lowerQuery.length; i++) {
     if (lowerText[i] === lowerQuery[queryIndex]) {
       score += 1;
       queryIndex++;
     }
   }
-  
+
   return queryIndex === lowerQuery.length ? score / lowerText.length : 0;
 }
 
@@ -99,7 +99,7 @@ function fuzzyMatch(query: string, text: string): number {
  */
 function highlightMatch(text: string, query: string): string {
   if (!query) return text;
-  
+
   const regex = new RegExp(`(${query})`, 'gi');
   return text.replace(regex, '<mark>$1</mark>');
 }
@@ -107,22 +107,22 @@ function highlightMatch(text: string, query: string): string {
 /**
  * Parse search syntax (e.g., "case:123", "date:2024-01")
  */
-function parseSearchSyntax(query: string): { 
+function parseSearchSyntax(query: string): {
   text: string;
   filters: Record<string, string>;
 } {
   const filters: Record<string, string> = {};
   let text = query;
-  
+
   const syntaxRegex = /(\w+):([^\s]+)/g;
   const matches = Array.from(query.matchAll(syntaxRegex));
-  
+
   matches.forEach(match => {
     const [full, key, value] = match;
     filters[key] = value;
     text = text.replace(full, '').trim();
   });
-  
+
   return { text, filters };
 }
 
@@ -167,8 +167,8 @@ function addRecentSearch(query: string): void {
     const recent = getRecentSearches();
     const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
     localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-  } catch (error) {
-    // Ignore localStorage errors
+  } catch (searchError) {
+    console.error('Failed to save recent search:', searchError);
   }
 }
 
@@ -194,7 +194,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -210,18 +210,18 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     if (!query) return [];
 
     const { text } = parseSearchSyntax(query);
-    
+
     const results = suggestions
       .map(suggestion => {
         // Category filter
         if (category !== 'all' && suggestion.category !== category) {
           return null;
         }
-        
+
         // Fuzzy match
         const score = fuzzyMatch(text, suggestion.text);
         if (score === 0) return null;
-        
+
         return {
           ...suggestion,
           score,
@@ -231,7 +231,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
       .filter((r): r is NonNullable<typeof r> => r !== null)
       .sort((a, b) => ((b as { score?: number })?.score || 0) - ((a as { score?: number })?.score || 0))
       .slice(0, maxSuggestions);
-    
+
     return results;
   }, [query, suggestions, category, maxSuggestions]);
 
@@ -240,7 +240,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     if (query) {
       return filteredSuggestions;
     }
-    
+
     // Show recent searches when input is empty
     return recentSearches.map((search, idx) => ({
       id: `recent-${idx}`,
@@ -256,7 +256,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
    */
   const handleSearch = useCallback(() => {
     if (!query.trim()) return;
-    
+
     addRecentSearch(query);
     setRecentSearches(getRecentSearches());
     onSearch(query, category);
@@ -272,12 +272,12 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     setQuery(value);
     setSelectedIndex(-1);
     setIsOpen(true);
-    
+
     // Debounced search
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
-    
+
     if (value.trim()) {
       debounceTimerRef.current = setTimeout(() => {
         onSearch(value, category);
@@ -307,20 +307,20 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
       }
       return;
     }
-    
+
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setSelectedIndex(prev => 
+        setSelectedIndex(prev =>
           prev < displayItems.length - 1 ? prev + 1 : prev
         );
         break;
-        
+
       case 'ArrowUp':
         e.preventDefault();
         setSelectedIndex(prev => prev > -1 ? prev - 1 : -1);
         break;
-        
+
       case 'Enter':
         e.preventDefault();
         if (selectedIndex >= 0 && displayItems[selectedIndex]) {
@@ -329,7 +329,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           handleSearch();
         }
         break;
-        
+
       case 'Escape':
         e.preventDefault();
         setIsOpen(false);
@@ -362,7 +362,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
         "focus-within:ring-2 focus-within:ring-offset-0 focus-within:ring-blue-500"
       )}>
         <Search className={cn("h-4 w-4 flex-shrink-0", theme.text.tertiary)} />
-        
+
         <input
           ref={inputRef}
           type="text"
@@ -378,7 +378,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             "placeholder:text-slate-400 dark:placeholder:text-slate-600"
           )}
         />
-        
+
         {query && (
           <button
             onClick={handleClear}
@@ -391,7 +391,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             <X className="h-3 w-3" />
           </button>
         )}
-        
+
         {showSyntaxHints && !query && (
           <div className="flex items-center gap-1 text-xs text-slate-400">
             <Command className="h-3 w-3" />
@@ -448,7 +448,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                 )}>
                   {item.icon || getCategoryIcon(item.category)}
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <p
                     className={cn(
@@ -466,7 +466,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                     </p>
                   )}
                 </div>
-                
+
                 <span className={cn(
                   "text-xs capitalize flex-shrink-0",
                   selectedIndex === idx ? theme.primary.text : theme.text.tertiary
@@ -476,7 +476,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
               </button>
             ))}
           </div>
-          
+
           {/* Syntax Hints Footer */}
           {showSyntaxHints && query && (
             <div className={cn(

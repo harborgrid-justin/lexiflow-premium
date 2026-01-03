@@ -41,7 +41,12 @@
  * ```
  */
 
-import type { ValidationResult, Validator, SyncValidator, AsyncValidator } from '@/types/forms';
+import type {
+  AsyncValidator,
+  SyncValidator,
+  ValidationResult,
+  Validator,
+} from "@/types/forms";
 
 // ============================================================================
 // VALIDATION HELPERS
@@ -57,7 +62,10 @@ export function success(): ValidationResult {
 /**
  * Create a failed validation result
  */
-export function error(message: string, severity: 'error' | 'warning' | 'info' = 'error'): ValidationResult {
+export function error(
+  message: string,
+  severity: "error" | "warning" | "info" = "error"
+): ValidationResult {
   return { valid: false, message, severity };
 }
 
@@ -65,14 +73,14 @@ export function error(message: string, severity: 'error' | 'warning' | 'info' = 
  * Create a warning validation result
  */
 export function warning(message: string): ValidationResult {
-  return { valid: true, message, severity: 'warning' };
+  return { valid: true, message, severity: "warning" };
 }
 
 /**
  * Create an info validation result
  */
 export function info(message: string): ValidationResult {
-  return { valid: true, message, severity: 'info' };
+  return { valid: true, message, severity: "info" };
 }
 
 // ============================================================================
@@ -82,12 +90,14 @@ export function info(message: string): ValidationResult {
 /**
  * Required field validator
  */
-export const required = (message: string = 'This field is required'): SyncValidator => {
+export const required = (
+  message: string = "This field is required"
+): SyncValidator => {
   return (value: unknown): ValidationResult => {
     if (value === null || value === undefined) {
       return error(message);
     }
-    if (typeof value === 'string' && value.trim().length === 0) {
+    if (typeof value === "string" && value.trim().length === 0) {
       return error(message);
     }
     if (Array.isArray(value) && value.length === 0) {
@@ -100,7 +110,10 @@ export const required = (message: string = 'This field is required'): SyncValida
 /**
  * Minimum length validator
  */
-export const minLength = (min: number, message?: string): SyncValidator<string> => {
+export const minLength = (
+  min: number,
+  message?: string
+): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success(); // Let required handle empty values
     if (value.length < min) {
@@ -113,7 +126,10 @@ export const minLength = (min: number, message?: string): SyncValidator<string> 
 /**
  * Maximum length validator
  */
-export const maxLength = (max: number, message?: string): SyncValidator<string> => {
+export const maxLength = (
+  max: number,
+  message?: string
+): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success();
     if (value.length > max) {
@@ -126,7 +142,10 @@ export const maxLength = (max: number, message?: string): SyncValidator<string> 
 /**
  * Exact length validator
  */
-export const exactLength = (length: number, message?: string): SyncValidator<string> => {
+export const exactLength = (
+  length: number,
+  message?: string
+): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success();
     if (value.length !== length) {
@@ -139,7 +158,9 @@ export const exactLength = (length: number, message?: string): SyncValidator<str
 /**
  * Email validator
  */
-export const email = (message: string = 'Invalid email address'): SyncValidator<string> => {
+export const email = (
+  message: string = "Invalid email address"
+): SyncValidator<string> => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return (value: string): ValidationResult => {
     if (!value) return success();
@@ -153,7 +174,7 @@ export const email = (message: string = 'Invalid email address'): SyncValidator<
 /**
  * URL validator
  */
-export const url = (message: string = 'Invalid URL'): SyncValidator<string> => {
+export const url = (message: string = "Invalid URL"): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success();
     try {
@@ -168,7 +189,10 @@ export const url = (message: string = 'Invalid URL'): SyncValidator<string> => {
 /**
  * Pattern validator
  */
-export const pattern = (regex: RegExp, message: string): SyncValidator<string> => {
+export const pattern = (
+  regex: RegExp,
+  message: string
+): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success();
     if (!regex.test(value)) {
@@ -181,7 +205,10 @@ export const pattern = (regex: RegExp, message: string): SyncValidator<string> =
 /**
  * Minimum value validator
  */
-export const min = (minValue: number, message?: string): SyncValidator<number> => {
+export const min = (
+  minValue: number,
+  message?: string
+): SyncValidator<number> => {
   return (value: number): ValidationResult => {
     if (value === null || value === undefined) return success();
     if (value < minValue) {
@@ -194,7 +221,10 @@ export const min = (minValue: number, message?: string): SyncValidator<number> =
 /**
  * Maximum value validator
  */
-export const max = (maxValue: number, message?: string): SyncValidator<number> => {
+export const max = (
+  maxValue: number,
+  message?: string
+): SyncValidator<number> => {
   return (value: number): ValidationResult => {
     if (value === null || value === undefined) return success();
     if (value > maxValue) {
@@ -207,7 +237,11 @@ export const max = (maxValue: number, message?: string): SyncValidator<number> =
 /**
  * Range validator
  */
-export const range = (minValue: number, maxValue: number, message?: string): SyncValidator<number> => {
+export const range = (
+  minValue: number,
+  maxValue: number,
+  message?: string
+): SyncValidator<number> => {
   return (value: number): ValidationResult => {
     if (value === null || value === undefined) return success();
     if (value < minValue || value > maxValue) {
@@ -220,7 +254,10 @@ export const range = (minValue: number, maxValue: number, message?: string): Syn
 /**
  * Date after validator
  */
-export const dateAfter = (compareDate: Date | string, message?: string): SyncValidator<string | Date> => {
+export const dateAfter = (
+  compareDate: Date | string,
+  message?: string
+): SyncValidator<string | Date> => {
   return (value: string | Date): ValidationResult => {
     if (!value) return success();
     const date = new Date(value);
@@ -235,7 +272,10 @@ export const dateAfter = (compareDate: Date | string, message?: string): SyncVal
 /**
  * Date before validator
  */
-export const dateBefore = (compareDate: Date | string, message?: string): SyncValidator<string | Date> => {
+export const dateBefore = (
+  compareDate: Date | string,
+  message?: string
+): SyncValidator<string | Date> => {
   return (value: string | Date): ValidationResult => {
     if (!value) return success();
     const date = new Date(value);
@@ -250,7 +290,9 @@ export const dateBefore = (compareDate: Date | string, message?: string): SyncVa
 /**
  * Phone number validator (US format)
  */
-export const phoneUS = (message: string = 'Invalid phone number'): SyncValidator<string> => {
+export const phoneUS = (
+  message: string = "Invalid phone number"
+): SyncValidator<string> => {
   const phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
   return (value: string): ValidationResult => {
     if (!value) return success();
@@ -264,11 +306,13 @@ export const phoneUS = (message: string = 'Invalid phone number'): SyncValidator
 /**
  * Credit card validator (Luhn algorithm)
  */
-export const creditCard = (message: string = 'Invalid credit card number'): SyncValidator<string> => {
+export const creditCard = (
+  message: string = "Invalid credit card number"
+): SyncValidator<string> => {
   return (value: string): ValidationResult => {
     if (!value) return success();
 
-    const sanitized = value.replace(/\s/g, '');
+    const sanitized = value.replace(/\s/g, "");
     if (!/^\d+$/.test(sanitized)) {
       return error(message);
     }
@@ -301,8 +345,14 @@ export const creditCard = (message: string = 'Invalid credit card number'): Sync
 /**
  * Match field validator (for password confirmation, etc.)
  */
-export const matchField = (fieldName: string, message?: string): Validator<unknown> => {
-  return (value: unknown, formData?: Record<string, unknown>): ValidationResult => {
+export const matchField = (
+  fieldName: string,
+  message?: string
+): Validator<unknown> => {
+  return (
+    value: unknown,
+    formData?: Record<string, unknown>
+  ): ValidationResult => {
     if (!value || !formData) return success();
     if (value !== formData[fieldName]) {
       return error(message || `Must match ${fieldName}`);
@@ -318,7 +368,7 @@ export const oneOf = <T>(values: T[], message?: string): SyncValidator<T> => {
   return (value: T): ValidationResult => {
     if (value === null || value === undefined) return success();
     if (!values.includes(value)) {
-      return error(message || `Must be one of: ${values.join(', ')}`);
+      return error(message || `Must be one of: ${values.join(", ")}`);
     }
     return success();
   };
@@ -327,7 +377,10 @@ export const oneOf = <T>(values: T[], message?: string): SyncValidator<T> => {
 /**
  * Array minimum length validator
  */
-export const arrayMinLength = (min: number, message?: string): SyncValidator<unknown[]> => {
+export const arrayMinLength = (
+  min: number,
+  message?: string
+): SyncValidator<unknown[]> => {
   return (value: unknown[]): ValidationResult => {
     if (!value) return success();
     if (!Array.isArray(value) || value.length < min) {
@@ -340,7 +393,10 @@ export const arrayMinLength = (min: number, message?: string): SyncValidator<unk
 /**
  * Array maximum length validator
  */
-export const arrayMaxLength = (max: number, message?: string): SyncValidator<unknown[]> => {
+export const arrayMaxLength = (
+  max: number,
+  message?: string
+): SyncValidator<unknown[]> => {
   return (value: unknown[]): ValidationResult => {
     if (!value) return success();
     if (!Array.isArray(value) || value.length > max) {
@@ -359,7 +415,7 @@ export const arrayMaxLength = (max: number, message?: string): SyncValidator<unk
  */
 export const uniqueAsync = (
   checkFn: (value: string) => Promise<boolean>,
-  message: string = 'This value is already taken'
+  message: string = "This value is already taken"
 ): AsyncValidator<string> => {
   return async (value: string): Promise<ValidationResult> => {
     if (!value) return success();
@@ -370,8 +426,9 @@ export const uniqueAsync = (
         return error(message);
       }
       return success();
-    } catch (err) {
-      return error('Unable to verify uniqueness');
+    } catch (validationError) {
+      console.error("Uniqueness validation error:", validationError);
+      return error("Unable to verify uniqueness");
     }
   };
 };
@@ -381,7 +438,7 @@ export const uniqueAsync = (
  */
 export const emailExistsAsync = (
   checkFn: (email: string) => Promise<boolean>,
-  message: string = 'Email address not found'
+  message: string = "Email address not found"
 ): AsyncValidator<string> => {
   return async (value: string): Promise<ValidationResult> => {
     if (!value) return success();
@@ -396,8 +453,9 @@ export const emailExistsAsync = (
         return error(message);
       }
       return success();
-    } catch (err) {
-      return error('Unable to verify email');
+    } catch (validationError) {
+      console.error("Email validation error:", validationError);
+      return error("Unable to verify email");
     }
   };
 };
@@ -410,7 +468,10 @@ export const emailExistsAsync = (
  * Combine multiple validators with AND logic
  */
 export const and = (...validators: Validator[]): Validator => {
-  return async (value: unknown, formData?: Record<string, unknown>): Promise<ValidationResult> => {
+  return async (
+    value: unknown,
+    formData?: Record<string, unknown>
+  ): Promise<ValidationResult> => {
     for (const validator of validators) {
       const result = await validator(value, formData);
       if (!result.valid) {
@@ -425,19 +486,22 @@ export const and = (...validators: Validator[]): Validator => {
  * Combine multiple validators with OR logic
  */
 export const or = (...validators: Validator[]): Validator => {
-  return async (value: unknown, formData?: Record<string, unknown>): Promise<ValidationResult> => {
+  return async (
+    value: unknown,
+    formData?: Record<string, unknown>
+  ): Promise<ValidationResult> => {
     const results = await Promise.all(
-      validators.map(v => v(value, formData))
+      validators.map((v) => v(value, formData))
     );
 
-    const hasValid = results.some(r => r.valid);
+    const hasValid = results.some((r) => r.valid);
     if (hasValid) {
       return success();
     }
 
     // Return first error
-    const firstError = results.find(r => !r.valid);
-    return firstError || error('Validation failed');
+    const firstError = results.find((r) => !r.valid);
+    return firstError || error("Validation failed");
   };
 };
 
@@ -448,7 +512,10 @@ export const when = (
   condition: (value: unknown, formData?: Record<string, unknown>) => boolean,
   validator: Validator
 ): Validator => {
-  return async (value: unknown, formData?: Record<string, unknown>): Promise<ValidationResult> => {
+  return async (
+    value: unknown,
+    formData?: Record<string, unknown>
+  ): Promise<ValidationResult> => {
     if (condition(value, formData)) {
       return validator(value, formData);
     }
@@ -464,17 +531,23 @@ export const when = (
  * Create a custom validator
  */
 export const custom = <T = unknown>(
-  validatorFn: (value: T, formData?: Record<string, unknown>) => boolean | Promise<boolean>,
+  validatorFn: (
+    value: T,
+    formData?: Record<string, unknown>
+  ) => boolean | Promise<boolean>,
   message: string
 ): Validator<T> => {
-  return async (value: T, formData?: Record<string, unknown>): Promise<ValidationResult> => {
+  return async (
+    value: T,
+    formData?: Record<string, unknown>
+  ): Promise<ValidationResult> => {
     try {
       const isValid = await validatorFn(value, formData);
       if (!isValid) {
         return error(message);
       }
       return success();
-    } catch (err) {
+    } catch {
       return error(message);
     }
   };

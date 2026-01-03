@@ -92,7 +92,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   onDeleteCitation,
   onValidateCitations,
   onExport,
-  className = ''}) => {
+  className = '' }) => {
   const [citations, setCitations] = useState<Citation[]>(
     initialCitations.length > 0
       ? initialCitations
@@ -110,8 +110,10 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
             year: '1854',
             volume: '9',
             reporter: 'Ex.',
-            page: '341'},
-          connections: ['2']},
+            page: '341'
+          },
+          connections: ['2']
+        },
         {
           id: '2',
           text: 'UCC § 2-714',
@@ -120,7 +122,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           status: 'valid',
           format: 'bluebook',
           footnoteNumber: 2,
-          connections: ['1', '3']},
+          connections: ['1', '3']
+        },
         {
           id: '3',
           text: 'Restatement (Second) of Contracts',
@@ -130,32 +133,20 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           format: 'bluebook',
           footnoteNumber: 3,
           validationMessages: ['Check if latest edition is cited'],
-          connections: ['2']},
+          connections: ['2']
+        },
       ]
   );
 
   const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
   const [selectedFormat, setSelectedFormat] = useState<CitationFormat>('bluebook');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
-  const [showAddDialog, setShowAddDialog] = useState(false);
-
-  const handleAddCitation = useCallback((citation: Omit<Citation, 'id'>) => {
-    const newCitation: Citation = {
-      ...citation,
-      id: `cite-${Date.now()}`,
-      formattedCitation: formatCitation(citation, selectedStyle)};
-    setCitations(prev => [...prev, newCitation]);
-    setShowAddDialog(false);
-    if (onAddCitation) {
-      onAddCitation(newCitation);
-    }
-  }, [onAddCitation, selectedStyle]);
 
   const handleAutoFormat = useCallback(() => {
     setCitations(prev => prev.map(cite => ({
       ...cite,
-      formattedCitation: formatCitation(cite, selectedStyle)})));
+      formattedCitation: formatCitation(cite, selectedStyle)
+    })));
   }, [selectedStyle]);
 
   const formatCitation = (citation: Omit<Citation, 'id' | 'formattedCitation'>, style: CitationStyle): string => {
@@ -166,10 +157,6 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
     return `${citation.title} (${citation.year || 'n.d.'})`;
   };
 
-  const handleCitationSelect = (citationId: string) => {
-    const citation = citations.find(c => c.id === citationId) || null;
-    setSelectedCitation(citation);
-  };
   const [filterType, setType] = useState<CitationType | 'all'>('all');
 
   const filteredCitations = citations.filter((citation) => {
@@ -177,7 +164,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
       searchQuery === '' ||
       citation.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
       citation.formatted.toLowerCase().includes(searchQuery.toLowerCase());
-    const matches= filterType === 'all' || citation.type === filterType;
+    const matches = filterType === 'all' || citation.type === filterType;
     return matchesSearch && matches;
   });
 
@@ -243,7 +230,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
     total: citations.length,
     valid: citations.filter((c) => c.status === 'valid').length,
     warnings: citations.filter((c) => c.status === 'warning').length,
-    errors: citations.filter((c) => c.status === 'error').length};
+    errors: citations.filter((c) => c.status === 'error').length
+  };
 
   return (
     <div className={`flex h-full flex-col ${className}`}>
@@ -309,8 +297,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           <button
             onClick={() => setActiveView('list')}
             className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'list'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
           >
             <div className="flex items-center gap-2">
@@ -321,8 +309,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           <button
             onClick={() => setActiveView('graph')}
             className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'graph'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
           >
             <div className="flex items-center gap-2">
@@ -333,8 +321,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           <button
             onClick={() => setActiveView('footnotes')}
             className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeView === 'footnotes'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
           >
             <div className="flex items-center gap-2">

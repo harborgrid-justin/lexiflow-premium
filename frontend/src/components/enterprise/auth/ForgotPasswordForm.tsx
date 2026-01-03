@@ -70,7 +70,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
       await authService.forgotPassword(formData.email);
       setStep('success');
       onSuccess?.();
-    } catch (_err) {
+    } catch (error) {
+      console.error('Password reset error:', error);
       // For security, don't reveal if email exists or not
       // Show success message anyway to prevent email enumeration
       setStep('success');

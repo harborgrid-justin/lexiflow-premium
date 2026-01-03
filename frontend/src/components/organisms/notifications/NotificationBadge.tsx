@@ -89,21 +89,21 @@ export const NotificationBadge: React.FC<NotificationBadgeProps> = ({
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Show only if count > 0
-  if (count <= 0) return null;
-
-  // Format count
-  const displayCount = count > max ? `${max}+` : count.toString();
-
   // Trigger animation when count changes
   useEffect(() => {
-    if (pulse) {
+    if (pulse && count > 0) {
       setIsAnimating(true);
       const timer = setTimeout(() => setIsAnimating(false), 1000);
       return () => clearTimeout(timer);
     }
     return undefined;
   }, [count, pulse]);
+
+  // Show only if count > 0
+  if (count <= 0) return null;
+
+  // Format count
+  const displayCount = count > max ? `${max}+` : count.toString();
 
   // Dot variant
   if (dot) {
@@ -239,7 +239,7 @@ export const NotificationBadgeGroup: React.FC<{
     label: string;
     count: number;
     variant?: NotificationBadgeProps['variant'];
-  }>;  className?: string;
+  }>; className?: string;
 }> = ({ badges, className = '' }) => {
   return (
     <div className={`flex items-center gap-3 ${className}`}>

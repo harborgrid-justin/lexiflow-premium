@@ -72,13 +72,6 @@ export function DocumentManagementSystem({
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
 
-  const handleUpdateMetadata = async (metadata: Record<string, unknown>) => {
-    if (selectedDocument && onUpdateMetadata) {
-      await onUpdateMetadata(selectedDocument.id, metadata);
-      setShowMetadataEditor(false);
-    }
-  };
-
   // Build tree structure from flat document list
   function buildTreeStructure(docs: readonly LegalDocument[]): DocumentNode[] {
     const tree: DocumentNode[] = [];
@@ -382,8 +375,8 @@ export function DocumentManagementSystem({
                     key={doc.id}
                     onClick={() => handleDocumentClick(doc)}
                     className={`p-4 border rounded-lg cursor-pointer hover:shadow-md ${isSelected
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 dark:border-gray-700'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700'
                       }`}
                   >
                     <div className="flex flex-col items-center text-center">

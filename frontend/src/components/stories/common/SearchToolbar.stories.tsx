@@ -71,7 +71,7 @@ export const Default: Story = {
   render: () => <SearchToolbarDefaultStory />,
 };
 
-const SearchToolbarWithActionsStory = () => {
+export const SearchToolbarWithActionsStory = () => {
   const [query, setQuery] = useState('');
   return (
     <SearchToolbar

@@ -4,24 +4,25 @@
  * @description AI-powered legal research hub with case law, statutes, and regulations search
  */
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Search,
-  BookOpen,
-  Scale,
-  FileText,
   BookmarkPlus,
-  History,
-  Sparkles,
-  SlidersHorizontal,
+  BookOpen,
   ChevronRight,
-  Highlighter,
-  MessageSquare,
-  Share2,
+  Clock,
   Download,
-  Star,
-  Clock} from 'lucide-react';
+  FileText,
+  Highlighter,
+  History,
+  MessageSquare,
+  Scale,
+  Search,
+  Share2,
+  SlidersHorizontal,
+  Sparkles,
+  Star
+} from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -82,13 +83,13 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSaveResult,
   onCreateAnnotation,
   onExport,
-  className = ''}) => {
+  className = '' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'search' | 'sessions' | 'saved'>('search');
   const [shows, setShows] = useState(false);
   const [showAIAssist, setShowAIAssist] = useState(false);
   const [selectedResult, setSelectedResult] = useState<ResearchResult | null>(null);
-  const [filters, sets] = useState<Searchs>({});
+  const [filters, setFilters] = useState<Searchs>({});
   const [isSearching, setIsSearching] = useState(false);
 
   // Mock data for demonstration
@@ -99,14 +100,16 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       query: 'breach of contract damages',
       timestamp: new Date('2024-01-15'),
       resultsCount: 42,
-      saved: true},
+      saved: true
+    },
     {
       id: '2',
       title: 'Employment Discrimination',
       query: 'Title VII discrimination workplace',
       timestamp: new Date('2024-01-14'),
       resultsCount: 28,
-      saved: false},
+      saved: false
+    },
   ]);
 
   const [results] = useState<ResearchResult[]>([
@@ -119,7 +122,8 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       type: 'case',
       snippet: 'The damages which the other party ought to receive in respect of such breach of contract should be such as may fairly and reasonably be considered either arising naturally...',
       relevanceScore: 0.95,
-      highlighted: ['breach of contract', 'damages']},
+      highlighted: ['breach of contract', 'damages']
+    },
     {
       id: '2',
       title: 'Uniform Commercial Code § 2-714',
@@ -127,7 +131,8 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
       type: 'statute',
       snippet: 'Where the buyer has accepted goods and given notification (subsection (3) of Section 2-607) he may recover as damages for any non-conformity of tender the loss resulting...',
       relevanceScore: 0.88,
-      highlighted: ['damages', 'buyer']},
+      highlighted: ['damages', 'buyer']
+    },
   ]);
 
   const handleSearch = useCallback(() => {
@@ -199,11 +204,10 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
         <div className="mt-6 flex gap-4 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveTab('search')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'search'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'search'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
           >
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4" />
@@ -212,11 +216,10 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('sessions')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'sessions'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'sessions'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
           >
             <div className="flex items-center gap-2">
               <History className="h-4 w-4" />
@@ -225,11 +228,10 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('saved')}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'saved'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === 'saved'
+              ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
           >
             <div className="flex items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />

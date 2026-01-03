@@ -138,25 +138,6 @@ export function DocumentViewer({
     return `${batesStamp.prefix}${num.toString().padStart(6, '0')}${batesStamp.suffix}`;
   };
 
-  const handleAddAnnotation = (annotation: DocumentAnnotation) => {
-    if (onAnnotationAdd) {
-      onAnnotationAdd(annotation);
-    }
-  };
-
-  const handleAddRedaction = (redaction: DocumentRedaction) => {
-    if (onRedactionAdd) {
-      onRedactionAdd(redaction);
-    }
-  };
-
-  const handleApplyBatesStamp = () => {
-    if (batesStamp && onBatesStampApply) {
-      onBatesStampApply(batesStamp);
-      setShowBatesStampDialog(false);
-    }
-  };
-
   return (
     <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-900">
       {/* Main Toolbar */}
@@ -365,8 +346,8 @@ export function DocumentViewer({
                   key={pageNum}
                   onClick={() => goToPage(pageNum)}
                   className={`relative cursor-pointer border-2 rounded ${pageNum === currentPage
-                      ? 'border-blue-500'
-                      : 'border-gray-200 dark:border-gray-700'
+                    ? 'border-blue-500'
+                    : 'border-gray-200 dark:border-gray-700'
                     }`}
                 >
                   <div className="aspect-[8.5/11] bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
@@ -394,9 +375,9 @@ export function DocumentViewer({
             {batesStamp && (
               <div
                 className={`absolute ${batesStamp.position === 'top-right' ? 'top-2 right-2' :
-                    batesStamp.position === 'bottom-left' ? 'bottom-2 left-2' :
-                      batesStamp.position === 'bottom-right' ? 'bottom-2 right-2' :
-                        'top-2 left-2'
+                  batesStamp.position === 'bottom-left' ? 'bottom-2 left-2' :
+                    batesStamp.position === 'bottom-right' ? 'bottom-2 right-2' :
+                      'top-2 left-2'
                   } text-xs font-mono text-gray-500 bg-white/80 px-2 py-1 rounded`}
               >
                 {getBatesNumber()}
@@ -408,8 +389,8 @@ export function DocumentViewer({
               <div
                 key={annotation.id}
                 className={`absolute border-2 ${annotation.type === 'highlight' ? 'bg-yellow-200/50 border-yellow-400' :
-                    annotation.type === 'note' ? 'bg-green-200/50 border-green-400' :
-                      'bg-blue-200/50 border-blue-400'
+                  annotation.type === 'note' ? 'bg-green-200/50 border-green-400' :
+                    'bg-blue-200/50 border-blue-400'
                   }`}
                 style={{
                   left: `${annotation.x}%`,
@@ -489,8 +470,8 @@ export function DocumentViewer({
                   >
                     <div className="flex items-start justify-between mb-2">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${annotation.type === 'highlight' ? 'bg-yellow-100 text-yellow-800' :
-                          annotation.type === 'note' ? 'bg-green-100 text-green-800' :
-                            'bg-blue-100 text-blue-800'
+                        annotation.type === 'note' ? 'bg-green-100 text-green-800' :
+                          'bg-blue-100 text-blue-800'
                         }`}>
                         {annotation.type}
                       </span>

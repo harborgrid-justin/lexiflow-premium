@@ -4,14 +4,14 @@
  * @description Persistent notification panel with action buttons and grouping.
  */
 
-import React, { useState, useEffect } from 'react';
-import { Bell, X, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
-import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import type { NotificationGroup } from '@/types';
+import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/NotificationDomain';
+import type { NotificationGroup } from '@/types';
+import { cn } from '@/utils/cn';
 import { formatDistanceToNow } from 'date-fns';
+import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 // Use the Notification type from NotificationDomain service
 interface Notification {
@@ -31,14 +31,16 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
   const { theme } = useTheme();
   const panel = useModalState();
   // HYDRATION-SAFE: Track mounted state for browser-only APIs
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useRef(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [groupedNotifications, setGroupedNotifications] = useState<(Notification | NotificationGroup)[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   // Set mounted flag
   useEffect(() => {
-    setIsMounted(true);
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   // Load notifications
@@ -391,4 +393,3 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
 });
 
 export default NotificationPanel;
-

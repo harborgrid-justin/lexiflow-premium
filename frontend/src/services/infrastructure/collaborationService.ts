@@ -110,7 +110,7 @@ import {
   WS_URL,
 } from "@/config/network/websocket.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 import type {
   CollaborationConfig,
   CollaborativeEdit,

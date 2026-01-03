@@ -20,10 +20,14 @@ import React, { memo } from 'react';
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
+// Components
+import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
+
 // Hooks & Context
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -63,6 +67,7 @@ PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 export const AppShell = memo<AppShellProps>(({ sidebar, headerContent, children, activeView, onNavigate: _onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
   const { isFetching } = useGlobalQueryStatus();
+  const breadcrumbItems = useBreadcrumbs();
 
   // Sidebar logic is now fully controlled by the parent (App.tsx / AppController)
   // We do not clone/inject props here to avoid ref issues with ErrorBoundaries.
@@ -94,6 +99,19 @@ export const AppShell = memo<AppShellProps>(({ sidebar, headerContent, children,
           className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0"
           style={{ contain: 'strict' }}
         >
+          {/* Breadcrumbs Navigation */}
+          {breadcrumbItems.length > 1 && (
+            <div className={cn("px-4 md:px-6 py-3 border-b", theme.border.default)}>
+              <Breadcrumbs
+                items={breadcrumbItems}
+                onNavigate={(path) => {
+                  // Navigate using window.location for now (can be enhanced with react-router)
+                  window.location.href = path;
+                }}
+              />
+            </div>
+          )}
+
           {children}
         </main>
       </div>

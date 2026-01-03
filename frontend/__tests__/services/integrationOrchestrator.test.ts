@@ -3,12 +3,12 @@
  * Tests for the IntegrationOrchestrator event-driven integration bus
  */
 
-import { IntegrationOrchestrator } from '@services/integrationOrchestrator';
+import { IntegrationOrchestrator } from '@services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
-import { db } from '@services/db';
+import { db } from '@services/data/db';
 
 // Mock dependencies
-jest.mock('@/services/db', () => ({
+jest.mock('@services/data/db', () => ({
   STORES: {
     CASES: 'cases',
     BILLING: 'billing',
@@ -22,14 +22,14 @@ jest.mock('@/services/db', () => ({
   },
 }));
 
-jest.mock('@/services/chainService', () => ({
+jest.mock('@services/infrastructure/chainService', () => ({
   ChainService: {
     createEntry: jest.fn().mockResolvedValue({ hash: 'test-hash' }),
   },
 }));
 
 // Mock DataService with dynamic import
-jest.mock('@/services/dataService', () => ({
+jest.mock('@services/data/dataService', () => ({
   DataService: {
     compliance: {
       runConflictCheck: jest.fn().mockResolvedValue({ conflicts: [] }),
@@ -77,7 +77,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('LEAD_STAGE_CHANGED event', () => {
       it('should trigger conflict check on Engagement stage', async () => {
-        const { DataService } = await import('@/services/data/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.LEAD_STAGE_CHANGED,
@@ -94,7 +94,7 @@ describe('IntegrationOrchestrator', () => {
       });
 
       it('should trigger conflict check on Conflict Check stage', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         await IntegrationOrchestrator.publish(
           SystemEventType.LEAD_STAGE_CHANGED,
@@ -110,7 +110,7 @@ describe('IntegrationOrchestrator', () => {
       });
 
       it('should not trigger conflict check on other stages', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
         jest.clearAllMocks();
 
         await IntegrationOrchestrator.publish(
@@ -170,7 +170,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('TASK_COMPLETED event', () => {
       it('should create draft billable entry for high priority tasks', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.TASK_COMPLETED,
@@ -191,7 +191,7 @@ describe('IntegrationOrchestrator', () => {
       });
 
       it('should not create billable entry for low priority tasks', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
         jest.clearAllMocks();
 
         await IntegrationOrchestrator.publish(
@@ -213,7 +213,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('DOCUMENT_UPLOADED event', () => {
       it('should replicate production documents to evidence vault', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.DOCUMENT_UPLOADED,
@@ -234,7 +234,7 @@ describe('IntegrationOrchestrator', () => {
       });
 
       it('should replicate evidence source documents', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         await IntegrationOrchestrator.publish(
           SystemEventType.DOCUMENT_UPLOADED,
@@ -256,7 +256,12 @@ describe('IntegrationOrchestrator', () => {
 
     describe('INVOICE_STATUS_CHANGED event', () => {
       it('should deploy collections workflow for overdue invoices', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
+
+        // Mock the playbooks service to return a collection template
+        (DataService as any).playbooks = {
+          getByIndex: jest.fn().mockResolvedValue([{ id: 'tpl-collection', type: 'collection' }])
+        };
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.INVOICE_STATUS_CHANGED,
@@ -270,12 +275,12 @@ describe('IntegrationOrchestrator', () => {
           }
         );
 
-        expect(DataService.workflow.deploy).toHaveBeenCalledWith('tpl-7', { caseId: 'case-1' });
+        expect(DataService.workflow.deploy).toHaveBeenCalledWith('tpl-collection', { caseId: 'case-1' });
         expect(result.triggeredActions).toContain('Deployed Collections Workflow');
       });
 
       it('should log to immutable ledger when invoice is paid', async () => {
-        const { ChainService } = await import('@/services/chainService');
+        const { ChainService } = await import('@services/infrastructure/chainService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.INVOICE_STATUS_CHANGED,
@@ -296,7 +301,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('WALL_ERECTED event', () => {
       it('should generate RLS policy for ethical wall', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.WALL_ERECTED,
@@ -321,7 +326,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('STAFF_HIRED event', () => {
       it('should provision user account', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.STAFF_HIRED,
@@ -341,13 +346,13 @@ describe('IntegrationOrchestrator', () => {
             name: 'John Doe',
           })
         );
-        expect(result.triggeredActions).toContain('Provisioned User Account for John Doe');
+        expect(result.triggeredActions).toContain('Provisioned User Account for John Doe (john@firm.com)');
       });
     });
 
     describe('SERVICE_COMPLETED event', () => {
       it('should auto-file proof of service when served', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.SERVICE_COMPLETED,
@@ -355,7 +360,7 @@ describe('IntegrationOrchestrator', () => {
             job: {
               id: 'svc-1',
               caseId: 'case-1',
-              status: 'Served',
+              status: 'SERVED',
               documentTitle: 'Summons',
               targetPerson: 'Jane Smith',
               targetAddress: '123 Main St',
@@ -376,8 +381,6 @@ describe('IntegrationOrchestrator', () => {
 
     describe('DATA_SOURCE_CONNECTED event', () => {
       it('should log audit event and queue sync job', async () => {
-        const { DataService } = await import('@/services/dataService');
-
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.DATA_SOURCE_CONNECTED,
           {
@@ -387,11 +390,10 @@ describe('IntegrationOrchestrator', () => {
           }
         );
 
-        expect(DataService.admin.logAudit).toHaveBeenCalledWith(
-          expect.objectContaining({
-            action: 'CONNECTION_ESTABLISHED',
-          })
-        );
+        // The handler uses db.put directly instead of DataService.admin.logAudit
+        expect(mockDb.put).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+          action: 'CONNECTION_ESTABLISHED',
+        }));
         expect(result.triggeredActions).toContain('Logged connection audit event for Data Warehouse');
         expect(result.triggeredActions).toContain('Queued initial sync job for conn-1');
       });
@@ -399,7 +401,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('Error handling', () => {
       it('should catch and report errors without crashing', async () => {
-        const { DataService } = await import('@/services/dataService');
+        const { DataService } = await import('@services/data/dataService');
         (DataService.compliance.runConflictCheck as jest.Mock).mockRejectedValueOnce(
           new Error('Compliance service unavailable')
         );

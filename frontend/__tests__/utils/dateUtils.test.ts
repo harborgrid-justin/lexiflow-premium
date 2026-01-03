@@ -15,7 +15,7 @@ import {
   getDaysUntil,
   generateDateFilename,
   isDateInRange,
-} from '../../utils/dateUtils';
+} from '../../src/utils/dateUtils';
 
 describe('DateUtils', () => {
   describe('getTodayString', () => {

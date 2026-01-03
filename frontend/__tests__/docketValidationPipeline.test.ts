@@ -9,15 +9,15 @@
  * @jest-environment jsdom
  */
 
-import { 
-  sanitizeDocketEntry, 
+import {
+  sanitizeDocketEntry,
   validateDocketEntry,
   isValidDocketEntryType,
-  isValidStructuredData 
-} from '../utils/docketValidation';
-import { DeadlineEngine } from '../services/features/legal/deadlineEngine';
-import { IdGenerator } from '../utils/idGenerator';
-import { DocketEntry, DocketEntryType } from '../types';
+  isValidStructuredData
+} from '@/utils/docketValidation';
+import { DeadlineEngine } from '@/services/features/legal/deadlineEngine';
+import { IdGenerator } from '@/utils/idGenerator';
+import { DocketEntry, DocketEntryType } from '@/types';
 
 describe('Docket Validation Pipeline', () => {
   describe('Sanitization', () => {

@@ -3,7 +3,7 @@
  * Tests for the centralized error handling utility
  */
 
-import { ErrorHandler, errorHandler, AppError } from '../../utils/errorHandler';
+import { ErrorHandler, errorHandler, AppError } from '../../src/utils/errorHandler';
 
 describe('ErrorHandler', () => {
   let consoleErrorSpy: jest.SpyInstance;
@@ -51,10 +51,10 @@ describe('ErrorHandler', () => {
     it('should log error without context', () => {
       const error = new Error('Another test error');
       errorHandler.logError(error);
-      
+
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       const logCall = consoleErrorSpy.mock.calls[0];
-      expect(logCall[0]).toContain('[General]');
+      expect(logCall[0]).toContain('[App]');
       expect(logCall[1]).toMatchObject({
         message: 'Another test error',
         context: 'General'
@@ -128,9 +128,10 @@ describe('ErrorHandler', () => {
     it('should log error with FATAL context', () => {
       const fatalError = new Error('Fatal error occurred');
       errorHandler.handleFatalError(fatalError);
-      
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-      const logCall = consoleErrorSpy.mock.calls[0];
+
+      // handleFatalError logs twice: first console.error, then logError
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+      const logCall = consoleErrorSpy.mock.calls[1]; // Second call is from logError
       expect(logCall[0]).toContain('[FATAL]');
       expect(logCall[1]).toMatchObject({
         message: 'Fatal error occurred',

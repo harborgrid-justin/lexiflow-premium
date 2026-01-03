@@ -4,11 +4,11 @@
  */
 
 import { MicroORM } from '@services/core/microORM';
-import { db } from '@services/db';
+import { db } from '@services/data/db';
 import { BaseEntity } from '@/types';
 
 // Mock the db module
-jest.mock('@/services/db', () => ({
+jest.mock('@services/data/db', () => ({
   db: {
     get: jest.fn(),
     getAll: jest.fn(),

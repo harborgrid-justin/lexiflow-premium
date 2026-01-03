@@ -5,9 +5,18 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { FinancialPerformance } from '../../../components/dashboard/FinancialPerformance';
+import { FinancialPerformance } from '@/features/dashboard/components/FinancialPerformance';
 import { DataService } from '@/services/data/dataService';
-import { ThemeProvider } from '../../../context/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+
+// Mock backendDiscovery to avoid import.meta issues in Jest
+jest.mock('@/services/integration/backendDiscovery', () => ({
+  backendDiscovery: {
+    getStatus: jest.fn(() => ({ available: true, healthy: true })),
+    subscribe: jest.fn(() => () => {}),
+    checkHealth: jest.fn(() => Promise.resolve(true)),
+  },
+}));
 
 // Mock the DataService
 jest.mock('@/services/data/dataService', () => ({

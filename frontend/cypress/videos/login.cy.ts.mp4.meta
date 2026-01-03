@@ -1,0 +1,241 @@
+;FFMETADATA1
+[CHAPTER]
+TIMEBASE=1/1000
+START=-8113
+END=5835
+title=Authentication - Login Successful Login should login successfully with valid credentials and redirect to dashboard
+[CHAPTER]
+TIMEBASE=1/1000
+START=7349
+END=19841
+title=Authentication - Login Successful Login should login successfully with valid credentials and redirect to dashboardattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=18641
+END=32405
+title=Authentication - Login Successful Login should login successfully with valid credentials and redirect to dashboardattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=31676
+END=46215
+title=Authentication - Login Successful Login should display welcome message after successful login
+[CHAPTER]
+TIMEBASE=1/1000
+START=48719
+END=60777
+title=Authentication - Login Successful Login should display welcome message after successful loginattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=60851
+END=72864
+title=Authentication - Login Successful Login should display welcome message after successful loginattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=72849
+END=84901
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid password
+[CHAPTER]
+TIMEBASE=1/1000
+START=84924
+END=96988
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid passwordattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=96855
+END=109087
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid passwordattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=109303
+END=121361
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid email
+[CHAPTER]
+TIMEBASE=1/1000
+START=121412
+END=133464
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid emailattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=133484
+END=145554
+title=Authentication - Login Failed Login - Invalid Credentials should show error message with invalid emailattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=145604
+END=157662
+title=Authentication - Login Failed Login - Invalid Credentials should validate email format before submission
+[CHAPTER]
+TIMEBASE=1/1000
+START=157721
+END=169752
+title=Authentication - Login Failed Login - Invalid Credentials should validate email format before submissionattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=169775
+END=181832
+title=Authentication - Login Failed Login - Invalid Credentials should validate email format before submissionattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=181955
+END=193927
+title=Authentication - Login Failed Login - Invalid Credentials should require both email and password fields
+[CHAPTER]
+TIMEBASE=1/1000
+START=194021
+END=205949
+title=Authentication - Login Failed Login - Invalid Credentials should require both email and password fieldsattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=205652
+END=217912
+title=Authentication - Login Failed Login - Invalid Credentials should require both email and password fieldsattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=215787
+END=230218
+title=Authentication - Login Remember Me Functionality should save remember me preference when checked
+[CHAPTER]
+TIMEBASE=1/1000
+START=232581
+END=244697
+title=Authentication - Login Remember Me Functionality should save remember me preference when checkedattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=244812
+END=256847
+title=Authentication - Login Remember Me Functionality should save remember me preference when checkedattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=256973
+END=268945
+title=Authentication - Login Remember Me Functionality should not save remember me preference when unchecked
+[CHAPTER]
+TIMEBASE=1/1000
+START=268644
+END=280970
+title=Authentication - Login Remember Me Functionality should not save remember me preference when uncheckedattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=279320
+END=293341
+title=Authentication - Login Remember Me Functionality should not save remember me preference when uncheckedattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=299880
+END=307400
+title=Authentication - Login Redirect After Login should redirect to originally requested page after login
+[CHAPTER]
+TIMEBASE=1/1000
+START=307481
+END=314973
+title=Authentication - Login Redirect After Login should redirect to originally requested page after loginattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=314746
+END=322529
+title=Authentication - Login Redirect After Login should redirect to originally requested page after loginattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=318326
+END=330379
+title=Authentication - Login Redirect After Login should redirect to dashboard when no return URL specified
+[CHAPTER]
+TIMEBASE=1/1000
+START=330484
+END=342473
+title=Authentication - Login Redirect After Login should redirect to dashboard when no return URL specifiedattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=342413
+END=354520
+title=Authentication - Login Redirect After Login should redirect to dashboard when no return URL specifiedattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=292300
+END=366688
+title=Authentication - Login Logout Flow should logout successfully and clear auth data
+[CHAPTER]
+TIMEBASE=1/1000
+START=356172
+END=441190
+title=Authentication - Login Logout Flow should logout successfully and clear auth dataattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=446600
+END=526326
+title=Authentication - Login Logout Flow should logout successfully and clear auth dataattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=523051
+END=606184
+title=Authentication - Login Logout Flow should show logout confirmation dialog
+[CHAPTER]
+TIMEBASE=1/1000
+START=604444
+END=689395
+title=Authentication - Login Logout Flow should show logout confirmation dialogattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=680211
+END=774441
+title=Authentication - Login Logout Flow should show logout confirmation dialogattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=765260
+END=868814
+title=Authentication - Login Logout Flow should clear session storage on logout
+[CHAPTER]
+TIMEBASE=1/1000
+START=890921
+END=972464
+title=Authentication - Login Logout Flow should clear session storage on logoutattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=955576
+END=1054123
+title=Authentication - Login Logout Flow should clear session storage on logoutattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=1139941
+END=1152789
+title=Authentication - Login Security Features should handle account lockout after multiple failed attempts
+[CHAPTER]
+TIMEBASE=1/1000
+START=1152568
+END=1165748
+title=Authentication - Login Security Features should handle account lockout after multiple failed attemptsattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=1165744
+END=1179114
+title=Authentication - Login Security Features should handle account lockout after multiple failed attemptsattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=1179181
+END=1192630
+title=Authentication - Login Security Features should mask password input
+[CHAPTER]
+TIMEBASE=1/1000
+START=1192976
+END=1206251
+title=Authentication - Login Security Features should mask password inputattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=1206471
+END=1219697
+title=Authentication - Login Security Features should mask password inputattempt 2
+[CHAPTER]
+TIMEBASE=1/1000
+START=1220155
+END=1233065
+title=Authentication - Login Security Features should allow toggling password visibility
+[CHAPTER]
+TIMEBASE=1/1000
+START=1232914
+END=1246120
+title=Authentication - Login Security Features should allow toggling password visibilityattempt 1
+[CHAPTER]
+TIMEBASE=1/1000
+START=1246030
+END=1259479
+title=Authentication - Login Security Features should allow toggling password visibilityattempt 2

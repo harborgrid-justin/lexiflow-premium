@@ -5,8 +5,17 @@
 
 import React from 'react';
 
+// Mock backendDiscovery to avoid import.meta issues in Jest
+jest.mock('@/services/integration/backendDiscovery', () => ({
+  backendDiscovery: {
+    getStatus: jest.fn(() => ({ available: true, healthy: true })),
+    subscribe: jest.fn(() => () => {}),
+    checkHealth: jest.fn(() => Promise.resolve(true)),
+  },
+}));
+
 // Mock dependencies
-jest.mock('../../../context/ThemeContext', () => ({
+jest.mock('@/contexts/theme/ThemeContext', () => ({
   useTheme: () => ({
     theme: {
       primary: { text: 'text-blue-600', bg: 'bg-blue-600' },
@@ -21,7 +30,7 @@ jest.mock('@/utils/cn', () => ({
   cn: (...args: any[]) => args.filter(Boolean).join(' '),
 }));
 
-jest.mock('@/services/dataService', () => ({
+jest.mock('@/services/data/dataService', () => ({
   DataService: {
     pleadings: {
       getAll: jest.fn().mockResolvedValue([]),

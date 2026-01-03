@@ -244,6 +244,272 @@ Cypress.Commands.add('assertAPICall', (alias: string, expectedData?: any) => {
 });
 
 // ============================================================================
+// REGISTRATION COMMANDS
+// ============================================================================
+
+/**
+ * Register a new user
+ * Best Practice: Use for testing registration flows
+ */
+Cypress.Commands.add('register', (userData: {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  firmName?: string;
+  role?: string;
+}) => {
+  const defaultData = {
+    firstName: 'Test',
+    lastName: 'User',
+    email: `test-${Date.now()}@lexiflow.com`,
+    password: 'TestPassword123!',
+    firmName: 'Test Law Firm',
+    role: 'attorney',
+    ...userData,
+  };
+
+  cy.intercept('POST', '/api/auth/register', {
+    statusCode: 201,
+    body: {
+      user: {
+        id: `user-${Date.now()}`,
+        email: defaultData.email,
+        name: `${defaultData.firstName} ${defaultData.lastName}`,
+        role: defaultData.role,
+        firm: defaultData.firmName,
+      },
+      token: 'test-registration-token',
+    },
+  }).as('registerRequest');
+
+  cy.visit('/register');
+  cy.get('[data-testid="first-name-input"]').type(defaultData.firstName);
+  cy.get('[data-testid="last-name-input"]').type(defaultData.lastName);
+  cy.get('[data-testid="email-input"]').type(defaultData.email);
+  cy.get('[data-testid="password-input"]').type(defaultData.password);
+  cy.get('[data-testid="confirm-password-input"]').type(defaultData.password);
+  cy.get('[data-testid="terms-checkbox"]').check();
+  cy.get('[data-testid="register-button"]').click();
+  cy.wait('@registerRequest');
+});
+
+// ============================================================================
+// MFA COMMANDS
+// ============================================================================
+
+/**
+ * Setup MFA for user
+ * Best Practice: Use for testing MFA enrollment flows
+ */
+Cypress.Commands.add('setupMFA', () => {
+  cy.intercept('POST', '/api/auth/mfa/setup', {
+    statusCode: 200,
+    body: {
+      qrCode: 'data:image/png;base64,test',
+      secret: 'TESTSECRET123',
+      backupCodes: ['111111-111111', '222222-222222', '333333-333333'],
+    },
+  }).as('mfaSetup');
+
+  cy.intercept('POST', '/api/auth/mfa/verify-setup', {
+    statusCode: 200,
+    body: {
+      success: true,
+      backupCodes: ['111111-111111', '222222-222222', '333333-333333'],
+    },
+  }).as('verifyMfaSetup');
+
+  cy.get('[data-testid="enable-mfa-button"]').click();
+  cy.wait('@mfaSetup');
+  cy.get('[data-testid="mfa-verification-code-input"]').type('123456');
+  cy.get('[data-testid="verify-mfa-button"]').click();
+  cy.wait('@verifyMfaSetup');
+});
+
+/**
+ * Login with MFA enabled
+ * Best Practice: Use for testing MFA verification flows
+ */
+Cypress.Commands.add('loginWithMFA', (email?: string, password?: string, mfaCode?: string) => {
+  const testEmail = email || 'mfa-user@lexiflow.com';
+  const testPassword = password || 'Password123!';
+  const testMfaCode = mfaCode || '123456';
+
+  cy.intercept('POST', '/api/auth/login', {
+    statusCode: 200,
+    body: {
+      requiresMfa: true,
+      tempToken: 'temp-mfa-token',
+    },
+  }).as('loginRequest');
+
+  cy.intercept('POST', '/api/auth/mfa/verify', {
+    statusCode: 200,
+    body: {
+      user: {
+        id: 'user-mfa-123',
+        email: testEmail,
+        name: 'MFA User',
+      },
+      token: 'final-auth-token',
+    },
+  }).as('mfaVerify');
+
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(testEmail);
+  cy.get('[data-testid="password-input"]').type(testPassword);
+  cy.get('[data-testid="login-button"]').click();
+  cy.wait('@loginRequest');
+
+  cy.get('[data-testid="mfa-code-input"]').type(testMfaCode);
+  cy.get('[data-testid="verify-mfa-code-button"]').click();
+  cy.wait('@mfaVerify');
+});
+
+/**
+ * Mock MFA status
+ * Best Practice: Use to set MFA enabled/disabled state
+ */
+Cypress.Commands.add('mockMFAStatus', (enabled: boolean, backupCodesRemaining?: number) => {
+  cy.intercept('GET', '/api/auth/mfa/status', {
+    statusCode: 200,
+    body: {
+      mfaEnabled: enabled,
+      backupCodesRemaining: backupCodesRemaining || 5,
+    },
+  }).as('mfaStatus');
+});
+
+// ============================================================================
+// PASSWORD RESET COMMANDS
+// ============================================================================
+
+/**
+ * Request password reset
+ * Best Practice: Use for testing forgot password flows
+ */
+Cypress.Commands.add('requestPasswordReset', (email: string) => {
+  cy.intercept('POST', '/api/auth/forgot-password', {
+    statusCode: 200,
+    body: {
+      success: true,
+      message: 'Password reset email sent',
+    },
+  }).as('forgotPasswordRequest');
+
+  cy.visit('/forgot-password');
+  cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="submit-button"]').click();
+  cy.wait('@forgotPasswordRequest');
+});
+
+/**
+ * Reset password with token
+ * Best Practice: Use for testing password reset completion
+ */
+Cypress.Commands.add('resetPassword', (token: string, newPassword: string) => {
+  cy.intercept('GET', `/api/auth/validate-reset-token?token=${token}`, {
+    statusCode: 200,
+    body: {
+      valid: true,
+      email: 'user@test.com',
+    },
+  }).as('validateToken');
+
+  cy.intercept('POST', '/api/auth/reset-password', {
+    statusCode: 200,
+    body: {
+      success: true,
+      message: 'Password reset successful',
+    },
+  }).as('resetPassword');
+
+  cy.visit(`/reset-password?token=${token}`);
+  cy.wait('@validateToken');
+  cy.get('[data-testid="new-password-input"]').type(newPassword);
+  cy.get('[data-testid="confirm-password-input"]').type(newPassword);
+  cy.get('[data-testid="submit-reset-button"]').click();
+  cy.wait('@resetPassword');
+});
+
+// ============================================================================
+// SESSION MANAGEMENT COMMANDS
+// ============================================================================
+
+/**
+ * Mock session status
+ * Best Practice: Use for testing session timeout scenarios
+ */
+Cypress.Commands.add('mockSessionStatus', (expiresIn: number, showWarning?: boolean) => {
+  cy.intercept('GET', '/api/auth/session/status', {
+    statusCode: 200,
+    body: {
+      active: true,
+      expiresIn,
+      showWarning: showWarning || false,
+      expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
+    },
+  }).as('sessionStatus');
+});
+
+/**
+ * Mock session expired
+ * Best Practice: Use for testing forced logout on timeout
+ */
+Cypress.Commands.add('mockSessionExpired', () => {
+  cy.intercept('GET', '/api/auth/session/status', {
+    statusCode: 401,
+    body: {
+      active: false,
+      expired: true,
+      message: 'Session expired',
+    },
+  }).as('sessionExpired');
+});
+
+/**
+ * Extend session
+ * Best Practice: Use for testing session extension flows
+ */
+Cypress.Commands.add('extendSession', () => {
+  cy.intercept('POST', '/api/auth/session/refresh', {
+    statusCode: 200,
+    body: {
+      token: `refreshed-token-${Date.now()}`,
+      expiresIn: 3600,
+    },
+  }).as('refreshSession');
+
+  cy.get('[data-testid="stay-logged-in-button"]').click();
+  cy.wait('@refreshSession');
+});
+
+/**
+ * Mock active sessions list
+ * Best Practice: Use for testing concurrent session management
+ */
+Cypress.Commands.add('mockActiveSessions', (sessionCount?: number) => {
+  const count = sessionCount || 2;
+  const sessions = [];
+
+  for (let i = 0; i < count; i++) {
+    sessions.push({
+      id: `session-${i + 1}`,
+      device: i === 0 ? 'Chrome on Windows' : `Device ${i + 1}`,
+      location: 'New York, US',
+      lastActive: new Date().toISOString(),
+      current: i === 0,
+    });
+  }
+
+  cy.intercept('GET', '/api/auth/sessions', {
+    statusCode: 200,
+    body: { sessions },
+  }).as('getSessions');
+});
+
+// ============================================================================
 // TYPE DECLARATIONS
 // ============================================================================
 
@@ -255,84 +521,167 @@ declare global {
        * @example cy.login('user@example.com', 'password123')
        */
       login(email?: string, password?: string): Chainable<void>;
-      
+
       /**
        * Setup test user with specific role
        * @example cy.setupTestUser('attorney')
        */
       setupTestUser(role?: 'attorney' | 'paralegal' | 'admin'): Chainable<void>;
-      
+
       /**
        * Logout and clear auth state
        * @example cy.logout()
        */
       logout(): Chainable<void>;
-      
+
       /**
        * Mock case list API endpoint
        * @example cy.mockCaseListAPI('cases.json')
        */
       mockCaseListAPI(fixture?: string): Chainable<void>;
-      
+
       /**
        * Mock case detail API endpoint
        * @example cy.mockCaseDetailAPI('case-001')
        */
       mockCaseDetailAPI(caseId: string): Chainable<void>;
-      
+
       /**
        * Mock create case API endpoint
        * @example cy.mockCreateCaseAPI()
        */
       mockCreateCaseAPI(): Chainable<void>;
-      
+
       /**
        * Mock update case API endpoint
        * @example cy.mockUpdateCaseAPI()
        */
       mockUpdateCaseAPI(): Chainable<void>;
-      
+
       /**
        * Mock archive case API endpoint
        * @example cy.mockArchiveCaseAPI()
        */
       mockArchiveCaseAPI(): Chainable<void>;
-      
+
       /**
        * Visit case list page
        * @example cy.visitCaseList('active')
        */
       visitCaseList(tab?: string): Chainable<void>;
-      
+
       /**
        * Visit case detail page
        * @example cy.visitCaseDetail('case-001')
        */
       visitCaseDetail(caseId: string): Chainable<void>;
-      
+
       /**
        * Open create case modal
        * @example cy.openCreateCaseModal()
        */
       openCreateCaseModal(): Chainable<void>;
-      
+
       /**
        * Fill case form with data
        * @example cy.fillCaseForm({ title: 'New Case', client: 'John Doe' })
        */
       fillCaseForm(caseData: Record<string, any>): Chainable<void>;
-      
+
       /**
        * Assert case appears in list
        * @example cy.assertCaseInList('Smith v. Johnson')
        */
       assertCaseInList(caseTitle: string): Chainable<void>;
-      
+
       /**
        * Assert API call was made with correct data
        * @example cy.assertAPICall('createCase', { title: 'New Case' })
        */
       assertAPICall(alias: string, expectedData?: any): Chainable<void>;
+
+      // ============================================================================
+      // REGISTRATION COMMANDS TYPE DECLARATIONS
+      // ============================================================================
+
+      /**
+       * Register a new user
+       * @example cy.register({ email: 'user@test.com', password: 'Pass123!' })
+       */
+      register(userData?: {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        password?: string;
+        firmName?: string;
+        role?: string;
+      }): Chainable<void>;
+
+      // ============================================================================
+      // MFA COMMANDS TYPE DECLARATIONS
+      // ============================================================================
+
+      /**
+       * Setup MFA for user
+       * @example cy.setupMFA()
+       */
+      setupMFA(): Chainable<void>;
+
+      /**
+       * Login with MFA enabled
+       * @example cy.loginWithMFA('user@test.com', 'password', '123456')
+       */
+      loginWithMFA(email?: string, password?: string, mfaCode?: string): Chainable<void>;
+
+      /**
+       * Mock MFA status
+       * @example cy.mockMFAStatus(true, 3)
+       */
+      mockMFAStatus(enabled: boolean, backupCodesRemaining?: number): Chainable<void>;
+
+      // ============================================================================
+      // PASSWORD RESET COMMANDS TYPE DECLARATIONS
+      // ============================================================================
+
+      /**
+       * Request password reset
+       * @example cy.requestPasswordReset('user@test.com')
+       */
+      requestPasswordReset(email: string): Chainable<void>;
+
+      /**
+       * Reset password with token
+       * @example cy.resetPassword('reset-token-123', 'NewPassword123!')
+       */
+      resetPassword(token: string, newPassword: string): Chainable<void>;
+
+      // ============================================================================
+      // SESSION MANAGEMENT COMMANDS TYPE DECLARATIONS
+      // ============================================================================
+
+      /**
+       * Mock session status
+       * @example cy.mockSessionStatus(300, true)
+       */
+      mockSessionStatus(expiresIn: number, showWarning?: boolean): Chainable<void>;
+
+      /**
+       * Mock session expired
+       * @example cy.mockSessionExpired()
+       */
+      mockSessionExpired(): Chainable<void>;
+
+      /**
+       * Extend session
+       * @example cy.extendSession()
+       */
+      extendSession(): Chainable<void>;
+
+      /**
+       * Mock active sessions list
+       * @example cy.mockActiveSessions(3)
+       */
+      mockActiveSessions(sessionCount?: number): Chainable<void>;
     }
   }
 }

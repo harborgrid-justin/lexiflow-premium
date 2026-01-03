@@ -72,7 +72,7 @@ export class LRUCache<T> {
   /**
    * Get current cache size.
    */
-  size(): number {
+  get size(): number {
     return this.cache.size;
   }
 

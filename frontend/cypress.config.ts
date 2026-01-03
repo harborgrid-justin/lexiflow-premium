@@ -10,7 +10,7 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
   e2e: {
     // Base URL for the application under test
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'http://localhost:3400',
 
     // Viewport settings
     viewportWidth: 1280,
@@ -91,8 +91,5 @@ export default defineConfig({
   videosFolder: 'cypress/videos',
 
   // Reporter configuration
-  reporter: 'cypress-multi-reporters',
-  reporterOptions: {
-    configFile: 'cypress-reporter-config.json',
-  },
+  reporter: 'spec',
 });

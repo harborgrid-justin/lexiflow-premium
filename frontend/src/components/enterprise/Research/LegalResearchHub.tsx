@@ -89,7 +89,7 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   const [shows, setShows] = useState(false);
   const [showAIAssist, setShowAIAssist] = useState(false);
   const [selectedResult, setSelectedResult] = useState<ResearchResult | null>(null);
-  const [filters, setFilters] = useState<Searchs>({});
+  const [filters] = useState<Searchs>({});
   const [isSearching, setIsSearching] = useState(false);
 
   // Mock data for demonstration

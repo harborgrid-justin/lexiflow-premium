@@ -67,11 +67,8 @@ export function DocumentViewer({
   showOCRStatus = true,
   enableAnnotations = true,
   enableRedaction = true,
-  onAnnotationAdd,
   onAnnotationDelete,
-  onRedactionAdd,
   onRedactionDelete,
-  onBatesStampApply,
 }: DocumentViewerProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [zoom, setZoom] = useState(100);

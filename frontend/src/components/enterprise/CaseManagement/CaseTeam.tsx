@@ -12,15 +12,26 @@
  * @module components/enterprise/CaseManagement/CaseTeam
  */
 
-import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import {
-  Users, UserPlus, UserMinus, Search, Filter,
-  Mail, Phone, Calendar, DollarSign, Clock,
-  Shield, Edit, Trash2, MoreVertical, Star,
-  CheckCircle, AlertCircle, TrendingUp, Award,
-  Building, ExternalLink, Settings, Download
+  AlertCircle,
+  Building,
+  CheckCircle,
+  Clock,
+  DollarSign,
+  Edit,
+  Mail,
+  MoreVertical,
+  Phone,
+  Search,
+  Shield,
+  Star,
+  Trash2,
+  TrendingUp,
+  UserPlus,
+  Users
 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -97,7 +108,7 @@ export interface CaseTeamProps {
 // Configuration
 // ============================================================================
 
-const ROLE_TEMPLATES: RoleTemplate[] = [
+const _ROLE_TEMPLATES: RoleTemplate[] = [
   {
     role: 'Lead Attorney',
     defaultPermissions: ['view', 'edit', 'delete', 'manage_team', 'manage_documents', 'manage_billing', 'manage_calendar', 'communicate_with_client'],
@@ -175,9 +186,7 @@ const ROLE_COLORS: Record<TeamMemberRole, string> = {
 // ============================================================================
 
 export const CaseTeam: React.FC<CaseTeamProps> = ({
-  caseId,
   members,
-  onAddMember,
   onRemoveMember,
   onUpdateMember,
   onUpdatePermissions,
@@ -186,7 +195,6 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState<TeamMemberRole | 'All'>('All');
-  const [showAddMember, setShowAddMember] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [showPermissions, setShowPermissions] = useState(false);
 

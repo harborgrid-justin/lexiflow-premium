@@ -47,14 +47,6 @@ export const EnterpriseDemoPage: React.FC = () => {
     // Toggle a widget selection modal
   };
 
-  const handleToggleWidget = (widgetId: string) => {
-    setSelectedWidgets(prev =>
-      prev.includes(widgetId)
-        ? prev.filter(id => id !== widgetId)
-        : [...prev, widgetId]
-    );
-  };
-
   const dateRange = {
     start: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 90 days ago
     end: new Date(),
@@ -80,8 +72,8 @@ export const EnterpriseDemoPage: React.FC = () => {
               <button
                 onClick={() => setViewMode('dashboard')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'dashboard'
-                    ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                   }`}
               >
                 <BarChart3 className="h-4 w-4" />
@@ -90,8 +82,8 @@ export const EnterpriseDemoPage: React.FC = () => {
               <button
                 onClick={() => setViewMode('analytics')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'analytics'
-                    ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                   }`}
               >
                 <LineChart className="h-4 w-4" />
@@ -100,8 +92,8 @@ export const EnterpriseDemoPage: React.FC = () => {
               <button
                 onClick={() => setViewMode('combined')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'combined'
-                    ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
                   }`}
               >
                 <Activity className="h-4 w-4" />

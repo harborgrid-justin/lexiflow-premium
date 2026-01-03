@@ -25,7 +25,7 @@ import {
   XCircle,
   Zap
 } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -87,7 +87,6 @@ export interface CitationManagerProps {
 
 export const CitationManager: React.FC<CitationManagerProps> = ({
   citations: initialCitations = [],
-  onAddCitation,
   onUpdateCitation,
   onDeleteCitation,
   onValidateCitations,
@@ -141,13 +140,6 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
   const [selectedFormat, setSelectedFormat] = useState<CitationFormat>('bluebook');
   const [searchQuery, setSearchQuery] = useState('');
-
-  const handleAutoFormat = useCallback(() => {
-    setCitations(prev => prev.map(cite => ({
-      ...cite,
-      formattedCitation: formatCitation(cite, selectedStyle)
-    })));
-  }, [selectedStyle]);
 
   const formatCitation = (citation: Omit<Citation, 'id' | 'formattedCitation'>, style: CitationStyle): string => {
     // Basic citation formatting

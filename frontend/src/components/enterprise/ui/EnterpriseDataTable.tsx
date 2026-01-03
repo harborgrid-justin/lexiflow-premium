@@ -123,7 +123,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [columns, setColumns] = useState<Column<T>[]>(initialColumns);
+  const [columns] = useState<Column<T>[]>(initialColumns);
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState<FilterConfig[]>([]);

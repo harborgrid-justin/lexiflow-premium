@@ -4,35 +4,30 @@
  * @description Production set management with Bates numbering, redaction tracking, and production history
  */
 
-import React, { useState } from 'react';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  Package,
-  Search,
-  Filter,
+  Archive,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Copy,
   Download,
-  Upload,
-  Hash,
+  Edit,
   Eye,
   EyeOff,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
   FileText,
-  Calendar,
-  Users,
-  Settings,
-  Plus,
+  Filter,
+  Hash,
   History,
-  Edit,
-  Trash2,
-  Send,
-  Archive,
-  Copy
+  Package,
+  Plus,
+  Search,
+  Send
 } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -210,14 +205,11 @@ const mockProductionHistory: ProductionHistory[] = [
 // ============================================================================
 
 export const ProductionManager: React.FC<ProductionManagerProps> = ({
-  caseId,
-  onNavigate,
   className
 }) => {
   const { theme } = useTheme();
-  const [productions, setProductions] = useState<Production[]>(mockProductions);
+  const [productions] = useState<Production[]>(mockProductions);
   const [selectedProduction, setSelectedProduction] = useState<Production | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'history' | 'redactions'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [showBatesGenerator, setShowBatesGenerator] = useState(false);
 

@@ -4,41 +4,35 @@
  * @description Trial exhibit organization with exhibit lists and presentation mode
  */
 
-import React, { useState } from 'react';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Presentation,
-  Search,
-  Filter,
-  Download,
-  Upload,
-  Eye,
-  Edit,
-  Trash2,
-  Plus,
-  Grid3x3,
-  List,
-  Maximize2,
-  Minimize2,
+  AlertCircle,
+  BookOpen,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  FileText,
-  Image as ImageIcon,
-  Video,
-  File,
-  CheckCircle2,
   Clock,
-  AlertCircle,
-  Tag,
+  Download,
+  Edit,
+  Eye,
+  File,
+  FileText,
+  Grid3x3,
+  Image as ImageIcon,
+  List,
+  Minimize2,
+  Plus,
+  Presentation,
+  Search,
   Star,
-  Copy,
-  Share2,
-  Printer,
-  BookOpen
+  Tag,
+  Trash2,
+  Video
 } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -222,14 +216,10 @@ const mockExhibitLists: ExhibitList[] = [
 // ============================================================================
 
 export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
-  caseId,
-  trialId,
-  onNavigate,
   className
 }) => {
   const { theme } = useTheme();
   const [exhibits, setExhibits] = useState<Exhibit[]>(mockExhibits);
-  const [exhibitLists, setExhibitLists] = useState<ExhibitList[]>(mockExhibitLists);
   const [selectedExhibit, setSelectedExhibit] = useState<Exhibit | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [presentationMode, setPresentationMode] = useState(false);

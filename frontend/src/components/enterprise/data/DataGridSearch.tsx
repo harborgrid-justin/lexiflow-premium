@@ -19,7 +19,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -97,11 +97,7 @@ export function DataGridSearch<T extends Record<string, unknown>>({
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [, startTransition] = useTransition();
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Defer search query for responsive typing
-  const deferredQuery = useDeferredValue(query);
 
   // Search options state
   const [threshold, setThreshold] = useState(customSearchOptions?.threshold ?? 0.6);

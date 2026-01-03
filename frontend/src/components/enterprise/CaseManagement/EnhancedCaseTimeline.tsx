@@ -12,16 +12,28 @@
  * @module components/enterprise/CaseManagement/EnhancedCaseTimeline
  */
 
-import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow, isFuture, isPast, isToday } from 'date-fns';
 import {
-  Calendar, Clock, FileText, Gavel, AlertTriangle,
-  CheckCircle, XCircle, MessageSquare, Upload,
-  Download, Printer, Filter, Eye, EyeOff,
-  ChevronDown, ChevronRight, Star, Users,
-  MapPin, Link as LinkIcon, Plus
+  AlertTriangle,
+  Calendar,
+  CheckCircle,
+  ChevronDown, ChevronRight,
+  Clock,
+  Download,
+  Eye, EyeOff,
+  FileText, Gavel,
+  Link as LinkIcon,
+  MapPin,
+  MessageSquare,
+  Plus,
+  Printer,
+  Star,
+  Upload,
+  Users,
+  XCircle
 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -195,7 +207,6 @@ const PRIORITY_COLORS: Record<string, string> = {
 export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
   events,
   onEventClick,
-  onEventUpdate,
   onEventCreate,
   viewMode = 'chronological',
   showFilters = true,
@@ -203,7 +214,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
   className,
 }) => {
   const [selectedTypes, setSelectedTypes] = useState<Set<EventType>>(new Set());
-  const [selectedStatuses, setSelectedStatuses] = useState<Set<EventStatus>>(new Set());
+  const [selectedStatuses] = useState<Set<EventStatus>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [showCompleted, setShowCompleted] = useState(true);
   const [groupExpanded, setGroupExpanded] = useState<Record<string, boolean>>({});
@@ -308,11 +319,10 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
   };
 
   // Render event card
-  const renderEventCard = (event: TimelineEvent, index?: number) => {
+  const renderEventCard = (event: TimelineEvent) => {
     const config = EVENT_TYPE_CONFIG[event.type];
     const Icon = config.icon;
     const eventDate = new Date(event.date);
-    const isUpcoming = isFuture(eventDate);
     const isOverdue = isPast(eventDate) && event.status !== 'completed' && event.type === 'deadline';
 
     return (

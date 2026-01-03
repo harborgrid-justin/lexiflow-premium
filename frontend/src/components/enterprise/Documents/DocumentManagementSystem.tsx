@@ -62,7 +62,6 @@ export function DocumentManagementSystem({
   onCheckOut,
   onCheckIn,
   onCreateFromTemplate,
-  onUpdateMetadata,
 }: DocumentManagementSystemProps) {
   const [treeData, setTreeData] = useState<DocumentNode[]>(buildTreeStructure(documents));
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);

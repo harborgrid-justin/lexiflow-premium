@@ -11,15 +11,25 @@
  * @module components/enterprise/CaseManagement/CaseTemplates
  */
 
-import React, { useState, useMemo } from 'react';
-import { Case, MatterType, CaseStatus } from '@/types';
 import { cn } from '@/lib/utils';
+import { Case, CaseStatus, MatterType } from '@/types';
 import {
-  Plus, Copy, Edit, Trash2, Star, Search,
-  FileText, Scale, Building, Users, Heart,
-  Briefcase, Home, Shield, DollarSign, Check,
-  ChevronRight, Filter, MoreVertical, X
+  Building,
+  Copy,
+  DollarSign,
+  Edit,
+  FileText,
+  Heart,
+  Home,
+  Plus,
+  Scale,
+  Search,
+  Shield,
+  Star,
+  Users,
+  X
 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces
@@ -335,7 +345,6 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
   templates = DEFAULT_TEMPLATES,
   onCreateFromTemplate,
   onEditTemplate,
-  onDeleteTemplate,
   onCloneTemplate,
   className,
 }) => {

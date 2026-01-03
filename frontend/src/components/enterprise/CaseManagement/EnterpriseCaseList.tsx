@@ -12,15 +12,22 @@
  * @module components/enterprise/CaseManagement/EnterpriseCaseList
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
-import { Case, CaseStatus, MatterType } from '@/types';
 import { cn } from '@/lib/utils';
+import { Case, CaseStatus } from '@/types';
 import {
-  Search, Filter, Download, Upload, Archive,
-  MoreVertical, Check, X, Edit, Trash2,
-  UserPlus, Calendar, DollarSign, Star,
-  ChevronDown, Save, Settings, Eye, EyeOff
+  Archive,
+  Download,
+  Edit,
+  Filter,
+  MoreVertical,
+  Save,
+  Search,
+  Settings,
+  Trash2,
+  Upload,
+  UserPlus
 } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces

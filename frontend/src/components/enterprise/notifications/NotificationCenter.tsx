@@ -28,7 +28,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { useDeferredValue, useMemo, useState, useTransition } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -81,10 +81,6 @@ export function NotificationCenter({
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
-  const [, startTransition] = useTransition();
-
-  // Defer search query for better input responsiveness
-  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   // Get notification icon
   const getNotificationIcon = (notification: UINotification) => {

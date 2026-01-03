@@ -63,9 +63,6 @@ interface DocumentWorkflowProps {
 export function DocumentWorkflow({
   workflow,
   templates = [],
-  availableReviewers = [],
-  onWorkflowCreate,
-  onWorkflowUpdate,
   onStepComplete,
   onStepReject,
   onWorkflowCancel,
@@ -316,10 +313,9 @@ export function DocumentWorkflow({
                 Workflow Steps
               </h3>
               <div className="space-y-4">
-                {workflow.steps.sort((a, b) => a.order - b.order).map((step, index) => {
+                {workflow.steps.sort((a, b) => a.order - b.order).map((step) => {
                   const isActive = step.id === currentStep?.id;
                   const isCompleted = step.status === 'completed';
-                  const isPending = step.status === 'pending';
 
                   return (
                     <div

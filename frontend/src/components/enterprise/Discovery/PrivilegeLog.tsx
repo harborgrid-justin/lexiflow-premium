@@ -4,32 +4,27 @@
  * @description Privilege log management with batch tagging and export to court format
  */
 
-import React, { useState } from 'react';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  Shield,
-  Search,
-  Filter,
-  Download,
-  Upload,
-  CheckSquare,
-  Square,
-  Tag,
-  FileText,
-  Calendar,
-  Users,
-  Mail,
   AlertCircle,
-  Edit,
-  Trash2,
-  Eye,
-  Plus,
   CheckCircle2,
+  CheckSquare,
+  Download,
+  Edit,
+  Eye,
+  Filter,
+  Plus,
+  Search,
+  Shield,
+  Square,
+  Trash2,
+  Upload,
   XCircle
 } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -117,8 +112,6 @@ const mockPrivilegeEntries: PrivilegeEntry[] = [
 // ============================================================================
 
 export const PrivilegeLog: React.FC<PrivilegeLogProps> = ({
-  caseId,
-  onNavigate,
   className
 }) => {
   const { theme } = useTheme();

@@ -4,37 +4,34 @@
  * @description Chain of custody tracking for evidence with handling logs and authentication records
  */
 
-import React, { useState } from 'react';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  Shield,
-  Search,
-  Filter,
-  Download,
-  Upload,
-  FileText,
-  User,
-  MapPin,
-  Clock,
-  CheckCircle2,
-  AlertTriangle,
-  Lock,
-  Unlock,
-  ArrowRight,
-  Package,
-  Fingerprint,
-  Camera,
-  Link as LinkIcon,
-  QrCode,
-  Eye,
-  Edit,
-  Plus,
   AlertCircle,
-  History
+  AlertTriangle,
+  ArrowRight,
+  Camera,
+  CheckCircle2,
+  Clock,
+  Download,
+  Eye,
+  FileText,
+  Fingerprint,
+  History,
+  Link as LinkIcon,
+  Lock,
+  MapPin,
+  Package,
+  Plus,
+  QrCode,
+  Search,
+  Shield,
+  Unlock,
+  User
 } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -286,9 +283,7 @@ const mockHandlingLogs: HandlingLog[] = [
 // ============================================================================
 
 export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
-  caseId,
   evidenceId,
-  onNavigate,
   className
 }) => {
   const { theme } = useTheme();

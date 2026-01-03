@@ -5,30 +5,27 @@
  * collection tracking, processing status, and review metrics
  */
 
-import React, { useState } from 'react';
+import { KPICard } from '@/components/enterprise/dashboard/KPICard';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  Users,
-  Database,
-  Settings,
+  Activity,
   BarChart3,
-  Search,
-  Filter,
-  Download,
-  Upload,
   CheckCircle2,
   Clock,
-  AlertCircle,
-  TrendingUp,
-  FolderOpen,
+  Database,
+  Download,
   FileText,
-  Shield,
-  Activity
+  Filter,
+  FolderOpen,
+  Search,
+  Settings,
+  Upload,
+  Users
 } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { KPICard } from '@/components/enterprise/dashboard/KPICard';
+import React, { useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -173,13 +170,10 @@ const mockReviewMetrics: ReviewMetrics = {
 // ============================================================================
 
 export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
-  caseId,
-  onNavigate,
   className
 }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'custodians' | 'collections' | 'processing'>('overview');
-  const [selectedCustodian, setSelectedCustodian] = useState<string | null>(null);
 
   // Calculate metrics
   const totalCustodians = mockCustodians.length;
@@ -384,8 +378,8 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                         className={cn(
                           'h-2 rounded-full',
                           item.status === 'completed' ? 'bg-emerald-500' :
-                          item.status === 'processing' ? 'bg-blue-500' :
-                          'bg-gray-400'
+                            item.status === 'processing' ? 'bg-blue-500' :
+                              'bg-gray-400'
                         )}
                       />
                     </div>

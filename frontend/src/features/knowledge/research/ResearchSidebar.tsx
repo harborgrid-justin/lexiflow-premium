@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResearchSession } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ResearchSidebarProps {

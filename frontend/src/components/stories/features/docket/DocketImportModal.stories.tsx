@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketImportModal } from '@/features/cases/components/docket/DocketImportModal';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 /**
  * DocketImportModal provides a multi-step wizard for importing docket data

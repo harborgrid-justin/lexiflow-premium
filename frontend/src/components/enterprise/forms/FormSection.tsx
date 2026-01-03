@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useId } from 'react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { FormSection as FormSectionType } from '@/types/forms';
 

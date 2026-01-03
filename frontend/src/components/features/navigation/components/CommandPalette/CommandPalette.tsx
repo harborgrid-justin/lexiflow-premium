@@ -31,7 +31,7 @@ import type { LucideIcon } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
 

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Calendar, Clock, AlertCircle, CheckCircle2, Flag } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { format, formatDistanceToNow, isPast, isToday, isTomorrow, isThisWeek } from 'date-fns';
 

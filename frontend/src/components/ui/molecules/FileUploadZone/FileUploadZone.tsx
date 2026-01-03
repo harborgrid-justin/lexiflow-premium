@@ -20,7 +20,7 @@ import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-rea
 import { DocumentService } from '@/services/features/documents/documentService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';

@@ -33,7 +33,7 @@ import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Internal Dependencies - Services & Utils

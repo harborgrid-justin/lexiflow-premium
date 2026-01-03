@@ -7,7 +7,7 @@
 
 import React, { useId } from 'react';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
 // TYPES

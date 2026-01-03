@@ -3,7 +3,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Button } from '@/components/ui/atoms/Button';
 import { TrendingDown, Clock, CheckCircle} from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface RateNegotiationProps {

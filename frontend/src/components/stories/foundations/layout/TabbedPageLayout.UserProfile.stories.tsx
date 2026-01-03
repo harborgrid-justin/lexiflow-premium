@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import React, { useState } from 'react';
 import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
 

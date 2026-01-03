@@ -31,7 +31,7 @@ interface FirmProcess {
 
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
 import { Case } from '@/types';
 import { cn } from '@/utils/cn';

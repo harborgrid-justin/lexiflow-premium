@@ -8,7 +8,7 @@ import React, { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 import { cn } from '@/utils/cn';
 import { Bookmark, BookOpen, ExternalLink, FileText, History, Loader2, Scale, Search, Share2 } from 'lucide-react';

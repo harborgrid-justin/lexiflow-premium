@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';

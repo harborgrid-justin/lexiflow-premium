@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Card } from '@/components/ui/molecules/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Wand2 } from 'lucide-react';
 import React from 'react';

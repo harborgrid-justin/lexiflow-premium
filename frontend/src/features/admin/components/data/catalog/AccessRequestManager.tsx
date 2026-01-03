@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { CheckCircle, Clock, User, XCircle } from 'lucide-react';
 import React from 'react';

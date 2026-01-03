@@ -1,55 +1,55 @@
 /**
  * Consolidated Provider Type Exports
- * 
+ *
  * BP9: Co-locate provider and type definitions
  * BP11: Define context contracts with explicit types
- * 
+ *
  * This barrel file provides a single import point for all provider types
  */
 
 // Theme types
 export type {
-  ThemeStateValue,
   ThemeActionsValue,
   ThemeContextValue,
   ThemeProviderProps,
-} from './ThemeContext.types';
+  ThemeStateValue,
+} from "./theme/ThemeContext.types";
 
 // Toast types
 export type {
-  ToastType,
+  PriorityMap,
   Toast,
-  ToastStateValue,
   ToastActionsValue,
   ToastContextValue,
   ToastProviderProps,
-  PriorityMap,
-} from './ToastContext.types';
+  ToastStateValue,
+  ToastType,
+} from "./toast/ToastContext.types";
 
 // DataSource types
 export type {
-  DataSourceType,
-  DataSourceStateValue,
   DataSourceActionsValue,
   DataSourceContextValue,
   DataSourceProviderProps,
-} from './DataSourceContext.types';
+  DataSourceStateValue,
+  DataSourceType,
+} from "./data/DataSourceContext.types";
 
 // Window types
 export type {
-  WindowInstance,
-  WindowStateValue,
+  DragState,
   WindowActionsValue,
   WindowContextValue,
+  WindowInstance,
   WindowProviderProps,
-  DragState,
-} from './WindowContext.types';
+  WindowStateValue,
+} from "./window/WindowContext.types";
 
 // Sync types
 export type {
-  SyncStatus,
-  SyncStateValue,
   SyncActionsValue,
   SyncContextValue,
   SyncProviderProps,
-} from './SyncContext.types';
+  SyncStateValue,
+  SyncStatus,
+} from "./sync/SyncContext.types";

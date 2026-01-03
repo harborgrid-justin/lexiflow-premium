@@ -30,7 +30,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
 import { BloomFilter } from '@/utils/bloomFilter';

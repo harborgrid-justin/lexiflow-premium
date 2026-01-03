@@ -7,14 +7,14 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { Breadcrumbs } from './Breadcrumbs';
 import type { BreadcrumbItem } from './Breadcrumbs';
 import { Folder, FileText } from 'lucide-react';
 
 // Mock useTheme to avoid provider issues
-vi.mock('@/providers/ThemeContext', async () => {
-  const actual = await vi.importActual('@/providers/ThemeContext');
+vi.mock('@/contexts/theme/ThemeContext', async () => {
+  const actual = await vi.importActual('@/contexts/theme/ThemeContext');
   return {
     ...actual,
     useTheme: () => ({

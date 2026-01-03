@@ -12,7 +12,7 @@ import type { QuickActionGroup } from './QuickActions';
 import { Clock, FileText, UserPlus, Briefcase } from 'lucide-react';
 
 // Mock useTheme
-vi.mock('@/providers/ThemeContext', () => ({
+vi.mock('@/contexts/theme/ThemeContext', () => ({
   useTheme: () => ({
     theme: {
       text: { primary: 'text-slate-900', secondary: 'text-slate-600', tertiary: 'text-slate-400' },

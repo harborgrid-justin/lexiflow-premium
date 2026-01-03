@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { Citation } from '@/types';
 import { cn } from '@/utils/cn';

@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';

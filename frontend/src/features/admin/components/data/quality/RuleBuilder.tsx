@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { CheckCircle, Code, Database, Play, Plus, Save, Trash2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';

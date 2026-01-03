@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Edit2, Trash2 } from 'lucide-react';
 import React from 'react';

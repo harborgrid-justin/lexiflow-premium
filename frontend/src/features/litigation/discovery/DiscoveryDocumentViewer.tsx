@@ -3,7 +3,7 @@ import { ArrowLeft, Printer, Download, FileText, ZoomIn, ZoomOut, Tag } from 'lu
 import { Button } from '@/components/ui/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { CodingPanel } from './viewer/CodingPanel';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DiscoveryDocumentViewerProps, ViewerDocumentState } from './types';
 

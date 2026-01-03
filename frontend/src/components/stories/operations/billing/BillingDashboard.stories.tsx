@@ -8,7 +8,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import BillingDashboard from '../../../../features/operations/billing/BillingDashboard';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 
 const meta: Meta<typeof BillingDashboard> = {

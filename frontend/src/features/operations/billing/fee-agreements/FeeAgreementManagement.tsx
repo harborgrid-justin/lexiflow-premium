@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Badge } from '@/components/ui/atoms/Badge';

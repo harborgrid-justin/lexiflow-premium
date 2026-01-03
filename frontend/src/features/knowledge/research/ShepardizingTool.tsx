@@ -2,7 +2,7 @@
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, HelpCircle, Loader2, Scale, XCircle } from 'lucide-react';

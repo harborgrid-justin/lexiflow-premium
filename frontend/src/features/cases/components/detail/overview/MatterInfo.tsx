@@ -16,7 +16,7 @@ import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar, Dollar
 import { Card } from '@/components/ui/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

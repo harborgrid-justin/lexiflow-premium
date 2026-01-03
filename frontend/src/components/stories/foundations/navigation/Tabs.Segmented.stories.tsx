@@ -1,5 +1,5 @@
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 

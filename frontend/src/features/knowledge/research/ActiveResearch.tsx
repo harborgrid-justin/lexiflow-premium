@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { performSearch } from './research.utils';
 import { useWindow } from '@/providers/WindowContext';

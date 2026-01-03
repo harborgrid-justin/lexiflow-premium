@@ -23,7 +23,7 @@ import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useResizeObserver } from '@/hooks/useResizeObserver';

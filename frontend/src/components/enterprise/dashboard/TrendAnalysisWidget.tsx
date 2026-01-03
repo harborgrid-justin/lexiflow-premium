@@ -29,7 +29,7 @@ import {
   AlertCircle,
   Info,
 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { TrendData, TimeSeriesDataPoint, BaseDashboardProps } from '@/types/dashboard';
 

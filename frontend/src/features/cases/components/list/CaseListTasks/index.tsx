@@ -2,7 +2,7 @@ import React from 'react';
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { TaskRow } from './TaskRow';
 import { TaskHeader } from './TaskHeader';

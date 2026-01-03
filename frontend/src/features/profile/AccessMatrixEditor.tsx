@@ -31,7 +31,7 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

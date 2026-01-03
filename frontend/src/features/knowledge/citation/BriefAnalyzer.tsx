@@ -32,7 +32,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils

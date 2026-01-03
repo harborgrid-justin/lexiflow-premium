@@ -15,7 +15,7 @@ import { CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

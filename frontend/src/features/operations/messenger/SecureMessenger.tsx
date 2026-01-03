@@ -18,7 +18,7 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 // ============================================================================
 // Hooks & Context
 import { useSecureMessenger } from '@/hooks/domain';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';

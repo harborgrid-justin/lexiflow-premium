@@ -20,7 +20,7 @@ import { Lock } from 'lucide-react';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers/WindowContext';
 import { useInterval } from '@/hooks/useInterval';

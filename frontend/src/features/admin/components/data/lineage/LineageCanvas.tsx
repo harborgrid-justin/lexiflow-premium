@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { NODE_STRIDE } from '@/utils/nexusPhysics';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { Pause, Play, RefreshCw } from 'lucide-react';

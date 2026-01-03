@@ -8,7 +8,7 @@
  * - Testing component theme consistency
  */
 
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';

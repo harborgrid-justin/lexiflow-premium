@@ -1,7 +1,10 @@
+import { isBackendApiEnabled as checkBackendEnabled } from '@/config/network/api.config';
+import { DataService } from '@/services/data/dataService';
+import { backendDiscovery } from '@/services/integration/backendDiscovery';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { isBackendApiEnabled as checkBackendEnabled } from '../config/network/api.config';
-import { DataService } from '../services/data/dataService';
-import { backendDiscovery } from '../services/integration/backendDiscovery';
+import type { DataSourceConfig } from '../repository/config';
+import { createConfigFromEnv } from '../repository/config';
+import type { RepositoryRegistry } from '../repository/types';
 import type {
   DataSourceActionsValue,
   DataSourceProviderProps,
@@ -9,9 +12,6 @@ import type {
   DataSourceType,
 } from './DataSourceContext.types';
 import { DataSourceActionsContext, DataSourceStateContext } from './DataSourceHooks';
-import type { DataSourceConfig } from './repository/config';
-import { createConfigFromEnv } from './repository/config';
-import type { RepositoryRegistry } from './repository/types';
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -47,11 +47,11 @@ import type { RepositoryRegistry } from './repository/types';
  */
 
 // Re-export types for convenience
+export type { DataSourceConfig } from '../repository/config';
+export * from '../repository/errors';
+export type { RepositoryRegistry } from '../repository/types';
 export type { DataSourceType } from './DataSourceContext.types';
 export * from './DataSourceHooks';
-export type { DataSourceConfig } from './repository/config';
-export * from './repository/errors';
-export type { RepositoryRegistry } from './repository/types';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         REPOSITORY FACTORY

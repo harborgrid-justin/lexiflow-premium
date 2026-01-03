@@ -20,7 +20,7 @@ import React, { useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Components

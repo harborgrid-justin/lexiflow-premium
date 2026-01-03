@@ -23,7 +23,7 @@ import type { IntentResult } from '@/services/features/research/geminiService';
 import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
 import { useClickOutside } from '@/hooks/useClickOutside';

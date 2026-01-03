@@ -332,7 +332,7 @@ All components are fully responsive and adapt to different screen sizes. Use the
 All components support dark mode through the theme context:
 
 ```tsx
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 const { theme, isDark } = useTheme();
 ```

@@ -1,5 +1,5 @@
-import { DataService } from '../services/data/dataService';
-import { SyncEngine } from '../services/data/syncEngine';
+import { DataService } from '@/services/data/dataService';
+import { SyncEngine } from '@/services/data/syncEngine';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   SyncActionsValue,
@@ -155,7 +155,8 @@ export const SyncProvider = ({
 
   // BP10: Stabilize function references with useCallback - Queue Processor
   const processQueue = useCallback(async () => {
-    if (!navigator.onLine || isProcessingRef.current) return;
+    const isNavigatorOnline = typeof navigator === 'undefined' ? true : navigator.onLine;
+    if (!isNavigatorOnline || isProcessingRef.current) return;
 
     const mutation = SyncEngine.peek();
     if (!mutation) {
@@ -246,21 +247,25 @@ export const SyncProvider = ({
       }
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+    }
 
     // Initial check
-    if (SyncEngine.count() > 0 && navigator.onLine) {
+    if (SyncEngine.count() > 0 && (typeof navigator === 'undefined' || navigator.onLine)) {
       processQueue();
     }
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      }
     };
     // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally
     // exclude them from dependencies to avoid recreating event handlers on every render
-     
+
   }, [processQueue, refreshCounts]);
 
   // BP10: Stabilize function references with useCallback
@@ -295,7 +300,7 @@ export const SyncProvider = ({
     }
     // Note: _onSyncSuccess is a function prop that may change, but we intentionally
     // exclude it from dependencies to maintain stable callback identity
-     
+
   }, [processQueue, refreshCounts]);
 
   // BP7: Memoize provider values explicitly - state context

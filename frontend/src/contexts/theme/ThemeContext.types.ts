@@ -2,6 +2,7 @@
  * ThemeContext Type Definitions
  */
 
+import type { ReactNode } from 'react';
 import { ThemeMode } from '@theme/tokens';
 import { tokens } from '@theme/tokens';
 
@@ -28,7 +29,7 @@ export interface ThemeContextValue extends ThemeStateValue, ThemeActionsValue {}
 
 // Provider props
 export interface ThemeProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   // BP14: Support test-friendly overrides
   initialMode?: ThemeMode;
 }

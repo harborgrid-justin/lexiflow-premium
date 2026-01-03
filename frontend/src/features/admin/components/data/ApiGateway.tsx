@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 import { Loader2, Server, ChevronRight } from 'lucide-react';
 
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/backend';
 import { ApiServiceSpec, ApiMethod } from '@/types';

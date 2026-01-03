@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
 
 // Context & Utils
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types

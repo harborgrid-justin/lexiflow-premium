@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface SplitViewLayoutProps {

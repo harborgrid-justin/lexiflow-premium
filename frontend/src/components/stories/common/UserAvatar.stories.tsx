@@ -1,5 +1,5 @@
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 

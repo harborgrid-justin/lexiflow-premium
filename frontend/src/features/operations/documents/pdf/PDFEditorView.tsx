@@ -6,7 +6,7 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';

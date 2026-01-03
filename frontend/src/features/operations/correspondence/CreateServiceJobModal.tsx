@@ -4,7 +4,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { ServiceJob, UserId } from '@/types';

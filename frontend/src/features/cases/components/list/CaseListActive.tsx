@@ -31,7 +31,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 
 // Hooks & Context
 import { useSort } from '@/hooks/useSort';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useToggle } from '@/hooks/useToggle';
 import { UseCaseListReturn } from '@/hooks/useCaseList';

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Calendar, Clock, CheckCircle, AlertCircle, FileText, Flag } from 'lucide-react';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
 

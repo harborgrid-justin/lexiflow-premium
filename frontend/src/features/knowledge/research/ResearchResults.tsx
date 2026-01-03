@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ResearchSession } from '@/types';
 import { cn } from '@/utils/cn';
 import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';

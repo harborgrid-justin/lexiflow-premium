@@ -532,7 +532,7 @@ interface ColumnDefinition<T> {
 
 ## Theme Integration
 
-All components use the theme context from `@/providers/ThemeContext` for consistent styling across light/dark modes.
+All components use the theme context from `@/contexts/theme/ThemeContext` for consistent styling across light/dark modes.
 
 ## Accessibility
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { History, User, Check, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { AuditLogEntry } from '@/types';

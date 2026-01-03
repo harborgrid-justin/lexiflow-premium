@@ -17,7 +17,7 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 // Utils & Constants

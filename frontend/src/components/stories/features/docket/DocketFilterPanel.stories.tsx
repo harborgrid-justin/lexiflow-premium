@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
 import { Case, CaseStatus, CaseId, PartyId, MatterType } from '@/types';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 /**
  * DocketFilterPanel provides a sidebar filter panel for docket entries

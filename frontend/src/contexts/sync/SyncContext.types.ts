@@ -2,6 +2,8 @@
  * SyncContext Type Definitions
  */
 
+import type { ReactNode } from 'react';
+
 export type SyncStatus = 'idle' | 'syncing' | 'offline' | 'error';
 
 // BP2: Narrow interface - read-only state
@@ -26,8 +28,10 @@ export type SyncContextType = SyncContextValue;
 
 // Provider props
 export interface SyncProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   // BP14: Support test-friendly overrides
-  initialOnlineState?: boolean;  // Notification callbacks to avoid circular dependency
+  initialOnlineState?: boolean;
+  // Notification callbacks to avoid circular dependency
   onSyncSuccess?: (message: string) => void;
-  onSyncError?: (message: string) => void;}
+  onSyncError?: (message: string) => void;
+}

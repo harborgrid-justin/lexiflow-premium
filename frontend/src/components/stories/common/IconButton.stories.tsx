@@ -1,5 +1,5 @@
 import { IconButton } from '@/components/ui/atoms/IconButton/IconButton';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Download, Edit, Plus, Share2, Trash2 } from 'lucide-react';
 import React from "react";

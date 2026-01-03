@@ -4,7 +4,7 @@
  * @description Full-container centered loading spinner with optional message
  */
 import { Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { containerStyles, spinnerStyles, messageStyles } from './CentredLoader.styles';
 

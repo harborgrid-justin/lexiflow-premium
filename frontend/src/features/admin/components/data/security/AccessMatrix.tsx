@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, RLSPermissionLevel as PermissionLevel } from '@/types/data-quality';

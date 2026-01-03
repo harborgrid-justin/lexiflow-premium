@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

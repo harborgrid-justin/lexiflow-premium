@@ -18,7 +18,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useToast } from '@/providers/ToastContext';
 
 // Components

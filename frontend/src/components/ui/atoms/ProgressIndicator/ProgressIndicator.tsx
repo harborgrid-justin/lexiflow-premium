@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { CheckCircle, XCircle, Loader2, X } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
 

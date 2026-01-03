@@ -2,6 +2,8 @@
  * ToastContext Type Definitions
  */
 
+import type { ReactNode } from 'react';
+
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 export interface Toast {
@@ -36,7 +38,7 @@ export interface ToastContextValue extends ToastStateValue, ToastActionsValue {}
 
 // Provider props
 export interface ToastProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   // BP14: Support test-friendly overrides
   maxVisible?: number;
   maxQueue?: number;

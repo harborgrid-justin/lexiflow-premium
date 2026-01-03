@@ -16,7 +16,7 @@ import { useRef, useEffect, memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components

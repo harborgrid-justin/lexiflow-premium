@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import React, { useState } from 'react';
 
 /**

@@ -9,7 +9,7 @@ import { Download, Plus, Search, Filter, Eye, Edit, FileText } from 'lucide-reac
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';

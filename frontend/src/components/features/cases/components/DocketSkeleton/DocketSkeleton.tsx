@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
 // DOCKET TABLE SKELETON

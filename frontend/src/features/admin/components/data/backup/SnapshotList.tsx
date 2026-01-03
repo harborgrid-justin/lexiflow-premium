@@ -2,7 +2,7 @@ import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Button } from '@/components/ui/atoms/Button';
 import { StatusBadge } from '@/components/ui/atoms/StatusBadge';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Archive, Clock, Database, Download } from 'lucide-react';
 import React from 'react';

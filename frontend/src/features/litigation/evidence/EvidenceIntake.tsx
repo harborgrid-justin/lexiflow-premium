@@ -18,7 +18,7 @@ import { TagInput } from '@/components/ui/molecules/TagInput/TagInput';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types

@@ -5,7 +5,7 @@ import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';

@@ -2,10 +2,11 @@
  * DataSourceContext Type Definitions
  */
 
-export type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
+import type { ReactNode } from 'react';
+import type { RepositoryRegistry } from '../repository/types';
+import type { DataSourceConfig } from '../repository/config';
 
-import type { RepositoryRegistry } from './repository/types';
-import type { DataSourceConfig } from './repository/config';
+export type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
 
 // Pattern 2: Narrow interface - read-only state (stable repository access)
 export interface DataSourceStateValue {
@@ -35,7 +36,7 @@ export interface DataSourceContextValue extends DataSourceStateValue, DataSource
 // Provider props
 // Pattern 13: Support test-friendly overrides (mock injection)
 export interface DataSourceProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   
   /**
    * Override initial source for testing

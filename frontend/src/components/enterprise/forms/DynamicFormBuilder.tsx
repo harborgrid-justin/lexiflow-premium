@@ -16,7 +16,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type {
   FieldSchema,

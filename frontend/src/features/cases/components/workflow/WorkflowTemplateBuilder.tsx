@@ -7,7 +7,7 @@ import { BuilderCanvas } from './builder/BuilderCanvas';
 import { BuilderProperties } from './builder/BuilderProperties';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';

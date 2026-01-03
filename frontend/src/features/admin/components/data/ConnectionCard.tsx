@@ -11,7 +11,7 @@ import {
   Database, Cloud, Server, AlertTriangle, X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getStatusColor, getStatusLabel, formatLastSync } from './utils';
 import type { DataSourceConnection } from './types';

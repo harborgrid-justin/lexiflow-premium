@@ -9,7 +9,7 @@ import { useMutation, queryClient } from '@/hooks/backend';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { Step1TemplateSelection, Step2FormConfiguration, Step3DraftReview } from '@features/document-assembly';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Pipeline } from '@/api/data-platform';
 

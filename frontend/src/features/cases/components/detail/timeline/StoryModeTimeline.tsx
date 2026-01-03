@@ -15,7 +15,7 @@ import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
 // Internal Dependencies - Components
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

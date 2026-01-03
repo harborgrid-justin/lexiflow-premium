@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { GitBranch, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PleadingDocument } from '@/types';
 

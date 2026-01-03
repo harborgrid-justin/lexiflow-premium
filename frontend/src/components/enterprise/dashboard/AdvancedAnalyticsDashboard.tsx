@@ -42,7 +42,7 @@ import {
   Maximize2,
   RefreshCw,
 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
 

@@ -24,7 +24,7 @@ import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

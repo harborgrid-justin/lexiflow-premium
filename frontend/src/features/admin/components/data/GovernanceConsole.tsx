@@ -4,7 +4,7 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { ModalFooter } from '@/components/ui/molecules/ModalFooter';
 import { Tabs } from '@/components/ui/molecules/Tabs';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 import { cn } from '@/utils/cn';
 import { MoreVertical } from 'lucide-react';

@@ -22,7 +22,7 @@ import { RuleService } from '@/services/features/rules/ruleService';
 
 // Hooks & Context
 import { useDebounce } from '@/hooks/useDebounce';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';

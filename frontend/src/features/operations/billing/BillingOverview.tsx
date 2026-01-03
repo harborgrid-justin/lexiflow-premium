@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { Currency } from '@/components/ui/atoms/Currency';

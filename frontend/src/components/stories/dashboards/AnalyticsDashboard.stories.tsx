@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnalyticsDashboard } from '@/features/admin/components/analytics/AnalyticsDashboard';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 
 /**

@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router';
 import type { Route } from "./+types/theme-settings";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
 // Meta Tags

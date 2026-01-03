@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, AlertTriangle, Database, FileText, Layers } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface DependencyNode {

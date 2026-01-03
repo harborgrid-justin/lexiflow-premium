@@ -8,7 +8,7 @@ import { EvidenceChainOfCustody } from '../../../../features/litigation/evidence
 import { EvidenceAdmissibility } from '../../../../features/litigation/evidence/EvidenceAdmissibility';
 import { EvidenceForensics } from '../../../../features/litigation/evidence/EvidenceForensics';
 import { EvidenceDetail } from '../../../../features/litigation/evidence/EvidenceDetail';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 
 /**

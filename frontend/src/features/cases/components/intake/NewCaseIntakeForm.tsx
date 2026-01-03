@@ -20,7 +20,7 @@ import { api } from '@/api';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { Case, Matter, User as UserType } from '@/types';
 import { cn } from '@/utils/cn';
 import {

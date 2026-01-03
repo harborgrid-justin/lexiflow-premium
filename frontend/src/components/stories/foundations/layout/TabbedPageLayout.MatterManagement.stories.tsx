@@ -1,6 +1,6 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus, Settings, TrendingUp } from 'lucide-react';

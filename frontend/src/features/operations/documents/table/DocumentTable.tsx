@@ -1,5 +1,5 @@
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';
 import { ArrowDown, ArrowUp } from 'lucide-react';

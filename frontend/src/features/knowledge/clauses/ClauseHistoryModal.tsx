@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Clause, ClauseVersion } from '@/types';
 import { History, ArrowLeftRight, X } from 'lucide-react';
 import { DiffViewer } from '@/components/features/discovery/components/DiffViewer/DiffViewer';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ClauseHistoryModalProps {

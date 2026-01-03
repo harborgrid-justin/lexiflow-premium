@@ -1,7 +1,7 @@
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DataProfile } from '@/types';
 import { cn } from '@/utils/cn';

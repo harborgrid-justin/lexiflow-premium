@@ -17,7 +17,7 @@ import { Download, FileText, Table, FileCode } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components

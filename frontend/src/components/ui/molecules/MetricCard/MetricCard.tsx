@@ -4,7 +4,7 @@
  * @description Animated metric card with sparkline support, trend indicators, and live status
  */
 
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';

@@ -20,7 +20,7 @@ import React, { useMemo, useTransition } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components

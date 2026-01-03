@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Sparkles, Calendar, User, FileText } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 

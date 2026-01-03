@@ -20,7 +20,7 @@ import React, { useState, useCallback } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
 // TYPES & INTERFACES

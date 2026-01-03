@@ -14,7 +14,7 @@
 
 import React from 'react';
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { WizardConfig } from '@/types/forms';
 import { FormField } from './FormField';

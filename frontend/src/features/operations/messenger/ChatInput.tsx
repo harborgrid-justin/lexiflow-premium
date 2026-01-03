@@ -24,7 +24,7 @@ import { Paperclip, Send, X, FileText, Clock, Sparkles, Loader2 } from 'lucide-r
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Attachment } from '@/hooks/useSecureMessenger';
 
 // Utils & Constants

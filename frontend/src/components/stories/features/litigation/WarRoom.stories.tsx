@@ -8,7 +8,7 @@ import { AdvisoryBoard } from '../../../../features/litigation/war-room/Advisory
 import { OppositionManager } from '../../../../features/litigation/war-room/OppositionManager';
 import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPrep';
 import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinder';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 
 // ============================================================================

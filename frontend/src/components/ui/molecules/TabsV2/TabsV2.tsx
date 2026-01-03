@@ -17,7 +17,7 @@
 
 import React, { useRef } from 'react';
 import { LucideIcon } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

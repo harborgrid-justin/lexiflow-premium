@@ -20,7 +20,7 @@ import { Search, Clock } from 'lucide-react';
 import { SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants

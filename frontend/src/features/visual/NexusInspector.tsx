@@ -16,7 +16,7 @@ import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';

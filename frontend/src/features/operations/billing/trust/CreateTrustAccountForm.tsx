@@ -19,7 +19,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { AlertCircle, CheckCircle, Landmark, Building, Shield, Users, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
 import type { CreateTrustAccountDto, TrustAccountType, TrustAccountStatus } from '@/types/trust-accounts';

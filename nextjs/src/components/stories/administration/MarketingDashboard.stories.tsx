@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MarketingDashboard } from '@/features/knowledge/practice/MarketingDashboard';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 
 /**
  * MarketingDashboard provides firm marketing and business development tools

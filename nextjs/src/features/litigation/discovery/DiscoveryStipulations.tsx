@@ -43,7 +43,7 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';

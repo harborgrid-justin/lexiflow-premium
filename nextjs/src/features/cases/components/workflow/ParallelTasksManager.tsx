@@ -2,7 +2,7 @@ import { GitMerge, MoreHorizontal, User, ListTodo } from 'lucide-react';
 import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { WorkflowTask, TaskStatusBackend } from '@/types';

@@ -20,7 +20,7 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 // ============================================================================
 // Hooks & Context
 import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';

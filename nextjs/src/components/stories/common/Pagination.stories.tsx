@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from '@/components/ui/molecules/Pagination/Pagination';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
 import React, { useState } from 'react';
 
 /**

@@ -7,9 +7,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import DocumentManager from '../../../../features/operations/documents/DocumentManager';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
-import { WindowProvider } from '@/providers/WindowContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
+import { WindowProvider } from '@/providers';
 import type { UserRole } from '@/types';
 
 const meta: Meta<typeof DocumentManager> = {

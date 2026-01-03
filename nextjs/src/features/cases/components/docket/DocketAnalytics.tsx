@@ -20,7 +20,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components

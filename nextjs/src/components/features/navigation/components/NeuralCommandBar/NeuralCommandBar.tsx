@@ -27,7 +27,7 @@ import { GlobalSearchResult, SearchService } from '@/services/search/searchServi
 // Hooks & Context
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useListNavigation } from '@/hooks/useListNavigation';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { HighlightedText } from '@/components/ui/atoms/HighlightedText/HighlightedText';

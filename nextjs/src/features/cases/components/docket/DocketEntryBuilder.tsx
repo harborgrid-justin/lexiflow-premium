@@ -19,7 +19,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 
 // Internal Dependencies - Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

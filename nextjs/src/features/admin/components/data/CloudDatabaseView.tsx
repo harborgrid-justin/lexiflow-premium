@@ -8,7 +8,7 @@
 import React from 'react';
 import { Plus, X, RefreshCw, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import type { ThemeContextValue } from '@/providers/ThemeContext.types';
 import { cn } from '@/utils/cn';
 import { ConnectionCard } from './ConnectionCard';

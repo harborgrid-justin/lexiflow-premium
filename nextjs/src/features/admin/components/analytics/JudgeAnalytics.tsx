@@ -23,7 +23,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
 import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils
 import { cn } from '@/utils/cn';

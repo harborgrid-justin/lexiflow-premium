@@ -4,7 +4,7 @@ import { RiskMeter } from '@/components/features/cases/components/RiskMeter/Risk
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 interface PerformanceScorecardsProps {

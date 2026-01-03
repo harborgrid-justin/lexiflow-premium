@@ -28,8 +28,8 @@ import { CitationDetail } from './CitationDetail';
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

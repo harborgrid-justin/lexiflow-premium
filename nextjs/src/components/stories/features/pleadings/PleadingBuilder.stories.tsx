@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PleadingBuilder } from '@features/litigation/pleadings/PleadingBuilder';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 
 /**
  * PleadingBuilder is the comprehensive pleading document creation and management

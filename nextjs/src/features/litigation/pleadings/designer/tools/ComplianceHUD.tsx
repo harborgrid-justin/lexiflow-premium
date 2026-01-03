@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { FormattingRule, PleadingSection } from '@/types';
 import { AlertOctagon, Info, Zap, AlertTriangle } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 interface ComplianceHUDProps {

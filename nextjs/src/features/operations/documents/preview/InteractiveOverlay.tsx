@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { X, Move } from 'lucide-react';
 import { PDFTool } from './AcrobatToolbar';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 interface Point { x: number; y: number }
 

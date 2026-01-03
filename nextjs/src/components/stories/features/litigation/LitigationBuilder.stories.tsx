@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LitigationBuilder } from '@/features/litigation/strategy/LitigationBuilder';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 
 /**
  * LitigationBuilder provides comprehensive litigation strategy planning tools

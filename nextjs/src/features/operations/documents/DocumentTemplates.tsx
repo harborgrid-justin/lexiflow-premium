@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { ArrowRight, FileText, Wand2 } from 'lucide-react';

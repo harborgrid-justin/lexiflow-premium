@@ -6,7 +6,7 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { LegalDocument } from '@/types';

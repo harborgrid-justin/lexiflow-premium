@@ -9,8 +9,8 @@
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 import { cn } from '@/utils/cn';
 
 import { Button } from '@/components/ui/atoms/Button';

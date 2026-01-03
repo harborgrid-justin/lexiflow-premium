@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Modal } from '@/components/ui/molecules/Modal';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/utils/cn';

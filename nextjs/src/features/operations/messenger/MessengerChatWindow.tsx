@@ -23,8 +23,8 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useInterval } from '@/hooks/useInterval';
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Components
 import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';

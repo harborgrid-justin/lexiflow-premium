@@ -16,7 +16,7 @@ import { CheckCircle, ChevronUp, ChevronDown, Clock, ArrowRight } from 'lucide-r
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

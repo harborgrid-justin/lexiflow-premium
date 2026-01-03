@@ -3,7 +3,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Stethoscope, Plus, Calendar, User } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { Examination } from '@/types';

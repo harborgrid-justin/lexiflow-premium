@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Maximize2, Menu, X } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { DataPlatformSidebar } from './DataPlatformSidebar';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { Loader2 } from 'lucide-react';
 import { PlatformView } from './types';
 

@@ -8,7 +8,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, expect, userEvent, within } from 'storybook/test';
 import { Dashboard } from '../../../features/dashboard/components/Dashboard';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
 import { ToastProvider } from '@providers/ToastContext';
 import type { User, UserId } from '@/types';
 

@@ -18,8 +18,8 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';

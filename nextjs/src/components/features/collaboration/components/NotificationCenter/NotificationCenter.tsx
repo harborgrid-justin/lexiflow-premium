@@ -18,8 +18,8 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
-import { useToast } from '@/providers/ToastContext';
+import { useTheme } from '@/providers';
+import { useToast } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';

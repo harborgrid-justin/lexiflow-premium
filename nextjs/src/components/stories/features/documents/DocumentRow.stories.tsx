@@ -7,8 +7,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentRow } from '../../../../features/operations/documents/table/DocumentRow';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { useTheme } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
+import { useTheme } from '@/providers';
 import { LegalDocument, UserId, CaseId, DocumentId } from '@/types';
 
 // Wrapper to provide theme to DocumentRow

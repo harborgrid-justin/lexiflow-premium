@@ -8,7 +8,7 @@ import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';

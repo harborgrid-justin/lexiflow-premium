@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import React from 'react';
 import type { FormatStats } from './types';

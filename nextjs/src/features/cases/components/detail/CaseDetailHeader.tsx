@@ -18,8 +18,8 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { ClientPortalModal } from '@features/operations';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils

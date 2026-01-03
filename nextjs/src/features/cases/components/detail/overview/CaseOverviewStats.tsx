@@ -13,8 +13,8 @@ import React from 'react';
 import { DollarSign, Clock, CheckCircle, TrendingUp, ExternalLink } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

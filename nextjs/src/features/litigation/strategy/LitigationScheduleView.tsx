@@ -14,7 +14,7 @@ import { TrendingUp } from 'lucide-react';
 import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/detail/planning';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils
 import { cn } from '@/utils/cn';

@@ -5,7 +5,7 @@
  */
 
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';

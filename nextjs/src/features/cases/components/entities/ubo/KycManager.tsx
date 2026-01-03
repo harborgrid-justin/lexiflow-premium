@@ -5,7 +5,7 @@ import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 interface KycManagerProps {

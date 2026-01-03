@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Plus, DollarSign } from 'lucide-react';
 import { useModalState } from '@/hooks/core';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/features/cases/components/Kanban/Kanban';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';

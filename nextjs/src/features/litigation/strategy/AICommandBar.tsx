@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { AIValidationService } from '@/services/infrastructure/aiValidationService';
 import { cn } from '@/utils/cn';

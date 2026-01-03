@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Calendar } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
 import { containerStyles, iconStyles } from './DateText.styles';

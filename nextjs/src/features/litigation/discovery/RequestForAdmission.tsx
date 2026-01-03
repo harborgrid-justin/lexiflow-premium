@@ -2,7 +2,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/utils/cn';

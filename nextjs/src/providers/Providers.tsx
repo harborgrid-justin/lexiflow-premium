@@ -3,7 +3,7 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { QueryClientProvider } from '@/providers/QueryClientProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ToastProvider } from '@/providers';
 import { Provider as JotaiProvider } from 'jotai';
 
 export function Providers({ children }: { children: React.ReactNode }) {

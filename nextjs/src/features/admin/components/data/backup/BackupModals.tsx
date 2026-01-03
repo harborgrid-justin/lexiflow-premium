@@ -1,7 +1,7 @@
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { Button } from '@/components/ui/atoms/Button';
 import { Modal } from '@/components/ui/molecules/Modal';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AlertCircle, Clock, Database } from 'lucide-react';
 import React from 'react';

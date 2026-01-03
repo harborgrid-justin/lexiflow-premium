@@ -10,15 +10,15 @@
  * @see /nextjs/REACT_CONCURRENT_MODE_GAP_ANALYSIS.md
  */
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { DataService } from '../services/data/dataService';
 import { SyncEngine } from '../services/data/syncEngine';
-import { syncStore, useFailedCount, useIsOnline, usePendingCount, useSyncStatus, useSyncStore } from '../services/data/syncStore';
+import { syncStore } from '../services/data/syncStore';
+import { SyncActionsContext } from './SyncContext';
 import type {
   SyncActionsValue,
   SyncProviderProps,
-  SyncStateValue,
-  SyncStatus,
+  SyncStatus
 } from './SyncContext.types';
 
 // Extend SyncProviderProps to include initialOnlineStatus for testing
@@ -27,7 +27,7 @@ interface ExtendedSyncProviderProps extends SyncProviderProps {
 }
 
 /**
- * SyncContext - Application-level offline sync boundary
+ * SyncProvider - Application-level offline sync boundary
  *
  * Best Practices Applied:
  * - BP1: Cross-cutting concern (offline sync) justifies context usage
@@ -41,48 +41,6 @@ interface ExtendedSyncProviderProps extends SyncProviderProps {
  * - BP13: Document provider responsibilities
  * - BP14: **NEW** Use useSyncExternalStore for external state (React 18/19)
  */
-
-// BP3: Actions context only (state comes from external store)
-const SyncActionsContext = createContext<SyncActionsValue | undefined>(undefined);
-
-// Legacy unified context type for backward compatibility
-export type SyncContextType = SyncStateValue & SyncActionsValue;
-
-// Legacy unified context export (for backward compatibility with useSync hook)
-export const SyncContext = createContext<SyncContextType | undefined>(undefined);
-
-// BP4: Export only custom hooks, not raw contexts
-
-/**
- * Hook to get sync state
- * Uses useSyncExternalStore - tearing-safe
- */
-export function useSyncState(): SyncStateValue {
-  return useSyncStore();
-}
-
-/**
- * Hook to get sync actions
- */
-export function useSyncActions(): SyncActionsValue {
-  const context = useContext(SyncActionsContext);
-  // BP5: Fail fast when provider is missing
-  if (!context) {
-    throw new Error('useSyncActions must be used within a SyncProvider');
-  }
-  return context;
-}
-
-// Convenience hook for consumers that need both (backward compatibility)
-export function useSync() {
-  return {
-    ...useSyncState(),
-    ...useSyncActions(),
-  };
-}
-
-// Export fine-grained hooks for performance
-export { useFailedCount, useIsOnline, usePendingCount, useSyncStatus };
 
 // Export types
 export type { SyncStatus };

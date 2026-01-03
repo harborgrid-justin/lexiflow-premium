@@ -24,7 +24,7 @@ import { DataService } from '@/services/data/dataService';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';

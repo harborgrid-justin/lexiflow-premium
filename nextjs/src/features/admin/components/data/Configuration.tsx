@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

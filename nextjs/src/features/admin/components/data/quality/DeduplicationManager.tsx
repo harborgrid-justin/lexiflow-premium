@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DedupeCluster } from '@/types';
 import { cn } from '@/utils/cn';

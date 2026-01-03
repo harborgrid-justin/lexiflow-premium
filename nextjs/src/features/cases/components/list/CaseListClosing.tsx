@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

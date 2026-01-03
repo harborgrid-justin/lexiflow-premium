@@ -34,7 +34,7 @@ import React, { useCallback, useDeferredValue, useEffect, useRef, useState } fro
 // ============================================================================
 // Hooks & Context
 import { useListNavigation } from '@/hooks/useListNavigation';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

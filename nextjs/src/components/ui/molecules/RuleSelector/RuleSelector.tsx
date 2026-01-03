@@ -23,7 +23,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { RuleService } from '@/services/features/rules/ruleService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

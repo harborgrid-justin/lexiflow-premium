@@ -20,7 +20,7 @@ import { ParsedDocketPreview } from './ParsedDocketPreview';
 
 // Internal Dependencies - Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';

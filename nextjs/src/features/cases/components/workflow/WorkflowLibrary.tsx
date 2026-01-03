@@ -21,7 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components

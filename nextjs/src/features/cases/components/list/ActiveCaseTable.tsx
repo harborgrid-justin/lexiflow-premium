@@ -23,7 +23,7 @@ import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon'
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils
 import { cn } from '@/utils/cn';

@@ -17,7 +17,7 @@ import React, { useCallback, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';

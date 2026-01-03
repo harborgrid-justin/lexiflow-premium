@@ -17,7 +17,7 @@ import { memo, useEffect, useRef } from 'react';
 // ============================================================================
 // Hooks & Context
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { ChatBubble } from '@/components/ui/molecules/ChatBubble/ChatBubble';

@@ -6,10 +6,10 @@ import { DataService } from '@/services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { performSearch } from './research.utils';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { queryClient } from '@/services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {

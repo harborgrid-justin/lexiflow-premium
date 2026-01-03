@@ -1,5 +1,5 @@
 // components/layout/Sidebar.tsx
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { AppView, User } from '@/types';
 import { cn } from '@/utils/cn';
 import React from 'react';

@@ -5,7 +5,7 @@ import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useQuery } from '@/hooks/backend';
 import { useSelection } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DataDictionaryItem } from '@/types';
 import { cn } from '@/utils/cn';

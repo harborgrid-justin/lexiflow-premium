@@ -7,8 +7,8 @@ import { PleadingTemplates } from '@features/litigation/pleadings';
 import { PleadingDrafts } from '@features/litigation/pleadings';
 import { PleadingFilingQueue } from '@features/litigation/pleadings';
 import { PleadingAnalytics } from '@features/litigation/pleadings';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 import React from "react";
 
 /**

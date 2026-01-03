@@ -21,7 +21,7 @@ import { api } from '@/api';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

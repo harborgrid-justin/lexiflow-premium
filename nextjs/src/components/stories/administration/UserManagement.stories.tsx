@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserManagement } from '@features/admin/components/users/UserManagement';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
 import { ToastProvider } from '@providers/ToastContext';
 
 /**

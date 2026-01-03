@@ -17,7 +17,7 @@ import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'reac
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';

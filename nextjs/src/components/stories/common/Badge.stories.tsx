@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 

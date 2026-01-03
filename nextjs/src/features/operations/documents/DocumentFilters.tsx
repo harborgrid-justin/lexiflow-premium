@@ -2,7 +2,7 @@ import {
   Folder, FolderOpen, Clock, Star, Cloud,
   FileText, Image as ImageIcon, Video, AlertOctagon, CheckCircle2, File, Loader2
 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/backend';

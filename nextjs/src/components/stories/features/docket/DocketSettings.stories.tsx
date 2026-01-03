@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketSettings } from '@/features/cases/components/docket/DocketSettings';
-import { ThemeProvider } from '@/providers/ThemeContext';
+import { ThemeProvider } from '@/providers';
 
 /**
  * DocketSettings provides configuration for court integrations and

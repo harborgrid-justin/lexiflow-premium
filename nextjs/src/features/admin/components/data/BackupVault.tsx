@@ -3,7 +3,7 @@ import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import React, { useState } from 'react';

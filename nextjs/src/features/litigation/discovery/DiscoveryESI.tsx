@@ -26,8 +26,8 @@ import { EvidenceCustodyLog } from '@features/litigation/evidence';
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Config
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';

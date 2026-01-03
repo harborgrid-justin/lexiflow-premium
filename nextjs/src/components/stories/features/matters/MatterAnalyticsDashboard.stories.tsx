@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 
 /**
  * MatterAnalyticsDashboard provides case-level analytics including time tracking,

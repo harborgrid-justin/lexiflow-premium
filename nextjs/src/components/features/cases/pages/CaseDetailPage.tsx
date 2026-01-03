@@ -45,7 +45,7 @@ import { CaseProjects } from '@/features/cases/components/detail/projects/CasePr
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
 import { useCaseDetail } from '@/hooks/useCaseDetail';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - SERVICES & UTILS

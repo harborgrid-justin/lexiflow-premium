@@ -18,7 +18,7 @@ import { Users, Building2, ShieldAlert, Globe } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components

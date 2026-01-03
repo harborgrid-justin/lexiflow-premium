@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketSheet } from '@/features/cases/components/docket/DocketSheet';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { WindowProvider } from '@/providers/WindowContext';
+import { ThemeProvider } from '@/providers';
+import { WindowProvider } from '@/providers';
 
 /**
  * DocketSheet is the main docket view component that integrates filtering,

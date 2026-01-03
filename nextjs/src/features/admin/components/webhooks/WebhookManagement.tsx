@@ -8,7 +8,7 @@ import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
 import { useSelection } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
 import React, { useState } from 'react';

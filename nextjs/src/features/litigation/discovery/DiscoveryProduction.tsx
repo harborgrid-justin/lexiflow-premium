@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 

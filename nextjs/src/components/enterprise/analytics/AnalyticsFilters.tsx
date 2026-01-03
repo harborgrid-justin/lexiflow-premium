@@ -21,7 +21,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // ============================================================================
 // TYPES & INTERFACES

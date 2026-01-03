@@ -23,7 +23,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';

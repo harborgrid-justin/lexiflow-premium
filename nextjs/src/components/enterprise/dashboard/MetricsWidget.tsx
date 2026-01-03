@@ -4,7 +4,7 @@
  * @description Real-time metrics widget with live updates
  */
 
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertCircle, LucideIcon, RefreshCw } from 'lucide-react';

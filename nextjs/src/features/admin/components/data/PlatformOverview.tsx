@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/backend';
 import { useInterval } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 import { cn } from '@/utils/cn';

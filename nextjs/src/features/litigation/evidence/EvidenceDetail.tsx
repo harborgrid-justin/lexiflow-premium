@@ -22,7 +22,7 @@ import { EvidenceStructure } from './EvidenceStructure';
 // Context & Utils
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Services & Types

@@ -22,7 +22,7 @@ import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

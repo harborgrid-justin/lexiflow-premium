@@ -16,7 +16,7 @@ import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

@@ -17,7 +17,7 @@ import { UploadCloud, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Card } from '@/components/ui/molecules/Card';

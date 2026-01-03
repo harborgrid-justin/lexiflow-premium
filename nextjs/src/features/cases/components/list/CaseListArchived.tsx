@@ -26,7 +26,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
 // Hooks & Context
 import { useModalState } from '@/hooks/useModalState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

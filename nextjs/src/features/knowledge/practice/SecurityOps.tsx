@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';

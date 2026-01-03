@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { EthicalWall } from '@/types';
 import { cn } from '@/utils/cn';
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';

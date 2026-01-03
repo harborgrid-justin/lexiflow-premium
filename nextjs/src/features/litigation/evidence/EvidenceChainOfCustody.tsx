@@ -16,7 +16,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea';
 import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
 
 // Context & Utils
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';

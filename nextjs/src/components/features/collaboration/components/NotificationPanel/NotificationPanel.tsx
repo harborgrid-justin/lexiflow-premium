@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, X, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { useModalState } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import type { NotificationGroup } from '@/types';
 import { NotificationService } from '@/services/domain/NotificationDomain';

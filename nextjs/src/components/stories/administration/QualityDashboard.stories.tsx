@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QualityDashboard } from '@/features/admin/components/data/quality/QualityDashboard';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 import type { DataAnomaly, QualityMetricHistory } from '@/types';
 
 // Mock data

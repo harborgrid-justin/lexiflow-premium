@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { Process } from './types';

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';

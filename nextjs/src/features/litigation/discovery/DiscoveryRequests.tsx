@@ -23,8 +23,8 @@ import { TaskCreationModal } from '@/components/features/cases/components/TaskCr
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 

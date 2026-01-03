@@ -8,7 +8,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 interface SkeletonProps {
   className?: string;

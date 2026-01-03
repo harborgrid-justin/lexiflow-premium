@@ -1,7 +1,7 @@
 import React from 'react';
 import { RefreshCw, AlertTriangle, X, Database, Cloud, Server, ShieldCheck, Trash2, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import type { DataConnection } from './types';
 

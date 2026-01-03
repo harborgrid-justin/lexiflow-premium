@@ -4,7 +4,7 @@
  * @description Case status distribution visualization widget
  */
 
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';

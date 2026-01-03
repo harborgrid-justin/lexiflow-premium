@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';

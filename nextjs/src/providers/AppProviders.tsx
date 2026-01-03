@@ -1,17 +1,17 @@
 /**
  * AppProviders - Composed Provider Tree
- * 
+ *
  * This file composes all application providers in the correct dependency order
  * to prevent circular dependencies. Providers are layered from most primitive
  * (Theme) to most dependent (Window, Sync).
- * 
+ *
  * Dependency Graph:
  * - ThemeProvider (no dependencies)
  * - ToastProvider (no dependencies)
  * - DataSourceProvider (no dependencies)
  * - WindowProvider (depends on Theme)
  * - SyncProvider (depends on Toast)
- * 
+ *
  * Best Practices Applied:
  * - BP1: Provider composition avoids circular imports
  * - BP3: Dependency injection pattern for cross-provider communication
@@ -19,11 +19,13 @@
  */
 
 import React from 'react';
-import { ThemeProvider, useTheme } from './ThemeContext';
-import { ToastProvider as ToastProviderBase, useToast } from './ToastContext';
-import { DataSourceProvider } from './DataSourceContext';
-import { WindowProvider } from './WindowContext';
-import { SyncProvider } from './SyncContext';
+import { DataSourceProvider } from './DataSourceProvider';
+import { SyncProvider } from './SyncProvider';
+import { useTheme } from './ThemeHooks';
+import { ThemeProvider } from './ThemeProvider';
+import { useToast } from './ToastHooks';
+import { ToastProvider as ToastProviderBase } from './ToastProvider';
+import { WindowProvider } from './WindowProvider';
 
 // Wrapper to ensure ToastProvider returns ReactNode
 const ToastProvider = ToastProviderBase as unknown as React.FC<{
@@ -80,7 +82,7 @@ function SyncProviderWithToast({ children }: { children: React.ReactNode }) {
 
 /**
  * Composed provider tree with proper dependency injection
- * 
+ *
  * Order matters:
  * 1. ThemeProvider - base layer (no deps)
  * 2. ToastProvider - base layer (no deps)

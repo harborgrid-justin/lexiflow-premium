@@ -3,7 +3,7 @@ import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } 
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';

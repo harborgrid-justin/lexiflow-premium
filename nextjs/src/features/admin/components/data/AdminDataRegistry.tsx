@@ -1,6 +1,6 @@
 import { VirtualList } from '@/components/ui/organisms/VirtualList/VirtualList';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { HardDrive, Loader2, Server } from 'lucide-react';

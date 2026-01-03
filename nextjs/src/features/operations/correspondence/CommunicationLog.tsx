@@ -20,7 +20,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';

@@ -24,7 +24,7 @@ import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
 import { PATHS } from '@/config/paths.config';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Copy, Eye, EyeOff, Trash2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { ValidationSeverity } from '@/types/bluebook';
 import type { FormattingResult } from './types';

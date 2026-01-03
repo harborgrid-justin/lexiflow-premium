@@ -20,7 +20,7 @@ import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Modal } from '@/components/ui/molecules/Modal/Modal';

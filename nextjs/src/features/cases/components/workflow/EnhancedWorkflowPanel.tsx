@@ -6,7 +6,7 @@ import { TaskDependencyManager } from './TaskDependencyManager';
 import { TimeTrackingPanel } from './TimeTrackingPanel';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

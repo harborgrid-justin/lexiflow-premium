@@ -1,5 +1,5 @@
 import { Copy, Edit3, Trash2, MoreHorizontal } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 export const TemplateActions = () => {

@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { X, Wand2, Minus } from 'lucide-react';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '@/types';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { useMutation, queryClient } from '@/hooks/backend';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/core';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { Step1TemplateSelection, Step2FormConfiguration, Step3DraftReview } from '@features/document-assembly';

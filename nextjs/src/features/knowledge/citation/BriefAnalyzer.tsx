@@ -32,8 +32,8 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
-import { useWindow } from '@/providers/WindowContext';
+import { useTheme } from '@/providers';
+import { useWindow } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

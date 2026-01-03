@@ -5,7 +5,7 @@ import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers'
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { CostForecast, CostMetric } from '@/types';
 import { cn } from '@/utils/cn';

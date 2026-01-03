@@ -24,7 +24,7 @@ import { Bell, Monitor, Moon, Sun } from 'lucide-react';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

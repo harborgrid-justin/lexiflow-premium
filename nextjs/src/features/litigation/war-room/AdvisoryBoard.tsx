@@ -28,7 +28,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';

@@ -7,7 +7,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';

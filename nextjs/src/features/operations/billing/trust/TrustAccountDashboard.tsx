@@ -18,7 +18,7 @@
 
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTrustAccounts } from '@/hooks/useTrustAccounts';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import type { TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { cn } from '@/utils/cn';

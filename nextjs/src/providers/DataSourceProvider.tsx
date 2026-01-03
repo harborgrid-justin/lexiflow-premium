@@ -2,13 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isBackendApiEnabled as checkBackendEnabled } from '../config/network/api.config';
 import { DataService } from '../services/data/dataService';
 import { backendDiscovery } from '../services/integration/backendDiscovery';
+import { DataSourceActionsContext, DataSourceStateContext } from './DataSourceContext';
 import type {
   DataSourceActionsValue,
   DataSourceProviderProps,
   DataSourceStateValue,
   DataSourceType,
 } from './DataSourceContext.types';
-import { DataSourceActionsContext, DataSourceStateContext } from './DataSourceHooks';
 import type { DataSourceConfig } from './repository/config';
 import { createConfigFromEnv } from './repository/config';
 import type { RepositoryRegistry } from './repository/types';
@@ -19,7 +19,7 @@ import type { RepositoryRegistry } from './repository/types';
  * ║                   Enterprise Pattern Implementation                       ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  *
- * @module providers/DataSourceContext
+ * @module providers/DataSourceProvider
  * @description Infrastructure boundary for data access layer
  *
  * ENTERPRISE PATTERNS APPLIED:

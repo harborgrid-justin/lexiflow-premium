@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/atoms/Button';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { IntegrityReport } from '@/services/infrastructure/chainService';
 import { cn } from '@/utils/cn';
 import { Download, GitCommit, LayoutList, Loader2, RefreshCw, Shield, ShieldCheck, Skull } from 'lucide-react';

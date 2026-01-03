@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Context & Utils
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Services & Types

@@ -22,7 +22,7 @@ import React, { useRef } from 'react';
 import { DocumentService } from '@/services/features/documents/documentService';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';

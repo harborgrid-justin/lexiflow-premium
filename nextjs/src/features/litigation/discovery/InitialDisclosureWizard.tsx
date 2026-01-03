@@ -5,7 +5,7 @@ import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';

@@ -9,7 +9,7 @@ import { Play, Pause, RotateCcw, AlertCircle, CheckCircle2, Clock, Zap, Trending
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import type { ProcessingJob } from '@/types/discovery-enhanced';

@@ -1,5 +1,5 @@
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { CaseId, TaskId, TaskPriorityBackend, TaskStatusBackend, UserId, WorkflowTask } from '@/types';
 import { PleadingComment } from '@/types';

@@ -19,7 +19,7 @@ import { ArgumentDetail } from './arguments/ArgumentDetail';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

@@ -12,7 +12,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Modal } from '@/components/ui/molecules/Modal';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/utils/cn';

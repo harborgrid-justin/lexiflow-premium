@@ -37,7 +37,7 @@ import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
 import { useToggle } from '@/hooks/useToggle';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Data & Types

@@ -19,7 +19,7 @@ import { Globe, Building } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Data
 import { cn } from '@/utils/cn';

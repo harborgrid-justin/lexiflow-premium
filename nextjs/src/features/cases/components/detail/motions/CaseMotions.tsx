@@ -19,10 +19,10 @@ import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

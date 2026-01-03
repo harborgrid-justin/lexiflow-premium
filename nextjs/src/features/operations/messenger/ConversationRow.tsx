@@ -2,7 +2,7 @@ import React from 'react';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { Briefcase, ExternalLink } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 interface ConversationRowProps {

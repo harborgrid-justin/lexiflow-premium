@@ -17,7 +17,7 @@ import { MoreVertical } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants

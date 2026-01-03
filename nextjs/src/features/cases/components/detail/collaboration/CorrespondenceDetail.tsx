@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 

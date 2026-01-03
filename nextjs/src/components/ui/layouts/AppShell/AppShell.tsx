@@ -23,7 +23,7 @@ import React, { memo } from 'react';
 // Hooks & Context
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

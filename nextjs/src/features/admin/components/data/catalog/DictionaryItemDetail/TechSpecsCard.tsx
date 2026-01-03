@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Card } from '@/components/ui/molecules/Card';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { DataDictionaryItem } from '@/types';
 import React from 'react';

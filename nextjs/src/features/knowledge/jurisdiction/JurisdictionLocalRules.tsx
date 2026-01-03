@@ -10,7 +10,7 @@ import { DataService } from '@/services/data/dataService';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { LegalRule } from '@/types';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { useModalState } from '@/hooks/core';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';

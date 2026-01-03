@@ -27,7 +27,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 // Hooks & Context
 import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import type { ThemeStateValue } from '@/providers/ThemeContext.types';
 
 // Utils & Services

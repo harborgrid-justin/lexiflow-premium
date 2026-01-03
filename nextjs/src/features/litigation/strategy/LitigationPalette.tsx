@@ -11,7 +11,7 @@ import React from 'react';
 import { X, GripVertical } from 'lucide-react';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils
 import { cn } from '@/utils/cn';

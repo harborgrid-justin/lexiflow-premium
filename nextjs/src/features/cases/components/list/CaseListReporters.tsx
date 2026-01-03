@@ -21,7 +21,7 @@ import { Mic2, Plus} from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

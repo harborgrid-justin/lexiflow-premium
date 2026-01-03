@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useDataSource } from '@/providers';
 import { cn } from '@/utils/cn';
 

@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

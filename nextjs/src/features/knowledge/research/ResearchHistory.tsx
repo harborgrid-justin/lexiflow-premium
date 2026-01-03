@@ -3,7 +3,7 @@ import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/Adaptiv
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '@/types';
 import { cn } from '@/utils/cn';

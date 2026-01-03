@@ -1,5 +1,5 @@
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { Group, Organization, User as UserType } from '@/types';
 import { cn } from '@/utils/cn';
 import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';

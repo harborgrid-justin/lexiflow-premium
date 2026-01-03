@@ -2,108 +2,119 @@
 // ============================================================================
 // Context Providers & Hooks
 // ============================================================================
-// 
+//
 // Best Practice Applied (BP4): Export only hooks, not raw contexts
 // This enables invariant checks and future refactors without breaking consumers
 
 // Composed Provider Tree (recommended way to use all providers)
-export { AppProviders } from './AppProviders';
+export { AppProviders } from "./AppProviders";
 
 // SyncContext exports
-export { SyncProvider, useSyncState, useSyncActions, useSync, SyncContext } from './SyncContext';
-export type { SyncContextType } from './SyncContext';
-export type { SyncStatus } from './SyncContext.types';
+export type { SyncContextType } from "./SyncContext";
+export type { SyncStatus } from "./SyncContext.types";
+export {
+  SyncContext,
+  useSync,
+  useSyncActions,
+  useSyncState,
+} from "./SyncHooks";
+export { SyncProvider } from "./SyncProvider";
 
 // ThemeContext exports
-export { ThemeProvider, useThemeState, useThemeActions, useTheme } from './ThemeContext';
+export { useTheme, useThemeActions, useThemeState } from "./ThemeHooks";
+export { ThemeProvider } from "./ThemeProvider";
 
 // ToastContext exports
-export { ToastProvider, useToastState, useToastActions, useToast } from './ToastContext';
-export type { ToastType } from './ToastContext.types';
+export type { ToastType } from "./ToastContext.types";
+export { useToast, useToastActions, useToastState } from "./ToastHooks";
+export { ToastProvider } from "./ToastProvider";
 
 // WindowContext exports
-export { WindowProvider, useWindowState, useWindowActions, useWindow } from './WindowContext';
-export type { WindowInstance } from './WindowContext.types';
+export type { WindowInstance } from "./WindowContext.types";
+export { useWindow, useWindowActions, useWindowState } from "./WindowHooks";
+export { WindowProvider } from "./WindowProvider";
 
 // DataSourceContext exports
-export { DataSourceProvider, useDataSourceState, useDataSourceActions, useDataSource } from './DataSourceContext';
-export type { DataSourceType } from './DataSourceContext.types';
+export type { DataSourceType } from "./DataSourceContext.types";
+export {
+  useDataSource,
+  useDataSourceActions,
+  useDataSourceState,
+} from "./DataSourceHooks";
+export { DataSourceProvider } from "./DataSourceProvider";
 
 // Repository infrastructure exports
-export type { 
-  BaseRepository, 
-  BatchRepository, 
-  SearchableRepository,
-  SearchOptions,
-  SearchResult,
+export type {
+  AuthProvider,
+  BaseRepository,
+  BatchRepository,
   CaseRepository,
-  DocumentRepository,
   ComplianceRepository,
   ConflictResult,
-  ScanResult,
-  RepositoryRegistry,
-  RepositoryFactory,
-  RepositoryConfig,
-  RepositoryLogger,
-  RepositoryTracer,
-  RepositoryMetrics,
-  Span,
-  AuthProvider,
   DataOwnership,
-} from './repository/types';
+  DocumentRepository,
+  RepositoryConfig,
+  RepositoryFactory,
+  RepositoryLogger,
+  RepositoryMetrics,
+  RepositoryRegistry,
+  RepositoryTracer,
+  ScanResult,
+  SearchOptions,
+  SearchResult,
+  SearchableRepository,
+  Span,
+} from "./repository/types";
 
 export type {
   DataSourceConfig,
   DataSourceEnvironmentConfig,
-  TimeoutConfig,
-  RetryConfig,
   ObservabilityConfig,
-} from './repository/config';
-
-export { 
-  DataSourceConfigBuilder,
-  createConfigFromEnv,
-  createTestConfig,
-  DEFAULT_TIMEOUTS,
-  DEFAULT_RETRY,
-  DEFAULT_OBSERVABILITY,
-  ENVIRONMENT_CONFIGS,
-} from './repository/config';
+  RetryConfig,
+  TimeoutConfig,
+} from "./repository/config";
 
 export {
-  RepositoryError,
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-  NetworkError,
-  TimeoutError,
-  ServerError,
-  RateLimitError,
+  DEFAULT_OBSERVABILITY,
+  DEFAULT_RETRY,
+  DEFAULT_TIMEOUTS,
+  DataSourceConfigBuilder,
+  ENVIRONMENT_CONFIGS,
+  createConfigFromEnv,
+  createTestConfig,
+} from "./repository/config";
+
+export {
   BusinessRuleError,
   ConcurrencyError,
+  ConflictError,
   ErrorFactory,
+  ForbiddenError,
+  NetworkError,
+  NotFoundError,
+  RateLimitError,
+  RepositoryError,
+  ServerError,
+  TimeoutError,
+  UnauthorizedError,
+  ValidationError,
+  getErrorSeverity,
+  getUserMessage,
   isRepositoryError,
   isRetryableError,
-  getUserMessage,
-  getErrorSeverity,
-} from './repository/errors';
+} from "./repository/errors";
 
-export type {
-  ValidationFailure,
-} from './repository/errors';
+export type { ValidationFailure } from "./repository/errors";
 
 // ============================================================================
 // Type Exports (Consolidated)
 // ============================================================================
 // Import all types from the consolidated types file for convenience
-export type * from './types';
+export type * from "./types";
 
 // ============================================================================
 // Legacy Type Exports (for backward compatibility)
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from '../components/theme/tokens';
-
+export type { ThemeMode } from "../components/theme/tokens";

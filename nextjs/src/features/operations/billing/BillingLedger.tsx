@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers/WindowContext';
+import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { OperatingLedger, TrustLedger } from '@features/knowledge';
 import { Plus } from 'lucide-react';

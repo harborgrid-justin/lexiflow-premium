@@ -1,23 +1,28 @@
-import { createContext, useContext } from 'react';
+import { useContext } from "react";
+import {
+  DataSourceActionsContext,
+  DataSourceStateContext,
+} from "./DataSourceContext";
 import type {
   DataSourceActionsValue,
   DataSourceStateValue,
-} from './DataSourceContext.types';
+} from "./DataSourceContext.types";
 
-// BP3: Split contexts for state and actions
 const contextId = Math.random().toString(36).substring(7);
-console.log('[DataSourceHooks] Module loaded, ID:', contextId);
-
-export const DataSourceStateContext = createContext<DataSourceStateValue | undefined>(undefined);
-export const DataSourceActionsContext = createContext<DataSourceActionsValue | undefined>(undefined);
+console.log("[DataSourceHooks] Module loaded, ID:", contextId);
 
 // BP4: Export only custom hooks, not raw contexts
 export function useDataSourceState(): DataSourceStateValue {
   const context = useContext(DataSourceStateContext);
   // BP5: Fail fast when provider is missing
   if (!context) {
-    console.error('[useDataSourceState] Context is missing! Provider not found in tree. Module ID:', contextId);
-    throw new Error('useDataSourceState must be used within a DataSourceProvider');
+    console.error(
+      "[useDataSourceState] Context is missing! Provider not found in tree. Module ID:",
+      contextId
+    );
+    throw new Error(
+      "useDataSourceState must be used within a DataSourceProvider"
+    );
   }
   return context;
 }
@@ -26,7 +31,9 @@ export function useDataSourceActions(): DataSourceActionsValue {
   const context = useContext(DataSourceActionsContext);
   // BP5: Fail fast when provider is missing
   if (!context) {
-    throw new Error('useDataSourceActions must be used within a DataSourceProvider');
+    throw new Error(
+      "useDataSourceActions must be used within a DataSourceProvider"
+    );
   }
   return context;
 }

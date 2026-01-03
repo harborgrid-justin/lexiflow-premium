@@ -1,8 +1,9 @@
 import { ErrorBoundary } from "@/components/organisms/ErrorBoundary";
 import { cn } from '@/utils/cn';
 import { Maximize2, Minus, X } from 'lucide-react';
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { WindowActionsContext, WindowStateContext } from './WindowContext';
 import type {
   DragState,
   WindowActionsValue,
@@ -12,7 +13,7 @@ import type {
 } from './WindowContext.types';
 
 /**
- * WindowContext - Application-level window management (orbital mode)
+ * WindowProvider - Application-level window management (orbital mode)
  *
  * Best Practices Applied:
  * - BP1: Cross-cutting concern (window management) justifies context usage
@@ -29,40 +30,8 @@ import type {
 // Re-export types for convenience
 export type { WindowInstance } from './WindowContext.types';
 
-// BP3: Split contexts for state and actions
-const WindowStateContext = createContext<WindowStateValue | undefined>(undefined);
-const WindowActionsContext = createContext<WindowActionsValue | undefined>(undefined);
-
 // Maximum number of windows to prevent memory leaks
 const MAX_WINDOWS = 20;
-
-// BP4: Export only custom hooks, not raw contexts
-export function useWindowState(): WindowStateValue {
-  const context = useContext(WindowStateContext);
-  // BP5: Fail fast when provider is missing
-  if (!context) {
-    throw new Error('useWindowState must be used within a WindowProvider');
-  }
-  return context;
-}
-
-export function useWindowActions(): WindowActionsValue {
-  const context = useContext(WindowActionsContext);
-  // BP5: Fail fast when provider is missing
-  if (!context) {
-    throw new Error('useWindowActions must be used within a WindowProvider');
-  }
-  return context;
-}
-
-// Convenience hook for consumers that need both (backward compatibility)
-export function useWindow() {
-  return {
-    ...useWindowState(),
-    ...useWindowActions(),
-  };
-}
-
 
 // Base Z-Index for Windows (below Modals and Toasts)
 const BASE_WINDOW_Z = 1000;

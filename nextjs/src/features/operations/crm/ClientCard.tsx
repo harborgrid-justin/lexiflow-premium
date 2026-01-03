@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Currency } from '@/components/ui/atoms/Currency/Currency';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { Client, ClientStatus } from '@/types';
 import { cn } from '@/utils/cn';
 import { Building, Lock, PieChart } from 'lucide-react';

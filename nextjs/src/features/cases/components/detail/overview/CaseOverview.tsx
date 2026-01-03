@@ -22,7 +22,7 @@ import { CaseOverviewModals } from './CaseOverviewModals';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 

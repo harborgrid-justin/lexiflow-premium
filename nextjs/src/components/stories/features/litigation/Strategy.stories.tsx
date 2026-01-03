@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StrategyCanvas } from '../../../../features/litigation/strategy/StrategyCanvas';
-import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '@/providers/ToastContext';
+import { ThemeProvider } from '@/providers';
+import { ToastProvider } from '@/providers';
 import React, { useState } from 'react';
 import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../features/cases/components/workflow/builder/types';
 

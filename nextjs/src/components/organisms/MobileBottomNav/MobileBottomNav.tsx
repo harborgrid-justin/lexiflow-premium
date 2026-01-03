@@ -21,7 +21,7 @@ import { MoreHorizontal } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

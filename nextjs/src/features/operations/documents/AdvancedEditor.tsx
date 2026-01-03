@@ -3,7 +3,7 @@ import { Wand2, RotateCcw } from 'lucide-react';
 import { useToggle } from '@/hooks/useToggle';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { EditorToolbar } from '@/components/features/discovery/components/EditorToolbar/EditorToolbar';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
 

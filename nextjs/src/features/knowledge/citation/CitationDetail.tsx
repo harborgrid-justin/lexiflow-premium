@@ -21,7 +21,7 @@ import { X, BookOpen, ExternalLink, CheckCircle, AlertTriangle, Link, Wand2, Loa
 import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

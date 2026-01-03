@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Currency } from '@/components/ui/atoms/Currency';
 import { Lock, MoreVertical } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

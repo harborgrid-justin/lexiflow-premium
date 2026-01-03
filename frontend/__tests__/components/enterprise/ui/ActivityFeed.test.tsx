@@ -85,10 +85,9 @@ describe('ActivityFeed', () => {
     });
 
     it('should display activity icons', () => {
-      renderWithTheme(<ActivityFeed activities={mockActivities} />);
+      const { container } = renderWithTheme(<ActivityFeed activities={mockActivities} />);
 
       // Icons should be rendered for each activity type
-      const { container } = screen.getByText('John Doe').closest('div')?.parentElement || document;
       const icons = container.querySelectorAll('svg');
       expect(icons.length).toBeGreaterThan(0);
     });
@@ -339,8 +338,8 @@ describe('ActivityFeed', () => {
         <ActivityFeed activities={mockActivities} onItemClick={jest.fn()} />
       );
 
-      const activity = screen.getByText('John Doe').closest('div');
-      expect(activity).toHaveClass('cursor-pointer');
+      const activity = container.querySelector('.cursor-pointer');
+      expect(activity).toBeInTheDocument();
     });
 
     it('should not show hover effect when onItemClick is not provided', () => {
@@ -365,9 +364,8 @@ describe('ActivityFeed', () => {
     });
 
     it('should display empty state icon', () => {
-      renderWithTheme(<ActivityFeed activities={[]} />);
+      const { container } = renderWithTheme(<ActivityFeed activities={[]} />);
 
-      const { container } = screen.getByText('No recent activity').closest('div') || document;
       const icon = container.querySelector('svg');
       expect(icon).toBeInTheDocument();
     });

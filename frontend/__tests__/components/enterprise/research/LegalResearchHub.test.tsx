@@ -54,7 +54,9 @@ describe('LegalResearchHub', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
       const searchInput = screen.getByPlaceholderText(/search case law, statutes/i);
-      const searchButton = screen.getByRole('button', { name: /search/i });
+      const searchButtons = screen.getAllByRole('button', { name: /^search$/i });
+      // Get the button that is NOT in a tab (the action button in the search bar)
+      const searchButton = searchButtons.find(btn => !btn.className.includes('border-b-2')) || searchButtons[0];
 
       fireEvent.change(searchInput, { target: { value: 'breach of contract' } });
       fireEvent.click(searchButton);
@@ -80,7 +82,8 @@ describe('LegalResearchHub', () => {
     it('should not search when query is empty', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
-      const searchButton = screen.getByRole('button', { name: /search/i });
+      const searchButtons = screen.getAllByRole('button', { name: /^search$/i });
+      const searchButton = searchButtons.find(btn => !btn.className.includes('border-b-2')) || searchButtons[0];
       fireEvent.click(searchButton);
 
       expect(mockOnSearch).not.toHaveBeenCalled();
@@ -90,12 +93,13 @@ describe('LegalResearchHub', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
       const searchInput = screen.getByPlaceholderText(/search case law, statutes/i);
-      const searchButton = screen.getByRole('button', { name: /search/i });
+      const searchButtons = screen.getAllByRole('button', { name: /^search$/i });
+      const searchButton = searchButtons.find(btn => !btn.className.includes('border-b-2')) || searchButtons[0];
 
       fireEvent.change(searchInput, { target: { value: 'test query' } });
       fireEvent.click(searchButton);
 
-      expect(screen.getByText(/searching\.\.\./i)).toBeInTheDocument();
+      expect(screen.getByText('Searching...')).toBeInTheDocument();
     });
   });
 
@@ -103,14 +107,14 @@ describe('LegalResearchHub', () => {
     it('should toggle filters panel when filter button is clicked', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
-      const filterButton = screen.getByTitle(/filters/i);
+      const filterButton = screen.getByTitle('Filters');
 
       // Filters should not be visible initially
-      expect(screen.queryByText(/jurisdiction/i)).not.toBeInTheDocument();
+      expect(screen.queryByText('Jurisdiction')).not.toBeInTheDocument();
 
       // Click to show filters
       fireEvent.click(filterButton);
-      expect(screen.getByText(/jurisdiction/i)).toBeInTheDocument();
+      expect(screen.getByText('Jurisdiction')).toBeInTheDocument();
 
       // Click again to hide filters
       fireEvent.click(filterButton);
@@ -119,12 +123,12 @@ describe('LegalResearchHub', () => {
     it('should display filter options for jurisdiction, document type, and date range', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
-      const filterButton = screen.getByTitle(/filters/i);
+      const filterButton = screen.getByTitle('Filters');
       fireEvent.click(filterButton);
 
-      expect(screen.getByText(/jurisdiction/i)).toBeInTheDocument();
-      expect(screen.getByText(/document type/i)).toBeInTheDocument();
-      expect(screen.getByText(/date range/i)).toBeInTheDocument();
+      expect(screen.getByText('Jurisdiction')).toBeInTheDocument();
+      expect(screen.getByText('Document Type')).toBeInTheDocument();
+      expect(screen.getByText('Date Range')).toBeInTheDocument();
     });
   });
 
@@ -190,8 +194,11 @@ describe('LegalResearchHub', () => {
     it('should display highlighted search terms', () => {
       render(<LegalResearchHub {...defaultProps} />);
 
-      expect(screen.getByText(/breach of contract/i)).toBeInTheDocument();
-      expect(screen.getByText(/damages/i)).toBeInTheDocument();
+      // Check for highlighted terms in the pill badges
+      const highlightedTerms = screen.getAllByText('breach of contract');
+      expect(highlightedTerms.length).toBeGreaterThan(0);
+      const damagesTerms = screen.getAllByText('damages');
+      expect(damagesTerms.length).toBeGreaterThan(0);
     });
 
     it('should call onExport when export button is clicked', () => {

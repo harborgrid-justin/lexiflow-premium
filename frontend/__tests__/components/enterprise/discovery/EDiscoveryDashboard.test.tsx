@@ -12,6 +12,7 @@ import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 jest.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    h3: ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
@@ -31,6 +32,32 @@ const mockTheme = {
     background: 'bg-gray-50',
     border: {
       default: 'border-gray-200',
+      focused: 'border-blue-500 ring-2 ring-blue-500/20',
+    },
+    action: {
+      primary: {
+        bg: 'bg-blue-600',
+        hover: 'hover:bg-blue-700',
+        text: 'text-white',
+        border: 'border-transparent',
+      },
+      secondary: {
+        bg: 'bg-white',
+        hover: 'hover:bg-slate-50',
+        text: 'text-slate-700',
+        border: 'border-slate-300',
+      },
+      ghost: {
+        bg: 'bg-transparent',
+        hover: 'hover:bg-slate-100',
+        text: 'text-slate-600',
+      },
+      danger: {
+        bg: 'bg-white',
+        hover: 'hover:bg-rose-50',
+        text: 'text-rose-600',
+        border: 'border-rose-200',
+      },
     },
   },
 };
@@ -171,7 +198,7 @@ describe('EDiscoveryDashboard', () => {
       const collectionsTab = screen.getByRole('button', { name: /collections/i });
       fireEvent.click(collectionsTab);
 
-      expect(screen.getByText('Progress')).toBeInTheDocument();
+      expect(screen.getAllByText('Progress')[0]).toBeInTheDocument();
       // Check for custodian names in collections
       expect(screen.getByText('Sarah Johnson')).toBeInTheDocument();
       expect(screen.getByText('Michael Chen')).toBeInTheDocument();
@@ -183,8 +210,8 @@ describe('EDiscoveryDashboard', () => {
       const collectionsTab = screen.getByRole('button', { name: /collections/i });
       fireEvent.click(collectionsTab);
 
-      expect(screen.getByText('Type')).toBeInTheDocument();
-      expect(screen.getByText('Size')).toBeInTheDocument();
+      expect(screen.getAllByText('Type')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Size')[0]).toBeInTheDocument();
     });
   });
 

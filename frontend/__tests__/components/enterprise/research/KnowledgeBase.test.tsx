@@ -147,8 +147,14 @@ describe('KnowledgeBase', () => {
     it('should show resource count per category', () => {
       render(<KnowledgeBase {...defaultProps} />);
 
-      expect(screen.getByText(/litigation \(2\)/i)).toBeInTheDocument();
-      expect(screen.getByText(/employment \(1\)/i)).toBeInTheDocument();
+      // Check for category buttons with counts in the text content
+      const litigationButton = screen.getByRole('button', { name: /litigation/i });
+      expect(litigationButton).toHaveTextContent('Litigation');
+      expect(litigationButton).toHaveTextContent('(2)');
+
+      const employmentButton = screen.getByRole('button', { name: /employment/i });
+      expect(employmentButton).toHaveTextContent('Employment');
+      expect(employmentButton).toHaveTextContent('(1)');
     });
 
     it('should highlight selected category', () => {
@@ -222,10 +228,10 @@ describe('KnowledgeBase', () => {
       if (resourceCard) {
         fireEvent.click(resourceCard);
 
-        expect(screen.getByText(/sarah johnson/i)).toBeInTheDocument();
-        expect(screen.getByText(/last updated/i)).toBeInTheDocument();
-        expect(screen.getByText(/downloads/i)).toBeInTheDocument();
-        expect(screen.getByText(/rating/i)).toBeInTheDocument();
+        expect(screen.getAllByText(/sarah johnson/i).length).toBeGreaterThan(0);
+        expect(screen.getByText('Last Updated')).toBeInTheDocument();
+        expect(screen.getByText('Downloads')).toBeInTheDocument();
+        expect(screen.getByText('Rating')).toBeInTheDocument();
       }
     });
 
@@ -265,8 +271,10 @@ describe('KnowledgeBase', () => {
     it('should display access level indicators (firm, team, private)', () => {
       render(<KnowledgeBase {...defaultProps} />);
 
-      expect(screen.getByText(/firm/i)).toBeInTheDocument();
-      expect(screen.getByText(/team/i)).toBeInTheDocument();
+      const firmAccess = screen.getAllByText('firm');
+      expect(firmAccess.length).toBeGreaterThan(0);
+      const teamAccess = screen.getAllByText('team');
+      expect(teamAccess.length).toBeGreaterThan(0);
     });
 
     it('should show confidential indicator for sensitive resources', () => {
@@ -352,9 +360,11 @@ describe('KnowledgeBase', () => {
     it('should display tags for each resource', () => {
       render(<KnowledgeBase {...defaultProps} />);
 
-      expect(screen.getByText(/summary judgment/i)).toBeInTheDocument();
-      expect(screen.getByText(/federal court/i)).toBeInTheDocument();
-      expect(screen.getByText(/employment/i)).toBeInTheDocument();
+      expect(screen.getByText('summary judgment')).toBeInTheDocument();
+      expect(screen.getByText('federal court')).toBeInTheDocument();
+      // Employment appears both as a tag and category, so check for its existence
+      const employmentElements = screen.getAllByText(/employment/i);
+      expect(employmentElements.length).toBeGreaterThan(0);
     });
 
     it('should limit tag display in grid view', () => {

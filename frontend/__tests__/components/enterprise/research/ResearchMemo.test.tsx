@@ -43,11 +43,16 @@ describe('ResearchMemo', () => {
     it('should render memo with default sections', () => {
       render(<ResearchMemo {...defaultProps} />);
 
-      expect(screen.getByText(/issue/i)).toBeInTheDocument();
-      expect(screen.getByText(/brief answer/i)).toBeInTheDocument();
-      expect(screen.getByText(/facts/i)).toBeInTheDocument();
-      expect(screen.getByText(/analysis/i)).toBeInTheDocument();
-      expect(screen.getByText(/conclusion/i)).toBeInTheDocument();
+      const issueElements = screen.getAllByText('Issue');
+      expect(issueElements.length).toBeGreaterThan(0);
+      const briefAnswerElements = screen.getAllByText('Brief Answer');
+      expect(briefAnswerElements.length).toBeGreaterThan(0);
+      const factsElements = screen.getAllByText('Facts');
+      expect(factsElements.length).toBeGreaterThan(0);
+      const analysisElements = screen.getAllByText('Analysis');
+      expect(analysisElements.length).toBeGreaterThan(0);
+      const conclusionElements = screen.getAllByText('Conclusion');
+      expect(conclusionElements.length).toBeGreaterThan(0);
     });
 
     it('should allow editing memo title', () => {
@@ -79,7 +84,8 @@ describe('ResearchMemo', () => {
       const analysisButton = screen.getByRole('button', { name: /analysis/i });
       fireEvent.click(analysisButton);
 
-      expect(screen.getByText(/analysis/i)).toBeInTheDocument();
+      const analysisElements = screen.getAllByText('Analysis');
+      expect(analysisElements.length).toBeGreaterThan(0);
     });
 
     it('should allow editing section content', () => {
@@ -116,7 +122,8 @@ describe('ResearchMemo', () => {
       const aiButton = screen.getByRole('button', { name: /ai assist/i });
       fireEvent.click(aiButton);
 
-      expect(screen.getAllByText(/ai research assistant/i).length).toBeGreaterThan(1);
+      const aiAssistantElements = screen.getAllByText('AI Research Assistant');
+      expect(aiAssistantElements.length).toBeGreaterThan(0);
     });
 
     it('should display AI suggestion options', () => {
@@ -175,11 +182,16 @@ describe('ResearchMemo', () => {
       const aiButton = screen.getByRole('button', { name: /ai assist/i });
       fireEvent.click(aiButton);
 
-      const closeButton = screen.getAllByText('×')[0];
-      fireEvent.click(closeButton);
+      // Verify panel is open
+      expect(screen.getByText('Summarize Section')).toBeInTheDocument();
 
-      // Panel should be closed
-      expect(screen.getAllByText(/ai research assistant/i).length).toBe(1);
+      // Get close buttons and find the one in the AI panel
+      const closeButtons = screen.getAllByText('×');
+      const sidebarCloseButton = closeButtons[closeButtons.length - 1];
+      fireEvent.click(sidebarCloseButton);
+
+      // Panel should be closed - the Summarize Section button should no longer be visible
+      expect(screen.queryByText('Summarize Section')).not.toBeInTheDocument();
     });
   });
 
@@ -190,7 +202,8 @@ describe('ResearchMemo', () => {
       const versionsTab = screen.getByRole('button', { name: /versions \(0\)/i });
       fireEvent.click(versionsTab);
 
-      expect(screen.getByText(/version history/i)).toBeInTheDocument();
+      const versionHistoryElements = screen.getAllByText('Version History');
+      expect(versionHistoryElements.length).toBeGreaterThan(0);
     });
 
     it('should show empty state when no versions exist', () => {

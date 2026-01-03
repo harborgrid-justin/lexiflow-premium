@@ -11,20 +11,20 @@ import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 // Mock chart color service
 jest.mock('@/services/theme/chartColorService', () => ({
   ChartColorService: {
-    getPalette: jest.fn(() => ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']),
+    getPalette: (mode: string) => ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
   },
 }));
 
 // Mock chart config
 jest.mock('@/utils/chartConfig', () => ({
-  getChartTheme: jest.fn(() => ({
+  getChartTheme: (mode: string) => ({
     grid: '#e5e7eb',
     text: '#374151',
     tooltipStyle: {
       backgroundColor: '#fff',
       border: '1px solid #e5e7eb',
     },
-  })),
+  }),
 }));
 
 // Mock Recharts
@@ -45,28 +45,33 @@ jest.mock('recharts', () => ({
 }));
 
 // Mock Lucide icons
-jest.mock('lucide-react', () => ({
-  Target: () => <div data-testid="target-icon" />,
-  TrendingUp: () => <div data-testid="trending-up-icon" />,
-  DollarSign: () => <div data-testid="dollar-icon" />,
-  Users: () => <div data-testid="users-icon" />,
-  FileText: () => <div data-testid="file-icon" />,
-  Award: () => <div data-testid="award-icon" />,
-  XCircle: () => <div data-testid="x-circle-icon" />,
-  Clock: () => <div data-testid="clock-icon" />,
-  CheckCircle2: () => <div data-testid="check-icon" />,
-  BarChart3: () => <div data-testid="bar-chart-icon" />,
-  PieChart: () => <div data-testid="pie-chart-icon" />,
-  Calendar: () => <div data-testid="calendar-icon" />,
-  Send: () => <div data-testid="send-icon" />,
-  Edit: () => <div data-testid="edit-icon" />,
-  Eye: () => <div data-testid="eye-icon" />,
-  Download: () => <div data-testid="download-icon" />,
-  Plus: () => <div data-testid="plus-icon" />,
-  ArrowUpRight: () => <div data-testid="arrow-icon" />,
-  Filter: () => <div data-testid="filter-icon" />,
-  Search: () => <div data-testid="search-icon" />,
-}));
+jest.mock('lucide-react', () => {
+  const React = require('react');
+  return {
+    Target: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="target-icon" {...props} />),
+    TrendingUp: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="trending-up-icon" {...props} />),
+    TrendingDown: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="trending-down-icon" {...props} />),
+    DollarSign: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="dollar-icon" {...props} />),
+    Users: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="users-icon" {...props} />),
+    FileText: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="file-icon" {...props} />),
+    Award: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="award-icon" {...props} />),
+    XCircle: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="x-circle-icon" {...props} />),
+    Clock: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="clock-icon" {...props} />),
+    CheckCircle2: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="check-icon" {...props} />),
+    BarChart3: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="bar-chart-icon" {...props} />),
+    PieChart: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="pie-chart-icon" {...props} />),
+    Calendar: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="calendar-icon" {...props} />),
+    Send: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="send-icon" {...props} />),
+    Edit: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="edit-icon" {...props} />),
+    Eye: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="eye-icon" {...props} />),
+    Download: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="download-icon" {...props} />),
+    Plus: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="plus-icon" {...props} />),
+    ArrowUpRight: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="arrow-icon" {...props} />),
+    Filter: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="filter-icon" {...props} />),
+    Search: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="search-icon" {...props} />),
+    Activity: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="activity-icon" {...props} />),
+  };
+});
 
 const renderWithProviders = (component: React.ReactElement) => {
   return render(<ThemeProvider>{component}</ThemeProvider>);

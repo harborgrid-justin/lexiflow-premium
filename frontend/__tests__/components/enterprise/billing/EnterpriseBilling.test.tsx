@@ -192,7 +192,9 @@ describe('EnterpriseBilling Component', () => {
       render(<EnterpriseBilling onExportData={mockOnExportData} />);
       fireEvent.click(screen.getByRole('button', { name: /Write-offs/i }));
 
-      expect(screen.getByText('$15,600')).toBeInTheDocument();
+      // Check for both original and write-off amounts (may have duplicates)
+      const amounts15600 = screen.getAllByText('$15,600');
+      expect(amounts15600.length).toBeGreaterThan(0);
       expect(screen.getByText('$4,500')).toBeInTheDocument();
       expect(screen.getByText('$1,500')).toBeInTheDocument();
     });

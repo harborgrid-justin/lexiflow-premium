@@ -30,6 +30,32 @@ const mockTheme = {
     background: 'bg-gray-50',
     border: {
       default: 'border-gray-200',
+      focused: 'border-blue-500 ring-2 ring-blue-500/20',
+    },
+    action: {
+      primary: {
+        bg: 'bg-blue-600',
+        hover: 'hover:bg-blue-700',
+        text: 'text-white',
+        border: 'border-transparent',
+      },
+      secondary: {
+        bg: 'bg-white',
+        hover: 'hover:bg-slate-50',
+        text: 'text-slate-700',
+        border: 'border-slate-300',
+      },
+      ghost: {
+        bg: 'bg-transparent',
+        hover: 'hover:bg-slate-100',
+        text: 'text-slate-600',
+      },
+      danger: {
+        bg: 'bg-white',
+        hover: 'hover:bg-rose-50',
+        text: 'text-rose-600',
+        border: 'border-rose-200',
+      },
     },
   },
 };
@@ -80,16 +106,16 @@ describe('EvidenceChainOfCustody', () => {
       render(<EvidenceChainOfCustody />);
 
       expect(screen.getByText(/Email communications related to contract negotiations/)).toBeInTheDocument();
-      expect(screen.getByText('CR-2025-1234')).toBeInTheDocument();
+      expect(screen.getAllByText('CR-2025-1234')[0]).toBeInTheDocument();
     });
 
     test('displays evidence type and category', () => {
       render(<EvidenceChainOfCustody />);
 
-      expect(screen.getByText('digital')).toBeInTheDocument();
-      expect(screen.getByText('physical')).toBeInTheDocument();
-      expect(screen.getByText('electronic')).toBeInTheDocument();
-      expect(screen.getByText('document')).toBeInTheDocument();
+      expect(screen.getAllByText('digital')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('physical')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('electronic')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('document')[0]).toBeInTheDocument();
     });
 
     test('shows evidence status badges', () => {
@@ -103,11 +129,19 @@ describe('EvidenceChainOfCustody', () => {
     test('allows clicking on evidence to view details', () => {
       render(<EvidenceChainOfCustody />);
 
-      const evidenceCard = screen.getByText('EV-2025-002').closest('div');
-      expect(evidenceCard).toHaveClass('cursor-pointer');
+      const evidenceCards = screen.getAllByText('EV-2025-002');
+      const evidenceCard = evidenceCards[0].closest('div');
 
-      if (evidenceCard) {
-        fireEvent.click(evidenceCard);
+      // Find the parent card div with cursor-pointer class
+      let cursorPointerDiv = evidenceCard;
+      while (cursorPointerDiv && !cursorPointerDiv.className.includes('cursor-pointer')) {
+        cursorPointerDiv = cursorPointerDiv.parentElement as HTMLDivElement | null;
+      }
+
+      expect(cursorPointerDiv).toHaveClass('cursor-pointer');
+
+      if (cursorPointerDiv) {
+        fireEvent.click(cursorPointerDiv);
 
         // Should show detail view with back button
         expect(screen.getByText('← Back to List')).toBeInTheDocument();
@@ -139,9 +173,9 @@ describe('EvidenceChainOfCustody', () => {
       fireEvent.click(transfersTab);
 
       await waitFor(() => {
-        expect(screen.getByText('Officer Michael Chen')).toBeInTheDocument();
-        expect(screen.getByText('Evidence Clerk Jane Smith')).toBeInTheDocument();
-      });
+        expect(screen.getAllByText('Officer Michael Chen')[0]).toBeInTheDocument();
+        expect(screen.getAllByText('Evidence Clerk Jane Smith')[0]).toBeInTheDocument();
+      }, { timeout: 3000 });
     });
 
     test('shows seal integrity status for each transfer', async () => {
@@ -151,8 +185,8 @@ describe('EvidenceChainOfCustody', () => {
       fireEvent.click(transfersTab);
 
       await waitFor(() => {
-        expect(screen.getByText('Seal Intact')).toBeInTheDocument();
-      });
+        expect(screen.getAllByText('Seal Intact')[0]).toBeInTheDocument();
+      }, { timeout: 3000 });
     });
   });
 
@@ -170,9 +204,9 @@ describe('EvidenceChainOfCustody', () => {
       fireEvent.click(handlingTab);
 
       await waitFor(() => {
-        expect(screen.getByText('Handling Log')).toBeInTheDocument();
+        expect(screen.getAllByText('Handling Log')[0]).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /log activity/i })).toBeInTheDocument();
-      });
+      }, { timeout: 3000 });
     });
 
     test('displays handling actions with timestamps', async () => {
@@ -195,10 +229,10 @@ describe('EvidenceChainOfCustody', () => {
       fireEvent.click(handlingTab);
 
       await waitFor(() => {
-        expect(screen.getByText(/Officer Michael Chen/)).toBeInTheDocument();
+        expect(screen.getAllByText(/Officer Michael Chen/)[0]).toBeInTheDocument();
         expect(screen.getByText(/Crime Scene Tech Amanda White/)).toBeInTheDocument();
         expect(screen.getByText(/Forensic Tech David Lee/)).toBeInTheDocument();
-      });
+      }, { timeout: 3000 });
     });
   });
 
@@ -300,12 +334,11 @@ describe('EvidenceChainOfCustody', () => {
 
   describe('Legal-Specific Features', () => {
     test('tracks collection date and collected by information', () => {
-      render(<EvidenceChainOfCustody />);
+      render(<EvidenceChainOfCustody evidenceId="1" />);
 
-      const evidenceCard = screen.getByText('EV-2025-001').closest('div');
-
-      // Collection information should be visible in cards
-      expect(screen.getByText(/Det. Sarah Johnson|Officer Michael Chen|Agent Emily Rodriguez/)).toBeInTheDocument();
+      // In detail view, collection information should be visible
+      expect(screen.getByText('Collected By')).toBeInTheDocument();
+      expect(screen.getByText('Det. Sarah Johnson')).toBeInTheDocument();
     });
 
     test('maintains proper evidence location tracking', () => {

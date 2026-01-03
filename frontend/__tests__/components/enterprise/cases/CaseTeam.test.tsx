@@ -120,10 +120,11 @@ describe('CaseTeam', () => {
     it('should display member roles', () => {
       render(<CaseTeam {...defaultProps} />);
 
-      expect(screen.getByText('Lead Attorney')).toBeInTheDocument();
+      // Multiple elements may have the same role text (badges and filter buttons)
+      expect(screen.getAllByText('Lead Attorney').length).toBeGreaterThan(0);
       expect(screen.getAllByText('Associate').length).toBeGreaterThan(0);
-      expect(screen.getByText('Paralegal')).toBeInTheDocument();
-      expect(screen.getByText('Expert Witness')).toBeInTheDocument();
+      expect(screen.getAllByText('Paralegal').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Expert Witness').length).toBeGreaterThan(0);
     });
 
     it('should display member contact information', () => {
@@ -166,8 +167,10 @@ describe('CaseTeam', () => {
     it('should display role badges with appropriate colors', () => {
       render(<CaseTeam {...defaultProps} />);
 
-      const leadAttorneyBadge = screen.getByText('Lead Attorney');
-      expect(leadAttorneyBadge).toHaveClass(/bg-purple-100/);
+      // Find the badge (not the filter button) by looking for the specific badge classes
+      const leadAttorneyBadges = screen.getAllByText('Lead Attorney');
+      const badge = leadAttorneyBadges.find(el => el.className.includes('bg-purple-100'));
+      expect(badge).toBeInTheDocument();
     });
 
     it('should sort members with lead attorneys first', () => {
@@ -307,9 +310,9 @@ describe('CaseTeam', () => {
     it('should calculate billable amount', () => {
       render(<CaseTeam {...defaultProps} />);
 
-      // (45.5 * 500) + (32 * 300) + (28.5 * 150) + (10 * 800) = 45,525
-      // Displayed as $45.5k
-      expect(screen.getByText(/\$45\.5k/i)).toBeInTheDocument();
+      // (45.5 * 500) + (32 * 300) + (28.5 * 150) + (10 * 800) = 44,625
+      // Displayed as $44.6k (using toFixed(1))
+      expect(screen.getByText(/\$44\.6k/i)).toBeInTheDocument();
     });
 
     it('should calculate utilization rate', () => {

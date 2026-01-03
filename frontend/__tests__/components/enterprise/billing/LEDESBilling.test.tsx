@@ -32,22 +32,25 @@ describe('LEDESBilling Component', () => {
 
     it('should select 1998B format by default', () => {
       render(<LEDESBilling onExport={mockOnExport} onImport={mockOnImport} />);
-      const format1998B = screen.getByText('LEDES 1998B').closest('div');
-      expect(format1998B).toHaveClass('border-blue-500');
+      // Find the format card container by its styling classes
+      const format1998BTitle = screen.getByText('LEDES 1998B');
+      const formatCard = format1998BTitle.closest('.cursor-pointer');
+      expect(formatCard).toHaveClass('border-blue-500');
     });
 
     it('should switch to LEDES 2000 format when clicked', () => {
       render(<LEDESBilling onExport={mockOnExport} onImport={mockOnImport} />);
-      const format2000 = screen.getByText('LEDES 2000').closest('div');
-      if (format2000) {
-        fireEvent.click(format2000);
-        expect(format2000).toHaveClass('border-blue-500');
+      const format2000Title = screen.getByText('LEDES 2000');
+      const formatCard = format2000Title.closest('.cursor-pointer');
+      if (formatCard) {
+        fireEvent.click(formatCard);
+        expect(formatCard).toHaveClass('border-blue-500');
       }
     });
 
     it('should display checkmark for selected format', () => {
       render(<LEDESBilling onExport={mockOnExport} onImport={mockOnImport} />);
-      const format1998B = screen.getByText('LEDES 1998B').closest('div');
+      const format1998B = screen.getByText('LEDES 1998B').closest('div')?.parentElement;
       expect(format1998B?.querySelector('svg')).toBeInTheDocument();
     });
   });
@@ -88,9 +91,13 @@ describe('LEDESBilling Component', () => {
       render(<LEDESBilling onExport={mockOnExport} onImport={mockOnImport} />);
       fireEvent.click(screen.getByRole('button', { name: /UTBMS Codes/i }));
 
-      expect(screen.getByText('Pre-litigation')).toBeInTheDocument();
+      // Multiple codes have Pre-litigation phase
+      const preLitigationElements = screen.getAllByText('Pre-litigation');
+      expect(preLitigationElements.length).toBeGreaterThan(0);
       expect(screen.getAllByText('Litigation').length).toBeGreaterThan(0);
-      expect(screen.getByText('Trial')).toBeInTheDocument();
+      // Multiple codes may have Trial phase
+      const trialElements = screen.getAllByText('Trial');
+      expect(trialElements.length).toBeGreaterThan(0);
     });
 
     it('should display code levels', () => {
@@ -233,7 +240,9 @@ describe('LEDESBilling Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /Portals/i }));
 
       expect(screen.getAllByText('LEDES 1998B').length).toBeGreaterThan(0);
-      expect(screen.getByText('LEDES 2000')).toBeInTheDocument();
+      // LEDES 2000 appears in both tab and portal list
+      const ledes2000Elements = screen.getAllByText('LEDES 2000');
+      expect(ledes2000Elements.length).toBeGreaterThan(0);
     });
 
     it('should display last submission dates', () => {
@@ -294,7 +303,9 @@ describe('LEDESBilling Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /Formats/i }));
 
       expect(screen.getByText('LEDES 2000 Format')).toBeInTheDocument();
-      expect(screen.getByText(/Enhanced format/i)).toBeInTheDocument();
+      // "Enhanced format" appears in both the format card and specifications
+      const enhancedFormatElements = screen.getAllByText(/Enhanced format/i);
+      expect(enhancedFormatElements.length).toBeGreaterThan(0);
       expect(screen.getByText(/Pipe-delimited text format/i)).toBeInTheDocument();
     });
   });

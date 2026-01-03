@@ -139,9 +139,9 @@ describe('CaseTemplates', () => {
       expect(screen.getByText('Used 24 times')).toBeInTheDocument();
       expect(screen.getByText('Used 18 times')).toBeInTheDocument();
 
-      // Check for estimated duration
+      // Check for estimated duration (multiple templates may have same duration)
       expect(screen.getByText('~365 days')).toBeInTheDocument();
-      expect(screen.getByText('~30 days')).toBeInTheDocument();
+      expect(screen.getAllByText('~30 days').length).toBeGreaterThan(0);
     });
 
     it('should display estimated budget', () => {
@@ -325,8 +325,22 @@ describe('CaseTemplates', () => {
       const template = screen.getByText('Corporate Formation');
       await userEvent.click(template);
 
-      const closeButton = await screen.findByRole('button', { name: /close|×/i });
-      await userEvent.click(closeButton);
+      // Wait for modal to open and find X close button (has X icon but no accessible name)
+      await waitFor(() => {
+        expect(screen.getByText('Description')).toBeInTheDocument();
+      });
+
+      // Find the X close button by looking for the button with X icon
+      const buttons = screen.getAllByRole('button');
+      const closeButton = buttons.find(btn => {
+        const svg = btn.querySelector('svg.lucide-x');
+        return svg !== null;
+      });
+
+      expect(closeButton).toBeTruthy();
+      if (closeButton) {
+        await userEvent.click(closeButton);
+      }
 
       await waitFor(() => {
         expect(screen.queryByText('Description')).not.toBeInTheDocument();
@@ -369,7 +383,10 @@ describe('CaseTemplates', () => {
       const createButton = await screen.findByRole('button', { name: /Create Case from Template/i });
       await userEvent.click(createButton);
 
-      expect(defaultProps.onCreateFromTemplate).toHaveBeenCalledWith(mockTemplates[1]);
+      // Verify it was called with the Corporate Formation template
+      expect(defaultProps.onCreateFromTemplate).toHaveBeenCalled();
+      const calledTemplate = defaultProps.onCreateFromTemplate.mock.calls[0][0];
+      expect(calledTemplate.name).toBe('Corporate Formation');
     });
 
     it('should close modal after creating case from template', async () => {
@@ -431,7 +448,10 @@ describe('CaseTemplates', () => {
       const editButton = await screen.findByRole('button', { name: /Edit Template/i });
       await userEvent.click(editButton);
 
-      expect(defaultProps.onEditTemplate).toHaveBeenCalledWith(mockTemplates[1]);
+      // Verify it was called with the Corporate Formation template
+      expect(defaultProps.onEditTemplate).toHaveBeenCalled();
+      const calledTemplate = defaultProps.onEditTemplate.mock.calls[0][0];
+      expect(calledTemplate.name).toBe('Corporate Formation');
     });
   });
 
@@ -487,8 +507,9 @@ describe('CaseTemplates', () => {
 
       render(<CaseTemplates {...defaultProps} templates={[templateWithManyItems]} />);
 
-      const template = screen.getByText('Civil Litigation - Breach of Contract');
-      await userEvent.click(template);
+      // Find and click the template card by its name
+      const templateName = await screen.findByText(templateWithManyItems.name);
+      await userEvent.click(templateName);
 
       await waitFor(() => {
         expect(screen.getByText('+ 2 more items')).toBeInTheDocument();

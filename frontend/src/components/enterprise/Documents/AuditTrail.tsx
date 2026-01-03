@@ -88,7 +88,7 @@ export function AuditTrail({
         event.userName.toLowerCase().includes(query) ||
         event.documentTitle?.toLowerCase().includes(query) ||
         event.eventType.toLowerCase().includes(query) ||
-        JSON.stringify(event.details).toLowerCase().includes(query);
+        JSON.stringify(event.details || {}).toLowerCase().includes(query);
       if (!matchesSearch) return false;
     }
 

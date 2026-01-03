@@ -6,7 +6,7 @@
 import React from 'react';
 
 // Mock dependencies
-jest.mock('../../../context/ThemeContext', () => ({
+jest.mock('@/contexts/theme/ThemeContext', () => ({
   useTheme: () => ({
     theme: {
       primary: { text: 'text-blue-600', bg: 'bg-blue-600' },

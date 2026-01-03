@@ -9,26 +9,29 @@ import { ClientPortal } from '@/components/enterprise/CRM/ClientPortal';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 // Mock Lucide icons
-jest.mock('lucide-react', () => ({
-  FileText: () => <div data-testid="file-icon" />,
-  Download: () => <div data-testid="download-icon" />,
-  Upload: () => <div data-testid="upload-icon" />,
-  Lock: () => <div data-testid="lock-icon" />,
-  Shield: () => <div data-testid="shield-icon" />,
-  Calendar: () => <div data-testid="calendar-icon" />,
-  MessageSquare: () => <div data-testid="message-icon" />,
-  CreditCard: () => <div data-testid="credit-card-icon" />,
-  Eye: () => <div data-testid="eye-icon" />,
-  Clock: () => <div data-testid="clock-icon" />,
-  CheckCircle2: () => <div data-testid="check-icon" />,
-  AlertCircle: () => <div data-testid="alert-icon" />,
-  Send: () => <div data-testid="send-icon" />,
-  Paperclip: () => <div data-testid="paperclip-icon" />,
-  Video: () => <div data-testid="video-icon" />,
-  Phone: () => <div data-testid="phone-icon" />,
-  Mail: () => <div data-testid="mail-icon" />,
-  Briefcase: () => <div data-testid="briefcase-icon" />,
-}));
+jest.mock('lucide-react', () => {
+  const React = require('react');
+  return {
+    FileText: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="file-icon" {...props} />),
+    Download: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="download-icon" {...props} />),
+    Upload: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="upload-icon" {...props} />),
+    Lock: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="lock-icon" {...props} />),
+    Shield: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="shield-icon" {...props} />),
+    Calendar: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="calendar-icon" {...props} />),
+    MessageSquare: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="message-icon" {...props} />),
+    CreditCard: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="credit-card-icon" {...props} />),
+    Eye: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="eye-icon" {...props} />),
+    Clock: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="clock-icon" {...props} />),
+    CheckCircle2: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="check-icon" {...props} />),
+    AlertCircle: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="alert-icon" {...props} />),
+    Send: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="send-icon" {...props} />),
+    Paperclip: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="paperclip-icon" {...props} />),
+    Video: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="video-icon" {...props} />),
+    Phone: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="phone-icon" {...props} />),
+    Mail: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="mail-icon" {...props} />),
+    Briefcase: React.forwardRef((props: any, ref: any) => <div ref={ref} data-testid="briefcase-icon" {...props} />),
+  };
+});
 
 const mockClient = {
   id: '1',
@@ -103,7 +106,8 @@ describe('ClientPortal Component', () => {
     test('shows document status badges (Available, Pending Review)', () => {
       renderWithProviders(<ClientPortal />);
 
-      expect(screen.getByText('Available')).toBeInTheDocument();
+      const availableElements = screen.getAllByText('Available');
+      expect(availableElements.length).toBeGreaterThan(0);
       expect(screen.getByText('Pending Review')).toBeInTheDocument();
     });
   });
@@ -125,7 +129,8 @@ describe('ClientPortal Component', () => {
       const casesTab = screen.getByText('Case Status');
       fireEvent.click(casesTab);
 
-      expect(screen.getByText('Case Progress')).toBeInTheDocument();
+      const progressElements = screen.getAllByText('Case Progress');
+      expect(progressElements.length).toBeGreaterThan(0);
       expect(screen.getByText('65%')).toBeInTheDocument();
       expect(screen.getByText('40%')).toBeInTheDocument();
     });
@@ -146,8 +151,10 @@ describe('ClientPortal Component', () => {
       const casesTab = screen.getByText('Case Status');
       fireEvent.click(casesTab);
 
-      expect(screen.getByText('Last Update')).toBeInTheDocument();
-      expect(screen.getByText('Next Deadline')).toBeInTheDocument();
+      const lastUpdateElements = screen.getAllByText('Last Update');
+      expect(lastUpdateElements.length).toBeGreaterThan(0);
+      const nextDeadlineElements = screen.getAllByText('Next Deadline');
+      expect(nextDeadlineElements.length).toBeGreaterThan(0);
       expect(screen.getByText('2026-01-15')).toBeInTheDocument();
     });
 
@@ -157,7 +164,8 @@ describe('ClientPortal Component', () => {
       const casesTab = screen.getByText('Case Status');
       fireEvent.click(casesTab);
 
-      expect(screen.getByText('Recent Activity')).toBeInTheDocument();
+      const recentActivityElements = screen.getAllByText('Recent Activity');
+      expect(recentActivityElements.length).toBeGreaterThan(0);
       expect(screen.getByText('Response to motion filed')).toBeInTheDocument();
     });
   });

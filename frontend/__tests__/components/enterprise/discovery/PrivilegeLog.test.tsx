@@ -31,6 +31,32 @@ const mockTheme = {
     background: 'bg-gray-50',
     border: {
       default: 'border-gray-200',
+      focused: 'border-blue-500 ring-2 ring-blue-500/20',
+    },
+    action: {
+      primary: {
+        bg: 'bg-blue-600',
+        hover: 'hover:bg-blue-700',
+        text: 'text-white',
+        border: 'border-transparent',
+      },
+      secondary: {
+        bg: 'bg-white',
+        hover: 'hover:bg-slate-50',
+        text: 'text-slate-700',
+        border: 'border-slate-300',
+      },
+      ghost: {
+        bg: 'bg-transparent',
+        hover: 'hover:bg-slate-100',
+        text: 'text-slate-600',
+      },
+      danger: {
+        bg: 'bg-white',
+        hover: 'hover:bg-rose-50',
+        text: 'text-rose-600',
+        border: 'border-rose-200',
+      },
     },
   },
 };
@@ -64,8 +90,8 @@ describe('PrivilegeLog', () => {
       render(<PrivilegeLog />);
 
       expect(screen.getByText('Total Entries')).toBeInTheDocument();
-      expect(screen.getByText('Attorney-Client')).toBeInTheDocument();
-      expect(screen.getByText('Work Product')).toBeInTheDocument();
+      expect(screen.getAllByText('Attorney-Client')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Work Product')[0]).toBeInTheDocument();
       expect(screen.getByText('Pending Review')).toBeInTheDocument();
       expect(screen.getByText('Challenged')).toBeInTheDocument();
     });
@@ -96,9 +122,9 @@ describe('PrivilegeLog', () => {
     test('shows privilege entry details in table rows', () => {
       render(<PrivilegeLog />);
 
-      expect(screen.getByText('Sarah Johnson')).toBeInTheDocument();
-      expect(screen.getByText('Michael Chen')).toBeInTheDocument();
-      expect(screen.getByText('Emily Rodriguez')).toBeInTheDocument();
+      expect(screen.getAllByText('Sarah Johnson')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Michael Chen')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Emily Rodriguez')[0]).toBeInTheDocument();
     });
   });
 
@@ -189,9 +215,9 @@ describe('PrivilegeLog', () => {
 
       // Check options
       expect(screen.getByText('All Types')).toBeInTheDocument();
-      expect(screen.getByText('Attorney-Client')).toBeInTheDocument();
-      expect(screen.getByText('Work Product')).toBeInTheDocument();
-      expect(screen.getByText('Both')).toBeInTheDocument();
+      expect(screen.getAllByText('Attorney-Client')[1]).toBeInTheDocument();
+      expect(screen.getAllByText('Work Product')[1]).toBeInTheDocument();
+      expect(screen.getAllByText('Both')[0]).toBeInTheDocument();
       expect(screen.getByText('Trade Secret')).toBeInTheDocument();
       expect(screen.getByText('Other')).toBeInTheDocument();
     });
@@ -280,8 +306,8 @@ describe('PrivilegeLog', () => {
       render(<PrivilegeLog />);
 
       // Status badges should be present
-      expect(screen.getByText('reviewed')).toBeInTheDocument();
-      expect(screen.getByText('pending')).toBeInTheDocument();
+      expect(screen.getAllByText('reviewed')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('pending')[0]).toBeInTheDocument();
     });
 
     test('displays document metadata (author, recipients, subject)', () => {

@@ -31,6 +31,32 @@ const mockTheme = {
     background: 'bg-gray-50',
     border: {
       default: 'border-gray-200',
+      focused: 'border-blue-500 ring-2 ring-blue-500/20',
+    },
+    action: {
+      primary: {
+        bg: 'bg-blue-600',
+        hover: 'hover:bg-blue-700',
+        text: 'text-white',
+        border: 'border-transparent',
+      },
+      secondary: {
+        bg: 'bg-white',
+        hover: 'hover:bg-slate-50',
+        text: 'text-slate-700',
+        border: 'border-slate-300',
+      },
+      ghost: {
+        bg: 'bg-transparent',
+        hover: 'hover:bg-slate-100',
+        text: 'text-slate-600',
+      },
+      danger: {
+        bg: 'bg-white',
+        hover: 'hover:bg-rose-50',
+        text: 'text-rose-600',
+        border: 'border-rose-200',
+      },
     },
   },
 };
@@ -63,8 +89,8 @@ describe('ExhibitOrganizer', () => {
       render(<ExhibitOrganizer />);
 
       expect(screen.getByText('Total Exhibits')).toBeInTheDocument();
-      expect(screen.getByText('Admitted')).toBeInTheDocument();
-      expect(screen.getByText('Pending')).toBeInTheDocument();
+      expect(screen.getAllByText('Admitted')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Pending')[0]).toBeInTheDocument();
       expect(screen.getByText('Marked for Presentation')).toBeInTheDocument();
       expect(screen.getByText('Starred')).toBeInTheDocument();
     });
@@ -92,15 +118,15 @@ describe('ExhibitOrganizer', () => {
     test('displays exhibit status badges', () => {
       render(<ExhibitOrganizer />);
 
-      expect(screen.getByText('admitted')).toBeInTheDocument();
-      expect(screen.getByText('pending')).toBeInTheDocument();
+      expect(screen.getAllByText('admitted')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('pending')[0]).toBeInTheDocument();
     });
 
     test('shows party designation for each exhibit', () => {
       render(<ExhibitOrganizer />);
 
-      expect(screen.getByText('plaintiff')).toBeInTheDocument();
-      expect(screen.getByText('defendant')).toBeInTheDocument();
+      expect(screen.getAllByText('plaintiff')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('defendant')[0]).toBeInTheDocument();
     });
   });
 
@@ -158,8 +184,8 @@ describe('ExhibitOrganizer', () => {
       fireEvent.click(presentationButton);
 
       await waitFor(() => {
-        const nextButton = screen.queryByRole('button', { name: '' });
-        // Navigation buttons should be present
+        // Should be in presentation mode
+        expect(screen.queryByText('Exit Presentation')).toBeInTheDocument();
       });
     });
   });
@@ -226,8 +252,8 @@ describe('ExhibitOrganizer', () => {
       const statusSelect = screen.getAllByRole('combobox')[0];
       expect(statusSelect).toBeInTheDocument();
 
-      expect(screen.getByText('Admitted')).toBeInTheDocument();
-      expect(screen.getByText('Pending')).toBeInTheDocument();
+      expect(screen.getAllByText('Admitted')[1]).toBeInTheDocument();
+      expect(screen.getAllByText('Pending')[1]).toBeInTheDocument();
       expect(screen.getByText('Rejected')).toBeInTheDocument();
       expect(screen.getByText('Withdrawn')).toBeInTheDocument();
     });
@@ -347,7 +373,7 @@ describe('ExhibitOrganizer', () => {
       render(<ExhibitOrganizer />);
 
       // Exhibits with presentation order should show it
-      expect(screen.getByText(/Order:/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Order:/)[0]).toBeInTheDocument();
     });
 
     test('handles trialId prop for trial-specific exhibits', () => {

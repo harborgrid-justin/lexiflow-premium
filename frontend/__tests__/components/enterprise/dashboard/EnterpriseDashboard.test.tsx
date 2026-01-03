@@ -197,11 +197,12 @@ describe('EnterpriseDashboard', () => {
       renderWithTheme(<EnterpriseDashboard {...defaultProps} />);
 
       expect(screen.getByText('Financial Summary')).toBeInTheDocument();
-      expect(screen.getByText('Total Revenue')).toBeInTheDocument();
+      // Use getAllByText for text that appears multiple times (in KPI cards and Financial Summary)
+      expect(screen.getAllByText('Total Revenue').length).toBeGreaterThanOrEqual(1);
       expect(screen.getByText('Collected')).toBeInTheDocument();
       expect(screen.getByText('Outstanding AR')).toBeInTheDocument();
       expect(screen.getByText('Realization Rate')).toBeInTheDocument();
-      expect(screen.getByText('Collection Rate')).toBeInTheDocument();
+      expect(screen.getAllByText('Collection Rate').length).toBeGreaterThanOrEqual(1);
     });
 
     test('renders activity feed with correct configuration', () => {

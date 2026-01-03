@@ -642,11 +642,11 @@ describe('AnalyticsWidgets', () => {
 
       const caseTrendsCard = screen.getByTestId('chart-card-case-trends');
       const caseTrendsContent = within(caseTrendsCard).getByTestId('chart-content');
-      expect(caseTrendsContent).toHaveStyle({ height: 350 });
+      expect(caseTrendsContent).toHaveStyle({ height: '350px' });
 
       const billingCard = screen.getByTestId('chart-card-billing-collections');
       const billingContent = within(billingCard).getByTestId('chart-content');
-      expect(billingContent).toHaveStyle({ height: 320 });
+      expect(billingContent).toHaveStyle({ height: '320px' });
     });
   });
 

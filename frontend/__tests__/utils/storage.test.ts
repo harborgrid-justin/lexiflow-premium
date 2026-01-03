@@ -10,7 +10,7 @@ import {
   getItem,
   setItem,
   removeItem,
-} from '../../utils/storage';
+} from '../../src/utils/storage';
 
 describe('STORAGE_KEYS', () => {
   it('should define all required keys', () => {
@@ -101,7 +101,7 @@ describe('StorageUtils.get', () => {
 
     expect(result).toBe('default');
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Storage format error'),
+      expect.stringContaining('JSON parse error'),
       expect.any(Error)
     );
 

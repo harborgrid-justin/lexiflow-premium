@@ -71,14 +71,14 @@ describe('PasswordStrengthIndicator', () => {
     });
 
     it('shows "Fair" for password meeting 60-79% of requirements', () => {
-      render(<PasswordStrengthIndicator password="Abcdefghijk1" />); // 3/5 = 60%
+      render(<PasswordStrengthIndicator password="abcdefghijk1" />); // 3/5 = 60% (length, lowercase, number)
 
       expect(screen.getByText('Fair')).toBeInTheDocument();
       expect(screen.getByText('Fair')).toHaveClass('text-yellow-600');
     });
 
     it('shows "Good" for password meeting 80-99% of requirements', () => {
-      render(<PasswordStrengthIndicator password="Abcdefghijk1" />); // 4/5 = 80%
+      render(<PasswordStrengthIndicator password="Abcdefghijk1" />); // 4/5 = 80% (length, uppercase, lowercase, number)
 
       expect(screen.getByText('Good')).toBeInTheDocument();
       expect(screen.getByText('Good')).toHaveClass('text-blue-600');
@@ -220,7 +220,7 @@ describe('PasswordStrengthIndicator', () => {
     });
 
     it('shows yellow progress bar for fair password', () => {
-      const { container } = render(<PasswordStrengthIndicator password="Abcdefghijk1" />);
+      const { container } = render(<PasswordStrengthIndicator password="abcdefghijk1" />);
 
       const progressBar = container.querySelector('.bg-yellow-500');
       expect(progressBar).toBeInTheDocument();

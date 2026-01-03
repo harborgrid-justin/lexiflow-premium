@@ -3,7 +3,7 @@
  * Tests for formatting utility functions
  */
 
-import { Formatters } from '../../utils/formatters';
+import { Formatters } from '../../src/utils/formatters';
 
 describe('Formatters', () => {
   describe('formatCurrency', () => {

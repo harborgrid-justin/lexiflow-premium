@@ -24,7 +24,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('MetricCard', () => {
   describe('Basic Rendering', () => {
     it('should render metric label and value', () => {
-      renderWithTheme(<MetricCard label="Total Users" value={1250} />);
+      renderWithTheme(<MetricCard label="Total Users" value={1250} animateValue={false} />);
 
       expect(screen.getByText('Total Users')).toBeInTheDocument();
       expect(screen.getByText('1,250')).toBeInTheDocument();
@@ -32,20 +32,20 @@ describe('MetricCard', () => {
 
     it('should render description when provided', () => {
       renderWithTheme(
-        <MetricCard label="Revenue" value={50000} description="Monthly recurring revenue" />
+        <MetricCard label="Revenue" value={50000} description="Monthly recurring revenue" animateValue={false} />
       );
 
       expect(screen.getByText('Monthly recurring revenue')).toBeInTheDocument();
     });
 
     it('should render icon when provided', () => {
-      renderWithTheme(<MetricCard label="Active Users" value={500} icon={Users} />);
+      renderWithTheme(<MetricCard label="Active Users" value={500} icon={Users} animateValue={false} />);
 
       expect(screen.getByText('Active Users')).toBeInTheDocument();
     });
 
     it('should render without icon', () => {
-      renderWithTheme(<MetricCard label="Metric" value={100} />);
+      renderWithTheme(<MetricCard label="Metric" value={100} animateValue={false} />);
 
       expect(screen.getByText('Metric')).toBeInTheDocument();
       expect(screen.getByText('100')).toBeInTheDocument();
@@ -60,37 +60,37 @@ describe('MetricCard', () => {
 
   describe('Number Formatting', () => {
     it('should format numbers with thousands separators', () => {
-      renderWithTheme(<MetricCard label="Users" value={1234567} format="number" />);
+      renderWithTheme(<MetricCard label="Users" value={1234567} format="number" animateValue={false} />);
 
       expect(screen.getByText('1,234,567')).toBeInTheDocument();
     });
 
     it('should format currency values', () => {
-      renderWithTheme(<MetricCard label="Revenue" value={50000} format="currency" prefix="$" />);
+      renderWithTheme(<MetricCard label="Revenue" value={50000} format="currency" prefix="$" animateValue={false} />);
 
       expect(screen.getByText(/50,000/)).toBeInTheDocument();
     });
 
     it('should format percentage values', () => {
-      renderWithTheme(<MetricCard label="Growth" value={12.5} format="percentage" suffix="%" />);
+      renderWithTheme(<MetricCard label="Growth" value={12.5} format="percentage" suffix="%" animateValue={false} />);
 
       expect(screen.getByText(/12.5/)).toBeInTheDocument();
     });
 
     it('should apply prefix to values', () => {
-      renderWithTheme(<MetricCard label="Price" value={99} prefix="$" />);
+      renderWithTheme(<MetricCard label="Price" value={99} prefix="$" animateValue={false} />);
 
       expect(screen.getByText(/\$99/)).toBeInTheDocument();
     });
 
     it('should apply suffix to values', () => {
-      renderWithTheme(<MetricCard label="Completion" value={85} suffix="%" />);
+      renderWithTheme(<MetricCard label="Completion" value={85} suffix="%" animateValue={false} />);
 
       expect(screen.getByText(/85%/)).toBeInTheDocument();
     });
 
     it('should apply both prefix and suffix', () => {
-      renderWithTheme(<MetricCard label="Range" value={50} prefix="~" suffix=" items" />);
+      renderWithTheme(<MetricCard label="Range" value={50} prefix="~" suffix=" items" animateValue={false} />);
 
       expect(screen.getByText(/~50 items/)).toBeInTheDocument();
     });
@@ -98,25 +98,25 @@ describe('MetricCard', () => {
 
   describe('Trend Indicators', () => {
     it('should display upward trend', () => {
-      renderWithTheme(<MetricCard label="Sales" value={1000} trend="up" trendValue="+12%" />);
+      renderWithTheme(<MetricCard label="Sales" value={1000} trend="up" trendValue="+12%" animateValue={false} />);
 
       expect(screen.getByText('+12%')).toBeInTheDocument();
     });
 
     it('should display downward trend', () => {
-      renderWithTheme(<MetricCard label="Costs" value={500} trend="down" trendValue="-5%" />);
+      renderWithTheme(<MetricCard label="Costs" value={500} trend="down" trendValue="-5%" animateValue={false} />);
 
       expect(screen.getByText('-5%')).toBeInTheDocument();
     });
 
     it('should display neutral trend', () => {
-      renderWithTheme(<MetricCard label="Status" value={100} trend="neutral" trendValue="0%" />);
+      renderWithTheme(<MetricCard label="Status" value={100} trend="neutral" trendValue="0%" animateValue={false} />);
 
       expect(screen.getByText('0%')).toBeInTheDocument();
     });
 
     it('should render trend without trendValue', () => {
-      renderWithTheme(<MetricCard label="Metric" value={100} trend="up" />);
+      renderWithTheme(<MetricCard label="Metric" value={100} trend="up" animateValue={false} />);
 
       // Should still render the component
       expect(screen.getByText('Metric')).toBeInTheDocument();
@@ -124,7 +124,7 @@ describe('MetricCard', () => {
 
     it('should show previous value comparison text', () => {
       renderWithTheme(
-        <MetricCard label="Revenue" value={1000} previousValue={900} trend="up" trendValue="+11%" />
+        <MetricCard label="Revenue" value={1000} previousValue={900} trend="up" trendValue="+11%" animateValue={false} />
       );
 
       expect(screen.getByText('vs previous period')).toBeInTheDocument();
@@ -132,7 +132,7 @@ describe('MetricCard', () => {
 
     it('should apply correct color to upward trend', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="Growth" value={100} trend="up" trendValue="+10%" />
+        <MetricCard label="Growth" value={100} trend="up" trendValue="+10%" animateValue={false} />
       );
 
       const trendElement = screen.getByText('+10%').parentElement;
@@ -141,7 +141,7 @@ describe('MetricCard', () => {
 
     it('should apply correct color to downward trend', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="Decline" value={100} trend="down" trendValue="-10%" />
+        <MetricCard label="Decline" value={100} trend="down" trendValue="-10%" animateValue={false} />
       );
 
       const trendElement = screen.getByText('-10%').parentElement;
@@ -242,7 +242,7 @@ describe('MetricCard', () => {
   describe('Click Interaction', () => {
     it('should call onClick when card is clicked', () => {
       const onClick = jest.fn();
-      renderWithTheme(<MetricCard label="Clickable" value={100} onClick={onClick} />);
+      renderWithTheme(<MetricCard label="Clickable" value={100} onClick={onClick} animateValue={false} />);
 
       const card = screen.getByText('Clickable').closest('div');
       if (card) {
@@ -253,15 +253,16 @@ describe('MetricCard', () => {
 
     it('should show cursor pointer when onClick is provided', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="Clickable" value={100} onClick={jest.fn()} />
+        <MetricCard label="Clickable" value={100} onClick={jest.fn()} animateValue={false} />
       );
 
-      const card = screen.getByText('Clickable').closest('div');
+      const card = container.querySelector('.cursor-pointer');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('cursor-pointer');
     });
 
     it('should not show cursor pointer when onClick is not provided', () => {
-      const { container } = renderWithTheme(<MetricCard label="Not Clickable" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Not Clickable" value={100} animateValue={false} />);
 
       const card = screen.getByText('Not Clickable').closest('div');
       expect(card).not.toHaveClass('cursor-pointer');
@@ -269,10 +270,11 @@ describe('MetricCard', () => {
 
     it('should show hover effects when clickable', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="Hover" value={100} onClick={jest.fn()} />
+        <MetricCard label="Hover" value={100} onClick={jest.fn()} animateValue={false} />
       );
 
-      const card = screen.getByText('Hover').closest('div');
+      const card = container.querySelector('.hover\\:shadow-lg');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('hover:shadow-lg');
     });
   });
@@ -280,10 +282,11 @@ describe('MetricCard', () => {
   describe('Custom Styling', () => {
     it('should apply custom className', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="Custom" value={100} className="custom-class" />
+        <MetricCard label="Custom" value={100} className="custom-class" animateValue={false} />
       );
 
-      const card = screen.getByText('Custom').closest('div');
+      const card = container.querySelector('.custom-class');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('custom-class');
     });
 
@@ -295,6 +298,7 @@ describe('MetricCard', () => {
           icon={Users}
           iconColor="text-purple-600"
           iconBgColor="bg-purple-100"
+          animateValue={false}
         />
       );
 
@@ -302,7 +306,7 @@ describe('MetricCard', () => {
     });
 
     it('should default to blue icon colors', () => {
-      renderWithTheme(<MetricCard label="Default Colors" value={100} icon={Users} />);
+      renderWithTheme(<MetricCard label="Default Colors" value={100} icon={Users} animateValue={false} />);
 
       expect(screen.getByText('Default Colors')).toBeInTheDocument();
     });
@@ -310,30 +314,34 @@ describe('MetricCard', () => {
 
   describe('Card Layout', () => {
     it('should have rounded corners', () => {
-      const { container } = renderWithTheme(<MetricCard label="Rounded" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Rounded" value={100} animateValue={false} />);
 
-      const card = screen.getByText('Rounded').closest('div');
+      const card = container.querySelector('.rounded-xl');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-xl');
     });
 
     it('should have border', () => {
-      const { container } = renderWithTheme(<MetricCard label="Bordered" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Bordered" value={100} animateValue={false} />);
 
-      const card = screen.getByText('Bordered').closest('div');
+      const card = container.querySelector('.border');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('border');
     });
 
     it('should have padding', () => {
-      const { container } = renderWithTheme(<MetricCard label="Padded" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Padded" value={100} animateValue={false} />);
 
-      const card = screen.getByText('Padded').closest('div');
+      const card = container.querySelector('.p-6');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('p-6');
     });
 
     it('should have hover shadow', () => {
-      const { container } = renderWithTheme(<MetricCard label="Shadow" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Shadow" value={100} animateValue={false} />);
 
-      const card = screen.getByText('Shadow').closest('div');
+      const card = container.querySelector('.hover\\:shadow-md');
+      expect(card).toBeInTheDocument();
       expect(card).toHaveClass('hover:shadow-md');
     });
   });
@@ -341,7 +349,7 @@ describe('MetricCard', () => {
   describe('Icon Display', () => {
     it('should render icon in rounded container', () => {
       const { container } = renderWithTheme(
-        <MetricCard label="With Icon" value={100} icon={Users} />
+        <MetricCard label="With Icon" value={100} icon={Users} animateValue={false} />
       );
 
       const iconContainer = container.querySelector('.rounded-lg');
@@ -349,7 +357,7 @@ describe('MetricCard', () => {
     });
 
     it('should position icon to the right of label', () => {
-      renderWithTheme(<MetricCard label="Icon Position" value={100} icon={Users} />);
+      renderWithTheme(<MetricCard label="Icon Position" value={100} icon={Users} animateValue={false} />);
 
       const container = screen.getByText('Icon Position').closest('div')?.parentElement;
       expect(container).toHaveClass('justify-between');
@@ -358,7 +366,7 @@ describe('MetricCard', () => {
 
   describe('Value Display', () => {
     it('should display large value text', () => {
-      const { container } = renderWithTheme(<MetricCard label="Large Value" value={100} />);
+      const { container } = renderWithTheme(<MetricCard label="Large Value" value={100} animateValue={false} />);
 
       const valueElement = screen.getByText('100');
       expect(valueElement).toHaveClass('text-3xl');
@@ -366,25 +374,25 @@ describe('MetricCard', () => {
     });
 
     it('should handle zero value', () => {
-      renderWithTheme(<MetricCard label="Zero" value={0} />);
+      renderWithTheme(<MetricCard label="Zero" value={0} animateValue={false} />);
 
       expect(screen.getByText('0')).toBeInTheDocument();
     });
 
     it('should handle negative values', () => {
-      renderWithTheme(<MetricCard label="Negative" value={-100} />);
+      renderWithTheme(<MetricCard label="Negative" value={-100} animateValue={false} />);
 
       expect(screen.getByText(/-100/)).toBeInTheDocument();
     });
 
     it('should handle decimal values', () => {
-      renderWithTheme(<MetricCard label="Decimal" value={12.5} format="percentage" suffix="%" />);
+      renderWithTheme(<MetricCard label="Decimal" value={12.5} format="percentage" suffix="%" animateValue={false} />);
 
       expect(screen.getByText(/12.5/)).toBeInTheDocument();
     });
 
     it('should handle very large numbers', () => {
-      renderWithTheme(<MetricCard label="Large" value={1000000000} />);
+      renderWithTheme(<MetricCard label="Large" value={1000000000} animateValue={false} />);
 
       expect(screen.getByText('1,000,000,000')).toBeInTheDocument();
     });
@@ -392,14 +400,14 @@ describe('MetricCard', () => {
 
   describe('Accessibility', () => {
     it('should have semantic heading for label', () => {
-      renderWithTheme(<MetricCard label="Accessible Label" value={100} />);
+      renderWithTheme(<MetricCard label="Accessible Label" value={100} animateValue={false} />);
 
       const label = screen.getByText('Accessible Label');
       expect(label).toBeInTheDocument();
     });
 
     it('should have readable value text', () => {
-      renderWithTheme(<MetricCard label="Value" value={12345} />);
+      renderWithTheme(<MetricCard label="Value" value={12345} animateValue={false} />);
 
       const value = screen.getByText('12,345');
       expect(value).toBeInTheDocument();
@@ -407,7 +415,7 @@ describe('MetricCard', () => {
 
     it('should support keyboard interaction when clickable', () => {
       const onClick = jest.fn();
-      renderWithTheme(<MetricCard label="Keyboard" value={100} onClick={onClick} />);
+      renderWithTheme(<MetricCard label="Keyboard" value={100} onClick={onClick} animateValue={false} />);
 
       const card = screen.getByText('Keyboard').closest('div');
       if (card) {
@@ -440,23 +448,17 @@ describe('MetricCard', () => {
     });
 
     it('should handle dynamic value updates', () => {
-      const { rerender } = renderWithTheme(<MetricCard label="Live Count" value={100} />);
+      const { rerender } = renderWithTheme(<MetricCard label="Live Count" value={100} animateValue={false} />);
 
       expect(screen.getByText('100')).toBeInTheDocument();
 
       rerender(
         <ThemeProvider>
-          <MetricCard label="Live Count" value={150} />
+          <MetricCard label="Live Count" value={150} animateValue={false} />
         </ThemeProvider>
       );
 
-      act(() => {
-        jest.advanceTimersByTime(1000);
-      });
-
-      waitFor(() => {
-        expect(screen.getByText('150')).toBeInTheDocument();
-      });
+      expect(screen.getByText('150')).toBeInTheDocument();
     });
 
     it('should work with onClick for drill-down navigation', () => {

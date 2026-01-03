@@ -5,9 +5,9 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { FinancialPerformance } from '../../../components/dashboard/FinancialPerformance';
+import { FinancialPerformance } from '@/components/dashboard/FinancialPerformance';
 import { DataService } from '@/services/data/dataService';
-import { ThemeProvider } from '../../../context/ThemeContext';
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 // Mock the DataService
 jest.mock('@/services/data/dataService', () => ({

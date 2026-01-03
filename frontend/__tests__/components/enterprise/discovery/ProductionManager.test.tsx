@@ -30,6 +30,32 @@ const mockTheme = {
     background: 'bg-gray-50',
     border: {
       default: 'border-gray-200',
+      focused: 'border-blue-500 ring-2 ring-blue-500/20',
+    },
+    action: {
+      primary: {
+        bg: 'bg-blue-600',
+        hover: 'hover:bg-blue-700',
+        text: 'text-white',
+        border: 'border-transparent',
+      },
+      secondary: {
+        bg: 'bg-white',
+        hover: 'hover:bg-slate-50',
+        text: 'text-slate-700',
+        border: 'border-slate-300',
+      },
+      ghost: {
+        bg: 'bg-transparent',
+        hover: 'hover:bg-slate-100',
+        text: 'text-slate-600',
+      },
+      danger: {
+        bg: 'bg-white',
+        hover: 'hover:bg-rose-50',
+        text: 'text-rose-600',
+        border: 'border-rose-200',
+      },
     },
   },
 };
@@ -97,7 +123,7 @@ describe('ProductionManager', () => {
     test('shows recipient party information', () => {
       render(<ProductionManager />);
 
-      expect(screen.getByText('Plaintiff')).toBeInTheDocument();
+      expect(screen.getAllByText('Plaintiff')[0]).toBeInTheDocument();
       expect(screen.getByText('Third-Party Subpoena')).toBeInTheDocument();
     });
   });
@@ -106,7 +132,7 @@ describe('ProductionManager', () => {
     test('displays Bates range for each production', () => {
       render(<ProductionManager />);
 
-      expect(screen.getByText('Bates Range')).toBeInTheDocument();
+      expect(screen.getAllByText('Bates Range')[0]).toBeInTheDocument();
 
       // Check for formatted Bates numbers
       expect(screen.getByText(/DEF-0000001 to DEF-0005000/)).toBeInTheDocument();
@@ -190,9 +216,9 @@ describe('ProductionManager', () => {
         fireEvent.click(productionCard);
 
         await waitFor(() => {
-          expect(screen.getByText('created')).toBeInTheDocument();
-          expect(screen.getByText('modified')).toBeInTheDocument();
-          expect(screen.getByText('produced')).toBeInTheDocument();
+          expect(screen.getAllByText(/created/i)[0]).toBeInTheDocument();
+          expect(screen.getAllByText(/modified/i)[0]).toBeInTheDocument();
+          expect(screen.getAllByText(/produced/i)[0]).toBeInTheDocument();
         });
       }
     });
@@ -217,18 +243,18 @@ describe('ProductionManager', () => {
     test('displays delivery method for each production', () => {
       render(<ProductionManager />);
 
-      expect(screen.getByText(/litigation platform/i)).toBeInTheDocument();
-      expect(screen.getByText(/ftp/i)).toBeInTheDocument();
-      expect(screen.getByText(/email/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/litigation platform/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/ftp/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/email/i)[0]).toBeInTheDocument();
     });
 
     test('shows production format information', () => {
       render(<ProductionManager />);
 
-      expect(screen.getByText(/Format:/)).toBeInTheDocument();
-      expect(screen.getByText(/pdf/i)).toBeInTheDocument();
-      expect(screen.getByText(/native/i)).toBeInTheDocument();
-      expect(screen.getByText(/mixed/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Format:/)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/pdf/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/native/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/mixed/i)[0]).toBeInTheDocument();
     });
   });
 
@@ -275,8 +301,8 @@ describe('ProductionManager', () => {
     test('shows created and produced dates', () => {
       render(<ProductionManager />);
 
-      expect(screen.getByText(/Created:/)).toBeInTheDocument();
-      expect(screen.getByText(/Produced:/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Created:/)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Produced:/)[0]).toBeInTheDocument();
     });
 
     test('handles caseId prop for case-specific productions', () => {
@@ -298,8 +324,9 @@ describe('ProductionManager', () => {
     test('allows selecting a production', () => {
       render(<ProductionManager />);
 
-      const productionCard = screen.getByText('Initial Production - Emails').closest('div');
-      expect(productionCard).toHaveClass('cursor-pointer');
+      const productionText = screen.getByText('Initial Production - Emails');
+      const productionCard = productionText.closest('div.cursor-pointer');
+      expect(productionCard).toBeInTheDocument();
 
       if (productionCard) {
         fireEvent.click(productionCard);

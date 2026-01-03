@@ -36,7 +36,7 @@ export const OutcomeSimulator: React.FC = () => {
   const [results, setResults] = useState<unknown[]>([]);
   const [metrics, setMetrics] = useState({ ev: 0, p25: 0, p75: 0 });
 
-  const runSimulation = () => {
+  const runSimulation = useCallback(() => {
     setIsCalculating(true);
 
     // Offload heavy calculation to scheduler to unblock UI
@@ -47,7 +47,7 @@ export const OutcomeSimulator: React.FC = () => {
       setMetrics({ ev: simulationResults.ev, p25: simulationResults.p25, p75: simulationResults.p75 });
       setIsCalculating(false);
     });
-  };
+  }, [low, high, liabilityProb, iterations]);
 
   // Initial run
   useEffect(() => {

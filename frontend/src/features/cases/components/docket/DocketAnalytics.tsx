@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -27,8 +27,8 @@ import { ChartColorService } from '@/services/theme/chartColorService';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
 
@@ -45,19 +45,18 @@ export const DocketAnalytics: React.FC = () => {
 
   // Enterprise Data Access
   const { data: entries } = useQuery<DocketEntry[]>(
-      ['docket', 'all'],
-      DataService.docket.getAll
+    ['docket', 'all'],
+    DataService.docket.getAll
   );
-
-  // Safety check: ensure entries is always an array
-  const safeEntries = Array.isArray(entries) ? entries : [];
 
   // Cache key based on entries length and last modified date
   const cacheKey = useMemo(() => {
+    // Safety check: ensure entries is always an array (moved inside useMemo)
+    const safeEntries = Array.isArray(entries) ? entries : [];
     if (safeEntries.length === 0) return 'empty';
     const lastEntry = safeEntries[safeEntries.length - 1];
     return `${safeEntries.length}-${lastEntry?.id || ''}`;
-  }, [safeEntries]);
+  }, [entries]);
 
   // Aggregate Filing Activity with incremental update logic for large datasets
   const filingActivity = useMemo(() => {
@@ -70,7 +69,7 @@ export const DocketAnalytics: React.FC = () => {
     // Note: In production, this could use Web Workers or IndexedDB-based aggregation
     console.log(`Computing filing activity for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateFilingActivity(safeEntries);
-  }, [safeEntries, cacheKey]) as Array<{ month: string; filings: number; orders: number }>;
+  }, [cacheKey]) as Array<{ month: string; filings: number; orders: number }>;
 
   // Aggregate Rulings with incremental update logic
   const judgeRulings = useMemo(() => {
@@ -82,7 +81,7 @@ export const DocketAnalytics: React.FC = () => {
     // For large datasets, log performance and compute
     console.log(`Computing judge rulings for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateJudgeRulings(safeEntries);
-  }, [safeEntries, cacheKey]) as Array<{ name: string; value: number; color: string }>;
+  }, [cacheKey]) as Array<{ name: string; value: number; color: string }>;
 
   return (
     <div className="space-y-6">
@@ -93,7 +92,7 @@ export const DocketAnalytics: React.FC = () => {
               <BarChart data={filingActivity} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                 <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={tooltipStyle} />
+                <Tooltip cursor={{ fill: chartTheme.grid }} contentStyle={tooltipStyle} />
                 <Legend />
                 <Bar dataKey="filings" name="Filings" fill={chartColors[0]} radius={[4, 4, 0, 0]} />
                 <Bar dataKey="orders" name="Orders" fill={chartColors[1]} radius={[4, 4, 0, 0]} />
@@ -120,7 +119,7 @@ export const DocketAnalytics: React.FC = () => {
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Legend verticalAlign="bottom" height={36} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -129,19 +128,17 @@ export const DocketAnalytics: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-            { label: 'Avg Time to Ruling', value: '14 Days', sub: '-2 days vs District Avg' },
-            { label: 'Most Active Case', value: 'Martinez v. TechCorp', sub: `${safeEntries.filter(e => e.caseId === 'C-2024-001').length} Entries YTD` },
-            { label: 'Upcoming Hearings', value: safeEntries.filter(e => e.type === 'Hearing').length.toString(), sub: 'Next 30 Days' }
+          { label: 'Avg Time to Ruling', value: '14 Days', sub: '-2 days vs District Avg' },
+          { label: 'Most Active Case', value: 'Martinez v. TechCorp', sub: `${safeEntries.filter(e => e.caseId === 'C-2024-001').length} Entries YTD` },
+          { label: 'Upcoming Hearings', value: safeEntries.filter(e => e.type === 'Hearing').length.toString(), sub: 'Next 30 Days' }
         ].map((stat) => (
-            <div key={i} className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
-                <p className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>{stat.label}</p>
-                <p className={cn("text-2xl font-bold mb-1", theme.text.primary)}>{stat.value}</p>
-                <p className={cn("text-xs", theme.text.secondary)}>{stat.sub}</p>
-            </div>
+          <div key={i} className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
+            <p className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>{stat.label}</p>
+            <p className={cn("text-2xl font-bold mb-1", theme.text.primary)}>{stat.value}</p>
+            <p className={cn("text-xs", theme.text.secondary)}>{stat.sub}</p>
+          </div>
         ))}
       </div>
     </div>
   );
 };
-
-

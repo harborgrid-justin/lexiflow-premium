@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
 import {
   draftingApi,
   DraftingTemplate,
@@ -13,7 +12,7 @@ import { cn } from '@/utils/cn';
 import { useTheme } from '@providers/ThemeContext';
 import { useToast } from '@providers/ToastContext';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface DocumentGeneratorProps {
   templateId?: string;
@@ -273,7 +272,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     }
   };
 
-  const handleRefreshPreview = async () => {
+  const handleRefreshPreview = useCallback(async () => {
     setLoading(true);
     try {
       const preview = await generatePreview();
@@ -282,7 +281,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [step, selectedTemplate, fieldValues, addToast]);
+  }, [generatePreview, addToast]);
 
   // Automatically refresh preview when moving to preview tab
   useEffect(() => {

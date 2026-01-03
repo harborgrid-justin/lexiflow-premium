@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from '@/components/ui/molecules/Pagination/Pagination';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 /**
@@ -48,28 +48,32 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const PaginationDefaultStory = () => {
+  const [page, setPage] = useState(1);
+  return (
+    <Pagination
+      currentPage={page}
+      totalPages={10}
+      onPageChange={setPage}
+    />
+  );
+};
+
 export const Default: Story = {
-  render: () => {
-    const [page, setPage] = useState(1);
-    return (
-      <Pagination
-        currentPage={page}
-        totalPages={10}
-        onPageChange={setPage}
-      />
-    );
-  },
+  render: () => <PaginationDefaultStory />,
+};
+
+const PaginationManyPagesStory = () => {
+  const [page, setPage] = useState(5);
+  return (
+    <Pagination
+      currentPage={page}
+      totalPages={50}
+      onPageChange={setPage}
+    />
+  );
 };
 
 export const ManyPages: Story = {
-  render: () => {
-    const [page, setPage] = useState(5);
-    return (
-      <Pagination
-        currentPage={page}
-        totalPages={50}
-        onPageChange={setPage}
-      />
-    );
-  },
+  render: () => <PaginationManyPagesStory />,
 };

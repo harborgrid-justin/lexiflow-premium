@@ -20,16 +20,16 @@ import {
   Trash2,
   Users
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MatterForm } from './matter-form';
 
 export const CaseDetail: React.FC = () => {
   // Extract matterId from hash
   const matterId = window.location.hash.split('/matters/')[1]?.split('?')[0];
-  const navigate = (path: string) => {
+  const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
-console.log('useNavigate:', navigate);
-  };
+    console.log('useNavigate:', path);
+  }, []);
 
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -248,8 +248,8 @@ console.log('useNavigate:', navigate);
                 <span>{matter.practiceArea?.replace(/_/g, ' ') || '-'}</span>
               </div>
               <div className={`flex items-center gap-2 font-medium ${matter.priority === MatterPriority.URGENT ? 'text-rose-600 dark:text-rose-400' :
-                  matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
-                    'text-blue-600 dark:text-blue-400'
+                matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
+                  'text-blue-600 dark:text-blue-400'
                 }`}>
                 <span>{matter.priority} Priority</span>
               </div>

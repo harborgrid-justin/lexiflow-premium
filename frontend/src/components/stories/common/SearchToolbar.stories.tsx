@@ -56,38 +56,39 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [query, setQuery] = useState('');
-    return (
-      <SearchToolbar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search cases..."
-      />
-    );
-  },
+const SearchToolbarDefaultStory = () => {
+  const [query, setQuery] = useState('');
+  return (
+    <SearchToolbar
+      value={query}
+      onChange={setQuery}
+      placeholder="Search cases..."
+    />
+  );
 };
 
-export const WithActions: Story = {
-  render: () => {
-    const [query, setQuery] = useState('');
-    return (
-      <SearchToolbar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search with actions..."
-        actions={
-          <>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-              Filter
-            </button>
-            <button className="px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700">
-              Export
-            </button>
-          </>
-        }
-      />
-    );
-  },
+export const Default: Story = {
+  render: () => <SearchToolbarDefaultStory />,
+};
+
+const SearchToolbarWithActionsStory = () => {
+  const [query, setQuery] = useState('');
+  return (
+    <SearchToolbar
+      value={query}
+      onChange={setQuery}
+      placeholder="Search with actions..."
+      actions={
+        <>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            Filter
+          </button>
+          <button className="px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700">
+            Export
+          </button>
+        </>
+      }
+    />
+  );
+},
 };

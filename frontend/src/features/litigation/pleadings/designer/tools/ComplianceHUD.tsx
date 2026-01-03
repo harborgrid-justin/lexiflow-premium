@@ -12,6 +12,9 @@ interface ComplianceHUDProps {
 
 const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScore }) => {
     const { theme } = useTheme();
+    // sections parameter available for future compliance checks
+    const sectionCount = sections?.length || 0;
+    console.debug(`Checking compliance for ${sectionCount} sections`);
 
     const issues = useMemo(() => [
         { id: 2, type: 'warning', msg: 'Heading capitalization inconsistent', blockId: 'b2' },

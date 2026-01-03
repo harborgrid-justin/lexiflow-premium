@@ -3,10 +3,9 @@ import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigatio
 import { cn } from '@/utils/cn';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting.api';
 import { useTheme } from '@providers/ThemeContext';
-import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@providers/ToastContext';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ApprovalQueue } from './components/ApprovalQueue';
 import { DocumentGenerator } from './components/DocumentGenerator';
 import { DraftingStats } from './components/DraftingStats';
@@ -51,7 +50,7 @@ const DraftingDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [addToast]);
 
   const handleCreateDraft = () => {
     setSelectedTemplateId(undefined);

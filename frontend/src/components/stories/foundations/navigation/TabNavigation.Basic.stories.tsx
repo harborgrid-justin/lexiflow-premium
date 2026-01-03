@@ -38,25 +38,27 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('documents');
-    return (
-      <div>
-        <TabNavigation
-          tabs={[
-            { id: 'documents', label: 'Documents', icon: FileText },
-            { id: 'team', label: 'Team', icon: Users },
-            { id: 'calendar', label: 'Calendar', icon: Calendar },
-            { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-          ]}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
-        <div className="mt-4 p-4 bg-white rounded-lg shadow">
-          <p className="text-slate-600">Active tab: <strong>{activeTab}</strong></p>
-        </div>
+const TabNavigationStory = () => {
+  const [activeTab, setActiveTab] = useState('documents');
+  return (
+    <div>
+      <TabNavigation
+        tabs={[
+          { id: 'documents', label: 'Documents', icon: FileText },
+          { id: 'team', label: 'Team', icon: Users },
+          { id: 'calendar', label: 'Calendar', icon: Calendar },
+          { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+        ]}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+      <div className="mt-4 p-4 bg-white rounded-lg shadow">
+        <p className="text-slate-600">Active tab: <strong>{activeTab}</strong></p>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const Default: Story = {
+  render: () => <TabNavigationStory />,
 };

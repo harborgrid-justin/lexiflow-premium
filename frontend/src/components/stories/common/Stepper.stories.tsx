@@ -66,28 +66,30 @@ export const MiddleStep: Story = {
   },
 };
 
-export const Interactive: Story = {
-  render: () => {
-    const [currentStep, setCurrentStep] = useState(0);
-    return (
-      <div className="space-y-6">
-        <Stepper steps={steps} currentStep={currentStep} />
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-            disabled={currentStep === 0}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-            disabled={currentStep === steps.length - 1}
-          >
-            Next
-          </Button>
-        </div>
+const StepperInteractiveStory = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+  return (
+    <div className="space-y-6">
+      <Stepper steps={steps} currentStep={currentStep} />
+      <div className="flex justify-between">
+        <Button
+          variant="outline"
+          onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+          disabled={currentStep === 0}
+        >
+          Previous
+        </Button>
+        <Button
+          onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
+          disabled={currentStep === steps.length - 1}
+        >
+          Next
+        </Button>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const Interactive: Story = {
+  render: () => <StepperInteractiveStory />,
 };

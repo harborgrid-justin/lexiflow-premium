@@ -4,21 +4,20 @@
  * @description Enterprise notification center with filtering, categorization, and real-time updates.
  */
 
-import { cn } from '@/utils/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/utils/cn';
 import {
+  AlertCircle,
   Bell,
   Check,
   CheckCircle,
-  AlertCircle,
   Info,
-  XCircle,
+  SettingsIcon,
   Trash2,
-  Settings as SettingsIcon,
-  Filter,
+  XCircle,
 } from 'lucide-react';
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // ========================================
 // TYPES & INTERFACES
@@ -225,9 +224,9 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     filter === type
                       ? cn(theme.primary.bg, theme.primary.text)
                       : cn(
-                          theme.text.secondary,
-                          `hover:${theme.surface.highlight}`
-                        )
+                        theme.text.secondary,
+                        `hover:${theme.surface.highlight}`
+                      )
                   )}
                 >
                   {type.charAt(0).toUpperCase() + type.slice(1)}

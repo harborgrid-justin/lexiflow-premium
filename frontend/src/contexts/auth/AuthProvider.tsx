@@ -16,7 +16,7 @@
 import { AuthApiService } from '@/api/auth/auth-api';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AuthActionsContext, AuthStateContext } from './authContexts';
-import type { AuthActionsValue, AuthStateValue, AuthUser, SessionInfo, MFASetup, PasswordPolicy, AuthEvent } from './authTypes';
+import type { AuthActionsValue, AuthEvent, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';
 
 // ============================================================================
 // Constants
@@ -135,7 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
       logout();
     }, SESSION_TIMEOUT);
-  }, []);
+  }, [logout]);
 
   const resetSessionTimer = useCallback(() => {
     if (session) {

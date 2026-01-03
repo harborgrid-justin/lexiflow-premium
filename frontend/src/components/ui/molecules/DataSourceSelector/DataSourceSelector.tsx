@@ -4,11 +4,11 @@
  * Shows backend availability status and only enables backend option when available
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
-import { useDataSource } from '@/providers';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
 import type { DataSourceType } from '@/providers';
+import { useDataSource } from '@/providers';
+import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 interface DataSourceOption {
   value: DataSourceType;

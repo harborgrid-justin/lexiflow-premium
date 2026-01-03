@@ -19,8 +19,8 @@ import { api } from '@/api';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -46,11 +46,11 @@ export const CaseInsightsDashboard: React.FC = () => {
     () => api.billing.getTimeEntries()
   );
 
-  // Analytics data placeholder - method doesn't exist in API
-  const analyticsData = { budgetAccuracy: 85 };
-
   // Calculate success probability from historical data
   const successMetrics = useMemo(() => {
+    // Analytics data placeholder - method doesn't exist in API
+    const analyticsData = { budgetAccuracy: 85 };
+
     if (!matters) return { probability: 0, riskScore: 0, budgetAccuracy: 0 };
 
     const activeMatters = matters.filter(m => m.status === CaseStatus.Active || m.status === CaseStatus.Open);
@@ -63,7 +63,7 @@ export const CaseInsightsDashboard: React.FC = () => {
       riskScore: activeMatters.length,
       budgetAccuracy: analyticsData?.budgetAccuracy || 0,
     };
-  }, [matters, analyticsData]);
+  }, [matters]);
 
   return (
     <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>

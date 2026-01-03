@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
-import { useModalState } from '@/hooks/core';
-import { useNotify } from '@/hooks/core';
-import { useQuery } from '@/hooks/backend';
-import { useSelection } from '@/hooks/core';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
+import { useModalState, useNotify, useSelection } from '@/hooks/core';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
 import React, { useState } from 'react';
@@ -97,6 +95,7 @@ export const WebhookManagement: React.FC = () => {
         message: result.message || (result.success ? 'Webhook responded successfully' : 'Webhook failed'),
       });
     } catch (error) {
+      console.error('Webhook test failed:', error);
       setTestResult({
         success: false,
         message: 'Failed to test webhook',

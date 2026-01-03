@@ -20,9 +20,9 @@ import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
 import { PATHS } from '@/config/paths.config';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import {
@@ -168,14 +168,14 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const notify = useNotify();
   const isEditMode = Boolean(id);
 
-  const navigate = (path: string) => {
+  const navigate = useCallback((path: string) => {
     if (onBack) {
       onBack();
-console.log('useNavigate:', navigate);
+      console.log('useNavigate:', path);
     } else {
       window.location.hash = `#/${path}`;
     }
-  };
+  }, [onBack]);
 
   // ========================================
   // STATE MANAGEMENT

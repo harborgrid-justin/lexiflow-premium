@@ -125,15 +125,15 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
 
-  const handleNavigate = (targetView: DiscoveryView, id?: string) => {
+  const handleNavigate = useCallback((targetView: DiscoveryView, id?: string) => {
     if (id) setContextId(id);
     setActiveTab(targetView);
-  };
+  }, [setContextId, setActiveTab]);
 
-  const handleBackToDashboard = () => {
+  const handleBackToDashboard = useCallback(() => {
     setActiveTab('dashboard');
     setContextId(null);
-  };
+  }, [setActiveTab, setContextId]);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({

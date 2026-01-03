@@ -4,11 +4,11 @@
  * @description Intelligent breadcrumb navigation with dropdown menus and recent paths tracking.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Home, Clock, ChevronDown } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
+import { ChevronDown, ChevronRight, Clock, Home } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -47,14 +47,14 @@ export interface DynamicBreadcrumbsProps {
 
 /**
  * Dynamic Breadcrumbs Component
- * 
+ *
  * Features:
  * - Collapsible breadcrumb trail with dropdown
  * - Recent paths tracking in localStorage
  * - Keyboard shortcuts (Ctrl+Home, Ctrl+←/→)
  * - Dropdown navigation for items with children
  * - Automatic truncation for long trails
- * 
+ *
  * @example
  * ```tsx
  * <DynamicBreadcrumbs
@@ -78,7 +78,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
 }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const [recentPaths, setRecentPaths] = useState<RecentPath[]>([]);
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -111,15 +111,15 @@ console.log('useNavigate:', navigate);
     if (items.length === 0) return;
 
     const pathKey = items.map(i => i.id).join('/');
-    
+
     setRecentPaths(prev => {
       // Check if path already exists
-      const existingIndex = prev.findIndex(p => 
+      const existingIndex = prev.findIndex(p =>
         p.items.map(i => i.id).join('/') === pathKey
       );
 
       let updated: RecentPath[];
-      
+
       if (existingIndex >= 0) {
         // Update existing path
         updated = [...prev];
@@ -144,7 +144,7 @@ console.log('useNavigate:', navigate);
         const typedA = a as { accessCount: number; timestamp: Date };
         const typedB = b as { accessCount: number; timestamp: Date };
         const scoreDiff = (typedB.accessCount * 2 + typedB.timestamp.getTime() / 1000000) -
-                         (typedA.accessCount * 2 + typedA.timestamp.getTime() / 1000000);
+          (typedA.accessCount * 2 + typedA.timestamp.getTime() / 1000000);
         return scoreDiff;
       });
 
@@ -160,7 +160,7 @@ console.log('useNavigate:', navigate);
   }, [items, maxRecent]);
 
   // Handle navigation
-  const handleNavigate = (path: string) => {
+  const handleNavigate = useCallback((path: string) => {
     if (onNavigate) {
       onNavigate(path);
     } else {
@@ -168,7 +168,7 @@ console.log('useNavigate:', navigate);
     }
     setActiveDropdown(null);
     setShowRecentDropdown(false);
-  };
+  }, [onNavigate, navigate]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -203,7 +203,7 @@ console.log('useNavigate:', navigate);
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [items]);
+  }, [items, handleNavigate]);
 
   // Close dropdown when clicking outside
   useClickOutside(dropdownRef as React.RefObject<HTMLElement>, () => {

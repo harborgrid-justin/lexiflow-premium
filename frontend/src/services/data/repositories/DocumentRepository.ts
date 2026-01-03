@@ -618,8 +618,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
             timestamp: new Date().toISOString(),
             block: 18452000 + Math.floor(Math.random() * 5000),
           });
-        } catch (_error) {
-          reject(new Error("Failed to verify document integrity"));
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          reject(
+            new Error(`Failed to verify document integrity: ${errorMessage}`)
+          );
         }
       }, 2000);
     });

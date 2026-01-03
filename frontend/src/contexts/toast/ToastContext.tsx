@@ -117,7 +117,7 @@ export const ToastProvider = ({
       }
       return prev;
     });
-  }, [maxVisible]);
+  }, [maxVisible, removeToast]);
 
   // Trigger processing whenever toasts state changes (slot frees up)
   useEffect(() => {

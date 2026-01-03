@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagInput } from '@/components/ui/molecules/TagInput/TagInput';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 /**
@@ -52,30 +52,34 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const TagInputDefaultStory = () => {
+  const [tags, setTags] = useState<string[]>(['contract', 'litigation']);
+  return (
+    <TagInput
+      tags={tags}
+      onAdd={(tag) => setTags([...tags, tag])}
+      onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
+      placeholder="Add tags..."
+    />
+  );
+};
+
 export const Default: Story = {
-  render: () => {
-    const [tags, setTags] = useState<string[]>(['contract', 'litigation']);
-    return (
-      <TagInput
-        tags={tags}
-        onAdd={(tag) => setTags([...tags, tag])}
-        onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
-        placeholder="Add tags..."
-      />
-    );
-  },
+  render: () => <TagInputDefaultStory />,
+};
+
+const TagInputEmptyStory = () => {
+  const [tags, setTags] = useState<string[]>([]);
+  return (
+    <TagInput
+      tags={tags}
+      onAdd={(tag) => setTags([...tags, tag])}
+      onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
+      placeholder="Type to add tags..."
+    />
+  );
 };
 
 export const Empty: Story = {
-  render: () => {
-    const [tags, setTags] = useState<string[]>([]);
-    return (
-      <TagInput
-        tags={tags}
-        onAdd={(tag) => setTags([...tags, tag])}
-        onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
-        placeholder="Type to add tags..."
-      />
-    );
-  },
+  render: () => <TagInputEmptyStory />,
 };

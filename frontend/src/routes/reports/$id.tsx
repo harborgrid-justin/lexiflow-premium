@@ -7,7 +7,7 @@ import { ChartCard } from '@/components/enterprise/analytics';
 import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import {
   Bar,
   BarChart,

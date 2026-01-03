@@ -40,7 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const entries = await timeApi.getAll({
       caseId: caseId || undefined,
       userId: userId || undefined,
-      status: (status as any) || undefined,
+      status: (status as string) || undefined,
       billable: billable === 'true' ? true : billable === 'false' ? false : undefined,
     });
 

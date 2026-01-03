@@ -350,9 +350,15 @@ export class ServerError extends ApiErrorBase {
  * Converts API error responses into typed error objects
  */
 export function parseApiError(error: unknown): ApiErrorBase {
-  const err = error as any;
+  const err = error as {
+    name?: string;
+    message?: string;
+    response?: unknown;
+    status?: number;
+    code?: string;
+  };
   // Network errors
-  if (err.name === "TypeError" && err.message.includes("fetch")) {
+  if (err.name === "TypeError" && err.message?.includes("fetch")) {
     return new NetworkError("Network connection failed");
   }
 

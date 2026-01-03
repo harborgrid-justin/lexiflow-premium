@@ -134,7 +134,8 @@ export function transformCaseToBackend<T extends { matterType?: MatterType }>(
   frontendCase: T
 ): Omit<T, "matterType"> & { type?: BackendCaseType } {
   if (!frontendCase.matterType) {
-    const { matterType: _matterType, ...rest } = frontendCase;
+    const rest = { ...frontendCase };
+    delete rest.matterType;
     return rest as Omit<T, "matterType"> & { type?: BackendCaseType };
   }
 

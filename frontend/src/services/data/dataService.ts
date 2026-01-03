@@ -1248,9 +1248,7 @@ Object.defineProperties(DataServiceBase, {
       },
       add: async (rule: unknown) => {
         try {
-          return await api.jurisdiction?.createRule?.(
-            rule as Record<string, unknown>
-          );
+          return await api.jurisdiction?.createRule?.(rule as any);
         } catch (error) {
           console.error("[DataService.rules] Failed to create rule:", error);
           throw error;

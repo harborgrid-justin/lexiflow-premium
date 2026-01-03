@@ -9,7 +9,7 @@
 import { Form, Link, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/instance.$instanceId";
+// import type { Route } from "./+types/instance.$instanceId";
 
 // ============================================================================
 // Meta Tags
@@ -98,8 +98,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function WorkflowInstanceDetailRoute() {
-  const { instance, template } = useLoaderData() as Route.ComponentProps['loaderData'];
-  const { instance, template } = loaderData;
+  const { instance, template } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -238,12 +237,12 @@ export default function WorkflowInstanceDetailRoute() {
                   <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                   <dd className="mt-1">
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${instance.status === 'running'
-                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                        : instance.status === 'completed'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                          : instance.status === 'failed'
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                      : instance.status === 'completed'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                        : instance.status === 'failed'
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                       }`}>
                       {instance.status}
                     </span>

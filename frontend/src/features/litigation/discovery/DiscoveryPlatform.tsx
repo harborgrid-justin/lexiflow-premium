@@ -38,6 +38,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { DiscoveryRequest } from '@/types';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
@@ -90,14 +91,14 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
     [STORES.REQUESTS, caseId || 'all'],
     async () => {
-      const discovery = DataService.discovery as any;
+      const discovery = DataService.discovery as unknown as DiscoveryRepository;
       return discovery.getRequests(caseId);
     }
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
     async () => {
-      const discovery = DataService.discovery as any;
+      const discovery = DataService.discovery as unknown as DiscoveryRepository;
       return discovery.syncDeadlines();
     },
     {

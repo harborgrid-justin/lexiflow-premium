@@ -11,8 +11,7 @@ import {
   DocumentAnnotations,
   DocumentViewer,
   MetadataPanel,
-  VersionHistory,
-  type Annotation
+  VersionHistory
 } from '@/components/features/documents/components';
 import { useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';
@@ -49,11 +48,12 @@ export async function loader({ params }: Route.LoaderArgs) {
   try {
     const document = await documentsApi.getById(documentId);
     const versions = await documentsApi.getVersions(documentId);
+    const annotations = await documentsApi.getAnnotations(documentId);
 
     return {
       document,
       versions,
-      annotations: [] as Annotation[], // TODO: Fetch from API
+      annotations,
     };
   } catch (error) {
     console.error('[Document Detail Loader] Error:', error);
@@ -141,7 +141,7 @@ export default function DocumentDetailRoute() {
       if (!version1 || !version2) throw new Error('Versions not found');
 
       const result = await documentsApi.compareVersions(
-        document.id,
+        doc.id,
         version1.id as string,
         version2.id as string
       );
@@ -156,7 +156,7 @@ export default function DocumentDetailRoute() {
 
   const handleDownload = async () => {
     try {
-      const blob = await documentsApi.download(document.id);
+      const blob = await documentsApi.download(doc.id);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -173,7 +173,7 @@ export default function DocumentDetailRoute() {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      await documentsApi.delete(document.id);
+      await documentsApi.delete(doc.id);
       navigate('/documents');
     } catch (error) {
       console.error('Delete failed:', error);
@@ -266,14 +266,14 @@ export default function DocumentDetailRoute() {
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         {activeTab === 'viewer' && (
-          <DocumentViewer document={document} />
+          <DocumentViewer document={doc} />
         )}
 
         {activeTab === 'metadata' && (
           <div className="p-6 overflow-auto h-full">
             <div className="max-w-2xl mx-auto">
               <MetadataPanel
-                document={document}
+                document={doc}
                 editable={true}
                 onUpdate={handleUpdate}
               />
@@ -286,7 +286,7 @@ export default function DocumentDetailRoute() {
             <div className="max-w-3xl mx-auto">
               <VersionHistory
                 versions={versions}
-                currentVersion={document.currentVersion}
+                currentVersion={doc.currentVersion}
                 onRestore={handleRestoreVersion}
                 onCompare={handleCompare}
               />
@@ -298,16 +298,26 @@ export default function DocumentDetailRoute() {
           <div className="p-6 overflow-auto h-full">
             <div className="max-w-3xl mx-auto">
               <DocumentAnnotations
-                documentId={document.id}
+                documentId={doc.id}
                 annotations={annotations}
                 onAdd={async (annotation) => {
-                  console.log('Add annotation:', annotation);
-                  // TODO: Implement API call
-                  alert('Annotation feature coming soon');
+                  try {
+                    await documentsApi.addAnnotation(doc.id, annotation);
+                    window.location.reload();
+                  } catch (error) {
+                    console.error('Failed to add annotation:', error);
+                    alert('Failed to add annotation');
+                  }
                 }}
                 onDelete={async (id) => {
-                  console.log('Delete annotation:', id);
-                  // TODO: Implement API call
+                  try {
+                    await documentsApi.deleteAnnotation(doc.id, id);
+                    window.location.reload();
+                  } catch (error) {
+                    console.error('Failed to delete annotation:', error);
+                    alert('Failed to delete annotation');
+                  }
+                }}
                 }}
               />
             </div>

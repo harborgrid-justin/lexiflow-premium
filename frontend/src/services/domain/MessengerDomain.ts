@@ -51,7 +51,7 @@ export const MessengerService = {
     conversationId: string;
     body: string;
     priority?: Message["priority"];
-    attachments?: string[];
+    attachments?: File[];
   }) => {
     return api.messaging.sendMessage({
       conversationId: data.conversationId,

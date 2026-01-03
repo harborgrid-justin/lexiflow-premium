@@ -17,7 +17,7 @@ import { api } from '@/api';
 import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
 import { Suspense } from 'react';
-import { useNavigate } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import type { Route } from "./+types/home";
 import { createMeta } from './_shared/meta-utils';
 

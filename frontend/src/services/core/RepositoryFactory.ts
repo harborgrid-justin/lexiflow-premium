@@ -12,8 +12,8 @@
  * ```
  */
 
-import { BaseEntity } from '@/types';
-import { Repository } from './Repository';
+import { BaseEntity } from "@/types";
+import { Repository } from "./Repository";
 
 /**
  * Generic Repository implementation without custom methods.
@@ -74,7 +74,10 @@ class RepositoryRegistry {
     storeName: string,
     repository: Repository<T>
   ): void {
-    this.instances.set(storeName, repository as unknown as Repository<BaseEntity>);
+    this.instances.set(
+      storeName,
+      repository as unknown as Repository<BaseEntity>
+    );
   }
 
   /**
@@ -84,7 +87,7 @@ class RepositoryRegistry {
   clear(): void {
     // Clean up each repository before clearing
     for (const repository of this.instances.values()) {
-      if (typeof repository.clearAllListeners === 'function') {
+      if (typeof repository.clearAllListeners === "function") {
         repository.clearAllListeners();
       }
     }
@@ -111,9 +114,10 @@ class RepositoryRegistry {
     let totalListeners = 0;
 
     for (const [name, repo] of this.instances.entries()) {
-      const listenerCount = typeof repo.getListenerCount === 'function' 
-        ? repo.getListenerCount() 
-        : 0;
+      const listenerCount =
+        typeof repo.getListenerCount === "function"
+          ? repo.getListenerCount()
+          : 0;
       repositories.push({ name, listeners: listenerCount });
       totalListeners += listenerCount;
     }
@@ -190,16 +194,14 @@ export function createRepositories(
  * const users = await repos.users.getAll();
  * ```
  */
-export function createTypedRepositories<
-  T extends Record<string, string>
->(
+export function createTypedRepositories<T extends Record<string, string>>(
   config: T
 ): { [K in keyof T]: Repository<BaseEntity> } {
   const result = {} as { [K in keyof T]: Repository<BaseEntity> };
 
   for (const key in config) {
     if (Object.prototype.hasOwnProperty.call(config, key)) {
-      result[key] = createRepository<BaseEntity>(config[key]);
+      result[key] = createRepository<BaseEntity>(config[key] as string);
     }
   }
 

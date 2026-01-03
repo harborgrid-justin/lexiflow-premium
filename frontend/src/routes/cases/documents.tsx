@@ -14,7 +14,7 @@ import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
 import type { LegalDocument } from '@/types';
 import { useState } from 'react';
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================

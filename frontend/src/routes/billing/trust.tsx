@@ -36,7 +36,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   try {
     const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as any) || undefined,
+      status: (status as string) || undefined,
     });
 
     return {
@@ -101,7 +101,7 @@ export async function action({ request }: Route.ActionArgs) {
     case "reconcile": {
       const reconcileAccountId = formData.get("accountId") as string;
       const reconcileData = {
-        reconciliationDate: new Date(formData.get("reconciliationDate") as string),
+        reconciliationDate: (formData.get("reconciliationDate") as string),
         bankStatementBalance: parseFloat(formData.get("bankStatementBalance") as string),
         mainLedgerBalance: parseFloat(formData.get("mainLedgerBalance") as string),
         clientLedgersTotalBalance: parseFloat(formData.get("clientLedgersTotalBalance") as string),

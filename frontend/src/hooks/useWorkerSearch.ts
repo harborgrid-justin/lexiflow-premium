@@ -154,6 +154,7 @@ export function useWorkerSearch<T>(
     }
     // Intentionally only depend on data changes, not query/fields
     // Query changes are handled in separate effect below to avoid re-indexing on every keystroke
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stableItems, fieldsKey, idKey]);
 
   // Dispatch Search Task (Only when query changes) with cancellation

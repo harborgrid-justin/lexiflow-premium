@@ -94,13 +94,13 @@ export const DEFAULT_RETRY_CONFIG: Required<RetryConfig> = {
   onRetry: (error: unknown, attemptNumber: number, delay: number) => {
     console.warn(
       `[RetryHandler] Retrying request (attempt ${attemptNumber}) after ${delay}ms due to:`,
-      (error as any).message
+      (error as { message?: string }).message
     );
   },
   onMaxRetriesExceeded: (error: unknown) => {
     console.error(
       "[RetryHandler] Max retries exceeded:",
-      (error as any).message
+      (error as { message?: string }).message
     );
   },
 };

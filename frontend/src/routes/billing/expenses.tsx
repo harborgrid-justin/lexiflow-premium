@@ -13,7 +13,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: any }) {
+export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Expenses',
     count: data?.expenses?.length,
@@ -69,7 +69,7 @@ export async function action({ request }: ActionFunctionArgs) {
       try {
         await expensesApi.approve(approveId);
         return { success: true, message: "Expense approved" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to approve expense" };
       }
     }
@@ -79,7 +79,7 @@ export async function action({ request }: ActionFunctionArgs) {
       try {
         await expensesApi.delete(deleteId);
         return { success: true, message: "Expense deleted" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to delete expense" };
       }
     }

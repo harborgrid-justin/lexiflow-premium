@@ -120,9 +120,9 @@ export const CaseDetail = ({
   } = useCaseDetail(caseData, initialTab, initialDocuments, initialParties);
 
   // Compatibility wrappers for UI that expects old method names
-  const handleAnalyze = (doc: unknown) => analyzeWithAI((doc as LegalDocument).id);
-  const handleDraft = () => draftDocument('Motion/Clause', draftPrompt);
-  const handleGenerateWorkflow = () => generateAIWorkflow();
+  const handleAnalyze = useCallback((doc: unknown) => analyzeWithAI((doc as LegalDocument).id), [analyzeWithAI]);
+  const handleDraft = useCallback(() => draftDocument('Motion/Clause', draftPrompt), [draftDocument, draftPrompt]);
+  const handleGenerateWorkflow = useCallback(() => generateAIWorkflow(), [generateAIWorkflow]);
 
   // Handle parent tab navigation - switch to first sub-tab of clicked parent
   const handleParentTabChange = useCallback((parentId: string) => {

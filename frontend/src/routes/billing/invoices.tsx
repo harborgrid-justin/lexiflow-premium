@@ -83,7 +83,7 @@ export async function action({ request }: ActionFunctionArgs) {
       try {
         await invoicesApi.send(sendId, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to send invoice" };
       }
     }
@@ -112,7 +112,7 @@ export async function action({ request }: ActionFunctionArgs) {
       try {
         await invoicesApi.recordPayment(invoiceId, payment);
         return { success: true, message: "Payment recorded" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to record payment" };
       }
     }

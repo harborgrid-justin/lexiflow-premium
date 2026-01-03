@@ -258,7 +258,11 @@ export function createPerformanceInterceptor(): {
       return config;
     },
     response: async (response: Response, data: unknown) => {
-      const requestConfig = (response as any).requestConfig;
+      const requestConfig = (
+        response as unknown as {
+          requestConfig?: { metadata?: { startTime?: number }; url?: string };
+        }
+      ).requestConfig;
       if (requestConfig?.metadata?.startTime) {
         const duration = performance.now() - requestConfig.metadata.startTime;
         console.log(
@@ -316,11 +320,15 @@ function transformKeys(
   }
 
   if (obj !== null && typeof obj === "object") {
-    return Object.keys(obj).reduce((result, key) => {
-      const newKey = transformer(key);
-      (result as any)[newKey] = transformKeys((obj as any)[key], transformer);
-      return result;
-    }, {} as any);
+    const typedObj = obj as Record<string, unknown>;
+    return Object.keys(typedObj).reduce(
+      (result, key) => {
+        const newKey = transformer(key);
+        result[newKey] = transformKeys(typedObj[key], transformer);
+        return result;
+      },
+      {} as Record<string, unknown>
+    );
   }
 
   return obj;
@@ -340,7 +348,13 @@ export function createErrorLoggingInterceptor(
   enabled: boolean = true
 ): ErrorInterceptor {
   return async (error: unknown) => {
-    const err = error as any;
+    const err = error as {
+      message?: string;
+      statusCode?: number;
+      status?: number;
+      path?: string;
+      timestamp?: string;
+    };
     if (enabled) {
       console.error("[API Error]", {
         message: err.message,
@@ -359,7 +373,10 @@ export function createErrorLoggingInterceptor(
  */
 export function createErrorTransformInterceptor(): ErrorInterceptor {
   return async (error: unknown) => {
-    const err = error as any;
+    const err = error as {
+      getUserMessage?: () => string;
+      userMessage?: string;
+    };
     // Add user-friendly message if available
     if (err.getUserMessage && typeof err.getUserMessage === "function") {
       err.userMessage = err.getUserMessage();
@@ -373,7 +390,7 @@ export function createErrorTransformInterceptor(): ErrorInterceptor {
  */
 export function createRetryAfterInterceptor(): ErrorInterceptor {
   return async (error: unknown) => {
-    const err = error as any;
+    const err = error as { statusCode?: number; retryAfter?: number };
     if (err.statusCode === 429) {
       const retryAfter = err.retryAfter || 60;
       console.warn(

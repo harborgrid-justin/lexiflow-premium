@@ -11,10 +11,10 @@
  */
 
 import { api } from '@/api';
-import { Link } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+// import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags

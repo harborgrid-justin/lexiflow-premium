@@ -212,9 +212,8 @@ export class KnowledgeRepository {
 
         // WIKI_ARTICLE_CREATED event type may not be defined, using generic event
         if ("WIKI_ARTICLE_CREATED" in SystemEventType) {
-          const eventType = (
-            SystemEventType as unknown as Record<string, SystemEventType>
-          ).WIKI_ARTICLE_CREATED;
+          const eventType = (SystemEventType as unknown as Record<string, any>)
+            .WIKI_ARTICLE_CREATED;
           if (eventType) {
             await IntegrationOrchestrator.publish(eventType, {
               article,

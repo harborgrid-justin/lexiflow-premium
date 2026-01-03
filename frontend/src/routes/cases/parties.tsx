@@ -13,8 +13,9 @@
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
 import { DataService } from '@/services/data/dataService';
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+// import type { Route } from "./+types/parties";
 
 // ============================================================================
 // Meta Tags

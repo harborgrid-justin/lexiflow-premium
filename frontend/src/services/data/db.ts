@@ -415,7 +415,7 @@ export class DatabaseManager {
         store: storeName,
         item,
         type: "put",
-        resolve,
+        resolve: resolve as any,
         reject,
       });
 
@@ -487,7 +487,7 @@ export class DatabaseManager {
         store: storeName,
         item: id,
         type: "delete",
-        resolve,
+        resolve: resolve as any,
         reject,
       });
 
@@ -515,7 +515,7 @@ export class DatabaseManager {
       const key = Array.isArray(value) ? indexName.split("_")[0] : indexName;
       const val = Array.isArray(value) ? value[0] : value;
       return items.filter(
-        (i: unknown) => (i as Record<string, unknown>)[key] === val
+        (i: unknown) => (i as Record<string, unknown>)[key as string] === val
       );
     }
     return new Promise((resolve, reject) => {

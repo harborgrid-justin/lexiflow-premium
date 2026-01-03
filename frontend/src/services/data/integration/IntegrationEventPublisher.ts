@@ -22,11 +22,20 @@ export class IntegrationEventPublisher {
   /**
    * Subscribe to an event type
    */
-  static subscribe(eventType: string, handler: EventHandler): void {
+  static subscribe(eventType: string, handler: EventHandler): () => void {
     if (!this.listeners.has(eventType)) {
       this.listeners.set(eventType, []);
     }
     this.listeners.get(eventType)?.push(handler);
+    return () => {
+      const handlers = this.listeners.get(eventType);
+      if (handlers) {
+        const index = handlers.indexOf(handler);
+        if (index > -1) {
+          handlers.splice(index, 1);
+        }
+      }
+    };
   }
 
   /**
@@ -126,7 +135,7 @@ export class IntegrationEventPublisher {
  * ```
  */
 export function createIntegratedRepository<
-  TBase extends new (...args: unknown[]) => InstanceType<TBase>,
+  TBase extends new (...args: any[]) => object,
 >(
   Repository: TBase,
   publishAdd?: (item: unknown) => Promise<void>,

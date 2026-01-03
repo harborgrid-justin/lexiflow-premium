@@ -348,9 +348,7 @@ export class DiscoveryRepository {
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.create(
-          custodian as Record<string, unknown>
-        );
+        return await discoveryApi.custodians.create(custodian as any);
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",

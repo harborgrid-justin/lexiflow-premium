@@ -12,7 +12,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: any }) {
+export function meta({ data }: Route.MetaArgs) {
   return [
     { title: `Invoice ${data?.invoice?.invoiceNumber || ''} | LexiFlow` },
     { name: 'description', content: `View invoice details and record payments` },
@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       try {
         await invoicesApi.send(params.id!, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent successfully" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to send invoice" };
       }
     }
@@ -81,7 +81,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       try {
         await invoicesApi.recordPayment(params.id!, payment);
         return { success: true, message: "Payment recorded successfully" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to record payment" };
       }
     }
@@ -96,7 +96,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         a.click();
         URL.revokeObjectURL(url);
         return { success: true, message: "PDF downloaded" };
-      } catch (_error) {
+      } catch {
         return { success: false, error: "Failed to download PDF" };
       }
 

@@ -20,7 +20,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -192,7 +192,6 @@ export function DataGrid<T extends Record<string, unknown>>({
 }: DataGridProps<T>) {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
 
   // Internal state (when not controlled)
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<string | number>>(new Set());
@@ -213,22 +212,6 @@ export function DataGrid<T extends Record<string, unknown>>({
   const setFilters = onFilterChange ?? setInternalFilters;
   const currentPage = controlledCurrentPage ?? internalCurrentPage;
   const setCurrentPage = onPageChange ?? setInternalCurrentPage;
-
-  // Measure container width for column sizing
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerWidth(entry.contentRect.width);
-      }
-    });
-
-    observer.observe(containerRef.current);
-    setContainerWidth(containerRef.current.clientWidth);
-
-    return () => observer.disconnect();
-  }, []);
 
   // Filter data
   const filteredData = useMemo(() => {

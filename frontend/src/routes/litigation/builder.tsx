@@ -12,6 +12,7 @@
  * @module routes/litigation/builder
  */
 
+import { MatterType } from '@/types/enums';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -27,23 +28,6 @@ interface StrategyTemplate {
   category: 'offensive' | 'defensive' | 'settlement' | 'appeal';
   phases: string[];
   description: string;
-}
-
-interface _Milestone {
-  id: string;
-  name: string;
-  dueDate: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'overdue';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-}
-
-interface _RiskFactor {
-  id: string;
-  category: string;
-  description: string;
-  likelihood: 'low' | 'medium' | 'high';
-  impact: 'low' | 'medium' | 'high';
-  mitigation: string;
 }
 
 interface LoaderData {
@@ -76,11 +60,10 @@ export function meta() {
 
 export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
-  const _caseId = url.searchParams.get('case');
   const templateId = url.searchParams.get('template');
   console.log('template ID:', templateId);
 
-  // TODO: Fetch strategy templates from API
+  // Default strategy templates
   const templates: StrategyTemplate[] = [
     {
       id: 'aggressive-plaintiff',
@@ -112,18 +95,14 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     },
   ];
 
-  // TODO: Fetch case types from API
-  const caseTypes = [
-    { id: 'commercial', name: 'Commercial Litigation' },
-    { id: 'employment', name: 'Employment Dispute' },
-    { id: 'ip', name: 'Intellectual Property' },
-    { id: 'personal-injury', name: 'Personal Injury' },
-    { id: 'contract', name: 'Contract Dispute' },
-    { id: 'securities', name: 'Securities Litigation' },
-  ];
+  // Case types from enum
+  const caseTypes = Object.values(MatterType).map(type => ({
+    id: type,
+    name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }));
 
-  // TODO: Fetch existing strategies
-  const existingStrategies: Strategy[] = [];
+  // Existing strategies (placeholder for future API)
+  const existingStrategies: LoaderData['existingStrategies'] = [];
 
   return {
     templates,
@@ -155,7 +134,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
         };
       }
 
-      // TODO: Save strategy to database
+      // Mock save strategy
       console.log('Saving strategy:', { name, caseId, templateId, objectives });
 
       return {

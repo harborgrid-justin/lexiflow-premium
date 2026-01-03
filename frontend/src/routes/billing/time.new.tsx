@@ -37,7 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
       rate: parseFloat(formData.get("rate") as string),
       description: formData.get("description") as string,
       billable: formData.get("billable") === "true",
-      status: (formData.get("status") as any) || 'Draft',
+      status: (formData.get("status") as string) || 'Draft',
       taskCode: formData.get("taskCode") as string || undefined,
       activityType: formData.get("activityType") as string || undefined,
     };

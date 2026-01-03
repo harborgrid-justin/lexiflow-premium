@@ -28,7 +28,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 // Components
 import { Button } from '@/components/ui/atoms/Button';
 import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
-import { TabbedPageLayout } from '@/components/layouts';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 import { PeriodSelector } from '@/components/ui/molecules/PeriodSelector';
 import { BillingDashboardContent } from './BillingDashboardContent';
@@ -114,11 +114,11 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
       pageActions={
         <div className="flex gap-3 items-center">
           <PeriodSelector selected={period} onChange={setPeriod} />
-          <ExportMenu onExport={exportReport as any} />
+          <ExportMenu onExport={(format) => exportReport(format)} />
           <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={BILLING_TAB_CONFIG as any}
+      tabConfig={BILLING_TAB_CONFIG as unknown as TabConfigItem[]}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

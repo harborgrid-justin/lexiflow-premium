@@ -9,20 +9,20 @@
  */
 
 // External Dependencies
+import { CheckCircle, Loader2, Mail, Phone, Plus, Users, Video } from 'lucide-react';
 import React, { useState } from 'react';
-import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
@@ -31,7 +31,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId } from '@/types';
+import { CaseId, ConferralMethod, ConferralResult, ConferralSession, UUID } from '@/types';
 
 interface ConferralLogProps {
   caseId: string;
@@ -49,33 +49,33 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
   // Enterprise Data Access
   const { data: sessions = [], isLoading } = useQuery<ConferralSession[]>(
-      ['conferrals', caseId],
-      () => DataService.collaboration.getConferrals(caseId)
+    ['conferrals', caseId],
+    () => DataService.collaboration.getConferrals(caseId)
   );
 
   const { mutate: addSession } = useMutation(
-      DataService.collaboration.addConferral,
-      {
-          invalidateKeys: [['conferrals', caseId]],
-          onSuccess: () => {
-              setIsModalOpen(false);
-              setNewSession({ method: 'Phone', result: 'Pending', date: new Date().toISOString().split('T')[0] });
-              addToast('Conferral session logged successfully', 'success');
-          },
-          onError: (error: Error) => {
-              const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-              addToast(`Failed to log conferral session: ${errorMsg}`, 'error');
-              console.error('Conferral save error:', error);
-          }
+    DataService.collaboration.addConferral,
+    {
+      invalidateKeys: [['conferrals', caseId]],
+      onSuccess: () => {
+        setIsModalOpen(false);
+        setNewSession({ method: 'Phone', result: 'Pending', date: new Date().toISOString().split('T')[0] });
+        addToast('Conferral session logged successfully', 'success');
+      },
+      onError: (error: Error) => {
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        addToast(`Failed to log conferral session: ${errorMsg}`, 'error');
+        console.error('Conferral save error:', error);
       }
+    }
   );
 
   const getMethodIcon = (method: string) => {
     switch (method) {
-      case 'Email': return <Mail className="h-4 w-4"/>;
-      case 'Phone': return <Phone className="h-4 w-4"/>;
-      case 'Video Conference': return <Video className="h-4 w-4"/>;
-      default: return <Users className="h-4 w-4"/>;
+      case 'Email': return <Mail className="h-4 w-4" />;
+      case 'Phone': return <Phone className="h-4 w-4" />;
+      case 'Video Conference': return <Video className="h-4 w-4" />;
+      default: return <Users className="h-4 w-4" />;
     }
   };
 
@@ -103,7 +103,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
     addSession(session);
   };
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>;
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)} /></div>;
 
   return (
     <div className="space-y-6">
@@ -141,7 +141,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
             {session.nextSteps && (
               <div className={cn("ml-11 mt-2 flex items-center gap-2 text-xs", theme.text.link)}>
-                <CheckCircle className="h-3 w-3"/>
+                <CheckCircle className="h-3 w-3" />
                 <span className="font-medium">Next: {session.nextSteps}</span>
               </div>
             )}
@@ -150,7 +150,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
         {sessions.length === 0 && (
           <div className={cn("text-center py-12 border-2 border-dashed rounded-lg", theme.border.default, theme.text.tertiary)}>
-            <Users className="h-12 w-12 mx-auto mb-2 opacity-20"/>
+            <Users className="h-12 w-12 mx-auto mb-2 opacity-20" />
             <p>No conferral sessions recorded.</p>
           </div>
         )}
@@ -162,7 +162,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             label="Subject / Topic"
             placeholder="e.g. Discovery Dispute regarding RFP Set 2"
             value={newSession.topic || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, topic: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({ ...newSession, topic: e.target.value })}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -170,7 +170,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
               label="Date"
               type="date"
               value={newSession.date}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, date: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({ ...newSession, date: e.target.value })}
             />
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Method</label>
@@ -178,7 +178,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral method"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.method}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({...newSession, method: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({ ...newSession, method: e.target.value as 'Phone' | 'Email' | 'Video Conference' | 'In-Person' })}
               >
                 <option>Phone</option>
                 <option>Email</option>
@@ -192,7 +192,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             label="Participants (Opposing Counsel)"
             placeholder="e.g. Robert Smith, Jane Doe"
             value={newSession.participants?.join(', ') || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, participants: e.target.value.split(', ')})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({ ...newSession, participants: e.target.value.split(', ') })}
           />
 
           <TextArea
@@ -200,7 +200,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             placeholder="Summary of what was discussed..."
             rows={4}
             value={newSession.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({ ...newSession, notes: e.target.value })}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -210,7 +210,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral outcome"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.result}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({...newSession, result: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({ ...newSession, result: e.target.value as 'Pending' | 'Agreed' | 'Partial Agreement' | 'Impasse' })}
               >
                 <option value="Pending">Pending</option>
                 <option value="Agreed">Agreed</option>
@@ -222,7 +222,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
               label="Next Steps"
               placeholder="e.g. File Motion, Send Letter"
               value={newSession.nextSteps || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, nextSteps: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({ ...newSession, nextSteps: e.target.value })}
             />
           </div>
 
@@ -235,4 +235,3 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
     </div>
   );
 };
-

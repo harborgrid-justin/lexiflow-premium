@@ -19,7 +19,7 @@ import type { Route } from "./+types/index";
 // Meta Tags
 // ============================================================================
 
-export function meta({ data: _data }: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return createMeta({
     title: 'Master Calendar',
     description: 'View and manage all deadlines, court dates, and appointments',

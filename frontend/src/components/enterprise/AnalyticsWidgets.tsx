@@ -349,7 +349,7 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
                   cy="50%"
                   labelLine={false}
                   label={(props: unknown) => {
-                    const { range, percentage } = (props as any).payload || props;
+                    const { range, percentage } = (props as { payload: { range: string; percentage: number } }).payload || props;
                     return range && percentage ? `${range}: ${percentage.toFixed(1)}%` : '';
                   }}
                   outerRadius={100}
@@ -361,7 +361,7 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={((value: number | undefined) => value ? `$${(value / 1000).toFixed(0)}K` : '$0') as any}
+                  formatter={(value: number | undefined) => value ? `$${(value / 1000).toFixed(0)}K` : '$0'}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     border: '1px solid #e5e7eb',
@@ -465,11 +465,11 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
                     border: '1px solid #e5e7eb',
                     borderRadius: '8px',
                   }}
-                  formatter={((value: number | undefined, name: string) => {
+                  formatter={(value: number | undefined, name: string) => {
                     if (!value) return '0';
                     if (name === 'Avg LTV') return `$${(value / 1000).toFixed(0)}K`;
                     return `${value.toFixed(1)}%`;
-                  }) as any}
+                  }}
                 />
                 <Legend />
                 <Line

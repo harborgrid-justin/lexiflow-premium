@@ -9,7 +9,7 @@
 import { Form, redirect, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/new";
+// import type { Route } from "./+types/new";
 
 // ============================================================================
 // Meta Tags

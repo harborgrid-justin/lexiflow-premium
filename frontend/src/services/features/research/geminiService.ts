@@ -290,6 +290,12 @@ declare module "@google/generative-ai" {
   export interface GenerateContentResult {
     response: {
       text(): string;
+      candidates?: {
+        content: { parts: { text: string }[] };
+        groundingMetadata?: {
+          groundingChunks: unknown[];
+        };
+      }[];
     };
   }
 
@@ -465,7 +471,7 @@ export const GeminiService = {
         Prompts.Draft(context, type)
       );
       for await (const chunk of result.stream) {
-        const chunkText = chunk.text();
+        const chunkText = chunk.response.text();
         if (chunkText) yield chunkText;
       }
     } catch {

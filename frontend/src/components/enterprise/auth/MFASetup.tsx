@@ -46,9 +46,9 @@ export const MFASetup: React.FC<MFASetupProps> = ({
   const [isEnabled, setIsEnabled] = useState(initialEnabled);
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
 
-  const authService = new AuthApiService();
+  const authService = React.useMemo(() => new AuthApiService(), []);
 
-  const initializeMFASetup = useCallback(async () => {
+  const initializeMFASetup = React.useCallback(async () => {
     setIsLoading(true);
     setError('');
 
@@ -63,7 +63,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authService]);
 
   useEffect(() => {
     initializeMFASetup();

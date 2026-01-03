@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
-export const CaseInsightsDashboard: React.FC<{ caseId?: string }> = ({ caseId: _caseId }) => {
+export const CaseInsightsDashboard: React.FC<{ caseId?: string }> = () => {
   const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
 

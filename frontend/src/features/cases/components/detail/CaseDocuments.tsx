@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React, { useState, useRef, lazy, Suspense } from 'react';
-import { Plus, Wand2, Loader2, ShieldCheck } from 'lucide-react';
+import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
+import React, { lazy, Suspense, useRef, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
@@ -18,20 +18,20 @@ import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useWindow } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
+import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { DocumentService } from '@/services/features/documents/documentService';
-import { DataService } from '@/services/data/dataService';
 import { queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DocumentService } from '@/services/features/documents/documentService';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '@/types';
+import { CaseId, EvidenceId, EvidenceItem, LegalDocument, WorkflowTask } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
 const DocumentAssembly = lazy(() => import('@/features/operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
@@ -97,13 +97,13 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         });
 
         // INTEGRATION POINT: Trigger orchestrator
-        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, {document: savedDoc});
+        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
 
         if (logAsEvidence) {
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
             id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID() as any,
+            trackingUuid: crypto.randomUUID(),
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',
@@ -206,5 +206,3 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     </div>
   );
 };
-
-

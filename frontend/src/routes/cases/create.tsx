@@ -35,10 +35,9 @@ export function meta() {
 /**
  * Pre-fetch reference data for case creation form
  */
-export async function loader() {
-  // TODO: Add auth check
-  // const user = await getUser(request);
-  // if (!user) throw redirect("/login");
+export async function loader({ request }: Route.LoaderArgs) {
+  // Auth check
+  requireAuthentication(request);
 
   // Pre-fetch reference data (jurisdictions, case types, etc.)
   const [jurisdictions, templates] = await Promise.all([
@@ -64,7 +63,7 @@ export async function action({ request }: Route.ActionArgs) {
       title: formData.get("title") as string,
       caseNumber: formData.get("caseNumber") as string,
       jurisdiction: formData.get("jurisdictionId") as string,
-      status: "Active" as any,
+      status: "Active",
       // ... extract all form fields
     };
 

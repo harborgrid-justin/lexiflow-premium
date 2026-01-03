@@ -23,7 +23,7 @@ import {
 import { Form, Link, useLoaderData, useSubmit } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+// import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -45,106 +45,15 @@ export async function loader({ request }: Route.LoaderArgs) {
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
 
-  // TODO: Replace with actual API call
-  // const reports = await api.reports.getAll({ search, category });
+  // Fetch reports from API
+  const reports = await api.analytics.getReports({
+    category: category !== 'all' ? category : undefined,
+  });
 
-  const mockReports: Report[] = [
-    {
-      id: '1',
-      name: 'Monthly Billing Summary',
-      description: 'Comprehensive monthly billing and revenue report',
-      type: 'billing-summary',
-      category: 'financial',
-      format: ['pdf', 'excel'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'last-month' },
-      },
-      status: 'active',
-      schedule: {
-        frequency: 'monthly',
-        dayOfMonth: 1,
-        time: '09:00',
-      },
-      lastRun: '2024-01-01T09:00:00Z',
-      nextRun: '2024-02-01T09:00:00Z',
-      createdAt: '2023-01-01T00:00:00Z',
-      updatedAt: '2024-01-15T10:30:00Z',
-      // userId: 'user-1',
-    },
-    {
-      id: '2',
-      name: 'Case Outcomes Report',
-      description: 'Win/loss analysis by attorney and practice area',
-      type: 'case-summary',
-      category: 'operational',
-      format: ['pdf'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'last-quarter' },
-      },
-      status: 'active',
-      schedule: {
-        frequency: 'quarterly',
-        dayOfMonth: 1,
-        time: '08:00',
-      },
-      lastRun: '2024-01-01T08:00:00Z',
-      nextRun: '2024-04-01T08:00:00Z',
-      createdAt: '2023-02-15T00:00:00Z',
-      updatedAt: '2023-12-20T14:15:00Z',
-      // userId: 'user-1',
-    },
-    {
-      id: '3',
-      name: 'Associate Productivity',
-      description: 'Billable hours and realization rates by associate',
-      type: 'productivity',
-      category: 'performance',
-      format: ['excel', 'csv'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'this-month' },
-      },
-      status: 'draft',
-      createdAt: '2024-01-10T00:00:00Z',
-      updatedAt: '2024-01-10T16:45:00Z',
-      // userId: 'user-1',
-    },
-    {
-      id: '4',
-      name: 'Compliance Audit Log',
-      description: 'System access and data modification logs',
-      type: 'custom',
-      category: 'compliance',
-      format: ['csv'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'last-week' },
-      },
-      status: 'active',
-      schedule: {
-        frequency: 'weekly',
-        dayOfWeek: 1,
-        time: '06:00',
-      },
-      lastRun: '2024-01-22T06:00:00Z',
-      nextRun: '2024-01-29T06:00:00Z',
-      createdAt: '2023-11-05T00:00:00Z',
-      updatedAt: '2023-11-05T09:20:00Z',
-      // userId: 'user-1',
-    },
-  ];
-
-  let filteredReports = mockReports;
-
-  if (search) {
-    const lowerSearch = search.toLowerCase();
-    filteredReports = filteredReports.filter(r =>
-      r.name.toLowerCase().includes(lowerSearch) ||
-      r.description?.toLowerCase().includes(lowerSearch)
-    );
-  }
-
-  if (category !== 'all') {
-    filteredReports = filteredReports.filter(r => r.category === category);
-  }
+  // Filter by search term if API doesn't support it yet
+  const filteredReports = search
+    ? reports.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
+    : reports;
 
   return {
     reports: filteredReports,
@@ -152,6 +61,10 @@ export async function loader({ request }: Route.LoaderArgs) {
     category,
   };
 }
+
+
+
+
 
 // ============================================================================
 // Action

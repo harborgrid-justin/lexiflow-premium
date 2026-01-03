@@ -310,10 +310,10 @@ export const Seeder = {
       security: {
         mfaEnabled: user.id === "usr-admin-justin",
         mfaMethod: "App",
-        lastPasswordChange: new Date().toISOString().split("T")[0],
+        lastPasswordChange: new Date().toISOString().split("T")[0] as string,
         passwordExpiry: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
           .toISOString()
-          .split("T")[0],
+          .split("T")[0] as string,
         activeSessions: [
           {
             id: "sess-1",

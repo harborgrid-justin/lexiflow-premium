@@ -14,7 +14,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: any }) {
+export function meta({ data }: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Rate Tables',
     count: data?.rateTables?.length,
@@ -48,7 +48,7 @@ export async function loader() {
 // ============================================================================
 
 export default function RateTablesRoute() {
-  const { rateTables: _rateTables } = useLoaderData<typeof loader>();
+  useLoaderData<typeof loader>();
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>

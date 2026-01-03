@@ -12,9 +12,9 @@
 
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
-import { useNavigate, useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/billing";
+// import type { Route } from "./+types/billing";
 
 interface TimeEntry {
   id: string;

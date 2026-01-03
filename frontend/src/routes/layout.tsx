@@ -162,6 +162,7 @@ export default function Layout() {
       }, 15000); // 15 second timeout (increased from 10s)
       return () => clearTimeout(timeout);
     }
+    return undefined;
   }, [isAppLoading, authIsLoading, navigate]);
 
   if (isAppLoading || !currentUser) {

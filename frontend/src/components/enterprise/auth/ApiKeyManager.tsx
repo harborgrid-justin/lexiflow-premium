@@ -63,7 +63,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
   const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
   const [revokingKeyId, setRevokingKeyId] = useState<string | null>(null);
 
-  const apiKeysService = new ApiKeysApiService();
+  const apiKeysService = React.useMemo(() => new ApiKeysApiService(), []);
 
   const loadData = useCallback(async () => {
     try {
@@ -81,7 +81,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [apiKeysService]);
 
   useEffect(() => {
     loadData();

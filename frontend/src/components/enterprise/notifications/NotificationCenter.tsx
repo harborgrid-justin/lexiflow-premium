@@ -81,7 +81,7 @@ export function NotificationCenter({
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Defer search query for better input responsiveness
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -165,6 +165,7 @@ export function NotificationCenter({
   // Calculate stats
   const unreadCount = notifications.filter((n) => !n.read).length;
   const totalCount = notifications.length;
+console.log('total count:', totalCount);
 
   // Selection handlers
   const toggleSelection = (id: string) => {

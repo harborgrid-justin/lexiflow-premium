@@ -76,7 +76,7 @@ export const CalendarGrid = React.memo<CalendarGridProps>(({
       {/* Grid Cells */}
       <div className={cn("flex-1 grid grid-cols-7 auto-rows-fr gap-px", theme.border.default, theme.surface.highlight)}>
         {/* Previous Month Padding */}
-        {paddingDays.map((_, i) => (
+        {paddingDays.map((_) => (
           <div key={`padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
 
@@ -121,7 +121,7 @@ export const CalendarGrid = React.memo<CalendarGridProps>(({
         })}
 
         {/* Next Month Padding to fill grid if needed */}
-        {Array.from({ length: (42 - (daysInMonth + startDayOfWeek)) % 7 }).map((_, i) => (
+        {Array.from({ length: (42 - (daysInMonth + startDayOfWeek)) % 7 }).map((_) => (
            <div key={`end-padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
       </div>

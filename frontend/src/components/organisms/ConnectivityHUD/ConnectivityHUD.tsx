@@ -45,7 +45,7 @@ export const ConnectivityHUD: React.FC = () => {
     failedCount = syncContext.failedCount;
     syncStatus = syncContext.syncStatus;
     retryFailed = syncContext.retryFailed;
-  } catch (error) {
+  } catch {
     // SyncProvider not yet available - use defaults
     // console.debug('[ConnectivityHUD] SyncProvider not available yet');
   }

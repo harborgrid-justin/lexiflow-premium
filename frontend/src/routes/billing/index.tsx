@@ -129,7 +129,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function BillingIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function BillingIndexRoute() {
   const { invoices, summary } = loaderData;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";

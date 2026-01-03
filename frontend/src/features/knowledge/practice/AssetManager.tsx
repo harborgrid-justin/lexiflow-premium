@@ -86,9 +86,9 @@ export const AssetManager: React.FC = () => {
         const asset: FirmAsset = {
             id: `AST-${Date.now()}`,
             name: newAsset.name,
-            type: (newAsset.type as any) || 'Hardware',
+            type: (newAsset.type as FirmAsset['type']) || 'Hardware',
             assignedTo: newAsset.assignedTo || 'Unassigned',
-            status: (newAsset.status as any) || 'Active',
+            status: (newAsset.status as FirmAsset['status']) || 'Active',
             purchaseDate: newAsset.purchaseDate || getTodayString(),
             value: Number(newAsset.value) || 0,
             serialNumber: newAsset.serialNumber
@@ -203,7 +203,7 @@ export const AssetManager: React.FC = () => {
                                 title="Select asset type"
                                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                 value={newAsset.type}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value as any })}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value as FirmAsset['type'] })}
                             >
                                 <option value="Hardware">Hardware</option>
                                 <option value="Software">Software</option>

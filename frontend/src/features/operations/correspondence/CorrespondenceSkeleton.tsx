@@ -28,7 +28,7 @@ export const CommunicationLogSkeleton: React.FC = () => {
 
       {/* Item skeletons */}
       <div className="flex-1 overflow-hidden">
-        {[...Array(10)].map((_, i) => (
+        {[...Array(10)].map((_) => (
           <div
             key={`comm-log-skeleton-${i}`}
             className={cn(
@@ -71,7 +71,7 @@ export const ServiceTrackerSkeleton: React.FC = () => {
   return (
     <div className="flex-1 overflow-auto custom-scrollbar p-6 bg-slate-50/50">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(6)].map((_) => (
           <div
             key={`service-tracker-skeleton-${i}`}
             className={cn(
@@ -132,7 +132,7 @@ export const CorrespondenceDetailSkeleton: React.FC = () => {
         </div>
 
         <div className={cn("space-y-3 p-4 rounded-lg", theme.surface.default)}>
-          {[...Array(3)].map((_, i) => (
+          {[...Array(3)].map((_) => (
             <div key={i} className="flex justify-between">
               <div className="h-4 w-16 bg-slate-200 rounded animate-pulse" />
               <div className="h-4 w-32 bg-slate-200 rounded animate-pulse" />
@@ -152,7 +152,7 @@ export const CorrespondenceDetailSkeleton: React.FC = () => {
 
       <div className={cn("p-4 border-t", theme.border.default)}>
         <div className="grid grid-cols-2 gap-2">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(4)].map((_) => (
             <div key={i} className="h-9 bg-slate-200 rounded animate-pulse" />
           ))}
         </div>

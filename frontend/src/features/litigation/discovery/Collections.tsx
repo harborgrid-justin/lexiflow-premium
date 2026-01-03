@@ -162,7 +162,7 @@ export const Collections: React.FC = () => {
     completed: collections.filter(c => c.status === 'completed').length,
     totalSize: collections.reduce((acc, col) => {
       if (col.actualSize) {
-        const sizeMatch = col.actualSize.match(/(\d+\.?\d*)\s*(GB|MB|TB)/);
+        const sizeMatch = col.actualSize.match(/(\d+.?\d*)\s*(GB|MB|TB)/);
         if (sizeMatch) {
           const value = parseFloat(sizeMatch[1]);
           const unit = sizeMatch[2];

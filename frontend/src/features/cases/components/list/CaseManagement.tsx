@@ -92,7 +92,7 @@ interface CaseManagementProps {
 
 export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices, onSelectCase }) => {
   const { theme } = useTheme();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('cases_active_tab', 'overview');
 
   const setActiveTab = (tab: string) => {
@@ -127,6 +127,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
 
   const metrics = useMemo(() => {
     const activeCases = cases?.filter(m => m.status === CaseStatus.Active).length || 0;
+console.log('metrics data:', metrics);
     const intakePipeline = cases?.filter(m => m.status === CaseStatus.Open || m.status === CaseStatus.PreFiling).length || 0;
     const upcomingDeadlines = cases?.filter(m => {
       if (!m.closeDate) return false;

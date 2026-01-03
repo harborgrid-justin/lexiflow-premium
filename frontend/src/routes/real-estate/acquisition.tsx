@@ -16,7 +16,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Real Estate - Acquisition',
     description: 'Manage real estate acquisitions including land purchases, building acquisitions, and transaction workflows.',
@@ -27,7 +27,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real estate acquisition data
   return {
     data: null,
@@ -62,8 +62,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function AcquisitionRoute({ loaderData }: Route.ComponentProps) {
+export default function AcquisitionRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

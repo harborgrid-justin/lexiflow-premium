@@ -4,23 +4,23 @@
  */
 
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { } from 'react-router';
 import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import { DateRangeSelector } from '@/components/enterprise/analytics';
-import { Search, Download, Filter, Shield, User, FileText, AlertCircle } from 'lucide-react';
+import { Search, Download, Shield, User, AlertCircle } from 'lucide-react';
 import type { AuditLog } from '@/types/analytics-enterprise';
 import { subDays } from 'date-fns';
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Audit Trail',
     description: 'System audit logs and compliance tracking',
   });
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real audit logs from API
   const mockLogs: AuditLog[] = [
     {
@@ -120,7 +120,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { logs: mockLogs };
 }
 
-export default function AuditTrailRoute({ loaderData }: Route.ComponentProps) {
+export default function AuditTrailRoute() {
   const { logs } = loaderData;
 
   const [searchTerm, setSearchTerm] = useState('');

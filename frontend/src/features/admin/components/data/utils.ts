@@ -65,7 +65,7 @@ export function formatLastSync(lastSync: string | null): string {
   try {
     const date = new Date(lastSync);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ago';
-  } catch (error) {
+  } catch {
     return 'Never';
   }
 }

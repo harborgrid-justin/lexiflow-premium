@@ -656,27 +656,21 @@ export class CollaborationService extends EventEmitter {
 
   /**
    * Generate consistent color for user
-   * ✅ REFACTORED: Now uses ChartColorService for theme-aware colors
+   * Simple hash-based color generation without external dependencies
    */
   private getUserColor(userId: string): string {
-    // Import at runtime to avoid circular dependencies
-    const { ChartColorService } = require("../theme/chartColorService");
-
-    // For user colors, we'll use the current system theme preference
-    // In a real implementation, this could be passed from the UI context
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const mode = prefersDark ? "dark" : "light";
-
-    // Hash userId to get consistent index
+    // Hash userId to get consistent color
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       hash = userId.charCodeAt(i) + ((hash << 5) - hash);
     }
 
-    const index = Math.abs(hash) % 8;
-    return ChartColorService.getUserColor(index, mode);
+    // Generate HSL color with good contrast
+    const hue = Math.abs(hash) % 360;
+    const saturation = 70;
+    const lightness = 50;
+    
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 
   /**

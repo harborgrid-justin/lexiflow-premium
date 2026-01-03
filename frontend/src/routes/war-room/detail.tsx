@@ -75,7 +75,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WarRoomDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function WarRoomDetailRoute() {
   const navigate = useNavigate();
 
   return (

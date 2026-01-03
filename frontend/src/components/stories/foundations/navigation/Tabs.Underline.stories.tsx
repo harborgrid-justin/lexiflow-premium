@@ -38,28 +38,30 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('documents');
-    return (
-      <div className="w-full max-w-2xl">
-        <Tabs
-          tabs={[
-            { id: 'documents', label: 'Documents', icon: FileText },
-            { id: 'team', label: 'Team', icon: Users },
-            { id: 'settings', label: 'Settings', icon: Settings },
-          ]}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-          variant="underline"
-        />
-        <div className="mt-6 p-6 bg-white rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-          </h3>
-          <p className="text-slate-600">Tab content goes here</p>
-        </div>
+const DefaultComponent = () => {
+  const [activeTab, setActiveTab] = useState('documents');
+  return (
+    <div className="w-full max-w-2xl">
+      <Tabs
+        tabs={[
+          { id: 'documents', label: 'Documents', icon: FileText },
+          { id: 'team', label: 'Team', icon: Users },
+          { id: 'settings', label: 'Settings', icon: Settings },
+        ]}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        variant="underline"
+      />
+      <div className="mt-6 p-6 bg-white rounded-lg shadow">
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">
+          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+        </h3>
+        <p className="text-slate-600">Tab content goes here</p>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const Default: Story = {
+  render: () => <DefaultComponent />,
 };

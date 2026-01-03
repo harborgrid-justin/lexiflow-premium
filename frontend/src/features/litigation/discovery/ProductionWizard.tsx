@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
-import type { ProductionSet } from '@/types/discovery-enhanced';
+import type { _ProductionSet } from '@/types/discovery-enhanced';
 
 interface ProductionWizardProps {
   onComplete: () => void;

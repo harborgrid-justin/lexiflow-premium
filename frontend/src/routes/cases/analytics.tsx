@@ -27,7 +27,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { case: caseData, analytics };
 }
 
-export default function CaseAnalyticsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseAnalyticsRoute() {
   return <CaseAnalyticsDashboard caseData={loaderData.case} />;
 }
 

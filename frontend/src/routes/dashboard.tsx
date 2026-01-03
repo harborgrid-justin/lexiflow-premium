@@ -29,7 +29,7 @@ export function meta({ }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   return {
     timestamp: new Date().toISOString(),
   };
@@ -39,7 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function DashboardRoute({ loaderData }: Route.ComponentProps) {
+export default function DashboardRoute() {
   const { currentUser } = useAppController();
   const navigate = useNavigate();
 

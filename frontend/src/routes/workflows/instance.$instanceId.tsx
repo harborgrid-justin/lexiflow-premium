@@ -6,9 +6,8 @@
  * @module routes/workflows/instance.detail
  */
 
-import { useNavigate, useLoaderData, Form, useNavigation, Link } from 'react-router';
+import { Link } from 'react-router';
 import type { Route } from "./+types/instance.$instanceId";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import { api } from '../../api';
 
@@ -45,7 +44,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     let template = null;
     try {
       template = await api.workflow.getTemplateById(instance.templateId);
-    } catch (e) {
+    } catch (error) {
       console.warn("Could not fetch template for instance", instance.templateId);
     }
 
@@ -97,9 +96,10 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WorkflowInstanceDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function WorkflowInstanceDetailRoute() {
   const { instance, template } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

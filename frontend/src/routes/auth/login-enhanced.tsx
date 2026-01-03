@@ -25,7 +25,8 @@ import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, clearError, error: authError, mfaRequired } = useAuth();
+console.log('useNavigate:', navigate);
+  const { mfaRequired: _mfaRequired } = useAuth();
 
   const [showMfa, setShowMfa] = useState(false);
   const [mfaCode, setMfaCode] = useState('');

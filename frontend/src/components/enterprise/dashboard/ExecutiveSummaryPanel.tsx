@@ -128,6 +128,7 @@ const ExecutiveSummaryPanelComponent: React.FC<ExecutiveSummaryPanelProps> = ({
     ],
     [summary]
   );
+console.log('metrics data:', metrics);
 
   const formatValue = (value: number, format: 'currency' | 'number' | 'percentage'): string => {
     switch (format) {

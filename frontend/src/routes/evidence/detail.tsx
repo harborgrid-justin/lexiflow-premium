@@ -75,7 +75,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function EvidenceDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function EvidenceDetailRoute() {
   const navigate = useNavigate();
 
   return (

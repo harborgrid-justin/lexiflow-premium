@@ -32,7 +32,7 @@ export function meta({ }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Load system settings from backend
   return {
     settings: {
@@ -72,10 +72,11 @@ export async function action({ request }: Route.ActionArgs) {
       // TODO: Clear application cache
       return { success: true, message: "Cache cleared successfully" };
 
-    case "toggle-maintenance":
+    case "toggle-maintenance": {
       const enabled = formData.get("enabled") === "true";
       // TODO: Toggle maintenance mode
       return { success: true, message: `Maintenance mode ${enabled ? 'enabled' : 'disabled'}` };
+      }
 
     default:
       return { success: false, error: "Invalid action" };
@@ -147,8 +148,9 @@ function Toggle({ id, label, checked, onChange, disabled }: ToggleProps) {
 // Component
 // ============================================================================
 
-export default function SystemSettingsRoute({ loaderData }: Route.ComponentProps) {
+export default function SystemSettingsRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const fetcher = useFetcher();
   const formId = useId();
 

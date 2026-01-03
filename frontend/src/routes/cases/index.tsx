@@ -51,7 +51,7 @@ export function meta({ data }: Route.MetaArgs) {
  * Fetches all cases and related data in parallel
  * Runs on the server in SSR mode, enabling fast initial loads
  */
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Auth check
   // const user = await requireAuth(request);
 

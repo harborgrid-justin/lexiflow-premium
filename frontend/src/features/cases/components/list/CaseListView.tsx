@@ -37,6 +37,7 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
   // Identity-stable navigation callback (Principle #13)
   const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
+console.log('useNavigate:', navigate);
   }, []);
 
   const [searchTerm, setSearchTerm] = useState('');

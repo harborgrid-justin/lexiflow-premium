@@ -28,7 +28,7 @@ function CodeBlock({ code }: { code: string }): React.JSX.Element {
     const highlighted = encodedCode
         .replace(/&quot;([^&]+)&quot;:/g, `<span class="${mode === 'dark' ? 'text-purple-300' : 'text-purple-600'}">&quot;$1&quot;</span>:`)
         .replace(/: &quot;([^&]+)&quot;/g, `: <span class="${mode === 'dark' ? 'text-amber-300' : 'text-amber-700'}">&quot;$1&quot;</span>`)
-        .replace(/: (\d+\.?\d*)/g, `: <span class="${mode === 'dark' ? 'text-sky-300' : 'text-sky-600'}">$1</span>`)
+        .replace(/: (\d+.?\d*)/g, `: <span class="${mode === 'dark' ? 'text-sky-300' : 'text-sky-600'}">$1</span>`)
         .replace(/: (true|false)/g, `: <span class="${mode === 'dark' ? 'text-rose-400' : 'text-rose-600'}">$1</span>`);
 
     return (
@@ -63,7 +63,7 @@ function MethodCard({ method }: { method: ApiMethod }) {
                 <div className="mb-6">
                     <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Parameters</h5>
                     <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
-                        {method.params.map((p, i) => (
+                        {method.params.map((p) => (
                             <div key={`param-${p.name}-${i}`} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.default)}>
                                 <code className={cn("font-bold", theme.text.primary)}>{p.name}</code>
                                 <code className={cn("text-purple-600 dark:text-purple-400", theme.text.secondary)}>{p.type}</code>

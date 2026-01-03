@@ -49,7 +49,7 @@ interface DocumentManagerProps {
 // ============================================================================
 
 export function DocumentManager({ currentUserRole = 'Associate', initialTab }: DocumentManagerProps) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('docs_active_tab', initialTab || 'browse');
 
   const setActiveTab = (tab: string) => {

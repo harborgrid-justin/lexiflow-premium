@@ -162,7 +162,18 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                         actions={
                             <div className="flex gap-2">
                                 <Button variant="outline" icon={Filter}>Filter</Button>
-                                <Button variant="primary" icon={Plus} onClick={() => { setComposeInitialData(undefined); activeTab === 'communications' ? composeModal.open() : serviceJobModal.open(); }}>
+                                <Button 
+                                    variant="primary" 
+                                    icon={Plus} 
+                                    onClick={() => { 
+                                        setComposeInitialData(undefined); 
+                                        if (activeTab === 'communications') {
+                                            composeModal.open();
+                                        } else {
+                                            serviceJobModal.open();
+                                        }
+                                    }}
+                                >
                                     {activeTab === 'communications' ? 'Compose' : 'New Service Job'}
                                 </Button>
                             </div>

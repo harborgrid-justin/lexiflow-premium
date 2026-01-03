@@ -57,6 +57,7 @@
  * 
  * // Get compliance metrics
  * const metrics = await ComplianceService.getComplianceMetrics();
+console.log('metrics data:', metrics);
  * // Returns: ComplianceMetrics with scores and risk counts
  * 
  * // Query key usage with React Query
@@ -178,7 +179,8 @@ export const ComplianceService = {
      * @throws Error if fetch fails
      * 
      * @example
-     * const metrics = await ComplianceService.getRiskMetrics();
+     * const metrics = aw
+console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
      * // Returns: { score: 95, high: 2, missingDocs: 8, violations: 0, activeWalls: 3 }
      */
     getRiskMetrics: async (): Promise<ComplianceMetrics> => {

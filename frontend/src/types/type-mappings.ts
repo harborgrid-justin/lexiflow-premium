@@ -66,7 +66,7 @@ export const CASE_TYPE_TO_MATTER_TYPE: Partial<Record<BackendCaseType, MatterTyp
 /**
  * Convert frontend MatterType to backend CaseType
  */
-export function matterTypeToCaseType(matterType: MatterType): BackendCaseType {
+export function matterTypeToCaseType(_matterType: MatterType): BackendCaseType {
   return MATTER_TYPE_TO_CASE_TYPE[matterType];
 }
 
@@ -127,13 +127,13 @@ export function transformCaseToBackend<T extends { matterType?: MatterType }>(
   frontendCase: T
 ): Omit<T, 'matterType'> & { type?: BackendCaseType } {
   if (!frontendCase.matterType) {
-    const { matterType, ...rest } = frontendCase;
+    const { _matterType, ...rest } = frontendCase;
     return rest as Omit<T, 'matterType'> & { type?: BackendCaseType };
   }
 
-  const { matterType, ...rest } = frontendCase;
+  const { _matterType, ...rest } = frontendCase;
   return {
     ...rest,
-    type: matterTypeToCaseType(matterType),
+    type: matterTypeToCaseType(_matterType),
   };
 }

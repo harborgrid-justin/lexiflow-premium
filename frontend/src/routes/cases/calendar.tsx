@@ -24,7 +24,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { case: caseData };
 }
 
-export default function CaseCalendarRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseCalendarRoute() {
   return <CaseCalendar caseId={loaderData.case.id} />;
 }
 

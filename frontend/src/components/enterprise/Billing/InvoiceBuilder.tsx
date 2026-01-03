@@ -175,7 +175,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
         const updated = { ...item, [field]: value };
 
         // Recalculate amount
-        let baseAmount = updated.quantity * updated.rate;
+        const baseAmount = updated.quantity * updated.rate;
         let discountAmount = 0;
 
         if (updated.discount && updated.discount > 0) {

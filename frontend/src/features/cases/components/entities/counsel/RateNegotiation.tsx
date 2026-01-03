@@ -65,7 +65,7 @@ export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) =>
                 <TableHead className="text-right">Status</TableHead>
             </TableHeader>
             <TableBody>
-                {rates.map((rate, i) => (
+                {rates.map((rate) => (
                     <TableRow key={i}>
                         <TableCell className={cn("font-bold", theme.text.primary)}>{rate.firm}</TableCell>
                         <TableCell>{rate.role}</TableCell>

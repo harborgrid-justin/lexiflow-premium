@@ -81,7 +81,12 @@ export const FileAttachment = React.memo<FileAttachmentProps>(({
           </button>
         )}
         <button
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDownload ? onDownload() : null; }}
+          onClick={(e: React.MouseEvent) => { 
+            e.stopPropagation(); 
+            if (onDownload) {
+              onDownload();
+            }
+          }}
           className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
           title="Download"
         >

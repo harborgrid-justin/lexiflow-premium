@@ -139,7 +139,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
           expiresAt: Date.now() + 86400000 // 24 hour TTL
         }
       );
-    } catch (e) {
+    } catch (error) {
       setVerificationStatus('failed');
     } finally {
       verificationRef.current = false;

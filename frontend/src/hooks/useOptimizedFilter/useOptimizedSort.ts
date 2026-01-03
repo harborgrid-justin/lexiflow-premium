@@ -13,7 +13,7 @@ export function useOptimizedSort<T>(
 ): OptimizedSortReturn<T> {
   const [sortKey, setSortKeyState] = useState(initialSortKey);
   const [sortDirection, setSortDirectionState] = useState<'asc' | 'desc'>('asc');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const sortedData = useMemo(() => {
     const sortFn = sortFunctions[sortKey];

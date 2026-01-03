@@ -19,7 +19,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ _data }: Route.MetaArgs) {
   return createMeta({
     title: 'Master Calendar',
     description: 'View and manage all deadlines, court dates, and appointments',
@@ -30,7 +30,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Parse URL for date range
   const url = new URL(request.url);
   const view = url.searchParams.get("view") || "month";
@@ -77,7 +77,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CalendarIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function CalendarIndexRoute() {
   const { events, view, currentDate } = loaderData;
 
   return (

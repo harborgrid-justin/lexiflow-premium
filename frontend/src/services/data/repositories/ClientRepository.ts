@@ -93,7 +93,7 @@ export class ClientRepository extends Repository<Client> {
             throw new Error(`[ClientRepository.${methodName}] Invalid email parameter`);
         }
         
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             throw new Error(`[ClientRepository.${methodName}] Invalid email format`);
         }
@@ -493,6 +493,7 @@ export class ClientRepository extends Repository<Client> {
     }> {
         try {
             const clients = await this.getAll();
+console.log('clients data:', clients);
             const byType: Record<string, number> = {};
             let active = 0;
             let inactive = 0;

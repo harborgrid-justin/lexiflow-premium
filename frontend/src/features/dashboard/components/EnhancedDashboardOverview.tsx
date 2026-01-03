@@ -19,8 +19,6 @@ import {
 import {
   BarChart,
   Bar,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -75,7 +73,7 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
   userRole = 'attorney',
 }) => {
   const { theme } = useTheme();
-  const [dateRange, setDateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
+  const [dateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
   // Fetch dashboard data
   const { data: kpis, isLoading: kpisLoading } = useQuery(

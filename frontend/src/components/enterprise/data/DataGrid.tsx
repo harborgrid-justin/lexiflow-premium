@@ -209,6 +209,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   const sortState = controlledSortState ?? internalSortState;
   const setSortState = onSortChange ?? setInternalSortState;
   const filters = controlledFilters ?? internalFilters;
+console.log('filter state:', filters);
   const setFilters = onFilterChange ?? setInternalFilters;
   const currentPage = controlledCurrentPage ?? internalCurrentPage;
   const setCurrentPage = onPageChange ?? setInternalCurrentPage;
@@ -253,17 +254,19 @@ export function DataGrid<T extends Record<string, unknown>>({
               if (!filter.value) return true;
               return String(cellValue || '').toLowerCase().includes(String(filter.value).toLowerCase());
 
-            case 'number':
+            case 'number': {
               const numValue = Number(cellValue);
               const minNum = typeof filter.min === 'number' ? filter.min : Number(filter.min);
               const maxNum = typeof filter.max === 'number' ? filter.max : Number(filter.max);
               if (!isNaN(minNum) && numValue < minNum) return false;
+              }
               if (!isNaN(maxNum) && numValue > maxNum) return false;
               return true;
 
-            case 'date':
+            case 'date': {
               const dateValue = new Date(cellValue as string);
               if (filter.min && dateValue < new Date(filter.min)) return false;
+              }
               if (filter.max && dateValue > new Date(filter.max)) return false;
               return true;
 

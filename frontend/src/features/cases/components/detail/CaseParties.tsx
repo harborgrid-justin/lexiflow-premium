@@ -78,6 +78,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     } else {
         // Add - use existing party's caseId or empty string as fallback
         const caseId = (parties.length > 0 ? parties[0].caseId : '') as CaseId;
+console.log('case ID:', caseId);
         const newParty: Party = {
             id: `p-${Date.now()}` as PartyId,
             name: currentParty.name,

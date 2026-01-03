@@ -36,7 +36,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         isDragging, handleDragEnter, handleDragLeave, handleDrop
     } = useDocumentManager({ enableDragDrop: true });
 
-    const deferredSearchTerm = useDeferredValue(searchTerm);
+    const _deferredSearchTerm = useDeferredValue(searchTerm);
 
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);

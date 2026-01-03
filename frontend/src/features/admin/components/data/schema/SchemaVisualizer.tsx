@@ -118,7 +118,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                             <circle cx="5" cy="5" r="3" fill={lineColor} />
                         </marker>
                     </defs>
-                    {relationships.map((rel, i) => {
+                    {relationships.map((rel) => {
                         const midX = (rel.x1 + rel.x2) / 2;
                         return (
                             <path

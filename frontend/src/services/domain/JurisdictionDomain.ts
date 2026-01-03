@@ -19,7 +19,7 @@ export const JurisdictionService = {
     getRegulatoryBodies: async () => {
         try {
             return await JurisdictionAPI.getRegulatory();
-        } catch (error) {
+        } catch {
             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
@@ -35,7 +35,7 @@ export const JurisdictionService = {
     getTreaties: async () => {
         try {
             return await JurisdictionAPI.getInternational();
-        } catch (error) {
+        } catch {
             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
@@ -50,7 +50,7 @@ export const JurisdictionService = {
     getArbitrationProviders: async () => {
         try {
             return await JurisdictionAPI.getArbitration();
-        } catch (error) {
+        } catch {
             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
@@ -64,7 +64,7 @@ export const JurisdictionService = {
     getMapNodes: async () => {
         try {
             return await JurisdictionAPI.getMapNodes();
-        } catch (error) {
+        } catch {
             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [

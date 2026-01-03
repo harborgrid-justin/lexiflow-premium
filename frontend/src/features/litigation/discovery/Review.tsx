@@ -92,7 +92,7 @@ export const Review: React.FC = () => {
   });
   const [notes, setNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleSearchChange = useCallback((value: string) => {
     startTransition(() => {

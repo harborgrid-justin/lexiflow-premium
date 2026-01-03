@@ -17,7 +17,7 @@ import type { AuthUser } from "./authTypes";
  * Get current user from request cookies/headers
  * Use in route loaders for SSR authentication
  */
-export async function getAuthUser(request: Request): Promise<AuthUser | null> {
+export async function getAuthUser(_request: Request): Promise<AuthUser | null> {
   // TODO: Implement actual session/JWT validation from request
   // const token = request.headers.get('Authorization')?.replace('Bearer ', '');
   // if (!token) return null;

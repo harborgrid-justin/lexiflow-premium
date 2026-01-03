@@ -43,7 +43,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const conversationId = url.searchParams.get("conversationId");
   const search = url.searchParams.get("q") || "";
@@ -132,7 +132,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function MessagesIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function MessagesIndexRoute() {
   const { conversations, selectedConversation, messages, search } = loaderData;
   const submit = useSubmit();
   const navigation = useNavigation();

@@ -4,7 +4,7 @@
  * @module routes/_shared/types
  */
 
-import type { ReactNode } from 'react';
+import type { } from 'react';
 
 /**
  * Props for route error boundary components

@@ -33,7 +33,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     return {
       invoice,
     };
-  } catch (error) {
+  } catch {
     console.error('Failed to load invoice:', error);
     throw new Response('Invoice not found', { status: 404 });
   }
@@ -49,29 +49,31 @@ export async function action({ request, params }: Route.ActionArgs) {
   const invoicesApi = new InvoicesApiService();
 
   switch (intent) {
-    case "send":
+    case "send": {
       const recipients = formData.get("recipients") as string;
       try {
         await invoicesApi.send(params.id, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent successfully" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to send invoice" };
       }
+    }
 
-    case "record-payment":
+    case "record-payment": {
       const payment = {
         amount: parseFloat(formData.get("amount") as string),
         date: formData.get("date") as string,
-        method: formData.get("method") as any,
+        method: formData.get("method") as 'check' | 'credit_card' | 'wire' | 'ach' | 'cash' | 'other',
         reference: formData.get("reference") as string || undefined,
         notes: formData.get("notes") as string || undefined,
       };
       try {
         await invoicesApi.recordPayment(params.id, payment);
         return { success: true, message: "Payment recorded successfully" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to record payment" };
       }
+    }
 
     case "download-pdf":
       try {
@@ -83,7 +85,7 @@ export async function action({ request, params }: Route.ActionArgs) {
         a.click();
         URL.revokeObjectURL(url);
         return { success: true, message: "PDF downloaded" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to download PDF" };
       }
 
@@ -99,6 +101,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 export default function InvoiceDetailRoute({ loaderData, actionData }: Route.ComponentProps) {
   const { invoice } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

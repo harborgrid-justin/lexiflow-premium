@@ -74,6 +74,7 @@ export default tseslint.config(
       "**/*.test.tsx",
       "**/*.spec.ts",
       "**/*.spec.tsx",
+      ".react-router/**", // Exclude auto-generated React Router types
     ],
   }
   // storybook.configs["flat/recommended"]

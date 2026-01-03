@@ -54,7 +54,7 @@ export const DiscoveryRequestsSkeleton: React.FC = () => {
         </div>
 
         {/* Table Rows */}
-        {[...Array(5)].map((_, i) => (
+        {[...Array(5)].map((_) => (
           <div
             key={`discovery-request-row-${i}`}
             className={cn('p-6 border-b', theme.border.default)}
@@ -124,7 +124,7 @@ export const PrivilegeLogSkeleton: React.FC = () => {
           </div>
         </div>
 
-        {[...Array(4)].map((_, i) => (
+        {[...Array(4)].map((_) => (
           <div
             key={i}
             className={cn('p-4 border-b', theme.border.default)}
@@ -179,7 +179,7 @@ export const ESIDashboardSkeleton: React.FC = () => {
 
       {/* Source Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(6)].map((_) => (
           <div
             key={i}
             className={cn('p-6 rounded-lg border shadow-sm', theme.surface.default, theme.border.default)}
@@ -273,7 +273,7 @@ export const ProductionWizardSkeleton: React.FC = () => {
           <div className="space-y-2">
             <Skeleton className="h-5 w-32" />
             <div className="space-y-2">
-              {[...Array(3)].map((_, i) => (
+              {[...Array(3)].map((_) => (
                 <div key={`timeline-item-${i}`} className={cn('flex items-center justify-between p-3 rounded border', theme.border.default)}>
                   <div className="flex items-center gap-3">
                     <Skeleton className="h-10 w-10 rounded" />
@@ -329,7 +329,7 @@ export const LegalHoldsSkeleton: React.FC = () => {
           </div>
         </div>
 
-        {[...Array(4)].map((_, i) => (
+        {[...Array(4)].map((_) => (
           <div
             key={i}
             className={cn('p-4 border-b', theme.border.default)}

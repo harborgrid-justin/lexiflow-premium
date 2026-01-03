@@ -132,7 +132,7 @@ export const OpenAIService = {
         });
 
         return response.output_text || "Error reviewing contract.";
-      } catch (e) {
+      } catch {
         return "Contract review service unavailable.";
       }
     });
@@ -176,7 +176,7 @@ export const OpenAIService = {
           }
         }
       }
-    } catch (e) {
+    } catch {
       yield "Error streaming content.";
     }
   },
@@ -193,7 +193,7 @@ export const OpenAIService = {
         });
 
         return response.output_text || "Error generating content.";
-      } catch (e) {
+      } catch {
         return "Generation failed.";
       }
     });
@@ -222,7 +222,7 @@ export const OpenAIService = {
           action: result.action || "UNKNOWN",
           confidence: result.confidence || 0,
         };
-      } catch (e) {
+      } catch {
         return { action: "UNKNOWN", confidence: 0 };
       }
     });
@@ -270,7 +270,7 @@ export const OpenAIService = {
           text: response.output_text || "Research unavailable.",
           sources: [],
         };
-      } catch (e) {
+      } catch {
         return {
           text: "Research service unavailable.",
           sources: [],
@@ -291,7 +291,7 @@ export const OpenAIService = {
         });
 
         return response.output_text || "";
-      } catch (e) {
+      } catch {
         return "Unable to generate reply.";
       }
     });
@@ -310,7 +310,7 @@ export const OpenAIService = {
         });
 
         return response.output_text || desc;
-      } catch (e) {
+      } catch {
         return desc;
       }
     });

@@ -32,6 +32,7 @@ export function meta() {
 
 export default function DocumentUploadRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   const handleUpload = async (files: File[], metadata: UploadMetadata) => {
     try {

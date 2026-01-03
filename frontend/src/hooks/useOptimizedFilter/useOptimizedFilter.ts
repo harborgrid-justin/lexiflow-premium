@@ -22,7 +22,7 @@ export function useOptimizedFilter<T>(
   const { initialTerm = '' } = config;
 
   const [filterTerm, setFilterTermState] = useState(initialTerm);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const filteredData = useMemo(
     () => filterFn(data, filterTerm),

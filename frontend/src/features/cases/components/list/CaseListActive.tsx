@@ -136,7 +136,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       if (DataService.documents?.getByCaseId) {
         queryClient.fetch(['documents', caseId], () => DataService.documents.getByCaseId(caseId));
       }
-    } catch (error) {
+    } catch {
       // Silently fail - prefetch is optional
     }
   }, []);

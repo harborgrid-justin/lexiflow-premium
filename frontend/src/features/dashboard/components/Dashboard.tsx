@@ -50,7 +50,7 @@ interface DashboardProps {
 // ============================================================================
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, currentUser }) => {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, setStoredTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
 
   const setActiveTab = (tab: string) => {

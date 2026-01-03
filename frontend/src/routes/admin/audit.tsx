@@ -50,10 +50,10 @@ interface AuditLogEntry {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get('page') || '1');
-  const filter = url.searchParams.get('filter') || 'all';
+  const _filter = url.searchParams.get('filter') || 'all';
 
   // Mock audit log data
   const logs: AuditLogEntry[] = [
@@ -203,9 +203,9 @@ function formatTimestamp(timestamp: string): string {
 // Component
 // ============================================================================
 
-export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
+export default function AuditLogsRoute() {
   const { logs, pagination, filters } = loaderData;
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [_searchParams, _setSearchParams] = useSearchParams();
   const formId = useId();
 
   const [selectedAction, setSelectedAction] = useState<string>('all');

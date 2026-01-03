@@ -35,7 +35,7 @@ import { filterStates } from './utils';
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Performance Engine: useQuery
   const { data: rawStates = [], isLoading } = useQuery<unknown[]>(
@@ -46,8 +46,11 @@ export const JurisdictionState: React.FC = () => {
   // Defensive array validation
   const states = Array.isArray(rawStates) ? rawStates : [];
   const filteredStates = useMemo(
-    () => filterStates(states as Array<{ name: string; region: string }>, filter),
-    [states, filter]
+    () => {
+      if (!states) return [];
+      return filterStates(states as Array<{ name: string; region: string }>, filter);
+    },
+    [filter, states]
   );
 
   const handleFilterChange = useCallback((value: string) => {
@@ -78,7 +81,7 @@ export const JurisdictionState: React.FC = () => {
           <TableHead>Jurisdiction Level</TableHead>
         </TableHeader>
         <TableBody>
-          {filteredStates.map((s, i) => (
+          {filteredStates.map((s) => (
             <TableRow key={`state-${(s as { region: string }).region}-${i}`}>
               <TableCell className={cn("font-medium", theme.text.primary)}>{(s as { name: string; region: string; type?: string }).region}</TableCell>
               <TableCell>{(s as { name: string; region: string; type?: string }).name}</TableCell>

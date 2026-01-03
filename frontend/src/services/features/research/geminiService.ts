@@ -350,7 +350,7 @@ export const GeminiService = {
 
                 if (!text) throw new Error("No response text from Gemini");
                 return safeParseJSON(text, { summary: "Analysis failed to parse", riskScore: 0 });
-            } catch (e) {
+            } catch {
                 console.error("Gemini Analysis Error:", e);
                 return { summary: "Analysis unavailable due to service error.", riskScore: 0 };
             }
@@ -379,7 +379,7 @@ export const GeminiService = {
                     suggestions: [],
                     missingAuthority: []
                 });
-            } catch (e) {
+            } catch {
                 console.error("Gemini Critique Error:", e);
                 return { score: 0, strengths: [], weaknesses: ["Service Error"], suggestions: [], missingAuthority: [] };
             }
@@ -394,7 +394,7 @@ export const GeminiService = {
                 });
                 const result = await model.generateContent(Prompts.Review(text));
                 return result.response.text() || "Error reviewing contract.";
-            } catch (e) {
+            } catch {
                 return "Contract review service unavailable.";
             }
         });
@@ -410,7 +410,7 @@ export const GeminiService = {
                 const chunkText = chunk.text();
                 if (chunkText) yield chunkText;
             }
-        } catch (e) {
+        } catch {
             yield "Error streaming content.";
         }
     },
@@ -423,7 +423,7 @@ export const GeminiService = {
                 });
                 const result = await model.generateContent(Prompts.Refine(desc));
                 return result.response.text() || desc;
-            } catch (e) {
+            } catch {
                 return desc;
             }
         });
@@ -437,7 +437,7 @@ export const GeminiService = {
                 });
                 const result = await model.generateContent(Prompts.Draft(prompt, type));
                 return result.response.text() || "Error generating content.";
-            } catch(e) {
+            } catch {
                 return "Generation failed.";
             }
         });
@@ -459,7 +459,7 @@ export const GeminiService = {
 
                 if (!responseText) throw new Error("No response text from Gemini");
                 return safeParseJSON(responseText, { action: 'UNKNOWN', confidence: 0 });
-            } catch (e) {
+            } catch {
                 return { action: 'UNKNOWN', confidence: 0 };
             }
         });
@@ -520,7 +520,7 @@ export const GeminiService = {
                     sources
                 };
                 return researchResponse;
-            } catch (e) {
+            } catch {
                 const errorResponse: ResearchResponse = {
                     text: "Research service unavailable.",
                     sources: []
@@ -540,7 +540,7 @@ export const GeminiService = {
                     `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
                 );
                 return result.response.text() || "";
-            } catch (e) {
+            } catch {
                 return "Unable to generate reply.";
             }
         });
@@ -569,7 +569,7 @@ export const GeminiService = {
                     treatment: []
                 };
                 return safeParseJSON<ShepardizeResult>(responseText, defaultValue);
-            } catch (e) {
+            } catch {
                 return null;
             }
         });

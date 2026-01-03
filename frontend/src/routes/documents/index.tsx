@@ -36,7 +36,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   try {
     const url = new URL(request.url);
     const filters = {
@@ -95,7 +95,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DocumentsIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DocumentsIndexRoute() {
   const { documents, totalCount } = loaderData;
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [filters, setFilters] = useState<DocumentFilterOptions>({});

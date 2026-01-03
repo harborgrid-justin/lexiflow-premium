@@ -29,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const caseId = url.searchParams.get("caseId") || undefined;
 
@@ -74,7 +74,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ExhibitsIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function ExhibitsIndexRoute() {
   const { items } = loaderData;
 
   return (

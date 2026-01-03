@@ -105,7 +105,7 @@ export function useWebSocket(options: WebSocketOptions = {}) {
       try {
         const authData = JSON.parse(storedAuth);
         return authData.accessToken || authData.token;
-      } catch (error) {
+      } catch {
         return null;
       }
     }
@@ -347,7 +347,6 @@ export function useWebSocketEvent<T = unknown>(
   socket: Socket | null,
   event: string,
   handler: EventListener<T>,
-  dependencies: unknown[] = [],
 ) {
   useEffect(() => {
     if (!socket) return;
@@ -357,5 +356,5 @@ export function useWebSocketEvent<T = unknown>(
     return () => {
       socket.off(event, handler);
     };
-  }, [socket, event, ...dependencies]);
+  }, [socket, event, handler]);
 }

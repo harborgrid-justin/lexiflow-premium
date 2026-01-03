@@ -63,6 +63,7 @@ export const CaseAnalyticsDashboard: React.FC = () => {
   // Calculate analytics metrics
   const metrics = useMemo(() => {
     if (!matters) return { totalMatters: 0, revenue: 0, avgResolution: 0, utilization: 0 };
+console.log('metrics data:', metrics);
 
     const now = new Date();
     const cutoffDate = new Date();

@@ -140,7 +140,7 @@ export const exactLength = (length: number, message?: string): SyncValidator<str
  * Email validator
  */
 export const email = (message: string = 'Invalid email address'): SyncValidator<string> => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
   return (value: string): ValidationResult => {
     if (!value) return success();
     if (!emailRegex.test(value)) {
@@ -251,7 +251,7 @@ export const dateBefore = (compareDate: Date | string, message?: string): SyncVa
  * Phone number validator (US format)
  */
 export const phoneUS = (message: string = 'Invalid phone number'): SyncValidator<string> => {
-  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
   return (value: string): ValidationResult => {
     if (!value) return success();
     if (!phoneRegex.test(value)) {

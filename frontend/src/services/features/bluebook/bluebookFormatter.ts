@@ -264,27 +264,31 @@ class BluebookFormatterClass {
       switch (citation.type) {
         case BluebookCitationType.CASE:
         case BluebookCitationType.UNPUBLISHED_OPINION:
-          const existingCase = toa.cases.find(c => c.citation === formatted);
-          if (existingCase) {
+          {
+            const existingCase = toa.cases.find(c => c.citation === formatted);
+            if (existingCase) {
             if (!existingCase.pages.includes(page)) {
-              existingCase.pages.push(page);
+            existingCase.pages.push(page);
             }
-          } else {
+            } else {
             toa.cases.push({ citation: formatted, pages: [page] });
+            }
+            break;
           }
-          break;
 
         case BluebookCitationType.STATUTE:
         case BluebookCitationType.REGULATION:
-          const existingStatute = toa.statutes.find(s => s.citation === formatted);
-          if (existingStatute) {
+          {
+            const existingStatute = toa.statutes.find(s => s.citation === formatted);
+            if (existingStatute) {
             if (!existingStatute.pages.includes(page)) {
-              existingStatute.pages.push(page);
+            existingStatute.pages.push(page);
             }
-          } else {
+            } else {
             toa.statutes.push({ citation: formatted, pages: [page] });
+            }
+            break;
           }
-          break;
 
         default:
           const existingSecondary = toa.secondary.find(s => s.citation === formatted);

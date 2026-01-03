@@ -63,10 +63,11 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
+export async function loader(): Promise<LoaderData> {
   const url = new URL(request.url);
   const draftId = url.searchParams.get('draft');
   const templateId = url.searchParams.get('template');
+console.log('template ID:', templateId);
 
   // TODO: Fetch templates from API
   const templates: Template[] = [
@@ -196,7 +197,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 // Component
 // ============================================================================
 
-export default function ComposeCorrespondenceRoute({ loaderData }: Route.ComponentProps) {
+export default function ComposeCorrespondenceRoute() {
   const navigate = useNavigate();
   const { templates, draftId } = loaderData as LoaderData;
 

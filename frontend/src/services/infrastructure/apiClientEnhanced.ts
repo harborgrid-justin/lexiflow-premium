@@ -31,7 +31,7 @@ import {
   ApiTimeoutError,
   ExternalServiceError,
   NetworkError,
-  ValidationError,
+  
 } from '@/services/core/errors';
 
 /**
@@ -659,4 +659,4 @@ export const apiClientEnhanced = new ApiClientEnhanced();
 export { ApiClientEnhanced };
 
 // Re-export types from base client
-export type { ApiError, PaginatedResponse } from './apiClient';
+export type {  PaginatedResponse } from './apiClient';

@@ -24,7 +24,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { case: caseData };
 }
 
-export default function CaseOverviewRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseOverviewRoute() {
   return <CaseOverviewDashboard caseId={loaderData.case.id} />;
 }
 

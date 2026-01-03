@@ -28,7 +28,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement entity data fetching
   // const url = new URL(request.url);
   // const type = url.searchParams.get("type");
@@ -64,8 +64,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function EntitiesIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function EntitiesIndexRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

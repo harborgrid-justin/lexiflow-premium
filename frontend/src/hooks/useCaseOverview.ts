@@ -180,7 +180,7 @@ export function useCaseOverview(
       ) {
         if (onNavigateToCase) onNavigateToCase(appealCase);
       }
-    } catch (e) {
+    } catch {
       alert("Failed to create appeal case.");
     }
   };

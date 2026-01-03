@@ -18,7 +18,7 @@ interface ClientCRMProps {
 }
 
 export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('crm_active_tab', initialTab || 'dashboard');
   const [showIntake, setShowIntake] = useState(false);
   const [selectedClientPortal, setSelectedClientPortal] = useState<Client | null>(null);

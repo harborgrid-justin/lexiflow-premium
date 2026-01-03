@@ -103,6 +103,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {status}
     </span>
   );
+console.log('content data:', content);
 
   if (animated) {
     return (

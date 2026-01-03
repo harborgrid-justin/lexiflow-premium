@@ -53,7 +53,7 @@ interface BillingDashboardProps {
 // ============================================================================
 const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
   const [period, setPeriod] = useState('30d');
 

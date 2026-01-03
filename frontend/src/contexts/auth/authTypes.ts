@@ -62,7 +62,7 @@ export interface AuthEvent {
   type: 'login' | 'logout' | 'mfa_enabled' | 'mfa_disabled' | 'password_changed' | 'token_refresh' | 'session_expired' | 'access_denied';
   timestamp: Date;
   userId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

@@ -28,7 +28,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement data platform fetching
   // const dataSources = await api.dataPlatform.getSources();
   // const integrations = await api.dataPlatform.getIntegrations();
@@ -63,8 +63,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DataPlatformIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DataPlatformIndexRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

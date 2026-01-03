@@ -16,7 +16,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Real Estate - Relocation',
     description: 'Manage relocation assistance programs for individuals and businesses displaced by real estate projects.',
@@ -27,7 +27,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real estate relocation data
   return {
     data: null,
@@ -62,8 +62,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function RelocationRoute({ loaderData }: Route.ComponentProps) {
+export default function RelocationRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

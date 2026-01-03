@@ -52,7 +52,7 @@ export class BackupsApiService {
   async getSnapshots(filters?: Record<string, unknown>): Promise<PaginatedResponse<BackupSnapshot>> {
     try {
       return await apiClient.get<PaginatedResponse<BackupSnapshot>>('/backups/snapshots', filters);
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }
@@ -90,7 +90,7 @@ export class BackupsApiService {
   async getSchedules(): Promise<BackupSchedule[]> {
     try {
       return await apiClient.get<BackupSchedule[]>('/backups/schedules');
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -128,7 +128,7 @@ export class BackupsApiService {
   }> {
     try {
       return await apiClient.get('/backups/stats');
-    } catch (error) {
+    } catch {
       return { totalSnapshots: 0, totalSize: 0, activeSchedules: 0 };
     }
   }

@@ -285,7 +285,7 @@ export const BriefAnalyzer: React.FC = () => {
                                                     signal: 'unknown',
                                                     createdAt: new Date().toISOString(),
                                                     updatedAt: new Date().toISOString(),
-                                                    userId: 'current-user' as any
+                                                    userId: 'current-user'
                                                 })}
                                             >
                                                 Add to Library

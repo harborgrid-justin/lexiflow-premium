@@ -40,7 +40,7 @@ export function throwNotFound(message = 'Not Found'): never {
  *
  * @example
  * ```tsx
- * export async function loader({ request }: Route.LoaderArgs) {
+ * export async function loader() {
  *   const user = await getUser(request);
  *   if (!user.isAdmin) throwForbidden('Admin access required');
  *   return { adminData };
@@ -59,7 +59,7 @@ export function throwForbidden(message = 'Forbidden'): never {
  *
  * @example
  * ```tsx
- * export async function loader({ request }: Route.LoaderArgs) {
+ * export async function loader() {
  *   const user = await getUser(request);
  *   if (!user) throwUnauthorized();
  *   return { userData };

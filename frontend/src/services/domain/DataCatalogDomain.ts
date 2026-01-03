@@ -30,7 +30,7 @@ export const DataCatalogService = {
     },
     
     getSchemaTables: async (): Promise<SchemaTable[]> => {
-        const tables: SchemaTable[] = Object.values(STORES).map((name, i) => ({
+        const tables: SchemaTable[] = Object.values(STORES).map((name) => ({
             name: name as string,
             x: (i % 6) * 300 + 50,
             y: Math.floor(i / 6) * 350 + 50,
@@ -56,7 +56,7 @@ export const DataCatalogService = {
                     records: count,
                     size: `${(count * 1.5 + 24).toFixed(1)} KB`
                 });
-            } catch (error) {
+            } catch {
                 // Store doesn't exist in IndexedDB yet - skip it
                 console.debug(`[DataCatalog] Store "${store}" not found in IndexedDB, skipping`);
             }

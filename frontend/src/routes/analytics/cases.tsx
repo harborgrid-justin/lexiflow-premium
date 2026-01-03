@@ -10,20 +10,20 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import { MetricCard, ChartCard, DateRangeSelector, FilterPanel } from '@/components/enterprise/analytics';
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
 } from 'recharts';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Case Analytics',
     description: 'Case outcomes, win rates, and performance metrics',
   });
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real data from API
   return {
     metrics: {
@@ -37,7 +37,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function CaseAnalyticsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseAnalyticsRoute() {
   const { metrics } = loaderData;
 
   const [dateRange, setDateRange] = useState({
@@ -83,6 +83,7 @@ export default function CaseAnalyticsRoute({ loaderData }: Route.ComponentProps)
       ],
     },
   ];
+console.log('filter state:', filters);
 
   const casesByOutcome = [
     { name: 'Won', value: 89, color: '#10B981' },

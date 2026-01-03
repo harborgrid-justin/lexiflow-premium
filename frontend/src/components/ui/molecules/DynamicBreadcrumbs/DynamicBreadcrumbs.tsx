@@ -78,6 +78,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
 }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const [recentPaths, setRecentPaths] = useState<RecentPath[]>([]);
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

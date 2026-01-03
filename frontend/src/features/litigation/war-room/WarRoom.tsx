@@ -157,7 +157,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   const { data: allCasesRaw } = useQuery<Case[]>(
     [STORES.CASES, "all"],
     async () => {
-      const cases = DataService.cases as any;
+      const cases = DataService.cases as { getAll: () => Promise<Case[]> };
       return cases.getAll();
     },
     { enabled: !caseId },
@@ -177,7 +177,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   } = useQuery(
     [STORES.CASES, currentCaseId, "warRoom"],
     async () => {
-      const warRoomService = DataService.warRoom as any;
+      const warRoomService = DataService.warRoom as { getData: (caseId: string) => Promise<unknown> };
       return warRoomService.getData(currentCaseId);
     },
     { enabled: !!currentCaseId },

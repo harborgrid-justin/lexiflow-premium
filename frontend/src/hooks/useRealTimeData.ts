@@ -450,6 +450,17 @@ export function useTypingIndicator(conversationId: string) {
     };
   }, [socket, conversationId, on, off]);
 
+  const stopTyping = useCallback(() => {
+    if (!socket || !isConnected) return;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    emit('typing:stop', { conversationId });
+  }, [socket, isConnected, conversationId, emit]);
+
   const startTyping = useCallback(() => {
     if (!socket || !isConnected) return;
 
@@ -464,18 +475,8 @@ export function useTypingIndicator(conversationId: string) {
     typingTimeoutRef.current = setTimeout(() => {
       stopTyping();
     }, 3000);
-  }, [socket, isConnected, conversationId, emit]);
+  }, [socket, isConnected, conversationId, emit, stopTyping]);
 
-  const stopTyping = useCallback(() => {
-    if (!socket || !isConnected) return;
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
-
-    emit('typing:stop', { conversationId });
-  }, [socket, isConnected, conversationId, emit]);
 
   useEffect(() => {
     return () => {

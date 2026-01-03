@@ -42,7 +42,7 @@ export class VersioningApiService {
         `/versioning/history/${entityType}/${entityId}`,
         filters,
       );
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }
@@ -68,7 +68,7 @@ export class VersioningApiService {
   async getBranches(entityType: string, entityId: string): Promise<string[]> {
     try {
       return await apiClient.get<string[]>(`/versioning/branches/${entityType}/${entityId}`);
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -79,7 +79,7 @@ export class VersioningApiService {
   async getTags(entityType: string, entityId: string): Promise<unknown[]> {
     try {
       return await apiClient.get<unknown[]>(`/versioning/tags/${entityType}/${entityId}`);
-    } catch (error) {
+    } catch {
       return [];
     }
   }

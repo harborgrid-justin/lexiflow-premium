@@ -67,7 +67,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WarRoomIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function WarRoomIndexRoute() {
   const { items } = loaderData;
 
   return (

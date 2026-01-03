@@ -10,20 +10,20 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
 import {
-  BarChart, Bar, LineChart, Line, ScatterChart, Scatter, PieChart, Pie, Cell,
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Client Analytics',
     description: 'Client profitability and engagement metrics',
   });
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   return {
     metrics: {
       totalClients: 148,
@@ -36,7 +36,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function ClientAnalyticsRoute({ loaderData }: Route.ComponentProps) {
+export default function ClientAnalyticsRoute() {
   const { metrics } = loaderData;
 
   const [dateRange, setDateRange] = useState({

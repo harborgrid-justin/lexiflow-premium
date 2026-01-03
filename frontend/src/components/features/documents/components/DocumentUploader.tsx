@@ -89,7 +89,7 @@ export function DocumentUploader({
       await onUpload(files, metadata);
       setFiles([]);
       setMetadata({ caseId, type: 'Document', tags: [], status: 'Draft' });
-    } catch (error) {
+    } catch () {
       console.error('Upload failed:', error);
     } finally {
       setUploading(false);

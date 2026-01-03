@@ -84,6 +84,7 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
+console.log('theme toggle function:', toggleTheme);
       localStorage.setItem(THEME_STORAGE_KEY, newMode);
       return newMode;
     });

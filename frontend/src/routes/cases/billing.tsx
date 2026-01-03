@@ -90,9 +90,10 @@ function formatHours(hours: number): string {
 // Component
 // ============================================================================
 
-export default function CaseBillingRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseBillingRoute() {
   const { caseData, timeEntries, invoices, expenses, totals } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   // Calculate budget utilization
   const budgetAmount = caseData.budget?.amount || 0;

@@ -43,7 +43,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
           // Check again in 30 seconds when connected
           timeoutId = setTimeout(checkBackend, 30000);
         }
-      } catch (error) {
+      } catch {
         if (isActive) {
           setBackendStatus('disconnected');
           const newRetryCount = retryCount + 1;

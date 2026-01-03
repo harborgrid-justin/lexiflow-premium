@@ -172,7 +172,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   if (isLoading) {
     return (
       <div className={cn('space-y-3', className)}>
-        {Array.from({ length: 5 }).map((_, i) => (
+        {Array.from({ length: 5 }).map((_) => (
           <div key={i} className="flex gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 animate-pulse">
             <div className="w-12 h-12 rounded-lg bg-gray-200 dark:bg-gray-700" />
             <div className="flex-1 space-y-2">

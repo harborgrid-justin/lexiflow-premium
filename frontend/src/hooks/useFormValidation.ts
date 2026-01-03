@@ -415,7 +415,7 @@ export const ValidationRules = {
     name: 'email',
     validate: (value: string) => {
       if (!value) return null;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
       return emailRegex.test(value) ? null : message;
     },
   }),

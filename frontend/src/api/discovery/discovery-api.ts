@@ -87,7 +87,7 @@ export class DiscoveryApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<DiscoveryProcess[]>(url);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.getAll] Error:', error);
       throw new Error('Failed to fetch discovery processes');
     }
@@ -97,7 +97,7 @@ export class DiscoveryApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<DiscoveryProcess>(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.getById] Error:', error);
       throw new Error(`Failed to fetch discovery process with id: ${id}`);
     }
@@ -113,7 +113,7 @@ export class DiscoveryApiService {
     }
     try {
       return await apiClient.post<DiscoveryProcess>(this.baseUrl, data);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.create] Error:', error);
       throw new Error('Failed to create discovery process');
     }
@@ -124,7 +124,7 @@ export class DiscoveryApiService {
     this.validateObject(data, 'data', 'update');
     try {
       return await apiClient.put<DiscoveryProcess>(`${this.baseUrl}/${id}`, data);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.update] Error:', error);
       throw new Error(`Failed to update discovery process with id: ${id}`);
     }
@@ -137,7 +137,7 @@ export class DiscoveryApiService {
     }
     try {
       return await apiClient.patch<DiscoveryProcess>(`${this.baseUrl}/${id}/phase`, { phase });
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.updatePhase] Error:', error);
       throw new Error(`Failed to update phase for discovery process with id: ${id}`);
     }
@@ -147,7 +147,7 @@ export class DiscoveryApiService {
     this.validateId(id, 'getSummary');
     try {
       return await apiClient.get(`${this.baseUrl}/${id}/summary`);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.getSummary] Error:', error);
       throw new Error(`Failed to fetch summary for discovery process with id: ${id}`);
     }
@@ -157,7 +157,7 @@ export class DiscoveryApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[DiscoveryApiService.delete] Error:', error);
       throw new Error(`Failed to delete discovery process with id: ${id}`);
     }

@@ -42,7 +42,7 @@ interface AdminPanelProps {
 // ============================================================================
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('admin_active_tab', initialTab || 'profile');
 
   const setActiveTab = (tab: string) => {

@@ -42,7 +42,7 @@ export class PipelinesApiService {
     console.log('[PipelinesApi] getAll called with filters:', filters);
     try {
       return await apiClient.get<PaginatedResponse<Pipeline>>('/pipelines', filters);
-    } catch (error) {
+    } catch () {
       console.error('[PipelinesApi] Error fetching pipelines:', error);
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
@@ -95,7 +95,7 @@ export class PipelinesApiService {
   }> {
     try {
       return await apiClient.get('/pipelines/stats');
-    } catch (error) {
+    } catch {
       return { total: 0, active: 0, failed: 0, paused: 0, totalRecordsProcessed: 0 };
     }
   }

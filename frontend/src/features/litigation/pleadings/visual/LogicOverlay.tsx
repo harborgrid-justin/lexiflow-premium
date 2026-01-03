@@ -39,7 +39,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document }) => {
 
       // Calculate strength based on content length, citations, and links
       const contentLength = section.content?.length || 0;
-      const hasCitations = /\d+\s+[A-Z][a-z]+\.?\s+\d+/.test(section.content || '');
+      const hasCitations = /\d+\s+[A-Z][a-z]+.?\s+\d+/.test(section.content || '');
       const hasEvidence = (section.linkedEvidenceIds?.length || 0) > 0;
       const hasArgument = !!section.linkedArgumentId;
 

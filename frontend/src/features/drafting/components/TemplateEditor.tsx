@@ -153,8 +153,8 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
     // Highlight placeholders
     preview = preview.replace(/\{\{(\w+)\}\}/g, '<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-1 rounded">{{$1}}</span>');
-    preview = preview.replace(/\{\{case\.(\w+)\}\}/g, '<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1 rounded">{{case.$1}}</span>');
-    preview = preview.replace(/\{\{party\.(\w+)\}\}/g, '<span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-1 rounded">{{party.$1}}</span>');
+    preview = preview.replace(/\{\{case.(\w+)\}\}/g, '<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1 rounded">{{case.$1}}</span>');
+    preview = preview.replace(/\{\{party.(\w+)\}\}/g, '<span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-1 rounded">{{party.$1}}</span>');
     preview = preview.replace(/\{\{clause:(\d+)\}\}/g, '<span class="bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-1 rounded">{{clause:$1}}</span>');
 
     return { __html: preview.replace(/\n/g, '<br/>') };

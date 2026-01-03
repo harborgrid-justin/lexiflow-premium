@@ -40,7 +40,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
@@ -189,7 +189,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ReportsIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function ReportsIndexRoute() {
   const { reports, search, category } = loaderData;
   const submit = useSubmit();
 

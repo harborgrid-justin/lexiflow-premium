@@ -63,7 +63,7 @@ export class HRApiService {
         utilization: Math.floor(Math.random() * 40) + 60, // Mock: 60-100%
         cases: Math.floor(Math.random() * 10) + 1 // Mock: 1-10 cases
       }));
-    } catch (error) {
+    } catch () {
       console.warn('[HRApiService] getUtilizationMetrics failed, returning empty array:', error);
       return [];
     }

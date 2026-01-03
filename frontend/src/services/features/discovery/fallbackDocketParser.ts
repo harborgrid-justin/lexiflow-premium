@@ -26,7 +26,7 @@ export interface FallbackParseResult {
 
 const PATTERNS = {
   // Case number patterns
-  caseNumber: /(?:Case No\.|Case Number:|No\.)\s*([A-Z0-9:-]+)/i,
+  caseNumber: /(?:Case No.|Case Number:|No.)\s*([A-Z0-9:-]+)/i,
 
   // Date patterns (various formats)
   date: /\b(\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})\b/,

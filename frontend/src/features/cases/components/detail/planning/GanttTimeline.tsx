@@ -57,7 +57,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
 
       return (
         <div className={cn("flex h-8 border-b", theme.border.default)}>
-          {days.map((d, i) => (
+          {days.map((d) => (
              <div
                 key={i}
                 className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 select-none", theme.border.default, theme.text.tertiary)}
@@ -80,7 +80,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
               <div className="relative min-w-max pb-20">
                   {/* Grid Lines */}
                   <div className="absolute inset-0 pointer-events-none z-0 flex">
-                      {Array.from({length: 90}).map((_, i) => (
+                      {Array.from({length: 90}).map((_) => (
                           <div key={i} className={cn("border-r h-full", theme.border.default)} style={{ width: pixelsPerDay * (zoom === 'Month' ? 30 : 7) }} />
                       ))}
                       {/* Today Line */}

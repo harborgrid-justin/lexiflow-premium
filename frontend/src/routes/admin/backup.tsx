@@ -59,7 +59,7 @@ interface BackupSchedule {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Mock backup data
   const backups: Backup[] = [
     {
@@ -149,26 +149,30 @@ export async function action({ request }: Route.ActionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "create-backup":
+    case "create-backup": {
       const type = formData.get("type") as string;
       // TODO: Initiate backup job
       return { success: true, message: `Creating ${type} backup...` };
+      }
 
-    case "restore":
+    case "restore": {
       const backupId = formData.get("backupId") as string;
       // TODO: Initiate restore job
       return { success: true, message: `Restoring from backup ${backupId}...` };
+      }
 
-    case "delete-backup":
+    case "delete-backup": {
       const deleteId = formData.get("backupId") as string;
       // TODO: Delete backup
       return { success: true, message: `Backup ${deleteId} deleted` };
+      }
 
-    case "toggle-schedule":
-      const scheduleId = formData.get("scheduleId") as string;
+    case "toggle-schedule": {
+      const _scheduleId = formData.get("scheduleId") as string;
       const enabled = formData.get("enabled") === "true";
       // TODO: Toggle schedule
       return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
+      }
 
     default:
       return { success: false, error: "Invalid action" };
@@ -229,10 +233,10 @@ function getTypeColor(type: Backup['type']): string {
 // Component
 // ============================================================================
 
-export default function BackupRoute({ loaderData }: Route.ComponentProps) {
+export default function BackupRoute() {
   const { backups, schedules, stats } = loaderData;
   const fetcher = useFetcher();
-  const formId = useId();
+  const _formId = useId();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 

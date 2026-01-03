@@ -40,9 +40,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         try {
           // Try to fetch audit logs or system metrics
           const logs = await adminApi.auditLogs.getAll();
-          const logList = Array.isArray(logs) ? logs : (logs as any).data || [];
+          const logList = Array.isArray(logs) ? logs : (logs as Record<string, unknown>).data || [];
 
-          const mappedLogs: DashboardItem[] = logList.map((log: any) => ({
+          const mappedLogs: DashboardItem[] = logList.map((log: Record<string, unknown>) => ({
             type: 'audit',
             id: log.id,
             label: `Audit: ${log.action} by ${log.userId}`,
@@ -60,9 +60,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       try {
         const cases = await litigationApi.cases.getAll();
         // cases might be PaginatedResponse or array. Assuming array or .data
-        const caseList = Array.isArray(cases) ? cases : (cases as any).data || [];
+        const caseList = Array.isArray(cases) ? cases : (cases as Record<string, unknown>).data || [];
 
-        const mappedCases: DashboardItem[] = caseList.map((c: any) => ({
+        const mappedCases: DashboardItem[] = caseList.map((c: Record<string, unknown>) => ({
           type: 'case',
           id: c.id,
           label: c.title || c.caseNumber || "Untitled Case",
@@ -74,8 +74,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         setError("Failed to load dashboard data");
       }
 
-    } catch (err: any) {
-      setError(err.message || "Data refresh failed");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Data refresh failed");
     } finally {
       setIsLoading(false);
     }

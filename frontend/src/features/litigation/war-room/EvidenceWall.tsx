@@ -70,7 +70,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
     // ============================================================================
     // STATE MANAGEMENT
     // ============================================================================
-    const [isPending, startTransition] = useTransition();
+    const [, startTransition] = useTransition();
 
     // ============================================================================
     // MEMOIZED VALUES

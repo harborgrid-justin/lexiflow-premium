@@ -107,9 +107,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function CaseTimelineRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseTimelineRoute() {
   const { caseData, events } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="min-h-full bg-gray-50 dark:bg-gray-900">

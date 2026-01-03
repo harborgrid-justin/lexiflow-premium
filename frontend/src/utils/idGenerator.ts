@@ -99,7 +99,7 @@ export const getIdTimestamp = (id: string): number | null => {
     if (parts.length >= 2) {
       return parseInt(parts[1]!, 36);
     }
-  } catch (error) {
+  } catch {
     return null;
   }
   return null;

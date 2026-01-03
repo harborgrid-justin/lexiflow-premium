@@ -111,7 +111,7 @@ export function useDocumentDragDrop(
         }
         queryClient.invalidate(queryKeys.documents.all());
         notify.success(`Uploaded ${e.dataTransfer.files.length} documents.`);
-      } catch (error) {
+      } catch {
         notify.error("Failed to upload dropped files.");
       } finally {
         setIsUploading(false);

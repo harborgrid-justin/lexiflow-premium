@@ -22,12 +22,10 @@
 import { CaseDetail } from '@/components/features/cases/pages/CaseDetailPage';
 import { DataService } from '@/services/data/dataService';
 import { Suspense, useCallback } from 'react';
-import { Await, Link, redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import type { Route } from "./+types/case-detail";
 import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
-import { RouteLoading, CardSkeleton } from '../_shared/RouteLoading';
 import { createCaseMeta } from '../_shared/meta-utils';
-import { throwNotFound } from '../_shared/loader-utils';
 
 // ============================================================================
 // Meta Tags
@@ -119,7 +117,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
         await DataService.cases.update(caseId, updates);
         return { success: true, message: "Case updated successfully" };
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: error instanceof Error ? error.message : "Failed to update case",
@@ -132,7 +130,7 @@ export async function action({ params, request }: Route.ActionArgs) {
         await DataService.cases.delete(caseId);
         // Redirect to cases list on successful delete
         return redirect("/cases");
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: error instanceof Error ? error.message : "Failed to delete case",
@@ -152,7 +150,7 @@ export async function action({ params, request }: Route.ActionArgs) {
       try {
         // TODO: Implement document upload
         return { success: true, message: "Document added" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to add document" };
       }
     }
@@ -180,7 +178,7 @@ function CaseDetailSkeleton() {
 
       {/* Tabs Skeleton */}
       <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700">
-        {Array.from({ length: 5 }).map((_, i) => (
+        {Array.from({ length: 5 }).map((_) => (
           <div
             key={i}
             className="h-10 w-24 rounded-t bg-gray-200 dark:bg-gray-700"
@@ -217,7 +215,7 @@ function StreamedDataLoading({ label }: { label: string }) {
 // Component
 // ============================================================================
 
-export default function CaseDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseDetailRoute() {
   const { caseData, documents, parties } = loaderData;
   const navigate = useNavigate();
 

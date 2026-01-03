@@ -112,7 +112,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
     detailsModal.open();
   };
 
-  const handleSendReminder = (holdId: string) => {
+  const handleSendReminder = (_holdId: string) => {
     notify.success('Reminder sent to pending custodians');
   };
 

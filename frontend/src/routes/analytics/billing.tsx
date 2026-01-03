@@ -10,20 +10,20 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
 import {
-  BarChart, Bar, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  BarChart, Bar, AreaChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line
 } from 'recharts';
 import { subDays } from 'date-fns';
-import { ArrowLeft, Download, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Billing Analytics',
     description: 'Revenue, realization, and collection metrics',
   });
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real data from API
   return {
     metrics: {
@@ -38,8 +38,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function BillingAnalyticsRoute({ loaderData }: Route.ComponentProps) {
-  const { metrics } = loaderData;
+export default function BillingAnalyticsRoute() {
+  const metrics = {
+    totalRevenue: 2847500,
+    collectedRevenue: 2524000,
+    outstandingAR: 1235000,
+    realizationRate: 92.3,
+    collectionRate: 88.7,
+    wipTotal: 458000,
+    avgDaysToCollect: 42,
+  };
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 90),

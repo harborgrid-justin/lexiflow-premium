@@ -53,16 +53,16 @@ export class BluebookParser {
     // Pattern: Party v. Party, Volume Reporter Page (Court Year)
     const patterns = [
       // Federal Supreme Court: Party v. Party, Vol U.S. Page (Year)
-      /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(U\.S\.|S\.\s*Ct\.|L\.\s*Ed\.(?:\s*2d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((\d{4})\)/i,
+      /^(.+?)\s+v.\s+(.+?),\s*(\d+)\s+(U.S.|S.\s*Ct.|L.\s*Ed.(?:\s*2d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((\d{4})\)/i,
 
       // Circuit Court: Party v. Party, Vol F.2d/F.3d Page (Circuit Year)
-      /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(F\.\s*2d|F\.\s*3d|F\.\s*4th)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+\s+Cir\.\s+)?(\d{4})\)/i,
+      /^(.+?)\s+v.\s+(.+?),\s*(\d+)\s+(F.\s*2d|F.\s*3d|F.\s*4th)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+\s+Cir.\s+)?(\d{4})\)/i,
 
       // District Court: Party v. Party, Vol F.Supp Page (D. Dist. Year)
-      /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(F\.\s*Supp\.(?:\s*2d|\s*3d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((D\.\s+[\w.]+\s+)?(\d{4})\)/i,
+      /^(.+?)\s+v.\s+(.+?),\s*(\d+)\s+(F.\s*Supp.(?:\s*2d|\s*3d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((D.\s+[\w.]+\s+)?(\d{4})\)/i,
 
       // State Court: Party v. Party, Vol Reporter Page (State Year)
-      /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+([\w.]+)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+)?(\d{4})\)/i,
+      /^(.+?)\s+v.\s+(.+?),\s*(\d+)\s+([\w.]+)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+)?(\d{4})\)/i,
     ];
 
     for (const pattern of patterns) {
@@ -105,10 +105,10 @@ export class BluebookParser {
   private static parseStatuteCitation(text: string): StatuteCitation | null {
     const patterns = [
       // U.S. Code: Title U.S.C. § Section (Year)
-      /^(\d+)\s+(U\.S\.C\.|U\.S\.C\.A\.|U\.S\.C\.S\.)\s+§+\s*([\d\w-]+(?:\([a-z0-9]\))*(?:-[\d\w]+)?)\s*(?:\((\d{4})\))?/i,
+      /^(\d+)\s+(U.S.C.|U.S.C.A.|U.S.C.S.)\s+§+\s*([\d\w-]+(?:\([a-z0-9]\))*(?:-[\d\w]+)?)\s*(?:\((\d{4})\))?/i,
 
       // State Code: State Code § Section (Year)
-      /^([\w.]+)\s+(?:Code|Stat\.?|Rev\. Stat\.?)\s+(?:Ann\.\s+)?§+\s*([\d\w.-]+)\s*(?:\((\d{4})\))?/i,
+      /^([\w.]+)\s+(?:Code|Stat.?|Rev. Stat.?)\s+(?:Ann.\s+)?§+\s*([\d\w.-]+)\s*(?:\((\d{4})\))?/i,
     ];
 
     for (const pattern of patterns) {
@@ -143,13 +143,13 @@ export class BluebookParser {
   private static parseConstitutionCitation(text: string): ConstitutionCitation | null {
     const patterns = [
       // U.S. Constitution Amendment
-      /^(U\.S\.|United States)\s+Const\.?\s+amend\.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
+      /^(U.S.|United States)\s+Const.?\s+amend.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
 
       // U.S. Constitution Article
-      /^(U\.S\.|United States)\s+Const\.?\s+art\.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
+      /^(U.S.|United States)\s+Const.?\s+art.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
 
       // State Constitution
-      /^([\w.]+)\s+Const\.?\s+art\.\s+([IVX\d]+),?\s*(?:§\s*(\d+))?/i,
+      /^([\w.]+)\s+Const.?\s+art.\s+([IVX\d]+),?\s*(?:§\s*(\d+))?/i,
     ];
 
     for (const pattern of patterns) {
@@ -181,7 +181,7 @@ export class BluebookParser {
    * Parse regulation citation (e.g., "29 C.F.R. § 1614.101 (2020)")
    */
   private static parseRegulationCitation(text: string): RegulationCitation | null {
-    const pattern = /^(\d+)\s+C\.F\.R\.\s+§\s*([\d.]+)\s*(?:\((\d{4})\))?/i;
+    const pattern = /^(\d+)\s+C.F.R.\s+§\s*([\d.]+)\s*(?:\((\d{4})\))?/i;
     const match = text.match(pattern);
 
     if (match) {
@@ -207,7 +207,7 @@ export class BluebookParser {
    */
   private static parseBookCitation(text: string): BookCitation | null {
     // Pattern: Author(s), Title (Edition Year)
-    const pattern = /^([\w\s.,&]+),\s+(.+?)\s+(?:\((\d+)(?:st|nd|rd|th)?\s+ed\.\s+)?(\d{4})\)/i;
+    const pattern = /^([\w\s.,&]+),\s+(.+?)\s+(?:\((\d+)(?:st|nd|rd|th)?\s+ed.\s+)?(\d{4})\)/i;
     const match = text.match(pattern);
 
     if (match && text.includes('(')) {

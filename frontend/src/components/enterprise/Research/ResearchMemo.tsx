@@ -191,7 +191,7 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
     try {
       const summary = await onAISummarize(currentSection.content);
       handleSectionUpdate(currentSection.id, summary);
-    } catch (error) {
+    } catch () {
       console.error('AI summarization failed:', error);
     } finally {
       setIsAISummarizing(false);

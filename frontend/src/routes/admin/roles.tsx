@@ -115,7 +115,7 @@ export async function loader(_args: Route.LoaderArgs) {
   return { roles: mockRoles, permissionGroups };
 }
 
-export default function AdminRolesPage({ loaderData }: Route.ComponentProps) {
+export default function AdminRolesPage() {
   const { roles } = loaderData;
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 

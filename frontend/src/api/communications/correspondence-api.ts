@@ -115,7 +115,7 @@ export class CorrespondenceApiService {
    * @private
    */
   private validateEmail(email: string, methodName: string): void {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       throw new Error(`[CorrespondenceApiService.${methodName}] Invalid email format`);
     }
@@ -145,7 +145,7 @@ export class CorrespondenceApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<Correspondence[]>(url);
-    } catch (error) {
+    } catch () {
       console.error('[CorrespondenceApiService.getAll] Error:', error);
       throw new Error('Failed to fetch correspondence');
     }
@@ -162,7 +162,7 @@ export class CorrespondenceApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<Correspondence>(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[CorrespondenceApiService.getById] Error:', error);
       throw new Error(`Failed to fetch correspondence with id: ${id}`);
     }
@@ -191,14 +191,14 @@ export class CorrespondenceApiService {
       data.recipients.forEach((email, index) => {
         try {
           this.validateEmail(email, 'create');
-        } catch (error) {
+        } catch {
           throw new Error(`[CorrespondenceApiService.create] Invalid email at recipients[${index}]: ${email}`);
         }
       });
     }
     try {
       return await apiClient.post<Correspondence>(this.baseUrl, data);
-    } catch (error) {
+    } catch () {
       console.error('[CorrespondenceApiService.create] Error:', error);
       throw new Error('Failed to create correspondence');
     }
@@ -220,14 +220,14 @@ export class CorrespondenceApiService {
       data.recipients.forEach((email, index) => {
         try {
           this.validateEmail(email, 'update');
-        } catch (error) {
+        } catch {
           throw new Error(`[CorrespondenceApiService.update] Invalid email at recipients[${index}]: ${email}`);
         }
       });
     }
     try {
       return await apiClient.put<Correspondence>(`${this.baseUrl}/${id}`, data);
-    } catch (error) {
+    } catch () {
       console.error('[CorrespondenceApiService.update] Error:', error);
       throw new Error(`Failed to update correspondence with id: ${id}`);
     }
@@ -244,7 +244,7 @@ export class CorrespondenceApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[CorrespondenceApiService.delete] Error:', error);
       throw new Error(`Failed to delete correspondence with id: ${id}`);
     }

@@ -9,6 +9,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router';
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 

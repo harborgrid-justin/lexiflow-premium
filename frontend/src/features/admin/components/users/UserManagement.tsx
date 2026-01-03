@@ -41,7 +41,7 @@ export const UserManagement: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();

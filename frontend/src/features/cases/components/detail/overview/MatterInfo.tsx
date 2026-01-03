@@ -65,7 +65,7 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
   return (
     <Card title="Matter Particulars" className={cn("border-t-4", theme.primary.border)}>
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-            {items.filter((item): item is InfoItem => Boolean(item)).map((item, i) => (
+            {items.filter((item): item is InfoItem => Boolean(item)).map((item) => (
                 <div key={i} className="min-w-0">
                     <dt className={cn("text-xs font-bold uppercase mb-1 truncate", theme.text.tertiary)}>{item.label}</dt>
                     <dd className={cn("text-sm flex items-start break-words", item.color || theme.text.primary, item.mono ? "font-mono font-bold" : "")}>

@@ -169,7 +169,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         <div className={cn("p-4 rounded-lg border", theme.status.error.bg, theme.status.error.border)}>
           <h4 className={cn("text-sm font-bold mb-2", theme.status.error.text)}>Validation Errors:</h4>
           <ul className="list-disc list-inside space-y-1">
-            {validationErrors.map((error, i) => (
+            {validationErrors.map((error) => (
               <li key={i} className={cn("text-sm", theme.status.error.text)}>{error}</li>
             ))}
           </ul>
@@ -265,7 +265,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                 <option value="Court" />
                 <option value="Plaintiff" />
                 <option value="Defendant" />
-                {caseParties.map((p, i) => <option key={i} value={p} />)}
+                {caseParties.map((p) => <option key={i} value={p} />)}
               </datalist>
             </div>
           </div>

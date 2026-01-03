@@ -71,12 +71,14 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function CaseFilingsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseFilingsRoute() {
   const { caseData, filings } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   // Count filings by status
   const draftCount = filings.filter((f: Filing) => f.status === 'draft').length;
+console.log('draft count:', draftCount);
   const pendingCount = filings.filter((f: Filing) => f.status === 'pending').length;
   const filedCount = filings.filter((f: Filing) => f.status === 'filed').length;
 

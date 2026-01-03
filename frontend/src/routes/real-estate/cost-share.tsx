@@ -16,7 +16,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Real Estate - Cost Share',
     description: 'Manage cost-sharing arrangements including partner contributions, funding allocations, and expense tracking.',
@@ -27,7 +27,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Fetch real estate cost share data
   return {
     data: null,
@@ -62,8 +62,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CostShareRoute({ loaderData }: Route.ComponentProps) {
+export default function CostShareRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

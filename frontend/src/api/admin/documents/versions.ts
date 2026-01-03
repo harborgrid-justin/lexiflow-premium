@@ -13,7 +13,7 @@ export async function redact(id: string, regions: Array<{ page: number; x: numbe
   validateArray(regions, 'regions', 'redact');
   try {
     return await apiClient.post<LegalDocument>(`/documents/${id}/redact`, { regions });
-  } catch (error) {
+  } catch () {
     console.error('[DocumentsApiService.redact] Error:', error);
     throw new Error(`Failed to redact document with id: ${id}`);
   }
@@ -25,7 +25,7 @@ export async function getVersions(documentId: string): Promise<unknown[]> {
   try {
     const response = await apiClient.get<PaginatedResponse<unknown>>(`/documents/${documentId}/versions`);
     return response.data;
-  } catch (error) {
+  } catch () {
     console.error('[DocumentsApiService.getVersions] Error:', error);
     throw new Error(`Failed to fetch versions for document with id: ${documentId}`);
   }
@@ -37,7 +37,7 @@ export async function restoreVersion(documentId: string, versionId: string): Pro
   validateId(versionId, 'restoreVersion');
   try {
     return await apiClient.post<LegalDocument>(`/documents/${documentId}/versions/${versionId}/restore`, {});
-  } catch (error) {
+  } catch () {
     console.error('[DocumentsApiService.restoreVersion] Error:', error);
     throw new Error(`Failed to restore version ${versionId} for document ${documentId}`);
   }
@@ -50,7 +50,7 @@ export async function compareVersions(documentId: string, versionId: string, com
   validateId(compareWithId, 'compareVersions');
   try {
     return await apiClient.get<{ diff: string }>(`/documents/${documentId}/versions/${versionId}/compare?compareWith=${compareWithId}`);
-  } catch (error) {
+  } catch () {
     console.error('[DocumentsApiService.compareVersions] Error:', error);
     throw new Error(`Failed to compare versions for document ${documentId}`);
   }

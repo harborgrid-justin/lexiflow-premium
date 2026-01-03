@@ -489,7 +489,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
     try {
       return await this._executeNode(node);
-    } catch (error) {
+    } catch {
       return await this._retryNode(node, attemptNumber + 1);
     }
   }

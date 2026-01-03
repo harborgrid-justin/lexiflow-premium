@@ -46,7 +46,7 @@ interface Integration {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const integrations: Integration[] = [
     {
       id: 'google-gemini',
@@ -224,10 +224,10 @@ function IntegrationCard({ integration, onConnect, onDisconnect, onSync }: Integ
 // Component
 // ============================================================================
 
-export default function IntegrationsRoute({ loaderData }: Route.ComponentProps) {
+export default function IntegrationsRoute() {
   const { integrations } = loaderData;
   const fetcher = useFetcher();
-  const formId = useId();
+  const _formId = useId();
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 

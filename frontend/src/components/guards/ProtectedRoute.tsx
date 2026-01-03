@@ -69,6 +69,7 @@ export function ProtectedRoute({
   redirectTo = '/login',
 }: ProtectedRouteProps) {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const { user, isLoading, isAuthenticated } = useAuthState();
 
   useEffect(() => {

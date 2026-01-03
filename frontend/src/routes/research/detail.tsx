@@ -75,7 +75,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ResearchDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function ResearchDetailRoute() {
   const navigate = useNavigate();
 
   return (

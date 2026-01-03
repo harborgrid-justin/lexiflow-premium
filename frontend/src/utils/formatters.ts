@@ -515,7 +515,7 @@ export const FormattersService = {
       const validName = validateString(caseName, 'legalCaseName');
 
       // Split by "v." or "vs." or "vs" or "v"
-      const parts = validName.split(/\s+(v\.?|vs\.?)\s+/i);
+      const parts = validName.split(/\s+(v.?|vs.?)\s+/i);
 
       if (parts.length >= 3) {
         const plaintiff = FormattersService.titleCase(parts[0]);

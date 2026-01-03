@@ -50,7 +50,7 @@ export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
                         <TableHead className="text-right">Balance</TableHead>
                     </TableHeader>
                     <TableBody>
-                        {trustAccounts.map((c, i) => (
+                        {trustAccounts.map((c) => (
                             <TableRow key={c.matterId || `trust-account-${i}`}>
                                 <TableCell className={cn("font-bold", theme.text.primary)}>{c.client}</TableCell>
                                 <TableCell>

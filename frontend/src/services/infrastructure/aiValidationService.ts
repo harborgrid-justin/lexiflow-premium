@@ -78,7 +78,7 @@ export class AIValidationService {
     let sanitized = prompt.replace(/<[^>]*>/g, '');
 
     // Remove potentially dangerous characters
-    sanitized = sanitized.replace(/[<>\"'`]/g, '');
+    sanitized = sanitized.replace(/[<>"'`]/g, '');
 
     // Normalize whitespace
     sanitized = sanitized.replace(/\s+/g, ' ').trim();
@@ -304,7 +304,7 @@ export class AIValidationService {
    */
   private static sanitizeString(value: string): string {
 
-    return value.slice(0, 200).replace(/[<>\"'`]/g, '');
+    return value.slice(0, 200).replace(/[<>"'`]/g, '');
   }
 
   /**

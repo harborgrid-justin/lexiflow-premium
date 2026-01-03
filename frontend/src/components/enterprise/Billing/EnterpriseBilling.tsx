@@ -86,6 +86,7 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
     overdueAmount: 234500.00,
     overdueCount: 18,
   };
+console.log('metrics data:', metrics);
 
   const agingBuckets: ARAgingBucket[] = [
     { label: 'Current', daysRange: '0-30 days', amount: 567890.00, count: 45, percentage: 45.5 },

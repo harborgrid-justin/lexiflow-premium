@@ -60,9 +60,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function CasePartiesRoute({ loaderData }: Route.ComponentProps) {
+export default function CasePartiesRoute() {
   const { caseData, parties } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   // Count parties by type
   const plaintiffCount = parties.filter((p: any) =>

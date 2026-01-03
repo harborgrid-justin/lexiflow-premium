@@ -31,7 +31,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Parse search/filter params
   const url = new URL(request.url);
   const category = url.searchParams.get("category") || "all";
@@ -79,7 +79,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function LibraryIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function LibraryIndexRoute() {
   const { resources, categories, currentCategory } = loaderData;
 
   return (

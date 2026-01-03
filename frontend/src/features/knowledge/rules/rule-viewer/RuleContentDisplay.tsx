@@ -124,7 +124,7 @@ export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selected
                  <div>
                      <h4 className={cn("text-sm font-bold mb-3", theme.text.primary)}>Amendments</h4>
                      <ul className="space-y-2">
-                         {structuredData.statutory_notes.amendments.map((am, i) => (
+                         {structuredData.statutory_notes.amendments.map((am) => (
                              <li key={`amendment-${am.date}-${am.effective_date}`} className={cn("text-xs flex items-center p-2 border rounded hover:opacity-80", theme.surface.highlight, theme.border.default)}>
                                  <span className={cn("font-medium mr-2", theme.text.primary)}>{am.date}</span>
                                  <span className={theme.text.secondary}>Effective: {am.effective_date}</span>

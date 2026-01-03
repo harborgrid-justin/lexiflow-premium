@@ -52,7 +52,7 @@ export async function loader(_args: Route.LoaderArgs) {
   return { permissions: mockPermissions };
 }
 
-export default function AdminPermissionsPage({ loaderData }: Route.ComponentProps) {
+export default function AdminPermissionsPage() {
   const { permissions } = loaderData;
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');

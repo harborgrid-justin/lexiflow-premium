@@ -34,7 +34,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
       try {
         await apiClient.healthCheck();
         setBackendStatus('connected');
-      } catch (error) {
+      } catch {
         setBackendStatus('disconnected');
       }
     };

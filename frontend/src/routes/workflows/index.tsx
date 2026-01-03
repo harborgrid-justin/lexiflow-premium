@@ -7,9 +7,8 @@
  * @module routes/workflows/index
  */
 
-import { Link, useNavigate, useLoaderData, Form, useNavigation } from 'react-router';
+import { Link, useNavigate, Form, useNavigation } from 'react-router';
 import type { Route } from "./+types/index";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import { api } from '../../api';
 import { useState } from 'react';
@@ -30,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const status = url.searchParams.get('status') as any;
   const category = url.searchParams.get('category') || undefined;
@@ -54,10 +53,11 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     switch (intent) {
-      case "create":
+      case "create": {
         const name = formData.get("name") as string;
         const category = formData.get("category") as string;
         if (!name || !category) return { success: false, error: "Name and category are required" };
+        }
         
         await api.workflow.createTemplate({
           name,
@@ -95,9 +95,10 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WorkflowsIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function WorkflowsIndexRoute() {
   const { templates, instances } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [activeTab, setActiveTab] = useState<'templates' | 'instances'>('templates');

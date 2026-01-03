@@ -187,8 +187,8 @@ export class DatabaseManager {
     store: string;
     item: unknown;
     type: "put" | "delete";
-    resolve: Function;
-    reject: Function;
+    resolve: (...args: unknown[]) => unknown;
+    reject: (...args: unknown[]) => unknown;
   }[] = [];
   private flushTimer: number | null = null;
   private readonly MAX_BUFFER_SIZE = DB_MAX_BUFFER_SIZE;
@@ -197,7 +197,7 @@ export class DatabaseManager {
   constructor() {
     try {
       if (!window.indexedDB) this.mode = "LocalStorage";
-    } catch (e) {
+    } catch {
       this.mode = "LocalStorage";
     }
   }

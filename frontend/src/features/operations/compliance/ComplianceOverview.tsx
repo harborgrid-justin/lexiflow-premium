@@ -112,7 +112,7 @@ export const ComplianceOverview = memo(() => {
                             { title: 'Conflict Hit: MegaCorp', time: '2 hours ago', severity: 'medium' },
                             { title: 'Ethical Wall Update', time: '5 hours ago', severity: 'low' },
                             { title: 'GDPR Data Request', time: 'Yesterday', severity: 'high' },
-                        ].map((alert, i) => (
+                        ].map((alert) => (
                             <div key={`alert-${alert.title.replace(/\s+/g, '-')}-${i}`} className={cn("flex items-start p-3 rounded-lg border transition-colors", theme.surface.highlight, theme.border.default)}>
                                 <Activity className={cn("h-4 w-4 mt-0.5 mr-3", alert.severity === 'high' ? "text-red-500" : alert.severity === 'medium' ? "text-amber-500" : "text-blue-500")} />
                                 <div>

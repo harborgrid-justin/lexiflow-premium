@@ -91,7 +91,7 @@ export const serviceJobSchema = z.object({
   servedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   signerName: z.string().max(200).transform(sanitizeString).optional(),
   gpsCoordinates: z.string()
-    .regex(/^-?\d+\.\d+,\s*-?\d+\.\d+$/, 'Invalid GPS coordinates')
+    .regex(/^-?\d+.\d+,\s*-?\d+.\d+$/, 'Invalid GPS coordinates')
     .optional(),
   notes: z.string().max(2000).transform(sanitizeHtml).optional(),
   proofDocumentId: z.string().optional(),

@@ -16,7 +16,6 @@ import {
   DollarSign,
   Edit,
   FileText,
-  Loader2,
   Scale,
   Trash2,
   Users
@@ -29,6 +28,7 @@ export const CaseDetail: React.FC = () => {
   const matterId = window.location.hash.split('/matters/')[1]?.split('?')[0];
   const navigate = (path: string) => {
     window.location.hash = `#/${path}`;
+console.log('useNavigate:', navigate);
   };
 
   const [editing, setEditing] = useState(false);

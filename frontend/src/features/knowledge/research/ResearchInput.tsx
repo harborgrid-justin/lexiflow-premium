@@ -22,7 +22,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
           const timer = setTimeout(() => {
               if (/section|code|statute|act|usc/i.test(query)) {
                   setIntent('statute');
-              } else if (/v\.|versus|holding|precedent|court/i.test(query)) {
+              } else if (/v.|versus|holding|precedent|court/i.test(query)) {
                   setIntent('caselaw');
               } else {
                   setIntent('general');

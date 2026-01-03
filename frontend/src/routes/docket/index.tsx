@@ -32,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const url = new URL(request.url);
   const search = url.searchParams.get("search") || undefined;
   const type = url.searchParams.get("type") || undefined;
@@ -106,10 +106,11 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DocketIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DocketIndexRoute() {
   const { entries, totalCount, page, totalPages } = loaderData;
   const navigation = useNavigation();
   const location = useLocation();
+console.log('location data:', location);
   const [searchParams] = useSearchParams();
   const isSubmitting = navigation.state === "submitting";
 

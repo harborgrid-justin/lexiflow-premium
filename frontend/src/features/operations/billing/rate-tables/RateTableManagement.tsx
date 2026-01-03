@@ -12,7 +12,7 @@ import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@providers/ThemeContext';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 
 interface RateTable {
   id: string;

@@ -31,7 +31,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement client data fetching
   // const [clients, recentActivity] = await Promise.all([
   //   api.crm.getClients(),
@@ -75,8 +75,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CRMIndexRoute({ loaderData }: Route.ComponentProps) {
-  const { clients, totalCount } = loaderData;
+export default function CRMIndexRoute() {
+  const { _clients, totalCount } = loaderData;
 
   return (
     <div className="p-8">

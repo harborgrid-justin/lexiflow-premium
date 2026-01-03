@@ -95,7 +95,7 @@ export const DataSourceService = {
 
       console.log(`[DataSourceService] Disconnected from ${source.name}`);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   },

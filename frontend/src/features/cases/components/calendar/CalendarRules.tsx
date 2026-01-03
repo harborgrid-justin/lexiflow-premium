@@ -49,7 +49,7 @@ export const CalendarRules: React.FC = () => {
             <div className="py-4 flex justify-center"><Loader2 className="animate-spin h-5 w-5 text-blue-600"/></div>
         ) : (
             <div className="space-y-3">
-            {rules.map((rule, i) => (
+            {rules.map((rule) => (
                 <div key={`rule-${rule.substring(0, 30)}-${i}`} className={cn("flex items-center justify-between p-3 rounded border transition-colors", theme.surface.highlight, theme.border.default, `hover:${theme.border.default}`)}>
                 <span className={cn("text-sm font-medium", theme.text.secondary)}>{rule}</span>
                 <div className="h-5 w-5 bg-green-500 rounded-full flex items-center justify-center shrink-0">

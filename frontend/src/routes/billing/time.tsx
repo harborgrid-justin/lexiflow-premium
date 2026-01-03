@@ -29,6 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
+  console.log('case ID:', caseId);
   const userId = url.searchParams.get('userId');
   const status = url.searchParams.get('status');
   const billable = url.searchParams.get('billable');
@@ -39,7 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const entries = await timeApi.getAll({
       caseId: caseId || undefined,
       userId: userId || undefined,
-      status: status as any || undefined,
+      status: (status as 'draft' | 'submitted' | 'approved' | 'invoiced') || undefined,
       billable: billable === 'true' ? true : billable === 'false' ? false : undefined,
     });
 
@@ -47,7 +48,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       entries,
       filters: { caseId, userId, status, billable },
     };
-  } catch (error) {
+  } catch {
     console.error('Failed to load time entries:', error);
     return {
       entries: [],
@@ -66,32 +67,35 @@ export async function action({ request }: Route.ActionArgs) {
   const timeApi = new TimeEntriesApiService();
 
   switch (intent) {
-    case "approve":
+    case "approve": {
       const approveId = formData.get("id") as string;
       try {
         await timeApi.approve(approveId);
         return { success: true, message: "Time entry approved" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to approve entry" };
       }
+    }
 
-    case "approve-bulk":
+    case "approve-bulk": {
       const approveIds = JSON.parse(formData.get("ids") as string);
       try {
         const result = await timeApi.approveBulk(approveIds);
         return { success: true, message: `${result.success} entries approved`, result };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to approve entries" };
       }
+    }
 
-    case "delete":
+    case "delete": {
       const deleteId = formData.get("id") as string;
       try {
         await timeApi.delete(deleteId);
         return { success: true, message: "Time entry deleted" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to delete entry" };
       }
+    }
 
     default:
       return { success: false, error: "Invalid action" };

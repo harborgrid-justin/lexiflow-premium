@@ -132,7 +132,7 @@ export const ChartSkeleton: React.FC<{
         <Skeleton height="100%" variant="rounded" />
         {/* Simulate chart bars/lines */}
         <div className="absolute inset-0 flex items-end justify-around p-4 gap-2">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({ length: 8 }).map((_) => (
             <Skeleton
               key={i}
               width="100%"

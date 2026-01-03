@@ -68,7 +68,7 @@ export const CalendarSOL: React.FC = () => {
             <TableHead>Days Left</TableHead>
           </TableHeader>
           <TableBody>
-            {safeData.map((row, i) => (
+            {safeData.map((row) => (
               <TableRow key={`sol-table-${row.date}-${row.matter}`} className={row.critical ? 'bg-red-50/50' : ''}>
                 <TableCell className={`font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</TableCell>
                 <TableCell className="font-medium text-slate-900">{row.matter}</TableCell>
@@ -91,7 +91,7 @@ export const CalendarSOL: React.FC = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {safeData.map((row, i) => (
+        {safeData.map((row) => (
           <div key={`sol-card-${row.date}-${row.matter}`} className={`p-4 rounded-lg border shadow-sm ${row.critical ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
             <div className="flex justify-between items-start mb-2">
               <span className={`text-lg font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</span>

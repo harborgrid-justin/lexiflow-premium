@@ -26,11 +26,11 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   const rateTablesApi = new RateTablesApiService();
 
   try {
-    const rateTables = await rateTablesApi.getAll();
+    const _rateTables = await rateTablesApi.getAll();
 
     return {
       rateTables,
@@ -47,7 +47,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function RateTablesRoute({ loaderData }: Route.ComponentProps) {
+export default function RateTablesRoute() {
   const { rateTables } = loaderData;
 
   return (

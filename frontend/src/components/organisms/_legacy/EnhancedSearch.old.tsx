@@ -112,6 +112,7 @@ function parseSearchSyntax(query: string): {
   filters: Record<string, string>;
 } {
   const filters: Record<string, string> = {};
+console.log('filter state:', filters);
   let text = query;
   
   const syntaxRegex = /(\w+):([^\s]+)/g;
@@ -157,7 +158,7 @@ function getRecentSearches(): string[] {
   try {
     const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
     return stored ? JSON.parse(stored) : [];
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -167,7 +168,7 @@ function addRecentSearch(query: string): void {
     const recent = getRecentSearches();
     const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
     localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-  } catch (error) {
+  } catch () {
     // Ignore localStorage errors
   }
 }

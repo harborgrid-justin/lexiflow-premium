@@ -12,8 +12,7 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { LegalDocument } from '@/types';
-import { Suspense, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useState } from 'react';
 import type { Route } from "./+types/documents";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
@@ -58,9 +57,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function CaseDocumentsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseDocumentsRoute() {
   const { caseData, documents } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
 

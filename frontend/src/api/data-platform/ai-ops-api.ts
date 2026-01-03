@@ -51,7 +51,7 @@ export class AiOpsApiService {
   async getEmbeddings(filters?: Record<string, unknown>): Promise<PaginatedResponse<VectorEmbedding>> {
     try {
       return await apiClient.get<PaginatedResponse<VectorEmbedding>>('/ai-ops/embeddings', filters);
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }
@@ -69,7 +69,7 @@ export class AiOpsApiService {
   async searchSimilar(embedding: number[], limit = 10): Promise<{ results: unknown[] }> {
     try {
       return await apiClient.post('/ai-ops/embeddings/search', { embedding, limit });
-    } catch (error) {
+    } catch {
       return { results: [] };
     }
   }
@@ -82,7 +82,7 @@ export class AiOpsApiService {
   async getModels(): Promise<AIModel[]> {
     try {
       return await apiClient.get<AIModel[]>('/ai-ops/models');
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -121,7 +121,7 @@ export class AiOpsApiService {
   }> {
     try {
       return await apiClient.get('/ai-ops/stats');
-    } catch (error) {
+    } catch {
       return { totalEmbeddings: 0, totalModels: 0, activeModels: 0, totalUsage: 0 };
     }
   }

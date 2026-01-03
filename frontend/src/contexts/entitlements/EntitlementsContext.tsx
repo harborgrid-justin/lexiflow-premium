@@ -27,7 +27,7 @@ const DEFAULT_ENTITLEMENTS: Entitlements = {
   storageLimitGB: 1,
 };
 
-export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const EntitlementsProvider: React.FC<React.PropsWithChildren> = () => {
   const { auth } = useAuth();
   const [entitlements, setEntitlements] = useState<Entitlements>(DEFAULT_ENTITLEMENTS);
   const [isLoading, setIsLoading] = useState(false);
@@ -85,6 +85,8 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ childr
   }, [auth.status, auth.user]);
 
   const value = useMemo(() => ({ entitlements, isLoading }), [entitlements, isLoading]);
+  
+  return <EntitlementsContext.Provider value={value}>{null}</EntitlementsContext.Provider>;
 };
 
 export const useEntitlements = (): EntitlementsContextValue => {

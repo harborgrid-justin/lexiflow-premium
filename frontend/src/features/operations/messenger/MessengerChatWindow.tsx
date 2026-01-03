@@ -100,7 +100,7 @@ export const MessengerChatWindow = ({
       try {
           const suggestion = await GeminiService.generateReply(lastMsg.text, activeConversation.role);
           setInputText(suggestion);
-      } catch (e) {
+      } catch {
           notify.error("Failed to generate reply.");
       } finally {
           setIsThinking(false);
@@ -154,7 +154,7 @@ export const MessengerChatWindow = ({
 
       {pendingAttachments.length > 0 && (
         <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface.default, theme.border.default)}>
-          {pendingAttachments.map((att, i) => (
+          {pendingAttachments.map((att) => (
             <div key={`pending-att-${att.name}-${i}`} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
               <FileAttachment name={att.name} size={typeof att.size === 'number' ? String(att.size) : att.size} type={att.type} className="w-48 shadow-sm"/>
               <button

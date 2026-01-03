@@ -43,7 +43,7 @@ export const CaseOverviewStats: React.FC = () => {
             { label: "Upcoming Events", value: "3", icon: Clock, color: theme.primary.text },
             { label: "Open Tasks", value: "12", icon: CheckCircle, color: theme.chart.colors.purple },
             { label: "Risk Score", value: "Low", icon: TrendingUp, color: theme.status.warning.text }
-        ].map((stat, i) => (
+        ].map((stat) => (
             <div 
                 key={i} 
                 onClick={() => handleDetail(stat.label)}

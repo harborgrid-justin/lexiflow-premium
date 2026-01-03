@@ -202,7 +202,7 @@ export function isUuid(value: unknown): value is string {
  */
 export function isEmail(value: unknown): value is string {
   if (!isString(value)) return false;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
   return emailRegex.test(value);
 }
 

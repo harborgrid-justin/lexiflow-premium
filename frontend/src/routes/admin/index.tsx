@@ -42,7 +42,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Require admin role to access this route
   const { user } = requireAdmin(request);
 
@@ -97,7 +97,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function AdminIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function AdminIndexRoute() {
   const { metrics, auditLogs } = loaderData;
 
   return (

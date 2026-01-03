@@ -101,7 +101,7 @@ export function useWorkflowBuilder(
             ...initialTemplate.stages.map((_, idx) => ({ id: `n-${idx}` })),
             { id: 'end' }
         ];
-        return nodes.slice(0, -1).map((node, i) => ({
+        return nodes.slice(0, -1).map((node) => ({
             id: `c-${i}`,
             from: node.id,
             to: nodes[i+1].id

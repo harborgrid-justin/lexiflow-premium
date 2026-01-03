@@ -94,7 +94,7 @@ export class PleadingsApiService {
 
             // Fallback
             return [];
-        } catch (error) {
+        } catch () {
             console.error('[PleadingsApiService.getAll] Error:', error);
             throw new Error('Failed to fetch pleadings');
         }
@@ -104,7 +104,7 @@ export class PleadingsApiService {
         this.validateId(id, 'getById');
         try {
             return await apiClient.get<Pleading>(`${this.baseUrl}/${id}`);
-        } catch (error) {
+        } catch () {
             console.error('[PleadingsApiService.getById] Error:', error);
             throw new Error(`Failed to fetch pleading with id: ${id}`);
         }
@@ -125,7 +125,7 @@ export class PleadingsApiService {
         }
         try {
             return await apiClient.post<Pleading>(this.baseUrl, data);
-        } catch (error) {
+        } catch () {
             console.error('[PleadingsApiService.create] Error:', error);
             throw new Error('Failed to create pleading');
         }
@@ -136,7 +136,7 @@ export class PleadingsApiService {
         this.validateObject(data, 'data', 'update');
         try {
             return await apiClient.put<Pleading>(`${this.baseUrl}/${id}`, data);
-        } catch (error) {
+        } catch () {
             console.error('[PleadingsApiService.update] Error:', error);
             throw new Error(`Failed to update pleading with id: ${id}`);
         }
@@ -146,7 +146,7 @@ export class PleadingsApiService {
         this.validateId(id, 'delete');
         try {
             await apiClient.delete(`${this.baseUrl}/${id}`);
-        } catch (error) {
+        } catch () {
             console.error('[PleadingsApiService.delete] Error:', error);
             throw new Error(`Failed to delete pleading with id: ${id}`);
         }

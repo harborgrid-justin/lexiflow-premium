@@ -182,11 +182,11 @@ export async function retryWithBackoff<T>(
         const result = await fn();
         clearTimeout(timeoutId);
         return result;
-      } catch (error) {
+      } catch () {
         clearTimeout(timeoutId);
         throw error;
       }
-    } catch (error) {
+    } catch () {
       // Parse error
       const parsedError = parseApiError(error);
       lastError = parsedError;
@@ -284,7 +284,7 @@ export class RetryHandler {
       }
 
       return result;
-    } catch (error) {
+    } catch () {
       // Record failure
       this.recordFailure();
       throw error;

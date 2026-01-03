@@ -29,6 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
+  console.log('case ID:', caseId);
   const category = url.searchParams.get('category');
   const status = url.searchParams.get('status');
 
@@ -38,14 +39,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     const expenses = await expensesApi.getAll({
       caseId: caseId || undefined,
       category: category || undefined,
-      status: status as any || undefined,
+      status: (status as 'pending' | 'approved' | 'rejected') || undefined,
     });
 
     return {
       expenses,
       filters: { caseId, category, status },
     };
-  } catch (error) {
+  } catch {
     console.error('Failed to load expenses:', error);
     return {
       expenses: [],
@@ -64,23 +65,25 @@ export async function action({ request }: Route.ActionArgs) {
   const expensesApi = new ExpensesApiService();
 
   switch (intent) {
-    case "approve":
+    case "approve": {
       const approveId = formData.get("id") as string;
       try {
         await expensesApi.approve(approveId);
         return { success: true, message: "Expense approved" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to approve expense" };
       }
+    }
 
-    case "delete":
+    case "delete": {
       const deleteId = formData.get("id") as string;
       try {
         await expensesApi.delete(deleteId);
         return { success: true, message: "Expense deleted" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to delete expense" };
       }
+    }
 
     default:
       return { success: false, error: "Invalid action" };

@@ -481,7 +481,7 @@ export class DraftingValidationService {
           if (v.validation.pattern) {
             try {
               new RegExp(v.validation.pattern);
-            } catch (error) {
+            } catch () {
               errors.push({
                 field: `variables[${index}].validation.pattern`,
                 message: "Invalid regex pattern",
@@ -671,7 +671,7 @@ export class DraftingValidationService {
           }
           break;
 
-        case "date":
+        case "date": {
           const dateValue = typeof value === "string" ? new Date(value) : value;
           if (!(dateValue instanceof Date) || isNaN(dateValue.getTime())) {
             fieldErrors.push(`${variable.label} must be a valid date`);
@@ -679,8 +679,9 @@ export class DraftingValidationService {
             processedValues[variable.name] = dateValue.toISOString();
           }
           break;
+          }
 
-        case "number":
+        case "number": {
           const numValue =
             typeof value === "string" ? parseFloat(value) : value;
           if (typeof numValue !== "number" || isNaN(numValue)) {
@@ -705,6 +706,7 @@ export class DraftingValidationService {
             processedValues[variable.name] = numValue;
           }
           break;
+          }
 
         case "select":
           if (typeof value !== "string" || !variable.options?.includes(value)) {
@@ -872,7 +874,7 @@ export class DraftingValidationService {
     });
 
     // Replace case data placeholders: {{case.field}}
-    content = content.replace(/\{\{case\.(\w+)\}\}/g, (match, field) => {
+    content = content.replace(/\{\{case.(\w+)\}\}/g, (match, field) => {
       const caseData = variableValues["case"] as
         | Record<string, unknown>
         | undefined;
@@ -883,7 +885,7 @@ export class DraftingValidationService {
     });
 
     // Replace party placeholders: {{party.plaintiff}}, {{party.defendant}}
-    content = content.replace(/\{\{party\.(\w+)\}\}/g, (match, role) => {
+    content = content.replace(/\{\{party.(\w+)\}\}/g, (match, role) => {
       const parties = variableValues["parties"] as
         | Record<string, unknown>
         | undefined;

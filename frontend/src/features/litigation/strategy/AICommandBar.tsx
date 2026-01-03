@@ -54,7 +54,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
             } else {
                 notify.error('AI failed to generate a valid graph.');
             }
-        } catch (e) {
+        } catch (_e) {
             notify.error('An error occurred during generation.');
         } finally {
             setIsLoading(false);
@@ -72,8 +72,8 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
                         className="flex-1 bg-transparent border-none outline-none text-sm p-2 placeholder:text-slate-400"
                         placeholder="Generate a strategy (e.g., 'Standard breach of contract litigation plan')"
                         value={prompt}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+                        onChange={(_e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
+                        onKeyDown={(_e) => e.key === 'Enter' && handleGenerate()}
                     />
                     <Button
                         size="sm"

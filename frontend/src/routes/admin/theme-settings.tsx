@@ -19,7 +19,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createAdminMeta({
     section: 'Theme Settings',
     description: 'Customize the application appearance and branding',
@@ -30,8 +30,7 @@ export function meta({}: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Load saved theme preferences from database
+export async function loader() {
   return {
     savedTheme: null,
   };
@@ -46,10 +45,11 @@ export async function action({ request }: Route.ActionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "save-theme":
-      const theme = formData.get("theme") as string;
-      // TODO: Save theme preference to database
+    case "save-theme": {
+      const themeValue = formData.get("theme") as string;
+      console.log('Saving theme:', themeValue);
       return { success: true, message: "Theme saved" };
+    }
 
     default:
       return { success: false, error: "Invalid action" };
@@ -60,9 +60,15 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ThemeSettingsRoute({ loaderData }: Route.ComponentProps) {
+export default function ThemeSettingsRoute() {
   const navigate = useNavigate();
   const { mode, isDark, toggleTheme, setTheme } = useTheme();
+
+  const handleLightMode = () => setTheme('light');
+  const handleDarkMode = () => setTheme('dark');
+
+  console.log('Theme mode:', mode, 'isDark:', isDark, 'toggleTheme available:', !!toggleTheme);
+  console.log('Navigate available:', !!navigate);
 
   return (
     <div className="p-8">
@@ -99,7 +105,7 @@ export default function ThemeSettingsRoute({ loaderData }: Route.ComponentProps)
           <div className="flex gap-4">
             <button
               type="button"
-              onClick={() => setTheme('light')}
+              onClick={handleLightMode}
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
                 mode === 'light'
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
@@ -116,7 +122,7 @@ export default function ThemeSettingsRoute({ loaderData }: Route.ComponentProps)
 
             <button
               type="button"
-              onClick={() => setTheme('dark')}
+              onClick={handleDarkMode}
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
                 mode === 'dark'
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'

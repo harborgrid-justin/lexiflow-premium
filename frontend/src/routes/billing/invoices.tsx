@@ -29,6 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
+  console.log('case ID:', caseId);
   const clientId = url.searchParams.get('clientId');
   const status = url.searchParams.get('status');
 
@@ -39,7 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       invoicesApi.getAll({
         caseId: caseId || undefined,
         clientId: clientId || undefined,
-        status: status as any || undefined,
+        status: (status as 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled') || undefined,
       }),
       invoicesApi.getStats(),
     ]);
@@ -49,7 +50,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       stats,
       filters: { caseId, clientId, status },
     };
-  } catch (error) {
+  } catch {
     console.error('Failed to load invoices:', error);
     return {
       invoices: [],
@@ -77,40 +78,43 @@ export async function action({ request }: Route.ActionArgs) {
   const invoicesApi = new InvoicesApiService();
 
   switch (intent) {
-    case "send":
+    case "send": {
       const sendId = formData.get("id") as string;
       const recipients = formData.get("recipients") as string;
       try {
         await invoicesApi.send(sendId, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to send invoice" };
       }
+    }
 
-    case "record-payment":
+    case "record-payment": {
       const invoiceId = formData.get("invoiceId") as string;
       const payment = {
         amount: parseFloat(formData.get("amount") as string),
         date: formData.get("date") as string,
-        method: formData.get("method") as any,
+        method: formData.get("method") as 'check' | 'credit_card' | 'wire' | 'ach' | 'cash' | 'other',
         reference: formData.get("reference") as string || undefined,
         notes: formData.get("notes") as string || undefined,
       };
       try {
         await invoicesApi.recordPayment(invoiceId, payment);
         return { success: true, message: "Payment recorded" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to record payment" };
       }
+    }
 
-    case "delete":
+    case "delete": {
       const deleteId = formData.get("id") as string;
       try {
         await invoicesApi.delete(deleteId);
         return { success: true, message: "Invoice deleted" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to delete invoice" };
       }
+    }
 
     default:
       return { success: false, error: "Invalid action" };

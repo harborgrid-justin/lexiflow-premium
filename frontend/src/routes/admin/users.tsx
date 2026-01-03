@@ -60,7 +60,7 @@ export async function loader(_args: Route.LoaderArgs) {
   return { users: mockUsers };
 }
 
-export default function AdminUsersPage({ loaderData }: Route.ComponentProps) {
+export default function AdminUsersPage() {
   const { users } = loaderData;
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');

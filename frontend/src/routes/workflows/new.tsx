@@ -58,6 +58,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function NewWorkflowRoute({ actionData }: Route.ComponentProps) {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

@@ -61,7 +61,7 @@ export class SyncApiService {
   async getStatus(): Promise<SyncStatus> {
     try {
       return await apiClient.get<SyncStatus>('/sync/status');
-    } catch (error) {
+    } catch {
       return {
         pending: 0,
         syncing: 0,
@@ -80,7 +80,7 @@ export class SyncApiService {
   async getQueue(filters?: Record<string, unknown>): Promise<PaginatedResponse<SyncQueueItem>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncQueueItem>>('/sync/queue', filters);
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }
@@ -91,7 +91,7 @@ export class SyncApiService {
   async getConflicts(filters?: Record<string, unknown>): Promise<PaginatedResponse<SyncConflict>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncConflict>>('/sync/conflicts', filters);
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }

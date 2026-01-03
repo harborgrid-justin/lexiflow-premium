@@ -163,7 +163,6 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
                                     <span className="font-bold">{w.prep}%</span>
                                 </div>
                                 <div className={cn("w-full h-1.5 rounded-full", theme.surface.highlight)}>
-                                    {/* eslint-disable-next-line @lexiflow/no-inline-styles -- Dynamic width requires inline style */}
                                     <div className={cn("h-1.5 rounded-full transition-all bg-blue-500")} style={{ width: `${w.prep}%` }}></div>
                                 </div>
                             </div>

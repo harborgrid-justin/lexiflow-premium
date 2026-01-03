@@ -127,7 +127,7 @@ export function useAppContext(): UseAppControllerReturn {
 
   // App Initialization State
   const [isAppLoading, setIsAppLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated] = useState(false);
   const [appStatusMessage, setAppStatusMessage] = useState(
     "Initializing Secure Data Layer..."
   );

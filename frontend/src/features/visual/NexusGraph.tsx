@@ -198,7 +198,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
         >
           <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
             {/* Links */}
-            {physicsState.current.links.map((link, i) => (
+            {physicsState.current.links.map((link) => (
               <line
                 key={`link-${link.sourceIndex}-${link.targetIndex}-${i}`}
                 ref={el => { if (el) linkRefs.current[i] = el; }}
@@ -209,7 +209,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
             ))}
 
             {/* Nodes */}
-            {nodesMeta.map((node, i) => (
+            {nodesMeta.map((node) => (
               // Use stable node ID for key (not index) for proper React reconciliation
               <g
                 key={node.id}

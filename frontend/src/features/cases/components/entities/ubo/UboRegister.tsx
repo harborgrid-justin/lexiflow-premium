@@ -41,6 +41,7 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
     entitiesTracked: stats?.corporations || corporations.length,
     ubosIdentified: corporations.reduce((sum, corp) => {
       const apiCorp = corp as unknown as Record<string, unknown>;
+console.log('metrics data:', metrics);
       const relationships = apiCorp.relationships as Array<unknown> | undefined;
       return sum + (relationships?.length || 0);
     }, 0),

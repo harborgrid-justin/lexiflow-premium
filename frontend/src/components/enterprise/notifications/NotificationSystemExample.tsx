@@ -163,6 +163,7 @@ export const HeaderWithNotifications: React.FC = () => {
 export const NotificationCenterPage: React.FC = () => {
   const [notifications, setNotifications] = useState<UINotification[]>(mockNotifications);
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   const handleMarkAsRead = useCallback((id: string) => {
     setNotifications((prev) =>

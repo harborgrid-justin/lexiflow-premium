@@ -43,7 +43,7 @@ export const HighlightedText: React.FC<HighlightedTextProps> = memo(({
   return (
     <span className={className}>
       {/* IDENTITY-STABLE KEYS: Use text content + index for reconciliation */}
-      {parts.map((part, i) =>
+      {parts.map((part) =>
         part.toLowerCase() === query.toLowerCase() ? (
           <span key={`highlight-${i}-${part}`} className={getHighlightClass(highlightClassName)}>
             {part}

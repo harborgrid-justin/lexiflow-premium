@@ -19,9 +19,9 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
-  const handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
+  const _handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
     startTransition(() => {
       setSelectedSection(section);
     });
@@ -176,7 +176,7 @@ export const ThemeSettingsPage: React.FC = () => {
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {mockRiskData.map((entry, index) => (
+                      {mockRiskData.map((entry, _index) => (
                         <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
@@ -228,7 +228,7 @@ export const ThemeSettingsPage: React.FC = () => {
           <div className={cn("p-6 rounded-lg", theme.surface.raised)}>
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Complete Chart Palette</h3>
             <div className="grid grid-cols-6 gap-4">
-              {palette.map((color, index) => (
+              {palette.map((color, _index) => (
                 <div key={`palette-${color}`} className="text-center">
                   <div
                     className="w-full h-16 rounded-lg mb-2 border"

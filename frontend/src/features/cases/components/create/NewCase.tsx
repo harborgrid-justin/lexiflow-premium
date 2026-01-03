@@ -171,6 +171,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const navigate = (path: string) => {
     if (onBack) {
       onBack();
+console.log('useNavigate:', navigate);
     } else {
       window.location.hash = `#/${path}`;
     }
@@ -536,7 +537,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const updateRelatedCase = useCallback((index: number, field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
-      relatedCases: prev.relatedCases.map((rc, i) =>
+      relatedCases: prev.relatedCases.map((rc) =>
         i === index ? { ...rc, [field]: value } : rc
       )
     }));

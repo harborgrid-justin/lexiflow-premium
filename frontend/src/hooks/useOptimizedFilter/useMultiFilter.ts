@@ -24,7 +24,7 @@ export function useMultiFilter<T, F extends Record<string, unknown>>(
   initialFilters: F
 ): MultiFilterReturn<T, F> {
   const [filters, setFiltersState] = useState<F>(initialFilters);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const filteredData = useMemo(
     () => filterFn(data, filters),

@@ -48,7 +48,7 @@ const sanitizeHtml = (html: string) => {
 export const WikiView: React.FC = () => {
   const { theme, mode } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const { data: articles = [], isLoading } = useQuery<WikiArticle[]>(
     ['wiki', 'all'],

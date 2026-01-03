@@ -37,21 +37,23 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
-    return (
-      <div>
-        <Tabs
-          tabs={['overview', 'details', 'activity', 'settings']}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-          variant="segmented"
-        />
-        <div className="mt-6 p-4 bg-white rounded-lg shadow max-w-md">
-          <p className="text-slate-600">Active: <strong>{activeTab}</strong></p>
-        </div>
+const DefaultComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  return (
+    <div>
+      <Tabs
+        tabs={['overview', 'details', 'activity', 'settings']}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        variant="segmented"
+      />
+      <div className="mt-6 p-4 bg-white rounded-lg shadow max-w-md">
+        <p className="text-slate-600">Active: <strong>{activeTab}</strong></p>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const Default: Story = {
+  render: () => <DefaultComponent />,
 };

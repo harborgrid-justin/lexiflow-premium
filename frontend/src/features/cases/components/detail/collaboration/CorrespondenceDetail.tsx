@@ -96,7 +96,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
           const documents = (await DataService.documents) as any;
           await documents.add(doc);
           notify.success('Correspondence saved to Case Documents.');
-      } catch (e) {
+      } catch {
           notify.error('Failed to save document.');
       }
   };
@@ -123,7 +123,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
           const docket = (await DataService.docket) as any;
           await docket.add(entry);
           notify.success('Service Proof linked to Docket.');
-      } catch (e) {
+      } catch {
           notify.error('Failed to create docket entry.');
       }
   };

@@ -97,7 +97,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ProfileIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function ProfileIndexRoute() {
   const { user, preferences } = loaderData;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";

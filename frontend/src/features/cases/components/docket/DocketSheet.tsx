@@ -54,11 +54,11 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'filings' | 'orders'>(filterType);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const liveModeToggle = useToggle();
 
   // Defer search term for better typing responsiveness
-  const deferredSearchTerm = useDeferredValue(searchTerm);
+  const _deferredSearchTerm = useDeferredValue(searchTerm);
 
   const addModal = useModalState();
   const deleteModal = useModalState();
@@ -222,7 +222,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     const parts = text.split(/(Docket #\d+|Motion|Order|Complaint|Exhibit|Answer)/g);
     return (
       <>
-        {parts.map((part, i) => {
+        {parts.map((part) => {
           if (part.match(/Docket #\d+/)) {
             return <span key={i} className={cn("font-medium cursor-pointer hover:underline px-1 rounded mx-0.5", theme.primary.text, theme.primary.light)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); alert(`Navigating to ${part}`); }}>{part}</span>;
           }

@@ -94,11 +94,22 @@ function calculateETA(
   return `${Math.ceil(remainingMs / 3600000)}h remaining`;
 }
 
+interface ThemeColors {
+  status: {
+    success: { bg: string };
+    warning: { bg: string };
+    error: { bg: string };
+  };
+  action: {
+    primary: { bg: string };
+  };
+}
+
 /**
  * Get progress bar color class
  */
 function getProgressColor(variant: string, theme: unknown): string {
-  const typedTheme = theme as any;
+  const typedTheme = theme as ThemeColors;
   switch (variant) {
     case 'success':
       return typedTheme.status.success.bg;
@@ -322,7 +333,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
         <div className="relative h-0 overflow-visible">
           <div className="absolute inset-0 pointer-events-none">
             {/* LAYOUT STABILITY: Fixed count for predictable layout */}
-            {[...Array(10)].map((_, i) => (
+            {[...Array(10)].map((_unused, i) => (
               <div
                 key={`confetti-${i}`}
                 className="absolute w-2 h-2 bg-emerald-500 rounded-full animate-confetti"

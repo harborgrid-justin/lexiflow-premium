@@ -193,7 +193,7 @@ export class CalendarApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
       return await apiClient.get<CalendarEvent[]>(url);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.getAll] Error:', error);
       throw new Error('Failed to fetch calendar events');
     }
@@ -211,7 +211,7 @@ export class CalendarApiService {
     this.validateId(id, 'getById');
     try {
       return await apiClient.get<CalendarEvent>(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.getById] Error:', error);
       throw new Error(`Failed to fetch calendar event with id: ${id}`);
     }
@@ -240,7 +240,7 @@ export class CalendarApiService {
     this.validateDate(data.endDate, 'endDate', 'create');
     try {
       return await apiClient.post<CalendarEvent>(this.baseUrl, data);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.create] Error:', error);
       throw new Error('Failed to create calendar event');
     }
@@ -266,7 +266,7 @@ export class CalendarApiService {
     }
     try {
       return await apiClient.put<CalendarEvent>(`${this.baseUrl}/${id}`, data);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.update] Error:', error);
       throw new Error(`Failed to update calendar event with id: ${id}`);
     }
@@ -284,7 +284,7 @@ export class CalendarApiService {
     this.validateId(id, 'delete');
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.delete] Error:', error);
       throw new Error(`Failed to delete calendar event with id: ${id}`);
     }
@@ -308,7 +308,7 @@ export class CalendarApiService {
     }
     try {
       return await apiClient.get<{ events: CalendarEvent[] }>(`${this.baseUrl}/upcoming?days=${days}`);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.getUpcoming] Error:', error);
       throw new Error('Failed to fetch upcoming events');
     }
@@ -328,7 +328,7 @@ export class CalendarApiService {
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}/statute-of-limitations?${queryString}` : `${this.baseUrl}/statute-of-limitations`;
       return await apiClient.get<CalendarEvent[]>(url);
-    } catch (error) {
+    } catch () {
       console.error('[CalendarApiService.getStatuteOfLimitations] Error:', error);
       throw new Error('Failed to fetch statute of limitations');
     }

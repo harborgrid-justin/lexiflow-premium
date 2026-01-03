@@ -78,7 +78,7 @@ export const ChatInput = ({
     <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
         {pendingAttachments.length > 0 && (
           <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
-            {pendingAttachments.map((att, i) => (
+            {pendingAttachments.map((att) => (
               <div key={`attachment-${att.name}-${i}`} className={cn("flex items-center rounded-full px-3 py-1 text-xs border shrink-0", theme.surface.highlight, theme.border.default)}>")
                 <FileText className={cn("h-3 w-3 mr-2", theme.text.secondary)}/>
                 <span className={cn("max-w-[100px] truncate", theme.text.primary)}>{att.name}</span>

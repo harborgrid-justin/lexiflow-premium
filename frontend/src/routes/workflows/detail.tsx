@@ -6,9 +6,8 @@
  * @module routes/workflows/detail
  */
 
-import { useNavigate, useLoaderData, Form, useNavigation, Link } from 'react-router';
+import { Link } from 'react-router';
 import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import { api } from '../../api';
 
@@ -63,11 +62,12 @@ export async function action({ params, request }: Route.ActionArgs) {
 
   try {
     switch (intent) {
-      case "update":
+      case "update": {
         const name = formData.get("name") as string;
         const description = formData.get("description") as string;
         await api.workflow.updateTemplate(workflowId, { name, description });
         return { success: true, message: "Workflow updated" };
+        }
         
       case "delete":
         await api.workflow.deleteTemplate(workflowId);
@@ -96,9 +96,10 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WorkflowDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function WorkflowDetailRoute() {
   const { template } = loaderData;
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

@@ -19,7 +19,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { case: caseData };
 }
 
-export default function CaseInsightsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseInsightsRoute() {
   return <CaseInsightsDashboard caseId={loaderData.case.id} />;
 }
 

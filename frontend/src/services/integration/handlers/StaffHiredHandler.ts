@@ -58,7 +58,7 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
     }
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     if (!emailRegex.test(staff.email)) {
       return 'Invalid email format for user provisioning';
     }

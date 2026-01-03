@@ -63,7 +63,7 @@ export class SchemaManagementApiService {
   async getTables(): Promise<SchemaTable[]> {
     try {
       return await apiClient.get<SchemaTable[]>('/schema/tables');
-    } catch (error) {
+    } catch () {
       console.error('[SchemaManagementApi] Error fetching tables:', error);
       return [];
     }
@@ -75,7 +75,7 @@ export class SchemaManagementApiService {
   async getTableColumns(tableName: string): Promise<unknown[]> {
     try {
       return await apiClient.get<unknown[]>(`/schema/tables/${tableName}/columns`);
-    } catch (error) {
+    } catch () {
       console.error('[SchemaManagementApi] Error fetching columns:', error);
       return [];
     }
@@ -89,7 +89,7 @@ export class SchemaManagementApiService {
   async getMigrations(): Promise<Migration[]> {
     try {
       return await apiClient.get<Migration[]>('/schema/migrations');
-    } catch (error) {
+    } catch () {
       console.error('[SchemaManagementApi] Error fetching migrations:', error);
       return [];
     }
@@ -129,7 +129,7 @@ export class SchemaManagementApiService {
   async getSnapshots(): Promise<Snapshot[]> {
     try {
       return await apiClient.get<Snapshot[]>('/schema/snapshots');
-    } catch (error) {
+    } catch () {
       console.error('[SchemaManagementApi] Error fetching snapshots:', error);
       return [];
     }

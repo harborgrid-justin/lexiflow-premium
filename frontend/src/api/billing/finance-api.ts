@@ -150,7 +150,7 @@ export class BillingApiService {
             }
             const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries');
             return Array.isArray(response) ? response : (response.data || []);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.getTimeEntries] Error:', error);
             throw new Error('Failed to fetch time entries');
         }
@@ -168,7 +168,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.getTimeEntryById] Error:', error);
             throw new Error(`Failed to fetch time entry with id: ${id}`);
         }
@@ -229,7 +229,7 @@ export class BillingApiService {
             });
 
             return await apiClient.post<TimeEntry>('/billing/time-entries', createDto);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.addTimeEntry] Error:', error);
             throw new Error('Failed to create time entry');
         }
@@ -247,7 +247,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<TimeEntry[]>('/billing/time-entries/bulk', { entries });
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.addBulkTimeEntries] Error:', error);
             throw new Error('Failed to create bulk time entries');
         }
@@ -267,7 +267,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}`, entry);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.updateTimeEntry] Error:', error);
             throw new Error(`Failed to update time entry with id: ${id}`);
         }
@@ -285,7 +285,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}/approve`, {});
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.approveTimeEntry] Error:', error);
             throw new Error(`Failed to approve time entry with id: ${id}`);
         }
@@ -305,7 +305,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<TimeEntry>(`/billing/time-entries/${id}/bill`, { invoiceId });
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.billTimeEntry] Error:', error);
             throw new Error(`Failed to bill time entry with id: ${id}`);
         }
@@ -324,7 +324,7 @@ export class BillingApiService {
         try {
             const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/case/${caseId}/unbilled`);
             return response.data;
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.getUnbilledTimeEntries] Error:', error);
             throw new Error(`Failed to fetch unbilled time entries for case: ${caseId}`);
         }
@@ -342,7 +342,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.get<{ total: number; billable: number; unbilled: number }>(`/billing/time-entries/case/${caseId}/totals`);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.getTimeEntryTotals] Error:', error);
             throw new Error(`Failed to fetch time entry totals for case: ${caseId}`);
         }
@@ -360,7 +360,7 @@ export class BillingApiService {
 
         try {
             await apiClient.delete(`/billing/time-entries/${id}`);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.deleteTimeEntry] Error:', error);
             throw new Error(`Failed to delete time entry with id: ${id}`);
         }
@@ -381,7 +381,7 @@ export class BillingApiService {
         try {
             const response = await apiClient.get<PaginatedResponse<unknown>>('/billing/invoices', filters);
             return response.data;
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getInvoices] Invoices endpoint not available, returning empty array');
             return [];
         }
@@ -399,7 +399,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<unknown>('/billing/invoices', data);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.createInvoice] Error:', error);
             throw new Error('Failed to create invoice');
         }
@@ -419,7 +419,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.put<unknown>(`/billing/invoices/${id}`, data);
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.updateInvoice] Error:', error);
             throw new Error(`Failed to update invoice with id: ${id}`);
         }
@@ -437,7 +437,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.post<unknown>(`/billing/invoices/${id}/send`, {});
-        } catch (error) {
+        } catch () {
             console.error('[BillingApiService.sendInvoice] Error:', error);
             throw new Error(`Failed to send invoice with id: ${id}`);
         }
@@ -459,7 +459,7 @@ export class BillingApiService {
             // Backend returns array directly, not paginated
             const response = await apiClient.get<TrustAccount[]>('/billing/trust-accounts', filters);
             return Array.isArray(response) ? response : [];
-        } catch (error) {
+        } catch {
             // Fallback to empty array if endpoint doesn't exist yet
             console.warn('[BillingApiService.getTrustAccounts] Trust accounts endpoint not available, returning empty array');
             return [];
@@ -528,7 +528,7 @@ export class BillingApiService {
                 filters
             );
             return Array.isArray(response) ? response : [];
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getTrustTransactions] Transactions endpoint not available, returning empty array');
             return [];
         }
@@ -616,7 +616,7 @@ export class BillingApiService {
     async getLowBalanceTrustAccounts(threshold?: number): Promise<TrustAccount[]> {
         try {
             return await apiClient.get<TrustAccount[]>('/billing/trust-accounts/low-balance', { threshold });
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getLowBalanceTrustAccounts] Endpoint not available, returning empty array');
             return [];
         }
@@ -631,7 +631,7 @@ export class BillingApiService {
     async getWIPStats(): Promise<unknown[]> {
         try {
             return await apiClient.get<unknown[]>('/billing/wip-stats');
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getWIPStats] WIP stats endpoint not available, returning empty array');
             return [];
         }
@@ -646,7 +646,7 @@ export class BillingApiService {
     async getRealizationStats(): Promise<unknown> {
         try {
             return await apiClient.get<unknown>('/billing/realization-stats');
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getRealizationStats] Realization stats endpoint not available, returning default');
             return [
                 { name: 'Billed', value: 0, color: '#10b981' },
@@ -667,7 +667,7 @@ export class BillingApiService {
 
         try {
             return await apiClient.get<unknown[]>(`/billing/rates/${timekeeperId}`);
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getRates] Rates endpoint not available, returning empty array');
             return [];
         }
@@ -682,7 +682,7 @@ export class BillingApiService {
     async getOverviewStats(): Promise<{ realization: number; totalBilled: number; month: string }> {
         try {
             return await apiClient.get<{ realization: number; totalBilled: number; month: string }>('/billing/overview-stats');
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getOverviewStats] Overview stats endpoint not available, returning default');
             return { realization: 92.4, totalBilled: 482000, month: 'March 2024' };
         }
@@ -698,7 +698,7 @@ export class BillingApiService {
         try {
             const response = await apiClient.get<PaginatedResponse<unknown>>('/clients', { sortBy: 'totalBilled', sortOrder: 'desc', limit: 4 });
             return response.data;
-        } catch (error) {
+        } catch {
             console.warn('[BillingApiService.getTopAccounts] Top accounts endpoint not available, returning empty array');
             return [];
         }

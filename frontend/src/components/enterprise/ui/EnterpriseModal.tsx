@@ -210,7 +210,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
       try {
         await onComplete?.();
         handleClose();
-      } catch (error) {
+      } catch () {
         console.error('Wizard completion error:', error);
       } finally {
         setIsProcessing(false);
@@ -229,7 +229,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
     try {
       await onConfirm?.();
       handleClose();
-    } catch (error) {
+    } catch () {
       console.error('Confirmation error:', error);
     } finally {
       setIsProcessing(false);

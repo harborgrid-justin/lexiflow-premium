@@ -28,7 +28,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement DAF data fetching
   // const funds = await api.daf.getFunds();
   // const grants = await api.daf.getGrants();
@@ -63,8 +63,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DAFIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DAFIndexRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

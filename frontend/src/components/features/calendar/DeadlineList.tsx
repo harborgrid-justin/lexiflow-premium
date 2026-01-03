@@ -40,9 +40,10 @@ export function DeadlineList({
     switch (filter) {
       case 'upcoming':
         return eventDate >= today && !event.completed;
-      case 'today':
+      case 'today': {
         const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
         return eventDay.getTime() === today.getTime();
+        }
       case 'overdue':
         return eventDate < today && !event.completed;
       default:

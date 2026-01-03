@@ -111,7 +111,7 @@ export const CollaborationService = {
 
       console.log(`[CollaborationService] Invited user ${userId} to workspace ${workspaceId}`);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   },
@@ -162,7 +162,7 @@ export const CollaborationService = {
       await db.put(SHARES_STORE, share);
       console.log(`[CollaborationService] Shared ${resourceId} with ${userId}`);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   },

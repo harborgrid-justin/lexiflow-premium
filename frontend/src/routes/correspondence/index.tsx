@@ -28,7 +28,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement correspondence fetching
   // const url = new URL(request.url);
   // const filter = url.searchParams.get("filter") || "all";
@@ -64,8 +64,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CorrespondenceIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function CorrespondenceIndexRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

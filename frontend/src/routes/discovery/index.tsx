@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -29,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement discovery data fetching
   // const url = new URL(request.url);
   // const caseId = url.searchParams.get("caseId");
@@ -65,8 +65,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DiscoveryIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DiscoveryIndexRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   // Import the DiscoveryPlatform component dynamically
   const DiscoveryPlatform = React.lazy(() =>

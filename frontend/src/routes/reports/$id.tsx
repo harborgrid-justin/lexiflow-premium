@@ -95,7 +95,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { report: mockReport };
 }
 
-export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) {
+export default function ReportViewerRoute() {
   const { report } = loaderData;
   const [isExporting, setIsExporting] = useState(false);
 
@@ -126,7 +126,7 @@ export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) 
           }));
           await exportToExcel(excelData, [], `${report.name}-${Date.now()}.xlsx`);
           break;
-        case 'csv':
+        case 'csv': {
           const csvData = Object.entries(report.data.summary).map(([key, value]) => ({
             Metric: key.replace(/([A-Z])/g, ' $1').trim(),
             Value: value,
@@ -137,6 +137,7 @@ export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) 
           ];
           await exportToCSV(csvData, columns, `${report.name}-${Date.now()}.csv`);
           break;
+          }
       }
     } catch (error) {
       console.error('Export failed:', error);

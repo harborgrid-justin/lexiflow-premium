@@ -6,19 +6,19 @@
 
 import type { Route } from "./+types/index";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Document Drafting - LexiFlow" },
     { name: "description", content: "Draft and assemble legal documents" },
   ];
 }
 
-export async function loader({}: Route.LoaderArgs) {
+export async function loader(_args: Route.LoaderArgs) {
   // TODO: Fetch drafting templates from API
   return { data: null };
 }
 
-export default function DraftingIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function DraftingIndexRoute() {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Document Drafting</h1>

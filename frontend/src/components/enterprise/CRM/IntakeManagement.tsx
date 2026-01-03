@@ -509,7 +509,7 @@ export const IntakeManagement: React.FC = () => {
                   <div>
                     <p className={cn("text-xs font-medium mb-2", theme.text.tertiary)}>Matched Clients</p>
                     <ul className="space-y-1">
-                      {result.matchedClients.map((client, i) => (
+                      {result.matchedClients.map((client) => (
                         <li key={i} className={cn("text-sm", theme.text.primary)}>{client}</li>
                       ))}
                     </ul>
@@ -519,7 +519,7 @@ export const IntakeManagement: React.FC = () => {
                   <div>
                     <p className={cn("text-xs font-medium mb-2", theme.text.tertiary)}>Matched Matters</p>
                     <ul className="space-y-1">
-                      {result.matchedMatters.map((matter, i) => (
+                      {result.matchedMatters.map((matter) => (
                         <li key={i} className={cn("text-sm", theme.text.primary)}>{matter}</li>
                       ))}
                     </ul>
@@ -529,7 +529,7 @@ export const IntakeManagement: React.FC = () => {
                   <div>
                     <p className={cn("text-xs font-medium mb-2", theme.text.tertiary)}>Matched Parties</p>
                     <ul className="space-y-1">
-                      {result.matchedParties.map((party, i) => (
+                      {result.matchedParties.map((party) => (
                         <li key={i} className={cn("text-sm", theme.text.primary)}>{party}</li>
                       ))}
                     </ul>

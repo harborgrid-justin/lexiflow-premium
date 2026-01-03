@@ -34,16 +34,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   const trustApi = new TrustAccountsApiService();
 
   try {
-    const accounts = await trustApi.getAll({
+    const _accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: status as any || undefined,
+      status: (status as 'active' | 'inactive' | 'closed') || undefined,
     });
 
     return {
       accounts,
       filters: { clientId, status },
     };
-  } catch (error) {
+  } catch {
     console.error('Failed to load trust accounts:', error);
     return {
       accounts: [],
@@ -62,7 +62,7 @@ export async function action({ request }: Route.ActionArgs) {
   const trustApi = new TrustAccountsApiService();
 
   switch (intent) {
-    case "deposit":
+    case "deposit": {
       const depositAccountId = formData.get("accountId") as string;
       const depositData = {
         amount: parseFloat(formData.get("amount") as string),
@@ -75,11 +75,12 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await trustApi.deposit(depositAccountId, depositData);
         return { success: true, message: "Deposit recorded" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to record deposit" };
       }
+    }
 
-    case "withdrawal":
+    case "withdrawal": {
       const withdrawAccountId = formData.get("accountId") as string;
       const withdrawData = {
         amount: parseFloat(formData.get("amount") as string),
@@ -87,16 +88,17 @@ export async function action({ request }: Route.ActionArgs) {
         description: formData.get("description") as string,
         checkNumber: formData.get("checkNumber") as string || undefined,
         payeeName: formData.get("payeeName") as string,
-        purpose: formData.get("purpose") as any,
+        purpose: formData.get("purpose") as 'payment_to_client' | 'payment_to_vendor' | 'fee_transfer' | 'other',
       };
       try {
         await trustApi.withdraw(withdrawAccountId, withdrawData);
         return { success: true, message: "Withdrawal recorded" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to record withdrawal" };
       }
+    }
 
-    case "reconcile":
+    case "reconcile": {
       const reconcileAccountId = formData.get("accountId") as string;
       const reconcileData = {
         reconciliationDate: formData.get("reconciliationDate") as string,
@@ -109,9 +111,10 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await trustApi.reconcile(reconcileAccountId, reconcileData);
         return { success: true, message: "Reconciliation completed" };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to complete reconciliation" };
       }
+    }
 
     default:
       return { success: false, error: "Invalid action" };
@@ -123,7 +126,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function TrustAccountsRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { accounts, filters } = loaderData;
+  const { accounts: _accounts, filters: _filters } = loaderData;
 
   return (
     <div className="p-8">

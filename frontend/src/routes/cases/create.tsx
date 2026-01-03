@@ -21,7 +21,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Create New Case',
     description: 'Create a new legal case or matter in LexiFlow',
@@ -35,7 +35,7 @@ export function meta({}: Route.MetaArgs) {
 /**
  * Pre-fetch reference data for case creation form
  */
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Add auth check
   // const user = await getUser(request);
   // if (!user) throw redirect("/login");
@@ -94,6 +94,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function CreateCaseRoute({ loaderData, actionData }: Route.ComponentProps) {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
 
   return (
     <div className="container mx-auto p-6">

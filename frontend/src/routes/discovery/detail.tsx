@@ -75,7 +75,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DiscoveryDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function DiscoveryDetailRoute() {
   const navigate = useNavigate();
 
   return (

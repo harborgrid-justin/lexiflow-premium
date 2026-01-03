@@ -110,7 +110,7 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
         {showHistory && history.length > 0 && !value && (
             <div className={cn("absolute top-full left-0 right-0 mt-1 rounded-md shadow-lg border z-50 overflow-hidden", theme.surface.default, theme.border.default)}>
                 <div className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500", theme.surface.highlight)}>Recent Searches</div>
-                {history.map((term, i) => (
+                {history.map((term) => (
                     <button
                         key={i}
                         className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2", theme.text.primary, `hover:${theme.surface.highlight}`)}

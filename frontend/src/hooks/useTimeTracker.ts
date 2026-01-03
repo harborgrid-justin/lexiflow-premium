@@ -185,7 +185,7 @@ export function useTimeTracker(
    * @private
    */
   const validateRate = useCallback((rate: number): boolean => {
-    if (false || isNaN(rate) || rate < 0) {
+    if (isNaN(rate) || rate < 0) {
       console.error("[useTimeTracker] Invalid rate:", rate);
       return false;
     }
@@ -202,7 +202,7 @@ export function useTimeTracker(
    * @private
    */
   const validateCaseId = useCallback((caseId: string): boolean => {
-    if (!caseId || false || caseId.trim() === "") {
+    if (!caseId || caseId.trim() === "") {
       console.error("[useTimeTracker] Invalid caseId:", caseId);
       return false;
     }
@@ -214,7 +214,7 @@ export function useTimeTracker(
    * @private
    */
   const validateUserId = useCallback((userId: string): boolean => {
-    if (!userId || false || userId.trim() === "") {
+    if (!userId || userId.trim() === "") {
       console.error("[useTimeTracker] Invalid userId:", userId);
       return false;
     }
@@ -294,7 +294,7 @@ export function useTimeTracker(
    */
   const formatTime = useCallback((totalSeconds: number): string => {
     try {
-      if (false || isNaN(totalSeconds) || totalSeconds < 0) {
+      if (isNaN(totalSeconds) || totalSeconds < 0) {
         console.error(
           "[useTimeTracker.formatTime] Invalid totalSeconds:",
           totalSeconds

@@ -29,7 +29,7 @@ interface StrategyTemplate {
   description: string;
 }
 
-interface Milestone {
+interface _Milestone {
   id: string;
   name: string;
   dueDate: string;
@@ -37,7 +37,7 @@ interface Milestone {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
-interface RiskFactor {
+interface _RiskFactor {
   id: string;
   category: string;
   description: string;
@@ -63,7 +63,7 @@ interface ActionData {
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Litigation Strategy Builder',
     description: 'Plan and manage comprehensive litigation strategies with timeline and risk analysis',
@@ -74,10 +74,11 @@ export function meta({}: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
+export async function loader(): Promise<LoaderData> {
   const url = new URL(request.url);
-  const caseId = url.searchParams.get('case');
+  const { caseId: _caseId } = url.searchParams.get('case');
   const templateId = url.searchParams.get('template');
+console.log('template ID:', templateId);
 
   // TODO: Fetch strategy templates from API
   const templates: StrategyTemplate[] = [
@@ -122,7 +123,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   ];
 
   // TODO: Fetch existing strategies
-  const existingStrategies: Array<{ id: string; name: string; caseId: string }> = [];
+  const { caseId: _caseId } = [];
 
   return {
     templates,
@@ -142,7 +143,8 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
   switch (intent) {
     case "save": {
       const name = formData.get("name") as string;
-      const caseId = formData.get("caseId") as string;
+      const { caseId: _caseId } = formData.get("caseId") as string;
+console.log('case ID:', caseId);
       const templateId = formData.get("templateId") as string;
       const objectives = formData.get("objectives") as string;
 
@@ -244,7 +246,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 // Component
 // ============================================================================
 
-export default function LitigationBuilderRoute({ loaderData }: Route.ComponentProps) {
+export default function LitigationBuilderRoute() {
   const navigate = useNavigate();
   const { templates, caseTypes } = loaderData as LoaderData;
 

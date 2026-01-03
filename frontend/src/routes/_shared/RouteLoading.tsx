@@ -154,7 +154,7 @@ export const RouteLoadingSkeleton = memo(function RouteLoadingSkeleton({
 
       {/* Content Grid Skeleton */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 6 }).map((_) => (
           <CardSkeleton key={i} />
         ))}
       </div>
@@ -215,7 +215,7 @@ export const TableSkeleton = memo(function TableSkeleton({
     >
       {/* Header Row */}
       <div className="flex gap-4 border-b border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
-        {Array.from({ length: columns }).map((_, i) => (
+        {Array.from({ length: columns }).map((_) => (
           <SkeletonBase key={i} className="h-4 flex-1" />
         ))}
       </div>
@@ -296,7 +296,7 @@ export const DetailPageSkeleton = memo(function DetailPageSkeleton({
           <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
             <SkeletonBase className="mb-4 h-6 w-32" />
             <div className="grid gap-4 sm:grid-cols-2">
-              {Array.from({ length: 6 }).map((_, i) => (
+              {Array.from({ length: 6 }).map((_) => (
                 <div key={i}>
                   <SkeletonBase className="mb-2 h-4 w-20" />
                   <SkeletonBase className="h-5 w-full" />

@@ -25,7 +25,7 @@ export const DocumentTable = ({
   const { theme } = useTheme();
   const [sortField, setSortField] = useState<keyof LegalDocument>('lastModified');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Concurrent-safe: Non-urgent sort updates wrapped in transition (Principle #3)
   // Keeps table responsive during sorting operations

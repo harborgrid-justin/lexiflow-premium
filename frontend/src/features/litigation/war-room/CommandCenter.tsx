@@ -139,7 +139,7 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
             <Card title={<div className="flex items-center gap-2"><AlertCircle className="h-5 w-5" /> Critical Alerts</div>}>
                     <div className="space-y-3">
                         {/* Skeleton loaders for alerts */}
-                        {[...Array(2)].map((_, i) => (
+                        {[...Array(2)].map((_) => (
                             <div key={`alert-skeleton-${i}`} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
                                 <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
                                 <div className="flex-1 space-y-2">

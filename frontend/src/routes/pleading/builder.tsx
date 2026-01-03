@@ -54,7 +54,7 @@ interface ActionData {
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Pleading Builder',
     description: 'Create court-ready legal pleadings with proper formatting and structure',
@@ -69,6 +69,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   const url = new URL(request.url);
   const templateId = url.searchParams.get('template');
   const caseId = url.searchParams.get('case');
+  console.log('template ID:', templateId, 'case ID:', caseId);
 
   // TODO: Fetch templates from API based on jurisdiction
   const templates: PleadingTemplate[] = [
@@ -182,8 +183,6 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
     }
 
     case "preview": {
-      const content = formData.get("content") as string;
-
       // TODO: Generate PDF preview
       console.log('Generating preview');
 
@@ -229,7 +228,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 
 export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
-  const { templates, courts, recentPleadings } = loaderData as LoaderData;
+  const { templates, courts } = loaderData;
 
   const handleCancel = () => {
     navigate('/pleading');

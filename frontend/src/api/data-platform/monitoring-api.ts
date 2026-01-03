@@ -56,7 +56,7 @@ export class MonitoringApiService {
   async getHealth(): Promise<SystemHealth> {
     try {
       return await apiClient.get<SystemHealth>('/monitoring/health');
-    } catch (error) {
+    } catch {
       return {
         status: 'degraded',
         cpuUsage: 0,
@@ -78,7 +78,7 @@ export class MonitoringApiService {
   }): Promise<{ data: PerformanceMetric[] }> {
     try {
       return await apiClient.get('/monitoring/metrics', filters);
-    } catch (error) {
+    } catch {
       return { data: [] };
     }
   }
@@ -101,7 +101,7 @@ export class MonitoringApiService {
   async getAlerts(filters?: Record<string, unknown>): Promise<PaginatedResponse<SystemAlert>> {
     try {
       return await apiClient.get<PaginatedResponse<SystemAlert>>('/monitoring/alerts', filters);
-    } catch (error) {
+    } catch {
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }

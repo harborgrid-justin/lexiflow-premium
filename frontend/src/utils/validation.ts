@@ -214,7 +214,7 @@ export const ValidationService = {
         errors,
         warnings
       };
-    } catch (error) {
+    } catch () {
       console.error('[ValidationService.validatePleadingCompleteness] Error:', error);
       return {
         valid: false,
@@ -307,7 +307,7 @@ export const ValidationService = {
         errors,
         warnings
       };
-    } catch (error) {
+    } catch () {
       console.error('[ValidationService.validateTemplate] Error:', error);
       return {
         valid: false,
@@ -414,7 +414,7 @@ export const ValidationService = {
         errors,
         warnings
       };
-    } catch (error) {
+    } catch () {
       console.error('[ValidationService.validateSectionContent] Error:', error);
       return {
         valid: false,
@@ -448,7 +448,7 @@ export const ValidationService = {
       ValidationService.validateArray(sections, 'sections', 'validateSections');
 
       return sections.map(section => ValidationService.validateSectionContent(section));
-    } catch (error) {
+    } catch () {
       console.error('[ValidationService.validateSections] Error:', error);
       return [{
         valid: false,

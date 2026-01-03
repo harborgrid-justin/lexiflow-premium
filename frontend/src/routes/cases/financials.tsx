@@ -24,7 +24,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { case: caseData, billing };
 }
 
-export default function CaseFinancialsRoute({ loaderData }: Route.ComponentProps) {
+export default function CaseFinancialsRoute() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
       <CaseFinancialsCenter caseId={loaderData.case.id} />

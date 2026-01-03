@@ -104,8 +104,9 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DocumentDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function DocumentDetailRoute() {
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const { document, versions, annotations } = loaderData;
   const [activeTab, setActiveTab] = useState<'viewer' | 'metadata' | 'versions' | 'annotations'>('viewer');
 

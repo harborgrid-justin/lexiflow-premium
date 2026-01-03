@@ -94,7 +94,7 @@ export function DataLakeExplorer(): React.ReactElement {
 
             <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surface.highlight, theme.border.default)}>
                 <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4" /></button>
-                {currentPath.slice(1).map((folder, i) => (
+                {currentPath.slice(1).map((folder) => (
                     <React.Fragment key={folder}>
                         <ChevronRight className="h-4 w-4 text-slate-400" />
                         <button

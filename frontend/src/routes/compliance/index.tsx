@@ -91,7 +91,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ComplianceIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function ComplianceIndexRoute() {
   const { alerts, pendingReports, conflictChecks } = loaderData;
 
   return (

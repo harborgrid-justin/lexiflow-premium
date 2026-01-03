@@ -19,7 +19,7 @@ import { createMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Firm Operations',
     description: 'Manage practice operations, staff, and resources',
@@ -30,7 +30,7 @@ export function meta({}: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // TODO: Implement practice data fetching
   // const [staff, resources, metrics] = await Promise.all([
   //   api.practice.getStaff(),
@@ -50,7 +50,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Component
 // ============================================================================
 
-export default function PracticeIndexRoute({ loaderData }: Route.ComponentProps) {
+export default function PracticeIndexRoute() {
   const { staffCount, activeMatters, utilizationRate, pendingTasks } = loaderData;
 
   return (

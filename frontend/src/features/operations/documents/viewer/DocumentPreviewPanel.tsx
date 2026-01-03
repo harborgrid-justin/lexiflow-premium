@@ -123,7 +123,7 @@ export function DocumentPreviewPanel({
     const redactedSummary = useMemo(() => {
         if (!document?.summary) return '';
         if (!isRedactionMode) return document.summary;
-        return document.summary.replace(/(\b[A-Z][a-z]*\b)|(\d{2}\/\d{2}\/\d{4})|([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g, '██████');
+        return document.summary.replace(/(\b[A-Z][a-z]*\b)|(\d{2}\/\d{2}\/\d{4})|([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)/g, '██████');
     }, [document?.summary, isRedactionMode]);
 
     if (!document) return <div className="hidden md:flex flex-col items-center justify-center h-full p-6 text-center text-slate-400"><AlertCircle className="h-8 w-8 opacity-50 mb-2" /><p className="text-sm">No document selected</p></div>;

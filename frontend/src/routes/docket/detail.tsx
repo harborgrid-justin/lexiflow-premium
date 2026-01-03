@@ -75,7 +75,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function DocketDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function DocketDetailRoute() {
   const { item } = loaderData;
   const navigate = useNavigate();
 

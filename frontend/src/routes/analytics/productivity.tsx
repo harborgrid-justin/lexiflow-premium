@@ -10,20 +10,19 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
 import {
-  BarChart, Bar, LineChart, Line, AreaChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
+  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
 } from 'recharts';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Productivity Analytics',
     description: 'Team utilization and performance metrics',
   });
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   return {
     metrics: {
       totalHours: 3842,
@@ -35,7 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function ProductivityAnalyticsRoute({ loaderData }: Route.ComponentProps) {
+export default function ProductivityAnalyticsRoute() {
   const { metrics } = loaderData;
 
   const [dateRange, setDateRange] = useState({

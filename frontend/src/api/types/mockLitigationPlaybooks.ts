@@ -163,7 +163,7 @@ export const LITIGATION_PLAYBOOKS: Playbook[] = [
     strategyNotes: 'Defeat commonality. Show individualized inquiry is required for liability.'
   },
   // Adding placeholder data for the rest to ensure valid objects
-  ...Array.from({ length: 45 }).map((_, i) => ({
+  ...Array.from({ length: 45 }).map((_) => ({
       id: `pb-gen-${i+20}`,
       title: `General Litigation Strategy ${i+1}`,
       category: 'General',

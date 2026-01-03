@@ -60,7 +60,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
               status={msg.status}
               isPrivileged={msg.isPrivileged}
             >
-              {msg.attachments && msg.attachments.map((att, i) => (
+              {msg.attachments && msg.attachments.map((att) => (
                 <div key={`msg-${msg.id}-att-${att.name}-${i}`} className="mt-2 w-full max-w-sm">
                   <FileAttachment
                     name={att.name}

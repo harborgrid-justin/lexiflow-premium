@@ -43,7 +43,7 @@ export const PerpetuateTestimony: React.FC = () => {
                     <div className="text-center py-8 text-slate-400 italic">No active Rule 27 petitions.</div>
                 ) : (
                     <div className="space-y-2">
-                        {petitions.map((p, i) => (
+                        {petitions.map((p) => (
                             <div key={`petition-${p.title}-${p.date}`} className="p-3 border rounded">
                                 <p className="font-bold">{p.title}</p>
                                 <p className="text-xs text-slate-500">{p.date}</p>

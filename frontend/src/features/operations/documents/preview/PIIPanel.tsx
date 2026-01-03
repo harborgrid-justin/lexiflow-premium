@@ -31,7 +31,7 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
             const findings: PIIEntity[] = [];
 
             // Mock findings based on content patterns
-            const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/g;
+            const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+/g;
             const phoneRegex = /\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g;
 
             let match;

@@ -46,7 +46,7 @@ import { AppProviders } from "@/providers/AppProviders";
  * Global meta tags for the application
  * These are merged with route-specific meta tags
  */
-export function meta({ }: Route.MetaArgs) {
+export function meta(_args: Route.MetaArgs) {
   return [
     { title: "LexiFlow AI Legal Suite" },
     {

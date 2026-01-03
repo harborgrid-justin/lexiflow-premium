@@ -198,7 +198,7 @@ export function createTypedRepositories<
   const result = {} as { [K in keyof T]: Repository<BaseEntity> };
 
   for (const key in config) {
-    if (config.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(config, key)) {
       result[key] = createRepository<BaseEntity>(config[key]);
     }
   }

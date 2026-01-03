@@ -154,7 +154,7 @@ const validateField = async (
         break;
 
       case 'email':
-        isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value));
+        isValid = /^[^\s@]+@[^\s@]+.[^\s@]+$/.test(String(value));
         message = rule.message || 'Invalid email address';
         break;
 
@@ -250,7 +250,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
       try {
         await onAutoSave(formData);
         setLastSaved(new Date());
-      } catch (error) {
+      } catch () {
         console.error('Auto-save error:', error);
       } finally {
         setIsSaving(false);
@@ -355,7 +355,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
       setIsSubmitting(true);
       try {
         await onSubmit(formData);
-      } catch (error) {
+      } catch () {
         console.error('Form submission error:', error);
       } finally {
         setIsSubmitting(false);

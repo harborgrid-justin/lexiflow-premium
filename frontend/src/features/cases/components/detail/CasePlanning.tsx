@@ -16,7 +16,7 @@ import { Layers, Plus, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { PlanningSidebar } from './planning/PlanningSidebar';
-import { ScheduleTimeline } from './planning/ScheduleTimeline';
+import { _ScheduleTimeline } from './planning/ScheduleTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

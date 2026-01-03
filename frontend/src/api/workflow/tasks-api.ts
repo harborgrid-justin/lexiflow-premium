@@ -191,7 +191,7 @@ export class TasksApiService {
         ? `${this.baseUrl}?${queryString}`
         : this.baseUrl;
       return await apiClient.get<WorkflowTask[]>(endpoint);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getAll] Error:", error);
       throw new Error("Failed to fetch tasks");
     }
@@ -209,7 +209,7 @@ export class TasksApiService {
     this.validateId(id, "getById");
     try {
       return await apiClient.get<WorkflowTask>(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getById] Error:", error);
       throw new Error(`Failed to fetch task with id: ${id}`);
     }
@@ -236,7 +236,7 @@ export class TasksApiService {
     }
     try {
       return await apiClient.post<WorkflowTask>(this.baseUrl, data);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.create] Error:", error);
       throw new Error("Failed to create task");
     }
@@ -256,7 +256,7 @@ export class TasksApiService {
     this.validateObject(data, "data", "update");
     try {
       return await apiClient.put<WorkflowTask>(`${this.baseUrl}/${id}`, data);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.update] Error:", error);
       throw new Error(`Failed to update task with id: ${id}`);
     }
@@ -276,7 +276,7 @@ export class TasksApiService {
     this.validateObject(data, "data", "patch");
     try {
       return await apiClient.patch<WorkflowTask>(`${this.baseUrl}/${id}`, data);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.patch] Error:", error);
       throw new Error(`Failed to patch task with id: ${id}`);
     }
@@ -294,7 +294,7 @@ export class TasksApiService {
     this.validateId(id, "delete");
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.delete] Error:", error);
       throw new Error(`Failed to delete task with id: ${id}`);
     }
@@ -368,7 +368,7 @@ export class TasksApiService {
         ? `${this.baseUrl}/statistics?${queryString}`
         : `${this.baseUrl}/statistics`;
       return await apiClient.get<TaskStatistics>(url);
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getStatistics] Error:", error);
       throw new Error("Failed to fetch task statistics");
     }
@@ -403,7 +403,7 @@ export class TasksApiService {
         `${this.baseUrl}/bulk/status`,
         { taskIds, status }
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.bulkUpdateStatus] Error:", error);
       throw new Error("Failed to bulk update task status");
     }
@@ -432,7 +432,7 @@ export class TasksApiService {
         `${this.baseUrl}/bulk/assign`,
         { taskIds, assignedTo }
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.bulkAssign] Error:", error);
       throw new Error("Failed to bulk assign tasks");
     }
@@ -456,7 +456,7 @@ export class TasksApiService {
         `${this.baseUrl}/bulk/delete`,
         { taskIds }
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.bulkDelete] Error:", error);
       throw new Error("Failed to bulk delete tasks");
     }
@@ -479,7 +479,7 @@ export class TasksApiService {
       return await apiClient.get<WorkflowTask[]>(
         `${this.baseUrl}/${parentId}/subtasks`
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getSubtasks] Error:", error);
       throw new Error(`Failed to fetch subtasks for task: ${parentId}`);
     }
@@ -504,7 +504,7 @@ export class TasksApiService {
         `${this.baseUrl}/${parentId}/subtasks`,
         subtaskData
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.addSubtask] Error:", error);
       throw new Error(`Failed to add subtask to task: ${parentId}`);
     }
@@ -527,7 +527,7 @@ export class TasksApiService {
       return await apiClient.get<TaskComment[]>(
         `${this.baseUrl}/${taskId}/comments`
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getComments] Error:", error);
       throw new Error(`Failed to fetch comments for task: ${taskId}`);
     }
@@ -551,7 +551,7 @@ export class TasksApiService {
         `${this.baseUrl}/${taskId}/comments`,
         { content }
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.addComment] Error:", error);
       throw new Error(`Failed to add comment to task: ${taskId}`);
     }
@@ -574,7 +574,7 @@ export class TasksApiService {
       return await apiClient.get<TaskAttachment[]>(
         `${this.baseUrl}/${taskId}/attachments`
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getAttachments] Error:", error);
       throw new Error(`Failed to fetch attachments for task: ${taskId}`);
     }
@@ -603,7 +603,7 @@ export class TasksApiService {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.uploadAttachment] Error:", error);
       throw new Error(`Failed to upload attachment to task: ${taskId}`);
     }
@@ -626,7 +626,7 @@ export class TasksApiService {
       return await apiClient.get<TaskHistory[]>(
         `${this.baseUrl}/${taskId}/history`
       );
-    } catch (error) {
+    } catch () {
       console.error("[TasksApiService.getHistory] Error:", error);
       throw new Error(`Failed to fetch history for task: ${taskId}`);
     }

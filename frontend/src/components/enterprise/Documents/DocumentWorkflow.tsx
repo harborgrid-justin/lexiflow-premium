@@ -130,7 +130,7 @@ export function DocumentWorkflow({
       setShowCommentDialog(false);
       setComment('');
       setActiveStepId(null);
-    } catch (error) {
+    } catch () {
       console.error('Failed to submit step action:', error);
       alert('Failed to submit action. Please try again.');
     }

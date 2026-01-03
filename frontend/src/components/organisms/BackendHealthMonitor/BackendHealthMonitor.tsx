@@ -27,7 +27,7 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
       const healthData = await apiClient.checkSystemHealth();
       setHealth(healthData);
       setLastUpdate(new Date());
-    } catch (error) {
+    } catch () {
       console.error('Failed to check system health:', error);
     } finally {
       setIsLoading(false);

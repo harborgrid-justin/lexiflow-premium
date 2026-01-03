@@ -20,7 +20,7 @@ export const OptimisticInput: React.FC<OptimisticInputProps> = ({
 }) => {
   // Local state for immediate feedback
   const [localValue, setLocalValue] = useState(externalValue);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Sync local state if external value changes (e.g. reset form)
   // But ONLY if we are not currently pending an update to avoid race conditions/cursor jumps

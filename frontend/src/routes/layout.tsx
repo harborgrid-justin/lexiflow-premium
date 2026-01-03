@@ -55,7 +55,7 @@ export function meta({ }: Route.MetaArgs) {
  * - Pre-fetching common data
  * - Setting up server-side context
  */
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader() {
   // Check for authentication token in localStorage (client-side check)
   // Note: In SSR context, this would check cookies/headers
   if (typeof window !== 'undefined') {
@@ -97,6 +97,7 @@ export default function Layout() {
   // React Router hooks
   const location = useLocation();
   const navigate = useNavigate();
+console.log('useNavigate:', navigate);
   const { caseId } = useParams();
 
   // Auth state

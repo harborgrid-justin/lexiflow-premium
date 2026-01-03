@@ -138,6 +138,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
             </div>
         </>
     );
+console.log('content data:', content);
 
     return (
         <div className="flex flex-col h-full">

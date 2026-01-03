@@ -85,7 +85,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
       <div className={cn("p-5 flex-1 flex flex-col justify-center", theme.surface.highlight)}>
         <div className="space-y-3 relative">
           <div className={cn("absolute left-3 top-2 bottom-2 w-0.5 -z-10", theme.border.default)}></div>
-          {data.stages.slice(0, 4).map((stage, i) => (
+          {data.stages.slice(0, 4).map((stage) => (
             <div key={i} className="flex items-center gap-3">
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold z-10 border-2",

@@ -16,7 +16,7 @@
  * });
  * 
  * <div onKeyDown={nav.handleKeyDown}>
- *   {options.map((opt, i) => (
+ *   {options.map((opt) => (
  *     <div key={i} className={nav.focusedIndex === i ? 'focused' : ''}>
  *       {opt.label}
  *     </div>

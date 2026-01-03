@@ -326,9 +326,9 @@ export const AnalysisEngine = {
    */
   extractCitations: (text: string): string[] => {
     // Regex for common reporters (e.g., 410 U.S. 113, 24 F.3d 100, Cal.Rptr.2d)
-    const reporterRegex = /(\d+)\s+([a-zA-Z0-9\.\s]+?)\s+(\d+)/g;
+    const reporterRegex = /(\d+)\s+([a-zA-Z0-9.\s]+?)\s+(\d+)/g;
     // Regex for codes (e.g., 11 U.S.C. § 362)
-    const codeRegex = /(\d+)\s+U\.?S\.?C\.?(\s+§+\s+)?(\d+)/gi;
+    const codeRegex = /(\d+)\s+U.?S.?C.?(\s+§+\s+)?(\d+)/gi;
 
     const citations = new Set<string>();
 

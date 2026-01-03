@@ -106,7 +106,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
     const errors: FieldError[] = [];
 
     switch (step) {
-      case FormStep.ACCOUNT_INFO:
+      case FormStep.ACCOUNT_INFO: {
         if (!data.accountNumber?.trim()) {
           errors.push({ field: 'accountNumber', message: 'Account number is required' });
         }
@@ -125,8 +125,9 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           errors.push({ field: 'clientName', message: 'Client name is required' });
         }
         break;
+      }
 
-      case FormStep.BANK_DETAILS:
+      case FormStep.BANK_DETAILS: {
         if (!data.bankName?.trim()) {
           errors.push({ field: 'bankName', message: 'Bank name is required' });
         }
@@ -139,8 +140,9 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           errors.push({ field: 'routingNumber', message: 'Routing number must be 9 digits' });
         }
         break;
+      }
 
-      case FormStep.COMPLIANCE:
+      case FormStep.COMPLIANCE: {
         if (!data.jurisdiction?.trim()) {
           errors.push({ field: 'jurisdiction', message: 'Jurisdiction is required' });
         }
@@ -151,8 +153,9 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           errors.push({ field: 'ioltalProgramId', message: 'IOLTA program ID is required for IOLTA accounts' });
         }
         break;
+      }
 
-      case FormStep.SIGNATORIES:
+      case FormStep.SIGNATORIES: {
         if (!data.authorizedSignatories || data.authorizedSignatories.length === 0) {
           errors.push({ field: 'authorizedSignatories', message: 'At least one authorized signatory is required' });
         }
@@ -160,8 +163,9 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           errors.push({ field: 'primarySignatory', message: 'Primary signatory is required' });
         }
         break;
+      }
 
-      case FormStep.REVIEW:
+      case FormStep.REVIEW: {
         // Final validation - all previous steps must be valid
         const step1Validation = validateStep(FormStep.ACCOUNT_INFO, data);
         const step2Validation = validateStep(FormStep.BANK_DETAILS, data);
@@ -174,6 +178,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           ...step4Validation.errors
         );
         break;
+      }
     }
 
     return { isValid: errors.length === 0, errors };

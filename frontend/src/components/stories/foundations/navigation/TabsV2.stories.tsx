@@ -99,189 +99,203 @@ const matterManagementTabs: ParentTabItem[] = [
  * Default two-level tab navigation showing Matter Management structure.
  * Parent tabs use underline style, sub-tabs use pill style.
  */
-export const Default = {
-  render: (args: React.ComponentProps<typeof TabsV2>) => {
-    const [activeTab, setActiveTab] = useState('overview');
+const DefaultComponent = (args: React.ComponentProps<typeof TabsV2>) => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <div className="space-y-6">
-        <TabsV2
-          {...args}
-          tabs={matterManagementTabs}
-          activeTabId={activeTab}
-          onChange={setActiveTab}
-        />
+  return (
+    <div className="space-y-6">
+      <TabsV2
+        {...args}
+        tabs={matterManagementTabs}
+        activeTabId={activeTab}
+        onChange={setActiveTab}
+      />
 
-        <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2">Active Tab: {activeTab}</h3>
-          <p className="text-slate-600 dark:text-slate-400">
-            Content for the selected tab would render here.
-          </p>
-        </div>
+      <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">Active Tab: {activeTab}</h3>
+        <p className="text-slate-600 dark:text-slate-400">
+          Content for the selected tab would render here.
+        </p>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const Default = {
+  render: (args: React.ComponentProps<typeof TabsV2>) => <DefaultComponent {...args} />,
 };
 
 /**
  * Small size variant with more compact spacing and smaller text.
  */
-export const SmallSize = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
+const SmallSizeComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <TabsV2
-        tabs={matterManagementTabs}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-        size="sm"
-      />
-    );
-  },
+  return (
+    <TabsV2
+      tabs={matterManagementTabs}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+      size="sm"
+    />
+  );
+};
+
+export const SmallSize = {
+  render: () => <SmallSizeComponent />,
 };
 
 /**
  * Large size variant with more prominent spacing and larger text.
  */
-export const LargeSize = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
+const LargeSizeComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <TabsV2
-        tabs={matterManagementTabs}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-        size="lg"
-      />
-    );
-  },
+  return (
+    <TabsV2
+      tabs={matterManagementTabs}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+      size="lg"
+    />
+  );
+};
+
+export const LargeSize = {
+  render: () => <LargeSizeComponent />,
 };
 
 /**
  * Compact mode without the background container on sub-tabs.
  * Useful for tighter layouts.
  */
-export const CompactSubTabs = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
+const CompactSubTabsComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <TabsV2
-        tabs={matterManagementTabs}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-        compactSubTabs
-      />
-    );
-  },
+  return (
+    <TabsV2
+      tabs={matterManagementTabs}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+      compactSubTabs
+    />
+  );
+};
+
+export const CompactSubTabs = {
+  render: () => <CompactSubTabsComponent />,
 };
 
 /**
  * Demonstrates disabled parent tabs and sub-tabs.
  */
+const WithDisabledTabsComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const tabsWithDisabled: ParentTabItem[] = [
+    {
+      id: 'matters_group',
+      label: 'Matters',
+      icon: Briefcase,
+      subTabs: [
+        { id: 'overview', label: 'Overview Dashboard', icon: Eye },
+        { id: 'operations', label: 'Operations Center', icon: Activity, disabled: true },
+        { id: 'intake', label: 'New Matter Intake', icon: Plus },
+      ],
+    },
+    {
+      id: 'planning_group',
+      label: 'Planning',
+      icon: Settings,
+      disabled: true,
+      subTabs: [
+        { id: 'calendar', label: 'Matter Calendar', icon: Clock },
+        { id: 'financials', label: 'Financials', icon: DollarSign },
+      ],
+    },
+    {
+      id: 'analytics_group',
+      label: 'Analytics',
+      icon: BarChart3,
+      subTabs: [
+        { id: 'analytics', label: 'Analytics Dashboard', icon: TrendingUp },
+      ],
+    },
+  ];
+
+  return (
+    <TabsV2
+      tabs={tabsWithDisabled}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+    />
+  );
+};
+
 export const WithDisabledTabs = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
-
-    const tabsWithDisabled: ParentTabItem[] = [
-      {
-        id: 'matters_group',
-        label: 'Matters',
-        icon: Briefcase,
-        subTabs: [
-          { id: 'overview', label: 'Overview Dashboard', icon: Eye },
-          { id: 'operations', label: 'Operations Center', icon: Activity, disabled: true },
-          { id: 'intake', label: 'New Matter Intake', icon: Plus },
-        ],
-      },
-      {
-        id: 'planning_group',
-        label: 'Planning',
-        icon: Settings,
-        disabled: true,
-        subTabs: [
-          { id: 'calendar', label: 'Matter Calendar', icon: Clock },
-          { id: 'financials', label: 'Financials', icon: DollarSign },
-        ],
-      },
-      {
-        id: 'analytics_group',
-        label: 'Analytics',
-        icon: BarChart3,
-        subTabs: [
-          { id: 'analytics', label: 'Analytics Dashboard', icon: TrendingUp },
-        ],
-      },
-    ];
-
-    return (
-      <TabsV2
-        tabs={tabsWithDisabled}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-      />
-    );
-  },
+  render: () => <WithDisabledTabsComponent />,
 };
 
 /**
  * Shows badge support on sub-tabs for notifications or counts.
  */
+const WithBadgesComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const tabsWithBadges: ParentTabItem[] = [
+    {
+      id: 'matters_group',
+      label: 'Matters',
+      icon: Briefcase,
+      subTabs: [
+        { id: 'overview', label: 'Overview Dashboard', icon: Eye },
+        { id: 'operations', label: 'Operations Center', icon: Activity, badge: 12 },
+        { id: 'intake', label: 'New Matter Intake', icon: Plus, badge: '3 New' },
+      ],
+    },
+    {
+      id: 'planning_group',
+      label: 'Planning',
+      icon: Settings,
+      subTabs: [
+        { id: 'calendar', label: 'Matter Calendar', icon: Clock, badge: 7 },
+        { id: 'financials', label: 'Financials', icon: DollarSign },
+      ],
+    },
+  ];
+
+  return (
+    <TabsV2
+      tabs={tabsWithBadges}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+    />
+  );
+};
+
 export const WithBadges = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
-
-    const tabsWithBadges: ParentTabItem[] = [
-      {
-        id: 'matters_group',
-        label: 'Matters',
-        icon: Briefcase,
-        subTabs: [
-          { id: 'overview', label: 'Overview Dashboard', icon: Eye },
-          { id: 'operations', label: 'Operations Center', icon: Activity, badge: 12 },
-          { id: 'intake', label: 'New Matter Intake', icon: Plus, badge: '3 New' },
-        ],
-      },
-      {
-        id: 'planning_group',
-        label: 'Planning',
-        icon: Settings,
-        subTabs: [
-          { id: 'calendar', label: 'Matter Calendar', icon: Clock, badge: 7 },
-          { id: 'financials', label: 'Financials', icon: DollarSign },
-        ],
-      },
-    ];
-
-    return (
-      <TabsV2
-        tabs={tabsWithBadges}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-      />
-    );
-  },
+  render: () => <WithBadgesComponent />,
 };
 
 /**
  * Mobile-friendly responsive view with overflow scrolling.
  */
-export const ResponsiveView = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
+const ResponsiveViewComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <div className="max-w-md">
-        <TabsV2
-          tabs={matterManagementTabs}
-          activeTabId={activeTab}
-          onChange={setActiveTab}
-        />
-      </div>
-    );
-  },
+  return (
+    <div className="max-w-md">
+      <TabsV2
+        tabs={matterManagementTabs}
+        activeTabId={activeTab}
+        onChange={setActiveTab}
+      />
+    </div>
+  );
+};
+
+export const ResponsiveView = {
+  render: () => <ResponsiveViewComponent />,
   parameters: {
     viewport: {
       defaultViewport: 'mobile1',
@@ -292,20 +306,22 @@ export const ResponsiveView = {
 /**
  * Dark mode variant.
  */
-export const DarkMode = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
+const DarkModeComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-    return (
-      <div className="bg-slate-900 p-6 rounded-lg">
-        <TabsV2
-          tabs={matterManagementTabs}
-          activeTabId={activeTab}
-          onChange={setActiveTab}
-        />
-      </div>
-    );
-  },
+  return (
+    <div className="bg-slate-900 p-6 rounded-lg">
+      <TabsV2
+        tabs={matterManagementTabs}
+        activeTabId={activeTab}
+        onChange={setActiveTab}
+      />
+    </div>
+  );
+};
+
+export const DarkMode = {
+  render: () => <DarkModeComponent />,
   parameters: {
     backgrounds: { default: 'dark' },
   },
@@ -314,63 +330,67 @@ export const DarkMode = {
 /**
  * Minimal tab structure with single parent.
  */
+const SimpleStructureComponent = () => {
+  const [activeTab, setActiveTab] = useState('all');
+
+  const simpleTabs: ParentTabItem[] = [
+    {
+      id: 'documents_group',
+      label: 'Documents',
+      icon: FileText,
+      subTabs: [
+        { id: 'all', label: 'All Documents', icon: Folder },
+        { id: 'recent', label: 'Recent', icon: Clock },
+        { id: 'shared', label: 'Shared', icon: Users },
+      ],
+    },
+  ];
+
+  return (
+    <TabsV2
+      tabs={simpleTabs}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+    />
+  );
+};
+
 export const SimpleStructure = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('all');
-
-    const simpleTabs: ParentTabItem[] = [
-      {
-        id: 'documents_group',
-        label: 'Documents',
-        icon: FileText,
-        subTabs: [
-          { id: 'all', label: 'All Documents', icon: Folder },
-          { id: 'recent', label: 'Recent', icon: Clock },
-          { id: 'shared', label: 'Shared', icon: Users },
-        ],
-      },
-    ];
-
-    return (
-      <TabsV2
-        tabs={simpleTabs}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-      />
-    );
-  },
+  render: () => <SimpleStructureComponent />,
 };
 
 /**
  * Complex hierarchy with many sub-tabs demonstrating overflow scrolling.
  */
+const ManySubTabsComponent = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const complexTabs: ParentTabItem[] = [
+    {
+      id: 'matters_group',
+      label: 'Matters',
+      icon: Briefcase,
+      subTabs: [
+        { id: 'overview', label: 'Overview Dashboard', icon: Eye },
+        { id: 'operations', label: 'Operations Center', icon: Activity },
+        { id: 'intake', label: 'New Matter Intake', icon: Plus },
+        { id: 'archive', label: 'Archive', icon: Folder },
+        { id: 'templates', label: 'Templates', icon: FileText },
+        { id: 'workflows', label: 'Workflows', icon: Settings },
+        { id: 'reports', label: 'Reports', icon: BarChart3 },
+      ],
+    },
+  ];
+
+  return (
+    <TabsV2
+      tabs={complexTabs}
+      activeTabId={activeTab}
+      onChange={setActiveTab}
+    />
+  );
+};
+
 export const ManySubTabs = {
-  render: () => {
-    const [activeTab, setActiveTab] = useState('overview');
-
-    const complexTabs: ParentTabItem[] = [
-      {
-        id: 'matters_group',
-        label: 'Matters',
-        icon: Briefcase,
-        subTabs: [
-          { id: 'overview', label: 'Overview Dashboard', icon: Eye },
-          { id: 'operations', label: 'Operations Center', icon: Activity },
-          { id: 'intake', label: 'New Matter Intake', icon: Plus },
-          { id: 'archive', label: 'Archive', icon: Folder },
-          { id: 'templates', label: 'Templates', icon: FileText },
-          { id: 'workflows', label: 'Workflows', icon: Settings },
-          { id: 'reports', label: 'Reports', icon: BarChart3 },
-        ],
-      },
-    ];
-
-    return (
-      <TabsV2
-        tabs={complexTabs}
-        activeTabId={activeTab}
-        onChange={setActiveTab}
-      />
-    );
-  },
+  render: () => <ManySubTabsComponent />,
 };

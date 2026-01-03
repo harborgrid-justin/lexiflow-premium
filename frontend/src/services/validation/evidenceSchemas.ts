@@ -279,7 +279,7 @@ const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEve
     errors.push({ path: 'id', message: 'Event ID is required' });
   }
 
-  const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z)?$/;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(.\d{3})?Z)?$/;
   if (!record.date || typeof record.date !== 'string' || !dateRegex.test(record.date)) {
     errors.push({ path: 'date', message: 'Invalid date format' });
   }
@@ -321,6 +321,7 @@ const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEve
 const validateEvidenceFilters = (data: unknown): ValidationResult<EvidenceFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
   const filters: EvidenceFilters = {};
+console.log('filter state:', filters);
   
   if (data && typeof data === 'object') {
     const input = data as Record<string, unknown>;

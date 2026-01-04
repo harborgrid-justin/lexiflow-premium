@@ -58,7 +58,7 @@ export default function PracticeIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

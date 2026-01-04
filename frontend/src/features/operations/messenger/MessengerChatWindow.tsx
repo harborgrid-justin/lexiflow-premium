@@ -92,6 +92,7 @@ export const MessengerChatWindow = ({
       return;
     }
     const lastMsg = activeConversation.messages[activeConversation.messages.length - 1];
+    if (!lastMsg) return;
     if (lastMsg.senderId === 'me') {
       notify.info("Waiting for their reply.");
       return;

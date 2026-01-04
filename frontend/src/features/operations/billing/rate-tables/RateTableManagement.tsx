@@ -116,7 +116,11 @@ const RateTableManagementComponent: React.FC = () => {
   const updateRate = useCallback((index: number, field: 'role' | 'rate', value: string | number) => {
     setFormData(prev => {
       const newRates = [...(prev.rates || [])];
-      newRates[index] = { ...newRates[index], [field]: value };
+      if (field === 'role') {
+        newRates[index] = { ...newRates[index], role: value as string };
+      } else {
+        newRates[index] = { ...newRates[index], rate: value as number };
+      }
       return { ...prev, rates: newRates };
     });
   }, []);

@@ -91,127 +91,71 @@ export interface ProductionManagerProps {
   className?: string;
 }
 
-// ============================================================================
-// MOCK DATA
-// ============================================================================
 
-const mockProductions: Production[] = [
-  {
-    id: '1',
-    name: 'Initial Production - Emails',
-    productionNumber: 'PROD-001',
-    recipientParty: 'Plaintiff',
-    status: 'produced',
-    createdDate: new Date('2025-11-01'),
-    producedDate: new Date('2025-11-15'),
-    batesRange: {
-      prefix: 'DEF',
-      startNumber: 1,
-      endNumber: 5000,
-      totalDocuments: 5000
-    },
-    documentCount: 5000,
-    redactionCount: 45,
-    format: 'pdf',
-    media: 'electronic',
-    deliveryMethod: 'litigation-platform',
-    loadFileIncluded: true,
-    metadata: {
-      createdBy: 'John Smith',
-      reviewedBy: 'Jane Doe',
-      approvedBy: 'Senior Counsel'
-    }
-  },
-  {
-    id: '2',
-    name: 'Supplemental Production - Financial Records',
-    productionNumber: 'PROD-002',
-    recipientParty: 'Plaintiff',
-    status: 'ready',
-    createdDate: new Date('2025-12-01'),
-    batesRange: {
-      prefix: 'DEF',
-      startNumber: 5001,
-      endNumber: 7500,
-      totalDocuments: 2500
-    },
-    documentCount: 2500,
-    redactionCount: 128,
-    format: 'native',
-    media: 'electronic',
-    deliveryMethod: 'ftp',
-    loadFileIncluded: true,
-    metadata: {
-      createdBy: 'Sarah Johnson',
-      reviewedBy: 'Michael Chen'
-    },
-    notes: 'Includes native Excel files with formulas intact'
-  },
-  {
-    id: '3',
-    name: 'Production - Technical Documents',
-    productionNumber: 'PROD-003',
-    recipientParty: 'Third-Party Subpoena',
-    status: 'draft',
-    createdDate: new Date('2026-01-02'),
-    batesRange: {
-      prefix: 'TP',
-      startNumber: 1,
-      endNumber: 1200,
-      totalDocuments: 1200
-    },
-    documentCount: 1200,
-    redactionCount: 67,
-    format: 'mixed',
-    media: 'electronic',
-    deliveryMethod: 'email',
-    loadFileIncluded: false,
-    metadata: {
-      createdBy: 'Emily Rodriguez'
-    }
-  }
-];
 
-const mockProductionHistory: ProductionHistory[] = [
-  {
-    id: '1',
-    productionId: '1',
-    action: 'created',
-    performedBy: 'John Smith',
-    timestamp: new Date('2025-11-01T09:00:00'),
-    notes: 'Initial production set created'
-  },
-  {
-    id: '2',
-    productionId: '1',
-    action: 'modified',
-    performedBy: 'Jane Doe',
-    timestamp: new Date('2025-11-10T14:30:00'),
-    changes: 'Added 50 additional documents',
-    notes: 'Included responsive emails from custodian Sarah Johnson'
-  },
-  {
-    id: '3',
-    productionId: '1',
-    action: 'produced',
-    performedBy: 'Senior Counsel',
-    timestamp: new Date('2025-11-15T16:45:00'),
-    notes: 'Production delivered via litigation platform'
-  }
-];
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const ProductionManager: React.FC<ProductionManagerProps> = ({
-  className
+  className,
+  caseId = 'default-case'
 }) => {
   const { theme } = useTheme();
-  const [productions] = useState<Production[]>(mockProductions);
+  const [productions, setProductions] = useState<Production[]>([]);
   const [selectedProduction, setSelectedProduction] = useState<Production | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showBatesGenerator, setShowBatesGenerator] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProductions = async () => {
+      setLoading(true);
+      try {
+        const data = await productionsApi.getAll({ caseId });
+        setProductions(data.map(p => {
+          let status: Production['status'] = 'draft';
+          if (p.status === 'ready' || p.status === 'produced') {
+            status = p.status;
+          }
+
+          return {
+            id: p.id,
+            name: p.name,
+            productionNumber: p.productionNumber || 'N/A',
+            recipientParty: p.producedTo || 'Unknown',
+            status,
+            createdDate: new Date(p.createdAt || Date.now()),
+            producedDate: p.productionDate ? new Date(p.productionDate) : undefined,
+            batesRange: {
+              prefix: p.beginBatesNumber?.split('-')[0] || 'UNK',
+              startNumber: parseInt(p.beginBatesNumber?.split('-')[1] || '0'),
+              endNumber: parseInt(p.endBatesNumber?.split('-')[1] || '0'),
+              totalDocuments: p.documentCount || 0
+            },
+            documentCount: p.documentCount || 0,
+            redactionCount: 0,
+            format: (p.format === 'native' || p.format === 'pdf' || p.format === 'tiff') ? p.format : 'mixed',
+            media: 'electronic',
+            deliveryMethod: 'litigation-platform',
+            loadFileIncluded: true,
+            metadata: {
+              createdBy: 'System',
+              ...(p.metadata as Record<string, string> || {})
+            },
+            notes: p.notes
+          };
+        }));
+      } catch (error) {
+        console.error('Failed to fetch productions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductions();
+  }, [caseId]);
 
   // Filter productions
   const filteredProductions = productions.filter(prod =>
@@ -357,7 +301,7 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
 
       {/* Productions List */}
       <div className="space-y-4">
-        {filteredProductions.map((production) => (
+        {filteredProductions.length > 0 ? filteredProductions.map((production) => (
           <motion.div
             key={production.id}
             initial={{ opacity: 0, y: 20 }}
@@ -456,6 +400,20 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
                   </div>
                 )}
               </div>
+            </div>
+          </motion.div>
+        )) : (
+            <div className={cn('p-12 text-center rounded-lg border border-dashed', theme.border.default)}>
+                <Package className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                <p className="text-lg font-medium">No productions found</p>
+                <p className="text-sm mt-1">Create a new production set to get started</p>
+                <Button variant="primary" className="mt-4" icon={Plus}>
+                    New Production
+                </Button>
+            </div>
+        )}
+      </div>
+              </div>
 
               <div className="flex items-center gap-2 ml-4">
                 <button
@@ -482,119 +440,91 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
                   </Button>
                 )}
               </div>
-            </div>
-          </motion.div>
+            </div >
+          </motion.div >
         ))}
+      </div >
+
+  {/* Production History */ }
+{
+  selectedProduction && (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={cn('p-6 rounded-lg border', theme.surface.default, theme.border.default)}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <History className={cn('h-5 w-5', theme.text.secondary)} />
+        <h3 className={cn('text-lg font-semibold', theme.text.primary)}>
+          Production History - {selectedProduction.productionNumber}
+        </h3>
       </div>
 
-      {/* Production History */}
-      {selectedProduction && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={cn('p-6 rounded-lg border', theme.surface.default, theme.border.default)}
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <History className={cn('h-5 w-5', theme.text.secondary)} />
-            <h3 className={cn('text-lg font-semibold', theme.text.primary)}>
-              Production History - {selectedProduction.productionNumber}
-            </h3>
-          </div>
+      <div className="space-y-3">
+        <div className={cn('p-4 text-center', theme.text.secondary)}>
+          Production history not available
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
-          <div className="space-y-3">
-            {mockProductionHistory
-              .filter(h => h.productionId === selectedProduction.id)
-              .map((history) => (
-                <div
-                  key={history.id}
-                  className={cn('p-4 rounded-lg border', theme.background, theme.border.default)}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={cn('p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30')}>
-                      <Clock className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className={cn('font-medium capitalize', theme.text.primary)}>
-                          {history.action}
-                        </span>
-                        <span className={cn('text-xs', theme.text.tertiary)}>
-                          {history.timestamp.toLocaleString()}
-                        </span>
-                      </div>
-                      <p className={cn('text-sm', theme.text.secondary)}>
-                        By: {history.performedBy}
-                      </p>
-                      {history.changes && (
-                        <p className={cn('text-sm mt-1', theme.text.secondary)}>
-                          Changes: {history.changes}
-                        </p>
-                      )}
-                      {history.notes && (
-                        <p className={cn('text-sm mt-1 italic', theme.text.tertiary)}>
-                          {history.notes}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </motion.div>
-      )}
+{/* Empty State */ }
+{
+  filteredProductions.length === 0 && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={cn('p-12 rounded-lg border text-center', theme.surface.default, theme.border.default)}
+    >
+      <Package className={cn('h-16 w-16 mx-auto mb-4 opacity-20', theme.text.primary)} />
+      <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
+        No Productions Found
+      </h3>
+      <p className={cn('text-sm', theme.text.secondary)}>
+        {searchQuery
+          ? 'Try adjusting your search query'
+          : 'Create your first production set to get started'
+        }
+      </p>
+    </motion.div>
+  )
+}
 
-      {/* Empty State */}
-      {filteredProductions.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className={cn('p-12 rounded-lg border text-center', theme.surface.default, theme.border.default)}
-        >
-          <Package className={cn('h-16 w-16 mx-auto mb-4 opacity-20', theme.text.primary)} />
-          <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
-            No Productions Found
-          </h3>
-          <p className={cn('text-sm', theme.text.secondary)}>
-            {searchQuery
-              ? 'Try adjusting your search query'
-              : 'Create your first production set to get started'
-            }
-          </p>
-        </motion.div>
-      )}
-
-      {/* Bates Generator Modal (placeholder) */}
-      {showBatesGenerator && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setShowBatesGenerator(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            className={cn('p-6 rounded-lg max-w-md w-full m-4', theme.surface.default)}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className={cn('text-lg font-semibold mb-4', theme.text.primary)}>
-              Bates Number Generator
-            </h3>
-            <p className={cn('text-sm mb-4', theme.text.secondary)}>
-              Configure Bates numbering settings for your production.
-            </p>
-            <div className="flex gap-2">
-              <Button variant="secondary" onClick={() => setShowBatesGenerator(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary">
-                Generate
-              </Button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </div>
+{/* Bates Generator Modal (placeholder) */ }
+{
+  showBatesGenerator && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      onClick={() => setShowBatesGenerator(false)}
+    >
+      <motion.div
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        className={cn('p-6 rounded-lg max-w-md w-full m-4', theme.surface.default)}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className={cn('text-lg font-semibold mb-4', theme.text.primary)}>
+          Bates Number Generator
+        </h3>
+        <p className={cn('text-sm mb-4', theme.text.secondary)}>
+          Configure Bates numbering settings for your production.
+        </p>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => setShowBatesGenerator(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary">
+            Generate
+          </Button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+    </div >
   );
 };
 

@@ -19,7 +19,6 @@ import { memo } from 'react';
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { queryKeys } from '@/utils/queryKeys';
 
 // Components
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
@@ -29,9 +28,9 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 // ============================================================================
 const ComplianceRiskComponent = () => {
    // Use server state management instead of manual fetch
-   const { data: metrics = { high: 0, missingDocs: 0, violations: 0 } } = useQuery(
-      queryKeys.compliance.riskMetrics?.() || ['compliance', 'riskMetrics'],
-      () => DataService.compliance.getRiskMetrics()
+   const { data: metrics = { high: 0, missingDocs: 0, violations: 0 } } = useQuery<{ high: number; missingDocs: number; violations: number }>(
+      ['compliance', 'riskMetrics'],
+      () => DataService.compliance.getRiskMetrics() as Promise<{ high: number; missingDocs: number; violations: number }>
    );
 
    return (

@@ -106,7 +106,7 @@ const ComplianceConflictsComponent: React.FC<ComplianceConflictsProps> = ({ conf
               <TableCell>
                 {c.foundIn.length > 0 ? (
                   <div className="flex flex-wrap gap-1">
-                    {c.foundIn.map((hit) => (
+                    {c.foundIn.map((hit, i) => (
                       <span key={`conflict-${c.id}-hit-${hit}-${i}`} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                         {hit}
                       </span>

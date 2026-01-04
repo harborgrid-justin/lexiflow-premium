@@ -146,7 +146,7 @@ export function useAppContext(): UseAppControllerReturn {
   // Use authenticated user if available, otherwise fallback to fetched users or default guest
   const currentUser: User = authUser
     ? ({
-        id: authUser.id,
+        id: authUser.id as UserId,
         email: authUser.email,
         name: authUser.name || authUser.email.split("@")[0],
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],

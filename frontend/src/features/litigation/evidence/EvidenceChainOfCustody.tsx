@@ -84,12 +84,12 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
 
         // Snapshot previous value for rollback
         const previousEvidence = queryClient.getQueryState(
-          evidenceQueryKeys.evidence.all
+          evidenceQueryKeys.evidence.all()
         )?.data as EvidenceItem[] | undefined;
 
         // Optimistically update cache
         queryClient.setQueryData<EvidenceItem[]>(
-          evidenceQueryKeys.evidence.all,
+          evidenceQueryKeys.evidence.all(),
           (old) => old?.map(item =>
             item.id === payload.item.id
               ? { ...item, chainOfCustody: [payload.event, ...item.chainOfCustody] }
@@ -113,7 +113,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
         // Rollback optimistic update on error
         if (context?.previousEvidence) {
           queryClient.setQueryData(
-            evidenceQueryKeys.evidence.all,
+            evidenceQueryKeys.evidence.all(),
             context.previousEvidence
           );
         }

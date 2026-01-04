@@ -56,7 +56,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -88,7 +88,7 @@ export default function LibraryIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

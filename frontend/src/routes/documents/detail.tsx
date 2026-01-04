@@ -15,7 +15,7 @@ import {
 } from '@/components/features/documents/components';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
-import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 
@@ -65,7 +65,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const { documentId } = params;
 
   if (!documentId) {
@@ -331,7 +331,7 @@ export default function DocumentDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   // Handle 404 specifically
   if (error instanceof Response && error.status === 404) {
     return (

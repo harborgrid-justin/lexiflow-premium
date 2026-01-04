@@ -70,86 +70,52 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   const [selectedTab, setSelectedTab] = useState<'overview' | 'aging' | 'collections' | 'writeoffs'>('overview');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Mock data - in production, fetch from API
-  const metrics: BillingSummaryMetrics = {
-    totalOutstanding: 1248750.00,
-    totalReceivables: 3567890.50,
-    collectedThisMonth: 892450.00,
-    collectionRate: 94.5,
-    writeOffsThisMonth: 12500.00,
-    averageDaysToPayment: 32,
-    overdueAmount: 234500.00,
-    overdueCount: 18,
-  };
-  console.log('metrics data:', metrics);
+  const { data: billingData, isLoading } = useQuery(
+    ['billing', 'overview'],
+    () => dashboardMetricsService.getBillingOverview()
+  );
 
-  const agingBuckets: ARAgingBucket[] = [
-    { label: 'Current', daysRange: '0-30 days', amount: 567890.00, count: 45, percentage: 45.5 },
-    { label: '31-60 Days', daysRange: '31-60 days', amount: 345670.00, count: 28, percentage: 27.7 },
-    { label: '61-90 Days', daysRange: '61-90 days', amount: 178900.00, count: 15, percentage: 14.3 },
-    { label: '91-120 Days', daysRange: '91-120 days', amount: 98450.00, count: 9, percentage: 7.9 },
-    { label: '120+ Days', daysRange: 'Over 120 days', amount: 57840.00, count: 6, percentage: 4.6 },
-  ];
+  const metrics: BillingSummaryMetrics = useMemo(() => {
+    if (!billingData || billingData.length === 0) {
+      return {
+        totalOutstanding: 0,
+        totalReceivables: 0,
+        collectedThisMonth: 0,
+        collectionRate: 0,
+        writeOffsThisMonth: 0,
+        averageDaysToPayment: 0,
+        overdueAmount: 0,
+        overdueCount: 0,
+      };
+    }
 
-  const collectionItems: CollectionItem[] = [
-    {
-      id: '1',
-      clientName: 'Acme Corporation',
-      invoiceNumber: 'INV-2024-001',
-      amount: 45600.00,
-      daysOverdue: 95,
-      lastContactDate: '2024-12-15',
-      assignedTo: 'Sarah Johnson',
-      priority: 'high',
-      status: 'in_progress',
-    },
-    {
-      id: '2',
-      clientName: 'TechStart LLC',
-      invoiceNumber: 'INV-2024-089',
-      amount: 28900.00,
-      daysOverdue: 67,
-      lastContactDate: '2024-12-28',
-      assignedTo: 'Michael Chen',
-      priority: 'medium',
-      status: 'contacted',
-    },
-    {
-      id: '3',
-      clientName: 'GlobalTrade Inc',
-      invoiceNumber: 'INV-2024-112',
-      amount: 67800.00,
-      daysOverdue: 125,
-      assignedTo: 'Sarah Johnson',
-      priority: 'high',
-      status: 'payment_plan',
-    },
-  ];
+    const total = billingData.reduce(
+      (acc, curr) => ({
+        totalOutstanding: acc.totalOutstanding + curr.outstanding,
+        collected: acc.collected + curr.collected,
+        writeOffs: acc.writeOffs + curr.writeOffs,
+        billed: acc.billed + curr.billed,
+      }),
+      { totalOutstanding: 0, collected: 0, writeOffs: 0, billed: 0 }
+    );
 
-  const writeOffRequests: WriteOffRequest[] = [
-    {
-      id: '1',
-      invoiceNumber: 'INV-2023-445',
-      clientName: 'Bankrupt Co',
-      originalAmount: 15600.00,
-      writeOffAmount: 15600.00,
-      reason: 'Client bankruptcy - Chapter 7',
-      requestedBy: 'John Smith',
-      requestedDate: '2024-01-02',
-      status: 'pending',
-    },
-    {
-      id: '2',
-      invoiceNumber: 'INV-2024-023',
-      clientName: 'Small Business LLC',
-      originalAmount: 4500.00,
-      writeOffAmount: 1500.00,
-      reason: 'Settlement - partial payment accepted',
-      requestedBy: 'Sarah Johnson',
-      requestedDate: '2023-12-28',
-      status: 'approved',
-    },
-  ];
+    return {
+      totalOutstanding: total.totalOutstanding,
+      totalReceivables: total.totalOutstanding,
+      collectedThisMonth: total.collected, // Approximation
+      collectionRate: total.billed ? (total.collected / total.billed) * 100 : 0,
+      writeOffsThisMonth: total.writeOffs,
+      averageDaysToPayment: 0, // Not available
+      overdueAmount: 0, // Not available
+      overdueCount: 0, // Not available
+    };
+  }, [billingData]);
+
+  const agingBuckets: ARAgingBucket[] = []; // TODO: Fetch from API
+
+  const collectionItems: CollectionItem[] = []; // TODO: Fetch from API
+
+  const writeOffRequests: WriteOffRequest[] = []; // TODO: Fetch from API
 
   const getPriorityBadge = (priority: 'high' | 'medium' | 'low') => {
     const styles = {
@@ -296,8 +262,8 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
               key={tab}
               onClick={() => setSelectedTab(tab)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
             >
               {tab === 'writeoffs' ? 'Write-offs' : tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -313,41 +279,50 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
             AR Aging Analysis
           </h3>
           <div className="space-y-4">
-            {agingBuckets.map((bucket) => (
-              <div key={bucket.label} className="border-b border-gray-200 pb-4 last:border-b-0 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100">
-                          {bucket.label}
-                        </h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {bucket.daysRange}
-                        </p>
+            {agingBuckets.length > 0 ? (
+              agingBuckets.map((bucket) => (
+                <div
+                  key={bucket.label}
+                  className="border-b border-gray-200 pb-4 last:border-b-0 dark:border-gray-700"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                            {bucket.label}
+                          </h4>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {bucket.daysRange}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            ${bucket.amount.toLocaleString()}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {bucket.count} invoices
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                          ${bucket.amount.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {bucket.count} invoices
-                        </p>
+                      <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                        <div
+                          className="absolute h-full bg-blue-600 dark:bg-blue-500"
+                          style={{ width: `${bucket.percentage}%` }}
+                        />
                       </div>
+                      <p className="mt-1 text-xs text-gray-500 text-right">
+                        {bucket.percentage}% of total
+                      </p>
                     </div>
-                    <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
-                      <div
-                        className="absolute h-full bg-blue-600 dark:bg-blue-500"
-                        style={{ width: `${bucket.percentage}%` }}
-                      />
-                    </div>
-                    <p className="mt-1 text-xs text-gray-500 text-right">
-                      {bucket.percentage}% of total
-                    </p>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                No aging data available
               </div>
-            ))}
+            )}
           </div>
         </div>
       )}
@@ -387,40 +362,54 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {collectionItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="font-medium text-gray-900 dark:text-gray-100">
-                          {item.clientName}
+                {collectionItems.length > 0 ? (
+                  collectionItems.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      <td className="px-6 py-4">
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                            {item.clientName}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {item.invoiceNumber}
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {item.invoiceNumber}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ${item.amount.toLocaleString()}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      {item.daysOverdue} days
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {getPriorityBadge(item.priority)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      {item.assignedTo || '-'}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {getStatusBadge(item.status)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
-                      <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                        Contact
-                      </button>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                        ${item.amount.toLocaleString()}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        {item.daysOverdue} days
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {getPriorityBadge(item.priority)}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        {item.assignedTo || '-'}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {getStatusBadge(item.status)}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
+                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                          Contact
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-6 py-8 text-center text-gray-500 dark:text-gray-400"
+                    >
+                      No collection items found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -462,54 +451,71 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {writeOffRequests.map((request) => (
-                  <tr key={request.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="font-medium text-gray-900 dark:text-gray-100">
-                          {request.invoiceNumber}
+                {writeOffRequests.length > 0 ? (
+                  writeOffRequests.map((request) => (
+                    <tr
+                      key={request.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      <td className="px-6 py-4">
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                            {request.invoiceNumber}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {request.clientName}
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {request.clientName}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        ${request.originalAmount.toLocaleString()}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-red-600 dark:text-red-400">
+                        ${request.writeOffAmount.toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        <div
+                          className="max-w-xs truncate"
+                          title={request.reason}
+                        >
+                          {request.reason}
                         </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      ${request.originalAmount.toLocaleString()}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-red-600 dark:text-red-400">
-                      ${request.writeOffAmount.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      <div className="max-w-xs truncate" title={request.reason}>
-                        {request.reason}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      {request.requestedBy}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {getStatusBadge(request.status)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
-                      {request.status === 'pending' && (
-                        <div className="flex justify-end gap-2">
-                          <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
-                            Approve
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        {request.requestedBy}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {getStatusBadge(request.status)}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
+                        {request.status === 'pending' && (
+                          <div className="flex justify-end gap-2">
+                            <button className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
+                              Approve
+                            </button>
+                            <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                        {request.status !== 'pending' && (
+                          <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                            View
                           </button>
-                          <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                            Reject
-                          </button>
-                        </div>
-                      )}
-                      {request.status !== 'pending' && (
-                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                          View
-                        </button>
-                      )}
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-6 py-8 text-center text-gray-500 dark:text-gray-400"
+                    >
+                      No write-off requests found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

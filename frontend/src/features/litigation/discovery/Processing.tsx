@@ -4,15 +4,15 @@
  * Manage document processing jobs and workflows
  */
 
-import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, AlertCircle, CheckCircle2, Clock, Zap, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/utils/cn';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
+import { cn } from '@/utils/cn';
+import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const Processing: React.FC = () => {
   const { theme } = useTheme();
@@ -122,7 +122,7 @@ export const Processing: React.FC = () => {
     switch (status) {
       case 'completed': return 'success';
       case 'processing': return 'info';
-      case 'failed': return 'danger';
+      case 'failed': return 'error';
       case 'paused': return 'warning';
       case 'queued': return 'neutral';
     }
@@ -130,7 +130,7 @@ export const Processing: React.FC = () => {
 
   const getPriorityVariant = (priority: ProcessingJob['priority']) => {
     switch (priority) {
-      case 'urgent': return 'danger';
+      case 'urgent': return 'error';
       case 'high': return 'warning';
       case 'normal': return 'info';
       case 'low': return 'neutral';

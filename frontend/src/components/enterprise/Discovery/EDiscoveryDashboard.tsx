@@ -81,106 +81,124 @@ export interface ReviewMetrics {
   reviewers: number;
 }
 
+export interface ProcessingStage {
+  phase: string;
+  status: 'not_started' | 'in_progress' | 'completed';
+  progress: number;
+  documentsProcessed: number;
+  totalDocuments: number;
+}
+
 export interface EDiscoveryDashboardProps {
   caseId?: string;
   onNavigate?: (view: string, id?: string) => void;
   className?: string;
 }
 
-// ============================================================================
-// MOCK DATA
-// ============================================================================
 
-const mockCustodians: Custodian[] = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@example.com',
-    department: 'Legal',
-    title: 'General Counsel',
-    status: 'hold',
-    dataSources: 3,
-    documentsCollected: 12450,
-    lastActivity: new Date('2026-01-02')
-  },
-  {
-    id: '2',
-    name: 'Michael Chen',
-    email: 'michael.chen@example.com',
-    department: 'Engineering',
-    title: 'VP Engineering',
-    status: 'active',
-    dataSources: 5,
-    documentsCollected: 28900,
-    lastActivity: new Date('2026-01-03')
-  },
-  {
-    id: '3',
-    name: 'Emily Rodriguez',
-    email: 'emily.rodriguez@example.com',
-    department: 'Finance',
-    title: 'CFO',
-    status: 'interviewed',
-    dataSources: 2,
-    documentsCollected: 8320,
-    lastActivity: new Date('2025-12-28')
-  }
-];
 
-const mockCollections: Collection[] = [
-  {
-    id: '1',
-    name: 'Email Archive Q4 2025',
-    custodian: 'Sarah Johnson',
-    sourceType: 'email',
-    status: 'completed',
-    totalItems: 12450,
-    collectedItems: 12450,
-    startDate: new Date('2025-12-15'),
-    completedDate: new Date('2025-12-20'),
-    size: 8960
-  },
-  {
-    id: '2',
-    name: 'SharePoint Documents',
-    custodian: 'Michael Chen',
-    sourceType: 'file_share',
-    status: 'in_progress',
-    totalItems: 28900,
-    collectedItems: 18200,
-    startDate: new Date('2026-01-01'),
-    size: 42300
-  }
-];
 
-const mockReviewMetrics: ReviewMetrics = {
-  totalDocuments: 45680,
-  reviewed: 23400,
-  privileged: 1240,
-  responsive: 8960,
-  nonResponsive: 12100,
-  needsReview: 22280,
-  flagged: 340,
-  avgReviewTime: 45,
-  reviewers: 8
-};
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
-  className
+  className,
+  caseId = 'default-case'
 }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'custodians' | 'collections' | 'processing'>('overview');
 
+  const [custodians, setCustodians] = useState<Custodian[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [metrics, setMetrics] = useState<ReviewMetrics | null>(null);
+  const [processingProgress, setProcessingProgress] = useState<ProcessingStage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [custodiansData, collectionsData, analyticsData] = await Promise.all([
+          custodiansApi.getAll({ caseId }),
+          collectionsApi.getAll(caseId),
+          discoveryAnalyticsApi.getByCaseId(caseId)
+        ]);
+
+        setCustodians(custodiansData.map(c => {
+          let status: Custodian['status'] = 'active';
+          const s = c.status.toLowerCase();
+          if (s === 'on hold') status = 'hold';
+          else if (s === 'released') status = 'released';
+          else if (s === 'interviewed') status = 'interviewed';
+
+          return {
+            id: c.id,
+            name: c.name,
+            email: c.email,
+            department: c.department,
+            title: c.role,
+            status,
+            dataSources: 0,
+            documentsCollected: 0,
+            lastActivity: new Date(c.updatedAt)
+          };
+        }));
+
+        setCollections(collectionsData.map(c => {
+          let status: Collection['status'] = 'pending';
+          if (['pending', 'in_progress', 'completed', 'failed'].includes(c.status)) {
+            status = c.status as Collection['status'];
+          }
+
+          return {
+            id: c.id,
+            name: c.collectionName,
+            custodian: c.custodians.join(', '),
+            sourceType: 'email',
+            status,
+            totalItems: c.totalItems || 0,
+            collectedItems: c.collectedItems || 0,
+            startDate: new Date(c.createdAt),
+            completedDate: c.completedAt ? new Date(c.completedAt) : undefined,
+            size: c.actualSize ? parseFloat(c.actualSize) : 0
+          };
+        }));
+
+        if (analyticsData && analyticsData.overview) {
+          setMetrics({
+            totalDocuments: analyticsData.overview.totalDocuments,
+            reviewed: analyticsData.overview.reviewedDocuments,
+            privileged: analyticsData.overview.privilegedDocuments,
+            responsive: analyticsData.overview.responsiveDocuments,
+            nonResponsive: analyticsData.overview.totalDocuments - analyticsData.overview.responsiveDocuments,
+            needsReview: analyticsData.overview.totalDocuments - analyticsData.overview.reviewedDocuments,
+            flagged: 0,
+            avgReviewTime: analyticsData.team.averageReviewRate,
+            reviewers: analyticsData.team.reviewers
+          });
+        }
+
+        if (analyticsData && analyticsData.progress) {
+          setProcessingProgress(analyticsData.progress);
+        }
+      } catch (error) {
+        console.error('Failed to fetch discovery data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [caseId]);
+
   // Calculate metrics
-  const totalCustodians = mockCustodians.length;
-  const activeCustodians = mockCustodians.filter(c => c.status === 'active' || c.status === 'hold').length;
-  const totalCollections = mockCollections.length;
-  const activeCollections = mockCollections.filter(c => c.status === 'in_progress').length;
-  const reviewProgress = Math.round((mockReviewMetrics.reviewed / mockReviewMetrics.totalDocuments) * 100);
+  const totalCustodians = custodians.length;
+  const activeCustodians = custodians.filter(c => c.status === 'active' || c.status === 'hold').length;
+  const totalCollections = collections.length;
+  const activeCollections = collections.filter(c => c.status === 'in_progress').length;
+  const reviewProgress = metrics && metrics.totalDocuments > 0 ? Math.round((metrics.reviewed / metrics.totalDocuments) * 100) : 0;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -246,7 +264,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
         />
         <KPICard
           title="Documents Collected"
-          value={mockCustodians.reduce((sum, c) => sum + c.documentsCollected, 0)}
+          value={custodians.reduce((sum, c) => sum + c.documentsCollected, 0)}
           icon={FileText}
           trend="up"
           trendValue="+2,340 today"
@@ -308,14 +326,14 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                 <BarChart3 className={cn('h-5 w-5', theme.text.secondary)} />
               </div>
               <div className="space-y-3">
-                {[
-                  { label: 'Reviewed', value: mockReviewMetrics.reviewed, color: 'bg-emerald-500' },
-                  { label: 'Needs Review', value: mockReviewMetrics.needsReview, color: 'bg-amber-500' },
-                  { label: 'Privileged', value: mockReviewMetrics.privileged, color: 'bg-blue-500' },
-                  { label: 'Responsive', value: mockReviewMetrics.responsive, color: 'bg-purple-500' },
-                  { label: 'Non-Responsive', value: mockReviewMetrics.nonResponsive, color: 'bg-gray-400' }
+                {metrics ? [
+                  { label: 'Reviewed', value: metrics.reviewed, color: 'bg-emerald-500' },
+                  { label: 'Needs Review', value: metrics.needsReview, color: 'bg-amber-500' },
+                  { label: 'Privileged', value: metrics.privileged, color: 'bg-blue-500' },
+                  { label: 'Responsive', value: metrics.responsive, color: 'bg-purple-500' },
+                  { label: 'Non-Responsive', value: metrics.nonResponsive, color: 'bg-gray-400' }
                 ].map((item) => {
-                  const percentage = Math.round((item.value / mockReviewMetrics.totalDocuments) * 100);
+                  const percentage = metrics.totalDocuments > 0 ? Math.round((item.value / metrics.totalDocuments) * 100) : 0;
                   return (
                     <div key={item.label}>
                       <div className="flex items-center justify-between mb-1">
@@ -332,7 +350,9 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                       </div>
                     </div>
                   );
-                })}
+                }) : (
+                  <div className={cn('text-center py-4', theme.text.secondary)}>No metrics available</div>
+                )}
               </div>
             </motion.div>
 
@@ -350,20 +370,15 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                 <Settings className={cn('h-5 w-5', theme.text.secondary)} />
               </div>
               <div className="space-y-4">
-                {[
-                  { stage: 'Deduplication', progress: 100, status: 'completed' },
-                  { stage: 'Text Extraction', progress: 85, status: 'processing' },
-                  { stage: 'OCR Processing', progress: 45, status: 'processing' },
-                  { stage: 'Indexing', progress: 0, status: 'queued' }
-                ].map((item, idx) => (
-                  <div key={item.stage}>
+                {processingProgress.length > 0 ? processingProgress.map((item, idx) => (
+                  <div key={item.phase}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {item.status === 'completed' && <CheckCircle2 className="h-4 w-4 text-emerald-600" />}
-                        {item.status === 'processing' && <Clock className="h-4 w-4 text-blue-600 animate-spin" />}
-                        {item.status === 'queued' && <Clock className="h-4 w-4 text-gray-400" />}
+                        {item.status === 'in_progress' && <Clock className="h-4 w-4 text-blue-600 animate-spin" />}
+                        {item.status === 'not_started' && <Clock className="h-4 w-4 text-gray-400" />}
                         <span className={cn('text-sm font-medium', theme.text.primary)}>
-                          {item.stage}
+                          {item.phase}
                         </span>
                       </div>
                       <span className={cn('text-sm', theme.text.secondary)}>
@@ -378,13 +393,15 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                         className={cn(
                           'h-2 rounded-full',
                           item.status === 'completed' ? 'bg-emerald-500' :
-                            item.status === 'processing' ? 'bg-blue-500' :
+                            item.status === 'in_progress' ? 'bg-blue-500' :
                               'bg-gray-400'
                         )}
                       />
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className={cn('text-center py-4', theme.text.secondary)}>No processing data available</div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -439,11 +456,11 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                   </tr>
                 </thead>
                 <tbody className={cn('divide-y', theme.surface.default, theme.border.default)}>
-                  {mockCustodians.map((custodian) => (
+                  {custodians.length > 0 ? custodians.map((custodian) => (
                     <tr
                       key={custodian.id}
                       className={cn('hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer')}
-                      onClick={() => setSelectedCustodian(custodian.id)}
+                      onClick={() => onNavigate?.('custodian', custodian.id)}
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center">
@@ -483,7 +500,20 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                         </span>
                       </td>
                     </tr>
-                  ))}
+                  )) : (
+                    <tr>
+                      <td colSpan={6} className={cn('px-6 py-12 text-center', theme.text.secondary)}>
+                        <div className="flex flex-col items-center justify-center">
+                          <Users className="h-12 w-12 mb-4 opacity-20" />
+                          <p className="text-lg font-medium">No custodians found</p>
+                          <p className="text-sm mt-1">Add a custodian to get started</p>
+                          <Button variant="primary" className="mt-4" icon={Users}>
+                            Add Custodian
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -508,7 +538,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {mockCollections.map((collection) => (
+              {collections.length > 0 ? collections.map((collection) => (
                 <motion.div
                   key={collection.id}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -540,7 +570,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                     <div className={cn('h-2 rounded-full bg-gray-200 dark:bg-gray-700')}>
                       <div
                         className="h-2 rounded-full bg-blue-500"
-                        style={{ width: `${(collection.collectedItems / collection.totalItems) * 100}%` }}
+                        style={{ width: `${collection.totalItems > 0 ? (collection.collectedItems / collection.totalItems) * 100 : 0}%` }}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2">
@@ -559,7 +589,16 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              )) : (
+                <div className={cn('col-span-full p-12 text-center rounded-lg border border-dashed', theme.border.default)}>
+                  <Database className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                  <p className="text-lg font-medium">No collections found</p>
+                  <p className="text-sm mt-1">Start a new collection to gather data</p>
+                  <Button variant="primary" className="mt-4" icon={Database}>
+                    New Collection
+                  </Button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

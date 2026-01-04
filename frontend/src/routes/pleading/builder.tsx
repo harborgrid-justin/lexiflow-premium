@@ -225,7 +225,7 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
 // Component
 // ============================================================================
 
-export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProps) {
+export default function PleadingBuilderRoute({ loaderData }: any) {
   const navigate = useNavigate();
   const { templates, courts } = loaderData;
 
@@ -311,7 +311,7 @@ export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProp
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                   >
                     <option value="">Select a court</option>
-                    {courts.map((court) => (
+                    {courts.map((court: any) => (
                       <option key={court.id} value={court.id}>
                         {court.name}
                       </option>
@@ -328,7 +328,7 @@ export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProp
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                   >
                     <option value="">Select a template</option>
-                    {templates.map((template) => (
+                    {templates.map((template: any) => (
                       <option key={template.id} value={template.id}>
                         {template.name} ({template.jurisdiction})
                       </option>
@@ -459,7 +459,7 @@ export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProp
               Quick Templates
             </h3>
             <div className="space-y-2">
-              {templates.map((template) => (
+              {templates.map((template: any) => (
                 <button
                   key={template.id}
                   type="button"
@@ -523,7 +523,7 @@ export default function PleadingBuilderRoute({ loaderData }: Route.ComponentProp
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

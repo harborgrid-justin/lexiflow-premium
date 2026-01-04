@@ -33,7 +33,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
-import { validateTimeEntrySafe } from '@/services/validation/billingSchemas';
+import { TimeEntryInput, validateTimeEntrySafe } from '@/services/validation/billingSchemas';
 import { WIPStatusEnum } from '@/types/enums';
 import { cn } from '@/utils/cn';
 
@@ -66,6 +66,9 @@ class InvoiceGenerationQueue {
         }
 
         try {
+            if (item.entries.length === 0) {
+                throw new Error("No entries to process");
+            }
             const primaryCase = item.entries[0].caseId;
             const clientName = "Client Ref " + primaryCase;
             const invoice = await DataService.billing.createInvoice(clientName, primaryCase, item.entries);
@@ -137,7 +140,7 @@ const BillingWIPComponent: React.FC = () => {
             // Validate all entries before invoicing
             const validationErrors: string[] = [];
             selectedEntries.forEach((entry, index) => {
-                const result = validateTimeEntrySafe(entry as Record<string, unknown>);
+                const result = validateTimeEntrySafe(entry as unknown as TimeEntryInput);
                 if (!result.valid) {
                     validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
                 }

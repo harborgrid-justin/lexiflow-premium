@@ -6,7 +6,7 @@
  * @module routes/exhibits/detail
  */
 
-import { useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 
@@ -47,7 +47,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const { exhibitId } = params;
 
   if (!exhibitId) {
@@ -108,7 +108,7 @@ export default function ExhibitDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   // Handle 404 specifically
   if (error instanceof Response && error.status === 404) {
     return (

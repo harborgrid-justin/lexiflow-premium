@@ -94,7 +94,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onAppl
                         </div>
 
                         <div className="relative border-l-2 border-slate-200 dark:border-slate-700 ml-4 space-y-8 py-2">
-                            {playbook.stages?.map((stage) => (
+                            {playbook.stages?.map((stage, i) => (
                                 <div key={`stage-${stage.name}-${i}`} className="relative pl-8">
                                     <div className={cn("absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 bg-white dark:bg-slate-900", i === 0 ? "border-green-500" : "border-slate-300")}></div>
                                     <h4 className="text-lg font-bold mb-1">{stage.name}</h4>
@@ -120,7 +120,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onAppl
                                 <BookOpen className="h-5 w-5 text-purple-600" /> Key Authorities
                             </h3>
                             <div className="space-y-3">
-                                {playbook.authorities?.map((auth) => (
+                                {playbook.authorities?.map((auth, i) => (
                                     <div key={`auth-${auth.citation}-${i}`} className={cn("p-4 rounded-lg border group hover:border-purple-300 transition-all cursor-pointer", theme.surface.default, theme.border.default)} onClick={() => handleLaunchResearch(auth.citation)}>
                                         <div className="flex justify-between items-start mb-1">
                                             <span className="text-xs font-bold uppercase text-purple-600">{auth.type}</span>

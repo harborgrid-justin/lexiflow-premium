@@ -1,4 +1,4 @@
-import { authApi, isBackendApiEnabled } from "@/api";
+import { api, authApi, isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   ExtendedUserProfile,

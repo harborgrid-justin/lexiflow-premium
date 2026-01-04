@@ -16,7 +16,6 @@ import { ActivityFeed } from '@/components/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/components/dashboard/widgets/ChartCard';
 import { KPICard } from '@/components/dashboard/widgets/KPICard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import type { Activity } from '@/types/dashboard';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
@@ -42,6 +41,7 @@ import {
   CartesianGrid,
   Cell,
   Legend,
+  Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -115,177 +115,132 @@ interface FinancialSummary {
 }
 
 // ============================================================================
-// MOCK DATA (Replace with real API calls)
+// DATA MAPPERS
 // ============================================================================
 
-const generateMockKPIs = (): KPIMetric[] => [
-  {
-    id: 'matters-opened',
-    label: 'Matters Opened',
-    value: 47,
-    previousValue: 38,
-    icon: Briefcase,
-    format: 'number',
-    color: 'blue',
-    target: 50,
-  },
-  {
-    id: 'total-revenue',
-    label: 'Total Revenue',
-    value: 2847500,
-    previousValue: 2456000,
-    icon: DollarSign,
-    format: 'currency',
-    color: 'green',
-  },
-  {
-    id: 'billable-hours',
-    label: 'Billable Hours',
-    value: 3842,
-    previousValue: 3654,
-    icon: Clock,
-    format: 'number',
-    color: 'purple',
-  },
-  {
-    id: 'collection-rate',
-    label: 'Collection Rate',
-    value: 88.7,
-    previousValue: 86.2,
-    icon: Target,
-    format: 'percentage',
-    color: 'orange',
-    target: 90,
-  },
-];
+const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
+  if (!data) return [];
+  return [
+    {
+      id: 'matters-opened',
+      label: 'Matters Opened',
+      value: data.activeCases.value,
+      previousValue: data.activeCases.previousValue,
+      changePercentage: data.activeCases.change,
+      trend: data.activeCases.trend,
+      icon: Briefcase,
+      format: 'number',
+      color: 'blue',
+      target: 50, // TODO: Fetch target from settings
+    },
+    {
+      id: 'total-revenue',
+      label: 'Total Revenue',
+      value: data.revenue.value,
+      previousValue: data.revenue.previousValue,
+      changePercentage: data.revenue.change,
+      trend: data.revenue.trend,
+      icon: DollarSign,
+      format: 'currency',
+      color: 'green',
+      target: data.revenue.target,
+    },
+    {
+      id: 'billable-hours',
+      label: 'Billable Hours',
+      value: data.billableHours.value,
+      previousValue: data.billableHours.previousValue,
+      changePercentage: data.billableHours.change,
+      trend: data.billableHours.trend,
+      icon: Clock,
+      format: 'number',
+      color: 'purple',
+      target: data.billableHours.target,
+    },
+    {
+      id: 'collection-rate',
+      label: 'Collection Rate',
+      value: data.collectionRate.value,
+      previousValue: data.collectionRate.previousValue,
+      changePercentage: data.collectionRate.change,
+      icon: Target,
+      format: 'percentage',
+      color: 'orange',
+      target: 90, // TODO: Fetch target from settings
+    },
+  ];
+};
 
-const generateMockActivities = (): Activity[] => [
-  {
-    id: '1',
-    type: 'case_created',
-    title: 'New Case Opened',
-    description: 'TechCorp Inc. v. Competitor - Patent Infringement',
-    timestamp: new Date(Date.now() - 1000 * 60 * 15),
-    user: { id: '1', name: 'Sarah Chen', avatar: '' },
-    priority: 'high',
-  },
-  {
-    id: '2',
-    type: 'payment_received',
-    title: 'Payment Received',
-    description: '$45,000 received from Global Industries',
-    timestamp: new Date(Date.now() - 1000 * 60 * 45),
-    user: { id: '2', name: 'Michael Torres', avatar: '' },
-    priority: 'medium',
-  },
-  {
-    id: '3',
-    type: 'task_completed',
-    title: 'Discovery Completed',
-    description: 'All document requests submitted in Johnson case',
-    timestamp: new Date(Date.now() - 1000 * 60 * 90),
-    user: { id: '3', name: 'Jessica Park', avatar: '' },
-    priority: 'low',
-  },
-  {
-    id: '4',
-    type: 'deadline_approaching',
-    title: 'Upcoming Deadline',
-    description: 'Motion to dismiss due in 48 hours - Anderson v. State',
-    timestamp: new Date(Date.now() - 1000 * 60 * 120),
-    user: { id: '4', name: 'David Kim', avatar: '' },
-    priority: 'critical',
-  },
-  {
-    id: '5',
-    type: 'case_closed',
-    title: 'Case Closed',
-    description: 'Martinez dispute settled favorably',
-    timestamp: new Date(Date.now() - 1000 * 60 * 180),
-    user: { id: '5', name: 'Emily Davis', avatar: '' },
-    priority: 'medium',
-  },
-];
+const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
+  if (!data) return [];
+  const colors = ['#94A3B8', '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'];
+  return data.map((item, index) => ({
+    stage: item.status,
+    count: item.count,
+    value: 0, // Value not provided by breakdown endpoint, might need another call or update endpoint
+    color: item.color || colors[index % colors.length],
+  }));
+};
 
-const generateCasePipelineData = (): CasePipelineStage[] => [
-  { stage: 'Lead', count: 23, value: 580000, color: '#94A3B8' },
-  { stage: 'Consultation', count: 18, value: 720000, color: '#3B82F6' },
-  { stage: 'Retained', count: 31, value: 1240000, color: '#8B5CF6' },
-  { stage: 'Active', count: 127, value: 5080000, color: '#10B981' },
-  { stage: 'Settlement', count: 12, value: 540000, color: '#F59E0B' },
-  { stage: 'Trial', count: 8, value: 960000, color: '#EF4444' },
-];
+const mapTeamPerformance = (data?: TeamMetrics[]): TeamMember[] => {
+  if (!data) return [];
+  return data.map((item) => ({
+    id: item.userId,
+    name: item.userName,
+    role: 'Member', // Role not in TeamMetrics
+    billableHours: item.billableHours,
+    totalHours: 0, // Not in TeamMetrics
+    utilizationRate: item.efficiency,
+    activeCases: item.activeCases,
+    revenue: 0, // Not in TeamMetrics
+  }));
+};
 
-const generateTeamPerformanceData = (): TeamMember[] => [
-  {
-    id: '1',
-    name: 'Sarah Chen',
-    role: 'Senior Partner',
-    billableHours: 186,
-    totalHours: 201,
-    utilizationRate: 92.5,
-    activeCases: 15,
-    revenue: 558000,
-  },
-  {
-    id: '2',
-    name: 'Michael Torres',
-    role: 'Partner',
-    billableHours: 178,
-    totalHours: 192,
-    utilizationRate: 92.7,
-    activeCases: 12,
-    revenue: 489000,
-  },
-  {
-    id: '3',
-    name: 'Jessica Park',
-    role: 'Associate',
-    billableHours: 172,
-    totalHours: 192,
-    utilizationRate: 89.5,
-    activeCases: 18,
-    revenue: 344000,
-  },
-  {
-    id: '4',
-    name: 'David Kim',
-    role: 'Associate',
-    billableHours: 165,
-    totalHours: 184,
-    utilizationRate: 89.7,
-    activeCases: 14,
-    revenue: 330000,
-  },
-  {
-    id: '5',
-    name: 'Emily Davis',
-    role: 'Junior Associate',
-    billableHours: 158,
-    totalHours: 176,
-    utilizationRate: 89.9,
-    activeCases: 16,
-    revenue: 237000,
-  },
-];
+const mapRevenueData = (data?: BillingOverview[]) => {
+  if (!data) return [];
+  return data.map((item) => ({
+    month: item.period,
+    revenue: item.billed,
+    target: 0, // Not in BillingOverview
+    collected: item.collected,
+  }));
+};
 
-const generateRevenueData = () => [
-  { month: 'Jul', revenue: 245000, target: 250000, collected: 220000 },
-  { month: 'Aug', revenue: 268000, target: 260000, collected: 245000 },
-  { month: 'Sep', revenue: 312000, target: 280000, collected: 280000 },
-  { month: 'Oct', revenue: 289000, target: 290000, collected: 265000 },
-  { month: 'Nov', revenue: 324000, target: 300000, collected: 298000 },
-  { month: 'Dec', revenue: 356000, target: 320000, collected: 325000 },
-];
+const mapFinancialSummary = (data?: BillingOverview[]): FinancialSummary => {
+  if (!data || data.length === 0) {
+    return {
+      totalRevenue: 0,
+      collected: 0,
+      outstanding: 0,
+      writeOffs: 0,
+      realizationRate: 0,
+      collectionRate: 0,
+    };
+  }
 
-const generateFinancialSummary = (): FinancialSummary => ({
-  totalRevenue: 2847500,
-  collected: 2524000,
-  outstanding: 323500,
-  writeOffs: 45200,
-  realizationRate: 92.3,
-  collectionRate: 88.7,
-});
+  // Aggregate data
+  const total = data.reduce(
+    (acc, curr) => ({
+      totalRevenue: acc.totalRevenue + curr.billed,
+      collected: acc.collected + curr.collected,
+      outstanding: acc.outstanding + curr.outstanding,
+      writeOffs: acc.writeOffs + curr.writeOffs,
+    }),
+    { totalRevenue: 0, collected: 0, outstanding: 0, writeOffs: 0 }
+  );
+
+  return {
+    ...total,
+    realizationRate: total.totalRevenue ? ((total.totalRevenue - total.writeOffs) / total.totalRevenue) * 100 : 0,
+    collectionRate: total.totalRevenue ? (total.collected / total.totalRevenue) * 100 : 0,
+  };
+};
+
+const EmptyChart = () => (
+  <div className="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-dashed border-gray-200 dark:border-gray-800">
+    <span className="text-gray-400 text-sm">No data available</span>
+  </div>
+);
 
 // ============================================================================
 // COMPONENT
@@ -302,13 +257,41 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
   const { theme } = useTheme();
   const [selectedTimeframe, setSelectedTimeframe] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
-  // Generate mock data (replace with real API calls)
-  const kpiMetrics = useMemo(() => generateMockKPIs(), []);
-  const activities = useMemo(() => generateMockActivities(), []);
-  const casePipeline = useMemo(() => generateCasePipelineData(), []);
-  const teamPerformance = useMemo(() => generateTeamPerformanceData(), []);
-  const revenueData = useMemo(() => generateRevenueData(), []);
-  const financialSummary = useMemo(() => generateFinancialSummary(), []);
+  // Fetch data
+  const { data: kpiData, isLoading: isKpiLoading } = useQuery(
+    ['dashboard', 'kpis'],
+    () => dashboardMetricsService.getKPIs()
+  );
+
+  const { data: activityData, isLoading: isActivityLoading } = useQuery(
+    ['dashboard', 'activity'],
+    () => dashboardMetricsService.getRecentActivity()
+  );
+
+  const { data: pipelineData, isLoading: isPipelineLoading } = useQuery(
+    ['dashboard', 'pipeline'],
+    () => dashboardMetricsService.getCaseStatusBreakdown()
+  );
+
+  const { data: teamData, isLoading: isTeamLoading } = useQuery(
+    ['dashboard', 'team'],
+    () => dashboardMetricsService.getTeamMetrics()
+  );
+
+  const { data: billingData, isLoading: isBillingLoading } = useQuery(
+    ['dashboard', 'billing'],
+    () => dashboardMetricsService.getBillingOverview()
+  );
+
+  // Map data
+  const kpiMetrics = useMemo(() => mapKPIs(kpiData), [kpiData]);
+  const activities = useMemo(() => activityData || [], [activityData]);
+  const casePipeline = useMemo(() => mapCasePipeline(pipelineData), [pipelineData]);
+  const teamPerformance = useMemo(() => mapTeamPerformance(teamData), [teamData]);
+  const revenueData = useMemo(() => mapRevenueData(billingData), [billingData]);
+  const financialSummary = useMemo(() => mapFinancialSummary(billingData), [billingData]);
+
+  const isDataLoading = isLoading || isKpiLoading || isActivityLoading || isPipelineLoading || isTeamLoading || isBillingLoading;
 
   // Render error state
   if (error) {
@@ -404,25 +387,47 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
 
       {/* Executive KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpiMetrics.map((metric, index) => (
-          <motion.div
-            key={metric.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-          >
-            <KPICard
-              label={metric.label}
-              value={metric.value}
-              previousValue={metric.previousValue}
-              icon={metric.icon}
-              format={metric.format}
-              color={metric.color}
-              isLoading={isLoading}
-              target={metric.target}
-            />
-          </motion.div>
-        ))}
+        {isDataLoading ? (
+          Array(4)
+            .fill(0)
+            .map((_, i) => (
+              <div
+                key={i}
+                className="h-32 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse"
+              />
+            ))
+        ) : kpiMetrics.length > 0 ? (
+          kpiMetrics.map((metric, index) => (
+            <motion.div
+              key={metric.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <KPICard
+                label={metric.label}
+                value={metric.value}
+                previousValue={metric.previousValue}
+                icon={metric.icon}
+                format={metric.format}
+                color={metric.color}
+                isLoading={isLoading}
+                target={metric.target}
+              />
+            </motion.div>
+          ))
+        ) : (
+          Array(4)
+            .fill(0)
+            .map((_, i) => (
+              <div
+                key={i}
+                className="h-32 rounded-xl bg-gray-50 dark:bg-gray-900 border border-dashed border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-400"
+              >
+                No Data
+              </div>
+            ))
+        )}
       </div>
 
       {/* Main Content Grid */}
@@ -439,53 +444,61 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
             height={320}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData}>
-                <defs>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorCollected" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
-                <XAxis dataKey="month" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                  }}
-                />
-                <Legend />
-                <Area
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#3B82F6"
-                  fillOpacity={1}
-                  fill="url(#colorRevenue)"
-                  name="Revenue"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="collected"
-                  stroke="#10B981"
-                  fillOpacity={1}
-                  fill="url(#colorCollected)"
-                  name="Collected"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="target"
-                  stroke="#F59E0B"
-                  strokeDasharray="5 5"
-                  strokeWidth={2}
-                  name="Target"
-                />
-              </AreaChart>
+              {revenueData.length > 0 ? (
+                <AreaChart data={revenueData}>
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorCollected" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    className="dark:stroke-gray-700"
+                  />
+                  <XAxis dataKey="month" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                    }}
+                  />
+                  <Legend />
+                  <Area
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#3B82F6"
+                    fillOpacity={1}
+                    fill="url(#colorRevenue)"
+                    name="Revenue"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="collected"
+                    stroke="#10B981"
+                    fillOpacity={1}
+                    fill="url(#colorCollected)"
+                    name="Collected"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="target"
+                    stroke="#F59E0B"
+                    strokeDasharray="5 5"
+                    strokeWidth={2}
+                    name="Target"
+                  />
+                </AreaChart>
+              ) : (
+                <EmptyChart />
+              )}
             </ResponsiveContainer>
           </ChartCard>
 
@@ -499,30 +512,41 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
             height={320}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={casePipeline}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
-                <XAxis dataKey="stage" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                  }}
-                  formatter={(value: number | string | Array<number | string>, name: string | number) => {
-                    if (name === 'value' && typeof value === 'number') {
-                      return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
-                    }
-                    return [value, 'Cases'];
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="count" name="Cases" radius={[8, 8, 0, 0]}>
-                  {casePipeline.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
+              {casePipeline.length > 0 ? (
+                <BarChart data={casePipeline}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    className="dark:stroke-gray-700"
+                  />
+                  <XAxis dataKey="stage" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                    }}
+                    formatter={(
+                      value: number | string | Array<number | string>,
+                      name: string | number
+                    ) => {
+                      if (name === 'value' && typeof value === 'number') {
+                        return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
+                      }
+                      return [value, 'Cases'];
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="count" name="Cases" radius={[8, 8, 0, 0]}>
+                    {casePipeline.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              ) : (
+                <EmptyChart />
+              )}
             </ResponsiveContainer>
           </ChartCard>
 
@@ -536,21 +560,44 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
             height={320}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={teamPerformance} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
-                <XAxis type="number" stroke="#6b7280" />
-                <YAxis dataKey="name" type="category" stroke="#6b7280" width={120} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="billableHours" fill="#3B82F6" name="Billable Hours" radius={[0, 8, 8, 0]} />
-                <Bar dataKey="totalHours" fill="#E5E7EB" name="Total Hours" radius={[0, 8, 8, 0]} />
-              </BarChart>
+              {teamPerformance.length > 0 ? (
+                <BarChart data={teamPerformance} layout="vertical">
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    className="dark:stroke-gray-700"
+                  />
+                  <XAxis type="number" stroke="#6b7280" />
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    stroke="#6b7280"
+                    width={120}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                    }}
+                  />
+                  <Legend />
+                  <Bar
+                    dataKey="billableHours"
+                    fill="#3B82F6"
+                    name="Billable Hours"
+                    radius={[0, 8, 8, 0]}
+                  />
+                  <Bar
+                    dataKey="totalHours"
+                    fill="#E5E7EB"
+                    name="Total Hours"
+                    radius={[0, 8, 8, 0]}
+                  />
+                </BarChart>
+              ) : (
+                <EmptyChart />
+              )}
             </ResponsiveContainer>
           </ChartCard>
         </div>

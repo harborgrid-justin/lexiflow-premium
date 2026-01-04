@@ -1296,16 +1296,6 @@ Object.defineProperties(DataServiceBase, {
   },
 
   /**
-   * RLS Policies API - Row Level Security management
-   * @backend api.rlsPolicies
-   * @features Policy definition, enforcement, testing
-   */
-  rlsPolicies: {
-    get: () => (isBackendApiEnabled() ? (api as any).rlsPolicies : null),
-    enumerable: true,
-  },
-
-  /**
    * Query Workbench API - SQL query execution
    * @backend api.queryWorkbench
    * @features Ad-hoc queries, saved queries, history

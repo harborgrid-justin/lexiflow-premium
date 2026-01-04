@@ -100,8 +100,8 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
             title: `Correspondence: ${commItem.subject}`,
             type: 'Correspondence',
             content: commItem.preview,
-            uploadDate: new Date().toISOString().split('T')[0],
-            lastModified: new Date().toISOString().split('T')[0],
+            uploadDate: new Date().toISOString().split('T')[0] ?? '',
+            lastModified: new Date().toISOString().split('T')[0] ?? '',
             tags: ['Communication', commItem.type],
             versions: [],
             sourceModule: 'Correspondence',
@@ -123,7 +123,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         if (correspondenceItem.type !== 'service') return;
 
         const serviceItem = correspondenceItem.item;
-        const todayDate = new Date().toISOString().split('T')[0];
+        const todayDate = new Date().toISOString().split('T')[0] ?? '';
         const entry: DocketEntry = {
             id: `dk-${Date.now()}` as DocketId,
             sequenceNumber: 999,
@@ -171,7 +171,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
             title: `Return Receipt - ${serviceItem.documentTitle}`,
             type: 'Document',
             description: `Proof of delivery/service for ${serviceItem.documentTitle} to ${serviceItem.targetPerson}. Signed by ${signerName}.`,
-            collectionDate: new Date().toISOString().split('T')[0],
+            collectionDate: new Date().toISOString().split('T')[0] ?? '',
             collectedBy: 'System Import',
             custodian: 'Firm Records',
             location: 'Digital Evidence Vault',

@@ -9,8 +9,6 @@ import React, { useMemo, useState } from 'react';
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
 import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
-import { CaseRepository } from '@/services/data/repositories/IntegratedCaseRepository';
-import { DocketRepository } from '@/services/data/repositories/IntegratedDocketRepository';
 import { DocketEntry } from '@/types';
 
 interface ContextPanelProps {

@@ -3,20 +3,20 @@
  * Manages discovery productions
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface Production {
   id: string;
   caseId: string;
   name: string;
   productionNumber?: string;
-  type: 'initial' | 'supplemental' | 'rolling';
-  status: 'draft' | 'in_progress' | 'ready' | 'produced' | 'objected';
+  type: "initial" | "supplemental" | "rolling";
+  status: "draft" | "in_progress" | "ready" | "produced" | "objected";
   producedTo?: string;
   producedBy?: string;
   productionDate?: string;
   dueDate?: string;
-  format: 'native' | 'tiff' | 'pdf' | 'paper' | 'electronic';
+  format: "native" | "tiff" | "pdf" | "paper" | "electronic";
   documentCount?: number;
   pageCount?: number;
   beginBatesNumber?: string;
@@ -38,18 +38,18 @@ export interface Production {
 
 export interface ProductionFilters {
   caseId?: string;
-  status?: Production['status'];
-  type?: Production['type'];
+  status?: Production["status"];
+  type?: Production["type"];
 }
 
 export class ProductionsApiService {
-  private readonly baseUrl = '/productions';
+  private readonly baseUrl = "/productions";
 
   async getAll(filters?: ProductionFilters): Promise<Production[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.type) params.append('type', filters.type);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.type) params.append("type", filters.type);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     const response = await apiClient.get<{ items: Production[] }>(url);
@@ -73,11 +73,18 @@ export class ProductionsApiService {
     return apiClient.put<Production>(`${this.baseUrl}/${id}`, data);
   }
 
-  async updateStatus(id: string, status: Production['status']): Promise<Production> {
-    return apiClient.patch<Production>(`${this.baseUrl}/${id}/status`, { status });
+  async updateStatus(
+    id: string,
+    status: Production["status"]
+  ): Promise<Production> {
+    return apiClient.patch<Production>(`${this.baseUrl}/${id}/status`, {
+      status,
+    });
   }
 
   async delete(id: string): Promise<void> {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
 }
+
+export const productionsApi = new ProductionsApiService();

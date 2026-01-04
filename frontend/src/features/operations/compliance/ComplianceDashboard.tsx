@@ -20,8 +20,8 @@ import React, { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
@@ -58,7 +58,7 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
       pageTitle="Risk & Compliance Center"
       pageSubtitle="Conflicts, Ethical Walls, and Regulatory Monitoring."
       pageActions={<Button variant="secondary" icon={Download}>Audit Report</Button>}
-      tabConfig={COMPLIANCE_TAB_CONFIG as { id: string; label: string; icon: React.ComponentType }[]}
+      tabConfig={COMPLIANCE_TAB_CONFIG as TabConfigItem[]}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

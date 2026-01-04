@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Filter, Layout, UserPlus } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,10 +25,10 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
@@ -70,17 +70,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   const [filterSpecialty, setFilterSpecialty] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
-  const _handleRoleFilterChange = useCallback((role: string) => {
-    setFilterRole(role);
-  }, []);
 
-  const _handleSpecialtyFilterChange = useCallback((specialty: string) => {
-    setFilterSpecialty(specialty);
-  }, []);
-
-  const _handleStatusFilterChange = useCallback((status: string) => {
-    setFilterStatus(status);
-  }, []);
 
   // ============================================================================
   // DATA FETCHING

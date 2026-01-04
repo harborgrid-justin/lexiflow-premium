@@ -10,6 +10,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
+import type { CaseId, DocumentId } from '@/types/primitives';
 import { cn } from '@/utils/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
@@ -22,8 +23,8 @@ export const Review: React.FC = () => {
   const [documents] = useState<ReviewDocument[]>([
     {
       id: 'DOC-001',
-      caseId: 'C-2024-001',
-      documentId: 'D-12345',
+      caseId: 'C-2024-001' as CaseId,
+      documentId: 'D-12345' as DocumentId,
       fileName: 'Q3_Financial_Report.pdf',
       fileType: 'pdf',
       fileSize: 2457600,
@@ -53,8 +54,8 @@ export const Review: React.FC = () => {
     },
     {
       id: 'DOC-002',
-      caseId: 'C-2024-001',
-      documentId: 'D-12346',
+      caseId: 'C-2024-001' as CaseId,
+      documentId: 'D-12346' as DocumentId,
       fileName: 'Attorney_Client_Communication.msg',
       fileType: 'email',
       fileSize: 45678,
@@ -105,17 +106,23 @@ export const Review: React.FC = () => {
 
   const handleNextDocument = () => {
     if (currentDocIndex < documents.length - 1) {
-      setCurrentDocIndex(currentDocIndex + 1);
-      setCurrentCoding(documents[currentDocIndex + 1].coding);
-      setNotes('');
+      const nextDoc = documents[currentDocIndex + 1];
+      if (nextDoc) {
+        setCurrentDocIndex(currentDocIndex + 1);
+        setCurrentCoding(nextDoc.coding);
+        setNotes('');
+      }
     }
   };
 
   const handlePreviousDocument = () => {
     if (currentDocIndex > 0) {
-      setCurrentDocIndex(currentDocIndex - 1);
-      setCurrentCoding(documents[currentDocIndex - 1].coding);
-      setNotes('');
+      const prevDoc = documents[currentDocIndex - 1];
+      if (prevDoc) {
+        setCurrentDocIndex(currentDocIndex - 1);
+        setCurrentCoding(prevDoc.coding);
+        setNotes('');
+      }
     }
   };
 

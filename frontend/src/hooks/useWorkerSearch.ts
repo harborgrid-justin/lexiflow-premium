@@ -102,7 +102,7 @@ export function useWorkerSearch<T>(
           requestId === requestIdRef.current &&
           requestId === cancelTokenRef.current
         ) {
-          setResults(results);
+          setFilteredItems(results);
           setIsSearching(false);
         }
       };

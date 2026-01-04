@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
@@ -169,7 +169,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
             caseId: formData.caseId,
             userId: 'current-user' as UserId,
             subject: formData.subject,
-            date: new Date().toISOString().split('T')[0],
+            date: new Date().toISOString().split('T')[0] ?? '',
             type: formData.type as CommunicationType,
             direction: 'Outbound',
             sender: 'Me (Attorney)',

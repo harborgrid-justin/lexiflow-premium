@@ -17,8 +17,8 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTrustAccounts } from '@/hooks/useTrustAccounts';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTrustAccounts } from '@/hooks/useTrustAccounts';
 import type { TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { cn } from '@/utils/cn';
@@ -496,7 +496,7 @@ export const TrustAccountDashboard: React.FC = () => {
           value={stats.needsReconciliation}
           subtitle="Overdue monthly reconciliation"
           variant={stats.needsReconciliation > 0 ? 'warning' : 'default'}
-          onClick={stats.needsReconciliation > 0 ? () => handleReconcileAccount(accountsNeedingReconciliation[0].id) : undefined}
+          onClick={stats.needsReconciliation > 0 && accountsNeedingReconciliation.length > 0 ? () => handleReconcileAccount(accountsNeedingReconciliation[0].id) : undefined}
         />
 
         <StatCard

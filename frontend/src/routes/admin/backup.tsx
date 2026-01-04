@@ -414,7 +414,7 @@ export default function BackupRoute({ loaderData }: any) {
                       {backup.name}
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {backup.storageLocation.toUpperCase()} • {backup.retentionDays} days retention
+                      {/* Location and retention info not available in snapshot */}
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
@@ -426,7 +426,7 @@ export default function BackupRoute({ loaderData }: any) {
                     {formatBytes(backup.size)}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                    {formatDate(backup.createdAt)}
+                    {formatDate(backup.created)}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <span className={`rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(backup.status)}`}>

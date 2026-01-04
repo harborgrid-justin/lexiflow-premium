@@ -240,10 +240,11 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                                 <CorrespondenceDetailSkeleton />
                             ) : (
                                 <CorrespondenceDetail
-                                    correspondenceItem={{
-                                        type: activeTab === 'communications' ? 'communication' : 'service',
-                                        item: itemSelection.selected as Record<string, unknown>
-                                    }}
+                                    correspondenceItem={
+                                        activeTab === 'communications'
+                                            ? { type: 'communication', item: itemSelection.selected as unknown as CommunicationItem }
+                                            : { type: 'service', item: itemSelection.selected as unknown as ServiceJob }
+                                    }
                                     onClose={() => inspectorToggle.close()}
                                     onReply={(item) => handleReply(item)}
                                 />

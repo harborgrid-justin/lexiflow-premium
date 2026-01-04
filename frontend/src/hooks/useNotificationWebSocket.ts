@@ -176,6 +176,8 @@ export const useNotificationWebSocket = (
     [onConnectionChange, log]
   );
 
+  const connectRef = useRef<() => void>(() => {});
+
   /**
    * Schedule reconnection with exponential backoff
    */
@@ -200,9 +202,9 @@ export const useNotificationWebSocket = (
 
     reconnectTimerRef.current = setTimeout(() => {
       reconnectAttemptsRef.current++;
-      connect();
+      connectRef.current();
     }, delay);
-  }, [maxReconnectAttempts, reconnectDelay, log]); // Removed connect from deps to avoid cycle
+  }, [maxReconnectAttempts, reconnectDelay, log]);
 
   /**
    * Connect to WebSocket
@@ -401,6 +403,10 @@ export const useNotificationWebSocket = (
   );
 
   // Auto-connect on mount
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
+
   useEffect(() => {
     if (token) {
       connect();

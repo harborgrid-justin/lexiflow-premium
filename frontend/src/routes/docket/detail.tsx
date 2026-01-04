@@ -9,7 +9,7 @@
 import { api } from '@/api';
 import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
-import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
@@ -58,7 +58,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const { docketId } = params;
 
   if (!docketId) {
@@ -195,7 +195,7 @@ export default function DocketDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   // Handle 404 specifically
   if (error instanceof Response && error.status === 404) {
     return (

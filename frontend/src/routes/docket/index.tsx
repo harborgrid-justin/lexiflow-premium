@@ -13,7 +13,7 @@ import { api } from '@/api';
 import type { CaseId } from '@/types';
 import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
-import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams, type LoaderFunctionArgs } from 'react-router';
+import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -66,7 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -328,7 +328,7 @@ export default function DocketIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

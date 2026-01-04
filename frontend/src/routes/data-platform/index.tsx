@@ -7,6 +7,7 @@
  * @module routes/data-platform/index
  */
 
+import { ActionFunctionArgs } from 'react-router-dom';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -38,7 +39,7 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -71,7 +72,7 @@ export default function DataPlatformIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

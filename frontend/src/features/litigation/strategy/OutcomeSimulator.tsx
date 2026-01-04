@@ -8,7 +8,7 @@
  */
 
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // Internal Components

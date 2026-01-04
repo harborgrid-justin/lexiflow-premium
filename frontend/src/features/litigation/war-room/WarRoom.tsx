@@ -20,6 +20,7 @@ import {
   FileText,
   Gavel,
   Layers,
+  Loader2,
   Mic2,
   Monitor,
   Shield,
@@ -176,7 +177,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   } = useQuery(
     QUERY_KEYS.CASES.WAR_ROOM(currentCaseId),
     async () => {
-      const warRoomService = DataService.warRoom as { getData: (caseId: string) => Promise<unknown> };
+      const warRoomService = DataService.warRoom as { getData: (caseId: string) => Promise<WarRoomData> };
       return warRoomService.getData(currentCaseId);
     },
     { enabled: !!currentCaseId },
@@ -497,7 +498,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
               onClick={() => handleParentTabChange(parent.id)}
               className={cn(
                 "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                activeParentTab.id === parent.id
+                activeParentTab?.id === parent.id
                   ? cn("border-current", theme.primary.text)
                   : cn(
                     "border-transparent",
@@ -509,7 +510,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
               <parent.icon
                 className={cn(
                   "h-4 w-4 mr-2",
-                  activeParentTab.id === parent.id
+                  activeParentTab?.id === parent.id
                     ? theme.primary.text
                     : theme.text.tertiary,
                 )}
@@ -520,7 +521,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        {activeParentTab.subTabs.length > 1 && (
+        {activeParentTab && activeParentTab.subTabs.length > 1 && (
           <div
             className={cn(
               "flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4",

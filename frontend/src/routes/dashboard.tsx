@@ -38,7 +38,7 @@ export async function loader() {
 // Component
 // ============================================================================
 
-export default function DashboardRoute({ loaderData: _loaderData }: Route.ComponentProps) {
+export default function DashboardRoute({ loaderData: _loaderData }: any) {
   const { currentUser } = useAppController();
   const navigate = useNavigate();
 
@@ -80,7 +80,7 @@ export default function DashboardRoute({ loaderData: _loaderData }: Route.Compon
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
       <div className="max-w-md rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-800 dark:bg-red-900/20">

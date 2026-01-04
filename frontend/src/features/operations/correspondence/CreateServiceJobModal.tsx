@@ -7,7 +7,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
-import { ServiceJob, UserId } from '@/types';
+import { CaseId, ServiceJob, UserId } from '@/types';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import React, { useState } from 'react';

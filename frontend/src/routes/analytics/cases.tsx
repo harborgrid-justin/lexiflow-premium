@@ -3,18 +3,28 @@
  * Detailed analytics for case outcomes, types, and trends
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/cases";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
-import { MetricCard, ChartCard, DateRangeSelector, FilterPanel } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
-} from 'recharts';
+import { ChartCard, DateRangeSelector, FilterPanel, MetricCard } from '@/components/enterprise/analytics';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useLoaderData } from 'react-router';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ComposedChart,
+  Legend,
+  Line,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/cases";
 
 export function meta() {
   return createMeta({
@@ -38,7 +48,7 @@ export async function loader() {
 }
 
 export default function CaseAnalyticsRoute() {
-  const { metrics } = loaderData;
+  const { metrics } = useLoaderData() as Route.ComponentProps['loaderData'];
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 90),
@@ -83,7 +93,7 @@ export default function CaseAnalyticsRoute() {
       ],
     },
   ];
-console.log('filter state:', filters);
+  console.log('filter state:', filters);
 
   const casesByOutcome = [
     { name: 'Won', value: 89, color: '#10B981' },
@@ -213,7 +223,7 @@ console.log('filter state:', filters);
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"

@@ -25,13 +25,13 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from "react";
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Types
-import { WorkflowTask } from '@/types';
+import { WorkflowTask } from "@/types";
 
 // ========================================
 // TYPES & INTERFACES
@@ -40,7 +40,7 @@ import { WorkflowTask } from '@/types';
 /**
  * Drag mode type
  */
-export type DragMode = 'move' | 'resize-left' | 'resize-right';
+export type DragMode = "move" | "resize-left" | "resize-right";
 
 /**
  * Configuration for useGanttDrag
@@ -51,7 +51,11 @@ interface DragOptions {
   /** Tasks array for date lookups */
   tasks: WorkflowTask[];
   /** Callback when task dates change */
-  onTaskUpdate: (taskId: string, newStartDate: string, newDueDate: string) => void;
+  onTaskUpdate: (
+    taskId: string,
+    newStartDate: string,
+    newDueDate: string
+  ) => void;
 }
 
 /**
@@ -59,9 +63,19 @@ interface DragOptions {
  */
 export interface UseGanttDragReturn {
   /** Initialize drag operation */
-  initDrag: (e: React.MouseEvent, taskId: string, mode: DragMode, element: HTMLElement) => void;
+  initDrag: (
+    e: React.MouseEvent,
+    taskId: string,
+    mode: DragMode,
+    element: HTMLElement
+  ) => void;
   /** Initialize drag operation (alias for backward compatibility) */
-  onMouseDown: (e: React.MouseEvent, taskId: string, mode: DragMode, element?: HTMLElement) => void;
+  onMouseDown: (
+    e: React.MouseEvent,
+    taskId: string,
+    mode: DragMode,
+    element?: HTMLElement
+  ) => void;
 }
 
 // ========================================
@@ -74,144 +88,158 @@ export interface UseGanttDragReturn {
  * @param options - Configuration options
  * @returns Object with initDrag method
  */
-export function useScheduleController({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
-    const dragRef = useRef<{
-        taskId: string;
-        mode: DragMode;
-        startX: number;
-        initialWidth: number;
-        element: HTMLElement;
-    } | null>(null);
+export function useScheduleController({
+  pixelsPerDay,
+  tasks,
+  onTaskUpdate,
+}: DragOptions): UseGanttDragReturn {
+  const dragRef = useRef<{
+    taskId: string;
+    mode: DragMode;
+    startX: number;
+    initialWidth: number;
+    element: HTMLElement;
+  } | null>(null);
 
-    const activeListenersRef = useRef<{
-        move: ((e: MouseEvent) => void) | null;
-        up: ((e: MouseEvent) => void) | null;
-    }>({ move: null, up: null });
+  const activeListenersRef = useRef<{
+    move: ((e: MouseEvent) => void) | null;
+    up: ((e: MouseEvent) => void) | null;
+  }>({ move: null, up: null });
 
-    // Cleanup event listeners on unmount
-    useEffect(() => {
-        return () => {
-            if (activeListenersRef.current.move) {
-                window.removeEventListener('mousemove', activeListenersRef.current.move);
-            }
-            if (activeListenersRef.current.up) {
-                window.removeEventListener('mouseup', activeListenersRef.current.up);
-            }
-        };
-    }, []);
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (activeListenersRef.current.move) {
+        window.removeEventListener(
+          "mousemove",
+          activeListenersRef.current.move
+        );
+      }
+      if (activeListenersRef.current.up) {
+        window.removeEventListener("mouseup", activeListenersRef.current.up);
+      }
+    };
+  }, []);
 
-    // 60fps Loop for smooth visual updates without React re-renders
-    const handleMouseMove = useCallback((e: MouseEvent) => {
-        if (!dragRef.current) return;
-        const { startX, initialWidth, element, mode } = dragRef.current;
-        const dx = e.clientX - startX;
+  // 60fps Loop for smooth visual updates without React re-renders
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!dragRef.current) return;
+    const { startX, initialWidth, element, mode } = dragRef.current;
+    const dx = e.clientX - startX;
 
-        requestAnimationFrame(() => {
-            if (mode === 'move') {
-                element.style.transform = `translate3d(${dx}px, 0, 0)`;
-                element.style.zIndex = '50';
-            } else if (mode === 'resize-right') {
-                element.style.width = `${Math.max(20, initialWidth + dx)}px`;
-            } else if (mode === 'resize-left') {
-                // For left resize, we translate right and shrink width, or translate left and grow width
-                // Visual trick: translate X and change width
-                const newWidth = Math.max(20, initialWidth - dx);
-                if (newWidth > 20) {
-                     element.style.transform = `translate3d(${dx}px, 0, 0)`;
-                     element.style.width = `${newWidth}px`;
-                }
-            }
-        });
-    }, []);
-
-    const handleMouseUp = useCallback((e: MouseEvent) => {
-        if (!dragRef.current) return;
-        const { taskId, mode, startX, element } = dragRef.current;
-        const dx = e.clientX - startX;
-
-        // Cleanup
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-        activeListenersRef.current = { move: null, up: null };
-        document.body.style.cursor = '';
-
-        // Reset visual overrides (React state update will snap it to correct place)
-        element.style.transform = '';
-        element.style.width = '';
-        element.style.zIndex = '';
-
-        dragRef.current = null;
-
-        // Logic: Calculate new dates
-        const daysDelta = Math.round(dx / pixelsPerDay);
-
-        if (daysDelta !== 0) {
-            const task = tasks.find(t => t.id === taskId);
-            if (task && task.dueDate) {
-                // Default duration to 5 days if not calculable
-                const currentDue = new Date(task.dueDate);
-                const currentStart = task.startDate
-                    ? new Date(task.startDate)
-                    : new Date(currentDue.getTime() - (5 * 24 * 60 * 60 * 1000));
-
-                const newStart = new Date(currentStart);
-                const newDue = new Date(currentDue);
-
-                if (mode === 'move') {
-                    newStart.setDate(newStart.getDate() + daysDelta);
-                    newDue.setDate(newDue.getDate() + daysDelta);
-                } else if (mode === 'resize-right') {
-                    newDue.setDate(newDue.getDate() + daysDelta);
-                } else if (mode === 'resize-left') {
-                    newStart.setDate(newStart.getDate() + daysDelta);
-                }
-
-                // Ensure start is before due
-                if (newStart.getTime() > newDue.getTime()) {
-                    return; // Invalid state, abort
-                }
-
-                onTaskUpdate(
-                    taskId,
-                    newStart.toISOString().split('T')[0],
-                    newDue.toISOString().split('T')[0]
-                );
-            }
+    requestAnimationFrame(() => {
+      if (mode === "move") {
+        element.style.transform = `translate3d(${dx}px, 0, 0)`;
+        element.style.zIndex = "50";
+      } else if (mode === "resize-right") {
+        element.style.width = `${Math.max(20, initialWidth + dx)}px`;
+      } else if (mode === "resize-left") {
+        // For left resize, we translate right and shrink width, or translate left and grow width
+        // Visual trick: translate X and change width
+        const newWidth = Math.max(20, initialWidth - dx);
+        if (newWidth > 20) {
+          element.style.transform = `translate3d(${dx}px, 0, 0)`;
+          element.style.width = `${newWidth}px`;
         }
-    }, [tasks, pixelsPerDay, onTaskUpdate, handleMouseMove]);
+      }
+    });
+  }, []);
 
-    const onMouseDown = useCallback((e: React.MouseEvent, taskId: string, mode: DragMode) => {
-        // Only left click
-        if (e.button !== 0) return;
+  const handleMouseUp = useCallback(
+    (e: MouseEvent) => {
+      if (!dragRef.current) return;
+      const { taskId, mode, startX, element } = dragRef.current;
+      const dx = e.clientX - startX;
 
-        e.preventDefault();
-        e.stopPropagation();
+      // Cleanup
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      activeListenersRef.current = { move: null, up: null };
+      document.body.style.cursor = "";
 
-        const target = e.currentTarget as HTMLElement;
-        // If dragging handles, the target is the handle, parent is the bar.
-        // If moving, target is the bar.
-        const element = mode === 'move' ? target : target.parentElement as HTMLElement;
+      // Reset visual overrides (React state update will snap it to correct place)
+      element.style.transform = "";
+      element.style.width = "";
+      element.style.zIndex = "";
 
-        if (!element) return;
+      dragRef.current = null;
 
-        const rect = element.getBoundingClientRect();
+      // Logic: Calculate new dates
+      const daysDelta = Math.round(dx / pixelsPerDay);
 
-        dragRef.current = {
+      if (daysDelta !== 0) {
+        const task = tasks.find((t) => t.id === taskId);
+        if (task && task.dueDate) {
+          // Default duration to 5 days if not calculable
+          const currentDue = new Date(task.dueDate);
+          const currentStart = task.startDate
+            ? new Date(task.startDate)
+            : new Date(currentDue.getTime() - 5 * 24 * 60 * 60 * 1000);
+
+          const newStart = new Date(currentStart);
+          const newDue = new Date(currentDue);
+
+          if (mode === "move") {
+            newStart.setDate(newStart.getDate() + daysDelta);
+            newDue.setDate(newDue.getDate() + daysDelta);
+          } else if (mode === "resize-right") {
+            newDue.setDate(newDue.getDate() + daysDelta);
+          } else if (mode === "resize-left") {
+            newStart.setDate(newStart.getDate() + daysDelta);
+          }
+
+          // Ensure start is before due
+          if (newStart.getTime() > newDue.getTime()) {
+            return; // Invalid state, abort
+          }
+
+          onTaskUpdate(
             taskId,
-            mode,
-            startX: e.clientX,
-            initialWidth: rect.width,
-            element
-        };
+            newStart.toISOString().split("T")[0] || "",
+            newDue.toISOString().split("T")[0] || ""
+          );
+        }
+      }
+    },
+    [tasks, pixelsPerDay, onTaskUpdate, handleMouseMove]
+  );
 
-        document.body.style.cursor = mode === 'move' ? 'grabbing' : 'col-resize';
+  const onMouseDown = useCallback(
+    (e: React.MouseEvent, taskId: string, mode: DragMode) => {
+      // Only left click
+      if (e.button !== 0) return;
 
-        // Store listeners in ref for cleanup
-        activeListenersRef.current = { move: handleMouseMove, up: handleMouseUp };
+      e.preventDefault();
+      e.stopPropagation();
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
-    }, [handleMouseMove, handleMouseUp]);
+      const target = e.currentTarget as HTMLElement;
+      // If dragging handles, the target is the handle, parent is the bar.
+      // If moving, target is the bar.
+      const element =
+        mode === "move" ? target : (target.parentElement as HTMLElement);
 
-    return { initDrag: onMouseDown, onMouseDown };
-};
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+
+      dragRef.current = {
+        taskId,
+        mode,
+        startX: e.clientX,
+        initialWidth: rect.width,
+        element,
+      };
+
+      document.body.style.cursor = mode === "move" ? "grabbing" : "col-resize";
+
+      // Store listeners in ref for cleanup
+      activeListenersRef.current = { move: handleMouseMove, up: handleMouseUp };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    },
+    [handleMouseMove, handleMouseUp]
+  );
+
+  return { initDrag: onMouseDown, onMouseDown };
+}

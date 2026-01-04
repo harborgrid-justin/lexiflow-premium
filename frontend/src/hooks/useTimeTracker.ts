@@ -418,7 +418,7 @@ export function useTimeTracker(
         id: `t-${Date.now()}` as UUID,
         caseId: caseId as CaseId,
         userId: userId as UserId,
-        date: new Date().toISOString().split("T")[0],
+        date: new Date().toISOString().split("T")[0] || "",
         duration: durationMinutes,
         description: "General Administrative Task (Auto-Logged)",
         rate,

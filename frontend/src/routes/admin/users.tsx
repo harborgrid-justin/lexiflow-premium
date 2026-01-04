@@ -4,7 +4,8 @@
  * Enterprise user management with role assignment, permissions, and audit trails.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useLoaderData } from 'react-router';
 import type { Route } from './+types/users';
 
 interface User {
@@ -61,7 +62,7 @@ export async function loader(_args: Route.LoaderArgs) {
 }
 
 export default function AdminUsersPage() {
-  const { users } = loaderData;
+  const { users } = useLoaderData() as Route.ComponentProps['loaderData'];
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');

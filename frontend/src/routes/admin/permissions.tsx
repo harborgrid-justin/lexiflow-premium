@@ -72,7 +72,7 @@ export default function AdminPermissionsPage() {
     if (!acc[perm.category]) {
       acc[perm.category] = [];
     }
-    acc[perm.category].push(perm);
+    acc[perm.category]?.push(perm);
     return acc;
   }, {});
 

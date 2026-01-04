@@ -11,15 +11,23 @@
  */
 
 import { api } from '@/api';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-// import type { Route } from "./+types/index";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta(_: Route.MetaArgs) {
+export function meta(_: unknown) {
   return createMeta({
     title: 'Compliance',
     description: 'Manage regulatory compliance, ethics, and conflict checking',
@@ -30,7 +38,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request: _ }: Route.LoaderArgs) {
+export async function loader({ request: _ }: LoaderFunctionArgs) {
   try {
     const [alerts, reports, conflicts] = await Promise.all([
       api.compliance.getChecks({ status: 'requires_review' }).catch(() => []),
@@ -59,7 +67,7 @@ export async function loader({ request: _ }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -100,7 +108,7 @@ export default function ComplianceIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

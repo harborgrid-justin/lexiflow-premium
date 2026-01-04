@@ -40,11 +40,11 @@ export class EventEmitter<T> {
    * @param data - Data to send to all listeners
    */
   emit(data: T): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(data);
       } catch (error) {
-        console.error('Error in event listener:', error);
+        console.error("Error in event listener:", error);
       }
     });
   }
@@ -95,7 +95,8 @@ export class EventEmitter<T> {
  * ```
  */
 export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
-  private listeners: Map<keyof TEvents, Set<(data: unknown) => void>> = new Map();
+  private listeners: Map<keyof TEvents, Set<(data: unknown) => void>> =
+    new Map();
 
   /**
    * Subscribe to a specific event type.
@@ -111,12 +112,14 @@ export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    this.listeners.get(event)!.add(listener as any);
+    this.listeners
+      .get(event)!
+      .add(listener as unknown as (data: unknown) => void);
 
     return () => {
       const eventListeners = this.listeners.get(event);
       if (eventListeners) {
-        eventListeners.delete(listener as any);
+        eventListeners.delete(listener as unknown as (data: unknown) => void);
         if (eventListeners.size === 0) {
           this.listeners.delete(event);
         }
@@ -153,7 +156,7 @@ export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
     const eventListeners = this.listeners.get(event);
     if (!eventListeners) return;
 
-    eventListeners.forEach(listener => {
+    eventListeners.forEach((listener) => {
       try {
         listener(data);
       } catch (error) {
@@ -197,7 +200,7 @@ export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
    */
   get totalListenerCount(): number {
     let count = 0;
-    this.listeners.forEach(set => {
+    this.listeners.forEach((set) => {
       count += set.size;
     });
     return count;
@@ -233,7 +236,7 @@ export function createEventEmitter<T>(): EventEmitter<T> {
  * ```
  */
 export function createTypedEventEmitter<
-  TEvents extends Record<string, unknown>
+  TEvents extends Record<string, unknown>,
 >(): TypedEventEmitter<TEvents> {
   return new TypedEventEmitter<TEvents>();
 }

@@ -8,16 +8,23 @@
  */
 
 import { api } from '@/api';
-import { Link } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: { items: unknown[] } }) {
   return createListMeta({
     entityType: 'War Rooms',
     count: data?.items?.length,
@@ -29,7 +36,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request: _ }: Route.LoaderArgs) {
+export async function loader({ request: _ }: LoaderFunctionArgs) {
   try {
     const cases = await api.cases.getAll();
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
@@ -46,7 +53,7 @@ export async function loader({ request: _ }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -77,7 +84,7 @@ export default function WarRoomIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

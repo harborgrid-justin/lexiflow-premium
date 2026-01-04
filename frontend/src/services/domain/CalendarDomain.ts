@@ -55,12 +55,12 @@
  * @modified 2025-12-22
  */
 
-import { ValidationError } from "@/services/core/errors";
-import { delay } from "@/utils/async";
-import { workflowApi } from "@/api/domains/workflow.api";
-import { CalendarEventType } from "@/types";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { workflowApi } from "@/api/domains/workflow.api";
+import { ValidationError } from "@/services/core/errors";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { CalendarEventType } from "@/types";
+import { delay } from "@/utils/async";
 
 // =============================================================================
 // REACT QUERY KEYS
@@ -98,6 +98,7 @@ interface CalendarEvent {
   location?: string;
   allDay?: boolean;
   recurring?: boolean;
+  reminder?: string;
   metadata?: unknown;
 }
 
@@ -207,7 +208,11 @@ export const CalendarService = {
    */
   getAll: async (): Promise<CalendarEvent[]> => {
     try {
-      return await workflowApi.calendar.getAll();
+      const events = await workflowApi.calendar.getAll();
+      return events.map((e) => ({
+        ...e,
+        type: e.eventType as CalendarEvent["type"],
+      }));
     } catch (error) {
       console.error("[CalendarService.getAll] Error:", error);
       throw error;
@@ -227,7 +232,12 @@ export const CalendarService = {
   getById: async (id: string): Promise<CalendarEvent | null> => {
     try {
       validateEventId(id, "getById");
-      return await workflowApi.calendar.getById(id);
+      const event = await workflowApi.calendar.getById(id);
+      if (!event) return null;
+      return {
+        ...event,
+        type: event.eventType as CalendarEvent["type"],
+      };
     } catch (error) {
       console.error("[CalendarService.getById] Error:", error);
       throw error;
@@ -265,7 +275,11 @@ export const CalendarService = {
         reminder: item.reminder,
       };
 
-      return await workflowApi.calendar.create(createDto);
+      const event = await workflowApi.calendar.create(createDto);
+      return {
+        ...event,
+        type: event.eventType as CalendarEvent["type"],
+      };
     } catch (error) {
       console.error("[CalendarService.add] Error:", error);
       throw error;
@@ -294,7 +308,11 @@ export const CalendarService = {
       validateEventId(id, "update");
       validateEventData(updates, "update");
 
-      return await workflowApi.calendar.update(id, updates);
+      const event = await workflowApi.calendar.update(id, updates);
+      return {
+        ...event,
+        type: event.eventType as CalendarEvent["type"],
+      };
     } catch (error) {
       console.error("[CalendarService.update] Error:", error);
       throw error;

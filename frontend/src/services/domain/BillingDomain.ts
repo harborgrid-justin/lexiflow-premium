@@ -97,8 +97,8 @@
 
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
+import { STORES, db } from "@/services/data/db";
 import {
-  CaseId,
   Client,
   FinancialPerformanceData,
   Invoice,
@@ -106,7 +106,6 @@ import {
   RateTable,
   TimeEntry,
   TrustTransaction,
-  UUID,
   WIPStat,
 } from "@/types";
 
@@ -119,13 +118,6 @@ class OperationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "OperationError";
-  }
-}
-
-class EntityNotFoundError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "EntityNotFoundError";
   }
 }
 
@@ -687,7 +679,9 @@ console.log('accounts data:', accounts);
 
       const clients = await db.getAll<Client>(STORES.CLIENTS);
       return clients
-        .sort((a, b) => (b.totalBilled || 0) - (a.totalBilled || 0))
+        .sort(
+          (a: Client, b: Client) => (b.totalBilled || 0) - (a.totalBilled || 0)
+        )
         .slice(0, 4);
     } catch (error) {
       console.error("[BillingRepository.getTopAccounts] Error:", error);

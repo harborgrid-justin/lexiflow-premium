@@ -48,7 +48,10 @@ import { ValidationError } from '@/services/core/errors';
  * @modified 2025-12-22
  */
 
-import { BackupsApiService } from "@/api/admin/backups-api";
+import {
+  BackupsApiService,
+  type BackupSchedule,
+} from "@/api/admin/backups-api";
 import { ArchiveStats, BackupSnapshot, SnapshotType } from "@/types";
 
 // =============================================================================
@@ -282,9 +285,9 @@ export const BackupService = {
   /**
    * Get backup schedules
    *
-   * @returns Promise<any[]> - Array of backup schedules
+   * @returns Promise<BackupSchedule[]> - Array of backup schedules
    */
-  getSchedules: async (): Promise<any[]> => {
+  getSchedules: async (): Promise<BackupSchedule[]> => {
     try {
       const backupApi = new BackupsApiService();
       return await backupApi.getSchedules();
@@ -299,9 +302,12 @@ export const BackupService = {
    *
    * @param id - Schedule ID
    * @param updates - Partial schedule updates
-   * @returns Promise<any> - Updated schedule
+   * @returns Promise<BackupSchedule> - Updated schedule
    */
-  updateSchedule: async (id: string, updates: any): Promise<any> => {
+  updateSchedule: async (
+    id: string,
+    updates: Partial<BackupSchedule>
+  ): Promise<BackupSchedule> => {
     try {
       const backupApi = new BackupsApiService();
       return await backupApi.updateSchedule(id, updates);

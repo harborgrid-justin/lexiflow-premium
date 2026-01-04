@@ -95,13 +95,12 @@ import {
   UserId,
 } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
-import { delay } from "@/utils/async";
 
 // Backend API Services
+import { isBackendApiEnabled } from "@/api";
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
 
 // Lead type definition
 interface Lead {

@@ -15,9 +15,8 @@
  * backend API integration for legal databases.
  */
 
-import { OperationError } from "@/services/core/errors";
-import { delay } from "@/utils/async";
 import { isBackendApiEnabled } from "@/api";
+import { OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 interface ResearchResult {

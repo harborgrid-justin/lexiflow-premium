@@ -129,8 +129,11 @@ export class IntegrationOrchestrator {
       const unsubscribe = IntegrationEventPublisher.subscribe(type, (async (
         payload: unknown
       ) => {
-        await this.publish(type as SystemEventType, payload as any);
-      }) as any);
+        await this.publish(
+          type as keyof SystemEventPayloads,
+          payload as SystemEventPayloads[keyof SystemEventPayloads]
+        );
+      }) as unknown as (payload: unknown) => void);
       this.subscriptionCleanups.push(unsubscribe);
     });
 

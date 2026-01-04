@@ -1,7 +1,6 @@
-import { MarketingMetric, MarketingCampaign } from "@/types";
-import { delay } from "@/utils/async";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { MarketingCampaign, MarketingMetric } from "@/types";
 
 export const MarketingService = {
   getMetrics: async (): Promise<MarketingMetric[]> => {

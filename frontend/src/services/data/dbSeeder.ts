@@ -221,7 +221,7 @@ export const Seeder = {
         name: c.name ?? "Unknown",
         type: "Corporation",
         roles: ["Client"],
-        status: c.status as LegalEntity["status"],
+        status: c.status as unknown as LegalEntity["status"],
         riskScore: 30,
         tags: [c.industry ?? "Unknown"],
       })

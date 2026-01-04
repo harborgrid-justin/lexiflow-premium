@@ -52,6 +52,17 @@ interface BackupSchedule {
   retentionDays: number;
 }
 
+interface ApiBackupSchedule {
+  id: string;
+  name: string;
+  frequency?: string;
+  type?: string;
+  enabled?: boolean;
+  nextRun?: string;
+  lastRun?: string;
+  retentionDays?: number;
+}
+
 // ============================================================================
 // Loader
 // ============================================================================
@@ -68,11 +79,11 @@ export async function loader() {
     createdAt: s.created,
   }));
 
-  const schedules: BackupSchedule[] = schedulesData.map((s: any) => ({
+  const schedules: BackupSchedule[] = (schedulesData as ApiBackupSchedule[]).map((s) => ({
     id: s.id,
     name: s.name,
-    frequency: s.frequency || 'daily',
-    type: s.type || 'full',
+    frequency: (s.frequency as BackupSchedule['frequency']) || 'daily',
+    type: (s.type as BackupSchedule['type']) || 'full',
     enabled: s.enabled ?? true,
     nextRun: s.nextRun || new Date().toISOString(),
     lastRun: s.lastRun,
@@ -117,7 +128,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await BackupService.createSnapshot(type === 'full' ? 'Full' : 'Incremental');
         return { success: true, message: `Creating ${type} backup...` };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to create backup" };
       }
     }
@@ -127,7 +138,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await BackupService.restoreSnapshot(backupId);
         return { success: true, message: `Restoring from backup ${backupId}...` };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to restore backup" };
       }
     }
@@ -137,7 +148,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await BackupService.deleteSnapshot(backupId);
         return { success: true, message: `Backup ${backupId} deleted` };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to delete backup" };
       }
     }
@@ -148,7 +159,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await BackupService.updateSchedule(scheduleId, { enabled });
         return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
-      } catch (error) {
+      } catch {
         return { success: false, error: "Failed to update schedule" };
       }
     }

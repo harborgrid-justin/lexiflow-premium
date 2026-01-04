@@ -2,7 +2,7 @@ import BillingDashboard from '@/features/operations/billing/BillingDashboard';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta(_args: Route.MetaArgs) {
   return createListMeta({
     entityType: 'Billing',
     description: 'Manage invoices, payments, and financial reports',

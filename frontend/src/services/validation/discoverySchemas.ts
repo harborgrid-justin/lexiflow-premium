@@ -107,7 +107,7 @@ const validateDiscoveryRequest = (
   }
 
   const dataType = "type" in data ? data.type : undefined;
-  if (!discoveryTypes.includes(dataType as any)) {
+  if (!discoveryTypes.includes(dataType as (typeof discoveryTypes)[number])) {
     errors.push({ path: "type", message: "Invalid discovery type" });
   }
 
@@ -136,7 +136,11 @@ const validateDiscoveryRequest = (
   }
 
   const dataStatus = "status" in data ? data.status : undefined;
-  if (!discoveryRequestStatuses.includes(dataStatus as any)) {
+  if (
+    !discoveryRequestStatuses.includes(
+      dataStatus as (typeof discoveryRequestStatuses)[number]
+    )
+  ) {
     errors.push({ path: "status", message: "Invalid status" });
   }
 
@@ -194,7 +198,11 @@ const validatePrivilegeLogEntry = (
   }
 
   const dataBasis = "basis" in data ? data.basis : undefined;
-  if (!privilegeBasisTypes.includes(dataBasis as any)) {
+  if (
+    !privilegeBasisTypes.includes(
+      dataBasis as (typeof privilegeBasisTypes)[number]
+    )
+  ) {
     errors.push({ path: "basis", message: "Invalid privilege basis" });
   }
 
@@ -306,7 +314,11 @@ const validateLegalHold = (
     });
   }
 
-  if (!legalHoldStatuses.includes(record.status as any)) {
+  if (
+    !legalHoldStatuses.includes(
+      record.status as (typeof legalHoldStatuses)[number]
+    )
+  ) {
     errors.push({ path: "status", message: "Invalid status" });
   }
 
@@ -432,7 +444,11 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
     errors.push({ path: "type", message: "Invalid source type" });
   }
 
-  if (!esiCollectionStatuses.includes(input.status as any)) {
+  if (
+    !esiCollectionStatuses.includes(
+      input.status as (typeof esiCollectionStatuses)[number]
+    )
+  ) {
     errors.push({ path: "status", message: "Invalid status" });
   }
 

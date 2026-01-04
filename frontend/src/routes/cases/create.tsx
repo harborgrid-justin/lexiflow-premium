@@ -12,10 +12,25 @@
 
 import { api } from '@/api';
 import NewCase from '@/features/cases/components/create/NewCase';
+import { CaseStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
-import { redirect } from 'react-router';
+import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type ActionData = Awaited<ReturnType<typeof action>>;
+
+interface RouteComponentProps {
+  actionData?: ActionData;
+}
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
@@ -55,7 +70,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 /**
  * Handle case creation form submission
  */
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   try {
@@ -63,7 +78,7 @@ export async function action({ request }: Route.ActionArgs) {
       title: formData.get("title") as string,
       caseNumber: formData.get("caseNumber") as string,
       jurisdiction: formData.get("jurisdictionId") as string,
-      status: "Active",
+      status: "Active" as CaseStatus,
       // ... extract all form fields
     };
 
@@ -94,7 +109,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CreateCaseRoute({ actionData }: Route.ComponentProps) {
+export default function CreateCaseRoute({ actionData }: RouteComponentProps) {
   return (
     <div className="container mx-auto p-6">
       <NewCase />
@@ -113,7 +128,7 @@ export default function CreateCaseRoute({ actionData }: Route.ComponentProps) {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

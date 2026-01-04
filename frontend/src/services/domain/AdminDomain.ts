@@ -8,18 +8,16 @@ import {
   GovernanceRule,
   PipelineJob,
   RLSPolicy,
-  RolePermission,
   TenantConfig,
+  type Permission,
+  type RolePermissions,
 } from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
+import { authApi, isBackendApiEnabled } from "@/api";
 import { adminApi } from "@/api/domains/admin.api";
-import { api, authApi, isBackendApiEnabled } from "@/api";
-import { API_PREFIX } from "@/config/network/api.config";
-import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { delay } from "@/utils/async";
 
 export const AdminService = {
   // Real backend API access
@@ -174,26 +172,28 @@ export const AdminService = {
   },
 
   // Permissions from backend
-  getPermissions: async (): Promise<RolePermission[]> => {
+  getRolePermissions: async (roleId: string): Promise<RolePermissions> => {
     if (isBackendApiEnabled()) {
       try {
-        return await authApi.permissions.getRolePermissions();
+        return await authApi.permissions.getRolePermissions(roleId);
       } catch (error) {
         console.warn("Failed to fetch permissions from backend", error);
-        return [];
+        throw error;
       }
     }
-    return [];
+    throw new Error("Backend API required");
   },
-  updatePermission: async (payload: {
-    role: string;
-    resource: string;
-    level: string;
-  }): Promise<unknown> => {
+  updateRolePermissions: async (
+    roleId: string,
+    permissions: Permission[]
+  ): Promise<RolePermissions> => {
     if (isBackendApiEnabled()) {
-      return await authApi.permissions.updateRolePermission(payload);
+      return await authApi.permissions.updateRolePermissions(
+        roleId,
+        permissions
+      );
     }
-    return payload;
+    throw new Error("Backend API required");
   },
 
   // Data Platform - ETL Pipelines

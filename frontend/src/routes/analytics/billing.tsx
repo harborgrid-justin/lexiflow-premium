@@ -3,18 +3,26 @@
  * Revenue, realization, collection rates, AR aging, and WIP reports
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/billing";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
-import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, AreaChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line
-} from 'recharts';
+import { ChartCard, DateRangeSelector, MetricCard } from '@/components/enterprise/analytics';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
+import { useState } from 'react';
+import { Link } from 'react-router';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/billing";
 
 export function meta() {
   return createMeta({
@@ -207,12 +215,12 @@ export default function BillingAnalyticsRoute() {
             <AreaChart data={revenueTrend}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="colorCollected" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />

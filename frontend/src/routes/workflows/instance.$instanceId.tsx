@@ -6,16 +6,21 @@
  * @module routes/workflows/instance.detail
  */
 
-import { Form, Link, useLoaderData, useNavigate, useNavigation } from 'react-router';
+import { Form, Link, useLoaderData, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
-// import type { Route } from "./+types/instance.$instanceId";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: LoaderData }) {
   return createDetailMeta({
     entityType: 'Workflow Instance',
     entityName: data?.instance?.id,
@@ -27,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { instanceId } = params;
 
   if (!instanceId) {
@@ -60,7 +65,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const { instanceId } = params;
 
   if (!instanceId) {

@@ -76,7 +76,10 @@ export function useVirtualizedDocket<T>({
   const itemOffsets = useMemo(() => {
     const offsets: number[] = [0];
     for (let i = 0; i < items.length; i++) {
-      offsets.push(offsets[i] + getItemHeight(i));
+      const prevOffset = offsets[i];
+      if (prevOffset !== undefined) {
+        offsets.push(prevOffset + getItemHeight(i));
+      }
     }
     return offsets;
   }, [items.length, getItemHeight]);
@@ -93,12 +96,16 @@ export function useVirtualizedDocket<T>({
         const mid = Math.floor((low + high) / 2);
         const offset = itemOffsets[mid];
 
-        if (offset === scrollTop) {
-          return mid;
-        } else if (offset < scrollTop) {
-          low = mid + 1;
+        if (offset !== undefined) {
+          if (offset === scrollTop) {
+            return mid;
+          } else if (offset < scrollTop) {
+            low = mid + 1;
+          } else {
+            high = mid - 1;
+          }
         } else {
-          high = mid - 1;
+          break;
         }
       }
 
@@ -117,7 +124,10 @@ export function useVirtualizedDocket<T>({
     const targetHeight =
       scrollTop + containerHeightPx + estimatedItemHeight * overscan;
 
-    while (endIndex < items.length && itemOffsets[endIndex] < targetHeight) {
+    while (
+      endIndex < items.length &&
+      (itemOffsets[endIndex] ?? 0) < targetHeight
+    ) {
       endIndex++;
     }
 
@@ -151,8 +161,8 @@ export function useVirtualizedDocket<T>({
 
       result.push({
         index: i,
-        item: items[i],
-        start: itemOffsets[i],
+        item: items[i]!,
+        start: itemOffsets[i] ?? 0,
         size: getItemHeight(i),
       });
     }
@@ -185,7 +195,7 @@ export function useVirtualizedDocket<T>({
       if (!scrollElementRef.current) return;
 
       const offset = itemOffsets[Math.min(index, items.length - 1)];
-      scrollElementRef.current.scrollTop = offset;
+      scrollElementRef.current.scrollTop = offset ?? 0;
     },
     [itemOffsets, items.length]
   );

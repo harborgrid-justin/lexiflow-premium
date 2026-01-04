@@ -284,6 +284,7 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      if (!file) return;
       const newAtt: Attachment = {
         name: file.name,
         type: file.type.includes("image") ? "image" : "doc",

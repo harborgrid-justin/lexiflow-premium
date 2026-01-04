@@ -4,8 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 interface Workspace {
   id: string;
@@ -33,16 +33,6 @@ interface Comment {
   createdAt: string;
   updatedAt?: string;
   mentions?: string[];
-}
-
-interface Share {
-  id: string;
-  resourceId: string;
-  resourceType: string;
-  sharedWith: string[];
-  permissions: "view" | "edit" | "admin";
-  sharedBy: string;
-  sharedAt: string;
 }
 
 export const CollaborationService = {

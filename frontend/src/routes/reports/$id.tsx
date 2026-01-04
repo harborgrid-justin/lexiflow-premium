@@ -7,7 +7,7 @@ import { ChartCard } from '@/components/enterprise/analytics';
 import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLoaderData } from 'react-router';
+import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import {
   Bar,
   BarChart,
@@ -21,7 +21,6 @@ import {
 } from 'recharts';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/$id";
 
 interface ChartData {
   id: string;
@@ -30,14 +29,16 @@ interface ChartData {
   data: Record<string, unknown>[];
 }
 
-export function meta({ params }: Route.MetaArgs) {
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+
+export function meta({ params }: { params: { id: string } }) {
   return createMeta({
     title: `Report ${params.id}`,
     description: 'View and export report',
   });
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
   // TODO: Fetch real report data from API
@@ -103,7 +104,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function ReportViewerRoute() {
-  const { report } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { report } = useLoaderData() as LoaderData;
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'excel' | 'csv') => {
@@ -290,7 +291,7 @@ export default function ReportViewerRoute() {
               ) : chart.type === 'bar' ? (
                 <BarChart data={chart.data}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey={chart.data[0].area ? 'area' : 'name'} stroke="#6b7280" />
+                  <XAxis dataKey={chart.data[0]?.area ? 'area' : 'name'} stroke="#6b7280" />
                   <YAxis stroke="#6b7280" />
                   <Tooltip />
                   <Bar dataKey="revenue" fill="#8B5CF6" name="Revenue ($)" />

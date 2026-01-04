@@ -59,15 +59,15 @@ export class VersioningApiService {
     return apiClient.post(`${this.baseUrl}/${versionId}/revert`, {});
   }
 
-  async getHistory(): Promise<any[]> {
-    return apiClient.get<any[]>(`${this.baseUrl}/history`);
+  async getHistory(): Promise<unknown[]> {
+    return apiClient.get<unknown[]>(`${this.baseUrl}/history`);
   }
 
-  async getBranches(): Promise<any[]> {
-    return apiClient.get<any[]>(`${this.baseUrl}/branches`);
+  async getBranches(): Promise<unknown[]> {
+    return apiClient.get<unknown[]>(`${this.baseUrl}/branches`);
   }
 
-  async getTags(): Promise<any[]> {
-    return apiClient.get<any[]>(`${this.baseUrl}/tags`);
+  async getTags(): Promise<unknown[]> {
+    return apiClient.get<unknown[]>(`${this.baseUrl}/tags`);
   }
 }

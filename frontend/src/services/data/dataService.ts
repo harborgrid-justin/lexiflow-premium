@@ -107,19 +107,19 @@ import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
 
 // Backend API Layer (Primary Data Source)
 import {
-  api,
-  isBackendApiEnabled,
   adminApi,
-  analyticsApi,
+  api,
   authApi,
   communicationsApi,
   complianceApi,
   discoveryApi,
   draftingApi,
   integrationsApi,
+  isBackendApiEnabled,
   litigationApi,
   workflowApi,
 } from "@/api";
+import type { CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
 
 // Legacy Database (Fallback Only - DEPRECATED)
 import { STORES } from "./db";
@@ -140,8 +140,8 @@ import { SecurityService } from "@/services/domain/SecurityDomain";
 
 // Operations & Administration
 import { AdminService } from "@/services/domain/AdminDomain";
-import { OperationsService } from "@/services/domain/OperationsDomain";
 import { AssetService } from "@/services/domain/AssetDomain";
+import { OperationsService } from "@/services/domain/OperationsDomain";
 
 // Communication & Collaboration
 import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
@@ -1206,7 +1206,7 @@ Object.defineProperties(DataServiceBase, {
   groups: {
     get: () =>
       isBackendApiEnabled()
-        ? authApi.groups
+        ? (authApi as unknown as { groups: unknown }).groups
         : legacyRepositoryRegistry.getOrCreate("groups"),
     enumerable: true,
   },
@@ -1432,7 +1432,7 @@ Object.defineProperties(DataServiceBase, {
   playbooks: {
     get: () =>
       isBackendApiEnabled()
-        ? draftingApi.templates
+        ? (draftingApi as unknown as { templates: unknown }).templates
         : legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES),
     enumerable: true,
   },

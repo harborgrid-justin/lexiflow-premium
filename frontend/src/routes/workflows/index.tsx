@@ -7,17 +7,23 @@
  * @module routes/workflows/index
  */
 
+import type { WorkflowStatus } from '@/types';
 import { useState } from 'react';
-import { Form, Link, useLoaderData, useNavigate, useNavigation } from 'react-router';
+import { Form, Link, useLoaderData, useNavigate, useNavigation, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: LoaderData }) {
   return createListMeta({
     entityType: 'Workflows',
     count: data?.templates?.length,
@@ -29,7 +35,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const status = url.searchParams.get('status') as WorkflowStatus;
   const category = url.searchParams.get('category') || undefined;

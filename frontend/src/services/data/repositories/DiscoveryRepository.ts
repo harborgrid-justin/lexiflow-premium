@@ -337,6 +337,15 @@ export class DiscoveryRepository {
    *
    * @param custodian - Custodian data to add
    * @returns Promise<unknown> Created custodian
+import { Custodian } from "@/api/discovery/custodians-api";
+
+// ... existing imports ...
+
+  /**
+   * Adds a new custodian
+   *
+   * @param custodian - Custodian data
+   * @returns Promise<Custodian>
    * @throws Error if validation fails or create fails
    */
   addCustodian = async (custodian: unknown): Promise<unknown> => {
@@ -348,7 +357,9 @@ export class DiscoveryRepository {
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.create(custodian as any);
+        return await discoveryApi.custodians.create(
+          custodian as Omit<Custodian, "id" | "createdAt" | "updatedAt">
+        );
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",

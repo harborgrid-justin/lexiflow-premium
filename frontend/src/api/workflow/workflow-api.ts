@@ -225,16 +225,16 @@ export class WorkflowApiService {
         ? `${this.baseUrl}/templates?${queryString}`
         : `${this.baseUrl}/templates`;
 
-      const response = await apiClient.get<any>(url);
+      const response = await apiClient.get<unknown>(url);
 
       // Handle paginated response
       if (
         response &&
         typeof response === "object" &&
         "data" in response &&
-        Array.isArray(response.data)
+        Array.isArray((response as { data: unknown[] }).data)
       ) {
-        return response.data;
+        return (response as { data: unknown[] }).data;
       }
 
       // Handle direct array response

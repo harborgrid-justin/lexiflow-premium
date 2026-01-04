@@ -14,15 +14,24 @@ import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { FilingsTable, type Filing } from '@/components/features/cases/components/FilingsTable';
 import { DataService } from '@/services/data/dataService';
 import type { DocketEntry } from '@/types';
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-// import type { Route } from "./+types/filings";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: LoaderData }) {
   const caseTitle = data?.caseData?.title || 'Case Filings';
   return [
     { title: `Filings - ${caseTitle} | LexiFlow` },
@@ -34,7 +43,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -56,9 +65,9 @@ export async function loader({ params }: Route.LoaderArgs) {
     id: entry.id,
     title: entry.title || entry.description || 'Untitled Filing',
     type: entry.type || 'Document',
-    filingDate: entry.filingDate || entry.createdAt,
-    deadline: entry.deadline,
-    status: entry.status || 'filed',
+    filingDate: entry.dateFiled || entry.createdAt,
+    deadline: undefined, // DocketEntry does not have deadline
+    status: 'filed', // DocketEntry does not have status
     filedBy: entry.filedBy || 'Unknown',
     docketNumber: entry.docketNumber,
     documentUrl: entry.documentUrl,
@@ -202,7 +211,7 @@ export default function CaseFilingsRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

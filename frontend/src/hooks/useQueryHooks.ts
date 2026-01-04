@@ -53,6 +53,7 @@ export function useQuery<T>(
       .catch(() => {});
 
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hashedKey, enabled, staleTime]);
 
   return {

@@ -130,8 +130,12 @@ export function checkTimeEntryOverlap(
     }
 
     // If existing entry doesn't have times, can't overlap
-    const entryStartTime = (entry as any).startTime;
-    const entryEndTime = (entry as any).endTime;
+    const entryWithTimes = entry as TimeEntry & {
+      startTime?: string;
+      endTime?: string;
+    };
+    const entryStartTime = entryWithTimes.startTime;
+    const entryEndTime = entryWithTimes.endTime;
     if (!entryStartTime || !entryEndTime) {
       return false;
     }

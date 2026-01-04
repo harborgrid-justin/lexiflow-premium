@@ -45,7 +45,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { IntegrationOrchestrator } from "@/services/integration/integrationOrchestrator";
-import { CaseId, DocketEntry, DocketId } from "@/types";
+import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 // Backend API Integration (Primary Data Source)
@@ -218,7 +218,7 @@ export class DocketRepository {
    * @example
    * await repo.syncFromPacer('caed', '1:24-cv-01442');
    */
-  async syncFromPacer(courtId: string, caseNumber: string): Promise<boolean> {
+  async syncFromPacer(_courtId: string, _caseNumber: string): Promise<boolean> {
     if (isBackendApiEnabled()) {
       // TODO: Implement backend sync endpoint
       console.warn("PACER sync via backend not yet implemented in frontend");

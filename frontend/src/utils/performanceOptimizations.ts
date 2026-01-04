@@ -6,7 +6,7 @@
  * Includes React.memo wrappers, component profiling, and render optimization helpers.
  */
 
-import React, { ComponentType, memo } from "react";
+import React, { Attributes, ComponentType, memo } from "react";
 
 /**
  * Performance optimization configuration
@@ -120,8 +120,8 @@ export function createMemoizedComponent<P>(
     }, []);
 
     return React.createElement(
-      MemoizedComponent as ComponentType<any>,
-      props as any
+      MemoizedComponent as ComponentType<unknown>,
+      props as Attributes
     );
   }
 
@@ -220,9 +220,12 @@ export function profileComponent<P>(
     };
 
     return React.createElement(
-      React.Profiler as any,
+      React.Profiler,
       { id, onRender: handleRender },
-      React.createElement(Component as any, props as any)
+      React.createElement(
+        Component as ComponentType<unknown>,
+        props as Attributes
+      )
     );
   }
 

@@ -1,7 +1,7 @@
 /**
  * @module useSelection
  * @description Enterprise-grade React hook for multi-select functionality with keyboard support
- * 
+ *
  * Provides production-ready selection management with:
  * - Single item selection (click)
  * - Range selection (Shift + click)
@@ -9,38 +9,38 @@
  * - Selection state helpers (isSelected, isAllSelected, isIndeterminate)
  * - Keyboard accessibility support
  * - Type-safe item tracking
- * 
+ *
  * @architecture
  * - Pattern: React Hooks + Controlled State
  * - State: selectedIds (string[]), lastSelectedId (string | null)
  * - Range algorithm: Slice-based index calculation
  * - Deduplication: Set-based merge for range selections
- * 
+ *
  * @performance
  * - Selection toggle: O(n) where n = selectedIds.length
  * - Range selection: O(k) where k = range size
  * - Select all: O(n) where n = items.length
  * - isSelected: O(n) via includes() - consider Set for large lists
- * 
+ *
  * @accessibility
  * - Supports Shift + click for range selection
  * - Works with keyboard events (e.g., Space/Enter + Shift)
  * - Compatible with ARIA multiselectable patterns
  * - Checkbox indeterminate state support
- * 
+ *
  * @security
  * - Type-safe ID tracking via generic constraints
  * - Prevents duplicate selections via Set deduplication
  * - Event validation prevents malformed selections
- * 
+ *
  * @usage
  * ```typescript
  * // Basic usage
  * const { selectedIds, toggleSelection, selectAll, clearSelection } = useSelection(items);
- * 
+ *
  * // With custom ID key
  * const selection = useSelection(users, 'userId');
- * 
+ *
  * // In list rendering
  * {items.map(item => (
  *   <Checkbox
@@ -48,7 +48,7 @@
  *     onChange={(e) => selection.toggleSelection(item.id, e)}
  *   />
  * ))}
- * 
+ *
  * // Select all checkbox
  * <Checkbox
  *   checked={selection.isAllSelected}
@@ -56,7 +56,7 @@
  *   onChange={selection.selectAll}
  * />
  * ```
- * 
+ *
  * @created 2024-07-20
  * @modified 2025-12-22
  */
@@ -64,7 +64,7 @@
 // =============================================================================
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from "react";
 
 // =============================================================================
 // TYPES
@@ -79,7 +79,10 @@ export interface UseSelectionReturn {
   /** Manually set selected IDs */
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>;
   /** Toggle selection for an item (supports Shift for range) */
-  toggleSelection: (id: string, event?: React.MouseEvent | React.ChangeEvent) => void;
+  toggleSelection: (
+    id: string,
+    event?: React.MouseEvent | React.ChangeEvent
+  ) => void;
   /** Toggle select all / deselect all */
   selectAll: () => void;
   /** Clear all selections */
@@ -102,7 +105,7 @@ export interface UseSelectionReturn {
  */
 function validateItems(items: unknown): void {
   if (!Array.isArray(items)) {
-    throw new Error('[useSelection] items must be an array');
+    throw new Error("[useSelection] items must be an array");
   }
 }
 
@@ -111,8 +114,8 @@ function validateItems(items: unknown): void {
  * @private
  */
 function validateId(id: unknown): void {
-  if (!id || typeof id !== 'string') {
-    throw new Error('[useSelection] id must be a non-empty string');
+  if (!id || typeof id !== "string") {
+    throw new Error("[useSelection] id must be a non-empty string");
   }
 }
 
@@ -120,9 +123,14 @@ function validateId(id: unknown): void {
  * Validate idKey parameter
  * @private
  */
-function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: keyof T): void {
-  if (items.length > 0 && !(idKey in items[0])) {
-    throw new Error(`[useSelection] idKey "${String(idKey)}" not found in items`);
+function validateIdKey<T extends Record<string, unknown>>(
+  items: T[],
+  idKey: keyof T
+): void {
+  if (items.length > 0 && items[0] && !(idKey in items[0])) {
+    throw new Error(
+      `[useSelection] idKey "${String(idKey)}" not found in items`
+    );
   }
 }
 
@@ -132,13 +140,13 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
 
 /**
  * React hook for managing multi-select state with range selection support
- * 
+ *
  * @template T - Type of items (must have string keys)
  * @param items - Array of items to select from
  * @param idKey - Property name to use as unique identifier (default: 'id')
  * @returns Object with selection state and control methods
  * @throws Error if items is not an array or idKey is invalid
- * 
+ *
  * @example
  * // Basic list selection
  * const items = [
@@ -146,31 +154,31 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
  *   { id: '2', name: 'Item 2' },
  *   { id: '3', name: 'Item 3' }
  * ];
- * 
+ *
  * const selection = useSelection(items);
- * 
+ *
  * @example
  * // Custom ID key
  * const users = [
  *   { userId: 'u1', name: 'Alice' },
  *   { userId: 'u2', name: 'Bob' }
  * ];
- * 
+ *
  * const selection = useSelection(users, 'userId');
- * 
+ *
  * @example
  * // With shift-click range selection
  * <div onClick={(e) => selection.toggleSelection(item.id, e)}>
  *   {item.name}
  * </div>
- * 
+ *
  * @algorithm
  * **Single selection:**
  * 1. Check if already selected
  * 2. If selected ? remove from array
  * 3. If not selected ? add to array
  * 4. Update lastSelectedId for range tracking
- * 
+ *
  * **Range selection (Shift + click):**
  * 1. Find index of lastSelectedId
  * 2. Find index of current id
@@ -178,13 +186,13 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
  * 4. Slice items array to get range
  * 5. Merge range IDs with existing selections (Set deduplication)
  * 6. Update state with merged array
- * 
+ *
  * @performance
  * - Range selection: O(k) where k = range size
  * - Single toggle: O(n) where n = selected count
  * - Select all: O(m) where m = total items
  * - Optimization: Consider Set<string> for large lists (O(1) lookups)
- * 
+ *
  * @accessibility
  * - Shift + click: Range selection (standard OS behavior)
  * - Ctrl/Cmd + click: Add to selection (browser default)
@@ -192,10 +200,10 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
  */
 export function useSelection<T extends object>(
   items: T[],
-  idKey: keyof T = 'id' as keyof T
+  idKey: keyof T = "id" as keyof T
 ): UseSelectionReturn {
   // Validate inputs in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     validateItems(items);
     validateIdKey(items as Record<string, unknown>[], idKey as string);
   }
@@ -205,20 +213,20 @@ export function useSelection<T extends object>(
 
   /**
    * Toggle selection for an item with optional range selection
-   * 
+   *
    * @param id - Item ID to toggle
    * @param originalEvent - Mouse or change event (checks shiftKey for range)
-   * 
+   *
    * @example
    * // Single toggle
    * toggleSelection('item-1');
-   * 
+   *
    * // Range selection (with Shift key)
    * <div onClick={(e) => toggleSelection('item-3', e)} />
    */
   const toggleSelection = useCallback(
     (id: string, originalEvent?: React.MouseEvent | React.ChangeEvent) => {
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== "production") {
         validateId(id);
       }
 
@@ -230,7 +238,7 @@ export function useSelection<T extends object>(
        */
       if (
         originalEvent &&
-        'shiftKey' in originalEvent &&
+        "shiftKey" in originalEvent &&
         originalEvent.shiftKey &&
         lastSelectedId
       ) {
@@ -273,7 +281,7 @@ export function useSelection<T extends object>(
   /**
    * Toggle select all / deselect all
    * If all selected ? clear, otherwise ? select all
-   * 
+   *
    * @example
    * <Checkbox
    *   checked={selection.isAllSelected}
@@ -289,7 +297,7 @@ export function useSelection<T extends object>(
   /**
    * Clear all selections
    * Resets selectedIds and lastSelectedId
-   * 
+   *
    * @example
    * <button onClick={selection.clearSelection}>Clear</button>
    */
@@ -300,13 +308,13 @@ export function useSelection<T extends object>(
 
   /**
    * Check if item is selected
-   * 
+   *
    * @param id - Item ID to check
    * @returns True if item is in selectedIds array
-   * 
+   *
    * @example
    * <Checkbox checked={selection.isSelected(item.id)} />
-   * 
+   *
    * @performance
    * O(n) via Array.includes()
    * Consider Set for large lists (thousands of items)

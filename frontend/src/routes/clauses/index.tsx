@@ -66,7 +66,7 @@ export async function action({ request }: Route.ActionArgs) {
 import ClauseLibrary from '@/features/knowledge/clauses/ClauseLibrary';
 
 export default function ClausesIndexRoute() {
-  return <ClauseLibrary />;
+  return <ClauseLibrary onSelectClause={() => { }} />;
 }
 
 // ============================================================================

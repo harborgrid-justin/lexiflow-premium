@@ -10,6 +10,8 @@
  */
 
 import { api } from '@/api';
+import type { CaseId } from '@/types';
+import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
 import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -42,7 +44,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const response = await api.docket.getAll({ search, type, page });
 
     // Robust handling of API response structure
-    let entries: any[] = [];
+    let entries: DocketEntry[] = [];
     if (Array.isArray(response)) {
       entries = response;
     } else if (response && Array.isArray(response.data)) {
@@ -81,7 +83,7 @@ export async function action({ request }: Route.ActionArgs) {
         }
 
         await api.docket.add({
-          caseId,
+          caseId: caseId as CaseId,
           title,
           description,
           dateFiled: new Date().toISOString(),

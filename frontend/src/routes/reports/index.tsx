@@ -10,6 +10,7 @@
  * @module routes/reports/index
  */
 
+import { api } from '@/api';
 import type { Report, ReportCategory } from '@/types/analytics-enterprise';
 import {
   Calendar,
@@ -20,16 +21,25 @@ import {
   Plus,
   Search
 } from 'lucide-react';
-import { Form, Link, useLoaderData, useSubmit } from 'react-router';
+import { Form, Link, useLoaderData, useSubmit, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-// import type { Route } from "./+types/index";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta(_: Route.MetaArgs) {
+export function meta(_: unknown) {
   return createMeta({
     title: 'Reports',
     description: 'Create, manage, and schedule custom reports',
@@ -40,7 +50,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
@@ -52,7 +62,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   // Filter by search term if API doesn't support it yet
   const filteredReports = search
-    ? reports.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
+    ? reports.filter((r: Report) => r.name.toLowerCase().includes(search.toLowerCase()))
     : reports;
 
   return {
@@ -70,7 +80,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   // const _id = formData.get("id");
@@ -103,7 +113,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function ReportsIndexRoute() {
-  const { reports, search, category } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { reports, search, category } = useLoaderData() as LoaderData;
   const submit = useSubmit();
 
   const categories: { value: ReportCategory | 'all'; label: string }[] = [
@@ -288,7 +298,7 @@ function ReportCard({ report }: { report: Report }) {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

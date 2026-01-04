@@ -30,10 +30,9 @@
  * @migrated Backend API integration completed 2025-12-21
  */
 
-import { Precedent, QAItem, WikiArticle } from "@/types";
-import { delay } from "@/utils/async";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { Precedent, QAItem, WikiArticle } from "@/types";
 
 /**
  * Query keys for React Query integration

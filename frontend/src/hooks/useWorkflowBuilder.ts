@@ -129,7 +129,7 @@ export function useWorkflowBuilder(
       return nodes.slice(0, -1).map((node, i) => ({
         id: `c-${i}`,
         from: node.id,
-        to: nodes[i + 1].id,
+        to: nodes[i + 1]?.id || "end",
       }));
     }
     return [{ id: "c1", from: "start", to: "end" }];

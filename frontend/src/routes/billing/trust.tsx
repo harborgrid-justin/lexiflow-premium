@@ -5,9 +5,25 @@
 
 import { TrustAccountsApiService } from '@/api/billing';
 import { TrustAccountDashboard } from '@/features/operations/billing/trust/TrustAccountDashboard';
-import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
+import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+type ActionData = Awaited<ReturnType<typeof action>>;
+
+interface RouteComponentProps {
+  loaderData: LoaderData;
+  actionData?: ActionData;
+}
+
+interface RouteErrorBoundaryProps {
+  error: unknown;
+}
 
 // ============================================================================
 // Meta Tags
@@ -124,8 +140,8 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-export default function TrustAccountsRoute({ actionData }: Route.ComponentProps) {
-  const { accounts: _accounts, filters: _filters } = useLoaderData() as Route.ComponentProps['loaderData'];
+export default function TrustAccountsRoute({ actionData }: RouteComponentProps) {
+  const { accounts: _accounts, filters: _filters } = useLoaderData() as LoaderData;
 
   return (
     <div className="p-8">
@@ -168,7 +184,7 @@ export default function TrustAccountsRoute({ actionData }: Route.ComponentProps)
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteErrorBoundaryProps) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -1,14 +1,11 @@
-import {
-  ExtendedUserProfile,
-  GranularPermission,
-  UserId,
-  EntityId,
-  UpdateUserDto,
-} from "@/types";
-import { delay } from "@/utils/async";
-import { STORES, db } from "@/services/data/db";
-import { authApi, adminApi, isBackendApiEnabled } from "@/api";
+import { authApi, isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import {
+    ExtendedUserProfile,
+    GranularPermission,
+    UpdateUserDto,
+    UserId,
+} from "@/types";
 
 export const ProfileDomain = {
   getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
@@ -28,8 +25,8 @@ export const ProfileDomain = {
         return {
           ...user,
           id: user.id as UserId,
-          preferences: (user as any).preferences || {},
-          security: (user as any).security || {},
+          preferences: (user as unknown as ExtendedUserProfile).preferences || {},
+          security: (user as unknown as ExtendedUserProfile).security || {},
           accessMatrix: permissions,
         } as ExtendedUserProfile;
       } catch (error) {
@@ -70,10 +67,6 @@ export const ProfileDomain = {
     prefs: Partial<ExtendedUserProfile["preferences"]>
   ): Promise<void> => {
     const current = await ProfileDomain.getCurrentProfile();
-    const updated = {
-      ...current,
-      preferences: { ...current.preferences, ...prefs },
-    };
 
     if (isBackendApiEnabled()) {
       try {
@@ -128,15 +121,6 @@ export const ProfileDomain = {
     }
   },
   getAuditLog: async (userId: string) => {
-    interface AuditLog {
-      id: string;
-      action: string;
-      timestamp: string;
-      ip?: string;
-      device?: string;
-      resource?: string;
-    }
-
     if (isBackendApiEnabled()) {
       try {
         const logs = await adminApi.auditLogs.getAll({ userId });

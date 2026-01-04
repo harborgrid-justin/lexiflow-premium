@@ -56,7 +56,8 @@ export const queryKeys = {
   evidence: {
     all: () => ["evidence", "all"] as const,
     lists: () => ["evidence", "list"] as const,
-    list: (filters?: any) => ["evidence", "list", filters] as const,
+    list: (filters?: Record<string, unknown>) =>
+      ["evidence", "list", filters] as const,
     detail: (id: string) => ["evidence", "detail", id] as const,
     byCaseId: (caseId: string) => ["evidence", "byCaseId", caseId] as const,
     byCustodian: (custodian: string) =>
@@ -152,7 +153,8 @@ export const queryKeys = {
   discovery: {
     all: () => ["discovery", "all"] as const,
     lists: () => ["discovery", "list"] as const,
-    list: (filters?: any) => ["discovery", "list", filters] as const,
+    list: (filters?: Record<string, unknown>) =>
+      ["discovery", "list", filters] as const,
     detail: (id: string) => ["discovery", "detail", id] as const,
     byCaseId: (caseId: string) => ["discovery", "byCaseId", caseId] as const,
     sanctions: () => ["discovery", "sanctions"] as const,
@@ -160,7 +162,8 @@ export const queryKeys = {
     // ESI
     esi: {
       all: () => ["discovery-esi", "all"] as const,
-      list: (filters?: any) => ["discovery-esi", "list", filters] as const,
+      list: (filters?: Record<string, unknown>) =>
+        ["discovery-esi", "list", filters] as const,
       detail: (id: string) => ["discovery-esi", id] as const,
       byCase: (caseId: string) => ["discovery-esi", "byCase", caseId] as const,
       byStatus: (status: string) =>
@@ -170,7 +173,7 @@ export const queryKeys = {
     // Productions
     productions: {
       all: () => ["discovery-productions", "all"] as const,
-      list: (filters?: any) =>
+      list: (filters?: Record<string, unknown>) =>
         ["discovery-productions", "list", filters] as const,
       detail: (id: string) => ["discovery-productions", id] as const,
       config: () => ["discovery-productions", "config"] as const,
@@ -181,7 +184,8 @@ export const queryKeys = {
     // Privilege Log
     privilege: {
       all: () => ["privilege-log", "all"] as const,
-      list: (filters?: any) => ["privilege-log", "list", filters] as const,
+      list: (filters?: Record<string, unknown>) =>
+        ["privilege-log", "list", filters] as const,
       detail: (id: string) => ["privilege-log", id] as const,
       byCase: (caseId: string) => ["privilege-log", "byCase", caseId] as const,
       byPrivilegeType: (type: string) =>
@@ -191,7 +195,8 @@ export const queryKeys = {
     // Legal Holds
     holds: {
       all: () => ["legal-holds", "all"] as const,
-      list: (filters?: any) => ["legal-holds", "list", filters] as const,
+      list: (filters?: Record<string, unknown>) =>
+        ["legal-holds", "list", filters] as const,
       detail: (id: string) => ["legal-holds", id] as const,
       byCase: (caseId: string) => ["legal-holds", "byCase", caseId] as const,
       byStatus: (status: string) =>
@@ -285,10 +290,11 @@ export const queryKeys = {
   billing: {
     all: () => ["billing", "all"] as const,
     lists: () => ["billing", "list"] as const,
-    list: (filters?: any) => ["billing", "list", filters] as const,
+    list: (filters?: Record<string, unknown>) =>
+      ["billing", "list", filters] as const,
 
     invoices: () => ["billing", "invoices"] as const,
-    invoiceList: (filters?: any) =>
+    invoiceList: (filters?: Record<string, unknown>) =>
       ["billing", "invoices", "list", filters] as const,
     invoice: (id: string) => ["billing", "invoices", id] as const,
     invoicesByCase: (caseId: string) =>
@@ -310,7 +316,7 @@ export const queryKeys = {
 
     // Expenses
     expenses: () => ["billing", "expenses"] as const,
-    expenseList: (filters?: any) =>
+    expenseList: (filters?: Record<string, unknown>) =>
       ["billing", "expenses", "list", filters] as const,
     expensesByCase: (caseId: string) =>
       ["billing", "expenses", "byCase", caseId] as const,
@@ -592,7 +598,8 @@ export const queryKeys = {
   correspondence: {
     all: () => ["communications", "all"] as const,
     lists: () => ["communications", "list"] as const,
-    list: (filters?: any) => ["communications", "list", filters] as const,
+    list: (filters?: Record<string, unknown>) =>
+      ["communications", "list", filters] as const,
     detail: (id: string) => ["communications", "detail", id] as const,
     drafts: () => ["communications", "drafts"] as const,
     byCase: (caseId: string) => ["communications", "byCase", caseId] as const,
@@ -603,7 +610,8 @@ export const queryKeys = {
   serviceJobs: {
     all: () => ["service-jobs", "all"] as const,
     lists: () => ["service-jobs", "list"] as const,
-    list: (filters?: any) => ["service-jobs", "list", filters] as const,
+    list: (filters?: Record<string, unknown>) =>
+      ["service-jobs", "list", filters] as const,
     detail: (id: string) => ["service-jobs", "detail", id] as const,
     byCase: (caseId: string) => ["service-jobs", "byCase", caseId] as const,
     byStatus: (status: string) => ["service-jobs", "byStatus", status] as const,

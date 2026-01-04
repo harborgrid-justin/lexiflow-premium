@@ -6,10 +6,19 @@
  * @module routes/workflows/new
  */
 
-import { Form, redirect, useNavigate, useNavigation } from 'react-router';
+import { Form, redirect, useNavigate, useNavigation, type ActionFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createMeta } from '../_shared/meta-utils';
-// import type { Route } from "./+types/new";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type ActionData = Awaited<ReturnType<typeof action>>;
+
+interface RouteComponentProps {
+  actionData?: ActionData;
+}
 
 // ============================================================================
 // Meta Tags
@@ -26,7 +35,7 @@ export function meta() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const name = formData.get("name") as string;
   const category = formData.get("category") as string;
@@ -56,7 +65,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function NewWorkflowRoute({ actionData }: Route.ComponentProps) {
+export default function NewWorkflowRoute({ actionData }: RouteComponentProps) {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";

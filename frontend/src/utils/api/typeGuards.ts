@@ -362,7 +362,8 @@ export function isComplete<T extends Record<string, unknown>>(
 ): obj is T {
   if (!isObject(obj)) return false;
   return requiredProps.every(
-    (prop) => prop in obj && (obj as any)[prop] !== undefined
+    (prop) =>
+      prop in obj && (obj as Record<keyof T, unknown>)[prop] !== undefined
   );
 }
 

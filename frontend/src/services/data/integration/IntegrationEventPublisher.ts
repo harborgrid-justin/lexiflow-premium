@@ -155,7 +155,7 @@ export function createIntegratedRepository<
       super(...args);
     }
 
-    async add(item: unknown): Promise<unknown> {
+    override async add(item: unknown): Promise<unknown> {
       const result = await super.add(item);
       if (publishAdd) {
         await publishAdd(result);
@@ -163,7 +163,7 @@ export function createIntegratedRepository<
       return result;
     }
 
-    async update(id: string, updates: unknown): Promise<unknown> {
+    override async update(id: string, updates: unknown): Promise<unknown> {
       const result = await super.update(id, updates);
       if (publishUpdate) {
         await publishUpdate(id, result);
@@ -171,7 +171,7 @@ export function createIntegratedRepository<
       return result;
     }
 
-    async delete(id: string): Promise<unknown> {
+    override async delete(id: string): Promise<unknown> {
       const result = await super.delete(id);
       if (publishDelete) {
         await publishDelete(id);

@@ -109,8 +109,9 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { Case, CasePhase, Party, CaseId, CaseStatus } from "@/types";
 import { Repository } from "@/services/core/Repository";
+import { STORES } from "@/services/data/db";
+import { Case, CasePhase, CaseStatus, Party } from "@/types";
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from "@/api";

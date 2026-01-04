@@ -3,18 +3,28 @@
  * Client profitability, engagement, and retention metrics
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/clients";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
-import { MetricCard, ChartCard, DateRangeSelector } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
+import { ChartCard, DateRangeSelector, MetricCard } from '@/components/enterprise/analytics';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useLoaderData } from 'react-router';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/clients";
 
 export function meta() {
   return createMeta({
@@ -37,7 +47,7 @@ export async function loader() {
 }
 
 export default function ClientAnalyticsRoute() {
-  const { metrics } = loaderData;
+  const { metrics } = useLoaderData() as Route.ComponentProps['loaderData'];
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 365),
@@ -202,7 +212,7 @@ export default function ClientAnalyticsRoute() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ industry, count }) => `${industry} (${count})`}
+                label={({ industry, count }: { industry: string; count: number }) => `${industry} (${count})`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="count"

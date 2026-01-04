@@ -15,11 +15,9 @@
  * with backend API integration for persistent storage and analytics.
  */
 
-import { OperationError } from "@/services/core/errors";
-import { delay } from "@/utils/async";
 import { isBackendApiEnabled } from "@/api";
+import { OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { STORES, db } from "@/services/data/db";
 
 interface Strategy {
   id: string;

@@ -1,18 +1,12 @@
-import {
-  CommunicationItem,
-  ServiceJob,
-  CaseId,
-  UserId,
-  ServiceMethod,
-} from "@/types";
+import { CommunicationItem, ServiceJob } from "@/types";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
+import { isBackendApiEnabled } from "@/api";
 import { communicationsApi } from "@/api/domains/communications.api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { SystemEventType } from "@/types/integration-types";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
+import { SystemEventType } from "@/types/integration-types";
 
 export const CorrespondenceService = {
   getCommunications: async () =>

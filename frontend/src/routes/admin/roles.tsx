@@ -4,7 +4,8 @@
  * Enterprise role management with permission templates and hierarchy.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useLoaderData } from 'react-router';
 import type { Route } from './+types/roles';
 
 interface Permission {
@@ -116,7 +117,7 @@ export async function loader(_args: Route.LoaderArgs) {
 }
 
 export default function AdminRolesPage() {
-  const { roles } = loaderData;
+  const { roles } = useLoaderData() as Route.ComponentProps['loaderData'];
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
   const getLevelColor = (level: number) => {
@@ -153,9 +154,8 @@ export default function AdminRolesPage() {
               {roles.map((role: Role) => (
                 <div
                   key={role.id}
-                  className={`p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                    selectedRole?.id === role.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                  }`}
+                  className={`p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${selectedRole?.id === role.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                    }`}
                   onClick={() => setSelectedRole(role)}
                 >
                   <div className="flex items-center justify-between">

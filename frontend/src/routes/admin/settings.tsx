@@ -58,7 +58,9 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+import type { ActionFunctionArgs } from 'react-router';
+
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -147,7 +149,7 @@ function Toggle({ id, label, checked, onChange, disabled }: ToggleProps) {
 // Component
 // ============================================================================
 
-export default function SystemSettingsRoute({ loaderData }: Route.ComponentProps) {
+export default function SystemSettingsRoute({ loaderData }: any) {
   const fetcher = useFetcher();
   const formId = useId();
 
@@ -349,31 +351,31 @@ export default function SystemSettingsRoute({ loaderData }: Route.ComponentProps
               id={`${formId}-feature-ocr`}
               label="OCR Processing"
               checked={featureFlags.ocr}
-              onChange={(v) => setFeatureFlags(f => ({ ...f, ocr: v }))}
+              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, ocr: v }))}
             />
             <Toggle
               id={`${formId}-feature-ai`}
               label="AI Assistant"
               checked={featureFlags.aiAssistant}
-              onChange={(v) => setFeatureFlags(f => ({ ...f, aiAssistant: v }))}
+              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, aiAssistant: v }))}
             />
             <Toggle
               id={`${formId}-feature-sync`}
               label="Real-time Sync"
               checked={featureFlags.realTimeSync}
-              onChange={(v) => setFeatureFlags(f => ({ ...f, realTimeSync: v }))}
+              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, realTimeSync: v }))}
             />
             <Toggle
               id={`${formId}-feature-search`}
               label="Advanced Search"
               checked={featureFlags.advancedSearch}
-              onChange={(v) => setFeatureFlags(f => ({ ...f, advancedSearch: v }))}
+              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, advancedSearch: v }))}
             />
             <Toggle
               id={`${formId}-feature-versioning`}
               label="Document Versioning"
               checked={featureFlags.documentVersioning}
-              onChange={(v) => setFeatureFlags(f => ({ ...f, documentVersioning: v }))}
+              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, documentVersioning: v }))}
             />
           </div>
         </SettingCard>

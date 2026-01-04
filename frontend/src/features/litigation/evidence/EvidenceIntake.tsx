@@ -119,7 +119,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
       title: title,
       type: type as EvidenceType,
       description: description,
-      collectionDate: new Date().toISOString().split('T')[0],
+      collectionDate: new Date().toISOString().split('T')[0] ?? '',
       collectedBy: 'Current User',
       custodian: custodian || 'Unknown',
       location: 'Evidence Locker / Digital S3',

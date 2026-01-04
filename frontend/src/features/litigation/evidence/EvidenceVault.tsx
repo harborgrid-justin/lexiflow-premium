@@ -89,9 +89,11 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
     EVIDENCE_PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || EVIDENCE_PARENT_TABS[0],
     [view]);
 
+  if (!activeParentTab) return null;
+
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = EVIDENCE_PARENT_TABS.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
+    if (parent && parent.subTabs && parent.subTabs.length > 0) {
       setView(parent.subTabs[0].id as ViewMode);
     }
   }, [setView]);
@@ -161,18 +163,18 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
               onClick={() => handleParentTabChange(parent.id)}
               className={cn(
                 "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                activeParentTab.id === parent.id
+                activeParentTab?.id === parent.id
                   ? cn("border-current", theme.primary.text)
                   : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
+              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab?.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
               {parent.label}
             </button>
           ))}
         </div>
 
-        {activeParentTab.subTabs.length > 0 && (
+        {activeParentTab?.subTabs && activeParentTab.subTabs.length > 0 && (
           <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
               <button

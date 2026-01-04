@@ -10,7 +10,7 @@
  * @module routes/calendar/index
  */
 
-import type { LoaderFunctionArgs, MetaArgs } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -50,7 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -86,7 +86,7 @@ export default function CalendarIndexRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

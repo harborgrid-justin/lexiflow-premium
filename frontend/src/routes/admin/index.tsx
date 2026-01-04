@@ -97,7 +97,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function AdminIndexRoute() {
-  const { metrics, auditLogs } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { metrics, auditLogs } = useLoaderData() as any;
 
   return (
     <div className="space-y-6 p-6">
@@ -302,7 +302,7 @@ function HealthBar({ label, value, max = 100 }: { label: string; value: number; 
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

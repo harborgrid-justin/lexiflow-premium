@@ -106,8 +106,8 @@ export default function ThemeSettingsRoute() {
               type="button"
               onClick={handleLightMode}
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${mode === 'light'
-                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+                ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
                 }`}
             >
               <svg className="h-8 w-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
@@ -122,8 +122,8 @@ export default function ThemeSettingsRoute() {
               type="button"
               onClick={handleDarkMode}
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${mode === 'dark'
-                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+                ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
                 }`}
             >
               <svg className="h-8 w-8 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@ export default function ThemeSettingsRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

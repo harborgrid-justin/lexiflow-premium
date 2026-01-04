@@ -63,9 +63,9 @@ export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
     <div className="space-y-6 animate-fade-in">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <MetricCard label="Total Marked" value={exhibits.length} icon={FileText} className="border-l-4 border-l-blue-500" />
-        <MetricCard label="Admitted" value={statusData[0].value} icon={CheckCircle} className="border-l-4 border-l-green-500" />
-        <MetricCard label="Excluded" value={statusData[2].value} icon={XCircle} className="border-l-4 border-l-red-500" />
-        <MetricCard label="Admission Rate" value={`${Math.round((statusData[0].value / exhibits.length) * 100)}%`} icon={PieIcon} className="border-l-4 border-l-purple-500" />
+        <MetricCard label="Admitted" value={statusData[0]?.value ?? 0} icon={CheckCircle} className="border-l-4 border-l-green-500" />
+        <MetricCard label="Excluded" value={statusData[2]?.value ?? 0} icon={XCircle} className="border-l-4 border-l-red-500" />
+        <MetricCard label="Admission Rate" value={`${Math.round(((statusData[0]?.value ?? 0) / (exhibits.length || 1)) * 100)}%`} icon={PieIcon} className="border-l-4 border-l-purple-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

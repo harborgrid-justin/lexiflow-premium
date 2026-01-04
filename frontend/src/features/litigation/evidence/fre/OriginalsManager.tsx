@@ -5,11 +5,11 @@
  * Logs justifications for admissibility of duplicates.
  */
 
-import React from 'react';
 import { Copy, Plus } from 'lucide-react';
+import React from 'react';
 
 // Common Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
@@ -33,7 +33,7 @@ export const OriginalsManager: React.FC = () => {
     return (
         <div className="space-y-6">
             <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface.default, theme.border.default)}>
-                <Copy className={cn("h-5 w-5 mt-0.5 shrink-0", theme.text.secondary)}/>
+                <Copy className={cn("h-5 w-5 mt-0.5 shrink-0", theme.text.secondary)} />
                 <div>
                     <h4 className="font-bold text-sm">FRE 1002: Requirement of the Original</h4>
                     <p className="text-xs mt-1">Track original documents vs. duplicates and log justifications for admissibility under FRE 1003 & 1004.</p>

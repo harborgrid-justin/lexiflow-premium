@@ -47,7 +47,7 @@ export async function loader() {
 }
 
 export default function CaseAnalyticsRoute() {
-  const { metrics } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { metrics } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 90),
@@ -287,7 +287,7 @@ export default function CaseAnalyticsRoute() {
   );
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
-import { GitBranch, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { PleadingDocument } from '@/types';
+import { cn } from '@/utils/cn';
+import { AlertCircle, ArrowRight, CheckCircle, GitBranch } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 interface LogicOverlayProps {
   document: PleadingDocument;
@@ -19,7 +19,7 @@ interface LogicNode {
 export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document }) => {
   const { theme } = useTheme();
 
-    // Analyze document sections and create logic flow with proper graph connections
+  // Analyze document sections and create logic flow with proper graph connections
   const logicNodes = useMemo<LogicNode[]>(() => {
     return document.sections.map((section, index) => {
       // Determine section type based on PleadingSectionType
@@ -45,14 +45,17 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document }) => {
 
       const strength: LogicNode['strength'] =
         (contentLength > 500 && hasCitations) || (hasEvidence && hasArgument) ? 'strong' :
-        contentLength > 200 || hasEvidence || hasArgument ? 'medium' : 'weak';
+          contentLength > 200 || hasEvidence || hasArgument ? 'medium' : 'weak';
 
       // Create connections based on actual links and flow
       const connections: string[] = [];
 
       // Add sequential connection
       if (index < document.sections.length - 1) {
-        connections.push(document.sections[index + 1].id);
+        const nextSection = document.sections[index + 1];
+        if (nextSection) {
+          connections.push(nextSection.id);
+        }
       }
 
       // Add connections to linked evidence sections

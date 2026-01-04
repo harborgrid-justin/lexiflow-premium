@@ -30,7 +30,7 @@ export const PropertyPanel: React.FC<PropertyPanelProps> = ({ section, onUpdate 
                     {['left', 'center', 'right', 'justify'].map((align) => (
                         <button
                             key={align}
-                            onClick={() => onUpdate({ meta: { ...section.meta, alignment: align as string } })}
+                            onClick={() => onUpdate({ meta: { ...section.meta, alignment: align as "center" | "left" | "right" | "justify" } })}
                             className={cn(
                                 "p-2 rounded border transition-colors",
                                 section.meta?.alignment === align ? "bg-blue-100 border-blue-300 text-blue-600" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"

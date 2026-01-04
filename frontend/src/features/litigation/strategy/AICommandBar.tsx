@@ -10,8 +10,8 @@ import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/atoms/Button';
-import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { AIValidationService } from '@/services/infrastructure/aiValidationService';
 import { cn } from '@/utils/cn';
@@ -30,7 +30,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
         // Validate prompt
         const promptValidation = AIValidationService.validatePrompt(prompt);
         if (!promptValidation.isValid) {
-            notify.error(promptValidation.errors[0]);
+            notify.error(promptValidation.errors[0] || 'Invalid prompt');
             setRemainingRequests(AIValidationService.getRemainingRequests());
             return;
         }

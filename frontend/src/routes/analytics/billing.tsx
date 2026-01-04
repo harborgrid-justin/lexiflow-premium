@@ -317,7 +317,7 @@ export default function BillingAnalyticsRoute() {
   );
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: any) {
   return (
     <RouteErrorBoundary
       error={error}

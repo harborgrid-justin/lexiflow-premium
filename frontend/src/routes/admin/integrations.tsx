@@ -121,7 +121,9 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+import type { ActionFunctionArgs } from 'react-router';
+
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const integrationId = formData.get("integrationId");
@@ -223,7 +225,7 @@ function IntegrationCard({ integration, onConnect, onDisconnect, onSync }: Integ
 // Component
 // ============================================================================
 
-export default function IntegrationsRoute({ loaderData }: Route.ComponentProps) {
+export default function IntegrationsRoute({ loaderData }: any) {
   const { integrations } = loaderData;
   const fetcher = useFetcher();
 

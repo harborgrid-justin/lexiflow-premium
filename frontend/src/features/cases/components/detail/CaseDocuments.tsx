@@ -88,10 +88,12 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     if (e.target.files && e.target.files.length > 0 && onDocumentCreated) {
       setIsUploading(true);
       try {
-        const file = e.target.files[0];
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        const file = files[0];
         // Upload to IDB via DocumentService
         const savedDoc = await DocumentService.uploadDocument(file, {
-          caseId: (documents.length > 0 ? documents[0].caseId : 'General') as CaseId,
+          caseId: (documents.length > 0 ? documents[0]?.caseId : 'General') as CaseId,
           sourceModule: 'General',
           tags: logAsEvidence ? ['Evidence'] : []
         });
@@ -103,12 +105,12 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
             id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID(),
+            trackingUuid: crypto.randomUUID() as UUID,
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',
             description: 'Auto-logged via Document Upload',
-            collectionDate: new Date().toISOString().split('T')[0],
+            collectionDate: new Date().toISOString().split('T')[0] || '',
             collectedBy: 'System',
             custodian: 'Firm DMS',
             location: 'Evidence Vault',

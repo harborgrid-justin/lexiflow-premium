@@ -3,9 +3,9 @@
  * Displays a list of conversations with search and filtering
  */
 
-import React, { useState } from 'react';
 import type { Conversation } from '@/api/communications/messaging-api';
 import { formatDistanceToNow } from 'date-fns';
+import { useState } from 'react';
 
 export interface ConversationSidebarProps {
   conversations: Conversation[];
@@ -71,7 +71,7 @@ export function ConversationSidebar({
 
   const getConversationAvatar = (conversation: Conversation): string | null => {
     if (conversation.type === 'direct' && conversation.participants.length === 1) {
-      return conversation.participants[0].userAvatar || null;
+      return conversation.participants[0]?.userAvatar || null;
     }
     return null;
   };
@@ -133,11 +133,10 @@ export function ConversationSidebar({
             <button
               key={filterType}
               onClick={() => setFilter(filterType)}
-              className={`rounded-md px-3 py-1 text-xs font-medium capitalize ${
-                filter === filterType
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`rounded-md px-3 py-1 text-xs font-medium capitalize ${filter === filterType
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               {filterType}
             </button>
@@ -179,11 +178,10 @@ export function ConversationSidebar({
                 <div
                   key={conversation.id}
                   onClick={() => onSelectConversation(conversation)}
-                  className={`group relative cursor-pointer p-4 transition-colors ${
-                    isActive
-                      ? 'bg-blue-50 dark:bg-blue-900/20'
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-700'
-                  }`}
+                  className={`group relative cursor-pointer p-4 transition-colors ${isActive
+                    ? 'bg-blue-50 dark:bg-blue-900/20'
+                    : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
                 >
                   <div className="flex gap-3">
                     {/* Avatar */}
@@ -224,9 +222,8 @@ export function ConversationSidebar({
                     <div className="flex-1 overflow-hidden">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <h3 className={`truncate text-sm font-semibold ${
-                            conversation.unreadCount > 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'
-                          }`}>
+                          <h3 className={`truncate text-sm font-semibold ${conversation.unreadCount > 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'
+                            }`}>
                             {name}
                           </h3>
                           {conversation.isPinned && (
@@ -256,14 +253,13 @@ export function ConversationSidebar({
                       {/* Last message or typing indicator */}
                       {typingUsers.length > 0 ? (
                         <p className="mt-1 truncate text-sm italic text-blue-600 dark:text-blue-400">
-                          {typingUsers[0].userName} is typing...
+                          {typingUsers[0]?.userName} is typing...
                         </p>
                       ) : conversation.lastMessage ? (
-                        <p className={`mt-1 truncate text-sm ${
-                          conversation.unreadCount > 0
-                            ? 'font-medium text-gray-900 dark:text-gray-100'
-                            : 'text-gray-600 dark:text-gray-400'
-                        }`}>
+                        <p className={`mt-1 truncate text-sm ${conversation.unreadCount > 0
+                          ? 'font-medium text-gray-900 dark:text-gray-100'
+                          : 'text-gray-600 dark:text-gray-400'
+                          }`}>
                           {conversation.lastMessage.senderId !== 'current-user' && (
                             <span>{conversation.lastMessage.senderName}: </span>
                           )}

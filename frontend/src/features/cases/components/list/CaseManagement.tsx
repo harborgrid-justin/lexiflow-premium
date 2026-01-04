@@ -112,7 +112,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
   const handleParentTabChange = (parentId: string) => {
     const parent = CASE_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0].id);
+      setActiveTab(parent.subTabs![0]?.id || '');
     }
   };
 

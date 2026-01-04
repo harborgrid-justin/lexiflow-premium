@@ -167,24 +167,27 @@ const VirtualListComponent = <T = Record<string, unknown>>(
       onScroll={handleScroll}
     >
       <div style={{ height: Number.isFinite(totalItemsHeight) ? totalItemsHeight + (footer ? 60 : 0) : 0, position: 'relative' }}>
-        {visibleItems.map(({ index, data, top }) => (
-          <div
-            key={resolveKey(data, index)}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: itemHeight,
-              transform: `translate3d(0, ${top}px, 0)`,
-              willChange: 'transform',
-              contentVisibility: 'auto',
-              containIntrinsicSize: `0px ${itemHeight}px`
-            }}
-          >
-            {renderItem(data, index)}
-          </div>
-        ))}
+        {visibleItems.map(({ index, data, top }) => {
+          if (!data) return null;
+          return (
+            <div
+              key={resolveKey(data, index)}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: itemHeight,
+                transform: `translate3d(0, ${top}px, 0)`,
+                willChange: 'transform',
+                contentVisibility: 'auto',
+                containIntrinsicSize: `0px ${itemHeight}px`
+              }}
+            >
+              {renderItem(data, index)}
+            </div>
+          )
+        })}
 
         {footer && (
           <div

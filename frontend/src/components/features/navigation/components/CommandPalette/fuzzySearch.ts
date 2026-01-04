@@ -63,7 +63,9 @@ export function fuzzyMatch(text: string, query: string): FuzzyMatchResult {
 
       // Scoring factors:
       // 1. Character at start of text or word = higher score
-      const isWordStart = textIndex === 0 || /[\s_-]/.test(textLower[textIndex - 1]);
+      const prevChar = textLower[textIndex - 1];
+      const isWordStart =
+        textIndex === 0 || (prevChar && /[\s_-]/.test(prevChar));
       if (isWordStart) {
         score += 10;
       }
@@ -97,7 +99,10 @@ export function fuzzyMatch(text: string, query: string): FuzzyMatchResult {
 
   // Normalize score to 0-100 range
   const maxPossibleScore = queryLower.length * 30; // Approximate max score
-  const normalizedScore = Math.min(100, Math.round((score / maxPossibleScore) * 100));
+  const normalizedScore = Math.min(
+    100,
+    Math.round((score / maxPossibleScore) * 100)
+  );
 
   return {
     matches,
@@ -116,7 +121,7 @@ export function fuzzyMatch(text: string, query: string): FuzzyMatchResult {
 export function scoreMatch(
   text: string,
   query: string,
-  keywords: string[] = [],
+  keywords: string[] = []
 ): number {
   if (!query) return 0;
 
@@ -134,7 +139,7 @@ export function scoreMatch(
   }
 
   // Contains query as whole word = high score
-  const wordBoundaryRegex = new RegExp(`\\b${escapeRegex(queryLower)}\\b`, 'i');
+  const wordBoundaryRegex = new RegExp(`\\b${escapeRegex(queryLower)}\\b`, "i");
   if (wordBoundaryRegex.test(textLower)) {
     return 85;
   }
@@ -169,7 +174,7 @@ export function scoreMatch(
  */
 export function getHighlightSegments(
   text: string,
-  matchIndices: number[],
+  matchIndices: number[]
 ): HighlightSegment[] {
   if (matchIndices.length === 0) {
     return [{ text, isHighlight: false }];
@@ -181,16 +186,21 @@ export function getHighlightSegments(
   // Sort indices to ensure they're in order
   const sortedIndices = [...matchIndices].sort((a, b) => a - b);
 
+  if (sortedIndices.length === 0) return [{ text, isHighlight: false }];
+
   // Group consecutive indices
   const groups: number[][] = [];
-  let currentGroup: number[] = [sortedIndices[0]];
+  let currentGroup: number[] = [sortedIndices[0]!];
 
   for (let i = 1; i < sortedIndices.length; i++) {
-    if (sortedIndices[i] === sortedIndices[i - 1] + 1) {
-      currentGroup.push(sortedIndices[i]);
-    } else {
+    const current = sortedIndices[i];
+    const prev = sortedIndices[i - 1];
+
+    if (current !== undefined && prev !== undefined && current === prev + 1) {
+      currentGroup.push(current);
+    } else if (current !== undefined) {
       groups.push(currentGroup);
-      currentGroup = [sortedIndices[i]];
+      currentGroup = [current];
     }
   }
   groups.push(currentGroup);
@@ -198,7 +208,11 @@ export function getHighlightSegments(
   // Create segments
   for (const group of groups) {
     const start = group[0];
-    const end = group[group.length - 1] + 1;
+    const last = group[group.length - 1];
+
+    if (start === undefined || last === undefined) continue;
+
+    const end = last + 1;
 
     // Add non-highlighted segment before this group
     if (start > lastIndex) {
@@ -232,7 +246,7 @@ export function getHighlightSegments(
  * Escape special regex characters
  */
 function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /**
@@ -247,7 +261,7 @@ export function fuzzyFilter<T>(
   items: T[],
   query: string,
   getText: (item: T) => string,
-  getKeywords?: (item: T) => string[],
+  getKeywords?: (item: T) => string[]
 ): T[] {
   if (!query) return items;
 
@@ -257,7 +271,7 @@ export function fuzzyFilter<T>(
       score: scoreMatch(
         getText(item),
         query,
-        getKeywords ? getKeywords(item) : [],
+        getKeywords ? getKeywords(item) : []
       ),
     }))
     .filter(({ score }) => score > 0)

@@ -75,7 +75,7 @@ export const CalendarTeam: React.FC = () => {
               <div className="col-span-1 md:col-span-7 grid grid-cols-7 gap-2">
                 {member.schedule?.map((status: number, i: number) => (
                   <div key={`schedule-${member.name}-day-${i}`} className="flex flex-col items-center gap-1">
-                    <span className={cn("md:hidden text-[10px] uppercase font-bold", theme.text.tertiary)}>{days[i].charAt(0)}</span>
+                    <span className={cn("md:hidden text-[10px] uppercase font-bold", theme.text.tertiary)}>{days[i]!.charAt(0)}</span>
                     <div className={cn(
                       "h-8 w-full rounded-md flex items-center justify-center border transition-colors",
                       status

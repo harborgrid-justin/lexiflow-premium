@@ -1,4 +1,5 @@
 import { ModuleRegistry } from "@/services/infrastructure/moduleRegistry";
+import { ModuleDefinition } from "@/types/misc";
 import { FilePlus, UserCircle } from "lucide-react";
 import { NAVIGATION_ITEMS } from "../nav.config";
 import { PATHS } from "../paths.config";

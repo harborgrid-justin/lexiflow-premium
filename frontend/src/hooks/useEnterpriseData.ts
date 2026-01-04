@@ -41,6 +41,14 @@ import type {
 } from "@/types";
 import { useMutation, useQuery } from "./useQueryHooks";
 
+interface UpdateCaseContext {
+  previousCase?: { data: Case };
+}
+
+interface UpdateTaskContext {
+  previousTask?: { data: WorkflowTask };
+}
+
 // ============================================================================
 // QUERY KEY FACTORY
 // ============================================================================
@@ -173,7 +181,7 @@ export function useUpdateCaseMutation() {
 
         return { previousCase };
       },
-      onError: (_error, { id }, context: any) => {
+      onError: (_error, { id }, context: UpdateCaseContext | undefined) => {
         // Rollback on error
         if (context?.previousCase) {
           queryClient.setQueryData(
@@ -332,7 +340,7 @@ export function useUpdateTaskMutation() {
 
         return { previousTask };
       },
-      onError: (_error, { id }, context: any) => {
+      onError: (_error, { id }, context: UpdateTaskContext | undefined) => {
         if (context?.previousTask) {
           queryClient.setQueryData(
             enterpriseQueryKeys.tasks.byId(id),

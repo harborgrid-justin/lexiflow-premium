@@ -16,6 +16,7 @@ export interface UserAvatarProps {
   user?: {
     name?: string;
     avatar?: string;
+    avatarUrl?: string;
     email?: string;
     [key: string]: unknown;
   };
@@ -86,9 +87,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
 
   return (
     <div className={cn('relative inline-block', className)}>
-      {user?.avatar ? (
+      {user?.avatar || user?.avatarUrl ? (
         <img
-          src={user.avatar}
+          src={user.avatar || user.avatarUrl}
           alt={user.name || 'User'}
           className={cn(
             'rounded-full object-cover',

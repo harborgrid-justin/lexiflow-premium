@@ -171,7 +171,7 @@ function toAuthUser(user: User): AuthUser {
   return {
     id: user.id,
     email: user.email,
-    name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email.split('@')[0],
+    name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email.split('@')[0] || 'User',
     firstName: user.firstName,
     lastName: user.lastName,
     role: user.role || 'Associate',
@@ -223,7 +223,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
         if (storedUser) {
-          const _parsedUser = JSON.parse(storedUser) as AuthUser;
+          JSON.parse(storedUser) as AuthUser;
           const parsedOrg = storedOrg ? JSON.parse(storedOrg) as Organization : null;
 
           // Validate session with backend

@@ -35,7 +35,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   try {
     // Map category string to API filter type if needed, or pass as is if compatible
     // Assuming category from URL matches Clause['category'] or is undefined
-    const filter = category ? { category: category as any } : {};
+    const filter = category ? { category: category as string } : {};
     const items = await DataService.analytics.clauses.getAll(filter);
     return { items, totalCount: items.length };
   } catch (error) {
@@ -59,17 +59,18 @@ export async function action({ request }: Route.ActionArgs) {
         // const data = Object.fromEntries(formData);
         // await DataService.analytics.clauses.create(data);
         return { success: true, message: "Clause created" };
-      case "delete":
+      case "delete": {
         const id = formData.get("id") as string;
         if (id) await DataService.analytics.clauses.delete(id);
         return { success: true, message: "Clause deleted" };
+      }
       case "duplicate":
         // Duplication logic
         return { success: true, message: "Clause duplicated" };
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

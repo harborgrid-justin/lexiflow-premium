@@ -1,13 +1,13 @@
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { DocketTable } from '@/features/cases/components/docket/DocketTable';
+import { CaseId, DocketEntry, DocketEntryType, DocketId, DocumentId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketTable } from '@/features/cases/components/docket/DocketTable';
-import { DocketEntry, DocketEntryType, CaseId, DocumentId, DocketId } from '@/types';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 /**
  * DocketTable provides a virtualized table view for displaying docket entries
  * with infinite scroll, keyboard navigation, and filtering capabilities.
- * 
+ *
  * ## Features
  * - Virtualized rendering for performance with large datasets
  * - Infinite scroll with load more trigger
@@ -86,7 +86,7 @@ type Story = StoryObj<typeof meta>;
 const generateMockEntry = (index: number): DocketEntry => {
   const types: DocketEntryType[] = ['Filing', 'Order', 'Hearing', 'Minute Entry', 'Notice'];
   const type = types[index % types.length];
-  
+
   const descriptions = [
     'MOTION to Dismiss for Failure to State a Claim',
     'ORDER granting Motion for Summary Judgment',
@@ -102,10 +102,10 @@ const generateMockEntry = (index: number): DocketEntry => {
     id: `docket-${index}` as DocketId,
     caseId: `case-${Math.floor(index / 10)}` as CaseId,
     sequenceNumber: index + 1,
-    dateFiled: new Date(2024, 11, 1 + (index % 30)).toISOString().split('T')[0],
-    entryDate: new Date(2024, 11, 1 + (index % 30)).toISOString().split('T')[0],
-    description: descriptions[index % descriptions.length],
-    type: type,
+    dateFiled: new Date(2024, 11, 1 + (index % 30)).toISOString().split('T')[0] || '',
+    entryDate: new Date(2024, 11, 1 + (index % 30)).toISOString().split('T')[0] || '',
+    description: descriptions[index % descriptions.length] || '',
+    type: type!,
     filedBy: index % 3 === 0 ? 'Plaintiff' : 'Defendant',
     documentId: index % 4 === 0 ? undefined : (`doc-${index}` as DocumentId),
     isSealed: index % 10 === 0,

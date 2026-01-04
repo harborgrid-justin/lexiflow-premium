@@ -15,17 +15,17 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
+  ArrowRight,
+  Clock,
   Command,
+  CornerDownLeft,
   Search,
   Sparkles,
-  Clock,
-  X,
-  CornerDownLeft,
-  ArrowRight
+  X
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -307,7 +307,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && focusedIndex === -1 && flatCommands.length > 0) {
-      handleCommandExecute(flatCommands[0]);
+      const firstCommand = flatCommands[0];
+      if (firstCommand) handleCommandExecute(firstCommand);
     } else {
       handleKeyDown(e);
     }

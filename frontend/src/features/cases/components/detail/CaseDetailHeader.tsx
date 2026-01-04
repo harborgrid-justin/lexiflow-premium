@@ -63,7 +63,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
             `Client Portal: ${client}`,
             <ClientPortalModal
                 client={{
-                    id: (clientId || 'unknown'),
+                    id: (clientId || 'unknown') as EntityId,
                     name: client,
                     industry: 'General',
                     status: ClientStatus.ACTIVE,
@@ -71,7 +71,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                     totalPaid: 0,
                     totalCases: 1,
                     activeCases: 1,
-                    matters: [id],
+                    matters: [id as CaseId],
                     clientNumber: 'TEMP',
                     paymentTerms: PaymentTerms.NET_30,
                     creditLimit: 0,

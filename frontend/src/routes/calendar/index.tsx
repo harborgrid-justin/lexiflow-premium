@@ -129,7 +129,7 @@ export async function action({ request }: ActionFunctionArgs) {
         const id = formData.get("id") as string;
         if (!id) return { success: false, error: "Missing event ID" };
 
-        const updates: any = {};
+        const updates: Record<string, unknown> = {};
         if (formData.has("title")) updates.title = formData.get("title") as string;
         if (formData.has("startDate")) updates.startDate = formData.get("startDate") as string;
         if (formData.has("endDate")) updates.endDate = formData.get("endDate") as string;

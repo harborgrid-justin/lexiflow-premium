@@ -76,7 +76,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
         }
         if (system === 'State') {
             const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k as keyof typeof STATE_JURISDICTIONS]?.name === level1) as keyof typeof STATE_JURISDICTIONS | undefined;
-            return stateKey ? STATE_JURISDICTIONS[stateKey].levels.map(l => l.name) : [];
+            return stateKey ? STATE_JURISDICTIONS[stateKey]?.levels.map(l => l.name) || [] : [];
         }
         return [];
     }, [system, level1]);
@@ -85,7 +85,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
         if (!level1 || !level2) return [];
         if (system === 'State') {
             const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k as keyof typeof STATE_JURISDICTIONS]?.name === level1) as keyof typeof STATE_JURISDICTIONS | undefined;
-            return stateKey ? STATE_JURISDICTIONS[stateKey].levels.find(l => l.name === level2)?.courts || [] : [];
+            return stateKey ? STATE_JURISDICTIONS[stateKey]?.levels.find(l => l.name === level2)?.courts || [] : [];
         }
         return [];
     }, [system, level1, level2]);

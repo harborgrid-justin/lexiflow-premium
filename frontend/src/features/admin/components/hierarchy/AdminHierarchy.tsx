@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Group, GroupId, Organization, User as UserType } from '@/types';
 import { cn } from '@/utils/cn';
@@ -48,7 +48,7 @@ export const AdminHierarchy: React.FC = () => {
 
   // Auto-select first org on load
   React.useEffect(() => {
-    if (orgs.length > 0 && !selectedOrgId) setSelectedOrgId(orgs[0].id);
+    if (orgs.length > 0 && !selectedOrgId) setSelectedOrgId(orgs[0]!.id);
   }, [orgs, selectedOrgId]);
 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600" /></div>;

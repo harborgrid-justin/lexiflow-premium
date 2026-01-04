@@ -9,12 +9,12 @@
  */
 
 // External Dependencies
-import React, { useState, useEffect } from 'react';
-import { Plus, Briefcase } from 'lucide-react';
+import { Briefcase, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
 import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { Button } from '@/components/ui/atoms/Button';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
 
@@ -26,7 +26,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Project, WorkflowTask, ProjectId, CaseId } from '@/types';
+import { CaseId, Project, ProjectId, WorkflowTask } from '@/types';
 
 interface CaseProjectsProps {
   projects: Project[]; // These come from parent initially, but we will fetch internal as well
@@ -48,14 +48,16 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
   // Fetch real data if available (overriding parent props if we want independent loading)
   // For hybrid, we'll sync.
   useEffect(() => {
-      if (initialProjects.length > 0 && initialProjects[0].caseId) {
-           // Refetch to ensure we have latest from DB
-           const load = async () => {
-               const data = await DataService.projects.getByCaseId(initialProjects[0].caseId!);
-               if (data.length > 0) setProjects(data);
-           };
-           load();
-      }
+    const firstProject = initialProjects[0];
+    if (firstProject && firstProject.caseId) {
+      const caseId = firstProject.caseId;
+      // Refetch to ensure we have latest from DB
+      const load = async () => {
+        const data = await DataService.projects.getByCaseId(caseId);
+        if (data.length > 0) setProjects(data);
+      };
+      load();
+    }
   }, [initialProjects]);
 
 
@@ -87,11 +89,11 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
     <div className="space-y-6 animate-fade-in h-full flex flex-col">
       {newTaskModalProjectId && (
         <TaskCreationModal
-            isOpen={true}
-            onClose={() => setNewTaskModalProjectId(null)}
-            relatedItemTitle={projects.find(p => p.id === newTaskModalProjectId)?.title}
-            relatedModule="Project"
-            onSave={(task) => onAddTask(newTaskModalProjectId, task)}
+          isOpen={true}
+          onClose={() => setNewTaskModalProjectId(null)}
+          relatedItemTitle={projects.find(p => p.id === newTaskModalProjectId)?.title}
+          relatedModule="Project"
+          onSave={(task) => onAddTask(newTaskModalProjectId, task)}
         />
       )}
 
@@ -103,27 +105,27 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
 
       {/* Header */}
       <div className={cn("flex flex-col md:flex-row justify-between items-center p-6 rounded-xl border shadow-sm gap-4 shrink-0", theme.surface.default, theme.border.default)}>
-          <div>
-              <h3 className={cn("text-lg font-bold mb-1", theme.text.primary)}>Case Projects</h3>
-              <p className={cn("text-sm", theme.text.secondary)}>Manage parallel workstreams and group cross-functional tasks.</p>
-          </div>
-          <Button variant="primary" icon={Plus} onClick={() => setIsNewProjectModalOpen(true)}>New Project</Button>
+        <div>
+          <h3 className={cn("text-lg font-bold mb-1", theme.text.primary)}>Case Projects</h3>
+          <p className={cn("text-sm", theme.text.secondary)}>Manage parallel workstreams and group cross-functional tasks.</p>
+        </div>
+        <Button variant="primary" icon={Plus} onClick={() => setIsNewProjectModalOpen(true)}>New Project</Button>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
-            <div className={cn("text-center py-12 rounded-xl border-2 border-dashed h-64 flex flex-col items-center justify-center", theme.surface.highlight, theme.border.default)}>
-                <Briefcase className={cn("h-12 w-12 mx-auto mb-3", theme.text.tertiary)}/>
-                <p className={cn("font-medium", theme.text.secondary)}>No projects yet.</p>
-                <button onClick={() => setIsNewProjectModalOpen(true)} className={cn("text-sm hover:underline mt-2", theme.text.link)}>Create your first project</button>
-            </div>
+          <div className={cn("text-center py-12 rounded-xl border-2 border-dashed h-64 flex flex-col items-center justify-center", theme.surface.highlight, theme.border.default)}>
+            <Briefcase className={cn("h-12 w-12 mx-auto mb-3", theme.text.tertiary)} />
+            <p className={cn("font-medium", theme.text.secondary)}>No projects yet.</p>
+            <button onClick={() => setIsNewProjectModalOpen(true)} className={cn("text-sm hover:underline mt-2", theme.text.link)}>Create your first project</button>
+          </div>
         ) : (
-            <ProjectList
-                projects={projects}
-                onAddTask={setNewTaskModalProjectId}
-                onUpdateTaskStatus={onUpdateTaskStatus}
-                onNavigateToModule={onNavigateToModule}
-            />
+          <ProjectList
+            projects={projects}
+            onAddTask={setNewTaskModalProjectId}
+            onUpdateTaskStatus={onUpdateTaskStatus}
+            onNavigateToModule={onNavigateToModule}
+          />
         )}
       </div>
     </div>

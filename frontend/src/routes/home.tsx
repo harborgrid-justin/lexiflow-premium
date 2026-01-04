@@ -13,7 +13,6 @@
  * @module routes/home
  */
 
-import { api } from '@/api';
 import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
 import { Suspense } from 'react';
@@ -49,8 +48,8 @@ export function meta(_: Route.MetaArgs) {
 export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     const [cases, tasks] = await Promise.all([
-      api.cases.getAll(),
-      api.tasks.getAll(),
+      DataService.cases.getAll(),
+      DataService.tasks.get().getAll(),
     ]);
 
     // Ensure we have arrays (defensive programming)

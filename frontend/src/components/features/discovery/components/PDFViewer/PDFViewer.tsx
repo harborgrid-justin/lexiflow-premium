@@ -47,6 +47,16 @@ const initializePDFJS = async () => {
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+interface PDFRenderTask {
+  promise: Promise<void>;
+  cancel(): void;
+}
+
+interface PDFLoadingTask {
+  promise: Promise<any>;
+  destroy(): void;
+}
+
 interface PDFViewerProps {
   url: string | null;
   scale?: number;
@@ -69,7 +79,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [pdfDoc, setPdfDoc] = useState<unknown | null>(null);
+  const [pdfDoc, setPdfDoc] = useState<any | null>(null);
   const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,8 +88,8 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const [pdfjsReady, setPdfjsReady] = useState(false);
 
   // Refs for tracking async state
-  const renderTaskRef = useRef<unknown | null>(null);
-  const loadingTaskRef = useRef<unknown | null>(null);
+  const renderTaskRef = useRef<PDFRenderTask | null>(null);
+  const loadingTaskRef = useRef<PDFLoadingTask | null>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -113,7 +123,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
 
     const observer = new ResizeObserver(entries => {
       if (!entries || entries.length === 0) return;
-      const width = entries[0].contentRect.width;
+      const width = entries[0]?.contentRect.width;
 
       // Debounce resize updates
       if (resizeTimeout.current) clearTimeout(resizeTimeout.current);

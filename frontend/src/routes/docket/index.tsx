@@ -47,14 +47,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (Array.isArray(response)) {
       entries = response;
     } else if (response && Array.isArray(response.data)) {
-      entries = response.data;
+      const paginated = response as PaginatedResponse<DocketEntry>;
+      entries = paginated.data;
     }
 
     return {
       entries,
-      totalCount: (response as any).total || entries.length || 0,
-      page: (response as any).page || 1,
-      totalPages: (response as any).totalPages || 1
+      totalCount: (response as PaginatedResponse<DocketEntry>).total || entries.length || 0,
+      page: (response as PaginatedResponse<DocketEntry>).page || 1,
+      totalPages: (response as PaginatedResponse<DocketEntry>).totalPages || 1
     };
   } catch (error) {
     console.error("Failed to load docket entries:", error);

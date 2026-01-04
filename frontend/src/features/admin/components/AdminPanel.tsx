@@ -55,7 +55,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
     <TabbedPageLayout
       pageTitle="Admin Console"
       pageSubtitle="System settings, security audits, and data management."
-      tabConfig={ADMIN_TAB_CONFIG as any}
+      tabConfig={ADMIN_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

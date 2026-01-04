@@ -107,7 +107,7 @@ export const AnalyticsDashboard: React.FC = () => {
           {isExporting ? 'Exporting...' : 'Export Report'}
         </Button>
       }
-      tabConfig={ANALYTICS_TAB_CONFIG as any}
+      tabConfig={ANALYTICS_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

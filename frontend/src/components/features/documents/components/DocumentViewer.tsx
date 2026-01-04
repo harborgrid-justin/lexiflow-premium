@@ -125,7 +125,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
             {/* Bates Number Display */}
             {document.customFields?.batesNumber && (
               <div className="text-right text-xs text-gray-500 font-mono mb-4">
-                {document.customFields.batesNumber}
+                {String(document.customFields.batesNumber)}
               </div>
             )}
 

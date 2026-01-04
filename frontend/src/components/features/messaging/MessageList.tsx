@@ -3,9 +3,9 @@
  * Displays a list of messages in a conversation with thread view support
  */
 
-import React, { useRef, useEffect } from 'react';
 import type { Message } from '@/api/communications/messaging-api';
 import { formatDistanceToNow } from 'date-fns';
+import { useEffect, useRef } from 'react';
 
 export interface MessageListProps {
   messages: Message[];
@@ -71,7 +71,7 @@ export function MessageList({
     <div className={`flex flex-col space-y-4 overflow-y-auto p-4 ${className}`}>
       {messages.map((message, index) => {
         const isOwnMessage = message.senderId === currentUserId;
-        const showAvatar = !isOwnMessage && (index === 0 || messages[index - 1].senderId !== message.senderId);
+        const showAvatar = !isOwnMessage && (index === 0 || messages[index - 1]?.senderId !== message.senderId);
         const showName = !isOwnMessage && showAvatar;
 
         return (
@@ -105,11 +105,10 @@ export function MessageList({
 
                 {/* Message Bubble */}
                 <div
-                  className={`group relative rounded-lg px-4 py-2 ${
-                    isOwnMessage
+                  className={`group relative rounded-lg px-4 py-2 ${isOwnMessage
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
-                  }`}
+                    }`}
                 >
                   {/* Reply indicator */}
                   {message.replyTo && (
@@ -156,9 +155,8 @@ export function MessageList({
 
                   {/* Action buttons (visible on hover) */}
                   <div
-                    className={`absolute ${
-                      isOwnMessage ? 'left-0 -translate-x-full' : 'right-0 translate-x-full'
-                    } top-0 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100`}
+                    className={`absolute ${isOwnMessage ? 'left-0 -translate-x-full' : 'right-0 translate-x-full'
+                      } top-0 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100`}
                   >
                     {onReply && (
                       <button

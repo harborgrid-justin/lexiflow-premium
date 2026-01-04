@@ -290,7 +290,7 @@ export const FormFillInteraction: Story = {
 
     // Select filing party
     const partySelect = canvas.getByLabelText(/filed by/i);
-    await userEvent.selectOptions(partySelect, mockParties[0]);
+    if (mockParties[0]) await userEvent.selectOptions(partySelect, mockParties[0]);
 
     // Attempt to save
     const saveButton = canvas.getByRole('button', { name: /save|submit/i });

@@ -147,23 +147,26 @@ export const VirtualGrid = React.memo(<T = Record<string, unknown>>(props: Virtu
       onScroll={handleScroll}
     >
       <div style={{ height: safeContainerContentHeight, position: 'relative' }}>
-        {visibleItems.map(({ index, data, top, left }) => (
-          <div
-            key={resolveKey(data, index)}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: safeItemWidth,
-              height: safeItemHeight,
-              transform: `translate3d(${left}px, ${top}px, 0)`,
-              willChange: 'transform',
-              contain: 'strict'
-            }}
-          >
-            {renderItem(data, index)}
-          </div>
-        ))}
+        {visibleItems.map(({ index, data, top, left }) => {
+          if (!data) return null;
+          return (
+            <div
+              key={resolveKey(data, index)}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: safeItemWidth,
+                height: safeItemHeight,
+                transform: `translate3d(${left}px, ${top}px, 0)`,
+                willChange: 'transform',
+                contain: 'strict'
+              }}
+            >
+              {renderItem(data, index)}
+            </div>
+          )
+        })}
       </div>
     </div>
   );

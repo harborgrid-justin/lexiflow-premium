@@ -61,18 +61,20 @@ export async function action({ request }: Route.ActionArgs) {
         // const data = Object.fromEntries(formData);
         // await DataService.communications.correspondence.create(data);
         return { success: true, message: "Correspondence created" };
-      case "delete":
+      case "delete": {
         const id = formData.get("id") as string;
         if (id) await DataService.communications.correspondence.delete(id);
         return { success: true, message: "Correspondence deleted" };
-      case "archive":
+      }
+      case "archive": {
         const archiveId = formData.get("id") as string;
         if (archiveId) await DataService.communications.correspondence.update(archiveId, { status: 'filed' });
         return { success: true, message: "Correspondence archived" };
+      }
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

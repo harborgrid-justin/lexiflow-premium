@@ -7,11 +7,11 @@
  * @module routes/citations/index
  */
 
+import { CitationManager } from '@/features/knowledge/citation/CitationManager';
+import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import { DataService } from '@/services/data/dataService';
-import { CitationManager } from '@/features/knowledge/citation/CitationManager';
 
 // ============================================================================
 // Meta Tags
@@ -51,13 +51,14 @@ export async function action({ request }: ActionFunctionArgs) {
     case "create":
       // TODO: Implement create via DataService.citations.add()
       return { success: true, message: "Citation created" };
-    case "delete":
+    case "delete": {
       const id = formData.get("id") as string;
       if (id) {
         await DataService.citations.delete(id);
         return { success: true, message: "Citation deleted" };
       }
       return { success: false, error: "Missing citation ID" };
+    }
     case "validate":
       // TODO: Implement validation via DataService.citations.validate() if available
       return { success: true, message: "Citation validated" };

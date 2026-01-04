@@ -214,7 +214,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   /**
    * Render a single breadcrumb item
    */
-  const renderBreadcrumbItem = (item: DynamicBreadcrumbItem, index: number, isLast: boolean) => {
+  const renderBreadcrumbItem = (item: DynamicBreadcrumbItem, _index: number, isLast: boolean) => {
     const hasChildren = item.children && item.children.length > 0;
     const isDropdownOpen = activeDropdown === item.id;
 
@@ -285,7 +285,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   /**
    * Render collapsed items dropdown
    */
-  const renderCollapsedDropdown = (collapsedItems: BreadcrumbItem[]) => {
+  const renderCollapsedDropdown = (collapsedItems: DynamicBreadcrumbItem[]) => {
     return (
       <div className="relative" ref={dropdownRef}>
         <button

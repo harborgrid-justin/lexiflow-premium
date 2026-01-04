@@ -6,15 +6,15 @@
  * and comprehensive access logs monitoring.
  */
 
-import React, { useState } from 'react';
-import { Shield } from 'lucide-react';
 import { useNotify } from '@/hooks/useNotify';
 import { BloomFilter } from '@/utils/bloomFilter';
-import { SecurityMetrics } from './SecurityMetrics';
-import { SecurityControlsPanel } from './SecurityControlsPanel';
-import { ThreatDetectionPanel } from './ThreatDetectionPanel';
+import { Shield } from 'lucide-react';
+import React, { useState } from 'react';
 import { AccessLogsTable } from './AccessLogsTable';
-import type { SecurityControl, AccessLogEntry, SecurityMetric, ThreatCheckResult } from './types';
+import { SecurityControlsPanel } from './SecurityControlsPanel';
+import { SecurityMetrics } from './SecurityMetrics';
+import { ThreatDetectionPanel } from './ThreatDetectionPanel';
+import type { AccessLogEntry, SecurityControl, SecurityMetric, ThreatCheckResult } from './types';
 
 // Bloom Filter initialization
 const ipBlacklist = new BloomFilter(10000, 0.001);
@@ -112,7 +112,7 @@ export const SecurityCompliance: React.FC = () => {
   };
 
   const handleCheckIp = (ip: string): ThreatCheckResult => {
-    if (ipWhitelist.some(range => ip.startsWith(range.split('/')[0].slice(0, -1)))) {
+    if (ipWhitelist.some(range => ip.startsWith(range.split('/')[0]!.slice(0, -1)))) {
       return { status: 'whitelisted', message: 'IP is on the whitelist and will always be allowed.' };
     }
     if (ipBlacklist.mightContain(ip)) {

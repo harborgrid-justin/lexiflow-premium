@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useId } from 'react';
-import { Search, Clock } from 'lucide-react';
+import { Clock, Search } from 'lucide-react';
+import React, { useId, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -73,15 +73,15 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
   };
 
   const handleHistorySelect = (term: string) => {
-      onChange(term);
-      setShowHistory(false);
-      inputRef.current?.focus();
+    onChange(term);
+    setShowHistory(false);
+    inputRef.current?.focus();
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-        SearchService.saveHistory(value);
-        setShowHistory(false);
+      SearchService.saveHistory(value);
+      setShowHistory(false);
     }
   };
 
@@ -108,18 +108,18 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
         />
 
         {showHistory && history.length > 0 && !value && (
-            <div className={cn("absolute top-full left-0 right-0 mt-1 rounded-md shadow-lg border z-50 overflow-hidden", theme.surface.default, theme.border.default)}>
-                <div className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500", theme.surface.highlight)}>Recent Searches</div>
-                {history.map((term) => (
-                    <button
-                        key={i}
-                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2", theme.text.primary, `hover:${theme.surface.highlight}`)}
-                        onClick={() => handleHistorySelect(term)}
-                    >
-                        <Clock className="h-3 w-3 text-slate-400"/> {term}
-                    </button>
-                ))}
-            </div>
+          <div className={cn("absolute top-full left-0 right-0 mt-1 rounded-md shadow-lg border z-50 overflow-hidden", theme.surface.default, theme.border.default)}>
+            <div className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500", theme.surface.highlight)}>Recent Searches</div>
+            {history.map((term, i) => (
+              <button
+                key={i}
+                className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2", theme.text.primary, `hover:${theme.surface.highlight}`)}
+                onClick={() => handleHistorySelect(term)}
+              >
+                <Clock className="h-3 w-3 text-slate-400" /> {term}
+              </button>
+            ))}
+          </div>
         )}
       </div>
       {actions && (
@@ -130,4 +130,3 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
     </div>
   );
 }
-

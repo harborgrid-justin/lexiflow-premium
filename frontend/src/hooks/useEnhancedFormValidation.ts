@@ -326,7 +326,7 @@ export function useEnhancedFormValidation<
       if (!error && fieldSchema?.validationRules) {
         for (const rule of fieldSchema.validationRules) {
           const result = await executeValidationRule(
-            rule as ValidationRule<any>,
+            rule as ValidationRule<unknown>,
             fieldValue,
             formData
           );

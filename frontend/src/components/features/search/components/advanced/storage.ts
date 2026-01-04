@@ -51,8 +51,10 @@ export function parseSearchSyntax(query: string): {
 
   for (const match of matches) {
     const [full, key, value] = match;
-    filters[key] = value;
-    text = text.replace(full, "").trim();
+    if (key && value) {
+      filters[key] = value;
+      text = text.replace(full, "").trim();
+    }
   }
 
   return { text, filters };

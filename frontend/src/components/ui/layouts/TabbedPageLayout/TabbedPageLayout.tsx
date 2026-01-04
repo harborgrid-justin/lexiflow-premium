@@ -13,20 +13,9 @@
 
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { TabConfigItem } from '@/types/layout';
 import { cn } from '@/utils/cn';
-import { LucideIcon } from 'lucide-react';
 import React, { ReactNode, useCallback, useMemo } from 'react';
-
-export interface TabConfigItem {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  subTabs?: {
-    id: string;
-    label: string;
-    icon: LucideIcon;
-  }[];
-}
 
 interface TabbedPageLayoutProps {
   pageTitle: string;
@@ -57,7 +46,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = tabConfig.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      const newTabId = parent.subTabs![0].id;
+      const newTabId = parent.subTabs![0]?.id;
       onTabChange(newTabId);
     }
   }, [tabConfig, onTabChange]);

@@ -49,12 +49,11 @@ export const DocketAnalytics: React.FC = () => {
     DataService.docket.getAll
   );
 
-  const safeEntries = entries || [];
+  const safeEntries = useMemo(() => entries || [], [entries]);
 
   // Cache key based on entries length and last modified date
   const cacheKey = useMemo(() => {
     // Safety check: ensure entries is always an array (moved inside useMemo)
-    const safeEntries = Array.isArray(entries) ? entries : [];
     if (safeEntries.length === 0) return 'empty';
     const lastEntry = safeEntries[safeEntries.length - 1];
     return `${safeEntries.length}-${lastEntry?.id || ''}`;
@@ -71,7 +70,7 @@ export const DocketAnalytics: React.FC = () => {
     // Note: In production, this could use Web Workers or IndexedDB-based aggregation
     console.log(`Computing filing activity for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateFilingActivity(safeEntries);
-  }, [cacheKey]) as Array<{ month: string; filings: number; orders: number }>;
+  }, [cacheKey, safeEntries]) as Array<{ month: string; filings: number; orders: number }>;
 
   // Aggregate Rulings with incremental update logic
   const judgeRulings = useMemo(() => {
@@ -83,7 +82,7 @@ export const DocketAnalytics: React.FC = () => {
     // For large datasets, log performance and compute
     console.log(`Computing judge rulings for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateJudgeRulings(safeEntries);
-  }, [cacheKey]) as Array<{ name: string; value: number; color: string }>;
+  }, [cacheKey, safeEntries]) as Array<{ name: string; value: number; color: string }>;
 
   return (
     <div className="space-y-6">

@@ -68,7 +68,7 @@ export function NotificationList({
       if (!groups[groupKey]) {
         groups[groupKey] = [];
       }
-      groups[groupKey].push(notification);
+      groups[groupKey]?.push(notification);
       return groups;
     }, {} as Record<string, ApiNotification[]>),
     [filteredNotifications]

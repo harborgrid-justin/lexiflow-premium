@@ -216,9 +216,9 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
     opposingPartyName: '',
     opposingCounsel: '',
     opposingCounselFirm: '',
-    intakeDate: new Date().toISOString().split('T')[0],
+    intakeDate: new Date().toISOString().split('T')[0]!,
     openedDate: '',
-    filingDate: new Date().toISOString().split('T')[0],
+    filingDate: new Date().toISOString().split('T')[0]!,
     trialDate: null,
     dateTerminated: null,
     targetCloseDate: null,
@@ -375,9 +375,9 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
       opposingPartyName: (data as Matter).opposingPartyName,
       opposingCounsel: typeof (data as Matter).opposingCounsel === 'string' ? (data as Matter).opposingCounsel as string : '',
       opposingCounselFirm: (data as Matter).opposingCounselFirm,
-      intakeDate: (data as Matter).intakeDate?.split('T')[0] || new Date().toISOString().split('T')[0],
+      intakeDate: (data as Matter).intakeDate?.split('T')[0] || new Date().toISOString().split('T')[0]!,
       openedDate: (data as Matter).openedDate?.split('T')[0] || '',
-      filingDate: (data as Case).filingDate?.split('T')[0] || new Date().toISOString().split('T')[0],
+      filingDate: (data as Case).filingDate?.split('T')[0] || new Date().toISOString().split('T')[0]!,
       trialDate: (data as Case).trialDate?.split('T')[0] || null,
       dateTerminated: (data as Case).dateTerminated?.split('T')[0] || null,
       targetCloseDate: (data as Matter).targetCloseDate?.split('T')[0] || null,
@@ -537,7 +537,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const updateRelatedCase = useCallback((index: number, field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
-      relatedCases: prev.relatedCases.map((rc) =>
+      relatedCases: prev.relatedCases.map((rc, i) =>
         i === index ? { ...rc, [field]: value } : rc
       )
     }));

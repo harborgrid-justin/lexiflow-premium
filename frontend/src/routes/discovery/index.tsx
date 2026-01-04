@@ -9,6 +9,7 @@
 
 import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
 import { DataService } from '@/services/data/dataService';
+import { DiscoveryType } from '@/types/enums';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -56,7 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
       case "create": {
         const title = formData.get("title") as string;
         const caseId = formData.get("caseId") as string;
-        const type = formData.get("type") as any;
+        const type = formData.get("type") as DiscoveryType;
 
         if (title && caseId && type) {
           await DataService.discoveryRequests.create({
@@ -83,7 +84,7 @@ export async function action({ request }: Route.ActionArgs) {
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

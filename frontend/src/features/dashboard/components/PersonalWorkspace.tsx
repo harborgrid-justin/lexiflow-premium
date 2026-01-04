@@ -10,6 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { UINotification } from '@/types/notifications';
 import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
 import React from 'react';
 
@@ -53,7 +54,7 @@ interface PersonalWorkspaceProps {
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
 
-    const { data: notifications = [] } = useQuery<any[]>(
+    const { data: notifications = [] } = useQuery<UINotification[]>(
         ['notifications'],
         () => Promise.resolve([]) // Placeholder
     );
@@ -160,7 +161,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                         <div className="lg:col-span-2">
                             <NotificationCenter
                                 notifications={notifications}
-                                unreadCount={notifications.filter((n: any) => !n.read).length}
+                                unreadCount={notifications.filter((n: UINotification) => !n.read).length}
                                 onMarkAsRead={handleMarkAsRead}
                                 onMarkAllAsRead={handleMarkAllAsRead}
                                 onDelete={handleDeleteNotification}

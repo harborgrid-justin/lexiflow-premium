@@ -14,9 +14,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { PlusCircle, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -226,7 +226,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
         setFocusedIndex(prev => {
           let next = prev + 1;
           // Skip disabled items
-          while (next < allActions.length && allActions[next].disabled) {
+          while (next < allActions.length && allActions[next]?.disabled) {
             next++;
           }
           return next >= allActions.length ? 0 : next;
@@ -238,7 +238,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
         setFocusedIndex(prev => {
           let next = prev - 1;
           // Skip disabled items
-          while (next >= 0 && allActions[next].disabled) {
+          while (next >= 0 && allActions[next]?.disabled) {
             next--;
           }
           return next < 0 ? allActions.length - 1 : next;
@@ -250,7 +250,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
         e.preventDefault();
         if (focusedIndex >= 0 && focusedIndex < allActions.length) {
           const action = allActions[focusedIndex];
-          if (!action.disabled) {
+          if (action && !action.disabled) {
             handleActionClick(action);
           }
         }
@@ -272,7 +272,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
           e.preventDefault();
           setFocusedIndex(prev => {
             let next = prev - 1;
-            while (next >= 0 && allActions[next].disabled) {
+            while (next >= 0 && allActions[next]?.disabled) {
               next--;
             }
             return next < 0 ? allActions.length - 1 : next;
@@ -281,7 +281,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
           e.preventDefault();
           setFocusedIndex(prev => {
             let next = prev + 1;
-            while (next < allActions.length && allActions[next].disabled) {
+            while (next < allActions.length && allActions[next]?.disabled) {
               next++;
             }
             return next >= allActions.length ? 0 : next;
@@ -389,53 +389,53 @@ export const QuickActions = React.memo<QuickActionsProps>(({
                           role="menuitem"
                           aria-disabled={action.disabled}
                         >
-                        {/* Icon */}
-                        <div
-                          className={styles.getActionIconContainer(
-                            action.iconVariant || 'primary'
-                          )}
-                        >
-                          <ActionIcon className={styles.actionIcon} />
-                        </div>
+                          {/* Icon */}
+                          <div
+                            className={styles.getActionIconContainer(
+                              action.iconVariant || 'primary'
+                            )}
+                          >
+                            <ActionIcon className={styles.actionIcon} />
+                          </div>
 
-                        {/* Content */}
-                        <div className={styles.actionContent}>
-                          <div className={styles.actionHeader}>
-                            <span className={styles.getActionLabel(theme)}>
-                              {action.label}
-                            </span>
-                            {action.badge && (
-                              <span className={styles.getBadge()}>
-                                {action.badge}
+                          {/* Content */}
+                          <div className={styles.actionContent}>
+                            <div className={styles.actionHeader}>
+                              <span className={styles.getActionLabel(theme)}>
+                                {action.label}
                               </span>
+                              {action.badge && (
+                                <span className={styles.getBadge()}>
+                                  {action.badge}
+                                </span>
+                              )}
+                            </div>
+                            {action.description && (
+                              <p className={styles.getActionDescription(theme)}>
+                                {action.description}
+                              </p>
                             )}
                           </div>
-                          {action.description && (
-                            <p className={styles.getActionDescription(theme)}>
-                              {action.description}
-                            </p>
-                          )}
-                        </div>
 
-                        {/* Keyboard Shortcut */}
-                        {action.shortcut && (
-                          <div className={styles.shortcut}>
-                            {action.shortcut.split('+').map((key, i, arr) => (
-                              <React.Fragment key={i}>
-                                <kbd className={styles.getShortcutKey(theme)}>
-                                  {key}
-                                </kbd>
-                                {i < arr.length - 1 && (
-                                  <span className="mx-0.5">+</span>
-                                )}
-                              </React.Fragment>
-                            ))}
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                          {/* Keyboard Shortcut */}
+                          {action.shortcut && (
+                            <div className={styles.shortcut}>
+                              {action.shortcut.split('+').map((key, i, arr) => (
+                                <React.Fragment key={i}>
+                                  <kbd className={styles.getShortcutKey(theme)}>
+                                    {key}
+                                  </kbd>
+                                  {i < arr.length - 1 && (
+                                    <span className="mx-0.5">+</span>
+                                  )}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
 
                   {/* Divider between groups */}
                   {groupIndex < visibleGroups.length - 1 && (

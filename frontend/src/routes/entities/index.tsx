@@ -53,13 +53,14 @@ export async function action({ request }: Route.ActionArgs) {
       // or submits to this action. For now, we'll assume the UI handles it or we'd need
       // to parse the full entity object here.
       return { success: true, message: "Entity created" };
-    case "delete":
+    case "delete": {
       const id = formData.get("id") as string;
       if (id) {
         await DataService.entities.delete(id);
         return { success: true, message: "Entity deleted" };
       }
       return { success: false, error: "Missing entity ID" };
+    }
     case "archive":
       // TODO: Implement archive functionality in DataService.entities
       return { success: true, message: "Entity archived" };

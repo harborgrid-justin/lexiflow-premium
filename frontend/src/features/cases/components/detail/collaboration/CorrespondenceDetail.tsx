@@ -31,7 +31,7 @@ import { EvidenceRepository } from '@/services/data/repositories/EvidenceReposit
 import { TaskRepository } from '@/services/data/repositories/TaskRepository';
 import { CorrespondenceService } from '@/services/domain/CommunicationDomain';
 import { DocketRepository } from '@/services/domain/DocketDomain';
-import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
+import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UserId, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
 
 interface CorrespondenceDetailProps {
@@ -75,7 +75,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
 
     const handleCreateTask = async (task: WorkflowTask) => {
         const tasks = (await DataService.tasks) as TaskRepository;
-        await tasks.add(task as unknown as any);
+        // Cast to satisfy branded type requirement for UserId
+        await tasks.add(task as WorkflowTask & { createdBy?: UserId });
         notify.success('Follow-up task created.');
     };
 

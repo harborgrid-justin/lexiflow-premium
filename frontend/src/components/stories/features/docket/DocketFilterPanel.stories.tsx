@@ -1,13 +1,13 @@
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
+import { Case, CaseId, CaseStatus, MatterType, PartyId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
-import { Case, CaseStatus, CaseId, PartyId, MatterType } from '@/types';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 
 /**
  * DocketFilterPanel provides a sidebar filter panel for docket entries
  * with search capabilities and case selection.
- * 
+ *
  * ## Features
  * - Full-text search across docket entries
  * - Filter by entry type (all, filings, orders)
@@ -224,6 +224,6 @@ export const SingleCase: Story = {
     searchTerm: '',
     activeTab: 'all',
     selectedCaseId: null,
-    cases: [mockCases[0]],
+    cases: [mockCases[0]!],
   },
 };

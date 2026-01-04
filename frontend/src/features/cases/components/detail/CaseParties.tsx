@@ -33,6 +33,7 @@ import { Scheduler } from '@/utils/scheduler';
 
 // Types & Interfaces
 import { CaseId, Organization, Party, PartyId } from '@/types';
+import { OrgId } from '@/types/primitives';
 
 interface CasePartiesProps {
     parties?: Party[];
@@ -77,7 +78,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             newParties = newParties.map(p => p.id === currentParty.id ? { ...p, ...currentParty } as Party : p);
         } else {
             // Add - use existing party's caseId or empty string as fallback
-            const caseId = (parties.length > 0 ? parties[0].caseId : '') as CaseId;
+            const caseId = (parties.length > 0 ? parties[0]?.caseId : '') as CaseId;
             console.log('case ID:', caseId);
             const newParty: Party = {
                 id: `p-${Date.now()}` as PartyId,

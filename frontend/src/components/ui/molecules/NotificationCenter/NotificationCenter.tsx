@@ -5,6 +5,7 @@
  */
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ThemeStateValue } from '@/contexts/theme/ThemeContext.types';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
 import {
@@ -68,7 +69,7 @@ const getNotificationIcon = (type: NotificationType) => {
   }
 };
 
-const getNotificationColor = (type: NotificationType, theme: any) => {
+const getNotificationColor = (type: NotificationType, theme: ThemeStateValue['theme']) => {
   switch (type) {
     case 'success':
       return 'text-green-600 dark:text-green-400';

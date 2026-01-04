@@ -240,7 +240,7 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
             </div>
             <div className="text-left">
               <p className={cn("font-medium text-sm", theme.text.primary)}>
-                {typedGroup.notifications[0].title}
+                {typedGroup.notifications[0]?.title}
               </p>
               <p className={cn("text-xs", theme.text.tertiary)}>
                 {formatDistanceToNow(new Date(typedGroup.latestTimestamp), { addSuffix: true })}

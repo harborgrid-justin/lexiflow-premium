@@ -14,9 +14,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect} from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { ChevronDown, ExternalLink } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -27,8 +27,8 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import * as styles from './MegaMenu.styles';
 import type { MegaMenuLayout } from './MegaMenu.styles';
+import * as styles from './MegaMenu.styles';
 
 // Types
 import type { UserRole } from '@/types';
@@ -121,7 +121,7 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
   onNavigate,
   className,
   disabled = false,
-  showFeatured = true}) => {
+  showFeatured = true }) => {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -155,7 +155,8 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
             return false;
           }
           return item.allowedRoles.includes(currentUserRole);
-        })}))
+        })
+      }))
       .filter(section => section.items.length > 0);
   }, [sections, currentUserRole]);
 
@@ -230,7 +231,8 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
       case ' ':
         e.preventDefault();
         if (focusedIndex >= 0 && focusedIndex < allItems.length) {
-          handleItemClick(allItems[focusedIndex]);
+          const item = allItems[focusedIndex];
+          if (item) handleItemClick(item);
         }
         break;
 

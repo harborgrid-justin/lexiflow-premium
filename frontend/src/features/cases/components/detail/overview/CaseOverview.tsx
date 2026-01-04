@@ -70,7 +70,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
         showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal}
         showTransferModal={showTransferModal} setShowTransferModal={setShowTransferModal}
         availableCases={availableCases}
-        onSaveTime={(entry) => handleSaveTime(entry as unknown as any)}
+        onSaveTime={(entry) => handleSaveTime(entry as TimeEntry)}
         onLinkCase={handleLinkCase}
         onTransfer={handleTransferToAppeal}
       />

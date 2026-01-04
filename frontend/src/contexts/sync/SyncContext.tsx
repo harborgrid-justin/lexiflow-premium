@@ -180,7 +180,7 @@ export const SyncProvider = ({
       const handler = MUTATION_HANDLERS[mutation.type] || MUTATION_HANDLERS['DEFAULT'];
       console.log(`[Sync] Replaying: ${mutation.type}`, mutation.payload);
 
-      await handler(mutation.payload);
+      await handler!(mutation.payload);
 
       // Success
       SyncEngine.dequeue();

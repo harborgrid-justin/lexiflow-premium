@@ -1,13 +1,13 @@
-import React, { useState, useRef, useMemo, useCallback, useEffect, useDeferredValue } from 'react';
-import { Search, X, Command } from 'lucide-react';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { Command, Search, X } from 'lucide-react';
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import * as styles from './EnhancedSearch.styles';
-import type { SearchCategory, SearchResult, EnhancedSearchProps } from './types';
-import { highlightMatch, filterSuggestions } from './utils';
-import { getRecentSearches, parseSearchSyntax } from './storage';
-import { useSearchHandlers, useKeyboardNav } from './hooks';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
+import { useKeyboardNav, useSearchHandlers } from './hooks';
+import { getRecentSearches, parseSearchSyntax } from './storage';
+import type { EnhancedSearchProps, SearchCategory, SearchResult } from './types';
+import { filterSuggestions, highlightMatch } from './utils';
 
 /**
  * EnhancedSearch - React 18 optimized with useId
@@ -30,7 +30,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,8 +49,8 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
   // Filter and highlight suggestions
   const filteredSuggestions = useMemo(() => {
-    const categoryFiltered = category === 'all' 
-      ? suggestions 
+    const categoryFiltered = category === 'all'
+      ? suggestions
       : suggestions.filter(s => s.category === category);
     return filterSuggestions(categoryFiltered, deferredQuery, 10);
   }, [suggestions, deferredQuery, category]);
@@ -76,13 +76,13 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     setQuery(value);
     setIsOpen(true);
     setSelectedIndex(-1);
-    
+
     // Parse syntax (e.g., "case:12345")
     const parsed = parseSearchSyntax(value);
     if (parsed.filters.category && parsed.filters.category !== category) {
       setCategory(parsed.filters.category as SearchCategory);
     }
-    
+
     performSearch(value, category);
   }, [category, performSearch]);
 
@@ -101,7 +101,12 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     isOpen,
     displayItems.length,
     () => performSearch(query, category),
-    () => selectedIndex >= 0 && handleSuggestionClick(displayItems[selectedIndex])
+    () => {
+      if (selectedIndex >= 0) {
+        const item = displayItems[selectedIndex];
+        if (item) handleSuggestionClick(item);
+      }
+    }
   );
 
   useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
@@ -111,7 +116,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
       {/* Search Input */}
       <div className={styles.getInputContainer(theme, isOpen)}>
         <Search className={styles.getSearchIcon(theme)} />
-        
+
         <input
           ref={inputRef}
           type="text"
@@ -123,7 +128,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           autoFocus={autoFocus}
           className={styles.getSearchInput(theme)}
         />
-        
+
         {query && (
           <button
             onClick={handleClear}
@@ -133,7 +138,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             <X className={styles.clearIcon} />
           </button>
         )}
-        
+
         {showSyntaxHints && !query && (
           <div className={styles.syntaxHintsContainer}>
             <Command className={styles.commandIcon} />
@@ -173,7 +178,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                 <div className={styles.getSuggestionIcon(theme, selectedIndex === idx)}>
                   {item.icon || getCategoryIcon(item.category)}
                 </div>
-                
+
                 <div className={styles.suggestionContentContainer}>
                   <p
                     className={styles.getSuggestionText(theme, selectedIndex === idx)}
@@ -185,7 +190,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                     </p>
                   )}
                 </div>
-                
+
                 <span className={styles.getSuggestionCategory(theme, selectedIndex === idx)}>
                   {item.category}
                 </span>

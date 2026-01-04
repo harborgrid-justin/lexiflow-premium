@@ -18,6 +18,13 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState, type Rea
 import { AuthActionsContext, AuthStateContext } from './authContexts';
 import type { AuthActionsValue, AuthEvent, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';
 
+interface LoginUserResponse extends User {
+  permissions?: string[];
+  mfaEnabled?: boolean;
+  accountLocked?: boolean;
+  passwordExpiresAt?: Date;
+}
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -251,6 +258,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await authApi.login(email, password);
       console.log('[AuthProvider] Login response received:', { hasToken: !!response.accessToken, userId: response.user?.id });
 
+      const userResponse = response.user as LoginUserResponse;
+
       // Convert API user response to AuthUser format
       const authUser: AuthUser = {
         id: response.user.id,
@@ -258,10 +267,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         name: (response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0]) || 'Unknown User',
         role: (response.user.role || 'attorney') as AuthUser['role'],
         avatarUrl: response.user.avatarUrl,
-        permissions: (response.user as any).permissions || [],
-        mfaEnabled: (response.user as any).mfaEnabled,
-        accountLocked: (response.user as any).accountLocked,
-        passwordExpiresAt: (response.user as any).passwordExpiresAt,
+        permissions: userResponse.permissions || [],
+        mfaEnabled: userResponse.mfaEnabled,
+        accountLocked: userResponse.accountLocked,
+        passwordExpiresAt: userResponse.passwordExpiresAt,
         lastLoginAt: new Date(),
         failedLoginAttempts: 0,
       };

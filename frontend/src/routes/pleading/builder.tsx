@@ -225,7 +225,7 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
 // Component
 // ============================================================================
 
-export default function PleadingBuilderRoute({ loaderData }: any) {
+export default function PleadingBuilderRoute({ loaderData }: { loaderData: LoaderData }) {
   const navigate = useNavigate();
   const { templates, courts } = loaderData;
 
@@ -311,7 +311,7 @@ export default function PleadingBuilderRoute({ loaderData }: any) {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                   >
                     <option value="">Select a court</option>
-                    {courts.map((court: any) => (
+                    {courts.map((court: Court) => (
                       <option key={court.id} value={court.id}>
                         {court.name}
                       </option>
@@ -328,7 +328,7 @@ export default function PleadingBuilderRoute({ loaderData }: any) {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                   >
                     <option value="">Select a template</option>
-                    {templates.map((template: any) => (
+                    {templates.map((template: PleadingTemplate) => (
                       <option key={template.id} value={template.id}>
                         {template.name} ({template.jurisdiction})
                       </option>
@@ -459,7 +459,7 @@ export default function PleadingBuilderRoute({ loaderData }: any) {
               Quick Templates
             </h3>
             <div className="space-y-2">
-              {templates.map((template: any) => (
+              {templates.map((template: PleadingTemplate) => (
                 <button
                   key={template.id}
                   type="button"

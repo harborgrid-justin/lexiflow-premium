@@ -4,15 +4,16 @@
  * Comprehensive privilege assertion and logging
  */
 
-import React, { useState } from 'react';
-import { Download, Plus, Search, Eye, Edit, FileText } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/utils/cn';
+import type { CaseId } from '@/types';
 import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
+import { cn } from '@/utils/cn';
+import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const PrivilegeLogEnhanced: React.FC = () => {
   const { theme } = useTheme();
@@ -24,7 +25,7 @@ export const PrivilegeLogEnhanced: React.FC = () => {
   const [entries] = useState<PrivilegeLogEntryEnhanced[]>([
     {
       id: 'PL-001',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       batesNumber: 'WITHHOLD-001',
       documentDate: '2023-10-15',
       author: 'Jane Smith',
@@ -44,7 +45,7 @@ export const PrivilegeLogEnhanced: React.FC = () => {
     },
     {
       id: 'PL-002',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       batesNumber: 'WITHHOLD-002',
       documentDate: '2023-11-03',
       author: 'Legal Department',
@@ -64,7 +65,7 @@ export const PrivilegeLogEnhanced: React.FC = () => {
     },
     {
       id: 'PL-003',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       batesNumber: 'WITHHOLD-003',
       documentDate: '2023-12-01',
       author: 'John Doe',

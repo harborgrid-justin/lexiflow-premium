@@ -2,7 +2,18 @@ import type { ThemeStateValue } from "@/contexts/theme/ThemeContext.types";
 import { cn } from "@/utils/cn";
 
 export const baseBadgeStyles =
-  "inline-flex items-center justify-center px-2.5 h-5 rounded-full text-[10px] font-bold border ring-1 ring-inset ring-black/5 uppercase tracking-wide whitespace-nowrap";
+  "inline-flex items-center justify-center rounded-full font-bold border ring-1 ring-inset ring-black/5 uppercase tracking-wide whitespace-nowrap";
+
+export const getBadgeSizeStyles = (size: "sm" | "md" | "lg" = "md") => {
+  switch (size) {
+    case "sm":
+      return "px-2 h-4 text-[10px]";
+    case "lg":
+      return "px-3 h-6 text-xs";
+    default:
+      return "px-2.5 h-5 text-[10px]";
+  }
+};
 
 interface ThemeStatus {
   success: { bg: string; text: string; border: string };

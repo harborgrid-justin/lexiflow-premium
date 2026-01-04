@@ -127,7 +127,7 @@ export const AdminService = {
         id: "sec1",
         label: "Require MFA",
         desc: "All internal users must use 2-factor authentication.",
-        type: "Lock" as any,
+        type: "Lock",
         enabled: true,
       },
       {

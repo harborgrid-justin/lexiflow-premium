@@ -7,14 +7,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MessageSquare } from 'lucide-react';
 
-interface Contact {
-  id: string;
-  name: string;
-  role: string;
-  status: string;
-  email: string;
-  department: string;
-}
+import { Contact } from '@/api/communications/messaging-api';
 
 interface MessengerContactsProps {
   contacts: Contact[];
@@ -49,12 +42,12 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
             {contacts.map(c => (
               <TableRow key={c.id}>
                 <TableCell className={cn("font-medium flex items-center gap-3", theme.text.primary)}>
-                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as 'online' | 'offline' | 'busy' | 'away'} /> {c.name}
+                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.isOnline ? 'online' : 'offline'} /> {c.name}
                 </TableCell>
-                <TableCell>{c.role}</TableCell>
-                <TableCell>{c.department}</TableCell>
+                <TableCell>{c.role || 'N/A'}</TableCell>
+                <TableCell>{'N/A'}</TableCell>
                 <TableCell>
-                  <Badge variant={c.status === 'online' ? 'success' : 'neutral'}>{c.status}</Badge>
+                  <Badge variant={c.isOnline ? 'success' : 'neutral'}>{c.isOnline ? 'Online' : 'Offline'}</Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button size="sm" variant="ghost" icon={MessageSquare} onClick={onMessageClick}>Message</Button>

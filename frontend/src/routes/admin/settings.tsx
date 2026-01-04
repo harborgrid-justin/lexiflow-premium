@@ -164,6 +164,8 @@ interface SystemFeatures {
   ocr: boolean;
   aiAssistant: boolean;
   realTimeSync: boolean;
+  advancedSearch: boolean;
+  documentVersioning: boolean;
   [key: string]: boolean;
 }
 
@@ -369,31 +371,31 @@ export default function SystemSettingsRoute({ loaderData }: { loaderData: { sett
               id={`${formId}-feature-ocr`}
               label="OCR Processing"
               checked={featureFlags.ocr}
-              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, ocr: v }))}
+              onChange={(v) => setFeatureFlags((f: SystemFeatures) => ({ ...f, ocr: v }))}
             />
             <Toggle
               id={`${formId}-feature-ai`}
               label="AI Assistant"
               checked={featureFlags.aiAssistant}
-              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, aiAssistant: v }))}
+              onChange={(v) => setFeatureFlags((f: SystemFeatures) => ({ ...f, aiAssistant: v }))}
             />
             <Toggle
               id={`${formId}-feature-sync`}
               label="Real-time Sync"
               checked={featureFlags.realTimeSync}
-              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, realTimeSync: v }))}
+              onChange={(v) => setFeatureFlags((f: SystemFeatures) => ({ ...f, realTimeSync: v }))}
             />
             <Toggle
               id={`${formId}-feature-search`}
               label="Advanced Search"
               checked={featureFlags.advancedSearch}
-              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, advancedSearch: v }))}
+              onChange={(v) => setFeatureFlags((f: SystemFeatures) => ({ ...f, advancedSearch: v }))}
             />
             <Toggle
               id={`${formId}-feature-versioning`}
               label="Document Versioning"
               checked={featureFlags.documentVersioning}
-              onChange={(v) => setFeatureFlags((f: any) => ({ ...f, documentVersioning: v }))}
+              onChange={(v) => setFeatureFlags((f: SystemFeatures) => ({ ...f, documentVersioning: v }))}
             />
           </div>
         </SettingCard>

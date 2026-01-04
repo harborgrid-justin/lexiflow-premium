@@ -13,6 +13,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import type { WarRoomData } from '@/types';
 import {
   Briefcase,
   CheckCircle,
@@ -206,7 +207,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = PARENT_TABS.find((p) => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id as WarRoomView);
+      setActiveTab(parent.subTabs[0]!.id as WarRoomView);
     }
   }, []);
 
@@ -227,7 +228,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   useEffect(() => {
     if (!caseId && allCases.length > 0) {
       if (!currentCaseId || !allCases.find((c) => c.id === currentCaseId)) {
-        setCurrentCaseId(allCases[0].id);
+        setCurrentCaseId(allCases[0]!.id);
       }
     }
   }, [allCases, currentCaseId, caseId]);

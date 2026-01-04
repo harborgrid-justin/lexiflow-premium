@@ -38,6 +38,19 @@ export function meta(_: MetaArgs) {
 }
 
 // ============================================================================
+// Types
+// ============================================================================
+
+interface AuditLogEntry {
+  id: string;
+  severity: 'high' | 'medium' | 'low';
+  action: string;
+  entityType: string;
+  userName: string;
+  timestamp: string;
+}
+
+// ============================================================================
 // Loader
 // ============================================================================
 
@@ -97,7 +110,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function AdminIndexRoute() {
-  const { metrics, auditLogs } = useLoaderData() as { metrics: any; auditLogs: any[] };
+  const { metrics, auditLogs } = useLoaderData() as { metrics: SystemMetrics; auditLogs: AuditLogEntry[] };
 
   return (
     <div className="space-y-6 p-6">
@@ -169,7 +182,7 @@ export default function AdminIndexRoute() {
             {auditLogs.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">No recent activity</p>
             ) : (
-              auditLogs.map((log: any) => (
+              auditLogs.map((log: AuditLogEntry) => (
                 <div key={log.id} className="flex items-start gap-3">
                   <div className={`mt-0.5 rounded-full p-1.5 ${log.severity === 'high' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
                     log.severity === 'medium' ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' :
@@ -302,7 +315,7 @@ function HealthBar({ label, value, max = 100 }: { label: string; value: number; 
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: any) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

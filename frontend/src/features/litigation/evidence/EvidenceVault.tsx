@@ -88,7 +88,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = EVIDENCE_PARENT_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      setView(parent.subTabs[0].id as ViewMode);
+      setView(parent.subTabs[0]!.id as ViewMode);
     }
   }, [setView]);
 
@@ -106,7 +106,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
             selectedItem={selectedItem}
             handleBack={handleBack}
             activeTab={activeTab}
-            setActiveTab={(tab) => setActiveTab(tab as ViewMode)}
+            setActiveTab={(tab) => setActiveTab(tab as DetailTab)}
             onNavigateToCase={onNavigateToCase}
             onCustodyUpdate={handleCustodyUpdate}
           />

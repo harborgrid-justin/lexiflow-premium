@@ -20,7 +20,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { baseBadgeStyles, getBadgeVariantStyles } from './Badge.styles';
+import { baseBadgeStyles, getBadgeSizeStyles, getBadgeVariantStyles } from './Badge.styles';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -35,13 +35,14 @@ export interface BadgeProps {
 /**
  * Badge - React 18 optimized with React.memo
  */
-export const Badge = React.memo<BadgeProps>(({ variant = 'neutral', children, className = '' }) => {
+export const Badge = React.memo<BadgeProps>(({ variant = 'neutral', size = 'md', children, className = '' }) => {
   const { theme } = useTheme();
 
   return (
     <span className={cn(
       baseBadgeStyles,
       getBadgeVariantStyles(theme, variant),
+      getBadgeSizeStyles(size),
       className
     )}>
       {children}

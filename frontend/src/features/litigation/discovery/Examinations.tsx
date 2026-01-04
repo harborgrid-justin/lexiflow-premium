@@ -104,7 +104,7 @@ export const Examinations = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                            <select title="Select examination type" className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewExam({ ...newExam, type: e.target.value as string })}>
+                            <select title="Select examination type" className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewExam({ ...newExam, type: e.target.value as "Physical" | "Mental" })}>
                                 <option value="">Select...</option>
                                 <option value="Physical">Physical</option>
                                 <option value="Mental">Mental</option>

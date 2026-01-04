@@ -49,6 +49,7 @@ import {
   Transcript,
   Vendor,
 } from "@/types";
+import { Custodian } from "@/types/discovery";
 import { delay } from "@/utils/async";
 
 /**
@@ -357,7 +358,9 @@ import { Custodian } from "@/api/discovery/custodians-api";
 
     if (this.useBackend) {
       try {
-        return await (discoveryApi as any).custodians.create(custodian as any);
+        return await discoveryApi.custodians.create(
+          custodian as Partial<Custodian>
+        );
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",

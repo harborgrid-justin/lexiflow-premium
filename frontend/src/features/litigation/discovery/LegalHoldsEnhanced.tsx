@@ -4,17 +4,18 @@
  * Tracks custodian acknowledgments and escalations
  */
 
-import React, { useState } from 'react';
-import { Plus, Mail, CheckCircle, AlertTriangle, Clock, Send, Eye, BarChart } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
-import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import type { CaseId, UserId } from '@/types';
 import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
+import { cn } from '@/utils/cn';
+import { AlertTriangle, BarChart, CheckCircle, Clock, Eye, Mail, Plus, Send } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const LegalHoldsEnhanced: React.FC = () => {
   const { theme } = useTheme();
@@ -27,7 +28,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
   const [holds] = useState<LegalHoldEnhanced[]>([
     {
       id: 'LH-001',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       holdName: 'Executive Communications Hold',
       matter: 'Smith v. Acme Corp',
       description: 'Preserve all communications related to Q3 2023 financial reporting',
@@ -37,7 +38,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
       custodianCount: 15,
       acknowledgedCount: 12,
       dataSources: ['Exchange Server', 'SharePoint', 'Slack'],
-      createdBy: 'Legal Team',
+      createdBy: 'Legal Team' as UserId,
       escalationLevel: 'warning',
       notifications: [
         {
@@ -73,7 +74,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
     },
     {
       id: 'LH-002',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       holdName: 'Product Development Hold',
       matter: 'Patent Litigation Case',
       description: 'Preserve all product development records',
@@ -83,7 +84,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
       custodianCount: 8,
       acknowledgedCount: 8,
       dataSources: ['GitHub', 'Jira', 'Confluence'],
-      createdBy: 'IP Team',
+      createdBy: 'IP Team' as UserId,
       escalationLevel: 'none',
       notifications: [],
       createdAt: '2024-01-15',

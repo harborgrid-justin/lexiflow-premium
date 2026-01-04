@@ -504,6 +504,15 @@ export const queryKeys = {
     stats: () => ["entities", "stats"] as const,
   },
 
+  // War Room
+  warRoom: {
+    all: () => ["warRoom", "all"] as const,
+    detail: (caseId: string) => ["warRoom", "detail", caseId] as const,
+    advisors: (caseId: string) => ["warRoom", "advisors", caseId] as const,
+    opposition: (caseId: string) => ["warRoom", "opposition", caseId] as const,
+    data: (id: string) => ["warRoom", "data", id] as const,
+  },
+
   // Beneficial Ownership (UBO)
   ubo: {
     all: () => ["ubo", "all"] as const,

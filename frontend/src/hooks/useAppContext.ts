@@ -37,6 +37,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { isBackendApiEnabled } from "@/api";
 import { DataService } from "@/services/data/dataService";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import type { UserId } from "@/types";
 
 // Hooks & Context
 import { useAuthState } from "@/contexts/auth/AuthProvider";
@@ -158,8 +159,9 @@ export function useAppContext(): UseAppControllerReturn {
         updatedAt: new Date().toISOString(),
       } as User)
     : users[currentUserIndex] || {
-        id: "temp-user",
+        id: "temp-user" as UserId,
         email: "Guest",
+        name: "Guest User",
         firstName: "Guest",
         lastName: "User",
         role: "user" as const,

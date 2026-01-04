@@ -3,13 +3,14 @@
  * Visual Timeline of Discovery Events and Deadlines
  */
 
-import React, { useState } from 'react';
-import { Calendar, Clock, CheckCircle, AlertCircle, FileText, Flag } from 'lucide-react';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import type { CaseId } from '@/types';
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
+import { cn } from '@/utils/cn';
+import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const DiscoveryTimeline: React.FC = () => {
   const { theme } = useTheme();
@@ -17,7 +18,7 @@ export const DiscoveryTimeline: React.FC = () => {
   const [events] = useState<DiscoveryTimelineEvent[]>([
     {
       id: 'EVT-001',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId as CaseId,
       eventType: 'hold_issued',
       title: 'Legal Hold Issued',
       description: 'Executive Communications Hold issued to 15 custodians',
@@ -31,7 +32,7 @@ export const DiscoveryTimeline: React.FC = () => {
     },
     {
       id: 'EVT-002',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       eventType: 'collection',
       title: 'Email Collection Started',
       description: 'Collection of executive email accounts initiated',
@@ -45,7 +46,7 @@ export const DiscoveryTimeline: React.FC = () => {
     },
     {
       id: 'EVT-003',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       eventType: 'deadline',
       title: 'Initial Disclosures Due',
       description: 'FRCP 26(a)(1) initial disclosures deadline',
@@ -59,7 +60,7 @@ export const DiscoveryTimeline: React.FC = () => {
     },
     {
       id: 'EVT-004',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       eventType: 'review_started',
       title: 'Document Review Phase Begins',
       description: 'First-pass review of 15,420 collected documents',
@@ -71,7 +72,7 @@ export const DiscoveryTimeline: React.FC = () => {
     },
     {
       id: 'EVT-005',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       eventType: 'production',
       title: 'Production 001 Due',
       description: 'Initial document production to plaintiff',
@@ -87,7 +88,7 @@ export const DiscoveryTimeline: React.FC = () => {
     },
     {
       id: 'EVT-006',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       eventType: 'deadline',
       title: 'Fact Discovery Cutoff',
       description: 'All fact discovery must be completed',

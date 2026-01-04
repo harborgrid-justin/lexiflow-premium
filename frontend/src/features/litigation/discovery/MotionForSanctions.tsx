@@ -10,6 +10,7 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { SanctionMotion } from '@/types';
 import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
 import { FileWarning, Gavel, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -20,14 +21,14 @@ export const MotionForSanctions: React.FC = () => {
     const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
     const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
-        QUERY_KEYS.SANCTIONS.ALL,
+        queryKeys.sanctions.all(),
         () => DataService.discovery.getSanctions()
     );
 
     const { mutate: addSanction } = useMutation(
         DataService.discovery.addSanctionMotion,
         {
-            invalidateKeys: [QUERY_KEYS.SANCTIONS.ALL],
+            invalidateKeys: [queryKeys.sanctions.all()],
             onSuccess: () => { sanctionModal.close(); setNewMotion({}); }
         }
     );
@@ -85,7 +86,7 @@ export const MotionForSanctions: React.FC = () => {
                     <Input label="Motion Title" value={newMotion.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({ ...newMotion, title: e.target.value })} placeholder="e.g. Motion for Spoliation Sanctions" />
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Basis</label>
-                        <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewMotion({ ...newMotion, ruleBasis: e.target.value as string })}>
+                        <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewMotion({ ...newMotion, ruleBasis: e.target.value as "Rule 37(a)" | "Rule 37(b)" | "Rule 37(c)" })}>
                             <option value="Rule 37(a)">Rule 37(a) - Compel</option>
                             <option value="Rule 37(b)">Rule 37(b) - Failure to Comply with Order</option>
                             <option value="Rule 37(c)">Rule 37(c) - Failure to Disclose/Admit</option>

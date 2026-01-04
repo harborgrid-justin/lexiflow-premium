@@ -69,7 +69,7 @@ class InvoiceGenerationQueue {
             if (item.entries.length === 0) {
                 throw new Error("No entries to process");
             }
-            const primaryCase = item.entries[0].caseId;
+            const primaryCase = item.entries[0]!.caseId;
             const clientName = "Client Ref " + primaryCase;
             const invoice = await DataService.billing.createInvoice(clientName, primaryCase, item.entries);
             item.resolve(invoice);

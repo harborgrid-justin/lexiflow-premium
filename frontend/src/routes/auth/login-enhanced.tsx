@@ -20,7 +20,7 @@ import {
 } from '@/services/validation/authSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormEvent, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
@@ -39,7 +39,7 @@ export default function LoginPage() {
     formState: { errors },
     getValues,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema) as any,
+    resolver: zodResolver(loginSchema) as unknown as Resolver<LoginFormData>,
     defaultValues: {
       email: '',
       password: '',
@@ -139,7 +139,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Email Field */}
                 <div>
                   <label

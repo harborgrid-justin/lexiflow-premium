@@ -203,6 +203,6 @@ const VirtualListComponent = <T = Record<string, unknown>>(
   );
 };
 
-export const VirtualList = forwardRef(VirtualListComponent as unknown as React.ForwardRefRenderFunction<VirtualListRef, VirtualListProps<any>>) as <T>(
+export const VirtualList = forwardRef(VirtualListComponent as unknown as React.ForwardRefRenderFunction<VirtualListRef, VirtualListProps<unknown>>) as <T>(
   props: VirtualListProps<T> & { ref?: React.Ref<VirtualListRef> }
 ) => React.ReactElement;

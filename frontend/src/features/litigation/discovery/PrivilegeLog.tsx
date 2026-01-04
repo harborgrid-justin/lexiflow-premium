@@ -44,7 +44,7 @@ export const PrivilegeLog: React.FC = () => {
   const notify = useNotify();
 
   const { data: logItems = [], isLoading } = useQuery<PrivilegeLogEntry[]>(
-    discoveryQueryKeys.discovery.privilege.all,
+    discoveryQueryKeys.discovery.privilege.all(),
     DataService.discovery.getPrivilegeLog
   );
 

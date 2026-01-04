@@ -11,7 +11,8 @@
  */
 
 import { api } from '@/api';
-import type { Report, ReportCategory } from '@/types/analytics-enterprise';
+import type { Report } from '@/api/compliance/reports-api';
+import type { ReportCategory } from '@/types/analytics-enterprise';
 import {
   Calendar,
   Edit,
@@ -56,8 +57,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get("category") || "all";
 
   // Fetch reports from API
-  const reports = await (api.analytics as any).getReports({
-    category: category !== 'all' ? category : undefined,
+  const reports = await api.compliance.reports.getAll({
+    reportType: category !== 'all' ? (category as Report['reportType']) : undefined,
   });
 
   // Filter by search term if API doesn't support it yet

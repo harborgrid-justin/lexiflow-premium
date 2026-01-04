@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
+import type { CaseId } from '@/types';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
 import React, { useState } from 'react';
@@ -22,7 +23,7 @@ export const Processing: React.FC = () => {
   const [jobs, setJobs] = useState<ProcessingJob[]>([
     {
       id: 'PROC-001',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       jobName: 'Executive Email Processing',
       collectionId: 'COL-001',
       status: 'completed',
@@ -44,7 +45,7 @@ export const Processing: React.FC = () => {
     },
     {
       id: 'PROC-002',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       jobName: 'SharePoint Document Processing',
       collectionId: 'COL-002',
       status: 'processing',
@@ -55,7 +56,7 @@ export const Processing: React.FC = () => {
       failedDocuments: 12,
       processingSteps: {
         deduplication: 'completed',
-        textExtraction: 'processing',
+        textExtraction: 'pending',
         metadata: 'pending',
         threading: 'pending'
       },
@@ -66,7 +67,7 @@ export const Processing: React.FC = () => {
     },
     {
       id: 'PROC-003',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       jobName: 'Forensic Image Processing',
       collectionId: 'COL-003',
       status: 'queued',
@@ -86,7 +87,7 @@ export const Processing: React.FC = () => {
     },
     {
       id: 'PROC-004',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       jobName: 'Legacy System Migration',
       collectionId: 'COL-004',
       status: 'failed',

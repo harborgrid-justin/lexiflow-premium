@@ -8,6 +8,8 @@ import React, { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { useDebounce } from '@/hooks/useDebounce';
+import { CaseRepository } from '@/services/data/repositories/CaseRepository';
+import { DocketRepository } from '@/services/data/repositories/DocketRepository';
 import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
 import { DocketEntry } from '@/types';
 

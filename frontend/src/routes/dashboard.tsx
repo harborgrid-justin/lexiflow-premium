@@ -38,7 +38,7 @@ export async function loader() {
 // Component
 // ============================================================================
 
-export default function DashboardRoute({ loaderData: _loaderData }: any) {
+export default function DashboardRoute({ loaderData: _loaderData }: Route.ComponentProps) {
   const { currentUser } = useAppController();
   const navigate = useNavigate();
 

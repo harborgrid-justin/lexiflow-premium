@@ -32,13 +32,19 @@ import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/Adaptiv
 import { cn } from '@/utils/cn';
 import { filterStates } from './utils';
 
+interface StateJurisdiction {
+  name: string;
+  region: string;
+  type?: string;
+}
+
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
   const [, startTransition] = useTransition();
 
   // Performance Engine: useQuery
-  const { data: rawStates = [], isLoading } = useQuery<unknown[]>(
+  const { data: rawStates = [], isLoading } = useQuery<StateJurisdiction[]>(
     ['jurisdictions', 'state'],
     DataService.jurisdiction.getState
   );
@@ -48,7 +54,7 @@ export const JurisdictionState: React.FC = () => {
     () => {
       const states = Array.isArray(rawStates) ? rawStates : [];
       if (!states) return [];
-      return filterStates(states as Array<{ name: string; region: string }>, filter);
+      return filterStates(states as StateJurisdiction[], filter);
     },
     [filter, rawStates]
   );
@@ -81,11 +87,11 @@ export const JurisdictionState: React.FC = () => {
           <TableHead>Jurisdiction Level</TableHead>
         </TableHeader>
         <TableBody>
-          {filteredStates.map((s) => (
-            <TableRow key={`state-${(s as { region: string }).region}-${i}`}>
-              <TableCell className={cn("font-medium", theme.text.primary)}>{(s as { name: string; region: string; type?: string }).region}</TableCell>
-              <TableCell>{(s as { name: string; region: string; type?: string }).name}</TableCell>
-              <TableCell>{(s as { name: string; region: string; type?: string }).type}</TableCell>
+          {filteredStates.map((s, i) => (
+            <TableRow key={`state-${s.region}-${i}`}>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{s.region}</TableCell>
+              <TableCell>{s.name}</TableCell>
+              <TableCell>{s.type}</TableCell>
             </TableRow>
           ))}
         </TableBody>

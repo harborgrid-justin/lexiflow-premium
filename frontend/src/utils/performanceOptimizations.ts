@@ -221,11 +221,8 @@ export function profileComponent<P>(
 
     return React.createElement(
       React.Profiler,
-      { id, onRender: handleRender as any },
-      React.createElement(
-        Component as React.ComponentType<any>,
-        props as React.Attributes
-      )
+      { id, onRender: handleRender as React.ProfilerOnRenderCallback },
+      React.createElement(Component, props as P & React.Attributes)
     );
   }
 

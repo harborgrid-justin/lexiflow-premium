@@ -4,6 +4,7 @@
  * @description Production set management with Bates numbering, redaction tracking, and production history
  */
 
+import { Production as APIProduction } from '@/api/discovery/productions-api';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
@@ -114,7 +115,7 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
       setLoading(true);
       try {
         const data = await DataService.productions.getAll({ caseId });
-        setProductions((data as any[]).map((p: any) => {
+        setProductions((data as APIProduction[]).map((p: APIProduction) => {
           let status: Production['status'] = 'draft';
           if (p.status === 'ready' || p.status === 'produced') {
             status = p.status;

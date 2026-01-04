@@ -46,7 +46,7 @@ export const LegalHolds: React.FC = () => {
   const notify = useNotify();
 
   const { data: holds = [], isLoading } = useQuery<LegalHold[]>(
-      discoveryQueryKeys.discovery.holds.all,
+      discoveryQueryKeys.discovery.holds.all(),
       DataService.discovery.getLegalHolds
   );
 
@@ -59,15 +59,15 @@ export const LegalHolds: React.FC = () => {
           // Optimistic update
           onMutate: async (holdId) => {
               // Cancel outgoing queries
-              await queryClient.cancelQueries(discoveryQueryKeys.discovery.holds.all);
+              await queryClient.cancelQueries(discoveryQueryKeys.discovery.holds.all());
 
               // Snapshot previous value
-              const previousHolds = queryClient.getQueryState<LegalHold[]>(discoveryQueryKeys.discovery.holds.all)?.data;
+              const previousHolds = queryClient.getQueryState<LegalHold[]>(discoveryQueryKeys.discovery.holds.all())?.data;
 
               // Optimistically update
               if (previousHolds) {
                   queryClient.setQueryData<LegalHold[]>(
-                      discoveryQueryKeys.discovery.holds.all,
+                      discoveryQueryKeys.discovery.holds.all(),
                       previousHolds.map((h: LegalHold) =>
                           h.id === holdId
                               ? { ...h, status: LegalHoldStatusEnum.ACKNOWLEDGED }
@@ -82,7 +82,7 @@ export const LegalHolds: React.FC = () => {
               // Rollback on error
               if (context?.previousHolds) {
                   queryClient.setQueryData(
-                      discoveryQueryKeys.discovery.holds.all,
+                      discoveryQueryKeys.discovery.holds.all(),
                       context.previousHolds
                   );
               }
@@ -92,7 +92,7 @@ export const LegalHolds: React.FC = () => {
               notify.success('Legal hold acknowledged successfully');
           },
           invalidateKeys: [
-              discoveryQueryKeys.discovery.holds.all,
+              discoveryQueryKeys.discovery.holds.all(),
               discoveryQueryKeys.discovery.holds.byStatus(LegalHoldStatusEnum.ACKNOWLEDGED)
           ]
       }

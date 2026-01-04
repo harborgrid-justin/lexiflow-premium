@@ -323,7 +323,7 @@ export const Review: React.FC = () => {
                   title="Select privilege type"
                   className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                   value={currentCoding.privilegeType || ''}
-                  onChange={(e) => handleCodingChange('privilegeType', e.target.value)}
+                  onChange={(e) => handleCodingChange('privilegeType', (e.target.value || undefined) as "attorney-client" | "work-product" | "both" | undefined)}
                 >
                   <option value="">Select...</option>
                   <option value="attorney-client">Attorney-Client</option>

@@ -208,7 +208,7 @@ export const CalendarService = {
    */
   getAll: async (): Promise<CalendarEvent[]> => {
     try {
-      const events = await (workflowApi as any).calendar.getAll();
+      const events = await workflowApi.calendar.getAll();
       return events.map((e: any) => ({
         ...e,
         type: e.eventType as CalendarEvent["type"],
@@ -232,7 +232,7 @@ export const CalendarService = {
   getById: async (id: string): Promise<CalendarEvent | null> => {
     try {
       validateEventId(id, "getById");
-      const event = await (workflowApi as any).calendar.getById(id);
+      const event = await workflowApi.calendar.getById(id);
       if (!event) return null;
       return {
         ...event,
@@ -275,7 +275,7 @@ export const CalendarService = {
         reminder: item.reminder,
       };
 
-      const event = await (workflowApi as any).calendar.create(createDto);
+      const event = await workflowApi.calendar.create(createDto);
       return {
         ...event,
         type: event.eventType as CalendarEvent["type"],
@@ -311,7 +311,7 @@ export const CalendarService = {
       const event = await workflowApi.calendar.update(id, updates);
       return {
         ...event,
-        type: event.eventType as any,
+        type: event.eventType as CalendarEvent["type"],
       };
     } catch (error) {
       console.error("[CalendarService.update] Error:", error);

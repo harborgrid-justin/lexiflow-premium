@@ -222,11 +222,18 @@ function getTypeColor(type: string): string {
   }
 }
 
+interface BackupStats {
+  totalBackups: number;
+  totalSize: number;
+  lastBackup: string | null;
+  nextScheduled: string | null;
+}
+
 // ============================================================================
 // Component
 // ============================================================================
 
-export default function BackupRoute({ loaderData }: { loaderData: { backups: Backup[]; schedules: BackupSchedule[]; stats: any } }) {
+export default function BackupRoute({ loaderData }: { loaderData: { backups: Backup[]; schedules: BackupSchedule[]; stats: BackupStats } }) {
   const { backups, schedules, stats } = loaderData;
   const fetcher = useFetcher();
 

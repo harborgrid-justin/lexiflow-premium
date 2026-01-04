@@ -121,7 +121,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
     setLoading(true);
     try {
-      const dto = {
+      const dto: CreateTemplateDto = {
         name,
         description,
         category,
@@ -131,12 +131,12 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
         jurisdiction,
         practiceArea,
         tags,
-        status: 'active' as const,
+        status: TemplateStatus.ACTIVE,
       };
 
       const saved = template
-        ? await draftingApi.updateTemplate(template.id, dto as Record<string, unknown>)
-        : await draftingApi.createTemplate(dto as Record<string, unknown>);
+        ? await draftingApi.updateTemplate(template.id, dto as UpdateTemplateDto)
+        : await draftingApi.createTemplate(dto);
 
       addToast(`Template ${template ? 'updated' : 'created'} successfully`, 'success');
       onSave(saved);

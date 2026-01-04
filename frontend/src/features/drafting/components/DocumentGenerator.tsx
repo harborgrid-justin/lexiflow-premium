@@ -114,6 +114,25 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     };
   }, [templateId, addToast]);
 
+  const loadTemplate = async (id: string) => {
+    try {
+      const template = await draftingApi.getTemplateById(id);
+      setSelectedTemplate(template);
+      setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
+
+      // Initialize variable values with defaults
+      const initialValues: Record<string, unknown> = {};
+      template.variables.forEach((v) => {
+        initialValues[v.name] = v.defaultValue || '';
+      });
+      setVariableValues(initialValues);
+      setStep('variables');
+    } catch (error) {
+      console.error('Failed to load template:', error);
+      addToast('Failed to load template', 'error');
+    }
+  };
+
   const handleSelectTemplate = (template: DraftingTemplate) => {
     loadTemplate(template.id);
   };
@@ -447,7 +466,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
             {/* Display validation errors for this field */}
             {validationErrors[variable.name] && (
               <div className="mt-1">
-                {validationErrors[variable.name].map((error, idx) => (
+                {validationErrors[variable.name]?.map((error, idx) => (
                   <p key={idx} className="text-xs text-red-600 dark:text-red-400">
                     {error}
                   </p>

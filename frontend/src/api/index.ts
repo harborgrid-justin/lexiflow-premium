@@ -45,7 +45,7 @@ export {
   isBackendApiEnabled,
   isIndexedDBMode,
   isProduction,
-  logApiConfig,
+  logApiConfig
 } from "@/config/network/api.config";
 
 // ==================== DOMAIN EXPORTS ====================
@@ -64,9 +64,7 @@ export { workflowApi } from "./domains/workflow.api";
 // Note: domains/data-platform.api exports dataPlatformApi (conflicts with data-platform/index.ts)
 // export { dataPlatformApi } from './domains/data-platform.api';
 export {
-  DraftingApiService,
-  draftingApi,
-  type ClauseReference,
+  draftingApi, DraftingApiService, type ClauseReference,
   type CreateTemplateDto,
   type DraftingStats,
   type DraftingTemplate,
@@ -74,13 +72,13 @@ export {
   type GenerateDocumentDto,
   type TemplateVariable,
   type UpdateGeneratedDocumentDto,
-  type UpdateTemplateDto,
+  type UpdateTemplateDto
 } from "./domains/drafting.api";
 export { hrApi } from "./domains/hr.api";
 export {
   LegalEntitiesApiService,
   type EntityRelationship,
-  type LegalEntityApi,
+  type LegalEntityApi
 } from "./domains/legal-entities.api";
 
 // ==================== ORGANIZED FOLDER EXPORTS ====================
@@ -105,7 +103,7 @@ export {
   MetricsApiService,
   OCRApiService,
   ProcessingJobsApiService,
-  ServiceJobsApiService,
+  ServiceJobsApiService
 } from "./admin";
 // Re-export all admin types
 export type {
@@ -114,7 +112,7 @@ export type {
   OCRRequest,
   ProcessingJob,
   ServiceJob,
-  SystemMetrics,
+  SystemMetrics
 } from "./admin";
 
 // Export data-platform (commented to avoid duplicates - services already exported from admin)
@@ -151,6 +149,7 @@ export const api = {
   permissions: authDomain.authApi.permissions,
   ethicalWalls: authDomain.authApi.ethicalWalls,
   tokenBlacklist: authDomain.authApi.tokenBlacklist,
+  analytics: analyticsDomain.analyticsApi,
   cases: litigationDomain.litigationApi.cases,
   docket: litigationDomain.litigationApi.docket,
   motions: litigationDomain.litigationApi.motions,
@@ -221,7 +220,7 @@ export const api = {
   ocr: adminDomain.adminApi.ocr,
   monitoring: adminDomain.adminApi.monitoring,
   health: adminDomain.adminApi.health,
-  analytics: adminDomain.adminApi.analytics,
+  adminAnalytics: adminDomain.adminApi.analytics,
   auditLogs: adminDomain.adminApi.auditLogs,
   versioning: adminDomain.adminApi.versioning,
   sync: adminDomain.adminApi.sync,

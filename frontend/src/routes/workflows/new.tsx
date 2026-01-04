@@ -94,7 +94,7 @@ export default function NewWorkflowRoute({ actionData }: RouteComponentProps) {
         <Form method="post" className="space-y-6">
           {actionData && 'error' in actionData && (
             <div className="rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400">
-              {(actionData as any).error}
+              {(actionData as { error: string }).error}
             </div>
           )}
 

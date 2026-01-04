@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useNotify } from '@/hooks/useNotify';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';
@@ -53,6 +53,8 @@ export const SecurityOps: React.FC = () => {
         if (!e.target.files || e.target.files.length === 0) return;
 
         const file = e.target.files[0];
+        if (!file) return;
+
         setFileName(file.name);
         setIsScanning(true);
         setScanResult(null);

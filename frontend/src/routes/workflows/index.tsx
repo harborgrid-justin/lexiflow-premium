@@ -7,6 +7,7 @@
  * @module routes/workflows/index
  */
 
+import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/workflow-api';
 import type { WorkflowStatus } from '@/types';
 import { useState } from 'react';
 import { Form, Link, useLoaderData, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -41,8 +42,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get('category') || undefined;
 
   const [templates, instances] = await Promise.all([
-    api.workflow.getTemplates({ status: status as any, category }),
-    api.workflow.getInstances({ status: status as any })
+    api.workflow.getTemplates({ status: status as WorkflowTemplate['status'], category }),
+    api.workflow.getInstances({ status: status as WorkflowInstance['status'] })
   ]);
 
   return { templates, instances };

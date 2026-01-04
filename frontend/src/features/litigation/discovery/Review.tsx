@@ -9,8 +9,10 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
-import type { CaseId, DocumentId } from '@/types/primitives';
 import { cn } from '@/utils/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
@@ -19,72 +21,17 @@ export const Review: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
 
-  // Mock review documents
-  const [documents] = useState<ReviewDocument[]>([
-    {
-      id: 'DOC-001',
-      caseId: 'C-2024-001' as CaseId,
-      documentId: 'D-12345' as DocumentId,
-      fileName: 'Q3_Financial_Report.pdf',
-      fileType: 'pdf',
-      fileSize: 2457600,
-      custodian: 'John Doe',
-      dateCreated: '2023-09-15',
-      dateModified: '2023-09-15',
-      author: 'John Doe',
-      subject: 'Q3 2023 Financial Performance',
-      reviewStatus: 'reviewed',
-      coding: {
-        responsive: 'yes',
-        privileged: 'no',
-        confidential: 'yes',
-        hotDocument: true,
-        redactionRequired: false,
-        issues: ['Financial Data', 'Material Evidence']
-      },
-      batesNumber: 'DEF-000125',
-      familyId: 'FAM-001',
-      hasAttachments: false,
-      attachmentCount: 0,
-      reviewedBy: 'Reviewer A',
-      reviewedAt: '2024-01-20T10:30:00Z',
-      tags: ['Financial', 'Key Document'],
-      createdAt: '2023-09-15',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: 'DOC-002',
-      caseId: 'C-2024-001' as CaseId,
-      documentId: 'D-12346' as DocumentId,
-      fileName: 'Attorney_Client_Communication.msg',
-      fileType: 'email',
-      fileSize: 45678,
-      custodian: 'Jane Smith',
-      dateCreated: '2023-10-05',
-      dateModified: '2023-10-05',
-      author: 'Jane Smith',
-      recipients: ['Legal Team'],
-      subject: 'Re: Strategy Discussion',
-      reviewStatus: 'in_review',
-      coding: {
-        responsive: 'maybe',
-        privileged: 'yes',
-        confidential: 'yes',
-        privilegeType: 'attorney-client',
-        hotDocument: false,
-        redactionRequired: true
-      },
-      batesNumber: 'DEF-000126',
-      familyId: 'FAM-002',
-      hasAttachments: true,
-      attachmentCount: 2,
-      createdAt: '2023-10-05',
-      updatedAt: '2024-01-20'
-    }
-  ]);
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch Review Documents
+  const { data: documents = [], isLoading } = useQuery<ReviewDocument[]>(
+    ['discovery', 'review', 'documents'],
+    async () => discoveryRepo.getReviewDocuments()
+  );
 
   const [currentDocIndex, setCurrentDocIndex] = useState(0);
-  const [currentCoding, setCurrentCoding] = useState<DocumentCoding>(documents[0]?.coding || {
+  const [currentCoding, setCurrentCoding] = useState<DocumentCoding>({
     responsive: 'not_coded',
     privileged: 'not_coded',
     confidential: 'not_coded',
@@ -94,6 +41,21 @@ export const Review: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [, startTransition] = useTransition();
+
+  // Update coding when document changes
+  React.useEffect(() => {
+    if (documents[currentDocIndex]) {
+      setCurrentCoding(documents[currentDocIndex].coding || {
+        responsive: 'not_coded',
+        privileged: 'not_coded',
+        confidential: 'not_coded',
+        hotDocument: false,
+        redactionRequired: false
+      });
+      // Reset notes or fetch them if they exist on the document
+      setNotes(''); 
+    }
+  }, [currentDocIndex, documents]);
 
   const handleSearchChange = useCallback((value: string) => {
     startTransition(() => {
@@ -106,29 +68,38 @@ export const Review: React.FC = () => {
 
   const handleNextDocument = () => {
     if (currentDocIndex < documents.length - 1) {
-      const nextDoc = documents[currentDocIndex + 1];
-      if (nextDoc) {
-        setCurrentDocIndex(currentDocIndex + 1);
-        setCurrentCoding(nextDoc.coding);
-        setNotes('');
-      }
+      setCurrentDocIndex(currentDocIndex + 1);
     }
   };
 
   const handlePreviousDocument = () => {
     if (currentDocIndex > 0) {
-      const prevDoc = documents[currentDocIndex - 1];
-      if (prevDoc) {
-        setCurrentDocIndex(currentDocIndex - 1);
-        setCurrentCoding(prevDoc.coding);
-        setNotes('');
-      }
+      setCurrentDocIndex(currentDocIndex - 1);
     }
   };
 
+  // Update Coding Mutation
+  const { mutate: saveCoding } = useMutation(
+    async ({ id, coding, notes }: { id: string; coding: DocumentCoding; notes?: string }) => {
+      return discoveryRepo.updateDocumentCoding(id, coding, notes);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidate(['discovery', 'review', 'documents']);
+        notify.success('Document coding saved successfully');
+        handleNextDocument();
+      },
+      onError: (error) => {
+        console.error('Failed to save coding:', error);
+        notify.error('Failed to save document coding');
+      }
+    }
+  );
+
   const handleSaveCoding = () => {
-    notify.success('Document coding saved successfully');
-    // In production, this would call API to save coding
+    if (currentDoc) {
+      saveCoding({ id: currentDoc.id, coding: currentCoding, notes });
+    }
   };
 
   const handleCodingChange = (field: keyof DocumentCoding, value: DocumentCoding[keyof DocumentCoding]) => {
@@ -138,12 +109,18 @@ export const Review: React.FC = () => {
   const stats = useMemo(() => ({
     total: documents.length,
     reviewed: documents.filter(d => d.reviewStatus === 'reviewed').length,
-    responsive: documents.filter(d => d.coding.responsive === 'yes').length,
-    privileged: documents.filter(d => d.coding.privileged === 'yes').length,
-    flagged: documents.filter(d => d.coding.hotDocument).length
+    responsive: documents.filter(d => d.coding?.responsive === 'yes').length,
+    privileged: documents.filter(d => d.coding?.privileged === 'yes').length,
+    flagged: documents.filter(d => d.coding?.hotDocument).length
   }), [documents]);
 
-  return (
+  if (isLoading) {
+    return <div className="p-8 text-center">Loading documents...</div>;
+  }
+
+  if (documents.length === 0) {
+    return <div className="p-8 text-center">No documents found for review.</div>;
+  }
     <div className="h-full flex flex-col space-y-4 animate-fade-in">
       {/* Header with Search and Stats */}
       <div className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>

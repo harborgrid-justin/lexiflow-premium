@@ -357,9 +357,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.create(
-          custodian as Omit<Custodian, "id" | "createdAt" | "updatedAt">
-        );
+        return await (discoveryApi as any).custodians.create(custodian as any);
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",

@@ -5,7 +5,7 @@
 
 import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryForm } from '@/components/billing/TimeEntryForm';
-import { useNavigate } from 'react-router';
+import { useNavigate, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
@@ -62,7 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-export default function NewTimeEntryRoute({ actionData }: Route.ComponentProps) {
+export default function NewTimeEntryRoute({ actionData }: { actionData: any }) {
   const navigate = useNavigate();
 
   // Redirect after successful creation
@@ -102,7 +102,7 @@ export default function NewTimeEntryRoute({ actionData }: Route.ComponentProps) 
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

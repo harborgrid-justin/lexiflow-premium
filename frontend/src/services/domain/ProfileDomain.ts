@@ -1,10 +1,10 @@
 import { authApi, isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
-    ExtendedUserProfile,
-    GranularPermission,
-    UpdateUserDto,
-    UserId,
+  ExtendedUserProfile,
+  GranularPermission,
+  UpdateUserDto,
+  UserId,
 } from "@/types";
 
 export const ProfileDomain = {
@@ -25,7 +25,8 @@ export const ProfileDomain = {
         return {
           ...user,
           id: user.id as UserId,
-          preferences: (user as unknown as ExtendedUserProfile).preferences || {},
+          preferences:
+            (user as unknown as ExtendedUserProfile).preferences || {},
           security: (user as unknown as ExtendedUserProfile).security || {},
           accessMatrix: permissions,
         } as ExtendedUserProfile;
@@ -123,8 +124,8 @@ export const ProfileDomain = {
   getAuditLog: async (userId: string) => {
     if (isBackendApiEnabled()) {
       try {
-        const logs = await adminApi.auditLogs.getAll({ userId });
-        return logs.map((log) => ({
+        const logs = await (adminApi as any).auditLogs.getAll({ userId });
+        return logs.map((log: any) => ({
           id: log.id,
           action: log.action,
           timestamp: log.timestamp,

@@ -51,7 +51,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as 'active' | 'inactive' | 'closed' | 'suspended') || undefined,
+      status: (status as any) || undefined,
     });
 
     return {

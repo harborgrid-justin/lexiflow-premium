@@ -61,7 +61,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, 
 
   const renderContent = () => {
     // Delegation to DashboardContent
-    return <DashboardContent activeTab={activeTab} onSelectCase={onSelectCase} currentUser={currentUser} />;
+    return <DashboardContent activeTab={activeTab} onSelectCase={onSelectCase} currentUser={currentUser as any} />;
   };
 
   return (

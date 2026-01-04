@@ -210,11 +210,13 @@ export function useLitigationBuilder({
 
     if (!validation.isValid) {
       setValidationErrors(validation.errors.map((e) => e.message));
-      notify.error(`Cannot deploy: ${validation.errors[0].message}`);
+      if (validation.errors[0]) {
+        notify.error(`Cannot deploy: ${validation.errors[0].message}`);
+      }
       return;
     }
 
-    if (validation.warnings.length > 0) {
+    if (validation.warnings.length > 0 && validation.warnings[0]) {
       notify.warning(`Warning: ${validation.warnings[0].message}`);
     }
 

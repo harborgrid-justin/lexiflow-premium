@@ -1301,7 +1301,7 @@ Object.defineProperties(DataServiceBase, {
    * @features Policy definition, enforcement, testing
    */
   rlsPolicies: {
-    get: () => (isBackendApiEnabled() ? api.rlsPolicies : null),
+    get: () => (isBackendApiEnabled() ? (api as any).rlsPolicies : null),
     enumerable: true,
   },
 

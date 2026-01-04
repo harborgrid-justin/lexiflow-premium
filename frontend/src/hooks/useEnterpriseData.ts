@@ -178,7 +178,7 @@ export function useUpdateCaseMutation() {
         if (context?.previousCase) {
           queryClient.setQueryData(
             enterpriseQueryKeys.cases.byId(id),
-            context.previousCase.data
+            (context.previousCase as any).data
           );
         }
       },
@@ -236,7 +236,11 @@ export function useUploadDocumentMutation() {
     { file: File; metadata?: Record<string, unknown> }
   >(
     async ({ file, metadata }) =>
-      enterpriseApi.upload<LegalDocument>("/documents/upload", file, metadata),
+      enterpriseApi.upload<LegalDocument>(
+        "/documents/upload",
+        file,
+        metadata as Record<string, string | Blob>
+      ),
     {
       onSuccess: () => {
         queryClient.invalidate(enterpriseQueryKeys.documents.all());
@@ -332,7 +336,7 @@ export function useUpdateTaskMutation() {
         if (context?.previousTask) {
           queryClient.setQueryData(
             enterpriseQueryKeys.tasks.byId(id),
-            context.previousTask.data
+            (context.previousTask as any).data
           );
         }
       },

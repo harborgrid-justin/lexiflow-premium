@@ -278,7 +278,7 @@ export function useEnhancedAutoSave<T>({
       lastSavedDataRef.current = resolvedData;
       await performSave(resolvedData, true);
     },
-    [conflictData, performSave]
+    [conflictData]
   );
 
   /**

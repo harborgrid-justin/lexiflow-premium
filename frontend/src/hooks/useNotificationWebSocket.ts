@@ -177,6 +177,32 @@ export const useNotificationWebSocket = (
   );
 
   /**
+   * Schedule reconnection with exponential backoff
+   */
+  const scheduleReconnect = useCallback((): void => {
+    if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
+      log("Max reconnect attempts reached");
+      return;
+    }
+
+    const delay = Math.min(
+      reconnectDelay * Math.pow(2, reconnectAttemptsRef.current),
+      30000 // Max 30s delay
+    );
+
+    log(`Scheduling reconnect in ${delay}ms (Attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`);
+
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+    }
+
+    reconnectTimerRef.current = setTimeout(() => {
+      reconnectAttemptsRef.current++;
+      connect();
+    }, delay);
+  }, [maxReconnectAttempts, reconnectDelay, log]); // Removed connect from deps to avoid cycle
+
+  /**
    * Connect to WebSocket
    */
   const connect = useCallback((): void => {
@@ -310,14 +336,7 @@ export const useNotificationWebSocket = (
   /**
    * Schedule reconnection with exponential backoff
    */
-  const scheduleReconnect = useCallback((): void => {
-    if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-      log("Max reconnect attempts reached");
-      return;
-    }
-
-    const delay = Math.min(
-      reconnectDelay * Math.pow(2, reconnectAttemptsRef.current),
+  /* const scheduleReconnect = useCallback((): void => { ... moved up ... */
       30000 // Max 30 seconds
     );
 

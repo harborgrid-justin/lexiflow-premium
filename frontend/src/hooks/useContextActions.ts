@@ -171,12 +171,16 @@ export function useContextToolbar(
         }
         const statsMap = new Map<string, ActionStats>();
         Object.entries(data.stats || {}).forEach(
-          ([id, stat]: [string, StoredActionStats]) => {
+          ([id, stat]: [string, unknown]) => {
+            const storedStat = stat as StoredActionStats;
             statsMap.set(id, {
-              ...stat,
-              lastUsed: new Date(stat.lastUsed),
+              actionId: id,
+              useCount: storedStat.useCount || 0,
+              avgTimeBetweenUses: storedStat.avgTimeBetweenUses || 0,
+              ...storedStat,
+              lastUsed: new Date(storedStat.lastUsed),
               contextPatterns: new Map(
-                Object.entries(stat.contextPatterns || {})
+                Object.entries(storedStat.contextPatterns || {})
               ),
             });
           }

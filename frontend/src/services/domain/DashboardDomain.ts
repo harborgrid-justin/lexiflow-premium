@@ -5,8 +5,8 @@
  */
 
 import { api, isBackendApiEnabled } from "@/api";
-import { TaskStatusBackend } from "@/types";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import { TaskStatusBackend } from "@/types";
 
 interface DashboardWidget {
   id: string;
@@ -117,13 +117,19 @@ export const DashboardService = {
       const [stats, tasks, invoices, auditLogs] = await Promise.all([
         api.cases.getStats(),
         api.tasks.getAll({ status: "Pending" as TaskStatusBackend }),
-        api.invoices.getAll({ startDate: startOfMonth, endDate: endOfMonth }),
+        (api as any).invoices.getAll({
+          startDate: startOfMonth,
+          endDate: endOfMonth,
+        }),
         isBackendApiEnabled()
           ? apiClient.get<{ total: number }>("/audit/logs/count?period=recent")
           : Promise.resolve({ total: 0 }),
       ]);
 
-      const revenue = invoices.reduce((sum, inv) => sum + (inv.total || 0), 0);
+      const revenue = invoices.reduce(
+        (sum, inv) => sum + (inv.totalAmount || 0),
+        0
+      );
 
       return {
         activeCases: stats.totalActive,

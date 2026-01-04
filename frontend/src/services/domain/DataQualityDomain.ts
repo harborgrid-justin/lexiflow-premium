@@ -1,3 +1,4 @@
+import { STORES, db } from "@/services/data/db";
 import {
   Case,
   CleansingRule,
@@ -6,11 +7,12 @@ import {
   DedupeCluster,
   QualityMetricHistory,
 } from "@/types";
+import { delay, yieldToMain } from "@/utils/async";
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export class DataQualityService {
   async getAnomalies(): Promise<DataAnomaly[]> {
@@ -110,7 +112,9 @@ export class DataQualityService {
       if (c.filingDate) {
         uniqueDates.add(c.filingDate);
         const year = c.filingDate.split("-")[0];
-        if (year && filingYears[year] !== undefined) filingYears[year]++;
+        if (year && filingYears[year] !== undefined) {
+          filingYears[year] = (filingYears[year] as number) + 1;
+        }
       }
 
       // Yield every 500 items to keep UI responsive

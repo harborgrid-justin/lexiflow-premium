@@ -147,7 +147,9 @@ export const DataSourceService = {
   testConnection: async (sourceId: string): Promise<ConnectionStatus> => {
     if (isBackendApiEnabled()) {
       try {
-        const result = await api.dataPlatform.dataSources.test(sourceId);
+        const result = await (api as any).dataPlatform.dataSources.test(
+          sourceId
+        );
         return {
           connected: result.success,
           latency: 0,

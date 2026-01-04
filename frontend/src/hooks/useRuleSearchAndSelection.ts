@@ -146,7 +146,8 @@ export function useRuleSearchAndSelection(
     if (
       !debouncedSearchTerm &&
       fullHierarchy.length > 0 &&
-      expandedIds.size === 0
+      expandedIds.size === 0 &&
+      fullHierarchy[0]
     ) {
       setExpandedIds(new Set([fullHierarchy[0].id]));
     }

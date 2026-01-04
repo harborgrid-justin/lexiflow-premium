@@ -104,10 +104,14 @@ export function useDocumentDragDrop(
       setIsUploading(true);
       try {
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
-          await DocumentService.uploadDocument(e.dataTransfer.files[i], {
-            sourceModule: currentFolder === "root" ? "General" : currentFolder,
-            caseId: "General" as CaseId,
-          });
+          const file = e.dataTransfer.files[i];
+          if (file) {
+            await DocumentService.uploadDocument(file, {
+              sourceModule:
+                currentFolder === "root" ? "General" : currentFolder,
+              caseId: "General" as CaseId,
+            });
+          }
         }
         queryClient.invalidate(queryKeys.documents.all());
         notify.success(`Uploaded ${e.dataTransfer.files.length} documents.`);

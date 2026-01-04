@@ -41,8 +41,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get('category') || undefined;
 
   const [templates, instances] = await Promise.all([
-    api.workflow.getTemplates({ status, category }),
-    api.workflow.getInstances({ status })
+    api.workflow.getTemplates({ status: status as any, category }),
+    api.workflow.getInstances({ status: status as any })
   ]);
 
   return { templates, instances };
@@ -52,7 +52,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const id = formData.get("id") as string;

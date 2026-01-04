@@ -17,15 +17,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useResizeObserver } from '@/hooks/useResizeObserver';
 import { useViewportTransform } from '@/hooks/useViewportTransform';
 
@@ -35,10 +35,10 @@ import { GraphOverlay } from './GraphOverlay';
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import { NODE_STRIDE } from '@/utils/nexusPhysics';
-import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils/graphData';
+import { buildGraphData, getNodeLabelYOffset, getNodeRadius, getNodeStrokeColor } from './utils/graphData';
 
 // Types
-import { Case, Party, EvidenceItem, NexusNodeData } from '@/types';
+import { Case, EvidenceItem, NexusNodeData, Party } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -125,6 +125,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
       // Update link positions
       for (let i = 0; i < state.links.length; i++) {
         const link = state.links[i];
+        if (!link) continue;
         const idxS = link.sourceIndex * NODE_STRIDE;
         const idxT = link.targetIndex * NODE_STRIDE;
         const line = linkRefs.current[i];
@@ -137,10 +138,10 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
           state.buffer[idxT] !== undefined &&
           state.buffer[idxT + 1] !== undefined
         ) {
-          line.setAttribute('x1', state.buffer[idxS].toString());
-          line.setAttribute('y1', state.buffer[idxS + 1].toString());
-          line.setAttribute('x2', state.buffer[idxT].toString());
-          line.setAttribute('y2', state.buffer[idxT + 1].toString());
+          line.setAttribute('x1', state.buffer[idxS]!.toString());
+          line.setAttribute('y1', state.buffer[idxS + 1]!.toString());
+          line.setAttribute('x2', state.buffer[idxT]!.toString());
+          line.setAttribute('y2', state.buffer[idxT + 1]!.toString());
         }
       }
 
@@ -166,7 +167,10 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
   // Memoized node click handler (Practice #4)
   const handleNodeClick = useCallback(
     (index: number) => {
-      onNodeClick(graphData.nodes[index]);
+      const node = graphData.nodes[index];
+      if (node) {
+        onNodeClick(node);
+      }
     },
     [graphData.nodes, onNodeClick]
   );
@@ -198,7 +202,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
         >
           <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
             {/* Links */}
-            {physicsState.current.links.map((link) => (
+            {physicsState.current.links.map((link, i) => (
               <line
                 key={`link-${link.sourceIndex}-${link.targetIndex}-${i}`}
                 ref={el => { if (el) linkRefs.current[i] = el; }}
@@ -209,7 +213,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
             ))}
 
             {/* Nodes */}
-            {nodesMeta.map((node) => (
+            {nodesMeta.map((node, i) => (
               // Use stable node ID for key (not index) for proper React reconciliation
               <g
                 key={node.id}

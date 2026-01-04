@@ -165,7 +165,7 @@ export function useCaseOverview(
       status: CaseStatus.Appeal,
       jurisdiction: "Appellate Court",
       court: "Circuit Court of Appeals",
-      filingDate: new Date().toISOString().split("T")[0],
+      filingDate: new Date().toISOString(),
       linkedCaseIds: [caseData.id, ...(caseData.linkedCaseIds || [])],
     };
 

@@ -191,7 +191,7 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
       this.config = null;
-      this.handlers = {};
+      this.handlers = new Map();
     }
   }
 

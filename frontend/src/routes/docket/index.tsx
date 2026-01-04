@@ -87,6 +87,7 @@ export async function action({ request }: Route.ActionArgs) {
           title,
           description,
           dateFiled: new Date().toISOString(),
+          entryDate: new Date().toISOString(),
           type: 'Motion',
           // Default values for required fields
           sequenceNumber: 0,

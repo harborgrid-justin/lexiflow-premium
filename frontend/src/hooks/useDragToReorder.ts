@@ -1,10 +1,10 @@
 /**
  * @module hooks/useDragToReorder
  * @category Hooks - Drag & Drop
- * 
+ *
  * Reusable drag-and-drop for list reordering with keyboard support.
  * Supports undo/redo, bulk operations, and accessibility.
- * 
+ *
  * @example
  * ```typescript
  * const {
@@ -22,7 +22,14 @@
  * ```
  */
 
-import React, { useState, useCallback, useRef, useEffect, DragEvent, KeyboardEvent } from 'react';
+import React, {
+  DragEvent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -98,16 +105,15 @@ export function useDragToReorder<T extends DraggableItem>({
   maxHistory = 50,
   dragHandleSelector,
 }: UseDragToReorderOptions<T>): UseDragToReorderReturn<T> {
-  
   const [items, setItems] = useState<T[]>(initialItems);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dropZoneId, setDropZoneId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  
+
   // Undo/redo history
   const [history, setHistory] = useState<T[][]>([initialItems]);
   const [historyIndex, setHistoryIndex] = useState(0);
-  
+
   const draggedItemRef = useRef<T | null>(null);
 
   // Sync external items changes
@@ -118,82 +124,96 @@ export function useDragToReorder<T extends DraggableItem>({
   /**
    * Add to history
    */
-  const addToHistory = useCallback((newItems: T[]) => {
-    if (!enableUndo) return;
-    
-    setHistory(prev => {
-      // Remove any future history if we're not at the end
-      const newHistory = prev.slice(0, historyIndex + 1);
-      newHistory.push(newItems);
-      
-      // Limit history size
-      if (newHistory.length > maxHistory) {
-        return newHistory.slice(newHistory.length - maxHistory);
-      }
-      
-      return newHistory;
-    });
-    
-    setHistoryIndex(prev => Math.min(prev + 1, maxHistory - 1));
-  }, [enableUndo, historyIndex, maxHistory]);
+  const addToHistory = useCallback(
+    (newItems: T[]) => {
+      if (!enableUndo) return;
+
+      setHistory((prev) => {
+        // Remove any future history if we're not at the end
+        const newHistory = prev.slice(0, historyIndex + 1);
+        newHistory.push(newItems);
+
+        // Limit history size
+        if (newHistory.length > maxHistory) {
+          return newHistory.slice(newHistory.length - maxHistory);
+        }
+
+        return newHistory;
+      });
+
+      setHistoryIndex((prev) => Math.min(prev + 1, maxHistory - 1));
+    },
+    [enableUndo, historyIndex, maxHistory]
+  );
 
   /**
    * Reorder items
    */
-  const reorderItems = useCallback((fromIndex: number, toIndex: number) => {
-    setItems(prev => {
-      const newItems = [...prev];
-      const [removed] = newItems.splice(fromIndex, 1);
-      newItems.splice(toIndex, 0, removed);
-      
-      addToHistory(newItems);
-      onReorder(newItems);
-      
-      return newItems;
-    });
-  }, [onReorder, addToHistory]);
+  const reorderItems = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      setItems((prev) => {
+        const newItems = [...prev];
+        const [removed] = newItems.splice(fromIndex, 1);
+        if (removed) {
+          newItems.splice(toIndex, 0, removed);
+        }
+
+        addToHistory(newItems);
+        onReorder(newItems);
+
+        return newItems;
+      });
+    },
+    [onReorder, addToHistory]
+  );
 
   /**
    * Drag start handler
    */
-  const handleDragStart = useCallback((id: string) => (e: React.DragEvent) => {
-    // Check if drag was initiated from handle
-    if (dragHandleSelector) {
-      const target = e.target as HTMLElement;
-      const handle = target.closest(dragHandleSelector);
-      if (!handle) {
-        e.preventDefault();
-        return;
+  const handleDragStart = useCallback(
+    (id: string) => (e: React.DragEvent) => {
+      // Check if drag was initiated from handle
+      if (dragHandleSelector) {
+        const target = e.target as HTMLElement;
+        const handle = target.closest(dragHandleSelector);
+        if (!handle) {
+          e.preventDefault();
+          return;
+        }
       }
-    }
 
-    const item = items.find(item => item.id === id);
-    if (!item) return;
+      const item = items.find((item) => item.id === id);
+      if (!item) return;
 
-    draggedItemRef.current = item;
-    setDraggingId(id);
-    
-    // Set drag image
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', id);
-    
-    // Add dragging class to element
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.classList.add('dragging');
-    }
-  }, [items, dragHandleSelector]);
+      draggedItemRef.current = item;
+      setDraggingId(id);
+
+      // Set drag image
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", id);
+
+      // Add dragging class to element
+      if (e.currentTarget instanceof HTMLElement) {
+        e.currentTarget.classList.add("dragging");
+      }
+    },
+    [items, dragHandleSelector]
+  );
 
   /**
    * Drag over handler
    */
-  const handleDragOver = useCallback((id: string) => (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    
-    if (id !== draggingId) {
-      setDropZoneId(id);
-    }
-  }, [draggingId]);
+  const handleDragOver = useCallback(
+    (id: string) => (e: React.DragEvent) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+
+      if (id !== draggingId) {
+        setDropZoneId(id);
+      }
+    },
+    [draggingId]
+  );
 
   /**
    * Drag leave handler
@@ -205,24 +225,27 @@ export function useDragToReorder<T extends DraggableItem>({
   /**
    * Drop handler
    */
-  const handleDrop = useCallback((targetId: string) => (e: React.DragEvent) => {
-    e.preventDefault();
-    
-    const draggedId = e.dataTransfer.getData('text/plain');
-    if (!draggedId || draggedId === targetId) {
-      setDropZoneId(null);
-      return;
-    }
+  const handleDrop = useCallback(
+    (targetId: string) => (e: React.DragEvent) => {
+      e.preventDefault();
 
-    const fromIndex = items.findIndex(item => item.id === draggedId);
-    const toIndex = items.findIndex(item => item.id === targetId);
-    
-    if (fromIndex !== -1 && toIndex !== -1) {
-      reorderItems(fromIndex, toIndex);
-    }
-    
-    setDropZoneId(null);
-  }, [items, reorderItems]);
+      const draggedId = e.dataTransfer.getData("text/plain");
+      if (!draggedId || draggedId === targetId) {
+        setDropZoneId(null);
+        return;
+      }
+
+      const fromIndex = items.findIndex((item) => item.id === draggedId);
+      const toIndex = items.findIndex((item) => item.id === targetId);
+
+      if (fromIndex !== -1 && toIndex !== -1) {
+        reorderItems(fromIndex, toIndex);
+      }
+
+      setDropZoneId(null);
+    },
+    [items, reorderItems]
+  );
 
   /**
    * Drag end handler
@@ -231,55 +254,61 @@ export function useDragToReorder<T extends DraggableItem>({
     setDraggingId(null);
     setDropZoneId(null);
     draggedItemRef.current = null;
-    
+
     // Remove dragging class
-    document.querySelectorAll('.dragging').forEach(el => {
-      el.classList.remove('dragging');
+    document.querySelectorAll(".dragging").forEach((el) => {
+      el.classList.remove("dragging");
     });
   }, []);
 
   /**
    * Keyboard handler for reordering
    */
-  const handleKeyDown = useCallback((id: string) => (e: React.KeyboardEvent) => {
-    if (!enableKeyboard) return;
+  const handleKeyDown = useCallback(
+    (id: string) => (e: React.KeyboardEvent) => {
+      if (!enableKeyboard) return;
 
-    const currentIndex = items.findIndex(item => item.id === id);
-    if (currentIndex === -1) return;
+      const currentIndex = items.findIndex((item) => item.id === id);
+      if (currentIndex === -1) return;
 
-    // Alt+Up: Move up
-    if (e.altKey && e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (currentIndex > 0) {
-        reorderItems(currentIndex, currentIndex - 1);
+      // Alt+Up: Move up
+      if (e.altKey && e.key === "ArrowUp") {
+        e.preventDefault();
+        if (currentIndex > 0) {
+          reorderItems(currentIndex, currentIndex - 1);
+        }
       }
-    }
-    
-    // Alt+Down: Move down
-    if (e.altKey && e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (currentIndex < items.length - 1) {
-        reorderItems(currentIndex, currentIndex + 1);
+
+      // Alt+Down: Move down
+      if (e.altKey && e.key === "ArrowDown") {
+        e.preventDefault();
+        if (currentIndex < items.length - 1) {
+          reorderItems(currentIndex, currentIndex + 1);
+        }
       }
-    }
-  }, [enableKeyboard, items, reorderItems]);
+    },
+    [enableKeyboard, items, reorderItems]
+  );
 
   /**
    * Toggle item selection (for bulk reorder)
    */
-  const toggleSelection = useCallback((id: string) => {
-    if (!enableBulkReorder) return;
-    
-    setSelectedIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  }, [enableBulkReorder]);
+  const toggleSelection = useCallback(
+    (id: string) => {
+      if (!enableBulkReorder) return;
+
+      setSelectedIds((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(id)) {
+          newSet.delete(id);
+        } else {
+          newSet.add(id);
+        }
+        return newSet;
+      });
+    },
+    [enableBulkReorder]
+  );
 
   /**
    * Clear selection
@@ -293,13 +322,15 @@ export function useDragToReorder<T extends DraggableItem>({
    */
   const undo = useCallback(() => {
     if (!enableUndo || historyIndex <= 0) return;
-    
+
     const newIndex = historyIndex - 1;
     const previousItems = history[newIndex];
-    
-    setItems(previousItems);
-    setHistoryIndex(newIndex);
-    onReorder(previousItems);
+
+    if (previousItems) {
+      setItems(previousItems);
+      setHistoryIndex(newIndex);
+      onReorder(previousItems);
+    }
   }, [enableUndo, history, historyIndex, onReorder]);
 
   /**
@@ -307,13 +338,15 @@ export function useDragToReorder<T extends DraggableItem>({
    */
   const redo = useCallback(() => {
     if (!enableUndo || historyIndex >= history.length - 1) return;
-    
+
     const newIndex = historyIndex + 1;
     const nextItems = history[newIndex];
-    
-    setItems(nextItems);
-    setHistoryIndex(newIndex);
-    onReorder(nextItems);
+
+    if (nextItems) {
+      setItems(nextItems);
+      setHistoryIndex(newIndex);
+      onReorder(nextItems);
+    }
   }, [enableUndo, history, historyIndex, onReorder]);
 
   const canUndo = enableUndo && historyIndex > 0;

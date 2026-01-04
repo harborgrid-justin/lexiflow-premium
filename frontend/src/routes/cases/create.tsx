@@ -110,14 +110,16 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function CreateCaseRoute({ actionData }: RouteComponentProps) {
+  const error = actionData && 'error' in actionData ? (actionData.error as string) : null;
+
   return (
     <div className="container mx-auto p-6">
       <NewCase />
 
       {/* Show validation errors from action */}
-      {actionData?.error && (
+      {error && (
         <div className="mt-4 rounded-md bg-red-50 p-4 text-red-800 dark:bg-red-900/20 dark:text-red-200">
-          {actionData.error}
+          {error}
         </div>
       )}
     </div>

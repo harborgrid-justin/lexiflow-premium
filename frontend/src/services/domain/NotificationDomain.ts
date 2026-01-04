@@ -5,9 +5,9 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
+import { isBackendApiEnabled } from "@/api";
 import { communicationsApi } from "@/api/domains/communications.api";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
 
 interface Notification {
   id: string;
@@ -156,15 +156,12 @@ export const NotificationService = {
         });
         return true;
       }
-      const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
 
       if (!subscriptions.includes(channel)) {
         subscriptions.push(channel);
-        defaultStorage.setItem(
-          SUBSCRIPTIONS_KEY,
-          JSON.stringify(subscriptions)
-        );
+        localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
       }
 
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
@@ -182,11 +179,11 @@ export const NotificationService = {
         });
         return true;
       }
-      const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
       const updated = subscriptions.filter((c: string) => c !== channel);
 
-      defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
+      localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
       console.log(
         `[NotificationService] Unsubscribed from channel: ${channel}`
       );

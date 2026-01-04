@@ -1,29 +1,29 @@
 /**
  * @module hooks/useHistory
  * @description State-based undo/redo functionality with command pattern
- * 
+ *
  * **WHEN TO USE THIS HOOK:**
  * - You need undo/redo for state transformations (immutable state updates)
  * - Your commands operate on React state objects
  * - You want functional, side-effect-free undo operations
  * - Example: Document editor, form history, configuration changes
- * 
+ *
  * **WHEN NOT TO USE (use useCommandHistory instead):**
  * - You need undo/redo for imperative operations (DOM manipulation, canvas drawing)
  * - Your commands have side effects on external systems
  * - You're working with workflow/strategy canvas nodes and connections
- * 
+ *
  * **PATTERN:**
  * Commands receive and return state: `execute: (state: T) => T`
  * The hook manages state internally and provides current state
- * 
+ *
  * @example
  * ```typescript
  * const { state, execute, undo, redo, canUndo, canRedo } = useHistory({
  *   initialState: { text: '' },
  *   maxHistory: 50
  * });
- * 
+ *
  * // Execute a state transformation
  * execute({
  *   execute: (state) => ({ ...state, text: 'new value' }),
@@ -32,7 +32,7 @@
  * ```
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface HistoryCommand<T> {
   execute: (state: T) => T;
@@ -60,7 +60,7 @@ export interface UseHistoryReturn<T> {
 export function useHistory<T>({
   initialState,
   maxHistory = 50,
-  onStateChange
+  onStateChange,
 }: UseHistoryOptions<T>): UseHistoryReturn<T> {
   const [state, setStateInternal] = useState<T>(initialState);
   const historyRef = useRef<HistoryCommand<T>[]>([]);
@@ -74,32 +74,40 @@ export function useHistory<T>({
     setStateInternal(newState);
   }, []);
 
-  const execute = useCallback((command: HistoryCommand<T>) => {
-    setStateInternal(prevState => {
-      const newState = command.execute(prevState);
+  const execute = useCallback(
+    (command: HistoryCommand<T>) => {
+      setStateInternal((prevState) => {
+        const newState = command.execute(prevState);
 
-      // Remove any redo history when new command is executed
-      historyRef.current = historyRef.current.slice(0, currentIndexRef.current + 1);
+        // Remove any redo history when new command is executed
+        historyRef.current = historyRef.current.slice(
+          0,
+          currentIndexRef.current + 1
+        );
 
-      // Add new command to history
-      historyRef.current.push(command);
+        // Add new command to history
+        historyRef.current.push(command);
 
-      // Maintain max history size
-      if (historyRef.current.length > maxHistory) {
-        historyRef.current.shift();
-      } else {
-        currentIndexRef.current++;
-      }
+        // Maintain max history size
+        if (historyRef.current.length > maxHistory) {
+          historyRef.current.shift();
+        } else {
+          currentIndexRef.current++;
+        }
 
-      return newState;
-    });
-  }, [maxHistory]);
+        return newState;
+      });
+    },
+    [maxHistory]
+  );
 
   const undo = useCallback(() => {
     if (currentIndexRef.current >= 0) {
       const command = historyRef.current[currentIndexRef.current];
-      setStateInternal(prevState => command.undo(prevState));
-      currentIndexRef.current--;
+      if (command) {
+        setStateInternal((prevState) => command.undo(prevState));
+        currentIndexRef.current--;
+      }
     }
   }, []);
 
@@ -107,7 +115,9 @@ export function useHistory<T>({
     if (currentIndexRef.current < historyRef.current.length - 1) {
       currentIndexRef.current++;
       const command = historyRef.current[currentIndexRef.current];
-      setStateInternal(prevState => command.execute(prevState));
+      if (command) {
+        setStateInternal((prevState) => command.execute(prevState));
+      }
     }
   }, []);
 
@@ -127,7 +137,7 @@ export function useHistory<T>({
     redo,
     execute,
     clear,
-    setState
+    setState,
   };
 }
 
@@ -148,14 +158,16 @@ export const TextCommands = {
         const section = getSectionById(state, id);
         if (section) {
           oldContent = section.content;
-          return updateSection(state, id, { content: newContent } as Partial<T>);
+          return updateSection(state, id, {
+            content: newContent,
+          } as Partial<T>);
         }
         return state;
       },
       undo: (state) => {
         return updateSection(state, id, { content: oldContent } as Partial<T>);
       },
-      description: `Update content for section ${id}`
+      description: `Update content for section ${id}`,
     };
-  }
+  },
 };

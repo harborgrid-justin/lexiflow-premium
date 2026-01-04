@@ -22,16 +22,15 @@ import {
   Shield,
   Users
 } from 'lucide-react';
-import { Link, useLoaderData } from 'react-router';
+import { Link, useLoaderData, type LoaderFunctionArgs, type MetaArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta(_: Route.MetaArgs) {
+export function meta(_: MetaArgs) {
   return createAdminMeta({
     section: 'Dashboard',
     description: 'System administration and configuration',
@@ -42,7 +41,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // Require admin role to access this route
   const { user } = requireAdmin(request);
 
@@ -170,7 +169,7 @@ export default function AdminIndexRoute() {
             {auditLogs.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">No recent activity</p>
             ) : (
-              auditLogs.map((log: { id: string; severity: string; action: string; entityType: string; userName: string; timestamp: string }) => (
+              auditLogs.map((log: any) => (
                 <div key={log.id} className="flex items-start gap-3">
                   <div className={`mt-0.5 rounded-full p-1.5 ${log.severity === 'high' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
                     log.severity === 'medium' ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' :

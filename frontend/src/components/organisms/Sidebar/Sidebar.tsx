@@ -56,7 +56,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
 
         {currentUser && (
           <SidebarFooter
-            currentUser={currentUser}
+            currentUser={currentUser as any}
             onSwitchUser={onSwitchUser}
             onNavigate={setActiveView}
             activeView={activeView}

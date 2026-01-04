@@ -22,7 +22,6 @@ import {
 } from 'recharts';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/billing";
 
 export function meta() {
   return createMeta({

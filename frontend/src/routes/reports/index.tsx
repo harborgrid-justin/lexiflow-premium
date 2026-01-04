@@ -56,7 +56,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get("category") || "all";
 
   // Fetch reports from API
-  const reports = await api.analytics.getReports({
+  const reports = await (api.analytics as any).getReports({
     category: category !== 'all' ? category : undefined,
   });
 

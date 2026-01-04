@@ -14,14 +14,16 @@
  * - Keyboard navigation
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import type { WizardConfig, WizardStep, FieldCondition } from '@/types/forms';
+import type { FieldCondition, WizardConfig, WizardStep } from "@/types/forms";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-export interface UseEnhancedWizardOptions<TFormData extends Record<string, unknown>> {
+export interface UseEnhancedWizardOptions<
+  TFormData extends Record<string, unknown>,
+> {
   /** Wizard configuration */
   config: WizardConfig<TFormData>;
   /** Initial form data */
@@ -49,11 +51,13 @@ export interface UseEnhancedWizardOptions<TFormData extends Record<string, unkno
   enableKeyboardNav?: boolean;
 }
 
-export interface UseEnhancedWizardReturn<TFormData extends Record<string, unknown>> {
+export interface UseEnhancedWizardReturn<
+  TFormData extends Record<string, unknown>,
+> {
   /** Current step index */
   currentStepIndex: number;
   /** Current step configuration */
-  currentStep: WizardStep<TFormData>;
+  currentStep: WizardStep<TFormData> | undefined;
   /** All visible steps */
   visibleSteps: WizardStep<TFormData>[];
   /** Total number of visible steps */
@@ -112,34 +116,39 @@ function evaluateCondition<TFormData extends Record<string, unknown>>(
   const fieldValue = formData[condition.field];
 
   switch (condition.operator) {
-    case 'equals':
+    case "equals":
       return fieldValue === condition.value;
-    case 'notEquals':
+    case "notEquals":
       return fieldValue !== condition.value;
-    case 'contains':
-      if (typeof fieldValue === 'string' && typeof condition.value === 'string') {
+    case "contains":
+      if (
+        typeof fieldValue === "string" &&
+        typeof condition.value === "string"
+      ) {
         return fieldValue.includes(condition.value);
       }
       if (Array.isArray(fieldValue)) {
         return fieldValue.includes(condition.value);
       }
       return false;
-    case 'greaterThan':
-      return typeof fieldValue === 'number' && typeof condition.value === 'number'
+    case "greaterThan":
+      return typeof fieldValue === "number" &&
+        typeof condition.value === "number"
         ? fieldValue > condition.value
         : false;
-    case 'lessThan':
-      return typeof fieldValue === 'number' && typeof condition.value === 'number'
+    case "lessThan":
+      return typeof fieldValue === "number" &&
+        typeof condition.value === "number"
         ? fieldValue < condition.value
         : false;
-    case 'isEmpty':
+    case "isEmpty":
       if (fieldValue === null || fieldValue === undefined) return true;
-      if (typeof fieldValue === 'string') return fieldValue.trim().length === 0;
+      if (typeof fieldValue === "string") return fieldValue.trim().length === 0;
       if (Array.isArray(fieldValue)) return fieldValue.length === 0;
       return false;
-    case 'isNotEmpty':
+    case "isNotEmpty":
       if (fieldValue === null || fieldValue === undefined) return false;
-      if (typeof fieldValue === 'string') return fieldValue.trim().length > 0;
+      if (typeof fieldValue === "string") return fieldValue.trim().length > 0;
       if (Array.isArray(fieldValue)) return fieldValue.length > 0;
       return true;
     default:
@@ -156,15 +165,19 @@ function shouldSkipStep<TFormData extends Record<string, unknown>>(
 ): boolean {
   if (!step.skipWhen) return false;
 
-  const conditions = Array.isArray(step.skipWhen) ? step.skipWhen : [step.skipWhen];
-  return conditions.every(condition => evaluateCondition(condition, formData));
+  const conditions = Array.isArray(step.skipWhen)
+    ? step.skipWhen
+    : [step.skipWhen];
+  return conditions.every((condition) =>
+    evaluateCondition(condition, formData)
+  );
 }
 
 /**
  * Get storage
  */
 function getStorage(persist: boolean): Storage | null {
-  if (!persist || typeof window === 'undefined') return null;
+  if (!persist || typeof window === "undefined") return null;
   return window.localStorage;
 }
 
@@ -192,7 +205,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
             return JSON.parse(stored);
           }
         } catch (err) {
-          console.error('Failed to load persisted wizard data:', err);
+          console.error("Failed to load persisted wizard data:", err);
         }
       }
     }
@@ -202,7 +215,9 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
   // State
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
   const [data, setDataState] = useState<TFormData>(loadPersistedData);
-  const [visitedSteps, setVisitedSteps] = useState<Set<number>>(new Set([initialStep]));
+  const [visitedSteps, setVisitedSteps] = useState<Set<number>>(
+    new Set([initialStep])
+  );
   const [isValidating, setIsValidating] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -214,7 +229,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
         try {
           storage.setItem(config.storageKey, JSON.stringify(data));
         } catch (err) {
-          console.error('Failed to persist wizard data:', err);
+          console.error("Failed to persist wizard data:", err);
         }
       }
     }
@@ -222,7 +237,9 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
 
   // Calculate visible steps (excluding skipped steps)
   const visibleSteps = useMemo(() => {
-    return config.steps.filter(step => !shouldSkipStep(step, data) && !step.hidden);
+    return config.steps.filter(
+      (step) => !shouldSkipStep(step, data) && !step.hidden
+    );
   }, [config.steps, data]);
 
   // Get current step
@@ -254,10 +271,10 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
           const result = await rule.validator(data);
           if (!result.valid) {
             // Set error for the fields involved
-            rule.fields.forEach(field => {
-              setErrors(prev => ({
+            rule.fields.forEach((field) => {
+              setErrors((prev) => ({
                 ...prev,
-                [field]: result.message || rule.message || 'Validation failed',
+                [field]: result.message || rule.message || "Validation failed",
               }));
             });
             return false;
@@ -277,11 +294,11 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
    * Update form data
    */
   const updateData = useCallback((updates: Partial<TFormData>) => {
-    setDataState(prev => ({ ...prev, ...updates }));
+    setDataState((prev) => ({ ...prev, ...updates }));
     // Clear errors for updated fields
-    setErrors(prev => {
+    setErrors((prev) => {
       const newErrors = { ...prev };
-      Object.keys(updates).forEach(key => {
+      Object.keys(updates).forEach((key) => {
         delete newErrors[key];
       });
       return newErrors;
@@ -321,7 +338,11 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
 
       // Before step change guard
       if (onBeforeStepChange) {
-        const canChange = await onBeforeStepChange(currentStepIndex, stepIndex, data);
+        const canChange = await onBeforeStepChange(
+          currentStepIndex,
+          stepIndex,
+          data
+        );
         if (!canChange) {
           return false;
         }
@@ -331,7 +352,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
 
       // Update step
       setCurrentStepIndex(stepIndex);
-      setVisitedSteps(prev => new Set(prev).add(stepIndex));
+      setVisitedSteps((prev) => new Set(prev).add(stepIndex));
 
       // After step change callback
       if (onAfterStepChange) {
@@ -355,7 +376,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
    */
   const goToStepById = useCallback(
     async (stepId: string): Promise<boolean> => {
-      const stepIndex = visibleSteps.findIndex(step => step.id === stepId);
+      const stepIndex = visibleSteps.findIndex((step) => step.id === stepId);
       if (stepIndex === -1) return false;
       return goToStep(stepIndex);
     },
@@ -377,7 +398,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
    */
   const goBack = useCallback(() => {
     if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
+      setCurrentStepIndex((prev) => prev - 1);
     }
   }, [currentStepIndex]);
 
@@ -406,7 +427,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
     // Validate current step
     const isValid = await validateCurrentStep();
     if (!isValid) {
-      throw new Error('Validation failed');
+      throw new Error("Validation failed");
     }
 
     // Call submit handler
@@ -427,7 +448,7 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
    * Set step error
    */
   const setStepError = useCallback((field: string, error: string | null) => {
-    setErrors(prev => {
+    setErrors((prev) => {
       if (error === null) {
         const { [field]: _, ...rest } = prev;
         return rest;
@@ -450,17 +471,17 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
         return;
       }
 
-      if (e.key === 'ArrowRight' || (e.ctrlKey && e.key === 'Enter')) {
+      if (e.key === "ArrowRight" || (e.ctrlKey && e.key === "Enter")) {
         e.preventDefault();
         goNext();
-      } else if (e.key === 'ArrowLeft') {
+      } else if (e.key === "ArrowLeft") {
         e.preventDefault();
         goBack();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [enableKeyboardNav, goNext, goBack]);
 
   // Computed values
@@ -469,9 +490,10 @@ export function useEnhancedWizard<TFormData extends Record<string, unknown>>({
   const canGoNext = !isLast;
   const canGoBack = !isFirst;
   const isStepValid = Object.keys(errors).length === 0;
-  const progress = visibleSteps.length > 0
-    ? Math.round(((currentStepIndex + 1) / visibleSteps.length) * 100)
-    : 0;
+  const progress =
+    visibleSteps.length > 0
+      ? Math.round(((currentStepIndex + 1) / visibleSteps.length) * 100)
+      : 0;
 
   return {
     currentStepIndex,

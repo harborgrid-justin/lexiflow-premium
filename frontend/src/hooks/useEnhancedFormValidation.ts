@@ -270,7 +270,7 @@ export function useEnhancedFormValidation<
   const isFieldVisible = useCallback(
     (fieldName: keyof TFormData): boolean => {
       const fieldSchema = getFieldSchema(
-        schema as FormSchema<TFormData>,
+        schema as unknown as FormSchema<Record<string, unknown>>,
         fieldName as string
       );
       if (!fieldSchema?.showWhen) return true;
@@ -295,7 +295,7 @@ export function useEnhancedFormValidation<
   const validateFieldImmediate = useCallback(
     async <K extends keyof TFormData>(field: K): Promise<boolean> => {
       const fieldSchema = getFieldSchema(
-        schema as FormSchema<TFormData>,
+        schema as unknown as FormSchema<Record<string, unknown>>,
         field as string
       );
       const fieldValue = formData[field];
@@ -327,7 +327,7 @@ export function useEnhancedFormValidation<
         for (const rule of fieldSchema.validationRules) {
           const result = await executeValidationRule(
             rule as ValidationRule<TFormData>,
-            fieldValue,
+            fieldValue as any,
             formData
           );
 
@@ -419,7 +419,7 @@ export function useEnhancedFormValidation<
       if (shouldValidate) {
         // Use debounced validation for async validators
         const fieldSchema = getFieldSchema(
-          schema as FormSchema<TFormData>,
+          schema as unknown as FormSchema<Record<string, unknown>>,
           field as string
         );
         const hasAsyncValidation = fieldSchema?.validationRules?.some(

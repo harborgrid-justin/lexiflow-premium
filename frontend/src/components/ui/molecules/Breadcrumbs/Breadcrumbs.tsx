@@ -27,6 +27,9 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 interface BreadcrumbItem {
   label: string;
+export interface BreadcrumbItem {
+  label: string;
+  path?: string;
   onClick?: () => void;
 }
 

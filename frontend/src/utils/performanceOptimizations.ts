@@ -223,8 +223,8 @@ export function profileComponent<P>(
       React.Profiler,
       { id, onRender: handleRender },
       React.createElement(
-        Component as ComponentType<unknown>,
-        props as Attributes
+        Component as React.ComponentType<any>,
+        props as React.Attributes
       )
     );
   }

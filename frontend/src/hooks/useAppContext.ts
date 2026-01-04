@@ -145,17 +145,17 @@ export function useAppContext(): UseAppControllerReturn {
 
   // Use authenticated user if available, otherwise fallback to fetched users or default guest
   const currentUser: User = authUser
-    ? {
+    ? ({
         id: authUser.id,
         email: authUser.email,
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
         role: authUser.role as string,
         avatarUrl: authUser.avatarUrl,
-        permissions: authUser.permissions || [],
+        permissions: (authUser.permissions || []) as string[],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      }
+      } as User)
     : users[currentUserIndex] || {
         id: "temp-user",
         email: "Guest",

@@ -39,7 +39,7 @@ export default function LoginPage() {
     formState: { errors },
     getValues,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as any,
     defaultValues: {
       email: '',
       password: '',
@@ -87,7 +87,7 @@ export default function LoginPage() {
     // Validate MFA code
     const validation = mfaCodeSchema.safeParse(mfaCode);
     if (!validation.success) {
-      setMfaError(validation.error.issues[0].message);
+      setMfaError(validation.error.issues[0]?.message || 'Invalid code');
       return;
     }
 
@@ -139,7 +139,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-4">
                 {/* Email Field */}
                 <div>
                   <label

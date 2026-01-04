@@ -5,7 +5,7 @@
 
 import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryList } from '@/components/billing/TimeEntryList';
-import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
+import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -60,7 +60,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const timeApi = new TimeEntriesApiService();
@@ -105,8 +105,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function TimeEntriesRoute({ actionData }: Route.ComponentProps) {
-  const { entries, filters } = useLoaderData() as Route.ComponentProps['loaderData'];
+export default function TimeEntriesRoute({ actionData }: { actionData: any }) {
+  const { entries, filters } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">

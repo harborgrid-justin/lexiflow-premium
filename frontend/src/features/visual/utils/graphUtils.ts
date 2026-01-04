@@ -1,12 +1,12 @@
 /**
  * graphUtils.ts
- * 
+ *
  * Utility functions for Nexus graph data transformation and rendering.
- * 
+ *
  * @module components/visual/utils/graphUtils
  */
 
-import { Case, Party, EvidenceItem, NexusNodeData } from '@/types';
+import { Case, EvidenceItem, NexusNodeData, Party } from "@/types";
 
 export interface GraphLink {
   sourceIndex: number;
@@ -30,24 +30,24 @@ export const transformToGraphNodes = (
   evidence: EvidenceItem[]
 ): NexusNodeData[] => {
   const rootNode: NexusNodeData = {
-    id: 'root',
-    type: 'root',
-    label: caseData.title ? truncateLabel(caseData.title, 20) : 'Untitled Case',
-    original: caseData
+    id: "root",
+    type: "root",
+    label: caseData.title ? truncateLabel(caseData.title, 20) : "Untitled Case",
+    original: caseData,
   };
 
-  const partyNodes: NexusNodeData[] = parties.map(p => ({
+  const partyNodes: NexusNodeData[] = parties.map((p) => ({
     id: p.id,
-    type: (p.type === 'Corporation' ? 'org' : 'party') as 'org' | 'party',
+    type: (p.type === "Corporation" ? "org" : "party") as "org" | "party",
     label: p.name,
-    original: p
+    original: p,
   }));
 
-  const evidenceNodes: NexusNodeData[] = evidence.map(e => ({
+  const evidenceNodes: NexusNodeData[] = evidence.map((e) => ({
     id: e.id,
-    type: 'evidence' as const,
+    type: "evidence" as const,
     label: truncateLabel(e.title, 15),
-    original: e
+    original: e,
   }));
 
   return [rootNode, ...partyNodes, ...evidenceNodes];
@@ -59,17 +59,17 @@ export const transformToGraphNodes = (
 export const createGraphLinks = (
   parties: Party[],
   evidence: EvidenceItem[]
-): Omit<GraphLink, 'sourceIndex' | 'targetIndex'>[] => {
-  const partyLinks = parties.map(p => ({
-    source: 'root',
+): Omit<GraphLink, "sourceIndex" | "targetIndex">[] => {
+  const partyLinks = parties.map((p) => ({
+    source: "root",
     target: p.id,
-    strength: 0.8
+    strength: 0.8,
   }));
 
-  const evidenceLinks = evidence.map(e => ({
-    source: 'root',
+  const evidenceLinks = evidence.map((e) => ({
+    source: "root",
     target: e.id,
-    strength: 0.3
+    strength: 0.3,
   }));
 
   return [...partyLinks, ...evidenceLinks];
@@ -80,21 +80,21 @@ export const createGraphLinks = (
  */
 export const truncateLabel = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
+  return text.substring(0, maxLength) + "...";
 };
 
 /**
  * Converts link data to indexed format for physics simulation
  */
 export const indexGraphLinks = (
-  links: Omit<GraphLink, 'sourceIndex' | 'targetIndex'>[]
+  links: Omit<GraphLink, "sourceIndex" | "targetIndex">[]
 ): GraphLink[] => {
-  return links.map(l => ({
+  return links.map((l) => ({
     sourceIndex: 0, // Will be computed by physics engine
     targetIndex: 0, // Will be computed by physics engine
     strength: l.strength,
     source: l.source,
-    target: l.target
+    target: l.target,
   }));
 };
 
@@ -122,12 +122,12 @@ export const getNodeStrokeColor = (
   fallback: string
 ): string => {
   switch (type) {
-    case 'party':
-      return chartTheme.colors.blue;
-    case 'org':
-      return chartTheme.colors.purple;
-    case 'evidence':
-      return chartTheme.colors.amber;
+    case "party":
+      return chartTheme.colors.blue || fallback;
+    case "org":
+      return chartTheme.colors.purple || fallback;
+    case "evidence":
+      return chartTheme.colors.amber || fallback;
     default:
       return fallback;
   }
@@ -138,9 +138,9 @@ export const getNodeStrokeColor = (
  */
 export const getNodeRadius = (type: string): number => {
   switch (type) {
-    case 'root':
+    case "root":
       return 40;
-    case 'org':
+    case "org":
       return 30;
     default:
       return 18;
@@ -151,5 +151,5 @@ export const getNodeRadius = (type: string): number => {
  * Calculates text Y offset for node label based on type
  */
 export const getNodeLabelYOffset = (type: string): number => {
-  return type === 'root' ? 46 : 32;
+  return type === "root" ? 46 : 32;
 };

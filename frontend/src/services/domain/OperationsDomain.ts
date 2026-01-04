@@ -1,9 +1,9 @@
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { CostMetric, CostForecast } from "@/types";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { CostForecast, CostMetric } from "@/types";
 
 export const OperationsService = {
   getOkrs: async () => {
@@ -51,7 +51,7 @@ export const OperationsService = {
 
   getReplicationStatus: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/replication-status");
+      return apiClient.get<any>("/operations/replication-status");
     }
     await delay(200);
     return {

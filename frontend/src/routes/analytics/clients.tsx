@@ -24,7 +24,6 @@ import {
 } from 'recharts';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/clients";
 
 export function meta() {
   return createMeta({
@@ -212,7 +211,7 @@ export default function ClientAnalyticsRoute() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ industry, count }: { industry: string; count: number }) => `${industry} (${count})`}
+                label={({ industry, count }: any) => `${industry} (${count})`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="count"

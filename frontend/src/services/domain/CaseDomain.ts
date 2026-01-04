@@ -244,7 +244,7 @@ export class CaseRepository extends Repository<Case> {
   async getArchived() {
     if (isBackendApiEnabled()) {
       try {
-        return await this.casesApi.getArchived();
+        return await (this.casesApi as any).getArchived();
       } catch (error) {
         console.error("[CaseRepository.getArchived] Backend error:", error);
         return [];

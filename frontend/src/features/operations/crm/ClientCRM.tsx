@@ -72,7 +72,7 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
         pageTitle="Client Relationships"
         pageSubtitle="CRM, Intake Pipeline, and Secure Client Portals."
         pageActions={<Button variant="primary" icon={UserPlus} onClick={() => setShowIntake(true)}>New Intake</Button>}
-        tabConfig={CRM_TAB_CONFIG as any}
+        tabConfig={CRM_TAB_CONFIG}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
       >

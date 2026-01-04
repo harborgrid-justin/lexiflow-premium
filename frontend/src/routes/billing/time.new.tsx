@@ -62,7 +62,13 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-export default function NewTimeEntryRoute({ actionData }: { actionData: any }) {
+interface ActionData {
+  success: boolean;
+  error?: string;
+  redirect?: string;
+}
+
+export default function NewTimeEntryRoute({ actionData }: { actionData: ActionData }) {
   const navigate = useNavigate();
 
   // Redirect after successful creation

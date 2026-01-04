@@ -23,6 +23,7 @@ export const getBadgeVariantStyles = (
     case "warning":
       return cn(status.warning.bg, status.warning.text, status.warning.border);
     case "error":
+    case "danger":
       return cn(status.error.bg, status.error.text, status.error.border);
     case "info":
       return cn(status.info.bg, status.info.text, status.info.border);

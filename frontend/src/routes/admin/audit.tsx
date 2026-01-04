@@ -203,7 +203,7 @@ function formatTimestamp(timestamp: string): string {
 // Component
 // ============================================================================
 
-export default function AuditLogsRoute({ loaderData }: any) {
+export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: AuditLogEntry[]; pagination: any; filters: any } }) {
   const { logs, pagination, filters } = loaderData;
   const formId = useId();
 

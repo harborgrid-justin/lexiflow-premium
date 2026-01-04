@@ -49,7 +49,7 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
             {contacts.map(c => (
               <TableRow key={c.id}>
                 <TableCell className={cn("font-medium flex items-center gap-3", theme.text.primary)}>
-                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as any} /> {c.name}
+                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as 'online' | 'offline' | 'busy' | 'away'} /> {c.name}
                 </TableCell>
                 <TableCell>{c.role}</TableCell>
                 <TableCell>{c.department}</TableCell>

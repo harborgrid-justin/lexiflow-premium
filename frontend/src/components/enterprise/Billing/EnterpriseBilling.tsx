@@ -70,7 +70,7 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   const [selectedTab, setSelectedTab] = useState<'overview' | 'aging' | 'collections' | 'writeoffs'>('overview');
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: billingData, isLoading } = useQuery(
+  const { data: billingData, isLoading: _isLoading } = useQuery(
     ['billing', 'overview'],
     () => dashboardMetricsService.getBillingOverview()
   );

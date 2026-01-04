@@ -226,7 +226,7 @@ function getTypeColor(type: string): string {
 // Component
 // ============================================================================
 
-export default function BackupRoute({ loaderData }: any) {
+export default function BackupRoute({ loaderData }: { loaderData: { backups: Backup[]; schedules: BackupSchedule[]; stats: any } }) {
   const { backups, schedules, stats } = loaderData;
   const fetcher = useFetcher();
 

@@ -327,7 +327,7 @@ export function useEnhancedFormValidation<
         for (const rule of fieldSchema.validationRules) {
           const result = await executeValidationRule(
             rule as ValidationRule<TFormData>,
-            fieldValue as any,
+            fieldValue,
             formData
           );
 

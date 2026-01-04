@@ -225,7 +225,7 @@ function IntegrationCard({ integration, onConnect, onDisconnect, onSync }: Integ
 // Component
 // ============================================================================
 
-export default function IntegrationsRoute({ loaderData }: any) {
+export default function IntegrationsRoute({ loaderData }: { loaderData: { integrations: Integration[] } }) {
   const { integrations } = loaderData;
   const fetcher = useFetcher();
 

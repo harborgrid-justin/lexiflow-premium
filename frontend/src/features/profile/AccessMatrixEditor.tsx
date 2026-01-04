@@ -177,7 +177,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Action</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, action: e.target.value as any })}>
+                            <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, action: e.target.value as GranularPermission['action'] })}>
                                 <option value="read">Read</option>
                                 <option value="create">Create</option>
                                 <option value="update">Update</option>
@@ -188,7 +188,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                         </div>
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Effect</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, effect: e.target.value as any })}>
+                            <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, effect: e.target.value as GranularPermission['effect'] })}>
                                 <option value="Allow">Allow</option>
                                 <option value="Deny">Deny</option>
                             </select>
@@ -198,7 +198,7 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Scope</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, scope: e.target.value as any })}>
+                            <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, scope: e.target.value as GranularPermission['scope'] })}>
                                 <option value="Global">Global</option>
                                 <option value="Region">Region</option>
                                 <option value="Office">Office</option>

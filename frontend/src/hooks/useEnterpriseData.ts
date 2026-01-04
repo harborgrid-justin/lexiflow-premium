@@ -178,7 +178,7 @@ export function useUpdateCaseMutation() {
         if (context?.previousCase) {
           queryClient.setQueryData(
             enterpriseQueryKeys.cases.byId(id),
-            (context.previousCase as any).data
+            context.previousCase.data
           );
         }
       },
@@ -336,7 +336,7 @@ export function useUpdateTaskMutation() {
         if (context?.previousTask) {
           queryClient.setQueryData(
             enterpriseQueryKeys.tasks.byId(id),
-            (context.previousTask as any).data
+            context.previousTask.data
           );
         }
       },

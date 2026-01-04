@@ -24,9 +24,9 @@ import { Card } from '@/components/ui/molecules/Card';
 import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 
 // Config
@@ -132,7 +132,7 @@ export const DiscoveryESI: React.FC = () => {
 
   // Enterprise Data Access
   const { data: sources = [] } = useQuery<ESISource[]>(
-    discoveryQueryKeys.discovery.esi.all,
+    discoveryQueryKeys.discovery.esi.all(),
     () => DataService.discovery.getESISources()
   );
 
@@ -140,7 +140,7 @@ export const DiscoveryESI: React.FC = () => {
     async (payload: { status: string }) => {
       return DataService.discovery.updateESISourceStatus(payload.status);
     },
-    { invalidateKeys: [discoveryQueryKeys.discovery.esi.all] }
+    { invalidateKeys: [discoveryQueryKeys.discovery.esi.all()] }
   );
 
   const { mutate: startCollection, isLoading: isCollecting } = useMutation(
@@ -159,7 +159,7 @@ export const DiscoveryESI: React.FC = () => {
       onError: () => {
         notify.error("Collection failed. Please try again.");
       },
-      invalidateKeys: [discoveryQueryKeys.discovery.esi.all]
+      invalidateKeys: [discoveryQueryKeys.discovery.esi.all()]
     }
   );
 

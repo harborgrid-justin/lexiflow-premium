@@ -246,42 +246,6 @@ export function useEnhancedAutoSave<T>({
   );
 
   /**
-   * Manually resolve conflict
-   */
-  const resolveConflict = useCallback(
-    async (resolution: "local" | "server" | T): Promise<void> => {
-      if (!conflictData) return;
-
-      let resolvedData: T;
-      if (resolution === "local") {
-        resolvedData = conflictData.local;
-      } else if (resolution === "server") {
-        resolvedData = conflictData.server;
-      } else {
-        resolvedData = resolution;
-      }
-
-      // Clear conflict
-      setConflictData(null);
-      setStatus("idle");
-
-      // Call resolver if exists
-      const resolver = (window as unknown as Record<string, unknown>)
-        .__autoSaveConflictResolver;
-      if (resolver && typeof resolver === "function") {
-        (resolver as (data: T) => void)(resolvedData);
-        delete (window as unknown as Record<string, unknown>)
-          .__autoSaveConflictResolver;
-      }
-
-      // Trigger save with resolved data
-      lastSavedDataRef.current = resolvedData;
-      await performSave(resolvedData, true);
-    },
-    [conflictData]
-  );
-
-  /**
    * Perform actual save operation
    */
   const performSave = useCallback(
@@ -413,6 +377,42 @@ export function useEnhancedAutoSave<T>({
       isEqual,
       handleConflict,
     ]
+  );
+
+  /**
+   * Manually resolve conflict
+   */
+  const resolveConflict = useCallback(
+    async (resolution: "local" | "server" | T): Promise<void> => {
+      if (!conflictData) return;
+
+      let resolvedData: T;
+      if (resolution === "local") {
+        resolvedData = conflictData.local;
+      } else if (resolution === "server") {
+        resolvedData = conflictData.server;
+      } else {
+        resolvedData = resolution;
+      }
+
+      // Clear conflict
+      setConflictData(null);
+      setStatus("idle");
+
+      // Call resolver if exists
+      const resolver = (window as unknown as Record<string, unknown>)
+        .__autoSaveConflictResolver;
+      if (resolver && typeof resolver === "function") {
+        (resolver as (data: T) => void)(resolvedData);
+        delete (window as unknown as Record<string, unknown>)
+          .__autoSaveConflictResolver;
+      }
+
+      // Trigger save with resolved data
+      lastSavedDataRef.current = resolvedData;
+      await performSave(resolvedData, true);
+    },
+    [conflictData, performSave]
   );
 
   /**

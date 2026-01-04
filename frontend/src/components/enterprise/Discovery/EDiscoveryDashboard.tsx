@@ -5,9 +5,11 @@
  * collection tracking, processing status, and review metrics
  */
 
+import { analyticsApi } from '@/api';
 import { KPICard } from '@/components/enterprise/dashboard/KPICard';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
@@ -114,16 +116,16 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
   const [collections, setCollections] = useState<Collection[]>([]);
   const [metrics, setMetrics] = useState<ReviewMetrics | null>(null);
   const [processingProgress, setProcessingProgress] = useState<ProcessingStage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [custodiansData, collectionsData, analyticsData] = await Promise.all([
-          custodiansApi.getAll({ caseId }),
-          collectionsApi.getAll(caseId),
-          discoveryAnalyticsApi.getByCaseId(caseId)
+          DataService.custodians.getAll({ caseId }),
+          DataService.esiSources.getAll({ caseId }),
+          analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
         ]);
 
         setCustodians(custodiansData.map(c => {

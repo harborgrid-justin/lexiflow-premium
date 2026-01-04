@@ -5,6 +5,7 @@
 
 import { TrustAccountsApiService } from '@/api/billing';
 import { TrustAccountDashboard } from '@/features/operations/billing/trust/TrustAccountDashboard';
+import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -51,7 +52,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as any) || undefined,
+      status: (status as TrustAccountStatus) || undefined,
     });
 
     return {

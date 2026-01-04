@@ -97,7 +97,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // ============================================================================
 
 export default function AdminIndexRoute() {
-  const { metrics, auditLogs } = useLoaderData() as any;
+  const { metrics, auditLogs } = useLoaderData() as { metrics: any; auditLogs: any[] };
 
   return (
     <div className="space-y-6 p-6">

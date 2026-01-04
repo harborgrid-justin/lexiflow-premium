@@ -149,7 +149,25 @@ function Toggle({ id, label, checked, onChange, disabled }: ToggleProps) {
 // Component
 // ============================================================================
 
-export default function SystemSettingsRoute({ loaderData }: any) {
+interface SystemSettings {
+  backendUrl: string;
+  dataSource: string;
+  cacheEnabled: boolean;
+  cacheTTL: number;
+  maxUploadSize: number;
+  sessionTimeout: number;
+  auditLogging: boolean;
+  maintenanceMode: boolean;
+}
+
+interface SystemFeatures {
+  ocr: boolean;
+  aiAssistant: boolean;
+  realTimeSync: boolean;
+  [key: string]: boolean;
+}
+
+export default function SystemSettingsRoute({ loaderData }: { loaderData: { settings: SystemSettings; features: SystemFeatures } }) {
   const fetcher = useFetcher();
   const formId = useId();
 

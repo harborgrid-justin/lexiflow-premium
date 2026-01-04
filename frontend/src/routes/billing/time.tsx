@@ -105,7 +105,12 @@ export async function action({ request }: ActionFunctionArgs) {
 // Component
 // ============================================================================
 
-export default function TimeEntriesRoute({ actionData }: { actionData: any }) {
+interface ActionData {
+  success: boolean;
+  error?: string;
+}
+
+export default function TimeEntriesRoute({ actionData }: { actionData: ActionData }) {
   const { entries, filters } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (

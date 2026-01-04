@@ -6,26 +6,30 @@
  * with useDiscoveryPlatform hook.
  */
 
-import React from 'react';
+import React from "react";
 
 // ============================================================================
 // TYPES
 // ============================================================================
 export type DiscoveryView =
-  | 'dashboard'
-  | 'requests'
-  | 'privilege'
-  | 'holds'
-  | 'plan'
-  | 'doc_viewer'
-  | 'response'
-  | 'production_wizard'
-  | 'productions'
-  | 'depositions'
-  | 'esi'
-  | 'interviews'
-  | 'custodians'
-  | 'examinations';
+  | "dashboard"
+  | "requests"
+  | "privilege"
+  | "holds"
+  | "plan"
+  | "doc_viewer"
+  | "response"
+  | "production_wizard"
+  | "productions"
+  | "depositions"
+  | "esi"
+  | "interviews"
+  | "custodians"
+  | "examinations"
+  | "collections"
+  | "processing"
+  | "review"
+  | "timeline";
 
 export interface DiscoverySubTab {
   id: string;
@@ -48,38 +52,38 @@ export interface DiscoveryParentTab {
 
 export const PARENT_TAB_CONFIG = [
   {
-    id: 'dashboard_parent',
-    label: 'Dashboard',
-    subTabs: [{ id: 'dashboard', label: 'Overview' }]
+    id: "dashboard_parent",
+    label: "Dashboard",
+    subTabs: [{ id: "dashboard", label: "Overview" }],
   },
   {
-    id: 'collection',
-    label: 'Collection',
+    id: "collection",
+    label: "Collection",
     subTabs: [
-      { id: 'esi', label: 'ESI Map' },
-      { id: 'custodians', label: 'Custodians' },
-      { id: 'interviews', label: 'Interviews' },
-      { id: 'holds', label: 'Legal Holds' },
-    ]
+      { id: "esi", label: "ESI Map" },
+      { id: "custodians", label: "Custodians" },
+      { id: "interviews", label: "Interviews" },
+      { id: "holds", label: "Legal Holds" },
+    ],
   },
   {
-    id: 'review',
-    label: 'Review & Production',
+    id: "review",
+    label: "Review & Production",
     subTabs: [
-      { id: 'requests', label: 'Requests' },
-      { id: 'productions', label: 'Productions' },
-      { id: 'privilege', label: 'Privilege Log' },
-    ]
+      { id: "requests", label: "Requests" },
+      { id: "productions", label: "Productions" },
+      { id: "privilege", label: "Privilege Log" },
+    ],
   },
   {
-    id: 'proceedings',
-    label: 'Proceedings',
+    id: "proceedings",
+    label: "Proceedings",
     subTabs: [
-      { id: 'depositions', label: 'Depositions' },
-      { id: 'examinations', label: 'Examinations' },
-      { id: 'plan', label: 'Discovery Plan' },
-    ]
-  }
+      { id: "depositions", label: "Depositions" },
+      { id: "examinations", label: "Examinations" },
+      { id: "plan", label: "Discovery Plan" },
+    ],
+  },
 ] as const;
 
 // ============================================================================
@@ -91,8 +95,13 @@ export const PARENT_TAB_CONFIG = [
  * @param view - The current discovery view
  * @returns The parent tab containing this view, or the dashboard parent as default
  */
-export const getParentTabForView = (view: DiscoveryView): typeof PARENT_TAB_CONFIG[number] => {
-  return PARENT_TAB_CONFIG.find(p => p.subTabs.some(s => s.id === view)) || PARENT_TAB_CONFIG[0];
+export const getParentTabForView = (
+  view: DiscoveryView
+): (typeof PARENT_TAB_CONFIG)[number] => {
+  return (
+    PARENT_TAB_CONFIG.find((p) => p.subTabs.some((s) => s.id === view)) ||
+    PARENT_TAB_CONFIG[0]
+  );
 };
 
 /**
@@ -101,10 +110,10 @@ export const getParentTabForView = (view: DiscoveryView): typeof PARENT_TAB_CONF
  * @returns The first sub-tab ID, or 'dashboard' as default
  */
 export const getFirstTabOfParent = (parentId: string): DiscoveryView => {
-  const parent = PARENT_TAB_CONFIG.find(p => p.id === parentId);
+  const parent = PARENT_TAB_CONFIG.find((p) => p.id === parentId);
   return parent && parent.subTabs.length > 0
-    ? parent.subTabs[0].id as DiscoveryView
-    : 'dashboard';
+    ? (parent.subTabs[0].id as DiscoveryView)
+    : "dashboard";
 };
 
 /**
@@ -113,5 +122,5 @@ export const getFirstTabOfParent = (parentId: string): DiscoveryView => {
  * @returns True if this is a detail view
  */
 export const isDetailView = (view: DiscoveryView): boolean => {
-  return ['doc_viewer', 'response', 'production_wizard'].includes(view);
+  return ["doc_viewer", "response", "production_wizard"].includes(view);
 };

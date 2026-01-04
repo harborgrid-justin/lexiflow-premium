@@ -26,7 +26,8 @@ import { baseBadgeStyles, getBadgeVariantStyles } from './Badge.styles';
 // TYPES & INTERFACES
 // ============================================================================
 export interface BadgeProps {
-  variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'purple';
+  variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'purple' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   className?: string;
 }

@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
@@ -108,7 +108,7 @@ export const Custodians: React.FC = () => {
       status: 'Pending',
       notes: formData.notes,
       createdAt: dateStr,
-      updatedAt: dateStr
+      updatedAt: dateStr || ''
     };
     createCustodian(newCustodian);
   };
@@ -121,7 +121,7 @@ export const Custodians: React.FC = () => {
     const updatedCustodian = {
       ...custodianSelection.selected,
       ...formData,
-      updatedAt: new Date().toISOString().split('T')[0]
+      updatedAt: new Date().toISOString().split('T')[0] || ''
     };
     updateCustodian(updatedCustodian);
   };

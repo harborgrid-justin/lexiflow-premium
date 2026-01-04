@@ -1,28 +1,11 @@
-import { DiscoveryRequest } from '@/types';
+import { DiscoveryRequest } from "@/types";
+import { DiscoveryView } from "@/utils/discoveryNavigation";
 
-export type DiscoveryView =
-  | 'dashboard'
-  | 'requests'
-  | 'privilege'
-  | 'holds'
-  | 'plan'
-  | 'doc_viewer'
-  | 'response'
-  | 'production_wizard'
-  | 'productions'
-  | 'depositions'
-  | 'esi'
-  | 'interviews'
-  | 'custodians'
-  | 'examinations'
-  | 'collections'
-  | 'processing'
-  | 'review'
-  | 'timeline';
+export type { DiscoveryView };
 
 export interface DiscoveryPlatformProps {
-    initialTab?: DiscoveryView;
-    caseId?: string;
+  initialTab?: DiscoveryView;
+  caseId?: string;
 }
 
 export interface DiscoveryRequestsProps {
@@ -47,14 +30,14 @@ export interface DiscoveryDocumentViewerProps {
 }
 
 export interface ViewerDocumentState {
-    title: string;
-    content: string;
-    type: string;
-    date: string;
+  title: string;
+  content: string;
+  type: string;
+  date: string;
 }
 
 export interface DiscoveryProductionsProps {
-    onCreateClick: () => void;
+  onCreateClick: () => void;
 }
 
 export interface InitialDisclosureWizardProps {

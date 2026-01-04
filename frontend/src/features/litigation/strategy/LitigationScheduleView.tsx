@@ -98,7 +98,7 @@ export const LitigationScheduleView: React.FC<LitigationScheduleViewProps> = ({ 
         <div className="flex-1">
           <ScheduleTimeline
             phases={phases}
-            tasks={tasks.map((t: any) => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
+            tasks={tasks.map((t) => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
             collapsedPhases={collapsedPhases}
             zoom={zoom}
             viewStartDate={viewStartDate}

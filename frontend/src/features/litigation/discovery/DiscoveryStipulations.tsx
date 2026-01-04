@@ -41,9 +41,9 @@ import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -182,7 +182,7 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
       id: IdGenerator.stipulation(),
       title: newStip.title.trim(),
       requestingParty: newStip.requestingParty.trim(),
-      proposedDate: newStip.proposedDate || new Date().toISOString().split('T')[0],
+      proposedDate: newStip.proposedDate || new Date().toISOString().split('T')[0] || '',
       status: 'Pending',
       reason: newStip.reason?.trim() || '',
       caseId: caseId,

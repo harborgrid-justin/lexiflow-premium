@@ -31,7 +31,7 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
     >
       <div className="flex justify-between items-start mb-1">
         <div className="flex items-center space-x-3 overflow-hidden">
-          <UserAvatar name={conv.name} size="md" indicatorStatus={conv.status as any} />
+          <UserAvatar name={conv.name} size="md" indicatorStatus={conv.status as 'online' | 'offline' | 'busy' | 'away'} />
           <div className="min-w-0">
             <h4 className={cn("text-sm font-bold truncate", conv.unread > 0 ? theme.text.primary : theme.text.secondary)}>{conv.name}</h4>
             <p className={cn("text-xs truncate flex items-center", theme.text.tertiary)}>

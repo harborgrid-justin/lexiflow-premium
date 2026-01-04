@@ -6,13 +6,13 @@
 
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
   Archive,
   Calendar,
   CheckCircle2,
-  Clock,
   Copy,
   Download,
   Edit,
@@ -27,7 +27,7 @@ import {
   Search,
   Send
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // TYPES
@@ -107,14 +107,14 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
   const [selectedProduction, setSelectedProduction] = useState<Production | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showBatesGenerator, setShowBatesGenerator] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductions = async () => {
       setLoading(true);
       try {
-        const data = await productionsApi.getAll({ caseId });
-        setProductions(data.map(p => {
+        const data = await DataService.productions.getAll({ caseId });
+        setProductions((data as any[]).map((p: any) => {
           let status: Production['status'] = 'draft';
           if (p.status === 'ready' || p.status === 'produced') {
             status = p.status;
@@ -400,20 +400,6 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
                   </div>
                 )}
               </div>
-            </div>
-          </motion.div>
-        )) : (
-            <div className={cn('p-12 text-center rounded-lg border border-dashed', theme.border.default)}>
-                <Package className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                <p className="text-lg font-medium">No productions found</p>
-                <p className="text-sm mt-1">Create a new production set to get started</p>
-                <Button variant="primary" className="mt-4" icon={Plus}>
-                    New Production
-                </Button>
-            </div>
-        )}
-      </div>
-              </div>
 
               <div className="flex items-center gap-2 ml-4">
                 <button
@@ -440,90 +426,99 @@ export const ProductionManager: React.FC<ProductionManagerProps> = ({
                   </Button>
                 )}
               </div>
-            </div >
-          </motion.div >
-        ))}
-      </div >
-
-  {/* Production History */ }
-{
-  selectedProduction && (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn('p-6 rounded-lg border', theme.surface.default, theme.border.default)}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <History className={cn('h-5 w-5', theme.text.secondary)} />
-        <h3 className={cn('text-lg font-semibold', theme.text.primary)}>
-          Production History - {selectedProduction.productionNumber}
-        </h3>
+            </div>
+          </motion.div>
+        )) : (
+          <div className={cn('p-12 text-center rounded-lg border border-dashed', theme.border.default)}>
+            <Package className="h-12 w-12 mx-auto mb-4 opacity-20" />
+            <p className="text-lg font-medium">No productions found</p>
+            <p className="text-sm mt-1">Create a new production set to get started</p>
+            <Button variant="primary" className="mt-4" icon={Plus}>
+              New Production
+            </Button>
+          </div>
+        )}
       </div>
 
-      <div className="space-y-3">
-        <div className={cn('p-4 text-center', theme.text.secondary)}>
-          Production history not available
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+      {/* Production History */}
+      {
+        selectedProduction && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={cn('p-6 rounded-lg border', theme.surface.default, theme.border.default)}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <History className={cn('h-5 w-5', theme.text.secondary)} />
+              <h3 className={cn('text-lg font-semibold', theme.text.primary)}>
+                Production History - {selectedProduction.productionNumber}
+              </h3>
+            </div>
 
-{/* Empty State */ }
-{
-  filteredProductions.length === 0 && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={cn('p-12 rounded-lg border text-center', theme.surface.default, theme.border.default)}
-    >
-      <Package className={cn('h-16 w-16 mx-auto mb-4 opacity-20', theme.text.primary)} />
-      <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
-        No Productions Found
-      </h3>
-      <p className={cn('text-sm', theme.text.secondary)}>
-        {searchQuery
-          ? 'Try adjusting your search query'
-          : 'Create your first production set to get started'
-        }
-      </p>
-    </motion.div>
-  )
-}
+            <div className="space-y-3">
+              <div className={cn('p-4 text-center', theme.text.secondary)}>
+                Production history not available
+              </div>
+            </div>
+          </motion.div>
+        )
+      }
 
-{/* Bates Generator Modal (placeholder) */ }
-{
-  showBatesGenerator && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      onClick={() => setShowBatesGenerator(false)}
-    >
-      <motion.div
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-        className={cn('p-6 rounded-lg max-w-md w-full m-4', theme.surface.default)}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h3 className={cn('text-lg font-semibold mb-4', theme.text.primary)}>
-          Bates Number Generator
-        </h3>
-        <p className={cn('text-sm mb-4', theme.text.secondary)}>
-          Configure Bates numbering settings for your production.
-        </p>
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={() => setShowBatesGenerator(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary">
-            Generate
-          </Button>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
+      {/* Empty State */}
+      {
+        filteredProductions.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={cn('p-12 rounded-lg border text-center', theme.surface.default, theme.border.default)}
+          >
+            <Package className={cn('h-16 w-16 mx-auto mb-4 opacity-20', theme.text.primary)} />
+            <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
+              No Productions Found
+            </h3>
+            <p className={cn('text-sm', theme.text.secondary)}>
+              {searchQuery
+                ? 'Try adjusting your search query'
+                : 'Create your first production set to get started'
+              }
+            </p>
+          </motion.div>
+        )
+      }
+
+      {/* Bates Generator Modal (placeholder) */}
+      {
+        showBatesGenerator && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setShowBatesGenerator(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              className={cn('p-6 rounded-lg max-w-md w-full m-4', theme.surface.default)}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className={cn('text-lg font-semibold mb-4', theme.text.primary)}>
+                Bates Number Generator
+              </h3>
+              <p className={cn('text-sm mb-4', theme.text.secondary)}>
+                Configure Bates numbering settings for your production.
+              </p>
+              <div className="flex gap-2">
+                <Button variant="secondary" onClick={() => setShowBatesGenerator(false)}>
+                  Cancel
+                </Button>
+                <Button variant="primary">
+                  Generate
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )
+      }
     </div >
   );
 };

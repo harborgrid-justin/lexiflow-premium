@@ -307,7 +307,7 @@ export class DatabaseManager {
     }, 500);
   }
 
-  async findCaseByTitle(title: string): Promise<any | null> {
+  async findCaseByTitle(title: string): Promise<unknown | null> {
     const id = this.titleIndex.search(title.toLowerCase());
     if (id) {
       return this.get(STORES.CASES, id);
@@ -415,7 +415,7 @@ export class DatabaseManager {
         store: storeName,
         item,
         type: "put",
-        resolve: resolve as any,
+        resolve: resolve as (value?: unknown) => void,
         reject,
       });
 
@@ -487,7 +487,7 @@ export class DatabaseManager {
         store: storeName,
         item: id,
         type: "delete",
-        resolve: resolve as any,
+        resolve: resolve as (value?: unknown) => void,
         reject,
       });
 

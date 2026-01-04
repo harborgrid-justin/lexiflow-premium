@@ -59,81 +59,38 @@ export const AdminService = {
   > => {
     try {
       // Use integrations API from backend
-      const response = await fetch(`${API_PREFIX}/integrations`, {
-        headers: {
-          Authorization: `Bearer ${defaultStorage.getItem("authToken") || ""}`,
-        },
-      });
+      const integrations = await apiClient.get<
+        Array<{
+          id: string;
+          name: string;
+          type: string;
+          status: string;
+        }>
+      >("/integrations");
 
-      if (
-        response.ok &&
-        response.headers.get("content-type")?.includes("application/json")
-      ) {
-        const integrations = await response.json();
-        return integrations.map(
-          (int: {
-            id: string;
-            name: string;
-            type: string;
-            status: string;
-          }) => ({
-            id: int.id,
-            name: int.name,
-            type: int.type,
-            status: int.status,
-            icon: int.name.charAt(0).toUpperCase(),
-            color:
-              int.status === "Connected"
-                ? "bg-blue-600"
-                : int.status === "Error"
-                  ? "bg-red-600"
-                  : "bg-gray-600",
-          })
-        );
+      if (integrations) {
+        return integrations.map((int) => ({
+          id: int.id,
+          name: int.name,
+          type: int.type,
+          status: int.status,
+          icon: int.name.charAt(0).toUpperCase(),
+          color:
+            int.status === "Connected"
+              ? "bg-blue-600"
+              : int.status === "Error"
+                ? "bg-red-600"
+                : "bg-gray-600",
+        }));
       }
+      return [];
     } catch (error) {
       console.error(
         "[AdminService.getIntegrations] Backend unavailable:",
         error
       );
+      return [];
     }
-
-    // Fallback to mock data for development
-    await delay(500);
-    return [
-      {
-        id: "int1",
-        name: "Outlook 365",
-        type: "Email & Calendar",
-        status: "Connected",
-        icon: "O",
-        color: "bg-blue-600",
-      },
-      {
-        id: "int2",
-        name: "Salesforce",
-        type: "CRM",
-        status: "Error",
-        icon: "S",
-        color: "bg-sky-500",
-      },
-      {
-        id: "int3",
-        name: "QuickBooks",
-        type: "Accounting",
-        status: "Disconnected",
-        icon: "Q",
-        color: "bg-green-600",
-      },
-      {
-        id: "int4",
-        name: "Clio",
-        type: "Practice Mgmt",
-        status: "Connected",
-        icon: "C",
-        color: "bg-indigo-600",
-      },
-    ];
   },
 
   getSecuritySettings: async (): Promise<
@@ -421,7 +378,7 @@ export const AdminService = {
         );
       }
     } catch (error) {
-      console.error('[AdminService.getConnectors] Backend unavailable:', error);
+      console.error("[AdminService.getConnectors] Backend unavailable:", error);
     }
 
     // Backend not available - return error status connectors

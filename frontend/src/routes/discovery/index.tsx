@@ -7,11 +7,9 @@
  * @module routes/discovery/index
  */
 
-import React from 'react';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -65,29 +63,10 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
+import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
+
 export default function DiscoveryIndexRoute() {
-  const navigate = useNavigate();
-console.log('useNavigate:', navigate);
-
-  // Import the DiscoveryPlatform component dynamically
-  const DiscoveryPlatform = React.lazy(() =>
-    import('@/features/litigation/discovery/DiscoveryPlatform')
-  );
-
-  return (
-    <div className="h-full">
-      <React.Suspense fallback={
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Loading Discovery Platform...</p>
-          </div>
-        </div>
-      }>
-        <DiscoveryPlatform initialTab="dashboard" />
-      </React.Suspense>
-    </div>
-  );
+  return <DiscoveryPlatform initialTab="dashboard" />;
 }
 
 // ============================================================================

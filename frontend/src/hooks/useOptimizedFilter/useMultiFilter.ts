@@ -15,8 +15,8 @@
  * ```
  */
 
-import { useState, useTransition, useMemo, useCallback } from 'react';
-import type { MultiFilterReturn } from './types';
+import { useCallback, useMemo, useState, useTransition } from "react";
+import type { MultiFilterReturn } from "./types";
 
 export function useMultiFilter<T, F extends Record<string, unknown>>(
   data: T[],
@@ -24,7 +24,7 @@ export function useMultiFilter<T, F extends Record<string, unknown>>(
   initialFilters: F
 ): MultiFilterReturn<T, F> {
   const [filters, setFiltersState] = useState<F>(initialFilters);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const filteredData = useMemo(
     () => filterFn(data, filters),
@@ -33,7 +33,7 @@ export function useMultiFilter<T, F extends Record<string, unknown>>(
 
   const updateFilter = useCallback((updates: Partial<F>) => {
     startTransition(() => {
-      setFiltersState(prev => ({ ...prev, ...updates }));
+      setFiltersState((prev) => ({ ...prev, ...updates }));
     });
   }, []);
 
@@ -48,6 +48,6 @@ export function useMultiFilter<T, F extends Record<string, unknown>>(
     filters,
     updateFilter,
     resetFilters,
-    isPending
+    isPending,
   };
 }

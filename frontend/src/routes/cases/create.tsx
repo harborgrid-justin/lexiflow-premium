@@ -35,7 +35,7 @@ export function meta() {
 /**
  * Pre-fetch reference data for case creation form
  */
-export async function loader({ request }: any) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // Auth check
   requireAuthentication(request);
 

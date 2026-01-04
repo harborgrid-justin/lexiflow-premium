@@ -12,7 +12,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: any) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return [
     { title: `Invoice ${data?.invoice?.invoiceNumber || ''} | LexiFlow` },
     { name: 'description', content: `View invoice details and record payments` },
@@ -166,7 +166,7 @@ export default function InvoiceDetailRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: any) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

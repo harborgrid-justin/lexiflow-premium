@@ -27,9 +27,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
             clientPort: 443,
             protocol: "wss",
           }
-        : {
-            port: 3000,
-          },
+        : undefined,
       proxy: {
         "/api": {
           target: env.VITE_API_BASE_URL || "http://localhost:3000",

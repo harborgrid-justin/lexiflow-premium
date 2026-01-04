@@ -47,7 +47,7 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
   // Enterprise Data Access
   const { data: fetchedEntities = [], isLoading } = useQuery<LegalEntity[]>(
       ['entities', 'all'],
-      DataService.entities.getAll,
+      () => DataService.entities.getAll(),
       { enabled: !propEntities }
   );
 

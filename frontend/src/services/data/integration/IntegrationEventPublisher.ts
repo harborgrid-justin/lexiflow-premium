@@ -135,12 +135,13 @@ export class IntegrationEventPublisher {
  * ```
  */
 interface RepositoryInterface {
-  add(item: any): Promise<any>;
-  update(id: string, updates: any): Promise<any>;
-  delete(id: string): Promise<any>;
+  add(item: unknown): Promise<unknown>;
+  update(id: string, updates: unknown): Promise<unknown>;
+  delete(id: string): Promise<unknown>;
 }
 
 export function createIntegratedRepository<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TBase extends new (...args: any[]) => RepositoryInterface,
 >(
   Repository: TBase,
@@ -149,6 +150,7 @@ export function createIntegratedRepository<
   publishDelete?: (id: string) => Promise<void>
 ) {
   return class IntegratedRepository extends Repository {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
     }

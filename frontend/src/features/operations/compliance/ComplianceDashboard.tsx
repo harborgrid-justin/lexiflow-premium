@@ -44,7 +44,7 @@ interface ComplianceDashboardProps {
 // ============================================================================
 
 export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initialTab }) => {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('compliance_active_tab', initialTab || 'overview');
 
   const setActiveTab = (tab: string) => {

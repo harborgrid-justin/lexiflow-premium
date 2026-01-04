@@ -48,7 +48,7 @@ export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'intel.firm');
   const [isExporting, setIsExporting] = useState(false);
 

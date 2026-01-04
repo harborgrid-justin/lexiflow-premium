@@ -42,7 +42,7 @@ interface KnowledgeBaseProps {
 // ============================================================================
 
 export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ initialTab }) => {
-    const [, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
     const [activeTab, _setActiveTab] = useSessionStorage<string>('knowledge_active_tab', initialTab || 'wiki');
 
     const setActiveTab = (tab: string) => {

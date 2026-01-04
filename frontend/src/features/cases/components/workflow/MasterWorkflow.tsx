@@ -29,9 +29,9 @@ interface FirmProcess {
   owner: string;
 }
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
 import { Case } from '@/types';
 import { cn } from '@/utils/cn';
@@ -118,7 +118,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   // ==========================================================================
   const { theme } = useTheme();
   const notify = useNotify();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useState<WorkflowView>('templates');
   const [viewMode, setViewMode] = useState<'list' | 'detail' | 'builder'>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -179,7 +179,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     calculateMetrics(casesArray, firmProcessesArray, tasksArray),
     [casesArray, firmProcessesArray, tasksArray]
   );
-console.log('metrics data:', metrics);
+  console.log('metrics data:', metrics);
 
   const activeParentTab = useMemo(() =>
     WORKFLOW_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || WORKFLOW_TABS[0],

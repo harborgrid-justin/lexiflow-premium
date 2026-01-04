@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { ChevronRight, Home } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -39,11 +39,11 @@ export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[] }>(({ items }) =
   return (
     <nav className={cn("flex items-center text-xs mb-4 flex-wrap", theme.text.secondary)} aria-label="Breadcrumb">
       <div className="flex items-center py-1">
-         <Home className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
+        <Home className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
       </div>
-      {/* IDENTITY-STABLE KEYS: Use label for stable reconciliation */}
-      {items.map((item) => (
-        <div key={item.label} className="flex items-center">
+      {/* IDENTITY-STABLE KEYS: Use label + index for stable reconciliation */}
+      {items.map((item, index) => (
+        <div key={`${item.label}-${index}`} className="flex items-center">
           <ChevronRight className={cn("h-3 w-3 mx-1 shrink-0", theme.text.tertiary)} />
           <button
             onClick={item.onClick}

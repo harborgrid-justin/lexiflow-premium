@@ -7,10 +7,10 @@ import {
 } from '@/api/domains/drafting.api';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useToast } from '@/contexts/toast/ToastContext';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@providers/ThemeContext';
-import { useToast } from '@providers/ToastContext';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 

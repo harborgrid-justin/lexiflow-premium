@@ -94,11 +94,56 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const sessionTimeoutRef = useRef<NodeJS.Timeout>();
   const tokenRefreshRef = useRef<NodeJS.Timeout>();
   const sessionWarningRef = useRef<NodeJS.Timeout>();
+  const userRef = useRef<AuthUser | null>(null);
+
+  // Keep user ref in sync
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   // Computed values
   const isAuthenticated = user !== null;
 
   // Session management functions
+  const clearSessionTimers = useCallback(() => {
+    if (sessionTimeoutRef.current) clearTimeout(sessionTimeoutRef.current);
+    if (sessionWarningRef.current) clearTimeout(sessionWarningRef.current);
+    if (tokenRefreshRef.current) clearInterval(tokenRefreshRef.current);
+  }, []);
+
+  const logout = useCallback(async (): Promise<void> => {
+    const userId = userRef.current?.id;
+    try {
+      const authApi = new AuthApiService();
+      await authApi.logout();
+
+      // Clear storage
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(AUTH_USER_KEY);
+
+      clearSessionTimers();
+      setUser(null);
+      setSession(null);
+      setRequiresMFA(false);
+      setError(null);
+
+      logAuditEvent({
+        type: 'logout',
+        timestamp: new Date(),
+        userId,
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+      // Still clear local state even if API fails
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(AUTH_USER_KEY);
+      clearSessionTimers();
+      setUser(null);
+      setSession(null);
+      setRequiresMFA(false);
+    }
+  }, [clearSessionTimers]);
+
   const startSession = useCallback(() => {
     const now = new Date();
     const expiresAt = new Date(now.getTime() + SESSION_TIMEOUT);
@@ -142,12 +187,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       startSession();
     }
   }, [session, startSession]);
-
-  const clearSessionTimers = useCallback(() => {
-    if (sessionTimeoutRef.current) clearTimeout(sessionTimeoutRef.current);
-    if (sessionWarningRef.current) clearTimeout(sessionWarningRef.current);
-    if (tokenRefreshRef.current) clearInterval(tokenRefreshRef.current);
-  }, []);
 
   // Initialize auth state from storage on mount
   useEffect(() => {
@@ -340,39 +379,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return false;
     }
   }, [requiresMFA, user, startSession]);
-
-  const logout = useCallback(async (): Promise<void> => {
-    const userId = user?.id;
-    try {
-      const authApi = new AuthApiService();
-      await authApi.logout();
-
-      // Clear storage
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem(AUTH_USER_KEY);
-
-      clearSessionTimers();
-      setUser(null);
-      setSession(null);
-      setRequiresMFA(false);
-      setError(null);
-
-      logAuditEvent({
-        type: 'logout',
-        timestamp: new Date(),
-        userId,
-      });
-    } catch (err) {
-      console.error('Logout error:', err);
-      // Still clear local state even if API fails
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem(AUTH_USER_KEY);
-      clearSessionTimers();
-      setUser(null);
-      setSession(null);
-      setRequiresMFA(false);
-    }
-  }, [user, clearSessionTimers]);
 
   const refreshToken = useCallback(async (): Promise<boolean> => {
     try {

@@ -5,7 +5,7 @@
 
 import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryList } from '@/components/billing/TimeEntryList';
-import { Link, useLoaderData } from 'react-router';
+import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -13,7 +13,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: any) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Time Entries',
     count: data?.entries?.length,
@@ -39,7 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const entries = await timeApi.getAll({
       caseId: caseId || undefined,
       userId: userId || undefined,
-      status: (status as any) || undefined,
+      status: (status as 'Draft' | 'Submitted' | 'Approved' | 'Billed') || undefined,
       billable: billable === 'true' ? true : billable === 'false' ? false : undefined,
     });
 
@@ -154,7 +154,7 @@ export default function TimeEntriesRoute({ actionData }: Route.ComponentProps) {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

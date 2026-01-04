@@ -38,7 +38,7 @@ const JurisdictionGeoMap = React.lazy(() => import('./JurisdictionGeoMap').then(
 
 export const JurisdictionManager: React.FC = () => {
   const { theme } = useTheme();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useState<JurisdictionView>('federal');
 
   const setActiveTab = (tab: JurisdictionView) => {

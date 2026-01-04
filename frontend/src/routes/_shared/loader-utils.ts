@@ -10,7 +10,7 @@
  * @module routes/_shared/loader-utils
  */
 
-import { redirect } from 'react-router';
+import { redirect } from "react-router";
 
 // ============================================================================
 // Error Response Utilities
@@ -28,7 +28,7 @@ import { redirect } from 'react-router';
  * }
  * ```
  */
-export function throwNotFound(message = 'Not Found'): never {
+export function throwNotFound(message = "Not Found"): never {
   throw new Response(message, {
     status: 404,
     statusText: message,
@@ -47,7 +47,7 @@ export function throwNotFound(message = 'Not Found'): never {
  * }
  * ```
  */
-export function throwForbidden(message = 'Forbidden'): never {
+export function throwForbidden(message = "Forbidden"): never {
   throw new Response(message, {
     status: 403,
     statusText: message,
@@ -66,14 +66,14 @@ export function throwForbidden(message = 'Forbidden'): never {
  * }
  * ```
  */
-export function throwUnauthorized(loginPath = '/login'): never {
+export function throwUnauthorized(loginPath = "/login"): never {
   throw redirect(loginPath);
 }
 
 /**
  * Throw a 400 Bad Request response
  */
-export function throwBadRequest(message = 'Bad Request'): never {
+export function throwBadRequest(message = "Bad Request"): never {
   throw new Response(message, {
     status: 400,
     statusText: message,
@@ -83,7 +83,7 @@ export function throwBadRequest(message = 'Bad Request'): never {
 /**
  * Throw a 500 Internal Server Error response
  */
-export function throwServerError(message = 'Internal Server Error'): never {
+export function throwServerError(message = "Internal Server Error"): never {
   throw new Response(message, {
     status: 500,
     statusText: message,
@@ -105,14 +105,11 @@ export function throwServerError(message = 'Internal Server Error'): never {
  * }
  * ```
  */
-export function createJsonResponse<T>(
-  data: T,
-  init?: ResponseInit
-): Response {
+export function createJsonResponse<T>(data: T, init?: ResponseInit): Response {
   return new Response(JSON.stringify(data), {
     ...init,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...init?.headers,
     },
   });
@@ -174,7 +171,7 @@ export async function parseFormData<T extends string>(
 
   for (const field of fields) {
     const value = formData.get(field);
-    result[field] = typeof value === 'string' ? value : null;
+    result[field] = typeof value === "string" ? value : null;
   }
 
   return result;
@@ -185,8 +182,8 @@ export async function parseFormData<T extends string>(
  */
 export async function getFormIntent(request: Request): Promise<string | null> {
   const formData = await request.formData();
-  const intent = formData.get('intent');
-  return typeof intent === 'string' ? intent : null;
+  const intent = formData.get("intent");
+  return typeof intent === "string" ? intent : null;
 }
 
 // ============================================================================
@@ -215,7 +212,9 @@ export async function getFormIntent(request: Request): Promise<string | null> {
  * }
  * ```
  */
-export async function fetchParallel<T extends Record<string, () => Promise<unknown>>>(
+export async function fetchParallel<
+  T extends Record<string, () => Promise<unknown>>,
+>(
   fetchers: T
 ): Promise<{
   [K in keyof T]: {
@@ -225,7 +224,7 @@ export async function fetchParallel<T extends Record<string, () => Promise<unkno
 }> {
   const keys = Object.keys(fetchers) as Array<keyof T>;
   const promises = keys.map((key) =>
-    fetchers[key]()
+    fetchers[key]!()
       .then((data) => ({ key, data, error: null }))
       .catch((error) => ({ key, data: null, error }))
   );
@@ -284,13 +283,15 @@ export function getPaginationParams(request: Request): {
   page: number;
   pageSize: number;
   sortBy: string | null;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
 } {
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1', 10);
-  const pageSize = parseInt(url.searchParams.get('pageSize') || '20', 10);
-  const sortBy = url.searchParams.get('sortBy');
-  const sortOrder = (url.searchParams.get('sortOrder') || 'asc') as 'asc' | 'desc';
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10);
+  const sortBy = url.searchParams.get("sortBy");
+  const sortOrder = (url.searchParams.get("sortOrder") || "asc") as
+    | "asc"
+    | "desc";
 
   return {
     page: Math.max(1, page),

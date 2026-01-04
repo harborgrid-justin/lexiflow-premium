@@ -62,7 +62,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
   // ==========================================================================
   // HOOKS - State & Transitions
   // ==========================================================================
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('case_list_active_tab', initialTab || 'active');
 
   const caseListData = useCaseList();

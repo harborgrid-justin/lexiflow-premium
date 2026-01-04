@@ -32,7 +32,7 @@ export function NotificationList({
 }: NotificationListProps) {
   const [filter, setFilter] = useState<'all' | 'unread' | 'high'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const handleFilterChange = useCallback((newFilter: 'all' | 'unread' | 'high') => {
     startTransition(() => {

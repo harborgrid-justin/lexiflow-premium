@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { FinancialPerformanceData } from '@/types';
 import React from 'react';

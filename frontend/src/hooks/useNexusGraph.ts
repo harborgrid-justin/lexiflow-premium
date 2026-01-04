@@ -204,6 +204,24 @@ export function useNexusGraph(
   const [isStable, setIsStable] = useState(false);
   const requestRef = useRef<number>(0);
 
+  const tickWorker = useCallback(() => {
+    if (!workerRef.current) return;
+    const state = physicsState.current;
+
+    // Transfer ownership of the buffer to the worker (Zero-Copy)
+    workerRef.current.postMessage(
+      {
+        buffer: state.buffer.buffer, // Transfer the ArrayBuffer
+        links: state.links,
+        count: state.count,
+        width: state.width,
+        height: state.height,
+        alpha: state.alpha,
+      },
+      [state.buffer.buffer]
+    );
+  }, []);
+
   // Initialize
   useEffect(() => {
     if (!containerRef.current) return;
@@ -276,24 +294,6 @@ export function useNexusGraph(
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
   }, [initialData, containerRef, tickWorker]);
-
-  const tickWorker = useCallback(() => {
-    if (!workerRef.current) return;
-    const state = physicsState.current;
-
-    // Transfer ownership of the buffer to the worker (Zero-Copy)
-    workerRef.current.postMessage(
-      {
-        buffer: state.buffer.buffer, // Transfer the ArrayBuffer
-        links: state.links,
-        count: state.count,
-        width: state.width,
-        height: state.height,
-        alpha: state.alpha,
-      },
-      [state.buffer.buffer]
-    );
-  }, []);
 
   const reheat = useCallback(() => {
     physicsState.current.alpha = 0.5;

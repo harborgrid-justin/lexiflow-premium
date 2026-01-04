@@ -37,7 +37,10 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         "fixed inset-y-0 left-0 z-50 w-72 flex flex-col h-full border-r transform transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none touch-pan-y",
         theme.surface.default,
         theme.border.default,
-        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:static md:inset-auto'
+        // Desktop: Always static and visible
+        "md:translate-x-0 md:static md:inset-auto",
+        // Mobile: Toggle visibility
+        isOpen ? 'translate-x-0' : '-translate-x-full'
       )}>
 
         <SidebarHeader onClose={onClose} />

@@ -68,7 +68,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
   // Enterprise Data Access
   const { data: entities = [] } = useQuery<LegalEntity[]>(
     queryKeys.entities.all(),
-    DataService.entities.getAll
+    () => DataService.entities.getAll()
   );
 
   useEffect(() => {

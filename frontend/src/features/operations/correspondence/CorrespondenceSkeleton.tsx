@@ -4,9 +4,9 @@
  * @description Loading skeleton components for correspondence lists
  */
 
-import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
+import React from 'react';
 
 /**
  * Skeleton for communication log items
@@ -28,7 +28,7 @@ export const CommunicationLogSkeleton: React.FC = () => {
 
       {/* Item skeletons */}
       <div className="flex-1 overflow-hidden">
-        {[...Array(10)].map((_) => (
+        {[...Array(10)].map((_, i) => (
           <div
             key={`comm-log-skeleton-${i}`}
             className={cn(

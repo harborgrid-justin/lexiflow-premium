@@ -62,7 +62,7 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const CalendarView: React.FC = () => {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('calendar_active_tab', 'master');
 
   const setActiveTab = (tab: string) => {

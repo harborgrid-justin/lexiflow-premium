@@ -7,10 +7,9 @@
  * @module routes/entities/index
  */
 
-import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -64,56 +63,10 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
+import { EntityDirector } from '@/features/cases/components/entities/EntityDirector';
+
 export default function EntitiesIndexRoute() {
-  const navigate = useNavigate();
-console.log('useNavigate:', navigate);
-
-  return (
-    <div className="p-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Entity Director
-          </h1>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Manage legal entities and corporate governance
-          </p>
-        </div>
-
-        <Link
-          to="/entities/new"
-          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          New Entity
-        </Link>
-      </div>
-
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1}
-            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-          />
-        </svg>
-        <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-          Entity Director Module
-        </h3>
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          This module is under development. Entity management features coming soon.
-        </p>
-      </div>
-    </div>
-  );
+  return <EntityDirector />;
 }
 
 // ============================================================================

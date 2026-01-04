@@ -19,8 +19,8 @@ import React, { useMemo, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useWindow } from '@/providers';
 
 // Components
@@ -70,7 +70,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
     // ============================================================================
     // STATE MANAGEMENT
     // ============================================================================
-    const [, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     // ============================================================================
     // MEMOIZED VALUES

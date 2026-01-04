@@ -1,10 +1,10 @@
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
-import { useTheme } from '@providers/ThemeContext';
 import { Link as LinkIcon, Loader2, RefreshCw, Settings } from 'lucide-react';
 import React from 'react';
 

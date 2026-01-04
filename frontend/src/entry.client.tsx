@@ -7,7 +7,11 @@
  * @see @rendering/client for implementation details
  */
 
+import { initializeModules } from "@/config/modules/initializeModules";
 import { initializeClient } from "@rendering/client";
+
+// Initialize modules before rendering
+initializeModules();
 
 // Initialize the client-side application
 initializeClient();

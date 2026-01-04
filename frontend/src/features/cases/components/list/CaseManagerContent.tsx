@@ -4,15 +4,15 @@
  * @description Content router for Case Management module tabs
  */
 
-import React, { lazy, useState } from 'react';
+import { api } from '@/api';
 import { MatterView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/api';
 import { Case } from '@/types';
+import React, { lazy, useState } from 'react';
 
 // Lazy load tab content components - from Case Management Suite
 const CaseOverviewDashboard = lazy(() => import('../overview/CaseOverviewDashboard').then(m => ({ default: m.CaseOverviewDashboard })));
-const CaseOperationsCenter = lazy(() => import('../operations/CaseOperationsCenter').then(m => ({ default: m.CaseOperationsCenter })));
+const CaseOperationsCenter = lazy(() => import('../operations/CaseOperationsCenter'));
 const CaseCalendar = lazy(() => import('../calendar/CaseCalendar').then(m => ({ default: m.CaseCalendar })));
 const CaseFinancialsCenter = lazy(() => import('../financials/CaseFinancialsCenter').then(m => ({ default: m.CaseFinancialsCenter })));
 const CaseInsightsDashboard = lazy(() => import('../insights/CaseInsightsDashboard').then(m => ({ default: m.CaseInsightsDashboard })));
@@ -44,7 +44,7 @@ interface CaseManagerContentProps {
 export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTab }) => {
   // Fetch cases for list views that need them
   const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => api.cases.getAll());
-  
+
   // Filter state for CaseListActive
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -65,7 +65,7 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
       case 'overview':
         return <CaseOverviewDashboard />;
       case 'active':
-        return <CaseListActive 
+        return <CaseListActive
           filteredCases={cases}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}

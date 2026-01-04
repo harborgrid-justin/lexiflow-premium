@@ -127,8 +127,6 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     );
   }
 
-  const totalItemsHeight = safeItems.length * itemHeight;
-
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
     requestAnimationFrame(() => {

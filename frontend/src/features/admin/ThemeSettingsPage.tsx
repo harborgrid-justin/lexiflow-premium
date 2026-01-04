@@ -19,7 +19,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const _handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
     startTransition(() => {

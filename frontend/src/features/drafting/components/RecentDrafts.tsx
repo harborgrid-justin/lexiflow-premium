@@ -1,9 +1,9 @@
-import React from 'react';
-import { FileText, Clock } from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
-import * as styles from '../DraftingDashboard.styles';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { GeneratedDocument } from '@api/domains/drafting.api';
 import { formatDistanceToNow } from 'date-fns';
+import { Clock, FileText } from 'lucide-react';
+import React from 'react';
+import * as styles from '../DraftingDashboard.styles';
 
 interface RecentDraftsProps {
   drafts: GeneratedDocument[];
@@ -27,8 +27,8 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
   return (
     <div className="divide-y divide-slate-100 dark:divide-slate-700">
       {draftsList.map((draft) => (
-        <div 
-          key={draft.id} 
+        <div
+          key={draft.id}
           className={styles.getListItem(theme)}
           onClick={() => onSelect(draft)}
         >
@@ -67,4 +67,3 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
     </div>
   );
 };
-

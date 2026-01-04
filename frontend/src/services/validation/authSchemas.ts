@@ -103,7 +103,7 @@ export const registerSchema = z
       .max(200, "Organization name must be less than 200 characters")
       .optional()
       .or(z.literal("")),
-    acceptTerms: z.literal(true, {
+    acceptTerms: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and conditions",
     }),
   })

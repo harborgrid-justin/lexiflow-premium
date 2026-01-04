@@ -26,9 +26,9 @@ import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button';
 import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 import { PeriodSelector } from '@/components/ui/molecules/PeriodSelector';
 import { BillingDashboardContent } from './BillingDashboardContent';
@@ -53,7 +53,7 @@ interface BillingDashboardProps {
 // ============================================================================
 const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
   const [period, setPeriod] = useState('30d');
 

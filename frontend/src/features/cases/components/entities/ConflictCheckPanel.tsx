@@ -40,7 +40,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<LegalEntity[]>([]);
     const [hasSearched, setHasSearched] = useState(false);
-    const [, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     const handleCheck = () => {
         if (!query) return;

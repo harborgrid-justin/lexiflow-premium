@@ -209,7 +209,7 @@ export const Seeder = {
         ...u,
         id: u.id as unknown as EntityId,
         type: "Individual",
-        roles: [u.role as any],
+        roles: [u.role as LegalEntity["roles"][number]],
         status: "Active",
         riskScore: 10,
         tags: ["Internal"],
@@ -221,7 +221,7 @@ export const Seeder = {
         name: c.name ?? "Unknown",
         type: "Corporation",
         roles: ["Client"],
-        status: c.status as any,
+        status: c.status as LegalEntity["status"],
         riskScore: 30,
         tags: [c.industry ?? "Unknown"],
       })
@@ -231,8 +231,8 @@ export const Seeder = {
         addEntity({
           id: `ent-pty-${p.id}` as EntityId,
           name: p.name,
-          type: p.type as any,
-          roles: [p.role as any],
+          type: p.type as LegalEntity["type"],
+          roles: [p.role as LegalEntity["roles"][number]],
           status: "Active",
           riskScore: 50,
           tags: [],

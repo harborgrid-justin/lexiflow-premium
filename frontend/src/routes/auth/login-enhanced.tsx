@@ -25,7 +25,7 @@ import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { mfaRequired: _mfaRequired, login, clearError, error: authError } = useAuth() as any;
+  const { mfaRequired: _mfaRequired, login, clearError, error: authError } = useAuth();
 
   const [showMfa, setShowMfa] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
@@ -39,7 +39,7 @@ export default function LoginPage() {
     formState: { errors },
     getValues,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema) as any,
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',

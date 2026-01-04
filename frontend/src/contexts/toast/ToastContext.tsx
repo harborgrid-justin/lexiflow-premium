@@ -93,6 +93,13 @@ export const ToastProvider = ({
   }, []);
 
   // BP10: Stabilize function references with useCallback
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    // Process queue after removing to fill the slot
+    // processQueue(); // Removed to avoid circular dependency
+  }, []);
+
+  // BP10: Stabilize function references with useCallback
   const processQueue = useCallback(() => {
     setToasts(prev => {
       // If we have space
@@ -125,13 +132,6 @@ export const ToastProvider = ({
       processQueue();
     }
   }, [toasts.length, processQueue, maxVisible]);
-
-  // BP10: Stabilize function references with useCallback
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-    // Process queue after removing to fill the slot
-    processQueue();
-  }, [processQueue]);
 
   // BP10: Stabilize function references with useCallback
   const addToast = useCallback((message: string, type: ToastType = 'info') => {

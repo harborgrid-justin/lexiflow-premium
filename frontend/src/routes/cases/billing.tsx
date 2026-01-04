@@ -41,7 +41,7 @@ interface Invoice {
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: any) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   const caseTitle = data?.caseData?.title || 'Case Billing';
   return [
     { title: `Billing - ${caseTitle} | LexiFlow` },
@@ -53,7 +53,7 @@ export function meta({ data }: any) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: any) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -376,7 +376,7 @@ export default function CaseBillingRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: any) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -115,7 +115,7 @@ export function useAppContext(): UseAppControllerReturn {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch] = useState("");
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 

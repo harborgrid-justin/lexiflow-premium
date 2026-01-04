@@ -16,9 +16,9 @@ import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 import { MatterView } from '@/config/tabs.config';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { CaseStatus, type Case, type Invoice } from '@/types';
 import { cn } from '@/utils/cn';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
@@ -127,7 +127,6 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
 
   const metrics = useMemo(() => {
     const activeCases = cases?.filter(m => m.status === CaseStatus.Active).length || 0;
-console.log('metrics data:', metrics);
     const intakePipeline = cases?.filter(m => m.status === CaseStatus.Open || m.status === CaseStatus.PreFiling).length || 0;
     const upcomingDeadlines = cases?.filter(m => {
       if (!m.closeDate) return false;
@@ -135,7 +134,9 @@ console.log('metrics data:', metrics);
       const daysUntil = (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
       return daysUntil >= 0 && daysUntil <= 7;
     }).length || 0;
-    const totalRevenue = invoices?.reduce((sum: number, inv) => sum + ((inv as { totalAmount?: number }).totalAmount || 0), 0) || 0;
+    const totalRevenue = Array.isArray(invoices)
+      ? invoices.reduce((sum: number, inv) => sum + ((inv as { totalAmount?: number }).totalAmount || 0), 0)
+      : 0;
 
     return { activeCases, intakePipeline, upcomingDeadlines, totalRevenue };
   }, [cases, invoices]);

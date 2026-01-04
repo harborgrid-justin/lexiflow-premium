@@ -5,7 +5,7 @@
 
 import { TrustAccountsApiService } from '@/api/billing';
 import { TrustAccountDashboard } from '@/features/operations/billing/trust/TrustAccountDashboard';
-import { Link, useLoaderData } from 'react-router';
+import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -13,7 +13,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: any) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Trust Accounts',
     count: data?.accounts?.length,
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as any) || undefined,
+      status: (status as 'active' | 'inactive' | 'closed' | 'suspended') || undefined,
     });
 
     return {

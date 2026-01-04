@@ -68,7 +68,7 @@ const PARENT_TABS = [
 
 export const SecureMessenger = ({ initialTab }: SecureMessengerProps) => {
   const { theme } = useTheme();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useState<MessengerView>('chats');
 
   const setActiveTab = (tab: MessengerView) => {

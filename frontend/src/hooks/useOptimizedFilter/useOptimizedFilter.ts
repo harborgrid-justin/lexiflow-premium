@@ -11,18 +11,18 @@
  * ```
  */
 
-import { useState, useTransition, useMemo, useCallback } from 'react';
-import type { OptimizedFilterConfig, OptimizedFilterReturn } from './types';
+import { useCallback, useMemo, useState, useTransition } from "react";
+import type { OptimizedFilterConfig, OptimizedFilterReturn } from "./types";
 
 export function useOptimizedFilter<T>(
   data: T[],
   filterFn: (data: T[], term: string) => T[],
   config: OptimizedFilterConfig = {}
 ): OptimizedFilterReturn<T> {
-  const { initialTerm = '' } = config;
+  const { initialTerm = "" } = config;
 
   const [filterTerm, setFilterTermState] = useState(initialTerm);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const filteredData = useMemo(
     () => filterFn(data, filterTerm),
@@ -46,6 +46,6 @@ export function useOptimizedFilter<T>(
     filterTerm,
     setFilterTerm,
     isPending,
-    resetFilter
+    resetFilter,
   };
 }

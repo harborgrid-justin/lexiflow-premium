@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
@@ -48,7 +48,7 @@ const sanitizeHtml = (html: string) => {
 export const WikiView: React.FC = () => {
   const { theme, mode } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const { data: articles = [], isLoading } = useQuery<WikiArticle[]>(
     ['wiki', 'all'],

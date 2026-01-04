@@ -1,6 +1,6 @@
 import { api } from '@/api';
+import { useToast } from '@/contexts/toast/ToastContext';
 import { ClauseReference, draftingApi, DraftingTemplate, TemplateCategory, TemplateVariable } from '@api/domains/drafting.api';
-import { useToast } from '@providers/ToastContext';
 import { Code, Eye, FileText, Save, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 

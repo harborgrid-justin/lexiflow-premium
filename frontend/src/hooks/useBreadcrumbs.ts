@@ -4,10 +4,10 @@
  * @description Hook to generate breadcrumb navigation based on current route path.
  */
 
-import { useMemo } from 'react';
-import { useLocation, useParams } from 'react-router';
-import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
-import type { BreadcrumbItem } from '@/components/ui/molecules/Breadcrumbs';
+import type { BreadcrumbItem } from "@/components/ui/molecules/Breadcrumbs";
+import { ModuleRegistry } from "@/services/infrastructure/moduleRegistry";
+import { useMemo } from "react";
+import { useLocation, useParams } from "react-router";
 
 /**
  * Generate breadcrumb items from current route
@@ -17,17 +17,18 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
   const params = useParams();
 
   return useMemo(() => {
-    const pathSegments = location.pathname.split('/').filter(Boolean);
+    const pathSegments = location.pathname.split("/").filter(Boolean);
     const breadcrumbs: BreadcrumbItem[] = [];
 
     // Home/Dashboard
     breadcrumbs.push({
-      label: 'Dashboard',
-      path: '/',
+      id: "home",
+      label: "Dashboard",
+      path: "/",
     });
 
     // Build breadcrumbs from path segments
-    let currentPath = '';
+    let currentPath = "";
     pathSegments.forEach((segment, _index) => {
       currentPath += `/${segment}`;
 
@@ -35,12 +36,16 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
       if (segment.match(/^[0-9a-f-]+$/i) && segment.length > 10) {
         // This looks like an ID, check if we have a param name for it
         const paramKeys = Object.keys(params);
-        const paramKey = paramKeys.find(key => params[key] === segment);
+        const paramKey = paramKeys.find((key) => params[key] === segment);
 
         if (paramKey) {
           // Get a friendly name from the module or use the param key
-          const label = paramKey.replace(/Id$/, '').replace(/([A-Z])/g, ' $1').trim();
+          const label = paramKey
+            .replace(/Id$/, "")
+            .replace(/([A-Z])/g, " $1")
+            .trim();
           breadcrumbs.push({
+            id: segment,
             label: `${label.charAt(0).toUpperCase() + label.slice(1)} #${segment.slice(0, 8)}`,
             path: currentPath,
           });
@@ -53,6 +58,7 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
 
       if (module) {
         breadcrumbs.push({
+          id: segment,
           label: module.label,
           path: currentPath,
           icon: module.icon,
@@ -60,10 +66,11 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
       } else {
         // Fallback: Convert kebab-case or snake_case to Title Case
         const label = segment
-          .replace(/[-_]/g, ' ')
+          .replace(/[-_]/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase());
 
         breadcrumbs.push({
+          id: segment,
           label,
           path: currentPath,
         });

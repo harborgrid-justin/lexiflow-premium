@@ -427,11 +427,3 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     />
   );
 }
-error = { error }
-title = "Failed to Load Audit Trail"
-message = "We couldn't load the audit logs. Please try again."
-backTo = "/"
-backLabel = "Back to Dashboard"
-  />
-  );
-}

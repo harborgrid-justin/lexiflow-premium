@@ -110,7 +110,7 @@ import {
   WS_URL,
 } from "@/config/network/websocket.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
-import { EventEmitter } from "eventemitter3";
+import EventEmitter from "eventemitter3";
 import type {
   CollaborationConfig,
   CollaborativeEdit,
@@ -669,7 +669,7 @@ export class CollaborationService extends EventEmitter {
     const hue = Math.abs(hash) % 360;
     const saturation = 70;
     const lightness = 50;
-    
+
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 

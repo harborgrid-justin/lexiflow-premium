@@ -53,7 +53,7 @@ export function useQuery<T>(
       .catch(() => {});
 
     return unsubscribe;
-  }, [key, hashedKey, enabled, staleTime]);
+  }, [hashedKey, enabled, staleTime]);
 
   return {
     ...state,

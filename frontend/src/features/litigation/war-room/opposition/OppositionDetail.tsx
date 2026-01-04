@@ -22,7 +22,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/providers';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';

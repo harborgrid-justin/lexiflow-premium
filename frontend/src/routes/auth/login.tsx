@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const { login } = useAuthActions();
 
   const [email, setEmail] = useState('');
@@ -21,6 +20,13 @@ console.log('useNavigate:', navigate);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
+    // Validate inputs
+    if (!email.trim() || !password) {
+      setError('Please enter both email and password.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {

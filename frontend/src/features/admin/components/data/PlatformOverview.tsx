@@ -1,9 +1,9 @@
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { useInterval } from '@/hooks/core';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 import { cn } from '@/utils/cn';
@@ -68,7 +68,7 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card title="Live Query Traffic (QPS)" className="lg:col-span-2 overflow-hidden">
                     <div className="h-64 w-full min-w-0">
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                             <AreaChart data={data}>
                                 <defs>
                                     <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">

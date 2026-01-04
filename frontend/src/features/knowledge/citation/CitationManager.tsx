@@ -50,7 +50,7 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [activeView, _setActiveView] = useSessionStorage<string>('citation_active_tab', 'library');
   const citationSelection = useSelection<Citation>();
 

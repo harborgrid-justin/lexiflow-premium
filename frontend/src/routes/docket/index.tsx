@@ -40,11 +40,20 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   try {
     const response = await api.docket.getAll({ search, type, page });
+
+    // Robust handling of API response structure
+    let entries: any[] = [];
+    if (Array.isArray(response)) {
+      entries = response;
+    } else if (response && Array.isArray(response.data)) {
+      entries = response.data;
+    }
+
     return {
-      entries: response.data,
-      totalCount: response.total,
-      page: response.page,
-      totalPages: response.totalPages
+      entries,
+      totalCount: response.total || entries.length || 0,
+      page: response.page || 1,
+      totalPages: response.totalPages || 1
     };
   } catch (error) {
     console.error("Failed to load docket entries:", error);
@@ -212,42 +221,50 @@ export default function DocketIndexRoute() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {entries.map((entry) => (
-                <tr key={entry.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                    {entry.dateFiled ? format(new Date(entry.dateFiled), 'MMM d, yyyy') : '-'}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                    <Link to={`/docket/${entry.id}`} className="font-medium hover:text-blue-600 dark:hover:text-blue-400">
-                      {entry.title || entry.description}
-                    </Link>
-                    {entry.caseId && <div className="text-xs text-gray-500">Case: {entry.caseId}</div>}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                      {entry.type || 'Entry'}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                    <Form method="post" className="inline-block">
-                      <input type="hidden" name="intent" value="delete" />
-                      <input type="hidden" name="id" value={entry.id} />
-                      <button
-                        type="submit"
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50"
-                        disabled={isSubmitting}
-                        onClick={(e) => {
-                          if (!confirm('Are you sure you want to delete this entry?')) {
-                            e.preventDefault();
-                          }
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </Form>
+              {Array.isArray(entries) && entries.length > 0 ? (
+                entries.map((entry) => (
+                  <tr key={entry.id}>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      {entry.dateFiled ? format(new Date(entry.dateFiled), 'MMM d, yyyy') : '-'}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <Link to={`/docket/${entry.id}`} className="font-medium hover:text-blue-600 dark:hover:text-blue-400">
+                        {entry.title || entry.description}
+                      </Link>
+                      {entry.caseId && <div className="text-xs text-gray-500">Case: {entry.caseId}</div>}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                        {entry.type || 'Entry'}
+                      </span>
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                      <Form method="post" className="inline-block">
+                        <input type="hidden" name="intent" value="delete" />
+                        <input type="hidden" name="id" value={entry.id} />
+                        <button
+                          type="submit"
+                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50"
+                          disabled={isSubmitting}
+                          onClick={(e) => {
+                            if (!confirm('Are you sure you want to delete this entry?')) {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </Form>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                    No docket entries found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
 

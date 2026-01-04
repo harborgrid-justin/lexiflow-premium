@@ -1,9 +1,9 @@
-import React from 'react';
-import { CheckCircle, AlertCircle} from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
-import * as styles from '../DraftingDashboard.styles';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { GeneratedDocument } from '@api/domains/drafting.api';
 import { formatDistanceToNow } from 'date-fns';
+import { AlertCircle, CheckCircle } from 'lucide-react';
+import React from 'react';
+import * as styles from '../DraftingDashboard.styles';
 
 interface ApprovalQueueProps {
   approvals: GeneratedDocument[];
@@ -28,8 +28,8 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
   return (
     <div className="divide-y divide-slate-100 dark:divide-slate-700">
       {approvalsList.map((doc) => (
-        <div 
-          key={doc.id} 
+        <div
+          key={doc.id}
           className={styles.getListItem(theme)}
           onClick={() => onReview(doc)}
         >
@@ -52,4 +52,3 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
     </div>
   );
 };
-

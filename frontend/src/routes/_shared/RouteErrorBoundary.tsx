@@ -173,7 +173,7 @@ export function GenericError({
 
           <p className="mb-4 text-red-700 dark:text-red-300">{message}</p>
 
-          {showDetails && error && (
+          {showDetails && !!error && (
             <details className="mb-4">
               <summary className="cursor-pointer text-sm font-medium text-red-800 dark:text-red-200">
                 Error Details

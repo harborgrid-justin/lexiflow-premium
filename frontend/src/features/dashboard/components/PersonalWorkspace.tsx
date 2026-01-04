@@ -22,7 +22,7 @@ import { DataService } from '@/services/data/dataService';
 import { STORES } from '@/services/data/db';
 
 // Hooks & Context
-import { useTheme } from '@/providers';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';

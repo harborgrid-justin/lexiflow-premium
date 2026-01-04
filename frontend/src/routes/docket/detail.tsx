@@ -7,6 +7,7 @@
  */
 
 import { api } from '@/api';
+import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
 import { useLoaderData, useNavigate } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -37,8 +38,13 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("Docket ID is required", { status: 400 });
   }
 
+  // Ignore internal router requests or static assets that might be matched
+  if (docketId === 'file' || docketId.endsWith('.data')) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   try {
-    const item = await api.docket.getById(docketId);
+    const item = await api.docket.getById(docketId as CaseId);
     if (!item) {
       throw new Response("Docket entry not found", { status: 404 });
     }

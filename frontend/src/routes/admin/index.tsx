@@ -22,7 +22,7 @@ import {
   Shield,
   Users
 } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -42,7 +42,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   // Require admin role to access this route
   const { user } = requireAdmin(request);
 
@@ -98,7 +98,7 @@ export async function loader() {
 // ============================================================================
 
 export default function AdminIndexRoute() {
-  const { metrics, auditLogs } = loaderData;
+  const { metrics, auditLogs } = useLoaderData() as Route.ComponentProps['loaderData'];
 
   return (
     <div className="space-y-6 p-6">

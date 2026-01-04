@@ -4,7 +4,8 @@
  * Enterprise permission management with granular access control.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useLoaderData } from 'react-router';
 import type { Route } from './+types/permissions';
 
 interface Permission {
@@ -53,7 +54,7 @@ export async function loader(_args: Route.LoaderArgs) {
 }
 
 export default function AdminPermissionsPage() {
-  const { permissions } = loaderData;
+  const { permissions } = useLoaderData() as { permissions: Permission[] };
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 

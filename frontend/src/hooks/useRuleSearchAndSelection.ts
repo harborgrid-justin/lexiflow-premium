@@ -72,7 +72,7 @@ export function useRuleSearchAndSelection(
   const [searchTerm, _setSearchTerm] = useState("");
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 

@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -10,7 +11,6 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
-import { useTheme } from '@providers/ThemeContext';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
 import React, { memo, useCallback, useState } from 'react';
 

@@ -44,14 +44,14 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader - Server-side Data Fetching
+// Loader - Client-side Data Fetching
 // ============================================================================
 
 /**
  * Fetches all cases and related data in parallel
- * Runs on the server in SSR mode, enabling fast initial loads
+ * Runs on the client to access localStorage auth token
  */
-export async function loader() {
+export async function clientLoader() {
   // TODO: Auth check
   // const user = await requireAuth(request);
 
@@ -63,6 +63,9 @@ export async function loader() {
 
   return { cases, invoices };
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action - Form Submissions

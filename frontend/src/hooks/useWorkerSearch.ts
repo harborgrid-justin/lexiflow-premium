@@ -91,17 +91,19 @@ export function useWorkerSearch<T>(
   useEffect(() => {
     workerRef.current = SearchWorker.create();
 
-    workerRef.current.onmessage = (e) => {
-      const { results, requestId } = e.data;
-      // Race Condition Protection: Only accept results matching the latest request ID
-      if (
-        requestId === requestIdRef.current &&
-        requestId === cancelTokenRef.current
-      ) {
-        setFilteredItems(results);
-        setIsSearching(false);
-      }
-    };
+    if (workerRef.current) {
+      workerRef.current.onmessage = (e) => {
+        const { results, requestId } = e.data;
+        // Race Condition Protection: Only accept results matching the latest request ID
+        if (
+          requestId === requestIdRef.current &&
+          requestId === cancelTokenRef.current
+        ) {
+          setResults(results);
+          setIsSearching(false);
+        }
+      };
+    }
 
     return () => {
       workerRef.current?.terminate();

@@ -7,9 +7,9 @@
  * @module components/features/cases/CaseQuickActions
  */
 
-import type { Case } from '@/types';
-import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import type { Case } from '@/types';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 export interface CaseQuickActionsProps {
@@ -44,16 +44,16 @@ export function CaseQuickActions({
 
   // Close menu when clicking outside
   useEffect(() => {
+    if (!isOpen) return;
+
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
   const handleAction = (action: (caseData: Case) => void) => {

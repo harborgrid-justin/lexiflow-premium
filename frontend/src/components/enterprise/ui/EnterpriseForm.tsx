@@ -139,17 +139,17 @@ const validateField = async (
         break;
 
       case 'minLength':
-        isValid = String(value).length >= (rule.value || 0);
+        isValid = String(value).length >= ((rule.value as number) || 0);
         message = rule.message || `${field.label} must be at least ${rule.value} characters`;
         break;
 
       case 'maxLength':
-        isValid = String(value).length <= (rule.value || Infinity);
+        isValid = String(value).length <= ((rule.value as number) || Infinity);
         message = rule.message || `${field.label} must be at most ${rule.value} characters`;
         break;
 
       case 'pattern':
-        isValid = new RegExp(rule.value).test(String(value));
+        isValid = new RegExp(rule.value as string).test(String(value));
         message = rule.message || `${field.label} format is invalid`;
         break;
 
@@ -159,12 +159,12 @@ const validateField = async (
         break;
 
       case 'min':
-        isValid = Number(value) >= (rule.value || 0);
+        isValid = Number(value) >= ((rule.value as number) || 0);
         message = rule.message || `${field.label} must be at least ${rule.value}`;
         break;
 
       case 'max':
-        isValid = Number(value) <= (rule.value || Infinity);
+        isValid = Number(value) <= ((rule.value as number) || Infinity);
         message = rule.message || `${field.label} must be at most ${rule.value}`;
         break;
 
@@ -216,7 +216,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
   const [expandedSections, setExpandedSections] = useState<Record<number, boolean>>({});
   const [showPassword, setShowPassword] = useState<Record<string, boolean>>({});
 
-  const autoSaveTimerRef = useRef<NodeJS.Timeout>();
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const formRef = useRef<HTMLFormElement>(null);
 
   // ============================================================================
@@ -411,7 +411,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
           fieldElement = (
             <textarea
               {...commonProps}
-              value={value}
+              value={value as string | number | readonly string[] | undefined}
               onChange={(e) => handleFieldChange(field.name, e.target.value)}
               placeholder={field.placeholder}
               rows={field.rows || 4}
@@ -433,7 +433,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
           fieldElement = (
             <select
               {...commonProps}
-              value={value}
+              value={value as string | number | readonly string[] | undefined}
               onChange={(e) => handleFieldChange(field.name, e.target.value)}
               multiple={field.multiple}
               className={cn(
@@ -451,7 +451,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
                 <option value="">{field.placeholder}</option>
               )}
               {field.options?.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={String(option.value)} value={String(option.value)}>
                   {option.label}
                 </option>
               ))}
@@ -478,11 +478,11 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
           fieldElement = (
             <div className="space-y-2">
               {field.options?.map((option) => (
-                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                <label key={String(option.value)} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name={field.name}
-                    value={option.value}
+                    value={String(option.value)}
                     checked={value === option.value}
                     onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     disabled={field.disabled || loading}
@@ -518,7 +518,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
               <Input
                 {...commonProps}
                 type={showPassword[field.name] ? 'text' : 'password'}
-                value={value}
+                value={value as string | number | readonly string[] | undefined}
                 onChange={(e) => handleFieldChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
                 autoComplete={field.autoComplete}
@@ -548,7 +548,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
             <Input
               {...commonProps}
               type={field.type}
-              value={value}
+              value={value as string | number | readonly string[] | undefined}
               onChange={(e) => handleFieldChange(field.name, e.target.value)}
               placeholder={field.placeholder}
               autoComplete={field.autoComplete}

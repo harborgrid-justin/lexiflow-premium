@@ -328,6 +328,8 @@ export interface ModuleDefinition {
   label: string;
   component: LazyExoticComponent<React.ComponentType<unknown>>;
   requiresAdmin?: boolean;
+  requiresAttorney?: boolean;
+  requiresStaff?: boolean;
   hidden?: boolean; // If true, don't show in sidebar navigation (e.g., Create Case)
   intentMatcher?: (intent: string, context: unknown) => boolean;
   category: NavCategory;

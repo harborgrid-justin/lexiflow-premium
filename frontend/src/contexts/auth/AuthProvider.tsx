@@ -14,6 +14,7 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
+import type { User } from '@/types';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AuthActionsContext, AuthStateContext } from './authContexts';
 import type { AuthActionsValue, AuthEvent, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';

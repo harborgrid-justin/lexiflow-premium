@@ -49,6 +49,12 @@
 export * from './theme';
 
 // ============================================================================
+// NAVIGATION COMPONENTS
+// ============================================================================
+export { SidebarFooter } from './organisms/Sidebar/SidebarFooter';
+export { SidebarHeader } from './organisms/Sidebar/SidebarHeader';
+
+// ============================================================================
 // STUB COMPONENTS (temporary - to be implemented)
 // ============================================================================
 import React from 'react';

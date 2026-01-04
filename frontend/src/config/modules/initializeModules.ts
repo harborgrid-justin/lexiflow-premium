@@ -9,25 +9,34 @@ import { NewCasePage, UserProfileManager } from "./lazyComponents";
 export const initializeModules = () => {
   const modules = NAVIGATION_ITEMS.flatMap((item) => {
     const { children, ...itemWithoutChildren } = item;
-    const mainModule = {
+    const component = COMPONENT_MAP[item.id];
+    if (!component) return [];
+
+    const mainModule: ModuleDefinition = {
       ...itemWithoutChildren,
-      component: COMPONENT_MAP[item.id],
+      component,
     };
 
     if (children && children.length > 0) {
-      const childModules = children.map((child) => ({
-        id: child.id,
-        label: child.label,
-        icon: child.icon,
-        category: item.category,
-        component: COMPONENT_MAP[child.id],
-        hidden: true,
-      }));
+      const childModules = children
+        .map((child) => {
+          const childComponent = COMPONENT_MAP[child.id];
+          if (!childComponent) return null;
+          return {
+            id: child.id,
+            label: child.label,
+            icon: child.icon,
+            category: item.category,
+            component: childComponent,
+            hidden: true,
+          } as ModuleDefinition;
+        })
+        .filter((m): m is ModuleDefinition => m !== null);
       return [mainModule, ...childModules];
     }
 
     return [mainModule];
-  }).filter((m): m is ModuleDefinition => m.component !== undefined);
+  });
 
   ModuleRegistry.registerBatch(modules);
 

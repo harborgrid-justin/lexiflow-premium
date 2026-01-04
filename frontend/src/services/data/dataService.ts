@@ -118,6 +118,8 @@ import {
   isBackendApiEnabled,
   litigationApi,
   workflowApi,
+  type CreateTemplateDto,
+  type UpdateTemplateDto,
 } from "@/api";
 import type { CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
 
@@ -1425,8 +1427,8 @@ Object.defineProperties(DataServiceBase, {
         ? {
             getAll: () => draftingApi.getAllTemplates(),
             getById: (id: string) => draftingApi.getTemplateById(id),
-            add: (item: any) => draftingApi.createTemplate(item),
-            update: (id: string, item: any) =>
+            add: (item: CreateTemplateDto) => draftingApi.createTemplate(item),
+            update: (id: string, item: UpdateTemplateDto) =>
               draftingApi.updateTemplate(id, item),
             delete: (id: string) => draftingApi.deleteTemplate(id),
           }

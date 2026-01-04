@@ -22,10 +22,10 @@ import { HolographicRouting } from '@/services/infrastructure/holographicRouting
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { HighlightedText } from '@/components/ui/atoms/HighlightedText/HighlightedText';
@@ -164,7 +164,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                     {results.length > 0 ? (
                         <div className="py-1">
                             {/* Optional Quick Actions Header */}
-                            {results.length > 0 && results[0].score && results[0].score > 80 && (
+                            {results.length > 0 && results[0] && typeof results[0].score === 'number' && results[0].score > 80 && (
                                 <div className={cn("px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
                                     <span>Top Matches</span>
                                     <span className="flex items-center gap-1"><Zap className="h-2 w-2" /> Instant</span>

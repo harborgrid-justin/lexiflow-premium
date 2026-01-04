@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@/providers';
 import type { PleadingDocument } from '@/types';
-import type { CaseId } from '@/types/primitives';
+import type { CaseId, DocumentId } from '@/types/primitives';
 import { PleadingAnalytics, PleadingDashboard, PleadingDrafts, PleadingFilingQueue, PleadingTemplates } from '@features/litigation/pleadings';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";

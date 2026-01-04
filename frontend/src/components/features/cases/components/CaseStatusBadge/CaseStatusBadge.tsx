@@ -7,8 +7,8 @@
  * @module components/features/cases/CaseStatusBadge
  */
 
-import type { CaseStatus } from '@/types/enums';
 import { cn } from '@/lib/utils';
+import type { CaseStatus } from '@/types/enums';
 
 export interface CaseStatusBadgeProps {
   /** The case status to display */
@@ -128,7 +128,13 @@ export function CaseStatusBadge({
   className,
   showIcon = false,
 }: CaseStatusBadgeProps) {
-  const config = STATUS_CONFIG[status] || STATUS_CONFIG['Active'];
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG['Active'] || {
+    label: status,
+    bgColor: 'bg-gray-100',
+    textColor: 'text-gray-800',
+    borderColor: 'border-gray-200',
+    icon: null
+  };
   const displayLabel = config.label || status;
 
   return (
@@ -157,7 +163,7 @@ export function CaseStatusBadge({
  * Helper function to get status color for other use cases
  */
 export function getStatusColor(status: string): string {
-  const config = STATUS_CONFIG[status] || STATUS_CONFIG['Active'];
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG['Active'] || { textColor: 'text-gray-800' };
   return config.textColor;
 }
 

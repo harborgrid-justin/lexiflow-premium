@@ -37,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const view = url.searchParams.get("view") || "month";
   const dateStr = url.searchParams.get("date") || new Date().toISOString().split('T')[0];
-  const date = parseISO(dateStr);
+  const date = parseISO(dateStr || new Date().toISOString());
 
   let startDate: Date;
   let endDate: Date;

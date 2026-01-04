@@ -163,7 +163,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{currentUser?.name || 'Guest'}</p>
             <p className={cn("text-[10px] uppercase font-medium tracking-wide", theme.text.secondary)}>{currentUser?.role || 'User'}</p>
           </div>
-          <UserAvatar user={currentUser} size="sm" showStatus={true} isOnline={true} className="shadow-sm" />
+          <UserAvatar user={currentUser ? { ...currentUser, name: currentUser.name || `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() } : undefined} size="sm" showStatus={true} isOnline={true} className="shadow-sm" />
         </button>
       </div>
     </header>

@@ -50,9 +50,13 @@ export function parseSearchSyntax(query: string): {
   const matches = query.matchAll(syntaxPattern);
 
   for (const match of matches) {
-    const [full, key, value] = match;
-    filters[key] = value;
-    text = text.replace(full, "").trim();
+    if (match.length >= 3) {
+      const [full, key, value] = match;
+      if (key && value) {
+        filters[key] = value;
+        text = text.replace(full, "").trim();
+      }
+    }
   }
 
   return { text, filters };

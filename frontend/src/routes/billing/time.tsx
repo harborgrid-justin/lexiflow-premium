@@ -9,6 +9,16 @@ import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs }
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
+interface ActionData {
+  success: boolean;
+  error?: string;
+  message?: string;
+}
+
+interface TimeEntriesRouteProps {
+  actionData?: ActionData;
+}
+
 // ============================================================================
 // Meta Tags
 // ============================================================================

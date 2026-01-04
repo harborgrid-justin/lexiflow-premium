@@ -13,13 +13,15 @@
  * - Recent searches history
  */
 
-import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
+import masterConfig from '@/config/master.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
 import { Calendar, Clock, Command, Hash, Search, Tag, TrendingUp, X } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+const SEARCH_DEBOUNCE_MS = masterConfig.SEARCH_DEBOUNCE_MS || 300;
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -118,9 +120,13 @@ function parseSearchSyntax(query: string): {
   const matches = Array.from(query.matchAll(syntaxRegex));
 
   matches.forEach(match => {
-    const [full, key, value] = match;
-    filters[key] = value;
-    text = text.replace(full, '').trim();
+    if (match.length >= 3) {
+      const [full, key, value] = match;
+      if (key && value) {
+        filters[key] = value;
+        text = text.replace(full, '').trim();
+      }
+    }
   });
 
   return { text, filters };

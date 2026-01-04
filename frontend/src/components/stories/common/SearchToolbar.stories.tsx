@@ -1,4 +1,4 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
@@ -89,6 +89,19 @@ export const SearchToolbarWithActionsStory = () => {
         </>
       }
     />
+  );
+};
+
+const WithButtonsStory = () => {
+  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState({});
+  return (
+    <ThemeProvider>
+      <SearchToolbar
+        onSearch={(q, f) => { setQuery(q); setFilters(f); }}
+        placeholder="Search with buttons"
+      />
+    </ThemeProvider>
   );
 };
 

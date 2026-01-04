@@ -7,6 +7,7 @@
  */
 
 import { DocumentUploader, type UploadMetadata } from '@/components/features/documents/components';
+import { DataService } from '@/services/data/dataService';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';

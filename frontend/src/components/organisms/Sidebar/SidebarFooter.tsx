@@ -84,7 +84,7 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
         onClick={() => onNavigate(PATHS.PROFILE)}
         className={styles.getUserButton(theme, activeView === PATHS.PROFILE)}
       >
-        <UserAvatar user={currentUser} className={styles.userAvatarWrapper} />
+        <UserAvatar user={currentUser ? { name: currentUser.name || `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() } : undefined} className={styles.userAvatarWrapper} />
         <div className={styles.userInfoContainer}>
           <p className={styles.getUserName(theme)}>{currentUser?.name || 'Guest'}</p>
           <p className={styles.getUserRole(theme)}>{currentUser?.role || 'User'}</p>

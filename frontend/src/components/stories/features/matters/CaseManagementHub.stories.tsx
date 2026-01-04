@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import CaseManagementHub from '@/features/cases/components/list/CaseManagementHub';
+import CaseManagementHub from '@/components/features/cases/CaseManagementHub';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@/providers';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * CaseManagementHub is the centralized case creation and management interface
  * providing matter intake, conflict checking, and initial case setup workflows.
- * 
+ *
  * ## Features
  * - Smart matter intake forms
  * - Automated conflict checking

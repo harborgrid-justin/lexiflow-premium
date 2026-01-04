@@ -99,6 +99,16 @@ export interface EnterpriseDataTableProps<T = Record<string, unknown>> {
   loading?: boolean;
 }
 
+// Helper for safe comparison
+const compareValues = (a: unknown, b: unknown): number => {
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a - b;
+  }
+  const strA = String(a);
+  const strB = String(b);
+  return strA.localeCompare(strB, undefined, { numeric: true, sensitivity: 'base' });
+};
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -208,7 +218,7 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
 
       if (aVal === bVal) return 0;
 
-      const comparison = aVal > bVal ? 1 : -1;
+      const comparison = compareValues(aVal, bVal);
       return sortOrder === 'asc' ? comparison : -comparison;
     });
   }, [filteredData, sortBy, sortOrder, columns, getCellValue]);
@@ -246,7 +256,9 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
 
   useEffect(() => {
     if (onSelectionChange) {
-      const selected = Array.from(selectedRows).map((idx) => sortedData[idx]);
+      const selected = Array.from(selectedRows)
+        .map((idx) => sortedData[idx])
+        .filter((item): item is T => item !== undefined);
       onSelectionChange(selected);
     }
   }, [selectedRows, sortedData, onSelectionChange]);
@@ -346,6 +358,7 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
 
   const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
     const row = sortedData[index];
+    if (!row) return null;
     const isSelected = selectedRows.has(index);
 
     return (
@@ -439,7 +452,9 @@ export const EnterpriseDataTable = <T extends Record<string, unknown>>({
                   size="sm"
                   icon={action.icon}
                   onClick={() => {
-                    const selected = Array.from(selectedRows).map((i) => sortedData[i]);
+                    const selected = Array.from(selectedRows)
+                      .map((i) => sortedData[i])
+                      .filter((item): item is T => item !== undefined);
                     action.onClick(selected);
                   }}
                 >

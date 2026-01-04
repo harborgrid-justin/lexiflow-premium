@@ -182,10 +182,10 @@ export const ResearchService = {
     return [];
   },
 
-  getHistory: async (): Promise<any[]> => {
+  getHistory: async (): Promise<unknown[]> => {
     if (isBackendApiEnabled()) {
       try {
-        return await apiClient.get<any[]>("/research/history");
+        return await apiClient.get<unknown[]>("/research/history");
       } catch (error) {
         console.error("[ResearchService.getHistory] Backend error:", error);
       }

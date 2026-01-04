@@ -28,7 +28,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, ClientStatus, PaymentTerms } from '@/types';
+import { Case, CaseId, ClientStatus, EntityId, PaymentTerms } from '@/types';
 
 interface CaseDetailHeaderProps {
     id: string;

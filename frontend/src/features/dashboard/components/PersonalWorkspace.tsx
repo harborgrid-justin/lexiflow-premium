@@ -160,7 +160,11 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                     {activeTab === 'notifications' && (
                         <div className="lg:col-span-2">
                             <NotificationCenter
-                                notifications={notifications}
+                                notifications={notifications.map(n => ({
+                                    ...n,
+                                    type: n.type as 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task',
+                                    timestamp: typeof n.timestamp === 'number' ? new Date(n.timestamp).toISOString() : n.timestamp
+                                }))}
                                 unreadCount={notifications.filter((n: UINotification) => !n.read).length}
                                 onMarkAsRead={handleMarkAsRead}
                                 onMarkAllAsRead={handleMarkAllAsRead}

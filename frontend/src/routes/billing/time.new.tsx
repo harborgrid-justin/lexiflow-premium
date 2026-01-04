@@ -65,6 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
 interface ActionData {
   success: boolean;
   error?: string;
+  message?: string;
   redirect?: string;
 }
 
@@ -72,8 +73,8 @@ export default function NewTimeEntryRoute({ actionData }: { actionData: ActionDa
   const navigate = useNavigate();
 
   // Redirect after successful creation
-  if (actionData?.success && actionData?.redirect) {
-    setTimeout(() => navigate(actionData.redirect), 1500);
+  if (actionData?.success && actionData.redirect) {
+    setTimeout(() => navigate(actionData.redirect as string), 1500);
   }
 
   return (

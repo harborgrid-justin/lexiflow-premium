@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { CaseId, EvidenceId, EvidenceItem, LegalDocument, WorkflowTask } from '@/types';
+import { CaseId, EvidenceId, EvidenceItem, LegalDocument, UUID, WorkflowTask } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
 const DocumentAssembly = lazy(() => import('@/features/operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
@@ -91,6 +91,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         const files = e.target.files;
         if (!files || files.length === 0) return;
         const file = files[0];
+        if (!file) return;
         // Upload to IDB via DocumentService
         const savedDoc = await DocumentService.uploadDocument(file, {
           caseId: (documents.length > 0 ? documents[0]?.caseId : 'General') as CaseId,

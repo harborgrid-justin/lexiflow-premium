@@ -36,9 +36,9 @@ export async function loader() {
       DataService.hr.getUtilizationMetrics()
     ]);
 
-    const activeMatters = metrics.reduce((acc, m) => acc + m.cases, 0);
+    const activeMatters = metrics.reduce((acc: number, m: { cases: number }) => acc + m.cases, 0);
     const avgUtilization = metrics.length > 0
-      ? metrics.reduce((acc, m) => acc + m.utilization, 0) / metrics.length
+      ? metrics.reduce((acc: number, m: { utilization: number }) => acc + m.utilization, 0) / metrics.length
       : 0;
 
     return {

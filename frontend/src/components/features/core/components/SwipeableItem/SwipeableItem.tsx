@@ -60,8 +60,10 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
   // Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     if (disabled || e.touches.length === 0) return;
-    startX.current = e.touches[0].clientX;
-    startY.current = e.touches[0].clientY;
+    const touch = e.touches[0];
+    if (!touch) return;
+    startX.current = touch.clientX;
+    startY.current = touch.clientY;
     currentX.current = 0; // Reset delta
     isDragging.current = true;
     isScrolling.current = false;
@@ -73,8 +75,10 @@ export const SwipeableItem = React.memo<SwipeableItemProps>(({
     // If we've already determined this is a scroll interaction, ignore swipe logic
     if (isScrolling.current) return;
 
-    const touchX = e.touches[0].clientX;
-    const touchY = e.touches[0].clientY;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
     const diffX = touchX - startX.current;
     const diffY = touchY - startY.current;
 

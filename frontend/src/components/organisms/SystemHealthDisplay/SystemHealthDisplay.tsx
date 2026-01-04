@@ -1,6 +1,6 @@
-import React from 'react';
-import { Database, Cloud, CheckCircle, XCircle } from 'lucide-react';
 import { useDataSource } from '@/providers';
+import { CheckCircle, Cloud, Database, XCircle } from 'lucide-react';
+import React from 'react';
 
 interface ServiceCoverageProps {
   className?: string;
@@ -131,8 +131,11 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
     if (!acc[service.category]) {
       acc[service.category] = { total: 0, backend: 0 };
     }
-    acc[service.category].total++;
-    if (service.hasBackend) acc[service.category].backend++;
+    const categoryStats = acc[service.category];
+    if (categoryStats) {
+      categoryStats.total++;
+      if (service.hasBackend) categoryStats.backend++;
+    }
     return acc;
   }, {} as Record<string, { total: number; backend: number }>);
 
@@ -163,9 +166,8 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
               </div>
               <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                 <div
-                  className={`h-2 rounded-full transition-all ${
-                    categoryPercent === 100 ? 'bg-emerald-500' : 'bg-amber-500'
-                  }`}
+                  className={`h-2 rounded-full transition-all ${categoryPercent === 100 ? 'bg-emerald-500' : 'bg-amber-500'
+                    }`}
                   style={{ width: `${categoryPercent}%` }}
                 />
               </div>
@@ -221,7 +223,10 @@ export const SystemHealthDisplay: React.FC<{
             {Object.entries(
               SERVICE_COVERAGE.reduce((acc: Record<string, ServiceInfo[]>, service) => {
                 if (!acc[service.category]) acc[service.category] = [];
-                acc[service.category].push(service);
+                const categoryServices = acc[service.category];
+                if (categoryServices) {
+                  categoryServices.push(service);
+                }
                 return acc;
               }, {} as Record<string, ServiceInfo[]>)
             ).map(([category, services]) => (

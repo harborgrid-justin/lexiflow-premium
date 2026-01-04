@@ -347,7 +347,7 @@ export const AdminService = {
     return [];
   },
 
-  getSystemSettings: async (): Promise<any> => {
+  getSystemSettings: async (): Promise<Record<string, unknown>> => {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/admin/settings");

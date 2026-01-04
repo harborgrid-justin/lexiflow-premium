@@ -144,7 +144,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
       // Debounce resize updates
       if (resizeTimeout.current) clearTimeout(resizeTimeout.current);
       resizeTimeout.current = setTimeout(() => {
-        if (isMounted.current && width > 0) {
+        if (isMounted.current && typeof width === 'number' && width > 0) {
           setContainerWidth(width);
         }
       }, 200);

@@ -7,11 +7,33 @@
  * @module components/features/cases/CaseCard
  */
 
-import type { Case } from '@/types';
 import { cn } from '@/lib/utils';
+import type { Case } from '@/types';
+import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router';
 import { CaseStatusBadge } from '../CaseStatusBadge';
-import { formatDistanceToNow } from 'date-fns';
+
+interface CaseCardContainerProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  to?: string;
+  className?: string;
+}
+
+const CaseCardContainer = ({ children, onClick, to, className }: CaseCardContainerProps) => {
+  if (onClick) {
+    return (
+      <div onClick={onClick} role="button" tabIndex={0} className={className}>
+        {children}
+      </div>
+    );
+  }
+  return (
+    <Link to={to || '#'} className={className}>
+      {children}
+    </Link>
+  );
+};
 
 export interface CaseCardProps {
   /** The case data to display */
@@ -83,16 +105,12 @@ export function CaseCard({
     }
   };
 
-  const CardWrapper = onClick ? 'div' : Link;
-  const wrapperProps = onClick
-    ? { onClick: handleClick, role: 'button', tabIndex: 0 }
-    : { to: `/cases/${caseData.id}` };
-
   const isGridVariant = variant === 'grid';
 
   return (
-    <CardWrapper
-      {...wrapperProps}
+    <CaseCardContainer
+      onClick={onClick ? handleClick : undefined}
+      to={onClick ? undefined : `/cases/${caseData.id}`}
       className={cn(
         'group relative overflow-hidden rounded-lg border bg-white shadow-sm transition-all hover:shadow-md dark:bg-gray-800 dark:border-gray-700',
         onClick && 'cursor-pointer',

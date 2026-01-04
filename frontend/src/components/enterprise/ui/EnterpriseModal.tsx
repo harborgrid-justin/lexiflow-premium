@@ -146,6 +146,16 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
   }, [isOpen]);
 
   // Handle escape key
+  // ============================================================================
+  // HANDLERS
+  // ============================================================================
+
+  const handleClose = useCallback(() => {
+    if (!isProcessing) {
+      onClose();
+    }
+  }, [isProcessing, onClose]);
+
   useEffect(() => {
     if (!isOpen || !closeOnEscape) return;
 
@@ -159,16 +169,6 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeOnEscape, handleClose]);
 
-  // ============================================================================
-  // HANDLERS
-  // ============================================================================
-
-  const handleClose = useCallback(() => {
-    if (!isProcessing) {
-      onClose();
-    }
-  }, [isProcessing, onClose]);
-
   const handleBackdropClick = useCallback(() => {
     if (closeOnBackdrop) {
       handleClose();
@@ -181,12 +181,12 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
       if (!steps || stepIndex < 0 || stepIndex >= steps.length) return;
 
       const currentStepData = steps[currentStepIndex];
-      if (currentStepData.onExit) {
+      if (currentStepData?.onExit) {
         await currentStepData.onExit();
       }
 
       const newStepData = steps[stepIndex];
-      if (newStepData.onEnter) {
+      if (newStepData?.onEnter) {
         await newStepData.onEnter();
       }
 
@@ -326,7 +326,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
 
     const currentStepData = steps[currentStepIndex];
     const isLastStep = currentStepIndex === steps.length - 1;
-    const isValid = currentStepData.isValid ?? true;
+    const isValid = currentStepData?.isValid ?? true;
 
     return (
       <div className={cn('px-6 py-4 border-t flex items-center justify-between', theme.border.default, theme.surface.default)}>
@@ -340,7 +340,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
         </Button>
 
         <div className="flex items-center gap-2">
-          {currentStepData.canSkip && !isLastStep && (
+          {currentStepData?.canSkip && !isLastStep && (
             <Button variant="ghost" onClick={handleNext} disabled={isProcessing}>
               Skip
             </Button>
@@ -592,7 +592,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
 
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-6">
-                {steps ? (
+                {steps && steps[currentStepIndex] ? (
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentStepIndex}

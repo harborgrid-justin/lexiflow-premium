@@ -3,9 +3,9 @@
  * Displays upcoming deadlines with priority indicators and court-specific features
  */
 
-import React, { useState } from 'react';
 import type { CalendarEvent } from '@/api/workflow/calendar-api';
-import { formatDistanceToNow, differenceInDays, format } from 'date-fns';
+import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
+import { useState } from 'react';
 
 export interface DeadlineListProps {
   events: CalendarEvent[];
@@ -43,7 +43,7 @@ export function DeadlineList({
       case 'today': {
         const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
         return eventDay.getTime() === today.getTime();
-        }
+      }
       case 'overdue':
         return eventDate < today && !event.completed;
       default:
@@ -161,9 +161,8 @@ export function DeadlineList({
               <div
                 key={event.id}
                 onClick={() => onEventClick?.(event)}
-                className={`group relative flex items-start gap-3 rounded-lg border-l-4 p-4 transition-colors ${priorityColor} ${
-                  onEventClick ? 'cursor-pointer hover:shadow-md' : ''
-                } ${event.completed ? 'opacity-60' : ''}`}
+                className={`group relative flex items-start gap-3 rounded-lg border-l-4 p-4 transition-colors ${priorityColor} ${onEventClick ? 'cursor-pointer hover:shadow-md' : ''
+                  } ${event.completed ? 'opacity-60' : ''}`}
               >
                 {/* Icon */}
                 <div className="flex-shrink-0 pt-0.5">

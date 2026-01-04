@@ -21,8 +21,9 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { TabbedPageLayout, TabConfigItem } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import type { TabConfigItem } from '@/types/layout';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config

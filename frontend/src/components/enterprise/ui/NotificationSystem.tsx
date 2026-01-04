@@ -96,8 +96,7 @@ const ToastNotification: React.FC<{
   notification: Notification;
   onDismiss: (id: string) => void;
 }> = ({ notification, onDismiss }) => {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const { theme, isDark } = useTheme();
 
   const icons = {
     success: CheckCircle2,

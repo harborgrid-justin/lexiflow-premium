@@ -3,7 +3,7 @@
  * Displays unread notification count with animated indicator
  */
 
-import React from 'react';
+
 
 export interface NotificationBadgeProps {
   count: number;

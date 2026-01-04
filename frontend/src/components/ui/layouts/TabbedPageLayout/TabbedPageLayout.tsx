@@ -17,6 +17,8 @@ import { TabConfigItem } from '@/types/layout';
 import { cn } from '@/utils/cn';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
+export type { TabConfigItem };
+
 interface TabbedPageLayoutProps {
   pageTitle: string;
   pageSubtitle: string;
@@ -47,7 +49,9 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
     const parent = tabConfig.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
       const newTabId = parent.subTabs![0]?.id;
-      onTabChange(newTabId);
+      if (newTabId) {
+        onTabChange(newTabId);
+      }
     }
   }, [tabConfig, onTabChange]);
 

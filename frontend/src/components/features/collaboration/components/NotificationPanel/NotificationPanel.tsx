@@ -7,7 +7,7 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { NotificationService } from '@/services/domain/NotificationDomain';
-import type { NotificationGroup } from '@/types';
+import type { NotificationGroup, UINotification } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';
@@ -50,9 +50,15 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
       setNotifications(allNotifications);
       // Group notifications by similar titles
       const grouped = allNotifications.reduce((acc: (Notification | NotificationGroup)[], notification) => {
-        const existing = acc.find((item): item is NotificationGroup => 'notifications' in item && item.notifications[0].title === notification.title);
+        const existing = acc.find((item): item is NotificationGroup => 'notifications' in item && item.notifications.length > 0 && item.notifications[0]?.title === notification.title);
         if (existing) {
-          existing.notifications.push(notification);
+          const uiNotification: UINotification = {
+            ...notification,
+            timestamp: notification.timestamp ? new Date(notification.timestamp).getTime() : new Date(notification.createdAt).getTime(),
+            priority: (notification.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
+            type: notification.type as 'info' | 'success' | 'warning' | 'error'
+          };
+          existing.notifications.push(uiNotification);
           existing.count++;
           const notifDate = notification.createdAt || notification.timestamp;
           if (notifDate && new Date(notifDate).getTime() > existing.latestTimestamp) {
@@ -64,9 +70,21 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
           const groupIndex = acc.indexOf(single);
           const singleDate = single.createdAt || single.timestamp || new Date().toISOString();
           const notifDate = notification.createdAt || notification.timestamp || new Date().toISOString();
+          const singleUI: UINotification = {
+            ...single,
+            timestamp: single.timestamp ? new Date(single.timestamp).getTime() : new Date(single.createdAt).getTime(),
+            priority: (single.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
+            type: single.type as 'info' | 'success' | 'warning' | 'error'
+          };
+          const notificationUI: UINotification = {
+            ...notification,
+            timestamp: notification.timestamp ? new Date(notification.timestamp).getTime() : new Date(notification.createdAt).getTime(),
+            priority: (notification.priority as 'low' | 'normal' | 'high' | 'urgent') || 'normal',
+            type: notification.type as 'info' | 'success' | 'warning' | 'error'
+          };
           const newGroup: NotificationGroup = {
             groupKey: notification.title,
-            notifications: [single, notification],
+            notifications: [singleUI, notificationUI],
             count: 2,
             latestTimestamp: Math.max(new Date(singleDate).getTime(), new Date(notifDate).getTime()),
             collapsed: false,

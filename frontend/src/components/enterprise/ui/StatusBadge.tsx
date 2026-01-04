@@ -50,8 +50,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   animated = false,
   showDot = true,
   className }) => {
-  const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
+  const { theme, isDark } = useTheme();
+  const isDarkMode = isDark;
   const themeStyles = isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900';
   console.log('StatusBadge theme:', { theme, isDarkMode, themeStyles });
 

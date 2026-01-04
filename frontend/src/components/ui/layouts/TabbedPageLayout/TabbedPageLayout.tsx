@@ -57,7 +57,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = tabConfig.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      const newTabId = parent.subTabs[0].id;
+      const newTabId = parent.subTabs![0].id;
       onTabChange(newTabId);
     }
   }, [tabConfig, onTabChange]);

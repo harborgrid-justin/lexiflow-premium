@@ -173,7 +173,7 @@ export function useUpdateCaseMutation() {
 
         return { previousCase };
       },
-      onError: (_error, { id }, context) => {
+      onError: (_error, { id }, context: any) => {
         // Rollback on error
         if (context?.previousCase) {
           queryClient.setQueryData(
@@ -332,7 +332,7 @@ export function useUpdateTaskMutation() {
 
         return { previousTask };
       },
-      onError: (_error, { id }, context) => {
+      onError: (_error, { id }, context: any) => {
         if (context?.previousTask) {
           queryClient.setQueryData(
             enterpriseQueryKeys.tasks.byId(id),

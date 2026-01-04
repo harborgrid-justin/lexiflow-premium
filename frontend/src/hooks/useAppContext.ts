@@ -37,7 +37,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { isBackendApiEnabled } from "@/api";
 import { DataService } from "@/services/data/dataService";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import type { UserId } from "@/types";
+import type { UserId, UserRole } from "@/types";
 
 // Hooks & Context
 import { useAuthState } from "@/contexts/auth/AuthProvider";
@@ -152,7 +152,7 @@ export function useAppContext(): UseAppControllerReturn {
         name: authUser.name || authUser.email.split("@")[0],
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
-        role: authUser.role as string,
+        role: authUser.role as UserRole,
         avatarUrl: authUser.avatarUrl,
         permissions: (authUser.permissions || []) as string[],
         createdAt: new Date().toISOString(),

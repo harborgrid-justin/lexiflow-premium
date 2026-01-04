@@ -33,7 +33,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { cn } from '@/utils/cn';
 
 // Types
-import type { CalendarEventItem, User, WorkflowTask } from '@/types';
+import type { CalendarEventItem, User } from '@/types';
 import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
@@ -53,6 +53,15 @@ interface PersonalWorkspaceProps {
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
 
+    const { data: notifications = [] } = useQuery<any[]>(
+        ['notifications'],
+        () => Promise.resolve([]) // Placeholder
+    );
+
+    const handleMarkAsRead = (_id: string) => { };
+    const handleMarkAllAsRead = () => { };
+    const handleDeleteNotification = (_id: string) => { };
+
     const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
         QUERY_KEYS.TASKS.ALL,
         () => DataService.tasks.getAll()
@@ -67,7 +76,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
 
-    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
+    const myTasks = safeAllTasks.filter((t: WorkflowTask) => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;
@@ -101,7 +110,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                     {myTasks.length === 0 &&
                                         <p className="text-center text-sm text-slate-500 py-8">No pending tasks assigned
                                             to you.</p>}
-                                    {myTasks.map((task) => (
+                                    {myTasks.map((task: WorkflowTask) => (
                                         <div key={`task-${task.caseId}-${task.title}`}
                                             className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
 
@@ -149,7 +158,13 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
 
                     {activeTab === 'notifications' && (
                         <div className="lg:col-span-2">
-                            <NotificationCenter />
+                            <NotificationCenter
+                                notifications={notifications}
+                                unreadCount={notifications.filter((n: any) => !n.read).length}
+                                onMarkAsRead={handleMarkAsRead}
+                                onMarkAllAsRead={handleMarkAllAsRead}
+                                onDelete={handleDeleteNotification}
+                            />
                         </div>
                     )}
                 </>

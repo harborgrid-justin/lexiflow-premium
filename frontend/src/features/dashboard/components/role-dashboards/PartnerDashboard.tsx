@@ -6,6 +6,7 @@
 
 import { ChartCard, KPICard, StatWidget } from '@/components/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';

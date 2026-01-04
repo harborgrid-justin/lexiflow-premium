@@ -7,6 +7,8 @@
  * @module routes/research/index
  */
 
+import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -28,13 +30,13 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement research history fetching
-  // const url = new URL(request.url);
-  // const query = url.searchParams.get("q");
-  // const results = query ? await api.research.search(query) : [];
-  // const recentSearches = await api.research.getRecentSearches();
-
-  return { items: [], totalCount: 0, recentSearches: [] };
+  try {
+    const history = await DataService.research.getHistory();
+    return { items: [], totalCount: 0, recentSearches: history };
+  } catch (error) {
+    console.error("Failed to load research history", error);
+    return { items: [], totalCount: 0, recentSearches: [] };
+  }
 }
 
 // ============================================================================
@@ -45,26 +47,43 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "search":
-      // TODO: Handle search query
-      return { success: true, results: [] };
-    case "save":
-      // TODO: Handle saving research
-      return { success: true, message: "Research saved" };
-    case "delete":
-      // TODO: Handle deleting saved research
-      return { success: true, message: "Research deleted" };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "search": {
+        const query = formData.get("q");
+        if (typeof query === 'string' && query) {
+          const results = await DataService.research.searchCases(query);
+          return { success: true, results };
+        }
+        return { success: false, error: "Query required" };
+      }
+      case "save": {
+        const data = Object.fromEntries(formData);
+        // Remove intent from data
+        delete data.intent;
+        await DataService.research.add(data);
+        return { success: true, message: "Research saved" };
+      }
+      case "delete": {
+        const id = formData.get("id");
+        if (typeof id === 'string') {
+          await DataService.research.delete(id);
+          return { success: true, message: "Research deleted" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error("Research action failed", error);
+    return { success: false, error: "Action failed" };
   }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
-
-import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
 
 export default function ResearchIndexRoute() {
   return <ResearchTool />;

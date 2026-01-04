@@ -1,11 +1,10 @@
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { useQuery } from '@/hooks/backend';
-import { useSelection } from '@/hooks/core';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataDictionaryItem } from '@/types';
 import { cn } from '@/utils/cn';
@@ -18,7 +17,7 @@ export const DataDictionary: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [activeDomain, setActiveDomain] = useState('All');
-    const itemSelection = useSelection<DataDictionaryItem>();
+    const [selectedItem, setSelectedItem] = React.useState<DataDictionaryItem | null>(null);
 
     const { data: items = [], isLoading, error, refetch } = useQuery<DataDictionaryItem[]>(
         ['catalog', 'dictionary'],
@@ -45,11 +44,11 @@ export const DataDictionary: React.FC = () => {
     };
 
     const handleSelect = (item: DataDictionaryItem) => {
-        itemSelection.select(item);
+        setSelectedItem(item);
     };
 
     const handleCloseDetail = () => {
-        itemSelection.deselect();
+        setSelectedItem(null);
         refetch(); // Refresh list on close to catch edits
     };
 
@@ -73,8 +72,8 @@ export const DataDictionary: React.FC = () => {
     );
 
     if (error) return <ErrorState message="Failed to load data dictionary" onRetry={refetch} />;
-    if (itemSelection.selected) {
-        return <DictionaryItemDetail item={itemSelection.selected} onClose={handleCloseDetail} />;
+    if (selectedItem) {
+        return <DictionaryItemDetail item={selectedItem} onClose={handleCloseDetail} />;
     }
 
     return (

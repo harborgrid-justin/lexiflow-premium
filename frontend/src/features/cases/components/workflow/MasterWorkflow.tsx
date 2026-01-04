@@ -233,7 +233,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = WORKFLOW_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id as WorkflowView);
+      setActiveTab(parent.subTabs![0].id as WorkflowView);
     }
   }, [setActiveTab]);
 
@@ -342,15 +342,15 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
           {/* Desktop Parent Navigation */}
           <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
             {WORKFLOW_TABS.map(parent => (
-              <button key={parent.id} onClick={() => handleParentTabChange(parent.id)} className={cn("flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2", activeParentTab.id === parent.id ? cn("border-current", theme.primary.text) : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`))}>
-                <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />{parent.label}
+              <button key={parent.id} onClick={() => handleParentTabChange(parent.id)} className={cn("flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2", activeParentTab?.id === parent.id ? cn("border-current", theme.primary.text) : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`))}>
+                <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab?.id === parent.id ? theme.primary.text : theme.text.tertiary)} />{parent.label}
               </button>
             ))}
           </div>
 
           {/* Sub-Navigation (Pills) */}
           <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
-            {activeParentTab.subTabs.map(tab => (
+            {activeParentTab?.subTabs.map(tab => (
               <button key={tab.id} onClick={() => setActiveTab(tab.id as WorkflowView)} className={cn("flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border", activeTab === tab.id ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`))}>
                 <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)} />{tab.label}
               </button>

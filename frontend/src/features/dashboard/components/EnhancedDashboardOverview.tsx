@@ -5,37 +5,37 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
-import React, { useState } from 'react';
-import {
-  Briefcase,
-  Clock,
-  DollarSign,
-  TrendingUp,
-  Users,
-  Target,
-  AlertCircle,
-  Calendar,
-} from 'lucide-react';
-import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
+import { cn } from '@/utils/cn';
+import {
+  AlertCircle,
+  Briefcase,
+  Calendar,
+  Clock,
+  DollarSign,
+  Target,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 // Components
-import { KPICard, ChartCard, ActivityFeed, DeadlinesList } from '@/components/dashboard/widgets';
+import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '@/components/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // ============================================================================
@@ -70,9 +70,8 @@ const CHART_COLORS = {
 
 export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps> = ({
   onSelectCase,
-  _userRole = 'attorney',
 }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const [dateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
   // Fetch dashboard data
@@ -196,16 +195,16 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={caseBreakdown || []}
+                data={(caseBreakdown || []).map(item => ({ name: item.status, value: item.count }))}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percentage }) => `${name}: ${percentage.toFixed(0)}%`}
+                label={({ name, percent }: { name?: string; percent?: number }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
                 outerRadius={100}
                 fill="#8884d8"
-                dataKey="count"
+                dataKey="value"
               >
-                {(caseBreakdown || []).map((entry, index) => (
+                {(caseBreakdown || []).map((_, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS.primary[index % CHART_COLORS.primary.length]} />
                 ))}
               </Pie>
@@ -225,20 +224,20 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={billingData || []}>
-              <CartesianGrid strokeDasharray="3 3" stroke={theme.theme === 'dark' ? '#374151' : '#e5e7eb'} />
+              <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
               <XAxis
                 dataKey="period"
-                stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'}
+                stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'}
                 style={{ fontSize: '12px' }}
               />
               <YAxis
-                stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'}
+                stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'}
                 style={{ fontSize: '12px' }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: theme.theme === 'dark' ? '#1f2937' : '#ffffff',
-                  border: `1px solid ${theme.theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+                  backgroundColor: mode === 'dark' ? '#1f2937' : '#ffffff',
+                  border: `1px solid ${mode === 'dark' ? '#374151' : '#e5e7eb'}`,
                   borderRadius: '8px',
                 }}
               />

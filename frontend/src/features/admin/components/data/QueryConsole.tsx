@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { cn } from '@/utils/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';
@@ -97,7 +97,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
 
     const exportCsv = () => {
         if (!results || results.length === 0) return;
-        const headers = Object.keys(results[0]);
+        const headers = Object.keys(results[0]!);
         const csvRows = [headers.join(",")];
         csvRows.push(...results.map(row => headers.map(h => JSON.stringify(row[h])).join(",")));
         const csvContent = csvRows.join("\n");
@@ -116,9 +116,9 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
 
     const visualizableData = useMemo(() => {
         if (!results || results.length < 1) return null;
-        const keys = Object.keys(results[0]);
-        const strKey = keys.find(k => typeof results[0][k] === 'string');
-        const numKey = keys.find(k => typeof results[0][k] === 'number');
+        const keys = Object.keys(results[0]!);
+        const strKey = keys.find(k => typeof results[0]![k] === 'string');
+        const numKey = keys.find(k => typeof results[0]![k] === 'number');
         if (strKey && numKey) return { data: results.slice(0, 50), strKey, numKey };
         return null;
     }, [results]);
@@ -187,7 +187,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                             {activeResultsTab === 'results' && results && results.length > 0 && (
                                 <div className="flex flex-col h-full">
                                     <div className={cn("flex border-b font-bold text-xs", theme.surface.highlight, theme.border.default)}>
-                                        {Object.keys(results[0]).map(k => (
+                                        {Object.keys(results[0]!).map(k => (
                                             <div key={k} className={cn("flex-1 px-4 py-2 border-r last:border-r-0 truncate", theme.border.default, theme.text.secondary)}>{k}</div>
                                         ))}
                                     </div>

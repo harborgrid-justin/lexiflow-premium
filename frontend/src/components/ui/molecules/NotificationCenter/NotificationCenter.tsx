@@ -68,7 +68,7 @@ const getNotificationIcon = (type: NotificationType) => {
   }
 };
 
-const getNotificationColor = (type: NotificationType, theme: unknown) => {
+const getNotificationColor = (type: NotificationType, theme: any) => {
   switch (type) {
     case 'success':
       return 'text-green-600 dark:text-green-400';
@@ -222,7 +222,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                   className={cn(
                     'px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap',
                     filter === type
-                      ? cn(theme.primary.bg, theme.primary.text)
+                      ? cn(theme.primary.main, theme.primary.text)
                       : cn(
                         theme.text.secondary,
                         `hover:${theme.surface.highlight}`
@@ -302,7 +302,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                                 className={cn(
                                   'text-[10px] px-2 py-1 rounded font-medium transition-colors',
                                   theme.primary.text,
-                                  `hover:${theme.primary.bg}`
+                                  `hover:${theme.primary.main}`
                                 )}
                               >
                                 {notification.actionLabel}

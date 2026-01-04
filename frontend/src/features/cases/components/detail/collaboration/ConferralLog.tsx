@@ -93,7 +93,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
       id: `conf-${Date.now()}` as UUID,
       caseId: caseId as CaseId,
       topic: newSession.topic || 'General Conferral',
-      date: newSession.date || new Date().toISOString().split('T')[0],
+      date: (newSession.date || new Date().toISOString().split('T')[0]) as string,
       method: newSession.method as ConferralMethod,
       participants: newSession.participants || [],
       notes: newSession.notes || '',

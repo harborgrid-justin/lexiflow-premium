@@ -57,7 +57,7 @@ import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 import { cn } from '@/utils/cn';
 
 // Types
-import type { Case } from "@/types";
+import type { Case, WarRoomData } from "@/types";
 
 // Subcomponents (Lazy Loaded)
 const CommandCenter = lazy(() =>
@@ -156,7 +156,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // DATA FETCHING
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
-    queryKeys.cases.all,
+    queryKeys.cases.all(),
     async () => {
       const cases = DataService.cases as { getAll: () => Promise<Case[]> };
       return cases.getAll();

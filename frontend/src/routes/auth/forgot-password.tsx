@@ -4,6 +4,7 @@
  * Handles password reset request
  */
 
+import { AuthApiService } from '@/api/auth/auth-api';
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router';
 
@@ -21,11 +22,8 @@ export default function ForgotPasswordPage() {
     try {
       console.log('[ForgotPassword] Requesting password reset for:', email);
 
-      // TODO: Implement actual password reset API call
-      // await authApi.requestPasswordReset(email);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const authApi = new AuthApiService();
+      await authApi.forgotPassword(email);
 
       setSuccess(true);
     } catch (err) {

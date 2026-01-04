@@ -10,6 +10,9 @@
  * @module routes/crm/index
  */
 
+import { ClientCRM } from '@/features/operations/crm/ClientCRM';
+import { DataService } from '@/services/data/dataService';
+import { ClientStatus } from '@/types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -31,17 +34,21 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement client data fetching
-  // const [clients, recentActivity] = await Promise.all([
-  //   api.crm.getClients(),
-  //   api.crm.getRecentActivity(),
-  // ]);
-
-  return {
-    clients: [],
-    recentActivity: [],
-    totalCount: 0,
-  };
+  try {
+    const clients = await DataService.clients.getAll();
+    return {
+      clients,
+      recentActivity: [],
+      totalCount: clients.length,
+    };
+  } catch (error) {
+    console.error("Failed to load CRM data", error);
+    return {
+      clients: [],
+      recentActivity: [],
+      totalCount: 0,
+    };
+  }
 }
 
 // ============================================================================
@@ -52,29 +59,43 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "add-client":
-      // TODO: Handle client creation
-      return { success: true, message: "Client added" };
+  try {
+    switch (intent) {
+      case "add-client": {
+        const name = formData.get("name") as string;
+        if (name) {
+          await DataService.clients.add({
+            name,
+            status: ClientStatus.PROSPECTIVE,
+          });
+        }
+        return { success: true, message: "Client added" };
+      }
 
-    case "update-contact":
-      // TODO: Handle contact update
-      return { success: true, message: "Contact updated" };
+      case "update-contact": {
+        // TODO: Implement contact update logic
+        return { success: true, message: "Contact updated" };
+      }
 
-    case "archive":
-      // TODO: Handle client archival
-      return { success: true, message: "Client archived" };
+      case "archive": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.clients.update(id, { status: ClientStatus.INACTIVE });
+        }
+        return { success: true, message: "Client archived" };
+      }
 
-    default:
-      return { success: false, error: "Invalid action" };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
-
-import { ClientCRM } from '@/features/operations/crm/ClientCRM';
 
 export default function CRMIndexRoute() {
   return <ClientCRM />;

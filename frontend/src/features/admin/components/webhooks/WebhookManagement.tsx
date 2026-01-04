@@ -1,12 +1,12 @@
 import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
-import { useModalState, useNotify, useSelection } from '@/hooks/core';
+import { useModalState, useNotify } from '@/hooks/core';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
@@ -36,7 +36,7 @@ export const WebhookManagement: React.FC = () => {
   const editModal = useModalState();
   const deleteModal = useModalState();
   const testModal = useModalState();
-  const webhookSelection = useSelection<SystemWebhookConfig>();
+  const [selectedWebhook, setSelectedWebhook] = React.useState<SystemWebhookConfig | null>(null);
   const [formData, setFormData] = useState<Partial<SystemWebhookConfig>>({ events: [] });
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -61,12 +61,12 @@ export const WebhookManagement: React.FC = () => {
   };
 
   const handleEdit = async () => {
-    if (!webhookSelection.selected) return;
+    if (!selectedWebhook) return;
     try {
-      await webhooksApi.update(webhookSelection.selected.id, formData);
+      await webhooksApi.update(selectedWebhook.id, formData);
       await refetch();
       editModal.close();
-      webhookSelection.deselect();
+      setSelectedWebhook(null);
       setFormData({ events: [] });
       notify.success('Webhook updated successfully');
     } catch (error) {
@@ -75,12 +75,12 @@ export const WebhookManagement: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!webhookSelection.selected) return;
+    if (!selectedWebhook) return;
     try {
-      await webhooksApi.delete(webhookSelection.selected.id);
+      await webhooksApi.delete(selectedWebhook.id);
       await refetch();
       deleteModal.close();
-      webhookSelection.deselect();
+      setSelectedWebhook(null);
       notify.success('Webhook deleted successfully');
     } catch (error) {
       console.error(error);
@@ -88,9 +88,9 @@ export const WebhookManagement: React.FC = () => {
   };
 
   const handleTest = async () => {
-    if (!webhookSelection.selected) return;
+    if (!selectedWebhook) return;
     try {
-      const result = await webhooksApi.test(webhookSelection.selected.id);
+      const result = await webhooksApi.test(selectedWebhook.id);
       setTestResult({
         success: result.success,
         message: result.message || (result.success ? 'Webhook responded successfully' : 'Webhook failed'),
@@ -105,13 +105,13 @@ export const WebhookManagement: React.FC = () => {
   };
 
   const openEditModal = (webhook: SystemWebhookConfig) => {
-    webhookSelection.select(webhook);
+    setSelectedWebhook(webhook);
     setFormData(webhook);
     editModal.open();
   };
 
   const openTestModal = (webhook: SystemWebhookConfig) => {
-    webhookSelection.select(webhook);
+    setSelectedWebhook(webhook);
     setTestResult(null);
     testModal.open();
   };
@@ -188,7 +188,7 @@ export const WebhookManagement: React.FC = () => {
                   <div className="flex gap-1">
                     <Button size="sm" variant="ghost" icon={Play} onClick={() => openTestModal(webhook)}>Test</Button>
                     <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(webhook)}>Edit</Button>
-                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { webhookSelection.select(webhook); deleteModal.open(); }}>Delete</Button>
+                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedWebhook(webhook); deleteModal.open(); }}>Delete</Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -232,7 +232,7 @@ export const WebhookManagement: React.FC = () => {
       <Modal isOpen={testModal.isOpen} onClose={testModal.close} title="Test Webhook">
         <div className="p-6">
           <p className={cn("mb-4", theme.text.secondary)}>
-            Send a test payload to: <code className={cn("px-2 py-1 rounded text-sm", theme.surface.highlight)}>{webhookSelection.selected?.url}</code>
+            Send a test payload to: <code className={cn("px-2 py-1 rounded text-sm", theme.surface.highlight)}>{selectedWebhook?.url}</code>
           </p>
           {testResult && (
             <div className={cn("p-4 rounded-lg mb-4 flex items-center gap-2", testResult.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800')}>
@@ -251,7 +251,7 @@ export const WebhookManagement: React.FC = () => {
       <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete Webhook">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
-            Are you sure you want to delete webhook <strong>{webhookSelection.selected?.id}</strong>? This action cannot be undone.
+            Are you sure you want to delete webhook <strong>{selectedWebhook?.id}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
             <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>

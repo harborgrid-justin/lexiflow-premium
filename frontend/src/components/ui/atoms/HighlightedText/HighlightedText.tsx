@@ -16,7 +16,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { getHighlightClass, defaultHighlightClass } from './TextHighlight.styles';
+import { defaultHighlightClass, getHighlightClass } from './TextHighlight.styles';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -43,7 +43,7 @@ export const HighlightedText: React.FC<HighlightedTextProps> = memo(({
   return (
     <span className={className}>
       {/* IDENTITY-STABLE KEYS: Use text content + index for reconciliation */}
-      {parts.map((part) =>
+      {parts.map((part, i) =>
         part.toLowerCase() === query.toLowerCase() ? (
           <span key={`highlight-${i}-${part}`} className={getHighlightClass(highlightClassName)}>
             {part}

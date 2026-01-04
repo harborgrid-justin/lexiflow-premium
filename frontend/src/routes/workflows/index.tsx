@@ -42,8 +42,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get('category') || undefined;
 
   const [templates, instances] = await Promise.all([
-    api.workflow.getTemplates({ status: status as WorkflowTemplate['status'], category }),
-    api.workflow.getInstances({ status: status as WorkflowInstance['status'] })
+    api.workflow.getTemplates({ status: status as unknown as WorkflowTemplate['status'], category }),
+    api.workflow.getInstances({ status: status as unknown as WorkflowInstance['status'] })
   ]);
 
   return { templates, instances };

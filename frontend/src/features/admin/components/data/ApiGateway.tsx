@@ -8,12 +8,12 @@
  */
 import React, { useState } from 'react';
 
-import { Loader2, Server, ChevronRight } from 'lucide-react';
+import { ChevronRight, Loader2, Server } from 'lucide-react';
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/backend';
-import { ApiServiceSpec, ApiMethod } from '@/types';
+import { DataService } from '@/services/data/dataService';
+import { ApiMethod, ApiServiceSpec } from '@/types';
 import { cn } from '@/utils/cn';
 import { encodeHtmlEntities } from '@/utils/sanitize';
 
@@ -63,7 +63,7 @@ function MethodCard({ method }: { method: ApiMethod }) {
                 <div className="mb-6">
                     <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Parameters</h5>
                     <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
-                        {method.params.map((p) => (
+                        {method.params.map((p, i) => (
                             <div key={`param-${p.name}-${i}`} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.default)}>
                                 <code className={cn("font-bold", theme.text.primary)}>{p.name}</code>
                                 <code className={cn("text-purple-600 dark:text-purple-400", theme.text.secondary)}>{p.type}</code>
@@ -74,10 +74,10 @@ function MethodCard({ method }: { method: ApiMethod }) {
                 </div>
             )}
 
-             <div>
+            <div>
                 <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Example Response</h5>
                 <CodeBlock code={method.response} />
-             </div>
+            </div>
         </div>
     );
 }
@@ -92,7 +92,7 @@ export function ApiGateway(): React.JSX.Element {
     );
 
     if (isLoading) {
-        return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;
+        return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)} /></div>;
     }
 
     return (
@@ -115,10 +115,10 @@ export function ApiGateway(): React.JSX.Element {
                             )}
                         >
                             <div className="flex items-center gap-2">
-                                <Server className="h-4 w-4"/>
+                                <Server className="h-4 w-4" />
                                 <span className="capitalize">{service.name}</span>
                             </div>
-                            <ChevronRight className="h-4 w-4 opacity-50"/>
+                            <ChevronRight className="h-4 w-4 opacity-50" />
                         </button>
                     ))}
                 </div>
@@ -139,7 +139,7 @@ export function ApiGateway(): React.JSX.Element {
                 ) : (
                     <div className={cn("flex h-full items-center justify-center text-center", theme.text.tertiary)}>
                         <div>
-                            <Server className="h-12 w-12 mx-auto mb-4 opacity-50"/>
+                            <Server className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <h3 className="font-bold">API Gateway</h3>
                             <p>Select a service from the left to view its endpoints.</p>
                         </div>

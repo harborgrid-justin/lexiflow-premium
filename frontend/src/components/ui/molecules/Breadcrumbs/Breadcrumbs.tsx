@@ -34,7 +34,7 @@ export interface BreadcrumbItem {
 /**
  * Breadcrumbs - React 18 optimized with React.memo
  */
-export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[] }>(({ items }) => {
+export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[]; onNavigate?: (path: string) => void }>(({ items, onNavigate }) => {
   const { theme } = useTheme();
 
   return (
@@ -47,11 +47,14 @@ export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[] }>(({ items }) =
         <div key={`${item.label}-${index}`} className="flex items-center">
           <ChevronRight className={cn("h-3 w-3 mx-1 shrink-0", theme.text.tertiary)} />
           <button
-            onClick={item.onClick}
-            disabled={!item.onClick}
+            onClick={() => {
+              if (item.onClick) item.onClick();
+              else if (onNavigate && item.path) onNavigate(item.path);
+            }}
+            disabled={!item.onClick && (!onNavigate || !item.path)}
             className={cn(
               "transition-colors py-1 px-1 rounded -ml-1",
-              item.onClick
+              (item.onClick || (onNavigate && item.path))
                 ? cn(`hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)
                 : cn("font-semibold cursor-default", theme.text.primary)
             )}

@@ -6,45 +6,45 @@
  *           approval chains, rollback, analytics, AI suggestions, external triggers
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import {
-  GitBranch,
-  Boxes,
-  GitCompare,
-  Clock,
-  UserCheck,
-  Undo2,
-  LineChart,
-  Sparkles,
-  Webhook,
-  Play,
-  Save,
-  Layers,
-  Settings,
-  AlertTriangle,
-  CheckCircle2,
-  TrendingUp,
-  Database,
-} from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import type {
-  EnhancedWorkflowInstance,
-  WorkflowVersion,
-  WorkflowSnapshot,
-  WorkflowAnalytics,
   AIWorkflowSuggestion,
-  ExternalTrigger,
-  WebhookConfig,
-  SLAConfig,
   ApprovalChain,
+  EnhancedWorkflowInstance,
+  ExternalTrigger,
   RollbackOperation,
+  SLAConfig,
+  WebhookConfig,
+  WorkflowAnalytics,
+  WorkflowSnapshot,
+  WorkflowVersion,
 } from '@/types/workflow-advanced-types';
+import { cn } from '@/utils/cn';
+import {
+  AlertTriangle,
+  Boxes,
+  CheckCircle2,
+  Clock,
+  Database,
+  GitBranch,
+  GitCompare,
+  Layers,
+  LineChart,
+  Play,
+  Save,
+  Settings,
+  Sparkles,
+  TrendingUp,
+  Undo2,
+  UserCheck,
+  Webhook,
+} from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 interface AdvancedWorkflowDesignerProps {
   workflowId?: string;
@@ -176,7 +176,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
     const currentVersion = versions[0]?.semanticVersion || '0.0.0';
     const versionParts = typeof currentVersion === 'string' ? currentVersion.split('.').map(Number) : [0, 0, 0];
-    const [major, minor, patch] = versionParts;
+    const [major = 0, minor = 0, patch = 0] = versionParts;
     const newVersion = `${major}.${minor}.${patch + 1}`;
 
     createVersionMutation.mutate({
@@ -840,8 +840,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                       key={bottleneck.id}
                       className={cn("p-4 rounded-lg border-l-4", theme.surface.default, theme.border.default,
                         bottleneck.severity === 'critical' ? "border-l-red-500" :
-                        bottleneck.severity === 'high' ? "border-l-amber-500" :
-                        bottleneck.severity === 'medium' ? "border-l-blue-500" : "border-l-slate-300"
+                          bottleneck.severity === 'high' ? "border-l-amber-500" :
+                            bottleneck.severity === 'medium' ? "border-l-blue-500" : "border-l-slate-300"
                       )}
                     >
                       <div className="flex items-start justify-between">
@@ -854,7 +854,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                             <span className={cn(
                               "px-2 py-0.5 text-xs rounded-full font-medium",
                               bottleneck.severity === 'critical' ? "bg-red-100 text-red-700" :
-                              bottleneck.severity === 'high' ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
+                                bottleneck.severity === 'high' ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
                             )}>
                               {bottleneck.severity}
                             </span>

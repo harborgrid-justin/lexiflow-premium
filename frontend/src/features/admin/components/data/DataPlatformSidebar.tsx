@@ -1,6 +1,6 @@
 import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 import { cn } from '@/utils/cn';
@@ -66,7 +66,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   if (hasChildren) {
                     // Navigate to first child
                     if (item.children && item.children.length > 0) {
-                      onChange(item.children[0].id);
+                      onChange(item.children[0]!.id);
                     }
                     // Also expand if not already expanded
                     if (!isExpanded) {

@@ -112,7 +112,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
   const handleParentTabChange = (parentId: string) => {
     const parent = CASE_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id);
+      setActiveTab(parent.subTabs![0].id);
     }
   };
 
@@ -194,12 +194,12 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
               onClick={() => handleParentTabChange(parent.id)}
               className={cn(
                 'flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2',
-                activeParentTab.id === parent.id
+                activeParentTab?.id === parent.id
                   ? cn('border-current', theme.primary.text)
                   : cn('border-transparent', theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <parent.icon className={cn('h-4 w-4 mr-2', activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
+              <parent.icon className={cn('h-4 w-4 mr-2', activeParentTab?.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
               {parent.label}
             </button>
           ))}
@@ -207,7 +207,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
 
         {/* Sub-Navigation (Pills) */}
         <div className={cn('flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4', theme.surface.highlight, theme.border.default)}>
-          {activeParentTab.subTabs.map(tab => {
+          {activeParentTab?.subTabs.map(tab => {
             const Icon = tab.icon;
             return (
               <button

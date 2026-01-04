@@ -57,7 +57,10 @@
 
 import { isBackendApiEnabled } from "@/api";
 import { workflowApi } from "@/api/domains/workflow.api";
-import { CalendarEvent as ApiCalendarEvent } from "@/api/workflow/calendar-api";
+import {
+  CalendarEvent as ApiCalendarEvent,
+  CalendarFilters,
+} from "@/api/workflow/calendar-api";
 import { ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { CalendarEventType } from "@/types";
@@ -201,18 +204,19 @@ export const CalendarService = {
   /**
    * Get all calendar events
    *
+   * @param filters - Optional filters
    * @returns Promise<CalendarEvent[]> - Array of all events
    * @throws Error if backend API call fails
    *
    * @example
    * const events = await CalendarService.getAll();
    */
-  getAll: async (): Promise<CalendarEvent[]> => {
+  getAll: async (filters?: CalendarFilters): Promise<CalendarEvent[]> => {
     try {
-      const events = await workflowApi.calendar.getAll();
+      const events = await workflowApi.calendar.getAll(filters);
       return events.map((e: ApiCalendarEvent) => ({
         ...e,
-        type: e.eventType as CalendarEvent["type"],
+        type: e.eventType as unknown as CalendarEvent["type"],
       }));
     } catch (error) {
       console.error("[CalendarService.getAll] Error:", error);
@@ -237,7 +241,7 @@ export const CalendarService = {
       if (!event) return null;
       return {
         ...event,
-        type: event.eventType as CalendarEvent["type"],
+        type: event.eventType as unknown as CalendarEvent["type"],
       };
     } catch (error) {
       console.error("[CalendarService.getById] Error:", error);
@@ -279,7 +283,7 @@ export const CalendarService = {
       const event = await workflowApi.calendar.create(createDto);
       return {
         ...event,
-        type: event.eventType as CalendarEvent["type"],
+        type: event.eventType as unknown as CalendarEvent["type"],
       };
     } catch (error) {
       console.error("[CalendarService.add] Error:", error);
@@ -312,7 +316,7 @@ export const CalendarService = {
       const event = await workflowApi.calendar.update(id, updates);
       return {
         ...event,
-        type: event.eventType as CalendarEvent["type"],
+        type: event.eventType as unknown as CalendarEvent["type"],
       };
     } catch (error) {
       console.error("[CalendarService.update] Error:", error);

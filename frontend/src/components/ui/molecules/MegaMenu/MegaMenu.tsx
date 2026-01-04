@@ -4,11 +4,11 @@
  * @description Enterprise mega menu for complex hierarchical navigation with categories and quick actions.
  */
 
-import { cn } from '@/utils/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/utils/cn';
 import { ChevronDown, LucideIcon } from 'lucide-react';
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // ========================================
 // TYPES & INTERFACES
@@ -143,7 +143,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
                           <div
                             className={cn(
                               'p-2 rounded-lg',
-                              theme.primary.bg,
+                              theme.primary.main,
                               'bg-opacity-10',
                               'group-hover:bg-opacity-20',
                               'transition-all'
@@ -282,7 +282,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
               className={cn(
                 'text-xs font-medium px-3 py-1.5 rounded transition-colors',
                 theme.primary.text,
-                `hover:${theme.primary.bg}`
+                `hover:${theme.primary.main}`
               )}
             >
               View All

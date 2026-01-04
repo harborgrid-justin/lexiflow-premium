@@ -1,12 +1,12 @@
 /**
  * Utility functions for Workflow components
  * Extracted from individual component files for better organization and reusability
- * 
+ *
  * NOTE: Pure utility functions only. React components moved to separate files.
  * For ProcessIcon component, import from './ProcessIcon' instead.
  */
 
-import { WorkflowTask, TaskStatusBackend } from '@/types';
+import { TaskStatusBackend, WorkflowTask } from '@/types';
 
 /**
  * @deprecated Use ProcessIcon component instead
@@ -25,7 +25,7 @@ export const getProcessIcon = (): unknown => {
 export const formatDeadline = (dueTime: number): string => {
   const diff = dueTime - Date.now();
   if (diff < 0) return 'OVERDUE';
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -67,5 +67,5 @@ export const getNextTask = (caseId: string, tasks: WorkflowTask[]): string => {
     const dateB = b.dueDate ? new Date(b.dueDate).getTime() : 0;
     return dateA - dateB;
   });
-  return caseTasks[0].title;
+  return caseTasks[0]?.title || '';
 };

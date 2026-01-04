@@ -130,7 +130,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
         <EntityNavigation
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          activeParentTabId={activeParentTab.id}
+          activeParentTabId={activeParentTab?.id || ''}
           onParentTabChange={handleParentTabChange}
         />
       </div>

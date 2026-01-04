@@ -12,6 +12,8 @@
  * @module routes/correspondence/compose
  */
 
+import type { DraftingTemplate } from '@/api/domains/drafting.api';
+import { DataService } from '@/services/data/dataService';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -21,13 +23,6 @@ import type { Route } from "./+types/compose";
 // Types
 // ============================================================================
 
-interface Template {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-}
-
 interface Recipient {
   id: string;
   name: string;
@@ -36,7 +31,7 @@ interface Recipient {
 }
 
 interface LoaderData {
-  templates: Template[];
+  templates: DraftingTemplate[];
   recentRecipients: Recipient[];
   draftId: string | null;
 }
@@ -69,35 +64,14 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   const templateId = url.searchParams.get('template');
   console.log('template ID:', templateId);
 
-  // TODO: Fetch templates from API
-  const templates: Template[] = [
-    {
-      id: 'demand-letter',
-      name: 'Demand Letter',
-      category: 'Litigation',
-      description: 'Standard demand letter for civil matters',
-    },
-    {
-      id: 'client-update',
-      name: 'Client Update',
-      category: 'General',
-      description: 'Status update letter to client',
-    },
-    {
-      id: 'opposing-counsel',
-      name: 'Letter to Opposing Counsel',
-      category: 'Litigation',
-      description: 'Professional correspondence to opposing counsel',
-    },
-    {
-      id: 'settlement-offer',
-      name: 'Settlement Offer',
-      category: 'Litigation',
-      description: 'Formal settlement offer letter',
-    },
-  ];
+  let templates: DraftingTemplate[] = [];
+  try {
+    templates = await DataService.drafting.getTemplates();
+  } catch (error) {
+    console.error("Failed to fetch templates", error);
+  }
 
-  // TODO: Fetch recent recipients from API
+  // TODO: Fetch recent recipients from API when endpoint is available
   const recentRecipients: Recipient[] = [];
 
   // TODO: Load draft if draftId is provided
@@ -124,20 +98,35 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
       const body = formData.get("body") as string;
       const templateId = formData.get("templateId") as string;
 
-      // TODO: Save draft to database
-      console.log('Saving draft:', { subject, body, templateId });
+      try {
+        // Use DataService to save draft
+        const draft = await DataService.communications.correspondence.create({
+          subject,
+          notes: body, // Mapping body to notes for now as per Correspondence interface
+          correspondenceType: 'letter', // Defaulting to letter
+          status: 'draft',
+          date: new Date().toISOString(),
+          metadata: { templateId }
+        });
 
-      return {
-        success: true,
-        message: "Draft saved successfully",
-        draftId: `draft-${Date.now()}`,
-      };
+        return {
+          success: true,
+          message: "Draft saved successfully",
+          draftId: draft.id,
+        };
+      } catch (error) {
+        console.error("Failed to save draft", error);
+        return {
+          success: false,
+          error: "Failed to save draft",
+        };
+      }
     }
 
     case "send": {
       const subject = formData.get("subject") as string;
       const body = formData.get("body") as string;
-      const recipients = formData.get("recipients") as string;
+      const recipientsStr = formData.get("recipients") as string;
 
       if (!subject?.trim()) {
         return {
@@ -153,20 +142,35 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
         };
       }
 
-      if (!recipients?.trim()) {
+      if (!recipientsStr?.trim()) {
         return {
           success: false,
           error: "At least one recipient is required",
         };
       }
 
-      // TODO: Send correspondence via API
-      console.log('Sending correspondence:', { subject, body, recipients });
+      try {
+        // Use DataService to send correspondence
+        await DataService.communications.correspondence.create({
+          subject,
+          notes: body,
+          recipients: recipientsStr.split(',').map(r => r.trim()),
+          correspondenceType: 'email', // Defaulting to email for send action
+          status: 'sent',
+          date: new Date().toISOString()
+        });
 
-      return {
-        success: true,
-        message: "Correspondence sent successfully",
-      };
+        return {
+          success: true,
+          message: "Correspondence sent successfully",
+        };
+      } catch (error) {
+        console.error("Failed to send correspondence", error);
+        return {
+          success: false,
+          error: "Failed to send correspondence",
+        };
+      }
     }
 
     case "preview": {

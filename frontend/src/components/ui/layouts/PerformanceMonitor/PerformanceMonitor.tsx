@@ -337,7 +337,7 @@ export const measurePerformance = (name: string, startMark: string, endMark: str
     try {
       performance.measure(name, startMark, endMark);
       const measure = performance.getEntriesByName(name)[0];
-      return measure.duration;
+      return measure?.duration ?? null;
     } catch (error) {
       console.warn('Performance measurement failed:', error);
       return null;

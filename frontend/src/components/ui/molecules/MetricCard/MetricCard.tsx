@@ -84,7 +84,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
     const min = Math.min(...sparklineData);
     const range = max - min || 1;
 
-    return sparklineData.map((d) => {
+    return sparklineData.map((d, i) => {
       const x = (i / (sparklineData.length - 1)) * width;
       const y = height - ((d - min) / range) * height;
       return `${x},${y}`;

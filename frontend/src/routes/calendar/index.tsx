@@ -10,6 +10,9 @@
  * @module routes/calendar/index
  */
 
+import { DataService } from '@/services/data/dataService';
+import type { CalendarEventType } from '@/types';
+import { endOfDay, endOfMonth, endOfWeek, parseISO, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -33,17 +36,62 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Parse URL for date range
   const url = new URL(request.url);
   const view = url.searchParams.get("view") || "month";
-  const date = url.searchParams.get("date") || new Date().toISOString().split('T')[0];
+  const dateStr = url.searchParams.get("date") || new Date().toISOString().split('T')[0];
+  const date = parseISO(dateStr);
 
-  // TODO: Implement calendar event fetching
-  // const events = await api.calendar.getEvents({ view, date });
+  let startDate: Date;
+  let endDate: Date;
 
-  return {
-    events: [],
-    view,
-    currentDate: date,
-    upcomingDeadlines: [],
-  };
+  switch (view) {
+    case 'week':
+      startDate = startOfWeek(date);
+      endDate = endOfWeek(date);
+      break;
+    case 'day':
+      startDate = startOfDay(date);
+      endDate = endOfDay(date);
+      break;
+    case 'month':
+    default:
+      startDate = startOfMonth(date);
+      endDate = endOfMonth(date);
+      break;
+  }
+
+  try {
+    const events = await DataService.calendar.getAll({
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    });
+
+    // Also fetch upcoming deadlines (e.g. next 30 days)
+    // We can use a separate call or filter from events if the range covers it.
+    // For now, let's just return empty or fetch specifically if needed.
+    // The UI might expect 'upcomingDeadlines'
+
+    // Let's fetch upcoming deadlines separately as they might be outside the current view
+    const upcomingDeadlines = await DataService.calendar.getAll({
+      eventType: 'deadline',
+      startDate: new Date().toISOString(),
+      // Default to 30 days ahead for upcoming
+      endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    });
+
+    return {
+      events,
+      view,
+      currentDate: dateStr,
+      upcomingDeadlines,
+    };
+  } catch (error) {
+    console.error("Failed to load calendar events", error);
+    return {
+      events: [],
+      view,
+      currentDate: dateStr,
+      upcomingDeadlines: [],
+    };
+  }
 }
 
 // ============================================================================
@@ -54,21 +102,58 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create-event":
-      // TODO: Handle event creation
-      return { success: true, message: "Event created" };
+  try {
+    switch (intent) {
+      case "create-event": {
+        const title = formData.get("title") as string;
+        const startDate = formData.get("startDate") as string;
+        const type = formData.get("type") as CalendarEventType;
 
-    case "update-event":
-      // TODO: Handle event update
-      return { success: true, message: "Event updated" };
+        if (!title || !startDate || !type) {
+          return { success: false, error: "Missing required fields" };
+        }
 
-    case "delete-event":
-      // TODO: Handle event deletion
-      return { success: true, message: "Event deleted" };
+        await DataService.calendar.add({
+          title,
+          startDate,
+          type,
+          description: formData.get("description") as string,
+          endDate: formData.get("endDate") as string,
+          location: formData.get("location") as string,
+          caseId: formData.get("caseId") as string,
+        });
+        return { success: true, message: "Event created" };
+      }
 
-    default:
-      return { success: false, error: "Invalid action" };
+      case "update-event": {
+        const id = formData.get("id") as string;
+        if (!id) return { success: false, error: "Missing event ID" };
+
+        const updates: any = {};
+        if (formData.has("title")) updates.title = formData.get("title") as string;
+        if (formData.has("startDate")) updates.startDate = formData.get("startDate") as string;
+        if (formData.has("endDate")) updates.endDate = formData.get("endDate") as string;
+        if (formData.has("description")) updates.description = formData.get("description") as string;
+        if (formData.has("location")) updates.location = formData.get("location") as string;
+
+        await DataService.calendar.update(id, updates);
+        return { success: true, message: "Event updated" };
+      }
+
+      case "delete-event": {
+        const id = formData.get("id") as string;
+        if (!id) return { success: false, error: "Missing event ID" };
+
+        await DataService.calendar.delete(id);
+        return { success: true, message: "Event deleted" };
+      }
+
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error("Calendar action failed", error);
+    return { success: false, error: "Action failed" };
   }
 }
 

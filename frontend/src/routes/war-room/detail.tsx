@@ -40,7 +40,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   try {
     // Fetch case details and related war room data
     const [item, advisors, experts] = await Promise.all([
-      DataService.cases.get(roomId),
+      DataService.cases.getById(roomId),
       DataService.warRoom.getAdvisors({ caseId: roomId }),
       DataService.warRoom.getExperts({ caseId: roomId })
     ]);

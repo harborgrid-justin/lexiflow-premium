@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -63,7 +63,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
           <Badge variant="neutral" className={theme.surface.default}>{data.category}</Badge>
           {data.auditReady && (
             <div className={cn("flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)} title="Full Audit Trail Enabled">
-              <ShieldCheck className="h-3 w-3 mr-1"/> Audited
+              <ShieldCheck className="h-3 w-3 mr-1" /> Audited
             </div>
           )}
         </div>
@@ -73,10 +73,10 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
 
         <div className={cn("flex items-center gap-4 mt-3 text-xs", theme.text.secondary)}>
           <span className="flex items-center">
-            <Clock className="h-3 w-3 mr-1"/> {data.duration}
+            <Clock className="h-3 w-3 mr-1" /> {data.duration}
           </span>
           <span className={cn("flex items-center px-1.5 py-0.5 rounded border", getComplexityColor(data.complexity))}>
-            <BarChart className="h-3 w-3 mr-1"/> {data.complexity}
+            <BarChart className="h-3 w-3 mr-1" /> {data.complexity}
           </span>
         </div>
       </div>
@@ -85,7 +85,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
       <div className={cn("p-5 flex-1 flex flex-col justify-center", theme.surface.highlight)}>
         <div className="space-y-3 relative">
           <div className={cn("absolute left-3 top-2 bottom-2 w-0.5 -z-10", theme.border.default)}></div>
-          {data.stages.slice(0, 4).map((stage) => (
+          {data.stages.slice(0, 4).map((stage, i) => (
             <div key={i} className="flex items-center gap-3">
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold z-10 border-2",
@@ -120,7 +120,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
           ))}
         </div>
         <span className={cn("flex items-center font-medium transition-colors", `group-hover:${theme.primary.text}`)}>
-          Use Template <ArrowRight className="h-3 w-3 ml-1"/>
+          Use Template <ArrowRight className="h-3 w-3 ml-1" />
         </span>
       </div>
     </div>

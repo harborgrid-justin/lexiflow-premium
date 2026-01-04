@@ -13,19 +13,13 @@ import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
-import React, { useCallback, useState, useTransition } from 'react';
+import React, { useState, useTransition } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
   const [, startTransition] = useTransition();
-
-  const _handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
-    startTransition(() => {
-      setSelectedSection(section);
-    });
-  }, []);
 
   const chartTheme = getChartTheme(mode);
   const riskColors = ChartColorService.getRiskColors(mode);
@@ -176,7 +170,7 @@ export const ThemeSettingsPage: React.FC = () => {
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {mockRiskData.map((entry, _index) => (
+                      {mockRiskData.map((entry, index) => (
                         <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
                       ))}
                     </Pie>

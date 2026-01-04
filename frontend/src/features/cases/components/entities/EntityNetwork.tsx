@@ -101,7 +101,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
       <div className={cn("w-80 space-y-4", theme.surface.default, theme.border.default)}>
         <h3 className={cn("p-4 font-bold border-b", theme.text.primary, theme.border.default)}>Conflict Clusters</h3>
         <div className="p-4 space-y-3 overflow-y-auto">
-          {components.map((comp) => (
+          {components.map((comp, i) => (
             <Card key={i} className={cn(comp.length > 2 ? "border-l-4 border-l-red-500" : "")}>
               <h4 className={cn("font-bold text-sm mb-2", theme.text.primary)}>Cluster {i + 1}</h4>
               <ul className="text-xs space-y-1">

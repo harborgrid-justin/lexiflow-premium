@@ -10,6 +10,8 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import { DataService } from '@/services/data/dataService';
+import { CitationManager } from '@/features/knowledge/citation/CitationManager';
 
 // ============================================================================
 // Meta Tags
@@ -28,12 +30,13 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement citation fetching
-  // const url = new URL(request.url);
-  // const caseId = url.searchParams.get("caseId");
-  // const citations = await api.citations.list({ caseId });
-
-  return { items: [], totalCount: 0 };
+  try {
+    const citations = await DataService.citations.getAll();
+    return { items: citations, totalCount: citations.length };
+  } catch (error) {
+    console.error("Failed to load citations", error);
+    return { items: [], totalCount: 0 };
+  }
 }
 
 // ============================================================================
@@ -46,13 +49,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
   switch (intent) {
     case "create":
-      // TODO: Handle citation creation
+      // TODO: Implement create via DataService.citations.add()
       return { success: true, message: "Citation created" };
     case "delete":
-      // TODO: Handle citation deletion
-      return { success: true, message: "Citation deleted" };
+      const id = formData.get("id") as string;
+      if (id) {
+        await DataService.citations.delete(id);
+        return { success: true, message: "Citation deleted" };
+      }
+      return { success: false, error: "Missing citation ID" };
     case "validate":
-      // TODO: Handle citation validation
+      // TODO: Implement validation via DataService.citations.validate() if available
       return { success: true, message: "Citation validated" };
     default:
       return { success: false, error: "Invalid action" };
@@ -62,8 +69,6 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 // Component
 // ============================================================================
-
-import { CitationManager } from '@/features/knowledge/citation/CitationManager';
 
 export default function CitationsIndexRoute() {
   return <CitationManager />;

@@ -101,17 +101,17 @@ export const FirmProfile: React.FC = () => {
     setFirmDetails(prev => {
       const keys = path.split('.');
       if (keys.length === 1) {
-        return { ...prev, [keys[0]]: value };
+        return { ...prev, [keys[0]!]: value };
       }
       // Handle nested updates
       const newData = { ...prev };
 
       let current = newData as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
-        current[keys[i]] = { ...(current[keys[i]] as Record<string, unknown>) };
-        current = current[keys[i]] as Record<string, unknown>;
+        current[keys[i]!] = { ...(current[keys[i]!] as Record<string, unknown>) };
+        current = current[keys[i]!] as Record<string, unknown>;
       }
-      current[keys[keys.length - 1]] = value;
+      current[keys[keys.length - 1]!] = value;
       return newData;
     });
   };

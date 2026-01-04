@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
@@ -81,7 +81,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                     <div className="p-6 h-full overflow-y-auto">
                         {!selectedDomain ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4">
-                                {domains.map((domain) => (
+                                {domains.map((domain, i) => (
                                     <div
                                         key={`domain-${domain.name}-${i}`}
                                         onClick={() => setSelectedDomain(domain.name)}

@@ -8,18 +8,18 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
 import { ChevronDown, ChevronRight, Clock, Home } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /**
  * Breadcrumb item definition
  */
-export interface BreadcrumbItem {
+export interface DynamicBreadcrumbItem {
   id: string;
   label: string;
   path: string;
   icon?: React.ReactNode;
-  children?: BreadcrumbItem[]; // For dropdown navigation
+  children?: DynamicBreadcrumbItem[]; // For dropdown navigation
   metadata?: Record<string, unknown>;
 }
 
@@ -28,7 +28,7 @@ export interface BreadcrumbItem {
  */
 interface RecentPath {
   id: string;
-  items: BreadcrumbItem[];
+  items: DynamicBreadcrumbItem[];
   timestamp: Date;
   accessCount: number;
 }
@@ -37,7 +37,7 @@ interface RecentPath {
  * Props for DynamicBreadcrumbs component
  */
 export interface DynamicBreadcrumbsProps {
-  items: BreadcrumbItem[];
+  items: DynamicBreadcrumbItem[];
   maxVisible?: number; // Maximum visible items before collapsing
   maxRecent?: number; // Maximum recent paths to store
   showHome?: boolean;
@@ -124,9 +124,9 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
         // Update existing path
         updated = [...prev];
         updated[existingIndex] = {
-          ...updated[existingIndex],
+          ...updated[existingIndex]!,
           timestamp: new Date(),
-          accessCount: updated[existingIndex].accessCount + 1
+          accessCount: updated[existingIndex]!.accessCount + 1
         };
       } else {
         // Add new path
@@ -176,20 +176,20 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
       // Ctrl+Home - Navigate to home
       if (e.ctrlKey && e.key === 'Home' && items.length > 0) {
         e.preventDefault();
-        handleNavigate(items[0].path);
+        handleNavigate(items[0]!.path);
       }
 
       // Ctrl+Left - Navigate back one level
       if (e.ctrlKey && e.key === 'ArrowLeft' && items.length > 1) {
         e.preventDefault();
-        handleNavigate(items[items.length - 2].path);
+        handleNavigate(items[items.length - 2]!.path);
       }
 
       // Ctrl+Right - Show dropdown of forward paths (if any)
       if (e.ctrlKey && e.key === 'ArrowRight' && items.length > 0) {
         e.preventDefault();
         const current = items[items.length - 1];
-        if (current.children && current.children.length > 0) {
+        if (current?.children && current.children.length > 0) {
           setActiveDropdown(current.id);
         }
       }
@@ -214,7 +214,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   /**
    * Render a single breadcrumb item
    */
-  const renderBreadcrumbItem = (item: BreadcrumbItem, _index: number, isLast: boolean) => {
+  const renderBreadcrumbItem = (item: DynamicBreadcrumbItem, index: number, isLast: boolean) => {
     const hasChildren = item.children && item.children.length > 0;
     const isDropdownOpen = activeDropdown === item.id;
 
@@ -368,7 +368,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
                 return (
                   <button
                     key={recent.id}
-                    onClick={() => handleNavigate(recent.items[recent.items.length - 1].path)}
+                    onClick={() => handleNavigate(recent.items[recent.items.length - 1]!.path)}
                     className={cn(
                       "w-full px-4 py-2 text-left transition-colors",
                       "hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -407,14 +407,14 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   };
 
   // Determine which items to show
-  let visibleItems: BreadcrumbItem[];
-  let collapsedItems: BreadcrumbItem[] = [];
+  let visibleItems: DynamicBreadcrumbItem[];
+  let collapsedItems: DynamicBreadcrumbItem[] = [];
 
   if (items.length <= maxVisible) {
     visibleItems = items;
   } else {
     // Always show first and last items, collapse middle
-    const firstItem = items[0];
+    const firstItem = items[0]!;
     const lastItems = items.slice(-(maxVisible - 2));
     collapsedItems = items.slice(1, -(maxVisible - 2));
     visibleItems = [firstItem, ...lastItems];
@@ -448,7 +448,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
       )}
 
       {/* First Item */}
-      {visibleItems.length > 0 && renderBreadcrumbItem(visibleItems[0], 0, items.length === 1)}
+      {visibleItems.length > 0 && renderBreadcrumbItem(visibleItems[0]!, 0, items.length === 1)}
 
       {/* Collapsed Items Dropdown */}
       {collapsedItems.length > 0 && (

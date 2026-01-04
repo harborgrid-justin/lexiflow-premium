@@ -1,11 +1,11 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { Loader2, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface WorkflowSetting {
   label: string;
@@ -38,19 +38,21 @@ export const WorkflowConfig: React.FC = () => {
   );
 
   const toggleSetting = (index: number) => {
-      const newSettings: WorkflowSetting[] = [...settings];
+    const newSettings: WorkflowSetting[] = [...settings];
+    if (newSettings[index]) {
       newSettings[index].enabled = !newSettings[index].enabled;
       updateSettings(newSettings);
+    }
   };
 
   if (loading) {
-      return (
-          <Card title="Workflow Automation Settings">
-              <div className="flex justify-center p-4">
-                  <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-              </div>
-          </Card>
-      );
+    return (
+      <Card title="Workflow Automation Settings">
+        <div className="flex justify-center p-4">
+          <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+        </div>
+      </Card>
+    );
   }
 
   return (
@@ -60,8 +62,8 @@ export const WorkflowConfig: React.FC = () => {
           <div key={i} className={cn("flex items-center justify-between p-3 border-b last:border-0", theme.border.default)}>
             <span className={cn("text-sm font-medium", theme.text.primary)}>{setting.label}</span>
             <button
-                onClick={() => toggleSetting(i)}
-                className={cn("text-2xl transition-colors", setting.enabled ? theme.primary.text : theme.text.tertiary)}
+              onClick={() => toggleSetting(i)}
+              className={cn("text-2xl transition-colors", setting.enabled ? theme.primary.text : theme.text.tertiary)}
             >
               {setting.enabled ? <ToggleRight className="h-8 w-8" /> : <ToggleLeft className="h-8 w-8" />}
             </button>
@@ -69,12 +71,11 @@ export const WorkflowConfig: React.FC = () => {
         ))}
 
         <div className={cn("pt-4 mt-4 border-t", theme.border.default)}>
-            <button className={cn("flex items-center text-sm font-medium", theme.text.secondary, `hover:${theme.primary.text}`)}>
-                <Settings className="h-4 w-4 mr-2" /> Advanced Configuration
-            </button>
+          <button className={cn("flex items-center text-sm font-medium", theme.text.secondary, `hover:${theme.primary.text}`)}>
+            <Settings className="h-4 w-4 mr-2" /> Advanced Configuration
+          </button>
         </div>
       </div>
     </Card>
   );
 };
-

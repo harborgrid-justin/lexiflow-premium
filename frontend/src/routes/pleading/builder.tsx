@@ -12,6 +12,7 @@
  * @module routes/pleading/builder
  */
 
+import { DataService } from '@/services/data/dataService';
 import { Form, Link, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -70,54 +71,48 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderDat
   const caseId = url.searchParams.get('case');
   console.log('template ID:', templateId, 'case ID:', caseId);
 
-  // TODO: Fetch templates from API based on jurisdiction
-  const templates: PleadingTemplate[] = [
-    {
-      id: 'civil-complaint',
-      name: 'Civil Complaint',
-      type: 'complaint',
-      jurisdiction: 'Federal',
-      description: 'Standard federal civil complaint format',
-    },
-    {
-      id: 'answer-defenses',
-      name: 'Answer with Affirmative Defenses',
-      type: 'answer',
-      jurisdiction: 'State',
-      description: 'Defendant response with affirmative defenses',
-    },
-    {
-      id: 'motion-dismiss',
-      name: 'Motion to Dismiss',
-      type: 'motion',
-      jurisdiction: 'Federal',
-      description: 'Rule 12(b)(6) motion to dismiss',
-    },
-    {
-      id: 'motion-summary',
-      name: 'Motion for Summary Judgment',
-      type: 'motion',
-      jurisdiction: 'Federal',
-      description: 'Summary judgment motion with supporting brief',
-    },
-  ];
+  try {
+    const [templates, courts, documents] = await Promise.all([
+      DataService.playbooks.getAll(),
+      DataService.jurisdiction.getAll(),
+      DataService.documents.getAll()
+    ]);
 
-  // TODO: Fetch courts from API
-  const courts: Court[] = [
-    { id: 'usdc-sdny', name: 'U.S. District Court - Southern District of New York', jurisdiction: 'Federal', level: 'federal' },
-    { id: 'usdc-cdca', name: 'U.S. District Court - Central District of California', jurisdiction: 'Federal', level: 'federal' },
-    { id: 'nysc-ny', name: 'New York Supreme Court - New York County', jurisdiction: 'New York', level: 'state' },
-    { id: 'lasc', name: 'Los Angeles Superior Court', jurisdiction: 'California', level: 'state' },
-  ];
+    // Filter documents for recent pleadings
+    const recentPleadings = Array.isArray(documents)
+      ? documents
+        .filter((d: any) => d.type === 'pleading' || d.category === 'pleading')
+        .sort((a: any, b: any) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+        .slice(0, 5)
+        .map((d: any) => ({ id: d.id, name: d.title || d.name, date: d.updatedAt || d.createdAt }))
+      : [];
 
-  // TODO: Fetch recent pleadings for quick access
-  const recentPleadings: Array<{ id: string; name: string; date: string }> = [];
+    // Map templates to PleadingTemplate interface
+    const mappedTemplates = Array.isArray(templates) ? templates.map((t: any) => ({
+      id: t.id,
+      name: t.name,
+      type: (t.category as any) || 'other',
+      jurisdiction: t.jurisdiction || 'General',
+      description: t.description || ''
+    })) : [];
 
-  return {
-    templates,
-    courts,
-    recentPleadings,
-  };
+    // Map courts
+    const mappedCourts = Array.isArray(courts) ? courts.map((c: any) => ({
+      id: c.id,
+      name: c.name,
+      jurisdiction: c.jurisdiction || 'General',
+      level: c.level || 'state'
+    })) : [];
+
+    return {
+      templates: mappedTemplates,
+      courts: mappedCourts,
+      recentPleadings
+    };
+  } catch (error) {
+    console.error("Failed to load pleading builder data", error);
+    return { templates: [], courts: [], recentPleadings: [] };
+  }
 }
 
 // ============================================================================

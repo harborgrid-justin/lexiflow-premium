@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
-import { Button } from '@/components/ui/atoms/Button';
+import { ArrowRight, Database, Plus, Server, Trash2 } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * ShardingVisualizer - React 18 optimized with React.memo
@@ -51,7 +51,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         ctx.stroke();
 
         const { ring: ringMap, sortedKeys } = ring.getRingState();
-        const maxHash = 2**31 -1;
+        const maxHash = 2 ** 31 - 1;
 
         // Draw nodes
         sortedKeys.forEach(hash => {
@@ -67,11 +67,11 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
 
             ctx.fillStyle = theme.chart.text;
             ctx.font = '12px sans-serif';
-            ctx.fillText(nodeName.split(':')[0], x + 15, y + 5);
+            ctx.fillText((nodeName || '').split(':')[0]!, x + 15, y + 5);
         });
 
         // Draw key
-        if(key && mappedNode) {
+        if (key && mappedNode) {
             const keyHash = (ring as unknown as { hash: (k: string) => number }).hash(key);
             const angle = (keyHash / maxHash) * 2 * Math.PI;
             const x = center.x + radius * Math.cos(angle);
@@ -120,10 +120,10 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
                             <input value={key} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface.input, theme.border.default, theme.text.primary)} />
                         </div>
                         <div className="flex items-center justify-center gap-4 text-center">
-                            <Database className={cn("h-8 w-8", theme.text.primary)}/>
-                            <ArrowRight className={cn("h-6 w-6", theme.text.tertiary)}/>
+                            <Database className={cn("h-8 w-8", theme.text.primary)} />
+                            <ArrowRight className={cn("h-6 w-6", theme.text.tertiary)} />
                             <div className={cn("p-3 rounded-lg border", theme.primary.light, theme.primary.border)}>
-                                <Server className={cn("h-8 w-8", theme.primary.text)}/>
+                                <Server className={cn("h-8 w-8", theme.primary.text)} />
                             </div>
                         </div>
                         <div className={cn("text-center p-4 rounded border", theme.surface.highlight, theme.border.default)}>

@@ -19,8 +19,8 @@
 import { api } from '@/api';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import type { Case, Matter, User as UserType } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -105,13 +105,13 @@ export const NewCaseIntakeForm: React.FC = () => {
 
   const handleNext = () => {
     if (currentStepIndex < steps.length - 1) {
-      setCurrentStep(steps[currentStepIndex + 1].id);
+      setCurrentStep(steps[currentStepIndex + 1]!.id);
     }
   };
 
   const handlePrev = () => {
     if (currentStepIndex > 0) {
-      setCurrentStep(steps[currentStepIndex - 1].id);
+      setCurrentStep(steps[currentStepIndex - 1]!.id);
     }
   };
 

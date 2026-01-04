@@ -41,7 +41,7 @@ interface TabsProps {
 export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'segmented' }: TabsProps) {
   const { theme } = useTheme();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  
+
   // Normalizing tabs to objects
   const normalizedTabs: TabItem[] = tabs.map(t =>
     typeof t === 'string' ? { id: t, label: t.charAt(0).toUpperCase() + t.slice(1).replace(/([A-Z])/g, ' $1').trim() } : t
@@ -50,11 +50,11 @@ export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'seg
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     if (e.key === 'ArrowRight') {
       const nextIndex = (index + 1) % normalizedTabs.length;
-      onChange(normalizedTabs[nextIndex].id);
+      onChange(normalizedTabs[nextIndex]!.id);
       tabRefs.current[nextIndex]?.focus();
     } else if (e.key === 'ArrowLeft') {
       const prevIndex = (index - 1 + normalizedTabs.length) % normalizedTabs.length;
-      onChange(normalizedTabs[prevIndex].id);
+      onChange(normalizedTabs[prevIndex]!.id);
       tabRefs.current[prevIndex]?.focus();
     }
   };
@@ -64,9 +64,9 @@ export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'seg
       <div className={cn("border-b w-full", theme.border.default, className)}>
         <nav className="-mb-px flex space-x-6 px-4" aria-label="Tabs" role="tablist">
           {normalizedTabs.map((tab, index) => {
-             const isActive = activeTab === tab.id;
-             const Icon = tab.icon;
-             return (
+            const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
               <button
                 key={tab.id}
                 ref={el => { if (el) tabRefs.current[index] = el; }}
@@ -85,7 +85,7 @@ export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'seg
                 {Icon && <Icon className={cn("h-4 w-4", isActive ? "text-current" : theme.text.tertiary)} />}
                 {tab.label}
               </button>
-             );
+            );
           })}
         </nav>
       </div>

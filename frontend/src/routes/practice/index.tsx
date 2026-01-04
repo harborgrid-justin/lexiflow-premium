@@ -10,6 +10,7 @@
  * @module routes/practice/index
  */
 
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -29,19 +30,32 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement practice data fetching
-  // const [staff, resources, metrics] = await Promise.all([
-  //   api.practice.getStaff(),
-  //   api.practice.getResources(),
-  //   api.practice.getMetrics(),
-  // ]);
+  try {
+    const [staff, metrics] = await Promise.all([
+      DataService.hr.getAll(),
+      DataService.hr.getUtilizationMetrics()
+    ]);
 
-  return {
-    staffCount: 0,
-    activeMatters: 0,
-    utilizationRate: 0,
-    pendingTasks: 0,
-  };
+    const activeMatters = metrics.reduce((acc, m) => acc + m.cases, 0);
+    const avgUtilization = metrics.length > 0
+      ? metrics.reduce((acc, m) => acc + m.utilization, 0) / metrics.length
+      : 0;
+
+    return {
+      staffCount: staff.length,
+      activeMatters,
+      utilizationRate: Math.round(avgUtilization),
+      pendingTasks: 0, // TODO: Integrate with TaskService when available
+    };
+  } catch (error) {
+    console.error("Failed to load practice data", error);
+    return {
+      staffCount: 0,
+      activeMatters: 0,
+      utilizationRate: 0,
+      pendingTasks: 0,
+    };
+  }
 }
 
 // ============================================================================

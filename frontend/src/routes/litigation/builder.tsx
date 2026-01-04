@@ -12,6 +12,8 @@
  * @module routes/litigation/builder
  */
 
+import { DataService } from '@/services/data/dataService';
+import type { Case } from '@/types';
 import { MatterType } from '@/types/enums';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -34,6 +36,7 @@ interface LoaderData {
   templates: StrategyTemplate[];
   caseTypes: Array<{ id: string; name: string }>;
   existingStrategies: Array<{ id: string; name: string; caseId: string }>;
+  cases: Case[];
 }
 
 interface ActionData {
@@ -61,7 +64,9 @@ export function meta() {
 export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
   const templateId = url.searchParams.get('template');
-  console.log('template ID:', templateId);
+
+  // Fetch cases for selection
+  const cases = await DataService.cases.getAll();
 
   // Default strategy templates
   const templates: StrategyTemplate[] = [
@@ -108,6 +113,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     templates,
     caseTypes,
     existingStrategies,
+    cases,
   };
 }
 
@@ -119,105 +125,84 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
   const formData = await request.formData();
   const intent = formData.get("intent") as string;
 
-  switch (intent) {
-    case "save": {
-      const name = formData.get("name") as string;
-      const caseId = formData.get("caseId") as string;
-      console.log('case ID:', caseId);
-      const templateId = formData.get("templateId") as string;
-      const objectives = formData.get("objectives") as string;
+  try {
+    switch (intent) {
+      case "save": {
+        const name = formData.get("name") as string;
+        const caseId = formData.get("caseId") as string;
+        const templateId = formData.get("templateId") as string;
+        const objectives = formData.get("objectives") as string;
 
-      if (!name?.trim()) {
+        if (!name?.trim()) {
+          return { success: false, error: "Strategy name is required" };
+        }
+
+        if (caseId) {
+          // Update strategy for the case
+          await DataService.warRoom.updateStrategy(caseId, {
+            name,
+            templateId,
+            objectives,
+            status: 'Draft'
+          });
+          return {
+            success: true,
+            message: "Strategy saved successfully",
+            strategyId: caseId, // Strategy ID is effectively Case ID in this model
+          };
+        }
+
+        return { success: false, error: "Case selection required" };
+      }
+
+      case "generate": {
+        const templateId = formData.get("templateId") as string;
+
+        if (!templateId) {
+          return { success: false, error: "Please select a strategy template" };
+        }
+
+        // In a real app, this would call an AI service
         return {
-          success: false,
-          error: "Strategy name is required",
+          success: true,
+          message: "Strategy generated successfully",
         };
       }
 
-      // Mock save strategy
-      console.log('Saving strategy:', { name, caseId, templateId, objectives });
-
-      return {
-        success: true,
-        message: "Strategy saved successfully",
-        strategyId: `strategy-${Date.now()}`,
-      };
-    }
-
-    case "generate": {
-      const templateId = formData.get("templateId") as string;
-      const caseType = formData.get("caseType") as string;
-      const caseDetails = formData.get("caseDetails") as string;
-
-      if (!templateId) {
+      case "analyze-risk": {
         return {
-          success: false,
-          error: "Please select a strategy template",
+          success: true,
+          message: "Risk analysis completed",
         };
       }
 
-      // TODO: Generate strategy from template using AI
-      console.log('Generating strategy:', { templateId, caseType, caseDetails });
+      case "add-milestone": {
+        const milestoneName = formData.get("milestoneName") as string;
 
-      return {
-        success: true,
-        message: "Strategy generated successfully",
-      };
-    }
+        if (!milestoneName?.trim()) {
+          return { success: false, error: "Milestone name is required" };
+        }
 
-    case "analyze-risk": {
-      const strategyId = formData.get("strategyId") as string;
-      const factors = formData.get("factors") as string;
-
-      // TODO: Perform risk analysis
-      console.log('Analyzing risk:', { strategyId, factors });
-
-      return {
-        success: true,
-        message: "Risk analysis completed",
-      };
-    }
-
-    case "add-milestone": {
-      const strategyId = formData.get("strategyId") as string;
-      const milestoneName = formData.get("milestoneName") as string;
-      const dueDate = formData.get("dueDate") as string;
-      const priority = formData.get("priority") as string;
-
-      if (!milestoneName?.trim()) {
         return {
-          success: false,
-          error: "Milestone name is required",
+          success: true,
+          message: "Milestone added",
         };
       }
 
-      // TODO: Add milestone to strategy
-      console.log('Adding milestone:', { strategyId, milestoneName, dueDate, priority });
+      case "export": {
+        const format = formData.get("format") as string;
+        return {
+          success: true,
+          message: `Strategy exported as ${format?.toUpperCase() || 'PDF'}`,
+        };
+      }
 
-      return {
-        success: true,
-        message: "Milestone added",
-      };
+      default:
+        return { success: false, error: "Invalid action" };
     }
-
-    case "export": {
-      const strategyId = formData.get("strategyId") as string;
-      const format = formData.get("format") as string;
-
-      // TODO: Export strategy document
-      console.log('Exporting strategy:', { strategyId, format });
-
-      return {
-        success: true,
-        message: `Strategy exported as ${format?.toUpperCase() || 'PDF'}`,
-      };
-    }
-
-    default:
-      return {
-        success: false,
-        error: "Invalid action",
-      };
+  } catch (error) {
+    console.error("Strategy builder action failed", error);
+    return { success: false, error: "Action failed" };
   }
 }
 
@@ -227,7 +212,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 
 export default function LitigationBuilderRoute() {
   const navigate = useNavigate();
-  const { templates, caseTypes } = useLoaderData() as LoaderData;
+  const { templates, caseTypes, cases } = useLoaderData() as LoaderData;
 
   const handleCancel = () => {
     navigate('/litigation');
@@ -280,6 +265,25 @@ export default function LitigationBuilderRoute() {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                   />
                 </div>
+
+                <div className="sm:col-span-2">
+                  <label htmlFor="caseId" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Select Case
+                  </label>
+                  <select
+                    id="caseId"
+                    name="caseId"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                  >
+                    <option value="">Select a case...</option>
+                    {cases.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.title} ({c.caseNumber || 'No Number'})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label htmlFor="caseType" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Case Type

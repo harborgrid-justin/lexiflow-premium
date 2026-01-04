@@ -14,6 +14,7 @@
 // ============================================================================
 import { Download, Plus } from 'lucide-react';
 import React, { Suspense, useTransition } from 'react';
+import { CaseListContent } from './CaseListContent';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

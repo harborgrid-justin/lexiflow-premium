@@ -1,9 +1,9 @@
 import { dataPlatformApi } from '@/api/data-platform';
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { Button } from '@/components/ui/atoms/Button';
-import { useNotify } from '@/hooks/core';
-import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
+import { useNotify } from '@/hooks/core';
 import { cn } from '@/utils/cn';
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
 import React, { useState } from 'react';
@@ -81,7 +81,7 @@ export const BackupVault: React.FC = () => {
                 </div>
             </div>
 
-            <BackupMetrics latestCreated={snapshots.length > 0 ? snapshots[0].createdAt : undefined} stats={stats} />
+            <BackupMetrics latestCreated={snapshots.length > 0 ? snapshots[0]!.createdAt : undefined} stats={stats} />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Snapshots Table */}

@@ -106,13 +106,15 @@ export class DocketRepository {
    * Retrieves all docket entries with optional case filtering
    * Routes to backend API if enabled, otherwise uses IndexedDB
    *
-   * @returns Promise<DocketEntry[]>
+   * @param filters - Optional filters for search, type, pagination
+   * @returns Promise<PaginatedResponse<DocketEntry> | DocketEntry[]>
    * @complexity O(1) API call or O(n) IndexedDB scan
    */
-  async getAll(): Promise<DocketEntry[]> {
+  async getAll(
+    filters?: DocketFilterOptions
+  ): Promise<PaginatedResponse<DocketEntry> | DocketEntry[]> {
     if (isBackendApiEnabled()) {
-      const response = await this.docketApi.getAll();
-      return response.data;
+      return this.docketApi.getAll(filters);
     }
     return [];
   }

@@ -10,8 +10,8 @@
  * @module routes/reports/index
  */
 
-import { api } from '@/api';
 import type { Report } from '@/api/compliance/reports-api';
+import { DataService } from '@/services/data/dataService';
 import type { ReportCategory } from '@/types/analytics-enterprise';
 import {
   Calendar,
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { Form, Link, useLoaderData, useSubmit, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
+import { createListMeta } from '../_shared/meta-utils';
 
 // ============================================================================
 // Types
@@ -40,9 +40,10 @@ interface RouteErrorBoundaryProps {
 // Meta Tags
 // ============================================================================
 
-export function meta(_: unknown) {
-  return createMeta({
-    title: 'Reports',
+export function meta({ data }: { data: LoaderData }) {
+  return createListMeta({
+    entityType: 'Reports',
+    count: data?.reports?.length,
     description: 'Create, manage, and schedule custom reports',
   });
 }
@@ -56,26 +57,31 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
 
-  // Fetch reports from API
-  const reports = await api.compliance.reports.getAll({
-    reportType: category !== 'all' ? (category as Report['reportType']) : undefined,
-  });
+  try {
+    // Fetch reports from API
+    const reports = await DataService.reports.getAll({
+      reportType: category !== 'all' ? (category as Report['reportType']) : undefined,
+    });
 
-  // Filter by search term if API doesn't support it yet
-  const filteredReports = search
-    ? reports.filter((r: Report) => r.name.toLowerCase().includes(search.toLowerCase()))
-    : reports;
+    // Filter by search term if API doesn't support it yet
+    const filteredReports = search
+      ? reports.filter((r: Report) => r.name.toLowerCase().includes(search.toLowerCase()))
+      : reports;
 
-  return {
-    reports: filteredReports,
-    search,
-    category,
-  };
+    return {
+      reports: filteredReports,
+      search,
+      category,
+    };
+  } catch (error) {
+    console.error("Failed to load reports", error);
+    return {
+      reports: [],
+      search,
+      category,
+    };
+  }
 }
-
-
-
-
 
 // ============================================================================
 // Action
@@ -84,21 +90,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
-  // const _id = formData.get("id");
+  const id = formData.get("id") as string;
 
   try {
     switch (intent) {
       case "delete": {
-        // await api.reports.delete(id as string);
+        if (id) await DataService.reports.delete(id);
         return { success: true, message: "Report deleted" };
       }
       case "run-now": {
-        // await api.reports.run(id as string);
+        if (id) {
+          const report = await DataService.reports.getById(id);
+          await DataService.reports.generate({
+            reportType: report.reportType,
+            format: report.format,
+            filters: report.filters
+          });
+        }
         return { success: true, message: "Report generation started" };
       }
       case "duplicate": {
-        // await api.reports.duplicate(id as string);
-        return { success: true, message: "Report duplicated" };
+        // Duplicate not directly supported, maybe just re-run logic or create template
+        // For now, treat as run-now or ignore
+        return { success: false, error: "Duplicate not supported yet" };
       }
       default:
         return { success: false, error: "Invalid action" };
@@ -218,14 +232,16 @@ export default function ReportsIndexRoute() {
 
 function ReportCard({ report }: { report: Report }) {
   const submit = useSubmit();
+  const description = (report.metadata?.description as string) || '';
+  const schedule = (report.metadata?.schedule as { frequency: string }) || null;
 
   return (
     <div className="group relative flex flex-col justify-between rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
       <div>
         <div className="flex items-start justify-between">
-          <div className={`rounded-lg p-2 ${report.category === 'financial' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
-            report.category === 'operational' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
-              report.category === 'compliance' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
+          <div className={`rounded-lg p-2 ${report.reportType === 'billing' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
+            report.reportType === 'case_status' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+              report.reportType === 'compliance' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
                 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
             }`}>
             <FileText className="h-6 w-6" />
@@ -245,17 +261,17 @@ function ReportCard({ report }: { report: Report }) {
           </Link>
         </h3>
         <p className="mt-1 text-sm text-gray-500 line-clamp-2 dark:text-gray-400">
-          {report.description}
+          {description}
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-            {report.type.replace('-', ' ')}
+            {report.reportType.replace('_', ' ')}
           </span>
-          {report.schedule && (
+          {schedule && (
             <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
               <Calendar className="h-3 w-3" />
-              {report.schedule.frequency}
+              {schedule.frequency}
             </span>
           )}
         </div>
@@ -263,8 +279,8 @@ function ReportCard({ report }: { report: Report }) {
 
       <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-700">
         <div className="text-xs text-gray-500 dark:text-gray-400">
-          {report.lastRun ? (
-            <>Last run: {new Date(report.lastRun).toLocaleDateString()}</>
+          {report.generatedAt ? (
+            <>Last run: {new Date(report.generatedAt).toLocaleDateString()}</>
           ) : (
             <>Never run</>
           )}

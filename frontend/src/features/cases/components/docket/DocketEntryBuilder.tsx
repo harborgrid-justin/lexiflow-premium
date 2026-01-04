@@ -18,8 +18,8 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 
 // Internal Dependencies - Hooks & Context
-import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -111,7 +111,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
     const validation = validateDocketEntry(entry);
     if (!validation.isValid) {
       setValidationErrors(validation.errors.map(e => e.message));
-      notifyError(`Validation failed: ${validation.errors[0].message}`);
+      notifyError(`Validation failed: ${validation.errors[0]?.message}`);
       return;
     }
 
@@ -169,7 +169,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         <div className={cn("p-4 rounded-lg border", theme.status.error.bg, theme.status.error.border)}>
           <h4 className={cn("text-sm font-bold mb-2", theme.status.error.text)}>Validation Errors:</h4>
           <ul className="list-disc list-inside space-y-1">
-            {validationErrors.map((error) => (
+            {validationErrors.map((error, i) => (
               <li key={i} className={cn("text-sm", theme.status.error.text)}>{error}</li>
             ))}
           </ul>
@@ -265,7 +265,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                 <option value="Court" />
                 <option value="Plaintiff" />
                 <option value="Defendant" />
-                {caseParties.map((p) => <option key={i} value={p} />)}
+                {caseParties.map((p, i) => <option key={i} value={p} />)}
               </datalist>
             </div>
           </div>

@@ -13,7 +13,7 @@ export type Entitlements = {
   storageLimitGB: number;
 };
 
-type EntitlementsContextValue = {
+export type EntitlementsContextValue = {
   entitlements: Entitlements;
   isLoading: boolean;
 };
@@ -85,7 +85,7 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = () => {
   }, [auth.status, auth.user]);
 
   const value = useMemo(() => ({ entitlements, isLoading }), [entitlements, isLoading]);
-  
+
   return <EntitlementsContext.Provider value={value}>{null}</EntitlementsContext.Provider>;
 };
 

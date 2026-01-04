@@ -1,14 +1,17 @@
-import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
-import { FilePlus, UserCircle } from 'lucide-react';
-import { NAVIGATION_ITEMS } from '../nav.config';
-import { PATHS } from '../paths.config';
-import { COMPONENT_MAP } from './componentMap';
-import { NewCasePage, UserProfileManager } from './lazyComponents';
+import { ModuleRegistry } from "@/services/infrastructure/moduleRegistry";
+import { FilePlus, UserCircle } from "lucide-react";
+import { NAVIGATION_ITEMS } from "../nav.config";
+import { PATHS } from "../paths.config";
+import { COMPONENT_MAP } from "./componentMap";
+import { NewCasePage, UserProfileManager } from "./lazyComponents";
 
 export const initializeModules = () => {
   const modules = NAVIGATION_ITEMS.flatMap((item) => {
     const { children, ...itemWithoutChildren } = item;
-    const mainModule = { ...itemWithoutChildren, component: COMPONENT_MAP[item.id] };
+    const mainModule = {
+      ...itemWithoutChildren,
+      component: COMPONENT_MAP[item.id],
+    };
 
     if (children && children.length > 0) {
       const childModules = children.map((child) => ({
@@ -23,24 +26,24 @@ export const initializeModules = () => {
     }
 
     return [mainModule];
-  }).filter((m) => m.component !== undefined);
+  }).filter((m): m is ModuleDefinition => m.component !== undefined);
 
   ModuleRegistry.registerBatch(modules);
 
   ModuleRegistry.register({
     id: PATHS.CREATE_CASE,
-    label: 'New Case',
+    label: "New Case",
     icon: FilePlus,
-    category: 'Case Work',
+    category: "Case Work",
     component: NewCasePage,
     hidden: true,
   });
 
   ModuleRegistry.register({
     id: PATHS.PROFILE,
-    label: 'My Profile',
+    label: "My Profile",
     icon: UserCircle,
-    category: 'Admin',
+    category: "Admin",
     component: UserProfileManager,
     hidden: true,
   });

@@ -7,7 +7,8 @@
  * @module routes/war-room/index
  */
 
-import { api } from '@/api';
+import { WarRoom } from '@/features/litigation/war-room/WarRoom';
+import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -38,7 +39,7 @@ export function meta({ data }: { data: { items: unknown[] } }) {
 
 export async function loader({ request: _ }: LoaderFunctionArgs) {
   try {
-    const cases = await api.cases.getAll();
+    const cases = await DataService.cases.getAll();
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
     const warRoomCases = cases.filter(c => c.status === 'Active' || c.status === 'Trial');
 
@@ -57,24 +58,50 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create":
-      // In a real app, this would create a new war room context or case
-      return { success: true, message: "War room created" };
-    case "delete":
-      return { success: true, message: "War room deleted" };
-    case "archive":
-      return { success: true, message: "War room archived" };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "create": {
+        // Create a new case with Trial status
+        const title = formData.get("title") as string;
+        if (title) {
+          await DataService.cases.add({
+            title,
+            status: 'Trial',
+            description: 'Created from War Room',
+            client: 'Unknown', // Should be provided
+            practiceArea: 'Litigation'
+          });
+          return { success: true, message: "War room case created" };
+        }
+        return { success: false, error: "Title required" };
+      }
+      case "delete": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.cases.delete(id);
+          return { success: true, message: "War room case deleted" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      case "archive": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.cases.update(id, { status: 'Closed' });
+          return { success: true, message: "War room archived" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
-
-import { WarRoom } from '@/features/litigation/war-room/WarRoom';
 
 export default function WarRoomIndexRoute() {
   return <WarRoom />;

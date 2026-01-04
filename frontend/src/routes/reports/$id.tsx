@@ -5,6 +5,7 @@
 
 import { ChartCard } from '@/components/enterprise/analytics';
 import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
+import { DataService } from '@/services/data/dataService';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
@@ -40,67 +41,31 @@ export function meta({ params }: { params: { id: string } }) {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
+  if (!id) throw new Error("Report ID is required");
 
-  // TODO: Fetch real report data from API
-  const mockReport = {
-    id,
-    name: 'Monthly Billing Summary',
-    description: 'Comprehensive monthly billing and revenue report',
-    type: 'billing-summary',
-    category: 'financial',
-    generatedAt: new Date().toISOString(),
-    period: {
-      start: '2024-01-01',
-      end: '2024-01-31',
-    },
-    data: {
-      summary: {
-        totalRevenue: 524000,
-        collected: 475000,
-        outstanding: 232000,
-        realizationRate: 92.3,
-        collectionRate: 90.6,
-      },
-      charts: [
-        {
-          id: 'revenue-trend',
-          type: 'line',
-          title: 'Revenue Trend',
-          data: [
-            { week: 'Week 1', revenue: 125000, collected: 112000 },
-            { week: 'Week 2', revenue: 132000, collected: 118000 },
-            { week: 'Week 3', revenue: 128000, collected: 121000 },
-            { week: 'Week 4', revenue: 139000, collected: 124000 },
-          ],
-        },
-        {
-          id: 'by-practice-area',
-          type: 'bar',
-          title: 'Revenue by Practice Area',
-          data: [
-            { area: 'Corporate', revenue: 185000 },
-            { area: 'Litigation', revenue: 142000 },
-            { area: 'IP/Patent', revenue: 98000 },
-            { area: 'Real Estate', revenue: 99000 },
-          ],
-        },
-        {
-          id: 'by-attorney',
-          type: 'bar',
-          title: 'Top Billing Attorneys',
-          data: [
-            { name: 'Sarah Chen', revenue: 112000 },
-            { name: 'Michael Torres', revenue: 98000 },
-            { name: 'Jessica Park', revenue: 89000 },
-            { name: 'David Kim', revenue: 76000 },
-            { name: 'Emily Davis', revenue: 68000 },
-          ],
-        },
-      ],
-    },
-  };
+  try {
+    const report = await DataService.reports.getById(id);
+    const metadata = report.metadata || {};
 
-  return { report: mockReport };
+    const mappedReport = {
+      id: report.id,
+      name: report.name,
+      description: (metadata.description as string) || '',
+      type: report.reportType,
+      category: report.reportType,
+      generatedAt: report.generatedAt || new Date().toISOString(),
+      period: (metadata.period as any) || { start: null, end: null },
+      data: {
+        summary: (metadata.summary as any) || {},
+        charts: (metadata.charts as any[]) || []
+      }
+    };
+
+    return { report: mappedReport };
+  } catch (error) {
+    console.error("Failed to load report", error);
+    throw error;
+  }
 }
 
 export default function ReportViewerRoute() {

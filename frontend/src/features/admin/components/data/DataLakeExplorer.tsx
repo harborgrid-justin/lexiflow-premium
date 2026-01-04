@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DataLakeItem } from '@/types';
@@ -94,7 +94,7 @@ export function DataLakeExplorer(): React.ReactElement {
 
             <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surface.highlight, theme.border.default)}>
                 <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4" /></button>
-                {currentPath.slice(1).map((folder) => (
+                {currentPath.slice(1).map((folder, i) => (
                     <React.Fragment key={folder}>
                         <ChevronRight className="h-4 w-4 text-slate-400" />
                         <button

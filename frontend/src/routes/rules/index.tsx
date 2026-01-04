@@ -7,6 +7,8 @@
  * @module routes/rules/index
  */
 
+import { RulesPlatform } from '@/features/knowledge/rules/RulesPlatform';
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -28,12 +30,13 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement rules engine data fetching
-  // const url = new URL(request.url);
-  // const category = url.searchParams.get("category");
-  // const rules = await api.rules.list({ category });
-
-  return { items: [], totalCount: 0 };
+  try {
+    const rules = await DataService.rules.getAll();
+    return { items: rules, totalCount: rules.length };
+  } catch (error) {
+    console.error("Failed to load rules", error);
+    return { items: [], totalCount: 0 };
+  }
 }
 
 // ============================================================================
@@ -44,29 +47,49 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create":
-      // TODO: Handle rule creation
-      return { success: true, message: "Rule created" };
-    case "delete":
-      // TODO: Handle rule deletion
-      return { success: true, message: "Rule deleted" };
-    case "enable":
-      // TODO: Handle rule activation
-      return { success: true, message: "Rule enabled" };
-    case "disable":
-      // TODO: Handle rule deactivation
-      return { success: true, message: "Rule disabled" };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "create": {
+        const data = Object.fromEntries(formData);
+        delete data.intent;
+        await DataService.rules.add(data);
+        return { success: true, message: "Rule created" };
+      }
+      case "delete": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.rules.delete(id);
+          return { success: true, message: "Rule deleted" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      case "enable": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.rules.update(id, { enabled: true });
+          return { success: true, message: "Rule enabled" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      case "disable": {
+        const id = formData.get("id") as string;
+        if (id) {
+          await DataService.rules.update(id, { enabled: false });
+          return { success: true, message: "Rule disabled" };
+        }
+        return { success: false, error: "ID required" };
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
-
-import { RulesPlatform } from '@/features/knowledge/rules/RulesPlatform';
 
 export default function RulesIndexRoute() {
   return <RulesPlatform />;

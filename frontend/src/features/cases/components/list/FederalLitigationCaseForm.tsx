@@ -16,12 +16,12 @@
  * 5. All dropdowns support keyboard navigation (WCAG 2.1 AA compliant)
  */
 
-import React, { useState, useReducer, useCallback, useEffect } from 'react';
-import { Scale, Users, Building, FileText, Calendar, AlertCircle } from 'lucide-react';
-import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
-import { Case, CaseStatus } from '@/types';
 import { api } from '@/api';
+import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
+import { Case, CaseStatus } from '@/types';
+import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 
 // Federal Case Type enum (matching backend case.entity.ts)
 export enum CaseType {
@@ -131,7 +131,7 @@ const initialState: FederalLitigationFormState = {
   natureOfSuit: '',
   natureOfSuitCode: '',
   juryDemand: 'None',
-  filingDate: new Date().toISOString().split('T')[0],
+  filingDate: new Date().toISOString().split('T')[0] || '',
   trialDate: null,
   dateTerminated: null,
   parties: [],
@@ -198,7 +198,7 @@ function formReducer(state: FederalLitigationFormState, action: FormAction): Fed
         natureOfSuit: loadedCase.natureOfSuit || '',
         natureOfSuitCode: loadedCase.natureOfSuitCode || '',
         juryDemand: (loadedCase.juryDemand as 'None' | 'Plaintiff' | 'Defendant' | 'Both') || 'None',
-        filingDate: loadedCase.filingDate || new Date().toISOString().split('T')[0],
+        filingDate: loadedCase.filingDate || new Date().toISOString().split('T')[0] || '',
         trialDate: loadedCase.trialDate || null,
         dateTerminated: loadedCase.dateTerminated || null,
         parties: loadedCase.parties?.map(p => (typeof p === 'string' ? p : p.id)) || [],
@@ -378,9 +378,8 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               type="text"
               value={state.title}
               onChange={(e) => updateField('title', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                state.errors.title ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
-              } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${state.errors.title ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
               placeholder="Saadein-Morales v. Westridge Swim & Racquet Club"
             />
             {state.errors.title && (
@@ -399,9 +398,8 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               type="text"
               value={state.caseNumber}
               onChange={(e) => updateField('caseNumber', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                state.errors.caseNumber ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
-              } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${state.errors.caseNumber ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
               placeholder="1:24-cv-01442-LMB-IDD"
             />
             {state.errors.caseNumber && (

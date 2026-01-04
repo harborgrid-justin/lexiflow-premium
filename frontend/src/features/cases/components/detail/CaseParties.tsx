@@ -296,7 +296,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                 aria-label="Link to Organization"
                                 className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                                 value={currentParty.linkedOrgId || ''}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({ ...currentParty, linkedOrgId: e.target.value || undefined })}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({ ...currentParty, linkedOrgId: (e.target.value || undefined) as OrgId | undefined })}
                             >
                                 <option value="">No Link</option>
                                 {orgs.map(org => (

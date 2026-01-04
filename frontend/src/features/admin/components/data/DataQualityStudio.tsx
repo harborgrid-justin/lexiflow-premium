@@ -6,8 +6,8 @@ import { JSX } from 'react/jsx-runtime';
 import { Button } from '@/components/ui/atoms/Button';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { Tabs } from '@/components/ui/molecules/Tabs';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { cn } from '@/utils/cn';
@@ -175,7 +175,7 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
                                         </div>
                                         <div className="flex gap-2 items-center flex-wrap">
                                             <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surface.highlight, theme.text.secondary)}>
-                                                {rule.conditions.length > 0 ? `${rule.conditions[0].field} ${rule.conditions[0].operator} ...` : 'No conditions'}
+                                                {rule.conditions.length > 0 ? `${rule.conditions[0]!.field} ${rule.conditions[0]!.operator} ...` : 'No conditions'}
                                             </code>
                                             <span className={cn("text-xs", theme.text.tertiary)}>{rule.description}</span>
                                         </div>

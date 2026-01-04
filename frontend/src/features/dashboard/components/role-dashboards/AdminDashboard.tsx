@@ -4,18 +4,18 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
-import React from 'react';
-import { Users, Activity, Server, AlertCircle } from 'lucide-react';
+import { ChartCard, KPICard, StatWidget } from '@/components/dashboard/widgets';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
-import { KPICard, StatWidget, ChartCard } from '@/components/dashboard/widgets';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { cn } from '@/utils/cn';
+import { Activity, AlertCircle, Server, Users } from 'lucide-react';
+import React from 'react';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const AdminDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
 
   const { isLoading } = useQuery(
     ['dashboard', 'admin'],
@@ -81,9 +81,9 @@ export const AdminDashboard: React.FC = () => {
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={mockUserActivity}>
-            <CartesianGrid strokeDasharray="3 3" stroke={theme.theme === 'dark' ? '#374151' : '#e5e7eb'} />
-            <XAxis dataKey="date" stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'} />
-            <YAxis stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
+            <XAxis dataKey="date" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="users" stroke="#3b82f6" name="Active Users" strokeWidth={2} />

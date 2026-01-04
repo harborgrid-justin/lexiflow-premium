@@ -38,9 +38,9 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
     useInterval(() => {
         setData(currentData => {
             if (currentData.length === 0) return currentData;
-            const nextTime = currentData[currentData.length - 1].time + 1;
+            const nextTime = currentData[currentData.length - 1]!.time + 1;
             // Random walk logic for somewhat realistic look
-            const prevValue = currentData[currentData.length - 1].value;
+            const prevValue = currentData[currentData.length - 1]!.value;
             const delta = Math.floor(Math.random() * 100) - 50;
             const nextValue = Math.max(100, Math.min(900, prevValue + delta));
 

@@ -40,13 +40,13 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         try {
           // Try to fetch audit logs or system metrics
           const logs = await adminApi.auditLogs.getAll();
-          const logList = Array.isArray(logs) ? logs : (logs as Record<string, unknown>).data || [];
+          const logList = (Array.isArray(logs) ? logs : (logs as Record<string, unknown>).data || []) as Record<string, unknown>[];
 
           const mappedLogs: DashboardItem[] = logList.map((log: Record<string, unknown>) => ({
             type: 'audit',
-            id: log.id,
+            id: log.id as string,
             label: `Audit: ${log.action} by ${log.userId}`,
-            action: log.action
+            action: log.action as string
           }));
           setItems(mappedLogs);
           return;
@@ -60,13 +60,13 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       try {
         const cases = await litigationApi.cases.getAll();
         // cases might be PaginatedResponse or array. Assuming array or .data
-        const caseList = Array.isArray(cases) ? cases : (cases as Record<string, unknown>).data || [];
+        const caseList = (Array.isArray(cases) ? cases : (cases as Record<string, unknown>).data || []) as Record<string, unknown>[];
 
         const mappedCases: DashboardItem[] = caseList.map((c: Record<string, unknown>) => ({
           type: 'case',
-          id: c.id,
-          label: c.title || c.caseNumber || "Untitled Case",
-          status: c.status
+          id: c.id as string,
+          label: (c.title || c.caseNumber || "Untitled Case") as string,
+          status: c.status as string
         }));
         setItems(mappedCases);
       } catch (e) {

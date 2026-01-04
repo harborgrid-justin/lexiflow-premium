@@ -6,12 +6,12 @@
  * @module routes/evidence/detail
  */
 
-import { useNavigate, useLoaderData } from 'react-router';
+import { DataService } from '@/services/data/dataService';
+import type { EvidenceItem } from '@/types';
+import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";
-import { DataService } from '@/services/data/dataService';
-import type { EvidenceItem } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -136,52 +136,7 @@ export default function EvidenceDetailRoute() {
   );
 }
 
-switch (intent) {
-  case "update":
-    // TODO: Implement update
-    return { success: true };
-  case "delete":
-    // TODO: Implement delete
-    // return redirect("/evidence");
-    return { success: true };
-  default:
-    return { success: false, error: "Invalid action" };
-}
-}
 
-// ============================================================================
-// Component
-// ============================================================================
-
-export default function EvidenceDetailRoute() {
-  const navigate = useNavigate();
-
-  return (
-    <div className="p-8">
-      <div className="mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back
-        </button>
-      </div>
-
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Evidence Detail
-      </h1>
-
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <p className="text-gray-500 dark:text-gray-400">
-          Detail view under development.
-        </p>
-      </div>
-    </div>
-  );
-}
 
 // ============================================================================
 // Error Boundary

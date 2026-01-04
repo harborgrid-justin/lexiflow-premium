@@ -6,20 +6,18 @@
  * @module routes/documents/detail
  */
 
-import { DocumentsApiService } from '@/api/admin/documents-api';
 import {
   DocumentAnnotations,
   DocumentViewer,
   MetadataPanel,
   VersionHistory
 } from '@/components/features/documents/components';
+import { DataService } from '@/services/data/dataService';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
-
-const documentsApi = new DocumentsApiService();
 
 // ============================================================================
 // Meta Tags
@@ -46,9 +44,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const document = await documentsApi.getById(documentId);
-    const versions = await documentsApi.getVersions(documentId);
-    const annotations = await documentsApi.getAnnotations(documentId);
+    const document = await DataService.documents.getById(documentId);
+    const versions = await DataService.documents.getVersions(documentId);
+    const annotations = await DataService.documents.getAnnotations(documentId);
 
     return {
       document,
@@ -79,16 +77,16 @@ export async function action({ params, request }: ActionFunctionArgs) {
     switch (intent) {
       case "update": {
         const updates = JSON.parse(formData.get("data") as string);
-        await documentsApi.update(documentId, updates);
+        await DataService.documents.update(documentId, updates);
         return { success: true };
       }
       case "delete": {
-        await documentsApi.delete(documentId);
+        await DataService.documents.delete(documentId);
         return { success: true, redirect: "/documents" };
       }
       case "restore-version": {
         const versionId = formData.get("versionId") as string;
-        await documentsApi.restoreVersion(documentId, versionId);
+        await DataService.documents.restoreVersion(documentId, versionId);
         return { success: true };
       }
       default:
@@ -111,7 +109,7 @@ export default function DocumentDetailRoute() {
 
   const handleUpdate = async (updates: Partial<typeof doc>) => {
     try {
-      await documentsApi.update(doc.id, updates);
+      await DataService.documents.update(doc.id, updates);
       window.location.reload();
     } catch (error) {
       console.error('Update failed:', error);
@@ -123,10 +121,10 @@ export default function DocumentDetailRoute() {
     if (!confirm(`Restore to version ${versionNumber}?`)) return;
 
     try {
-      const versionId = versions.find((v) => v.versionNumber === versionNumber)?.id;
+      const versionId = versions.find((v: DocumentVersion) => v.versionNumber === versionNumber)?.id;
       if (!versionId) throw new Error('Version not found');
 
-      await documentsApi.restoreVersion(doc.id, versionId as string);
+      await DataService.documents.restoreVersion(doc.id, versionId as string);
       window.location.reload();
     } catch (error) {
       console.error('Restore failed:', error);
@@ -140,7 +138,7 @@ export default function DocumentDetailRoute() {
       const version2 = versions.find((v: DocumentVersion) => v.versionNumber === v2);
       if (!version1 || !version2) throw new Error('Versions not found');
 
-      const result = await documentsApi.compareVersions(
+      const result = await DataService.documents.compareVersions(
         doc.id,
         version1.id as string,
         version2.id as string
@@ -156,7 +154,7 @@ export default function DocumentDetailRoute() {
 
   const handleDownload = async () => {
     try {
-      const blob = await documentsApi.download(doc.id);
+      const blob = await DataService.documents.download(doc.id);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -173,7 +171,7 @@ export default function DocumentDetailRoute() {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      await documentsApi.delete(doc.id);
+      await DataService.documents.delete(doc.id);
       navigate('/documents');
     } catch (error) {
       console.error('Delete failed:', error);
@@ -302,7 +300,7 @@ export default function DocumentDetailRoute() {
                 annotations={annotations}
                 onAdd={async (annotation) => {
                   try {
-                    await documentsApi.addAnnotation(doc.id, annotation);
+                    await DataService.documents.addAnnotation(doc.id, annotation);
                     window.location.reload();
                   } catch (error) {
                     console.error('Failed to add annotation:', error);
@@ -311,7 +309,7 @@ export default function DocumentDetailRoute() {
                 }}
                 onDelete={async (id) => {
                   try {
-                    await documentsApi.deleteAnnotation(doc.id, id);
+                    await DataService.documents.deleteAnnotation(doc.id, id);
                     window.location.reload();
                   } catch (error) {
                     console.error('Failed to delete annotation:', error);

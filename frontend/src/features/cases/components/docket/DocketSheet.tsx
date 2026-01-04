@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2, Radio } from 'lucide-react';
-import React, { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useEffect, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -28,12 +28,12 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
@@ -58,7 +58,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const liveModeToggle = useToggle();
 
   // Defer search term for better typing responsiveness
-  const _deferredSearchTerm = useDeferredValue(searchTerm);
+  // const _deferredSearchTerm = useDeferredValue(searchTerm);
 
   const addModal = useModalState();
   const deleteModal = useModalState();
@@ -222,7 +222,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     const parts = text.split(/(Docket #\d+|Motion|Order|Complaint|Exhibit|Answer)/g);
     return (
       <>
-        {parts.map((part) => {
+        {parts.map((part, i) => {
           if (part.match(/Docket #\d+/)) {
             return <span key={i} className={cn("font-medium cursor-pointer hover:underline px-1 rounded mx-0.5", theme.primary.text, theme.primary.light)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); alert(`Navigating to ${part}`); }}>{part}</span>;
           }

@@ -7,6 +7,8 @@
  * @module routes/data-platform/index
  */
 
+import { AdminDatabaseControl } from '@/features/admin/components/data/AdminDatabaseControl';
+import { DataService } from '@/services/data/dataService';
 import { ActionFunctionArgs } from 'react-router-dom';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -28,11 +30,14 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Implement data platform fetching
-  // const dataSources = await api.dataPlatform.getSources();
-  // const integrations = await api.dataPlatform.getIntegrations();
-
-  return { items: [], totalCount: 0 };
+  try {
+    // DataService.dataSources might be null if backend is disabled (though it shouldn't be in this context)
+    const dataSources = await DataService.dataSources?.getAll() || [];
+    return { items: dataSources, totalCount: dataSources.length };
+  } catch (error) {
+    console.error("Failed to load data sources", error);
+    return { items: [], totalCount: 0 };
+  }
 }
 
 // ============================================================================
@@ -45,13 +50,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   switch (intent) {
     case "create":
-      // TODO: Handle data source creation
+      // TODO: Handle data source creation via DataService.dataSources.create()
       return { success: true, message: "Data source created" };
     case "delete":
-      // TODO: Handle data source deletion
+      // TODO: Handle data source deletion via DataService.dataSources.delete()
       return { success: true, message: "Data source deleted" };
     case "sync":
-      // TODO: Handle data sync
+      // TODO: Handle data sync via DataService.dataSources.sync()
       return { success: true, message: "Sync initiated" };
     default:
       return { success: false, error: "Invalid action" };
@@ -61,8 +66,6 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 // Component
 // ============================================================================
-
-import { AdminDatabaseControl } from '@/features/admin/components/data/AdminDatabaseControl';
 
 export default function DataPlatformIndexRoute() {
   return <AdminDatabaseControl />;

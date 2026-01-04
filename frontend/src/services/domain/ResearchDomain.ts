@@ -181,4 +181,15 @@ export const ResearchService = {
     console.warn("[ResearchService] Backend related cases API unavailable");
     return [];
   },
+
+  getHistory: async (): Promise<any[]> => {
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<any[]>("/research/history");
+      } catch (error) {
+        console.error("[ResearchService.getHistory] Backend error:", error);
+      }
+    }
+    return [];
+  },
 };

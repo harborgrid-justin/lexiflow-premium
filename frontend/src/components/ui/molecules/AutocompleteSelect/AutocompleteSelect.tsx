@@ -1,8 +1,8 @@
 /**
  * AutocompleteSelect Component
- * 
+ *
  * Generic type-safe autocomplete dropdown with create-new-entity capability.
- * 
+ *
  * Architecture Decisions:
  * 1. Generic over TEntity and TValue to support any entity type while maintaining type safety
  * 2. Controlled component pattern - parent manages selected value
@@ -10,67 +10,67 @@
  * 4. Keyboard navigation (Arrow keys, Enter, Escape) for accessibility
  * 5. Virtual scrolling for large option lists (performance optimization)
  * 6. Memoized render functions to prevent unnecessary re-renders
- * 
+ *
  * Type Parameters:
  * @template TEntity - The entity type (e.g., Party, Case, Attorney)
  * @template TValue - The value type (usually string for IDs)
  * @template TCreateData - The data shape for creating new entities
  */
 
-import React, { useState, useRef, useEffect, useMemo, useCallback} from 'react';
-import { createPortal } from 'react-dom';
-import { Search, Plus, Loader, AlertCircle, Check } from 'lucide-react';
-import { useEntityAutocomplete, EntityAutocompleteConfig } from '@/hooks/useEntityAutocomplete';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { EntityAutocompleteConfig, useEntityAutocomplete } from '@/hooks/useEntityAutocomplete';
+import { AlertCircle, Check, Loader, Plus, Search } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-export interface AutocompleteSelectProps<TEntity, TValue extends string = string, TCreateData = Partial<TEntity>> 
+export interface AutocompleteSelectProps<TEntity, TValue extends string = string, TCreateData = Partial<TEntity>>
   extends Omit<EntityAutocompleteConfig<TEntity, TCreateData>, 'debounceMs' | 'minSearchLength' | 'initialOptions'> {
-  
+
   /** Current selected value */
   value: TValue | null;
-  
+
   /** Callback when selection changes */
   onChange: (value: TValue | null, entity: TEntity | null) => void;
-  
+
   /** Placeholder text */
   placeholder?: string;
-  
+
   /** Label for the input */
   label?: string;
-  
+
   /** Required field indicator */
   required?: boolean;
-  
+
   /** Disabled state */
   disabled?: boolean;
-  
+
   /** Error message */
   error?: string;
-  
+
   /** Helper text */
   helperText?: string;
-  
+
   /** Component to render for creating new entity (optional) */
   CreateComponent?: React.ComponentType<CreateComponentProps<TCreateData>>;
-  
+
   /** Custom option renderer */
   renderOption?: (entity: TEntity, isHighlighted: boolean, isSelected: boolean) => React.ReactNode;
-  
+
   /** Custom empty state */
   renderEmpty?: (searchQuery: string) => React.ReactNode;
-  
+
   /** Allow clearing selection */
   clearable?: boolean;
-  
+
   /** Maximum height for dropdown in pixels */
   maxDropdownHeight?: number;
-  
+
   /** Additional CSS classes */
   className?: string;
-  
+
   /** Test ID for automated testing */
   testId?: string;
-  
+
   /** Initial options to display before search */
   initialOptions?: TEntity[];
 }
@@ -78,13 +78,13 @@ export interface AutocompleteSelectProps<TEntity, TValue extends string = string
 export interface CreateComponentProps<TCreateData> {
   /** Initial data (pre-filled from search query) */
   initialData: Partial<TCreateData>;
-  
+
   /** Callback when entity is created */
   onCreated: (data: TCreateData) => void;
-  
+
   /** Callback to cancel */
   onCancel: () => void;
-  
+
   /** Loading state while creating */
   isCreating: boolean;
 }
@@ -115,15 +115,15 @@ export const AutocompleteSelect = React.memo(<
   initialOptions = [],
   ...autocompleteConfig
 }: AutocompleteSelectProps<TEntity, TValue, TCreateData>) => {
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   // Hook for entity autocomplete logic
   const {
     options,
@@ -140,16 +140,16 @@ export const AutocompleteSelect = React.memo(<
     debounceMs: 300,
     minSearchLength: 0,
   });
-  
+
   // Find selected entity for display
   const selectedEntity = useMemo(() => {
     if (!value) return null;
     const allEntities = [...initialOptions, ...options];
-    return allEntities.find(entity => 
+    return allEntities.find(entity =>
       autocompleteConfig.getValue(entity) === value
     ) || null;
   }, [value, options, initialOptions, autocompleteConfig]);
-  
+
   // Close dropdown when clicking outside
   useClickOutside(containerRef as React.RefObject<HTMLElement>, () => {
     if (isOpen) {
@@ -157,7 +157,7 @@ export const AutocompleteSelect = React.memo(<
       setSearchQuery('');
     }
   });
-  
+
   /**
    * Handle option selection
    * Type-safe: ensures entity matches TEntity and value matches TValue
@@ -169,7 +169,7 @@ export const AutocompleteSelect = React.memo(<
     setSearchQuery('');
     setHighlightedIndex(-1);
   }, [onChange, autocompleteConfig, setSearchQuery]);
-  
+
   /**
    * Handle clear selection
    */
@@ -178,7 +178,7 @@ export const AutocompleteSelect = React.memo(<
     onChange(null, null);
     setSearchQuery('');
   }, [onChange, setSearchQuery]);
-  
+
   /**
    * Handle keyboard navigation
    * Arrow Up/Down: Navigate options
@@ -187,33 +187,33 @@ export const AutocompleteSelect = React.memo(<
    */
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!isOpen && e.key !== 'Enter' && e.key !== 'ArrowDown') return;
-    
+
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
         } else {
-          setHighlightedIndex(prev => 
+          setHighlightedIndex(prev =>
             prev < options.length - 1 ? prev + 1 : prev
           );
         }
         break;
-        
+
       case 'ArrowUp':
         e.preventDefault();
         setHighlightedIndex(prev => prev > 0 ? prev - 1 : 0);
         break;
-        
+
       case 'Enter':
         e.preventDefault();
         if (highlightedIndex >= 0 && highlightedIndex < options.length) {
-          handleSelect(options[highlightedIndex]);
+          handleSelect(options[highlightedIndex]!);
         } else if (searchQuery.trim() && !hasExactMatch(searchQuery) && CreateComponent) {
           setShowCreateModal(true);
         }
         break;
-        
+
       case 'Escape':
         e.preventDefault();
         setIsOpen(false);
@@ -222,7 +222,7 @@ export const AutocompleteSelect = React.memo(<
         break;
     }
   }, [isOpen, options, highlightedIndex, searchQuery, hasExactMatch, CreateComponent, handleSelect, setSearchQuery]);
-  
+
   /**
    * Scroll highlighted option into view
    */
@@ -234,7 +234,7 @@ export const AutocompleteSelect = React.memo(<
       }
     }
   }, [highlightedIndex]);
-  
+
   /**
    * Handle create entity from modal
    */
@@ -248,7 +248,7 @@ export const AutocompleteSelect = React.memo(<
       // Error is handled in useEntityAutocomplete hook
     }
   }, [createEntity, handleSelect]);
-  
+
   /**
    * Default option renderer
    */
@@ -266,15 +266,15 @@ export const AutocompleteSelect = React.memo(<
       </div>
     </div>
   ), [autocompleteConfig]);
-  
+
   const optionRenderer = renderOption || defaultRenderOption;
-  
+
   /**
    * Render dropdown content
    */
   const renderDropdown = () => {
     if (!isOpen) return null;
-    
+
     const dropdownContent = (
       <div
         ref={dropdownRef}
@@ -287,7 +287,7 @@ export const AutocompleteSelect = React.memo(<
             <span className="ml-2 text-sm text-slate-600 dark:text-slate-400">Searching...</span>
           </div>
         )}
-        
+
         {!isLoading && options.length === 0 && (
           <div className="py-8 text-center text-slate-500">
             {renderEmpty ? (
@@ -309,14 +309,14 @@ export const AutocompleteSelect = React.memo(<
             )}
           </div>
         )}
-        
+
         {!isLoading && options.length > 0 && (
           <div className="max-h-64 overflow-y-auto">
             {options.map((entity: TEntity, index: number) => {
               const entityValue = autocompleteConfig.getValue(entity);
               const isSelected = entityValue === value;
               const isHighlighted = index === highlightedIndex;
-              
+
               return (
                 <div
                   key={entityValue}
@@ -327,7 +327,7 @@ export const AutocompleteSelect = React.memo(<
                 </div>
               );
             })}
-            
+
             {searchQuery.trim() && !hasExactMatch(searchQuery) && CreateComponent && (
               <button
                 onClick={() => setShowCreateModal(true)}
@@ -342,7 +342,7 @@ export const AutocompleteSelect = React.memo(<
             )}
           </div>
         )}
-        
+
         {autocompleteError && (
           <div className="px-4 py-3 border-t border-red-200 bg-red-50 dark:bg-red-900/20">
             <div className="flex items-center text-sm text-red-600 dark:text-red-400">
@@ -353,11 +353,11 @@ export const AutocompleteSelect = React.memo(<
         )}
       </div>
     );
-    
+
     // Use portal to avoid z-index issues
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return dropdownContent;
-    
+
     return createPortal(
       <div
         style={{
@@ -372,7 +372,7 @@ export const AutocompleteSelect = React.memo(<
       document.body
     );
   };
-  
+
   return (
     <div ref={containerRef} className={`relative ${className}`} data-testid={testId}>
       {label && (
@@ -381,7 +381,7 @@ export const AutocompleteSelect = React.memo(<
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
-      
+
       <div className="relative">
         <input
           ref={inputRef}
@@ -403,7 +403,7 @@ export const AutocompleteSelect = React.memo(<
             bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
           `}
         />
-        
+
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           {isLoading ? (
             <Loader className="w-5 h-5 animate-spin text-slate-400" />
@@ -411,7 +411,7 @@ export const AutocompleteSelect = React.memo(<
             <Search className="w-5 h-5 text-slate-400" />
           )}
         </div>
-        
+
         {clearable && value && !disabled && (
           <button
             onClick={handleClear}
@@ -421,17 +421,17 @@ export const AutocompleteSelect = React.memo(<
           </button>
         )}
       </div>
-      
+
       {renderDropdown()}
-      
+
       {error && (
         <p className="mt-1 text-sm text-red-600 dark:text-red-400">{error}</p>
       )}
-      
+
       {!error && helperText && (
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{helperText}</p>
       )}
-      
+
       {showCreateModal && CreateComponent && (
         <CreateComponent
           initialData={{ name: searchQuery } as unknown as Partial<TCreateData>}

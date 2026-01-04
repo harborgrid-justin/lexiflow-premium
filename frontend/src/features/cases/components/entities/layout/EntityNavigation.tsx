@@ -1,11 +1,11 @@
-import React from 'react';
-import { Network, Users, Share2, ShieldAlert, Map as MapIcon, BarChart3, Database, Building, Briefcase, Import, GraduationCap, Scale, FileCheck, DollarSign } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
+import { BarChart3, Briefcase, Building, Database, DollarSign, FileCheck, GraduationCap, Import, Map as MapIcon, Network, Scale, Share2, ShieldAlert, Users } from 'lucide-react';
+import React from 'react';
 
-export type DirectorView = 
+export type DirectorView =
   | 'directory' | 'network' | 'hierarchy' | 'conflicts' | 'map' | 'analytics' | 'ingestion' | 'governance' | 'vendors'
-  | 'ubo_register' | 'kyc_docs' 
+  | 'ubo_register' | 'kyc_docs'
   | 'oc_scorecards' | 'oc_rates'
   | 'talent_alumni';
 
@@ -63,63 +63,63 @@ const PARENT_TABS = [
   }
 ];
 
-export const EntityNavigation: React.FC<EntityNavigationProps> = ({ 
-  activeTab, setActiveTab, activeParentTabId, onParentTabChange 
+export const EntityNavigation: React.FC<EntityNavigationProps> = ({
+  activeTab, setActiveTab, activeParentTabId, onParentTabChange
 }) => {
   const { theme } = useTheme();
-  
+
   const activeParentTab = PARENT_TABS.find(p => p.id === activeParentTabId) || PARENT_TABS[0];
 
   return (
     <>
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4 overflow-x-auto no-scrollbar", theme.border.default)}>
-            {PARENT_TABS.map(parent => (
-                <button
-                    key={parent.id}
-                    onClick={() => onParentTabChange(parent.id)}
-                    className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2 whitespace-nowrap",
-                        activeParentTabId === parent.id 
-                            ? cn("border-current", theme.primary.text)
-                            : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
-                    )}
-                >
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTabId === parent.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {parent.label}
-                </button>
-            ))}
-        </div>
+      {/* Desktop Parent Navigation */}
+      <div className={cn("hidden md:flex space-x-6 border-b mb-4 overflow-x-auto no-scrollbar", theme.border.default)}>
+        {PARENT_TABS.map(parent => (
+          <button
+            key={parent.id}
+            onClick={() => onParentTabChange(parent.id)}
+            className={cn(
+              "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2 whitespace-nowrap",
+              activeParentTabId === parent.id
+                ? cn("border-current", theme.primary.text)
+                : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
+            )}
+          >
+            <parent.icon className={cn("h-4 w-4 mr-2", activeParentTabId === parent.id ? theme.primary.text : theme.text.tertiary)} />
+            {parent.label}
+          </button>
+        ))}
+      </div>
 
-        {/* Sub-Navigation (Pills) */}
-        {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
-                {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => setActiveTab(tab.id as DirectorView)} 
-                        className={cn(
-                            "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTab === tab.id 
-                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
-                        )}
-                    >
-                        <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                        {tab.label}
-                    </button>
-                ))}
-            </div>
-        )}
+      {/* Sub-Navigation (Pills) */}
+      {activeParentTab?.subTabs && activeParentTab.subTabs.length > 1 && (
+        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
+          {activeParentTab?.subTabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as DirectorView)}
+              className={cn(
+                "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
+                activeTab === tab.id
+                  ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border)
+                  : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
+              )}
+            >
+              <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)} />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
     </>
   );
 };
 
 export const getEntityParentTab = (view: DirectorView) => {
-    return PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || PARENT_TABS[0];
+  return PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || PARENT_TABS[0];
 };
 
 export const getEntityFirstTab = (parentId: string) => {
-    const parent = PARENT_TABS.find(p => p.id === parentId);
-    return parent && parent.subTabs.length > 0 ? parent.subTabs[0].id as DirectorView : 'directory';
+  const parent = PARENT_TABS.find(p => p.id === parentId);
+  return parent && parent.subTabs.length > 0 ? parent.subTabs[0]!.id as DirectorView : 'directory';
 };

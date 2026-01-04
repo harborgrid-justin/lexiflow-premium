@@ -1,10 +1,10 @@
 /**
  * JurisdictionSelector.tsx
- * 
+ *
  * Hierarchical jurisdiction selector supporting Federal (circuit/district) and
  * State (state/court level/county) court systems. Dynamically loads court options
  * based on selected hierarchy level.
- * 
+ *
  * @module components/case-list/case-form/JurisdictionSelector
  * @category Case Management - Forms
  */
@@ -12,8 +12,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useMemo } from 'react';
-import { Globe, Building } from 'lucide-react';
+import { Building, Globe } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,8 +22,8 @@ import { Globe, Building } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Data
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '@/api/types/federalHierarchy';
 import { cn } from '@/utils/cn';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS} from '@/api/types/federalHierarchy';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -31,7 +31,7 @@ import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS} from '@/api/types/federalHierarc
 import { JurisdictionObject } from '@/types';
 
 interface JurisdictionSelectorProps {
-  onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject } | null) => void;
+    onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject } | null) => void;
 }
 
 export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJurisdictionChange }) => {
@@ -43,7 +43,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
 
     useEffect(() => {
         if (system && level1 && ((system === 'Federal' && level2) || (system === 'State' && level2 && finalCourt))) {
-             onJurisdictionChange({
+            onJurisdictionChange({
                 finalCourt: finalCourt || level2!,
                 jurisdictionConfig: {
                     country: 'USA',
@@ -65,17 +65,17 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
         setFinalCourt(null);
     };
 
-    const level1Options = system === 'Federal' 
-        ? FEDERAL_CIRCUITS.map(c => c.name) 
+    const level1Options = system === 'Federal'
+        ? FEDERAL_CIRCUITS.map(c => c.name)
         : Object.values(STATE_JURISDICTIONS).map(s => s.name);
-    
+
     const level2Options = useMemo(() => {
         if (!level1) return [];
         if (system === 'Federal') {
             return FEDERAL_CIRCUITS.find(c => c.name === level1)?.districts || [];
         }
         if (system === 'State') {
-            const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k].name === level1);
+            const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k as keyof typeof STATE_JURISDICTIONS]?.name === level1) as keyof typeof STATE_JURISDICTIONS | undefined;
             return stateKey ? STATE_JURISDICTIONS[stateKey].levels.map(l => l.name) : [];
         }
         return [];
@@ -84,7 +84,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     const finalCourtOptions = useMemo(() => {
         if (!level1 || !level2) return [];
         if (system === 'State') {
-            const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k].name === level1);
+            const stateKey = Object.keys(STATE_JURISDICTIONS).find(k => STATE_JURISDICTIONS[k as keyof typeof STATE_JURISDICTIONS]?.name === level1) as keyof typeof STATE_JURISDICTIONS | undefined;
             return stateKey ? STATE_JURISDICTIONS[stateKey].levels.find(l => l.name === level2)?.courts || [] : [];
         }
         return [];
@@ -112,14 +112,14 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
                     onClick={() => handleSystemSelect('Federal')}
                     className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'Federal' ? "bg-blue-50 border-blue-300 ring-1 ring-blue-200" : `hover:${theme.surface.default}`)}
                 >
-                    <Globe className="h-6 w-6 mx-auto text-blue-600 mb-1"/>
+                    <Globe className="h-6 w-6 mx-auto text-blue-600 mb-1" />
                     <span className="text-sm font-bold text-blue-800">Federal</span>
                 </button>
                 <button
                     onClick={() => handleSystemSelect('State')}
                     className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'State' ? "bg-green-50 border-green-300 ring-1 ring-green-200" : `hover:${theme.surface.default}`)}
                 >
-                    <Building className="h-6 w-6 mx-auto text-green-600 mb-1"/>
+                    <Building className="h-6 w-6 mx-auto text-green-600 mb-1" />
                     <span className="text-sm font-bold text-green-800">State</span>
                 </button>
             </div>
@@ -150,7 +150,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
                 'Select Level...',
                 !level1
             )}
-            
+
             {system === 'State' && level2 && finalCourtOptions.length > 0 && renderSelect(
                 'Court Name',
                 finalCourt,

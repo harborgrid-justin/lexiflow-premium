@@ -26,11 +26,11 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { DocketRepository } from '@/services/data/repositories/DocketRepository';
 import { DocumentRepository } from '@/services/data/repositories/DocumentRepository';
 import { EvidenceRepository } from '@/services/data/repositories/EvidenceRepository';
 import { TaskRepository } from '@/services/data/repositories/TaskRepository';
 import { CorrespondenceService } from '@/services/domain/CommunicationDomain';
+import { DocketRepository } from '@/services/domain/DocketDomain';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
 
@@ -75,7 +75,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
 
     const handleCreateTask = async (task: WorkflowTask) => {
         const tasks = (await DataService.tasks) as TaskRepository;
-        await tasks.add(task);
+        await tasks.add(task as unknown as any);
         notify.success('Follow-up task created.');
     };
 
@@ -89,8 +89,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             title: `Correspondence: ${commItem.subject}`,
             type: 'Correspondence',
             content: commItem.preview,
-            uploadDate: new Date().toISOString().split('T')[0],
-            lastModified: new Date().toISOString().split('T')[0],
+            uploadDate: new Date().toISOString().split('T')[0] ?? '',
+            lastModified: new Date().toISOString().split('T')[0] ?? '',
             tags: ['Communication', commItem.type],
             versions: [],
             sourceModule: 'Correspondence',
@@ -154,7 +154,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             title: `Return Receipt - ${serviceItem.documentTitle}`,
             type: 'Document',
             description: `Proof of delivery/service for ${serviceItem.documentTitle} to ${serviceItem.targetPerson}. Signed by ${signerName}.`,
-            collectionDate: new Date().toISOString().split('T')[0],
+            collectionDate: new Date().toISOString().split('T')[0] ?? '',
             collectedBy: 'System Import',
             custodian: 'Firm Records',
             location: 'Digital Evidence Vault',

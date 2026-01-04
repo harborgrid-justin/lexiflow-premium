@@ -91,9 +91,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [passwordPolicy] = useState<PasswordPolicy>(DEFAULT_PASSWORD_POLICY);
 
   // Refs for intervals and timeouts
-  const sessionTimeoutRef = useRef<NodeJS.Timeout>();
-  const tokenRefreshRef = useRef<NodeJS.Timeout>();
-  const sessionWarningRef = useRef<NodeJS.Timeout>();
+  const sessionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const tokenRefreshRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const sessionWarningRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const userRef = useRef<AuthUser | null>(null);
 
   // Keep user ref in sync
@@ -255,13 +255,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const authUser: AuthUser = {
         id: response.user.id,
         email: response.user.email,
-        name: response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0],
+        name: (response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0]) || 'Unknown User',
         role: (response.user.role || 'attorney') as AuthUser['role'],
         avatarUrl: response.user.avatarUrl,
-        permissions: response.user.permissions || [],
-        mfaEnabled: response.user.mfaEnabled,
-        accountLocked: response.user.accountLocked,
-        passwordExpiresAt: response.user.passwordExpiresAt,
+        permissions: (response.user as any).permissions || [],
+        mfaEnabled: (response.user as any).mfaEnabled,
+        accountLocked: (response.user as any).accountLocked,
+        passwordExpiresAt: (response.user as any).passwordExpiresAt,
         lastLoginAt: new Date(),
         failedLoginAttempts: 0,
       };

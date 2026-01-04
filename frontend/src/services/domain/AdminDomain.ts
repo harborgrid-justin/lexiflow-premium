@@ -346,4 +346,32 @@ export const AdminService = {
     }
     return [];
   },
+
+  getSystemSettings: async (): Promise<any> => {
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/admin/settings");
+      } catch (error) {
+        console.warn("Failed to fetch system settings", error);
+      }
+    }
+    // Fallback or default
+    return {
+      backendUrl: process.env.VITE_API_URL || "/api",
+      dataSource: "postgresql",
+      cacheEnabled: true,
+      cacheTTL: 300,
+      maxUploadSize: 50 * 1024 * 1024,
+      sessionTimeout: 30,
+      auditLogging: true,
+      maintenanceMode: false,
+      features: {
+        ocr: true,
+        aiAssistant: true,
+        realTimeSync: true,
+        advancedSearch: true,
+        documentVersioning: true,
+      },
+    };
+  },
 };

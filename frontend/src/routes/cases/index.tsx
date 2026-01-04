@@ -18,8 +18,8 @@
  * @module routes/cases/index
  */
 
-import { api } from '@/api';
 import { CaseManagement } from '@/features/cases/components/list/CaseManagement';
+import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { useCallback } from 'react';
 import { redirect, useNavigate } from 'react-router';
@@ -57,8 +57,8 @@ export async function clientLoader() {
 
   // Fetch data in parallel for performance
   const [cases, invoices] = await Promise.all([
-    api.cases.getAll(),
-    api.invoices.getAll(),
+    DataService.cases.getAll(),
+    DataService.invoices.getAll(),
   ]);
 
   return { cases, invoices };
@@ -93,7 +93,7 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       try {
-        const newCase = await api.cases.add({
+        const newCase = await DataService.cases.add({
           title: title.trim(),
           caseNumber: caseNumber.trim(),
           status: "Active",
@@ -117,7 +117,7 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       try {
-        await api.cases.delete(caseId);
+        await DataService.cases.delete(caseId);
         return { success: true };
       } catch (error) {
         return {

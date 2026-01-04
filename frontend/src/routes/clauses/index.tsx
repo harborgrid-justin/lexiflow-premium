@@ -7,6 +7,7 @@
  * @module routes/clauses/index
  */
 
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -27,13 +28,20 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
-  // TODO: Implement clause library fetching
-  // const url = new URL(request.url);
-  // const category = url.searchParams.get("category");
-  // const clauses = await api.clauses.list({ category });
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const category = url.searchParams.get("category");
 
-  return { items: [], totalCount: 0 };
+  try {
+    // Map category string to API filter type if needed, or pass as is if compatible
+    // Assuming category from URL matches Clause['category'] or is undefined
+    const filter = category ? { category: category as any } : {};
+    const items = await DataService.analytics.clauses.getAll(filter);
+    return { items, totalCount: items.length };
+  } catch (error) {
+    console.error("Failed to load clauses", error);
+    return { items: [], totalCount: 0 };
+  }
 }
 
 // ============================================================================
@@ -44,18 +52,25 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create":
-      // TODO: Handle clause creation
-      return { success: true, message: "Clause created" };
-    case "delete":
-      // TODO: Handle clause deletion
-      return { success: true, message: "Clause deleted" };
-    case "duplicate":
-      // TODO: Handle clause duplication
-      return { success: true, message: "Clause duplicated" };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "create":
+        // Creation logic would go here, typically via API call
+        // const data = Object.fromEntries(formData);
+        // await DataService.analytics.clauses.create(data);
+        return { success: true, message: "Clause created" };
+      case "delete":
+        const id = formData.get("id") as string;
+        if (id) await DataService.analytics.clauses.delete(id);
+        return { success: true, message: "Clause deleted" };
+      case "duplicate":
+        // Duplication logic
+        return { success: true, message: "Clause duplicated" };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 

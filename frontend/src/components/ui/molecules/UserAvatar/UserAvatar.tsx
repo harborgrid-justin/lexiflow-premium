@@ -62,9 +62,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
     if (!user?.name) return 'U';
     const parts = user.name.trim().split(' ');
     if (parts.length >= 2) {
-      return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+      return `${parts[0]![0]}${parts[parts.length - 1]![0]}`.toUpperCase();
     }
-    return user.name[0].toUpperCase();
+    return user.name[0]!.toUpperCase();
   };
 
   const getAvatarColor = () => {

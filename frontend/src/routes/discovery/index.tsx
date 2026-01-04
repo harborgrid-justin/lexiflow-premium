@@ -7,6 +7,8 @@
  * @module routes/discovery/index
  */
 
+import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -27,13 +29,18 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
-  // TODO: Implement discovery data fetching
-  // const url = new URL(request.url);
-  // const caseId = url.searchParams.get("caseId");
-  // const discovery = await api.discovery.list({ caseId });
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const caseId = url.searchParams.get("caseId") || undefined;
 
-  return { items: [], totalCount: 0 };
+  try {
+    // Fetch discovery processes
+    const items = await DataService.discoveryMain.getAll({ caseId });
+    return { items, totalCount: items.length };
+  } catch (error) {
+    console.error("Failed to load discovery data", error);
+    return { items: [], totalCount: 0 };
+  }
 }
 
 // ============================================================================
@@ -44,26 +51,46 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create":
-      // TODO: Handle discovery request creation
-      return { success: true, message: "Discovery request created" };
-    case "delete":
-      // TODO: Handle discovery request deletion
-      return { success: true, message: "Discovery request deleted" };
-    case "respond":
-      // TODO: Handle discovery response
-      return { success: true, message: "Response recorded" };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "create": {
+        const title = formData.get("title") as string;
+        const caseId = formData.get("caseId") as string;
+        const type = formData.get("type") as any;
+
+        if (title && caseId && type) {
+          await DataService.discoveryRequests.create({
+            title,
+            caseId,
+            requestType: type,
+            status: 'draft'
+          });
+        }
+        return { success: true, message: "Discovery request created" };
+      }
+
+      case "delete": {
+        const id = formData.get("id") as string;
+        if (id) await DataService.discoveryRequests.delete(id);
+        return { success: true, message: "Discovery request deleted" };
+      }
+
+      case "respond": {
+        // TODO: Handle discovery response (update request)
+        return { success: true, message: "Response recorded" };
+      }
+
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
-
-import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
 
 export default function DiscoveryIndexRoute() {
   return <DiscoveryPlatform initialTab="dashboard" />;

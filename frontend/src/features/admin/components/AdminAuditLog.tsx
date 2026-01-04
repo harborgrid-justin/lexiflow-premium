@@ -1,10 +1,9 @@
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useToast } from '@/providers';
-import { useWindow } from '@/providers';
+import { useQuery } from '@/hooks/backend';
+import { useToast, useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { ChainedLogEntry, ChainService, IntegrityReport } from '@/services/infrastructure/chainService';
 import { AuditLogEntry } from '@/types';
@@ -72,7 +71,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
             ...newLogs[randomIndex],
             action: "UNAUTHORIZED_ACCESS",
             resource: "/restricted/payroll_db"
-        };
+        } as ChainedLogEntry;
         setLocalLogs(newLogs);
         addToast(`Simulated Attack: Modified Block #${randomIndex + 1}.`, 'warning');
         setVerifyResult(null);

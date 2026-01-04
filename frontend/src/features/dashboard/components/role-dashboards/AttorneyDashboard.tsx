@@ -4,18 +4,18 @@
  * @description Attorney-specific dashboard focused on billable hours, case deadlines, and workload
  */
 
-import React from 'react';
-import { Clock, Briefcase, Target, Calendar, FileText, TrendingUp } from 'lucide-react';
+import { ChartCard, DeadlinesList, KPICard, StatWidget } from '@/components/dashboard/widgets';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
-import { KPICard, StatWidget, ChartCard, DeadlinesList } from '@/components/dashboard/widgets';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { cn } from '@/utils/cn';
+import { Briefcase, Calendar, Clock, FileText, Target, TrendingUp } from 'lucide-react';
+import React from 'react';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const AttorneyDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
 
   const { isLoading } = useQuery(
     ['dashboard', 'attorney'],
@@ -87,9 +87,9 @@ export const AttorneyDashboard: React.FC = () => {
       >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={mockHoursData}>
-            <CartesianGrid strokeDasharray="3 3" stroke={theme.theme === 'dark' ? '#374151' : '#e5e7eb'} />
-            <XAxis dataKey="day" stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'} />
-            <YAxis stroke={theme.theme === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
+            <XAxis dataKey="day" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <Tooltip />
             <Bar dataKey="hours" fill="#3b82f6" name="Hours" />
           </BarChart>

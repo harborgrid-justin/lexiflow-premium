@@ -10,7 +10,15 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 
-const DafDashboardComponent = () => {
+interface DafDashboardProps {
+  stats?: {
+    dataSources: number;
+    accessPolicies: number;
+    activeKeys: number;
+  };
+}
+
+const DafDashboardComponent = ({ stats }: DafDashboardProps) => {
   const { theme } = useTheme();
 
   return (
@@ -39,7 +47,7 @@ const DafDashboardComponent = () => {
             <Database className="h-5 w-5 text-blue-600" />
             <div>
               <p className={cn("text-sm", theme.text.secondary)}>Data Sources</p>
-              <p className={cn("text-2xl font-bold", theme.text.primary)}>12</p>
+              <p className={cn("text-2xl font-bold", theme.text.primary)}>{stats?.dataSources ?? 0}</p>
             </div>
           </div>
         </div>
@@ -49,7 +57,7 @@ const DafDashboardComponent = () => {
             <Lock className="h-5 w-5 text-emerald-600" />
             <div>
               <p className={cn("text-sm", theme.text.secondary)}>Access Policies</p>
-              <p className={cn("text-2xl font-bold", theme.text.primary)}>47</p>
+              <p className={cn("text-2xl font-bold", theme.text.primary)}>{stats?.accessPolicies ?? 0}</p>
             </div>
           </div>
         </div>
@@ -59,7 +67,7 @@ const DafDashboardComponent = () => {
             <Key className="h-5 w-5 text-purple-600" />
             <div>
               <p className={cn("text-sm", theme.text.secondary)}>Active Keys</p>
-              <p className={cn("text-2xl font-bold", theme.text.primary)}>23</p>
+              <p className={cn("text-2xl font-bold", theme.text.primary)}>{stats?.activeKeys ?? 0}</p>
             </div>
           </div>
         </div>

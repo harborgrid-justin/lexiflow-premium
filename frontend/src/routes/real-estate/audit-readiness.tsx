@@ -8,9 +8,9 @@
  */
 
 import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/audit-readiness";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/audit-readiness";
 
 // ============================================================================
 // Meta Tags
@@ -28,7 +28,8 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Fetch real estate audit readiness data
+  // TODO: Fetch real estate audit readiness data when API is available
+  // Currently no backend service for real estate audit readiness
   return {
     data: null,
     stats: {
@@ -64,7 +65,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function AuditReadinessRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

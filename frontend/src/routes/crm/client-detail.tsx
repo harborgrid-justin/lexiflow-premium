@@ -6,8 +6,9 @@
  * @module routes/crm/client-detail
  */
 
+import { DataService } from '@/services/data/dataService';
 import type { Client } from '@/types';
-import { useNavigate } from 'react-router';
+import { redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/client-detail";
@@ -37,13 +38,16 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("Client ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.crm.clients.get(clientId);
-  // if (!item) {
-  //   throw new Response("Client not found", { status: 404 });
-  // }
-
-  return { item: null as { id: string; name: string } | null };
+  try {
+    const item = await DataService.clients.getById(clientId);
+    if (!item) {
+      throw new Response("Client not found", { status: 404 });
+    }
+    return { item };
+  } catch (error) {
+    console.error("Failed to load client", error);
+    throw new Response("Client not found", { status: 404 });
+  }
 }
 
 // ============================================================================
@@ -60,16 +64,25 @@ export async function action({ params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/crm");
-      return { success: true };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "update": {
+        const updates: Partial<Client> = {};
+        const name = formData.get("name");
+        if (name && typeof name === 'string') updates.name = name;
+
+        await DataService.clients.update(clientId, updates);
+        return { success: true };
+      }
+      case "delete": {
+        await DataService.clients.delete(clientId);
+        return redirect("/crm");
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
@@ -79,6 +92,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function ClientDetailRoute() {
   const navigate = useNavigate();
+  const { item } = useLoaderData() as { item: Client };
 
   return (
     <div className="p-8">
@@ -94,14 +108,60 @@ export default function ClientDetailRoute() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Client Detail
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          {item.name}
+        </h1>
+        <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+          {item.status}
+        </span>
+      </div>
 
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <p className="text-gray-500 dark:text-gray-400">
-          Detail view under development.
-        </p>
+      <div className="bg-white shadow overflow-hidden sm:rounded-lg dark:bg-gray-800">
+        <div className="px-4 py-5 sm:px-6">
+          <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+            Client Information
+          </h3>
+          <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+            Personal details and application.
+          </p>
+        </div>
+        <div className="border-t border-gray-200 dark:border-gray-700">
+          <dl>
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800/50">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Full name
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 dark:text-gray-100">
+                {item.name}
+              </dd>
+            </div>
+            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Industry
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 dark:text-gray-100">
+                {item.industry || 'N/A'}
+              </dd>
+            </div>
+            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800/50">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Email address
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 dark:text-gray-100">
+                {item.email || 'N/A'}
+              </dd>
+            </div>
+            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Total Billed
+              </dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 dark:text-gray-100">
+                ${item.totalBilled?.toLocaleString() || '0'}
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </div>
   );

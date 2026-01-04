@@ -69,7 +69,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
         tables.forEach(t => {
             t.columns.forEach((col, idx) => {
                 if (col.fk) {
-                    const targetTableName = col.fk.split('.')[0];
+                    const targetTableName = col.fk.split('.')[0]!;
                     const targetTable = tableMap.get(targetTableName);
 
                     if (targetTable) {
@@ -118,7 +118,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                             <circle cx="5" cy="5" r="3" fill={lineColor} />
                         </marker>
                     </defs>
-                    {relationships.map((rel) => {
+                    {relationships.map((rel, i) => {
                         const midX = (rel.x1 + rel.x2) / 2;
                         return (
                             <path

@@ -56,7 +56,7 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = RULES_PLATFORM_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0].id as RulesView);
+      setActiveTab(parent.subTabs![0]!.id as RulesView);
     }
   }, []);
 

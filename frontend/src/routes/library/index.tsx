@@ -10,6 +10,7 @@
  * @module routes/library/index
  */
 
+import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -36,20 +37,35 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const category = url.searchParams.get("category") || "all";
   const search = url.searchParams.get("q") || "";
 
-  // TODO: Implement library data fetching
-  // const resources = await api.library.search({ category, search });
+  try {
+    // Map filters to API params
+    const filter = {
+      category: category !== "all" ? category : undefined,
+      search: search || undefined
+    };
 
-  return {
-    resources: [],
-    categories: [
-      { id: 'templates', name: 'Templates', count: 0 },
-      { id: 'precedents', name: 'Precedents', count: 0 },
-      { id: 'research', name: 'Research', count: 0 },
-      { id: 'forms', name: 'Forms', count: 0 },
-    ],
-    currentCategory: category,
-    searchQuery: search,
-  };
+    const resources = await DataService.analytics.knowledge.getAll(filter);
+
+    return {
+      resources,
+      categories: [
+        { id: 'templates', name: 'Templates', count: 0 }, // Counts could be fetched separately if needed
+        { id: 'precedents', name: 'Precedents', count: 0 },
+        { id: 'research', name: 'Research', count: 0 },
+        { id: 'forms', name: 'Forms', count: 0 },
+      ],
+      currentCategory: category,
+      searchQuery: search,
+    };
+  } catch (error) {
+    console.error("Failed to load library resources", error);
+    return {
+      resources: [],
+      categories: [],
+      currentCategory: category,
+      searchQuery: search,
+    };
+  }
 }
 
 // ============================================================================
@@ -60,17 +76,24 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "upload":
-      // TODO: Handle resource upload
-      return { success: true, message: "Resource uploaded" };
+  try {
+    switch (intent) {
+      case "upload":
+        // Upload logic would go here
+        // const data = Object.fromEntries(formData);
+        // await DataService.analytics.knowledge.create(data);
+        return { success: true, message: "Resource uploaded" };
 
-    case "delete":
-      // TODO: Handle resource deletion
-      return { success: true };
+      case "delete":
+        const id = formData.get("id") as string;
+        if (id) await DataService.analytics.knowledge.delete(id);
+        return { success: true };
 
-    default:
-      return { success: false, error: "Invalid action" };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 

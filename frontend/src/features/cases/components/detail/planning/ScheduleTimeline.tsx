@@ -57,7 +57,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
 
         return (
             <div className={cn("flex h-8 border-b", theme.border.default)}>
-                {days.map((d) => (
+                {days.map((d, i) => (
                     <div
                         key={i}
                         className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 select-none", theme.border.default, theme.text.tertiary)}

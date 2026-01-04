@@ -2,7 +2,7 @@
  * @module components/common/TabsV2
  * @category Common
  * @description Two-level tab navigation system matching TabbedPageLayout design.
- * 
+ *
  * Features:
  * - Parent tabs with underline style
  * - Sub-tabs with pill/badge style
@@ -10,15 +10,15 @@
  * - Keyboard navigation
  * - Responsive design
  * - Theme integration
- * 
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
 
-import React, { useRef } from 'react';
-import { LucideIcon } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
+import { LucideIcon } from 'lucide-react';
+import React, { useRef } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -90,17 +90,19 @@ export const TabsV2: React.FC<TabsV2Props> = ({
   // Keyboard navigation for parent tabs
   const handleParentKeyDown = (e: React.KeyboardEvent, index: number) => {
     const enabledTabs = tabs.filter(t => !t.disabled);
-    const currentIndex = enabledTabs.findIndex(t => t.id === tabs[index].id);
-    
+    const currentIndex = enabledTabs.findIndex(t => t.id === tabs[index]!.id);
+
     if (e.key === 'ArrowRight') {
       const nextIndex = (currentIndex + 1) % enabledTabs.length;
       const nextTab = enabledTabs[nextIndex];
+      if (!nextTab) return;
       handleParentTabChange(nextTab.id);
       const actualIndex = tabs.findIndex(t => t.id === nextTab.id);
       parentTabRefs.current[actualIndex]?.focus();
     } else if (e.key === 'ArrowLeft') {
       const prevIndex = (currentIndex - 1 + enabledTabs.length) % enabledTabs.length;
       const prevTab = enabledTabs[prevIndex];
+      if (!prevTab) return;
       handleParentTabChange(prevTab.id);
       const actualIndex = tabs.findIndex(t => t.id === prevTab.id);
       parentTabRefs.current[actualIndex]?.focus();
@@ -110,19 +112,21 @@ export const TabsV2: React.FC<TabsV2Props> = ({
   // Keyboard navigation for sub-tabs
   const handleSubKeyDown = (e: React.KeyboardEvent, index: number) => {
     if (!activeParentTab) return;
-    
+
     const enabledSubTabs = activeParentTab.subTabs.filter(t => !t.disabled);
-    const currentIndex = enabledSubTabs.findIndex(t => t.id === activeParentTab.subTabs[index].id);
-    
+    const currentIndex = enabledSubTabs.findIndex(t => t.id === activeParentTab.subTabs[index]!.id);
+
     if (e.key === 'ArrowRight') {
       const nextIndex = (currentIndex + 1) % enabledSubTabs.length;
       const nextTab = enabledSubTabs[nextIndex];
+      if (!nextTab) return;
       onChange(nextTab.id);
       const actualIndex = activeParentTab.subTabs.findIndex(t => t.id === nextTab.id);
       subTabRefs.current[actualIndex]?.focus();
     } else if (e.key === 'ArrowLeft') {
       const prevIndex = (currentIndex - 1 + enabledSubTabs.length) % enabledSubTabs.length;
       const prevTab = enabledSubTabs[prevIndex];
+      if (!prevTab) return;
       onChange(prevTab.id);
       const actualIndex = activeParentTab.subTabs.findIndex(t => t.id === prevTab.id);
       subTabRefs.current[actualIndex]?.focus();

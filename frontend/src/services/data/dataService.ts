@@ -1422,7 +1422,14 @@ Object.defineProperties(DataServiceBase, {
   playbooks: {
     get: () =>
       isBackendApiEnabled()
-        ? (draftingApi as unknown as { templates: unknown }).templates
+        ? {
+            getAll: () => draftingApi.getAllTemplates(),
+            getById: (id: string) => draftingApi.getTemplateById(id),
+            add: (item: any) => draftingApi.createTemplate(item),
+            update: (id: string, item: any) =>
+              draftingApi.updateTemplate(id, item),
+            delete: (id: string) => draftingApi.deleteTemplate(id),
+          }
         : legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES),
     enumerable: true,
   },

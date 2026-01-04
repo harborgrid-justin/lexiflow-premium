@@ -49,6 +49,8 @@ export const DocketAnalytics: React.FC = () => {
     DataService.docket.getAll
   );
 
+  const safeEntries = entries || [];
+
   // Cache key based on entries length and last modified date
   const cacheKey = useMemo(() => {
     // Safety check: ensure entries is always an array (moved inside useMemo)
@@ -131,7 +133,7 @@ export const DocketAnalytics: React.FC = () => {
           { label: 'Avg Time to Ruling', value: '14 Days', sub: '-2 days vs District Avg' },
           { label: 'Most Active Case', value: 'Martinez v. TechCorp', sub: `${safeEntries.filter(e => e.caseId === 'C-2024-001').length} Entries YTD` },
           { label: 'Upcoming Hearings', value: safeEntries.filter(e => e.type === 'Hearing').length.toString(), sub: 'Next 30 Days' }
-        ].map((stat) => (
+        ].map((stat, i) => (
           <div key={i} className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <p className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>{stat.label}</p>
             <p className={cn("text-2xl font-bold mb-1", theme.text.primary)}>{stat.value}</p>

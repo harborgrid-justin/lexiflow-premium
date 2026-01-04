@@ -88,7 +88,6 @@ export type { DataSourceType } from "./data/DataSourceContext.types";
 
 // Repository infrastructure exports
 export type {
-  AuthProvider,
   BaseRepository,
   BatchRepository,
   CaseRepository,
@@ -96,6 +95,7 @@ export type {
   ConflictResult,
   DataOwnership,
   DocumentRepository,
+  AuthProvider as RepositoryAuthProvider,
   RepositoryConfig,
   RepositoryFactory,
   RepositoryLogger,

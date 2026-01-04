@@ -9,7 +9,7 @@
  * @module routes/docket/index
  */
 
-import { api } from '@/api';
+import { DataService } from '@/services/data/dataService';
 import type { CaseId } from '@/types';
 import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
@@ -40,7 +40,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const page = parseInt(url.searchParams.get("page") || "1", 10);
 
   try {
-    const response = await api.docket.getAll({ search, type, page });
+    const response = await DataService.docket.getAll({ search, type, page });
 
     // Robust handling of API response structure
     let entries: DocketEntry[] = [];
@@ -52,9 +52,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     return {
       entries,
-      totalCount: response.total || entries.length || 0,
-      page: response.page || 1,
-      totalPages: response.totalPages || 1
+      totalCount: (response as any).total || entries.length || 0,
+      page: (response as any).page || 1,
+      totalPages: (response as any).totalPages || 1
     };
   } catch (error) {
     console.error("Failed to load docket entries:", error);
@@ -81,7 +81,7 @@ export async function action({ request }: ActionFunctionArgs) {
           return { success: false, error: "Missing required fields (Title, Case ID)" };
         }
 
-        await api.docket.add({
+        await DataService.docket.add({
           caseId: caseId as CaseId,
           title,
           description,
@@ -100,7 +100,7 @@ export async function action({ request }: ActionFunctionArgs) {
         const id = formData.get("id") as string;
         if (!id) return { success: false, error: "Missing ID" };
 
-        await api.docket.delete(id);
+        await DataService.docket.delete(id);
         return { success: true, message: "Entry deleted" };
       }
 

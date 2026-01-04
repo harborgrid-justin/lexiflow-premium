@@ -4,12 +4,13 @@
  * Handles password reset with token from email
  */
 
+import { AuthApiService } from '@/api/auth/auth-api';
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
@@ -80,11 +81,8 @@ console.log('useNavigate:', navigate);
     try {
       console.log('[ResetPassword] Resetting password with token');
 
-      // TODO: Implement actual password reset API call
-      // await authApi.resetPassword(token, formData.password);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const authApi = new AuthApiService();
+      await authApi.resetPassword(token, formData.password);
 
       // Redirect to login with success message
       navigate('/login?reset=success');

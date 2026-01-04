@@ -6,14 +6,11 @@
  * @module routes/documents/upload
  */
 
+import { DocumentUploader, type UploadMetadata } from '@/components/features/documents/components';
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/upload";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import { DocumentsApiService } from '@/api/admin/documents-api';
-import { DocumentUploader, type UploadMetadata } from '@/components/features/documents/components';
-
-const documentsApi = new DocumentsApiService();
+import type { Route } from "./+types/upload";
 
 // ============================================================================
 // Meta Tags
@@ -32,7 +29,7 @@ export function meta() {
 
 export default function DocumentUploadRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   const handleUpload = async (files: File[], metadata: UploadMetadata) => {
     try {
@@ -46,7 +43,7 @@ console.log('useNavigate:', navigate);
           description: metadata.description,
         };
 
-        return await documentsApi.upload(file, uploadMetadata);
+        return await DataService.documents.upload(file, uploadMetadata);
       });
 
       const results = await Promise.all(uploadPromises);

@@ -21,104 +21,16 @@ export function meta() {
   });
 }
 
-export async function loader() {
-  // TODO: Fetch real audit logs from API
-  const mockLogs: AuditLog[] = [
-    {
-      id: '1',
-      userId: 'user-1',
-      userName: 'Sarah Chen',
-      userEmail: 'sarah.chen@example.com',
-      action: 'create',
-      entityType: 'case',
-      entityId: 'case-123',
-      entityName: 'TechCorp v. Innovate LLC',
-      changes: [
-        { field: 'status', oldValue: null, newValue: 'active' },
-        { field: 'assignedTo', oldValue: null, newValue: 'user-1' },
-      ],
-      ipAddress: '192.168.1.100',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0',
-      timestamp: '2024-01-30T14:23:45Z',
-      severity: 'low',
-      category: 'data_modification',
-      createdAt: '2024-01-30T14:23:45Z',
-      updatedAt: '2024-01-30T14:23:45Z',
-    },
-    {
-      id: '2',
-      userId: 'user-2',
-      userName: 'Michael Torres',
-      userEmail: 'michael.torres@example.com',
-      action: 'login',
-      entityType: 'session',
-      ipAddress: '192.168.1.105',
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
-      timestamp: '2024-01-30T09:15:32Z',
-      severity: 'low',
-      category: 'authentication',
-      createdAt: '2024-01-30T09:15:32Z',
-      updatedAt: '2024-01-30T09:15:32Z',
-    },
-    {
-      id: '3',
-      userId: 'user-3',
-      userName: 'Jessica Park',
-      userEmail: 'jessica.park@example.com',
-      action: 'delete',
-      entityType: 'document',
-      entityId: 'doc-456',
-      entityName: 'Draft Motion.docx',
-      changes: [
-        { field: 'status', oldValue: 'active', newValue: 'deleted' },
-      ],
-      ipAddress: '192.168.1.112',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Edge/120.0.0.0',
-      timestamp: '2024-01-30T11:45:18Z',
-      severity: 'high',
-      category: 'data_modification',
-      createdAt: '2024-01-30T11:45:18Z',
-      updatedAt: '2024-01-30T11:45:18Z',
-    },
-    {
-      id: '4',
-      userId: 'user-1',
-      userName: 'Sarah Chen',
-      userEmail: 'sarah.chen@example.com',
-      action: 'export',
-      entityType: 'report',
-      entityId: 'report-789',
-      entityName: 'Client Billing Summary',
-      ipAddress: '192.168.1.100',
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0',
-      timestamp: '2024-01-30T16:30:22Z',
-      severity: 'medium',
-      category: 'data_access',
-      metadata: { format: 'PDF', recordCount: 1250 },
-      createdAt: '2024-01-30T16:30:22Z',
-      updatedAt: '2024-01-30T16:30:22Z',
-    },
-    {
-      id: '5',
-      userId: 'user-4',
-      userName: 'David Kim',
-      userEmail: 'david.kim@example.com',
-      action: 'access_denied',
-      entityType: 'case',
-      entityId: 'case-999',
-      entityName: 'Confidential Matter',
-      ipAddress: '192.168.1.120',
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Firefox/121.0',
-      timestamp: '2024-01-30T13:12:55Z',
-      severity: 'critical',
-      category: 'security',
-      metadata: { reason: 'Insufficient permissions' },
-      createdAt: '2024-01-30T13:12:55Z',
-      updatedAt: '2024-01-30T13:12:55Z',
-    },
-  ];
+import { DataService } from '@/services/data/dataService';
 
-  return { logs: mockLogs };
+export async function loader() {
+  try {
+    const logs = await DataService.security.getAuditLogs();
+    return { logs: logs as AuditLog[] };
+  } catch (error) {
+    console.error("Failed to load audit logs", error);
+    return { logs: [] };
+  }
 }
 
 export default function AuditTrailRoute() {

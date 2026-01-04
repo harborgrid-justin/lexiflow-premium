@@ -190,7 +190,7 @@ export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                 Team Activity
               </h3>
               <div className="space-y-3">
-                {(Array.isArray(teamMembers) ? teamMembers : (teamMembers as { data: User[] })?.data || []).slice(0, 5).map((member: User) => (
+                {(Array.isArray(teamMembers) ? teamMembers : (teamMembers as unknown as { data: User[] })?.data || []).slice(0, 5).map((member: User) => (
                   <ActivityItem key={member.id} member={member} isDark={isDark} />
                 ))}
               </div>

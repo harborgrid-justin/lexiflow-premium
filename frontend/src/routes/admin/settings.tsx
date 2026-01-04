@@ -11,6 +11,7 @@
  * @module routes/admin/settings
  */
 
+import { DataService } from '@/services/data/dataService';
 import { useId, useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -32,26 +33,49 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // Load system settings from backend
-  return {
-    settings: {
-      backendUrl: process.env.VITE_API_URL || '/api',
-      dataSource: 'postgresql',
-      cacheEnabled: true,
-      cacheTTL: 300,
-      maxUploadSize: 50 * 1024 * 1024, // 50MB
-      sessionTimeout: 30, // minutes
-      auditLogging: true,
-      maintenanceMode: false,
-    },
-    features: {
-      ocr: true,
-      aiAssistant: true,
-      realTimeSync: true,
-      advancedSearch: true,
-      documentVersioning: true,
-    },
-  };
+  try {
+    const config = await DataService.admin.getSystemSettings();
+    return {
+      settings: {
+        backendUrl: config.backendUrl,
+        dataSource: config.dataSource,
+        cacheEnabled: config.cacheEnabled,
+        cacheTTL: config.cacheTTL,
+        maxUploadSize: config.maxUploadSize,
+        sessionTimeout: config.sessionTimeout,
+        auditLogging: config.auditLogging,
+        maintenanceMode: config.maintenanceMode,
+      },
+      features: config.features || {
+        ocr: true,
+        aiAssistant: true,
+        realTimeSync: true,
+        advancedSearch: true,
+        documentVersioning: true,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to load settings", error);
+    return {
+      settings: {
+        backendUrl: process.env.VITE_API_URL || '/api',
+        dataSource: 'postgresql',
+        cacheEnabled: true,
+        cacheTTL: 300,
+        maxUploadSize: 50 * 1024 * 1024,
+        sessionTimeout: 30,
+        auditLogging: true,
+        maintenanceMode: false,
+      },
+      features: {
+        ocr: true,
+        aiAssistant: true,
+        realTimeSync: true,
+        advancedSearch: true,
+        documentVersioning: true,
+      }
+    };
+  }
 }
 
 // ============================================================================

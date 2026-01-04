@@ -13,6 +13,8 @@
 
 import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
+import { BackupService } from '../../services/domain/BackupDomain';
+import type { BackupSnapshot } from '../../types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/backup";
@@ -32,16 +34,11 @@ export function meta() {
 // Types
 // ============================================================================
 
-interface Backup {
-  id: string;
-  name: string;
-  type: 'full' | 'incremental' | 'differential';
-  status: 'completed' | 'in-progress' | 'failed' | 'scheduled';
-  size: number; // bytes
-  createdAt: string;
-  completedAt?: string;
+// Extend BackupSnapshot to include UI-specific fields if needed, or map them
+interface Backup extends BackupSnapshot {
   retentionDays: number;
   storageLocation: 'local' | 's3' | 'azure' | 'gcs';
+  createdAt: string; // Mapped from created
 }
 
 interface BackupSchedule {
@@ -60,79 +57,45 @@ interface BackupSchedule {
 // ============================================================================
 
 export async function loader() {
-  // Mock backup data
-  const backups: Backup[] = [
-    {
-      id: 'backup-1',
-      name: 'Daily Full Backup',
-      type: 'full',
-      status: 'completed',
-      size: 2.5 * 1024 * 1024 * 1024, // 2.5 GB
-      createdAt: new Date(Date.now() - 3600000).toISOString(),
-      completedAt: new Date(Date.now() - 3000000).toISOString(),
-      retentionDays: 30,
-      storageLocation: 'local',
-    },
-    {
-      id: 'backup-2',
-      name: 'Hourly Incremental',
-      type: 'incremental',
-      status: 'completed',
-      size: 150 * 1024 * 1024, // 150 MB
-      createdAt: new Date(Date.now() - 7200000).toISOString(),
-      completedAt: new Date(Date.now() - 7100000).toISOString(),
-      retentionDays: 7,
-      storageLocation: 'local',
-    },
-    {
-      id: 'backup-3',
-      name: 'Weekly Full Backup',
-      type: 'full',
-      status: 'completed',
-      size: 2.4 * 1024 * 1024 * 1024, // 2.4 GB
-      createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-      completedAt: new Date(Date.now() - 86400000 * 3 + 600000).toISOString(),
-      retentionDays: 90,
-      storageLocation: 's3',
-    },
-  ];
+  const snapshots = await BackupService.getSnapshots();
+  const schedulesData = await BackupService.getSchedules();
 
-  const schedules: BackupSchedule[] = [
-    {
-      id: 'schedule-1',
-      name: 'Daily Full Backup',
-      frequency: 'daily',
-      type: 'full',
-      enabled: true,
-      nextRun: new Date(Date.now() + 86400000).toISOString(),
-      lastRun: new Date(Date.now() - 3600000).toISOString(),
-      retentionDays: 30,
-    },
-    {
-      id: 'schedule-2',
-      name: 'Hourly Incremental',
-      frequency: 'hourly',
-      type: 'incremental',
-      enabled: true,
-      nextRun: new Date(Date.now() + 3600000).toISOString(),
-      lastRun: new Date(Date.now() - 7200000).toISOString(),
-      retentionDays: 7,
-    },
-    {
-      id: 'schedule-3',
-      name: 'Weekly Full to S3',
-      frequency: 'weekly',
-      type: 'full',
-      enabled: true,
-      nextRun: new Date(Date.now() + 86400000 * 4).toISOString(),
-      lastRun: new Date(Date.now() - 86400000 * 3).toISOString(),
-      retentionDays: 90,
-    },
-  ];
+  // Map snapshots to UI Backup type
+  const backups: Backup[] = snapshots.map(s => ({
+    ...s,
+    retentionDays: 30, // Default or fetch from policy
+    storageLocation: 'local', // Default
+    createdAt: s.created,
+  }));
+
+  const schedules: BackupSchedule[] = schedulesData.map((s: any) => ({
+    id: s.id,
+    name: s.name,
+    frequency: s.frequency || 'daily',
+    type: s.type || 'full',
+    enabled: s.enabled ?? true,
+    nextRun: s.nextRun || new Date().toISOString(),
+    lastRun: s.lastRun,
+    retentionDays: s.retentionDays || 30,
+  }));
 
   const stats = {
     totalBackups: backups.length,
-    totalSize: backups.reduce((sum, b) => sum + b.size, 0),
+    totalSize: backups.reduce((sum, b) => {
+      if (typeof b.size === 'string') {
+        // Parse "1.5 GB" etc.
+        const parts = b.size.split(' ');
+        const val = parseFloat(parts[0] || '0');
+        const unit = parts[1];
+        let bytes = val;
+        if (unit === 'KB') bytes *= 1024;
+        if (unit === 'MB') bytes *= 1024 * 1024;
+        if (unit === 'GB') bytes *= 1024 * 1024 * 1024;
+        if (unit === 'TB') bytes *= 1024 * 1024 * 1024 * 1024;
+        return sum + bytes;
+      }
+      return sum + (typeof b.size === 'number' ? b.size : 0);
+    }, 0),
     lastBackup: backups[0]?.createdAt,
     nextScheduled: schedules.find(s => s.enabled)?.nextRun,
   };
@@ -150,29 +113,44 @@ export async function action({ request }: Route.ActionArgs) {
 
   switch (intent) {
     case "create-backup": {
-      const type = formData.get("type") as string;
-      // TODO: Initiate backup job
-      return { success: true, message: `Creating ${type} backup...` };
+      const type = formData.get("type") as 'full' | 'incremental';
+      try {
+        await BackupService.createSnapshot(type === 'full' ? 'Full' : 'Incremental');
+        return { success: true, message: `Creating ${type} backup...` };
+      } catch (error) {
+        return { success: false, error: "Failed to create backup" };
+      }
     }
 
     case "restore": {
       const backupId = formData.get("backupId") as string;
-      // TODO: Initiate restore job
-      return { success: true, message: `Restoring from backup ${backupId}...` };
+      try {
+        await BackupService.restoreSnapshot(backupId);
+        return { success: true, message: `Restoring from backup ${backupId}...` };
+      } catch (error) {
+        return { success: false, error: "Failed to restore backup" };
+      }
     }
 
     case "delete-backup": {
       const backupId = formData.get("backupId") as string;
-      // TODO: Delete backup
-      return { success: true, message: `Backup ${backupId} deleted` };
+      try {
+        await BackupService.deleteSnapshot(backupId);
+        return { success: true, message: `Backup ${backupId} deleted` };
+      } catch (error) {
+        return { success: false, error: "Failed to delete backup" };
+      }
     }
 
     case "toggle-schedule": {
       const scheduleId = formData.get("scheduleId") as string;
       const enabled = formData.get("enabled") === "true";
-      // Toggle schedule in data service
-      console.log(`Toggling schedule ${scheduleId} to ${enabled ? 'enabled' : 'disabled'}`);
-      return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
+      try {
+        await BackupService.updateSchedule(scheduleId, { enabled });
+        return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
+      } catch (error) {
+        return { success: false, error: "Failed to update schedule" };
+      }
     }
 
     default:
@@ -184,7 +162,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Helper Functions
 // ============================================================================
 
-function formatBytes(bytes: number): string {
+function formatBytes(bytes: number | string): string {
+  if (typeof bytes === 'string') return bytes;
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -202,10 +181,11 @@ function formatDate(date: string): string {
   });
 }
 
-function getStatusColor(status: Backup['status']): string {
-  switch (status) {
+function getStatusColor(status: string): string {
+  switch (status.toLowerCase()) {
     case 'completed':
       return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+    case 'running':
     case 'in-progress':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
     case 'failed':
@@ -217,8 +197,8 @@ function getStatusColor(status: Backup['status']): string {
   }
 }
 
-function getTypeColor(type: Backup['type']): string {
-  switch (type) {
+function getTypeColor(type: string): string {
+  switch (type.toLowerCase()) {
     case 'full':
       return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
     case 'incremental':
@@ -446,7 +426,7 @@ export default function BackupRoute({ loaderData }: Route.ComponentProps) {
                       <button
                         type="button"
                         onClick={() => handleRestore(backup.id)}
-                        disabled={backup.status !== 'completed'}
+                        disabled={backup.status !== 'Completed'}
                         className="text-blue-600 hover:text-blue-800 disabled:opacity-50 dark:text-blue-400"
                       >
                         Restore

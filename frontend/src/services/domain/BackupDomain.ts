@@ -48,9 +48,8 @@ import { ValidationError } from '@/services/core/errors';
  * @modified 2025-12-22
  */
 
-import { BackupSnapshot, ArchiveStats, SnapshotType } from "@/types";
-import { delay } from "@/utils/async";
 import { BackupsApiService } from "@/api/admin/backups-api";
+import { ArchiveStats, BackupSnapshot, SnapshotType } from "@/types";
 
 // =============================================================================
 // REACT QUERY KEYS
@@ -93,12 +92,6 @@ function validateSnapshotId(id: unknown, methodName: string): void {
   if (!id || typeof id !== "string" || id.trim() === "") {
     throw new Error(
       `[BackupService.${methodName}] Snapshot ID is required and must be a non-empty string`
-    );
-  }
-
-  if (!id.startsWith("snap-")) {
-    throw new Error(
-      `[BackupService.${methodName}] Invalid snapshot ID format. Must start with 'snap-'`
     );
   }
 }
@@ -263,6 +256,57 @@ export const BackupService = {
       return true;
     } catch (error) {
       console.error("[BackupService.restoreSnapshot] Error:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a backup snapshot
+   *
+   * @param id - Snapshot ID to delete
+   * @returns Promise<void>
+   * @throws Error if deletion fails
+   */
+  deleteSnapshot: async (id: string): Promise<void> => {
+    try {
+      validateSnapshotId(id, "deleteSnapshot");
+      const backupApi = new BackupsApiService();
+      await backupApi.delete(id);
+      console.log(`[BackupService] Successfully deleted snapshot ${id}`);
+    } catch (error) {
+      console.error("[BackupService.deleteSnapshot] Error:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get backup schedules
+   *
+   * @returns Promise<any[]> - Array of backup schedules
+   */
+  getSchedules: async (): Promise<any[]> => {
+    try {
+      const backupApi = new BackupsApiService();
+      return await backupApi.getSchedules();
+    } catch (error) {
+      console.error("[BackupService.getSchedules] Error:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Update a backup schedule
+   *
+   * @param id - Schedule ID
+   * @param updates - Partial schedule updates
+   * @returns Promise<any> - Updated schedule
+   */
+  updateSchedule: async (id: string, updates: any): Promise<any> => {
+    try {
+      const backupApi = new BackupsApiService();
+      return await backupApi.updateSchedule(id, updates);
+    } catch (error) {
+      console.error("[BackupService.updateSchedule] Error:", error);
       throw error;
     }
   },

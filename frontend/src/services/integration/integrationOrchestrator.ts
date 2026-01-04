@@ -133,7 +133,7 @@ export class IntegrationOrchestrator {
             type as keyof SystemEventPayloads,
             payload as SystemEventPayloads[keyof SystemEventPayloads]
           );
-        }) as unknown as (payload: unknown) => void
+        }) as any
       );
       this.subscriptionCleanups.push(unsubscribe);
     });

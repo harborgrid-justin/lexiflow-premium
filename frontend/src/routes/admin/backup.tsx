@@ -17,7 +17,6 @@ import { BackupService } from '../../services/domain/BackupDomain';
 import type { BackupSnapshot } from '../../types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/backup";
 
 // ============================================================================
 // Meta Tags

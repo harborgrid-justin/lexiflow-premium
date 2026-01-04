@@ -190,7 +190,7 @@ class SocketService {
       console.log("[SocketService] Disconnecting");
       this.socket.disconnect();
       this.socket = null;
-      this.config = null;
+      (this as any).config = null;
       this.handlers = new Map();
     }
   }

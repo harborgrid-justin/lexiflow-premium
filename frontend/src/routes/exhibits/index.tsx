@@ -10,13 +10,13 @@
 import { api } from '@/api';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Exhibits',
     count: data?.items?.length,
@@ -28,7 +28,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get("caseId") || undefined;
 
@@ -45,7 +45,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 

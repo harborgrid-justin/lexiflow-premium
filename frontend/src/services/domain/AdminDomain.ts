@@ -121,7 +121,7 @@ export const AdminService = {
     }
 
     // Fallback to default security settings
-    await delay(300);
+    await new Promise((resolve) => setTimeout(resolve, 300));
     return [
       {
         id: "sec1",

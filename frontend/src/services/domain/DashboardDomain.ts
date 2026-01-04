@@ -127,7 +127,7 @@ export const DashboardService = {
       ]);
 
       const revenue = invoices.reduce(
-        (sum, inv) => sum + (inv.totalAmount || 0),
+        (sum: number, inv: any) => sum + (inv.totalAmount || 0),
         0
       );
 

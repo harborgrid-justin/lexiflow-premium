@@ -15,7 +15,6 @@ import { useId, useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/settings";
 
 // ============================================================================
 // Meta Tags
@@ -76,7 +75,7 @@ export async function action({ request }: Route.ActionArgs) {
       const enabled = formData.get("enabled") === "true";
       // TODO: Toggle maintenance mode
       return { success: true, message: `Maintenance mode ${enabled ? 'enabled' : 'disabled'}` };
-      }
+    }
 
     default:
       return { success: false, error: "Invalid action" };

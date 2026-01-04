@@ -13,16 +13,15 @@ import { api } from '@/api';
 import type { CaseId } from '@/types';
 import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
-import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams } from 'react-router';
+import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Docket Entries',
     count: data?.entries?.length,
@@ -34,7 +33,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("search") || undefined;
   const type = url.searchParams.get("type") || undefined;

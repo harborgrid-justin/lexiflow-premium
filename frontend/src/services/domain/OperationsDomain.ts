@@ -53,7 +53,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       return apiClient.get<any>("/operations/replication-status");
     }
-    await delay(200);
+    await new Promise((resolve) => setTimeout(resolve, 200));
     return {
       lag: 0,
       bandwidth: 0,
@@ -67,7 +67,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       return apiClient.get<CostMetric[]>("/operations/costs/metrics");
     }
-    await delay(200);
+    await new Promise((resolve) => setTimeout(resolve, 200));
     return [];
   },
 
@@ -75,7 +75,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       return apiClient.get<CostForecast[]>("/operations/costs/forecast");
     }
-    await delay(200);
+    await new Promise((resolve) => setTimeout(resolve, 200));
     return [];
   },
 };

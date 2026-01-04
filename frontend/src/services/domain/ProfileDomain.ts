@@ -124,7 +124,7 @@ export const ProfileDomain = {
   getAuditLog: async (userId: string) => {
     if (isBackendApiEnabled()) {
       try {
-        const logs = await (adminApi as any).auditLogs.getAll({ userId });
+        const logs = await (api as any).admin.auditLogs.getAll({ userId });
         return logs.map((log: any) => ({
           id: log.id,
           action: log.action,

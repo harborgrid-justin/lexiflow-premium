@@ -156,12 +156,12 @@ export const NotificationService = {
         });
         return true;
       }
-      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = localStorage.getItem("subscriptions");
       const subscriptions = stored ? JSON.parse(stored) : [];
 
       if (!subscriptions.includes(channel)) {
         subscriptions.push(channel);
-        localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
+        localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
       }
 
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
@@ -179,11 +179,11 @@ export const NotificationService = {
         });
         return true;
       }
-      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = localStorage.getItem("subscriptions");
       const subscriptions = stored ? JSON.parse(stored) : [];
       const updated = subscriptions.filter((c: string) => c !== channel);
 
-      localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
+      localStorage.setItem("subscriptions", JSON.stringify(updated));
       console.log(
         `[NotificationService] Unsubscribed from channel: ${channel}`
       );

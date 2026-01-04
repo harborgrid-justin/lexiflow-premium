@@ -9,16 +9,15 @@
 import { api } from '@/api';
 import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { createDetailMeta } from '../_shared/meta-utils';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createDetailMeta({
     entityType: 'Docket',
     entityName: data?.item?.title || data?.item?.description,
@@ -30,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader - WITH PROPER PARAM VALIDATION
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { docketId } = params;
 
   // CRITICAL: Validate param exists

@@ -12,13 +12,13 @@
 
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import type { LoaderFunctionArgs, MetaArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta(_: Route.MetaArgs) {
+export function meta(_: MetaArgs) {
   return createMeta({
     title: 'Master Calendar',
     description: 'View and manage all deadlines, court dates, and appointments',
@@ -29,7 +29,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // Parse URL for date range
   const url = new URL(request.url);
   const view = url.searchParams.get("view") || "month";

@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/integrations";
 
 // ============================================================================
 // Meta Tags
@@ -294,8 +293,8 @@ export default function IntegrationsRoute({ loaderData }: Route.ComponentProps) 
             type="button"
             onClick={() => setSelectedCategory(category.id)}
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${selectedCategory === category.id
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
               }`}
           >
             {category.label}

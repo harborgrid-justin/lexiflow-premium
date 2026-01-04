@@ -14,7 +14,6 @@ import { useId, useState } from 'react';
 import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/audit";
 
 // ============================================================================
 // Meta Tags

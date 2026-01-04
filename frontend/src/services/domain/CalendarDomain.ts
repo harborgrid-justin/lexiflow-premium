@@ -311,7 +311,7 @@ export const CalendarService = {
       const event = await workflowApi.calendar.update(id, updates);
       return {
         ...event,
-        type: event.eventType as CalendarEvent["type"],
+        type: event.eventType as any,
       };
     } catch (error) {
       console.error("[CalendarService.update] Error:", error);

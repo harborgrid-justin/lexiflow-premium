@@ -31,7 +31,7 @@ import { useWindow } from '@/providers';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { STORES } from '@/services/data/db';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 
 // ============================================================================
@@ -46,7 +46,7 @@ export const DiscoveryDepositions: React.FC = () => {
 
     // Enterprise Data Access
     const { data: rawDepositions = [] } = useQuery<Deposition[]>(
-        [STORES.DISCOVERY_EXT_DEPO, 'all'],
+        QUERY_KEYS.DEPOSITIONS.ALL,
         () => DataService.discovery.getDepositions()
     );
 
@@ -56,7 +56,7 @@ export const DiscoveryDepositions: React.FC = () => {
     const { mutate: scheduleDeposition } = useMutation(
         DataService.discovery.addDeposition,
         {
-            invalidateKeys: [[STORES.DISCOVERY_EXT_DEPO, 'all']],
+            invalidateKeys: [QUERY_KEYS.DEPOSITIONS.ALL],
             onSuccess: () => {
                 closeWindow('schedule-depo');
                 setNewDepo({});

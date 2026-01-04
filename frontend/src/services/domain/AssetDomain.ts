@@ -6,6 +6,7 @@
 
 import { delay } from '@/utils/async';
 import { STORES, db } from '@/services/data/db';
+import { isBackendApiEnabled } from '@/api';
 
 interface Asset {
   id: string;
@@ -32,9 +33,23 @@ interface MaintenanceRecord {
 }
 
 export const AssetService = {
-  getAll: async () => db.getAll(STORES.ASSETS),
-  getById: async (id: string) => db.get(STORES.ASSETS, id),
+  getAll: async () => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+        console.warn('Backend API for assets not implemented yet');
+    }
+    return db.getAll(STORES.ASSETS);
+  },
+  getById: async (id: string) => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
+    return db.get(STORES.ASSETS, id);
+  },
   add: async (item: unknown) => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
     return db.put(STORES.ASSETS, {
       ...itemObj,
@@ -43,13 +58,21 @@ export const AssetService = {
     });
   },
   update: async (id: string, updates: unknown) => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     const existing = await db.get(STORES.ASSETS, id);
     return db.put(STORES.ASSETS, {
       ...(existing && typeof existing === 'object' ? existing : {}),
       ...(updates && typeof updates === 'object' ? updates : {})
     });
   },
-  delete: async (id: string) => db.delete(STORES.ASSETS, id),
+  delete: async (id: string) => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
+    return db.delete(STORES.ASSETS, id);
+  },
   
   // Asset specific methods
   getAssets: async (filters?: { 
@@ -57,6 +80,9 @@ export const AssetService = {
     status?: string; 
     assignedTo?: string 
   }): Promise<Asset[]> => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     let assets = await db.getAll<Asset>(STORES.ASSETS);
 
     if (filters?.type) {
@@ -75,6 +101,9 @@ export const AssetService = {
   },
   
   assignAsset: async (assetId: string, userId: string): Promise<boolean> => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     await delay(100);
     try {
       const asset = await db.get<Asset>(STORES.ASSETS, assetId);
@@ -99,6 +128,9 @@ export const AssetService = {
   },
   
   unassignAsset: async (assetId: string): Promise<boolean> => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     await delay(100);
     try {
       const asset = await db.get(STORES.ASSETS, assetId);
@@ -119,6 +151,9 @@ export const AssetService = {
   },
   
   getMaintenanceHistory: async (assetId: string): Promise<MaintenanceRecord[]> => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     await delay(50);
     // Note: Using MAINTENANCE_TICKETS instead of MAINTENANCE_RECORDS
     const records = await db.getAll<MaintenanceRecord>(STORES.MAINTENANCE_TICKETS);
@@ -130,6 +165,9 @@ export const AssetService = {
   },
   
   scheduleMaintenance: async (assetId: string, schedule: Partial<MaintenanceRecord>): Promise<MaintenanceRecord> => {
+    if (isBackendApiEnabled()) {
+        // TODO: Implement backend API call
+    }
     const record: MaintenanceRecord = {
       id: `maint-${Date.now()}`,
       assetId,

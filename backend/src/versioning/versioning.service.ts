@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { DataVersion } from './entities/data-version.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { DataVersion } from "./entities/data-version.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -35,7 +35,7 @@ import { DataVersion } from './entities/data-version.entity';
 export class VersioningService {
   constructor(
     @InjectRepository(DataVersion)
-    private readonly versionRepository: Repository<DataVersion>,
+    private readonly versionRepository: Repository<DataVersion>
   ) {}
 
   async createVersion(data: {
@@ -50,13 +50,13 @@ export class VersioningService {
     // Get current version number
     const latestVersion = await this.versionRepository.findOne({
       where: { entityType: data.entityType, entityId: data.entityId },
-      order: { version: 'DESC' },
+      order: { version: "DESC" },
     });
 
     const version = this.versionRepository.create({
       ...data,
       version: (latestVersion?.version || 0) + 1,
-      createdBy: data.userId || 'system',
+      createdBy: data.userId || "system",
     });
 
     return await this.versionRepository.save(version);
@@ -65,21 +65,21 @@ export class VersioningService {
   async getVersionHistory(
     entityType: string,
     entityId: string,
-    filters?: { branch?: string; page?: number; limit?: number },
+    filters?: { branch?: string; page?: number; limit?: number }
   ) {
     const { branch, page = 1, limit = 50 } = filters || {};
 
     const queryBuilder = this.versionRepository
-      .createQueryBuilder('version')
-      .where('version.entityType = :entityType', { entityType })
-      .andWhere('version.entityId = :entityId', { entityId });
+      .createQueryBuilder("version")
+      .where("version.entityType = :entityType", { entityType })
+      .andWhere("version.entityId = :entityId", { entityId });
 
     if (branch) {
-      queryBuilder.andWhere('version.branch = :branch', { branch });
+      queryBuilder.andWhere("version.branch = :branch", { branch });
     }
 
     const [data, total] = await queryBuilder
-      .orderBy('version.version', 'DESC')
+      .orderBy("version.version", "DESC")
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
@@ -95,7 +95,7 @@ export class VersioningService {
 
   async getVersion(id: string): Promise<DataVersion> {
     const version = await this.versionRepository.findOne({ where: { id } });
-    
+
     if (!version) {
       throw new NotFoundException(`Version with ID ${id} not found`);
     }
@@ -105,29 +105,31 @@ export class VersioningService {
 
   async getBranches(entityType: string, entityId: string): Promise<string[]> {
     const result = await this.versionRepository
-      .createQueryBuilder('version')
-      .select('DISTINCT version.branch', 'branch')
-      .where('version.entityType = :entityType', { entityType })
-      .andWhere('version.entityId = :entityId', { entityId })
-      .andWhere('version.branch IS NOT NULL')
+      .createQueryBuilder("version")
+      .select("DISTINCT version.branch", "branch")
+      .where("version.entityType = :entityType", { entityType })
+      .andWhere("version.entityId = :entityId", { entityId })
+      .andWhere("version.branch IS NOT NULL")
       .getRawMany<{ branch: string }>();
 
-    return result.map(r => r.branch);
+    return result.map((r) => r.branch);
   }
 
   async getTags(entityType: string, entityId: string) {
     const versions = await this.versionRepository.find({
       where: { entityType, entityId },
-      select: ['id', 'version', 'tag', 'createdAt'],
-      order: { version: 'DESC' },
+      select: ["id", "version", "tag", "createdAt"],
+      order: { version: "DESC" },
     });
 
-    return versions.filter(v => v.tag).map(v => ({
-      id: v.id,
-      version: v.version,
-      tag: v.tag,
-      createdAt: v.createdAt,
-    }));
+    return versions
+      .filter((v) => v.tag)
+      .map((v) => ({
+        id: v.id,
+        version: v.version,
+        tag: v.tag,
+        createdAt: v.createdAt,
+      }));
   }
 
   async tagVersion(id: string, tag: string): Promise<DataVersion> {
@@ -156,5 +158,45 @@ export class VersioningService {
         createdAt: version2.createdAt,
       },
     };
+  }
+
+  async getGlobalHistory(limit = 100): Promise<DataVersion[]> {
+    return await this.versionRepository.find({
+      order: { createdAt: "DESC" },
+      take: limit,
+    });
+  }
+
+  async getBranches(): Promise<any[]> {
+    const branches = await this.versionRepository
+      .createQueryBuilder("version")
+      .select("version.branch", "name")
+      .addSelect("MAX(version.createdAt)", "lastCommit")
+      .addSelect("MAX(version.createdBy)", "author") // Simplified: author of last commit
+      .where("version.branch IS NOT NULL")
+      .groupBy("version.branch")
+      .getRawMany();
+
+    return branches.map((b) => ({
+      name: b.name,
+      lastCommit: b.lastCommit,
+      author: b.author,
+      status: "active", // Default status
+    }));
+  }
+
+  async getTags(): Promise<any[]> {
+    const tags = await this.versionRepository
+      .createQueryBuilder("version")
+      .select("version.tag", "name")
+      .addSelect("version.version", "version")
+      .addSelect("version.createdAt", "date")
+      .addSelect("version.createdBy", "author")
+      .addSelect("version.commitMessage", "description")
+      .where("version.tag IS NOT NULL")
+      .orderBy("version.createdAt", "DESC")
+      .getRawMany();
+
+    return tags;
   }
 }

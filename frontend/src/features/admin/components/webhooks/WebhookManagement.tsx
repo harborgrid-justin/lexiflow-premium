@@ -7,6 +7,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { useModalState, useNotify, useSelection } from '@/hooks/core';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
 import React, { useState } from 'react';
@@ -26,7 +27,7 @@ export const WebhookManagement: React.FC = () => {
   const notify = useNotify();
 
   // Fetch real webhooks from backend
-  const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
+  const { data: webhooks = [], isLoading, refetch } = useQuery(QUERY_KEYS.WEBHOOKS.ALL, async () => {
     const response = await webhooksApi.getAll();
     return response as SystemWebhookConfig[];
   });

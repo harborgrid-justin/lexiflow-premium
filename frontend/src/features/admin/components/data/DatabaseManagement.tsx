@@ -2,6 +2,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -14,7 +15,7 @@ export const DatabaseManagement: React.FC = () => {
   const resetModal = useModalState();
 
   // Note: getDbInfo, incrementVersion, resetDatabase methods need to be implemented in DatabaseManager
-  const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => {
+  const { data: dbInfo, refetch } = useQuery(QUERY_KEYS.DB.INFO, () => {
     // Temporary stub until db.getDbInfo() is implemented
     return Promise.resolve({
       name: 'LexiFlow DB',

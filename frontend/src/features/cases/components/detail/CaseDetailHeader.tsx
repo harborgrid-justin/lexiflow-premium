@@ -21,6 +21,7 @@ import { ClientPortalModal } from '@features/operations';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -52,8 +53,8 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
     // ============================================================================
     // DATA FETCHING
     // ============================================================================
-    const { data: openTasks } = useQuery(['tasks', id, 'count'], () => DataService.tasks.countByCaseId(id), { refetchOnWindowFocus: true, staleTime: 5000 });
-    const { data: unreadMessages } = useQuery(['messages', id, 'count'], () => DataService.messenger.countUnread(id), { refetchOnWindowFocus: true, staleTime: 5000 });
+    const { data: openTasks } = useQuery(QUERY_KEYS.TASKS.COUNT(id), () => DataService.tasks.countByCaseId(id), { refetchOnWindowFocus: true, staleTime: 5000 });
+    const { data: unreadMessages } = useQuery(QUERY_KEYS.MESSAGES.UNREAD_COUNT(id), () => DataService.messenger.countUnread(id), { refetchOnWindowFocus: true, staleTime: 5000 });
 
     const handleOpenPortal = () => {
         const winId = `portal-${clientId}`;

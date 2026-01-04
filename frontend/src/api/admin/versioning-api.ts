@@ -3,7 +3,7 @@
  * Document and entity version control
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface Version {
   id: string;
@@ -24,12 +24,12 @@ export interface VersionFilters {
 }
 
 export class VersioningApiService {
-  private readonly baseUrl = '/versioning';
+  private readonly baseUrl = "/versioning";
 
   async getVersions(filters: VersionFilters): Promise<Version[]> {
     const params = new URLSearchParams();
-    if (filters.entityId) params.append('entityId', filters.entityId);
-    if (filters.entityType) params.append('entityType', filters.entityType);
+    if (filters.entityId) params.append("entityId", filters.entityId);
+    if (filters.entityType) params.append("entityType", filters.entityType);
     const queryString = params.toString();
     return apiClient.get<Version[]>(`${this.baseUrl}?${queryString}`);
   }
@@ -38,15 +38,36 @@ export class VersioningApiService {
     return apiClient.get<Version>(`${this.baseUrl}/${id}`);
   }
 
-  async createVersion(data: { entityId: string; entityType: string; changes: Record<string, unknown> }): Promise<Version> {
+  async createVersion(data: {
+    entityId: string;
+    entityType: string;
+    changes: Record<string, unknown>;
+  }): Promise<Version> {
     return apiClient.post<Version>(this.baseUrl, data);
   }
 
-  async compareVersions(version1Id: string, version2Id: string): Promise<unknown> {
-    return apiClient.get(`${this.baseUrl}/compare?v1=${version1Id}&v2=${version2Id}`);
+  async compareVersions(
+    version1Id: string,
+    version2Id: string
+  ): Promise<unknown> {
+    return apiClient.get(
+      `${this.baseUrl}/compare?v1=${version1Id}&v2=${version2Id}`
+    );
   }
 
   async revertToVersion(versionId: string): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${versionId}/revert`, {});
+  }
+
+  async getHistory(): Promise<any[]> {
+    return apiClient.get<any[]>(`${this.baseUrl}/history`);
+  }
+
+  async getBranches(): Promise<any[]> {
+    return apiClient.get<any[]>(`${this.baseUrl}/branches`);
+  }
+
+  async getTags(): Promise<any[]> {
+    return apiClient.get<any[]>(`${this.baseUrl}/tags`);
   }
 }

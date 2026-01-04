@@ -19,6 +19,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 // Services & Data
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -63,9 +64,9 @@ export function CRMDashboard() {
     sources: analyticsSources
   };
 
-  const { data: clients = [] } = useQuery(['clients', 'all'], () => DataService.clients.getAll());
-  const { data: cases = [] } = useQuery(['cases', 'all'], () => DataService.cases.getAll());
-  const { data: leads = [] } = useQuery(['crm', 'leads'], () => DataService.crm.getLeads());
+  const { data: clients = [] } = useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  const { data: cases = [] } = useQuery(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
+  const { data: leads = [] } = useQuery(QUERY_KEYS.CRM.LEADS, () => DataService.crm.getLeads());
 
   // Ensure data is array before using array methods
   const clientsArray = Array.isArray(clients) ? clients : [];

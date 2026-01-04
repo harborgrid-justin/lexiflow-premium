@@ -10,6 +10,7 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';
@@ -123,7 +124,7 @@ export const ClientAnalytics: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'profitability' | 'ltv' | 'risk' | 'satisfaction'>('profitability');
 
   // Data queries
-  useQuery(['clients', 'all'], () => DataService.clients.getAll());
+  useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
 
   // Mock analytics data
   const profitabilityData: ClientProfitability[] = [

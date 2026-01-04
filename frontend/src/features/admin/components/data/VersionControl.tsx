@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
 import React, { useState } from 'react';
@@ -45,7 +46,7 @@ export const VersionControl = React.memo<VersionControlProps>(function VersionCo
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // Fetch real history from backend
-  const { data: history = [], isLoading: historyLoading } = useQuery(['versionControl', 'history'], async () => {
+  const { data: history = [], isLoading: historyLoading } = useQuery(QUERY_KEYS.VERSION_CONTROL.HISTORY, async () => {
     const sampleHistory: HistoryEntry[] = [
       {
         id: '1',
@@ -70,7 +71,7 @@ export const VersionControl = React.memo<VersionControlProps>(function VersionCo
   });
 
   // Fetch real branches from backend
-  const { data: branches = [], isLoading: branchesLoading } = useQuery(['versionControl', 'branches'], async () => {
+  const { data: branches = [], isLoading: branchesLoading } = useQuery(QUERY_KEYS.VERSION_CONTROL.BRANCHES, async () => {
     const sampleBranches: Branch[] = [
       { name: 'main', lastCommit: '2 hours ago', author: 'Justin Saadein', status: 'active' },
       { name: 'feature/case-import', lastCommit: '1 day ago', author: 'Sarah Miller', status: 'active' },
@@ -79,7 +80,7 @@ export const VersionControl = React.memo<VersionControlProps>(function VersionCo
   });
 
   // Fetch real tags from backend
-  const { data: tags = [], isLoading: tagsLoading } = useQuery(['versionControl', 'tags'], async () => {
+  const { data: tags = [], isLoading: tagsLoading } = useQuery(QUERY_KEYS.VERSION_CONTROL.TAGS, async () => {
     const sampleTags: VersionTag[] = [
       {
         name: 'v2.5.0',

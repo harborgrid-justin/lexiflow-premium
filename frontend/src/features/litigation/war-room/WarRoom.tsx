@@ -43,7 +43,6 @@ import React, {
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from "@/services/data/dataService";
-import { STORES } from "@/services/data/db";
 
 // Hooks & Context
 import { useTheme } from "@/providers";
@@ -155,7 +154,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // DATA FETCHING
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
-    [STORES.CASES, "all"],
+    QUERY_KEYS.CASES.ALL,
     async () => {
       const cases = DataService.cases as { getAll: () => Promise<Case[]> };
       return cases.getAll();
@@ -175,7 +174,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
     isError,
     error,
   } = useQuery(
-    [STORES.CASES, currentCaseId, "warRoom"],
+    QUERY_KEYS.CASES.WAR_ROOM(currentCaseId),
     async () => {
       const warRoomService = DataService.warRoom as { getData: (caseId: string) => Promise<unknown> };
       return warRoomService.getData(currentCaseId);

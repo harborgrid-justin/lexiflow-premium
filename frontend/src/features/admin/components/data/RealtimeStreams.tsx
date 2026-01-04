@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // Use real data from backend - fetching realtime streams configuration
-  const { data: streams = [], isLoading: streamsLoading } = useQuery(['realtime', 'streams'], async () => {
+  const { data: streams = [], isLoading: streamsLoading } = useQuery(QUERY_KEYS.REALTIME.STREAMS, async () => {
     // Fetch from backend or return sample for now
     const sampleStreams: DataStream[] = [
       {

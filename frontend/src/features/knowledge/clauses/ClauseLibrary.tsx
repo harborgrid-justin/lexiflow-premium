@@ -27,6 +27,7 @@ import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { Clause } from '@/types';
 import { cn } from '@/utils/cn';
 
@@ -48,7 +49,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     // Fetch real clauses from DataService
-    const { data: clauses = [], isLoading, error, refetch } = useQuery(['clauses'], async () => {
+    const { data: clauses = [], isLoading, error, refetch } = useQuery(QUERY_KEYS.CLAUSES.ALL, async () => {
         return await DataService.clauses.getAll();
     });
 

@@ -1,10 +1,18 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
-import { Migration } from './entities/migration.entity';
-import { Snapshot } from './entities/snapshot.entity';
-import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/create-migration.dto';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { Repository, DataSource } from "typeorm";
+import { Migration } from "./entities/migration.entity";
+import { Snapshot } from "./entities/snapshot.entity";
+import {
+  CreateMigrationDto,
+  CreateSnapshotDto,
+  CreateTableDto,
+} from "./dto/create-migration.dto";
 import {
   TableQueryResult,
   TableInfo,
@@ -13,7 +21,7 @@ import {
   TableColumn,
   AlterTableOperations,
   SchemaSnapshotData,
-} from './interfaces';
+} from "./interfaces";
 
 /**
  * ╔=================================================================================================================╗
@@ -51,11 +59,11 @@ export class SchemaManagementService {
     @InjectRepository(Snapshot)
     private readonly snapshotRepository: Repository<Snapshot>,
     @InjectDataSource()
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   // ==================== SCHEMA INSPECTION ====================
-  
+
   async getTables(): Promise<TableInfo[]> {
     const query = `
       SELECT
@@ -87,7 +95,7 @@ export class SchemaManagementService {
   async getTableColumns(tableName: string): Promise<TableColumn[]> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException('Invalid table name format');
+      throw new BadRequestException("Invalid table name format");
     }
 
     const query = `
@@ -103,7 +111,9 @@ export class SchemaManagementService {
       ORDER BY ordinal_position;
     `;
 
-    const columns = await this.dataSource.query<ColumnQueryResult[]>(query, [tableName]);
+    const columns = await this.dataSource.query<ColumnQueryResult[]>(query, [
+      tableName,
+    ]);
 
     // Get primary keys
     const pkQuery = `
@@ -113,22 +123,29 @@ export class SchemaManagementService {
       WHERE i.indrelid = $1::regclass AND i.indisprimary;
     `;
 
-    const pks = await this.dataSource.query<PrimaryKeyInfo[]>(pkQuery, [tableName]);
+    const pks = await this.dataSource.query<PrimaryKeyInfo[]>(pkQuery, [
+      tableName,
+    ]);
     const pkColumns = new Set(pks.map((pk: PrimaryKeyInfo) => pk.column_name));
 
-    return columns.map((col: ColumnQueryResult): TableColumn => ({
-      ...col,
-      pk: pkColumns.has(col.name),
-      notNull: col.is_nullable === 'NO',
-      type: col.character_maximum_length
-        ? `${col.type}(${col.character_maximum_length})`
-        : col.type,
-    }));
+    return columns.map(
+      (col: ColumnQueryResult): TableColumn => ({
+        ...col,
+        pk: pkColumns.has(col.name),
+        notNull: col.is_nullable === "NO",
+        type: col.character_maximum_length
+          ? `${col.type}(${col.character_maximum_length})`
+          : col.type,
+      })
+    );
   }
 
   // ==================== MIGRATIONS ====================
-  
-  async createMigration(dto: CreateMigrationDto, userId: string): Promise<Migration> {
+
+  async createMigration(
+    dto: CreateMigrationDto,
+    userId: string
+  ): Promise<Migration> {
     const migration = this.migrationRepository.create({
       ...dto,
       appliedBy: userId,
@@ -139,7 +156,7 @@ export class SchemaManagementService {
 
   async getMigrations(): Promise<Migration[]> {
     return await this.migrationRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -147,12 +164,12 @@ export class SchemaManagementService {
    * Validate SQL identifier (table/column name) to prevent injection
    */
   private isValidIdentifier(name: string): boolean {
-    // PostgreSQL identifier rules: starts with letter or underscore, 
+    // PostgreSQL identifier rules: starts with letter or underscore,
     // contains only letters, digits, underscores, max 63 chars
     const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]{0,62}$/;
     return validPattern.test(name);
   }
-  
+
   async applyMigration(id: string, userId: string): Promise<Migration> {
     const migration = await this.migrationRepository.findOne({ where: { id } });
 
@@ -161,7 +178,7 @@ export class SchemaManagementService {
     }
 
     if (migration.applied) {
-      throw new BadRequestException('Migration already applied');
+      throw new BadRequestException("Migration already applied");
     }
 
     try {
@@ -173,7 +190,7 @@ export class SchemaManagementService {
 
       return await this.migrationRepository.save(migration);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       throw new BadRequestException(`Migration failed: ${message}`);
     }
   }
@@ -186,7 +203,7 @@ export class SchemaManagementService {
     }
 
     if (!migration.applied) {
-      throw new BadRequestException('Migration not applied');
+      throw new BadRequestException("Migration not applied");
     }
 
     try {
@@ -197,21 +214,24 @@ export class SchemaManagementService {
 
       return await this.migrationRepository.save(migration);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       throw new BadRequestException(`Revert failed: ${message}`);
     }
   }
 
   // ==================== SNAPSHOTS ====================
-  
-  async createSnapshot(dto: CreateSnapshotDto, userId: string): Promise<Snapshot> {
+
+  async createSnapshot(
+    dto: CreateSnapshotDto,
+    userId: string
+  ): Promise<Snapshot> {
     const tables = await this.getTables();
 
     // Filter tables based on provided table names or include all
     let filteredTables = tables;
     if (dto.tables && dto.tables.length > 0) {
       const tableNames = dto.tables;
-      filteredTables = tables.filter(t => tableNames.includes(t.name));
+      filteredTables = tables.filter((t) => tableNames.includes(t.name));
     }
 
     const schemaData: SchemaSnapshotData = {
@@ -232,8 +252,15 @@ export class SchemaManagementService {
 
   async getSnapshots(): Promise<Snapshot[]> {
     return await this.snapshotRepository.find({
-      order: { createdAt: 'DESC' },
-      select: ['id', 'name', 'description', 'sizeBytes', 'createdAt', 'createdBy'],
+      order: { createdAt: "DESC" },
+      select: [
+        "id",
+        "name",
+        "description",
+        "sizeBytes",
+        "createdAt",
+        "createdBy",
+      ],
     });
   }
 
@@ -253,25 +280,29 @@ export class SchemaManagementService {
   }
 
   // ==================== TABLE OPERATIONS ====================
-  
-  async createTable(dto: CreateTableDto): Promise<{ success: boolean; table: string }> {
-    const columnDefs = dto.columns.map(col => {
-      let def = `${col.name} ${col.type}`;
-      if (col.pk) def += ' PRIMARY KEY';
-      if (col.notNull) def += ' NOT NULL';
-      if (col.unique) def += ' UNIQUE';
-      if (col.defaultValue) def += ` DEFAULT ${col.defaultValue}`;
-      return def;
-    }).join(', ');
+
+  async createTable(
+    dto: CreateTableDto
+  ): Promise<{ success: boolean; table: string }> {
+    const columnDefs = dto.columns
+      .map((col) => {
+        let def = `${col.name} ${col.type}`;
+        if (col.pk) def += " PRIMARY KEY";
+        if (col.notNull) def += " NOT NULL";
+        if (col.unique) def += " UNIQUE";
+        if (col.defaultValue) def += ` DEFAULT ${col.defaultValue}`;
+        return def;
+      })
+      .join(", ");
 
     const query = `CREATE TABLE IF NOT EXISTS ${dto.name} (${columnDefs})`;
 
     await this.dataSource.query(query);
 
     // Add foreign keys separately
-    for (const col of dto.columns.filter(c => c.fk)) {
+    for (const col of dto.columns.filter((c) => c.fk)) {
       if (col.fk) {
-        const [refTable, refColumn] = col.fk.split('.');
+        const [refTable, refColumn] = col.fk.split(".");
         const fkQuery = `ALTER TABLE ${dto.name} ADD CONSTRAINT fk_${dto.name}_${col.name} FOREIGN KEY (${col.name}) REFERENCES ${refTable}(${refColumn})`;
         await this.dataSource.query(fkQuery);
       }
@@ -280,10 +311,13 @@ export class SchemaManagementService {
     return { success: true, table: dto.name };
   }
 
-  async alterTable(tableName: string, alterations: AlterTableOperations): Promise<{ success: boolean; table: string; operations: number }> {
+  async alterTable(
+    tableName: string,
+    alterations: AlterTableOperations
+  ): Promise<{ success: boolean; table: string; operations: number }> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException('Invalid table name format');
+      throw new BadRequestException("Invalid table name format");
     }
 
     const operations: string[] = [];
@@ -294,7 +328,7 @@ export class SchemaManagementService {
         if (!this.isValidIdentifier(col.name)) {
           throw new BadRequestException(`Invalid column name: ${col.name}`);
         }
-        const columnDef = `ADD COLUMN "${col.name}" ${col.type}${col.nullable === false ? ' NOT NULL' : ''}${col.default ? ` DEFAULT ${col.default}` : ''}`;
+        const columnDef = `ADD COLUMN "${col.name}" ${col.type}${col.nullable === false ? " NOT NULL" : ""}${col.default ? ` DEFAULT ${col.default}` : ""}`;
         operations.push(columnDef);
       }
     }
@@ -319,7 +353,9 @@ export class SchemaManagementService {
           operations.push(`ALTER COLUMN "${col.name}" TYPE ${col.type}`);
         }
         if (col.nullable !== undefined) {
-          operations.push(`ALTER COLUMN "${col.name}" ${col.nullable ? 'DROP NOT NULL' : 'SET NOT NULL'}`);
+          operations.push(
+            `ALTER COLUMN "${col.name}" ${col.nullable ? "DROP NOT NULL" : "SET NOT NULL"}`
+          );
         }
       }
     }
@@ -327,32 +363,99 @@ export class SchemaManagementService {
     // Handle RENAME COLUMN
     if (alterations.renameColumns && Array.isArray(alterations.renameColumns)) {
       for (const rename of alterations.renameColumns) {
-        if (!this.isValidIdentifier(rename.oldName) || !this.isValidIdentifier(rename.newName)) {
-          throw new BadRequestException('Invalid column names for rename');
+        if (
+          !this.isValidIdentifier(rename.oldName) ||
+          !this.isValidIdentifier(rename.newName)
+        ) {
+          throw new BadRequestException("Invalid column names for rename");
         }
-        operations.push(`RENAME COLUMN "${rename.oldName}" TO "${rename.newName}"`);
+        operations.push(
+          `RENAME COLUMN "${rename.oldName}" TO "${rename.newName}"`
+        );
       }
     }
 
     if (operations.length === 0) {
-      throw new BadRequestException('No valid alterations provided');
+      throw new BadRequestException("No valid alterations provided");
     }
 
     // Execute all operations in a single ALTER TABLE statement
-    const query = `ALTER TABLE "${tableName}" ${operations.join(', ')}`;
+    const query = `ALTER TABLE "${tableName}" ${operations.join(", ")}`;
     await this.dataSource.query(query);
 
     return { success: true, table: tableName, operations: operations.length };
   }
 
-  async dropTable(tableName: string): Promise<{ success: boolean; table: string }> {
+  async dropTable(
+    tableName: string
+  ): Promise<{ success: boolean; table: string }> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException('Invalid table name format');
+      throw new BadRequestException("Invalid table name format");
     }
 
     // Use double quotes for identifier to prevent injection
     await this.dataSource.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
     return { success: true, table: tableName };
+  }
+
+  async getDbInfo(): Promise<any> {
+    const dbNameResult = await this.dataSource.query(
+      "SELECT current_database()"
+    );
+    const dbName = dbNameResult[0].current_database;
+
+    const versionResult = await this.dataSource.query("SELECT version()");
+    const version = versionResult[0].version;
+
+    const tablesResult = await this.dataSource.query(`
+      SELECT count(*) as count
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+    `);
+    const tableCount = parseInt(tablesResult[0].count, 10);
+
+    const sizeResult = await this.dataSource.query(`
+      SELECT pg_size_pretty(pg_database_size(current_database())) as size
+    `);
+    const size = sizeResult[0].size;
+
+    return {
+      name: dbName,
+      version: version,
+      mode: "readwrite", // PostgreSQL is typically readwrite unless configured otherwise
+      totalStores: tableCount,
+      size: size,
+      stores: await this.getTables(), // Reusing existing method to list tables
+    };
+  }
+
+  async resetDatabase(): Promise<any> {
+    if (process.env.NODE_ENV === "production") {
+      throw new BadRequestException(
+        "Cannot reset database in production environment"
+      );
+    }
+
+    // Safety check: Ensure we are not deleting critical system tables if any
+    // For a full reset in dev, we typically drop the public schema and recreate it
+
+    try {
+      await this.dataSource.query("DROP SCHEMA public CASCADE");
+      await this.dataSource.query("CREATE SCHEMA public");
+      await this.dataSource.query("GRANT ALL ON SCHEMA public TO public");
+
+      // Re-run migrations to restore schema structure
+      await this.dataSource.runMigrations();
+
+      return {
+        success: true,
+        message: "Database successfully reset and migrations reapplied",
+      };
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to reset database: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
   }
 }

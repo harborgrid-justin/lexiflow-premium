@@ -19,6 +19,7 @@ import { MatterView } from '@/config/tabs.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { CaseStatus, type Case, type Invoice } from '@/types';
 import { cn } from '@/utils/cn';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
@@ -116,11 +117,11 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
   };
 
   // Fetch KPIs for stats
-  const { data: cases } = useQuery(['cases', 'all'], () => api.cases.getAll(), {
+  const { data: cases } = useQuery(QUERY_KEYS.CASES.ALL, () => api.cases.getAll(), {
     initialData: initialCases,
     onError: (error) => console.error('[CaseManagement] Failed to fetch cases:', error)
   });
-  const { data: invoices } = useQuery(['billing', 'invoices'], () => api.billing.getInvoices(), {
+  const { data: invoices } = useQuery(QUERY_KEYS.BILLING.INVOICES, () => api.billing.getInvoices(), {
     initialData: initialInvoices,
     onError: (error) => console.warn('[CaseManagement] Failed to fetch invoices:', error)
   });

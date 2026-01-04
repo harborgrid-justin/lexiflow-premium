@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
 import React, { useState } from 'react';
@@ -21,7 +22,7 @@ export const EventBusManager: React.FC = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
 
   // Fetch real event bus data from backend
-  const { data: events = [], isLoading } = useQuery(['eventBus', 'events'], async () => {
+  const { data: events = [], isLoading } = useQuery(QUERY_KEYS.EVENT_BUS.EVENTS, async () => {
     // Fetch from backend event bus service
     const sampleEvents: EventBusEvent[] = [
       {

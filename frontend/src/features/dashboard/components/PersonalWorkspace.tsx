@@ -19,7 +19,7 @@ import React from 'react';
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { STORES } from '@/services/data/db';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -54,12 +54,12 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const { theme } = useTheme();
 
     const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
-        [STORES.TASKS, 'all'],
+        QUERY_KEYS.TASKS.ALL,
         () => DataService.tasks.getAll()
     );
 
     const { data: allEvents = [], isLoading: eventsLoading, error: eventsError } = useQuery<CalendarEventItem[]>(
-        ['calendar', 'all'],
+        QUERY_KEYS.CALENDAR.ALL,
         () => DataService.calendar.getEvents()
     );
 

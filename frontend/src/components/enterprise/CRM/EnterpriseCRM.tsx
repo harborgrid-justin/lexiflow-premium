@@ -10,6 +10,7 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import type { Client } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -65,8 +66,8 @@ export const EnterpriseCRM: React.FC = () => {
   const [activeView, setActiveView] = useState<'list' | '360'>('list');
 
   // Data queries
-  const { data: clients = [] } = useQuery(['clients', 'all'], () => DataService.clients.getAll());
-  const { data: opportunities = [] } = useQuery(['crm', 'opportunities'], () =>
+  const { data: clients = [] } = useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  const { data: opportunities = [] } = useQuery(QUERY_KEYS.CRM.OPPORTUNITIES, () =>
     Promise.resolve([
       {
         id: '1',
@@ -95,7 +96,7 @@ export const EnterpriseCRM: React.FC = () => {
     ] as Opportunity[])
   );
 
-  const { data: relationships = [] } = useQuery(['crm', 'relationships'], () =>
+  const { data: relationships = [] } = useQuery(QUERY_KEYS.CRM.RELATIONSHIPS, () =>
     Promise.resolve([
       {
         id: '1',

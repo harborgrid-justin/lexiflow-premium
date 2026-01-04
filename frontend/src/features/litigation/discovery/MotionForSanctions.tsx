@@ -8,7 +8,6 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { STORES } from '@/services/data/db';
 import { SanctionMotion } from '@/types';
 import { cn } from '@/utils/cn';
 import { FileWarning, Gavel, Plus } from 'lucide-react';
@@ -21,14 +20,14 @@ export const MotionForSanctions: React.FC = () => {
     const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
     const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
-        [STORES.SANCTIONS, 'all'],
+        QUERY_KEYS.SANCTIONS.ALL,
         () => DataService.discovery.getSanctions()
     );
 
     const { mutate: addSanction } = useMutation(
         DataService.discovery.addSanctionMotion,
         {
-            invalidateKeys: [[STORES.SANCTIONS, 'all']],
+            invalidateKeys: [QUERY_KEYS.SANCTIONS.ALL],
             onSuccess: () => { sanctionModal.close(); setNewMotion({}); }
         }
     );

@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -18,7 +19,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Fetch real configuration from backend
-  const { data: backendConfig, isLoading } = useQuery(['system', 'config'], async () => {
+  const { data: backendConfig, isLoading } = useQuery(QUERY_KEYS.SYSTEM.CONFIG, async () => {
     // Fetch from backend configuration API
     return {
       appName: 'LexiFlow',

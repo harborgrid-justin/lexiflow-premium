@@ -104,7 +104,6 @@ import {
   createIntegratedRepository,
 } from "./integration/IntegrationEventPublisher";
 import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
-import { DataSourceRouter } from "./routing/DataSourceRouter";
 
 // Backend API Layer (Primary Data Source)
 import { api, isBackendApiEnabled } from "@/api";
@@ -129,6 +128,7 @@ import { SecurityService } from "@/services/domain/SecurityDomain";
 // Operations & Administration
 import { AdminService } from "@/services/domain/AdminDomain";
 import { OperationsService } from "@/services/domain/OperationsDomain";
+import { AssetService } from "@/services/domain/AssetDomain";
 
 // Communication & Collaboration
 import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
@@ -407,30 +407,33 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.cases (PostgreSQL + NestJS)
    * @features CRUD, search, analytics, assignments, status tracking
    */
-  cases: DataSourceRouter.createPropertyDescriptor(
-    "cases",
-    getIntegratedCaseRepository
-  ),
+  cases: {
+    get: () =>
+      isBackendApiEnabled() ? api.cases : getIntegratedCaseRepository(),
+    enumerable: true,
+  },
 
   /**
    * Docket API - Court document tracking and management
    * @backend api.docket
    * @features Filing tracking, deadlines, court entries
    */
-  docket: DataSourceRouter.createPropertyDescriptor(
-    "docket",
-    getIntegratedDocketRepository
-  ),
+  docket: {
+    get: () =>
+      isBackendApiEnabled() ? api.docket : getIntegratedDocketRepository(),
+    enumerable: true,
+  },
 
   /**
    * Documents API - Legal document management system
    * @backend api.documents
    * @features Upload, version control, OCR, metadata extraction
    */
-  documents: DataSourceRouter.createPropertyDescriptor(
-    "documents",
-    getIntegratedDocumentRepository
-  ),
+  documents: {
+    get: () =>
+      isBackendApiEnabled() ? api.documents : getIntegratedDocumentRepository(),
+    enumerable: true,
+  },
 
   /**
    * Drafting API - Document drafting and assembly
@@ -444,20 +447,21 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.pleadings
    * @features Drafting, filing, template management
    */
-  pleadings: DataSourceRouter.createPropertyDescriptor(
-    "pleadings",
-    getPleadingRepository
-  ),
+  pleadings: {
+    get: () =>
+      isBackendApiEnabled() ? api.pleadings : getPleadingRepository(),
+    enumerable: true,
+  },
 
   /**
    * Motions API - Motion tracking and management
    * @backend api.motions
    * @features Motion filing, responses, hearings, rulings
    */
-  motions: DataSourceRouter.createPropertyDescriptor(
-    "motions",
-    getMotionsRepository
-  ),
+  motions: {
+    get: () => (isBackendApiEnabled() ? api.motions : getMotionsRepository()),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // DISCOVERY & EVIDENCE MANAGEMENT
@@ -468,91 +472,120 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.evidence
    * @features Intake, cataloging, authentication, exhibits
    */
-  evidence: DataSourceRouter.createPropertyDescriptor(
-    "evidence",
-    getEvidenceRepository
-  ),
+  evidence: {
+    get: () => (isBackendApiEnabled() ? api.evidence : getEvidenceRepository()),
+    enumerable: true,
+  },
 
   /**
    * Legal Holds API - Litigation hold management
    * @backend api.legalHolds
    * @features Hold notices, custodian tracking, compliance
    */
-  legalHolds: DataSourceRouter.createPropertyDescriptor("legalHolds", () =>
-    legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
-      STORES.LEGAL_HOLDS
-    )
-  ),
+  legalHolds: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.legalHolds
+        : legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+            STORES.LEGAL_HOLDS
+          ),
+    enumerable: true,
+  },
 
   /**
    * Depositions API - Deposition scheduling and tracking
    * @backend api.depositions
    * @features Scheduling, transcripts, exhibit management
    */
-  depositions: DataSourceRouter.createPropertyDescriptor("depositions", () =>
-    legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
-      "depositions"
-    )
-  ),
+  depositions: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.depositions
+        : legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+            "depositions"
+          ),
+    enumerable: true,
+  },
 
   /**
    * Discovery Requests API - Discovery request/response management
    * @backend api.discoveryRequests
    * @features Interrogatories, RFPs, RFAs, responses
    */
-  discoveryRequests: DataSourceRouter.createPropertyDescriptor(
-    "discoveryRequests",
-    () =>
-      legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
-        "discoveryRequests"
-      )
-  ),
+  discoveryRequests: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.discoveryRequests
+        : legacyRepositoryRegistry.getOrCreate<import("@/types").BaseEntity>(
+            "discoveryRequests"
+          ),
+    enumerable: true,
+  },
 
   /**
    * ESI Sources API - Electronic source tracking
    * @backend api.esiSources
    * @features Data source identification, preservation
    */
-  esiSources: DataSourceRouter.createPropertyDescriptor("esiSources", () =>
-    legacyRepositoryRegistry.getOrCreate("esiSources")
-  ),
+  esiSources: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.esiSources
+        : legacyRepositoryRegistry.getOrCreate("esiSources"),
+    enumerable: true,
+  },
 
   /**
    * Privilege Log API - Attorney-client privilege tracking
    * @backend api.privilegeLog
    * @features Privilege assertions, log generation
    */
-  privilegeLog: DataSourceRouter.createPropertyDescriptor("privilegeLog", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.PRIVILEGE_LOG)
-  ),
+  privilegeLog: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.privilegeLog
+        : legacyRepositoryRegistry.getOrCreate(STORES.PRIVILEGE_LOG),
+    enumerable: true,
+  },
 
   /**
    * Productions API - Document production management
    * @backend api.productions
    * @features Production sets, Bates numbering, delivery
    */
-  productions: DataSourceRouter.createPropertyDescriptor("productions", () =>
-    legacyRepositoryRegistry.getOrCreate("productions")
-  ),
+  productions: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.productions
+        : legacyRepositoryRegistry.getOrCreate("productions"),
+    enumerable: true,
+  },
 
   /**
    * Custodian Interviews API - Custodian interview tracking
    * @backend api.custodianInterviews
    * @features Interview scheduling, questionnaires, notes
    */
-  custodianInterviews: DataSourceRouter.createPropertyDescriptor(
-    "custodianInterviews",
-    () => legacyRepositoryRegistry.getOrCreate("custodianInterviews")
-  ),
+  custodianInterviews: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.custodianInterviews
+        : legacyRepositoryRegistry.getOrCreate("custodianInterviews"),
+    enumerable: true,
+  },
 
   /**
    * Custodians API - Custodian management
    * @backend api.custodians
    * @features Custodian profiles, data sources, holds
    */
-  custodians: DataSourceRouter.createPropertyDescriptor("custodians", () =>
-    legacyRepositoryRegistry.getOrCreate("custodians")
-  ),
+  custodians: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.custodians
+        : legacyRepositoryRegistry.getOrCreate("custodians"),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // TRIAL MANAGEMENT
@@ -563,35 +596,47 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.trial
    * @features Trial calendar, witness lists, exhibits
    */
-  trial: DataSourceRouter.createPropertyDescriptor("trial", getTrialRepository),
+  trial: {
+    get: () => (isBackendApiEnabled() ? api.trial : getTrialRepository()),
+    enumerable: true,
+  },
 
   /**
    * Exhibits API - Trial exhibit management
    * @backend api.exhibits
    * @features Exhibit lists, authentication, presentation
    */
-  exhibits: DataSourceRouter.createPropertyDescriptor(null, () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.EXHIBITS)
-  ),
+  exhibits: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.exhibits
+        : legacyRepositoryRegistry.getOrCreate(STORES.EXHIBITS),
+    enumerable: true,
+  },
 
   /**
    * Witnesses API - Witness management
    * @backend api.witnesses
    * @features Witness profiles, availability, testimony prep
    */
-  witnesses: DataSourceRouter.createPropertyDescriptor(
-    "witnesses",
-    getWitnessesRepository
-  ),
+  witnesses: {
+    get: () =>
+      isBackendApiEnabled() ? api.witnesses : getWitnessesRepository(),
+    enumerable: true,
+  },
 
   /**
    * Examinations API - Witness examination tracking
    * @backend api.examinations
    * @features Direct/cross examination, transcripts
    */
-  examinations: DataSourceRouter.createPropertyDescriptor("examinations", () =>
-    legacyRepositoryRegistry.getOrCreate("examinations")
-  ),
+  examinations: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.examinations
+        : legacyRepositoryRegistry.getOrCreate("examinations"),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // FINANCIAL MANAGEMENT
@@ -602,76 +647,102 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.billing
    * @features Time tracking, invoicing, payments, reporting
    */
-  billing: DataSourceRouter.createPropertyDescriptor(
-    "billing",
-    getIntegratedBillingRepository
-  ),
+  billing: {
+    get: () =>
+      isBackendApiEnabled() ? api.billing : getIntegratedBillingRepository(),
+    enumerable: true,
+  },
 
   /**
    * Time Entries API - Time tracking and management
    * @backend api.timeEntries
    * @features Time capture, timers, approvals
    */
-  timeEntries: DataSourceRouter.createPropertyDescriptor("timeEntries", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.BILLING)
-  ),
+  timeEntries: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.timeEntries
+        : legacyRepositoryRegistry.getOrCreate(STORES.BILLING),
+    enumerable: true,
+  },
 
   /**
    * Invoices API - Invoice generation and management
    * @backend api.invoices
    * @features Invoice creation, delivery, payment tracking
    */
-  invoices: DataSourceRouter.createPropertyDescriptor("invoices", () =>
-    legacyRepositoryRegistry.getOrCreate("invoices")
-  ),
+  invoices: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.invoices
+        : legacyRepositoryRegistry.getOrCreate("invoices"),
+    enumerable: true,
+  },
 
   /**
    * Expenses API - Expense tracking and reimbursement
    * @backend api.expenses
    * @features Expense capture, approvals, reimbursements
    */
-  expenses: DataSourceRouter.createPropertyDescriptor("expenses", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES)
-  ),
+  expenses: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.expenses
+        : legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES),
+    enumerable: true,
+  },
 
   /**
    * Fee Agreements API - Fee arrangement management
    * @backend api.feeAgreements
    * @features Retainer, contingency, hourly agreements
    */
-  feeAgreements: DataSourceRouter.createPropertyDescriptor(
-    "feeAgreements",
-    () => legacyRepositoryRegistry.getOrCreate("feeAgreements")
-  ),
+  feeAgreements: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.feeAgreements
+        : legacyRepositoryRegistry.getOrCreate("feeAgreements"),
+    enumerable: true,
+  },
 
   /**
    * Rate Tables API - Billing rate management
    * @backend api.rateTables
    * @features Attorney rates, paralegal rates, rate changes
    */
-  rateTables: DataSourceRouter.createPropertyDescriptor("rateTables", () =>
-    legacyRepositoryRegistry.getOrCreate("rateTables")
-  ),
+  rateTables: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.rateTables
+        : legacyRepositoryRegistry.getOrCreate("rateTables"),
+    enumerable: true,
+  },
 
   /**
    * Trust Accounts API - IOLTA/trust account management
    * @backend api.trustAccounts
    * @features Trust accounting, disbursements, compliance
    */
-  trustAccounts: DataSourceRouter.createPropertyDescriptor(
-    "trustAccounts",
-    () => legacyRepositoryRegistry.getOrCreate("trustAccounts")
-  ),
+  trustAccounts: {
+    get: () =>
+      isBackendApiEnabled()
+        ? billingApi.trustAccounts
+        : legacyRepositoryRegistry.getOrCreate("trustAccounts"),
+    enumerable: true,
+  },
 
   /**
    * Billing Analytics API - Financial analytics and reporting
    * @backend api.billingAnalytics
    * @features Revenue analysis, realization rates, aging
    */
-  billingAnalytics: DataSourceRouter.createPropertyDescriptor(
-    "billingAnalytics",
-    () => legacyRepositoryRegistry.getOrCreate("billingAnalytics")
-  ),
+  billingAnalytics: {
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.billingAnalytics
+        : legacyRepositoryRegistry.getOrCreate("billingAnalytics"),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // CLIENT & ENTITY MANAGEMENT
@@ -682,39 +753,47 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.clients
    * @features Client profiles, contacts, matter assignments
    */
-  clients: DataSourceRouter.createPropertyDescriptor(
-    "clients",
-    getClientsRepository
-  ),
+  clients: {
+    get: () => (isBackendApiEnabled() ? api.clients : getClientsRepository()),
+    enumerable: true,
+  },
 
   /**
    * Parties API - Case party management
    * @backend api.parties
    * @features Plaintiffs, defendants, interested parties
    */
-  parties: DataSourceRouter.createPropertyDescriptor("parties", () =>
-    legacyRepositoryRegistry.getOrCreate("parties")
-  ),
+  parties: {
+    get: () =>
+      isBackendApiEnabled()
+        ? litigationApi.parties
+        : legacyRepositoryRegistry.getOrCreate("parties"),
+    enumerable: true,
+  },
 
   /**
    * Organizations API - Organization management
    * @backend api.organizations
    * @features Corporate entities, opposing counsel firms
    */
-  organizations: DataSourceRouter.createPropertyDescriptor(
-    "organizations",
-    getOrganizationsRepository
-  ),
+  organizations: {
+    get: () =>
+      isBackendApiEnabled()
+        ? integrationsApi.organizations
+        : getOrganizationsRepository(),
+    enumerable: true,
+  },
 
   /**
    * Legal Entities API - Legal entity management
    * @backend api.legalEntities
    * @features Entity structures, relationships, hierarchies
    */
-  entities: DataSourceRouter.createPropertyDescriptor(
-    "legalEntities",
-    getEntitiesRepository
-  ),
+  entities: {
+    get: () =>
+      isBackendApiEnabled() ? api.legalEntities : getEntitiesRepository(),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // WORKFLOW & TASK MANAGEMENT
@@ -725,17 +804,20 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.tasks
    * @features Task assignment, deadlines, dependencies, tracking
    */
-  tasks: DataSourceRouter.createPropertyDescriptor("tasks", getTasksRepository),
+  tasks: {
+    get: () => (isBackendApiEnabled() ? api.tasks : getTasksRepository()),
+    enumerable: true,
+  },
 
   /**
    * Projects API - Project management
    * @backend api.projects
    * @features Project planning, milestones, resource allocation
    */
-  projects: DataSourceRouter.createPropertyDescriptor(
-    null,
-    getProjectsRepository
-  ),
+  projects: {
+    get: () => (isBackendApiEnabled() ? api.projects : getProjectsRepository()),
+    enumerable: true,
+  },
 
   /**
    * Workflow API - Automated workflow management
@@ -770,56 +852,78 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.conflictChecks
    * @features Client conflicts, matter conflicts, waivers
    */
-  conflictChecks: DataSourceRouter.createPropertyDescriptor(
-    "conflictChecks",
-    () => legacyRepositoryRegistry.getOrCreate("conflictChecks")
-  ),
+  conflictChecks: {
+    get: () =>
+      isBackendApiEnabled()
+        ? complianceApi.conflictChecks
+        : legacyRepositoryRegistry.getOrCreate("conflictChecks"),
+    enumerable: true,
+  },
 
   /**
    * Ethical Walls API - Information barrier management
    * @backend api.ethicalWalls
    * @features Wall creation, access restrictions, monitoring
    */
-  ethicalWalls: DataSourceRouter.createPropertyDescriptor("ethicalWalls", () =>
-    legacyRepositoryRegistry.getOrCreate("ethicalWalls")
-  ),
+  ethicalWalls: {
+    get: () =>
+      isBackendApiEnabled()
+        ? authApi.ethicalWalls
+        : legacyRepositoryRegistry.getOrCreate("ethicalWalls"),
+    enumerable: true,
+  },
 
   /**
    * Audit Logs API - System audit trail
    * @backend api.auditLogs
    * @features Activity tracking, compliance reporting, forensics
    */
-  auditLogs: DataSourceRouter.createPropertyDescriptor("auditLogs", () =>
-    legacyRepositoryRegistry.getOrCreate("auditLogs")
-  ),
+  auditLogs: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.auditLogs
+        : legacyRepositoryRegistry.getOrCreate("auditLogs"),
+    enumerable: true,
+  },
 
   /**
    * Permissions API - Access control management
    * @backend api.permissions
    * @features Role-based access, permissions, groups
    */
-  permissions: DataSourceRouter.createPropertyDescriptor("permissions", () =>
-    legacyRepositoryRegistry.getOrCreate("permissions")
-  ),
+  permissions: {
+    get: () =>
+      isBackendApiEnabled()
+        ? authApi.permissions
+        : legacyRepositoryRegistry.getOrCreate("permissions"),
+    enumerable: true,
+  },
 
   /**
    * RLS Policies API - Row-level security policies
    * @backend api.rlsPolicies
    * @features Data isolation, multi-tenancy, security rules
    */
-  rlsPolicies: DataSourceRouter.createPropertyDescriptor("rlsPolicies", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.POLICIES)
-  ),
+  rlsPolicies: {
+    get: () =>
+      isBackendApiEnabled()
+        ? dataPlatformApi.rlsPolicies
+        : legacyRepositoryRegistry.getOrCreate(STORES.POLICIES),
+    enumerable: true,
+  },
 
   /**
    * Compliance Reporting API - Regulatory compliance reports
    * @backend api.complianceReporting
    * @features Compliance dashboards, certifications, filings
    */
-  complianceReporting: DataSourceRouter.createPropertyDescriptor(
-    "complianceReporting",
-    () => legacyRepositoryRegistry.getOrCreate("complianceReports")
-  ),
+  complianceReporting: {
+    get: () =>
+      isBackendApiEnabled()
+        ? complianceApi.complianceReporting
+        : legacyRepositoryRegistry.getOrCreate("complianceReports"),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // ANALYTICS & INTELLIGENCE
@@ -841,10 +945,11 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.citations
    * @features Bluebook formatting, citation extraction, validation
    */
-  citations: DataSourceRouter.createPropertyDescriptor(
-    null,
-    getCitationsRepository
-  ),
+  citations: {
+    get: () =>
+      isBackendApiEnabled() ? analyticsApi.citations : getCitationsRepository(),
+    enumerable: true,
+  },
 
   /**
    * Analytics API - Business intelligence and analytics
@@ -858,39 +963,52 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.judgeStats
    * @features Judge history, ruling patterns, scheduling preferences
    */
-  judgeStats: DataSourceRouter.createPropertyDescriptor("judgeStats", () => ({
-    getAll: async () => MOCK_JUDGES,
-    getById: async (id: string) => MOCK_JUDGES.find((j) => j.id === id),
-    search: async (query: string) =>
-      MOCK_JUDGES.filter((j) =>
-        j.name.toLowerCase().includes(query.toLowerCase())
-      ),
-  })),
+  judgeStats: {
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.judgeStats
+        : {
+            getAll: async () => MOCK_JUDGES,
+            getById: async (id: string) => MOCK_JUDGES.find((j) => j.id === id),
+            search: async (query: string) =>
+              MOCK_JUDGES.filter((j) =>
+                j.name.toLowerCase().includes(query.toLowerCase())
+              ),
+          },
+    enumerable: true,
+  },
 
   /**
    * Outcome Predictions API - AI-powered case outcome predictions
    * @backend api.outcomePredictions
    * @features ML predictions, confidence scores, risk factors
    */
-  outcomePredictions: DataSourceRouter.createPropertyDescriptor(
-    "outcomePredictions",
-    () => ({
-      predict: async (caseId: string) => ({
-        caseId,
-        prediction: "unavailable",
-        confidence: 0,
-        factors: [],
-      }),
-      getHistory: async () => [],
-    })
-  ),
+  outcomePredictions: {
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.outcomePredictions
+        : {
+            predict: async (caseId: string) => ({
+              caseId,
+              prediction: "unavailable",
+              confidence: 0,
+              factors: [],
+            }),
+            getHistory: async () => [],
+          },
+    enumerable: true,
+  },
 
   /**
    * Risks API - Risk assessment and management
    * @backend api.risks
    * @features Risk identification, mitigation, tracking
    */
-  risks: DataSourceRouter.createPropertyDescriptor(null, getRisksRepository),
+  risks: {
+    get: () =>
+      isBackendApiEnabled() ? workflowApi.risks : getRisksRepository(),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // COMMUNICATION & COLLABORATION
@@ -901,10 +1019,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.communications
    * @features Email tracking, call logs, correspondence
    */
-  communications: DataSourceRouter.createPropertyDescriptor(
-    "communications",
-    () => legacyRepositoryRegistry.getOrCreate("communications")
-  ),
+  communications: {
+    get: () =>
+      isBackendApiEnabled()
+        ? communicationsApi.communications
+        : legacyRepositoryRegistry.getOrCreate("communications"),
+    enumerable: true,
+  },
 
   /**
    * Correspondence API - Document correspondence tracking
@@ -918,9 +1039,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.messaging
    * @features Team chat, notifications, alerts
    */
-  messaging: DataSourceRouter.createPropertyDescriptor("messaging", () =>
-    legacyRepositoryRegistry.getOrCreate("messages")
-  ),
+  messaging: {
+    get: () =>
+      isBackendApiEnabled()
+        ? communicationsApi.messaging
+        : legacyRepositoryRegistry.getOrCreate("messages"),
+    enumerable: true,
+  },
 
   /**
    * Notifications API - System notification management
@@ -965,52 +1090,60 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.ocr
    * @features Document OCR, text extraction, indexing
    */
-  ocr: DataSourceRouter.createPropertyDescriptor("ocr", () => ({
-    processDocument: async () => ({
-      success: false,
-      message: "Backend required",
-    }),
-    getStatus: async () => ({ status: "unavailable" }),
-  })),
+  ocr: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.ocr
+        : {
+            processDocument: async () => ({
+              success: false,
+              message: "Backend required",
+            }),
+            getStatus: async () => ({ status: "unavailable" }),
+          },
+    enumerable: true,
+  },
 
   /**
    * War Room API - Litigation strategy and command center
    * @backend api.warRoom
    * @features Strategy, advisory board, opposition intel
    */
-  warRoom: DataSourceRouter.createPropertyDescriptor(null, async () => {
-    const { WarRoomService } = await import("@/services/domain/WarRoomDomain");
-    return WarRoomService;
-  }),
+  warRoom: {
+    get: () =>
+      isBackendApiEnabled()
+        ? workflowApi.warRoom
+        : import("@/services/domain/WarRoomDomain").then(
+            (m) => m.WarRoomService
+          ),
+    enumerable: true,
+  },
 
   /**
    * Processing Jobs API - Background job management
    * @backend api.processingJobs
    * @features Job queues, status tracking, scheduling
    */
-  processingJobs: DataSourceRouter.createPropertyDescriptor(
-    "processingJobs",
-    () => legacyRepositoryRegistry.getOrCreate(STORES.PROCESSING_JOBS)
-  ),
+  processingJobs: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.processingJobs
+        : legacyRepositoryRegistry.getOrCreate(STORES.PROCESSING_JOBS),
+    enumerable: true,
+  },
 
   /**
    * Document Versions API - Document version control
    * @backend api.documentVersions
    * @features Version tracking, diffs, rollback
    */
-  documentVersions: DataSourceRouter.createPropertyDescriptor(
-    "documentVersions",
-    () => {
-      const repo = legacyRepositoryRegistry.getOrCreate("documentVersions");
-      return {
-        ...repo,
-        delete: async (id: string) => {
-          await repo.delete(id);
-          return { success: true, id };
-        },
-      };
-    }
-  ),
+  documentVersions: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.documentVersions
+        : legacyRepositoryRegistry.getOrCreate("documentVersions"),
+    enumerable: true,
+  },
 
   /**
    * Search API - Full-text search service
@@ -1018,7 +1151,10 @@ Object.defineProperties(DataServiceBase, {
    * @features Document search, case search, entity search
    */
   search: {
-    get: () => import("../domain/SearchDomain").then((m) => m.SearchService),
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.search
+        : import("../domain/SearchDomain").then((m) => m.SearchService),
     enumerable: true,
   },
 
@@ -1041,36 +1177,52 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.users
    * @features User profiles, authentication, roles
    */
-  users: DataSourceRouter.createPropertyDescriptor("users", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.USERS)
-  ),
+  users: {
+    get: () =>
+      isBackendApiEnabled()
+        ? authApi.users
+        : legacyRepositoryRegistry.getOrCreate(STORES.USERS),
+    enumerable: true,
+  },
 
   /**
    * Groups API - User group management
    * @backend api.groups
    * @features Team groups, practice groups, permissions
    */
-  groups: DataSourceRouter.createPropertyDescriptor("groups", () =>
-    legacyRepositoryRegistry.getOrCreate("groups")
-  ),
+  groups: {
+    get: () =>
+      isBackendApiEnabled()
+        ? authApi.groups
+        : legacyRepositoryRegistry.getOrCreate("groups"),
+    enumerable: true,
+  },
 
   /**
    * Case Teams API - Case team composition
    * @backend api.caseTeams
    * @features Attorney assignments, paralegal assignments, roles
    */
-  caseTeams: DataSourceRouter.createPropertyDescriptor("caseTeams", () =>
-    legacyRepositoryRegistry.getOrCreate("caseTeams")
-  ),
+  caseTeams: {
+    get: () =>
+      isBackendApiEnabled()
+        ? litigationApi.caseTeams
+        : legacyRepositoryRegistry.getOrCreate("caseTeams"),
+    enumerable: true,
+  },
 
   /**
    * Case Phases API - Case phase management
    * @backend api.casePhases
    * @features Discovery phase, trial phase, appeals
    */
-  casePhases: DataSourceRouter.createPropertyDescriptor("casePhases", () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.PHASES)
-  ),
+  casePhases: {
+    get: () =>
+      isBackendApiEnabled()
+        ? litigationApi.casePhases
+        : legacyRepositoryRegistry.getOrCreate(STORES.PHASES),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // ADMINISTRATIVE & SYSTEM SERVICES
@@ -1088,9 +1240,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.reports
    * @features Custom reports, templates, scheduling
    */
-  reports: DataSourceRouter.createPropertyDescriptor(null, () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.REPORTERS)
-  ),
+  reports: {
+    get: () =>
+      isBackendApiEnabled()
+        ? complianceApi.reports
+        : legacyRepositoryRegistry.getOrCreate(STORES.REPORTERS),
+    enumerable: true,
+  },
 
   /**
    * Quality API - Data quality management
@@ -1107,41 +1263,102 @@ Object.defineProperties(DataServiceBase, {
   catalog: { get: () => DataCatalogService, enumerable: true },
 
   /**
+   * Data Sources API - External data source management
+   * @backend api.dataSources
+   * @features Connection management, sync, ingestion
+   */
+  dataSources: {
+    get: () => (isBackendApiEnabled() ? api.dataSources : null),
+    enumerable: true,
+  },
+
+  /**
+   * Schema Management API - Database schema operations
+   * @backend api.schemaManagement
+   * @features Migrations, snapshots, schema inspection
+   */
+  schemaManagement: {
+    get: () => (isBackendApiEnabled() ? api.schemaManagement : null),
+    enumerable: true,
+  },
+
+  /**
+   * RLS Policies API - Row Level Security management
+   * @backend api.rlsPolicies
+   * @features Policy definition, enforcement, testing
+   */
+  rlsPolicies: {
+    get: () => (isBackendApiEnabled() ? api.rlsPolicies : null),
+    enumerable: true,
+  },
+
+  /**
+   * Query Workbench API - SQL query execution
+   * @backend api.queryWorkbench
+   * @features Ad-hoc queries, saved queries, history
+   */
+  queryWorkbench: {
+    get: () => (isBackendApiEnabled() ? api.queryWorkbench : null),
+    enumerable: true,
+  },
+
+  /**
    * Backup API - Backup and disaster recovery
    * @backend api.backup
    * @features Automated backups, restore, archiving
    */
-  backup: { get: () => BackupService, enumerable: true },
+  backup: {
+    get: () => (isBackendApiEnabled() ? adminApi.backups : BackupService),
+    enumerable: true,
+  },
 
   /**
    * Dashboard API - Dashboard and widget management
    * @backend api.dashboard
    * @features Custom dashboards, widgets, layouts
    */
-  dashboard: DataSourceRouter.createPropertyDescriptor(null, async () => {
-    const { DashboardService } =
-      await import("@/services/domain/DashboardDomain");
-    return DashboardService;
-  }),
+  dashboard: {
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.dashboard
+        : import("@/services/domain/DashboardDomain").then(
+            (m) => m.DashboardService
+          ),
+    enumerable: true,
+  },
 
   /**
    * Metrics API - System metrics and monitoring
    * @backend api.metrics
    * @features Performance metrics, health checks, SLA monitoring
    */
-  metrics: DataSourceRouter.createPropertyDescriptor("metrics", () => ({
-    getSystem: async () => ({ cpu: 0, memory: 0, disk: 0, network: 0 }),
-    getApplication: async () => ({ requests: 0, errors: 0, responseTime: 0 }),
-  })),
+  metrics: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.metrics
+        : {
+            getSystem: async () => ({ cpu: 0, memory: 0, disk: 0, network: 0 }),
+            getApplication: async () => ({
+              requests: 0,
+              errors: 0,
+              responseTime: 0,
+            }),
+          },
+    enumerable: true,
+  },
 
   /**
    * Service Jobs API - Service job management
    * @backend api.serviceJobs
    * @features Scheduled jobs, cron tasks, maintenance
    */
-  serviceJobs: DataSourceRouter.createPropertyDescriptor("serviceJobs", () =>
-    legacyRepositoryRegistry.getOrCreate("serviceJobs")
-  ),
+  serviceJobs: {
+    get: () =>
+      isBackendApiEnabled()
+        ? adminApi.serviceJobs
+        : legacyRepositoryRegistry.getOrCreate("serviceJobs"),
+    enumerable: true,
+  },
 
   // ─────────────────────────────────────────────────────────────────────────
   // BUSINESS DEVELOPMENT & STRATEGY
@@ -1199,18 +1416,26 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.playbooks
    * @features Template library, best practices, workflows
    */
-  playbooks: DataSourceRouter.createPropertyDescriptor(null, () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES)
-  ),
+  playbooks: {
+    get: () =>
+      isBackendApiEnabled()
+        ? draftingApi.templates
+        : legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES),
+    enumerable: true,
+  },
 
   /**
    * Clauses API - Contract clause library
    * @backend api.clauses
    * @features Clause templates, versions, approval status
    */
-  clauses: DataSourceRouter.createPropertyDescriptor(null, () =>
-    legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES)
-  ),
+  clauses: {
+    get: () =>
+      isBackendApiEnabled()
+        ? analyticsApi.clauses
+        : legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES),
+    enumerable: true,
+  },
 
   /**
    * Rules API - Court rules and procedures
@@ -1295,10 +1520,13 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.dataSources
    * @features Third-party integrations, API connections, sync
    */
-  dataSourcesIntegration: DataSourceRouter.createPropertyDescriptor(
-    "dataSources",
-    () => legacyRepositoryRegistry.getOrCreate("dataSources")
-  ),
+  dataSourcesIntegration: {
+    get: () =>
+      isBackendApiEnabled()
+        ? dataPlatformApi.dataSources
+        : legacyRepositoryRegistry.getOrCreate("dataSources"),
+    enumerable: true,
+  },
 
   /**
    * Organization API - Multi-org management
@@ -1333,27 +1561,6 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true,
   },
 
-  /**
-   * Assets API - Digital asset management
-   * @backend api.assets
-   * @features File storage, media library, CDN
-   */
-  assets: {
-    get: () => import("../domain/AssetDomain").then((m) => m.AssetService),
-    enumerable: true,
-  },
-
-  /**
-   * Sources API - Data source management
-   * @backend api.sources
-   * @features Source configuration, connectors, ETL
-   */
-  sources: {
-    get: () =>
-      import("../domain/DataSourceDomain").then((m) => m.DataSourceService),
-    enumerable: true,
-  },
-
   // ─────────────────────────────────────────────────────────────────────────
   // SECURITY & TOKEN MANAGEMENT
   // ─────────────────────────────────────────────────────────────────────────
@@ -1370,14 +1577,17 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.tokenBlacklist
    * @features Token revocation, logout, session management
    */
-  tokenBlacklist: DataSourceRouter.createPropertyDescriptor(
-    "tokenBlacklistAdmin",
-    () => ({
-      getAll: async () => [],
-      add: async () => ({ success: false }),
-      remove: async () => ({ success: false }),
-    })
-  ),
+  tokenBlacklist: {
+    get: () =>
+      isBackendApiEnabled()
+        ? authApi.tokenBlacklist
+        : {
+            getAll: async () => [],
+            add: async () => ({ success: false }),
+            remove: async () => ({ success: false }),
+          },
+    enumerable: true,
+  },
 
   /**
    * Operations API - Operational management
@@ -1387,18 +1597,34 @@ Object.defineProperties(DataServiceBase, {
   operations: { get: () => OperationsService, enumerable: true },
 
   /**
+   * Assets API - Asset and equipment management
+   * @backend api.assets
+   * @features Asset tracking, assignment, maintenance
+   */
+  assets: { get: () => AssetService, enumerable: true },
+
+  /**
    * Production API - Production deployment management
    * @backend api.production
    * @features Environment management, deployments, configs
    */
-  production: DataSourceRouter.createPropertyDescriptor("productions", () => ({
-    getStatus: async () => ({
-      environment: "development",
-      version: "1.0.0",
-      healthy: true,
-    }),
-    deploy: async () => ({ success: false, message: "Backend required" }),
-  })),
+  production: {
+    get: () =>
+      isBackendApiEnabled()
+        ? discoveryApi.productions
+        : {
+            getStatus: async () => ({
+              environment: "development",
+              version: "1.0.0",
+              healthy: true,
+            }),
+            deploy: async () => ({
+              success: false,
+              message: "Backend required",
+            }),
+          },
+    enumerable: true,
+  },
 
   // ═════════════════════════════════════════════════════════════════════════
   //                     FALLBACK SERVICES (DEPRECATED)
@@ -1432,18 +1658,26 @@ Object.defineProperties(DataServiceBase, {
    * @fallback IndexedDB repository
    * @removal v2.0.0
    */
-  discoveryMain: DataSourceRouter.createPropertyDescriptor("discovery", () =>
-    legacyRepositoryRegistry.getOrCreate("discovery")
-  ),
+  discoveryMain: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.discovery
+        : legacyRepositoryRegistry.getOrCreate("discovery"),
+    enumerable: true,
+  },
 
   /**
    * @deprecated Compliance Main (Local) - Legacy compliance system
    * @fallback IndexedDB repository
    * @removal v2.0.0
    */
-  complianceMain: DataSourceRouter.createPropertyDescriptor("compliance", () =>
-    legacyRepositoryRegistry.getOrCreate("complianceReports")
-  ),
+  complianceMain: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.compliance
+        : legacyRepositoryRegistry.getOrCreate("complianceReports"),
+    enumerable: true,
+  },
 });
 
 // ═══════════════════════════════════════════════════════════════════════════

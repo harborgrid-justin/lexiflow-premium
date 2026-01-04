@@ -31,7 +31,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { STORES } from '@/services/data/db';
+import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
@@ -89,7 +89,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-    [STORES.REQUESTS, caseId || 'all'],
+    caseId ? QUERY_KEYS.REQUESTS.BY_CASE(caseId) : QUERY_KEYS.REQUESTS.ALL,
     async () => {
       const discovery = DataService.discovery as unknown as DiscoveryRepository;
       return discovery.getRequests(caseId);

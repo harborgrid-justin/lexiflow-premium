@@ -1,168 +1,158 @@
-import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '@/types';
-import { delay } from '@/utils/async';
-import { STORES, db } from '@/services/data/db';
-import { authApi, isBackendApiEnabled } from '@/api';
-
-// Default profile for fallback/mocking
-const DEFAULT_PROFILE: ExtendedUserProfile = {
-    id: 'usr-admin-justin' as UserId,
-    name: 'Justin Harbor',
-    email: 'justin@harborgrid.com',
-    role: 'Administrator',
-    entityId: 'ent-admin' as EntityId,
-    title: 'Senior Partner',
-    department: 'Litigation',
-    userType: 'Internal',
-    status: 'online',
-    skills: ['Commercial Litigation', 'Class Action', 'Bankruptcy', 'Negotiation'],
-    barAdmissions: [
-        { state: 'VA', number: '99823', status: 'Active' },
-        { state: 'DC', number: '445210', status: 'Active' }
-    ],
-    preferences: {
-        theme: 'system',
-        notifications: {
-            email: true,
-            push: true,
-            slack: false,
-            digestFrequency: 'Daily'
-        },
-        dashboardLayout: ['metrics', 'tasks', 'calendar'],
-        density: 'comfortable',
-        locale: 'en-US',
-        timezone: 'America/New_York'
-    },
-    security: {
-        mfaEnabled: true,
-        mfaMethod: 'App',
-        lastPasswordChange: '2024-01-15',
-        passwordExpiry: '2024-04-15',
-        ipWhitelist: ['192.168.1.1'],
-        activeSessions: [
-            { id: 'sess-1', device: 'MacBook Pro', ip: '192.168.1.55', lastActive: 'Just now', current: true },
-            { id: 'sess-2', device: 'iPhone 15', ip: '10.0.0.5', lastActive: '2 hours ago', current: false }
-        ]
-    },
-    accessMatrix: [
-        { id: 'perm-1', resource: 'cases', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-2', resource: 'documents', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-3', resource: 'billing', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-4', resource: 'billing.invoices', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-5', resource: 'hr', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-6', resource: 'admin', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-7', resource: 'security', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-8', resource: 'compliance', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-9', resource: 'audit', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-10', resource: 'analytics', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-11', resource: 'integrations', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-12', resource: 'api.keys', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-13', resource: 'system', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-14', resource: 'database', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
-        { id: 'perm-15', resource: '*', action: '*', effect: 'Allow', scope: 'Global', reason: 'Super Admin - Unrestricted Access' }
-    ]
-};
+import {
+  ExtendedUserProfile,
+  GranularPermission,
+  UserId,
+  EntityId,
+  UpdateUserDto,
+} from "@/types";
+import { delay } from "@/utils/async";
+import { STORES, db } from "@/services/data/db";
+import { authApi, adminApi, isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const ProfileDomain = {
-    getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
-        if (isBackendApiEnabled()) {
-            try {
-                const user = await authApi.auth.getCurrentUser();
-                // Merge backend user with default profile structure for missing fields
-                return {
-                    ...DEFAULT_PROFILE,
-                    ...user,
-                    id: user.id as UserId,
-                    // Ensure we keep the extended fields from default if not present in user
-                    preferences: { ...DEFAULT_PROFILE.preferences, ...(user as any).preferences },
-                    security: { ...DEFAULT_PROFILE.security, ...(user as any).security },
-                    accessMatrix: DEFAULT_PROFILE.accessMatrix // TODO: Fetch permissions from backend
-                };
-            } catch (error) {
-                console.warn('Failed to fetch profile from backend, falling back to local', error);
-            }
-        }
-        
-        // Fallback to local/mock
-        return DEFAULT_PROFILE;
-    },
-    updateProfile: async (updates: Partial<ExtendedUserProfile>): Promise<ExtendedUserProfile> => {
-        const current = await ProfileDomain.getCurrentProfile();
-        const updated = { ...current, ...updates };
-        
-        if (isBackendApiEnabled()) {
-             // TODO: Implement backend update
-             // await authApi.users.update(current.id, updates);
-             console.warn('Backend update for profile not fully implemented');
-        }
-        
-        await db.put(STORES.USERS, updated);
-        return updated;
-    },
-    updatePreferences: async (prefs: Partial<ExtendedUserProfile['preferences']>): Promise<void> => {
-        const current = await ProfileDomain.getCurrentProfile();
-        const updated = { ...current, preferences: { ...current.preferences, ...prefs } };
-        
-        if (isBackendApiEnabled()) {
-             // TODO: Implement backend update
-        }
-        
-        await db.put(STORES.USERS, updated);
-    },
-    updateSecurity: async (sec: Partial<ExtendedUserProfile['security']>): Promise<void> => {
-        const current = await ProfileDomain.getCurrentProfile();
-        await delay(500); // Simulate secure handshake
-        const updated = { ...current, security: { ...current.security, ...sec } };
-        
-        if (isBackendApiEnabled()) {
-             // TODO: Implement backend update
-        }
-        
-        await db.put(STORES.USERS, updated);
-    },
-    addPermission: async (perm: GranularPermission): Promise<GranularPermission> => {
-        const current = await ProfileDomain.getCurrentProfile();
-        const newPerm = { ...perm, id: `perm-${Date.now()}` };
-        const updated = { ...current, accessMatrix: [...current.accessMatrix, newPerm] };
-        
-        if (isBackendApiEnabled()) {
-             // TODO: Implement backend update
-        }
-        
-        await db.put(STORES.USERS, updated);
-        return newPerm;
-    },
-    revokePermission: async (id: string): Promise<void> => {
-        const current = await ProfileDomain.getCurrentProfile();
-        const updated = { ...current, accessMatrix: current.accessMatrix.filter(p => p.id !== id) };
-        
-        if (isBackendApiEnabled()) {
-             // TODO: Implement backend update
-        }
-        
-        await db.put(STORES.USERS, updated);
-    },
-    getAuditLog: async (userId: string) => {
-        interface AuditLog {
-            id: string;
-            action: string;
-            timestamp: string;
-            ip?: string;
-            device?: string;
-            resource?: string;
+  getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
+    if (isBackendApiEnabled()) {
+      try {
+        const user = await authApi.auth.getCurrentUser();
+
+        let permissions: GranularPermission[] = [];
+        try {
+          permissions = await apiClient.get<GranularPermission[]>(
+            `/users/${user.id}/permissions`
+          );
+        } catch (e) {
+          console.warn("Failed to fetch permissions", e);
         }
 
-        if (isBackendApiEnabled()) {
-            // TODO: Implement backend audit log fetch
-            // return authApi.audit.getLogs(userId);
-        }
-
-        const logs = await db.getByIndex<AuditLog>(STORES.LOGS, 'userId', userId);
-        if (logs.length === 0) {
-             return [
-                { id: 'log-1', action: 'Login', timestamp: new Date().toISOString(), ip: '192.168.1.55', device: 'MacBook Pro' },
-                { id: 'log-2', action: 'View Case', resource: 'Martinez v. TechCorp', timestamp: new Date(Date.now() - 3600000).toISOString() },
-            ];
-        }
-        return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
+        return {
+          ...user,
+          id: user.id as UserId,
+          preferences: (user as any).preferences || {},
+          security: (user as any).security || {},
+          accessMatrix: permissions,
+        } as ExtendedUserProfile;
+      } catch (error) {
+        console.warn("Failed to fetch profile from backend", error);
+        throw error;
+      }
     }
+    throw new Error("Backend API disabled");
+  },
+  updateProfile: async (
+    updates: Partial<ExtendedUserProfile>
+  ): Promise<ExtendedUserProfile> => {
+    const current = await ProfileDomain.getCurrentProfile();
+    const updated = { ...current, ...updates };
+
+    if (isBackendApiEnabled()) {
+      try {
+        // Map ExtendedUserProfile updates to UpdateUserDto
+        const dto: UpdateUserDto = {
+          firstName: updates.firstName,
+          lastName: updates.lastName,
+          email: updates.email,
+          role: updates.role,
+          department: updates.department,
+          title: updates.title,
+          // Add other fields if they exist in UpdateUserDto
+        };
+        await authApi.users.update(current.id, dto);
+      } catch (error) {
+        console.warn("Backend update for profile failed", error);
+        throw error;
+      }
+    }
+
+    return updated;
+  },
+  updatePreferences: async (
+    prefs: Partial<ExtendedUserProfile["preferences"]>
+  ): Promise<void> => {
+    const current = await ProfileDomain.getCurrentProfile();
+    const updated = {
+      ...current,
+      preferences: { ...current.preferences, ...prefs },
+    };
+
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.patch(`/users/${current.id}/preferences`, prefs);
+      } catch (error) {
+        console.warn("Backend update for preferences failed", error);
+        throw error;
+      }
+    }
+  },
+  updateSecurity: async (
+    sec: Partial<ExtendedUserProfile["security"]>
+  ): Promise<void> => {
+    const current = await ProfileDomain.getCurrentProfile();
+
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.patch(`/users/${current.id}/security`, sec);
+      } catch (error) {
+        console.warn("Backend update for security failed", error);
+        throw error;
+      }
+    }
+  },
+  addPermission: async (
+    perm: GranularPermission
+  ): Promise<GranularPermission> => {
+    const current = await ProfileDomain.getCurrentProfile();
+    const newPerm = { ...perm, id: `perm-${Date.now()}` };
+
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.post(`/users/${current.id}/permissions`, perm);
+      } catch (error) {
+        console.warn("Backend update for permissions failed", error);
+        throw error;
+      }
+    }
+
+    return newPerm;
+  },
+  revokePermission: async (id: string): Promise<void> => {
+    const current = await ProfileDomain.getCurrentProfile();
+
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.delete(`/users/${current.id}/permissions/${id}`);
+      } catch (error) {
+        console.warn("Backend update for permissions failed", error);
+        throw error;
+      }
+    }
+  },
+  getAuditLog: async (userId: string) => {
+    interface AuditLog {
+      id: string;
+      action: string;
+      timestamp: string;
+      ip?: string;
+      device?: string;
+      resource?: string;
+    }
+
+    if (isBackendApiEnabled()) {
+      try {
+        const logs = await adminApi.auditLogs.getAll({ userId });
+        return logs.map((log) => ({
+          id: log.id,
+          action: log.action,
+          timestamp: log.timestamp,
+          ip: log.ipAddress,
+          device: log.userAgent,
+          resource: log.entityType,
+        }));
+      } catch (error) {
+        console.warn("Failed to fetch audit logs from backend", error);
+        return [];
+      }
+    }
+    return [];
+  },
 };

@@ -4,13 +4,21 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { delay } from '@/utils/async';
-import { db} from '@/services/data/db';
+import { delay } from "@/utils/async";
+import { db } from "@/services/data/db";
+import { api, isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 interface DataSource {
   id: string;
   name: string;
-  type: 'postgresql' | 'mysql' | 'mongodb' | 'salesforce' | 'google-drive' | 'sharepoint';
+  type:
+    | "postgresql"
+    | "mysql"
+    | "mongodb"
+    | "salesforce"
+    | "google-drive"
+    | "sharepoint";
   host?: string;
   port?: number;
   database?: string;
@@ -27,27 +35,56 @@ interface ConnectionStatus {
   version?: string;
 }
 
-const DATA_SOURCES_STORE = 'data_sources';
+const DATA_SOURCES_STORE = "data_sources";
 
 export const DataSourceService = {
-  getAll: async () => db.getAll(DATA_SOURCES_STORE),
-  getById: async (id: string) => db.get(DATA_SOURCES_STORE, id),
-  add: async (item: unknown) => db.put(DATA_SOURCES_STORE, {
-    ...(item && typeof item === 'object' ? item : {}),
-    connected: false,
-    createdAt: new Date().toISOString()
-  }),
-  update: async (id: string, updates: unknown) => {
-    const existing = await db.get(DATA_SOURCES_STORE, id);
+  getAll: async () => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DataSource[]>("/data-sources");
+    }
+    return db.getAll(DATA_SOURCES_STORE);
+  },
+  getById: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DataSource>(`/data-sources/${id}`);
+    }
+    return db.get(DATA_SOURCES_STORE, id);
+  },
+  add: async (item: unknown) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.post<DataSource>("/data-sources", item);
+    }
     return db.put(DATA_SOURCES_STORE, {
-      ...(existing && typeof existing === 'object' ? existing : {}),
-      ...(updates && typeof updates === 'object' ? updates : {})
+      ...(item && typeof item === "object" ? item : {}),
+      connected: false,
+      createdAt: new Date().toISOString(),
     });
   },
-  delete: async (id: string) => db.delete(DATA_SOURCES_STORE, id),
+  update: async (id: string, updates: unknown) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.patch<DataSource>(`/data-sources/${id}`, updates);
+    }
+    const existing = await db.get(DATA_SOURCES_STORE, id);
+    return db.put(DATA_SOURCES_STORE, {
+      ...(existing && typeof existing === "object" ? existing : {}),
+      ...(updates && typeof updates === "object" ? updates : {}),
+    });
+  },
+  delete: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.delete(`/data-sources/${id}`);
+    }
+    return db.delete(DATA_SOURCES_STORE, id);
+  },
 
   // Data source specific methods
-  getDataSources: async (filters?: { type?: string; connected?: boolean }): Promise<DataSource[]> => {
+  getDataSources: async (filters?: {
+    type?: string;
+    connected?: boolean;
+  }): Promise<DataSource[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DataSource[]>("/data-sources", filters);
+    }
     let sources = await db.getAll<DataSource>(DATA_SOURCES_STORE);
 
     if (filters?.type) {
@@ -55,94 +92,76 @@ export const DataSourceService = {
     }
 
     if (filters?.connected !== undefined) {
-      sources = sources.filter((s: DataSource) => s.connected === filters.connected);
+      sources = sources.filter(
+        (s: DataSource) => s.connected === filters.connected
+      );
     }
 
     return sources;
   },
-  
+
   connect: async (sourceId: string): Promise<boolean> => {
-    await delay(300); // Simulate connection
-    try {
-      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
-      if (!source) throw new Error('Source not found');
-
-      // In production, this would establish real database connection
-      await db.put(DATA_SOURCES_STORE, {
-        ...source,
-        connected: true,
-        lastSync: new Date().toISOString()
-      });
-
-      console.log(`[DataSourceService] Connected to ${source.name}`);
-      return true;
-    } catch (err) {
-      console.error('[DataSourceService] Connection failed:', err);
-      return false;
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.post(`/data-sources/${sourceId}/connect`);
+        return true;
+      } catch (e) {
+        console.error("Connection failed", e);
+        return false;
+      }
     }
+    console.warn("[DataSourceService] Backend API disabled");
+    return false;
   },
 
   disconnect: async (sourceId: string): Promise<boolean> => {
-    await delay(100);
-    try {
-      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
-      if (!source) return false;
-
-      await db.put(DATA_SOURCES_STORE, {
-        ...source,
-        connected: false
-      });
-
-      console.log(`[DataSourceService] Disconnected from ${source.name}`);
-      return true;
-    } catch {
-      return false;
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.post(`/data-sources/${sourceId}/disconnect`);
+        return true;
+      } catch (e) {
+        console.error("Disconnect failed", e);
+        return false;
+      }
     }
+    console.warn("[DataSourceService] Backend API disabled");
+    return false;
   },
 
-  sync: async (sourceId: string, options?: { fullSync?: boolean }): Promise<boolean> => {
-    await delay(500); // Simulate sync operation
-    try {
-      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
-      if (!source || !source.connected) {
-        throw new Error('Source not connected');
+  sync: async (
+    sourceId: string,
+    options?: { fullSync?: boolean }
+  ): Promise<boolean> => {
+    if (isBackendApiEnabled()) {
+      try {
+        await apiClient.post(`/data-sources/${sourceId}/sync`, options);
+        return true;
+      } catch (e) {
+        console.error("Sync failed", e);
+        return false;
       }
-
-      // In production, this would pull data from external source
-      await db.put(DATA_SOURCES_STORE, {
-        ...source,
-        lastSync: new Date().toISOString()
-      });
-
-      console.log(`[DataSourceService] Synced ${source.name} (${options?.fullSync ? 'full' : 'incremental'})`);
-      return true;
-    } catch (err) {
-      console.error('[DataSourceService] Sync failed:', err);
-      return false;
     }
+    console.warn("[DataSourceService] Backend API disabled");
+    return false;
   },
 
   testConnection: async (sourceId: string): Promise<ConnectionStatus> => {
-    await delay(200);
-    try {
-      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
-      if (!source) {
-        return { connected: false, error: 'Source not found' };
+    if (isBackendApiEnabled()) {
+      try {
+        const result = await api.dataPlatform.dataSources.test(sourceId);
+        return {
+          connected: result.success,
+          latency: 0,
+          version: "Unknown",
+          error: result.message,
+        };
+      } catch (e) {
+        return {
+          connected: false,
+          error: e instanceof Error ? e.message : "Connection failed",
+        };
       }
-      
-      // Simulate connection test
-      const latency = Math.floor(Math.random() * 100) + 20;
-      
-      return {
-        connected: true,
-        latency,
-        version: '14.5', // Mock database version
-      };
-    } catch (err) {
-      return {
-        connected: false,
-        error: err instanceof Error ? err.message : 'Connection failed',
-      };
     }
+    return { connected: false, error: "Backend API disabled" };
   },
 };

@@ -57,6 +57,10 @@
 
 import { ValidationError } from "@/services/core/errors";
 import { delay } from "@/utils/async";
+import { workflowApi } from "@/api/domains/workflow.api";
+import { CalendarEventType } from "@/types";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 // =============================================================================
 // REACT QUERY KEYS
@@ -203,10 +207,7 @@ export const CalendarService = {
    */
   getAll: async (): Promise<CalendarEvent[]> => {
     try {
-      // Note: calendar API is not yet available in integrationsApi
-      // This will need to be updated when the API is added
-      console.warn("[CalendarService.getAll] Calendar API not yet available");
-      return [];
+      return await workflowApi.calendar.getAll();
     } catch (error) {
       console.error("[CalendarService.getAll] Error:", error);
       throw error;
@@ -226,9 +227,7 @@ export const CalendarService = {
   getById: async (id: string): Promise<CalendarEvent | null> => {
     try {
       validateEventId(id, "getById");
-      // Note: calendar API is not yet available in integrationsApi
-      console.warn("[CalendarService.getById] Calendar API not yet available");
-      return null;
+      return await workflowApi.calendar.getById(id);
     } catch (error) {
       console.error("[CalendarService.getById] Error:", error);
       throw error;
@@ -253,17 +252,20 @@ export const CalendarService = {
     try {
       validateEventData(item, "add");
 
-      const event: CalendarEvent = {
-        id: `event-${Date.now()}`,
+      // Map to CreateCalendarEventDto
+      const createDto = {
         title: item.title || "New Event",
+        eventType: (item.type as CalendarEventType) || "reminder",
         startDate: item.startDate || new Date().toISOString(),
-        type: item.type || "reminder",
-        ...item,
+        endDate: item.endDate || new Date().toISOString(),
+        description: item.description,
+        location: item.location,
+        attendees: item.attendees,
+        caseId: item.caseId,
+        reminder: item.reminder,
       };
 
-      // Note: calendar API is not yet available in integrationsApi
-      console.warn("[CalendarService.add] Calendar API not yet available");
-      return event;
+      return await workflowApi.calendar.create(createDto);
     } catch (error) {
       console.error("[CalendarService.add] Error:", error);
       throw error;
@@ -292,15 +294,7 @@ export const CalendarService = {
       validateEventId(id, "update");
       validateEventData(updates, "update");
 
-      // Note: calendar API is not yet available in integrationsApi
-      console.warn("[CalendarService.update] Calendar API not yet available");
-      return {
-        id,
-        title: updates.title || "Event",
-        startDate: updates.startDate || new Date().toISOString(),
-        type: updates.type || "reminder",
-        ...updates,
-      } as CalendarEvent;
+      return await workflowApi.calendar.update(id, updates);
     } catch (error) {
       console.error("[CalendarService.update] Error:", error);
       throw error;
@@ -320,8 +314,7 @@ export const CalendarService = {
   delete: async (id: string): Promise<boolean> => {
     try {
       validateEventId(id, "delete");
-      // Note: calendar API is not yet available in integrationsApi
-      console.warn("[CalendarService.delete] Calendar API not yet available");
+      await workflowApi.calendar.delete(id);
       return true;
     } catch (error) {
       console.error("[CalendarService.delete] Error:", error);
@@ -423,7 +416,7 @@ export const CalendarService = {
    */
   getUpcoming: async (days: number = 7): Promise<CalendarEvent[]> => {
     try {
-      if (typeof days !== 'number' || days <= 0) {
+      if (typeof days !== "number" || days <= 0) {
         throw new ValidationError(
           "[CalendarService.getUpcoming] Days must be a positive number"
         );
@@ -468,25 +461,7 @@ export const CalendarService = {
   ): Promise<CalendarEvent> => {
     try {
       validateEventData(event, "createEvent");
-
-      const newEvent: CalendarEvent = {
-        id: `event-${Date.now()}`,
-        title: event.title || "New Event",
-        description: event.description,
-        startDate: event.startDate || new Date().toISOString(),
-        endDate: event.endDate,
-        type: event.type || "reminder",
-        caseId: event.caseId,
-        attendees: event.attendees ?? [],
-        location: event.location,
-        allDay: event.allDay || false,
-        recurring: event.recurring || false,
-        metadata: event.metadata,
-      };
-
-      // await db.put(STORES.CALENDAR_EVENTS, newEvent);
-
-      return newEvent;
+      return await CalendarService.add(event);
     } catch (error) {
       console.error("[CalendarService.createEvent] Error:", error);
       throw error;
@@ -548,6 +523,10 @@ export const CalendarService = {
     provider?: "google" | "outlook" | "ical";
   }): Promise<boolean> => {
     try {
+      if (isBackendApiEnabled()) {
+        await apiClient.post("/calendar/sync", options);
+        return true;
+      }
       const provider = options?.provider || "default";
 
       await delay(500);

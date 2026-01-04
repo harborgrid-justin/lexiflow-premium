@@ -15,7 +15,7 @@ import {
  * ? Migrated to backend API (2025-12-21)
  */
 import { adminApi } from "@/api/domains/admin.api";
-import { MOCK_API_SPEC } from "@/api/types/mockApiSpec";
+import { api, authApi, isBackendApiEnabled } from "@/api";
 import { API_PREFIX } from "@/config/network/api.config";
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
 import { apiClient } from "@/services/infrastructure/apiClient";
@@ -103,25 +103,23 @@ export const AdminService = {
       enabled: boolean;
     }>
   > => {
-    try {
-      // Attempt to fetch from backend
-      const response = await fetch(`${API_PREFIX}/admin/security-settings`, {
-        headers: {
-          Authorization: `Bearer ${defaultStorage.getItem("authToken") || ""}`,
-        },
-      });
-
-      if (
-        response.ok &&
-        response.headers.get("content-type")?.includes("application/json")
-      ) {
-        return await response.json();
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<
+          Array<{
+            id: string;
+            label: string;
+            desc: string;
+            type: string;
+            enabled: boolean;
+          }>
+        >("/admin/security-settings");
+      } catch (error) {
+        console.error(
+          "[AdminService.getSecuritySettings] Backend unavailable:",
+          error
+        );
       }
-    } catch (error) {
-      console.error(
-        "[AdminService.getSecuritySettings] Backend unavailable:",
-        error
-      );
     }
 
     // Fallback to default security settings
@@ -153,314 +151,199 @@ export const AdminService = {
 
   // RLS Policies from backend
   getRLSPolicies: async (): Promise<RLSPolicy[]> => {
-    // RLS policies are managed via data platform API, not admin API
-    // Fallback to mock data for development
-    await delay(200);
-    return [
-      {
-        id: "rls1",
-        name: "tenant_isolation_cases",
-        table: "cases",
-        cmd: "ALL",
-        roles: ["All"],
-        using: "org_id = current_setting('app.current_org_id')::uuid",
-        status: "Active",
-      },
-      {
-        id: "rls2",
-        name: "partner_view_billing",
-        table: "billing",
-        cmd: "SELECT",
-        roles: ["Partner"],
-        using: "true",
-        status: "Active",
-      },
-      {
-        id: "rls3",
-        name: "associate_edit_own_time",
-        table: "time_entries",
-        cmd: "UPDATE",
-        roles: ["Associate"],
-        using: "user_id = auth.uid()",
-        status: "Active",
-      },
-    ];
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/data-platform/rls-policies");
+      } catch (error) {
+        console.warn("Failed to fetch RLS policies from backend", error);
+        return [];
+      }
+    }
+    return [];
   },
   saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<unknown> => {
-    // In production, this would save via data platform API
+    if (isBackendApiEnabled()) {
+      return await apiClient.post("/data-platform/rls-policies", policy);
+    }
     return policy;
   },
-  deleteRLSPolicy: async (): Promise<void> => {
-    // In production, this would delete via data platform API
-    await delay(100);
+  deleteRLSPolicy: async (id: string): Promise<void> => {
+    if (isBackendApiEnabled()) {
+      await apiClient.delete(`/data-platform/rls-policies/${id}`);
+    }
   },
 
   // Permissions from backend
   getPermissions: async (): Promise<RolePermission[]> => {
-    // Permissions are managed via auth API, not admin API
-    return [
-      { id: "p1", role: "Associate", resource: "Financials", access: "Read" },
-    ];
+    if (isBackendApiEnabled()) {
+      try {
+        return await authApi.permissions.getRolePermissions();
+      } catch (error) {
+        console.warn("Failed to fetch permissions from backend", error);
+        return [];
+      }
+    }
+    return [];
   },
   updatePermission: async (payload: {
     role: string;
     resource: string;
     level: string;
   }): Promise<unknown> => {
-    // In production, this would update via auth API
+    if (isBackendApiEnabled()) {
+      return await authApi.permissions.updateRolePermission(payload);
+    }
     return payload;
   },
 
   // Data Platform - ETL Pipelines
   getPipelines: async (): Promise<PipelineJob[]> => {
-    // Pipelines are managed via data platform API
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/data-platform/pipelines");
+      } catch (error) {
+        console.warn("Failed to fetch pipelines from backend", error);
+        return [];
+      }
+    }
     return [];
   },
   getApiKeys: async (): Promise<ApiKey[]> => {
-    // API keys are managed via auth API
-    return [
-      {
-        id: "key_1",
-        name: "Default Key",
-        key: "pk_live_ab12...",
-        scopes: [],
-        status: "active",
-        lastUsedAt: undefined,
-        expiresAt: undefined,
-        createdAt: "2024-01-01",
-        updatedAt: "2024-01-01",
-      },
-    ];
+    if (isBackendApiEnabled()) {
+      try {
+        return await authApi.apiKeys.getAll();
+      } catch (error) {
+        console.warn("Failed to fetch API keys from backend", error);
+        return [];
+      }
+    }
+    return [];
   },
 
   getAnomalies: async (): Promise<DataAnomaly[]> => {
-    try {
-      // Use data quality API endpoint
-      const response = await fetch(`${API_PREFIX}/data-platform/anomalies`, {
-        headers: {
-          Authorization: `Bearer ${defaultStorage.getItem("authToken") || ""}`,
-        },
-      });
-
-      if (
-        response.ok &&
-        response.headers.get("content-type")?.includes("application/json")
-      ) {
-        return await response.json();
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/data-platform/anomalies");
+      } catch (error) {
+        console.warn("Failed to fetch anomalies from backend", error);
+        return [];
       }
-    } catch (error) {
-      console.error("[AdminService.getAnomalies] Backend unavailable:", error);
     }
-
-    // Fallback to mock data for development
-    await delay(600);
-    return [
-      {
-        id: 1,
-        table: "clients",
-        field: "email",
-        issue: "Invalid Format",
-        count: 12,
-        sample: "john-doe@",
-        status: "Detected",
-        severity: "High",
-      },
-      {
-        id: 2,
-        table: "cases",
-        field: "status",
-        issue: "Inconsistent Casing",
-        count: 5,
-        sample: "closed",
-        status: "Fixed",
-        severity: "Low",
-      },
-      {
-        id: 3,
-        table: "documents",
-        field: "metadata",
-        issue: "Missing Author",
-        count: 142,
-        sample: "NULL",
-        status: "Detected",
-        severity: "Medium",
-      },
-    ];
+    return [];
   },
 
   getDataDomains: async (): Promise<
     Array<{ name: string; count: number; desc: string }>
   > => {
-    try {
-      // Use data platform API endpoint
-      const response = await fetch(`${API_PREFIX}/data-platform/domains`, {
-        headers: {
-          Authorization: `Bearer ${defaultStorage.getItem("authToken") || ""}`,
-        },
-      });
-
-      if (
-        response.ok &&
-        response.headers.get("content-type")?.includes("application/json")
-      ) {
-        return await response.json();
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<
+          Array<{ name: string; count: number; desc: string }>
+        >("/data-platform/domains");
+      } catch (error) {
+        console.error(
+          "[AdminService.getDataDomains] Backend unavailable:",
+          error
+        );
+        return [];
       }
-    } catch (error) {
-      console.error(
-        "[AdminService.getDataDomains] Backend unavailable:",
-        error
-      );
     }
-
-    // Fallback to default domains
-    await delay(200);
-    return [
-      { name: "Legal", count: 12, desc: "Core case and litigation data." },
-      {
-        name: "Finance",
-        count: 8,
-        desc: "Billing, invoices, and trust accounts.",
-      },
-      { name: "HR", count: 4, desc: "Staff, roles, and performance data." },
-    ];
+    return [];
   },
 
   getTenantConfig: async (): Promise<TenantConfig> => {
-    await delay(100);
-    return {
-      name: "LexiFlow",
-      tier: "Enterprise Suite",
-      version: "2.5",
-      region: "US-East-1",
-    };
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<TenantConfig>("/admin/tenant/config");
+      } catch (error) {
+        console.warn("Failed to fetch tenant config from backend", error);
+        throw error;
+      }
+    }
+    throw new Error("Backend API disabled");
   },
 
   getConnectors: async (): Promise<Connector[]> => {
-    try {
-      // Fetch from backend data-sources API
-      const response = await fetch(`${API_PREFIX}/integrations/data-sources`, {
-        headers: {
-          Authorization: `Bearer ${defaultStorage.getItem("authToken") || ""}`,
-        },
-      });
-      if (
-        response.ok &&
-        response.headers.get("content-type")?.includes("application/json")
-      ) {
-        const connections = await response.json();
-        // Transform backend response to connector format
-        return connections.map(
-          (conn: {
+    if (isBackendApiEnabled()) {
+      try {
+        // Fetch from backend data-sources API
+        const connections = await apiClient.get<
+          Array<{
             id: string;
             name: string;
             type: string;
             status: string;
-          }) => {
-            // Map status to valid Connector status
-            let connectorStatus: "Healthy" | "Syncing" | "Degraded" | "Error" =
-              "Error";
-            if (conn.status === "active") connectorStatus = "Healthy";
-            else if (conn.status === "syncing") connectorStatus = "Syncing";
-            else if (conn.status === "degraded") connectorStatus = "Degraded";
+          }>
+        >("/integrations/data-sources");
 
-            return {
-              id: conn.id,
-              name: conn.name,
-              type: conn.type,
-              status: connectorStatus,
-              color:
-                conn.type === "PostgreSQL"
-                  ? "text-blue-600"
-                  : conn.type === "Snowflake"
-                    ? "text-sky-500"
-                    : "text-gray-600",
-            };
-          }
+        // Transform backend response to connector format
+        return connections.map((conn) => {
+          // Map status to valid Connector status
+          let connectorStatus: "Healthy" | "Syncing" | "Degraded" | "Error" =
+            "Error";
+          if (conn.status === "active") connectorStatus = "Healthy";
+          else if (conn.status === "syncing") connectorStatus = "Syncing";
+          else if (conn.status === "degraded") connectorStatus = "Degraded";
+
+          return {
+            id: conn.id,
+            name: conn.name,
+            type: conn.type,
+            status: connectorStatus,
+            color:
+              conn.type === "PostgreSQL"
+                ? "text-blue-600"
+                : conn.type === "Snowflake"
+                  ? "text-sky-500"
+                  : "text-gray-600",
+          };
+        });
+      } catch (error) {
+        console.error(
+          "[AdminService.getConnectors] Backend unavailable:",
+          error
         );
+        return [];
       }
-    } catch (error) {
-      console.error("[AdminService.getConnectors] Backend unavailable:", error);
     }
-
-    // Backend not available - return error status connectors
-    await delay(200);
-    return [
-      {
-        id: "c1",
-        name: "Primary Warehouse",
-        type: "Snowflake",
-        status: "Error" as const,
-        color: "text-sky-500",
-      },
-      {
-        id: "c2",
-        name: "Legacy Archive",
-        type: "PostgreSQL",
-        status: "Error" as const,
-        color: "text-blue-600",
-      },
-    ];
+    return [];
   },
 
   getGovernanceRules: async (): Promise<GovernanceRule[]> => {
-    await delay(200);
-    return [
-      {
-        id: 1,
-        name: "PII Encryption",
-        status: "Enforced",
-        impact: "High",
-        passing: "100%",
-        desc: "All columns tagged PII must be encrypted at rest.",
-      },
-      {
-        id: 2,
-        name: "Duplicate Detection",
-        status: "Monitoring",
-        impact: "Medium",
-        passing: "98.2%",
-        desc: "Flag records with >95% similarity in core fields.",
-      },
-      {
-        id: 3,
-        name: "Retention Policy (7 Years)",
-        status: "Enforced",
-        impact: "Critical",
-        passing: "100%",
-        desc: "Hard delete case data 7 years after closure.",
-      },
-    ];
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<GovernanceRule[]>("/admin/governance/rules");
+      } catch (error) {
+        console.warn("Failed to fetch governance rules", error);
+        return [];
+      }
+    }
+    return [];
   },
 
   getGovernancePolicies: async (): Promise<GovernancePolicy[]> => {
-    await delay(200);
-    return [
-      {
-        id: "pol1",
-        title: "Data Retention Standard",
-        version: "2.4",
-        status: "Active",
-        date: "2024-01-15",
-      },
-      {
-        id: "pol2",
-        title: "Access Control Policy",
-        version: "1.1",
-        status: "Review",
-        date: "2023-11-30",
-      },
-      {
-        id: "pol3",
-        title: "GDPR Compliance Guide",
-        version: "3.0",
-        status: "Active",
-        date: "2024-02-10",
-      },
-    ];
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<GovernancePolicy[]>(
+          "/admin/governance/policies"
+        );
+      } catch (error) {
+        console.warn("Failed to fetch governance policies", error);
+        return [];
+      }
+    }
+    return [];
   },
 
   getApiSpec: async (): Promise<ApiServiceSpec[]> => {
-    await delay(100);
-    return MOCK_API_SPEC;
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<ApiServiceSpec[]>("/admin/api-specs");
+      } catch (error) {
+        console.warn("Failed to fetch API specs", error);
+        return [];
+      }
+    }
+    return [];
   },
 };

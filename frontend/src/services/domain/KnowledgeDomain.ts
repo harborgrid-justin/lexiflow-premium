@@ -32,6 +32,8 @@
 
 import { Precedent, QAItem, WikiArticle } from "@/types";
 import { delay } from "@/utils/async";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 /**
  * Query keys for React Query integration
@@ -119,6 +121,16 @@ export class KnowledgeRepository {
    * - Search: Case-insensitive title and content matching
    */
   getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<WikiArticle[]>("/knowledge/wiki", {
+          q: query,
+        });
+      } catch (error) {
+        console.warn("Failed to fetch wiki articles", error);
+        return [];
+      }
+    }
     try {
       // Knowledge API not yet available via analyticsApi, using fallback
       await delay(200);
@@ -159,6 +171,15 @@ export class KnowledgeRepository {
   async getWikiArticleById(id: string): Promise<WikiArticle | undefined> {
     this.validateId(id, "getWikiArticleById");
 
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<WikiArticle>(`/knowledge/wiki/${id}`);
+      } catch (error) {
+        console.warn("Failed to fetch wiki article", error);
+        return undefined;
+      }
+    }
+
     try {
       const all = await this.getWikiArticles();
       return all.find((a) => a.id === id);
@@ -198,6 +219,23 @@ export class KnowledgeRepository {
     }
 
     if (!article.content || article.content.trim() === "") {
+      throw new Error(
+        "[KnowledgeRepository.createWikiArticle] Article must have content"
+      );
+    }
+
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.post<WikiArticle>("/knowledge/wiki", article);
+      } catch (error) {
+        console.error("Failed to create wiki article", error);
+        throw error;
+      }
+    }
+
+    // Fallback logic (not implemented for create)
+    throw new Error("Backend API required for creating wiki articles");
+  }
       throw new Error(
         "[KnowledgeRepository.createWikiArticle] Article must have content"
       );
@@ -260,6 +298,15 @@ export class KnowledgeRepository {
       );
     }
 
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.patch<WikiArticle>(`/knowledge/wiki/${id}`, updates);
+      } catch (error) {
+        console.error("Failed to update wiki article", error);
+        throw error;
+      }
+    }
+
     try {
       const existing = await this.getWikiArticleById(id);
       if (!existing) {
@@ -289,6 +336,14 @@ export class KnowledgeRepository {
    * const precedents = await repo.getPrecedents();
    */
   getPrecedents = async (): Promise<Precedent[]> => {
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<Precedent[]>("/knowledge/precedents");
+      } catch (error) {
+        console.warn("Failed to fetch precedents", error);
+        return [];
+      }
+    }
     try {
       // Knowledge API not yet available via analyticsApi, using fallback
       await delay(200);

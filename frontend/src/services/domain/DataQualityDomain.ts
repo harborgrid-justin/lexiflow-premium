@@ -12,9 +12,14 @@ import {
 import { STORES, db } from "@/services/data/db";
 import { yieldToMain } from "@/utils/apiUtils";
 import { delay } from "@/utils/async";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 export class DataQualityService {
   async getAnomalies(): Promise<DataAnomaly[]> {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DataAnomaly[]>("/data-quality/anomalies");
+    }
     // In real app, scan DB. Here we return seeded anomalies.
     const anomalies = await db.getAll<DataAnomaly>("anomalies");
     if (anomalies.length === 0) {
@@ -45,29 +50,59 @@ export class DataQualityService {
   }
 
   async getDedupeClusters(): Promise<DedupeCluster[]> {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DedupeCluster[]>("/data-quality/dedupe-clusters");
+    }
     await delay(100);
     return [];
   }
   async getHistory(): Promise<QualityMetricHistory[]> {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<QualityMetricHistory[]>("/data-quality/history");
+    }
     await delay(100);
     return [];
   }
   async runCleansingJob(): Promise<{ processed: number; fixed: number }> {
+    if (isBackendApiEnabled()) {
+      return apiClient.post<{ processed: number; fixed: number }>(
+        "/data-quality/cleansing-job",
+        {}
+      );
+    }
     await delay(800);
     return { processed: 1500, fixed: 42 };
   }
-  async mergeCluster(): Promise<void> {
+  async mergeCluster(clusterId: string): Promise<void> {
+    if (isBackendApiEnabled()) {
+      return apiClient.post(
+        `/data-quality/dedupe-clusters/${clusterId}/merge`,
+        {}
+      );
+    }
     await delay(100);
   }
-  async ignoreCluster(): Promise<void> {
+  async ignoreCluster(clusterId: string): Promise<void> {
+    if (isBackendApiEnabled()) {
+      return apiClient.post(
+        `/data-quality/dedupe-clusters/${clusterId}/ignore`,
+        {}
+      );
+    }
     await delay(100);
   }
-  async applyFix(): Promise<void> {
+  async applyFix(anomalyId: string): Promise<void> {
+    if (isBackendApiEnabled()) {
+      return apiClient.post(`/data-quality/anomalies/${anomalyId}/fix`, {});
+    }
     await delay(100);
   }
 
   // Optimized Profiler with single-pass aggregation and yielding
   async getProfiles(): Promise<DataProfile[]> {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<DataProfile[]>("/data-quality/profiles");
+    }
     const cases = await db.getAll<Case>(STORES.CASES);
     const total = cases.length;
 

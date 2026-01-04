@@ -3,8 +3,13 @@
  * @updated 2025-12-19
  */
 
-import { api } from '@/api';
-import type { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from '@/api/workflow/war-room-api';
+import { api } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type {
+  CreateAdvisorDto,
+  CreateExpertDto,
+  UpdateStrategyDto,
+} from "@/api/workflow/war-room-api";
 
 export const WarRoomService = {
   getAll: async () => {
@@ -23,81 +28,49 @@ export const WarRoomService = {
   // War room specific methods
   getData: async (caseId: string) => {
     if (!caseId) return null;
-    try {
-      return await api.warRoom.getWarRoomData(caseId);
-    } catch (error) {
-      console.warn('[WarRoomService] Failed to fetch data, returning mock:', error);
-      return {
-        caseId,
-        strategy: { theme: 'Mock Theme', narrative: 'Mock Narrative' },
-        advisors: [],
-        experts: [],
-        evidence: [],
-        witnesses: []
-      };
-    }
+    return await api.warRoom.getWarRoomData(caseId);
   },
 
-  getSessions: async () => [],
-  createSession: async (session: unknown) => session,
-  joinSession: async () => true,
-  leaveSession: async () => true,
-  getParticipants: async () => [],
+  getSessions: async () => {
+    return apiClient.get("/war-room/sessions");
+  },
+  createSession: async (session: unknown) => {
+    return apiClient.post("/war-room/sessions", session);
+  },
+  joinSession: async (sessionId: string) => {
+    return apiClient.post(`/war-room/sessions/${sessionId}/join`, {});
+  },
+  leaveSession: async (sessionId: string) => {
+    return apiClient.post(`/war-room/sessions/${sessionId}/leave`, {});
+  },
+  getParticipants: async (sessionId: string) => {
+    return apiClient.get(`/war-room/sessions/${sessionId}/participants`);
+  },
 
   // Advisors
   getAdvisors: async (query?: Record<string, string>) => {
-    try {
-      return await api.warRoom.getAdvisors(query);
-    } catch (error) {
-      console.error('[WarRoomService.getAdvisors] Error:', error);
-      return [];
-    }
+    return await api.warRoom.getAdvisors(query);
   },
 
   createAdvisor: async (data: CreateAdvisorDto) => {
-    try {
-      return await api.warRoom.createAdvisor(data);
-    } catch (error) {
-      console.error('[WarRoomService.createAdvisor] Error:', error);
-      return { id: 'mock-advisor', ...data };
-    }
+    return await api.warRoom.createAdvisor(data);
   },
 
   deleteAdvisor: async (id: string) => {
-    try {
-      return await api.warRoom.deleteAdvisor(id);
-    } catch (error) {
-      console.error('[WarRoomService.deleteAdvisor] Error:', error);
-      return true;
-    }
+    return await api.warRoom.deleteAdvisor(id);
   },
 
   // Experts
   getExperts: async (query?: Record<string, string>) => {
-    try {
-      return await api.warRoom.getExperts(query);
-    } catch (error) {
-      console.error('[WarRoomService.getExperts] Error:', error);
-      return [];
-    }
+    return await api.warRoom.getExperts(query);
   },
 
   createExpert: async (data: CreateExpertDto) => {
-    try {
-      return await api.warRoom.createExpert(data);
-    } catch (error) {
-      console.error('[WarRoomService.createExpert] Error:', error);
-      return { id: 'mock-expert', ...data };
-    }
+    return await api.warRoom.createExpert(data);
   },
 
   deleteExpert: async (id: string) => {
-    try {
-      return await api.warRoom.deleteExpert(id);
-    } catch (error) {
-      console.error('[WarRoomService.deleteExpert] Error:', error);
-      return true;
-    }
+    return await api.warRoom.deleteExpert(id);
   },
 
   // Strategy
@@ -105,8 +78,8 @@ export const WarRoomService = {
     try {
       return await api.warRoom.getStrategy(caseId);
     } catch (error) {
-      console.error('[WarRoomService.getStrategy] Error:', error);
-      return { theme: 'Mock Theme', narrative: 'Mock Narrative' };
+      console.error("[WarRoomService.getStrategy] Error:", error);
+      return null;
     }
   },
 
@@ -114,7 +87,7 @@ export const WarRoomService = {
     try {
       return await api.warRoom.updateStrategy(caseId, data);
     } catch (error) {
-      console.error('[WarRoomService.updateStrategy] Error:', error);
+      console.error("[WarRoomService.updateStrategy] Error:", error);
       return { ...data };
     }
   },

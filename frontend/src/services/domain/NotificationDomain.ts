@@ -5,12 +5,14 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { communicationsApi } from '@/api/domains/communications.api';
-import { defaultStorage } from '@/services/infrastructure/adapters/StorageAdapter';
+import { communicationsApi } from "@/api/domains/communications.api";
+import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 interface Notification {
   id: string;
-  type: 'info' | 'warning' | 'error' | 'success';
+  type: "info" | "warning" | "error" | "success";
   title: string;
   message: string;
   read: boolean;
@@ -19,32 +21,41 @@ interface Notification {
   metadata?: unknown;
 }
 
-const SUBSCRIPTIONS_KEY = 'lexiflow_notification_subscriptions';
+const SUBSCRIPTIONS_KEY = "lexiflow_notification_subscriptions";
 
 export const NotificationService = {
   getAll: async () => communicationsApi.notifications?.getAll?.() || [],
-  getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
+  getById: async (id: string) =>
+    communicationsApi.notifications?.getById?.(id) || null,
   add: async (item: unknown) => {
-    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
+    const itemObj =
+      item && typeof item === "object" ? (item as Record<string, unknown>) : {};
     const notification = {
       ...itemObj,
       timestamp: itemObj.timestamp || new Date().toISOString(),
-      read: false
+      read: false,
     };
-    return communicationsApi.notifications?.create?.(notification) || notification;
+    return (
+      communicationsApi.notifications?.create?.(notification) || notification
+    );
   },
   update: async (id: string, updates: unknown) => {
     // NotificationsApiService doesn't have update method, use markAsRead instead
-    const updatesObj = updates && typeof updates === 'object' ? updates as Record<string, unknown> : {};
+    const updatesObj =
+      updates && typeof updates === "object"
+        ? (updates as Record<string, unknown>)
+        : {};
     if (updatesObj.read === true) {
-      return communicationsApi.notifications?.markAsRead?.(id) || {
-        id,
-        ...updatesObj
-      };
+      return (
+        communicationsApi.notifications?.markAsRead?.(id) || {
+          id,
+          ...updatesObj,
+        }
+      );
     }
     return {
       id,
-      ...updatesObj
+      ...updatesObj,
     };
   },
   delete: async (id: string) => {
@@ -53,22 +64,38 @@ export const NotificationService = {
   },
 
   // Notification specific methods
-  getNotifications: async (filters?: { read?: boolean; type?: string; limit?: number }): Promise<Notification[]> => {
-    const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+  getNotifications: async (filters?: {
+    read?: boolean;
+    type?: string;
+    limit?: number;
+  }): Promise<Notification[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Notification[]>(
+        "/communications/notifications",
+        filters
+      );
+    }
+    const rawNotifications =
+      (await communicationsApi.notifications?.getAll?.()) || [];
     let notifications = rawNotifications as unknown as Notification[];
 
     // Apply filters
     if (filters?.read !== undefined) {
-      notifications = notifications.filter((n: Notification) => n.read === filters.read);
+      notifications = notifications.filter(
+        (n: Notification) => n.read === filters.read
+      );
     }
 
     if (filters?.type) {
-      notifications = notifications.filter((n: Notification) => n.type === filters.type);
+      notifications = notifications.filter(
+        (n: Notification) => n.type === filters.type
+      );
     }
 
     // Sort by timestamp descending
-    notifications.sort((a: Notification, b: Notification) =>
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    notifications.sort(
+      (a: Notification, b: Notification) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
 
     // Apply limit
@@ -90,7 +117,12 @@ export const NotificationService = {
 
   markAllAsRead: async (): Promise<boolean> => {
     try {
-      const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+      if (isBackendApiEnabled()) {
+        await apiClient.post("/communications/notifications/mark-all-read");
+        return true;
+      }
+      const rawNotifications =
+        (await communicationsApi.notifications?.getAll?.()) || [];
       const notifications = rawNotifications as unknown as Notification[];
       const unread = notifications.filter((n: Notification) => !n.read);
 
@@ -107,19 +139,35 @@ export const NotificationService = {
   },
 
   getUnreadCount: async (): Promise<number> => {
-    const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+    if (isBackendApiEnabled()) {
+      const result = await apiClient.get<{ count: number }>(
+        "/communications/notifications/unread-count"
+      );
+      return result.count;
+    }
+    const rawNotifications =
+      (await communicationsApi.notifications?.getAll?.()) || [];
     const notifications = rawNotifications as unknown as Notification[];
     return notifications.filter((n: Notification) => !n.read).length;
   },
 
   subscribe: async (channel: string): Promise<boolean> => {
     try {
+      if (isBackendApiEnabled()) {
+        await apiClient.post("/communications/notifications/subscribe", {
+          channel,
+        });
+        return true;
+      }
       const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
 
       if (!subscriptions.includes(channel)) {
         subscriptions.push(channel);
-        defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
+        defaultStorage.setItem(
+          SUBSCRIPTIONS_KEY,
+          JSON.stringify(subscriptions)
+        );
       }
 
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
@@ -131,12 +179,20 @@ export const NotificationService = {
 
   unsubscribe: async (channel: string): Promise<boolean> => {
     try {
+      if (isBackendApiEnabled()) {
+        await apiClient.post("/communications/notifications/unsubscribe", {
+          channel,
+        });
+        return true;
+      }
       const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
       const updated = subscriptions.filter((c: string) => c !== channel);
 
       defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
-      console.log(`[NotificationService] Unsubscribed from channel: ${channel}`);
+      console.log(
+        `[NotificationService] Unsubscribed from channel: ${channel}`
+      );
       return true;
     } catch {
       return false;

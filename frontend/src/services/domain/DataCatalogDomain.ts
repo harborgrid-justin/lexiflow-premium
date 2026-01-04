@@ -8,45 +8,80 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { MOCK_DATA_DICTIONARY } from "@/api/types/dataDictionary";
 import { STORES, db } from "@/services/data/db";
 import { delay } from "@/utils/async";
+import { api, isBackendApiEnabled } from "@/api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const DataCatalogService = {
   getDictionary: async (): Promise<DataDictionaryItem[]> => {
-    await delay(100);
-    return MOCK_DATA_DICTIONARY;
+    if (isBackendApiEnabled()) {
+      try {
+        const tables = await api.schemaManagement.getTables();
+        const dictionary: DataDictionaryItem[] = [];
+        tables.forEach((table) => {
+          table.columns.forEach((col) => {
+            dictionary.push({
+              id: `${table.name}-${col.name}`,
+              table: table.name,
+              column: col.name,
+              dataType: col.type,
+              description: "Imported from schema",
+              classification: "Internal",
+              isPII: false,
+              domain: "System",
+              owner: "System",
+              sourceSystem: "PostgreSQL",
+              dataQualityScore: 100,
+            });
+          });
+        });
+        return dictionary;
+      } catch (e) {
+        console.warn("Failed to fetch dictionary", e);
+        return [];
+      }
+    }
+    return [];
   },
 
   updateItem: async (
     id: string,
     updates: Partial<DataDictionaryItem>
   ): Promise<DataDictionaryItem> => {
-    await delay(300);
-    const item = MOCK_DATA_DICTIONARY.find((d) => d.id === id);
-    if (!item) throw new Error("Item not found");
-    return { ...item, ...updates };
+    if (isBackendApiEnabled()) {
+      return apiClient.patch<DataDictionaryItem>(
+        `/data-catalog/dictionary/${id}`,
+        updates
+      );
+    }
+    throw new Error("Backend API disabled");
   },
 
   getDataDomains: async () => {
-    await delay(200);
-    return [
-      { name: "Legal", count: 12, desc: "Core case and litigation data." },
-      {
-        name: "Finance",
-        count: 8,
-        desc: "Billing, invoices, and trust accounts.",
-      },
-      { name: "HR", count: 4, desc: "Staff, roles, and performance data." },
-      {
-        name: "IT",
-        count: 15,
-        desc: "System logs, security, and infrastructure.",
-      },
-    ];
+    if (isBackendApiEnabled()) {
+      return apiClient.get<{ name: string; count: number; desc: string }[]>(
+        "/data-catalog/domains"
+      );
+    }
+    return [];
   },
 
   getSchemaTables: async (): Promise<SchemaTable[]> => {
+    if (isBackendApiEnabled()) {
+      try {
+        const tables = await api.schemaManagement.getTables();
+        // Add layout coordinates
+        return tables.map((table, i) => ({
+          ...table,
+          x: (i % 6) * 300 + 50,
+          y: Math.floor(i / 6) * 350 + 50,
+        }));
+      } catch (e) {
+        console.warn("Failed to fetch schema tables", e);
+        return [];
+      }
+    }
     const tables: SchemaTable[] = Object.values(STORES).map((name, i) => ({
       name: name as string,
       x: (i % 6) * 300 + 50,
@@ -86,61 +121,17 @@ export const DataCatalogService = {
   getDataLakeItems: async (
     folderId: string = "root"
   ): Promise<DataLakeItem[]> => {
-    await delay(150);
-    // This remains mocked as we don't have a real S3 backend in browser
-    const MOCK_FILES: Record<string, DataLakeItem[]> = {
-      root: [
-        {
-          id: "f1",
-          name: "raw_ingest",
-          type: "folder",
-          modified: "2024-03-10",
-          tier: "Hot",
-          parentId: "root",
-        },
-        {
-          id: "f2",
-          name: "processed_parquet",
-          type: "folder",
-          modified: "2024-03-11",
-          tier: "Hot",
-          parentId: "root",
-        },
-        {
-          id: "f3",
-          name: "archive_logs",
-          type: "folder",
-          modified: "2023-12-01",
-          tier: "Cool",
-          parentId: "root",
-        },
-      ],
-      raw_ingest: [
-        {
-          id: "raw1",
-          name: "client_dump_2024.csv",
-          type: "file",
-          size: "450 MB",
-          modified: "2024-03-10",
-          format: "CSV",
-          tier: "Hot",
-          parentId: "raw_ingest",
-        },
-      ],
-      processed_parquet: [
-        {
-          id: "pq1",
-          name: "fact_sales_q1.parquet",
-          type: "file",
-          size: "1.2 GB",
-          modified: "2024-03-11",
-          format: "Parquet",
-          tier: "Hot",
-          parentId: "processed_parquet",
-        },
-      ],
-    };
-    return MOCK_FILES[folderId] || [];
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<DataLakeItem[]>(
+          `/data-catalog/lake/${folderId}`
+        );
+      } catch (e) {
+        console.warn("Failed to fetch data lake items", e);
+        return [];
+      }
+    }
+    return [];
   },
 
   // Dynamically build lineage based on current Entity Relationships in backend

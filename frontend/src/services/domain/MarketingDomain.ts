@@ -1,18 +1,22 @@
-import { MarketingMetric, MarketingCampaign } from '@/types';
-import { delay } from '@/utils/async';
-import { MOCK_METRICS } from "@/api/types/marketingMetric";
-export const MarketingService = {
-    getMetrics: async (): Promise<MarketingMetric[]> => {
-        await delay(200);
-        return MOCK_METRICS;
-    },
-    
-    getCampaigns: async (): Promise<MarketingCampaign[]> => {
-        return [
-              { id: '1', name: 'Q1 Webinar Series', target: 'Corporate Counsel', status: 'Active', budget: '$2,000/mo' },
-              { id: '2', name: 'Google Ads - "Commercial Lit"', target: 'Small Business', status: 'Active', budget: '$2,000/mo' },
-              { id: '3', name: 'LegalTech Conference Sponsor', target: 'Industry Wide', status: 'Upcoming', dates: 'Sep 15-18' },
-        ];
-    }
-};
+import { MarketingMetric, MarketingCampaign } from "@/types";
+import { delay } from "@/utils/async";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
+export const MarketingService = {
+  getMetrics: async (): Promise<MarketingMetric[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<MarketingMetric[]>("/marketing/metrics");
+    }
+    console.warn("Backend disabled, returning empty metrics");
+    return [];
+  },
+
+  getCampaigns: async (): Promise<MarketingCampaign[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<MarketingCampaign[]>("/marketing/campaigns");
+    }
+    console.warn("Backend disabled, returning empty campaigns");
+    return [];
+  },
+};

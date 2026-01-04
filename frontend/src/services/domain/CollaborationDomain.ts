@@ -4,8 +4,10 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { delay } from '@/utils/async';
-import { db} from '@/services/data/db';
+import { delay } from "@/utils/async";
+import { db } from "@/services/data/db";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 interface Workspace {
   id: string;
@@ -18,7 +20,7 @@ interface Workspace {
 }
 
 interface WorkspaceSettings {
-  visibility: 'private' | 'team' | 'public';
+  visibility: "private" | "team" | "public";
   allowGuests?: boolean;
   notificationPreferences?: unknown;
 }
@@ -40,58 +42,93 @@ interface Share {
   resourceId: string;
   resourceType: string;
   sharedWith: string[];
-  permissions: 'view' | 'edit' | 'admin';
+  permissions: "view" | "edit" | "admin";
   sharedBy: string;
   sharedAt: string;
 }
 
 // Define local store names for collaboration features
-const WORKSPACES_STORE = 'workspaces';
-const COMMENTS_STORE = 'comments';
-const SHARES_STORE = 'shares';
+const WORKSPACES_STORE = "workspaces";
+const COMMENTS_STORE = "comments";
+const SHARES_STORE = "shares";
 
 export const CollaborationService = {
-  getAll: async () => db.getAll(WORKSPACES_STORE),
-  getById: async (id: string) => db.get(WORKSPACES_STORE, id),
+  getAll: async () => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Workspace[]>("/collaboration/workspaces");
+    }
+    return db.getAll(WORKSPACES_STORE);
+  },
+  getById: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Workspace>(`/collaboration/workspaces/${id}`);
+    }
+    return db.get(WORKSPACES_STORE, id);
+  },
   add: async (item: unknown) => {
-    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
+    if (isBackendApiEnabled()) {
+      return apiClient.post<Workspace>("/collaboration/workspaces", item);
+    }
+    const itemObj =
+      item && typeof item === "object" ? (item as Record<string, unknown>) : {};
     return db.put(WORKSPACES_STORE, {
       ...itemObj,
       createdAt: new Date().toISOString(),
-      members: Array.isArray(itemObj.members) ? itemObj.members : []
+      members: Array.isArray(itemObj.members) ? itemObj.members : [],
     });
   },
   update: async (id: string, updates: unknown) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.patch<Workspace>(
+        `/collaboration/workspaces/${id}`,
+        updates
+      );
+    }
     const existing = await db.get(WORKSPACES_STORE, id);
     return db.put(WORKSPACES_STORE, {
-      ...(existing && typeof existing === 'object' ? existing : {}),
-      ...(updates && typeof updates === 'object' ? updates : {})
+      ...(existing && typeof existing === "object" ? existing : {}),
+      ...(updates && typeof updates === "object" ? updates : {}),
     });
   },
-  delete: async (id: string) => db.delete(WORKSPACES_STORE, id),
+  delete: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.delete(`/collaboration/workspaces/${id}`);
+    }
+    return db.delete(WORKSPACES_STORE, id);
+  },
 
   // Collaboration specific methods
   getWorkspaces: async (userId?: string): Promise<Workspace[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Workspace[]>("/collaboration/workspaces", {
+        userId,
+      });
+    }
     const workspaces = await db.getAll<Workspace>(WORKSPACES_STORE);
 
     if (userId) {
-      return workspaces.filter((w: Workspace) =>
-        w.ownerId === userId || w.members.includes(userId)
+      return workspaces.filter(
+        (w: Workspace) => w.ownerId === userId || w.members.includes(userId)
       );
     }
 
     return workspaces;
   },
-  
-  createWorkspace: async (workspace: Partial<Workspace>): Promise<Workspace> => {
+
+  createWorkspace: async (
+    workspace: Partial<Workspace>
+  ): Promise<Workspace> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.post<Workspace>("/collaboration/workspaces", workspace);
+    }
     const newWorkspace: Workspace = {
       id: `workspace-${Date.now()}`,
-      name: workspace.name || 'New Workspace',
+      name: workspace.name || "New Workspace",
       description: workspace.description,
-      ownerId: workspace.ownerId || '',
+      ownerId: workspace.ownerId || "",
       members: workspace.members || [],
       createdAt: new Date().toISOString(),
-      settings: workspace.settings || { visibility: 'private' },
+      settings: workspace.settings || { visibility: "private" },
     };
 
     await db.put(WORKSPACES_STORE, newWorkspace);
@@ -109,7 +146,9 @@ export const CollaborationService = {
         await db.put(WORKSPACES_STORE, workspace);
       }
 
-      console.log(`[CollaborationService] Invited user ${userId} to workspace ${workspaceId}`);
+      console.log(
+        `[CollaborationService] Invited user ${userId} to workspace ${workspaceId}`
+      );
       return true;
     } catch {
       return false;
@@ -121,18 +160,22 @@ export const CollaborationService = {
     const comments = await db.getAll<Comment>(COMMENTS_STORE);
     return comments
       .filter((c: Comment) => c.resourceId === resourceId)
-      .sort((a: Comment, b: Comment) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      .sort(
+        (a: Comment, b: Comment) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
   },
-  
-  addComment: async (resourceId: string, comment: Partial<Comment>): Promise<Comment> => {
+
+  addComment: async (
+    resourceId: string,
+    comment: Partial<Comment>
+  ): Promise<Comment> => {
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
       resourceId,
-      resourceType: comment.resourceType || 'document',
-      userId: comment.userId || '',
-      content: comment.content || '',
+      resourceType: comment.resourceType || "document",
+      userId: comment.userId || "",
+      content: comment.content || "",
       parentId: comment.parentId,
       createdAt: new Date().toISOString(),
       mentions: comment.mentions,
@@ -145,17 +188,17 @@ export const CollaborationService = {
   shareResource: async (
     resourceId: string,
     userId: string,
-    options?: { permissions?: 'view' | 'edit' | 'admin'; resourceType?: string }
+    options?: { permissions?: "view" | "edit" | "admin"; resourceType?: string }
   ): Promise<boolean> => {
     await delay(100);
     try {
       const share: Share = {
         id: `share-${Date.now()}`,
         resourceId,
-        resourceType: options?.resourceType || 'document',
+        resourceType: options?.resourceType || "document",
         sharedWith: [userId],
-        permissions: options?.permissions || 'view',
-        sharedBy: 'current-user', // In production, get from auth context
+        permissions: options?.permissions || "view",
+        sharedBy: "current-user", // In production, get from auth context
         sharedAt: new Date().toISOString(),
       };
 

@@ -100,6 +100,8 @@ import { delay } from "@/utils/async";
 // Backend API Services
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 // Lead type definition
 interface Lead {
@@ -121,82 +123,34 @@ interface Lead {
  */
 export const CRMService = {
   getLeads: async (): Promise<Lead[]> => {
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Lead[]>("/crm/leads");
+    }
     // CRM leads are managed separately, not via admin API
     await delay(200);
     return [];
   },
 
   getAnalytics: async (mode: "light" | "dark" = "light") => {
-    const leads = await CRMService.getLeads();
+    if (isBackendApiEnabled()) {
+      return apiClient.get("/crm/analytics", { mode });
+    }
 
-    // Dynamic Calculation based on DB state
-    const bySource = leads.reduce(
-      (acc: Record<string, number>, l: unknown) => {
-        const lead = l as Lead;
-        acc[lead.source || "Referral"] =
-          (acc[lead.source || "Referral"] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    );
-
-    const sourcesChart = Object.keys(bySource).map((k) => ({
-      name: k,
-      value: bySource[k],
-    }));
-
-    // Get theme-aware colors
-    const { ChartColorService } = await import("../theme/chartColorService");
-    const categoryColors = ChartColorService.getCategoryColors(mode || "light");
-
+    console.warn("Backend disabled, returning empty analytics");
     return {
-      growth: [
-        { month: "Jan", clients: 5 },
-        { month: "Feb", clients: 8 },
-        { month: "Mar", clients: leads.length },
-      ],
-      industry: [
-        { name: "Tech", value: 40, color: categoryColors.tech },
-        { name: "Finance", value: 25, color: categoryColors.finance },
-        { name: "Healthcare", value: 15, color: categoryColors.healthcare },
-      ],
-      revenue: [
-        { name: "Q1", retained: 400000, new: 120000 },
-        { name: "Q2", retained: 450000, new: 180000 },
-      ],
-      sources: sourcesChart,
+      growth: [],
+      industry: [],
+      revenue: [],
+      sources: [],
     };
   },
 
   updateLead: async (id: string, updates: { stage: string }): Promise<Lead> => {
-    // In production, this would fetch from CRM API
-    const lead: Lead = {
-      id,
-      client: "Mock Client",
-      title: "Mock Lead",
-      stage: updates.stage,
-      value: "$0",
-    };
-
-    // Integration Point: CRM -> Compliance
-    if (updates.stage) {
-      await IntegrationEventPublisher.publish(
-        SystemEventType.LEAD_STAGE_CHANGED,
-        {
-          leadId: id,
-          stage: updates.stage,
-          clientName: lead.client,
-          value: lead.value,
-        }
-      );
+    if (isBackendApiEnabled()) {
+      return apiClient.patch<Lead>(`/crm/leads/${id}`, updates);
     }
 
-    // Automation: If Converted, create Client and Case
-    if (updates.stage === "Matter Created") {
-      await CRMService.convertLeadToClient(lead);
-    }
-
-    return lead;
+    throw new Error("Backend disabled, cannot update lead");
   },
 
   convertLeadToClient: async (lead: Lead) => {

@@ -158,16 +158,17 @@ export function useAppContext(): UseAppControllerReturn {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       } as User)
-    : users[currentUserIndex] || {
+    : users[currentUserIndex] ||
+      ({
         id: "temp-user" as UserId,
         email: "Guest",
         name: "Guest User",
         firstName: "Guest",
         lastName: "User",
-        role: "user" as const,
+        role: "user",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
+      } as unknown as User);
 
   // ==========================================================================
   // INITIALIZATION LOGIC

@@ -84,15 +84,16 @@ export async function action({ request }: ActionFunctionArgs) {
         // await DataService.analytics.knowledge.create(data);
         return { success: true, message: "Resource uploaded" };
 
-      case "delete":
+      case "delete": {
         const id = formData.get("id") as string;
         if (id) await DataService.analytics.knowledge.delete(id);
         return { success: true };
+      }
 
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

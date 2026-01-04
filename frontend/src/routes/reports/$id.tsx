@@ -54,10 +54,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
       type: report.reportType,
       category: report.reportType,
       generatedAt: report.generatedAt || new Date().toISOString(),
-      period: (metadata.period as any) || { start: null, end: null },
+      period: (metadata.period as { start: string | null; end: string | null }) || { start: null, end: null },
       data: {
-        summary: (metadata.summary as any) || {},
-        charts: (metadata.charts as any[]) || []
+        summary: (metadata.summary as Record<string, unknown>) || {},
+        charts: (metadata.charts as ChartData[]) || []
       }
     };
 

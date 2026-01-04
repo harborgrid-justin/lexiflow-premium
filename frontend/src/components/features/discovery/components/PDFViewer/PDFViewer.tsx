@@ -47,13 +47,29 @@ const initializePDFJS = async () => {
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+interface PDFPageViewport {
+  width: number;
+  height: number;
+}
+
 interface PDFRenderTask {
   promise: Promise<void>;
   cancel(): void;
 }
 
+interface PDFPageProxy {
+  getViewport(params: { scale: number; rotation?: number }): PDFPageViewport;
+  render(params: any): PDFRenderTask;
+}
+
+interface PDFDocumentProxy {
+  getPage(pageNumber: number): Promise<PDFPageProxy>;
+  numPages: number;
+  destroy(): void;
+}
+
 interface PDFLoadingTask {
-  promise: Promise<any>;
+  promise: Promise<PDFDocumentProxy>;
   destroy(): void;
 }
 
@@ -79,7 +95,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [pdfDoc, setPdfDoc] = useState<any | null>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

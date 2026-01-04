@@ -285,7 +285,7 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: Aud
             className="rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           >
             <option value="all">All Actions</option>
-            {filters.actions.map((action: string) => (
+            {(filters as any).actions?.map((action: string) => (
               <option key={action} value={action}>{action}</option>
             ))}
           </select>
@@ -364,7 +364,7 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: Aud
       {/* Pagination */}
       <div className="mt-6 flex items-center justify-between">
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Showing page {pagination.page} of {pagination.totalPages} ({pagination.totalItems} total entries)
+          Showing page {pagination.page} of {pagination.totalPages} ({(pagination as any).totalItems} total entries)
         </p>
         <div className="flex gap-2">
           <button

@@ -233,7 +233,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = WORKFLOW_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs![0].id as WorkflowView);
+      setActiveTab((parent.subTabs![0]?.id || '') as WorkflowView);
     }
   }, [setActiveTab]);
 

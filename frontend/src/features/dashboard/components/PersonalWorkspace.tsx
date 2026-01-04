@@ -34,7 +34,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { cn } from '@/utils/cn';
 
 // Types
-import type { CalendarEventItem, User } from '@/types';
+import type { CalendarEventItem, User, WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
 
 // ============================================================================

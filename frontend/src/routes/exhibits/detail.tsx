@@ -74,7 +74,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

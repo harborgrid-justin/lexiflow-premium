@@ -34,7 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   try {
     // Map type string to API filter if needed
-    const filter = type ? { system: type as any } : {};
+    const filter = type ? { system: type as string } : {};
     const items = await DataService.analytics.jurisdiction.getAll(filter);
     return { items, totalCount: items.length };
   } catch (error) {
@@ -58,17 +58,18 @@ export async function action({ request }: Route.ActionArgs) {
         // const data = Object.fromEntries(formData);
         // await DataService.analytics.jurisdiction.create(data);
         return { success: true, message: "Jurisdiction created" };
-      case "delete":
+      case "delete": {
         const id = formData.get("id") as string;
         if (id) await DataService.analytics.jurisdiction.delete(id);
         return { success: true, message: "Jurisdiction deleted" };
+      }
       case "update":
         // Update logic
         return { success: true, message: "Jurisdiction updated" };
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

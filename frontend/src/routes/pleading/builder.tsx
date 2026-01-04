@@ -13,6 +13,7 @@
  */
 
 import { DataService } from '@/services/data/dataService';
+import { LegalDocument } from '@/types';
 import { Form, Link, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -80,28 +81,28 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderDat
 
     // Filter documents for recent pleadings
     const recentPleadings = Array.isArray(documents)
-      ? documents
-        .filter((d: any) => d.type === 'pleading' || d.category === 'pleading')
-        .sort((a: any, b: any) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+      ? (documents as LegalDocument[])
+        .filter((d) => d.type === 'pleading' || (d as any).category === 'pleading')
+        .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0).getTime() - new Date(a.updatedAt || a.createdAt || 0).getTime())
         .slice(0, 5)
-        .map((d: any) => ({ id: d.id, name: d.title || d.name, date: d.updatedAt || d.createdAt }))
+        .map((d) => ({ id: d.id, name: d.title, date: d.updatedAt || d.createdAt || new Date().toISOString() }))
       : [];
 
     // Map templates to PleadingTemplate interface
-    const mappedTemplates = Array.isArray(templates) ? templates.map((t: any) => ({
+    const mappedTemplates = Array.isArray(templates) ? templates.map((t: { id: string; name: string; category?: string; jurisdiction?: string; description?: string }) => ({
       id: t.id,
       name: t.name,
-      type: (t.category as any) || 'other',
+      type: (t.category as PleadingTemplate['type']) || 'other',
       jurisdiction: t.jurisdiction || 'General',
       description: t.description || ''
     })) : [];
 
     // Map courts
-    const mappedCourts = Array.isArray(courts) ? courts.map((c: any) => ({
+    const mappedCourts = Array.isArray(courts) ? courts.map((c: { id: string; name: string; jurisdiction?: string; level?: string }) => ({
       id: c.id,
       name: c.name,
       jurisdiction: c.jurisdiction || 'General',
-      level: c.level || 'state'
+      level: (c.level as Court['level']) || 'state'
     })) : [];
 
     return {

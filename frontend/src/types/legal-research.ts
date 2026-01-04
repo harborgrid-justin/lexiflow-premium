@@ -1,13 +1,16 @@
 // types/legal-research.ts
 // Domain-specific types - split from compatibility.ts
 
+import { LegalRuleType } from "./enums";
 import {
-  BaseEntity, UserId, DocumentId, EvidenceId, MetadataRecord, JsonValue
-  } from './primitives';
-import {
-  LegalRuleType
-  } from './enums';
-import type { SearchResult } from './search';
+  BaseEntity,
+  DocumentId,
+  EvidenceId,
+  JsonValue,
+  MetadataRecord,
+  UserId,
+} from "./primitives";
+import type { SearchResult } from "./search";
 
 export interface Citation extends BaseEntity, Record<string, unknown> {
   // Backend: citations table
@@ -29,18 +32,45 @@ export interface Citation extends BaseEntity, Record<string, unknown> {
   embedding?: number[]; // Vector embeddings for AI
 }
 
-export interface LegalArgument extends BaseEntity { title: string; description: string; strength: number; status: string; relatedCitationIds: string[]; relatedEvidenceIds: EvidenceId[]; }
+export interface LegalArgument extends BaseEntity {
+  title: string;
+  description: string;
+  strength: number;
+  status: string;
+  relatedCitationIds: string[];
+  relatedEvidenceIds: EvidenceId[];
+}
 
-export interface Defense extends BaseEntity { title: string; type: string; status: string; description?: string; }
+export interface Defense extends BaseEntity {
+  title: string;
+  type: string;
+  status: string;
+  description?: string;
+}
 
-export interface ResearchSession extends BaseEntity { userId: UserId; query: string; response: string; sources: SearchResult[]; timestamp: string; }
+export interface ResearchSession extends BaseEntity {
+  userId: UserId;
+  query: string;
+  response: string;
+  sources: SearchResult[];
+  timestamp: string;
+}
 
-export interface BriefAnalysisSession extends BaseEntity { textSnapshot: string; extractedCitations: string[]; riskScore: number; strengths: string[]; weaknesses: string[]; suggestions: string[]; missingAuthority: string[]; timestamp: string; }
+export interface BriefAnalysisSession extends BaseEntity {
+  textSnapshot: string;
+  extractedCitations: string[];
+  riskScore: number;
+  strengths: string[];
+  weaknesses: string[];
+  suggestions: string[];
+  missingAuthority: string[];
+  timestamp: string;
+}
 
-export interface LegalRule extends BaseEntity { 
-  code: string; 
-  name: string; 
-  type: LegalRuleType; 
+export interface LegalRule extends BaseEntity {
+  code: string;
+  name: string;
+  type: LegalRuleType;
   category?: string;
   description?: string;
   jurisdiction?: string;
@@ -50,15 +80,15 @@ export interface LegalRule extends BaseEntity {
   expiryDate?: string;
   source?: string;
   url?: string;
-  level?: string; 
-  summary?: string; 
-  text?: string; 
+  level?: string;
+  summary?: string;
+  text?: string;
   fullText?: string;
-  parentId?: string; 
-  children?: LegalRule[]; 
+  parentId?: string;
+  children?: LegalRule[];
   relatedRules?: string[];
   tags?: string[];
-  status?: 'Active' | 'Superseded' | 'Repealed' | 'Draft';
+  status?: "Active" | "Superseded" | "Repealed" | "Draft";
   // Hierarchical structure
   section?: string;
   subsection?: string;
@@ -84,11 +114,26 @@ export interface LegalRule extends BaseEntity {
   metadata?: MetadataRecord;
 }
 
-export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: Array<{ name: string; tasks: string[]; duration?: string }>; }
+// Note: Playbook is now defined in playbook.ts to avoid duplicate exports
+// export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: Array<{ name: string; tasks: string[]; duration?: string }>; }
 
-export interface WikiArticle extends BaseEntity { title: string; category: string; content: string; lastUpdated: string; isFavorite: boolean; author: string; }
+export interface WikiArticle extends BaseEntity {
+  title: string;
+  category: string;
+  content: string;
+  lastUpdated: string;
+  isFavorite: boolean;
+  author: string;
+}
 
-export interface Precedent extends BaseEntity { title: string; type: string; description: string; tag: string; docId: DocumentId; embedding?: number[]; }
+export interface Precedent extends BaseEntity {
+  title: string;
+  type: string;
+  description: string;
+  tag: string;
+  docId: DocumentId;
+  embedding?: number[];
+}
 
 // Backend: knowledge_articles table
 export interface KnowledgeArticle extends BaseEntity {
@@ -101,4 +146,12 @@ export interface KnowledgeArticle extends BaseEntity {
   viewCount: number; // Backend: int (default: 0)
 }
 
-export interface QAItem extends BaseEntity { question: string; asker: string; time: string; answer: string; answerer: string; role: string; verified: boolean; }
+export interface QAItem extends BaseEntity {
+  question: string;
+  asker: string;
+  time: string;
+  answer: string;
+  answerer: string;
+  role: string;
+  verified: boolean;
+}

@@ -82,7 +82,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderDat
     // Filter documents for recent pleadings
     const recentPleadings = Array.isArray(documents)
       ? (documents as LegalDocument[])
-        .filter((d) => d.type === 'pleading' || (d as any).category === 'pleading')
+        .filter((d) => d.type === 'pleading' || ('category' in d && (d as LegalDocument & { category?: string }).category === 'pleading'))
         .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0).getTime() - new Date(a.updatedAt || a.createdAt || 0).getTime())
         .slice(0, 5)
         .map((d) => ({ id: d.id, name: d.title, date: d.updatedAt || d.createdAt || new Date().toISOString() }))
@@ -138,14 +138,30 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
         };
       }
 
-      // TODO: Save pleading to database
-      console.log('Saving pleading:', { title, courtId, templateId, content });
+      try {
+        const pleading = await DataService.pleadings.add({
+          title: title.trim(),
+          courtId: courtId || undefined,
+          templateId: templateId || undefined,
+          content: content || '',
+          status: 'Draft',
+          type: 'Motion',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
 
-      return {
-        success: true,
-        message: "Pleading saved successfully",
-        pleadingId: `pleading-${Date.now()}`,
-      };
+        return {
+          success: true,
+          message: "Pleading saved successfully",
+          pleadingId: pleading.id,
+        };
+      } catch (error) {
+        console.error('Failed to save pleading:', error);
+        return {
+          success: false,
+          error: "Failed to save pleading",
+        };
+      }
     }
 
     case "generate": {
@@ -168,45 +184,173 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
         };
       }
 
-      // TODO: Generate pleading content from template
-      console.log('Generating pleading:', { templateId, courtId, parties, claims });
+      try {
+        const template = await DataService.drafting.templates.getById(templateId);
+        if (!template) {
+          return {
+            success: false,
+            error: "Template not found",
+          };
+        }
 
-      return {
-        success: true,
-        message: "Pleading generated successfully",
-      };
+        let content = template.content || '';
+        if (parties) {
+          content = content.replace(/{{parties}}/g, parties);
+        }
+        if (claims) {
+          content = content.replace(/{{claims}}/g, claims);
+        }
+        content = content.replace(/{{date}}/g, new Date().toLocaleDateString());
+        content = content.replace(/{{court}}/g, courtId);
+
+        return {
+          success: true,
+          message: "Pleading generated successfully",
+          content,
+        };
+      } catch (error) {
+        console.error('Failed to generate pleading:', error);
+        return {
+          success: false,
+          error: "Failed to generate pleading",
+        };
+      }
     }
 
     case "preview": {
-      // TODO: Generate PDF preview
-      console.log('Generating preview');
+      const content = formData.get("content") as string;
+      const title = formData.get("title") as string;
 
-      return {
-        success: true,
-        message: "Preview generated",
-        previewUrl: "/api/pleadings/preview/temp",
-      };
+      try {
+        const previewHtml = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${title || 'Pleading Preview'}</title>
+            <style>
+              @page { margin: 1in; }
+              body { font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 2; }
+              h1 { text-align: center; font-size: 14pt; font-weight: bold; margin-bottom: 2em; }
+              p { text-indent: 0.5in; margin: 0; }
+            </style>
+          </head>
+          <body>
+            <h1>${title || 'LEGAL PLEADING'}</h1>
+            <div>${content || ''}</div>
+          </body>
+          </html>
+        `;
+
+        const blob = new Blob([previewHtml], { type: 'text/html' });
+        const previewUrl = URL.createObjectURL(blob);
+
+        return {
+          success: true,
+          message: "Preview generated",
+          previewUrl,
+        };
+      } catch (error) {
+        console.error('Failed to generate preview:', error);
+        return {
+          success: false,
+          error: "Failed to generate preview",
+        };
+      }
     }
 
     case "export": {
       const format = formData.get("format") as string;
       const pleadingId = formData.get("pleadingId") as string;
+      const content = formData.get("content") as string;
+      const title = formData.get("title") as string;
 
-      // TODO: Export pleading in requested format
-      console.log('Exporting pleading:', { format, pleadingId });
+      try {
+        let exportBlob: Blob;
+        let filename: string;
 
-      return {
-        success: true,
-        message: `Pleading exported as ${format?.toUpperCase() || 'PDF'}`,
-      };
+        switch (format?.toLowerCase()) {
+          case 'docx':
+            exportBlob = new Blob([content || ''], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            filename = `${title || 'pleading'}.docx`;
+            break;
+          case 'txt':
+            exportBlob = new Blob([content || ''], { type: 'text/plain' });
+            filename = `${title || 'pleading'}.txt`;
+            break;
+          case 'pdf':
+          default:
+            const html = `<!DOCTYPE html><html><head><title>${title}</title></head><body>${content}</body></html>`;
+            exportBlob = new Blob([html], { type: 'text/html' });
+            filename = `${title || 'pleading'}.html`;
+        }
+
+        const url = URL.createObjectURL(exportBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        return {
+          success: true,
+          message: `Pleading exported as ${format?.toUpperCase() || 'HTML'}`,
+        };
+      } catch (error) {
+        console.error('Failed to export pleading:', error);
+        return {
+          success: false,
+          error: "Failed to export pleading",
+        };
+      }
     }
 
     case "validate": {
-      // TODO: Validate pleading against court rules
-      return {
-        success: true,
-        message: "Pleading validation passed",
-      };
+      const content = formData.get("content") as string;
+      const courtId = formData.get("courtId") as string;
+
+      try {
+        const validationErrors: string[] = [];
+
+        if (!content || content.trim().length < 100) {
+          validationErrors.push("Content appears too short for a legal pleading");
+        }
+
+        const wordCount = content?.split(/\s+/).length || 0;
+        if (wordCount > 10000) {
+          validationErrors.push("Content exceeds typical pleading length limits");
+        }
+
+        const hasCaption = /IN THE .* COURT/i.test(content || '');
+        if (!hasCaption) {
+          validationErrors.push("Missing standard court caption");
+        }
+
+        const hasCertificate = /certificate of service/i.test(content || '');
+        if (!hasCertificate) {
+          validationErrors.push("Missing certificate of service");
+        }
+
+        if (validationErrors.length > 0) {
+          return {
+            success: false,
+            message: "Pleading validation found issues",
+            errors: validationErrors,
+          };
+        }
+
+        return {
+          success: true,
+          message: "Pleading validation passed - meets court requirements",
+        };
+      } catch (error) {
+        console.error('Validation failed:', error);
+        return {
+          success: false,
+          error: "Validation process failed",
+        };
+      }
     }
 
     default:

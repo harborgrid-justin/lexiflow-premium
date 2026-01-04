@@ -255,6 +255,6 @@ export function CaseCard({
           </button>
         </div>
       )}
-    </CardWrapper>
+    </CaseCardContainer>
   );
 }

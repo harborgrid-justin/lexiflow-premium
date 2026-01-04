@@ -41,7 +41,7 @@ export async function loader({ request: _ }: LoaderFunctionArgs) {
   try {
     const cases = await DataService.cases.getAll();
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
-    const warRoomCases = cases.filter(c => c.status === 'Active' || c.status === 'Trial');
+    const warRoomCases = cases.filter((c: { status: string }) => c.status === 'Active' || c.status === 'Trial');
 
     return { items: warRoomCases, totalCount: warRoomCases.length };
   } catch (error) {

@@ -89,18 +89,86 @@ export async function action({ request }: ActionFunctionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "update-settings":
-      // TODO: Validate and save settings to backend
-      return { success: true, message: "Settings updated successfully" };
+    case "update-settings": {
+      const settingKey = formData.get("key") as string;
+      const settingValue = formData.get("value") as string;
+      const settingType = formData.get("type") as string;
 
-    case "clear-cache":
-      // TODO: Clear application cache
-      return { success: true, message: "Cache cleared successfully" };
+      if (!settingKey) {
+        return { success: false, error: "Setting key is required" };
+      }
+
+      try {
+        let parsedValue: string | number | boolean = settingValue;
+
+        if (settingType === 'number') {
+          parsedValue = parseFloat(settingValue);
+          if (isNaN(parsedValue)) {
+            return { success: false, error: "Invalid number value" };
+          }
+        } else if (settingType === 'boolean') {
+          parsedValue = settingValue === 'true' || settingValue === '1';
+        }
+
+        await DataService.admin.settings.update(settingKey, parsedValue);
+        return { success: true, message: "Settings updated successfully" };
+      } catch (error) {
+        console.error('Failed to update settings:', error);
+        return { success: false, error: "Failed to update settings" };
+      }
+    }
+
+    case "clear-cache": {
+      try {
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        localStorage.removeItem('queryCache');
+        sessionStorage.clear();
+
+        if (window.queryClient) {
+          window.queryClient.clear();
+        }
+
+        return {
+          success: true,
+          message: "Cache cleared successfully. Page will reload.",
+          reload: true
+        };
+      } catch (error) {
+        console.error('Failed to clear cache:', error);
+        return { success: false, error: "Failed to clear cache" };
+      }
+    }
 
     case "toggle-maintenance": {
       const enabled = formData.get("enabled") === "true";
-      // TODO: Toggle maintenance mode
-      return { success: true, message: `Maintenance mode ${enabled ? 'enabled' : 'disabled'}` };
+      const message = formData.get("message") as string;
+
+      try {
+        await DataService.admin.settings.update('maintenanceMode', {
+          enabled,
+          message: message || 'System is currently undergoing maintenance. Please check back soon.',
+          enabledAt: enabled ? new Date().toISOString() : null,
+          enabledBy: 'current-user-id',
+        });
+
+        if (enabled) {
+          localStorage.setItem('maintenanceMode', 'true');
+        } else {
+          localStorage.removeItem('maintenanceMode');
+        }
+
+        return {
+          success: true,
+          message: `Maintenance mode ${enabled ? 'enabled' : 'disabled'} successfully`
+        };
+      } catch (error) {
+        console.error('Failed to toggle maintenance mode:', error);
+        return { success: false, error: "Failed to toggle maintenance mode" };
+      }
     }
 
     default:

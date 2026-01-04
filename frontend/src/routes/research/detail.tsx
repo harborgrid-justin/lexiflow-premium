@@ -31,18 +31,21 @@ export function meta({ data }: Route.MetaArgs) {
 export async function loader({ params }: Route.LoaderArgs) {
   const { researchId } = params;
 
-  // CRITICAL: Validate param exists
   if (!researchId) {
     throw new Response("Research ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.research.get(researchId);
-  // if (!item) {
-  //   throw new Response("Research not found", { status: 404 });
-  // }
-
-  return { item: null };
+  try {
+    const item = await DataService.knowledge.research.getById(researchId);
+    if (!item) {
+      throw new Response("Research session not found", { status: 404 });
+    }
+    return { item };
+  } catch (error) {
+    console.error("Failed to load research session:", error);
+    if (error instanceof Response) throw error;
+    throw new Response("Research session not found", { status: 404 });
+  }
 }
 
 // ============================================================================
@@ -60,13 +63,30 @@ export async function action({ params, request }: Route.ActionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/research");
-      return { success: true };
+    case "update": {
+      const query = formData.get("query") as string;
+      const notes = formData.get("notes") as string;
+      const status = formData.get("status") as string;
+
+      const updates: Partial<ResearchSession> = {
+        updatedAt: new Date().toISOString(),
+      };
+
+      if (query) updates.query = query;
+      if (notes) updates.notes = notes;
+      if (status) updates.status = status;
+
+      await DataService.knowledge.research.update(researchId, updates);
+      return { success: true, message: "Research session updated successfully" };
+    }
+    case "delete": {
+      await DataService.knowledge.research.delete(researchId);
+      return {
+        success: true,
+        message: "Research session deleted successfully",
+        redirect: "/research"
+      };
+    }
     default:
       return { success: false, error: "Invalid action" };
   }

@@ -69,13 +69,30 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/docket");
-      return { success: true };
+    case "update": {
+      const entryNumber = formData.get("entryNumber") as string;
+      const description = formData.get("description") as string;
+      const filingDate = formData.get("filingDate") as string;
+
+      const updates: Partial<DocketEntry> = {
+        updatedAt: new Date().toISOString(),
+      };
+
+      if (entryNumber) updates.entryNumber = entryNumber;
+      if (description) updates.description = description;
+      if (filingDate) updates.filingDate = filingDate;
+
+      await DataService.docket.update(docketId, updates);
+      return { success: true, message: "Docket entry updated successfully" };
+    }
+    case "delete": {
+      await DataService.docket.delete(docketId);
+      return {
+        success: true,
+        message: "Docket entry deleted successfully",
+        redirect: "/docket"
+      };
+    }
     default:
       return { success: false, error: "Invalid action" };
   }

@@ -4,6 +4,7 @@
  */
 
 import { ChartCard, DateRangeSelector, FilterPanel, MetricCard } from '@/components/enterprise/analytics';
+import { DataService } from '@/services/data/dataService';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useState } from 'react';
@@ -33,17 +34,59 @@ export function meta() {
 }
 
 export async function loader() {
-  // TODO: Fetch real data from API
-  return {
-    metrics: {
-      totalCases: 273,
-      activeCases: 127,
-      wonCases: 89,
-      winRate: 87.5,
-      avgDuration: 145,
-      avgSettlement: 325000,
-    },
-  };
+  try {
+    const cases = await DataService.cases.getAll();
+    const activeCases = cases.filter(c => c.status === 'Active' || c.status === 'In Progress');
+    const closedCases = cases.filter(c => c.status === 'Closed' || c.status === 'Resolved');
+    const wonCases = closedCases.filter(c => c.outcome === 'Won' || c.status === 'Settled');
+
+    const totalCases = cases.length;
+    const wonCount = wonCases.length;
+    const winRate = closedCases.length > 0 ? (wonCount / closedCases.length) * 100 : 0;
+
+    const durations = closedCases
+      .filter(c => c.filingDate && c.closedDate)
+      .map(c => {
+        const start = new Date(c.filingDate!).getTime();
+        const end = new Date(c.closedDate!).getTime();
+        return Math.floor((end - start) / (1000 * 60 * 60 * 24));
+      });
+
+    const avgDuration = durations.length > 0
+      ? Math.floor(durations.reduce((sum, d) => sum + d, 0) / durations.length)
+      : 0;
+
+    const settlements = closedCases
+      .filter(c => c.settlementAmount)
+      .map(c => c.settlementAmount || 0);
+
+    const avgSettlement = settlements.length > 0
+      ? Math.floor(settlements.reduce((sum, s) => sum + s, 0) / settlements.length)
+      : 0;
+
+    return {
+      metrics: {
+        totalCases,
+        activeCases: activeCases.length,
+        wonCases: wonCount,
+        winRate: parseFloat(winRate.toFixed(1)),
+        avgDuration,
+        avgSettlement,
+      },
+    };
+  } catch (error) {
+    console.error('Failed to fetch case analytics:', error);
+    return {
+      metrics: {
+        totalCases: 0,
+        activeCases: 0,
+        wonCases: 0,
+        winRate: 0,
+        avgDuration: 0,
+        avgSettlement: 0,
+      },
+    };
+  }
 }
 
 export default function CaseAnalyticsRoute() {
@@ -222,7 +265,7 @@ export default function CaseAnalyticsRoute() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"

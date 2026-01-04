@@ -2,18 +2,31 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, DocumentId, EvidenceId,
-  MotionId, DocketId, CaseId, MetadataRecord, JsonValue
-} from './primitives';
+  DocketEntryType,
+  MotionOutcome,
+  MotionStatus,
+  MotionType,
+} from "./enums";
 import {
-  MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType
-} from './enums';
+  BaseEntity,
+  CaseId,
+  DocketId,
+  DocumentId,
+  EvidenceId,
+  JsonValue,
+  MetadataRecord,
+  MotionId,
+} from "./primitives";
 
 // SearchResult is exported from ./search.ts
-export interface FileChunk { id: string; pageNumber: number; contentPreview: string; hash: string; }
+export interface FileChunk {
+  id: string;
+  pageNumber: number;
+  contentPreview: string;
+  hash: string;
+}
 
-export interface Motion extends BaseEntity { 
+export interface Motion extends BaseEntity {
   id: MotionId;
   // Core fields (aligned with backend Motion entity)
   caseId: CaseId; // Backend: uuid (required), FK to cases
@@ -21,24 +34,24 @@ export interface Motion extends BaseEntity {
   type: MotionType; // Backend: enum MotionType
   status: MotionStatus; // Backend: enum MotionStatus (DRAFT, FILED, PENDING, GRANTED, DENIED, etc.)
   description: string; // Backend: text, nullable
-  
+
   // Filing information
   filedBy?: string; // Backend: varchar(255)
   filedDate?: string; // Backend: date
   filingDate?: string; // Backend: date (duplicate field in backend)
-  
+
   // Hearing and deadlines
   hearingDate?: string; // Backend: date
   responseDeadline?: string; // Backend: date
   rulingDate?: string; // Backend: date
   decisionDate?: string; // Backend: date (duplicate field in backend)
-  
+
   // Documents and attachments
   documentId?: DocumentId; // Backend: uuid
   supportingDocs?: string[]; // Backend: jsonb
   attachments?: string[]; // Backend: jsonb
   documents?: DocumentId[]; // Frontend legacy
-  
+
   // Decision and outcome
   ruling?: JsonValue; // Backend: jsonb
   decision?: string; // Backend: text
@@ -47,7 +60,7 @@ export interface Motion extends BaseEntity {
 
   // Response
   opposingPartyResponse?: JsonValue; // Backend: jsonb
-  
+
   // Frontend-specific fields
   oppositionDueDate?: string;
   replyDueDate?: string;
@@ -65,52 +78,71 @@ export interface DocketEntryStructuredData {
   additionalText: string;
 }
 
-export interface DocketEntry extends BaseEntity { 
+export interface DocketFilterOptions {
+  search?: string;
+  type?: string;
+  page?: number;
+  limit?: number;
+  caseId?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface DocketEntry extends BaseEntity {
   id: DocketId;
   // Core fields (aligned with backend DocketEntry entity)
   caseId: CaseId; // Backend: uuid (required), FK to cases
   sequenceNumber: number; // Backend: int
   docketNumber?: string; // Backend: varchar(100)
-  
+
   // Dates
   dateFiled: string; // Backend: date (required)
   entryDate: string; // Backend: date (required)
   date?: string; // Frontend legacy alias for entryDate
-  
+
   // Content
   description: string; // Backend: varchar(255) (required)
   type: DocketEntryType; // Backend: enum DocketEntryType
   text?: string; // Backend: text
   filedBy?: string; // Backend: varchar(255)
-  
+
   // Document information
   documentTitle?: string; // Backend: varchar(255)
   documentUrl?: string; // Backend: varchar(2048)
   documentId?: DocumentId; // Backend: uuid
-  
+
   // PACER integration
   pacerDocketNumber?: string; // Backend: varchar(100)
   pacerDocumentNumber?: string; // Backend: varchar(100)
   pacerLastSyncAt?: string; // Backend: timestamp
   pacerSequenceNumber?: number; // Frontend legacy
-  
+
   // Security flags
   isSealed?: boolean; // Backend: boolean, default false
   isRestricted?: boolean; // Backend: boolean, default false
-  
+
   // Additional data
   notes?: string; // Backend: text
-  attachments?: Array<{ // Backend: jsonb
+  attachments?: Array<{
+    // Backend: jsonb
     id: string;
     name: string;
     documentNumber?: string;
   }>;
   metadata?: MetadataRecord; // Backend: jsonb
-  
+
   // Frontend-specific fields
   title?: string; // Alias for description
   structuredData?: DocketEntryStructuredData;
-  triggersDeadlines?: Array<{ id: string; type: string; date: string; title: string; status: string; ruleReference: string; description?: string }>;
+  triggersDeadlines?: Array<{
+    id: string;
+    type: string;
+    date: string;
+    title: string;
+    status: string;
+    ruleReference: string;
+    description?: string;
+  }>;
   docLink?: string; // Alias for documentUrl
   syncMetadata?: { pacerId: string; lastPolled: string; checksum: string };
 }

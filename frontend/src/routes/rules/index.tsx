@@ -82,7 +82,7 @@ export async function action({ request }: Route.ActionArgs) {
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch {
     return { success: false, error: "Action failed" };
   }
 }

@@ -93,12 +93,10 @@ export const SearchToolbarWithActionsStory = () => {
 };
 
 const WithButtonsStory = () => {
-  const [query, setQuery] = useState('');
-  const [filters, setFilters] = useState({});
   return (
     <ThemeProvider>
       <SearchToolbar
-        onSearch={(q, f) => { setQuery(q); setFilters(f); }}
+        onSearch={() => { /* Story demo */ }}
         placeholder="Search with buttons"
       />
     </ThemeProvider>

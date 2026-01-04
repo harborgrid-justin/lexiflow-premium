@@ -18,6 +18,7 @@ export interface DashboardKPIs {
     previousValue: number;
     change: number;
     trend: "up" | "down" | "neutral";
+    target?: number;
   };
   billableHours: {
     value: number;
@@ -42,11 +43,13 @@ export interface DashboardKPIs {
     value: number;
     previousValue: number;
     change: number;
+    target?: number;
   };
   clientSatisfaction: {
     value: number;
     previousValue: number;
     change: number;
+    target?: number;
   };
 }
 

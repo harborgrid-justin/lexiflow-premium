@@ -222,7 +222,10 @@ export function profileComponent<P>(
     return React.createElement(
       React.Profiler,
       { id, onRender: handleRender as React.ProfilerOnRenderCallback },
-      React.createElement(Component, props as P & React.Attributes)
+      React.createElement(
+        Component as React.ComponentType<Record<string, unknown>>,
+        props as Record<string, unknown> & React.Attributes
+      )
     );
   }
 

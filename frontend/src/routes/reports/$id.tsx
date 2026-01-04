@@ -205,7 +205,7 @@ export default function ReportViewerRoute() {
           <div>
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Period</p>
             <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {new Date(report.period.start).toLocaleDateString()} - {new Date(report.period.end).toLocaleDateString()}
+              {report.period?.start ? new Date(report.period.start).toLocaleDateString() : 'N/A'} - {report.period?.end ? new Date(report.period.end).toLocaleDateString() : 'N/A'}
             </p>
           </div>
           <div>

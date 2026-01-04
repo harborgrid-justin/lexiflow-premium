@@ -4,32 +4,27 @@
  */
 
 import {
+  billingApiService,
+  TrustAccount,
+  TrustReconciliation,
+  TrustTransaction
+} from '@/services/api/billing.service';
+import {
   AlertTriangle,
   Calendar,
   CheckCircle,
   DollarSign,
   Download,
   FileText,
+  Landmark,
   Plus,
   Search,
   Shield,
   Users
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-// Types
-interface TrustAccount {
-  id: string;
-  accountNumber: string;
-  accountName: string;
-  bankName: string;
-  accountType: 'IOLTA' | 'Non-IOLTA';
-  balance: number;
-  currency: string;
-  lastReconciled?: string;
-  status: 'active' | 'inactive';
-}
-
+// Local types for UI-specific data structures
 interface ClientTrustLedger {
   id: string;
   clientId: string;
@@ -39,33 +34,6 @@ interface ClientTrustLedger {
   balance: number;
   lastActivity?: string;
   status: 'active' | 'inactive' | 'depleted';
-}
-
-interface TrustTransaction {
-  id: string;
-  date: string;
-  type: 'deposit' | 'withdrawal' | 'transfer' | 'interest';
-  clientName: string;
-  matterDescription: string;
-  amount: number;
-  balance: number;
-  description: string;
-  checkNumber?: string;
-  reference?: string;
-}
-
-interface ThreeWayReconciliation {
-  id: string;
-  date: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'discrepancy';
-  bankStatementBalance: number;
-  mainLedgerBalance: number;
-  clientLedgersTotalBalance: number;
-  difference: number;
-  outstandingChecks: number;
-  depositsInTransit: number;
-  reconciledBy?: string;
-  notes?: string;
 }
 
 interface ComplianceAlert {
@@ -80,9 +48,26 @@ interface ComplianceAlert {
 
 interface TrustAccountingProps {
   accountId?: string;
-  onReconcile?: (reconciliation: ThreeWayReconciliation) => void;
+  onReconcile?: (reconciliation: TrustReconciliation) => void;
   onTransactionCreate?: (transaction: Partial<TrustTransaction>) => void;
 }
+
+// Empty State Component
+const EmptyState: React.FC<{ message: string; onAdd?: () => void; addLabel?: string }> = ({ message, onAdd, addLabel }) => (
+  <div className="flex flex-col items-center justify-center py-12 text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+    <Landmark className="w-12 h-12 mb-3 opacity-50" />
+    <p className="text-sm mb-3">{message}</p>
+    {onAdd && (
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+      >
+        <Plus className="w-4 h-4" />
+        {addLabel || 'Add Data'}
+      </button>
+    )}
+  </div>
+);
 
 export const TrustAccounting: React.FC<TrustAccountingProps> = ({
   accountId: initialAccountId,
@@ -92,151 +77,84 @@ export const TrustAccounting: React.FC<TrustAccountingProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
 
-  // Mock data
-  const trustAccounts: TrustAccount[] = [
-    {
-      id: '1',
-      accountNumber: 'XXXX-4567',
-      accountName: 'IOLTA Trust Account',
-      bankName: 'First National Bank',
-      accountType: 'IOLTA',
-      balance: 2567890.50,
-      currency: 'USD',
-      lastReconciled: '2024-01-01',
-      status: 'active',
-    },
-    {
-      id: '2',
-      accountNumber: 'XXXX-8901',
-      accountName: 'Client Retainer Trust',
-      bankName: 'First National Bank',
-      accountType: 'Non-IOLTA',
-      balance: 456780.00,
-      currency: 'USD',
-      lastReconciled: '2024-01-01',
-      status: 'active',
-    },
-  ];
+  // State for API data
+  const [trustAccounts, setTrustAccounts] = useState<TrustAccount[]>([]);
+  const [transactions, setTransactions] = useState<TrustTransaction[]>([]);
+  const [reconciliations, setReconciliations] = useState<TrustReconciliation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const clientLedgers: ClientTrustLedger[] = [
-    {
-      id: '1',
-      clientId: 'C-001',
-      clientName: 'Acme Corporation',
-      matterId: 'M-2024-001',
-      matterDescription: 'Corporate Acquisition',
-      balance: 125000.00,
-      lastActivity: '2024-01-02',
-      status: 'active',
-    },
-    {
-      id: '2',
-      clientId: 'C-002',
-      clientName: 'TechStart LLC',
-      matterId: 'M-2024-045',
-      matterDescription: 'Patent Litigation',
-      balance: 78500.00,
-      lastActivity: '2023-12-28',
-      status: 'active',
-    },
-    {
-      id: '3',
-      clientId: 'C-003',
-      clientName: 'GlobalTrade Inc',
-      matterId: 'M-2024-112',
-      matterDescription: 'International Contract Dispute',
-      balance: 0.00,
-      lastActivity: '2023-12-15',
-      status: 'depleted',
-    },
-  ];
+  // Local state for client ledgers and compliance (not yet in API)
+  const [clientLedgers, setClientLedgers] = useState<ClientTrustLedger[]>([]);
+  const [complianceAlerts, setComplianceAlerts] = useState<ComplianceAlert[]>([]);
 
-  const transactions: TrustTransaction[] = [
-    {
-      id: '1',
-      date: '2024-01-02',
-      type: 'deposit',
-      clientName: 'Acme Corporation',
-      matterDescription: 'Corporate Acquisition',
-      amount: 50000.00,
-      balance: 125000.00,
-      description: 'Initial retainer deposit',
-      checkNumber: '1234',
-      reference: 'Wire Transfer',
-    },
-    {
-      id: '2',
-      date: '2024-01-02',
-      type: 'withdrawal',
-      clientName: 'TechStart LLC',
-      matterDescription: 'Patent Litigation',
-      amount: -12500.00,
-      balance: 78500.00,
-      description: 'Legal fees - December 2023',
-      checkNumber: '5678',
-    },
-  ];
+  // Fetch trust accounts on mount
+  useEffect(() => {
+    const fetchTrustData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const accounts = await billingApiService.getTrustAccounts();
+        setTrustAccounts(accounts);
 
-  const reconciliations: ThreeWayReconciliation[] = [
-    {
-      id: '1',
-      date: '2024-01-01',
-      status: 'completed',
-      bankStatementBalance: 2567890.50,
-      mainLedgerBalance: 2567890.50,
-      clientLedgersTotalBalance: 2567890.50,
-      difference: 0.00,
-      outstandingChecks: 0,
-      depositsInTransit: 0,
-      reconciledBy: 'Sarah Johnson',
-      notes: 'All balances match - no discrepancies',
-    },
-    {
-      id: '2',
-      date: '2023-12-01',
-      status: 'completed',
-      bankStatementBalance: 2456780.00,
-      mainLedgerBalance: 2456780.00,
-      clientLedgersTotalBalance: 2456780.00,
-      difference: 0.00,
-      outstandingChecks: 1,
-      depositsInTransit: 0,
-      reconciledBy: 'Michael Chen',
-    },
-  ];
+        // If we have accounts and a selected account, fetch transactions and reconciliations
+        if (accounts.length > 0) {
+          const accountId = selectedAccount || accounts[0].id;
+          if (!selectedAccount) {
+            setSelectedAccount(accountId);
+          }
 
-  const complianceAlerts: ComplianceAlert[] = [
-    {
-      id: '1',
-      severity: 'critical',
-      type: 'Negative Balance',
-      message: 'Client ledger balance cannot be negative',
-      clientName: 'Smith Family Trust',
-      date: '2024-01-03',
-      resolved: false,
-    },
-    {
-      id: '2',
-      severity: 'warning',
-      type: 'Reconciliation Overdue',
-      message: 'Monthly reconciliation is overdue by 5 days',
-      date: '2024-01-03',
-      resolved: false,
-    },
-    {
-      id: '3',
-      severity: 'info',
-      type: 'Low Balance Alert',
-      message: 'Client trust balance below minimum threshold',
-      clientName: 'Johnson LLC',
-      date: '2024-01-02',
-      resolved: true,
-    },
-  ];
+          const [txns, recs] = await Promise.all([
+            billingApiService.getTrustTransactions(accountId),
+            billingApiService.getTrustReconciliations(accountId)
+          ]);
+          setTransactions(txns);
+          setReconciliations(recs);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load trust accounting data');
+        console.error('Error fetching trust data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTrustData();
+  }, []);
+
+  // Fetch transactions when selected account changes
+  useEffect(() => {
+    if (!selectedAccount) return;
+
+    const fetchAccountData = async () => {
+      try {
+        const [txns, recs] = await Promise.all([
+          billingApiService.getTrustTransactions(selectedAccount),
+          billingApiService.getTrustReconciliations(selectedAccount)
+        ]);
+        setTransactions(txns);
+        setReconciliations(recs);
+      } catch (err) {
+        console.error('Error fetching account data:', err);
+      }
+    };
+
+    fetchAccountData();
+  }, [selectedAccount]);
 
   const totalTrustBalance = trustAccounts.reduce((sum, acc) => sum + acc.balance, 0);
   const totalClientLedgers = clientLedgers.reduce((sum, ledger) => sum + ledger.balance, 0);
   const reconciliationMatch = Math.abs(totalTrustBalance - totalClientLedgers) < 0.01;
+
+  const handleAddAccount = () => {
+    // TODO: Open add account modal
+    console.log('Add account clicked');
+  };
+
+  const handleAddTransaction = () => {
+    // TODO: Open add transaction modal
+    console.log('Add transaction clicked');
+  };
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {

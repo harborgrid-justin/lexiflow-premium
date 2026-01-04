@@ -66,12 +66,32 @@ export async function action({ params, request }: Route.ActionArgs) {
 
   try {
     switch (intent) {
-      case "update":
-        // TODO: Implement update logic
-        return { success: true };
-      case "delete":
-        // TODO: Implement delete logic
-        return { success: true };
+      case "update": {
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const status = formData.get("status") as string;
+        const location = formData.get("location") as string;
+
+        const updates: Partial<EvidenceItem> = {
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (title) updates.title = title;
+        if (description) updates.description = description;
+        if (status) updates.status = status;
+        if (location) updates.location = location;
+
+        await DataService.evidence.update(evidenceId, updates);
+        return { success: true, message: "Evidence updated successfully" };
+      }
+      case "delete": {
+        await DataService.evidence.delete(evidenceId);
+        return {
+          success: true,
+          message: "Evidence deleted successfully",
+          redirect: "/evidence"
+        };
+      }
       default:
         return { success: false, error: "Invalid action" };
     }

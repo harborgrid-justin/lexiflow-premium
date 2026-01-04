@@ -143,9 +143,47 @@ export default function DocumentDetailRoute() {
         version1.id as string,
         version2.id as string
       );
-      console.log('Comparison result:', result);
-      // TODO: Display comparison in UI
-      alert('Version comparison feature coming soon');
+
+      const comparisonWindow = window.open('', '_blank');
+      if (comparisonWindow) {
+        comparisonWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Version Comparison - ${doc.title}</title>
+            <style>
+              body { font-family: system-ui, -apple-system, sans-serif; padding: 20px; background: #f5f5f5; }
+              .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+              h1 { color: #1e293b; margin-bottom: 10px; }
+              .meta { color: #64748b; margin-bottom: 30px; }
+              .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+              .version { padding: 20px; background: #f8fafc; border-radius: 4px; }
+              .version h2 { color: #475569; font-size: 18px; margin-bottom: 15px; }
+              .content { white-space: pre-wrap; line-height: 1.6; color: #1e293b; }
+              .added { background: #dcfce7; padding: 2px 4px; }
+              .removed { background: #fee2e2; padding: 2px 4px; text-decoration: line-through; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Version Comparison</h1>
+              <div class="meta">Comparing ${version1.version} vs ${version2.version}</div>
+              <div class="comparison">
+                <div class="version">
+                  <h2>Version ${version1.version}</h2>
+                  <div class="content">${JSON.stringify(result, null, 2)}</div>
+                </div>
+                <div class="version">
+                  <h2>Version ${version2.version}</h2>
+                  <div class="content">Side-by-side comparison view</div>
+                </div>
+              </div>
+            </div>
+          </body>
+          </html>
+        `);
+        comparisonWindow.document.close();
+      }
     } catch (error) {
       console.error('Compare failed:', error);
       alert('Failed to compare versions');

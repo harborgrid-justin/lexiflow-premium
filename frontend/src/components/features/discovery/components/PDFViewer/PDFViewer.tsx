@@ -57,9 +57,14 @@ interface PDFRenderTask {
   cancel(): void;
 }
 
+interface PDFRenderParams {
+  canvasContext: CanvasRenderingContext2D;
+  viewport: PDFPageViewport;
+}
+
 interface PDFPageProxy {
   getViewport(params: { scale: number; rotation?: number }): PDFPageViewport;
-  render(params: any): PDFRenderTask;
+  render(params: PDFRenderParams): PDFRenderTask;
 }
 
 interface PDFDocumentProxy {

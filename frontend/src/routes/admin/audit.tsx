@@ -210,15 +210,16 @@ interface Pagination {
   totalPages: number;
 }
 
-interface AuditFilters {
-  action?: string;
-  entityType?: string;
-  userId?: string;
-  startDate?: string;
-  endDate?: string;
+interface LoaderData {
+  logs: AuditLogEntry[];
+  pagination: Pagination & { totalItems: number };
+  filters: {
+    actions: string[];
+    resourceTypes: string[];
+  };
 }
 
-export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: AuditLogEntry[]; pagination: Pagination; filters: AuditFilters } }) {
+export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData }) {
   const { logs, pagination, filters } = loaderData;
   const formId = useId();
 
@@ -226,8 +227,35 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: Aud
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleExport = () => {
-    // TODO: Implement CSV export
-    console.log('Exporting audit logs...');
+    try {
+      const headers = ['Timestamp', 'User', 'Action', 'Resource Type', 'Resource Name', 'IP Address', 'Severity'];
+      const csvRows = [
+        headers.join(','),
+        ...logs.map(log => [
+          new Date(log.timestamp).toLocaleString(),
+          log.userEmail,
+          log.action,
+          log.resourceType,
+          log.resourceName,
+          log.ipAddress,
+          log.severity
+        ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
+      ];
+
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to export audit logs:', error);
+      alert('Failed to export audit logs. Please try again.');
+    }
   };
 
   return (
@@ -285,7 +313,7 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: Aud
             className="rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           >
             <option value="all">All Actions</option>
-            {(filters as any).actions?.map((action: string) => (
+            {filters.actions.map((action: string) => (
               <option key={action} value={action}>{action}</option>
             ))}
           </select>
@@ -364,7 +392,7 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: { logs: Aud
       {/* Pagination */}
       <div className="mt-6 flex items-center justify-between">
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Showing page {pagination.page} of {pagination.totalPages} ({(pagination as any).totalItems} total entries)
+          Showing page {pagination.page} of {pagination.totalPages} ({pagination.totalItems} total entries)
         </p>
         <div className="flex gap-2">
           <button

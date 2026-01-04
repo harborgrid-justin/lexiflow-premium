@@ -57,7 +57,7 @@ export const DocketAnalytics: React.FC = () => {
     if (safeEntries.length === 0) return 'empty';
     const lastEntry = safeEntries[safeEntries.length - 1];
     return `${safeEntries.length}-${lastEntry?.id || ''}`;
-  }, [entries]);
+  }, [entries, safeEntries]);
 
   // Aggregate Filing Activity with incremental update logic for large datasets
   const filingActivity = useMemo(() => {

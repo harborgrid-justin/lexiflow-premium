@@ -180,7 +180,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
               <select
                 className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 value={task.projectId}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({ ...task, projectId: e.target.value as any })}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({ ...task, projectId: e.target.value || undefined })}
                 aria-label="Link to Project"
               >
                 <option value="">-- No Project --</option>

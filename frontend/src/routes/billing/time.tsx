@@ -15,10 +15,6 @@ interface ActionData {
   message?: string;
 }
 
-interface TimeEntriesRouteProps {
-  actionData?: ActionData;
-}
-
 // ============================================================================
 // Meta Tags
 // ============================================================================

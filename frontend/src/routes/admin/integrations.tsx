@@ -10,6 +10,7 @@
  * @module routes/admin/integrations
  */
 
+import { DataService } from '@/services/data/dataService';
 import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -129,17 +130,73 @@ export async function action({ request }: ActionFunctionArgs) {
   const integrationId = formData.get("integrationId");
 
   switch (intent) {
-    case "connect":
-      // TODO: Initiate OAuth flow or API key configuration
-      return { success: true, message: `Connecting to ${integrationId}...` };
+    case "connect": {
+      const provider = formData.get("provider") as string;
+      const apiKey = formData.get("apiKey") as string;
 
-    case "disconnect":
-      // TODO: Revoke tokens and remove integration
-      return { success: true, message: `Disconnected from ${integrationId}` };
+      if (!integrationId) {
+        return { success: false, error: "Integration ID is required" };
+      }
 
-    case "sync":
-      // TODO: Trigger manual sync for integration
-      return { success: true, message: `Syncing ${integrationId}...` };
+      try {
+        if (apiKey) {
+          await DataService.admin.integrations.connect(integrationId as string, {
+            type: 'api_key',
+            credentials: { apiKey },
+            provider: provider || integrationId as string,
+            status: 'connected',
+            connectedAt: new Date().toISOString(),
+          });
+          return { success: true, message: `Connected to ${integrationId} successfully` };
+        } else {
+          const oauthUrl = `/api/integrations/${integrationId}/oauth/authorize`;
+          return {
+            success: true,
+            message: `Initiating OAuth flow for ${integrationId}`,
+            redirect: oauthUrl
+          };
+        }
+      } catch (error) {
+        console.error(`Failed to connect to ${integrationId}:`, error);
+        return { success: false, error: `Failed to connect to ${integrationId}` };
+      }
+    }
+
+    case "disconnect": {
+      if (!integrationId) {
+        return { success: false, error: "Integration ID is required" };
+      }
+
+      try {
+        await DataService.admin.integrations.disconnect(integrationId as string);
+        return { success: true, message: `Disconnected from ${integrationId} successfully` };
+      } catch (error) {
+        console.error(`Failed to disconnect from ${integrationId}:`, error);
+        return { success: false, error: `Failed to disconnect from ${integrationId}` };
+      }
+    }
+
+    case "sync": {
+      if (!integrationId) {
+        return { success: false, error: "Integration ID is required" };
+      }
+
+      try {
+        const result = await DataService.admin.integrations.sync(integrationId as string, {
+          fullSync: formData.get("fullSync") === "true",
+          since: formData.get("since") as string || undefined,
+        });
+
+        return {
+          success: true,
+          message: `Synced ${result.itemsSynced || 0} items from ${integrationId}`,
+          data: result
+        };
+      } catch (error) {
+        console.error(`Failed to sync ${integrationId}:`, error);
+        return { success: false, error: `Failed to sync ${integrationId}` };
+      }
+    }
 
     default:
       return { success: false, error: "Invalid action" };

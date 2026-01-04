@@ -97,7 +97,7 @@ export function useTrustAccounts(
     error: queryError,
     refetch: originalRefetch,
   } = useQuery<TrustAccount[]>(
-    trustKeys.list(filters) as any,
+    trustKeys.list(filters) as readonly [string, string, TrustAccountFilters?],
     () => trustAccountsApi.getAll(filters),
     {
       staleTime: 30000, // 30 seconds - balance data should be relatively fresh

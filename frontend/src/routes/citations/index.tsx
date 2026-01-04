@@ -48,9 +48,34 @@ export async function action({ request }: ActionFunctionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "create":
-      // TODO: Implement create via DataService.citations.add()
-      return { success: true, message: "Citation created" };
+    case "create": {
+      const citation = formData.get("citation") as string;
+      const court = formData.get("court") as string;
+      const year = parseInt(formData.get("year") as string, 10);
+      const title = formData.get("title") as string || undefined;
+      const caseId = formData.get("caseId") as string || undefined;
+
+      if (!citation || !court || !year) {
+        return { success: false, error: "Citation text, court, and year are required" };
+      }
+
+      try {
+        await DataService.citations.add({
+          citation,
+          court,
+          year,
+          title,
+          caseId,
+          status: "Valid",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+        return { success: true, message: "Citation created successfully" };
+      } catch (error) {
+        console.error("Failed to create citation:", error);
+        return { success: false, error: "Failed to create citation" };
+      }
+    }
     case "delete": {
       const id = formData.get("id") as string;
       if (id) {
@@ -59,9 +84,35 @@ export async function action({ request }: ActionFunctionArgs) {
       }
       return { success: false, error: "Missing citation ID" };
     }
-    case "validate":
-      // TODO: Implement validation via DataService.citations.validate() if available
-      return { success: true, message: "Citation validated" };
+    case "validate": {
+      const id = formData.get("id") as string;
+      const citation = formData.get("citation") as string;
+
+      if (!citation) {
+        return { success: false, error: "Citation text required for validation" };
+      }
+
+      try {
+        const bluebookPattern = /^(\d+)\s+([A-Z][a-z]+\.?)\s+(\d+)(,\s+(\d+))?\s+\((\d{4})\)$/;
+        const isValidFormat = bluebookPattern.test(citation);
+
+        if (id && isValidFormat) {
+          await DataService.citations.update(id, {
+            status: "Valid",
+            updatedAt: new Date().toISOString()
+          });
+        }
+
+        return {
+          success: true,
+          message: isValidFormat ? "Citation is Bluebook compliant" : "Citation format needs review",
+          isValid: isValidFormat
+        };
+      } catch (error) {
+        console.error("Failed to validate citation:", error);
+        return { success: false, error: "Validation failed" };
+      }
+    }
     default:
       return { success: false, error: "Invalid action" };
   }

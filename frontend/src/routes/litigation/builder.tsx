@@ -63,7 +63,9 @@ export function meta() {
 
 export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
-  const _templateId = url.searchParams.get('template');
+  const templateId = url.searchParams.get('template');
+  // Note: templateId could be used for future pre-selection logic
+  void templateId; // Explicitly mark as intentionally unused for now
 
   // Fetch cases for selection
   const cases = await DataService.cases.getAll();

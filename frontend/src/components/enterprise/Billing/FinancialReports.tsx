@@ -4,80 +4,25 @@
  */
 
 import {
+  type MatterProfitability,
+  type ProfitabilityMetrics,
+  type RealizationMetrics,
+  type RevenueForecasting,
+  type TimekeeperPerformance,
+  type WorkInProgressMetrics
+} from '@/services/api/billing.service';
+import {
   Activity,
   BarChart3,
   DollarSign,
   Download,
   Filter,
   PieChart,
+  Plus,
   TrendingDown,
-  TrendingUp,
+  TrendingUp
 } from 'lucide-react';
-import React, { useState } from 'react';
-
-// Types
-interface ProfitabilityMetrics {
-  grossRevenue: number;
-  grossProfit: number;
-  grossMargin: number;
-  operatingExpenses: number;
-  netProfit: number;
-  netMargin: number;
-  ebitda: number;
-}
-
-interface RealizationMetrics {
-  standardBillingRate: number;
-  actualBillingRate: number;
-  billingRealization: number;
-  standardCollectionAmount: number;
-  actualCollectionAmount: number;
-  collectionRealization: number;
-  overallRealization: number;
-}
-
-interface WorkInProgressMetrics {
-  totalWIP: number;
-  unbilledTime: number;
-  unbilledExpenses: number;
-  billedNotCollected: number;
-  averageAgeDays: number;
-  writeOffAmount: number;
-  writeOffPercentage: number;
-}
-
-interface RevenueForecasting {
-  month: string;
-  projectedRevenue: number;
-  actualRevenue: number;
-  variance: number;
-  variancePercent: number;
-}
-
-interface TimekeeperPerformance {
-  id: string;
-  name: string;
-  level: string;
-  billableHours: number;
-  targetHours: number;
-  utilizationRate: number;
-  billingRate: number;
-  revenue: number;
-  realization: number;
-}
-
-interface MatterProfitability {
-  id: string;
-  matterNumber: string;
-  matterDescription: string;
-  client: string;
-  totalFees: number;
-  totalCosts: number;
-  profit: number;
-  profitMargin: number;
-  hoursWorked: number;
-  realizationRate: number;
-}
+import React, { useEffect, useState } from 'react';
 
 interface FinancialReportsProps {
   firmId?: string;
@@ -85,115 +30,84 @@ interface FinancialReportsProps {
   onExport?: (reportType: string, format: 'pdf' | 'excel' | 'csv') => void;
 }
 
+// Empty state component
+const EmptyState: React.FC<{ message: string; onAdd?: () => void; addLabel?: string }> = ({ message, onAdd, addLabel }) => (
+  <div className="flex flex-col items-center justify-center py-12 text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+    <BarChart3 className="w-12 h-12 mb-3 opacity-50" />
+    <p className="text-sm mb-3">{message}</p>
+    {onAdd && (
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+      >
+        <Plus className="w-4 h-4" />
+        {addLabel || 'Add Data'}
+      </button>
+    )}
+  </div>
+);
+
 export const FinancialReports: React.FC<FinancialReportsProps> = ({
+  dateRange,
   onExport,
 }) => {
   const [selectedTab, setSelectedTab] = useState<'profitability' | 'realization' | 'wip' | 'forecasting' | 'performance'>('profitability');
   const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
   const [showFilters, setShowFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data
-  const profitability: ProfitabilityMetrics = {
-    grossRevenue: 4567890.00,
-    grossProfit: 3234560.00,
-    grossMargin: 70.8,
-    operatingExpenses: 1876540.00,
-    netProfit: 1358020.00,
-    netMargin: 29.7,
-    ebitda: 1567890.00,
-  };
+  // State for API data
+  const [profitability, setProfitability] = useState<ProfitabilityMetrics | null>(null);
+  const [realization, setRealization] = useState<RealizationMetrics | null>(null);
+  const [wipMetrics, setWipMetrics] = useState<WorkInProgressMetrics | null>(null);
+  const [revenueForecast, setRevenueForecast] = useState<RevenueForecasting[]>([]);
+  const [timekeeperPerformance, setTimekeeperPerformance] = useState<TimekeeperPerformance[]>([]);
+  const [matterProfitability, setMatterProfitability] = useState<MatterProfitability[]>([]);
 
-  const realization: RealizationMetrics = {
-    standardBillingRate: 5234000.00,
-    actualBillingRate: 4892300.00,
-    billingRealization: 93.5,
-    standardCollectionAmount: 4892300.00,
-    actualCollectionAmount: 4567890.00,
-    collectionRealization: 93.4,
-    overallRealization: 87.3,
-  };
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-  const wipMetrics: WorkInProgressMetrics = {
-    totalWIP: 2345670.00,
-    unbilledTime: 1456780.00,
-    unbilledExpenses: 456890.00,
-    billedNotCollected: 432000.00,
-    averageAgeDays: 47,
-    writeOffAmount: 45600.00,
-    writeOffPercentage: 1.9,
-  };
+        const filters = dateRange
+          ? { startDate: dateRange.start, endDate: dateRange.end }
+          : undefined;
 
-  const revenueForecast: RevenueForecasting[] = [
-    { month: 'Jan 2024', projectedRevenue: 380000, actualRevenue: 392450, variance: 12450, variancePercent: 3.3 },
-    { month: 'Feb 2024', projectedRevenue: 375000, actualRevenue: 368900, variance: -6100, variancePercent: -1.6 },
-    { month: 'Mar 2024', projectedRevenue: 390000, actualRevenue: 405680, variance: 15680, variancePercent: 4.0 },
-    { month: 'Apr 2024', projectedRevenue: 385000, actualRevenue: 378450, variance: -6550, variancePercent: -1.7 },
-    { month: 'May 2024', projectedRevenue: 395000, actualRevenue: 412300, variance: 17300, variancePercent: 4.4 },
-    { month: 'Jun 2024', projectedRevenue: 400000, actualRevenue: 0, variance: 0, variancePercent: 0 },
-  ];
+        const [
+          profitabilityData,
+          realizationData,
+          wipData,
+          forecastData,
+          performanceData,
+          matterData,
+        ] = await Promise.all([
+          billingApiService.getProfitabilityMetrics(filters),
+          billingApiService.getRealizationMetrics(filters),
+          billingApiService.getWIPMetrics(filters),
+          billingApiService.getRevenueForecast(filters),
+          billingApiService.getTimekeeperPerformance(filters),
+          billingApiService.getMatterProfitability(filters),
+        ]);
 
-  const timekeeperPerformance: TimekeeperPerformance[] = [
-    {
-      id: '1',
-      name: 'Sarah Johnson',
-      level: 'Partner',
-      billableHours: 1456,
-      targetHours: 1600,
-      utilizationRate: 91.0,
-      billingRate: 650.00,
-      revenue: 946400,
-      realization: 94.5,
-    },
-    {
-      id: '2',
-      name: 'Michael Chen',
-      level: 'Senior Associate',
-      billableHours: 1678,
-      targetHours: 1800,
-      utilizationRate: 93.2,
-      billingRate: 475.00,
-      revenue: 797050,
-      realization: 92.8,
-    },
-    {
-      id: '3',
-      name: 'Emily Rodriguez',
-      level: 'Associate',
-      billableHours: 1789,
-      targetHours: 1900,
-      utilizationRate: 94.2,
-      billingRate: 350.00,
-      revenue: 626150,
-      realization: 91.2,
-    },
-  ];
+        setProfitability(profitabilityData);
+        setRealization(realizationData);
+        setWipMetrics(wipData);
+        setRevenueForecast(forecastData);
+        setTimekeeperPerformance(performanceData);
+        setMatterProfitability(matterData);
+      } catch (err) {
+        console.error('Failed to fetch financial reports:', err);
+        setError('Failed to load financial data. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const matterProfitability: MatterProfitability[] = [
-    {
-      id: '1',
-      matterNumber: 'M-2024-001',
-      matterDescription: 'Corporate Acquisition - Acme Corp',
-      client: 'Acme Corporation',
-      totalFees: 345600,
-      totalCosts: 78900,
-      profit: 266700,
-      profitMargin: 77.2,
-      hoursWorked: 532,
-      realizationRate: 95.3,
-    },
-    {
-      id: '2',
-      matterNumber: 'M-2024-045',
-      matterDescription: 'Patent Litigation',
-      client: 'TechStart LLC',
-      totalFees: 278900,
-      totalCosts: 89600,
-      profit: 189300,
-      profitMargin: 67.9,
-      hoursWorked: 587,
-      realizationRate: 89.4,
-    },
-  ];
+    fetchData();
+  }, [dateRange]);
 
   const getPerformanceColor = (value: number, threshold: number = 90) => {
     if (value >= threshold) return 'text-green-600 dark:text-green-400';

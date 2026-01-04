@@ -132,7 +132,7 @@ const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
       icon: Briefcase,
       format: 'number',
       color: 'blue',
-      target: 50, // TODO: Fetch target from settings
+      target: data.activeCases.target,
     },
     {
       id: 'total-revenue',
@@ -167,7 +167,7 @@ const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
       icon: Target,
       format: 'percentage',
       color: 'orange',
-      target: 90, // TODO: Fetch target from settings
+      target: data.collectionRate.target,
     },
   ];
 };

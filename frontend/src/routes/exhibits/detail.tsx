@@ -65,12 +65,32 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
   try {
     switch (intent) {
-      case "update":
-        // TODO: Implement update logic
-        return { success: true };
-      case "delete":
-        // TODO: Implement delete logic
-        return { success: true };
+      case "update": {
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const exhibitNumber = formData.get("exhibitNumber") as string;
+        const status = formData.get("status") as string;
+
+        const updates: Partial<TrialExhibit> = {
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (title) updates.title = title;
+        if (description) updates.description = description;
+        if (exhibitNumber) updates.exhibitNumber = exhibitNumber;
+        if (status) updates.status = status;
+
+        await DataService.trial.exhibits.update(exhibitId, updates);
+        return { success: true, message: "Exhibit updated successfully" };
+      }
+      case "delete": {
+        await DataService.trial.exhibits.delete(exhibitId);
+        return {
+          success: true,
+          message: "Exhibit deleted successfully",
+          redirect: "/exhibits"
+        };
+      }
       default:
         return { success: false, error: "Invalid action" };
     }

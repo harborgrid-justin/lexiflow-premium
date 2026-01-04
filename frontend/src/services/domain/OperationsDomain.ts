@@ -51,7 +51,7 @@ export const OperationsService = {
 
   getReplicationStatus: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<any>("/operations/replication-status");
+      return apiClient.get<ReplicationStatus>("/operations/replication-status");
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return {

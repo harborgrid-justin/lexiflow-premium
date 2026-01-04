@@ -341,31 +341,31 @@ export class CollaborationService extends EventEmitter {
   private handleMessage(message: WSMessage): void {
     switch (message.type) {
       case "presence-update":
-        this.handlePresenceUpdate(message.payload as any);
+        this.handlePresenceUpdate(message.payload as UserPresence);
         break;
 
       case "cursor-move":
-        this.handleCursorMove(message.payload as any);
+        this.handleCursorMove(message.payload as CursorPosition);
         break;
 
       case "edit-operation":
-        this.handleEditOperation(message.payload as any);
+        this.handleEditOperation(message.payload as CollaborativeEdit);
         break;
 
       case "lock-request":
-        this.handleLockRequest(message.payload as any);
+        this.handleLockRequest(message.payload as DocumentLock);
         break;
 
       case "lock-release":
-        this.handleLockRelease(message.payload as any);
+        this.handleLockRelease(message.payload as { documentId: string });
         break;
 
       case "user-joined":
-        this.handleUserJoined(message.payload as any);
+        this.handleUserJoined(message.payload as UserPresence);
         break;
 
       case "user-left":
-        this.handleUserLeft(message.payload as any);
+        this.handleUserLeft(message.payload as { userId: string });
         break;
     }
   }

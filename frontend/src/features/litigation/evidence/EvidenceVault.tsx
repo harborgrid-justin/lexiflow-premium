@@ -26,7 +26,7 @@ import { EvidenceVaultContent } from './EvidenceVaultContent';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
+import { DetailTab, useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/utils/cn';
 

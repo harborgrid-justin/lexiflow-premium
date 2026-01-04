@@ -1,5 +1,5 @@
-import { Card } from '@/components/ui/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
@@ -50,7 +50,7 @@ export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
                         <TableHead className="text-right">Balance</TableHead>
                     </TableHeader>
                     <TableBody>
-                        {trustAccounts.map((c) => (
+                        {trustAccounts.map((c, i) => (
                             <TableRow key={c.matterId || `trust-account-${i}`}>
                                 <TableCell className={cn("font-bold", theme.text.primary)}>{c.client}</TableCell>
                                 <TableCell>

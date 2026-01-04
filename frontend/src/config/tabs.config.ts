@@ -673,3 +673,12 @@ export const RULES_PLATFORM_TABS: TabConfigItem[] = [
     ],
   },
 ];
+
+export type RulesView =
+  | "dashboard"
+  | "federal_evidence"
+  | "federal_civil"
+  | "local"
+  | "standing_orders"
+  | "search"
+  | "compare";

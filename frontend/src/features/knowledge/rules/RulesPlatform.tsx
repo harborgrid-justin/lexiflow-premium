@@ -50,13 +50,13 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
   }, [initialTab]);
 
   const activeParentTab = useMemo(() =>
-    RULES_PLATFORM_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || RULES_PLATFORM_TABS[0],
+    RULES_PLATFORM_TABS.find(p => p.subTabs?.some(s => s.id === activeTab)) || RULES_PLATFORM_TABS[0],
     [activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = RULES_PLATFORM_TABS.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id as RulesView);
+    if (parent && parent.subTabs && parent.subTabs.length > 0) {
+      setActiveTab(parent.subTabs![0].id as RulesView);
     }
   }, []);
 
@@ -82,19 +82,19 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
               onClick={() => handleParentTabChange(parent.id)}
               className={cn(
                 "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                activeParentTab.id === parent.id
+                activeParentTab?.id === parent.id
                   ? cn("border-current", theme.primary.text)
                   : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
-              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
+              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab?.id === parent.id ? theme.primary.text : theme.text.tertiary)} />
               {parent.label}
             </button>
           ))}
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        {activeParentTab.subTabs.length > 1 && (
+        {activeParentTab?.subTabs && activeParentTab.subTabs.length > 1 && (
           <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
               <button

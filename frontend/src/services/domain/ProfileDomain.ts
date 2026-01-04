@@ -1,4 +1,6 @@
-import { api, authApi, isBackendApiEnabled } from "@/api";
+import { authApi, isBackendApiEnabled } from "@/api";
+import { AuditLog } from "@/api/admin/audit-logs-api";
+import { adminApi } from "@/api/domains/admin.api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   ExtendedUserProfile,
@@ -124,8 +126,8 @@ export const ProfileDomain = {
   getAuditLog: async (userId: string) => {
     if (isBackendApiEnabled()) {
       try {
-        const logs = await (api as any).admin.auditLogs.getAll({ userId });
-        return logs.map((log: any) => ({
+        const logs = await adminApi.auditLogs.getAll({ userId });
+        return logs.map((log: AuditLog) => ({
           id: log.id,
           action: log.action,
           timestamp: log.timestamp,

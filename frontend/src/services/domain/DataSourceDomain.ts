@@ -4,7 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { api, isBackendApiEnabled } from "@/api";
+import { isBackendApiEnabled } from "@/api";
+import { dataPlatformApi } from "@/api/domains/data-platform.api";
 import { db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
@@ -147,9 +148,7 @@ export const DataSourceService = {
   testConnection: async (sourceId: string): Promise<ConnectionStatus> => {
     if (isBackendApiEnabled()) {
       try {
-        const result = await (api as any).dataPlatform.dataSources.test(
-          sourceId
-        );
+        const result = await dataPlatformApi.dataSources.test(sourceId);
         return {
           connected: result.success,
           latency: 0,

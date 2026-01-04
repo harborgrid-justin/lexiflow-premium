@@ -1,6 +1,15 @@
 import { api } from '@/api';
 import { useToast } from '@/contexts/toast/ToastContext';
-import { ClauseReference, draftingApi, DraftingTemplate, TemplateCategory, TemplateVariable } from '@api/domains/drafting.api';
+import {
+  ClauseReference,
+  CreateTemplateDto,
+  draftingApi,
+  DraftingTemplate,
+  TemplateCategory,
+  TemplateStatus,
+  TemplateVariable,
+  UpdateTemplateDto
+} from '@api/domains/drafting.api';
 import { Code, Eye, FileText, Save, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -63,7 +72,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
   const handleUpdateVariable = (index: number, updates: Partial<TemplateVariable>) => {
     const updated = [...variables];
-    updated[index] = { ...updated[index], ...updates };
+    updated[index] = { ...updated[index], ...updates } as TemplateVariable;
     setVariables(updated);
   };
 
@@ -84,7 +93,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
   const handleUpdateClauseRef = (index: number, updates: Partial<ClauseReference>) => {
     const updated = [...clauseRefs];
-    updated[index] = { ...updated[index], ...updates };
+    updated[index] = { ...updated[index], ...updates } as ClauseReference;
     setClauseRefs(updated);
   };
 
@@ -363,7 +372,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <div className="flex items-center space-x-2">
                       <select
                         value={variable.type}
-                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as string })}
+                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as TemplateVariable['type'] })}
                         className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                       >
                         <option value="text">Text</option>

@@ -4,19 +4,20 @@
  * Manage data collection from custodians and sources
  */
 
-import React, { useState } from 'react';
-import { Plus, Download, Pause, Play, AlertTriangle, CheckCircle, Clock, Database } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
-import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
 import type { DataCollection } from '@/types/discovery-enhanced';
+import { CaseId } from '@/types/primitives';
+import { cn } from '@/utils/cn';
+import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const Collections: React.FC = () => {
   const { theme } = useTheme();
@@ -27,7 +28,7 @@ export const Collections: React.FC = () => {
   const [collections, setCollections] = useState<DataCollection[]>([
     {
       id: 'COL-001',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       collectionName: 'Executive Email Collection',
       custodians: ['John Doe', 'Jane Smith'],
       dataSources: ['Exchange Server', 'Gmail'],
@@ -48,7 +49,7 @@ export const Collections: React.FC = () => {
     },
     {
       id: 'COL-002',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       collectionName: 'SharePoint Document Collection',
       custodians: ['Legal Team'],
       dataSources: ['SharePoint Site A', 'SharePoint Site B'],
@@ -67,7 +68,7 @@ export const Collections: React.FC = () => {
     },
     {
       id: 'COL-003',
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       collectionName: 'Laptop Forensic Image',
       custodians: ['Michael Chen'],
       dataSources: ['Dell Laptop #4521'],
@@ -91,7 +92,7 @@ export const Collections: React.FC = () => {
     dataSources: '',
     dateStart: '',
     dateEnd: '',
-    method: 'remote' as const,
+    method: 'remote' as DataCollection['collectionMethod'],
     notes: ''
   });
 
@@ -134,7 +135,7 @@ export const Collections: React.FC = () => {
 
     const newCollection: DataCollection = {
       id: `COL-${String(collections.length + 1).padStart(3, '0')}`,
-      caseId: 'C-2024-001',
+      caseId: 'C-2024-001' as CaseId,
       collectionName: formData.collectionName,
       custodians: formData.custodians.split(',').map(c => c.trim()),
       dataSources: formData.dataSources.split(',').map(s => s.trim()),
@@ -163,7 +164,7 @@ export const Collections: React.FC = () => {
     totalSize: collections.reduce((acc, col) => {
       if (col.actualSize) {
         const sizeMatch = col.actualSize.match(/(\d+.?\d*)\s*(GB|MB|TB)/);
-        if (sizeMatch) {
+        if (sizeMatch && sizeMatch[1]) {
           const value = parseFloat(sizeMatch[1]);
           const unit = sizeMatch[2];
           return acc + (unit === 'GB' ? value : unit === 'TB' ? value * 1024 : value / 1024);
@@ -346,7 +347,7 @@ export const Collections: React.FC = () => {
               title="Select collection method"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.method}
-              onChange={(e) => setFormData({ ...formData, method: e.target.value as 'remote' | 'onsite' | 'forensic' | 'api' })}
+              onChange={(e) => setFormData({ ...formData, method: e.target.value as DataCollection['collectionMethod'] })}
             >
               <option value="remote">Remote Collection</option>
               <option value="onsite">On-Site Collection</option>

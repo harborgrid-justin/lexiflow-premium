@@ -4,53 +4,18 @@
  * Enterprise permission management with granular access control.
  */
 
+import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/permissions';
 
-interface Permission {
-  id: string;
-  resource: string;
-  action: string;
-  description: string;
-  category: string;
-  roleCount: number;
+interface Permission extends PermissionDefinition {
+  roleCount?: number;
 }
 
-const mockPermissions: Permission[] = [
-  // Cases
-  { id: 'cases:create', resource: 'cases', action: 'create', description: 'Create new cases', category: 'Case Management', roleCount: 4 },
-  { id: 'cases:read', resource: 'cases', action: 'read', description: 'View case details', category: 'Case Management', roleCount: 6 },
-  { id: 'cases:update', resource: 'cases', action: 'update', description: 'Update case information', category: 'Case Management', roleCount: 4 },
-  { id: 'cases:delete', resource: 'cases', action: 'delete', description: 'Delete cases', category: 'Case Management', roleCount: 2 },
-
-  // Documents
-  { id: 'documents:create', resource: 'documents', action: 'create', description: 'Upload new documents', category: 'Document Management', roleCount: 5 },
-  { id: 'documents:read', resource: 'documents', action: 'read', description: 'View documents', category: 'Document Management', roleCount: 6 },
-  { id: 'documents:update', resource: 'documents', action: 'update', description: 'Edit document metadata', category: 'Document Management', roleCount: 4 },
-  { id: 'documents:delete', resource: 'documents', action: 'delete', description: 'Delete documents', category: 'Document Management', roleCount: 3 },
-
-  // Billing
-  { id: 'billing:create', resource: 'billing', action: 'create', description: 'Create invoices and time entries', category: 'Billing', roleCount: 3 },
-  { id: 'billing:read', resource: 'billing', action: 'read', description: 'View billing information', category: 'Billing', roleCount: 4 },
-  { id: 'billing:update', resource: 'billing', action: 'update', description: 'Edit billing records', category: 'Billing', roleCount: 3 },
-  { id: 'billing:approve', resource: 'billing', action: 'approve', description: 'Approve time and expenses', category: 'Billing', roleCount: 2 },
-
-  // Discovery
-  { id: 'discovery:create', resource: 'discovery', action: 'create', description: 'Create legal holds and custodians', category: 'Discovery', roleCount: 4 },
-  { id: 'discovery:read', resource: 'discovery', action: 'read', description: 'View discovery materials', category: 'Discovery', roleCount: 5 },
-  { id: 'discovery:update', resource: 'discovery', action: 'update', description: 'Update discovery status', category: 'Discovery', roleCount: 4 },
-  { id: 'discovery:produce', resource: 'discovery', action: 'produce', description: 'Create productions', category: 'Discovery', roleCount: 3 },
-
-  // Admin
-  { id: 'admin:users', resource: 'admin', action: 'users', description: 'Manage user accounts', category: 'Administration', roleCount: 1 },
-  { id: 'admin:roles', resource: 'admin', action: 'roles', description: 'Manage roles and permissions', category: 'Administration', roleCount: 1 },
-  { id: 'admin:settings', resource: 'admin', action: 'settings', description: 'Configure system settings', category: 'Administration', roleCount: 1 },
-  { id: 'admin:audit', resource: 'admin', action: 'audit', description: 'View audit logs', category: 'Administration', roleCount: 2 },
-];
-
 export async function loader(_args: Route.LoaderArgs) {
-  return { permissions: mockPermissions };
+  // TODO: Fetch role counts from backend when available
+  return { permissions: SYSTEM_PERMISSIONS };
 }
 
 export default function AdminPermissionsPage() {
@@ -182,8 +147,12 @@ export default function AdminPermissionsPage() {
                       </span>
                     </div>
                     <div className="flex items-center space-x-4">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {perm.roleCount} roles
+                      <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                        {perm.roleCount !== undefined ? (
+                          `${perm.roleCount} roles`
+                        ) : (
+                          <span className="h-4 w-12 bg-gray-100 dark:bg-gray-800 rounded block" />
+                        )}
                       </span>
                       <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 text-sm">
                         View Roles

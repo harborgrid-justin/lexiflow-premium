@@ -30,7 +30,7 @@ import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
-import { Playbook } from '@/api/types/mockLitigationPlaybooks';
+import { Playbook } from '@/types/playbook';
 import { cn } from '@/utils/cn';
 import { extractCategories, filterPlaybooks, getDifficultyBorderColor, getDifficultyColor } from './utils';
 

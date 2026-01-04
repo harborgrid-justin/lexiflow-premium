@@ -57,6 +57,7 @@
 
 import { isBackendApiEnabled } from "@/api";
 import { workflowApi } from "@/api/domains/workflow.api";
+import { CalendarEvent as ApiCalendarEvent } from "@/api/workflow/calendar-api";
 import { ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { CalendarEventType } from "@/types";
@@ -209,7 +210,7 @@ export const CalendarService = {
   getAll: async (): Promise<CalendarEvent[]> => {
     try {
       const events = await workflowApi.calendar.getAll();
-      return events.map((e: any) => ({
+      return events.map((e: ApiCalendarEvent) => ({
         ...e,
         type: e.eventType as CalendarEvent["type"],
       }));

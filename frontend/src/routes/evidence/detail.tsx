@@ -6,10 +6,12 @@
  * @module routes/evidence/detail
  */
 
-import { useNavigate } from 'react-router';
+import { useNavigate, useLoaderData } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";
+import { DataService } from '@/services/data/dataService';
+import type { EvidenceItem } from '@/types';
 
 // ============================================================================
 // Meta Tags
@@ -35,13 +37,17 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("Evidence ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.evidence.get(evidenceId);
-  // if (!item) {
-  //   throw new Response("Evidence not found", { status: 404 });
-  // }
-
-  return { item: null as { id: string; title: string } | null };
+  try {
+    const item = await DataService.discovery.evidence.getById(evidenceId);
+    if (!item) {
+      throw new Response("Evidence not found", { status: 404 });
+    }
+    return { item };
+  } catch (error) {
+    console.error("Failed to load evidence", error);
+    if (error instanceof Response) throw error;
+    throw new Response("Evidence not found", { status: 404 });
+  }
 }
 
 // ============================================================================
@@ -58,17 +64,89 @@ export async function action({ params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/evidence");
-      return { success: true };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "update":
+        // TODO: Implement update logic
+        return { success: true };
+      case "delete":
+        // TODO: Implement delete logic
+        return { success: true };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
+export default function EvidenceDetailRoute() {
+  const navigate = useNavigate();
+  const { item } = useLoaderData() as { item: EvidenceItem };
+
+  return (
+    <div className="p-8">
+      <div className="mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+      </div>
+
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        Evidence: {item.title}
+      </h1>
+
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Type</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white capitalize">{item.type}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white capitalize">{item.status}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Custodian</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white">{item.custodian}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Location</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white">{item.location}</p>
+          </div>
+          <div className="col-span-1 md:col-span-2">
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Description</h3>
+            <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
+              {item.description || <span className="text-gray-400 italic">No description provided</span>}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+switch (intent) {
+  case "update":
+    // TODO: Implement update
+    return { success: true };
+  case "delete":
+    // TODO: Implement delete
+    // return redirect("/evidence");
+    return { success: true };
+  default:
+    return { success: false, error: "Invalid action" };
+}
 }
 
 // ============================================================================

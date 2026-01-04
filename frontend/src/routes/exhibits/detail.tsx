@@ -6,7 +6,9 @@
  * @module routes/exhibits/detail
  */
 
-import { useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { DataService } from '@/services/data/dataService';
+import type { TrialExhibit } from '@/types';
+import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 
@@ -14,7 +16,7 @@ import { createDetailMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: { data: { item: TrialExhibit } }) {
   return createDetailMeta({
     entityType: 'Exhibit',
     entityName: data?.item?.title ?? 'Unknown Exhibit',
@@ -34,13 +36,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Exhibit ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.exhibits.get(exhibitId);
-  // if (!item) {
-  //   throw new Response("Exhibit not found", { status: 404 });
-  // }
-
-  return { item: null as { id: string; title: string } | null };
+  try {
+    const item = await DataService.trial.exhibits.getById(exhibitId);
+    if (!item) {
+      throw new Response("Exhibit not found", { status: 404 });
+    }
+    return { item };
+  } catch (error) {
+    console.error("Failed to load exhibit", error);
+    if (error instanceof Response) throw error;
+    throw new Response("Exhibit not found", { status: 404 });
+  }
 }
 
 // ============================================================================
@@ -57,16 +63,19 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/exhibits");
-      return { success: true };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "update":
+        // TODO: Implement update logic
+        return { success: true };
+      case "delete":
+        // TODO: Implement delete logic
+        return { success: true };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    return { success: false, error: "Action failed" };
   }
 }
 
@@ -76,6 +85,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
 export default function ExhibitDetailRoute() {
   const navigate = useNavigate();
+  const { item } = useLoaderData() as { item: TrialExhibit };
 
   return (
     <div className="p-8">
@@ -92,13 +102,26 @@ export default function ExhibitDetailRoute() {
       </div>
 
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Exhibit Detail
+        Exhibit {item.exhibitNumber ? `#${item.exhibitNumber}` : ''}: {item.title}
       </h1>
 
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <p className="text-gray-500 dark:text-gray-400">
-          Detail view under development.
-        </p>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white capitalize">{item.status}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Type</h3>
+            <p className="text-lg font-medium text-gray-900 dark:text-white capitalize">{item.type}</p>
+          </div>
+          <div className="col-span-1 md:col-span-2">
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Description</h3>
+            <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
+              {item.description || <span className="text-gray-400 italic">No description provided</span>}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

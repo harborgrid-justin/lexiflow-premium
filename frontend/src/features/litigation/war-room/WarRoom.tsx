@@ -13,7 +13,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import type { WarRoomData } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
 import {
   Briefcase,
   CheckCircle,
@@ -156,7 +156,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // DATA FETCHING
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
-    QUERY_KEYS.CASES.ALL,
+    queryKeys.cases.all,
     async () => {
       const cases = DataService.cases as { getAll: () => Promise<Case[]> };
       return cases.getAll();
@@ -176,7 +176,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
     isError,
     error,
   } = useQuery(
-    QUERY_KEYS.CASES.WAR_ROOM(currentCaseId),
+    queryKeys.warRoom.detail(currentCaseId),
     async () => {
       const warRoomService = DataService.warRoom as { getData: (caseId: string) => Promise<WarRoomData> };
       return warRoomService.getData(currentCaseId);

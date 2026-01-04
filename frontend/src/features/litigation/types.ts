@@ -6,15 +6,25 @@
  * @module components/litigation/types
  */
 
-import { WorkflowNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
-import { Playbook } from '@/api/types/mockLitigationPlaybooks';
+import { Playbook } from "@/types/playbook";
+import {
+  NodeType,
+  WorkflowConnection,
+  WorkflowNode,
+} from "@/types/workflow-types";
 
-export type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';
+export type ZoomLevel = "Quarter" | "Month" | "Week" | "Day";
 
 export interface StrategyCanvasProps {
   nodes: WorkflowNode[];
   connections: WorkflowConnection[];
-  addNode: (type: NodeType, x: number, y: number, label?: string, litType?: string) => string;
+  addNode: (
+    type: NodeType,
+    x: number,
+    y: number,
+    label?: string,
+    litType?: string
+  ) => string;
   updateNode: (id: string, updates: Partial<WorkflowNode>) => void;
   deleteNode: (id: string) => void;
   addConnection: (from: string, to: string, fromPort?: string) => void;
@@ -42,7 +52,10 @@ export interface LitigationPropertiesProps {
   selectedConnection: WorkflowConnection | null;
   onUpdateNode: (id: string, updates: Partial<WorkflowNode>) => void;
   onDeleteNode: (id: string) => void;
-  onUpdateConnection: (id: string, updates: Partial<WorkflowConnection>) => void;
+  onUpdateConnection: (
+    id: string,
+    updates: Partial<WorkflowConnection>
+  ) => void;
   onDeleteConnection: (id: string) => void;
 }
 
@@ -51,7 +64,7 @@ export interface LitigationBuilderProps {
 }
 
 export interface PlaybookLibraryProps {
-    onApply: (playbook: Playbook) => void;
+  onApply: (playbook: Playbook) => void;
 }
 
 export interface PlaybookDetailProps {
@@ -65,15 +78,21 @@ export interface StrategyToolbarProps {
   setScale: (scale: number | ((s: number) => number)) => void;
   onToggleSidebar: () => void;
   onZoomToFit: () => void;
-  onExport: (format: 'svg' | 'markdown') => void;
+  onExport: (format: "svg" | "markdown") => void;
 }
 
 export interface AICommandBarProps {
-  onGenerate: (graph: { nodes: unknown[], connections: unknown[] }) => void;
+  onGenerate: (graph: { nodes: unknown[]; connections: unknown[] }) => void;
 }
 
 export interface MinimapProps {
   nodes: WorkflowNode[];
-  viewport: { x: number; y: number; width: number; height: number; scale: number };
+  viewport: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    scale: number;
+  };
   onPan: (pos: { x: number; y: number }) => void;
 }

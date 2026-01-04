@@ -6,7 +6,6 @@
 
 import { ChartCard, KPICard, StatWidget } from '@/components/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';
@@ -26,7 +25,7 @@ import {
 } from 'recharts';
 
 export const PartnerDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
 
   const { isLoading } = useQuery(
     ['dashboard', 'partner'],
@@ -106,9 +105,9 @@ export const PartnerDashboard: React.FC = () => {
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={mockRevenueData}>
-            <CartesianGrid strokeDasharray="3 3" stroke={theme.mode === 'dark' ? '#374151' : '#e5e7eb'} />
-            <XAxis dataKey="month" stroke={theme.mode === 'dark' ? '#9ca3af' : '#6b7280'} />
-            <YAxis stroke={theme.mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
+            <XAxis dataKey="month" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} name="Actual Revenue" />
@@ -127,9 +126,9 @@ export const PartnerDashboard: React.FC = () => {
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={mockCaseOutcomes}>
-              <CartesianGrid strokeDasharray="3 3" stroke={theme.mode === 'dark' ? '#374151' : '#e5e7eb'} />
-              <XAxis dataKey="outcome" stroke={theme.mode === 'dark' ? '#9ca3af' : '#6b7280'} />
-              <YAxis stroke={theme.mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+              <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
+              <XAxis dataKey="outcome" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+              <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
               <Tooltip />
               <Bar dataKey="count" fill="#8b5cf6" name="Cases" />
             </BarChart>

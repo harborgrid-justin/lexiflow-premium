@@ -21,9 +21,9 @@ import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
@@ -61,7 +61,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   // Set initial judge selection when data loads
   useEffect(() => {
     if (judges.length > 0 && !selectedJudgeId) {
-      setSelectedJudgeId(judges[0].id);
+      setSelectedJudgeId(judges[0]?.id || '');
     }
   }, [judges, selectedJudgeId]);
 
@@ -90,7 +90,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
           {/* Embedded Navigation (Simplified) */}
           <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
             <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-3">
-              {RESEARCH_TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
+              {RESEARCH_TAB_CONFIG.flatMap(g => g.subTabs || []).map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveView(tab.id)}

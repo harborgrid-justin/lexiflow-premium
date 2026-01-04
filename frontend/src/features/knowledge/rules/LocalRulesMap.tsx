@@ -6,7 +6,7 @@ import { cn } from '@/utils/cn';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
 import { Book, Loader2, MapPin } from 'lucide-react';
 import React, { useMemo } from 'react';
-import { CourtLevel, groupJurisdictionsByState, StateGroup } from './localRulesMap.utils';
+import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const LocalRulesMap: React.FC = () => {
@@ -19,7 +19,7 @@ export const LocalRulesMap: React.FC = () => {
     );
 
     // Transform flat list into grouped state structure dynamically
-    const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions as Array<{ state: string }>), [jurisdictions]);
+    const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions as Jurisdiction[]), [jurisdictions]);
 
     return (
         <div className="h-full flex flex-col space-y-6 animate-fade-in">

@@ -234,13 +234,6 @@ export const queryKeys = {
     byCaseId: (caseId: string) => ["risks", "byCaseId", caseId] as const,
   },
 
-  // War Room
-  warRoom: {
-    data: (caseId: string) => ["warRoom", caseId] as const,
-    advisors: (caseId: string) => ["warRoom", "advisors", caseId] as const,
-    opposition: (caseId: string) => ["warRoom", "opposition", caseId] as const,
-  },
-
   // Calendar
   calendar: {
     events: () => ["calendar-events", "events"] as const,

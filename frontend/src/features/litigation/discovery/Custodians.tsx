@@ -97,7 +97,7 @@ export const Custodians: React.FC = () => {
     // Generate ID and timestamps in event handler (not during render) for deterministic rendering
     const now = new Date();
     const newId = `cust-${Date.now()}`;
-    const dateStr = now.toISOString().split('T')[0];
+    const dateStr = now.toISOString().split('T')[0] || '';
     const newCustodian: Custodian = {
       id: newId,
       caseId: 'case-1',

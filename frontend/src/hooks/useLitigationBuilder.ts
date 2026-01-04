@@ -43,11 +43,11 @@ import { useAutoSave } from "./useAutoSave";
 import { useNotify } from "./useNotify";
 
 // Utils & Constants
-import { Playbook } from "@/api/types/mockLitigationPlaybooks";
 import {
   CANVAS_CONSTANTS,
   VALIDATION_MESSAGES,
 } from "@/types/canvas-constants";
+import { Playbook } from "@/types/playbook";
 import {
   LITIGATION_PORTS,
   NodeType,

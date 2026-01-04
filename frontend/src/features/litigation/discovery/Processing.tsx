@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
-import type { CaseId } from '@/types';
+import { CaseId } from '@/types/primitives';
 import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
 import React, { useState } from 'react';

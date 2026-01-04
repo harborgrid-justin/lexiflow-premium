@@ -211,7 +211,8 @@ export default function ClientAnalyticsRoute() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ industry, count }: { industry: string; count: number }) => `${industry} (${count})` as any}
+                nameKey="industry"
+                label={({ name, value }: { name?: string; value: number }) => `${name} (${value})`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="count"

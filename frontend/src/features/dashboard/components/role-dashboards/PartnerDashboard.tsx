@@ -8,9 +8,9 @@ import { ChartCard, KPICard, StatWidget } from '@/components/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
+import { type PartnerDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';
-import { Award, Briefcase, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
+import { Award, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
 import React from 'react';
 import {
   Bar,
@@ -28,9 +28,9 @@ import {
 export const PartnerDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
 
-  const { isLoading } = useQuery(
+  const { data, isLoading } = useQuery<PartnerDashboardData>(
     ['dashboard', 'partner'],
-    () => dashboardMetricsService.getRoleDashboard('partner')
+    () => dashboardMetricsService.getRoleDashboard('partner') as Promise<PartnerDashboardData>
   );
 
   useQuery(
@@ -42,21 +42,21 @@ export const PartnerDashboard: React.FC = () => {
     return <LazyLoader message="Loading partner dashboard..." />;
   }
 
-  const mockRevenueData = [
-    { month: 'Jan', revenue: 450000, target: 500000 },
-    { month: 'Feb', revenue: 520000, target: 500000 },
-    { month: 'Mar', revenue: 485000, target: 500000 },
-    { month: 'Apr', revenue: 550000, target: 500000 },
-    { month: 'May', revenue: 610000, target: 550000 },
-    { month: 'Jun', revenue: 580000, target: 550000 },
-  ];
+  // Fallback data
+  const kpis = data?.kpis || {
+    monthlyRevenue: { value: 0, previousValue: 0, target: 0 },
+    newClients: { value: 0, previousValue: 0 },
+    winRate: { value: 0, previousValue: 0 },
+    clientRetention: { value: 0, previousValue: 0 },
+  };
 
-  const mockCaseOutcomes = [
-    { outcome: 'Won', count: 24 },
-    { outcome: 'Settled', count: 18 },
-    { outcome: 'Ongoing', count: 32 },
-    { outcome: 'Lost', count: 3 },
-  ];
+  const revenueTrends = data?.revenueTrends || [];
+  const caseOutcomes = data?.caseOutcomes || [];
+  const businessMetrics = data?.businessMetrics || {
+    avgCaseValue: { value: 0, change: 0 },
+    cac: { value: 0, change: 0 },
+    nps: { value: 0, change: 0 },
+  };
 
   return (
     <div className="space-y-6">
@@ -64,33 +64,33 @@ export const PartnerDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard
           label="Monthly Revenue"
-          value={580000}
-          previousValue={550000}
-          target={550000}
+          value={kpis.monthlyRevenue.value}
+          previousValue={kpis.monthlyRevenue.previousValue}
+          target={kpis.monthlyRevenue.target}
           icon={DollarSign}
           format="currency"
           color="green"
         />
         <KPICard
           label="New Clients"
-          value={8}
-          previousValue={6}
+          value={kpis.newClients.value}
+          previousValue={kpis.newClients.previousValue}
           icon={Users}
           format="number"
           color="blue"
         />
         <KPICard
           label="Win Rate"
-          value={88.9}
-          previousValue={85.2}
+          value={kpis.winRate.value}
+          previousValue={kpis.winRate.previousValue}
           icon={Award}
           format="percentage"
           color="purple"
         />
         <KPICard
           label="Client Retention"
-          value={94.5}
-          previousValue={92.1}
+          value={kpis.clientRetention.value}
+          previousValue={kpis.clientRetention.previousValue}
           icon={Target}
           format="percentage"
           color="green"
@@ -105,7 +105,7 @@ export const PartnerDashboard: React.FC = () => {
         height={350}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={mockRevenueData}>
+          <LineChart data={revenueTrends}>
             <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
             <XAxis dataKey="month" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
@@ -126,7 +126,7 @@ export const PartnerDashboard: React.FC = () => {
           height={300}
         >
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={mockCaseOutcomes}>
+            <BarChart data={caseOutcomes}>
               <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
               <XAxis dataKey="outcome" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
               <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
@@ -143,34 +143,26 @@ export const PartnerDashboard: React.FC = () => {
           <div className="space-y-3">
             <StatWidget
               label="Average Case Value"
-              value="$45,200"
-              change="+8.5% vs last month"
-              changePositive
+              value={`$${businessMetrics.avgCaseValue.value.toLocaleString()}`}
+              change={`${businessMetrics.avgCaseValue.change > 0 ? '+' : ''}${businessMetrics.avgCaseValue.change}% vs last month`}
+              changePositive={businessMetrics.avgCaseValue.change >= 0}
               variant="success"
               icon={DollarSign}
             />
             <StatWidget
-              label="Client Satisfaction Score"
-              value="4.8/5.0"
-              change="+0.2 improvement"
-              changePositive
-              variant="success"
-              icon={Award}
+              label="Client Acquisition Cost"
+              value={`$${businessMetrics.cac.value.toLocaleString()}`}
+              change={`${businessMetrics.cac.change > 0 ? '+' : ''}${businessMetrics.cac.change}% vs last month`}
+              changePositive={businessMetrics.cac.change <= 0}
+              variant="warning"
+              icon={Users}
             />
             <StatWidget
-              label="Active Client Matters"
-              value={142}
-              change="+12 this month"
-              changePositive
+              label="Net Promoter Score"
+              value={businessMetrics.nps.value}
+              change={`${businessMetrics.nps.change > 0 ? '+' : ''}${businessMetrics.nps.change} points`}
+              changePositive={businessMetrics.nps.change >= 0}
               variant="info"
-              icon={Briefcase}
-            />
-            <StatWidget
-              label="Referral Rate"
-              value="32%"
-              change="+5% increase"
-              changePositive
-              variant="success"
               icon={TrendingUp}
             />
           </div>

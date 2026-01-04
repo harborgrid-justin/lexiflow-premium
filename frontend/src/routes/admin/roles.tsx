@@ -4,116 +4,22 @@
  * Enterprise role management with permission templates and hierarchy.
  */
 
+import { rolesService, type Role } from '@/services/api/roles.service';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/roles';
 
-interface Permission {
-  id: string;
-  name: string;
-  resource: string;
-  actions: string[];
-}
-
-interface Role {
-  id: string;
-  name: string;
-  description: string;
-  level: number;
-  userCount: number;
-  permissions: string[];
-  isSystem: boolean;
-}
-
-const mockRoles: Role[] = [
-  {
-    id: '1',
-    name: 'Admin',
-    description: 'Full system access with all permissions',
-    level: 100,
-    userCount: 2,
-    permissions: ['*:*'],
-    isSystem: true,
-  },
-  {
-    id: '2',
-    name: 'Senior Partner',
-    description: 'Senior partner with billing and case management',
-    level: 90,
-    userCount: 5,
-    permissions: ['cases:*', 'billing:*', 'documents:*', 'clients:*', 'analytics:read'],
-    isSystem: true,
-  },
-  {
-    id: '3',
-    name: 'Partner',
-    description: 'Partner with case and client management',
-    level: 80,
-    userCount: 12,
-    permissions: ['cases:*', 'documents:*', 'clients:read', 'billing:read'],
-    isSystem: true,
-  },
-  {
-    id: '4',
-    name: 'Associate',
-    description: 'Associate attorney with limited management',
-    level: 60,
-    userCount: 25,
-    permissions: ['cases:read', 'cases:update', 'documents:*', 'research:*'],
-    isSystem: true,
-  },
-  {
-    id: '5',
-    name: 'Paralegal',
-    description: 'Paralegal with document and discovery access',
-    level: 40,
-    userCount: 18,
-    permissions: ['cases:read', 'documents:*', 'discovery:*', 'calendar:*'],
-    isSystem: false,
-  },
-  {
-    id: '6',
-    name: 'Client',
-    description: 'External client with limited portal access',
-    level: 10,
-    userCount: 150,
-    permissions: ['cases:read:own', 'documents:read:own', 'billing:read:own'],
-    isSystem: true,
-  },
-];
-
-const permissionGroups: { name: string; permissions: Permission[] }[] = [
-  {
-    name: 'Cases',
-    permissions: [
-      { id: 'cases:create', name: 'Create Cases', resource: 'cases', actions: ['create'] },
-      { id: 'cases:read', name: 'View Cases', resource: 'cases', actions: ['read'] },
-      { id: 'cases:update', name: 'Update Cases', resource: 'cases', actions: ['update'] },
-      { id: 'cases:delete', name: 'Delete Cases', resource: 'cases', actions: ['delete'] },
-    ],
-  },
-  {
-    name: 'Documents',
-    permissions: [
-      { id: 'documents:create', name: 'Upload Documents', resource: 'documents', actions: ['create'] },
-      { id: 'documents:read', name: 'View Documents', resource: 'documents', actions: ['read'] },
-      { id: 'documents:update', name: 'Edit Documents', resource: 'documents', actions: ['update'] },
-      { id: 'documents:delete', name: 'Delete Documents', resource: 'documents', actions: ['delete'] },
-    ],
-  },
-  {
-    name: 'Billing',
-    permissions: [
-      { id: 'billing:create', name: 'Create Invoices', resource: 'billing', actions: ['create'] },
-      { id: 'billing:read', name: 'View Billing', resource: 'billing', actions: ['read'] },
-      { id: 'billing:update', name: 'Edit Billing', resource: 'billing', actions: ['update'] },
-      { id: 'billing:approve', name: 'Approve Billing', resource: 'billing', actions: ['approve'] },
-    ],
-  },
-];
-
 export async function loader(_args: Route.LoaderArgs) {
-  return { roles: mockRoles, permissionGroups };
+  try {
+    const [roles, permissionGroups] = await Promise.all([
+      rolesService.getRoles(),
+      rolesService.getPermissions()
+    ]);
+    return { roles, permissionGroups };
+  } catch (error) {
+    console.error('Failed to load roles data:', error);
+    return { roles: [], permissionGroups: [] };
+  }
 }
 
 export default function AdminRolesPage() {

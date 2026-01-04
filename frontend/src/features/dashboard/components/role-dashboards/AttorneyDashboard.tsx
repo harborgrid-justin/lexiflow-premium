@@ -8,7 +8,7 @@ import { ChartCard, DeadlinesList, KPICard, StatWidget } from '@/components/dash
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
+import { type AttorneyDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';
 import { Briefcase, Calendar, Clock, FileText, Target, TrendingUp } from 'lucide-react';
 import React from 'react';
@@ -17,9 +17,9 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 export const AttorneyDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
 
-  const { isLoading } = useQuery(
+  const { data, isLoading } = useQuery<AttorneyDashboardData>(
     ['dashboard', 'attorney'],
-    () => dashboardMetricsService.getRoleDashboard('attorney')
+    () => dashboardMetricsService.getRoleDashboard('attorney') as Promise<AttorneyDashboardData>
   );
 
   const { data: deadlines, isLoading: deadlinesLoading } = useQuery(
@@ -31,13 +31,15 @@ export const AttorneyDashboard: React.FC = () => {
     return <LazyLoader message="Loading attorney dashboard..." />;
   }
 
-  const mockHoursData = [
-    { day: 'Mon', hours: 8.5 },
-    { day: 'Tue', hours: 7.2 },
-    { day: 'Wed', hours: 9.1 },
-    { day: 'Thu', hours: 6.8 },
-    { day: 'Fri', hours: 8.3 },
-  ];
+  // Fallback if data is missing (e.g. API error or empty)
+  const kpis = data?.kpis || {
+    billableHours: { value: 0, previousValue: 0, target: 0 },
+    activeCases: { value: 0, previousValue: 0 },
+    utilizationRate: { value: 0, previousValue: 0 },
+    upcomingDeadlines: { value: 0, subtitle: 'Next 2 weeks' },
+  };
+
+  const dailyBillableHours = data?.dailyBillableHours || [];
 
   return (
     <div className="space-y-6">
@@ -45,33 +47,33 @@ export const AttorneyDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard
           label="Billable Hours (Week)"
-          value={39.9}
-          previousValue={35.2}
-          target={40}
+          value={kpis.billableHours.value}
+          previousValue={kpis.billableHours.previousValue}
+          target={kpis.billableHours.target}
           icon={Clock}
           format="duration"
           color="blue"
         />
         <KPICard
           label="Active Cases"
-          value={12}
-          previousValue={11}
+          value={kpis.activeCases.value}
+          previousValue={kpis.activeCases.previousValue}
           icon={Briefcase}
           format="number"
           color="purple"
         />
         <KPICard
           label="Utilization Rate"
-          value={87.5}
-          previousValue={82.1}
+          value={kpis.utilizationRate.value}
+          previousValue={kpis.utilizationRate.previousValue}
           icon={Target}
           format="percentage"
           color="green"
         />
         <KPICard
           label="Upcoming Deadlines"
-          value={8}
-          subtitle="Next 2 weeks"
+          value={kpis.upcomingDeadlines.value}
+          subtitle={kpis.upcomingDeadlines.subtitle}
           icon={Calendar}
           format="number"
           color="orange"
@@ -86,7 +88,7 @@ export const AttorneyDashboard: React.FC = () => {
         height={300}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={mockHoursData}>
+          <BarChart data={dailyBillableHours}>
             <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
             <XAxis dataKey="day" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />

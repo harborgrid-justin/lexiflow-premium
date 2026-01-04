@@ -3,33 +3,39 @@
  * Evidence, custodians, depositions, legal holds, productions, privilege log
  */
 
-import { EvidenceApiService } from '../discovery/evidence-api';
-import { CustodiansApiService } from '../discovery/custodians-api';
-import { ExaminationsApiService } from '../discovery/examinations-api';
-import { WitnessesApiService } from '../discovery/witnesses-api';
-import { DepositionsApiService } from '../discovery/depositions-api';
-import { LegalHoldsApiService } from '../discovery/legal-holds-api';
-import { ProductionsApiService } from '../discovery/productions-api';
-import { DiscoveryRequestsApiService } from '../discovery/discovery-requests-api';
-import { ESISourcesApiService } from '../discovery/esi-sources-api';
-import { PrivilegeLogApiService } from '../discovery/privilege-log-api';
-import { CustodianInterviewsApiService } from '../discovery/custodian-interviews-api';
-import { DiscoveryApiService } from '../discovery/discovery-api';
+import { CollectionsApiService } from "../discovery/collections-api";
+import { CustodianInterviewsApiService } from "../discovery/custodian-interviews-api";
+import { CustodiansApiService } from "../discovery/custodians-api";
+import { DepositionsApiService } from "../discovery/depositions-api";
+import { DiscoveryApiService } from "../discovery/discovery-api";
+import { DiscoveryRequestsApiService } from "../discovery/discovery-requests-api";
+import { ESISourcesApiService } from "../discovery/esi-sources-api";
+import { EvidenceApiService } from "../discovery/evidence-api";
+import { ExaminationsApiService } from "../discovery/examinations-api";
+import { LegalHoldsApiService } from "../discovery/legal-holds-api";
+import { PrivilegeLogApiService } from "../discovery/privilege-log-api";
+import { ProcessingApiService } from "../discovery/processing-api";
+import { ProductionsApiService } from "../discovery/productions-api";
+import { ReviewApiService } from "../discovery/review-api";
+import { WitnessesApiService } from "../discovery/witnesses-api";
 
 // Export service classes
 export {
-  EvidenceApiService,
+  CollectionsApiService,
+  CustodianInterviewsApiService,
   CustodiansApiService,
-  ExaminationsApiService,
-  WitnessesApiService,
   DepositionsApiService,
-  LegalHoldsApiService,
-  ProductionsApiService,
+  DiscoveryApiService,
   DiscoveryRequestsApiService,
   ESISourcesApiService,
+  EvidenceApiService,
+  ExaminationsApiService,
+  LegalHoldsApiService,
   PrivilegeLogApiService,
-  CustodianInterviewsApiService,
-  DiscoveryApiService,
+  ProcessingApiService,
+  ProductionsApiService,
+  ReviewApiService,
+  WitnessesApiService,
 };
 
 // Export singleton instances
@@ -46,4 +52,7 @@ export const discoveryApi = {
   privilegeLog: new PrivilegeLogApiService(),
   custodianInterviews: new CustodianInterviewsApiService(),
   discovery: new DiscoveryApiService(),
+  collections: new CollectionsApiService(),
+  processing: new ProcessingApiService(),
+  review: new ReviewApiService(),
 } as const;

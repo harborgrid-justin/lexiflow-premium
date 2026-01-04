@@ -9,10 +9,14 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DataCollection } from '@/types/discovery-enhanced';
 import { CaseId } from '@/types/primitives';
 import { cn } from '@/utils/cn';
@@ -24,67 +28,51 @@ export const Collections: React.FC = () => {
   const notify = useNotify();
   const createModal = useModalState();
 
-  // Mock data - in production, this would come from API
-  const [collections, setCollections] = useState<DataCollection[]>([
-    {
-      id: 'COL-001',
-      caseId: 'C-2024-001' as CaseId,
-      collectionName: 'Executive Email Collection',
-      custodians: ['John Doe', 'Jane Smith'],
-      dataSources: ['Exchange Server', 'Gmail'],
-      dateRange: { start: '2023-01-01', end: '2023-12-31' },
-      status: 'completed',
-      progress: 100,
-      totalItems: 15420,
-      collectedItems: 15420,
-      estimatedSize: '4.2 GB',
-      actualSize: '4.18 GB',
-      collectionMethod: 'remote',
-      assignedTo: 'IT Team',
-      startedAt: '2024-01-15T09:00:00Z',
-      completedAt: '2024-01-15T14:30:00Z',
-      notes: 'Collection completed successfully',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15'
-    },
-    {
-      id: 'COL-002',
-      caseId: 'C-2024-001' as CaseId,
-      collectionName: 'SharePoint Document Collection',
-      custodians: ['Legal Team'],
-      dataSources: ['SharePoint Site A', 'SharePoint Site B'],
-      dateRange: { start: '2023-06-01', end: '2023-12-31' },
-      status: 'in_progress',
-      progress: 67,
-      totalItems: 8500,
-      collectedItems: 5695,
-      estimatedSize: '12.5 GB',
-      collectionMethod: 'api',
-      assignedTo: 'Discovery Team',
-      startedAt: '2024-01-20T10:00:00Z',
-      notes: 'In progress - expected completion tomorrow',
-      createdAt: '2024-01-20',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: 'COL-003',
-      caseId: 'C-2024-001' as CaseId,
-      collectionName: 'Laptop Forensic Image',
-      custodians: ['Michael Chen'],
-      dataSources: ['Dell Laptop #4521'],
-      dateRange: { start: '2023-01-01', end: '2024-01-20' },
-      status: 'pending',
-      progress: 0,
-      totalItems: 0,
-      collectedItems: 0,
-      estimatedSize: '500 GB',
-      collectionMethod: 'forensic',
-      assignedTo: 'Forensics Team',
-      notes: 'Waiting for device handover',
-      createdAt: '2024-01-18',
-      updatedAt: '2024-01-18'
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch Collections
+  const { data: collections = [], isLoading } = useQuery<DataCollection[]>(
+    DISCOVERY_QUERY_KEYS.collections.all(),
+    async () => {
+      return discoveryRepo.getCollections();
     }
-  ]);
+  );
+
+  // Create Collection Mutation
+  const { mutate: createCollection, isLoading: isCreating } = useMutation(
+    async (newCollection: Partial<DataCollection>) => {
+      return discoveryRepo.createCollection(newCollection);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(DISCOVERY_QUERY_KEYS.collections.all());
+        notify.success('Collection created successfully');
+        createModal.close();
+        setFormData({ collectionName: '', custodians: '', dataSources: '', dateStart: '', dateEnd: '', method: 'remote', notes: '' });
+      },
+      onError: (error) => {
+        console.error('Failed to create collection:', error);
+        notify.error('Failed to create collection');
+      }
+    }
+  );
+
+  // Update Collection Mutation (Pause/Resume)
+  const { mutate: updateCollection } = useMutation(
+    async ({ id, data }: { id: string; data: Partial<DataCollection> }) => {
+      return discoveryRepo.updateCollection(id, data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(DISCOVERY_QUERY_KEYS.collections.all());
+      },
+      onError: (error) => {
+        console.error('Failed to update collection:', error);
+        notify.error('Failed to update collection');
+      }
+    }
+  );
 
   const [formData, setFormData] = useState({
     collectionName: '',
@@ -116,15 +104,10 @@ export const Collections: React.FC = () => {
     }
   };
 
-  const handlePauseResume = (collectionId: string) => {
-    setCollections(prev => prev.map(col => {
-      if (col.id === collectionId) {
-        const newStatus = col.status === 'in_progress' ? 'paused' : 'in_progress';
-        notify.success(`Collection ${newStatus === 'paused' ? 'paused' : 'resumed'}`);
-        return { ...col, status: newStatus };
-      }
-      return col;
-    }));
+  const handlePauseResume = (collection: DataCollection) => {
+    const newStatus = collection.status === 'in_progress' ? 'paused' : 'in_progress';
+    updateCollection({ id: collection.id, data: { status: newStatus } });
+    notify.success(`Collection ${newStatus === 'paused' ? 'paused' : 'resumed'}`);
   };
 
   const handleCreateCollection = () => {
@@ -133,9 +116,8 @@ export const Collections: React.FC = () => {
       return;
     }
 
-    const newCollection: DataCollection = {
-      id: `COL-${String(collections.length + 1).padStart(3, '0')}`,
-      caseId: 'C-2024-001' as CaseId,
+    const newCollection: Partial<DataCollection> = {
+      caseId: 'C-2024-001' as CaseId, // TODO: Get actual case ID from context
       collectionName: formData.collectionName,
       custodians: formData.custodians.split(',').map(c => c.trim()),
       dataSources: formData.dataSources.split(',').map(s => s.trim()),
@@ -147,14 +129,9 @@ export const Collections: React.FC = () => {
       estimatedSize: 'TBD',
       collectionMethod: formData.method,
       notes: formData.notes,
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0]
     };
 
-    setCollections(prev => [...prev, newCollection]);
-    notify.success('Collection created successfully');
-    createModal.close();
-    setFormData({ collectionName: '', custodians: '', dataSources: '', dateStart: '', dateEnd: '', method: 'remote', notes: '' });
+    createCollection(newCollection);
   };
 
   const stats = {
@@ -173,6 +150,10 @@ export const Collections: React.FC = () => {
       return acc;
     }, 0).toFixed(2) + ' GB'
   };
+
+  if (isLoading) {
+    return <LazyLoader />;
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -239,66 +220,83 @@ export const Collections: React.FC = () => {
             <TableHead>Actions</TableHead>
           </TableHeader>
           <TableBody>
-            {collections.map((collection) => (
-              <TableRow key={collection.id}>
-                <TableCell>
-                  <div>
-                    <div className={cn("font-medium", theme.text.primary)}>{collection.collectionName}</div>
-                    <div className={cn("text-xs", theme.text.tertiary)}>{collection.id}</div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    {collection.custodians.slice(0, 2).map((custodian, idx) => (
-                      <div key={idx} className="text-sm">{custodian}</div>
-                    ))}
-                    {collection.custodians.length > 2 && (
-                      <div className={cn("text-xs", theme.text.tertiary)}>+{collection.custodians.length - 2} more</div>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant={getStatusVariant(collection.status)} className="flex items-center gap-1 w-fit">
-                    {getStatusIcon(collection.status)}
-                    {collection.status.replace('_', ' ')}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    <div className={cn("w-32 h-2 rounded-full", theme.surface.highlight)}>
-                      <div
-                        className="h-2 rounded-full bg-blue-600 transition-all"
-                        style={{ width: `${collection.progress}%` }}
-                      />
-                    </div>
-                    <div className={cn("text-xs", theme.text.tertiary)}>{collection.progress}%</div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-sm">
-                    {collection.collectedItems.toLocaleString()} / {collection.totalItems.toLocaleString() || '—'}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-sm">{collection.actualSize || collection.estimatedSize}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    {(collection.status === 'in_progress' || collection.status === 'paused') && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        icon={collection.status === 'in_progress' ? Pause : Play}
-                        onClick={() => handlePauseResume(collection.id)}
-                      >
-                        {collection.status === 'in_progress' ? 'Pause' : 'Resume'}
-                      </Button>
-                    )}
-                    <Button size="sm" variant="ghost">View</Button>
+            {collections.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <Database className={cn("h-12 w-12 mb-4", theme.text.tertiary)} />
+                    <h3 className={cn("text-lg font-medium", theme.text.primary)}>No Collections Found</h3>
+                    <p className={cn("text-sm max-w-sm mt-2 mb-6", theme.text.secondary)}>
+                      Start a new data collection to gather evidence from custodians and data sources.
+                    </p>
+                    <Button variant="primary" icon={Plus} onClick={createModal.open}>
+                      Create First Collection
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              collections.map((collection) => (
+                <TableRow key={collection.id}>
+                  <TableCell>
+                    <div>
+                      <div className={cn("font-medium", theme.text.primary)}>{collection.collectionName}</div>
+                      <div className={cn("text-xs", theme.text.tertiary)}>{collection.id}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      {collection.custodians.slice(0, 2).map((custodian, idx) => (
+                        <div key={idx} className="text-sm">{custodian}</div>
+                      ))}
+                      {collection.custodians.length > 2 && (
+                        <div className={cn("text-xs", theme.text.tertiary)}>+{collection.custodians.length - 2} more</div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={getStatusVariant(collection.status)} className="flex items-center gap-1 w-fit">
+                      {getStatusIcon(collection.status)}
+                      {collection.status.replace('_', ' ')}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <div className={cn("w-32 h-2 rounded-full", theme.surface.highlight)}>
+                        <div
+                          className="h-2 rounded-full bg-blue-600 transition-all"
+                          style={{ width: `${collection.progress}%` }}
+                        />
+                      </div>
+                      <div className={cn("text-xs", theme.text.tertiary)}>{collection.progress}%</div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm">
+                      {collection.collectedItems.toLocaleString()} / {collection.totalItems.toLocaleString() || '—'}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm">{collection.actualSize || collection.estimatedSize}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {(collection.status === 'in_progress' || collection.status === 'paused') && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          icon={collection.status === 'in_progress' ? Pause : Play}
+                          onClick={() => handlePauseResume(collection)}
+                        >
+                          {collection.status === 'in_progress' ? 'Pause' : 'Resume'}
+                        </Button>
+                      )}
+                      <Button size="sm" variant="ghost">View</Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </TableContainer>
       </div>
@@ -364,7 +362,9 @@ export const Collections: React.FC = () => {
           />
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
-            <Button variant="primary" onClick={handleCreateCollection}>Create Collection</Button>
+            <Button variant="primary" onClick={handleCreateCollection} disabled={isCreating}>
+              {isCreating ? 'Creating...' : 'Create Collection'}
+            </Button>
           </div>
         </div>
       </Modal>

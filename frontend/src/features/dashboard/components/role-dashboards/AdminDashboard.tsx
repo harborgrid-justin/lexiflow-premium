@@ -8,7 +8,7 @@ import { ChartCard, KPICard, StatWidget } from '@/components/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
+import { type AdminDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
 import React from 'react';
@@ -17,22 +17,29 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 export const AdminDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
 
-  const { isLoading } = useQuery(
+  const { data, isLoading } = useQuery<AdminDashboardData>(
     ['dashboard', 'admin'],
-    () => dashboardMetricsService.getRoleDashboard('admin')
+    () => dashboardMetricsService.getRoleDashboard('admin') as Promise<AdminDashboardData>
   );
 
   if (isLoading) {
     return <LazyLoader message="Loading admin dashboard..." />;
   }
 
-  const mockUserActivity = [
-    { date: 'Mon', users: 45, actions: 320 },
-    { date: 'Tue', users: 48, actions: 355 },
-    { date: 'Wed', users: 52, actions: 402 },
-    { date: 'Thu', users: 49, actions: 378 },
-    { date: 'Fri', users: 51, actions: 395 },
-  ];
+  // Fallback data
+  const kpis = data?.kpis || {
+    totalUsers: { value: 0, previousValue: 0 },
+    activeUsers: { value: 0, subtitle: '0% of users' },
+    systemHealth: { value: 100, previousValue: 100 },
+    openIssues: { value: 0, subtitle: '0 critical' },
+  };
+
+  const userActivity = data?.userActivity || [];
+  const systemStats = data?.systemStats || {
+    storageUsage: { value: 0, total: 100, unit: 'TB' },
+    apiLatency: { value: 0, unit: 'ms' },
+    errorRate: { value: 0, unit: '%' },
+  };
 
   return (
     <div className="space-y-6">
@@ -40,32 +47,32 @@ export const AdminDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard
           label="Total Users"
-          value={52}
-          previousValue={50}
+          value={kpis.totalUsers.value}
+          previousValue={kpis.totalUsers.previousValue}
           icon={Users}
           format="number"
           color="blue"
         />
         <KPICard
           label="Active Today"
-          value={45}
-          subtitle="86.5% of users"
+          value={kpis.activeUsers.value}
+          subtitle={kpis.activeUsers.subtitle}
           icon={Activity}
           format="number"
           color="green"
         />
         <KPICard
           label="System Health"
-          value={99.8}
-          previousValue={99.5}
+          value={kpis.systemHealth.value}
+          previousValue={kpis.systemHealth.previousValue}
           icon={Server}
           format="percentage"
           color="green"
         />
         <KPICard
           label="Open Issues"
-          value={3}
-          subtitle="2 critical"
+          value={kpis.openIssues.value}
+          subtitle={kpis.openIssues.subtitle}
           icon={AlertCircle}
           format="number"
           color="orange"
@@ -80,7 +87,7 @@ export const AdminDashboard: React.FC = () => {
         height={300}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={mockUserActivity}>
+          <LineChart data={userActivity}>
             <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
             <XAxis dataKey="date" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
             <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
@@ -98,9 +105,22 @@ export const AdminDashboard: React.FC = () => {
           System Statistics
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatWidget label="Total Cases" value={284} variant="info" />
-          <StatWidget label="Documents Stored" value="12.4 GB" variant="info" />
-          <StatWidget label="API Requests (24h)" value="45.2K" change="+12.3%" changePositive variant="success" />
+          <StatWidget
+            label="Storage Usage"
+            value={`${systemStats.storageUsage.value} ${systemStats.storageUsage.unit}`}
+            subtitle={`of ${systemStats.storageUsage.total} ${systemStats.storageUsage.unit}`}
+            variant="info"
+          />
+          <StatWidget
+            label="API Latency"
+            value={`${systemStats.apiLatency.value} ${systemStats.apiLatency.unit}`}
+            variant={systemStats.apiLatency.value < 200 ? "success" : "warning"}
+          />
+          <StatWidget
+            label="Error Rate"
+            value={`${systemStats.errorRate.value}${systemStats.errorRate.unit}`}
+            variant={systemStats.errorRate.value < 1 ? "success" : "error"}
+          />
         </div>
       </div>
     </div>

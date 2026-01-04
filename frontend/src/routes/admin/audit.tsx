@@ -10,6 +10,8 @@
  * @module routes/admin/audit
  */
 
+import { AdminService } from '@/services/domain/AdminDomain';
+import type { AuditLogEntry } from '@/types';
 import { useId, useState } from 'react';
 import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -27,25 +29,6 @@ export function meta() {
 }
 
 // ============================================================================
-// Types
-// ============================================================================
-
-interface AuditLogEntry {
-  id: string;
-  timestamp: string;
-  userId: string;
-  userEmail: string;
-  action: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'LOGOUT' | 'EXPORT' | 'PERMISSION_CHANGE';
-  resourceType: string;
-  resourceId: string;
-  resourceName: string;
-  ipAddress: string;
-  userAgent: string;
-  metadata?: Record<string, unknown>;
-  severity: 'info' | 'warning' | 'critical';
-}
-
-// ============================================================================
 // Loader
 // ============================================================================
 
@@ -55,88 +38,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get('page') || '1');
 
-  // Mock audit log data
-  const logs: AuditLogEntry[] = [
-    {
-      id: '1',
-      timestamp: new Date().toISOString(),
-      userId: 'user-1',
-      userEmail: 'admin@lexiflow.com',
-      action: 'LOGIN',
-      resourceType: 'session',
-      resourceId: 'sess-123',
-      resourceName: 'User Session',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      severity: 'info',
-    },
-    {
-      id: '2',
-      timestamp: new Date(Date.now() - 3600000).toISOString(),
-      userId: 'user-1',
-      userEmail: 'admin@lexiflow.com',
-      action: 'CREATE',
-      resourceType: 'case',
-      resourceId: 'case-456',
-      resourceName: 'Smith v. Johnson',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      severity: 'info',
-    },
-    {
-      id: '3',
-      timestamp: new Date(Date.now() - 7200000).toISOString(),
-      userId: 'user-2',
-      userEmail: 'attorney@lexiflow.com',
-      action: 'UPDATE',
-      resourceType: 'document',
-      resourceId: 'doc-789',
-      resourceName: 'Motion to Dismiss.pdf',
-      ipAddress: '192.168.1.2',
-      userAgent: 'Mozilla/5.0...',
-      severity: 'info',
-    },
-    {
-      id: '4',
-      timestamp: new Date(Date.now() - 10800000).toISOString(),
-      userId: 'user-1',
-      userEmail: 'admin@lexiflow.com',
-      action: 'PERMISSION_CHANGE',
-      resourceType: 'user',
-      resourceId: 'user-3',
-      resourceName: 'paralegal@lexiflow.com',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      severity: 'warning',
-      metadata: { oldRole: 'viewer', newRole: 'editor' },
-    },
-    {
-      id: '5',
-      timestamp: new Date(Date.now() - 14400000).toISOString(),
-      userId: 'user-1',
-      userEmail: 'admin@lexiflow.com',
-      action: 'EXPORT',
-      resourceType: 'report',
-      resourceId: 'report-101',
-      resourceName: 'Q4 Billing Report',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      severity: 'info',
-    },
-  ];
-
-  return {
-    logs,
-    pagination: {
-      page,
-      totalPages: 10,
-      totalItems: 100,
-    },
-    filters: {
-      actions: ['CREATE', 'READ', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT', 'EXPORT', 'PERMISSION_CHANGE'],
-      resourceTypes: ['case', 'document', 'user', 'session', 'report', 'billing'],
-    },
-  };
+  try {
+    const logs = await AdminService.getLogs();
+    return {
+      logs,
+      pagination: {
+        page,
+        totalPages: 10,
+        totalItems: logs.length,
+      },
+      filters: {
+        actions: ['CREATE', 'READ', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT', 'EXPORT', 'PERMISSION_CHANGE'],
+        resourceTypes: ['case', 'document', 'user', 'session', 'report', 'billing'],
+      },
+    };
+  } catch (error) {
+    console.error('Failed to load audit logs:', error);
+    return {
+      logs: [],
+      pagination: { page: 1, totalPages: 1, totalItems: 0 },
+      filters: { actions: [], resourceTypes: [] }
+    };
+  }
 }
 
 // ============================================================================
@@ -163,7 +86,7 @@ function getActionColor(action: AuditLogEntry['action']): string {
   }
 }
 
-function getSeverityIcon(severity: AuditLogEntry['severity']): React.ReactNode {
+function getSeverityIcon(severity: AuditLogEntry['severity'] = 'info'): React.ReactNode {
   switch (severity) {
     case 'critical':
       return (
@@ -233,12 +156,12 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData 
         headers.join(','),
         ...logs.map(log => [
           new Date(log.timestamp).toLocaleString(),
-          log.userEmail,
+          log.userEmail || log.user,
           log.action,
-          log.resourceType,
-          log.resourceName,
-          log.ipAddress,
-          log.severity
+          log.resourceType || '',
+          log.resourceName || log.resource,
+          log.ipAddress || log.ip,
+          log.severity || 'info'
         ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
       ];
 
@@ -350,13 +273,13 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData 
               <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center gap-2">
-                    {getSeverityIcon(log.severity)}
+                    {getSeverityIcon(log.severity || 'info')}
                     <span>{formatTimestamp(log.timestamp)}</span>
                   </div>
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {log.userEmail}
+                    {log.userEmail || log.user}
                   </div>
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
@@ -366,14 +289,14 @@ export default function AuditLogsRoute({ loaderData }: { loaderData: LoaderData 
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-900 dark:text-gray-100">
-                    {log.resourceName}
+                    {log.resourceName || log.resource}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
-                    {log.resourceType} • {log.resourceId}
+                    {log.resourceType || 'Unknown'} • {log.resourceId || ''}
                   </div>
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                  {log.ipAddress}
+                  {log.ipAddress || log.ip}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm">
                   <button

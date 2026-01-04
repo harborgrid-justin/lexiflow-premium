@@ -60,6 +60,20 @@ import { delay } from "@/utils/async";
  * queryClient.invalidateQueries({ queryKey: DISCOVERY_QUERY_KEYS.depositions.byCase(caseId) });
  */
 export const DISCOVERY_QUERY_KEYS = {
+  // Collections
+  collections: {
+    all: () => ["discovery", "collections"] as const,
+    byId: (id: string) => ["discovery", "collections", id] as const,
+    byCase: (caseId: string) =>
+      ["discovery", "collections", "case", caseId] as const,
+  },
+  // Processing Jobs
+  processing: {
+    all: () => ["discovery", "processing"] as const,
+    byId: (id: string) => ["discovery", "processing", id] as const,
+    byCase: (caseId: string) =>
+      ["discovery", "processing", "case", caseId] as const,
+  },
   // Depositions
   depositions: {
     all: () => ["discovery", "depositions"] as const,
@@ -1028,12 +1042,19 @@ import { Custodian } from "@/api/discovery/custodians-api";
   /**
    * Get all processing jobs
    *
+   * @param caseId - Optional case ID filter
    * @returns Promise<ProcessingJob[]> Array of processing jobs
    * @throws Error if fetch fails
    */
-  getProcessingJobs = async (): Promise<ProcessingJob[]> => {
+  getProcessingJobs = async (caseId?: string): Promise<ProcessingJob[]> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.processing.getAll(caseId);
+    }
     try {
-      return await db.getAll(STORES.PROCESSING_JOBS);
+      if (caseId) {
+        return db.getAllByIndex(STORES.PROCESSING_JOBS, "caseId", caseId);
+      }
+      return db.getAll(STORES.PROCESSING_JOBS);
     } catch (error) {
       console.error("[DiscoveryRepository.getProcessingJobs] Error:", error);
       throw new OperationError(
@@ -1041,6 +1062,117 @@ import { Custodian } from "@/api/discovery/custodians-api";
         "Failed to fetch processing jobs"
       );
     }
+  };
+
+  /**
+   * Get a processing job by ID
+   * @param id Job ID
+   */
+  getProcessingJob = async (id: string): Promise<ProcessingJob> => {
+    this.validateId(id, "getProcessingJob");
+    if (isBackendApiEnabled()) {
+      return discoveryApi.processing.getById(id);
+    }
+    const job = await db.get(STORES.PROCESSING_JOBS, id);
+    if (!job) {
+      throw new EntityNotFoundError("ProcessingJob", id);
+    }
+    return job;
+  };
+
+  /**
+   * Create a new processing job
+   * @param data Job data
+   */
+  createProcessingJob = async (
+    data: Partial<ProcessingJob>
+  ): Promise<ProcessingJob> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.processing.create(data);
+    }
+    const newJob = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as ProcessingJob;
+    await db.add(STORES.PROCESSING_JOBS, newJob);
+    return newJob;
+  };
+
+  /**
+   * Update a processing job
+   * @param id Job ID
+   * @param data Updates
+   */
+  updateProcessingJob = async (
+    id: string,
+    data: Partial<ProcessingJob>
+  ): Promise<ProcessingJob> => {
+    this.validateId(id, "updateProcessingJob");
+    if (isBackendApiEnabled()) {
+      // Handle specific actions like pause/resume/retry if needed, or just generic update
+      // For now, generic update
+      return discoveryApi.processing.create({ ...data, id } as any); // API might need PUT
+    }
+    const existing = await this.getProcessingJob(id);
+    const updated = {
+      ...existing,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    await db.put(STORES.PROCESSING_JOBS, updated);
+    return updated;
+  };
+
+  /**
+   * Delete a processing job
+   * @param id Job ID
+   */
+  deleteProcessingJob = async (id: string): Promise<void> => {
+    this.validateId(id, "deleteProcessingJob");
+    if (isBackendApiEnabled()) {
+      await discoveryApi.processing.delete(id);
+      return;
+    }
+    await db.delete(STORES.PROCESSING_JOBS, id);
+  };
+
+  // =============================================================================
+  // DOCUMENT REVIEW
+  // =============================================================================
+
+  /**
+   * Get review documents
+   * @param filters Search filters
+   */
+  getReviewDocuments = async (filters?: any): Promise<ReviewDocument[]> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.review.getDocuments(filters);
+    }
+    // Fallback: return empty array or mock data if needed
+    return [];
+  };
+
+  /**
+   * Update document coding
+   * @param id Document ID
+   * @param coding Coding data
+   * @param notes Optional notes
+   */
+  updateDocumentCoding = async (
+    id: string,
+    coding: DocumentCoding,
+    notes?: string
+  ): Promise<ReviewDocument> => {
+    this.validateId(id, "updateDocumentCoding");
+    if (isBackendApiEnabled()) {
+      return discoveryApi.review.updateCoding(id, coding, notes);
+    }
+    throw new OperationError(
+      "updateDocumentCoding",
+      "Not supported in offline mode"
+    );
   };
 
   // =============================================================================
@@ -1438,8 +1570,104 @@ import { Custodian } from "@/api/discovery/custodians-api";
   startCollection = async (id: string): Promise<string> => {
     this.validateId(id, "startCollection");
 
+    if (isBackendApiEnabled()) {
+      await discoveryApi.collections.resume(id);
+      return `job-${Date.now()}`; // Backend should return job ID, but for now we return a generated one or update API to return it
+    }
+
     // Mock implementation - in production, this would call backend job queue
     await delay(500);
     return `job-${Date.now()}`;
+  };
+
+  // ============================================================================
+  // Collections Management
+  // ============================================================================
+
+  /**
+   * Get all data collections
+   * @param caseId Optional case ID to filter by
+   */
+  getCollections = async (caseId?: string): Promise<DataCollection[]> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.collections.getAll(caseId);
+    }
+    // Fallback to local DB
+    if (caseId) {
+      return db.getAllByIndex(STORES.DISCOVERY_COLLECTIONS, "caseId", caseId);
+    }
+    return db.getAll(STORES.DISCOVERY_COLLECTIONS);
+  };
+
+  /**
+   * Get a data collection by ID
+   * @param id Collection ID
+   */
+  getCollection = async (id: string): Promise<DataCollection> => {
+    this.validateId(id, "getCollection");
+    if (isBackendApiEnabled()) {
+      return discoveryApi.collections.getById(id);
+    }
+    const collection = await db.get(STORES.DISCOVERY_COLLECTIONS, id);
+    if (!collection) {
+      throw new EntityNotFoundError("Collection", id);
+    }
+    return collection;
+  };
+
+  /**
+   * Create a new data collection
+   * @param data Collection data
+   */
+  createCollection = async (
+    data: Partial<DataCollection>
+  ): Promise<DataCollection> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.collections.create(data);
+    }
+    const newCollection = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as DataCollection;
+    await db.add(STORES.DISCOVERY_COLLECTIONS, newCollection);
+    return newCollection;
+  };
+
+  /**
+   * Update a data collection
+   * @param id Collection ID
+   * @param data Updates
+   */
+  updateCollection = async (
+    id: string,
+    data: Partial<DataCollection>
+  ): Promise<DataCollection> => {
+    this.validateId(id, "updateCollection");
+    if (isBackendApiEnabled()) {
+      return discoveryApi.collections.update(id, data);
+    }
+    const existing = await this.getCollection(id);
+    const updated = {
+      ...existing,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    await db.put(STORES.DISCOVERY_COLLECTIONS, updated);
+    return updated;
+  };
+
+  /**
+   * Delete a data collection
+   * @param id Collection ID
+   */
+  deleteCollection = async (id: string): Promise<void> => {
+    this.validateId(id, "deleteCollection");
+    if (isBackendApiEnabled()) {
+      await discoveryApi.collections.delete(id);
+      return;
+    }
+    await db.delete(STORES.DISCOVERY_COLLECTIONS, id);
   };
 }

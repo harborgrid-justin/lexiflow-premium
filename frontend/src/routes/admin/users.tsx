@@ -4,61 +4,19 @@
  * Enterprise user management with role assignment, permissions, and audit trails.
  */
 
+import { usersService, type User } from '@/services/api/users.service';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/users';
 
-interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  status: 'active' | 'inactive' | 'pending';
-  lastLogin: string | null;
-  createdAt: string;
-  mfaEnabled: boolean;
-}
-
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'admin@lexiflow.com',
-    firstName: 'System',
-    lastName: 'Admin',
-    role: 'admin',
-    status: 'active',
-    lastLogin: '2026-01-01T10:30:00Z',
-    createdAt: '2025-01-01T00:00:00Z',
-    mfaEnabled: true,
-  },
-  {
-    id: '2',
-    email: 'john.smith@lawfirm.com',
-    firstName: 'John',
-    lastName: 'Smith',
-    role: 'attorney',
-    status: 'active',
-    lastLogin: '2025-12-31T15:45:00Z',
-    createdAt: '2025-06-15T00:00:00Z',
-    mfaEnabled: true,
-  },
-  {
-    id: '3',
-    email: 'jane.doe@lawfirm.com',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    role: 'paralegal',
-    status: 'active',
-    lastLogin: '2025-12-30T09:00:00Z',
-    createdAt: '2025-08-20T00:00:00Z',
-    mfaEnabled: false,
-  },
-];
-
 export async function loader(_args: Route.LoaderArgs) {
-  // In production, fetch from API with proper authorization check
-  return { users: mockUsers };
+  try {
+    const users = await usersService.getUsers();
+    return { users };
+  } catch (error) {
+    console.error('Failed to load users:', error);
+    return { users: [] };
+  }
 }
 
 export default function AdminUsersPage() {

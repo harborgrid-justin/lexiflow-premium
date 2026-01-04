@@ -7,10 +7,11 @@
  * @module routes/real-estate/encroachment
  */
 
+import { DataService } from '@/services/data/dataService';
 import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/encroachment";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/encroachment";
 
 // ============================================================================
 // Meta Tags
@@ -28,14 +29,25 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Fetch real estate encroachment data
-  return {
-    data: null,
-    stats: {
-      total: 0,
-      active: 0,
-    }
-  };
+  try {
+    const encroachments = await DataService.realEstate.getEncroachments();
+    const activeEncroachments = encroachments.filter(e => e.status === 'Active' || e.status === 'Under Review');
+
+    return {
+      data: encroachments,
+      stats: {
+        total: encroachments.length,
+        active: activeEncroachments.length,
+        resolved: encroachments.filter(e => e.status === 'Resolved').length,
+      }
+    };
+  } catch (error) {
+    console.error('Failed to fetch encroachment data:', error);
+    return {
+      data: [],
+      stats: { total: 0, active: 0, resolved: 0 }
+    };
+  }
 }
 
 // ============================================================================
@@ -64,7 +76,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function EncroachmentRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

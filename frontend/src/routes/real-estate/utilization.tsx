@@ -8,9 +8,9 @@
  */
 
 import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/utilization";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/utilization";
 
 // ============================================================================
 // Meta Tags
@@ -28,14 +28,34 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Fetch real estate utilization data
-  return {
-    data: null,
-    stats: {
-      total: 0,
-      active: 0,
-    }
-  };
+  try {
+    const properties = await DataService.realEstate.getAllProperties();
+    const utilizationData = properties.map((p: { id: string; name?: string; squareFeet?: number; occupiedSquareFeet?: number }) => ({
+      ...p,
+      utilizationRate: p.squareFeet && p.occupiedSquareFeet
+        ? (p.occupiedSquareFeet / p.squareFeet) * 100
+        : 0
+    }));
+
+    const avgUtilization = utilizationData.length > 0
+      ? utilizationData.reduce((sum: number, p: { utilizationRate: number }) => sum + p.utilizationRate, 0) / utilizationData.length
+      : 0;
+
+    return {
+      data: utilizationData,
+      stats: {
+        total: properties.length,
+        avgUtilization: parseFloat(avgUtilization.toFixed(1)),
+        underutilized: utilizationData.filter((p: { utilizationRate: number }) => p.utilizationRate < 70).length,
+      }
+    };
+  } catch (error) {
+    console.error('Failed to fetch utilization data:', error);
+    return {
+      data: [],
+      stats: { total: 0, avgUtilization: 0, underutilized: 0 }
+    };
+  }
 }
 
 // ============================================================================
@@ -64,7 +84,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function UtilizationRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

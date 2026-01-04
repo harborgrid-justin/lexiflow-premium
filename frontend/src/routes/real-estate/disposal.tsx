@@ -8,9 +8,9 @@
  */
 
 import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/disposal";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/disposal";
 
 // ============================================================================
 // Meta Tags
@@ -28,14 +28,25 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Fetch real estate disposal data
-  return {
-    data: null,
-    stats: {
-      total: 0,
-      active: 0,
-    }
-  };
+  try {
+    const disposals = await DataService.realEstate.getDisposals();
+    const pendingDisposals = disposals.filter(d => d.status === 'Pending' || d.status === 'In Progress');
+
+    return {
+      data: disposals,
+      stats: {
+        total: disposals.length,
+        pending: pendingDisposals.length,
+        completed: disposals.filter(d => d.status === 'Completed').length,
+      }
+    };
+  } catch (error) {
+    console.error('Failed to fetch disposal data:', error);
+    return {
+      data: [],
+      stats: { total: 0, pending: 0, completed: 0 }
+    };
+  }
 }
 
 // ============================================================================
@@ -64,7 +75,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function DisposalRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

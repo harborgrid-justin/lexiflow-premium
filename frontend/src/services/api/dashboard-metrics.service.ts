@@ -81,6 +81,118 @@ export interface TeamMetrics {
   efficiency: number;
 }
 
+export interface AttorneyDashboardData {
+  kpis: {
+    billableHours: {
+      value: number;
+      previousValue: number;
+      target: number;
+    };
+    activeCases: {
+      value: number;
+      previousValue: number;
+    };
+    utilizationRate: {
+      value: number;
+      previousValue: number;
+    };
+    upcomingDeadlines: {
+      value: number;
+      subtitle: string;
+    };
+  };
+  dailyBillableHours: {
+    day: string;
+    hours: number;
+  }[];
+}
+
+export interface PartnerDashboardData {
+  kpis: {
+    monthlyRevenue: {
+      value: number;
+      previousValue: number;
+      target: number;
+    };
+    newClients: {
+      value: number;
+      previousValue: number;
+    };
+    winRate: {
+      value: number;
+      previousValue: number;
+    };
+    clientRetention: {
+      value: number;
+      previousValue: number;
+    };
+  };
+  revenueTrends: {
+    month: string;
+    revenue: number;
+    target: number;
+  }[];
+  caseOutcomes: {
+    outcome: string;
+    count: number;
+  }[];
+  businessMetrics: {
+    avgCaseValue: {
+      value: number;
+      change: number;
+    };
+    cac: {
+      value: number;
+      change: number;
+    };
+    nps: {
+      value: number;
+      change: number;
+    };
+  };
+}
+
+export interface AdminDashboardData {
+  kpis: {
+    totalUsers: {
+      value: number;
+      previousValue: number;
+    };
+    activeUsers: {
+      value: number;
+      subtitle: string;
+    };
+    systemHealth: {
+      value: number;
+      previousValue: number;
+    };
+    openIssues: {
+      value: number;
+      subtitle: string;
+    };
+  };
+  userActivity: {
+    date: string;
+    users: number;
+    actions: number;
+  }[];
+  systemStats: {
+    storageUsage: {
+      value: number;
+      total: number;
+      unit: string;
+    };
+    apiLatency: {
+      value: number;
+      unit: string;
+    };
+    errorRate: {
+      value: number;
+      unit: string;
+    };
+  };
+}
+
 export interface DashboardFilters {
   dateRange?: {
     start: string;
@@ -181,7 +293,12 @@ export class DashboardMetricsService {
    */
   async getRoleDashboard(
     role: "attorney" | "paralegal" | "admin" | "partner"
-  ): Promise<Record<string, unknown>> {
+  ): Promise<
+    | AttorneyDashboardData
+    | PartnerDashboardData
+    | AdminDashboardData
+    | Record<string, unknown>
+  > {
     return apiClient.get(`${this.baseUrl}/role/${role}`);
   }
 

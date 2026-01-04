@@ -73,12 +73,30 @@ export async function action({ params, request }: Route.ActionArgs) {
 
   try {
     switch (intent) {
-      case "update":
-        // TODO: Implement update logic when requirements are clear
-        return { success: true };
-      case "delete":
-        // TODO: Implement delete logic when requirements are clear
-        return { success: true };
+      case "update": {
+        const name = formData.get("name") as string;
+        const description = formData.get("description") as string;
+        const status = formData.get("status") as string;
+
+        const updates: Partial<WarRoom> = {
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (name) updates.name = name;
+        if (description) updates.description = description;
+        if (status) updates.status = status;
+
+        await DataService.warRoom.update(warRoomId, updates);
+        return { success: true, message: "War room updated successfully" };
+      }
+      case "delete": {
+        await DataService.warRoom.delete(warRoomId);
+        return {
+          success: true,
+          message: "War room deleted successfully",
+          redirect: "/war-room"
+        };
+      }
       default:
         return { success: false, error: "Invalid action" };
     }

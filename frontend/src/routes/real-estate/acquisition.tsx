@@ -8,9 +8,9 @@
  */
 
 import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/acquisition";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/acquisition";
 
 // ============================================================================
 // Meta Tags
@@ -28,14 +28,26 @@ export function meta() {
 // ============================================================================
 
 export async function loader() {
-  // TODO: Fetch real estate acquisition data
-  return {
-    data: null,
-    stats: {
-      total: 0,
-      active: 0,
-    }
-  };
+  try {
+    const acquisitions = await DataService.realEstate.getAcquisitions();
+    const pending = acquisitions.filter((a: { status?: string }) => a.status === 'Pending' || a.status === 'Due Diligence');
+
+    return {
+      data: acquisitions,
+      stats: {
+        total: acquisitions.length,
+        pending: pending.length,
+        completed: acquisitions.filter((a: { status?: string }) => a.status === 'Completed').length,
+        totalInvestment: acquisitions.reduce((sum: number, a: { purchasePrice?: number }) => sum + (a.purchasePrice || 0), 0),
+      }
+    };
+  } catch (error) {
+    console.error('Failed to fetch acquisition data:', error);
+    return {
+      data: [],
+      stats: { total: 0, pending: 0, completed: 0, totalInvestment: 0 }
+    };
+  }
 }
 
 // ============================================================================
@@ -64,7 +76,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function AcquisitionRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

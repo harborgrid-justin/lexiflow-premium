@@ -106,7 +106,20 @@ import {
 import { RepositoryRegistry } from "./repositories/RepositoryRegistry";
 
 // Backend API Layer (Primary Data Source)
-import { api, isBackendApiEnabled } from "@/api";
+import {
+  api,
+  isBackendApiEnabled,
+  adminApi,
+  analyticsApi,
+  authApi,
+  communicationsApi,
+  complianceApi,
+  discoveryApi,
+  draftingApi,
+  integrationsApi,
+  litigationApi,
+  workflowApi,
+} from "@/api";
 
 // Legacy Database (Fallback Only - DEPRECATED)
 import { STORES } from "./db";
@@ -661,7 +674,7 @@ Object.defineProperties(DataServiceBase, {
   timeEntries: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.timeEntries
+        ? api.timeEntries
         : legacyRepositoryRegistry.getOrCreate(STORES.BILLING),
     enumerable: true,
   },
@@ -674,7 +687,7 @@ Object.defineProperties(DataServiceBase, {
   invoices: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.invoices
+        ? api.invoices
         : legacyRepositoryRegistry.getOrCreate("invoices"),
     enumerable: true,
   },
@@ -687,7 +700,7 @@ Object.defineProperties(DataServiceBase, {
   expenses: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.expenses
+        ? api.expenses
         : legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES),
     enumerable: true,
   },
@@ -700,7 +713,7 @@ Object.defineProperties(DataServiceBase, {
   feeAgreements: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.feeAgreements
+        ? api.feeAgreements
         : legacyRepositoryRegistry.getOrCreate("feeAgreements"),
     enumerable: true,
   },
@@ -713,7 +726,7 @@ Object.defineProperties(DataServiceBase, {
   rateTables: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.rateTables
+        ? api.rateTables
         : legacyRepositoryRegistry.getOrCreate("rateTables"),
     enumerable: true,
   },
@@ -726,7 +739,7 @@ Object.defineProperties(DataServiceBase, {
   trustAccounts: {
     get: () =>
       isBackendApiEnabled()
-        ? billingApi.trustAccounts
+        ? api.trustAccounts
         : legacyRepositoryRegistry.getOrCreate("trustAccounts"),
     enumerable: true,
   },
@@ -907,7 +920,7 @@ Object.defineProperties(DataServiceBase, {
   rlsPolicies: {
     get: () =>
       isBackendApiEnabled()
-        ? dataPlatformApi.rlsPolicies
+        ? api.rlsPolicies
         : legacyRepositoryRegistry.getOrCreate(STORES.POLICIES),
     enumerable: true,
   },
@@ -1523,7 +1536,7 @@ Object.defineProperties(DataServiceBase, {
   dataSourcesIntegration: {
     get: () =>
       isBackendApiEnabled()
-        ? dataPlatformApi.dataSources
+        ? api.dataSources
         : legacyRepositoryRegistry.getOrCreate("dataSources"),
     enumerable: true,
   },

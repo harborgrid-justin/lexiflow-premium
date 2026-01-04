@@ -65,6 +65,7 @@ export { workflowApi } from "./domains/workflow.api";
 // export { dataPlatformApi } from './domains/data-platform.api';
 export {
   DraftingApiService,
+  draftingApi,
   type ClauseReference,
   type CreateTemplateDto,
   type DraftingStats,

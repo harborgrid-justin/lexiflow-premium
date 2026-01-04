@@ -12,8 +12,7 @@
  * @module routes/pleading/builder
  */
 
-import { Form, Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/builder";
+import { Form, Link, useNavigate, type LoaderFunctionArgs, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -65,7 +64,7 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
+export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderData> {
   const url = new URL(request.url);
   const templateId = url.searchParams.get('template');
   const caseId = url.searchParams.get('case');
@@ -125,7 +124,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs): Promise<ActionData> {
+export async function action({ request }: ActionFunctionArgs): Promise<ActionData> {
   const formData = await request.formData();
   const intent = formData.get("intent") as string;
 

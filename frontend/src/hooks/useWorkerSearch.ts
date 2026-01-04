@@ -77,8 +77,8 @@ export function useWorkerSearch<T>(
 
   const [filteredItems, setFilteredItems] = useState<T[]>(stableItems);
   const [isSearching, setIsSearching] = useState(false);
-  const [results, setResults] = useState<T[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  // const [results, setResults] = useState<T[]>([]);
+  // const [error, setError] = useState<Error | null>(null);
 
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);

@@ -12,7 +12,7 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
 import { useLoaderData } from 'react-router';
-import type { Route } from './+types/index';
+// import type { Route } from './+types/index';
 
 export function meta() {
   return createMeta({

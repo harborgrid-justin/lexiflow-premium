@@ -45,11 +45,10 @@ export function useMinDisplayTime(
 
         if (remaining > 0) {
           // Keep showing loading until minDuration is met
-          const timer = setTimeout(() => {
+          timeoutRef.current = setTimeout(() => {
             setShouldShowLoading(false);
             startTimeRef.current = null;
           }, remaining);
-          return () => clearTimeout(timer);
         } else {
           setShouldShowLoading(false);
           startTimeRef.current = null;
@@ -58,6 +57,12 @@ export function useMinDisplayTime(
         setShouldShowLoading(false);
       }
     }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [isLoading, minDuration, delay]);
 
   return shouldShowLoading;

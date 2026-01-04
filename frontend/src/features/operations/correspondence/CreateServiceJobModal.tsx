@@ -74,7 +74,7 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
                 errors[err.path[0] as string] = err.message;
             });
             setValidationErrors(errors);
-            notify.error('Validation failed: ' + validation.error.issues[0].message);
+            notify.error('Validation failed: ' + (validation.error.issues[0]?.message || 'Unknown error'));
             return;
         }
 
@@ -109,7 +109,7 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
                             aria-label="Select case"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.caseId || ''}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, caseId: e.target.value as string })}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, caseId: e.target.value as CaseId })}
                         >
                             <option value="">Select Case...</option>
                             {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}

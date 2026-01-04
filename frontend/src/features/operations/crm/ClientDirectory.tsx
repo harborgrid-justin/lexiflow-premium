@@ -34,6 +34,11 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
       onSuccess: (token, clientId) => {
         const tokenStr = token as string;
         notify.success(`Portal Access Token Generated: ${tokenStr.substring(0, 12)}...`);
+        const clientsToRender = Array.isArray(propClients)
+          ? propClients
+          : Array.isArray(fetchedClients)
+            ? fetchedClients
+            : [];
         const client = clientsToRender.find(c => c.id === clientId);
         if (client) onOpenPortal(client);
       }

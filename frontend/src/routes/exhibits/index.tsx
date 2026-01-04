@@ -8,9 +8,9 @@
  */
 
 import { api } from '@/api';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags

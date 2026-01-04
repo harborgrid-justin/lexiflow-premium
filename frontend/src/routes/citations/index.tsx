@@ -9,13 +9,12 @@
 
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Citations',
     count: data?.items?.length,

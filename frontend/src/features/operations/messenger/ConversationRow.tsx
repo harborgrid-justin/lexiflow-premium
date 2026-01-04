@@ -31,7 +31,7 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
     >
       <div className="flex justify-between items-start mb-1">
         <div className="flex items-center space-x-3 overflow-hidden">
-          <UserAvatar name={conv.name} size="md" indicatorStatus={conv.status as string} />
+          <UserAvatar name={conv.name} size="md" indicatorStatus={conv.status as any} />
           <div className="min-w-0">
             <h4 className={cn("text-sm font-bold truncate", conv.unread > 0 ? theme.text.primary : theme.text.secondary)}>{conv.name}</h4>
             <p className={cn("text-xs truncate flex items-center", theme.text.tertiary)}>
@@ -41,7 +41,7 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={cn("text-[10px] whitespace-nowrap ml-2", theme.text.tertiary)}>{formatTime(lastMsg?.timestamp)}</span>
+          <span className={cn("text-[10px] whitespace-nowrap ml-2", theme.text.tertiary)}>{formatTime(lastMsg?.timestamp || '')}</span>
           <button
             onClick={onPopOut}
             className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-blue-600"

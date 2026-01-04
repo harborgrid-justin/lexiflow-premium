@@ -6,16 +6,15 @@
  * @module routes/exhibits/detail
  */
 
-import { useNavigate } from 'react-router';
+import { useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createDetailMeta({
     entityType: 'Exhibit',
     entityName: data?.item?.title ?? 'Unknown Exhibit',
@@ -27,7 +26,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader - WITH PROPER PARAM VALIDATION
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { exhibitId } = params;
 
   // CRITICAL: Validate param exists

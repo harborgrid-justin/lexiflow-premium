@@ -148,6 +148,7 @@ export function useAppContext(): UseAppControllerReturn {
     ? ({
         id: authUser.id,
         email: authUser.email,
+        name: authUser.name || authUser.email.split("@")[0],
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
         role: authUser.role as string,

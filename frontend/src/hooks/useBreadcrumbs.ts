@@ -22,7 +22,6 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
 
     // Home/Dashboard
     breadcrumbs.push({
-      id: "home",
       label: "Dashboard",
       path: "/",
     });
@@ -45,7 +44,6 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
             .replace(/([A-Z])/g, " $1")
             .trim();
           breadcrumbs.push({
-            id: segment,
             label: `${label.charAt(0).toUpperCase() + label.slice(1)} #${segment.slice(0, 8)}`,
             path: currentPath,
           });
@@ -58,10 +56,8 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
 
       if (module) {
         breadcrumbs.push({
-          id: segment,
           label: module.label,
           path: currentPath,
-          icon: module.icon,
         });
       } else {
         // Fallback: Convert kebab-case or snake_case to Title Case
@@ -70,7 +66,6 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
           .replace(/\b\w/g, (char) => char.toUpperCase());
 
         breadcrumbs.push({
-          id: segment,
           label,
           path: currentPath,
         });

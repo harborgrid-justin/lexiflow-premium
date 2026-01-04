@@ -1,50 +1,64 @@
 // types/misc.ts
 // Miscellaneous types - split from compatibility.ts
 
+import type React from "react";
+import type { LazyExoticComponent } from "react";
+import type { Case, Party } from "./case";
+import type { LegalDocument } from "./documents";
 import {
-  BaseEntity, UserId, EntityId, CaseId, MetadataRecord
-} from './primitives';
+  EntityRole,
+  EntityType,
+  NavCategory,
+  ServiceMethod,
+  ServiceStatus,
+} from "./enums";
+import type { EvidenceItem } from "./evidence";
+import type { DocketEntry, Motion } from "./motion-docket";
 import {
-  ServiceMethod, EntityType, EntityRole, ServiceStatus, NavCategory
-} from './enums';
-import type React from 'react';
-import type { LazyExoticComponent } from 'react';
-import type { Case, Party } from './case';
-import type { Motion, DocketEntry } from './motion-docket';
-import type { EvidenceItem } from './evidence';
-import type { LegalDocument } from './documents';
-import type { WorkflowTask } from './workflow';
+  BaseEntity,
+  CaseId,
+  EntityId,
+  MetadataRecord,
+  UserId,
+} from "./primitives";
+import type { WorkflowTask } from "./workflow";
 
-export interface Attachment { 
+export interface Attachment {
   id?: string;
-  name: string; 
-  size?: string | number; 
-  type?: string; 
-  sender?: string; 
-  date?: string; 
-  url?: string; 
+  name: string;
+  size?: string | number;
+  type?: string;
+  sender?: string;
+  date?: string;
+  url?: string;
 }
 
 // Backend: calendar_events table
 // Backend CalendarEventType enum (from calendar/dto/calendar.dto.ts)
 export enum CalendarEventType {
-  HEARING = 'Hearing',
-  DEADLINE = 'Deadline',
-  MEETING = 'Meeting',
-  REMINDER = 'Reminder',
-  COURT_DATE = 'CourtDate',
-  FILING = 'Filing'
+  HEARING = "Hearing",
+  DEADLINE = "Deadline",
+  MEETING = "Meeting",
+  REMINDER = "Reminder",
+  COURT_DATE = "CourtDate",
+  FILING = "Filing",
 }
 
 export interface CalendarEventItem {
   id: string;
   title: string;
   date: string; // Alias for startDate
-  type: CalendarEventType | 'case' | 'deadline' | 'hearing' | 'task' | 'compliance'; // Backend: enum (default: REMINDER)
+  type:
+    | CalendarEventType
+    | "case"
+    | "deadline"
+    | "hearing"
+    | "task"
+    | "compliance"; // Backend: enum (default: REMINDER)
   description?: string;
   priority?: string;
   location?: string;
-  
+
   // Backend additional fields
   eventType?: CalendarEventType; // Alias for type
   startDate?: string; // Backend: timestamp (required)
@@ -53,7 +67,7 @@ export interface CalendarEventItem {
   reminder?: string; // Backend: varchar
   completed?: boolean; // Backend: boolean (default: false)
   caseId?: string; // Backend: uuid
-  
+
   // Legacy frontend values (map to backend enum)
   // Old: 'deposition' | 'court_appearance' | 'trial' | 'conference' | 'filing_deadline'
   // Map: deposition -> MEETING, court_appearance -> COURT_DATE, trial -> HEARING
@@ -70,17 +84,59 @@ export interface CasePhase {
   color: string;
 }
 
-export interface CommunicationItem extends BaseEntity { caseId: CaseId; userId: UserId; subject: string; date: string; type: string; direction: string; sender: string; recipient: string; preview: string; hasAttachment: boolean; status: string; isPrivileged: boolean; }
+export interface CommunicationItem extends BaseEntity {
+  caseId: CaseId;
+  userId: UserId;
+  subject: string;
+  date: string;
+  type: string;
+  direction: string;
+  sender: string;
+  recipient: string;
+  preview: string;
+  hasAttachment: boolean;
+  status: string;
+  isPrivileged: boolean;
+}
 
-export interface Conversation extends BaseEntity { name: string; role: string; status: string; unread: number; isExternal: boolean; messages: Message[]; draft?: string; }
+export interface Conversation extends BaseEntity {
+  name: string;
+  role: string;
+  status: string;
+  unread: number;
+  isExternal: boolean;
+  messages: Message[];
+  draft?: string;
+}
 
-export interface EntityRelationship extends BaseEntity { sourceId: EntityId; targetId: EntityId; type: 'Employment' | 'Subsidiary' | 'Counsel_For' | 'Sued_By' | 'Witness_For' | 'Family' | 'Conflict' | 'Board_Member'; description?: string; startDate?: string; endDate?: string; active: boolean; weight?: number; }
+export interface EntityRelationship extends BaseEntity {
+  sourceId: EntityId;
+  targetId: EntityId;
+  type:
+    | "Employment"
+    | "Subsidiary"
+    | "Counsel_For"
+    | "Sued_By"
+    | "Witness_For"
+    | "Family"
+    | "Conflict"
+    | "Board_Member";
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  active: boolean;
+  weight?: number;
+}
 
-export interface JudgeMotionStat { name: string; grant: number; deny: number; }
+export interface JudgeMotionStat {
+  name: string;
+  grant: number;
+  deny: number;
+}
 
 export interface JudgeProfile extends BaseEntity {
-  name: string; 
-  court: string; 
+  name: string;
+  court: string;
   jurisdiction?: string;
   appointedBy?: string;
   yearsOnBench?: number;
@@ -93,12 +149,12 @@ export interface JudgeProfile extends BaseEntity {
     totalRuled: number;
     grantRate: number;
   }>;
-  grantRateDismiss: number; 
-  grantRateSummary: number; 
+  grantRateDismiss: number;
+  grantRateSummary: number;
   grantRateDiscovery?: number;
   grantRateSanctions?: number;
   // Case statistics
-  avgCaseDuration: number; 
+  avgCaseDuration: number;
   casesAssigned?: number;
   casesResolved?: number;
   trialRate?: number;
@@ -107,7 +163,7 @@ export interface JudgeProfile extends BaseEntity {
   tendencies: string[];
   rulingPatterns?: string[];
   preferredProcedures?: string[];
-  strictness?: 'Lenient' | 'Moderate' | 'Strict';
+  strictness?: "Lenient" | "Moderate" | "Strict";
   // Additional context
   notableRulings?: Array<{
     caseTitle: string;
@@ -135,7 +191,7 @@ export interface CounselProfile extends BaseEntity {
   avgSettlementAmount?: number;
   avgSettlementVariance: number;
   // Strategy patterns
-  aggressiveness?: 'Low' | 'Medium' | 'High';
+  aggressiveness?: "Low" | "Medium" | "High";
   motionFrequency?: number;
   discoveryTactics?: string[];
   negotiationStyle?: string;
@@ -184,12 +240,12 @@ export interface OutcomePredictionData {
   // Risk factors
   riskFactors: Array<{
     factor: string;
-    impact: 'Low' | 'Medium' | 'High';
+    impact: "Low" | "Medium" | "High";
     description: string;
   }>;
   strengthFactors: Array<{
     factor: string;
-    impact: 'Low' | 'Medium' | 'High';
+    impact: "Low" | "Medium" | "High";
     description: string;
   }>;
   // Timelines
@@ -210,7 +266,7 @@ export interface OutcomePredictionData {
 export interface AnalysisSession extends BaseEntity {
   caseId?: CaseId;
   userId: UserId;
-  sessionType: 'Brief' | 'Case' | 'Motion' | 'Discovery' | 'Trial' | 'General';
+  sessionType: "Brief" | "Case" | "Motion" | "Discovery" | "Trial" | "General";
   startTime: string;
   endTime?: string;
   duration?: number; // minutes
@@ -227,18 +283,44 @@ export interface AnalysisSession extends BaseEntity {
   metadata?: MetadataRecord;
 }
 
-export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; metadata?: MetadataRecord; }
+export interface LegalEntity extends BaseEntity {
+  id: EntityId;
+  name: string;
+  type: EntityType;
+  roles: EntityRole[];
+  email?: string;
+  phone?: string;
+  website?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  taxId?: string;
+  company?: string;
+  title?: string;
+  barNumber?: string;
+  jurisdiction?: string;
+  status: "Active" | "Inactive" | "Prospect" | "Blacklisted" | "Deceased";
+  riskScore: number;
+  tags: string[];
+  notes?: string;
+  linkedUserId?: UserId;
+  avatar?: string;
+  externalIds?: Record<string, string>;
+  aliases?: string[];
+  metadata?: MetadataRecord;
+}
 
-export interface Message extends BaseEntity { 
+export interface Message extends BaseEntity {
   conversationId?: string;
-  senderId: UserId | 'me' | string; 
-  text: string; 
+  senderId: UserId | "me" | string;
+  text: string;
   content?: string;
-  timestamp: string; 
-  status?: 'sent' | 'delivered' | 'read'; 
+  timestamp: string;
+  status?: "sent" | "delivered" | "read";
   read?: boolean;
-  isPrivileged?: boolean; 
-  attachments?: Attachment[]; 
+  isPrivileged?: boolean;
+  attachments?: Attachment[];
 }
 
 export interface ModuleDefinition {
@@ -253,11 +335,11 @@ export interface ModuleDefinition {
   children?: ModuleDefinition[];
 }
 
-export interface NexusNodeData { 
-  id: string; 
-  type: 'root' | 'org' | 'party' | 'evidence' | 'motion'; 
-  label: string; 
-  original: Case | Party | EvidenceItem | Motion | object; 
+export interface NexusNodeData {
+  id: string;
+  type: "root" | "org" | "party" | "evidence" | "motion";
+  label: string;
+  original: Case | Party | EvidenceItem | Motion | object;
   status?: string;
 }
 
@@ -288,39 +370,93 @@ export interface ProductionSet {
   docCount: number;
   size: string;
   format: string;
-  status: 'Delivered' | 'Staging' | 'Failed';
+  status: "Delivered" | "Staging" | "Failed";
 }
 
-export interface RealizationStat { id?: string; name: string; value: number; color: string; }
+export interface RealizationStat {
+  id?: string;
+  name: string;
+  value: number;
+  color: string;
+}
 
-export interface ServiceJob extends BaseEntity { caseId: CaseId; requestorId: UserId; documentTitle: string; targetPerson: string; targetAddress: string; serverName: string; method: ServiceMethod; mailType?: string; trackingNumber?: string; addressedTo?: string; status: keyof typeof ServiceStatus; dueDate: string; attempts: number; servedDate?: string; gpsCoordinates?: string; notes?: string; signerName?: string; attemptHistory?: { date: string; result: string; lat?: number; long?: number }[]; }
+export interface ServiceJob extends BaseEntity {
+  caseId: CaseId;
+  requestorId: UserId;
+  documentTitle: string;
+  targetPerson: string;
+  targetAddress: string;
+  serverName: string;
+  method: ServiceMethod;
+  mailType?: string;
+  trackingNumber?: string;
+  addressedTo?: string;
+  status: keyof typeof ServiceStatus;
+  dueDate: string;
+  attempts: number;
+  servedDate?: string;
+  gpsCoordinates?: string;
+  notes?: string;
+  signerName?: string;
+  attemptHistory?: {
+    date: string;
+    result: string;
+    lat?: number;
+    long?: number;
+  }[];
+  [key: string]: unknown;
+}
 
 export interface StaffMember {
   id: string;
   userId: UserId;
   name: string;
   email: string;
-  role: 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
+  role: "Associate" | "Paralegal" | "Senior Partner" | "Administrator";
   phone: string;
   billableTarget: number;
   currentBillable: number;
   utilizationRate: number;
   salary: number;
-  status: 'Active' | 'Inactive';
+  status: "Active" | "Inactive";
   startDate: string;
 }
 
-export interface MiscSystemNotification extends BaseEntity { text: string; time: string; read: boolean; type?: string; }
+export interface MiscSystemNotification extends BaseEntity {
+  text: string;
+  time: string;
+  read: boolean;
+  type?: string;
+}
 
 export interface TimelineEvent {
   id: string;
   date: string;
   title: string;
-  type: 'milestone' | 'document' | 'billing' | 'motion' | 'hearing' | 'task' | 'planning';
+  type:
+    | "milestone"
+    | "document"
+    | "billing"
+    | "motion"
+    | "hearing"
+    | "task"
+    | "planning";
   description?: string;
   relatedId?: string;
 }
 
-export interface WIPStat { name: string; wip: number; billed: number; }
+export interface WIPStat {
+  name: string;
+  wip: number;
+  billed: number;
+}
 
-export interface WarRoomData { case: Case; witnesses: Party[]; documents: LegalDocument[]; motions: Motion[]; docket: DocketEntry[]; evidence: EvidenceItem[]; tasks: WorkflowTask[]; }
+export interface WarRoomData {
+  case: Case;
+  witnesses: Party[];
+  documents: LegalDocument[];
+  motions: Motion[];
+  docket: DocketEntry[];
+  evidence: EvidenceItem[];
+  tasks: WorkflowTask[];
+}

@@ -49,7 +49,9 @@ interface AuditLogEntry {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+import type { LoaderFunctionArgs } from 'react-router';
+
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get('page') || '1');
 
@@ -201,7 +203,7 @@ function formatTimestamp(timestamp: string): string {
 // Component
 // ============================================================================
 
-export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
+export default function AuditLogsRoute({ loaderData }: any) {
   const { logs, pagination, filters } = loaderData;
   const formId = useId();
 
@@ -268,7 +270,7 @@ export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
             className="rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           >
             <option value="all">All Actions</option>
-            {filters.actions.map((action) => (
+            {filters.actions.map((action: string) => (
               <option key={action} value={action}>{action}</option>
             ))}
           </select>
@@ -301,7 +303,7 @@ export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-            {logs.map((log) => (
+            {logs.map((log: AuditLogEntry) => (
               <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center gap-2">

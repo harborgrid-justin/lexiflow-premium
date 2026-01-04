@@ -25,8 +25,6 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface BreadcrumbItem {
-  label: string;
 export interface BreadcrumbItem {
   label: string;
   path?: string;

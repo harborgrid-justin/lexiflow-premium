@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useDebounce } from '@/hooks/useDebounce';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useDebounce } from '@/hooks/useDebounce';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
@@ -114,7 +114,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
 
           {conflicts.length > 0 && (
             <ul className="list-disc pl-5 mt-1 space-y-0.5">
-              {conflicts.slice(0, 3).map((c) => <li key={`conflict-${i}-${c.substring(0, 30)}`}>{c}</li>)}
+              {conflicts.slice(0, 3).map((c, i) => <li key={`conflict-${i}-${c.substring(0, 30)}`}>{c}</li>)}
               {conflicts.length > 3 && <li>...and {conflicts.length - 3} more</li>}
             </ul>
           )}

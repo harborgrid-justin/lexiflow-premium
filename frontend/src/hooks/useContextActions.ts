@@ -175,8 +175,8 @@ export function useContextToolbar(
             const storedStat = stat as StoredActionStats;
             statsMap.set(id, {
               actionId: id,
-              useCount: storedStat.useCount || 0,
-              avgTimeBetweenUses: storedStat.avgTimeBetweenUses || 0,
+              useCount: Number(storedStat.useCount) || 0,
+              avgTimeBetweenUses: Number(storedStat.avgTimeBetweenUses) || 0,
               ...storedStat,
               lastUsed: new Date(storedStat.lastUsed),
               contextPatterns: new Map(

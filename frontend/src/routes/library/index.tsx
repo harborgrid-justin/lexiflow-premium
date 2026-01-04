@@ -12,13 +12,13 @@
 
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/index";
+import type { LoaderFunctionArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
   return createListMeta({
     entityType: 'Resources',
     count: data?.resources?.length,
@@ -30,7 +30,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // Parse search/filter params
   const url = new URL(request.url);
   const category = url.searchParams.get("category") || "all";

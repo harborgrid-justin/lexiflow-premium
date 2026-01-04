@@ -231,21 +231,29 @@ export function useProgress({
       if (currentIdx === -1) return prev;
 
       const newSteps = [...prev];
-      newSteps[currentIdx] = {
-        ...newSteps[currentIdx],
-        status: "completed",
-        progress: 100,
-        id: newSteps[currentIdx].id || "",
-      };
+      const currentStep = newSteps[currentIdx];
+      if (currentStep) {
+        newSteps[currentIdx] = {
+          ...currentStep,
+          status: "completed",
+          progress: 100,
+          id: currentStep.id || "",
+          label: currentStep.label || "",
+        };
+      }
 
       // Move to next step if available
       if (currentIdx + 1 < newSteps.length) {
-        newSteps[currentIdx + 1] = {
-          ...newSteps[currentIdx + 1],
-          status: "in-progress",
-          progress: 0,
-          id: newSteps[currentIdx + 1].id || "",
-        };
+        const nextStep = newSteps[currentIdx + 1];
+        if (nextStep) {
+          newSteps[currentIdx + 1] = {
+            ...nextStep,
+            status: "in-progress",
+            progress: 0,
+            id: nextStep.id || "",
+            label: nextStep.label || "",
+          };
+        }
       } else {
         // All steps completed
         setProgressState(100);

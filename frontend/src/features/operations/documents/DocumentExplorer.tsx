@@ -1,12 +1,12 @@
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelection';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument, UserRole } from '@/types';
 import { cn } from '@/utils/cn';
-import { useDeferredValue, useState } from 'react';
+import { useState } from 'react';
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentToolbar } from './DocumentToolbar';
@@ -36,7 +36,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         isDragging, handleDragEnter, handleDragLeave, handleDrop
     } = useDocumentManager({ enableDragDrop: true });
 
-    const _deferredSearchTerm = useDeferredValue(searchTerm);
+    // const _deferredSearchTerm = useDeferredValue(searchTerm);
 
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);
@@ -57,11 +57,12 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         }
     );
 
-    const renderGridCell = (item: LegalDocument) => {
+    const renderGridCell = (item: unknown) => {
+        const doc = item as LegalDocument;
         return (
             <DocumentGridCard
-                doc={item}
-                isSelected={isSelected(item.id)}
+                doc={doc}
+                isSelected={isSelected(doc.id)}
                 onToggleSelection={(id, e) => toggleSelection(id, e)}
                 onPreview={setPreviewDoc}
             />

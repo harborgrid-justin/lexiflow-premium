@@ -10,9 +10,9 @@
  * @module routes/calendar/index
  */
 
+import type { LoaderFunctionArgs, MetaArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import type { LoaderFunctionArgs, MetaArgs } from 'react-router';
 
 // ============================================================================
 // Meta Tags

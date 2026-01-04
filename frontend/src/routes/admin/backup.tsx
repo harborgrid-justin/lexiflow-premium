@@ -117,7 +117,9 @@ export async function loader() {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+import type { ActionFunctionArgs } from 'react-router';
+
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -224,7 +226,7 @@ function getTypeColor(type: string): string {
 // Component
 // ============================================================================
 
-export default function BackupRoute({ loaderData }: Route.ComponentProps) {
+export default function BackupRoute({ loaderData }: any) {
   const { backups, schedules, stats } = loaderData;
   const fetcher = useFetcher();
 
@@ -344,7 +346,7 @@ export default function BackupRoute({ loaderData }: Route.ComponentProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {schedules.map((schedule) => (
+              {schedules.map((schedule: BackupSchedule) => (
                 <tr key={schedule.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
                     {schedule.name}
@@ -405,7 +407,7 @@ export default function BackupRoute({ loaderData }: Route.ComponentProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {backups.map((backup) => (
+              {backups.map((backup: BackupSnapshot) => (
                 <tr key={backup.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-6 py-4">
                     <div className="text-sm font-medium text-gray-900 dark:text-gray-100">

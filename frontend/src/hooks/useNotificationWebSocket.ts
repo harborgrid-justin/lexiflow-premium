@@ -190,7 +190,9 @@ export const useNotificationWebSocket = (
       30000 // Max 30s delay
     );
 
-    log(`Scheduling reconnect in ${delay}ms (Attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`);
+    log(
+      `Scheduling reconnect in ${delay}ms (Attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`
+    );
 
     if (reconnectTimerRef.current) {
       clearTimeout(reconnectTimerRef.current);
@@ -332,23 +334,6 @@ export const useNotificationWebSocket = (
     log,
     updateConnectionState,
   ]);
-
-  /**
-   * Schedule reconnection with exponential backoff
-   */
-  /* const scheduleReconnect = useCallback((): void => { ... moved up ... */
-      30000 // Max 30 seconds
-    );
-
-    log(
-      `Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`
-    );
-
-    reconnectTimerRef.current = setTimeout(() => {
-      reconnectAttemptsRef.current += 1;
-      connect();
-    }, delay);
-  }, [maxReconnectAttempts, reconnectDelay, connect, log]);
 
   /**
    * Disconnect from WebSocket

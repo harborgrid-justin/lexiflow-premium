@@ -116,7 +116,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
         const idx = i * NODE_STRIDE;
         const x = state.buffer[idx];
         const y = state.buffer[idx + 1];
-        const el = domRefs.current.get(nodesMeta[i]?.id);
+        const el = domRefs.current.get(nodesMeta[i]?.id || '');
         if (el) {
           el.setAttribute('transform', `translate(${x},${y})`);
         }

@@ -121,7 +121,7 @@ export function useAppContext(): UseAppControllerReturn {
   });
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 

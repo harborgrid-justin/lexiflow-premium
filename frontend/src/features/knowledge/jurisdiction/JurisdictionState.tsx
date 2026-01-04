@@ -35,7 +35,7 @@ import { filterStates } from './utils';
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // Performance Engine: useQuery
   const { data: rawStates = [], isLoading } = useQuery<unknown[]>(

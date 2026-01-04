@@ -46,7 +46,7 @@ interface ComplianceConflictsProps {
 const ComplianceConflictsComponent: React.FC<ComplianceConflictsProps> = ({ conflicts }) => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const filteredConflicts = useMemo(() =>
     conflicts.filter(c =>

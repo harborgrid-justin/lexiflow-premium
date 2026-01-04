@@ -18,6 +18,7 @@ import { adminApi } from "@/api/domains/admin.api";
 import { MOCK_API_SPEC } from "@/api/types/mockApiSpec";
 import { API_PREFIX } from "@/config/network/api.config";
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
+import { apiClient } from "@/services/infrastructure/apiClient";
 import { delay } from "@/utils/async";
 
 export const AdminService = {

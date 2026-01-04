@@ -5,10 +5,10 @@
  * Provides smooth loading animations for various dashboard components
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { cn } from '@/utils/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 interface SkeletonProps {
   className?: string;
@@ -132,7 +132,7 @@ export const ChartSkeleton: React.FC<{
         <Skeleton height="100%" variant="rounded" />
         {/* Simulate chart bars/lines */}
         <div className="absolute inset-0 flex items-end justify-around p-4 gap-2">
-          {Array.from({ length: 8 }).map((_) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton
               key={i}
               width="100%"
@@ -296,36 +296,36 @@ export const WidgetSkeleton: React.FC<{
   bodyLines = 5,
   className,
 }) => {
-  const { theme } = useTheme();
+    const { theme } = useTheme();
 
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={cn(
-        'p-6 rounded-xl border shadow-sm',
-        theme.surface.default,
-        theme.border.default,
-        className
-      )}
-      style={{ minHeight: height }}
-    >
-      {showHeader && (
-        <div className="mb-6 space-y-2">
-          {Array.from({ length: headerLines }).map((_, index) => (
-            <Skeleton
-              key={index}
-              width={index === 0 ? '40%' : '60%'}
-              height={index === 0 ? 20 : 14}
-            />
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className={cn(
+          'p-6 rounded-xl border shadow-sm',
+          theme.surface.default,
+          theme.border.default,
+          className
+        )}
+        style={{ minHeight: height }}
+      >
+        {showHeader && (
+          <div className="mb-6 space-y-2">
+            {Array.from({ length: headerLines }).map((_, index) => (
+              <Skeleton
+                key={index}
+                width={index === 0 ? '40%' : '60%'}
+                height={index === 0 ? 20 : 14}
+              />
+            ))}
+          </div>
+        )}
+        <div className="space-y-3">
+          {Array.from({ length: bodyLines }).map((_, index) => (
+            <Skeleton key={index} width={`${90 - index * 5}%`} height={16} />
           ))}
         </div>
-      )}
-      <div className="space-y-3">
-        {Array.from({ length: bodyLines }).map((_, index) => (
-          <Skeleton key={index} width={`${90 - index * 5}%`} height={16} />
-        ))}
-      </div>
-    </motion.div>
-  );
-};
+      </motion.div>
+    );
+  };

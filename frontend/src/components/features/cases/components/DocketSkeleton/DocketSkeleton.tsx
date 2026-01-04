@@ -4,9 +4,9 @@
  * @description Skeleton screens for docket table and calendar loading states
  */
 
-import React from 'react';
-import { cn } from '@/utils/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/utils/cn';
+import React from 'react';
 
 // ============================================================================
 // DOCKET TABLE SKELETON
@@ -29,7 +29,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
 
       {/* Rows - IDENTITY-STABLE KEYS */}
       <div className="flex-1 overflow-hidden">
-        {Array.from({ length: rows }).map((_) => (
+        {Array.from({ length: rows }).map((_, i) => (
           <div
             key={`docket-row-${i}`}
             className={cn("hidden md:flex items-center px-6 border-b h-[72px]", theme.border.default)}
@@ -69,7 +69,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
 
         {/* Mobile View - IDENTITY-STABLE KEYS */}
         <div className="md:hidden space-y-3 p-4">
-          {Array.from({ length: rows }).map((_) => (
+          {Array.from({ length: rows }).map((_, i) => (
             <div
               key={`docket-mobile-${i}`}
               className={cn("p-4 rounded-lg border h-[140px]", theme.border.default, theme.surface.default)}
@@ -134,7 +134,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
         ))}
 
         {/* Calendar Days - DETERMINISTIC RENDERING: Use stable pattern instead of Math.random */}
-        {Array.from({ length: 35 }).map((_) => (
+        {Array.from({ length: 35 }).map((_, i) => (
           <div
             key={`calendar-day-${i}`}
             className={cn("p-2 min-h-[120px] flex flex-col", theme.surface.default)}
@@ -166,7 +166,7 @@ export const DocketStatsSkeleton: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      {Array.from({ length: 4 }).map((_) => (
+      {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
           className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}
@@ -201,7 +201,7 @@ export const DocketFilterSkeleton: React.FC = () => {
         <div>
           <div className="w-16 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-2" />
           <div className="space-y-2">
-            {Array.from({ length: 3 }).map((_) => (
+            {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="w-full h-9 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             ))}
           </div>
@@ -211,7 +211,7 @@ export const DocketFilterSkeleton: React.FC = () => {
         <div>
           <div className="w-20 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-2" />
           <div className="space-y-2">
-            {Array.from({ length: 5 }).map((_) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="space-y-1">
                 <div className="w-full h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
                 <div className="w-3/4 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />

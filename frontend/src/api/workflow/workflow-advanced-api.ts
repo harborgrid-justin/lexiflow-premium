@@ -5,36 +5,36 @@
  * @integration DataService facade pattern for seamless backend/local routing
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 import type {
-  EnhancedWorkflowInstance,
+  AILearningFeedback,
+  AIWorkflowSuggestion,
+  ApprovalChain,
+  ApprovalDecision,
+  ApprovalInstance,
   ConditionalBranchingConfig,
+  EnhancedWorkflowInstance,
+  ExternalTrigger,
   ParallelExecutionConfig,
-  WorkflowVersion,
-  WorkflowDiff,
-  WorkflowTemplate,
+  RollbackOperation,
   SLAConfig,
   SLAStatus,
-  ApprovalChain,
-  ApprovalInstance,
-  ApprovalDecision,
-  WorkflowSnapshot,
-  RollbackOperation,
-  WorkflowAnalytics,
-  AIWorkflowSuggestion,
-  AILearningFeedback,
-  ExternalTrigger,
   TriggerEvent,
+  WorkflowAnalytics,
+  WorkflowDiff,
   WorkflowQueryFilters,
+  WorkflowSnapshot,
   WorkflowSortOptions,
-} from '@/types/workflow-advanced-types';
+  WorkflowTemplate,
+  WorkflowVersion,
+} from "@/types/workflow-advanced-types";
 
 /**
  * Advanced Workflow API Service
  * Provides enterprise-grade workflow automation with 10 elite features
  */
 export class WorkflowAdvancedApiService {
-  private readonly baseUrl = '/workflow/advanced';
+  private readonly baseUrl = "/workflow/advanced";
 
   // ============================================================================
   // FEATURE 1: CONDITIONAL BRANCHING ENGINE
@@ -45,7 +45,7 @@ export class WorkflowAdvancedApiService {
    */
   async createConditionalBranching(
     workflowId: string,
-    config: ConditionalBranchingConfig,
+    config: ConditionalBranchingConfig
   ): Promise<ConditionalBranchingConfig> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/conditional`, config);
   }
@@ -56,9 +56,12 @@ export class WorkflowAdvancedApiService {
   async evaluateConditionalBranching(
     workflowId: string,
     nodeId: string,
-    context: Record<string, unknown>,
+    context: Record<string, unknown>
   ): Promise<{ branchId: string; matched: boolean; evaluationTime: number }> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/conditional/${nodeId}/evaluate`, { context });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/conditional/${nodeId}/evaluate`,
+      { context }
+    );
   }
 
   /**
@@ -67,16 +70,24 @@ export class WorkflowAdvancedApiService {
   async updateConditionalBranching(
     workflowId: string,
     configId: string,
-    updates: Partial<ConditionalBranchingConfig>,
+    updates: Partial<ConditionalBranchingConfig>
   ): Promise<ConditionalBranchingConfig> {
-    return apiClient.patch(`${this.baseUrl}/${workflowId}/conditional/${configId}`, updates);
+    return apiClient.patch(
+      `${this.baseUrl}/${workflowId}/conditional/${configId}`,
+      updates
+    );
   }
 
   /**
    * Delete conditional branching configuration
    */
-  async deleteConditionalBranching(workflowId: string, configId: string): Promise<void> {
-    return apiClient.delete(`${this.baseUrl}/${workflowId}/conditional/${configId}`);
+  async deleteConditionalBranching(
+    workflowId: string,
+    configId: string
+  ): Promise<void> {
+    return apiClient.delete(
+      `${this.baseUrl}/${workflowId}/conditional/${configId}`
+    );
   }
 
   /**
@@ -85,9 +96,18 @@ export class WorkflowAdvancedApiService {
   async testConditionalRules(
     workflowId: string,
     config: ConditionalBranchingConfig,
-    testCases: Array<{ input: Record<string, unknown>; expectedBranch: string }>,
-  ): Promise<Array<{ input: Record<string, unknown>; actualBranch: string; passed: boolean }>> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/conditional/test`, { config, testCases });
+    testCases: Array<{ input: Record<string, unknown>; expectedBranch: string }>
+  ): Promise<
+    Array<{
+      input: Record<string, unknown>;
+      actualBranch: string;
+      passed: boolean;
+    }>
+  > {
+    return apiClient.post(`${this.baseUrl}/${workflowId}/conditional/test`, {
+      config,
+      testCases,
+    });
   }
 
   // ============================================================================
@@ -99,7 +119,7 @@ export class WorkflowAdvancedApiService {
    */
   async createParallelExecution(
     workflowId: string,
-    config: ParallelExecutionConfig,
+    config: ParallelExecutionConfig
   ): Promise<ParallelExecutionConfig> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/parallel`, config);
   }
@@ -110,14 +130,17 @@ export class WorkflowAdvancedApiService {
   async executeParallelBranches(
     workflowId: string,
     configId: string,
-    context: Record<string, unknown>,
+    context: Record<string, unknown>
   ): Promise<{
     completedBranches: string[];
     failedBranches: string[];
     executionTime: number;
     metrics: Record<string, unknown>;
   }> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/parallel/${configId}/execute`, { context });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/parallel/${configId}/execute`,
+      { context }
+    );
   }
 
   /**
@@ -125,14 +148,16 @@ export class WorkflowAdvancedApiService {
    */
   async getParallelExecutionMetrics(
     workflowId: string,
-    configId: string,
+    configId: string
   ): Promise<{
     totalExecutions: number;
     averageDuration: number;
     successRate: number;
     branchMetrics: Record<string, unknown>;
   }> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/parallel/${configId}/metrics`);
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/parallel/${configId}/metrics`
+    );
   }
 
   /**
@@ -141,9 +166,12 @@ export class WorkflowAdvancedApiService {
   async updateParallelExecution(
     workflowId: string,
     configId: string,
-    updates: Partial<ParallelExecutionConfig>,
+    updates: Partial<ParallelExecutionConfig>
   ): Promise<ParallelExecutionConfig> {
-    return apiClient.patch(`${this.baseUrl}/${workflowId}/parallel/${configId}`, updates);
+    return apiClient.patch(
+      `${this.baseUrl}/${workflowId}/parallel/${configId}`,
+      updates
+    );
   }
 
   // ============================================================================
@@ -155,9 +183,12 @@ export class WorkflowAdvancedApiService {
    */
   async createVersion(
     workflowId: string,
-    versionData: Partial<WorkflowVersion>,
+    versionData: Partial<WorkflowVersion>
   ): Promise<WorkflowVersion> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/versions`, versionData);
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/versions`,
+      versionData
+    );
   }
 
   /**
@@ -170,7 +201,10 @@ export class WorkflowAdvancedApiService {
   /**
    * Get specific version
    */
-  async getVersion(workflowId: string, versionId: string): Promise<WorkflowVersion> {
+  async getVersion(
+    workflowId: string,
+    versionId: string
+  ): Promise<WorkflowVersion> {
     return apiClient.get(`${this.baseUrl}/${workflowId}/versions/${versionId}`);
   }
 
@@ -180,7 +214,7 @@ export class WorkflowAdvancedApiService {
   async compareVersions(
     workflowId: string,
     versionA: string,
-    versionB: string,
+    versionB: string
   ): Promise<WorkflowDiff> {
     return apiClient.get(`${this.baseUrl}/${workflowId}/versions/compare`, {
       params: { versionA, versionB },
@@ -190,15 +224,25 @@ export class WorkflowAdvancedApiService {
   /**
    * Rollback to specific version
    */
-  async rollbackToVersion(workflowId: string, versionId: string): Promise<EnhancedWorkflowInstance> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/versions/${versionId}/rollback`);
+  async rollbackToVersion(
+    workflowId: string,
+    versionId: string
+  ): Promise<EnhancedWorkflowInstance> {
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/versions/${versionId}/rollback`
+    );
   }
 
   /**
    * Publish version
    */
-  async publishVersion(workflowId: string, versionId: string): Promise<WorkflowVersion> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/versions/${versionId}/publish`);
+  async publishVersion(
+    workflowId: string,
+    versionId: string
+  ): Promise<WorkflowVersion> {
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/versions/${versionId}/publish`
+    );
   }
 
   /**
@@ -207,9 +251,12 @@ export class WorkflowAdvancedApiService {
   async deprecateVersion(
     workflowId: string,
     versionId: string,
-    reason: string,
+    reason: string
   ): Promise<WorkflowVersion> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/versions/${versionId}/deprecate`, { reason });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/versions/${versionId}/deprecate`,
+      { reason }
+    );
   }
 
   // ============================================================================
@@ -229,21 +276,30 @@ export class WorkflowAdvancedApiService {
     minRating?: number;
     certified?: boolean;
   }): Promise<WorkflowTemplate[]> {
-    return apiClient.get(`${this.baseUrl}/templates/search`, { params: query });
+    return apiClient.get(`${this.baseUrl}/templates/search`, query);
   }
 
   /**
    * Get AI-suggested categories for a template
    */
-  async getAICategories(templateId: string): Promise<Array<{ category: string; confidence: number }>> {
-    return apiClient.get(`${this.baseUrl}/templates/${templateId}/ai-categories`);
+  async getAICategories(
+    templateId: string
+  ): Promise<Array<{ category: string; confidence: number }>> {
+    return apiClient.get(
+      `${this.baseUrl}/templates/${templateId}/ai-categories`
+    );
   }
 
   /**
    * Fork a template
    */
-  async forkTemplate(templateId: string, name: string): Promise<WorkflowTemplate> {
-    return apiClient.post(`${this.baseUrl}/templates/${templateId}/fork`, { name });
+  async forkTemplate(
+    templateId: string,
+    name: string
+  ): Promise<WorkflowTemplate> {
+    return apiClient.post(`${this.baseUrl}/templates/${templateId}/fork`, {
+      name,
+    });
   }
 
   /**
@@ -252,9 +308,12 @@ export class WorkflowAdvancedApiService {
   async rateTemplate(
     templateId: string,
     rating: number,
-    comment?: string,
+    comment?: string
   ): Promise<WorkflowTemplate> {
-    return apiClient.post(`${this.baseUrl}/templates/${templateId}/rate`, { rating, comment });
+    return apiClient.post(`${this.baseUrl}/templates/${templateId}/rate`, {
+      rating,
+      comment,
+    });
   }
 
   /**
@@ -277,7 +336,10 @@ export class WorkflowAdvancedApiService {
   /**
    * Create SLA configuration for workflow
    */
-  async createSLA(workflowId: string, config: Partial<SLAConfig>): Promise<SLAConfig> {
+  async createSLA(
+    workflowId: string,
+    config: Partial<SLAConfig>
+  ): Promise<SLAConfig> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/sla`, config);
   }
 
@@ -294,9 +356,11 @@ export class WorkflowAdvancedApiService {
   async calculateSLAStatus(
     workflowId: string,
     nodeId: string,
-    slaConfigId: string,
+    slaConfigId: string
   ): Promise<SLAStatus> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/sla/${slaConfigId}/status/${nodeId}`);
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/sla/${slaConfigId}/status/${nodeId}`
+    );
   }
 
   /**
@@ -317,8 +381,14 @@ export class WorkflowAdvancedApiService {
   /**
    * Pause SLA tracking
    */
-  async pauseSLA(workflowId: string, nodeId: string, reason: string): Promise<void> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/sla/pause/${nodeId}`, { reason });
+  async pauseSLA(
+    workflowId: string,
+    nodeId: string,
+    reason: string
+  ): Promise<void> {
+    return apiClient.post(`${this.baseUrl}/${workflowId}/sla/pause/${nodeId}`, {
+      reason,
+    });
   }
 
   /**
@@ -337,7 +407,7 @@ export class WorkflowAdvancedApiService {
    */
   async createApprovalChain(
     workflowId: string,
-    chain: Partial<ApprovalChain>,
+    chain: Partial<ApprovalChain>
   ): Promise<ApprovalChain> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/approvals`, chain);
   }
@@ -352,8 +422,13 @@ export class WorkflowAdvancedApiService {
   /**
    * Get approval instance
    */
-  async getApprovalInstance(workflowId: string, instanceId: string): Promise<ApprovalInstance> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}`);
+  async getApprovalInstance(
+    workflowId: string,
+    instanceId: string
+  ): Promise<ApprovalInstance> {
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}`
+    );
   }
 
   /**
@@ -362,9 +437,12 @@ export class WorkflowAdvancedApiService {
   async submitApprovalDecision(
     workflowId: string,
     instanceId: string,
-    decision: Partial<ApprovalDecision>,
+    decision: Partial<ApprovalDecision>
   ): Promise<{ approved: boolean; chainComplete: boolean }> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}/decide`, decision);
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}/decide`,
+      decision
+    );
   }
 
   /**
@@ -374,19 +452,22 @@ export class WorkflowAdvancedApiService {
     workflowId: string,
     instanceId: string,
     toUserId: string,
-    reason?: string,
+    reason?: string
   ): Promise<void> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}/delegate`, {
-      toUserId,
-      reason,
-    });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/approvals/instances/${instanceId}/delegate`,
+      {
+        toUserId,
+        reason,
+      }
+    );
   }
 
   /**
    * Get pending approvals for user
    */
   async getPendingApprovals(userId: string): Promise<ApprovalInstance[]> {
-    return apiClient.get(`${this.baseUrl}/approvals/pending`, { params: { userId } });
+    return apiClient.get(`${this.baseUrl}/approvals/pending`, { userId });
   }
 
   // ============================================================================
@@ -398,7 +479,11 @@ export class WorkflowAdvancedApiService {
    */
   async createSnapshot(
     workflowId: string,
-    data: { type: 'manual' | 'milestone' | 'scheduled'; label?: string; description?: string },
+    data: {
+      type: "manual" | "milestone" | "scheduled";
+      label?: string;
+      description?: string;
+    }
   ): Promise<WorkflowSnapshot> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/snapshots`, data);
   }
@@ -413,8 +498,13 @@ export class WorkflowAdvancedApiService {
   /**
    * Get specific snapshot
    */
-  async getSnapshot(workflowId: string, snapshotId: string): Promise<WorkflowSnapshot> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/snapshots/${snapshotId}`);
+  async getSnapshot(
+    workflowId: string,
+    snapshotId: string
+  ): Promise<WorkflowSnapshot> {
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/snapshots/${snapshotId}`
+    );
   }
 
   /**
@@ -423,20 +513,25 @@ export class WorkflowAdvancedApiService {
   async rollback(
     workflowId: string,
     snapshotId: string,
-    strategy: 'full' | 'partial' | 'compensating' = 'full',
-    dryRun: boolean = false,
+    strategy: "full" | "partial" | "compensating" = "full",
+    dryRun: boolean = false
   ): Promise<RollbackOperation> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/snapshots/${snapshotId}/rollback`, {
-      strategy,
-      dryRun,
-    });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/snapshots/${snapshotId}/rollback`,
+      {
+        strategy,
+        dryRun,
+      }
+    );
   }
 
   /**
    * Delete snapshot
    */
   async deleteSnapshot(workflowId: string, snapshotId: string): Promise<void> {
-    return apiClient.delete(`${this.baseUrl}/${workflowId}/snapshots/${snapshotId}`);
+    return apiClient.delete(
+      `${this.baseUrl}/${workflowId}/snapshots/${snapshotId}`
+    );
   }
 
   /**
@@ -449,9 +544,12 @@ export class WorkflowAdvancedApiService {
       interval?: number;
       maxSnapshots?: number;
       retentionDays?: number;
-    },
+    }
   ): Promise<void> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/snapshots/auto-config`, config);
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/snapshots/auto-config`,
+      config
+    );
   }
 
   // ============================================================================
@@ -469,9 +567,9 @@ export class WorkflowAdvancedApiService {
       includeBottlenecks?: boolean;
       includeSuggestions?: boolean;
       includeTrends?: boolean;
-    },
+    }
   ): Promise<WorkflowAnalytics> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/analytics`, { params: options });
+    return apiClient.get(`${this.baseUrl}/${workflowId}/analytics`, options);
   }
 
   /**
@@ -489,14 +587,19 @@ export class WorkflowAdvancedApiService {
   /**
    * Get node-specific analytics
    */
-  async getNodeAnalytics(workflowId: string, nodeId: string): Promise<{
+  async getNodeAnalytics(
+    workflowId: string,
+    nodeId: string
+  ): Promise<{
     executionCount: number;
     averageDuration: number;
     failureRate: number;
     waitTime: number;
     throughput: number;
   }> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/analytics/nodes/${nodeId}`);
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/analytics/nodes/${nodeId}`
+    );
   }
 
   /**
@@ -504,12 +607,12 @@ export class WorkflowAdvancedApiService {
    */
   async exportAnalytics(
     workflowId: string,
-    format: 'pdf' | 'excel' | 'csv',
-    dateRange: { start: string; end: string },
+    format: "pdf" | "excel" | "csv",
+    dateRange: { start: string; end: string }
   ): Promise<Blob> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/analytics/export`, {
-      params: { format, ...dateRange },
-      responseType: 'blob',
+    return apiClient.getBlob(`${this.baseUrl}/${workflowId}/analytics/export`, {
+      format,
+      ...dateRange,
     });
   }
 
@@ -522,16 +625,24 @@ export class WorkflowAdvancedApiService {
    */
   async getAISuggestions(
     workflowId: string,
-    options?: { minConfidence?: number; types?: string[] },
+    options?: { minConfidence?: number; types?: string[] }
   ): Promise<AIWorkflowSuggestion[]> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/ai/suggestions`, { params: options });
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/ai/suggestions`,
+      options
+    );
   }
 
   /**
    * Apply AI suggestion
    */
-  async applyAISuggestion(workflowId: string, suggestionId: string): Promise<EnhancedWorkflowInstance> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/ai/suggestions/${suggestionId}/apply`);
+  async applyAISuggestion(
+    workflowId: string,
+    suggestionId: string
+  ): Promise<EnhancedWorkflowInstance> {
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/ai/suggestions/${suggestionId}/apply`
+    );
   }
 
   /**
@@ -540,23 +651,31 @@ export class WorkflowAdvancedApiService {
   async provideSuggestionFeedback(
     workflowId: string,
     suggestionId: string,
-    feedback: Partial<AILearningFeedback>,
+    feedback: Partial<AILearningFeedback>
   ): Promise<void> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/ai/suggestions/${suggestionId}/feedback`, feedback);
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/ai/suggestions/${suggestionId}/feedback`,
+      feedback
+    );
   }
 
   /**
    * Trigger AI analysis
    */
-  async triggerAIAnalysis(workflowId: string): Promise<{ jobId: string; estimatedTime: number }> {
+  async triggerAIAnalysis(
+    workflowId: string
+  ): Promise<{ jobId: string; estimatedTime: number }> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/ai/analyze`);
   }
 
   /**
    * Get AI analysis status
    */
-  async getAIAnalysisStatus(workflowId: string, jobId: string): Promise<{
-    status: 'pending' | 'running' | 'completed' | 'failed';
+  async getAIAnalysisStatus(
+    workflowId: string,
+    jobId: string
+  ): Promise<{
+    status: "pending" | "running" | "completed" | "failed";
     progress: number;
     results?: AIWorkflowSuggestion[];
   }> {
@@ -572,7 +691,7 @@ export class WorkflowAdvancedApiService {
    */
   async createExternalTrigger(
     workflowId: string,
-    config: Partial<ExternalTrigger>,
+    config: Partial<ExternalTrigger>
   ): Promise<ExternalTrigger> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/triggers`, config);
   }
@@ -590,16 +709,26 @@ export class WorkflowAdvancedApiService {
   async updateExternalTrigger(
     workflowId: string,
     triggerId: string,
-    updates: Partial<ExternalTrigger>,
+    updates: Partial<ExternalTrigger>
   ): Promise<ExternalTrigger> {
-    return apiClient.patch(`${this.baseUrl}/${workflowId}/triggers/${triggerId}`, updates);
+    return apiClient.patch(
+      `${this.baseUrl}/${workflowId}/triggers/${triggerId}`,
+      updates
+    );
   }
 
   /**
    * Enable/disable external trigger
    */
-  async toggleExternalTrigger(workflowId: string, triggerId: string, enabled: boolean): Promise<void> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/triggers/${triggerId}/toggle`, { enabled });
+  async toggleExternalTrigger(
+    workflowId: string,
+    triggerId: string,
+    enabled: boolean
+  ): Promise<void> {
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/triggers/${triggerId}/toggle`,
+      { enabled }
+    );
   }
 
   /**
@@ -608,9 +737,12 @@ export class WorkflowAdvancedApiService {
   async testExternalTrigger(
     workflowId: string,
     triggerId: string,
-    payload: Record<string, unknown>,
+    payload: Record<string, unknown>
   ): Promise<TriggerEvent> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/triggers/${triggerId}/test`, { payload });
+    return apiClient.post(
+      `${this.baseUrl}/${workflowId}/triggers/${triggerId}/test`,
+      { payload }
+    );
   }
 
   /**
@@ -619,16 +751,24 @@ export class WorkflowAdvancedApiService {
   async getTriggerEvents(
     workflowId: string,
     triggerId: string,
-    limit: number = 50,
+    limit: number = 50
   ): Promise<TriggerEvent[]> {
-    return apiClient.get(`${this.baseUrl}/${workflowId}/triggers/${triggerId}/events`, { params: { limit } });
+    return apiClient.get(
+      `${this.baseUrl}/${workflowId}/triggers/${triggerId}/events`,
+      { limit }
+    );
   }
 
   /**
    * Delete external trigger
    */
-  async deleteExternalTrigger(workflowId: string, triggerId: string): Promise<void> {
-    return apiClient.delete(`${this.baseUrl}/${workflowId}/triggers/${triggerId}`);
+  async deleteExternalTrigger(
+    workflowId: string,
+    triggerId: string
+  ): Promise<void> {
+    return apiClient.delete(
+      `${this.baseUrl}/${workflowId}/triggers/${triggerId}`
+    );
   }
 
   // ============================================================================
@@ -645,7 +785,9 @@ export class WorkflowAdvancedApiService {
   /**
    * Create enhanced workflow instance
    */
-  async createEnhanced(data: Partial<EnhancedWorkflowInstance>): Promise<EnhancedWorkflowInstance> {
+  async createEnhanced(
+    data: Partial<EnhancedWorkflowInstance>
+  ): Promise<EnhancedWorkflowInstance> {
     return apiClient.post(`${this.baseUrl}/enhanced`, data);
   }
 
@@ -654,7 +796,7 @@ export class WorkflowAdvancedApiService {
    */
   async updateEnhanced(
     workflowId: string,
-    updates: Partial<EnhancedWorkflowInstance>,
+    updates: Partial<EnhancedWorkflowInstance>
   ): Promise<EnhancedWorkflowInstance> {
     return apiClient.patch(`${this.baseUrl}/${workflowId}/enhanced`, updates);
   }
@@ -665,7 +807,7 @@ export class WorkflowAdvancedApiService {
   async queryEnhanced(
     filters: WorkflowQueryFilters,
     sort?: WorkflowSortOptions,
-    pagination?: { page: number; limit: number },
+    pagination?: { page: number; limit: number }
   ): Promise<{
     data: EnhancedWorkflowInstance[];
     total: number;
@@ -673,7 +815,11 @@ export class WorkflowAdvancedApiService {
     limit: number;
     totalPages: number;
   }> {
-    return apiClient.post(`${this.baseUrl}/enhanced/query`, { filters, sort, pagination });
+    return apiClient.post(`${this.baseUrl}/enhanced/query`, {
+      filters,
+      sort,
+      pagination,
+    });
   }
 
   /**
@@ -687,13 +833,16 @@ export class WorkflowAdvancedApiService {
       enableSnapshots?: boolean;
       enableSLA?: boolean;
       enableAI?: boolean;
-    },
+    }
   ): Promise<{
     instanceId: string;
     status: string;
     estimatedCompletion: string;
   }> {
-    return apiClient.post(`${this.baseUrl}/${workflowId}/execute`, { input, options });
+    return apiClient.post(`${this.baseUrl}/${workflowId}/execute`, {
+      input,
+      options,
+    });
   }
 
   /**
@@ -720,30 +869,39 @@ export class WorkflowAdvancedApiService {
   /**
    * Clone workflow with all configurations
    */
-  async cloneWorkflow(workflowId: string, name: string): Promise<EnhancedWorkflowInstance> {
+  async cloneWorkflow(
+    workflowId: string,
+    name: string
+  ): Promise<EnhancedWorkflowInstance> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/clone`, { name });
   }
 
   /**
    * Export workflow configuration
    */
-  async exportWorkflow(workflowId: string, format: 'json' | 'yaml' | 'bpmn'): Promise<Blob> {
+  async exportWorkflow(
+    workflowId: string,
+    format: "json" | "yaml" | "bpmn"
+  ): Promise<Blob> {
     return apiClient.get(`${this.baseUrl}/${workflowId}/export`, {
       params: { format },
-      responseType: 'blob',
+      responseType: "blob",
     });
   }
 
   /**
    * Import workflow configuration
    */
-  async importWorkflow(file: File, format: 'json' | 'yaml' | 'bpmn'): Promise<EnhancedWorkflowInstance> {
+  async importWorkflow(
+    file: File,
+    format: "json" | "yaml" | "bpmn"
+  ): Promise<EnhancedWorkflowInstance> {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('format', format);
-    
+    formData.append("file", file);
+    formData.append("format", format);
+
     return apiClient.post(`${this.baseUrl}/import`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
   }
 }

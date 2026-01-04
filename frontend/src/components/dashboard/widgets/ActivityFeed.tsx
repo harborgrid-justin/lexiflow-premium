@@ -144,7 +144,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   if (isLoading) {
     return (
       <div className={cn('space-y-4', className)}>
-        {Array.from({ length: 5 }).map((_) => (
+        {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex gap-3 animate-pulse">
             <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
             <div className="flex-1 space-y-2">

@@ -121,7 +121,7 @@ export const CalendarGrid = React.memo<CalendarGridProps>(({
         })}
 
         {/* Next Month Padding to fill grid if needed */}
-        {Array.from({ length: (42 - (daysInMonth + startDayOfWeek)) % 7 }).map((_) => (
+        {Array.from({ length: (42 - (daysInMonth + startDayOfWeek)) % 7 }).map((_, i) => (
           <div key={`end-padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
       </div>

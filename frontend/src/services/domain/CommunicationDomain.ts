@@ -11,15 +11,24 @@ import {
 import { communicationsApi } from "@/api/domains/communications.api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { SystemEventType } from "@/types/integration-types";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 
 export const CorrespondenceService = {
   getCommunications: async () =>
     communicationsApi.correspondence?.getAll?.() || [],
 
   getServiceJobs: async (): Promise<ServiceJob[]> => {
-    // Note: serviceJobs API is not yet available in communicationsApi
-    // This will need to be updated when the API is added
-    // console.warn('[CorrespondenceService.getServiceJobs] Service jobs API not yet available');
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<ServiceJob[]>(
+          "/communications/service-jobs"
+        );
+      } catch (e) {
+        console.warn("Failed to fetch service jobs", e);
+        return [];
+      }
+    }
     return [];
   },
 
@@ -43,34 +52,39 @@ export const CorrespondenceService = {
   },
 
   addServiceJob: async (job: ServiceJob): Promise<ServiceJob> => {
-    const newJob = { ...job, id: job.id || crypto.randomUUID() };
-    // Note: serviceJobs API is not yet available in communicationsApi
-    // console.warn('[CorrespondenceService.addServiceJob] Service jobs API not yet available');
-    return newJob;
+    if (isBackendApiEnabled()) {
+      return apiClient.post<ServiceJob>("/communications/service-jobs", job);
+    }
+    throw new Error("Backend API required");
   },
 
   updateServiceJob: async (
     id: string,
     updates: Partial<ServiceJob>
   ): Promise<ServiceJob> => {
-    // Note: serviceJobs API is not yet available in communicationsApi
-
-    // Temporary: Return updates as ServiceJob until API is available
-    const job = { id, ...updates } as ServiceJob;
-
-    // Integration Logic: If served, trigger orchestrator
-    if (updates.status === "SERVED") {
-      await IntegrationEventPublisher.publish(
-        SystemEventType.SERVICE_COMPLETED,
-        { job }
+    if (isBackendApiEnabled()) {
+      const job = await apiClient.patch<ServiceJob>(
+        `/communications/service-jobs/${id}`,
+        updates
       );
-    }
 
-    return job;
+      // Integration Logic: If served, trigger orchestrator
+      if (updates.status === "SERVED") {
+        await IntegrationEventPublisher.publish(
+          SystemEventType.SERVICE_COMPLETED,
+          { job }
+        );
+      }
+
+      return job;
+    }
+    throw new Error("Backend API required");
   },
 
   archive: async (id: string) => {
-    console.log(`[API] Archived correspondence ${id}`);
-    // Soft delete logic would go here
+    if (isBackendApiEnabled()) {
+      return apiClient.delete(`/communications/correspondence/${id}`);
+    }
+    throw new Error("Backend API required");
   },
 };

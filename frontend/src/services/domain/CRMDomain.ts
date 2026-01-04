@@ -127,7 +127,6 @@ export const CRMService = {
       return apiClient.get<Lead[]>("/crm/leads");
     }
     // CRM leads are managed separately, not via admin API
-    await delay(200);
     return [];
   },
 

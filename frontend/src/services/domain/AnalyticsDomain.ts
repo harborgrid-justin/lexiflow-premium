@@ -75,6 +75,8 @@
  */
 
 import { analyticsApi } from "@/api/domains/analytics.api";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { isBackendApiEnabled } from "@/api";
 import {
   JudgeMotionStat,
   OpposingCounselProfile,
@@ -101,14 +103,6 @@ export const ANALYTICS_QUERY_KEYS = {
   outcomePrediction: (caseId: string) =>
     ["analytics", "outcome-prediction", caseId] as const,
 } as const;
-
-/**
- * Default judge motion statistics
- * Used as fallback when backend data is unavailable
- *
- * @private
- */
-const DEFAULT_JUDGE_MOTION_STATS: JudgeMotionStat[] = [];
 
 /**
  * Analytics Service
@@ -169,17 +163,17 @@ export const AnalyticsService = {
    * - No sensitive case details exposed
    */
   getCounselProfiles: async (): Promise<OpposingCounselProfile[]> => {
-    try {
-      // Note: counsel API endpoint not yet available in analyticsApi
-      // This will need to be updated when the API is added
-      console.warn(
-        "[AnalyticsService.getCounselProfiles] Counsel profiles API not yet available"
-      );
-      return [];
-    } catch (error) {
-      console.error("[AnalyticsService.getCounselProfiles] Error:", error);
-      throw new Error("Failed to fetch opposing counsel profiles");
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<OpposingCounselProfile[]>(
+          "/analytics/counsel-profiles"
+        );
+      } catch (error) {
+        console.warn("Failed to fetch opposing counsel profiles", error);
+        return [];
+      }
     }
+    return [];
   },
 
   // =============================================================================
@@ -214,39 +208,14 @@ export const AnalyticsService = {
     try {
       const stats = await analyticsApi.judgeStats?.getAll?.();
 
-      if (!stats || !Array.isArray(stats) || stats.length === 0) {
-        console.warn(
-          "[AnalyticsService] Backend judge stats unavailable, using default data"
-        );
-        return DEFAULT_JUDGE_MOTION_STATS;
-      }
-
-      // Validate stat structure
-      const validStats = stats.every(
-        (stat) =>
-          stat &&
-          typeof stat === "object" &&
-          "name" in stat &&
-          "grant" in stat &&
-          "deny" in stat &&
-          typeof stat.grant === "number" &&
-          typeof stat.deny === "number"
-      );
-
-      if (!validStats) {
-        console.warn(
-          "[AnalyticsService] Invalid judge stats structure, using default data"
-        );
-        return DEFAULT_JUDGE_MOTION_STATS;
+      if (!stats || !Array.isArray(stats)) {
+        return [];
       }
 
       return stats as unknown as JudgeMotionStat[];
     } catch (error) {
       console.error("[AnalyticsService.getJudgeMotionStats] Error:", error);
-      console.warn(
-        "[AnalyticsService] Falling back to default judge motion stats"
-      );
-      return DEFAULT_JUDGE_MOTION_STATS;
+      throw error;
     }
   },
 
@@ -286,16 +255,13 @@ export const AnalyticsService = {
         await analyticsApi.outcomePredictions?.getPredictions?.();
 
       if (!predictions || !Array.isArray(predictions)) {
-        console.warn(
-          "[AnalyticsService] Invalid outcome predictions data, returning empty array"
-        );
         return [];
       }
 
       return predictions as unknown as OutcomePredictionData[];
     } catch (error) {
       console.error("[AnalyticsService.getOutcomePredictions] Error:", error);
-      throw new Error("Failed to fetch outcome predictions");
+      throw error;
     }
   },
 

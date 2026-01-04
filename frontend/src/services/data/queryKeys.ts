@@ -3,89 +3,93 @@
  *
  * This file defines the query keys used throughout the application for data fetching.
  * Using centralized keys ensures consistency and proper cache invalidation.
+ * 
+ * @deprecated Use queryKeys from '@/utils/queryKeys' instead.
  */
+
+import { queryKeys } from '@/utils/queryKeys';
 
 export const QUERY_KEYS = {
   TASKS: {
-    ALL: ["tasks"],
-    BY_ID: (id: string) => ["tasks", id],
-    BY_CASE: (caseId: string) => ["tasks", "case", caseId],
-    COUNT: (caseId: string) => ["tasks", caseId, "count"],
+    ALL: queryKeys.tasks.all(),
+    BY_ID: (id: string) => queryKeys.tasks.detail(id),
+    BY_CASE: (caseId: string) => queryKeys.tasks.byCaseId(caseId),
+    COUNT: (caseId: string) => [...queryKeys.tasks.byCaseId(caseId), 'count'],
   },
   CALENDAR: {
-    ALL: ["calendar"],
-    EVENTS: ["calendar", "events"],
+    ALL: queryKeys.calendar.events(),
+    EVENTS: queryKeys.calendar.events(),
   },
   SANCTIONS: {
-    ALL: ["sanctions"],
-    BY_CASE: (caseId: string) => ["sanctions", "case", caseId],
+    ALL: queryKeys.sanctions.all(),
+    BY_CASE: (caseId: string) => queryKeys.sanctions.byCase(caseId),
   },
   EXHIBITS: {
-    ALL: ["exhibits"],
-    BY_CASE: (caseId: string) => ["exhibits", "case", caseId],
+    ALL: queryKeys.exhibits.all(),
+    BY_CASE: (caseId: string) => queryKeys.exhibits.byCaseId(caseId),
   },
   WITNESSES: {
-    ALL: ["witnesses"],
-    BY_CASE: (caseId: string) => ["witnesses", "case", caseId],
+    ALL: queryKeys.witnesses.all(),
+    BY_CASE: (caseId: string) => queryKeys.witnesses.byCase(caseId),
   },
   USERS: {
-    ALL: ["users"],
-    PROFILE: (id: string) => ["users", id, "profile"],
+    ALL: queryKeys.users.all(),
+    PROFILE: (id: string) => [...queryKeys.users.detail(id), 'profile'],
   },
   ASSETS: {
-    ALL: ["assets"],
-    BY_ID: (id: string) => ["assets", id],
+    ALL: queryKeys.assets.all(),
+    BY_ID: (id: string) => queryKeys.assets.detail(id),
   },
   DOCUMENTS: {
-    ALL: ["documents"],
-    BY_CASE: (caseId: string) => ["documents", "case", caseId],
+    ALL: queryKeys.documents.all(),
+    BY_CASE: (caseId: string) => queryKeys.documents.byCaseId(caseId),
   },
   CASES: {
-    ALL: ["cases"],
-    WAR_ROOM: (id: string) => ["cases", id, "warRoom"],
+    ALL: queryKeys.cases.all(),
+    WAR_ROOM: (id: string) => queryKeys.warRoom.data(id),
   },
   DEPOSITIONS: {
-    ALL: ["depositions"],
+    ALL: queryKeys.depositions.all(),
   },
   REQUESTS: {
-    ALL: ["requests"],
-    BY_CASE: (caseId: string) => ["requests", "case", caseId],
+    ALL: queryKeys.discovery.all(),
+    BY_CASE: (caseId: string) => queryKeys.discovery.byCaseId(caseId),
   },
   CLIENTS: {
-    ALL: ["clients"],
+    ALL: queryKeys.clients.all(),
   },
   CRM: {
-    LEADS: ["crm", "leads"],
-    OPPORTUNITIES: ["crm", "opportunities"],
-    RELATIONSHIPS: ["crm", "relationships"],
+    LEADS: queryKeys.crm.leads(),
+    OPPORTUNITIES: queryKeys.crm.opportunities(),
+    RELATIONSHIPS: queryKeys.crm.relationships(),
   },
   CLAUSES: {
-    ALL: ["clauses"],
+    ALL: queryKeys.clauses.all(),
   },
   MESSAGES: {
-    UNREAD_COUNT: (caseId: string) => ["messages", caseId, "count"],
+    UNREAD_COUNT: (caseId: string) => queryKeys.messages.unreadCount(caseId),
   },
   BILLING: {
-    INVOICES: ["billing", "invoices"],
+    INVOICES: queryKeys.billing.invoices(),
   },
   WEBHOOKS: {
-    ALL: ["webhooks"],
+    ALL: queryKeys.webhooks.all(),
   },
   VERSION_CONTROL: {
-    HISTORY: ["versionControl", "history"],
-    BRANCHES: ["versionControl", "branches"],
-    TAGS: ["versionControl", "tags"],
+    HISTORY: queryKeys.versionControl.history(),
+    BRANCHES: queryKeys.versionControl.branches(),
+    TAGS: queryKeys.versionControl.tags(),
   },
   REALTIME: {
-    STREAMS: ["realtime", "streams"],
+    STREAMS: queryKeys.realtime.streams(),
   },
   DB: {
-    INFO: ["db", "info"],
+    INFO: queryKeys.db.info(),
   },
   EVENT_BUS: {
-    EVENTS: ["eventBus", "events"],
+    EVENTS: queryKeys.eventBus.events(),
   },
   SYSTEM: {
-    CONFIG: ["system", "config"],
+    CONFIG: queryKeys.system.config(),
   },
 };

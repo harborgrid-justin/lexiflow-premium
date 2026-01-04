@@ -4,8 +4,6 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { delay } from "@/utils/async";
-import { db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
 
@@ -47,35 +45,24 @@ interface Share {
   sharedAt: string;
 }
 
-// Define local store names for collaboration features
-const WORKSPACES_STORE = "workspaces";
-const COMMENTS_STORE = "comments";
-const SHARES_STORE = "shares";
-
 export const CollaborationService = {
   getAll: async () => {
     if (isBackendApiEnabled()) {
       return apiClient.get<Workspace[]>("/collaboration/workspaces");
     }
-    return db.getAll(WORKSPACES_STORE);
+    return [];
   },
   getById: async (id: string) => {
     if (isBackendApiEnabled()) {
       return apiClient.get<Workspace>(`/collaboration/workspaces/${id}`);
     }
-    return db.get(WORKSPACES_STORE, id);
+    return undefined;
   },
   add: async (item: unknown) => {
     if (isBackendApiEnabled()) {
       return apiClient.post<Workspace>("/collaboration/workspaces", item);
     }
-    const itemObj =
-      item && typeof item === "object" ? (item as Record<string, unknown>) : {};
-    return db.put(WORKSPACES_STORE, {
-      ...itemObj,
-      createdAt: new Date().toISOString(),
-      members: Array.isArray(itemObj.members) ? itemObj.members : [],
-    });
+    throw new Error("Backend API required");
   },
   update: async (id: string, updates: unknown) => {
     if (isBackendApiEnabled()) {
@@ -84,17 +71,13 @@ export const CollaborationService = {
         updates
       );
     }
-    const existing = await db.get(WORKSPACES_STORE, id);
-    return db.put(WORKSPACES_STORE, {
-      ...(existing && typeof existing === "object" ? existing : {}),
-      ...(updates && typeof updates === "object" ? updates : {}),
-    });
+    throw new Error("Backend API required");
   },
   delete: async (id: string) => {
     if (isBackendApiEnabled()) {
       return apiClient.delete(`/collaboration/workspaces/${id}`);
     }
-    return db.delete(WORKSPACES_STORE, id);
+    throw new Error("Backend API required");
   },
 
   // Collaboration specific methods
@@ -104,15 +87,7 @@ export const CollaborationService = {
         userId,
       });
     }
-    const workspaces = await db.getAll<Workspace>(WORKSPACES_STORE);
-
-    if (userId) {
-      return workspaces.filter(
-        (w: Workspace) => w.ownerId === userId || w.members.includes(userId)
-      );
-    }
-
-    return workspaces;
+    return [];
   },
 
   createWorkspace: async (
@@ -121,68 +96,39 @@ export const CollaborationService = {
     if (isBackendApiEnabled()) {
       return apiClient.post<Workspace>("/collaboration/workspaces", workspace);
     }
-    const newWorkspace: Workspace = {
-      id: `workspace-${Date.now()}`,
-      name: workspace.name || "New Workspace",
-      description: workspace.description,
-      ownerId: workspace.ownerId || "",
-      members: workspace.members || [],
-      createdAt: new Date().toISOString(),
-      settings: workspace.settings || { visibility: "private" },
-    };
-
-    await db.put(WORKSPACES_STORE, newWorkspace);
-    return newWorkspace;
+    throw new Error("Backend API required");
   },
 
   inviteUser: async (workspaceId: string, userId: string): Promise<boolean> => {
-    await delay(100);
-    try {
-      const workspace = await db.get<Workspace>(WORKSPACES_STORE, workspaceId);
-      if (!workspace) return false;
-
-      if (!workspace.members.includes(userId)) {
-        workspace.members.push(userId);
-        await db.put(WORKSPACES_STORE, workspace);
-      }
-
-      console.log(
-        `[CollaborationService] Invited user ${userId} to workspace ${workspaceId}`
-      );
+    if (isBackendApiEnabled()) {
+      await apiClient.post(`/collaboration/workspaces/${workspaceId}/invite`, {
+        userId,
+      });
       return true;
-    } catch {
-      return false;
     }
+    throw new Error("Backend API required");
   },
 
   getComments: async (resourceId: string): Promise<Comment[]> => {
-    await delay(50);
-    const comments = await db.getAll<Comment>(COMMENTS_STORE);
-    return comments
-      .filter((c: Comment) => c.resourceId === resourceId)
-      .sort(
-        (a: Comment, b: Comment) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    if (isBackendApiEnabled()) {
+      return apiClient.get<Comment[]>(
+        `/collaboration/comments?resourceId=${resourceId}`
       );
+    }
+    return [];
   },
 
   addComment: async (
     resourceId: string,
     comment: Partial<Comment>
   ): Promise<Comment> => {
-    const newComment: Comment = {
-      id: `comment-${Date.now()}`,
-      resourceId,
-      resourceType: comment.resourceType || "document",
-      userId: comment.userId || "",
-      content: comment.content || "",
-      parentId: comment.parentId,
-      createdAt: new Date().toISOString(),
-      mentions: comment.mentions,
-    };
-
-    await db.put(COMMENTS_STORE, newComment);
-    return newComment;
+    if (isBackendApiEnabled()) {
+      return apiClient.post<Comment>("/collaboration/comments", {
+        resourceId,
+        ...comment,
+      });
+    }
+    throw new Error("Backend API required");
   },
 
   shareResource: async (
@@ -190,23 +136,14 @@ export const CollaborationService = {
     userId: string,
     options?: { permissions?: "view" | "edit" | "admin"; resourceType?: string }
   ): Promise<boolean> => {
-    await delay(100);
-    try {
-      const share: Share = {
-        id: `share-${Date.now()}`,
+    if (isBackendApiEnabled()) {
+      await apiClient.post("/collaboration/share", {
         resourceId,
-        resourceType: options?.resourceType || "document",
-        sharedWith: [userId],
-        permissions: options?.permissions || "view",
-        sharedBy: "current-user", // In production, get from auth context
-        sharedAt: new Date().toISOString(),
-      };
-
-      await db.put(SHARES_STORE, share);
-      console.log(`[CollaborationService] Shared ${resourceId} with ${userId}`);
+        userId,
+        ...options,
+      });
       return true;
-    } catch {
-      return false;
     }
+    throw new Error("Backend API required");
   },
 };

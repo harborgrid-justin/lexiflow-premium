@@ -131,31 +131,7 @@ export class KnowledgeRepository {
         return [];
       }
     }
-    try {
-      // Knowledge API not yet available via analyticsApi, using fallback
-      await delay(200);
-      const all: WikiArticle[] = [];
-
-      if (!query || query.trim() === "") {
-        return all;
-      }
-
-      const q = query.toLowerCase().trim();
-      const filtered = all.filter((a: WikiArticle) => {
-        const titleMatch = a.title?.toLowerCase().includes(q);
-        const contentMatch = a.content?.toLowerCase().includes(q);
-        return titleMatch || contentMatch;
-      });
-
-      console.log(
-        `[KnowledgeRepository] Found ${filtered.length} wiki articles matching "${query}"`
-      );
-
-      return filtered;
-    } catch (error) {
-      console.error("[KnowledgeRepository.getWikiArticles] Error:", error);
-      throw new Error("Failed to fetch wiki articles");
-    }
+    return [];
   };
 
   /**
@@ -179,14 +155,7 @@ export class KnowledgeRepository {
         return undefined;
       }
     }
-
-    try {
-      const all = await this.getWikiArticles();
-      return all.find((a) => a.id === id);
-    } catch (error) {
-      console.error("[KnowledgeRepository.getWikiArticleById] Error:", error);
-      throw new Error("Failed to fetch wiki article");
-    }
+    return undefined;
   }
 
   /**
@@ -236,42 +205,6 @@ export class KnowledgeRepository {
     // Fallback logic (not implemented for create)
     throw new Error("Backend API required for creating wiki articles");
   }
-      throw new Error(
-        "[KnowledgeRepository.createWikiArticle] Article must have content"
-      );
-    }
-
-    try {
-      // Publish integration event
-      try {
-        const { IntegrationOrchestrator } =
-          await import("@/services/integration/integrationOrchestrator");
-        const { SystemEventType } = await import("@/types/integration-types");
-
-        // WIKI_ARTICLE_CREATED event type may not be defined, using generic event
-        if ("WIKI_ARTICLE_CREATED" in SystemEventType) {
-          const eventType = (SystemEventType as unknown as Record<string, any>)
-            .WIKI_ARTICLE_CREATED;
-          if (eventType) {
-            await IntegrationOrchestrator.publish(eventType, {
-              article,
-              title: article.title,
-            });
-          }
-        }
-      } catch (eventError) {
-        console.warn(
-          "[KnowledgeRepository] Failed to publish integration event",
-          eventError
-        );
-      }
-
-      return article;
-    } catch (error) {
-      console.error("[KnowledgeRepository.createWikiArticle] Error:", error);
-      throw new Error("Failed to create wiki article");
-    }
-  }
 
   /**
    * Update an existing wiki article
@@ -300,26 +233,17 @@ export class KnowledgeRepository {
 
     if (isBackendApiEnabled()) {
       try {
-        return await apiClient.patch<WikiArticle>(`/knowledge/wiki/${id}`, updates);
+        return await apiClient.patch<WikiArticle>(
+          `/knowledge/wiki/${id}`,
+          updates
+        );
       } catch (error) {
         console.error("Failed to update wiki article", error);
         throw error;
       }
     }
 
-    try {
-      const existing = await this.getWikiArticleById(id);
-      if (!existing) {
-        throw new Error("Wiki article not found");
-      }
-
-      const updated = { ...existing, ...updates };
-
-      return updated;
-    } catch (error) {
-      console.error("[KnowledgeRepository.updateWikiArticle] Error:", error);
-      throw new Error("Failed to update wiki article");
-    }
+    throw new Error("Backend API required for updating wiki articles");
   }
 
   // =============================================================================
@@ -344,14 +268,7 @@ export class KnowledgeRepository {
         return [];
       }
     }
-    try {
-      // Knowledge API not yet available via analyticsApi, using fallback
-      await delay(200);
-      return [];
-    } catch (error) {
-      console.error("[KnowledgeRepository.getPrecedents] Error:", error);
-      throw new Error("Failed to fetch precedents");
-    }
+    return [];
   };
 
   /**
@@ -432,14 +349,15 @@ export class KnowledgeRepository {
    * const qaItems = await repo.getQA();
    */
   getQA = async (): Promise<QAItem[]> => {
-    try {
-      // Knowledge API not yet available via analyticsApi, using fallback
-      await delay(200);
-      return [];
-    } catch (error) {
-      console.error("[KnowledgeRepository.getQA] Error:", error);
-      throw new Error("Failed to fetch Q&A items");
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<QAItem[]>("/knowledge/qa");
+      } catch (error) {
+        console.warn("Failed to fetch Q&A items", error);
+        return [];
+      }
     }
+    return [];
   };
 
   /**
@@ -496,31 +414,17 @@ export class KnowledgeRepository {
     usage: Array<{ name: string; views: number }>;
     topics: Array<{ name: string; value: number; color: string }>;
   }> => {
-    try {
-      await delay(200);
-
-      // Get theme-aware colors
-      const { ChartColorService } = await import("../theme/chartColorService");
-      const categoryColors = ChartColorService.getCategoryColors(
-        mode || "light"
-      );
-
-      return {
-        usage: [
-          { name: "Jan", views: 400 },
-          { name: "Feb", views: 300 },
-          { name: "Mar", views: 600 },
-        ],
-        topics: [
-          { name: "Litigation", value: 40, color: categoryColors.legal },
-          { name: "Finance", value: 25, color: categoryColors.finance },
-          { name: "HR", value: 15, color: categoryColors.other },
-        ],
-      };
-    } catch (error) {
-      console.error("[KnowledgeRepository.getAnalytics] Error:", error);
-      throw new Error("Failed to fetch knowledge analytics");
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/knowledge/analytics", {
+          params: { mode },
+        });
+      } catch (error) {
+        console.warn("Failed to fetch knowledge analytics", error);
+        return { usage: [], topics: [] };
+      }
     }
+    return { usage: [], topics: [] };
   };
 
   /**

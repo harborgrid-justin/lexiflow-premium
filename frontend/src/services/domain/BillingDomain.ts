@@ -97,7 +97,6 @@
 
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
-import { STORES, db } from "@/services/data/db";
 import {
   CaseId,
   Client,
@@ -110,7 +109,6 @@ import {
   UUID,
   WIPStat,
 } from "@/types";
-import { delay } from "@/utils/async";
 
 // Backend API Integration (Primary Data Source)
 import { BillingApiService } from "@/api/billing/finance-api";
@@ -246,7 +244,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     if (this.useBackend) {
       return this.billingApi.getTimeEntries();
     }
-    return super.getAll();
+    return [];
   }
 
   /**
@@ -266,7 +264,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return undefined;
       }
     }
-    return super.getById(id);
+    return undefined;
   }
 
   /**
@@ -281,7 +279,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     if (this.useBackend) {
       return apiClient.post<TimeEntry>("/billing/time-entries", entry);
     }
-    return super.add(entry as TimeEntry);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -300,7 +298,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     if (this.useBackend) {
       return apiClient.patch<TimeEntry>(`/billing/time-entries/${id}`, updates);
     }
-    return super.update(id, updates);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -316,7 +314,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       await apiClient.delete(`/billing/time-entries/${id}`);
       return;
     }
-    return super.delete(id);
+    throw new Error("Backend API required");
   }
 
   // =============================================================================
@@ -343,11 +341,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         );
       }
 
-      return await db.getByIndex<RateTable>(
-        STORES.RATES,
-        "timekeeperId",
-        timekeeperId
-      );
+      return [];
     } catch (error) {
       console.error("[BillingRepository.getRates] Error:", error);
       throw new OperationError("Failed to fetch rate tables");
@@ -380,11 +374,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return this.billingApi.getTimeEntries(caseId ? { caseId } : undefined);
       }
 
-      // Fallback to IndexedDB
-      const allEntries = await this.getAll();
-      return caseId
-        ? allEntries.filter((e) => e.caseId === caseId)
-        : allEntries;
+      return [];
     } catch (error) {
       console.error("[BillingRepository.getTimeEntries] Error:", error);
       throw new OperationError("Failed to fetch time entries");
@@ -433,25 +423,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return await apiClient.post<TimeEntry>("/billing/time-entries", entry);
       }
 
-      const result = await this.add(entry);
-
-      // Publish integration event for time tracking
-      try {
-        const { IntegrationOrchestrator } =
-          await import("@/services/integration/integrationOrchestrator");
-        const { SystemEventType } = await import("@/types/integration-types");
-
-        await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
-          entry: result,
-        });
-      } catch (eventError) {
-        console.warn(
-          "[BillingRepository] Failed to publish integration event",
-          eventError
-        );
-      }
-
-      return result;
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.addTimeEntry] Error:", error);
       throw new OperationError("Failed to add time entry");
@@ -478,13 +450,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return await apiClient.get<WIPStat[]>("/billing/wip-stats");
       }
 
-      const clients = await db.getAll<Client>(STORES.CLIENTS);
-
-      return clients.slice(0, 3).map((c) => ({
-        name: (c.name || "").split(" ")[0] || "Unknown",
-        wip: Math.floor(Math.random() * 50000),
-        billed: c.totalBilled,
-      }));
+      return [];
     } catch (error) {
       console.error("[BillingRepository.getWIPStats] Error:", error);
       throw new OperationError("Failed to fetch WIP statistics");
@@ -536,7 +502,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return await apiClient.get<Invoice[]>("/billing/invoices");
       }
 
-      return await db.getAll<Invoice>(STORES.INVOICES);
+      return [];
     } catch (error) {
       console.error("[BillingRepository.getInvoices] Error:", error);
       throw new OperationError("Failed to fetch invoices");
@@ -584,73 +550,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         });
       }
 
-      const totalAmount = entries.reduce((sum, e) => sum + (e.total || 0), 0);
-      const now = new Date();
-      const dueDate = new Date();
-      dueDate.setDate(now.getDate() + 30);
-
-      const invoice: Invoice = {
-        id: `INV-${Date.now()}` as UUID,
-        createdAt: now.toISOString(),
-        updatedAt: now.toISOString(),
-        invoiceNumber: `INV-${Date.now()}`,
-        caseId: caseId as CaseId,
-        clientId: `client-${Date.now()}`,
-        clientName: clientName,
-        matterDescription: caseId,
-        invoiceDate: now.toISOString().split("T")[0] || "",
-        dueDate: dueDate.toISOString().split("T")[0] || "",
-        billingModel: "Hourly",
-        status: "Draft",
-        subtotal: totalAmount,
-        taxAmount: 0,
-        discountAmount: 0,
-        totalAmount: totalAmount,
-        paidAmount: 0,
-        balanceDue: totalAmount,
-        timeCharges: totalAmount,
-        expenseCharges: 0,
-        currency: "USD",
-        // Frontend-specific (legacy)
-        client: clientName,
-        matter: caseId,
-        date: now.toISOString().split("T")[0],
-        amount: totalAmount,
-        items: entries.map((e) => e.id),
-      };
-
-      await db.put(STORES.INVOICES, invoice);
-
-      // Update time entries to mark as billed
-      for (const entry of entries) {
-        const updatedEntry = {
-          ...entry,
-          status: "Billed" as const,
-          invoiceId: invoice.id,
-        };
-        await db.put(STORES.BILLING, updatedEntry);
-      }
-
-      // Publish integration event
-      try {
-        const { IntegrationOrchestrator } =
-          await import("@/services/integration/integrationOrchestrator");
-        const { SystemEventType } = await import("@/types/integration-types");
-
-        await IntegrationOrchestrator.publish(
-          SystemEventType.INVOICE_STATUS_CHANGED,
-          {
-            invoice,
-          }
-        );
-      } catch (eventError) {
-        console.warn(
-          "[BillingRepository] Failed to publish integration event",
-          eventError
-        );
-      }
-
-      return invoice;
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.createInvoice] Error:", error);
       throw new OperationError("Failed to create invoice");
@@ -683,15 +583,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         );
       }
 
-      const invoice = await db.get<Invoice>(STORES.INVOICES, id);
-      if (!invoice) {
-        throw new EntityNotFoundError("Invoice not found");
-      }
-
-      const updated = { ...invoice, ...updates };
-      await db.put(STORES.INVOICES, updated);
-
-      return updated;
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.updateInvoice] Error:", error);
       throw new OperationError("Failed to update invoice");
@@ -717,13 +609,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return true;
       }
 
-      await delay(500);
-      console.log(`[BillingRepository] Invoice ${id} sent`);
-
-      // Update invoice status to 'Sent'
-      await this.updateInvoice(id, { status: "Sent" });
-
-      return true;
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.sendInvoice] Error:", error);
       throw new OperationError("Failed to send invoice");
@@ -833,11 +719,10 @@ console.log('accounts data:', accounts);
         }>("/billing/overview-stats");
       }
 
-      await delay(50);
       return {
-        realization: 92.4,
-        totalBilled: 482000,
-        month: "March 2024",
+        realization: 0,
+        totalBilled: 0,
+        month: "",
       };
     } catch (error) {
       console.error("[BillingRepository.getOverviewStats] Error:", error);
@@ -862,17 +747,11 @@ console.log('accounts data:', accounts);
         );
       }
 
-      const summary = await db.get<OperatingSummary>(
-        STORES.OPERATING_SUMMARY,
-        "op-summary-main"
-      );
-      return (
-        summary || {
-          balance: 0,
-          expensesMtd: 0,
-          cashFlowMtd: 0,
-        }
-      );
+      return {
+        balance: 0,
+        expensesMtd: 0,
+        cashFlowMtd: 0,
+      };
     } catch (error) {
       console.error("[BillingRepository.getOperatingSummary] Error:", error);
       throw new OperationError("Failed to fetch operating summary");
@@ -896,23 +775,9 @@ console.log('accounts data:', accounts);
         );
       }
 
-      await delay(200);
       return {
-        revenue: [
-          { month: "Jan", actual: 420000, target: 400000 },
-          { month: "Feb", actual: 450000, target: 410000 },
-          { month: "Mar", actual: 380000, target: 420000 },
-          { month: "Apr", actual: 490000, target: 430000 },
-          { month: "May", actual: 510000, target: 440000 },
-          { month: "Jun", actual: 550000, target: 450000 },
-        ],
-        expenses: [
-          { category: "Payroll", value: 250000 },
-          { category: "Rent", value: 45000 },
-          { category: "Software", value: 15000 },
-          { category: "Marketing", value: 25000 },
-          { category: "Travel", value: 12000 },
-        ],
+        revenue: [],
+        expenses: [],
       };
     } catch (error) {
       console.error(
@@ -943,8 +808,7 @@ console.log('accounts data:', accounts);
         return;
       }
 
-      await delay(1000);
-      console.log("[BillingRepository] Financials synced");
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.sync] Error:", error);
       throw new OperationError("Failed to sync billing data");
@@ -983,8 +847,7 @@ console.log('accounts data:', accounts);
         return response.url;
       }
 
-      await delay(1500);
-      return `report.${format.toLowerCase()}`;
+      throw new Error("Backend API required");
     } catch (error) {
       console.error("[BillingRepository.export] Error:", error);
       throw new OperationError("Failed to export billing data");

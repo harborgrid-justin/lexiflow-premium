@@ -9,9 +9,6 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { STORES, db } from "@/services/data/db";
-import { yieldToMain } from "@/utils/apiUtils";
-import { delay } from "@/utils/async";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
 
@@ -20,47 +17,19 @@ export class DataQualityService {
     if (isBackendApiEnabled()) {
       return apiClient.get<DataAnomaly[]>("/data-quality/anomalies");
     }
-    // In real app, scan DB. Here we return seeded anomalies.
-    const anomalies = await db.getAll<DataAnomaly>("anomalies");
-    if (anomalies.length === 0) {
-      return [
-        {
-          id: 1,
-          table: "clients",
-          field: "email",
-          issue: "Invalid Format",
-          count: 12,
-          sample: "john-doe@",
-          status: "Detected",
-          severity: "High",
-        },
-        {
-          id: 2,
-          table: "cases",
-          field: "status",
-          issue: "Inconsistent Casing",
-          count: 5,
-          sample: "closed",
-          status: "Fixed",
-          severity: "Low",
-        },
-      ];
-    }
-    return anomalies;
+    return [];
   }
 
   async getDedupeClusters(): Promise<DedupeCluster[]> {
     if (isBackendApiEnabled()) {
       return apiClient.get<DedupeCluster[]>("/data-quality/dedupe-clusters");
     }
-    await delay(100);
     return [];
   }
   async getHistory(): Promise<QualityMetricHistory[]> {
     if (isBackendApiEnabled()) {
       return apiClient.get<QualityMetricHistory[]>("/data-quality/history");
     }
-    await delay(100);
     return [];
   }
   async runCleansingJob(): Promise<{ processed: number; fixed: number }> {
@@ -70,8 +39,7 @@ export class DataQualityService {
         {}
       );
     }
-    await delay(800);
-    return { processed: 1500, fixed: 42 };
+    throw new Error("Backend API required");
   }
   async mergeCluster(clusterId: string): Promise<void> {
     if (isBackendApiEnabled()) {
@@ -80,7 +48,7 @@ export class DataQualityService {
         {}
       );
     }
-    await delay(100);
+    throw new Error("Backend API required");
   }
   async ignoreCluster(clusterId: string): Promise<void> {
     if (isBackendApiEnabled()) {
@@ -89,13 +57,13 @@ export class DataQualityService {
         {}
       );
     }
-    await delay(100);
+    throw new Error("Backend API required");
   }
   async applyFix(anomalyId: string): Promise<void> {
     if (isBackendApiEnabled()) {
       return apiClient.post(`/data-quality/anomalies/${anomalyId}/fix`, {});
     }
-    await delay(100);
+    throw new Error("Backend API required");
   }
 
   // Optimized Profiler with single-pass aggregation and yielding

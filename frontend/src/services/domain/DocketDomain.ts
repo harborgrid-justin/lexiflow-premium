@@ -44,13 +44,9 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { IntegrationOrchestrator } from "@/services/integration/integrationOrchestrator";
 import { CaseId, DocketEntry, DocketId } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
-import { delay } from "@/utils/async";
-import { retryWithBackoff } from "@/utils/retryWithBackoff";
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from "@/api";
@@ -99,11 +95,10 @@ export interface DocketEntryWithVersion extends DocketEntry {
  *
  * @extends Repository<DocketEntry>
  */
-export class DocketRepository extends Repository<DocketEntry> {
+export class DocketRepository {
   private readonly docketApi: DocketApiService;
 
   constructor() {
-    super(STORES.DOCKET);
     this.docketApi = new DocketApiService();
   }
 
@@ -114,12 +109,12 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @returns Promise<DocketEntry[]>
    * @complexity O(1) API call or O(n) IndexedDB scan
    */
-  override async getAll(): Promise<DocketEntry[]> {
+  async getAll(): Promise<DocketEntry[]> {
     if (isBackendApiEnabled()) {
       const response = await this.docketApi.getAll();
       return response.data;
     }
-    return super.getAll();
+    return [];
   }
 
   /**
@@ -128,7 +123,7 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @param id - Docket entry identifier
    * @returns Promise<DocketEntry | undefined>
    */
-  override async getById(id: string): Promise<DocketEntry | undefined> {
+  async getById(id: string): Promise<DocketEntry | undefined> {
     if (isBackendApiEnabled()) {
       try {
         return await this.docketApi.getById(id);
@@ -137,7 +132,7 @@ export class DocketRepository extends Repository<DocketEntry> {
         return undefined;
       }
     }
-    return super.getById(id);
+    return undefined;
   }
 
   /**
@@ -146,7 +141,7 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @param entry - Docket entry data
    * @returns Promise<DocketEntry>
    */
-  override async add(
+  async add(
     entry: Omit<DocketEntry, "id" | "createdAt" | "updatedAt">
   ): Promise<DocketEntry> {
     if (isBackendApiEnabled()) {
@@ -158,12 +153,7 @@ export class DocketRepository extends Repository<DocketEntry> {
       });
       return created;
     }
-    const created = await super.add(entry as DocketEntry);
-    await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
-      entry: created,
-      caseId: entry.caseId,
-    });
-    return created;
+    throw new Error("Backend API is required for adding docket entries");
   }
 
   /**
@@ -173,14 +163,14 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @param updates - Partial updates
    * @returns Promise<DocketEntry>
    */
-  override async update(
+  async update(
     id: string,
     updates: Partial<DocketEntry>
   ): Promise<DocketEntry> {
     if (isBackendApiEnabled()) {
       return this.docketApi.update(id, updates);
     }
-    return super.update(id, updates);
+    throw new Error("Backend API is required for updating docket entries");
   }
 
   /**
@@ -189,12 +179,12 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @param id - Docket entry identifier
    * @returns Promise<void>
    */
-  override async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     if (isBackendApiEnabled()) {
       await this.docketApi.delete(id);
       return;
     }
-    return super.delete(id);
+    throw new Error("Backend API is required for deleting docket entries");
   }
 
   /**
@@ -204,12 +194,12 @@ export class DocketRepository extends Repository<DocketEntry> {
    * @returns Promise<DocketEntry[]>
    * @complexity O(1) API call or O(log n) IndexedDB index lookup
    */
-  override async getByCaseId(caseId: string): Promise<DocketEntry[]> {
+  async getByCaseId(caseId: string): Promise<DocketEntry[]> {
     if (isBackendApiEnabled()) {
       const response = await this.docketApi.getAll(caseId);
       return response.data;
     }
-    return this.getByIndex("caseId", caseId);
+    return [];
   }
 
   /**
@@ -229,43 +219,11 @@ export class DocketRepository extends Repository<DocketEntry> {
    * await repo.syncFromPacer('caed', '1:24-cv-01442');
    */
   async syncFromPacer(courtId: string, caseNumber: string): Promise<boolean> {
-    console.log(`[PACER] Syncing for ${caseNumber} in ${courtId}...`);
-
-    return retryWithBackoff(
-      async () => {
-        // Simulate PACER API call delay
-        await delay(1500);
-
-        // Simulate finding a new entry from PACER
-        const dateStr = new Date().toISOString().split("T")[0]!;
-        const newEntry: DocketEntry = {
-          id: `dk-sync-${Date.now()}` as DocketId,
-          sequenceNumber: 9999, // Next available sequence
-          pacerSequenceNumber: 123,
-          caseId: caseNumber as CaseId,
-          date: dateStr,
-          dateFiled: dateStr,
-          entryDate: dateStr,
-          type: "Order",
-          title: "ORDER ON MOTION TO COMPEL",
-          description:
-            "The court has reviewed the motion and hereby GRANTS it. Signed by Judge Smith.",
-          filedBy: "Court",
-          isSealed: false,
-        };
-
-        // Add to database (will use backend API if enabled)
-        await this.add(newEntry);
-
-        // Integration event already published by add() method
-
-        return true;
-      },
-      {
-        maxRetries: 3,
-        initialDelay: 1000,
-        maxDelay: 10000,
-      }
-    );
+    if (isBackendApiEnabled()) {
+      // TODO: Implement backend sync endpoint
+      console.warn("PACER sync via backend not yet implemented in frontend");
+      return false;
+    }
+    throw new Error("Backend API is required for PACER sync");
   }
 }

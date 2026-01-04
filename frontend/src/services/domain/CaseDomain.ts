@@ -111,8 +111,6 @@
 
 import { Case, CasePhase, Party, CaseId, CaseStatus } from "@/types";
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
-import { delay } from "@/utils/async";
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from "@/api";
@@ -159,7 +157,7 @@ export class CaseRepository extends Repository<Case> {
     if (isBackendApiEnabled()) {
       return this.casesApi.getAll();
     }
-    return super.getAll();
+    return [];
   }
 
   /**
@@ -178,7 +176,7 @@ export class CaseRepository extends Repository<Case> {
         return undefined;
       }
     }
-    return super.getById(id);
+    return undefined;
   }
 
   /**
@@ -193,7 +191,7 @@ export class CaseRepository extends Repository<Case> {
     if (isBackendApiEnabled()) {
       return this.casesApi.add(caseData);
     }
-    return super.add(caseData as Case);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -207,7 +205,7 @@ export class CaseRepository extends Repository<Case> {
     if (isBackendApiEnabled()) {
       return this.casesApi.update(id, updates);
     }
-    return super.update(id, updates);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -221,7 +219,7 @@ export class CaseRepository extends Repository<Case> {
       await this.casesApi.delete(id);
       return;
     }
-    return super.delete(id);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -248,20 +246,10 @@ export class CaseRepository extends Repository<Case> {
         return await this.casesApi.getArchived();
       } catch (error) {
         console.error("[CaseRepository.getArchived] Backend error:", error);
-        // Fallback to local filtering
+        return [];
       }
     }
-
-    const cases = await this.getAll();
-    return cases
-      .filter((c) => c.status === "Closed" || c.status === "Settled")
-      .map((c) => ({
-        id: c.id,
-        date: c.dateTerminated || c.filingDate,
-        title: c.title,
-        client: c.client,
-        outcome: c.status,
-      }));
+    return [];
   }
 
   /**
@@ -275,7 +263,7 @@ export class CaseRepository extends Repository<Case> {
     if (isBackendApiEnabled()) {
       return this.casesApi.getAll({ status });
     }
-    return this.getByIndex("status", status);
+    return [];
   }
 
   /**
@@ -287,14 +275,10 @@ export class CaseRepository extends Repository<Case> {
    */
   async importDocket(caseId: string, data: unknown) {
     if (isBackendApiEnabled()) {
-      console.warn(
-        "[CaseRepository.importDocket] Backend endpoint not yet implemented"
-      );
+      await apiClient.post(`/cases/${caseId}/docket/import`, data);
+      return true;
     }
-
-    await delay(500);
-    console.log(`[API] Imported docket data for ${caseId}`, data);
-    return true;
+    throw new Error("Backend API required");
   }
 
   /**
@@ -304,11 +288,11 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<void>
    */
   async archive(id: string) {
-    await delay(300);
-    const c = await this.getById(id);
-    if (c) {
-      await this.update(id, { status: CaseStatus.Closed });
+    if (isBackendApiEnabled()) {
+      await this.casesApi.update(id, { status: CaseStatus.Closed });
+      return;
     }
+    throw new Error("Backend API required");
   }
 
   /**
@@ -319,13 +303,10 @@ export class CaseRepository extends Repository<Case> {
    */
   async flag(id: string) {
     if (isBackendApiEnabled()) {
-      console.warn(
-        "[CaseRepository.flag] Backend endpoint not yet implemented"
-      );
+      await apiClient.post(`/cases/${id}/flag`, {});
+      return;
     }
-
-    await delay(300);
-    console.log(`[API] Case ${id} flagged`);
+    throw new Error("Backend API required");
   }
 }
 
@@ -376,7 +357,7 @@ export class PhaseRepository extends Repository<CasePhase> {
         console.error("[PhaseRepository.getAll] Backend error:", error);
       }
     }
-    return super.getAll();
+    return [];
   }
 
   /**
@@ -394,7 +375,7 @@ export class PhaseRepository extends Repository<CasePhase> {
         return undefined;
       }
     }
-    return super.getById(id);
+    return undefined;
   }
 
   /**
@@ -409,7 +390,7 @@ export class PhaseRepository extends Repository<CasePhase> {
     if (isBackendApiEnabled()) {
       return apiClient.post<CasePhase>("/case-phases", phaseData);
     }
-    return super.add(phaseData as CasePhase);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -426,7 +407,7 @@ export class PhaseRepository extends Repository<CasePhase> {
     if (isBackendApiEnabled()) {
       return apiClient.patch<CasePhase>(`/case-phases/${id}`, updates);
     }
-    return super.update(id, updates);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -440,7 +421,7 @@ export class PhaseRepository extends Repository<CasePhase> {
       await apiClient.delete(`/case-phases/${id}`);
       return;
     }
-    return super.delete(id);
+    throw new Error("Backend API required");
   }
 
   /**
@@ -457,21 +438,12 @@ export class PhaseRepository extends Repository<CasePhase> {
     // Try backend API first
     if (isBackendApiEnabled()) {
       try {
-        const phases = await apiClient.get<CasePhase[]>(
-          `/case-phases/case/${caseId}`
-        );
-        if (phases && phases.length > 0) {
-          return phases;
-        }
+        return await apiClient.get<CasePhase[]>(`/case-phases/case/${caseId}`);
       } catch (error) {
         console.error("[PhaseRepository.getByCaseId] Backend error:", error);
-        // Fall through to IndexedDB or demo data
+        return [];
       }
     }
-
-    // Try IndexedDB
-    const phases = await this.getByIndex("caseId", caseId);
-
-    return phases;
+    return [];
   };
 }

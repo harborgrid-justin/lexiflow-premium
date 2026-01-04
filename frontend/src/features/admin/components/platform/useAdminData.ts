@@ -1,23 +1,24 @@
 import { queryClient, useMutation, useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/dataService";
+import { queryKeys } from "@/utils/queryKeys";
 // ✅ Migrated to backend API (2025-12-21)
 import { Category } from "./EntitySidebar";
 
 export const useAdminData = (activeCategory: Category) => {
   // Independent Queries
-  const usersQuery = useQuery(["users", "all"], () =>
+  const usersQuery = useQuery(queryKeys.users.all(), () =>
     DataService.users.getAll()
   );
-  const casesQuery = useQuery(["cases", "all"], () =>
+  const casesQuery = useQuery(queryKeys.cases.all(), () =>
     DataService.cases.getAll()
   );
-  const clientsQuery = useQuery(["clients", "all"], () =>
+  const clientsQuery = useQuery(queryKeys.clients.all(), () =>
     DataService.clients.getAll()
   );
-  const clausesQuery = useQuery(["clauses", "all"], () =>
+  const clausesQuery = useQuery(queryKeys.clauses.all(), () =>
     DataService.clauses.getAll()
   );
-  const docsQuery = useQuery(["documents", "all"], () =>
+  const docsQuery = useQuery(queryKeys.documents.all(), () =>
     DataService.documents.getAll()
   );
 

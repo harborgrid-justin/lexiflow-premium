@@ -6,7 +6,6 @@
  */
 
 import { communicationsApi } from "@/api/domains/communications.api";
-import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
 
@@ -20,8 +19,6 @@ interface Notification {
   actionUrl?: string;
   metadata?: unknown;
 }
-
-const SUBSCRIPTIONS_KEY = "lexiflow_notification_subscriptions";
 
 export const NotificationService = {
   getAll: async () => communicationsApi.notifications?.getAll?.() || [],

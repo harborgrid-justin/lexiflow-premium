@@ -7,7 +7,7 @@ import {
   NestInterceptor,
   Optional,
 } from "@nestjs/common";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 

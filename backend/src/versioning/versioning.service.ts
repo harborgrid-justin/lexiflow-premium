@@ -103,7 +103,7 @@ export class VersioningService {
     return version;
   }
 
-  async getBranches(entityType: string, entityId: string): Promise<string[]> {
+  async getEntityBranches(entityType: string, entityId: string): Promise<string[]> {
     const result = await this.versionRepository
       .createQueryBuilder("version")
       .select("DISTINCT version.branch", "branch")
@@ -115,7 +115,7 @@ export class VersioningService {
     return result.map((r) => r.branch);
   }
 
-  async getTags(entityType: string, entityId: string) {
+  async getEntityTags(entityType: string, entityId: string) {
     const versions = await this.versionRepository.find({
       where: { entityType, entityId },
       select: ["id", "version", "tag", "createdAt"],

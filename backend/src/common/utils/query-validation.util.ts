@@ -5,22 +5,101 @@
 
 // Define allowed sort fields for each entity type
 const ENTITY_SORT_FIELDS: Record<string, string[]> = {
-  case: ['id', 'caseNumber', 'title', 'status', 'filingDate', 'closeDate', 'trialDate', 'createdAt', 'updatedAt'],
-  document: ['id', 'fileName', 'fileSize', 'createdAt', 'updatedAt'],
-  expense: ['id', 'amount', 'expenseDate', 'category', 'createdAt', 'updatedAt'],
-  invoice: ['id', 'invoiceNumber', 'amount', 'dueDate', 'status', 'createdAt', 'updatedAt'],
-  timeEntry: ['id', 'hours', 'date', 'createdAt', 'updatedAt'],
-  project: ['id', 'name', 'status', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
-  workflow: ['id', 'name', 'usageCount', 'category', 'isActive', 'createdAt', 'updatedAt'],
-  task: ['id', 'title', 'dueDate', 'priority', 'status', 'createdAt', 'updatedAt'],
-  employee: ['id', 'firstName', 'lastName', 'email', 'department', 'role', 'status', 'createdAt', 'updatedAt'],
-  trial: ['id', 'date', 'courtRoom', 'status', 'createdAt', 'updatedAt'],
-  risk: ['id', 'riskScore', 'severity', 'category', 'createdAt', 'updatedAt'],
-  warRoom: ['id', 'name', 'status', 'createdAt', 'updatedAt'],
-  report: ['id', 'name', 'type', 'status', 'createdAt', 'updatedAt'],
-  pleading: ['id', 'filedDate', 'hearingDate', 'type', 'status', 'createdAt', 'updatedAt'],
-  knowledge: ['id', 'title', 'category', 'views', 'createdAt', 'updatedAt'],
-  messenger: ['id', 'lastMessageAt', 'createdAt', 'updatedAt'],
+  case: [
+    "id",
+    "caseNumber",
+    "title",
+    "status",
+    "filingDate",
+    "closeDate",
+    "trialDate",
+    "createdAt",
+    "updatedAt",
+  ],
+  document: ["id", "fileName", "fileSize", "createdAt", "updatedAt"],
+  expense: [
+    "id",
+    "amount",
+    "expenseDate",
+    "category",
+    "createdAt",
+    "updatedAt",
+  ],
+  invoice: [
+    "id",
+    "invoiceNumber",
+    "amount",
+    "dueDate",
+    "status",
+    "createdAt",
+    "updatedAt",
+  ],
+  timeEntry: ["id", "hours", "date", "createdAt", "updatedAt"],
+  project: [
+    "id",
+    "name",
+    "status",
+    "startDate",
+    "endDate",
+    "createdAt",
+    "updatedAt",
+  ],
+  workflow: [
+    "id",
+    "name",
+    "usageCount",
+    "category",
+    "isActive",
+    "createdAt",
+    "updatedAt",
+  ],
+  task: [
+    "id",
+    "title",
+    "dueDate",
+    "priority",
+    "status",
+    "createdAt",
+    "updatedAt",
+  ],
+  employee: [
+    "id",
+    "firstName",
+    "lastName",
+    "email",
+    "department",
+    "role",
+    "status",
+    "createdAt",
+    "updatedAt",
+  ],
+  trial: ["id", "date", "courtRoom", "status", "createdAt", "updatedAt"],
+  risk: ["id", "riskScore", "severity", "category", "createdAt", "updatedAt"],
+  warRoom: ["id", "name", "status", "createdAt", "updatedAt"],
+  report: ["id", "name", "type", "status", "createdAt", "updatedAt"],
+  custodian: [
+    "id",
+    "fullName",
+    "email",
+    "department",
+    "title",
+    "status",
+    "isKeyPlayer",
+    "isOnLegalHold",
+    "createdAt",
+    "updatedAt",
+  ],
+  pleading: [
+    "id",
+    "filedDate",
+    "hearingDate",
+    "type",
+    "status",
+    "createdAt",
+    "updatedAt",
+  ],
+  knowledge: ["id", "title", "category", "views", "createdAt", "updatedAt"],
+  messenger: ["id", "lastMessageAt", "createdAt", "updatedAt"],
 };
 
 /**
@@ -33,9 +112,13 @@ const ENTITY_SORT_FIELDS: Record<string, string[]> = {
 export function validateSortField(
   entityType: string,
   sortBy?: string,
-  defaultField: string = 'createdAt',
+  defaultField: string = "createdAt"
 ): string {
-  const allowedFields = ENTITY_SORT_FIELDS[entityType] || ['id', 'createdAt', 'updatedAt'];
+  const allowedFields = ENTITY_SORT_FIELDS[entityType] || [
+    "id",
+    "createdAt",
+    "updatedAt",
+  ];
 
   if (!sortBy) {
     return defaultField;
@@ -43,7 +126,9 @@ export function validateSortField(
 
   const isAllowed = allowedFields.includes(sortBy);
   if (!isAllowed) {
-    console.warn(`Invalid sort field "${sortBy}" for entity "${entityType}". Using default "${defaultField}"`);
+    console.warn(
+      `Invalid sort field "${sortBy}" for entity "${entityType}". Using default "${defaultField}"`
+    );
     return defaultField;
   }
 
@@ -58,19 +143,21 @@ export function validateSortField(
  */
 export function validateSortOrder(
   sortOrder: string | undefined,
-  defaultOrder: 'ASC' | 'DESC' = 'DESC',
-): 'ASC' | 'DESC' {
+  defaultOrder: "ASC" | "DESC" = "DESC"
+): "ASC" | "DESC" {
   if (!sortOrder) {
     return defaultOrder;
   }
 
   const normalized = sortOrder.toUpperCase();
-  if (normalized !== 'ASC' && normalized !== 'DESC') {
-    console.warn(`Invalid sort order "${sortOrder}". Using default "${defaultOrder}"`);
+  if (normalized !== "ASC" && normalized !== "DESC") {
+    console.warn(
+      `Invalid sort order "${sortOrder}". Using default "${defaultOrder}"`
+    );
     return defaultOrder;
   }
 
-  return normalized as 'ASC' | 'DESC';
+  return normalized as "ASC" | "DESC";
 }
 
 /**
@@ -83,7 +170,7 @@ export function validateSortOrder(
 export function validatePagination(
   page?: number,
   limit?: number,
-  maxLimit: number = 100,
+  maxLimit: number = 100
 ): { page: number; limit: number } {
   const validPage = Math.max(1, Math.floor(page || 1));
   const validLimit = Math.max(1, Math.min(maxLimit, Math.floor(limit || 20)));
@@ -97,14 +184,16 @@ export function validatePagination(
  * @param search - Raw search string
  * @returns Sanitized search string
  */
-export function sanitizeSearchQuery(search: string | undefined): string | undefined {
-  if (!search || typeof search !== 'string') {
+export function sanitizeSearchQuery(
+  search: string | undefined
+): string | undefined {
+  if (!search || typeof search !== "string") {
     return undefined;
   }
 
   // Remove null bytes and other control characters
-  const cleaned = search.replace(/[\x00-\x1F\x7F]/g, '');
-  
+  const cleaned = search.replace(/[\x00-\x1F\x7F]/g, "");
+
   // Trim and return undefined if empty
   const trimmed = cleaned.trim();
   return trimmed.length > 0 ? trimmed : undefined;
@@ -118,18 +207,18 @@ export function sanitizeSearchQuery(search: string | undefined): string | undefi
  */
 export function buildLikePattern(
   search: string,
-  matchType: 'contains' | 'startsWith' | 'endsWith' | 'exact' = 'contains',
+  matchType: "contains" | "startsWith" | "endsWith" | "exact" = "contains"
 ): string {
-  const sanitized = sanitizeSearchQuery(search) || '';
+  const sanitized = sanitizeSearchQuery(search) || "";
 
   switch (matchType) {
-    case 'startsWith':
+    case "startsWith":
       return `${sanitized}%`;
-    case 'endsWith':
+    case "endsWith":
       return `%${sanitized}`;
-    case 'exact':
+    case "exact":
       return sanitized;
-    case 'contains':
+    case "contains":
     default:
       return `%${sanitized}%`;
   }
@@ -143,7 +232,7 @@ export function buildLikePattern(
  */
 export function validateDateRange(
   startDate?: string | Date,
-  endDate?: string | Date,
+  endDate?: string | Date
 ): { startDate: Date; endDate: Date } | undefined {
   if (!startDate && !endDate) {
     return undefined;
@@ -155,19 +244,19 @@ export function validateDateRange(
 
     // Check if dates are valid
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      console.warn('Invalid date format in date range');
+      console.warn("Invalid date format in date range");
       return undefined;
     }
 
     // Ensure start is before end
     if (start > end) {
-      console.warn('Start date is after end date, swapping');
+      console.warn("Start date is after end date, swapping");
       return { startDate: end, endDate: start };
     }
 
     return { startDate: start, endDate: end };
   } catch (error) {
-    console.warn('Error validating date range:', error);
+    console.warn("Error validating date range:", error);
     return undefined;
   }
 }
@@ -178,11 +267,13 @@ export function validateDateRange(
  * @param filters - Raw filter object
  * @returns Cleaned filter object
  */
-export function sanitizeFilters<T extends Record<string, unknown>>(filters: T): Partial<T> {
+export function sanitizeFilters<T extends Record<string, unknown>>(
+  filters: T
+): Partial<T> {
   const cleaned: Partial<T> = {};
 
   for (const [key, value] of Object.entries(filters)) {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       (cleaned as any)[key] = value;
     }
   }
@@ -200,7 +291,7 @@ export function sanitizeFilters<T extends Record<string, unknown>>(filters: T): 
 export function validateEnum<T>(
   value: unknown,
   allowedValues: T[],
-  defaultValue?: T,
+  defaultValue?: T
 ): T | undefined {
   if (!value) {
     return defaultValue;
@@ -208,7 +299,9 @@ export function validateEnum<T>(
 
   const isValid = allowedValues.includes(value as T);
   if (!isValid) {
-    console.warn(`Invalid enum value "${value}". Allowed: ${allowedValues.join(', ')}`);
+    console.warn(
+      `Invalid enum value "${value}". Allowed: ${allowedValues.join(", ")}`
+    );
     return defaultValue;
   }
 
@@ -227,7 +320,7 @@ export function validateNumericRange(
   value: unknown,
   min: number,
   max: number,
-  defaultValue?: number,
+  defaultValue?: number
 ): number | undefined {
   if (value === undefined || value === null) {
     return defaultValue;
@@ -259,11 +352,11 @@ export function validateNumericRange(
  * @returns QueryBuilder with orderBy applied
  */
 export function applySafeSort<T>(
-  queryBuilder: T & { orderBy: (field: string, order: 'ASC' | 'DESC') => T },
+  queryBuilder: T & { orderBy: (field: string, order: "ASC" | "DESC") => T },
   alias: string,
   entityType: string,
   sortBy?: string,
-  sortOrder?: string,
+  sortOrder?: string
 ): T {
   const safeSortField = validateSortField(entityType, sortBy);
   const safeSortOrder = validateSortOrder(sortOrder);

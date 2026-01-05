@@ -76,7 +76,6 @@
       "@features/admin": ["src/features/admin"],
       "@features/visual": ["src/features/visual"],
       "@hooks/*": ["src/hooks/*"],
-      "@providers/ToastContext": ["src/providers/ToastContext.tsx"],
       "@providers/ThemeContext": ["src/contexts/theme/ThemeContext.tsx"],
       "@providers/ToastContext": ["src/contexts/toast/ToastContext.tsx"],
       "@services/*": ["src/services/*"],

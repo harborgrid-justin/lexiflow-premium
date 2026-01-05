@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere} from 'typeorm';
-import { Task } from './entities/task.entity';
-import { CreateTaskDto, TaskStatus, TaskPriority } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
-import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
-import { sanitizeSearchQuery } from '@common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from "@common/utils/math.utils";
+import { sanitizeSearchQuery } from "@common/utils/query-validation.util";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
+import { CreateTaskDto, TaskPriority, TaskStatus } from "./dto/create-task.dto";
+import { UpdateTaskDto } from "./dto/update-task.dto";
+import { Task } from "./entities/task.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +39,7 @@ import { sanitizeSearchQuery } from '@common/utils/query-validation.util';
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>,
+    private readonly taskRepository: Repository<Task>
   ) {}
 
   async create(createTaskDto: CreateTaskDto, userId: string): Promise<Task> {
@@ -60,34 +60,50 @@ export class TasksService {
     page?: number;
     limit?: number;
   }) {
-    const { status, priority, caseId, assignedTo, search, page = 1, limit = 50 } = filters;
-    
+    const {
+      status,
+      priority,
+      caseId,
+      assignedTo,
+      search,
+      page = 1,
+      limit = 50,
+    } = filters;
+
     const where: FindOptionsWhere<Task> = {};
-    
+
     if (status) where.status = status;
-    if (priority && Object.values(TaskPriority).includes(priority as TaskPriority)) {
+    if (
+      priority &&
+      Object.values(TaskPriority).includes(priority as TaskPriority)
+    ) {
       where.priority = priority as TaskPriority;
     }
     if (caseId) where.caseId = caseId;
     if (assignedTo) where.assignedTo = assignedTo;
 
-    const queryBuilder = this.taskRepository.createQueryBuilder('task');
+    const queryBuilder = this.taskRepository.createQueryBuilder("task");
 
     const sanitizedSearch = sanitizeSearchQuery(search);
     if (sanitizedSearch) {
-      queryBuilder.where('task.title LIKE :search OR task.description LIKE :search', {
-        search: `%${sanitizedSearch}%`,
-      });
+      queryBuilder.where(
+        "(task.title LIKE :search OR task.description LIKE :search)",
+        {
+          search: `%${sanitizedSearch}%`,
+        }
+      );
     }
 
-    Object.keys(where).forEach(key => {
+    Object.keys(where).forEach((key) => {
       const typedKey = key as keyof FindOptionsWhere<Task>;
-      queryBuilder.andWhere(`task.${key} = :${key}`, { [key]: where[typedKey] });
+      queryBuilder.andWhere(`task.${key} = :${key}`, {
+        [key]: where[typedKey],
+      });
     });
 
     const [data, total] = await queryBuilder
-      .orderBy('task.dueDate', 'ASC', 'NULLS LAST')
-      .addOrderBy('task.priority', 'DESC')
+      .orderBy("task.dueDate", "ASC", "NULLS LAST")
+      .addOrderBy("task.priority", "DESC")
       .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();
@@ -103,7 +119,7 @@ export class TasksService {
 
   async findOne(id: string): Promise<Task> {
     const task = await this.taskRepository.findOne({ where: { id } });
-    
+
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
@@ -115,7 +131,10 @@ export class TasksService {
     const task = await this.findOne(id);
 
     // Auto-complete when status changes to Completed
-    if (updateTaskDto.status === TaskStatus.COMPLETED && updateTaskDto.completionPercentage === undefined) {
+    if (
+      updateTaskDto.status === TaskStatus.COMPLETED &&
+      updateTaskDto.completionPercentage === undefined
+    ) {
       updateTaskDto.completionPercentage = 100;
     }
 
@@ -123,7 +142,9 @@ export class TasksService {
     return await this.taskRepository.save(task);
   }
 
-  async bulkUpdate(updates: Array<{ id: string; updates: UpdateTaskDto }>): Promise<Task[]> {
+  async bulkUpdate(
+    updates: Array<{ id: string; updates: UpdateTaskDto }>
+  ): Promise<Task[]> {
     const results = await Promise.all(
       updates.map(({ id, updates: updateDto }) => this.update(id, updateDto))
     );
@@ -140,13 +161,22 @@ export class TasksService {
 
     const [total, completed, inProgress, blocked, overdue] = await Promise.all([
       this.taskRepository.count({ where }),
-      this.taskRepository.count({ where: { ...where, status: TaskStatus.COMPLETED } }),
-      this.taskRepository.count({ where: { ...where, status: TaskStatus.IN_PROGRESS } }),
-      this.taskRepository.count({ where: { ...where, status: TaskStatus.BLOCKED } }),
-      this.taskRepository.createQueryBuilder('task')
+      this.taskRepository.count({
+        where: { ...where, status: TaskStatus.COMPLETED },
+      }),
+      this.taskRepository.count({
+        where: { ...where, status: TaskStatus.IN_PROGRESS },
+      }),
+      this.taskRepository.count({
+        where: { ...where, status: TaskStatus.BLOCKED },
+      }),
+      this.taskRepository
+        .createQueryBuilder("task")
         .where(where)
-        .andWhere('task.dueDate < :now', { now: new Date() })
-        .andWhere('task.status != :completed', { completed: TaskStatus.COMPLETED })
+        .andWhere("task.dueDate < :now", { now: new Date() })
+        .andWhere("task.status != :completed", {
+          completed: TaskStatus.COMPLETED,
+        })
         .getCount(),
     ]);
 

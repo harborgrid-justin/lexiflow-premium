@@ -50,7 +50,7 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     const [cases, tasks] = await Promise.all([
       DataService.cases.getAll(),
-      DataService.tasks.get().getAll(),
+      DataService.tasks.getAll(),
     ]);
 
     // Ensure we have arrays (defensive programming)

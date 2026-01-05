@@ -1,24 +1,24 @@
+import { Public } from "@common/decorators/public.decorator";
+import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  Param,
-  Query,
   Head,
   HttpCode,
   HttpStatus,
+  Param,
+  Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import {
-  ApiTags,
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from "@nestjs/swagger";
-import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import { VersioningService } from "./versioning.service";
-import { Public } from "@common/decorators/public.decorator";
 
 @ApiTags("Versioning")
 @ApiBearerAuth("JWT-auth")
@@ -68,22 +68,22 @@ export class VersioningController {
   @ApiOperation({ summary: "Get branches" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async getBranches(
+  async getEntityBranches(
     @Param("entityType") entityType: string,
     @Param("entityId") entityId: string
   ): Promise<unknown> {
-    return await this.versioningService.getBranches(entityType, entityId);
+    return await this.versioningService.getEntityBranches(entityType, entityId);
   }
 
   @Get("tags/:entityType/:entityId")
   @ApiOperation({ summary: "Get tags" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async getTags(
+  async getEntityTags(
     @Param("entityType") entityType: string,
     @Param("entityId") entityId: string
   ): Promise<unknown> {
-    return await this.versioningService.getTags(entityType, entityId);
+    return await this.versioningService.getEntityTags(entityType, entityId);
   }
 
   @Get(":id")

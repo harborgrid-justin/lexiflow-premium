@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * @module hooks/useAppController
  * @category Hooks - Application

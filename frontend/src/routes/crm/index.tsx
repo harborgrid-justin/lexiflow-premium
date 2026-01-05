@@ -11,6 +11,7 @@
  */
 
 import { ClientCRM } from '@/features/operations/crm/ClientCRM';
+import { AuthenticationError } from '@/services/core/errors';
 import { DataService } from '@/services/data/dataService';
 import { ClientStatus } from '@/types';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -42,6 +43,13 @@ export async function loader() {
       totalCount: clients.length,
     };
   } catch (error) {
+    // Re-throw authentication errors to show login prompt
+    if (error instanceof AuthenticationError) {
+      console.warn("[CRM Route] Authentication required");
+      throw new Response("Authentication required", { status: 401 });
+    }
+
+    // For other errors, log and return empty state
     console.error("Failed to load CRM data", error);
     return {
       clients: [],

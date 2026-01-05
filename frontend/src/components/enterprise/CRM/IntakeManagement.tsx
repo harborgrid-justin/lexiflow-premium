@@ -291,7 +291,7 @@ export const IntakeManagement: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-2 pt-4 border-t" style={{ borderColor: theme.border.default }}>
+            <div className={cn("flex gap-2 pt-4 border-t", theme.border.default)}>
               <button className={cn("px-3 py-2 rounded text-sm border", theme.border.default, "hover:shadow")}>
                 <Search className="h-4 w-4 inline mr-1" />
                 Run Conflict Check

@@ -466,7 +466,7 @@ export const ClientAnalytics: React.FC = () => {
               </div>
 
               {/* LTV Breakdown */}
-              <div className="mt-4 pt-4 border-t" style={{ borderColor: theme.border.default }}>
+              <div className={cn("mt-4 pt-4 border-t", theme.border.default)}>
                 <p className={cn("text-xs mb-2", theme.text.tertiary)}>LTV Composition</p>
                 <div className="flex gap-2">
                   <div
@@ -559,7 +559,7 @@ export const ClientAnalytics: React.FC = () => {
               </div>
 
               {/* Financial Risk Indicators */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t" style={{ borderColor: theme.border.default }}>
+              <div className={cn("grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t", theme.border.default)}>
                 <div>
                   <p className={cn("text-xs", theme.text.tertiary)}>Outstanding Balance</p>
                   <p className={cn("text-lg font-bold", theme.text.primary)}>

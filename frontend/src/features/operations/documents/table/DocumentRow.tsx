@@ -1,4 +1,3 @@
-import { tokens } from '@/components/theme/tokens';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { TagList } from '@/components/ui/molecules/TagList/TagList';
@@ -14,11 +13,10 @@ interface DocumentRowProps {
     setSelectedDocForHistory: (doc: LegalDocument) => void;
     setTaggingDoc: (doc: LegalDocument) => void;
     onRowClick?: (doc: LegalDocument) => void;
-    theme: typeof tokens.colors.light;
 }
 
 export const DocumentRow = React.memo<DocumentRowProps>(({
-    doc, isSelected, toggleSelection, setSelectedDocForHistory, setTaggingDoc, onRowClick, theme
+    doc, isSelected, toggleSelection, setSelectedDocForHistory, setTaggingDoc, onRowClick
 }) => {
 
     const handleSelection = (e: React.MouseEvent | React.ChangeEvent) => {
@@ -48,7 +46,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
 
     return (
         <div
-            className={cn("flex items-center h-full cursor-pointer select-none", isSelected ? theme.primary.light : '')}
+            className={cn("flex items-center h-full cursor-pointer select-none", isSelected ? "bg-primary-light" : '')}
             onClick={handleClick}
         >
             <div className="w-10 flex-shrink-0 flex justify-center" onClick={handleSelection}>
@@ -60,12 +58,12 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
                 />
             </div>
             <div className="flex-1 min-w-0 flex items-center pr-4">
-                <div className={cn("p-2 rounded-lg mr-3 border transition-colors", theme.surface.highlight, theme.border.default, `group-hover:${theme.border.default}`)}>
+                <div className={cn("p-2 rounded-lg mr-3 border transition-colors bg-surface border-border group-hover:border-border")}>
                     <FileIcon type={doc.type} className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                    <div className={cn("text-sm font-bold transition-colors truncate max-w-xs", theme.text.primary, `group-hover:${theme.primary.text}`)}>{doc.title}</div>
-                    <div className={cn("text-xs mt-0.5", theme.text.secondary)}>{doc.type} • {doc.fileSize}</div>
+                    <div className={cn("text-sm font-bold transition-colors truncate max-w-xs text-text group-hover:text-primary")}>{doc.title}</div>
+                    <div className={cn("text-xs mt-0.5 text-text-muted")}>{doc.type} • {doc.fileSize}</div>
                 </div>
             </div>
             <div className="w-28 flex-shrink-0">
@@ -75,11 +73,11 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
             </div>
             <div className="w-28 flex-shrink-0">
                 {doc.status === 'Signed' ? (
-                    <span className={cn("flex items-center text-xs font-bold px-2 py-1 rounded w-fit", theme.status.success.bg, theme.status.success.text)}><CheckSquare className="h-3 w-3 mr-1" /> Signed</span>
+                    <span className={cn("flex items-center text-xs font-bold px-2 py-1 rounded w-fit bg-success/10 text-success")}><CheckSquare className="h-3 w-3 mr-1" /> Signed</span>
                 ) : doc.status === 'Draft' ? (
-                    <span className={cn("flex items-center text-xs px-2 py-1 rounded w-fit", theme.status.neutral.bg, theme.status.neutral.text)}><Clock className="h-3 w-3 mr-1" /> Draft</span>
+                    <span className={cn("flex items-center text-xs px-2 py-1 rounded w-fit bg-slate-100 text-slate-600")}><Clock className="h-3 w-3 mr-1" /> Draft</span>
                 ) : (
-                    <span className={cn("flex items-center text-xs font-medium px-2 py-1 rounded w-fit", theme.primary.light, theme.primary.text)}>Final</span>
+                    <span className={cn("flex items-center text-xs font-medium px-2 py-1 rounded w-fit bg-primary-light text-primary")}>Final</span>
                 )}
             </div>
             <div className="w-48 flex-shrink-0">
@@ -88,7 +86,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
                         <TagList tags={[...doc.tags]} limit={2} />
                         <button
                             onClick={handleTagging}
-                            className={cn("opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
+                            className={cn("opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-text-muted hover:bg-surface hover:text-primary")}
                         >
                             <Tag className="h-3 w-3" />
                         </button>
@@ -101,14 +99,14 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
                     )}
                 </div>
             </div>
-            <div className={cn("w-32 flex-shrink-0 whitespace-nowrap text-sm", theme.text.secondary)}>
+            <div className={cn("w-32 flex-shrink-0 whitespace-nowrap text-sm text-text-muted")}>
                 {doc.lastModified}
             </div>
             <div className="w-24 flex-shrink-0 flex justify-end">
                 <div className="flex justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                    <button className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)}><Download className="h-4 w-4" /></button>
-                    <button onClick={handleHistory} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)} title="View History"><Eye className="h-4 w-4" /></button>
-                    <button className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)}><MoreVertical className="h-4 w-4" /></button>
+                    <button className={cn("p-1.5 rounded text-text-muted hover:text-primary hover:bg-primary-light")}><Download className="h-4 w-4" /></button>
+                    <button onClick={handleHistory} className={cn("p-1.5 rounded text-text-muted hover:text-primary hover:bg-primary-light")} title="View History"><Eye className="h-4 w-4" /></button>
+                    <button className={cn("p-1.5 rounded text-text-muted hover:text-primary hover:bg-primary-light")}><MoreVertical className="h-4 w-4" /></button>
                 </div>
             </div>
         </div>

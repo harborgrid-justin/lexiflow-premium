@@ -1,10 +1,14 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Client } from './entities/client.entity';
-import { CreateClientDto, ClientStatus } from './dto/create-client.dto';
-import { UpdateClientDto } from './dto/update-client.dto';
-import * as crypto from 'crypto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as crypto from "crypto";
+import { Repository } from "typeorm";
+import { ClientStatus, CreateClientDto } from "./dto/create-client.dto";
+import { UpdateClientDto } from "./dto/update-client.dto";
+import { Client } from "./entities/client.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -38,23 +42,25 @@ import * as crypto from 'crypto';
 export class ClientsService {
   constructor(
     @InjectRepository(Client)
-    private readonly clientRepository: Repository<Client>,
+    private readonly clientRepository: Repository<Client>
   ) {}
 
   async create(createDto: CreateClientDto): Promise<Client> {
     const existing = await this.clientRepository.findOne({
-      where: { email: createDto.email }
+      where: { email: createDto.email },
     });
 
     if (existing) {
-      throw new ConflictException(`Client with email ${createDto.email} already exists`);
+      throw new ConflictException(
+        `Client with email ${createDto.email} already exists`
+      );
     }
 
     // Create client directly from DTO
     const client = this.clientRepository.create({
       ...createDto,
-      clientType: createDto.clientType?.toLowerCase() || 'individual',
-      status: createDto.status?.toLowerCase() || 'active'
+      clientType: createDto.clientType?.toLowerCase() || "individual",
+      status: createDto.status?.toLowerCase() || "active",
     });
     return await this.clientRepository.save(client);
   }
@@ -65,22 +71,43 @@ export class ClientsService {
     search?: string;
     page?: number;
     limit?: number;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
   }) {
-    const { status, type, search, page = 1, limit = 50 } = filters;
-    
-    const queryBuilder = this.clientRepository.createQueryBuilder('client');
+    const {
+      status,
+      type,
+      search,
+      page = 1,
+      limit = 50,
+      sortBy = "name",
+      sortOrder = "ASC",
+    } = filters;
 
-    if (status) queryBuilder.andWhere('client.status = :status', { status: status.toLowerCase() });
-    if (type) queryBuilder.andWhere('client.clientType = :type', { type: type.toLowerCase() });
+    const queryBuilder = this.clientRepository.createQueryBuilder("client");
+
+    if (status)
+      queryBuilder.andWhere("client.status = :status", {
+        status: status.toLowerCase(),
+      });
+    if (type)
+      queryBuilder.andWhere("client.clientType = :type", {
+        type: type.toLowerCase(),
+      });
     if (search) {
       queryBuilder.andWhere(
-        '(client.name LIKE :search OR client.email LIKE :search OR client.primaryContact LIKE :search)',
+        "(client.name LIKE :search OR client.email LIKE :search OR client.primaryContact LIKE :search)",
         { search: `%${search}%` }
       );
     }
 
+    // Handle sorting - map common sort fields
+    const sortField =
+      sortBy === "totalBilled" ? "client.totalBilled" : `client.${sortBy}`;
+    const order = sortOrder?.toUpperCase() === "DESC" ? "DESC" : "ASC";
+
     const [data, total] = await queryBuilder
-      .orderBy('client.name', 'ASC')
+      .orderBy(sortField, order)
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
@@ -96,7 +123,7 @@ export class ClientsService {
 
   async findOne(id: string): Promise<Client> {
     const client = await this.clientRepository.findOne({ where: { id } });
-    
+
     if (!client) {
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
@@ -109,10 +136,12 @@ export class ClientsService {
 
     if (updateDto.email && updateDto.email !== client.email) {
       const existing = await this.clientRepository.findOne({
-        where: { email: updateDto.email }
+        where: { email: updateDto.email },
       });
       if (existing) {
-        throw new ConflictException(`Email ${updateDto.email} is already in use`);
+        throw new ConflictException(
+          `Email ${updateDto.email} is already in use`
+        );
       }
     }
 
@@ -132,10 +161,12 @@ export class ClientsService {
     return [];
   }
 
-  async generatePortalToken(id: string): Promise<{ token: string; expiresAt: string }> {
+  async generatePortalToken(
+    id: string
+  ): Promise<{ token: string; expiresAt: string }> {
     const client = await this.findOne(id);
 
-    const token = `token-${id}-${crypto.randomBytes(32).toString('hex')}`;
+    const token = `token-${id}-${crypto.randomBytes(32).toString("hex")}`;
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7); // 7 days validity
 

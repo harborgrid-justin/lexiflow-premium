@@ -118,7 +118,7 @@ export class WorkflowService implements OnModuleDestroy {
     if (category)
       queryBuilder.andWhere("workflow.category = :category", { category });
     if (isActive !== undefined)
-      queryBuilder.andWhere("workflow.is_active = :isActive", { isActive });
+      queryBuilder.andWhere("workflow.isActive = :isActive", { isActive });
 
     const sanitizedSearch = sanitizeSearchQuery(search);
     if (sanitizedSearch) {

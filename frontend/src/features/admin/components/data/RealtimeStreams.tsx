@@ -2,8 +2,8 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
@@ -111,7 +111,7 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
 
   return (
     <div className={cn("h-full flex flex-col overflow-hidden", theme.background)}>
-      <div className="p-6 border-b shrink-0" style={{ borderColor: theme.border.default }}>
+      <div className={cn("p-6 border-b shrink-0", theme.border.default)}>
         <h2 className={cn("text-2xl font-bold mb-2", theme.text.primary)}>Realtime Data Streams</h2>
         <p className={cn("text-sm", theme.text.secondary)}>
           Monitor and manage real-time data streams, WebSocket connections, and event processing.

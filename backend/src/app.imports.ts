@@ -51,6 +51,7 @@ import { BluebookModule } from "./bluebook/bluebook.module";
 import { CalendarModule } from "./calendar/calendar.module";
 import { CitationsModule } from "./citations/citations.module";
 import { ClientsModule } from "./clients/clients.module";
+import { CrmModule } from "./crm/crm.module";
 import { ExhibitsModule } from "./exhibits/exhibits.module";
 import { HRModule } from "./hr/hr.module";
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module";
@@ -139,6 +140,7 @@ export const APP_IMPORTS = [
   TrialModule,
   ExhibitsModule,
   ClientsModule,
+  CrmModule,
   OrganizationsModule,
   CitationsModule,
   BluebookModule,

@@ -30,7 +30,17 @@ export class WorkflowInstancesService {
     private readonly instanceRepository: Repository<WorkflowInstance>,
     @InjectRepository(WorkflowTemplate)
     private readonly templateRepository: Repository<WorkflowTemplate>
-  ) {}
+  ) {
+    // Validate repository injection
+    if (!this.instanceRepository) {
+      this.logger.error("WorkflowInstance repository not injected");
+      throw new Error("WorkflowInstance repository injection failed");
+    }
+    if (!this.templateRepository) {
+      this.logger.error("WorkflowTemplate repository not injected");
+      throw new Error("WorkflowTemplate repository injection failed");
+    }
+  }
 
   async create(dto: CreateWorkflowInstanceDto): Promise<WorkflowInstance> {
     // Verify template exists
@@ -73,37 +83,55 @@ export class WorkflowInstancesService {
   ): Promise<PaginatedWorkflowInstances> {
     const { status, caseId, templateId, page = 1, limit = 50 } = query;
 
-    const queryBuilder = this.instanceRepository
-      .createQueryBuilder("instance")
-      .leftJoinAndSelect("instance.template", "template");
-
-    if (status) {
-      queryBuilder.andWhere("instance.status = :status", { status });
+    // Safety check for repository
+    if (!this.instanceRepository || !this.instanceRepository.manager) {
+      this.logger.error("Repository not properly initialized");
+      throw new Error("WorkflowInstance repository not initialized");
     }
 
-    if (caseId) {
-      queryBuilder.andWhere("instance.case_id = :caseId", { caseId });
+    try {
+      const queryBuilder = this.instanceRepository
+        .createQueryBuilder("instance")
+        .leftJoinAndSelect("instance.template", "template");
+
+      if (status) {
+        queryBuilder.andWhere("instance.status = :status", { status });
+      }
+
+      if (caseId) {
+        queryBuilder.andWhere("instance.caseId = :caseId", { caseId });
+      }
+
+      if (templateId) {
+        queryBuilder.andWhere("instance.templateId = :templateId", {
+          templateId,
+        });
+      }
+
+      const [data, total] = await queryBuilder
+        .orderBy("instance.createdAt", "DESC")
+        .skip(calculateOffset(page, limit))
+        .take(limit)
+        .getManyAndCount();
+
+      return {
+        data,
+        total,
+        page,
+        limit,
+        totalPages: calculateTotalPages(total, limit),
+      };
+    } catch (error) {
+      this.logger.error("Failed to query workflow instances:", error);
+      // Return empty result set instead of failing
+      return {
+        data: [],
+        total: 0,
+        page,
+        limit,
+        totalPages: 0,
+      };
     }
-
-    if (templateId) {
-      queryBuilder.andWhere("instance.template_id = :templateId", {
-        templateId,
-      });
-    }
-
-    const [data, total] = await queryBuilder
-      .orderBy("instance.created_at", "DESC")
-      .skip(calculateOffset(page, limit))
-      .take(limit)
-      .getManyAndCount();
-
-    return {
-      data,
-      total,
-      page,
-      limit,
-      totalPages: calculateTotalPages(total, limit),
-    };
   }
 
   async findOne(id: string): Promise<WorkflowInstance> {

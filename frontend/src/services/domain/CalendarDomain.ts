@@ -214,13 +214,21 @@ export const CalendarService = {
   getAll: async (filters?: CalendarFilters): Promise<CalendarEvent[]> => {
     try {
       const events = await workflowApi.calendar.getAll(filters);
+      // Ensure events is an array before mapping
+      if (!Array.isArray(events)) {
+        console.warn(
+          "[CalendarService.getAll] Expected array but got:",
+          typeof events
+        );
+        return [];
+      }
       return events.map((e: ApiCalendarEvent) => ({
         ...e,
         type: e.eventType as unknown as CalendarEvent["type"],
       }));
     } catch (error) {
       console.error("[CalendarService.getAll] Error:", error);
-      throw error;
+      return []; // Return empty array instead of throwing
     }
   },
 

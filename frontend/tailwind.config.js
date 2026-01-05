@@ -1,16 +1,75 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        primary: "var(--color-primary)",
+        "primary-dark": "var(--color-primaryDark)",
+        "primary-light": "var(--color-primaryLight)",
+        secondary: "var(--color-secondary)",
+        accent: "var(--color-accent)",
+        background: "var(--color-background)",
+        surface: "var(--color-surface)",
+        border: "var(--color-border)",
+        "border-light": "var(--color-borderLight)",
+        text: "var(--color-text)",
+        "text-muted": "var(--color-textMuted)",
+        success: "var(--color-success)",
+        warning: "var(--color-warning)",
+        error: "var(--color-error)",
+        info: "var(--color-info)",
+      },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ["var(--font-sans)", "sans-serif"],
+        serif: ["var(--font-serif)", "serif"],
+        mono: ["var(--font-mono)", "monospace"],
+        app: ["var(--font-app)", "sans-serif"],
+      },
+      fontSize: {
+        xs: "var(--size-xs)",
+        sm: "var(--size-sm)",
+        base: "var(--size-base)",
+        lg: "var(--size-lg)",
+        xl: "var(--size-xl)",
+        "2xl": "var(--size-2xl)",
+        "3xl": "var(--size-3xl)",
+      },
+      fontWeight: {
+        light: "var(--weight-light)",
+        normal: "var(--weight-normal)",
+        medium: "var(--weight-medium)",
+        semibold: "var(--weight-semibold)",
+        bold: "var(--weight-bold)",
+        black: "var(--weight-black)",
+      },
+      borderRadius: {
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+        full: "var(--radius-full)",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        xl: "var(--shadow-xl)",
+        inner: "var(--shadow-inner)",
+      },
+      zIndex: {
+        header: "var(--z-header)",
+        sidebar: "var(--z-sidebar)",
+        modal: "var(--z-modal)",
+        overlay: "var(--z-overlay)",
+      },
+      spacing: {
+        unit: "var(--spacing-unit)",
+        gutter: "var(--spacing-gutter)",
+        container: "var(--spacing-container)",
       },
     },
   },
   plugins: [],
-}
+};

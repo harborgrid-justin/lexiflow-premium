@@ -12,50 +12,113 @@ import {
 export const OperationsService = {
   getOkrs: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/okrs");
+      try {
+        return await apiClient.get("/operations/okrs");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] OKRs endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getCleTracking: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/cle");
+      try {
+        return await apiClient.get("/operations/cle");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] CLE endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getVendorContracts: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/vendors/contracts");
+      try {
+        return await apiClient.get("/operations/vendors/contracts");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Vendor contracts endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getVendorDirectory: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/vendors");
+      try {
+        return await apiClient.get("/operations/vendors");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Vendor directory endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getRfps: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/rfps");
+      try {
+        return await apiClient.get("/operations/rfps");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] RFPs endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getMaintenanceTickets: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/maintenance");
+      try {
+        return await apiClient.get("/operations/maintenance");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Maintenance endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
   getFacilities: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/operations/facilities");
+      try {
+        return await apiClient.get("/operations/facilities");
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Facilities endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return [];
   },
 
   getReplicationStatus: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<ReplicationStatus>("/operations/replication-status");
+      try {
+        return await apiClient.get<ReplicationStatus>(
+          "/operations/replication-status"
+        );
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Replication status endpoint not available, returning defaults"
+        );
+        return {
+          lag: 0,
+          bandwidth: 0,
+          syncStatus: "Unknown",
+          peakBandwidth: 0,
+        };
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return {
@@ -69,9 +132,16 @@ export const OperationsService = {
   // Cost FinOps - calculated from backend metrics
   getCostMetrics: async (): Promise<InfrastructureCostMetric[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<InfrastructureCostMetric[]>(
-        "/operations/costs/metrics"
-      );
+      try {
+        return await apiClient.get<InfrastructureCostMetric[]>(
+          "/operations/costs/metrics"
+        );
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Cost metrics endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return [];
@@ -79,7 +149,16 @@ export const OperationsService = {
 
   getCostForecast: async (): Promise<CostForecast[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<CostForecast[]>("/operations/costs/forecast");
+      try {
+        return await apiClient.get<CostForecast[]>(
+          "/operations/costs/forecast"
+        );
+      } catch (error) {
+        console.warn(
+          "[OperationsService] Cost forecast endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return [];

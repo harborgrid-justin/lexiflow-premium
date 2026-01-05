@@ -6,6 +6,7 @@
  * @module routes/workflows/instance.detail
  */
 
+import { requireAuthentication } from '@/utils/route-guards';
 import { Form, Link, useLoaderData, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -32,7 +33,10 @@ export function meta({ data }: { data: LoaderData }) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  // Auth check
+  requireAuthentication(request);
+
   const { instanceId } = params;
 
   if (!instanceId) {

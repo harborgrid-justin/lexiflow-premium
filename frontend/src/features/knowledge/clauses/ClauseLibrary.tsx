@@ -24,8 +24,8 @@ import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/Adaptiv
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { Clause } from '@/types';
@@ -71,7 +71,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
     return (
         <div className={cn("h-full flex flex-col", theme.background)}>
             {/* Header */}
-            <div className="p-4 border-b shrink-0" style={{ borderColor: theme.border.default }}>
+            <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h2 className={cn("text-xl font-bold", theme.text.primary)}>Clause Library</h2>

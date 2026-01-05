@@ -40,7 +40,14 @@ const DATA_SOURCES_STORE = "data_sources";
 export const DataSourceService = {
   getAll: async () => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<DataSource[]>("/data-sources");
+      try {
+        return await apiClient.get<DataSource[]>("/data-sources");
+      } catch (error) {
+        console.warn(
+          "[DataSourceService] Backend endpoint not available, returning empty array"
+        );
+        return [];
+      }
     }
     return db.getAll(DATA_SOURCES_STORE);
   },

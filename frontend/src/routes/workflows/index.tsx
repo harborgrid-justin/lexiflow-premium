@@ -10,7 +10,7 @@
 import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/workflow-api';
 import type { WorkflowStatus } from '@/types';
 import { useState } from 'react';
-import { Form, Link, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { Form, Link, redirect, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -37,16 +37,26 @@ export function meta({ data }: { data: LoaderData }) {
 // ============================================================================
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  // Auth check
+  requireAuthentication(request);
+
   const url = new URL(request.url);
   const status = url.searchParams.get('status') as WorkflowStatus;
   const category = url.searchParams.get('category') || undefined;
 
-  const [templates, instances] = await Promise.all([
-    api.workflow.getTemplates({ status: status as unknown as WorkflowTemplate['status'], category }),
-    api.workflow.getInstances({ status: status as unknown as WorkflowInstance['status'] })
-  ]);
+  try {
+    const [templates, instances] = await Promise.all([
+      api.workflow.getTemplates({ status: status as unknown as WorkflowTemplate['status'], category }),
+      api.workflow.getInstances({ status: status as unknown as WorkflowInstance['status'] })
+    ]);
 
-  return { templates, instances };
+    return { templates, instances };
+  } catch (error: any) {
+    if (error?.message?.includes('401') || error?.message?.includes('Unauthorized') || error?.statusCode === 401) {
+      throw redirect('/login');
+    }
+    throw error;
+  }
 }
 
 // ============================================================================

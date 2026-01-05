@@ -6,7 +6,8 @@
  * @module routes/workflows/new
  */
 
-import { Form, redirect, useNavigate, useNavigation, type ActionFunctionArgs } from 'react-router';
+import { requireAuthentication } from '@/utils/route-guards';
+import { Form, redirect, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -29,6 +30,16 @@ export function meta() {
     title: 'New Workflow',
     description: 'Create a new workflow template',
   });
+}
+
+// ============================================================================
+// Loader
+// ============================================================================
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Auth check
+  requireAuthentication(request);
+  return null;
 }
 
 // ============================================================================

@@ -10,14 +10,14 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+// import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -47,8 +47,8 @@ export const Button = React.memo<ButtonProps>(({
   disabled,
   ...props
 }) => {
-  const { theme } = useTheme();
-  const variants = getVariants(theme);
+  // const { theme } = useTheme();
+  const variants = getVariants();
 
   const ariaLabel = props['aria-label'] || (typeof children === 'string' ? children : undefined);
 

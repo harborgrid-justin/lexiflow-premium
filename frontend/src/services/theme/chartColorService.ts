@@ -8,14 +8,35 @@
  * @module services/theme/chartColorService
  */
 
-import { tokens, ThemeMode } from '@theme/tokens';
+import { ThemeMode, tokens } from "@theme/tokens";
 
 export class ChartColorService {
   /**
    * Get all chart colors for the current theme mode
    */
   static getChartColors(mode: ThemeMode) {
+    // Safety check for chart colors
+    if (!tokens.colors[mode]?.chart?.colors) {
+      console.warn(
+        `[ChartColorService] Chart colors not found for mode: ${mode}, using defaults`
+      );
+      return this.getDefaultChartColors();
+    }
     return tokens.colors[mode].chart.colors;
+  }
+
+  /**
+   * Get default chart colors as fallback
+   */
+  private static getDefaultChartColors() {
+    return {
+      primary: "#3b82f6",
+      secondary: "#8b5cf6",
+      success: "#10b981",
+      warning: "#f59e0b",
+      danger: "#ef4444",
+      neutral: "#6b7280",
+    };
   }
 
   /**
@@ -23,11 +44,11 @@ export class ChartColorService {
    * Used by: ComplianceDomain, clauseAnalytics, etc.
    */
   static getRiskColors(mode: ThemeMode) {
-    const chart = tokens.colors[mode].chart.colors;
+    const chart = this.getChartColors(mode);
     return {
       low: chart.success,
       medium: chart.warning,
-      high: chart.danger
+      high: chart.danger,
     };
   }
 
@@ -36,13 +57,26 @@ export class ChartColorService {
    * Used by: Status badges, alerts, notifications
    */
   static getStatusColors(mode: ThemeMode) {
+    // Safety check for status colors
+    if (!tokens.colors[mode]?.status) {
+      console.warn(
+        `[ChartColorService] Status colors not found for mode: ${mode}, using defaults`
+      );
+      return {
+        success: "#10b981",
+        warning: "#f59e0b",
+        error: "#ef4444",
+        info: "#3b82f6",
+        neutral: "#6b7280",
+      };
+    }
     const status = tokens.colors[mode].status;
     return {
       success: status.success.icon,
       warning: status.warning.icon,
       error: status.error.icon,
       info: status.info.icon,
-      neutral: status.neutral.icon
+      neutral: status.neutral.icon,
     };
   }
 
@@ -51,12 +85,29 @@ export class ChartColorService {
    * Used by: Recharts components
    */
   static getChartTheme(mode: ThemeMode) {
+    // Safety check for chart theme
+    if (!tokens.colors[mode]?.chart) {
+      console.warn(
+        `[ChartColorService] Chart theme not found for mode: ${mode}, using defaults`
+      );
+      const colors = this.getDefaultChartColors();
+      return {
+        grid: mode === "dark" ? "#374151" : "#e5e7eb",
+        text: mode === "dark" ? "#9ca3af" : "#6b7280",
+        tooltip: {
+          bg: mode === "dark" ? "#1f2937" : "#ffffff",
+          border: mode === "dark" ? "#374151" : "#e5e7eb",
+          text: mode === "dark" ? "#f3f4f6" : "#111827",
+        },
+        colors,
+      };
+    }
     const theme = tokens.colors[mode];
     return {
       grid: theme.chart.grid,
       text: theme.chart.text,
       tooltip: theme.chart.tooltip,
-      colors: theme.chart.colors
+      colors: theme.chart.colors,
     };
   }
 
@@ -75,7 +126,7 @@ export class ChartColorService {
       colors.success,
       colors.warning,
       colors.danger,
-      colors.neutral
+      colors.neutral,
     ];
     return palette[index % palette.length]!;
   }
@@ -88,16 +139,16 @@ export class ChartColorService {
    * @param mode - Theme mode
    */
   static getUserColor(index: number, mode: ThemeMode): string {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
     const userPalette = [
-      colors.blue,      // blue
-      colors.emerald,   // emerald/green
-      colors.warning,   // amber
-      colors.danger,    // rose/red
-      colors.purple,    // purple
-      '#ec4899',        // pink (fallback - TODO: add to tokens)
-      '#14b8a6',        // teal (fallback - TODO: add to tokens)
-      '#f97316'         // orange (fallback - TODO: add to tokens)
+      colors.primary || "#3b82f6", // blue
+      colors.success || "#10b981", // emerald/green
+      colors.warning || "#f59e0b", // amber
+      colors.danger || "#ef4444", // rose/red
+      colors.secondary || "#8b5cf6", // purple
+      "#ec4899", // pink (fallback)
+      "#14b8a6", // teal (fallback)
+      "#f97316", // orange (fallback)
     ];
     return userPalette[index % userPalette.length]!;
   }
@@ -107,13 +158,13 @@ export class ChartColorService {
    * Used by: CRMDomain, KnowledgeDomain analytics
    */
   static getCategoryColors(mode: ThemeMode) {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
     return {
-      tech: colors.blue,
-      finance: colors.purple,
-      healthcare: colors.emerald,
-      legal: colors.primary,
-      other: colors.neutral
+      tech: colors.primary || "#3b82f6",
+      finance: colors.secondary || "#8b5cf6",
+      healthcare: colors.success || "#10b981",
+      legal: colors.primary || "#3b82f6",
+      other: colors.neutral || "#6b7280",
     };
   }
 
@@ -122,10 +173,10 @@ export class ChartColorService {
    * Used by: Jurisdiction maps
    */
   static getJurisdictionColors(mode: ThemeMode) {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
     return {
-      federal: colors.blue,
-      state: colors.emerald
+      federal: colors.primary || "#3b82f6",
+      state: colors.success || "#10b981",
     };
   }
 
@@ -134,14 +185,14 @@ export class ChartColorService {
    * Used by: NexusGraph, GraphOverlay
    */
   static getEntityColors(mode: ThemeMode) {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
 
     return {
-      case: mode === 'dark' ? '#1e293b' : '#0f172a',
-      individual: colors.blue,
-      organization: colors.purple,
-      evidence: colors.warning,
-      document: colors.neutral
+      case: mode === "dark" ? "#1e293b" : "#0f172a",
+      individual: colors.primary || "#3b82f6",
+      organization: colors.secondary || "#8b5cf6",
+      evidence: colors.warning || "#f59e0b",
+      document: colors.neutral || "#6b7280",
     };
   }
 
@@ -149,14 +200,14 @@ export class ChartColorService {
    * Get full palette as array (for components that need all colors)
    */
   static getPalette(mode: ThemeMode): string[] {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
     return [
       colors.primary,
       colors.secondary,
       colors.success,
       colors.warning,
       colors.danger,
-      colors.neutral
+      colors.neutral,
     ];
   }
 
@@ -165,16 +216,22 @@ export class ChartColorService {
    * Used directly in Tooltip components
    */
   static getTooltipStyle(mode: ThemeMode) {
-    const tooltip = tokens.colors[mode].chart.tooltip;
+    // Safety check for tooltip colors
+    const tooltip = tokens.colors[mode]?.chart?.tooltip || {
+      bg: mode === "dark" ? "#1f2937" : "#ffffff",
+      border: mode === "dark" ? "#374151" : "#e5e7eb",
+      text: mode === "dark" ? "#f3f4f6" : "#111827",
+    };
     return {
       backgroundColor: tooltip.bg,
       borderColor: tooltip.border,
       color: tooltip.text,
-      borderRadius: '8px',
-      border: 'none',
-      boxShadow: mode === 'dark'
-        ? '0 4px 6px -1px rgb(0 0 0 / 0.3)'
-        : '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+      borderRadius: "8px",
+      border: "none",
+      boxShadow:
+        mode === "dark"
+          ? "0 4px 6px -1px rgb(0 0 0 / 0.3)"
+          : "0 4px 6px -1px rgb(0 0 0 / 0.1)",
     };
   }
 }

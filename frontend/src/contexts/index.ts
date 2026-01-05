@@ -52,12 +52,7 @@ export type { SyncContextType } from "./sync/SyncContext";
 export type { SyncStatus } from "./sync/SyncContext.types";
 
 // ThemeContext exports
-export {
-  ThemeProvider,
-  useTheme,
-  useThemeActions,
-  useThemeState,
-} from "./theme/ThemeContext";
+export { ThemeProvider, useTheme } from "./theme/ThemeContext";
 
 // ToastContext exports
 export {

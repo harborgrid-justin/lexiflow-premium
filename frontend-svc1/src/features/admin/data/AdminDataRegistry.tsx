@@ -1,1 +1,0 @@
-// Obsolete file - Content moved to components/admin/data/AdminDataRegistry.tsx

@@ -16,6 +16,7 @@ import { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { DEFAULT_TOKENS } from '@/components/theme/tokens';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
@@ -25,16 +26,22 @@ export const useChartTheme = () => {
   const { theme } = useTheme();
 
   return useMemo(() => ({
-    grid: theme.chart.grid,
-    text: theme.chart.text,
-    colors: theme.chart.colors,
+    grid: DEFAULT_TOKENS.colors.border,
+    text: DEFAULT_TOKENS.colors.textMuted,
+    colors: [
+      DEFAULT_TOKENS.colors.primary,
+      DEFAULT_TOKENS.colors.secondary,
+      DEFAULT_TOKENS.colors.accent,
+      DEFAULT_TOKENS.colors.success,
+      DEFAULT_TOKENS.colors.warning
+    ],
     tooltipStyle: {
-        backgroundColor: theme.chart.tooltip.bg,
-        borderColor: theme.chart.tooltip.border,
-        color: theme.chart.tooltip.text,
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        borderWidth: '1px'
+      backgroundColor: DEFAULT_TOKENS.colors.surface,
+      borderColor: DEFAULT_TOKENS.colors.border,
+      color: DEFAULT_TOKENS.colors.text,
+      borderRadius: '8px',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+      borderWidth: '1px'
     }
   }), [theme]);
 };

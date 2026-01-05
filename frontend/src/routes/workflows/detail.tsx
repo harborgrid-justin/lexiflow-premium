@@ -6,6 +6,7 @@
  * @module routes/workflows/detail
  */
 
+import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -27,7 +28,10 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
+  // Auth check
+  requireAuthentication(request);
+
   const { workflowId } = params;
 
   if (!workflowId) {
@@ -136,8 +140,8 @@ export default function WorkflowDetailRoute() {
               type="submit"
               disabled={isSubmitting}
               className={`inline-flex items-center rounded-md px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${template.status === 'active'
-                  ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600'
-                  : 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
+                ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600'
+                : 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
                 }`}
             >
               {template.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -205,8 +209,8 @@ export default function WorkflowDetailRoute() {
                   <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                   <dd className="mt-1">
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${template.status === 'active'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                       }`}>
                       {template.status}
                     </span>

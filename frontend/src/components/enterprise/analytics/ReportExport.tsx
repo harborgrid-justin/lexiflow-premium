@@ -15,11 +15,12 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import { DEFAULT_TOKENS } from '@/components/theme/tokens';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // ============================================================================
@@ -194,7 +195,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     cursor: disabled || isExporting ? 'not-allowed' : 'pointer',
     transition: 'all 0.2s',
     opacity: disabled || isExporting ? 0.6 : 1,
-    backgroundColor: theme.primary?.main || '#3b82f6',
+    backgroundColor: DEFAULT_TOKENS.colors.primary,
     color: '#ffffff',
     display: 'flex',
     alignItems: 'center',
@@ -211,8 +212,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     top: '100%',
     right: 0,
     marginTop: '8px',
-    backgroundColor: theme.surface?.raised || '#ffffff',
-    border: `1px solid ${theme.border?.default || '#e2e8f0'}`,
+    backgroundColor: DEFAULT_TOKENS.colors.surface,
+    border: `1px solid ${DEFAULT_TOKENS.colors.border}`,
     borderRadius: '8px',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     minWidth: '280px',
@@ -226,7 +227,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     border: 'none',
     borderRadius: '6px',
     backgroundColor: 'transparent',
-    color: theme.text?.primary || '#1e293b',
+    color: DEFAULT_TOKENS.colors.text,
     cursor: 'pointer',
     transition: 'background-color 0.2s',
     display: 'flex',
@@ -241,7 +242,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     display: 'flex',
     alignItems: 'center',
     fontSize: '14px',
-    color: theme.text?.primary || '#1e293b'
+    color: DEFAULT_TOKENS.colors.text
   };
 
   const checkboxStyle: React.CSSProperties = {
@@ -265,7 +266,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
         {showOptions && !isExporting && (
           <div style={dropdownContentStyle}>
             <div style={{ marginBottom: '16px' }}>
-              <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: 600, color: theme.text?.primary || '#1e293b' }}>
+              <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: 600, color: DEFAULT_TOKENS.colors.text }}>
                 Export Options
               </h4>
 
@@ -300,8 +301,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
               </label>
             </div>
 
-            <div style={{ borderTop: `1px solid ${theme.border?.default || '#e2e8f0'}`, paddingTop: '12px' }}>
-              <h4 style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: 600, color: theme.text?.secondary || '#64748b' }}>
+            <div style={{ borderTop: `1px solid ${DEFAULT_TOKENS.colors.border}`, paddingTop: '12px' }}>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: 600, color: DEFAULT_TOKENS.colors.textMuted }}>
                 Select Format
               </h4>
               {formats.map(format => (

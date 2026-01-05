@@ -9,7 +9,8 @@
 
 import { CitationManager } from '@/features/knowledge/citation/CitationManager';
 import { DataService } from '@/services/data/dataService';
-import type { ActionFunctionArgs } from 'react-router';
+import { requireAuthentication } from '@/utils/route-guards';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -29,7 +30,9 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireAuthentication(request);
+
   try {
     const citations = await DataService.citations.getAll();
     return { items: citations, totalCount: citations.length };

@@ -4,11 +4,11 @@
  * ✅ Backend-ready with proper data handling (2025-12-21)
  */
 
-import React from 'react';
-import { Sparkles, Calendar, User, FileText } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
+import { Calendar, FileText, Sparkles, User } from 'lucide-react';
+import React from 'react';
 
 interface Step2FormConfigurationProps {
   template: string;
@@ -143,7 +143,7 @@ export const Step2FormConfiguration: React.FC<Step2FormConfigurationProps> = ({
       </div>
 
       {/* Generate Button */}
-      <div className="flex gap-3 pt-4 border-t" style={{ borderColor: theme.border.default }}>
+      <div className={cn("flex gap-3 pt-4 border-t", theme.border.default)}>
         <button
           onClick={onGenerate}
           disabled={!isFormValid}

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useState, useRef } from 'react';
 import { X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 // ============================================================================
@@ -23,7 +23,6 @@ import { useScrollLock } from '@/hooks/ui';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { tokens } from '@/components/theme/tokens';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -52,10 +51,10 @@ interface ModalProps {
 // ============================================================================
 
 export function Modal({
-    isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true
+  isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true
 }: ModalProps) {
-  const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   // React 18: useId generates stable, unique IDs (SSR-safe)
   const titleId = React.useId();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -92,7 +91,7 @@ export function Modal({
         }
       }
       if (e.key === 'Escape') {
-          onClose();
+        onClose();
       }
     };
 
@@ -104,9 +103,9 @@ export function Modal({
   }, [isOpen, onClose]);
 
   const handleBackdropClick = () => {
-      if (closeOnBackdrop) {
-          onClose();
-      }
+    if (closeOnBackdrop) {
+      onClose();
+    }
   };
 
   if (!isOpen || !mounted || typeof document === 'undefined' || !document.body) return null;
@@ -121,14 +120,14 @@ export function Modal({
 
   const modalContent = (
     <div
-        className={cn("fixed inset-0 flex items-center justify-center p-4 sm:p-6", tokens.zIndex.modal)}
-        aria-labelledby={titleId}
-        role="dialog"
-        aria-modal="true"
+      className={cn("fixed inset-0 flex items-center justify-center p-4 sm:p-6 z-modal", className)}
+      aria-labelledby={titleId}
+      role="dialog"
+      aria-modal="true"
     >
       {/* Backdrop */}
       <div
-        className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop)}
+        className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200 bg-black/50")}
         aria-hidden="true"
         onClick={handleBackdropClick}
       />
@@ -137,16 +136,14 @@ export function Modal({
       <div
         ref={modalRef}
         className={cn(
-        "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-xl",
-        theme.surface.default,
-        theme.border.default,
-        sizes[size],
-        "max-h-[calc(100dvh-3rem)]",
-        className
-      )}>
+          "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-xl bg-surface border-border",
+          sizes[size],
+          "max-h-[calc(100dvh-3rem)]",
+          className
+        )}>
         {/* Header */}
-        <div className={cn("flex items-center justify-between px-6 py-4 border-b shrink-0", theme.surface.default, theme.border.default)}>
-          <h3 className={cn("text-lg font-bold leading-6 tracking-tight", theme.text.primary)} id={titleId}>
+        <div className={cn("flex items-center justify-between px-6 py-4 border-b shrink-0 bg-surface border-border")}>
+          <h3 className={cn("text-lg font-bold leading-6 tracking-tight text-text")} id={titleId}>
             {title}
           </h3>
           <button

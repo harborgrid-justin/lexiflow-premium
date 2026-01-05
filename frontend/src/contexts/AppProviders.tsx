@@ -21,7 +21,7 @@
 import React from 'react';
 import { DataSourceProvider } from './data/DataSourceContext';
 import { SyncProvider } from './sync/SyncContext';
-import { ThemeProvider, useTheme } from './theme/ThemeContext';
+import { ThemeProvider } from './theme/ThemeContext';
 import { ToastProvider as ToastProviderBase, useToast } from './toast/ToastContext';
 import { WindowProvider } from './window/WindowContext';
 
@@ -41,25 +41,25 @@ interface AppProvidersProps {
  * This avoids circular dependency by keeping the connection isolated
  */
 function WindowProviderWithTheme({ children }: { children: React.ReactNode }) {
-  const { theme } = useTheme();
   // Map the full theme to the subset required by WindowProvider
+  // Using semantic Tailwind classes that map to CSS variables
   const windowTheme = {
     surface: {
-      default: theme.surface.default,
-      muted: theme.surface.raised,
+      default: 'bg-surface',
+      muted: 'bg-surface',
     },
     border: {
-      default: theme.border.default,
+      default: 'border-border',
     },
     accent: {
-      primary: theme.primary.DEFAULT,
+      primary: 'bg-primary',
     },
     text: {
-      secondary: theme.text.secondary,
-      tertiary: theme.text.tertiary,
+      secondary: 'text-text-muted',
+      tertiary: 'text-text-muted',
     },
     interactive: {
-      hover: theme.surface.highlight,
+      hover: 'hover:bg-surface',
     },
   };
   return <WindowProvider theme={windowTheme}>{children}</WindowProvider>;

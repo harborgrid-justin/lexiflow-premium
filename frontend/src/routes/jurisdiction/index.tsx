@@ -33,9 +33,15 @@ export async function loader({ request }: Route.LoaderArgs) {
   const type = url.searchParams.get("type"); // federal, state, local
 
   try {
-    // Map type string to API filter if needed
-    const filter = type ? { system: type as string } : {};
-    const items = await DataService.analytics.jurisdiction.getAll(filter);
+    // Load all jurisdictions or filter by type
+    let items;
+    if (type === 'federal') {
+      items = await DataService.jurisdiction.getFederal();
+    } else if (type === 'state') {
+      items = await DataService.jurisdiction.getState();
+    } else {
+      items = await DataService.jurisdiction.getAll();
+    }
     return { items, totalCount: items.length };
   } catch (error) {
     console.error("Failed to load jurisdictions", error);

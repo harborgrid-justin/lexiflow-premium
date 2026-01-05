@@ -14,7 +14,7 @@
 
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '@/types';
-import { Form, Link, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { Form, Link, useNavigate, redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 
@@ -112,7 +112,10 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderDat
       courts: mappedCourts,
       recentPleadings
     };
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message?.includes('401') || error?.message?.includes('Unauthorized') || error?.statusCode === 401) {
+      throw redirect('/login');
+    }
     console.error("Failed to load pleading builder data", error);
     return { templates: [], courts: [], recentPleadings: [] };
   }

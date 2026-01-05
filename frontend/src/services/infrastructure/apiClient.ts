@@ -336,6 +336,7 @@ class ApiClient {
       // Handle 401 Unauthorized - attempt token refresh
       // Skip redirect for login endpoint to prevent loops
       const isLoginRequest = response.url.includes("/auth/login");
+      const isSSR = typeof window === "undefined";
 
       if (response.status === 401 && !isLoginRequest) {
         console.warn(
@@ -356,7 +357,7 @@ class ApiClient {
                 "[ApiClient] Token refresh failed, clearing tokens and redirecting"
               );
               this.clearAuthTokens();
-              if (typeof window !== "undefined") {
+              if (!isSSR) {
                 window.location.href = "/login";
               }
               throw new AuthenticationError(
@@ -372,7 +373,7 @@ class ApiClient {
             }
             console.error("[ApiClient] Token refresh failed:", error);
             this.clearAuthTokens();
-            if (typeof window !== "undefined") {
+            if (!isSSR) {
               window.location.href = "/login";
             }
             throw new AuthenticationError(
@@ -380,13 +381,17 @@ class ApiClient {
             );
           }
         } else {
-          console.warn(
-            "[ApiClient] No refresh token available, redirecting to login"
-          );
+          console.warn("[ApiClient] No refresh token available");
           this.clearAuthTokens();
-          if (typeof window !== "undefined") {
+          // Only redirect on client side, not during SSR
+          if (!isSSR) {
+            console.log("[ApiClient] Redirecting to login");
             window.location.href = "/login";
           }
+          // Throw error so route loaders can catch and handle gracefully
+          throw new AuthenticationError(
+            "Authentication required. Please login."
+          );
         }
       }
 

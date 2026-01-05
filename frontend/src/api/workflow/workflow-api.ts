@@ -247,9 +247,18 @@ export class WorkflowApiService {
         response
       );
       return [];
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("[WorkflowApiService.getTemplates] Error:", error);
-      // Return empty array instead of throwing to prevent UI crash
+      // Propagate auth errors
+      if (
+        error instanceof Error &&
+        (error.message.includes("401") ||
+          error.message.includes("Unauthorized") ||
+          (error as any).statusCode === 401)
+      ) {
+        throw error;
+      }
+      // Return empty array instead of throwing to prevent UI crash for other errors
       return [];
     }
   }
@@ -405,6 +414,15 @@ export class WorkflowApiService {
 
       return await apiClient.get<WorkflowInstance[]>(url);
     } catch (error: unknown) {
+      // Propagate auth errors
+      if (
+        error instanceof Error &&
+        (error.message.includes("401") ||
+          error.message.includes("Unauthorized") ||
+          (error as any).statusCode === 401)
+      ) {
+        throw error;
+      }
       // Graceful degradation: if endpoint doesn't exist yet, return empty array
       const errorMessage =
         error instanceof Error ? error.message : String(error);

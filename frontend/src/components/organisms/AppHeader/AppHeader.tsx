@@ -96,7 +96,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
         {/* System Heartbeat Dot - Desktop only */}
         <div className={cn("hidden xl:flex items-center gap-2 px-3 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
-          <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? `${theme.status.success.bg} opacity-100` : `${theme.status.success.text} opacity-40`)}></div>
+          <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000 bg-success", pulse ? "opacity-100" : "opacity-40")}></div>
           <span className={cn("text-[9px] font-mono uppercase tracking-widest", theme.text.tertiary)}>System Online</span>
         </div>
       </div>

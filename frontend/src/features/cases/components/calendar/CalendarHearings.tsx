@@ -56,9 +56,9 @@ export const CalendarHearings: React.FC = () => {
     id: e.id,
     title: e.title,
     case: e.description || 'Unassigned Matter',
-    time: '09:00 AM', // Mock time if not in event model
-    location: e.location || 'Courtroom 4B',
-    judge: 'Presiding Judge'
+    time: e.startTime ? new Date(e.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Time TBD',
+    location: e.location || 'Courtroom TBD',
+    judge: e.judge || 'Presiding Judge'
   }));
 
   return (

@@ -84,7 +84,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CaseFilingsRoute() {
   const { caseData, filings } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   // Count filings by status
   const draftCount = filings.filter((f: Filing) => f.status === 'draft').length;

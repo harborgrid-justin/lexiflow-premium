@@ -3,11 +3,11 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { Modal } from '@/components/ui/molecules/Modal';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
@@ -26,7 +26,8 @@ interface UserData {
 }
 
 /**
- * @deprecated Mock data - use backend API via DataService.users
+ * User Management Component
+ * Manages system users via backend API
  */
 
 export const UserManagement: React.FC = () => {
@@ -60,7 +61,8 @@ export const UserManagement: React.FC = () => {
       return;
     }
     try {
-      await DataService.users.add(formData);
+      // Use create for backend API
+      await (DataService.users as any).create(formData);
       await refetch();
       createModal.close();
       setFormData({});
@@ -74,7 +76,7 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Update user via backend API
-      // await DataService.admin.updateUser(userSelection.selected.id, formData);
+      await (DataService.users as any).update(userSelection.selected.id, formData);
       editModal.close();
       userSelection.deselect();
       setFormData({});
@@ -89,7 +91,7 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Delete user via backend API
-      // await DataService.admin.deleteUser(userSelection.selected.id);
+      await (DataService.users as any).delete(userSelection.selected.id);
       deleteModal.close();
       userSelection.deselect();
       notify.success('User deleted successfully');

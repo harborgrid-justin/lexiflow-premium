@@ -105,7 +105,6 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function WorkflowsIndexRoute() {
   const { templates, instances } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [activeTab, setActiveTab] = useState<'templates' | 'instances'>('templates');

@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router';
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const { changePassword } = useAuthActions();
   const { user, passwordPolicy } = useAuthState();
 

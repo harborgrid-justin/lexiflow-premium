@@ -110,7 +110,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CaseTimelineRoute() {
   const { caseData, events } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   return (
     <div className="min-h-full bg-gray-50 dark:bg-gray-900">

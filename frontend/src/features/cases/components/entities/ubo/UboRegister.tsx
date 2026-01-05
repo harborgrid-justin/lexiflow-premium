@@ -36,12 +36,11 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   // Use backend entities or fallback to legacy prop
   const corporations = apiEntities.length > 0 ? apiEntities : legacyEntities.filter(e => e.type === 'Corporation');
 
-  // Calculate UBO metrics (mock for now until UBO endpoint is implemented)
+  // Calculate UBO metrics from backend data
   const metrics = useMemo(() => ({
     entitiesTracked: stats?.corporations || corporations.length,
     ubosIdentified: corporations.reduce((sum, corp) => {
       const apiCorp = corp as unknown as Record<string, unknown>;
-console.log('metrics data:', metrics);
       const relationships = apiCorp.relationships as Array<unknown> | undefined;
       return sum + (relationships?.length || 0);
     }, 0),

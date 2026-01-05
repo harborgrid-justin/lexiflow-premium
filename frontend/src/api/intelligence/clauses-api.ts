@@ -3,12 +3,12 @@
  * Legal clause library and templates
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface Clause {
   id: string;
   name: string;
-  category: 'boilerplate' | 'custom' | 'standard' | 'statutory' | 'contractual';
+  category: "boilerplate" | "custom" | "standard" | "statutory" | "contractual";
   clauseType: string;
   text: string;
   variables?: {
@@ -26,40 +26,85 @@ export interface Clause {
 }
 
 export interface ClauseFilters {
-  category?: Clause['category'];
+  category?: Clause["category"];
   clauseType?: string;
   jurisdiction?: string;
   search?: string;
 }
 
 export class ClausesApiService {
-  private readonly baseUrl = '/clauses';
+  private readonly baseUrl = "/clauses";
 
   async getAll(filters?: ClauseFilters): Promise<Clause[]> {
     const params = new URLSearchParams();
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.clauseType) params.append('clauseType', filters.clauseType);
-    if (filters?.jurisdiction) params.append('jurisdiction', filters.jurisdiction);
-    if (filters?.search) params.append('search', filters.search);
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.clauseType) params.append("clauseType", filters.clauseType);
+    if (filters?.jurisdiction)
+      params.append("jurisdiction", filters.jurisdiction);
+    if (filters?.search) params.append("search", filters.search);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Clause[]>(url);
+
+    const response = await apiClient.get<Clause[] | { data: Clause[] }>(url);
+
+    if (Array.isArray(response)) {
+      return response;
+    }
+
+    if (
+      response &&
+      "data" in response &&
+      Array.isArray((response as { data: Clause[] }).data)
+    ) {
+      return (response as { data: Clause[] }).data;
+    }
+
+    return [];
   }
 
   async getById(id: string): Promise<Clause> {
-    return apiClient.get<Clause>(`${this.baseUrl}/${id}`);
+    const response = await apiClient.get<Clause | { data: Clause }>(
+      `${this.baseUrl}/${id}`
+    );
+    if (response && "data" in response) {
+      return (response as { data: Clause }).data;
+    }
+    return response as Clause;
   }
 
   async create(data: Partial<Clause>): Promise<Clause> {
-    return apiClient.post<Clause>(this.baseUrl, data);
+    const response = await apiClient.post<Clause | { data: Clause }>(
+      this.baseUrl,
+      data
+    );
+    if (response && "data" in response) {
+      return (response as { data: Clause }).data;
+    }
+    return response as Clause;
   }
 
   async update(id: string, data: Partial<Clause>): Promise<Clause> {
-    return apiClient.put<Clause>(`${this.baseUrl}/${id}`, data);
+    const response = await apiClient.put<Clause | { data: Clause }>(
+      `${this.baseUrl}/${id}`,
+      data
+    );
+    if (response && "data" in response) {
+      return (response as { data: Clause }).data;
+    }
+    return response as Clause;
   }
 
-  async render(id: string, variables: Record<string, unknown>): Promise<{ text: string }> {
-    return apiClient.post(`${this.baseUrl}/${id}/render`, { variables });
+  async render(
+    id: string,
+    variables: Record<string, unknown>
+  ): Promise<{ text: string }> {
+    const response = await apiClient.post<
+      { text: string } | { data: { text: string } }
+    >(`${this.baseUrl}/${id}/render`, { variables });
+    if (response && "data" in response) {
+      return (response as { data: { text: string } }).data;
+    }
+    return response as { text: string };
   }
 
   async delete(id: string): Promise<void> {

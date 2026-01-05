@@ -54,14 +54,14 @@ interface BillingDashboardProps {
 const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
   const [isPending, startTransition] = useTransition();
-  const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
+  const [activeTab, setActiveTabState] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
   const [period, setPeriod] = useState('30d');
 
   // Concurrent-safe: Non-urgent tab changes wrapped in transition (Principle #3)
   // Keeps UI responsive during tab transitions
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-      _setActiveTab(tab);
+      setActiveTabState(tab);
     });
   };
 
@@ -99,7 +99,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
 
   const { mutate: exportReport } = useMutation(
     (format: string) => DataService.billing.export(format),
-    { onSuccess: (_, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
+    { onSuccess: (result, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
   );
 
   const renderContent = () => {
@@ -118,7 +118,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
           <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={BILLING_TAB_CONFIG as unknown as TabConfigItem[]}
+      tabConfig={BILLING_TAB_CONFIG as TabConfigItem[]}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

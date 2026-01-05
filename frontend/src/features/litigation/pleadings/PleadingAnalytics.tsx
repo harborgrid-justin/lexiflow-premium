@@ -18,8 +18,8 @@ import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, Res
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Components
 import { Card } from '@/components/ui/molecules/Card/Card';
@@ -27,11 +27,10 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { ChartColorService } from '@/services/theme/chartColorService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Types
-import { PleadingDocument } from '@/types';
+import { Pleading } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -40,47 +39,94 @@ import { PleadingDocument } from '@/types';
 export const PleadingAnalytics: React.FC = () => {
     const { theme, mode } = useTheme();
 
-    const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
+    const { data: pleadings = [] } = useQuery<Pleading[]>(
         ['pleadings', 'all'],
         () => DataService.pleadings.getAll()
     );
 
     const analytics = useMemo(() => {
-        // Motion success rate (mock calculation based on status)
-        const filed = pleadings.filter(p => p.status === 'Filed').length;
+        // Motion success rate
+        // 'filed' status indicates success in this context
+        const filed = pleadings.filter(p => p.status === 'filed').length;
         const total = pleadings.length;
         const successRate = total > 0 ? Math.round((filed / total) * 100) : 0;
 
-        // Average drafting time (mock - 2-5 days)
-        const avgDraftingTime = 3.5;
+        // Average drafting time
+        // Calculate days between creation and filing
+        const completedPleadings = pleadings.filter(p => p.createdAt && p.filedDate);
+        let avgDraftingTime = 0;
+        if (completedPleadings.length > 0) {
+            const totalDays = completedPleadings.reduce((acc, p) => {
+                const start = new Date(p.createdAt!).getTime();
+                const end = new Date(p.filedDate!).getTime();
+                // Ensure positive duration
+                const duration = Math.max(0, end - start);
+                return acc + duration / (1000 * 60 * 60 * 24);
+            }, 0);
+            avgDraftingTime = parseFloat((totalDays / completedPleadings.length).toFixed(1));
+        }
 
-        // Clause usage (mock data) - use theme-aware colors
-        const clauseUsage = [
-            { name: 'Jurisdiction', count: 45, color: ChartColorService.getColorByIndex(0, mode) },
-            { name: 'Summary Judgment', count: 32, color: ChartColorService.getColorByIndex(1, mode) },
-            { name: 'Discovery', count: 28, color: ChartColorService.getColorByIndex(2, mode) },
-            { name: 'Damages', count: 25, color: ChartColorService.getColorByIndex(3, mode) },
-            { name: 'Relief Sought', count: 42, color: ChartColorService.getColorByIndex(4, mode) },
-        ];
+        // Clause usage
+        // Currently no clause usage data in Pleading entity.
+        // TODO: Integrate with Clause Analytics API when available.
+        const clauseUsage: { name: string; count: number; color: string }[] = [];
 
-        // Monthly trend (mock data)
-        const monthlyTrend = [
-            { month: 'Jan', count: 12 },
-            { month: 'Feb', count: 15 },
-            { month: 'Mar', count: 18 },
-            { month: 'Apr', count: 14 },
-            { month: 'May', count: 22 },
-            { month: 'Jun', count: 19 },
-        ];
+        // Monthly trend
+        // Group by creation month
+        const monthlyCounts: Record<string, number> = {};
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        // Initialize with 0 for last 6 months to show trend even if empty
+        const today = new Date();
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            const monthName = d.toLocaleString('default', { month: 'short' });
+            monthlyCounts[monthName] = 0;
+        }
+
+        pleadings.forEach(p => {
+            if (p.createdAt) {
+                const date = new Date(p.createdAt);
+                const month = date.toLocaleString('default', { month: 'short' });
+                if (monthlyCounts[month] !== undefined) {
+                    monthlyCounts[month]++;
+                }
+            }
+        });
+
+        const monthlyTrend = Object.entries(monthlyCounts)
+            .map(([month, count]) => ({ month, count }))
+            // Sort by month index if needed, but Object.entries might not preserve order.
+            // Since we initialized in order, it might be okay, but safer to rely on the initialized keys order if we iterate them.
+            // Re-mapping based on our initialized months list:
+            .sort((a, b) => {
+                // Simple sort for now, or just map from the keys we created
+                return 0;
+            });
+
+        // Better approach for monthly trend to ensure order:
+        const trendData = [];
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            const monthName = d.toLocaleString('default', { month: 'short' });
+            trendData.push({
+                month: monthName,
+                count: monthlyCounts[monthName] || 0
+            });
+        }
+
 
         // Motion type distribution
-        const motionTypes = [
-            { type: 'Summary Judgment', count: 18 },
-            { type: 'Dismiss', count: 15 },
-            { type: 'Compel', count: 12 },
-            { type: 'Protective Order', count: 8 },
-            { type: 'Extension', count: 7 },
-        ];
+        const typeCounts: Record<string, number> = {};
+        pleadings.forEach(p => {
+            const type = p.type ? (p.type.charAt(0).toUpperCase() + p.type.slice(1)) : 'Unknown';
+            typeCounts[type] = (typeCounts[type] || 0) + 1;
+        });
+
+        const motionTypes = Object.entries(typeCounts)
+            .map(([type, count]) => ({ type, count }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 5); // Top 5 types
 
         return {
             successRate,
@@ -88,7 +134,7 @@ export const PleadingAnalytics: React.FC = () => {
             totalPleadings: total,
             filedPleadings: filed,
             clauseUsage,
-            monthlyTrend,
+            monthlyTrend: trendData,
             motionTypes,
         };
     }, [pleadings, mode]);
@@ -157,32 +203,41 @@ export const PleadingAnalytics: React.FC = () => {
             {/* Clause Usage */}
             <Card title="Most Used Clauses">
                 <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie
-                                data={analytics.clauseUsage}
-                                dataKey="count"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                label
-                            >
-                                {analytics.clauseUsage.map((entry, index) => (
-                                    <Cell key={`clause-${entry.name}-${index}`} fill={entry.color} />
+                    {analytics.clauseUsage.length > 0 ? (
+                        <>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={analytics.clauseUsage}
+                                        dataKey="count"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={80}
+                                        label
+                                    >
+                                        {analytics.clauseUsage.map((entry, index) => (
+                                            <Cell key={`clause-${entry.name}-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            <div className="flex justify-center gap-4 mt-4 flex-wrap">
+                                {analytics.clauseUsage.map(clause => (
+                                    <div key={clause.name} className="flex items-center text-xs">
+                                        <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: clause.color }} />
+                                        <span className={theme.text.secondary}>{clause.name}</span>
+                                    </div>
                                 ))}
-                            </Pie>
-                            <Tooltip />
-                        </PieChart>
-                    </ResponsiveContainer>
-                    <div className="flex justify-center gap-4 mt-4 flex-wrap">
-                        {analytics.clauseUsage.map(clause => (
-                            <div key={clause.name} className="flex items-center text-xs">
-                                <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: clause.color }} />
-                                <span className={theme.text.secondary}>{clause.name}</span>
                             </div>
-                        ))}
-                    </div>
+                        </>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-400 bg-gray-50/50 rounded-lg border border-dashed border-gray-200">
+                            <FileText className="w-8 h-8 mb-2 opacity-50" />
+                            <span className="text-sm">No clause usage data available</span>
+                        </div>
+                    )}
                 </div>
             </Card>
         </div>

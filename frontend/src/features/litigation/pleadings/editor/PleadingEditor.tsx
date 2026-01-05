@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types';
 import { cn } from '@/utils/cn';
@@ -36,13 +36,9 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
     const [activeTool, setActiveTool] = useState<EditorTool>('properties');
     const [isSaving, setIsSaving] = useState(false);
 
-    // Local state for comments/variables (normally would be in document object, mocking here for UI flow)
-    const [comments, setComments] = useState<PleadingComment[]>(document.comments || []);
-    const [variables, setVariables] = useState<PleadingVariable[]>(document.variables || [
-        { id: 'v1', key: 'PlaintiffName', label: 'Plaintiff Name', value: 'Justin Saadein-Morales', source: 'Case' },
-        { id: 'v2', key: 'DefendantName', label: 'Defendant Name', value: 'Westridge Swim & Racquet Club', source: 'Case' },
-        { id: 'v3', key: 'Court', label: 'Court Name', value: 'US District Court', source: 'System' }
-    ]);
+    // Load comments and variables from document or backend
+    const [comments, setComments] = useState<PleadingComment[]>(initialDoc.comments || []);
+    const [variables, setVariables] = useState<PleadingVariable[]>(initialDoc.variables || []);
 
     const { mutate: saveDocument } = useMutation<PleadingDocument, PleadingDocument>(
         async (doc: PleadingDocument) => {

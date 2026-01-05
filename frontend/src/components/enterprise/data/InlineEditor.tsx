@@ -59,6 +59,7 @@ export function InlineEditor({
 }: CellEditorProps) {
   const { theme } = useTheme();
   const [value, setValue] = useState(initialValue);
+  const [isEditing, setIsEditing] = useState(true);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -74,278 +75,277 @@ export function InlineEditor({
     }
   }, [type]);
 
+  // Handle saving value
+  const handleSave = useCallback(() => {
+    // Convert value to appropriate type
+    let finalValue = value;
+
+    switch (type) {
+      case 'number':
+        finalValue = value ? parseFloat(String(value)) : null;
+        break;
+      case 'checkbox':
+        finalValue = Boolean(value);
+        break;
+      case 'date':
+        finalValue = value ? new Date(String(value)) : null;
+        break;
+    }
+
+    onSave(finalValue);
+  }, [value, type, onSave]);
+
   // Handle click outside
   useEffect(() => {
+    if (!isEditing) return;
+
     const handleClickOutside = (event: MouseEvent) => {
-      const handleSave = useCallback(() => {
-        // Convert value to appropriate type
-        let finalValue = value;
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        handleSave();
+      }
+    };
 
-        switch (type) {
-          case 'number':
-            finalValue = value ? parseFloat(String(value)) : null;
-            break;
-          case 'checkbox':
-            finalValue = Boolean(value);
-            break;
-          case 'date':
-            finalValue = value ? new Date(String(value)) : null;
-            break;
-        }
+    // Guard browser API access for SSR compatibility
+    if (typeof document === 'undefined') return;
 
-        onSave(finalValue);
-      }, [value, type, onSave]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isEditing, handleSave]);
 
-      useEffect(() => {
-        if (!isEditing) return;
+  const handleCancel = useCallback(() => {
+    onCancel();
+  }, [onCancel]);
 
-        const handleClickOutside = (event: MouseEvent) => {
-          if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-            handleSave();
-          }
-        };
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && type !== 'textarea') {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancel();
+    }
+  }, [type, handleSave, handleCancel]);
 
-        // Guard browser API access for SSR compatibility
-        if (typeof document === 'undefined') return;
+  const renderEditor = () => {
+    switch (type) {
+      case 'text':
+        return (
+          <input
+            ref={inputRef as React.RefObject<HTMLInputElement>}
+            type="text"
+            value={String(value ?? '')}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )}
+          />
+        );
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-      }, [isEditing, handleSave]);
+      case 'number':
+        return (
+          <input
+            ref={inputRef as React.RefObject<HTMLInputElement>}
+            type="number"
+            value={value !== null && value !== undefined ? String(value) : ''}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )}
+          />
+        );
 
-      const handleCancel = useCallback(() => {
-        onCancel();
-      }, [onCancel]);
+      case 'date':
+        return (
+          <input
+            ref={inputRef as React.RefObject<HTMLInputElement>}
+            type="date"
+            value={value ? formatDateForInput(value) : ''}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )}
+          />
+        );
 
-      const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && type !== 'textarea') {
-          e.preventDefault();
-          handleSave();
-        } else if (e.key === 'Escape') {
-          e.preventDefault();
-          handleCancel();
-        }
-      }, [type, handleSave, handleCancel]);
+      case 'select':
+        return (
+          <select
+            ref={inputRef as React.RefObject<HTMLSelectElement>}
+            value={value !== null && value !== undefined ? String(value) : ''}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            )}
+          >
+            <option value="">Select...</option>
+            {options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
 
-      const renderEditor = () => {
-        switch (type) {
-          case 'text':
-            return (
-              <input
-                ref={inputRef as React.RefObject<HTMLInputElement>}
-                type="text"
-                value={String(value ?? '')}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-              />
-            );
-
-          case 'number':
-            return (
-              <input
-                ref={inputRef as React.RefObject<HTMLInputElement>}
-                type="number"
-                value={value !== null && value !== undefined ? String(value) : ''}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-              />
-            );
-
-          case 'date':
-            return (
-              <input
-                ref={inputRef as React.RefObject<HTMLInputElement>}
-                type="date"
-                value={value ? formatDateForInput(value) : ''}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-              />
-            );
-
-          case 'select':
-            return (
-              <select
-                ref={inputRef as React.RefObject<HTMLSelectElement>}
-                value={value !== null && value !== undefined ? String(value) : ''}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                )}
-              >
-                <option value="">Select...</option>
-                {options?.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            );
-
-          case 'checkbox':
-            return (
-              <div className="flex items-center justify-center">
-                <input
-                  ref={inputRef as React.RefObject<HTMLInputElement>}
-                  type="checkbox"
-                  checked={!!value}
-                  onChange={(e) => setValue(e.target.checked)}
-                  onKeyDown={handleKeyDown}
-                  className="w-4 h-4 rounded cursor-pointer"
-                />
-              </div>
-            );
-
-          case 'textarea':
-            return (
-              <textarea
-                ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-                value={String(value ?? '')}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                rows={3}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded resize-none",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-              />
-            );
-
-          default:
-            return (
-              <input
-                ref={inputRef as React.RefObject<HTMLInputElement>}
-                type="text"
-                value={String(value ?? '')}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className={cn(
-                  "w-full px-2 py-1 text-sm border rounded",
-                  theme.surface.default,
-                  theme.border.default,
-                  theme.text.primary,
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500"
-                )}
-              />
-            );
-        }
-      };
-
-      return (
-        <div ref={containerRef} className="flex items-center gap-1 w-full">
-          <div className="flex-1">
-            {renderEditor()}
+      case 'checkbox':
+        return (
+          <div className="flex items-center justify-center">
+            <input
+              ref={inputRef as React.RefObject<HTMLInputElement>}
+              type="checkbox"
+              checked={!!value}
+              onChange={(e) => setValue(e.target.checked)}
+              onKeyDown={handleKeyDown}
+              className="w-4 h-4 rounded cursor-pointer"
+            />
           </div>
+        );
 
-          {/* Action Buttons (for textarea and complex editors) */}
-          {type === 'textarea' && (
-            <div className="flex gap-1 flex-shrink-0">
-              <button
-                onClick={handleSave}
-                className="p-1 text-green-600 hover:bg-green-50 rounded transition-colors"
-                title="Save (Enter)"
-              >
-                <CheckIcon />
-              </button>
-              <button
-                onClick={handleCancel}
-                className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
-                title="Cancel (Esc)"
-              >
-                <XIcon />
-              </button>
-            </div>
-          )}
+      case 'textarea':
+        return (
+          <textarea
+            ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+            value={String(value ?? '')}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={3}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded resize-none",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )}
+          />
+        );
+
+      default:
+        return (
+          <input
+            ref={inputRef as React.RefObject<HTMLInputElement>}
+            type="text"
+            value={String(value ?? '')}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full px-2 py-1 text-sm border rounded",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              "focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )}
+          />
+        );
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="flex items-center gap-1 w-full">
+      <div className="flex-1">
+        {renderEditor()}
+      </div>
+
+      {/* Action Buttons (for textarea and complex editors) */}
+      {type === 'textarea' && (
+        <div className="flex gap-1 flex-shrink-0">
+          <button
+            onClick={handleSave}
+            className="p-1 text-green-600 hover:bg-green-50 rounded transition-colors"
+            title="Save (Enter)"
+          >
+            <CheckIcon />
+          </button>
+          <button
+            onClick={handleCancel}
+            className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+            title="Cancel (Esc)"
+          >
+            <XIcon />
+          </button>
         </div>
-      );
-    }
+      )}
+    </div>
+  );
+}
 
-    InlineEditor.displayName = 'InlineEditor';
+InlineEditor.displayName = 'InlineEditor';
 
-    // ============================================================================
-    // HELPER FUNCTIONS
-    // ============================================================================
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
-    /**
-     * Formats a date value for HTML date input
-     */
-    function formatDateForInput(value: unknown): string {
-      if (!value) return '';
+/**
+ * Formats a date value for HTML date input
+ */
+function formatDateForInput(value: unknown): string {
+  if (!value) return '';
 
-      const date = value instanceof Date ? value : new Date(String(value));
+  const date = value instanceof Date ? value : new Date(String(value));
 
-      if (isNaN(date.getTime())) return '';
+  if (isNaN(date.getTime())) return '';
 
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
 
-      return `${year}-${month}-${day}`;
-    }
+  return `${year}-${month}-${day}`;
+}
 
-    // ============================================================================
-    // ICONS
-    // ============================================================================
+// ============================================================================
+// ICONS
+// ============================================================================
 
-    function CheckIcon() {
-      return (
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 13l4 4L19 7"
-          />
-        </svg>
-      );
-    }
+function CheckIcon() {
+  return (
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  );
+}
 
-    function XIcon() {
-      return (
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      );
-    }
+function XIcon() {
+  return (
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  );
+}

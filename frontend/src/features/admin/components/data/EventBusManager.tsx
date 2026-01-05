@@ -1,8 +1,8 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
@@ -23,34 +23,9 @@ export const EventBusManager: React.FC = () => {
 
   // Fetch real event bus data from backend
   const { data: events = [], isLoading } = useQuery(QUERY_KEYS.EVENT_BUS.EVENTS, async () => {
-    // Fetch from backend event bus service
-    const sampleEvents: EventBusEvent[] = [
-      {
-        id: '1',
-        event: 'case.created',
-        payload: { caseId: 'case-123', title: 'Smith v. Johnson' },
-        timestamp: new Date().toISOString(),
-        source: 'CaseService',
-        status: 'delivered',
-      },
-      {
-        id: '2',
-        event: 'document.uploaded',
-        payload: { documentId: 'doc-456', caseId: 'case-123' },
-        timestamp: new Date(Date.now() - 5000).toISOString(),
-        source: 'DocumentService',
-        status: 'delivered',
-      },
-      {
-        id: '3',
-        event: 'billing.invoice_created',
-        payload: { invoiceId: 'inv-789', amount: 15000 },
-        timestamp: new Date(Date.now() - 12000).toISOString(),
-        source: 'BillingService',
-        status: 'pending',
-      },
-    ];
-    return sampleEvents;
+    // TODO: Implement actual backend event bus fetch
+    // For now, return empty array - real data comes from EventBusService
+    return [];
   });
 
   return (

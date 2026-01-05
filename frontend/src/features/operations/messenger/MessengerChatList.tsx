@@ -1,14 +1,14 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { Conversation } from '@/hooks/useSecureMessenger';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 import { cn } from '@/utils/cn';
 import { MoreVertical } from 'lucide-react';
 import React from 'react';
 import { ConversationRow } from './ConversationRow';
-import { MessengerChatWindow } from './MessengerChatWindow';
+import { PopoutChatWindow } from './PopoutChatWindow';
 
 interface MessengerChatListProps {
   conversations: Conversation[];
@@ -31,18 +31,8 @@ export function MessengerChatList({
     openWindow(
       winId,
       `Chat: ${conv.name}`,
-      <MessengerChatWindow
-        activeConversation={conv}
-        activeConvId={conv.id}
-        setActiveConvId={() => { }} // No-op for detached window
-        inputText=""
-        setInputText={() => { }}
-        pendingAttachments={[]}
-        setPendingAttachments={() => { }}
-        isPrivilegedMode={false}
-        setIsPrivilegedMode={() => { }}
-        handleSendMessage={() => { }} // Mock
-        handleFileSelect={() => { }} // Mock
+      <PopoutChatWindow
+        conversation={conv}
         formatTime={formatTime}
       />
     );

@@ -30,9 +30,11 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
             setIsScanning(true);
             const findings: PIIEntity[] = [];
 
-            // Mock findings based on content patterns
+            // Real-time findings based on content patterns
             const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+/g;
             const phoneRegex = /\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g;
+            const ssnRegex = /\b\d{3}-\d{2}-\d{4}\b/g;
+            const ccRegex = /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/g;
 
             let match;
             let count = 0;
@@ -42,7 +44,6 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
                 if (isCancelled) return;
                 findings.push({ id: `pii-e-${match.index}`, type: 'Email', value: match[0], index: match.index, ignored: false });
                 count++;
-                // Yield every 10 matches to keep UI responsive
                 if (count % 10 === 0) await yieldToMain();
             }
 
@@ -50,6 +51,22 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
             while ((match = phoneRegex.exec(content)) !== null) {
                 if (isCancelled) return;
                 findings.push({ id: `pii-p-${match.index}`, type: 'Phone', value: match[0], index: match.index, ignored: false });
+                count++;
+                if (count % 10 === 0) await yieldToMain();
+            }
+
+            // Process SSNs
+            while ((match = ssnRegex.exec(content)) !== null) {
+                if (isCancelled) return;
+                findings.push({ id: `pii-s-${match.index}`, type: 'SSN', value: match[0], index: match.index, ignored: false });
+                count++;
+                if (count % 10 === 0) await yieldToMain();
+            }
+
+            // Process Credit Cards
+            while ((match = ccRegex.exec(content)) !== null) {
+                if (isCancelled) return;
+                findings.push({ id: `pii-c-${match.index}`, type: 'CreditCard', value: match[0], index: match.index, ignored: false });
                 count++;
                 if (count % 10 === 0) await yieldToMain();
             }
@@ -74,7 +91,17 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
     };
 
     const handleRedactAll = () => {
-        onApplyRedactions("Redacted Content");
+        let redactedContent = content;
+        // Sort entities by index descending to avoid shifting indices during replacement
+        const toRedact = entities.filter(e => !e.ignored).sort((a, b) => b.index - a.index);
+
+        for (const entity of toRedact) {
+            const replacement = '█'.repeat(entity.value.length);
+            // Use substring to replace at specific index
+            redactedContent = redactedContent.substring(0, entity.index) + replacement + redactedContent.substring(entity.index + entity.value.length);
+        }
+
+        onApplyRedactions(redactedContent);
     };
 
     return (

@@ -25,19 +25,20 @@ export const ThemeSettingsPage: React.FC = () => {
   const statusColors = ChartColorService.getStatusColors(mode);
   const palette = ChartColorService.getPalette(mode);
 
-  // Sample data for chart testing
-  const mockRiskData = [
-    { name: 'Low Risk', value: 12, color: riskColors.low },
-    { name: 'Medium Risk', value: 8, color: riskColors.medium },
-    { name: 'High Risk', value: 4, color: riskColors.high }
-  ];
-
-  const mockCategoryData = [
-    { name: 'Tech', value: 40 },
-    { name: 'Finance', value: 30 },
-    { name: 'Healthcare', value: 20 },
-    { name: 'Legal', value: 10 }
-  ];
+  // Sample data for chart testing - using memoized calculation
+  const chartData = useMemo(() => ({
+    riskData: [
+      { name: 'Low Risk', value: 12, color: riskColors.low },
+      { name: 'Medium Risk', value: 8, color: riskColors.medium },
+      { name: 'High Risk', value: 4, color: riskColors.high }
+    ] as const,
+    categoryData: [
+      { name: 'Tech', value: 40 },
+      { name: 'Finance', value: 30 },
+      { name: 'Healthcare', value: 20 },
+      { name: 'Legal', value: 10 }
+    ] as const
+  }), [riskColors]);
 
   return (
     <div className={cn("min-h-screen p-8", theme.background)}>
@@ -160,16 +161,16 @@ export const ThemeSettingsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={mockRiskData}
+                      data={chartData.riskData}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={entry => entry.name}
+                      label={(entry) => entry.name}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {mockRiskData.map((entry, index) => (
+                      {chartData.riskData.map((entry, index) => (
                         <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
@@ -194,7 +195,7 @@ export const ThemeSettingsPage: React.FC = () => {
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Category Distribution</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockCategoryData}>
+                <BarChart data={chartData.categoryData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
                   <XAxis dataKey="name" tick={{ fill: chartTheme.text }} />
                   <YAxis tick={{ fill: chartTheme.text }} />

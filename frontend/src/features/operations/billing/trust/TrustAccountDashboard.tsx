@@ -18,11 +18,17 @@
 
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useModalState } from '@/hooks/useModalState';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation } from '@/hooks/useQueryHooks';
 import { useTrustAccounts } from '@/hooks/useTrustAccounts';
-import type { TrustAccount } from '@/types/trust-accounts';
+import { DataService } from '@/services/data/dataService';
+import { queryClient } from '@/services/infrastructure/queryClient';
+import type { CreateTrustAccountDto, TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
+import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
 
@@ -370,20 +376,50 @@ export const TrustAccountDashboard: React.FC = () => {
    * EVENT HANDLERS: Memoized callbacks prevent child re-renders
    * WHY: useCallback ensures function identity stability
    */
+  const notify = useNotify();
+  const createModal = useModalState();
+  const reconcileModal = useModalState<string>();
+
+  const { mutate: createTrustAccount, isLoading: isCreating } = useMutation(
+    (data: CreateTrustAccountDto) => DataService.billing.trustAccounts.create(data),
+    {
+      onSuccess: () => {
+        notify.success('Trust account created successfully');
+        queryClient.invalidateQueries(queryKeys.billing.trustAccounts.all);
+        createModal.close();
+      },
+      onError: (error: any) => {
+        notify.error(error?.message || 'Failed to create trust account');
+      }
+    }
+  );
+
+  const { mutate: reconcileTrustAccount, isLoading: isReconciling } = useMutation(
+    (accountId: string) => DataService.billing.trustAccounts.reconcile(accountId),
+    {
+      onSuccess: () => {
+        notify.success('Reconciliation initiated successfully');
+        queryClient.invalidateQueries(queryKeys.billing.trustAccounts.all);
+        reconcileModal.close();
+        refetch();
+      },
+      onError: (error: any) => {
+        notify.error(error?.message || 'Failed to initiate reconciliation');
+      }
+    }
+  );
+
   const handleViewAccount = useCallback((accountId: string) => {
-    console.log('Navigate to account:', accountId);
-    // TODO: Implement navigation to account detail
+    window.location.hash = `#/billing/trust-accounts/${accountId}`;
   }, []);
 
   const handleCreateAccount = useCallback(() => {
-    console.log('Open create account form');
-    // TODO: Implement create account flow
-  }, []);
+    createModal.open();
+  }, [createModal]);
 
   const handleReconcileAccount = useCallback((accountId: string) => {
-    console.log('Open reconciliation wizard:', accountId);
-    // TODO: Implement reconciliation flow
-  }, []);
+    reconcileModal.open(accountId);
+  }, [reconcileModal]);
 
   /**
    * LOADING STATE

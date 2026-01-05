@@ -38,7 +38,7 @@ export const Custodians: React.FC<CustodiansProps> = ({ caseId }) => {
   const notify = useNotify();
 
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
-  const { data: rawCustodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
+  const { data: rawCustodians = [] } = useQuery<Custodian[]>(
     caseId ? [...queryKeys.discoveryExtended.custodians(), caseId] : queryKeys.discoveryExtended.custodians(),
     () => DataService.custodians.getAll(caseId ? { caseId } : undefined)
   );

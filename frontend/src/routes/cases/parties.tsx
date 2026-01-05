@@ -64,7 +64,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function CasePartiesRoute() {
   const { caseData, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   // Count parties by type
   interface Party { type: string }

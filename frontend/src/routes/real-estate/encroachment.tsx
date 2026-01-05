@@ -76,7 +76,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function EncroachmentRoute() {
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

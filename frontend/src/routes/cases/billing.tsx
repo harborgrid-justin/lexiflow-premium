@@ -114,7 +114,6 @@ function formatHours(hours: number): string {
 export default function CaseBillingRoute() {
   const { caseData, timeEntries, invoices, expenses, totals } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   // Calculate budget utilization
   const budgetAmount = caseData.budget?.amount || 0;

@@ -119,7 +119,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const { theme } = useTheme();
   const notify = useNotify();
   const [isPending, startTransition] = useTransition();
-  const [activeTab, _setActiveTab] = useState<WorkflowView>('templates');
+  const [activeTab, setActiveTabState] = useState<WorkflowView>('templates');
   const [viewMode, setViewMode] = useState<'list' | 'detail' | 'builder'>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<'case' | 'process'>('case');
@@ -127,7 +127,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
 
   const setActiveTab = useCallback((tab: WorkflowView) => {
     startTransition(() => {
-      _setActiveTab(tab);
+      setActiveTabState(tab);
     });
   }, []);
 

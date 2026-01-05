@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router';
 
 export default function EnterpriseLoginPage() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const { login } = useAuthActions();
   const { requiresMFA, user } = useAuthState();
 

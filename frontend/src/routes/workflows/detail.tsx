@@ -99,7 +99,6 @@ export async function action({ params, request }: Route.ActionArgs) {
 export default function WorkflowDetailRoute() {
   const { template } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

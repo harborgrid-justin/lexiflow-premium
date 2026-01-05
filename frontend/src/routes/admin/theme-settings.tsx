@@ -67,7 +67,6 @@ export default function ThemeSettingsRoute() {
   const handleDarkMode = () => setTheme('dark');
 
   console.log('Theme mode:', mode, 'isDark:', isDark, 'toggleTheme available:', !!toggleTheme);
-  console.log('Navigate available:', !!navigate);
 
   return (
     <div className="p-8">

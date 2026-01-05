@@ -113,7 +113,6 @@ export default function InvoiceDetailRoute() {
   const { invoice } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

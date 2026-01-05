@@ -52,14 +52,41 @@ export const CalendarHearings: React.FC = () => {
   // Ensure events is always an array
   const events = Array.isArray(eventsData) ? eventsData : [];
 
-  const hearings = events.filter(e => e.type === 'hearing').map(e => ({
-    id: e.id,
-    title: e.title,
-    case: e.description || 'Unassigned Matter',
-    time: (e as any).startTime ? new Date((e as any).startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Time TBD',
-    location: e.location || 'Courtroom TBD',
-    judge: (e as any).judge || 'Presiding Judge'
-  }));
+  // Type-safe hearing data extraction
+  interface HearingDisplay {
+    id: string;
+    title: string;
+    case: string;
+    time: string;
+    location: string;
+    judge: string;
+  }
+
+  const hearings: HearingDisplay[] = events
+    .filter(e => e.type === 'hearing')
+    .map(e => {
+      // Extract time from startDate field
+      let timeDisplay = 'Time TBD';
+      if (e.startDate) {
+        try {
+          timeDisplay = new Date(e.startDate).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch (error) {
+          console.error('Invalid date format:', e.startDate);
+        }
+      }
+
+      return {
+        id: e.id,
+        title: e.title,
+        case: e.description || 'Unassigned Matter',
+        time: timeDisplay,
+        location: e.location || 'Courtroom TBD',
+        judge: 'Presiding Judge' // Note: Judge field not in CalendarEventItem type - should be added to backend if needed
+      };
+    });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">

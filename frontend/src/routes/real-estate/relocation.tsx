@@ -7,10 +7,10 @@
  * @module routes/real-estate/relocation
  */
 
-import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/relocation";
+import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/relocation";
 
 // ============================================================================
 // Meta Tags
@@ -63,7 +63,6 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function RelocationRoute() {
-  const navigate = useNavigate();
 
   return (
     <div className="p-8">

@@ -84,7 +84,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
   }
 
   const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-    if (active && payload && payload.length) {
+    if (active && payload && payload.length && payload[0]) {
       const data = payload[0].payload;
       const displayName = 'name' in data ? data.name : 'metric' in data ? data.metric : '';
 

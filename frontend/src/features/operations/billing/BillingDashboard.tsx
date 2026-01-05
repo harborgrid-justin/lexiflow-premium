@@ -99,7 +99,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
 
   const { mutate: exportReport } = useMutation(
     (format: string) => DataService.billing.export(format),
-    { onSuccess: (result, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
+    { onSuccess: (_result, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
   );
 
   const renderContent = () => {

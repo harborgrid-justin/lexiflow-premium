@@ -14,7 +14,7 @@ import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
 import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
-import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 // import type { Route } from "./+types/parties";
 
@@ -63,7 +63,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function CasePartiesRoute() {
   const { caseData, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  const navigate = useNavigate();
 
   // Count parties by type
   interface Party { type: string }

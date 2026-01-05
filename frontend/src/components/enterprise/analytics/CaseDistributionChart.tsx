@@ -18,12 +18,12 @@
 // ============================================================================
 import React, { useMemo, useState } from 'react';
 import {
-  PieChart,
-  Pie,
   Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
-  Legend,
   TooltipProps
 } from 'recharts';
 
@@ -135,7 +135,7 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   // Custom tooltip
   const CustomTooltip = (props: TooltipProps<number, string>) => {
     const { active, payload } = props as { active?: boolean; payload?: Array<{ payload: CaseDistributionData & { percentage: number } }> };
-    if (!active || !payload || payload.length === 0) return null;
+    if (!active || !payload || payload.length === 0 || !payload[0]) return null;
 
     const data = payload[0].payload as CaseDistributionData & { percentage: number };
     const percentage = ((data.value / total) * 100).toFixed(1);

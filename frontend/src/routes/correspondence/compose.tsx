@@ -45,7 +45,7 @@ interface ActionData {
   error?: string;
   draftId?: string;
   preview?: { subject: string; body: string };
-  attachment?: any;
+  attachment?: { id: string; name: string; url?: string };
 }
 
 // ============================================================================
@@ -79,12 +79,13 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   // Fetch recent recipients (clients)
   const recentRecipients: Recipient[] = [];
   try {
-    const clients = (await DataService.communications.clients.getAll()) as any[];
-    clients.forEach(client => {
+    const clientsResponse = await DataService.communications.clients.getAll();
+    const clients = Array.isArray(clientsResponse) ? clientsResponse : [];
+    clients.forEach((client: { id: string; firstName?: string; lastName?: string; email?: string }) => {
       if (client.email) {
         recentRecipients.push({
           id: client.id,
-          name: `${client.firstName} ${client.lastName}`,
+          name: `${client.firstName || ''} ${client.lastName || ''}`.trim() || 'Unknown',
           email: client.email,
           type: 'to'
         });

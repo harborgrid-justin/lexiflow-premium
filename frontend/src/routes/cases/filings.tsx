@@ -14,7 +14,7 @@ import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { FilingsTable, type Filing } from '@/components/features/cases/components/FilingsTable';
 import { DataService } from '@/services/data/dataService';
 import type { DocketEntry } from '@/types';
-import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
@@ -83,7 +83,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function CaseFilingsRoute() {
   const { caseData, filings } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  const navigate = useNavigate();
 
   // Count filings by status
   const draftCount = filings.filter((f: Filing) => f.status === 'draft').length;

@@ -16,20 +16,12 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ data }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isAnimating, setIsAnimating] = useState(true);
 
-    // Default mock data if no props provided (Fallthrough safety)
-    const [graphData, setGraphData] = useState<{ nodes: SimulationNode[], links: { source: string; target: string; strength?: number }[] }>({
-        nodes: [
-            { id: 'src1', label: 'Salesforce CRM', type: 'root' },
-            { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
-            { id: 'wh1', label: 'Data Warehouse', type: 'org' },
-            { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
-        ],
-        links: [
-            { source: 'src1', target: 'stg1', strength: 0.8 },
-            { source: 'stg1', target: 'wh1', strength: 0.8 },
-            { source: 'wh1', target: 'rpt1', strength: 0.8 },
-        ]
-    });
+    // Use provided data or fallback to empty state
+    const [graphData, setGraphData] = useState<{ nodes: SimulationNode[], links: { source: string; target: string; strength?: number }[] }>(
+        data && data.nodes.length > 0
+            ? (data as { nodes: SimulationNode[], links: { source: string; target: string; strength?: number }[] })
+            : { nodes: [], links: [] }
+    );
 
     useEffect(() => {
         if (data && data.nodes.length > 0) {

@@ -73,7 +73,21 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       case "update-contact": {
-        // TODO: Implement contact update logic
+        const id = formData.get("id") as string;
+        const email = formData.get("email") as string;
+        const phone = formData.get("phone") as string;
+        const address = formData.get("address") as string;
+
+        if (!id) {
+          return { success: false, error: "Contact ID is required" };
+        }
+
+        const updates: Record<string, string> = {};
+        if (email) updates.email = email;
+        if (phone) updates.phone = phone;
+        if (address) updates.address = address;
+
+        await DataService.clients.update(id, updates);
         return { success: true, message: "Contact updated" };
       }
 

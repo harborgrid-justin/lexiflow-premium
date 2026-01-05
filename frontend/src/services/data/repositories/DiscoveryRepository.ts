@@ -33,7 +33,6 @@ import {
 } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
 import {
-  Custodian,
   CustodianInterview,
   Deposition,
   DiscoveryRequest,
@@ -380,9 +379,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.create(
-          custodian as Omit<Custodian, "id" | "createdAt" | "updatedAt">
-        );
+        return await discoveryApi.custodians.create(custodian as any);
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",
@@ -1086,7 +1083,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     if (!job) {
       throw new EntityNotFoundError("ProcessingJob", id);
     }
-    return job;
+    return job as ProcessingJob;
   };
 
   /**
@@ -1645,7 +1642,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     if (!collection) {
       throw new EntityNotFoundError("Collection", id);
     }
-    return collection;
+    return collection as DataCollection;
   };
 
   /**
@@ -1664,7 +1661,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as DataCollection;
-    await db.add(STORES.DISCOVERY_COLLECTIONS, newCollection);
+    await db.add(STORES.DISCOVERY_COLLECTIONS, newCollection as any);
     return newCollection;
   };
 

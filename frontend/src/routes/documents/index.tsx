@@ -3,7 +3,11 @@ import { DataService } from '@/services/data/dataService';
 import type { MetaArgs } from 'react-router';
 import { createListMeta } from '../_shared/meta-utils';
 
-export async function loader() {
+interface LoaderData {
+  count: number;
+}
+
+export async function loader(): Promise<LoaderData> {
   try {
     const documents = await DataService.documents.getAll();
     return { count: documents.length };
@@ -13,9 +17,10 @@ export async function loader() {
 }
 
 export function meta({ data }: MetaArgs) {
+  const loaderData = data as LoaderData | undefined;
   return createListMeta({
     entityType: 'Documents',
-    count: (data as any)?.count || 0,
+    count: loaderData?.count || 0,
     description: 'Manage your legal documents, filings, and attachments',
   });
 }

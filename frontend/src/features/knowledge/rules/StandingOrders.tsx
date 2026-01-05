@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import type { JudgeProfile } from '@/types';
 import { cn } from '@/utils/cn';
@@ -11,8 +11,24 @@ import React from 'react';
 export const StandingOrders: React.FC = () => {
     const { theme } = useTheme();
 
-    // Using Mock Judges for now
-    const { data: judges = [] } = useQuery<JudgeProfile[]>(['analysis', 'judges'], () => DataService.analysis.getJudgeProfiles());
+    // Fetch judge profiles from backend
+    const { data: judges = [] } = useQuery<JudgeProfile[]>(
+        ['analysis', 'judges'],
+        () => DataService.analysis.getJudgeProfiles()
+    );
+
+    // Fetch standing orders from backend
+    const { data: standingOrders = [] } = useQuery<any[]>(
+        ['knowledge', 'standing-orders'],
+        async () => {
+            try {
+                return (await (DataService as any).knowledge?.getStandingOrders?.()) || [];
+            } catch (error) {
+                console.warn('[StandingOrders] Failed to fetch orders:', error);
+                return [];
+            }
+        }
+    );
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -28,27 +44,25 @@ export const StandingOrders: React.FC = () => {
                         </div>
 
                         <div className="flex-1 space-y-3">
-                            <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.default)}>Active Orders</h5>
-                            {/* Mock Orders based on judge tendencies */}
-                            <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
-                                <div className="flex items-center gap-2">
-                                    <FileIcon />
-                                    <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Civil Pre-Trial Order</span>
-                                </div>
-                                <Download className={cn("h-4 w-4", theme.text.tertiary)} />
-                            </div>
-                            <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
-                                <div className="flex items-center gap-2">
-                                    <FileIcon />
-                                    <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Discovery Protocols</span>
-                                </div>
-                                <Download className={cn("h-4 w-4", theme.text.tertiary)} />
-                            </div>
-                        </div>
+                            <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.default)}>Standing Orders</h5>
+                            {standingOrders.filter((order: any) => order.judgeId === judge.id).length > 0 ? (
+                                standingOrders.filter((order: any) => order.judgeId === judge.id).map((order: any) => (
+                                    <div key={order.id} className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
+                                        <div className="flex items-center gap-2">
+                                            <FileIcon />
+                                            <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>{order.title || 'Standing Order'}</span>
+                                        </div>
+                                        <Download className={cn("h-4 w-4", theme.text.tertiary)} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className={cn("text-xs", theme.text.tertiary)}>No standing orders available</p>
+                            )}
 
-                        <div className={cn("mt-4 pt-4 border-t flex justify-between items-center", theme.border.default)}>
-                            <span className={cn("text-xs", theme.text.secondary)}>Updated: 2 weeks ago</span>
-                            <Button size="sm" variant="ghost" icon={ExternalLink}>Court Page</Button>
+                            <div className={cn("mt-4 pt-4 border-t flex justify-between items-center", theme.border.default)}>
+                                <span className={cn("text-xs", theme.text.secondary)}>Updated: 2 weeks ago</span>
+                                <Button size="sm" variant="ghost" icon={ExternalLink}>Court Page</Button>
+                            </div>
                         </div>
                     </Card>
                 ))}

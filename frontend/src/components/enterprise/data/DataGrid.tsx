@@ -94,6 +94,9 @@ export interface DataGridProps<T extends Record<string, unknown>> {
   // Editing
   onCellEdit?: (rowId: string | number, columnId: string, value: unknown) => void;
 
+  // Row Click
+  onRowClick?: (row: T) => void;
+
   // Export
   onExport?: (format: 'csv' | 'excel' | 'pdf') => void;
   enableExport?: boolean;
@@ -475,8 +478,10 @@ export function DataGrid<T extends Record<string, unknown>>({
           "flex border-b transition-colors",
           theme.border.subtle,
           isSelected && theme.surface.highlight,
-          !isSelected && `hover:${theme.surface.highlight}`
+          !isSelected && `hover:${theme.surface.highlight}`,
+          onRowClick && "cursor-pointer"
         )}
+        onClick={() => onRowClick?.(row)}
       >
         {enableSelection && (
           <div

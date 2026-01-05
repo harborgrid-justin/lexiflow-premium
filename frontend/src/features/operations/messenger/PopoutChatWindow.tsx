@@ -32,7 +32,7 @@ export const PopoutChatWindow: React.FC<PopoutChatWindowProps> = ({ conversation
     // Optimistic update
     setActiveConversation(prev => ({
       ...prev,
-      messages: [...prev.messages, newMessage]
+      messages: [...prev.messages, { ...newMessage, text: newMessage.content }]
     }));
 
     try {
@@ -67,12 +67,14 @@ export const PopoutChatWindow: React.FC<PopoutChatWindowProps> = ({ conversation
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const newAtt: Attachment = {
-        name: file.name,
-        type: file.type.includes('image') ? 'image' : 'doc',
-        size: '1.2 MB', // In a real app, calculate this
-      };
-      setPendingAttachments(prev => [...prev, newAtt]);
+      if (file) {
+        const newAtt: Attachment = {
+          name: file.name,
+          type: file.type.includes('image') ? 'image' : 'doc',
+          size: '1.2 MB', // In a real app, calculate this
+        };
+        setPendingAttachments(prev => [...prev, newAtt]);
+      }
     }
   };
 

@@ -5,9 +5,8 @@ import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play
 import { dataPlatformApi, Pipeline } from '@/api/data-platform';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { Connector } from '@/types';
+import { useMutation, useQuery } from '@/hooks/backend';
 import { cn } from '@/utils/cn';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
@@ -41,9 +40,13 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
 
     const pipelines = Array.isArray(pipelinesResponse) ? pipelinesResponse : (pipelinesResponse?.data || []);
 
-    // Mock connectors for now - can be implemented later
-    const connectors: Connector[] = [];
-    const isLoadingConnectors = false;
+    // Fetch connectors from backend API
+    const { data: connectorsResponse = [], isLoading: isLoadingConnectors } = useQuery(
+        ['connectors', 'all'],
+        () => dataPlatformApi.connectors?.getAll?.() || Promise.resolve([])
+    );
+
+    const connectors = Array.isArray(connectorsResponse) ? connectorsResponse : (connectorsResponse?.data || []);
 
     const { mutate: executePipeline } = useMutation(
         (id: string) => dataPlatformApi.pipelines.execute(id),

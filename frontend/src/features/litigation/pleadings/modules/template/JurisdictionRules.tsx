@@ -8,21 +8,20 @@ import React from 'react';
 
 interface JurisdictionRulesProps {
   jurisdiction?: string;
-  documentId?: string;
 }
 
-export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdiction, documentId }) => {
+export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdiction }) => {
   const { theme } = useTheme();
 
   // Fetch jurisdiction rules from backend
   const { data: rulesData = [], isLoading } = useQuery(
-    jurisdiction ? queryKeys.jurisdiction.rules(jurisdiction) : [],
+    jurisdiction ? queryKeys.rules.byJurisdiction(jurisdiction) : [],
     () => jurisdiction ? DataService.rules.search('', jurisdiction) : Promise.resolve([]),
     { enabled: !!jurisdiction }
   );
 
   // Format rules from backend or provide empty state
-  const rules = rulesData.length > 0 ? rulesData.map((rule: any, idx: number) => ({
+  const rules = (rulesData as any[]).length > 0 ? (rulesData as any[]).map((rule: any, idx: number) => ({
     id: idx + 1,
     rule: rule.name || rule.description || 'Rule',
     status: 'Pass' as const,
@@ -52,7 +51,7 @@ export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdicti
         {rules.length === 0 ? (
           <p className={cn("text-xs", theme.text.tertiary)}>No rules available for {jurisdiction || 'this jurisdiction'}.</p>
         ) : (
-          rules.map((rule) => (
+          rules.map((rule: any) => (
             <div key={rule.id} className={cn("flex items-start gap-2 p-2 rounded text-xs", theme.surface.highlight)}>
               {rule.status === 'Pass' ? (
                 <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5" />

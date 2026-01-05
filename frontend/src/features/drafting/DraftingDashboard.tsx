@@ -64,7 +64,8 @@ const DraftingDashboard: React.FC = () => {
 
   const handleSelectDraft = (draft: GeneratedDocument) => {
     addToast(`Opening draft: ${draft.title}`, 'info');
-    // TODO: Navigate to document editor
+    // Navigate to document editor - implementation depends on routing setup
+    window.location.hash = `#/drafting/editor/${draft.id}`;
   };
 
   const handleSelectTemplate = (template: DraftingTemplate) => {
@@ -79,7 +80,8 @@ const DraftingDashboard: React.FC = () => {
 
   const handleReview = (doc: GeneratedDocument) => {
     addToast(`Reviewing: ${doc.title}`, 'info');
-    // TODO: Navigate to review interface
+    // Navigate to review interface - implementation depends on routing setup
+    window.location.hash = `#/drafting/review/${doc.id}`;
   };
 
   const handleTemplateSaved = () => {

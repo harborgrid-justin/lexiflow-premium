@@ -7,7 +7,7 @@
  * @module routes/real-estate/audit-readiness
  */
 
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/audit-readiness";
@@ -64,7 +64,6 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function AuditReadinessRoute() {
-  const navigate = useNavigate();
 
   return (
     <div className="p-8">

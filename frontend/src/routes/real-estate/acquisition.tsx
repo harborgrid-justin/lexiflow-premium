@@ -8,7 +8,7 @@
  */
 
 import { DataService } from '@/services/data/dataService';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/acquisition";
@@ -76,7 +76,6 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function AcquisitionRoute() {
-  const navigate = useNavigate();
 
   return (
     <div className="p-8">

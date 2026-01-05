@@ -61,9 +61,15 @@ export async function action({ request }: Route.ActionArgs) {
       }
       return { success: false, error: "Missing entity ID" };
     }
-    case "archive":
-      // TODO: Implement archive functionality in DataService.entities
+    case "archive": {
+      const id = formData.get("id") as string;
+      if (!id) {
+        return { success: false, error: "Missing entity ID" };
+      }
+      // Archive entity by updating its status
+      await DataService.entities.update(id, { status: "archived", archivedAt: new Date().toISOString() });
       return { success: true, message: "Entity archived" };
+    }
     default:
       return { success: false, error: "Invalid action" };
   }

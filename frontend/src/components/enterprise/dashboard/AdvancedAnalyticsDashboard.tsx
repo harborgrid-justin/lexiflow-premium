@@ -5,46 +5,46 @@
  * Provides comprehensive data visualization and analysis capabilities
  */
 
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ScatterChart,
-  Scatter,
-  ComposedChart,
-} from 'recharts';
-import {
-  TrendingUp,
-  BarChart3,
-  PieChart as PieChartIcon,
   Activity,
-  Target,
+  BarChart3,
   Download,
   Maximize2,
+  PieChart as PieChartIcon,
   RefreshCw,
+  Target,
+  TrendingUp,
 } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import type { BaseDashboardProps, ChartDataPoint } from '@/types/dashboard';
+import React, { useMemo, useState } from 'react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ComposedChart,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Scatter,
+  ScatterChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 interface ChartConfig {
   type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter' | 'composed';
@@ -291,7 +291,7 @@ export const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProp
           {config.showLegend && <Legend />}
           <Area
             type="monotone"
-            dataKey={config.dataKeys[0]}
+            dataKey={config.dataKeys[0] || ''}
             fill={colors[0]}
             stroke={colors[0]}
             fillOpacity={0.3}

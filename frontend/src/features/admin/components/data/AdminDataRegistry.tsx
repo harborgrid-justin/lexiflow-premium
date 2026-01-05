@@ -72,7 +72,7 @@ export const AdminDataRegistry: React.FC = () => {
         />
         <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <h4 className="text-sm font-bold text-yellow-800 mb-1">Data Retention Policy</h4>
-          <p className="text-xs text-yellow-700">All case data is retained for 7 years post-closing. Mock data files are read-only in this environment.</p>
+          <p className="text-xs text-yellow-700">All case data is retained for 7 years post-closing per regulatory requirements. Consult your data retention policy for your jurisdiction.</p>
         </div>
       </div>
     </div>

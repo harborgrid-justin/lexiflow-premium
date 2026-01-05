@@ -12,7 +12,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
-import React, { useDeferredValue, useState, useTransition } from 'react';
+import React, { useDeferredValue, useState } from 'react';
 
 interface UserData {
   id: string;
@@ -42,7 +42,6 @@ export const UserManagement: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
-  const [_isPending, _startTransition] = useTransition();
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();

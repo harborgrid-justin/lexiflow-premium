@@ -168,7 +168,7 @@ export const DashboardService = {
     ).length;
 
     const billableHours = timeEntries.reduce(
-      (sum, entry) => sum + (entry.hours || 0),
+      (sum, entry) => sum + (entry.duration || 0),
       0
     );
 

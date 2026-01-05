@@ -161,8 +161,8 @@ export default function Layout() {
         break;
       case 'SEARCH':
         if (intent.context) {
-          // TODO: Implement search navigation when search route is ready
-          console.log("Search requested:", intent.context);
+          // Navigate to search with query parameter
+          navigate(`/search?q=${encodeURIComponent(intent.context)}`);
         }
         break;
     }

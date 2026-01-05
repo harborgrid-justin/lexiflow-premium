@@ -378,14 +378,14 @@ export const TrustAccountDashboard: React.FC = () => {
    */
   const notify = useNotify();
   const createModal = useModalState();
-  const reconcileModal = useModalState<string>();
+  const reconcileModal = useModalState();
 
-  const { mutate: createTrustAccount, isLoading: isCreating } = useMutation(
+  const { mutate: createTrustAccount } = useMutation(
     (data: CreateTrustAccountDto) => DataService.billing.trustAccounts.create(data),
     {
       onSuccess: () => {
         notify.success('Trust account created successfully');
-        queryClient.invalidateQueries(queryKeys.billing.trustAccounts.all);
+        queryClient.invalidate(queryKeys.billing.trustAccounts());
         createModal.close();
       },
       onError: (error: any) => {
@@ -394,12 +394,12 @@ export const TrustAccountDashboard: React.FC = () => {
     }
   );
 
-  const { mutate: reconcileTrustAccount, isLoading: isReconciling } = useMutation(
+  const { mutate: reconcileTrustAccount } = useMutation(
     (accountId: string) => DataService.billing.trustAccounts.reconcile(accountId),
     {
       onSuccess: () => {
         notify.success('Reconciliation initiated successfully');
-        queryClient.invalidateQueries(queryKeys.billing.trustAccounts.all);
+        queryClient.invalidate(queryKeys.billing.trustAccounts());
         reconcileModal.close();
         refetch();
       },
@@ -418,7 +418,7 @@ export const TrustAccountDashboard: React.FC = () => {
   }, [createModal]);
 
   const handleReconcileAccount = useCallback((accountId: string) => {
-    reconcileModal.open(accountId);
+    reconcileModal.open();
   }, [reconcileModal]);
 
   /**

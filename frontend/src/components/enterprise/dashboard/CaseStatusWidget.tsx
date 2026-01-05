@@ -53,7 +53,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
   }
 
   const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-    if (active && payload && payload.length) {
+    if (active && payload && payload.length && payload[0]) {
       const data = payload[0].payload;
       return (
         <div

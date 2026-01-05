@@ -5,6 +5,7 @@
 
 import { ChartCard, DateRangeSelector, FilterPanel, MetricCard } from '@/components/enterprise/analytics';
 import { DataService } from '@/services/data/dataService';
+import type { Case } from '@/types';
 import { subDays } from 'date-fns';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useState } from 'react';
@@ -265,7 +266,7 @@ export default function CaseAnalyticsRoute() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"

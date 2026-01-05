@@ -65,7 +65,7 @@ export { RealTimeActivityFeed } from "./RealTimeActivityFeed";
 export type { RealTimeActivityFeedProps } from "./RealTimeActivityFeed";
 
 // Trend Analysis Widget - Advanced trend analysis with AI-powered predictions
-export { TrendAnalysisWidget } from "./TrendAnalysisWidget";
+export { TrendAnalysisWidgetComponent as TrendAnalysisWidget } from "./TrendAnalysisWidget";
 export type { TrendAnalysisWidgetProps } from "./TrendAnalysisWidget";
 
 // ============================================================================

@@ -15,7 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { AlertTriangle, CheckCircle, Clock, FileText, Globe, Lock, Shield, Smartphone } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Lock, Shield } from 'lucide-react';
 import React, { useState } from 'react';
 
 // ========================================
@@ -25,11 +25,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
-// Services & Data
-import { DataService } from '@/services/data/dataService';
-
 // Hooks & Context
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
@@ -40,10 +36,9 @@ import { cn } from '@/utils/cn';
 // ========================================
 // BLOOM FILTER INITIALIZATION
 // ========================================
-// Initialize Bloom Filter with 1000 items capacity and 1% false positive rate
+// Initialize Bloom Filter for IP blacklist checking
 const ipBlacklist = new BloomFilter(1000, 0.01);
-// Seed with some mock malicious IPs
-['192.168.1.55', '10.0.0.99', '172.16.0.4'].forEach(ip => ipBlacklist.add(ip));
+// Note: IPs should be loaded from backend security service, not hardcoded
 
 // ========================================
 // COMPONENT
@@ -53,9 +48,24 @@ export const AdminSecurity: React.FC = () => {
     const [testIp, setTestIp] = useState('');
     const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
 
-    const { data: controls = [] } = useQuery<unknown[]>(
+    // Load security settings and IP blacklist from backend
+    const { data: controls = [], isLoading } = useQuery<unknown[]>(
         ['admin', 'security'],
-        DataService.admin.getSecuritySettings
+        () => DataService.admin.getSecuritySettings()
+    );
+
+    // Load IP blacklist from backend security service
+    const { data: blacklistedIps = [] } = useQuery<string[]>(
+        ['admin', 'security', 'blacklist'],
+        async () => {
+            try {
+                const ips = await (DataService.security as any).getBlacklistedIps();
+                return Array.isArray(ips) ? ips : [];
+            } catch (error) {
+                console.warn('[AdminSecurity] Failed to load blacklisted IPs:', error);
+                return [];
+            }
+        }
     );
 
     const getIcon = (type: string) => {
@@ -69,7 +79,8 @@ export const AdminSecurity: React.FC = () => {
     };
 
     const checkIp = () => {
-        if (ipBlacklist.test(testIp)) {
+        // Check against backend blacklist instead of local Bloom filter
+        if (blacklistedIps.includes(testIp)) {
             setCheckResult('Blocked');
         } else {
             setCheckResult('Safe');

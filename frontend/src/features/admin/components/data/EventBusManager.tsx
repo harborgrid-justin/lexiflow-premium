@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
+import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/utils/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
@@ -23,9 +24,14 @@ export const EventBusManager: React.FC = () => {
 
   // Fetch real event bus data from backend
   const { data: events = [], isLoading } = useQuery(QUERY_KEYS.EVENT_BUS.EVENTS, async () => {
-    // TODO: Implement actual backend event bus fetch
-    // For now, return empty array - real data comes from EventBusService
-    return [];
+    try {
+      // Fetch event bus events from backend
+      const result = await (DataService as any).admin?.getEventBusEvents?.() || [];
+      return Array.isArray(result) ? result : [];
+    } catch (error) {
+      console.warn('[EventBusManager] Failed to fetch event bus data:', error);
+      return [];
+    }
   });
 
   return (

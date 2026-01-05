@@ -74,8 +74,14 @@ export async function action({ params, request }: Route.ActionArgs) {
       };
 
       if (query) updates.query = query;
-      if (notes) (updates as any).notes = notes;
-      if (status) (updates as any).status = status;
+      if (notes) {
+        // Store notes in metadata or a dedicated field
+        (updates as Partial<ResearchSession> & { notes?: string }).notes = notes;
+      }
+      if (status) {
+        // Store status in metadata or a dedicated field
+        (updates as Partial<ResearchSession> & { status?: string }).status = status;
+      }
 
       await DataService.knowledge.research.update(researchId, updates);
       return { success: true, message: "Research session updated successfully" };

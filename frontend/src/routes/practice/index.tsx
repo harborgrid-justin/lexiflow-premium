@@ -44,7 +44,7 @@ export async function loader() {
     let pendingTasks = 0;
     try {
       const tasks = await DataService.workflow.tasks.getAll();
-      pendingTasks = tasks.filter((t: any) => t.status !== 'completed').length;
+      pendingTasks = tasks.filter((t: { status?: string }) => t.status !== 'completed').length;
     } catch (e) {
       console.error("Failed to fetch tasks", e);
     }

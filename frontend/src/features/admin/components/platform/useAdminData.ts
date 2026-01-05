@@ -33,10 +33,46 @@ export const useAdminData = (activeCategory: Category) => {
   // Generic Mutation Handler
   const { mutate: saveItem } = useMutation(
     async (payload: { category: Category; item: unknown; isNew: boolean }) => {
-      // In a real app, switch on category to call specific DataService methods
-      // For this mock admin panel, we just return the item to simulate success
-      // Actual persistence logic would go here
-      return payload.item;
+      // Route to appropriate DataService method based on category
+      switch (payload.category) {
+        case "users":
+          return payload.isNew
+            ? await DataService.users.add(payload.item)
+            : await DataService.users.update(
+                (payload.item as any).id,
+                payload.item
+              );
+        case "cases":
+          return payload.isNew
+            ? await DataService.cases.add(payload.item)
+            : await DataService.cases.update(
+                (payload.item as any).id,
+                payload.item
+              );
+        case "clients":
+          return payload.isNew
+            ? await DataService.communications.addContact(payload.item)
+            : await DataService.communications.updateContact(
+                (payload.item as any).id,
+                payload.item
+              );
+        case "clauses":
+          return payload.isNew
+            ? await (DataService.clauses as any).add(payload.item)
+            : await (DataService.clauses as any).update(
+                (payload.item as any).id,
+                payload.item
+              );
+        case "documents":
+          return payload.isNew
+            ? await DataService.documents.add(payload.item)
+            : await DataService.documents.update(
+                (payload.item as any).id,
+                payload.item
+              );
+        default:
+          return payload.item;
+      }
     },
     {
       onSuccess: (savedItem: unknown, variables) => {

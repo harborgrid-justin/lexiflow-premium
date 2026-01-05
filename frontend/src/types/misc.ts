@@ -453,6 +453,13 @@ export interface WIPStat {
   billed: number;
 }
 
+export interface WarRoom extends BaseEntity {
+  name: string;
+  description?: string;
+  status: string;
+  caseId: string;
+}
+
 export interface WarRoomData {
   case: Case;
   witnesses: Party[];

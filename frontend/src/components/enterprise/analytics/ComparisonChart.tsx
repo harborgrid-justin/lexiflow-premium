@@ -18,19 +18,19 @@
 // ============================================================================
 import React, { useMemo } from 'react';
 import {
-  BarChart,
   Bar,
-  LineChart,
-  Line,
-  ComposedChart,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
+  ComposedChart,
   Legend,
+  Line,
+  LineChart,
+  ReferenceLine,
   ResponsiveContainer,
+  Tooltip,
   TooltipProps,
-  ReferenceLine
+  XAxis,
+  YAxis
 } from 'recharts';
 
 // ============================================================================
@@ -168,7 +168,7 @@ export const ComparisonChart: React.FC<ComparisonChartProps> = ({
   // Custom tooltip
   const CustomTooltip = (props: TooltipProps<number, string>) => {
     const { active, payload, label } = props as { active?: boolean; payload?: Array<{ payload: ComparisonDataPoint & { change: number; changeAbs: number } }>; label?: string };
-    if (!active || !payload || payload.length === 0) return null;
+    if (!active || !payload || payload.length === 0 || !payload[0]) return null;
 
     const data = payload[0].payload as ComparisonDataPoint & { change: number; changeAbs: number };
     const change = data.change || 0;

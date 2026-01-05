@@ -10,7 +10,7 @@
  */
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { Link, useNavigate, type ActionFunctionArgs } from 'react-router';
+import { Link, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 
@@ -60,7 +60,6 @@ export async function action({ request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function ThemeSettingsRoute() {
-  const navigate = useNavigate();
   const { mode, isDark, toggleTheme, setTheme } = useTheme();
 
   const handleLightMode = () => setTheme('light');

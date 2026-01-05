@@ -10,7 +10,7 @@
 import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/workflow-api';
 import type { WorkflowStatus } from '@/types';
 import { useState } from 'react';
-import { Form, Link, useLoaderData, useNavigate, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { Form, Link, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -104,7 +104,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function WorkflowsIndexRoute() {
   const { templates, instances } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [activeTab, setActiveTab] = useState<'templates' | 'instances'>('templates');

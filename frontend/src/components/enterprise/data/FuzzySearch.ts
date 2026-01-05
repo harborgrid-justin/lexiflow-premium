@@ -405,7 +405,7 @@ export function damerauLevenshteinDistance(str1: string, str2: string): number {
         matrix[i]![j] + cost, // substitution
         matrix[i + 1]![j] + 1, // insertion
         matrix[i]![j + 1] + 1, // deletion
-        (matrix[k]![l] || 0) + (i - k - 1) + 1 + (j - l - 1) // transposition
+        (matrix[k]?.[l] || 0) + (i - k - 1) + 1 + (j - l - 1) // transposition
       );
     }
     charMap[str1[i - 1]!] = i;

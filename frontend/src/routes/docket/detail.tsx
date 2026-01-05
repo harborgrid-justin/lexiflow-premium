@@ -7,7 +7,6 @@
  */
 
 import { DataService } from '@/services/data/dataService';
-import { DocketEntry } from '@/types';
 import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -75,7 +74,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
       const description = formData.get("description") as string;
       const filingDate = formData.get("filingDate") as string;
 
-      const updates: Partial<DocketEntry> = {
+      const updates: any = {
         updatedAt: new Date().toISOString(),
       };
 

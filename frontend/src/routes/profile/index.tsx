@@ -115,9 +115,10 @@ export async function action({ request }: Route.ActionArgs) {
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Action failed:", error);
-    return { success: false, error: error.message || "Operation failed" };
+    const errorMessage = error instanceof Error ? error.message : "Operation failed";
+    return { success: false, error: errorMessage };
   }
 }
 

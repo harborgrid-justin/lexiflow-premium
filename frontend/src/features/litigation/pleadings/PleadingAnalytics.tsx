@@ -44,6 +44,19 @@ export const PleadingAnalytics: React.FC = () => {
         () => DataService.pleadings.getAll()
     );
 
+    // Fetch clause usage data
+    const { data: clauseDataFromApi = [] } = useQuery<any[]>(
+        ['analytics', 'clause_usage'],
+        async () => {
+            try {
+                return await (DataService as any).analytics?.getClauseUsage?.() || [];
+            } catch (error) {
+                console.warn('[PleadingAnalytics] Clause usage data unavailable:', error);
+                return [];
+            }
+        }
+    );
+
     const analytics = useMemo(() => {
         // Motion success rate
         // 'filed' status indicates success in this context
@@ -66,10 +79,12 @@ export const PleadingAnalytics: React.FC = () => {
             avgDraftingTime = parseFloat((totalDays / completedPleadings.length).toFixed(1));
         }
 
-        // Clause usage
-        // Currently no clause usage data in Pleading entity.
-        // TODO: Integrate with Clause Analytics API when available.
-        const clauseUsage: { name: string; count: number; color: string }[] = [];
+        // Clause usage - from backend API
+        const clauseUsage = clauseDataFromApi.map((clause: any, idx: number) => ({
+            name: clause.name || clause.title,
+            count: clause.count || 0,
+            color: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'][idx % 5]
+        }));
 
         // Monthly trend
         // Group by creation month
@@ -93,16 +108,6 @@ export const PleadingAnalytics: React.FC = () => {
                 }
             }
         });
-
-        const monthlyTrend = Object.entries(monthlyCounts)
-            .map(([month, count]) => ({ month, count }))
-            // Sort by month index if needed, but Object.entries might not preserve order.
-            // Since we initialized in order, it might be okay, but safer to rely on the initialized keys order if we iterate them.
-            // Re-mapping based on our initialized months list:
-            .sort((a, b) => {
-                // Simple sort for now, or just map from the keys we created
-                return 0;
-            });
 
         // Better approach for monthly trend to ensure order:
         const trendData = [];
@@ -137,7 +142,7 @@ export const PleadingAnalytics: React.FC = () => {
             monthlyTrend: trendData,
             motionTypes,
         };
-    }, [pleadings, mode]);
+    }, [pleadings, clauseDataFromApi, mode]);
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">

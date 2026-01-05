@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -260,7 +260,7 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
 
   // Check if filters are active
   const hasActiveFilters = useMemo(() => {
-    return Object.keys(filterState.filters).some(key => filterState.filters[key].length > 0);
+    return Object.keys(filterState.filters).some(key => (filterState.filters[key]?.length || 0) > 0);
   }, [filterState.filters]);
 
   // Styles

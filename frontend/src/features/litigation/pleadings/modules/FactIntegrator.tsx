@@ -17,19 +17,19 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
   const { theme } = useTheme();
 
   // Fetch case details and timeline events from backend
-  const { data: caseData, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     queryKeys.cases.detail(caseId),
     () => DataService.cases.getById(caseId)
   );
 
   // Derive timeline events from case data or fetch from docket entries
   const { data: docketEntries = [] } = useQuery(
-    queryKeys.docket.byCase(caseId),
+    queryKeys.docket.byCaseId(caseId),
     () => DataService.docket.getAllByCaseId(caseId)
   );
 
   // Convert docket entries to timeline events for display
-  const timelineEvents: TimelineEvent[] = docketEntries.map((entry: any) => ({
+  const timelineEvents: TimelineEvent[] = (docketEntries as any[]).map((entry: any) => ({
     id: entry.id,
     date: entry.dateEntered || new Date().toISOString().split('T')[0],
     title: entry.description || entry.summary || 'Docket Entry',

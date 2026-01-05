@@ -128,8 +128,10 @@ export async function action({ request }: ActionFunctionArgs) {
         localStorage.removeItem('queryCache');
         sessionStorage.clear();
 
-        if ((window as any).queryClient) {
-          (window as any).queryClient.clear();
+        // Access queryClient from window if exposed globally
+        const windowWithQueryClient = window as Window & { queryClient?: { clear: () => void } };
+        if (windowWithQueryClient.queryClient) {
+          windowWithQueryClient.queryClient.clear();
         }
 
         return {

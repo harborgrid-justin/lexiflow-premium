@@ -25,7 +25,7 @@ import {
   Upload,
   UserPlus,
 } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface RealTimeActivityFeedProps extends BaseDashboardProps {
   activities: ActivityType[];

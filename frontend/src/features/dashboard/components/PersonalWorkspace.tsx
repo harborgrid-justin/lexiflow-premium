@@ -71,7 +71,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
 
     const handleMarkAsRead = async (id: string) => {
         await DataService.notifications.update(id, { read: true });
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries?.(['notifications']);
     };
 
     const handleMarkAllAsRead = async () => {
@@ -81,12 +81,12 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
         // For now, let's iterate over unread notifications.
         const unread = notifications.filter(n => !n.read);
         await Promise.all(unread.map(n => DataService.notifications.update(n.id, { read: true })));
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries?.(['notifications']);
     };
 
     const handleDeleteNotification = async (id: string) => {
         await DataService.notifications.delete(id);
-        queryClient.invalidateQueries(['notifications']);
+        queryClient.invalidateQueries?.(['notifications']);
     };
 
     const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
@@ -190,6 +190,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                     ...n,
                                     timestamp: new Date(n.timestamp).getTime(),
                                     priority: "normal",
+                                    type: n.type as any
                                 }))}
                                 unreadCount={
                                     notifications.filter((n) => !n.read).length

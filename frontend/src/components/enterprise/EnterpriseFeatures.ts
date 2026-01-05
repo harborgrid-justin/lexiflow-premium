@@ -420,7 +420,7 @@ export function getUpgradeFeatures(
  */
 export function getRequiredTier(features: EnterpriseFeature[]): LicenseTier {
   if (features.length === 0) {
-    return "Starter";
+    return "Starter" as LicenseTier;
   }
 
   const tiers = features.map((feature) => FEATURE_AVAILABILITY[feature]);
@@ -599,4 +599,4 @@ export function isFeatureEnabled(
 // EXPORTS
 // ============================================================================
 
-export type { FeatureFlags, FeatureInfo, LicenseTierInfo };
+// Types are already exported at definition sites or via 'export interface'

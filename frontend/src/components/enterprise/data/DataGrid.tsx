@@ -322,8 +322,8 @@ export function DataGrid<T extends Record<string, unknown>>({
     } else {
       const existing = sortState[existingIndex];
       const newDirection: SortDirection =
-        existing.direction === 'asc' ? 'desc' :
-          existing.direction === 'desc' ? null :
+        existing?.direction === 'asc' ? 'desc' :
+          existing?.direction === 'desc' ? null :
             'asc';
 
       if (newDirection === null) {
@@ -468,6 +468,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   // Render row
   const renderRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
     const row = displayData[index];
+    if (!row) return null;
     const rowId = row[rowIdKey] as string | number;
     const isSelected = selectedRows.has(rowId);
 
@@ -529,7 +530,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                 />
               ) : (
                 <span className="truncate">
-                  {column.cell ? column.cell({ value: cellValue, row }) : String(cellValue ?? '')}
+                  {column.cell ? column.cell({ value: cellValue, row: row as T }) : String(cellValue ?? '')}
                 </span>
               )}
             </div>

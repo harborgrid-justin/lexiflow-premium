@@ -95,31 +95,31 @@ const getDateRangeForPreset = (preset: DatePreset): DateRange => {
   switch (preset) {
     case 'today':
       return {
-        startDate: today.toISOString().split('T')[0],
-        endDate: today.toISOString().split('T')[0]
+        startDate: today.toISOString().split('T')[0] || '',
+        endDate: today.toISOString().split('T')[0] || ''
       };
     case 'yesterday': {
       const yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
       return {
-        startDate: yesterday.toISOString().split('T')[0],
-        endDate: yesterday.toISOString().split('T')[0]
+        startDate: yesterday.toISOString().split('T')[0] || '',
+        endDate: yesterday.toISOString().split('T')[0] || ''
       };
     }
     case 'last7days': {
       const start = new Date(today);
       start.setDate(start.getDate() - 7);
       return {
-        startDate: start.toISOString().split('T')[0],
-        endDate: today.toISOString().split('T')[0]
+        startDate: start.toISOString().split('T')[0] || '',
+        endDate: today.toISOString().split('T')[0] || ''
       };
     }
     case 'last30days': {
       const start = new Date(today);
       start.setDate(start.getDate() - 30);
       return {
-        startDate: start.toISOString().split('T')[0],
-        endDate: today.toISOString().split('T')[0]
+        startDate: start.toISOString().split('T')[0] || '',
+        endDate: today.toISOString().split('T')[0] || ''
       };
     }
     case 'lastQuarter': {
@@ -129,29 +129,29 @@ const getDateRangeForPreset = (preset: DatePreset): DateRange => {
       const start = new Date(year, lastQuarter * 3, 1);
       const end = new Date(year, (lastQuarter + 1) * 3, 0);
       return {
-        startDate: start.toISOString().split('T')[0],
-        endDate: end.toISOString().split('T')[0]
+        startDate: start.toISOString().split('T')[0] || '',
+        endDate: end.toISOString().split('T')[0] || ''
       };
     }
     case 'lastYear': {
       const start = new Date(now.getFullYear() - 1, 0, 1);
       const end = new Date(now.getFullYear() - 1, 11, 31);
       return {
-        startDate: start.toISOString().split('T')[0],
-        endDate: end.toISOString().split('T')[0]
+        startDate: start.toISOString().split('T')[0] || '',
+        endDate: end.toISOString().split('T')[0] || ''
       };
     }
     case 'ytd': {
       const start = new Date(now.getFullYear(), 0, 1);
       return {
-        startDate: start.toISOString().split('T')[0],
-        endDate: today.toISOString().split('T')[0]
+        startDate: start.toISOString().split('T')[0] || '',
+        endDate: today.toISOString().split('T')[0] || ''
       };
     }
     default:
       return {
-        startDate: today.toISOString().split('T')[0],
-        endDate: today.toISOString().split('T')[0]
+        startDate: today.toISOString().split('T')[0] || '',
+        endDate: today.toISOString().split('T')[0] || ''
       };
   }
 };

@@ -321,7 +321,7 @@ export const creditCard = (
     let isEven = false;
 
     for (let i = sanitized.length - 1; i >= 0; i--) {
-      let digit = parseInt(sanitized[i], 10);
+      let digit = parseInt(sanitized[i] || "0", 10);
 
       if (isEven) {
         digit *= 2;

@@ -7,10 +7,21 @@
  * @module routes/real-estate/portfolio-summary
  */
 
-import { Link } from 'react-router';
+import { DataService } from '@/services/data/dataService';
+import type { PortfolioStats } from '@/services/domain/RealEstateDomain';
+import { Building2, DollarSign, Landmark, MapPin, PieChart, TrendingUp } from 'lucide-react';
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/portfolio-summary";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface LoaderData {
+  stats: PortfolioStats;
+}
 
 // ============================================================================
 // Meta Tags
@@ -27,15 +38,27 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader() {
-  // TODO: Fetch real estate portfolio summary data
-  return {
-    data: null,
-    stats: {
-      total: 0,
-      active: 0,
-    }
-  };
+export async function loader(): Promise<LoaderData> {
+  try {
+    const stats = await DataService.realEstate.getPortfolioStats();
+
+    return { stats };
+  } catch (error) {
+    console.error('Failed to fetch portfolio stats:', error);
+    return {
+      stats: {
+        totalProperties: 0,
+        totalValue: 0,
+        activeProperties: 0,
+        pendingAcquisitions: 0,
+        pendingDisposals: 0,
+        activeEncroachments: 0,
+        avgUtilizationRate: 0,
+        totalSquareFootage: 0,
+        totalAcreage: 0,
+      }
+    };
+  }
 }
 
 // ============================================================================
@@ -47,12 +70,8 @@ export async function action({ request }: Route.ActionArgs) {
   const intent = formData.get("intent");
 
   switch (intent) {
-    case "create":
-      return { success: true };
-    case "update":
-      return { success: true };
-    case "delete":
-      return { success: true };
+    case "refresh":
+      return { success: true, message: "Data refreshed" };
     default:
       return { success: false, error: "Invalid action" };
   }
@@ -63,6 +82,24 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function PortfolioSummaryRoute() {
+  const { stats } = useLoaderData<LoaderData>();
+
+  const formatCurrency = (value?: number): string => {
+    if (!value) return '$0';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+  };
+
+  const formatNumber = (value?: number): string => {
+    if (!value) return '0';
+    return new Intl.NumberFormat('en-US').format(value);
+  };
+
+  const quickLinks = [
+    { label: 'Inventory', to: '/real_estate/inventory', description: 'View all properties' },
+    { label: 'Acquisitions', to: '/real_estate/acquisition', description: 'Pending acquisitions' },
+    { label: 'Disposals', to: '/real_estate/disposal', description: 'Property disposals' },
+    { label: 'Utilization', to: '/real_estate/utilization', description: 'Space utilization' },
+  ];
 
   return (
     <div className="p-8">
@@ -85,18 +122,117 @@ export default function PortfolioSummaryRoute() {
         </p>
       </div>
 
-      {/* Content Placeholder */}
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-        <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-          Portfolio Summary Module
-        </h3>
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          This real estate module is under development.
-        </p>
+      {/* Key Metrics Grid */}
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900/30">
+              <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Properties</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{formatNumber(stats.totalProperties)}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{stats.activeProperties} active</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-emerald-100 p-3 dark:bg-emerald-900/30">
+              <DollarSign className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Portfolio Value</p>
+              <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(stats.totalValue)}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-purple-100 p-3 dark:bg-purple-900/30">
+              <PieChart className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Avg Utilization</p>
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.avgUtilizationRate.toFixed(1)}%</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-amber-100 p-3 dark:bg-amber-900/30">
+              <Landmark className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Square Footage</p>
+              <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{formatNumber(stats.totalSquareFootage)}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">sq ft</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-teal-100 p-3 dark:bg-teal-900/30">
+              <MapPin className="h-6 w-6 text-teal-600 dark:text-teal-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Acreage</p>
+              <p className="text-3xl font-bold text-teal-600 dark:text-teal-400">{formatNumber(stats.totalAcreage)}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">acres</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div className="rounded-lg bg-rose-100 p-3 dark:bg-rose-900/30">
+              <TrendingUp className="h-6 w-6 text-rose-600 dark:text-rose-400" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pending Activity</p>
+              <p className="text-3xl font-bold text-rose-600 dark:text-rose-400">{stats.pendingAcquisitions + stats.pendingDisposals}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{stats.pendingAcquisitions} acq / {stats.pendingDisposals} disp</p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Quick Links Section */}
+      <div className="mb-8">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Quick Links</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {quickLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-300 hover:shadow-md transition-all dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-600"
+            >
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">{link.label}</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{link.description}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Active Issues */}
+      {stats.activeEncroachments > 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-700 dark:bg-amber-900/20">
+          <h3 className="font-medium text-amber-800 dark:text-amber-200">Attention Required</h3>
+          <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">
+            There are {stats.activeEncroachments} active encroachment{stats.activeEncroachments !== 1 ? 's' : ''} that require attention.
+          </p>
+          <Link
+            to="/real_estate/encroachments"
+            className="mt-2 inline-block text-sm font-medium text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+          >
+            View Encroachments →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

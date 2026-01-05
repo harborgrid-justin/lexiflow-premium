@@ -18,7 +18,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -224,7 +224,7 @@ export function calculateAutoFitWidth<T>(
   // Measure sample of content (first 100 rows for performance)
   const sampleSize = Math.min(100, data.length);
   for (let i = 0; i < sampleSize; i++) {
-    const value = accessor(data[i]);
+    const value = accessor(data[i] as T);
     const text = value != null ? String(value) : '';
     const textWidth = context.measureText(text).width + 40; // Add padding
 

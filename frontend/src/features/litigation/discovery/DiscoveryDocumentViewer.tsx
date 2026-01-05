@@ -108,7 +108,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                         </div>
 
                         <div className={cn("px-16 py-4 font-serif text-sm leading-loose whitespace-pre-wrap select-text", theme.text.primary)}>
-                            {doc.content}
+                            {doc.content as React.ReactNode}
                         </div>
 
                         {/* Simulated Page Footer */}

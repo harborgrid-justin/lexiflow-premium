@@ -342,9 +342,9 @@ export function levenshteinDistance(str1: string, str2: string): number {
     for (let j = 1; j <= len2; j++) {
       const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
       matrix[i]![j] = Math.min(
-        matrix[i - 1]![j] + 1, // deletion
-        matrix[i]![j - 1] + 1, // insertion
-        matrix[i - 1]![j - 1] + cost // substitution
+        (matrix[i - 1]?.[j] ?? 0) + 1, // deletion
+        (matrix[i]?.[j - 1] ?? 0) + 1, // insertion
+        (matrix[i - 1]?.[j - 1] ?? 0) + cost // substitution
       );
     }
   }
@@ -402,9 +402,9 @@ export function damerauLevenshteinDistance(str1: string, str2: string): number {
       }
 
       matrix[i + 1]![j + 1] = Math.min(
-        matrix[i]![j] + cost, // substitution
-        matrix[i + 1]![j] + 1, // insertion
-        matrix[i]![j + 1] + 1, // deletion
+        (matrix[i]?.[j] ?? 0) + cost, // substitution
+        (matrix[i + 1]?.[j] ?? 0) + 1, // insertion
+        (matrix[i]?.[j + 1] ?? 0) + 1, // deletion
         (matrix[k]?.[l] || 0) + (i - k - 1) + 1 + (j - l - 1) // transposition
       );
     }

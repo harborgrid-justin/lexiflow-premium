@@ -242,7 +242,7 @@ export const Review: React.FC<ReviewProps> = ({ caseId }) => {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
                 ) : (
-                  docContent || currentDoc?.content || "No content available for this document."
+                  (docContent || currentDoc?.content || "No content available for this document.") as React.ReactNode
                 )}
               </div>
             </div>

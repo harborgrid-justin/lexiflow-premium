@@ -29,7 +29,6 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils & Constants
-import { BloomFilter } from '@/utils/bloomFilter';
 import { cn } from '@/utils/cn';
 
 
@@ -37,7 +36,6 @@ import { cn } from '@/utils/cn';
 // BLOOM FILTER INITIALIZATION
 // ========================================
 // Initialize Bloom Filter for IP blacklist checking
-const ipBlacklist = new BloomFilter(1000, 0.01);
 // Note: IPs should be loaded from backend security service, not hardcoded
 
 // ========================================
@@ -49,7 +47,7 @@ export const AdminSecurity: React.FC = () => {
     const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
 
     // Load security settings and IP blacklist from backend
-    const { data: controls = [], isLoading } = useQuery<unknown[]>(
+    const { data: controls = [] } = useQuery<unknown[]>(
         ['admin', 'security'],
         () => DataService.admin.getSecuritySettings()
     );

@@ -165,12 +165,12 @@ export const ThemeSettingsPage: React.FC = () => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={(entry) => entry.name}
+                      label={(entry: any) => entry.name}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {chartData.riskData.map((entry, index) => (
+                      {chartData.riskData.map((entry: any, index: number) => (
                         <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
                       ))}
                     </Pie>

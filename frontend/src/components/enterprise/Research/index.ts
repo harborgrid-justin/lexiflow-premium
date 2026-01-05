@@ -5,50 +5,49 @@
  * for LexiFlow Premium enterprise platform.
  */
 
-export { LegalResearchHub } from './LegalResearchHub';
+export { LegalResearchHub } from "./LegalResearchHub";
 export type {
-  LegalResearchHubProps,
-  ResearchSession,
-  ResearchResult,
   Annotation,
-  SearchFilters,
-} from './LegalResearchHub';
+  LegalResearchHubProps,
+  ResearchResult,
+  ResearchSession,
+} from "./LegalResearchHub";
 
-export { CitationManager } from './CitationManager';
+export { CitationManager } from "./CitationManager";
 export type {
-  CitationManagerProps,
   Citation,
-  CitationGraph,
   CitationFormat,
-  CitationType,
+  CitationGraph,
+  CitationManagerProps,
   CitationStatus,
-} from './CitationManager';
+  CitationType,
+} from "./CitationManager";
 
-export { KnowledgeBase } from './KnowledgeBase';
+export { KnowledgeBase } from "./KnowledgeBase";
 export type {
   KnowledgeBaseProps,
   KnowledgeResource,
-  ResourceType,
   ResourceCategory,
-} from './KnowledgeBase';
+  ResourceType,
+} from "./KnowledgeBase";
 
-export { ResearchMemo } from './ResearchMemo';
+export { ResearchMemo } from "./ResearchMemo";
 export type {
-  ResearchMemoProps,
-  ResearchMemo as ResearchMemoType,
+  MemoCollaborator,
+  MemoComment,
   MemoSection,
   MemoVersion,
-  MemoComment,
-  MemoCollaborator,
-} from './ResearchMemo';
+  ResearchMemoProps,
+  ResearchMemo as ResearchMemoType,
+} from "./ResearchMemo";
 
-export { StatutoryMonitor } from './StatutoryMonitor';
+export { StatutoryMonitor } from "./StatutoryMonitor";
 export type {
-  StatutoryMonitorProps,
-  LegislativeUpdate,
-  RegulatoryAlert,
-  MonitoringRule,
-  UpdateType,
-  UpdateStatus,
   AlertPriority,
-} from './StatutoryMonitor';
+  LegislativeUpdate,
+  MonitoringRule,
+  RegulatoryAlert,
+  StatutoryMonitorProps,
+  UpdateStatus,
+  UpdateType,
+} from "./StatutoryMonitor";

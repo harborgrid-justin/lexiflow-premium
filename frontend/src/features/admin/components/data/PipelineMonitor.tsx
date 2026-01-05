@@ -43,10 +43,10 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
     // Fetch connectors from backend API
     const { data: connectorsResponse = [], isLoading: isLoadingConnectors } = useQuery(
         ['connectors', 'all'],
-        () => dataPlatformApi.connectors?.getAll?.() || Promise.resolve([])
+        () => (dataPlatformApi as any).connectors?.getAll?.() || Promise.resolve([])
     );
 
-    const connectors = Array.isArray(connectorsResponse) ? connectorsResponse : (connectorsResponse?.data || []);
+    const connectors = Array.isArray(connectorsResponse) ? connectorsResponse : ((connectorsResponse as any)?.data || []);
 
     const { mutate: executePipeline } = useMutation(
         (id: string) => dataPlatformApi.pipelines.execute(id),
@@ -219,7 +219,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {connectors.map(conn => {
+                            {connectors.map((conn: any) => {
                                 const Icon = getIcon(conn.type);
                                 return (
                                     <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>

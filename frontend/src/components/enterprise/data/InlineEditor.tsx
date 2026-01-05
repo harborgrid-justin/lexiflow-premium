@@ -59,7 +59,6 @@ export function InlineEditor({
 }: CellEditorProps) {
   const { theme } = useTheme();
   const [value, setValue] = useState(initialValue);
-  const [isEditing, setIsEditing] = useState(true);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 

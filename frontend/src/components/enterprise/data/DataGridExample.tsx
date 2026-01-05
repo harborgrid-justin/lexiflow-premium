@@ -68,7 +68,7 @@ function generateMockUsers(count: number): User[] {
       email: `user${i}@example.com`,
       age: 20 + Math.floor(Math.random() * 40),
       salary: 40000 + Math.floor(Math.random() * 100000),
-      department: departments[Math.floor(Math.random() * departments.length)],
+      department: departments[Math.floor(Math.random() * departments.length)] || 'Engineering',
       active: Math.random() > 0.3,
       joinDate: new Date(2020 + Math.floor(Math.random() * 4), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
       status: statuses[Math.floor(Math.random() * statuses.length)] as 'active' | 'inactive' | 'pending',

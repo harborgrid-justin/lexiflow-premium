@@ -9,7 +9,9 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { EncroachmentStatus, RealEstateEncroachment } from '@/services/domain/RealEstateDomain';
-import { Link } from 'react-router';
+import { AlertTriangle, CheckCircle, FileText, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Form, Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/encroachment";

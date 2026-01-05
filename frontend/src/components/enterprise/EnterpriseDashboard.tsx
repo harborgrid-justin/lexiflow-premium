@@ -16,7 +16,8 @@ import { ActivityFeed } from '@/components/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/components/dashboard/widgets/ChartCard';
 import { KPICard } from '@/components/dashboard/widgets/KPICard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { DashboardKPIs } from '@/services/api/dashboard-metrics.service';
+import { useQuery } from '@/hooks/backend';
+import { DashboardKPIs, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {

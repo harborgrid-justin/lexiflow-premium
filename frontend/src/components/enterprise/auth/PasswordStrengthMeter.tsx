@@ -145,9 +145,13 @@ export const calculatePasswordStrength = (
     4: { label: 'Strong', color: 'bg-green-500', percentage: 100 },
   };
 
+  const strength = strengthMap[score];
+
   return {
     score: score as 0 | 1 | 2 | 3 | 4,
-    ...strengthMap[score],
+    label: strength.label!,
+    color: strength.color,
+    percentage: strength.percentage,
     feedback,
   };
 };
@@ -174,17 +178,16 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 font-medium">Password strength:</span>
           <span
-            className={`font-semibold ${
-              strength.score === 0
-                ? 'text-red-600'
-                : strength.score === 1
+            className={`font-semibold ${strength.score === 0
+              ? 'text-red-600'
+              : strength.score === 1
                 ? 'text-orange-600'
                 : strength.score === 2
-                ? 'text-yellow-600'
-                : strength.score === 3
-                ? 'text-blue-600'
-                : 'text-green-600'
-            }`}
+                  ? 'text-yellow-600'
+                  : strength.score === 3
+                    ? 'text-blue-600'
+                    : 'text-green-600'
+              }`}
           >
             {strength.label}
           </span>
@@ -208,9 +211,8 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({
           {strength.feedback.map((item, index) => (
             <div
               key={index}
-              className={`flex items-start text-xs ${
-                strength.score >= 4 ? 'text-green-700' : 'text-gray-600'
-              }`}
+              className={`flex items-start text-xs ${strength.score >= 4 ? 'text-green-700' : 'text-gray-600'
+                }`}
             >
               {strength.score >= 4 ? (
                 <svg

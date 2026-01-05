@@ -14,7 +14,7 @@ export const PipelineDAG = React.memo(function PipelineDAG() {
 
     // Fetch pipeline stages from backend
     const { data: pipelineData, isLoading } = useQuery(
-        queryKeys.analytics.pipelines(),
+        (queryKeys as any).analytics?.pipelines?.() || ['pipelines', 'stages'],
         () => (DataService as any).dataPlatformApi?.pipelines?.getStages?.() || Promise.resolve([])
     );
 

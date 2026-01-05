@@ -162,7 +162,7 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
   const [activeView, setActiveView] = useState<'edit' | 'preview' | 'versions' | 'comments'>(
     'edit'
   );
-  const [selectedSection, setSelectedSection] = useState<string>(memo.sections[0]?.id);
+  const [selectedSection, setSelectedSection] = useState<string>(memo.sections[0]?.id || '');
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [isAISummarizing, setIsAISummarizing] = useState(false);
   const [showCollaborators, setShowCollaborators] = useState(false);
@@ -277,8 +277,8 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
             <button
               onClick={() => setActiveView('edit')}
               className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'edit'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                 }`}
             >
               <Edit3 className="h-4 w-4" />
@@ -287,8 +287,8 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
             <button
               onClick={() => setActiveView('preview')}
               className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'preview'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                 }`}
             >
               <Eye className="h-4 w-4" />
@@ -297,8 +297,8 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
             <button
               onClick={() => setActiveView('versions')}
               className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'versions'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                 }`}
             >
               <GitBranch className="h-4 w-4" />
@@ -307,8 +307,8 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
             <button
               onClick={() => setActiveView('comments')}
               className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeView === 'comments'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                 }`}
             >
               <MessageSquare className="h-4 w-4" />
@@ -365,8 +365,8 @@ export const ResearchMemo: React.FC<ResearchMemoProps> = ({
                     key={section.id}
                     onClick={() => setSelectedSection(section.id)}
                     className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors ${selectedSection === section.id
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
                       }`}
                   >
                     <span className="font-medium">{section.title}</span>

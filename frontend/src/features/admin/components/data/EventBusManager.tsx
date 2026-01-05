@@ -9,14 +9,14 @@ import { cn } from '@/utils/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
 import React, { useState } from 'react';
 
-interface EventBusEvent {
-  id: string;
-  event: string;
-  payload: unknown;
-  timestamp: string;
-  source: string;
-  status: 'delivered' | 'pending' | 'failed';
-}
+// interface EventBusEvent {
+//   id: string;
+//   event: string;
+//   payload: unknown;
+//   timestamp: string;
+//   source: string;
+//   status: 'delivered' | 'pending' | 'failed';
+// }
 
 export const EventBusManager: React.FC = () => {
   const { theme } = useTheme();

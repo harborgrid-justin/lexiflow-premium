@@ -380,7 +380,7 @@ export const TrustAccountDashboard: React.FC = () => {
   const createModal = useModalState();
   const reconcileModal = useModalState();
 
-  const { mutate: createTrustAccount } = useMutation(
+  const { mutate: _createTrustAccount } = useMutation(
     (data: CreateTrustAccountDto) => DataService.billing.trustAccounts.create(data),
     {
       onSuccess: () => {
@@ -394,7 +394,7 @@ export const TrustAccountDashboard: React.FC = () => {
     }
   );
 
-  const { mutate: reconcileTrustAccount } = useMutation(
+  const { mutate: _reconcileTrustAccount } = useMutation(
     (accountId: string) => DataService.billing.trustAccounts.reconcile(accountId),
     {
       onSuccess: () => {
@@ -417,7 +417,7 @@ export const TrustAccountDashboard: React.FC = () => {
     createModal.open();
   }, [createModal]);
 
-  const handleReconcileAccount = useCallback((accountId: string) => {
+  const handleReconcileAccount = useCallback((_accountId: string) => {
     reconcileModal.open();
   }, [reconcileModal]);
 

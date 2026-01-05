@@ -235,7 +235,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
                     <div className="text-sm">{source.custodian}</div>
                   </TableCell>
                   <TableCell>
-                    <div className={cn("text-sm font-mono", theme.text.secondary)}>{source.location}</div>
+                    <div className={cn("text-sm font-mono", theme.text.secondary)}>{(source as any).location}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm">{source.actualSize || source.estimatedSize}</div>
+                    <div className="text-sm">{(source as any).actualSize || (source as any).estimatedSize}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">

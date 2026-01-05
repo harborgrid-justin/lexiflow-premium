@@ -89,7 +89,7 @@ export const PleadingAnalytics: React.FC = () => {
         // Monthly trend
         // Group by creation month
         const monthlyCounts: Record<string, number> = {};
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        // const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         // Initialize with 0 for last 6 months to show trend even if empty
         const today = new Date();

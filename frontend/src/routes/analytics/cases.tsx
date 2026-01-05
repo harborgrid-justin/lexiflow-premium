@@ -37,19 +37,19 @@ export function meta() {
 export async function loader() {
   try {
     const cases = (await DataService.cases.getAll()) as Case[];
-    const activeCases = cases.filter(c => c.status === 'Active' || c.status === 'In Progress');
-    const closedCases = cases.filter(c => c.status === 'Closed' || c.status === 'Resolved');
-    const wonCases = closedCases.filter(c => c.outcome === 'Won' || c.status === 'Settled');
+    const activeCases = cases.filter(c => c.status === 'Active' || c.status === ('In Progress' as any));
+    const closedCases = cases.filter(c => c.status === 'Closed' || c.status === ('Resolved' as any));
+    const wonCases = closedCases.filter(c => (c as any).outcome === 'Won' || c.status === 'Settled');
 
     const totalCases = cases.length;
     const wonCount = wonCases.length;
     const winRate = closedCases.length > 0 ? (wonCount / closedCases.length) * 100 : 0;
 
     const durations = closedCases
-      .filter(c => c.filingDate && c.closedDate)
+      .filter(c => c.filingDate && c.closeDate)
       .map(c => {
         const start = new Date(c.filingDate!).getTime();
-        const end = new Date(c.closedDate!).getTime();
+        const end = new Date(c.closeDate!).getTime();
         return Math.floor((end - start) / (1000 * 60 * 60 * 24));
       });
 
@@ -58,8 +58,8 @@ export async function loader() {
       : 0;
 
     const settlements = closedCases
-      .filter(c => c.settlementAmount)
-      .map(c => c.settlementAmount || 0);
+      .filter(c => (c as any).settlementAmount)
+      .map(c => (c as any).settlementAmount || 0);
 
     const avgSettlement = settlements.length > 0
       ? Math.floor(settlements.reduce((sum, s) => sum + s, 0) / settlements.length)

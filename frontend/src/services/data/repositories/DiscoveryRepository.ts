@@ -1661,7 +1661,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as DataCollection;
-    await db.add(STORES.DISCOVERY_COLLECTIONS, newCollection as any);
+    await (db as any).add(STORES.DISCOVERY_COLLECTIONS, newCollection as any);
     return newCollection;
   };
 

@@ -18,7 +18,11 @@ import { cn } from '@/utils/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
 import React from 'react';
 
-export const Processing: React.FC = () => {
+interface ProcessingProps {
+  caseId?: string;
+}
+
+export const Processing: React.FC<ProcessingProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
 
@@ -27,9 +31,9 @@ export const Processing: React.FC = () => {
 
   // Fetch Processing Jobs
   const { data: jobs = [], isLoading } = useQuery<ProcessingJob[]>(
-    DISCOVERY_QUERY_KEYS.processing.all(),
+    caseId ? DISCOVERY_QUERY_KEYS.processing.byCase(caseId) : DISCOVERY_QUERY_KEYS.processing.all(),
     async () => {
-      return discoveryRepo.getProcessingJobs();
+      return discoveryRepo.getProcessingJobs(caseId);
     }
   );
 
@@ -40,7 +44,9 @@ export const Processing: React.FC = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidate(DISCOVERY_QUERY_KEYS.processing.all());
+        queryClient.invalidate(
+          caseId ? DISCOVERY_QUERY_KEYS.processing.byCase(caseId) : DISCOVERY_QUERY_KEYS.processing.all()
+        );
       },
       onError: (error) => {
         console.error('Failed to update job:', error);

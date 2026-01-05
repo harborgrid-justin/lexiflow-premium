@@ -39,15 +39,19 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 import { CaseId, Deposition, UUID } from '@/types';
 
-export const DiscoveryDepositions: React.FC = () => {
+interface DiscoveryDepositionsProps {
+    caseId?: string;
+}
+
+export const DiscoveryDepositions: React.FC<DiscoveryDepositionsProps> = ({ caseId }) => {
     const { theme } = useTheme();
     const { openWindow, closeWindow } = useWindow();
     const [newDepo, setNewDepo] = useState<Partial<Deposition>>({});
 
     // Enterprise Data Access
     const { data: rawDepositions = [] } = useQuery<Deposition[]>(
-        QUERY_KEYS.DEPOSITIONS.ALL,
-        () => DataService.discovery.getDepositions()
+        caseId ? QUERY_KEYS.DEPOSITIONS.BY_CASE(caseId) : QUERY_KEYS.DEPOSITIONS.ALL,
+        () => DataService.discovery.getDepositions(caseId)
     );
 
     // Ensure depositions is always an array
@@ -68,7 +72,7 @@ export const DiscoveryDepositions: React.FC = () => {
         if (!newDepo.witnessName || !newDepo.date) return;
         const deposition: Deposition = {
             id: `DEP-${Date.now()}` as UUID,
-            caseId: 'C-2024-001' as CaseId, // Mock default
+            caseId: (caseId || 'C-2024-001') as CaseId,
             witnessName: newDepo.witnessName,
             date: newDepo.date,
             location: newDepo.location || 'Remote',

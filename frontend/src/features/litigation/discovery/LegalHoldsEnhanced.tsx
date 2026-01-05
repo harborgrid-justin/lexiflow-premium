@@ -11,86 +11,33 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import type { CaseId, UserId } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, BarChart, CheckCircle, Clock, Eye, Mail, Plus, Send } from 'lucide-react';
 import React, { useState } from 'react';
 
-export const LegalHoldsEnhanced: React.FC = () => {
+interface LegalHoldsEnhancedProps {
+  caseId?: string;
+}
+
+export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const detailsModal = useModalState();
 
   const [selectedHold, setSelectedHold] = useState<LegalHoldEnhanced | null>(null);
 
-  // Mock data with notification tracking
-  const [holds] = useState<LegalHoldEnhanced[]>([
-    {
-      id: 'LH-001',
-      caseId: 'C-2024-001' as CaseId,
-      holdName: 'Executive Communications Hold',
-      matter: 'Smith v. Acme Corp',
-      description: 'Preserve all communications related to Q3 2023 financial reporting',
-      scope: 'Email, documents, and instant messages from 2023-06-01 to 2023-12-31',
-      issuedDate: '2024-01-10',
-      status: 'active',
-      custodianCount: 15,
-      acknowledgedCount: 12,
-      dataSources: ['Exchange Server', 'SharePoint', 'Slack'],
-      createdBy: 'Legal Team' as UserId,
-      escalationLevel: 'warning',
-      notifications: [
-        {
-          id: 'NOTIF-001',
-          legalHoldId: 'LH-001',
-          custodianId: 'CUST-001',
-          custodianName: 'John Doe',
-          custodianEmail: 'john.doe@company.com',
-          sentAt: '2024-01-10T09:00:00Z',
-          acknowledgedAt: '2024-01-10T14:30:00Z',
-          acknowledgmentMethod: 'email',
-          remindersSent: 0,
-          status: 'acknowledged',
-          createdAt: '2024-01-10',
-          updatedAt: '2024-01-10'
-        },
-        {
-          id: 'NOTIF-002',
-          legalHoldId: 'LH-001',
-          custodianId: 'CUST-002',
-          custodianName: 'Jane Smith',
-          custodianEmail: 'jane.smith@company.com',
-          sentAt: '2024-01-10T09:00:00Z',
-          remindersSent: 2,
-          lastReminderAt: '2024-01-18T09:00:00Z',
-          status: 'overdue',
-          createdAt: '2024-01-10',
-          updatedAt: '2024-01-18'
-        }
-      ],
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: 'LH-002',
-      caseId: 'C-2024-001' as CaseId,
-      holdName: 'Product Development Hold',
-      matter: 'Patent Litigation Case',
-      description: 'Preserve all product development records',
-      scope: 'Engineering documents, source code, design specifications',
-      issuedDate: '2024-01-15',
-      status: 'active',
-      custodianCount: 8,
-      acknowledgedCount: 8,
-      dataSources: ['GitHub', 'Jira', 'Confluence'],
-      createdBy: 'IP Team' as UserId,
-      escalationLevel: 'none',
-      notifications: [],
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15'
-    }
-  ]);
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch Enhanced Legal Holds
+  const { data: holds = [], isLoading } = useQuery<LegalHoldEnhanced[]>(
+    caseId ? ['discovery', 'legal-holds', 'enhanced', caseId] : ['discovery', 'legal-holds', 'enhanced'],
+    async () => discoveryRepo.getLegalHoldsEnhanced(caseId)
+  );
 
   const getStatusBadge = (status: LegalHoldEnhanced['status']) => {
     switch (status) {

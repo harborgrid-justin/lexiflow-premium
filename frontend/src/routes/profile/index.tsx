@@ -34,8 +34,10 @@ export function meta(_: Route.MetaArgs) {
 export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     const user = await api.auth.getCurrentUser();
-    // Mock preferences for now as they might not be in user object or need separate call
-    const preferences = {
+
+    // Load preferences from localStorage or use defaults
+    const storedPrefs = typeof localStorage !== 'undefined' ? localStorage.getItem('user_preferences') : null;
+    const preferences = storedPrefs ? JSON.parse(storedPrefs) : {
       notifications: true,
       emailDigest: 'daily',
       theme: 'system',
@@ -68,28 +70,54 @@ export async function action({ request }: Route.ActionArgs) {
   const intent = formData.get("intent");
 
   try {
+    const user = await api.auth.getCurrentUser();
+    if (!user) throw new Error("Not authenticated");
+
     switch (intent) {
       case "update-profile": {
-        // const firstName = formData.get("firstName") as string;
-        // const lastName = formData.get("lastName") as string;
-        // await api.auth.users.update(userId, { firstName, lastName });
-        return { success: true, message: "Profile updated" };
+        const firstName = formData.get("firstName") as string;
+        const lastName = formData.get("lastName") as string;
+        const email = formData.get("email") as string;
+        const phone = formData.get("phone") as string;
+
+        await api.auth.users.update(user.id, {
+          firstName,
+          lastName,
+          email,
+          phone
+        });
+        return { success: true, message: "Profile updated successfully" };
       }
       case "change-password": {
-        // const currentPassword = formData.get("currentPassword") as string;
-        // const newPassword = formData.get("newPassword") as string;
-        // await api.auth.auth.changePassword(currentPassword, newPassword);
-        return { success: true, message: "Password changed" };
+        const currentPassword = formData.get("currentPassword") as string;
+        const newPassword = formData.get("newPassword") as string;
+        const confirmPassword = formData.get("confirmPassword") as string;
+
+        if (newPassword !== confirmPassword) {
+          return { success: false, error: "New passwords do not match" };
+        }
+
+        await api.auth.auth.changePassword(currentPassword, newPassword);
+        return { success: true, message: "Password changed successfully" };
       }
       case "update-preferences": {
-        return { success: true, message: "Preferences updated" };
+        const notifications = formData.get("notifications") === "on";
+        const emailDigest = formData.get("emailDigest") as string;
+        const theme = formData.get("theme") as string;
+
+        const preferences = { notifications, emailDigest, theme };
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('user_preferences', JSON.stringify(preferences));
+        }
+
+        return { success: true, message: "Preferences updated successfully" };
       }
       default:
         return { success: false, error: "Invalid action" };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Action failed:", error);
-    return { success: false, error: "Operation failed" };
+    return { success: false, error: error.message || "Operation failed" };
   }
 }
 

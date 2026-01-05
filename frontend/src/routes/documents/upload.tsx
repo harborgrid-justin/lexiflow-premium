@@ -30,7 +30,6 @@ export function meta() {
 
 export default function DocumentUploadRoute() {
   const navigate = useNavigate();
-  console.log('useNavigate:', navigate);
 
   const handleUpload = async (files: File[], metadata: UploadMetadata) => {
     try {
@@ -48,9 +47,6 @@ export default function DocumentUploadRoute() {
       });
 
       const results = await Promise.all(uploadPromises);
-
-      // Show success message
-      alert(`Successfully uploaded ${results.length} document(s)`);
 
       // Navigate back to documents list
       navigate('/documents');

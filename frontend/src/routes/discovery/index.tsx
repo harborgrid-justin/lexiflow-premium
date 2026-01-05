@@ -77,7 +77,16 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
       case "respond": {
-        // TODO: Handle discovery response (update request)
+        const id = formData.get("id") as string;
+        const response = formData.get("response") as string;
+
+        if (id && response) {
+          await DataService.discoveryRequests.update(id, {
+            status: 'responded',
+            responseDate: new Date().toISOString(),
+            responseNotes: response
+          });
+        }
         return { success: true, message: "Response recorded" };
       }
 

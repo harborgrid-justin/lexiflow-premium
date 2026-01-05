@@ -117,7 +117,7 @@ export function PDFEditorView() {
                             scale={scale} setScale={setScale}
                             rotation={rotation} setRotation={setRotation}
                             pageNum={pageNum} setPageNum={setPageNum}
-                            totalPages={10} // Mock
+                            totalPages={documentSelection.selected?.pageCount || 1}
                         />
                         <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>

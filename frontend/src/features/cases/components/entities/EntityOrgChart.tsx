@@ -54,10 +54,9 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
     const entities = propEntities || fetchedEntities;
 
     const { root, children } = useMemo(() => {
-        // Mock hierarchy logic: Find "TechCorp" as root, others as children
-        // In a real app, this would traverse relationships recursively
-        const r = entities.find(e => e.name.includes('TechCorp')) || entities[0];
-        const c = entities.filter(e => e.id !== r?.id).slice(0, 3);
+        // Try to find a corporate entity as root, otherwise use the first one
+        const r = entities.find(e => e.type === 'Corporation') || entities[0];
+        const c = entities.filter(e => e.id !== r?.id);
         return { root: r, children: c };
     }, [entities]);
 

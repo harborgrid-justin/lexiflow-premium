@@ -41,11 +41,19 @@ export async function loader() {
       ? metrics.reduce((acc: number, m: { utilization: number }) => acc + m.utilization, 0) / metrics.length
       : 0;
 
+    let pendingTasks = 0;
+    try {
+      const tasks = await DataService.workflow.tasks.getAll();
+      pendingTasks = tasks.filter((t: any) => t.status !== 'completed').length;
+    } catch (e) {
+      console.error("Failed to fetch tasks", e);
+    }
+
     return {
       staffCount: staff.length,
       activeMatters,
       utilizationRate: Math.round(avgUtilization),
-      pendingTasks: 0, // TODO: Integrate with TaskService when available
+      pendingTasks,
     };
   } catch (error) {
     console.error("Failed to load practice data", error);

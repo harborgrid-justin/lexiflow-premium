@@ -9,8 +9,8 @@ import { Download, Filter, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button/Button';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -22,18 +22,24 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem } from '@/types';
 
-export const EvidenceCustodyLog: React.FC = () => {
+interface EvidenceCustodyLogProps {
+  items?: EvidenceItem[];
+}
+
+export const EvidenceCustodyLog: React.FC<EvidenceCustodyLogProps> = ({ items }) => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Enterprise Data Access: Fetch from the main evidence store to ensure consistency
+  // Use passed items or fetch all if not provided (fallback for standalone usage)
   const { data } = useQuery<EvidenceItem[]>(
     ['evidence', 'all'],
-    () => DataService.evidence.getAll()
+    () => DataService.evidence.getAll(),
+    { enabled: !items }
   );
 
   // Ensure evidence is always an array
   const evidence = useMemo(() => {
+    if (items) return items;
     if (!data) return [];
     if (Array.isArray(data)) return data as EvidenceItem[];
     // Handle paginated response with data property (backend pagination)
@@ -46,7 +52,7 @@ export const EvidenceCustodyLog: React.FC = () => {
     }
     console.warn('[EvidenceCustodyLog] Data is not an array:', data);
     return [];
-  }, [data]);
+  }, [data, items]);
 
   // Flatten custody events from all evidence items
   const events = useMemo(() => {
@@ -106,7 +112,7 @@ export const EvidenceCustodyLog: React.FC = () => {
               <TableCell className={cn("font-medium", theme.text.primary)}>{evt.itemTitle}</TableCell>
               <TableCell>
                 <span className={`px-2 py-1 rounded text-xs font-bold ${evt.action.includes('Collected') ? cn(theme.status.success.bg, theme.status.success.text) :
-                    evt.action.includes('Transfer') ? cn(theme.status.info.bg, theme.status.info.text) : cn(theme.surface.highlight, theme.text.secondary)
+                  evt.action.includes('Transfer') ? cn(theme.status.info.bg, theme.status.info.text) : cn(theme.surface.highlight, theme.text.secondary)
                   }`}>
                   {evt.action}
                 </span>

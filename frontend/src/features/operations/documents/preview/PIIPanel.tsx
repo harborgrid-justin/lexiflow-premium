@@ -54,12 +54,6 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
                 if (count % 10 === 0) await yieldToMain();
             }
 
-            // Add some mock SSNs if none found just for demo visual
-            if (findings.length === 0 && content.length > 0) {
-                findings.push({ id: 'mock-1', type: 'SSN', value: '***-**-1234', index: 0, ignored: false });
-                findings.push({ id: 'mock-2', type: 'CreditCard', value: '****-****-****-4242', index: 0, ignored: false });
-            }
-
             if (!isCancelled) {
                 setEntities(findings);
                 setIsScanning(false);

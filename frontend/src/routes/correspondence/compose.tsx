@@ -34,6 +34,8 @@ interface LoaderData {
   templates: DraftingTemplate[];
   recentRecipients: Recipient[];
   draftId: string | null;
+  draft?: any; // Using any for now as Correspondence type might need to be imported
+  templateId?: string | null;
 }
 
 interface ActionData {
@@ -71,16 +73,40 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     console.error("Failed to fetch templates", error);
   }
 
-  // TODO: Fetch recent recipients from API when endpoint is available
+  // Fetch recent recipients (clients)
   const recentRecipients: Recipient[] = [];
+  try {
+    const clients = await DataService.communications.clients.getAll();
+    clients.forEach(client => {
+      if (client.email) {
+        recentRecipients.push({
+          id: client.id,
+          name: `${client.firstName} ${client.lastName}`,
+          email: client.email,
+          type: 'to'
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Failed to fetch recipients", error);
+  }
 
-  // TODO: Load draft if draftId is provided
-  // TODO: Pre-select template if templateId is provided
+  // Load draft if draftId is provided
+  let draft = null;
+  if (draftId) {
+    try {
+      draft = await DataService.communications.correspondence.getById(draftId);
+    } catch (error) {
+      console.error("Failed to load draft", error);
+    }
+  }
 
   return {
     templates,
     recentRecipients,
     draftId,
+    draft,
+    templateId
   };
 }
 
@@ -174,19 +200,46 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
     }
 
     case "preview": {
-      // TODO: Generate preview
+      const subject = formData.get("subject") as string;
+      const body = formData.get("body") as string;
+
       return {
         success: true,
         message: "Preview generated",
+        preview: { subject, body }
       };
     }
 
     case "attach": {
-      // TODO: Handle attachment upload
-      return {
-        success: true,
-        message: "Attachment added",
-      };
+      const file = formData.get("file") as File;
+      const draftId = formData.get("draftId") as string;
+
+      if (!file || file.size === 0) {
+        return {
+          success: false,
+          error: "No file selected",
+        };
+      }
+
+      try {
+        const document = await DataService.documents.upload(file, {
+          category: 'correspondence_attachment',
+          draftId: draftId || undefined,
+          uploadedAt: new Date().toISOString()
+        });
+
+        return {
+          success: true,
+          message: "Attachment added",
+          attachment: document
+        };
+      } catch (error) {
+        console.error("Failed to upload attachment", error);
+        return {
+          success: false,
+          error: "Failed to upload attachment",
+        };
+      }
     }
 
     default:

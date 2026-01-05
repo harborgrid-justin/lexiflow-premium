@@ -3,8 +3,8 @@
  * Manages trial exhibits
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { TrialExhibit } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { TrialExhibit } from "@/types";
 
 // Alias for backward compatibility
 export type Exhibit = TrialExhibit;
@@ -12,19 +12,19 @@ export type Exhibit = TrialExhibit;
 export interface ExhibitFilters {
   caseId?: string;
   party?: string;
-  status?: TrialExhibit['status'];
-  type?: TrialExhibit['type'];
+  status?: TrialExhibit["status"];
+  type?: TrialExhibit["type"];
 }
 
 export class ExhibitsApiService {
-  private readonly baseUrl = '/exhibits';
+  private readonly baseUrl = "/exhibits";
 
   async getAll(filters?: ExhibitFilters): Promise<TrialExhibit[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.party) params.append('party', filters.party);
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.type) params.append('type', filters.type);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.party) params.append("party", filters.party);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.type) params.append("type", filters.type);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     return apiClient.get<TrialExhibit[]>(url);
@@ -42,12 +42,22 @@ export class ExhibitsApiService {
     return apiClient.post<TrialExhibit>(this.baseUrl, data);
   }
 
+  // Alias for Repository compatibility
+  async add(data: Partial<TrialExhibit>): Promise<TrialExhibit> {
+    return this.create(data);
+  }
+
   async update(id: string, data: Partial<TrialExhibit>): Promise<TrialExhibit> {
     return apiClient.put<TrialExhibit>(`${this.baseUrl}/${id}`, data);
   }
 
-  async updateStatus(id: string, status: TrialExhibit['status']): Promise<TrialExhibit> {
-    return apiClient.patch<TrialExhibit>(`${this.baseUrl}/${id}/status`, { status });
+  async updateStatus(
+    id: string,
+    status: TrialExhibit["status"]
+  ): Promise<TrialExhibit> {
+    return apiClient.patch<TrialExhibit>(`${this.baseUrl}/${id}/status`, {
+      status,
+    });
   }
 
   async delete(id: string): Promise<void> {

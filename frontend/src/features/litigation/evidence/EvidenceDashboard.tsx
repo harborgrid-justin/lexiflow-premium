@@ -5,13 +5,13 @@
  * Displays high-level metrics, charts, and recent activity for evidence items.
  */
 
+import { Activity, AlertTriangle, Box, HardDrive, ShieldCheck } from 'lucide-react';
 import React from 'react';
-import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Common Components
-import { Card } from '@/components/ui/molecules/Card';
 import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Context & Utils
@@ -19,40 +19,19 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
-import { DataService } from '@/services/data/dataService';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { EvidenceItem } from '@/types';
 import { ViewMode } from '@/hooks/useEvidenceManager';
+import { EvidenceItem } from '@/types';
 
 interface EvidenceDashboardProps {
   onNavigate: (view: ViewMode) => void;
+  items?: EvidenceItem[];
 }
 
-export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate }) => {
+export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate, items = [] }) => {
   const { theme, mode } = useTheme();
 
-  // Load evidence from IndexedDB via useQuery for accurate, cached data
-  const { data } = useQuery(
-    queryKeys.evidence.all(),
-    () => DataService.evidence.getAll()
-  );
-
-  // Ensure evidence is always an array with proper type guards
-  const evidence = React.useMemo(() => {
-    if (!data) return [];
-    if (Array.isArray(data)) return data as EvidenceItem[];
-    // Handle paginated response with data property (backend pagination)
-    if (typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
-      return (data as Record<string, unknown>).data as EvidenceItem[];
-    }
-    // Handle object with items property
-    if (typeof data === 'object' && 'items' in data && Array.isArray((data as Record<string, unknown>).items)) {
-      return (data as Record<string, unknown>).items as EvidenceItem[];
-    }
-    console.warn('[EvidenceDashboard] Data is not an array:', data);
-    return [];
-  }, [data]);
+  // Use items passed from parent (EvidenceVault) which handles fetching and caching
+  const evidence = items;
 
   // Calculate stats from live data
   const stats = React.useMemo(() => ({
@@ -80,28 +59,28 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
       {/* Top Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <MetricCard
-            label="Total Evidence"
-            value={stats.total}
-            icon={Box}
-            className="border-l-4 border-l-blue-600"
+          label="Total Evidence"
+          value={stats.total}
+          icon={Box}
+          className="border-l-4 border-l-blue-600"
         />
         <MetricCard
-            label="Digital Assets"
-            value={stats.digital}
-            icon={HardDrive}
-            className="border-l-4 border-l-purple-600"
+          label="Digital Assets"
+          value={stats.digital}
+          icon={HardDrive}
+          className="border-l-4 border-l-purple-600"
         />
         <MetricCard
-            label="Admissibility Risk"
-            value={stats.challenged}
-            icon={AlertTriangle}
-            className="border-l-4 border-l-amber-500"
+          label="Admissibility Risk"
+          value={stats.challenged}
+          icon={AlertTriangle}
+          className="border-l-4 border-l-amber-500"
         />
         <MetricCard
-            label="Chain Integrity"
-            value={100}
-            icon={ShieldCheck}
-            className="border-l-4 border-l-emerald-600"
+          label="Chain Integrity"
+          value={100}
+          icon={ShieldCheck}
+          className="border-l-4 border-l-emerald-600"
         />
       </div>
 
@@ -124,7 +103,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
                 ))}
               </Pie>
               <Tooltip />
-              <Legend verticalAlign="bottom" height={36}/>
+              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </Card>
@@ -147,9 +126,9 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
               </div>
             ))}
             <div className="pt-2">
-                <Button variant="ghost" size="sm" className={cn("w-full", theme.primary.text)} onClick={() => onNavigate('custody')}>
+              <Button variant="ghost" size="sm" className={cn("w-full", theme.primary.text)} onClick={() => onNavigate('custody')}>
                 View Full Chain of Custody Log
-                </Button>
+              </Button>
             </div>
           </div>
         </Card>
@@ -162,17 +141,16 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
           <p className="opacity-80 text-sm">All digital assets are encrypted at rest (AES-256) and anchored to the Ethereum blockchain.</p>
         </div>
         <div className="flex gap-4 mt-4 md:mt-0">
-            <div className="text-center">
-                <p className="text-xs opacity-60 uppercase">Storage Used</p>
-                <p className="text-xl font-mono font-bold text-emerald-400">4.2 TB</p>
-            </div>
-             <div className="text-center">
-                <p className="text-xs opacity-60 uppercase">Retention Policy</p>
-                <p className="text-xl font-mono font-bold text-blue-400">7 Years</p>
-            </div>
+          <div className="text-center">
+            <p className="text-xs opacity-60 uppercase">Storage Used</p>
+            <p className="text-xl font-mono font-bold text-emerald-400">4.2 TB</p>
+          </div>
+          <div className="text-center">
+            <p className="text-xs opacity-60 uppercase">Retention Policy</p>
+            <p className="text-xl font-mono font-bold text-blue-400">7 Years</p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-

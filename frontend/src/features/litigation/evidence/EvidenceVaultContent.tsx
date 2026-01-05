@@ -8,7 +8,7 @@
 import React, { lazy } from 'react';
 
 // Types
-import { ViewMode, EvidenceFilters } from '@/hooks/useEvidenceManager';
+import { EvidenceFilters, ViewMode } from '@/hooks/useEvidenceManager';
 import { EvidenceItem } from '@/types';
 
 // Lazy Loaded Components
@@ -32,11 +32,11 @@ interface EvidenceVaultContentProps {
 export function EvidenceVaultContent({
   view, evidenceItems, filteredItems, filters, setFilters, onItemClick, onIntakeClick, onIntakeComplete, onNavigate
 }: EvidenceVaultContentProps) {
-    switch (view) {
-      case 'dashboard': return <EvidenceDashboard onNavigate={onNavigate} />;
-      case 'inventory': return <EvidenceInventory items={evidenceItems} filteredItems={filteredItems} filters={filters} setFilters={setFilters} onItemClick={onItemClick} onIntakeClick={onIntakeClick} />;
-      case 'custody': return <EvidenceCustodyLog />;
-      case 'intake': return <EvidenceIntake handleBack={() => onNavigate('inventory')} onComplete={onIntakeComplete} />;
-      default: return <EvidenceDashboard onNavigate={onNavigate} />;
-    }
+  switch (view) {
+    case 'dashboard': return <EvidenceDashboard onNavigate={onNavigate} items={evidenceItems} />;
+    case 'inventory': return <EvidenceInventory items={evidenceItems} filteredItems={filteredItems} filters={filters} setFilters={setFilters} onItemClick={onItemClick} onIntakeClick={onIntakeClick} />;
+    case 'custody': return <EvidenceCustodyLog items={evidenceItems} />;
+    case 'intake': return <EvidenceIntake handleBack={() => onNavigate('inventory')} onComplete={onIntakeComplete} />;
+    default: return <EvidenceDashboard onNavigate={onNavigate} items={evidenceItems} />;
+  }
 }

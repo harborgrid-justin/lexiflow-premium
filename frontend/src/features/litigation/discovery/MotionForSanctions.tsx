@@ -15,20 +15,24 @@ import { FileWarning, Gavel, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
 
-export const MotionForSanctions: React.FC = () => {
+interface MotionForSanctionsProps {
+    caseId?: string;
+}
+
+export const MotionForSanctions: React.FC<MotionForSanctionsProps> = ({ caseId }) => {
     const { theme } = useTheme();
     const sanctionModal = useModalState();
     const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
     const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
-        queryKeys.sanctions.all(),
-        () => DataService.discovery.getSanctions()
+        caseId ? queryKeys.sanctions.byCase(caseId) : queryKeys.sanctions.all(),
+        () => DataService.discovery.getSanctions(caseId)
     );
 
     const { mutate: addSanction } = useMutation(
         DataService.discovery.addSanctionMotion,
         {
-            invalidateKeys: [queryKeys.sanctions.all()],
+            invalidateKeys: [caseId ? queryKeys.sanctions.byCase(caseId) : queryKeys.sanctions.all()],
             onSuccess: () => { sanctionModal.close(); setNewMotion({}); }
         }
     );
@@ -36,8 +40,9 @@ export const MotionForSanctions: React.FC = () => {
     const handleSave = () => {
         if (!newMotion.title) return;
         addSanction({
-            id: `sanc-${Date.now()}`,
-            caseId: 'General',
+            // id: ... let backend handle it or generate UUID
+            id: crypto.randomUUID(),
+            caseId: caseId || 'General',
             title: newMotion.title,
             ruleBasis: newMotion.ruleBasis as never || 'Rule 37(a)',
             status: 'Draft',

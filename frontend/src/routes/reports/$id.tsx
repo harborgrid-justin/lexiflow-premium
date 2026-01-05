@@ -87,9 +87,33 @@ export default function ReportViewerRoute() {
 
       switch (format) {
         case 'pdf':
-          // TODO: Implement PDF export with charts
-          console.log('Exporting to PDF...', exportData);
-          alert('PDF export will be implemented with jsPDF library');
+          try {
+            const doc = new jsPDF();
+            doc.setFontSize(20);
+            doc.text(report.name, 20, 20);
+
+            doc.setFontSize(12);
+            doc.text(`Generated: ${new Date(report.generatedAt).toLocaleString()}`, 20, 30);
+            doc.text(`Period: ${report.period.start} to ${report.period.end}`, 20, 40);
+            doc.text(report.description, 20, 50);
+
+            let y = 70;
+            doc.setFontSize(16);
+            doc.text("Summary", 20, y);
+            y += 10;
+
+            doc.setFontSize(12);
+            Object.entries(report.data.summary).forEach(([key, value]) => {
+              const label = key.replace(/([A-Z])/g, ' $1').trim();
+              doc.text(`${label}: ${value}`, 20, y);
+              y += 10;
+            });
+
+            doc.save(`${report.name.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+          } catch (error) {
+            console.error("Failed to export PDF", error);
+            alert("Failed to export PDF");
+          }
           break;
         case 'excel':
           // Convert data for Excel export

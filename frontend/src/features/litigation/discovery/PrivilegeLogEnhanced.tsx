@@ -9,82 +9,33 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import type { CaseId } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
 import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
 
-export const PrivilegeLogEnhanced: React.FC = () => {
+interface PrivilegeLogEnhancedProps {
+  caseId?: string;
+}
+
+export const PrivilegeLogEnhanced: React.FC<PrivilegeLogEnhancedProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPrivilegeType, setFilterPrivilegeType] = useState<string>('all');
 
-  const [entries] = useState<PrivilegeLogEntryEnhanced[]>([
-    {
-      id: 'PL-001',
-      caseId: 'C-2024-001' as CaseId,
-      batesNumber: 'WITHHOLD-001',
-      documentDate: '2023-10-15',
-      author: 'Jane Smith',
-      authorRole: 'General Counsel',
-      recipients: ['External Counsel'],
-      recipientRoles: ['Outside Attorney'],
-      subject: 'Re: Litigation Strategy Discussion',
-      documentType: 'Email',
-      privilegeType: 'attorney-client',
-      privilegeBasis: 'Communication between client and attorney for purpose of obtaining legal advice',
-      description: 'Email discussing potential litigation strategy and settlement options',
-      confidentialityLevel: 'attorneys_eyes_only',
-      withholdingParty: 'Defendant',
-      objectionStatus: 'none',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15'
-    },
-    {
-      id: 'PL-002',
-      caseId: 'C-2024-001' as CaseId,
-      batesNumber: 'WITHHOLD-002',
-      documentDate: '2023-11-03',
-      author: 'Legal Department',
-      authorRole: 'In-House Counsel',
-      recipients: ['Management Team'],
-      recipientRoles: ['Executive'],
-      subject: 'Litigation Preparation Memo',
-      documentType: 'Memorandum',
-      privilegeType: 'work-product',
-      privilegeBasis: 'Document prepared in anticipation of litigation',
-      description: 'Internal memorandum analyzing case strengths and weaknesses prepared by counsel',
-      confidentialityLevel: 'confidential',
-      withholdingParty: 'Defendant',
-      objectionStatus: 'none',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15'
-    },
-    {
-      id: 'PL-003',
-      caseId: 'C-2024-001' as CaseId,
-      batesNumber: 'WITHHOLD-003',
-      documentDate: '2023-12-01',
-      author: 'John Doe',
-      authorRole: 'CEO',
-      recipients: ['Jane Smith', 'External Counsel'],
-      recipientRoles: ['General Counsel', 'Outside Attorney'],
-      subject: 'Confidential Legal Consultation',
-      documentType: 'Email Chain',
-      privilegeType: 'both',
-      privilegeBasis: 'Attorney-client communication and work product prepared in anticipation of litigation',
-      description: 'Email chain discussing legal options and attorney work product analysis',
-      confidentialityLevel: 'highly_confidential',
-      withholdingParty: 'Defendant',
-      objectionStatus: 'challenged',
-      notes: 'Opposing counsel has challenged this privilege assertion',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20'
-    }
-  ]);
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch Enhanced Privilege Log
+  const { data: entries = [], isLoading } = useQuery<PrivilegeLogEntryEnhanced[]>(
+    caseId ? ['discovery', 'privilege-log', 'enhanced', caseId] : ['discovery', 'privilege-log', 'enhanced'],
+    async () => discoveryRepo.getPrivilegeLogEnhanced(caseId)
+  );
 
   const getPrivilegeTypeBadge = (type: PrivilegeLogEntryEnhanced['privilegeType']) => {
     switch (type) {

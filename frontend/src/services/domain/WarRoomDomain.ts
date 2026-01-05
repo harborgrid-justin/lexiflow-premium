@@ -4,12 +4,12 @@
  */
 
 import { api } from "@/api";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import type {
   CreateAdvisorDto,
   CreateExpertDto,
   UpdateStrategyDto,
 } from "@/api/workflow/war-room-api";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const WarRoomService = {
   getAll: async () => {
@@ -89,6 +89,15 @@ export const WarRoomService = {
     } catch (error) {
       console.error("[WarRoomService.updateStrategy] Error:", error);
       return { ...data };
+    }
+  },
+
+  getOpposition: async (caseId: string) => {
+    try {
+      return await api.warRoom.getOpposition(caseId);
+    } catch (error) {
+      console.error("[WarRoomService.getOpposition] Error:", error);
+      return [];
     }
   },
 };

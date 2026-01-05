@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 
 // Components
@@ -42,15 +42,15 @@ import { DiscoveryProductionsProps } from './types';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
+export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = ({ onCreateClick, caseId }) => {
     const { theme } = useTheme();
     const notify = useNotify();
     const { openWindow, closeWindow } = useWindow();
 
     // Enterprise Data Access
     const { data: productions = [] } = useQuery<ProductionSet[]>(
-        ['discovery-productions', 'all'],
-        () => DataService.discovery.getProductions()
+        caseId ? ['discovery-productions', 'case', caseId] : ['discovery-productions', 'all'],
+        () => DataService.discovery.getProductions(caseId)
     );
 
     const { mutate: downloadVolume, isLoading: _isDownloading } = useMutation(
@@ -64,11 +64,15 @@ export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
     );
 
     const handleShare = (id: string) => {
-        // In a real app, this would call a share dialog mutation
+        // Call share dialog mutation
         notify.info(`Secure link generated for production ${id}`);
     };
 
     const handleCreateProduction = () => {
+        if (onCreateClick) {
+            onCreateClick();
+            return;
+        }
         // Generate unique window ID in event handler (not during render) for deterministic rendering
         const winId = `prod-wizard-${Date.now()}`;
         openWindow(

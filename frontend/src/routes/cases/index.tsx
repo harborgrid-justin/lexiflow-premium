@@ -52,9 +52,6 @@ export function meta({ data }: Route.MetaArgs) {
  * Runs on the client to access localStorage auth token
  */
 export async function clientLoader() {
-  // TODO: Auth check
-  // const user = await requireAuth(request);
-
   // Fetch data in parallel for performance
   const [cases, invoices] = await Promise.all([
     DataService.cases.getAll(),

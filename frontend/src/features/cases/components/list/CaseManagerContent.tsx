@@ -39,9 +39,10 @@ const MasterWorkflow = lazy(() => import('../workflow/MasterWorkflow').then(m =>
 interface CaseManagerContentProps {
   activeTab: MatterView | string;
   currentUserRole?: string;
+  onSelectCase?: (id: string) => void;
 }
 
-export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTab }) => {
+export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTab, onSelectCase }) => {
   // Fetch cases for list views that need them
   const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => api.cases.getAll());
 
@@ -58,6 +59,12 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
     setSearchTerm('');
     setDateFrom('');
     setDateTo('');
+  };
+
+  const handleCaseSelect = (c: any) => {
+    if (onSelectCase) {
+      onSelectCase(c.id || c);
+    }
   };
 
   const renderContent = () => {
@@ -78,7 +85,7 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
           dateTo={dateTo}
           setDateTo={setDateTo}
           resetFilters={resetFilters}
-          onSelectCase={(c) => console.log('Selected:', c)}
+          onSelectCase={handleCaseSelect}
         />;
       case 'intake':
         return <CaseListIntake />;
@@ -87,13 +94,13 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
       case 'operations':
         return <CaseOperationsCenter />;
       case 'workflows':
-        return <MasterWorkflow onSelectCase={(c) => console.log('Selected:', c)} />;
+        return <MasterWorkflow onSelectCase={handleCaseSelect} />;
       case 'docket':
-        return <CaseListDocket onSelectCase={(c) => console.log('Selected:', c)} />;
+        return <CaseListDocket onSelectCase={handleCaseSelect} />;
       case 'tasks':
-        return <CaseListTasks onSelectCase={(c) => console.log('Selected:', c)} />;
+        return <CaseListTasks onSelectCase={handleCaseSelect} />;
       case 'conflicts':
-        return <CaseListConflicts onSelectCase={(c) => console.log('Selected:', c)} />;
+        return <CaseListConflicts onSelectCase={handleCaseSelect} />;
       case 'calendar':
         return <CaseCalendar />;
       case 'financials':
@@ -111,7 +118,7 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
       case 'closing':
         return <CaseListClosing />;
       case 'archived':
-        return <CaseListArchived onSelectCase={(c) => console.log('Selected:', c)} />;
+        return <CaseListArchived onSelectCase={handleCaseSelect} />;
       case 'misc':
         return <CaseListMisc />;
       case 'analytics':

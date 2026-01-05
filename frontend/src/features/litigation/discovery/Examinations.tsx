@@ -14,20 +14,24 @@ import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/core';
 
-export const Examinations = () => {
+interface ExaminationsProps {
+    caseId?: string;
+}
+
+export const Examinations: React.FC<ExaminationsProps> = ({ caseId }) => {
     const { theme } = useTheme();
     const examModal = useModalState();
     const [newExam, setNewExam] = useState<Partial<Examination>>({});
 
     const { data: exams = [] } = useQuery<Examination[]>(
-        ['examinations', 'all'],
-        () => DataService.discovery.getExaminations()
+        caseId ? ['examinations', 'case', caseId] : ['examinations', 'all'],
+        () => DataService.discovery.getExaminations(caseId)
     );
 
     const { mutate: addExam } = useMutation(
         DataService.discovery.addExamination,
         {
-            invalidateKeys: [['examinations', 'all']],
+            invalidateKeys: [caseId ? ['examinations', 'case', caseId] : ['examinations', 'all']],
             onSuccess: () => {
                 examModal.close();
                 setNewExam({});
@@ -38,8 +42,8 @@ export const Examinations = () => {
     const handleSave = () => {
         if (!newExam.examinee || !newExam.type) return;
         addExam({
-            id: `exam-${Date.now()}`,
-            caseId: 'General',
+            id: crypto.randomUUID(),
+            caseId: caseId || 'General',
             examinee: newExam.examinee,
             type: newExam.type as 'Physical' | 'Mental',
             doctorName: newExam.doctorName || 'Pending Selection',

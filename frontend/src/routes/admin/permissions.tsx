@@ -5,6 +5,7 @@
  */
 
 import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
+import { RolesService } from '@/services/api/roles.service';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/permissions';
@@ -14,8 +15,27 @@ interface Permission extends PermissionDefinition {
 }
 
 export async function loader(_args: Route.LoaderArgs) {
-  // TODO: Fetch role counts from backend when available
-  return { permissions: SYSTEM_PERMISSIONS };
+  const rolesService = new RolesService();
+  let roleCounts: Record<string, number> = {};
+
+  try {
+    const roles = await rolesService.getRoles();
+    // Count how many roles have each permission
+    roles.forEach(role => {
+      role.permissions.forEach(permId => {
+        roleCounts[permId] = (roleCounts[permId] || 0) + 1;
+      });
+    });
+  } catch (error) {
+    console.error("Failed to fetch roles for permission counts", error);
+  }
+
+  const permissions = SYSTEM_PERMISSIONS.map(p => ({
+    ...p,
+    roleCount: roleCounts[p.id] || 0
+  }));
+
+  return { permissions };
 }
 
 export default function AdminPermissionsPage() {

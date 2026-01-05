@@ -140,12 +140,40 @@ export default function Layout() {
   }, [navigate]);
 
   const handleNeuralCommand = useCallback((intent: IntentResult) => {
-    // TODO: Implement neural command handling
     console.log('Neural command:', intent);
-  }, []);
+
+    if (intent.confidence < 0.7) {
+      return;
+    }
+
+    switch (intent.action) {
+      case 'NAVIGATE':
+        if (intent.targetModule) {
+          navigate(`/${intent.targetModule.toLowerCase()}`);
+        }
+        break;
+      case 'CREATE':
+        if (intent.targetModule === 'Case') {
+          navigate('/cases/new');
+        } else if (intent.targetModule === 'Document') {
+          navigate('/documents/upload');
+        }
+        break;
+      case 'SEARCH':
+        if (intent.context) {
+          // TODO: Implement search navigation when search route is ready
+          console.log("Search requested:", intent.context);
+        }
+        break;
+    }
+  }, [navigate]);
 
   const handleGlobalSearch = useCallback(() => {
-    // TODO: Implement global search action
+    // Focus search bar or open search modal
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.focus();
+    }
   }, []);
 
   const handleResetMainContent = useCallback(() => {

@@ -4,8 +4,8 @@
  * Trial war room collaboration - advisors, experts, and case strategy
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Advisor, Expert, CaseStrategy, ExpertType } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { Advisor, CaseStrategy, Expert, ExpertType } from "@/types";
 
 // DTOs matching backend war-room.dto.ts
 export interface CreateAdvisorDto {
@@ -35,13 +35,15 @@ export interface UpdateStrategyDto {
 }
 
 export class WarRoomApiService {
-  private readonly baseUrl = '/war-room';
+  private readonly baseUrl = "/war-room";
 
   // === ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
   async getAdvisors(query?: Record<string, string>): Promise<Advisor[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}/advisors?${queryString}` : `${this.baseUrl}/advisors`;
+    const url = queryString
+      ? `${this.baseUrl}/advisors?${queryString}`
+      : `${this.baseUrl}/advisors`;
     return apiClient.get<Advisor[]>(url);
   }
 
@@ -61,7 +63,9 @@ export class WarRoomApiService {
   async getExperts(query?: Record<string, string>): Promise<Expert[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}/experts?${queryString}` : `${this.baseUrl}/experts`;
+    const url = queryString
+      ? `${this.baseUrl}/experts?${queryString}`
+      : `${this.baseUrl}/experts`;
     return apiClient.get<Expert[]>(url);
   }
 
@@ -82,12 +86,29 @@ export class WarRoomApiService {
     return apiClient.get(`${this.baseUrl}/${caseId}`);
   }
 
+  // Alias for Domain Service compatibility
+  async getData(caseId: string): Promise<unknown> {
+    return this.getWarRoomData(caseId);
+  }
+
   // === STRATEGY === (backend: GET/PUT /war-room/:caseId/strategy)
   async getStrategy(caseId: string): Promise<CaseStrategy> {
     return apiClient.get<CaseStrategy>(`${this.baseUrl}/${caseId}/strategy`);
   }
 
-  async updateStrategy(caseId: string, data: UpdateStrategyDto): Promise<CaseStrategy> {
-    return apiClient.put<CaseStrategy>(`${this.baseUrl}/${caseId}/strategy`, data);
+  async updateStrategy(
+    caseId: string,
+    data: UpdateStrategyDto
+  ): Promise<CaseStrategy> {
+    return apiClient.put<CaseStrategy>(
+      `${this.baseUrl}/${caseId}/strategy`,
+      data
+    );
+  }
+
+  // === OPPOSITION === (Placeholder for future backend implementation)
+  async getOpposition(caseId: string): Promise<unknown[]> {
+    // Return empty array to prevent crash until backend is implemented
+    return [];
   }
 }

@@ -3,21 +3,33 @@
  * Manages legal hold notices and preservation obligations
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { LegalHold, LegalHoldFilters } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { LegalHold, LegalHoldFilters } from "@/types";
+import type { LegalHoldEnhanced } from "@/types/discovery-enhanced";
 
 export class LegalHoldsApiService {
-  private readonly baseUrl = '/legal-holds';
+  private readonly baseUrl = "/legal-holds";
 
   async getAll(filters?: LegalHoldFilters): Promise<LegalHold[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.custodianId) params.append('custodianId', filters.custodianId);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.custodianId) params.append("custodianId", filters.custodianId);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     const response = await apiClient.get<{ items: LegalHold[] }>(url);
     // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
+  }
+
+  async getEnhanced(filters?: LegalHoldFilters): Promise<LegalHoldEnhanced[]> {
+    const params = new URLSearchParams();
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    const queryString = params.toString();
+    const url = queryString
+      ? `${this.baseUrl}/enhanced?${queryString}`
+      : `${this.baseUrl}/enhanced`;
+    const response = await apiClient.get<{ items: LegalHoldEnhanced[] }>(url);
     return Array.isArray(response) ? response : response.items || [];
   }
 

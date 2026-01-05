@@ -36,8 +36,8 @@ import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
-import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useToggle } from '@/hooks/useToggle';
 import { cn } from '@/utils/cn';
 
 // Data & Types
@@ -63,7 +63,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
     // Using caseId in query key ensures React Query manages cache independently per case
     const { data: exhibitsData = [], isLoading, error, refetch } = useQuery<TrialExhibit[]>(
         ['exhibits', caseId || 'all'],
-        DataService.exhibits.getAll
+        () => DataService.exhibits.getAll(caseId ? { caseId } : undefined)
     );
 
     // Ensure exhibits is always an array

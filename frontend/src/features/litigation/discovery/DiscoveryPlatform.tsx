@@ -150,27 +150,27 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     const discovery = DataService.discovery as unknown as DiscoveryRepository;
     await discovery.updateRequestStatus(reqId, 'Responded');
     queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
-    alert(`Response saved for ${reqId}. Status updated to Responded.`);
+    notify.success(`Response saved for ${reqId}. Status updated to Responded.`);
     setActiveTab('requests');
   };
 
   const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
 
   const tabContentMap = useMemo(() => ({
-    'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} />,
+    'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} caseId={caseId} />,
     'requests': <DiscoveryRequests items={requests} onNavigate={handleNavigate} />,
-    'depositions': <DiscoveryDepositions />,
-    'examinations': <Examinations />,
-    'custodians': <Custodians />,
-    'esi': <ESISourcesList />,
-    'productions': <DiscoveryProductions onCreateClick={() => setActiveTab('production_wizard')} />,
-    'interviews': <DiscoveryInterviews />,
-    'privilege': <PrivilegeLogEnhanced />,
-    'holds': <LegalHoldsEnhanced />,
-    'collections': <Collections />,
-    'processing': <Processing />,
-    'review': <Review />,
-    'timeline': <DiscoveryTimeline />,
+    'depositions': <DiscoveryDepositions caseId={caseId} />,
+    'examinations': <Examinations caseId={caseId} />,
+    'custodians': <Custodians caseId={caseId} />,
+    'esi': <ESISourcesList caseId={caseId} />,
+    'productions': <DiscoveryProductions caseId={caseId} onCreateClick={() => setActiveTab('production_wizard')} />,
+    'interviews': <DiscoveryInterviews caseId={caseId} />,
+    'privilege': <PrivilegeLogEnhanced caseId={caseId} />,
+    'holds': <LegalHoldsEnhanced caseId={caseId} />,
+    'collections': <Collections caseId={caseId} />,
+    'processing': <Processing caseId={caseId} />,
+    'review': <Review caseId={caseId} />,
+    'timeline': <DiscoveryTimeline caseId={caseId} />,
     'plan': (
       <div className={cn("p-12 flex flex-col items-center justify-center h-full text-center rounded-lg border-2 border-dashed", theme.border.default)}>
         <Users className={cn("h-16 w-16 mb-4 opacity-20", theme.text.primary)} />
@@ -192,7 +192,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
             <div className="p-6 h-full"><DiscoveryResponse request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('requests')} onSave={handleSaveResponse} /></div>
           )}
           {activeTab === 'production_wizard' && (
-            <div className="h-full"><ProductionWizard onComplete={() => setActiveTab('productions')} onCancel={() => setActiveTab('productions')} /></div>
+            <div className="h-full"><ProductionWizard caseId={caseId} onComplete={() => setActiveTab('productions')} onCancel={() => setActiveTab('productions')} /></div>
           )}
         </Suspense>
       </div>

@@ -145,7 +145,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
     case "add-document": {
       // Handle document upload
-      const file = formData.get("file");
+      const file = formData.get("file") as File;
       const title = formData.get("title") as string;
 
       if (!file || !title) {
@@ -153,9 +153,15 @@ export async function action({ params, request }: Route.ActionArgs) {
       }
 
       try {
-        // TODO: Implement document upload
+        await DataService.documents.upload(file, {
+          title,
+          caseId,
+          category: 'case_document',
+          uploadedAt: new Date().toISOString()
+        });
         return { success: true, message: "Document added" };
-      } catch {
+      } catch (error) {
+        console.error("Failed to add document", error);
         return { success: false, error: "Failed to add document" };
       }
     }

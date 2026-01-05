@@ -3,55 +3,48 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalEntity } from '@/types';
 import { cn } from '@/utils/cn';
-import { CheckCircle, Clock, TrendingDown } from 'lucide-react';
+import { CheckCircle, Clock, Plus, TrendingDown } from 'lucide-react';
 import React from 'react';
+
+interface Rate {
+    firm: string;
+    role: string;
+    standardRate: number;
+    negotiatedRate: number;
+    savings: string;
+    effectiveDate: string;
+    status: string;
+}
 
 interface RateNegotiationProps {
     entities: LegalEntity[];
+    rates?: Rate[];
 }
 
-export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) => {
+export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities, rates = [] }) => {
     const { theme } = useTheme();
 
     const lawFirms = entities.filter(e => e.type === 'Law Firm');
 
-    // Mock rate data
-    const rates = lawFirms.map((firm) => ({
-        firm: firm.name,
-        role: 'Partner',
-        standardRate: 1100,
-        negotiatedRate: 850,
-        savings: '22%',
-        effectiveDate: '2024-01-01',
-        status: 'Approved'
-    }));
-
-    // Add associate rows
-    lawFirms.forEach((firm) => {
-        rates.push({
-            firm: firm.name,
-            role: 'Associate',
-            standardRate: 650,
-            negotiatedRate: 525,
-            savings: '19%',
-            effectiveDate: '2024-01-01',
-            status: 'Approved'
-        });
-    });
-
     return (
         <div className="space-y-6">
-            <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.status.success.bg, theme.status.success.border)}>
-                <div className="flex items-center gap-4">
-                    <div className={cn("p-3 bg-white/50 rounded-full shadow-sm", theme.status.success.text)}>
-                        <TrendingDown className="h-6 w-6" />
+            {rates.length > 0 && (
+                <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.status.success.bg, theme.status.success.border)}>
+                    <div className="flex items-center gap-4">
+                        <div className={cn("p-3 bg-white/50 rounded-full shadow-sm", theme.status.success.text)}>
+                            <TrendingDown className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h3 className={cn("text-lg font-bold", theme.status.success.text)}>Rate Optimization</h3>
+                            <p className={cn("text-sm", theme.status.success.text)}>Negotiated rates active.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className={cn("text-lg font-bold", theme.status.success.text)}>Rate Optimization</h3>
-                        <p className={cn("text-sm", theme.status.success.text)}>Total savings of <strong>$1.2M</strong> projected for FY2024 via negotiated discounts.</p>
-                    </div>
+                    <Button variant="outline" className={cn("bg-white/50 border-emerald-200", theme.status.success.text, "hover:bg-white")}>View Analytics</Button>
                 </div>
-                <Button variant="outline" className={cn("bg-white/50 border-emerald-200", theme.status.success.text, "hover:bg-white")}>View Analytics</Button>
+            )}
+
+            <div className="flex justify-end">
+                <Button variant="primary" size="sm" icon={Plus}>Add Rate</Button>
             </div>
 
             <TableContainer>

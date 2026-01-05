@@ -143,7 +143,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
   }, [cases, invoices]);
 
   const renderContent = () => {
-    return <CaseManagerContent activeTab={activeTab as MatterView} />;
+    return <CaseManagerContent activeTab={activeTab as MatterView} onSelectCase={onSelectCase} />;
   };
 
   return (

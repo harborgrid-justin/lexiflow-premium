@@ -17,6 +17,7 @@ import { PrivilegeLogApiService } from "../discovery/privilege-log-api";
 import { ProcessingApiService } from "../discovery/processing-api";
 import { ProductionsApiService } from "../discovery/productions-api";
 import { ReviewApiService } from "../discovery/review-api";
+import { TimelineApiService } from "../discovery/timeline-api";
 import { WitnessesApiService } from "../discovery/witnesses-api";
 
 // Export service classes
@@ -35,6 +36,7 @@ export {
   ProcessingApiService,
   ProductionsApiService,
   ReviewApiService,
+  TimelineApiService,
   WitnessesApiService,
 };
 
@@ -55,4 +57,5 @@ export const discoveryApi = {
   collections: new CollectionsApiService(),
   processing: new ProcessingApiService(),
   review: new ReviewApiService(),
+  timeline: new TimelineApiService(),
 } as const;

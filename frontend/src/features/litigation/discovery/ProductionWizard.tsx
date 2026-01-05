@@ -10,18 +10,53 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { ProductionSet } from '@/types';
 import { cn } from '@/utils/cn';
 import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
 import React, { useState } from 'react';
 
 interface ProductionWizardProps {
+  caseId?: string;
   onComplete: () => void;
   onCancel: () => void;
 }
 
-export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, onCancel }) => {
+export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onComplete, onCancel }) => {
   const { theme } = useTheme();
   const notify = useNotify();
+
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch documents count for initial selection
+  const { data: documentsCount } = useQuery(
+    ['documents', 'count', caseId],
+    async () => {
+      if (!caseId) return 0;
+      const docs = await DataService.documents.getByCaseId(caseId);
+      return docs.length;
+    },
+    { enabled: !!caseId }
+  );
+
+  const { mutate: createProduction, isLoading: isCreating } = useMutation(
+    async (newProduction: Partial<ProductionSet>) => {
+      return discoveryRepo.createProduction(newProduction);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidate(DISCOVERY_QUERY_KEYS.productions.all());
+        notify.success('Production set created successfully');
+        onComplete();
+      },
+      onError: () => {
+        notify.error('Failed to create production set');
+      }
+    }
+  );
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -40,13 +75,19 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
     batesStart: '',
     notes: '',
     // Document selection
-    selectedDocuments: 150,
+    selectedDocuments: 0,
     documentFilters: {
       responsive: true,
       dateRange: '',
       custodians: [] as string[]
     }
   });
+
+  React.useEffect(() => {
+    if (documentsCount !== undefined) {
+      setFormData(prev => ({ ...prev, selectedDocuments: documentsCount }));
+    }
+  }, [documentsCount]);
 
   const steps = [
     { number: 1, title: 'Basic Info', icon: FileText },
@@ -70,8 +111,26 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
   };
 
   const handleComplete = () => {
-    notify.success('Production set created successfully');
-    onComplete();
+    createProduction({
+      name: formData.productionName,
+      productionNumber: formData.productionNumber,
+      producingParty: formData.producingParty,
+      receivingParty: formData.receivingParty,
+      type: formData.productionType,
+      dueDate: formData.dueDate,
+      format: formData.format,
+      loadFileType: formData.loadFileType,
+      includeMetadata: formData.includeMetadata,
+      includeText: formData.includeText,
+      confidentialityDesignation: formData.confidentialityDesignation,
+      batesPrefix: formData.batesPrefix,
+      batesStart: formData.batesStart,
+      notes: formData.notes,
+      docCount: formData.selectedDocuments,
+      status: 'Staging',
+      size: '0 MB', // Initial size
+      date: new Date().toISOString().split('T')[0]
+    } as unknown as Partial<ProductionSet>);
   };
 
   const updateFormData = (field: string, value: unknown) => {

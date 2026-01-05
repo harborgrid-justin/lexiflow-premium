@@ -6,100 +6,26 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import type { CaseId } from '@/types';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
 import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 
-export const DiscoveryTimeline: React.FC = () => {
+interface DiscoveryTimelineProps {
+  caseId?: string;
+}
+
+export const DiscoveryTimeline: React.FC<DiscoveryTimelineProps> = ({ caseId }) => {
   const { theme } = useTheme();
 
-  const [events] = useState<DiscoveryTimelineEvent[]>([
-    {
-      id: 'EVT-001',
-      caseId: 'C-2024-001' as CaseId as CaseId,
-      eventType: 'hold_issued',
-      title: 'Legal Hold Issued',
-      description: 'Executive Communications Hold issued to 15 custodians',
-      eventDate: '2024-01-10',
-      status: 'completed',
-      relatedEntityType: 'hold',
-      relatedEntityId: 'LH-001',
-      completedAt: '2024-01-10T09:00:00Z',
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-10'
-    },
-    {
-      id: 'EVT-002',
-      caseId: 'C-2024-001' as CaseId,
-      eventType: 'collection',
-      title: 'Email Collection Started',
-      description: 'Collection of executive email accounts initiated',
-      eventDate: '2024-01-15',
-      status: 'completed',
-      relatedEntityType: 'collection',
-      relatedEntityId: 'COL-001',
-      completedAt: '2024-01-15T14:30:00Z',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-15'
-    },
-    {
-      id: 'EVT-003',
-      caseId: 'C-2024-001' as CaseId,
-      eventType: 'deadline',
-      title: 'Initial Disclosures Due',
-      description: 'FRCP 26(a)(1) initial disclosures deadline',
-      eventDate: '2024-02-01',
-      dueDate: '2024-02-01',
-      status: 'upcoming',
-      priority: 'high',
-      assignedTo: ['Legal Team'],
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-10'
-    },
-    {
-      id: 'EVT-004',
-      caseId: 'C-2024-001' as CaseId,
-      eventType: 'review_started',
-      title: 'Document Review Phase Begins',
-      description: 'First-pass review of 15,420 collected documents',
-      eventDate: '2024-01-20',
-      status: 'completed',
-      completedAt: '2024-01-20T08:00:00Z',
-      createdAt: '2024-01-20',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: 'EVT-005',
-      caseId: 'C-2024-001' as CaseId,
-      eventType: 'production',
-      title: 'Production 001 Due',
-      description: 'Initial document production to plaintiff',
-      eventDate: '2024-02-15',
-      dueDate: '2024-02-15',
-      status: 'upcoming',
-      priority: 'critical',
-      relatedEntityType: 'production',
-      relatedEntityId: 'PROD-001',
-      assignedTo: ['Discovery Team'],
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-10'
-    },
-    {
-      id: 'EVT-006',
-      caseId: 'C-2024-001' as CaseId,
-      eventType: 'deadline',
-      title: 'Fact Discovery Cutoff',
-      description: 'All fact discovery must be completed',
-      eventDate: '2024-04-30',
-      dueDate: '2024-04-30',
-      status: 'upcoming',
-      priority: 'critical',
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-10'
-    }
-  ]);
+  const { data: events = [], isLoading } = useQuery<DiscoveryTimelineEvent[]>(
+    caseId ? ['discovery', 'timeline', caseId] : ['discovery', 'timeline', 'all'],
+    () => (DataService.discovery as unknown as DiscoveryRepository).getTimelineEvents(caseId)
+  );
+
 
   const getEventIcon = (eventType: DiscoveryTimelineEvent['eventType']) => {
     switch (eventType) {

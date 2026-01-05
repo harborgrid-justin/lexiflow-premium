@@ -29,14 +29,18 @@ interface Custodian {
   updatedAt: string;
 }
 
-export const Custodians: React.FC = () => {
+interface CustodiansProps {
+  caseId?: string;
+}
+
+export const Custodians: React.FC<CustodiansProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
 
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
   const { data: rawCustodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
-    queryKeys.discoveryExtended.custodians(),
-    () => DataService.custodians.getAll()
+    caseId ? queryKeys.discoveryExtended.custodians(caseId) : queryKeys.discoveryExtended.custodians(),
+    () => DataService.custodians.getAll(caseId ? { caseId } : undefined)
   );
 
   // Ensure custodians is always an array to prevent .map() errors

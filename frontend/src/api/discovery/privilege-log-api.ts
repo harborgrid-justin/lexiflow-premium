@@ -5,6 +5,7 @@
 
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { PrivilegeLogEntry, PrivilegeLogFilters } from "@/types";
+import type { PrivilegeLogEntryEnhanced } from "@/types/discovery-enhanced";
 
 export class PrivilegeLogApiService {
   private readonly baseUrl = "/privilege-log";
@@ -20,6 +21,21 @@ export class PrivilegeLogApiService {
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     const response = await apiClient.get<{ items: PrivilegeLogEntry[] }>(url);
     // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
+  }
+
+  async getEnhanced(
+    filters?: PrivilegeLogFilters
+  ): Promise<PrivilegeLogEntryEnhanced[]> {
+    const params = new URLSearchParams();
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    const queryString = params.toString();
+    const url = queryString
+      ? `${this.baseUrl}/enhanced?${queryString}`
+      : `${this.baseUrl}/enhanced`;
+    const response = await apiClient.get<{
+      items: PrivilegeLogEntryEnhanced[];
+    }>(url);
     return Array.isArray(response) ? response : response.items || [];
   }
 

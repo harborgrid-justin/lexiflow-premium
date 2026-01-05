@@ -23,7 +23,11 @@ import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
-export const Collections: React.FC = () => {
+interface CollectionsProps {
+  caseId?: string;
+}
+
+export const Collections: React.FC<CollectionsProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const createModal = useModalState();
@@ -33,9 +37,9 @@ export const Collections: React.FC = () => {
 
   // Fetch Collections
   const { data: collections = [], isLoading } = useQuery<DataCollection[]>(
-    DISCOVERY_QUERY_KEYS.collections.all(),
+    caseId ? DISCOVERY_QUERY_KEYS.collections.byCase(caseId) : DISCOVERY_QUERY_KEYS.collections.all(),
     async () => {
-      return discoveryRepo.getCollections();
+      return discoveryRepo.getCollections(caseId);
     }
   );
 
@@ -46,7 +50,9 @@ export const Collections: React.FC = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(DISCOVERY_QUERY_KEYS.collections.all());
+        queryClient.invalidateQueries(
+          caseId ? DISCOVERY_QUERY_KEYS.collections.byCase(caseId) : DISCOVERY_QUERY_KEYS.collections.all()
+        );
         notify.success('Collection created successfully');
         createModal.close();
         setFormData({ collectionName: '', custodians: '', dataSources: '', dateStart: '', dateEnd: '', method: 'remote', notes: '' });
@@ -117,7 +123,7 @@ export const Collections: React.FC = () => {
     }
 
     const newCollection: Partial<DataCollection> = {
-      caseId: 'C-2024-001' as CaseId, // TODO: Get actual case ID from context
+      caseId: (caseId || 'C-2024-001') as CaseId,
       collectionName: formData.collectionName,
       custodians: formData.custodians.split(',').map(c => c.trim()),
       dataSources: formData.dataSources.split(',').map(s => s.trim()),

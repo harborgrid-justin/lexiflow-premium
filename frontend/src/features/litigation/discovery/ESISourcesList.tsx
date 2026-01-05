@@ -4,98 +4,71 @@
  * Track and manage data sources for collection
  */
 
-import React, { useState } from 'react';
-import { Database, Server, Mail, Cloud, HardDrive, Smartphone, Plus, CheckCircle, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { ESISource } from '@/types';
 import { cn } from '@/utils/cn';
+import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, Mail, Plus, Server, Smartphone } from 'lucide-react';
+import React, { useState } from 'react';
 
-interface ESISource {
-  id: string;
-  name: string;
-  type: 'email' | 'fileserver' | 'cloud' | 'database' | 'device' | 'other';
-  custodian: string;
-  location: string;
-  status: 'identified' | 'preserved' | 'collected' | 'processed';
-  estimatedSize: string;
-  actualSize?: string;
-  preservationDate?: string;
-  collectionDate?: string;
-  notes?: string;
+interface ESISourcesListProps {
+  caseId?: string;
 }
 
-export const ESISourcesList: React.FC = () => {
+export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const createModal = useModalState();
 
-  const [sources, setSources] = useState<ESISource[]>([
-    {
-      id: 'ESI-001',
-      name: 'Exchange Server - Executive Mailboxes',
-      type: 'email',
-      custodian: 'IT Department',
-      location: 'exchange.company.com',
-      status: 'collected',
-      estimatedSize: '1.5 TB',
-      actualSize: '1.48 TB',
-      preservationDate: '2024-01-10',
-      collectionDate: '2024-01-15',
-      notes: 'Legal hold applied to 15 executive mailboxes'
-    },
-    {
-      id: 'ESI-002',
-      name: 'SharePoint Site - Legal Department',
-      type: 'cloud',
-      custodian: 'Legal Team',
-      location: 'company.sharepoint.com/sites/legal',
-      status: 'preserved',
-      estimatedSize: '500 GB',
-      preservationDate: '2024-01-10',
-      notes: 'Awaiting collection authorization'
-    },
-    {
-      id: 'ESI-003',
-      name: 'John Doe - Laptop',
-      type: 'device',
-      custodian: 'John Doe',
-      location: 'Dell Laptop #4521',
-      status: 'identified',
-      estimatedSize: '500 GB',
-      notes: 'Pending device handover for forensic imaging'
-    },
-    {
-      id: 'ESI-004',
-      name: 'SQL Database - Customer Records',
-      type: 'database',
-      custodian: 'Database Admin',
-      location: 'sql-prod-01.company.com',
-      status: 'processed',
-      estimatedSize: '2.5 TB',
-      actualSize: '2.47 TB',
-      preservationDate: '2024-01-08',
-      collectionDate: '2024-01-12',
-      notes: 'Full database snapshot taken and processed'
-    },
-    {
-      id: 'ESI-005',
-      name: 'Slack Workspace',
-      type: 'cloud',
-      custodian: 'IT Department',
-      location: 'company.slack.com',
-      status: 'preserved',
-      estimatedSize: 'Unknown',
-      preservationDate: '2024-01-10',
-      notes: 'API access configured for data export'
+  // Access Discovery Repository
+  const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
+
+  // Fetch ESI Sources
+  const { data: sources = [], isLoading } = useQuery<ESISource[]>(
+    caseId ? DISCOVERY_QUERY_KEYS.esiSources.byCase(caseId) : DISCOVERY_QUERY_KEYS.esiSources.all(),
+    async () => {
+      return discoveryRepo.getESISources(caseId);
     }
-  ]);
+  );
+
+  // Create ESI Source Mutation
+  const { mutate: createSource, isLoading: isCreating } = useMutation(
+    async (newSource: Partial<ESISource>) => {
+      return discoveryRepo.addESISource(newSource as ESISource);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidate(DISCOVERY_QUERY_KEYS.esiSources.all());
+        if (caseId) {
+          queryClient.invalidate(DISCOVERY_QUERY_KEYS.esiSources.byCase(caseId));
+        }
+        notify.success('ESI Source added successfully');
+        createModal.close();
+        setFormData({
+          name: '',
+          type: 'email',
+          custodian: '',
+          location: '',
+          estimatedSize: '',
+          notes: ''
+        });
+      },
+      onError: () => {
+        notify.error('Failed to add ESI Source');
+      }
+    }
+  );
 
   const [formData, setFormData] = useState({
     name: '',
@@ -140,16 +113,11 @@ export const ESISourcesList: React.FC = () => {
       return;
     }
 
-    const newSource: ESISource = {
-      id: `ESI-${String(sources.length + 1).padStart(3, '0')}`,
+    createSource({
       ...formData,
-      status: 'identified'
-    };
-
-    setSources(prev => [...prev, newSource]);
-    notify.success('ESI source added successfully');
-    createModal.close();
-    setFormData({ name: '', type: 'email', custodian: '', location: '', estimatedSize: '', notes: '' });
+      status: 'identified',
+      caseId: caseId
+    } as ESISource);
   };
 
   const stats = {
@@ -159,6 +127,10 @@ export const ESISourcesList: React.FC = () => {
     collected: sources.filter(s => s.status === 'collected').length,
     processed: sources.filter(s => s.status === 'processed').length
   };
+
+  if (isLoading) {
+    return <LazyLoader message="Loading ESI Sources..." />;
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -234,45 +206,53 @@ export const ESISourcesList: React.FC = () => {
             <TableHead>Actions</TableHead>
           </TableHeader>
           <TableBody>
-            {sources.map((source) => (
-              <TableRow key={source.id}>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    {getSourceIcon(source.type)}
-                    <div>
-                      <div className={cn("font-medium", theme.text.primary)}>{source.name}</div>
-                      <div className={cn("text-xs", theme.text.tertiary)}>{source.id}</div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="neutral" size="sm">
-                    {source.type}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="text-sm">{source.custodian}</div>
-                </TableCell>
-                <TableCell>
-                  <div className={cn("text-sm font-mono", theme.text.secondary)}>{source.location}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    {getStatusIcon(source.status)}
-                    {getStatusBadge(source.status)}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-sm">{source.actualSize || source.estimatedSize}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    <Button size="sm" variant="ghost">View</Button>
-                    <Button size="sm" variant="ghost">Edit</Button>
-                  </div>
+            {sources.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                  No ESI sources found. Add one to get started.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              sources.map((source) => (
+                <TableRow key={source.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {getSourceIcon(source.type)}
+                      <div>
+                        <div className={cn("font-medium", theme.text.primary)}>{source.name}</div>
+                        <div className={cn("text-xs", theme.text.tertiary)}>{source.id}</div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="neutral" size="sm">
+                      {source.type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm">{source.custodian}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className={cn("text-sm font-mono", theme.text.secondary)}>{source.location}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(source.status)}
+                      {getStatusBadge(source.status)}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm">{source.actualSize || source.estimatedSize}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button size="sm" variant="ghost">View</Button>
+                      <Button size="sm" variant="ghost">Edit</Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </TableContainer>
       </div>
@@ -332,7 +312,7 @@ export const ESISourcesList: React.FC = () => {
           />
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
-            <Button variant="primary" onClick={handleCreateSource}>Add Source</Button>
+            <Button variant="primary" onClick={handleCreateSource} isLoading={isCreating}>Add Source</Button>
           </div>
         </div>
       </Modal>

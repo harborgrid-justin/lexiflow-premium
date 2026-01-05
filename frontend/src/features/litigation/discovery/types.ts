@@ -38,6 +38,7 @@ export interface ViewerDocumentState {
 
 export interface DiscoveryProductionsProps {
   onCreateClick: () => void;
+  caseId?: string;
 }
 
 export interface InitialDisclosureWizardProps {

@@ -49,6 +49,12 @@ import {
   Transcript,
   Vendor,
 } from "@/types";
+import type {
+  DocumentCoding,
+  LegalHoldEnhanced,
+  PrivilegeLogEntryEnhanced,
+  ReviewDocument,
+} from "@/types/discovery-enhanced";
 import { delay } from "@/utils/async";
 
 /**
@@ -1497,6 +1503,18 @@ import { Custodian } from "@/api/discovery/custodians-api";
   };
 
   /**
+   * Get enhanced legal holds
+   */
+  getLegalHoldsEnhanced = async (): Promise<LegalHoldEnhanced[]> => {
+    if (this.useBackend) {
+      return discoveryApi.legalHolds.getEnhanced();
+    }
+    // Fallback to regular holds cast as enhanced (incomplete data but prevents crash)
+    const holds = await this.getLegalHolds();
+    return holds as unknown as LegalHoldEnhanced[];
+  };
+
+  /**
    * Get privilege log entries
    *
    * @returns Promise<PrivilegeLogEntry[]> Array of privilege log entries
@@ -1523,6 +1541,18 @@ import { Custodian } from "@/api/discovery/custodians-api";
         "Failed to fetch privilege log"
       );
     }
+  };
+
+  /**
+   * Get enhanced privilege log entries
+   */
+  getPrivilegeLogEnhanced = async (): Promise<PrivilegeLogEntryEnhanced[]> => {
+    if (this.useBackend) {
+      return discoveryApi.privilegeLog.getEnhanced();
+    }
+    // Fallback
+    const entries = await this.getPrivilegeLog();
+    return entries as unknown as PrivilegeLogEntryEnhanced[];
   };
 
   // =============================================================================
@@ -1669,5 +1699,19 @@ import { Custodian } from "@/api/discovery/custodians-api";
       return;
     }
     await db.delete(STORES.DISCOVERY_COLLECTIONS, id);
+  };
+
+  /**
+   * Get discovery timeline events
+   * @param caseId Optional case ID to filter by
+   */
+  getTimelineEvents = async (
+    caseId?: string
+  ): Promise<DiscoveryTimelineEvent[]> => {
+    if (isBackendApiEnabled()) {
+      return discoveryApi.timeline.getEvents(caseId);
+    }
+    // Fallback to local DB or empty array if not implemented locally
+    return [];
   };
 }

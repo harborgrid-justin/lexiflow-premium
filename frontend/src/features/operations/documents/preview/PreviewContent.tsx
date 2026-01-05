@@ -74,7 +74,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
                 setRotation={setRotation}
                 pageNum={pageNum}
                 setPageNum={setPageNum}
-                totalPages={10} // Mock total pages as PDFViewer doesn't bubble it up yet in this simplified version
+                totalPages={doc.pageCount || 1}
             />
 
             {/* PDF Canvas Container */}

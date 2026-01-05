@@ -239,8 +239,8 @@ export function useEvidenceManager(caseId?: string): UseEvidenceVaultReturn {
    * Automatically filtered by case scope if caseId provided
    */
   const { data, isLoading } = useQuery<EvidenceItem[]>(
-    queryKeys.evidence.all(),
-    () => DataService.evidence.getAll()
+    caseId ? queryKeys.evidence.byCaseId(caseId) : queryKeys.evidence.all(),
+    () => DataService.evidence.getAll(caseId)
   );
 
   // Ensure allEvidenceItems is always an array

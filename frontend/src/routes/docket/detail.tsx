@@ -6,7 +6,7 @@
  * @module routes/docket/detail
  */
 
-import { api } from '@/api';
+import { DataService } from '@/services/data/dataService';
 import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
@@ -43,7 +43,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const item = await api.docket.getById(docketId as CaseId);
+    const item = await DataService.docket.getById(docketId as CaseId);
     if (!item) {
       throw new Response("Docket entry not found", { status: 404 });
     }

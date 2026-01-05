@@ -77,7 +77,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
     queryKeys.warRoom.advisors(caseId || ''),
-    () => DataService.warRoom.getAdvisors(caseId || '')
+    () => DataService.warRoom.getAdvisors(caseId ? { caseId } : undefined)
   );
 
   // ============================================================================

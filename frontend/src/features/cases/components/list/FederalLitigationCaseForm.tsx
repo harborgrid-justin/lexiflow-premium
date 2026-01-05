@@ -19,6 +19,7 @@
 import { api } from '@/api';
 import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
+import { DataService } from '@/services/data/dataService';
 import { Case, CaseStatus } from '@/types';
 import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
@@ -491,13 +492,8 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             error={state.errors.court}
             placeholder="Search court..."
             fetchFn={async (search: string) => {
-              // Mock court data - replace with actual API call
-              const courts = [
-                { id: '1', name: 'U.S. District Court Eastern District of Virginia - (Alexandria)' },
-                { id: '2', name: 'U.S. District Court Southern District of New York' },
-                { id: '3', name: 'U.S. District Court Northern District of California' },
-              ];
-              return courts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+              const courts = await DataService.jurisdiction.getFederal();
+              return courts.filter((c: any) => c.name.toLowerCase().includes(search.toLowerCase()));
             }}
             getLabel={(court) => (court as unknown as { name: string }).name}
             getValue={(court) => (court as unknown as { name: string }).name}

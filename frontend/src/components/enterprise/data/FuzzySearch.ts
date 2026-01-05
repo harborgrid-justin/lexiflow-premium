@@ -57,7 +57,7 @@ export interface FuzzySearchOptions {
   includeMatches?: boolean;
 
   /** Search algorithm. Default: 'combined' */
-  algorithm?: 'levenshtein' | 'damerau-levenshtein' | 'trigram' | 'combined';
+  algorithm?: "levenshtein" | "damerau-levenshtein" | "trigram" | "combined";
 
   /** Field weights for multi-field search. Default: equal weights */
   fieldWeights?: Record<string, number>;
@@ -104,18 +104,18 @@ export function fuzzySearch<T extends Record<string, unknown>>(
     ignoreAccents = true,
     limit,
     includeMatches = false,
-    algorithm = 'combined',
+    algorithm = "combined",
     fieldWeights = {},
     usePhonetic = false,
   } = options;
 
-  if (!query || query.trim() === '') {
-    return data.map(item => ({ item, score: 1, matches: [] }));
+  if (!query || query.trim() === "") {
+    return data.map((item) => ({ item, score: 1, matches: [] }));
   }
 
   // Normalize query
   const normalizedQuery = normalizeString(query, ignoreCase, ignoreAccents);
-  const phoneticQuery = usePhonetic ? soundex(normalizedQuery) : '';
+  const phoneticQuery = usePhonetic ? soundex(normalizedQuery) : "";
 
   // Search each item
   const results: SearchResult<T>[] = [];
@@ -130,30 +130,37 @@ export function fuzzySearch<T extends Record<string, unknown>>(
       if (value == null) continue;
 
       const stringValue = String(value);
-      const normalizedValue = normalizeString(stringValue, ignoreCase, ignoreAccents);
+      const normalizedValue = normalizeString(
+        stringValue,
+        ignoreCase,
+        ignoreAccents
+      );
 
       // Calculate similarity based on algorithm
       let similarity = 0;
 
       switch (algorithm) {
-        case 'levenshtein': {
+        case "levenshtein": {
           similarity = levenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
         }
-        case 'damerau-levenshtein': {
-          similarity = damerauLevenshteinSimilarity(normalizedQuery, normalizedValue);
+        case "damerau-levenshtein": {
+          similarity = damerauLevenshteinSimilarity(
+            normalizedQuery,
+            normalizedValue
+          );
           break;
         }
-        case 'trigram': {
+        case "trigram": {
           similarity = trigramSimilarity(normalizedQuery, normalizedValue);
           break;
         }
-        case 'combined':
+        case "combined":
         default: {
           // Use weighted combination of algorithms
           const lev = levenshteinSimilarity(normalizedQuery, normalizedValue);
           const tri = trigramSimilarity(normalizedQuery, normalizedValue);
-          similarity = (lev * 0.6) + (tri * 0.4);
+          similarity = lev * 0.6 + tri * 0.4;
           break;
         }
       }
@@ -245,7 +252,7 @@ export function searchIndex<T extends Record<string, unknown>>(
     threshold = 0.6,
     sortByScore = true,
     limit,
-    algorithm = 'combined',
+    algorithm = "combined",
     fieldWeights = {},
   } = options;
 
@@ -262,23 +269,26 @@ export function searchIndex<T extends Record<string, unknown>>(
       let similarity = 0;
 
       switch (algorithm) {
-        case 'levenshtein': {
+        case "levenshtein": {
           similarity = levenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
         }
-        case 'damerau-levenshtein': {
-          similarity = damerauLevenshteinSimilarity(normalizedQuery, normalizedValue);
+        case "damerau-levenshtein": {
+          similarity = damerauLevenshteinSimilarity(
+            normalizedQuery,
+            normalizedValue
+          );
           break;
         }
-        case 'trigram': {
+        case "trigram": {
           similarity = trigramSimilarity(normalizedQuery, normalizedValue);
           break;
         }
-        case 'combined':
+        case "combined":
         default: {
           const lev = levenshteinSimilarity(normalizedQuery, normalizedValue);
           const tri = trigramSimilarity(normalizedQuery, normalizedValue);
-          similarity = (lev * 0.6) + (tri * 0.4);
+          similarity = lev * 0.6 + tri * 0.4;
           break;
         }
       }
@@ -319,27 +329,27 @@ export function levenshteinDistance(str1: string, str2: string): number {
   const len2 = str2.length;
 
   // Create matrix
-  const matrix: number[][] = Array(len1 + 1)
-    .fill(null)
-    .map(() => Array(len2 + 1).fill(0));
+  const matrix: number[][] = Array.from({ length: len1 + 1 }, () =>
+    Array(len2 + 1).fill(0)
+  );
 
   // Initialize first column and row
-  for (let i = 0; i <= len1; i++) matrix[i][0] = i;
-  for (let j = 0; j <= len2; j++) matrix[0][j] = j;
+  for (let i = 0; i <= len1; i++) matrix[i]![0] = i;
+  for (let j = 0; j <= len2; j++) matrix[0]![j] = j;
 
   // Calculate distances
   for (let i = 1; i <= len1; i++) {
     for (let j = 1; j <= len2; j++) {
       const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
-      matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,      // deletion
-        matrix[i][j - 1] + 1,      // insertion
-        matrix[i - 1][j - 1] + cost // substitution
+      matrix[i]![j] = Math.min(
+        matrix[i - 1]![j] + 1, // deletion
+        matrix[i]![j - 1] + 1, // insertion
+        matrix[i - 1]![j - 1] + cost // substitution
       );
     }
   }
 
-  return matrix[len1][len2];
+  return matrix[len1]![len2]!;
 }
 
 /**
@@ -352,7 +362,7 @@ export function levenshteinSimilarity(str1: string, str2: string): number {
   const distance = levenshteinDistance(str1, str2);
   const maxLength = Math.max(str1.length, str2.length);
 
-  return 1 - (distance / maxLength);
+  return 1 - distance / maxLength;
 }
 
 /**
@@ -363,18 +373,18 @@ export function damerauLevenshteinDistance(str1: string, str2: string): number {
   const len2 = str2.length;
   const maxDist = len1 + len2;
 
-  const matrix: number[][] = Array(len1 + 2)
-    .fill(null)
-    .map(() => Array(len2 + 2).fill(0));
+  const matrix: number[][] = Array.from({ length: len1 + 2 }, () =>
+    Array(len2 + 2).fill(0)
+  );
 
-  matrix[0][0] = maxDist;
+  matrix[0]![0] = maxDist;
   for (let i = 0; i <= len1; i++) {
-    matrix[i + 1][0] = maxDist;
-    matrix[i + 1][1] = i;
+    matrix[i + 1]![0] = maxDist;
+    matrix[i + 1]![1] = i;
   }
   for (let j = 0; j <= len2; j++) {
-    matrix[0][j + 1] = maxDist;
-    matrix[1][j + 1] = j;
+    matrix[0]![j + 1] = maxDist;
+    matrix[1]![j + 1] = j;
   }
 
   const charMap: Record<string, number> = {};
@@ -382,7 +392,7 @@ export function damerauLevenshteinDistance(str1: string, str2: string): number {
   for (let i = 1; i <= len1; i++) {
     let db = 0;
     for (let j = 1; j <= len2; j++) {
-      const k = charMap[str2[j - 1]] || 0;
+      const k = charMap[str2[j - 1]!] || 0;
       const l = db;
       let cost = 1;
 
@@ -391,30 +401,33 @@ export function damerauLevenshteinDistance(str1: string, str2: string): number {
         db = j;
       }
 
-      matrix[i + 1][j + 1] = Math.min(
-        matrix[i][j] + cost,           // substitution
-        matrix[i + 1][j] + 1,          // insertion
-        matrix[i][j + 1] + 1,          // deletion
-        matrix[k][l] + (i - k - 1) + 1 + (j - l - 1) // transposition
+      matrix[i + 1]![j + 1] = Math.min(
+        matrix[i]![j] + cost, // substitution
+        matrix[i + 1]![j] + 1, // insertion
+        matrix[i]![j + 1] + 1, // deletion
+        (matrix[k]![l] || 0) + (i - k - 1) + 1 + (j - l - 1) // transposition
       );
     }
-    charMap[str1[i - 1]] = i;
+    charMap[str1[i - 1]!] = i;
   }
 
-  return matrix[len1 + 1][len2 + 1];
+  return matrix[len1 + 1]![len2 + 1]!;
 }
 
 /**
  * Converts Damerau-Levenshtein distance to similarity score
  */
-export function damerauLevenshteinSimilarity(str1: string, str2: string): number {
+export function damerauLevenshteinSimilarity(
+  str1: string,
+  str2: string
+): number {
   if (str1 === str2) return 1;
   if (str1.length === 0 || str2.length === 0) return 0;
 
   const distance = damerauLevenshteinDistance(str1, str2);
   const maxLength = Math.max(str1.length, str2.length);
 
-  return 1 - (distance / maxLength);
+  return 1 - distance / maxLength;
 }
 
 /**
@@ -433,7 +446,7 @@ export function trigramSimilarity(str1: string, str2: string): number {
   // Calculate Jaccard similarity
   const set1 = new Set(trigrams1);
   const set2 = new Set(trigrams2);
-  const intersection = new Set([...set1].filter(x => set2.has(x)));
+  const intersection = new Set([...set1].filter((x) => set2.has(x)));
 
   return intersection.size / (set1.size + set2.size - intersection.size);
 }
@@ -442,7 +455,7 @@ export function trigramSimilarity(str1: string, str2: string): number {
  * Extracts trigrams from a string
  */
 function getTrigrams(str: string): string[] {
-  const padded = '  ' + str + '  ';
+  const padded = "  " + str + "  ";
   const trigrams: string[] = [];
 
   for (let i = 0; i < padded.length - 2; i++) {
@@ -460,36 +473,48 @@ function getTrigrams(str: string): string[] {
  * Simplified Soundex algorithm for phonetic matching
  */
 export function soundex(str: string): string {
-  if (!str) return '';
+  if (!str) return "";
 
-  const normalized = str.toUpperCase().replace(/[^A-Z]/g, '');
-  if (normalized.length === 0) return '';
+  const normalized = str.toUpperCase().replace(/[^A-Z]/g, "");
+  if (normalized.length === 0) return "";
 
   const codes: Record<string, string> = {
-    B: '1', F: '1', P: '1', V: '1',
-    C: '2', G: '2', J: '2', K: '2', Q: '2', S: '2', X: '2', Z: '2',
-    D: '3', T: '3',
-    L: '4',
-    M: '5', N: '5',
-    R: '6',
+    B: "1",
+    F: "1",
+    P: "1",
+    V: "1",
+    C: "2",
+    G: "2",
+    J: "2",
+    K: "2",
+    Q: "2",
+    S: "2",
+    X: "2",
+    Z: "2",
+    D: "3",
+    T: "3",
+    L: "4",
+    M: "5",
+    N: "5",
+    R: "6",
   };
 
-  let soundexCode = normalized[0];
-  let prevCode = codes[normalized[0]] || '';
+  let soundexCode = normalized[0]!;
+  let prevCode = codes[normalized[0]!] || "";
 
   for (let i = 1; i < normalized.length && soundexCode.length < 4; i++) {
-    const char = normalized[i];
-    const code = codes[char] || '';
+    const char = normalized[i]!;
+    const code = codes[char] || "";
 
     if (code && code !== prevCode) {
       soundexCode += code;
       prevCode = code;
     } else if (!code) {
-      prevCode = '';
+      prevCode = "";
     }
   }
 
-  return soundexCode.padEnd(4, '0');
+  return soundexCode.padEnd(4, "0");
 }
 
 // ============================================================================
@@ -511,7 +536,7 @@ function normalizeString(
   }
 
   if (ignoreAccents) {
-    normalized = normalized.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    normalized = normalized.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   return normalized.trim();
@@ -521,8 +546,8 @@ function normalizeString(
  * Gets nested value from object using dot notation
  */
 function getNestedValue(obj: unknown, path: string): unknown {
-  return path.split('.').reduce((acc: unknown, part) => {
-    if (acc && typeof acc === 'object' && part in acc) {
+  return path.split(".").reduce((acc: unknown, part) => {
+    if (acc && typeof acc === "object" && part in acc) {
       return (acc as Record<string, unknown>)[part];
     }
     return undefined;
@@ -546,12 +571,12 @@ function findMatchIndices(text: string, query: string): [number, number][] {
 
   // If no exact matches, find partial matches
   if (indices.length === 0) {
-    const queryChars = query.split('');
+    const queryChars = query.split("");
     let currentStart = -1;
     let currentEnd = -1;
 
     for (let i = 0; i < text.length; i++) {
-      if (queryChars.some(char => text[i] === char)) {
+      if (queryChars.some((char) => text[i] === char)) {
         if (currentStart === -1) {
           currentStart = i;
         }
@@ -577,11 +602,11 @@ function findMatchIndices(text: string, query: string): [number, number][] {
 export function highlightMatches(
   text: string,
   matches: [number, number][],
-  highlightClass: string = 'highlight'
+  highlightClass: string = "highlight"
 ): string {
   if (!matches || matches.length === 0) return text;
 
-  let result = '';
+  let result = "";
   let lastIndex = 0;
 
   for (const [start, end] of matches) {

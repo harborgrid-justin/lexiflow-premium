@@ -211,7 +211,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const currentActions = useMemo(() => {
     const actionsToFilter = currentPath.length > 0
-      ? currentPath[currentPath.length - 1].children || []
+      ? currentPath[currentPath.length - 1]!.children || []
       : actions;
 
     if (!query.trim()) return actionsToFilter;

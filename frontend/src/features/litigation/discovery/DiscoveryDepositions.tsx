@@ -50,7 +50,7 @@ export const DiscoveryDepositions: React.FC<DiscoveryDepositionsProps> = ({ case
 
     // Enterprise Data Access
     const { data: rawDepositions = [] } = useQuery<Deposition[]>(
-        caseId ? QUERY_KEYS.DEPOSITIONS.BY_CASE(caseId) : QUERY_KEYS.DEPOSITIONS.ALL,
+        caseId ? [...QUERY_KEYS.DEPOSITIONS.ALL, caseId] : QUERY_KEYS.DEPOSITIONS.ALL,
         () => DataService.discovery.getDepositions(caseId)
     );
 

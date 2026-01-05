@@ -15,7 +15,7 @@ export async function loader() {
 export function meta({ data }: MetaArgs) {
   return createListMeta({
     entityType: 'Documents',
-    count: data?.count || 0,
+    count: (data as any)?.count || 0,
     description: 'Manage your legal documents, filings, and attachments',
   });
 }

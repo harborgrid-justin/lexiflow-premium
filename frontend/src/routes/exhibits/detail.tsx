@@ -78,7 +78,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
         if (title) updates.title = title;
         if (description) updates.description = description;
         if (exhibitNumber) updates.exhibitNumber = exhibitNumber;
-        if (status) updates.status = status;
+        if (status) updates.status = status as any;
 
         await DataService.exhibits.update(exhibitId, updates);
         return { success: true, message: "Exhibit updated successfully" };

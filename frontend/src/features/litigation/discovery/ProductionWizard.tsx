@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { ProductionSet } from '@/types';
@@ -44,7 +44,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onCo
 
   const { mutate: createProduction, isLoading: isCreating } = useMutation(
     async (newProduction: Partial<ProductionSet>) => {
-      return discoveryRepo.createProduction(newProduction);
+      return discoveryRepo.createProduction(newProduction as unknown as ProductionSet);
     },
     {
       onSuccess: () => {

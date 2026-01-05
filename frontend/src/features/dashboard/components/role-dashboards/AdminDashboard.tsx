@@ -108,7 +108,6 @@ export const AdminDashboard: React.FC = () => {
           <StatWidget
             label="Storage Usage"
             value={`${systemStats.storageUsage.value} ${systemStats.storageUsage.unit}`}
-            subtitle={`of ${systemStats.storageUsage.total} ${systemStats.storageUsage.unit}`}
             variant="info"
           />
           <StatWidget
@@ -119,7 +118,7 @@ export const AdminDashboard: React.FC = () => {
           <StatWidget
             label="Error Rate"
             value={`${systemStats.errorRate.value}${systemStats.errorRate.unit}`}
-            variant={systemStats.errorRate.value < 1 ? "success" : "error"}
+            variant={systemStats.errorRate.value < 1 ? "success" : "danger"}
           />
         </div>
       </div>

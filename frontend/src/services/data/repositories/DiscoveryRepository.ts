@@ -33,6 +33,7 @@ import {
 } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
 import {
+  Custodian,
   CustodianInterview,
   Deposition,
   DiscoveryRequest,
@@ -41,7 +42,6 @@ import {
   LegalDocument,
   LegalHold,
   PrivilegeLogEntry,
-  ProcessingJob,
   ProductionSet,
   ReviewBatch,
   SanctionMotion,
@@ -50,9 +50,12 @@ import {
   Vendor,
 } from "@/types";
 import type {
+  DataCollection,
+  DiscoveryTimelineEvent,
   DocumentCoding,
   LegalHoldEnhanced,
   PrivilegeLogEntryEnhanced,
+  ProcessingJob,
   ReviewDocument,
 } from "@/types/discovery-enhanced";
 import { delay } from "@/utils/async";
@@ -378,7 +381,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     if (this.useBackend) {
       try {
         return await discoveryApi.custodians.create(
-          custodian as Record<string, unknown>
+          custodian as Omit<Custodian, "id" | "createdAt" | "updatedAt">
         );
       } catch (error) {
         console.warn(
@@ -1058,7 +1061,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     }
     try {
       if (caseId) {
-        return db.getAllByIndex(STORES.PROCESSING_JOBS, "caseId", caseId);
+        return db.getByIndex(STORES.PROCESSING_JOBS, "caseId", caseId);
       }
       return db.getAll(STORES.PROCESSING_JOBS);
     } catch (error) {
@@ -1102,7 +1105,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as ProcessingJob;
-    await db.add(STORES.PROCESSING_JOBS, newJob);
+    await db.put(STORES.PROCESSING_JOBS, newJob);
     return newJob;
   };
 
@@ -1119,7 +1122,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     if (isBackendApiEnabled()) {
       // Handle specific actions like pause/resume/retry if needed, or just generic update
       // For now, generic update
-      return discoveryApi.processing.create({ ...data, id } as any); // API might need PUT
+      return discoveryApi.processing.create({ ...data, id }); // API might need PUT
     }
     const existing = await this.getProcessingJob(id);
     const updated = {
@@ -1624,7 +1627,7 @@ import { Custodian } from "@/api/discovery/custodians-api";
     }
     // Fallback to local DB
     if (caseId) {
-      return db.getAllByIndex(STORES.DISCOVERY_COLLECTIONS, "caseId", caseId);
+      return db.getByIndex(STORES.DISCOVERY_COLLECTIONS, "caseId", caseId);
     }
     return db.getAll(STORES.DISCOVERY_COLLECTIONS);
   };

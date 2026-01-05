@@ -23,7 +23,7 @@ export async function loader(_args: Route.LoaderArgs) {
 }
 
 export default function AdminRolesPage() {
-  const { roles } = useLoaderData() as Route.ComponentProps['loaderData'];
+  const { roles, permissionGroups } = useLoaderData() as Route.ComponentProps['loaderData'];
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
   const getLevelColor = (level: number) => {

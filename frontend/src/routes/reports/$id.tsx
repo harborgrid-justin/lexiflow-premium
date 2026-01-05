@@ -6,6 +6,7 @@
 import { ChartCard } from '@/components/enterprise/analytics';
 import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
 import { DataService } from '@/services/data/dataService';
+import { jsPDF } from 'jspdf';
 import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router';
@@ -76,14 +77,14 @@ export default function ReportViewerRoute() {
     setIsExporting(true);
     try {
       // Prepare data for export
-      const exportData = {
+      /* const exportData = {
         title: report.name,
         description: report.description,
         generatedAt: new Date(report.generatedAt).toLocaleString(),
         period: `${report.period.start} to ${report.period.end}`,
         summary: report.data.summary,
         charts: report.data.charts,
-      };
+      }; */
 
       switch (format) {
         case 'pdf':

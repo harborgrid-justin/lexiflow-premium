@@ -13,76 +13,79 @@
 // ============================================================================
 
 // KPI Card Component
-export { KPICard } from './KPICard';
-export type { KPICardProps } from './KPICard';
+export { KPICard } from "./KPICard";
+export type { KPICardProps } from "./KPICard";
 
 // Metrics Widget Component
-export { MetricsWidget } from './MetricsWidget';
-export type { MetricsWidgetProps, MetricItem } from './MetricsWidget';
+export { MetricsWidget } from "./MetricsWidget";
+export type { MetricItem, MetricsWidgetProps } from "./MetricsWidget";
 
 // Revenue Overview Component
-export { RevenueOverview } from './RevenueOverview';
-export type { RevenueOverviewProps, RevenueDataPoint } from './RevenueOverview';
+export { RevenueOverview } from "./RevenueOverview";
+export type { RevenueDataPoint, RevenueOverviewProps } from "./RevenueOverview";
 
 // Case Status Widget Component
-export { CaseStatusWidget } from './CaseStatusWidget';
-export type { CaseStatusWidgetProps, CaseStatusData } from './CaseStatusWidget';
+export { CaseStatusWidget } from "./CaseStatusWidget";
+export type { CaseStatusData, CaseStatusWidgetProps } from "./CaseStatusWidget";
 
 // Team Productivity Widget Component
-export { TeamProductivityWidget } from './TeamProductivityWidget';
+export { TeamProductivityWidget } from "./TeamProductivityWidget";
 export type {
-  TeamProductivityWidgetProps,
-  TeamMember,
+  TeamMember as DashboardTeamMember,
   TeamProductivityData,
-} from './TeamProductivityWidget';
+  TeamProductivityWidgetProps,
+} from "./TeamProductivityWidget";
 
 // System Health Indicator Component
-export { SystemHealthIndicator } from './SystemHealthIndicator';
+export { SystemHealthIndicator } from "./SystemHealthIndicator";
 export type {
+  HealthStatus,
   SystemHealthIndicatorProps,
   SystemService,
-  HealthStatus,
-} from './SystemHealthIndicator';
+} from "./SystemHealthIndicator";
 
 // ============================================================================
 // ADVANCED DASHBOARD COMPONENTS
 // ============================================================================
 
 // Advanced Analytics Dashboard - Multi-chart analytics with various visualization types
-export { AdvancedAnalyticsDashboard } from './AdvancedAnalyticsDashboard';
-export type { AdvancedAnalyticsDashboardProps } from './AdvancedAnalyticsDashboard';
+export { AdvancedAnalyticsDashboard } from "./AdvancedAnalyticsDashboard";
+export type { AdvancedAnalyticsDashboardProps } from "./AdvancedAnalyticsDashboard";
 
 // Executive Summary Panel - High-level executive dashboard with comprehensive KPIs
-export { ExecutiveSummaryPanel } from './ExecutiveSummaryPanel';
-export type { ExecutiveSummaryPanelProps } from './ExecutiveSummaryPanel';
+export { ExecutiveSummaryPanel } from "./ExecutiveSummaryPanel";
+export type { ExecutiveSummaryPanelProps } from "./ExecutiveSummaryPanel";
 
 // Performance Metrics Grid - Detailed performance metrics with benchmarks and trends
-export { PerformanceMetricsGrid } from './PerformanceMetricsGrid';
-export type { PerformanceMetricsGridProps } from './PerformanceMetricsGrid';
+export { PerformanceMetricsGrid } from "./PerformanceMetricsGrid";
+export type { PerformanceMetricsGridProps } from "./PerformanceMetricsGrid";
 
 // Real-Time Activity Feed - Live activity feed with real-time updates and filtering
-export { RealTimeActivityFeed } from './RealTimeActivityFeed';
-export type { RealTimeActivityFeedProps } from './RealTimeActivityFeed';
+export { RealTimeActivityFeed } from "./RealTimeActivityFeed";
+export type { RealTimeActivityFeedProps } from "./RealTimeActivityFeed";
 
 // Trend Analysis Widget - Advanced trend analysis with AI-powered predictions
-export { TrendAnalysisWidget } from './TrendAnalysisWidget';
-export type { TrendAnalysisWidgetProps } from './TrendAnalysisWidget';
+export { TrendAnalysisWidget } from "./TrendAnalysisWidget";
+export type { TrendAnalysisWidgetProps } from "./TrendAnalysisWidget";
 
 // ============================================================================
 // UTILITY COMPONENTS
 // ============================================================================
 
 // Error Boundary - Robust error boundary for dashboard components
-export { DashboardErrorBoundary, useErrorHandler } from './DashboardErrorBoundary';
+export {
+  DashboardErrorBoundary,
+  useErrorHandler,
+} from "./DashboardErrorBoundary";
 
 // Skeleton Loaders - Professional loading states for all dashboard components
 export {
-  Skeleton,
+  ActivityFeedSkeleton,
+  ChartSkeleton,
+  DashboardSkeleton,
   KPICardSkeleton,
   MetricsGridSkeleton,
-  ChartSkeleton,
-  ActivityFeedSkeleton,
+  Skeleton,
   TableSkeleton,
-  DashboardSkeleton,
   WidgetSkeleton,
-} from './DashboardSkeletonLoader';
+} from "./DashboardSkeletonLoader";

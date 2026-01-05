@@ -33,7 +33,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const caseId = url.searchParams.get("caseId");
 
-    const evidence = await DataService.evidence.getAll();
+    const evidence = (await DataService.evidence.getAll()) as EvidenceItem[];
     const filteredEvidence = caseId
       ? evidence.filter(item => item.caseId === caseId)
       : evidence;

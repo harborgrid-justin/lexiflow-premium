@@ -44,13 +44,17 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
+import { type PaginatedResponse } from "@/services/infrastructure/apiClient";
 import { IntegrationOrchestrator } from "@/services/integration/integrationOrchestrator";
 import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from "@/api";
-import { DocketApiService } from "@/api/litigation/docket-api";
+import {
+  DocketApiService,
+  type DocketFilterOptions,
+} from "@/api/litigation/docket-api";
 
 // ============================================================================
 // ERROR CLASSES

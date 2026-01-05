@@ -30,15 +30,15 @@ export function meta() {
 
 export async function loader() {
   try {
-    const encroachments = await DataService.realEstate.getEncroachments();
-    const activeEncroachments = encroachments.filter(e => e.status === 'Active' || e.status === 'Under Review');
+    const encroachments = (await DataService.realEstate.getEncroachments()) as any[];
+    const activeEncroachments = encroachments.filter((e: any) => e.status === 'Active' || e.status === 'Under Review');
 
     return {
       data: encroachments,
       stats: {
         total: encroachments.length,
         active: activeEncroachments.length,
-        resolved: encroachments.filter(e => e.status === 'Resolved').length,
+        resolved: encroachments.filter((e: any) => e.status === 'Resolved').length,
       }
     };
   } catch (error) {

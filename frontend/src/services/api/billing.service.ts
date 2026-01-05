@@ -534,7 +534,9 @@ export class BillingApiService {
   // PRIVATE HELPERS
   // ============================================================================
 
-  private buildQueryParams(filters?: Record<string, unknown>): string {
+  private buildQueryParams(
+    filters?: BillingFilters | Record<string, unknown>
+  ): string {
     if (!filters) return "";
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {

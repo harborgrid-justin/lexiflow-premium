@@ -34,7 +34,7 @@ export const PrivilegeLogEnhanced: React.FC<PrivilegeLogEnhancedProps> = ({ case
   // Fetch Enhanced Privilege Log
   const { data: entries = [], isLoading } = useQuery<PrivilegeLogEntryEnhanced[]>(
     caseId ? ['discovery', 'privilege-log', 'enhanced', caseId] : ['discovery', 'privilege-log', 'enhanced'],
-    async () => discoveryRepo.getPrivilegeLogEnhanced(caseId)
+    async () => discoveryRepo.getPrivilegeLogEnhanced()
   );
 
   if (isLoading) {

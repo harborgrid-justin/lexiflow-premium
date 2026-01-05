@@ -4,6 +4,7 @@ import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { LegalDocument } from '@/types/documents';
 import { cn } from '@/utils/cn';
 import { ArrowLeft, Download, FileText, Printer, Tag, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useState } from 'react';
@@ -16,7 +17,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
     const [showCodingPanel, setShowCodingPanel] = useState(true);
 
     // Fetch Document Metadata
-    const { data: metadata, isLoading: isLoadingMetadata } = useQuery(
+    const { data: metadata, isLoading: isLoadingMetadata } = useQuery<LegalDocument>(
         DOCUMENTS_QUERY_KEYS.byId(docId),
         () => DataService.documents.getById(docId)
     );

@@ -36,7 +36,7 @@ export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }
   // Fetch Enhanced Legal Holds
   const { data: holds = [], isLoading } = useQuery<LegalHoldEnhanced[]>(
     caseId ? ['discovery', 'legal-holds', 'enhanced', caseId] : ['discovery', 'legal-holds', 'enhanced'],
-    async () => discoveryRepo.getLegalHoldsEnhanced(caseId)
+    async () => discoveryRepo.getLegalHoldsEnhanced()
   );
 
   if (isLoading) {

@@ -17,23 +17,23 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { DataGrid } from './DataGrid';
-import { DataGridSearch } from './DataGridSearch';
 import {
+  actionColumn,
+  booleanColumn,
   createColumns,
-  textColumn,
-  numberColumn,
   currencyColumn,
   dateColumn,
-  booleanColumn,
+  numberColumn,
   statusColumn,
-  actionColumn,
+  textColumn,
 } from './DataGridColumn';
+import { DataGridSearch } from './DataGridSearch';
 
 // ============================================================================
 // TYPES
@@ -71,7 +71,7 @@ function generateMockUsers(count: number): User[] {
       department: departments[Math.floor(Math.random() * departments.length)],
       active: Math.random() > 0.3,
       joinDate: new Date(2020 + Math.floor(Math.random() * 4), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
-      status: statuses[Math.floor(Math.random() * statuses.length)],
+      status: statuses[Math.floor(Math.random() * statuses.length)] as 'active' | 'inactive' | 'pending',
     });
   }
 
@@ -203,7 +203,7 @@ export function DataGridExample() {
       <div className="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-4">
         <h3 className="font-semibold text-gray-900 mb-2">Usage Example:</h3>
         <pre className="text-xs bg-gray-900 text-gray-100 p-4 rounded overflow-x-auto">
-{`import { DataGrid, createColumns, textColumn, numberColumn } from '@/components/enterprise/data';
+          {`import { DataGrid, createColumns, textColumn, numberColumn } from '@/components/enterprise/data';
 
 const columns = createColumns<User>([
   textColumn('name', 'Name', 'name', { editable: true }),

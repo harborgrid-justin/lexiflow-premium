@@ -7,6 +7,7 @@
  * @module routes/real-estate/disposal
  */
 
+import { DataService } from '@/services/data/dataService';
 import { Link, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -29,15 +30,15 @@ export function meta() {
 
 export async function loader() {
   try {
-    const disposals = await DataService.realEstate.getDisposals();
-    const pendingDisposals = disposals.filter(d => d.status === 'Pending' || d.status === 'In Progress');
+    const disposals = (await DataService.realEstate.getDisposals()) as any[];
+    const pendingDisposals = disposals.filter((d: any) => d.status === 'Pending' || d.status === 'In Progress');
 
     return {
       data: disposals,
       stats: {
         total: disposals.length,
         pending: pendingDisposals.length,
-        completed: disposals.filter(d => d.status === 'Completed').length,
+        completed: disposals.filter((d: any) => d.status === 'Completed').length,
       }
     };
   } catch (error) {

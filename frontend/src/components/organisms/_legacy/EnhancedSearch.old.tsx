@@ -21,7 +21,7 @@ import { sanitizeHtml } from '@/utils/sanitize';
 import { Calendar, Clock, Command, Hash, Search, Tag, TrendingUp, X } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-const SEARCH_DEBOUNCE_MS = masterConfig.SEARCH_DEBOUNCE_MS || 300;
+const SEARCH_DEBOUNCE_MS = (masterConfig as any).SEARCH_DEBOUNCE_MS || 300;
 
 // ============================================================================
 // TYPES & INTERFACES

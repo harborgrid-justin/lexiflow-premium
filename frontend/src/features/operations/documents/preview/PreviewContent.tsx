@@ -74,7 +74,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
                 setRotation={setRotation}
                 pageNum={pageNum}
                 setPageNum={setPageNum}
-                totalPages={doc.pageCount || 1}
+                totalPages={document.pageCount || 1}
             />
 
             {/* PDF Canvas Container */}

@@ -4,19 +4,19 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Too
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { CostForecast, CostMetric } from '@/types';
+import { CostForecast, InfrastructureCostMetric } from '@/types';
 import { cn } from '@/utils/cn';
 
 export function CostFinOps() {
     const { theme } = useTheme();
     const chartTheme = useChartTheme();
 
-    const { data: costData = [], isLoading: costLoading } = useQuery<CostMetric[]>(
+    const { data: costData = [], isLoading: costLoading } = useQuery<InfrastructureCostMetric[]>(
         ['finops', 'costs'],
-        () => (DataService as unknown as { operations: { getCostMetrics: () => Promise<CostMetric[]> } }).operations.getCostMetrics()
+        () => (DataService as unknown as { operations: { getCostMetrics: () => Promise<InfrastructureCostMetric[]> } }).operations.getCostMetrics()
     );
 
     const { data: forecastData = [], isLoading: forecastLoading } = useQuery<CostForecast[]>(

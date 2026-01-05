@@ -3,7 +3,11 @@
  */
 import { isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { CostForecast, CostMetric } from "@/types";
+import {
+  CostForecast,
+  InfrastructureCostMetric,
+  ReplicationStatus,
+} from "@/types";
 
 export const OperationsService = {
   getOkrs: async () => {
@@ -63,9 +67,11 @@ export const OperationsService = {
   },
 
   // Cost FinOps - calculated from backend metrics
-  getCostMetrics: async (): Promise<CostMetric[]> => {
+  getCostMetrics: async (): Promise<InfrastructureCostMetric[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get<CostMetric[]>("/operations/costs/metrics");
+      return apiClient.get<InfrastructureCostMetric[]>(
+        "/operations/costs/metrics"
+      );
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return [];

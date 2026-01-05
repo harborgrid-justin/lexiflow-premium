@@ -7,7 +7,7 @@
  */
 
 import { DataService } from '@/services/data/dataService';
-import type { Advisor, Case, Expert } from '@/types';
+import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -86,11 +86,11 @@ export async function action({ params, request }: Route.ActionArgs) {
         if (description) updates.description = description;
         if (status) updates.status = status;
 
-        await DataService.warRoom.update(warRoomId, updates);
+        await DataService.warRoom.update(roomId, updates);
         return { success: true, message: "War room updated successfully" };
       }
       case "delete": {
-        await DataService.warRoom.delete(warRoomId);
+        await DataService.warRoom.delete(roomId);
         return {
           success: true,
           message: "War room deleted successfully",

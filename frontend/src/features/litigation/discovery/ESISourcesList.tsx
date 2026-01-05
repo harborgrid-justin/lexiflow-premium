@@ -87,6 +87,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
       case 'database': return <Database className="h-5 w-5 text-orange-600" />;
       case 'device': return <HardDrive className="h-5 w-5 text-gray-600" />;
       case 'other': return <Smartphone className="h-5 w-5 text-gray-600" />;
+      default: return <Smartphone className="h-5 w-5 text-gray-600" />;
     }
   };
 
@@ -96,6 +97,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
       case 'preserved': return <Badge variant="warning">Preserved</Badge>;
       case 'collected': return <Badge variant="info">Collected</Badge>;
       case 'processed': return <Badge variant="success">Processed</Badge>;
+      default: return <Badge variant="neutral">Unknown</Badge>;
     }
   };
 
@@ -117,7 +119,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
       ...formData,
       status: 'identified',
       caseId: caseId
-    } as ESISource);
+    } as any);
   };
 
   const stats = {

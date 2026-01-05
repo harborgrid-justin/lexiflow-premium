@@ -44,6 +44,8 @@ interface ActionData {
   message?: string;
   error?: string;
   draftId?: string;
+  preview?: { subject: string; body: string };
+  attachment?: any;
 }
 
 // ============================================================================
@@ -77,7 +79,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   // Fetch recent recipients (clients)
   const recentRecipients: Recipient[] = [];
   try {
-    const clients = await DataService.communications.clients.getAll();
+    const clients = (await DataService.communications.clients.getAll()) as any[];
     clients.forEach(client => {
       if (client.email) {
         recentRecipients.push({

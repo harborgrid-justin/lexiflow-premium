@@ -50,7 +50,7 @@ export const Review: React.FC<ReviewProps> = ({ caseId }) => {
 
   // Fetch content for current document
   const { data: docContent, isLoading: isLoadingContent } = useQuery(
-    currentDoc ? ['documents', currentDoc.id || currentDoc.documentId, 'content'] : null,
+    currentDoc ? ['documents', currentDoc.id || currentDoc.documentId, 'content'] : ['documents', 'unknown', 'content'],
     () => (currentDoc ? DataService.documents.getContent(currentDoc.id || currentDoc.documentId) : Promise.resolve(null)),
     { enabled: !!currentDoc }
   );

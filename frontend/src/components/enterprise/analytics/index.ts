@@ -13,38 +13,38 @@
 
 export {
   RevenueTrendChart,
+  type RevenueDataPoint as AnalyticsRevenueDataPoint,
   type RevenueTrendChartProps,
-  type RevenueDataPoint
-} from './RevenueTrendChart';
+} from "./RevenueTrendChart";
 
 export {
   CaseDistributionChart,
   type CaseDistributionChartProps,
-  type CaseDistributionData
-} from './CaseDistributionChart';
+  type CaseDistributionData,
+} from "./CaseDistributionChart";
 
 export {
   TeamPerformanceChart,
+  type TeamMemberPerformance,
   type TeamPerformanceChartProps,
-  type TeamMemberPerformance
-} from './TeamPerformanceChart';
+} from "./TeamPerformanceChart";
 
 export {
   TimeSeriesChart,
+  type ReferenceAreaConfig,
+  type ReferenceLine,
+  type SeriesConfig,
   type TimeSeriesChartProps,
   type TimeSeriesDataPoint,
-  type SeriesConfig,
-  type ReferenceLine,
-  type ReferenceAreaConfig
-} from './TimeSeriesChart';
+} from "./TimeSeriesChart";
 
 export {
   ComparisonChart,
   type ComparisonChartProps,
   type ComparisonDataPoint,
   type ComparisonType,
-  type VisualizationType
-} from './ComparisonChart';
+  type VisualizationType,
+} from "./ComparisonChart";
 
 // ============================================================================
 // FILTER & EXPORT COMPONENTS
@@ -52,43 +52,34 @@ export {
 
 export {
   AnalyticsFilters,
-  type AnalyticsFiltersProps,
   type AnalyticsFilterState,
-  type DateRange,
+  type AnalyticsFiltersProps,
   type DatePreset,
+  type DateRange,
+  type FilterGroup,
   type FilterOption,
-  type FilterGroup
-} from './AnalyticsFilters';
+} from "./AnalyticsFilters";
 
 export {
   ReportExport,
-  type ReportExportProps,
+  type ExportOptions as AnalyticsExportOptions,
   type ExportFormat,
-  type ExportOptions
-} from './ReportExport';
+  type ReportExportProps,
+} from "./ReportExport";
 
 // ============================================================================
 // UTILITY COMPONENTS
 // ============================================================================
 
-export {
-  MetricCard,
-  type MetricCardProps
-} from './MetricCard';
+export { MetricCard, type MetricCardProps } from "./MetricCard";
 
-export {
-  ChartCard,
-  type ChartCardProps
-} from './ChartCard';
+export { ChartCard, type ChartCardProps } from "./ChartCard";
 
 export {
   DateRangeSelector,
+  type DatePreset as DatePresetType,
   type DateRangeSelectorProps,
   type DateRange as DateRangeType,
-  type DatePreset as DatePresetType
-} from './DateRangeSelector';
+} from "./DateRangeSelector";
 
-export {
-  FilterPanel,
-  type FilterPanelProps
-} from './FilterPanel';
+export { FilterPanel, type FilterPanelProps } from "./FilterPanel";

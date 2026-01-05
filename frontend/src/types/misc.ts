@@ -1,7 +1,7 @@
 // types/misc.ts
 // Miscellaneous types - split from compatibility.ts
 
-import type React from "react";
+import type * as React from "react";
 import type { LazyExoticComponent } from "react";
 import type { Case, Party } from "./case";
 import type { LegalDocument } from "./documents";

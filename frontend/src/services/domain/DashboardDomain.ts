@@ -157,11 +157,25 @@ export const DashboardService = {
   },
 
   getStats: async () => {
-    const stats = await api.cases.getStats();
+    const [stats, motions, timeEntries] = await Promise.all([
+      api.cases.getStats(),
+      api.motions.getAll(),
+      api.timeEntries.getAll({ billable: true }),
+    ]);
+
+    const pendingMotions = motions.filter(
+      (m) => !["Decided", "Withdrawn"].includes(m.status)
+    ).length;
+
+    const billableHours = timeEntries.reduce(
+      (sum, entry) => sum + (entry.hours || 0),
+      0
+    );
+
     return {
       activeCases: stats.totalActive,
-      pendingMotions: 0,
-      billableHours: 0,
+      pendingMotions,
+      billableHours,
       highRisks: stats.atRisk,
     };
   },

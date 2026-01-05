@@ -128,8 +128,8 @@ export async function action({ request }: ActionFunctionArgs) {
         localStorage.removeItem('queryCache');
         sessionStorage.clear();
 
-        if (window.queryClient) {
-          window.queryClient.clear();
+        if ((window as any).queryClient) {
+          (window as any).queryClient.clear();
         }
 
         return {

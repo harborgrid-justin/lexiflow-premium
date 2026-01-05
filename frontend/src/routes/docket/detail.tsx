@@ -7,6 +7,7 @@
  */
 
 import { DataService } from '@/services/data/dataService';
+import { DocketEntry } from '@/types';
 import type { CaseId } from '@/types/primitives';
 import { format } from 'date-fns';
 import { useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';

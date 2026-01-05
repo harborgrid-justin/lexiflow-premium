@@ -122,7 +122,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    * const allEvidence = await repo.getAll();
    * const caseEvidence = await repo.getAll('case-123');
    */
-  override async getAll(caseId?: string): Promise<EvidenceItem[]> {
+  override async getAll(arg?: any): Promise<EvidenceItem[]> {
+    const caseId = typeof arg === "string" ? arg : undefined;
     if (caseId) {
       return this.getByCaseId(caseId);
     }
@@ -139,7 +140,9 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
     }
 
     try {
-      return await super.getAll();
+      // Call super.getAll with empty options if arg is not options
+      const options = typeof arg === "object" ? arg : {};
+      return await super.getAll(options);
     } catch (error) {
       console.error("[EvidenceRepository.getAll] Error:", error);
       throw new OperationError("getAll", "Failed to fetch evidence items");

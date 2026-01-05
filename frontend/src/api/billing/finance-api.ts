@@ -832,7 +832,29 @@ export class BillingApiService {
       console.warn(
         "[BillingApiService.getOverviewStats] Overview stats endpoint not available, returning default"
       );
-      return { realization: 92.4, totalBilled: 482000, month: "March 2024" };
+      return {
+        realization: 0,
+        totalBilled: 0,
+        month: new Date().toLocaleString("default", {
+          month: "long",
+          year: "numeric",
+        }),
+      };
+    }
+  }
+
+  /**
+   * Get financial performance data
+   *
+   * @returns Promise<FinancialPerformanceData>
+   */
+  async getFinancialPerformance(): Promise<FinancialPerformanceData> {
+    try {
+      return await apiClient.get<FinancialPerformanceData>(
+        "/billing/financial-performance"
+      );
+    } catch {
+      return { revenue: [], expenses: [] };
     }
   }
 

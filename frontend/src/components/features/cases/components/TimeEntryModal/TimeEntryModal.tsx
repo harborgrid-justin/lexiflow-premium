@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Clock, DollarSign, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
-import { Clock, Wand2, DollarSign } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,16 +23,16 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { TimeEntryPayload, CaseId } from '@/types';
+import { CaseId, TimeEntryPayload } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -64,7 +64,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
   const handleSave = () => {
     onSave({
       caseId: caseId || 'General',
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split('T')[0]!,
       duration: parseFloat(duration) * 60,
       description: desc,
       rate: 450,
@@ -79,7 +79,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={<span className={cn("flex items-center gap-2", theme.text.primary)}><Clock className={cn("h-5 w-5", theme.primary.text)}/> Log Billable Time</span>}
+      title={<span className={cn("flex items-center gap-2", theme.text.primary)}><Clock className={cn("h-5 w-5", theme.primary.text)} /> Log Billable Time</span>}
       size="sm"
     >
       <div className="p-6 space-y-5">
@@ -102,7 +102,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Value Est.</label>
             <div className={cn("w-full px-3 py-2 border rounded-md text-sm font-mono flex items-center", theme.surface.input, theme.border.default, theme.text.primary)}>
-              <DollarSign className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
+              <DollarSign className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
               {(parseFloat(duration || '0') * 450).toFixed(2)}
             </div>
           </div>
@@ -141,4 +141,3 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
     </Modal>
   );
 };
-

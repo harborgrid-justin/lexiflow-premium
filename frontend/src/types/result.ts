@@ -3,14 +3,14 @@
  * @category Types - Core
  * @description Type-safe Result<T, E> pattern for error handling without exceptions.
  * Inspired by Rust's Result type, provides compile-time guarantees for error handling.
- * 
+ *
  * USAGE:
  * ```typescript
  * function parseData(input: string): Result<Data, ParseError> {
  *   if (valid) return ok(data);
  *   return err({ code: 'INVALID_FORMAT', message: 'Bad input' });
  * }
- * 
+ *
  * const result = parseData(input);
  * if (result.ok) {
  *   console.log(result.value);
@@ -95,7 +95,7 @@ export function map<T, U, E>(
   if (result.ok) {
     return ok(fn(result.value));
   }
-  return result;
+  return result as Err<E>;
 }
 
 /**
@@ -106,9 +106,9 @@ export function mapErr<T, E, F>(
   fn: (error: E) => F
 ): Result<T, F> {
   if (!result.ok) {
-    return err(fn(result.error));
+    return err(fn((result as Err<E>).error));
   }
-  return result;
+  return result as Ok<T>;
 }
 
 /**
@@ -121,7 +121,7 @@ export function andThen<T, U, E>(
   if (result.ok) {
     return fn(result.value);
   }
-  return result;
+  return result as Err<E>;
 }
 
 /**
@@ -138,17 +138,15 @@ export function unwrapOrElse<T, E>(
   result: Result<T, E>,
   fn: (error: E) => T
 ): T {
-  return result.ok ? result.value : fn(result.error);
+  return result.ok ? result.value : fn((result as Err<E>).error);
 }
 
 /**
  * Convert Result to a tuple [value | null, error | null]
  * Useful for destructuring patterns
  */
-export function toTuple<T, E>(
-  result: Result<T, E>
-): [T, null] | [null, E] {
-  return result.ok ? [result.value, null] : [null, result.error];
+export function toTuple<T, E>(result: Result<T, E>): [T, null] | [null, E] {
+  return result.ok ? [result.value, null] : [null, (result as Err<E>).error];
 }
 
 /**
@@ -159,7 +157,7 @@ export function collect<T, E>(results: Result<T, E>[]): Result<T[], E> {
   const values: T[] = [];
   for (const result of results) {
     if (!result.ok) {
-      return result;
+      return result as Err<E>;
     }
     values.push(result.value);
   }
@@ -176,9 +174,7 @@ export function tryCatch<T, E = Error>(
   try {
     return ok(fn());
   } catch (error) {
-    const mappedError = errorHandler 
-      ? errorHandler(error) 
-      : (error as E);
+    const mappedError = errorHandler ? errorHandler(error) : (error as E);
     return err(mappedError);
   }
 }
@@ -194,9 +190,7 @@ export async function tryCatchAsync<T, E = Error>(
     const value = await fn();
     return ok(value);
   } catch (error) {
-    const mappedError = errorHandler 
-      ? errorHandler(error) 
-      : (error as E);
+    const mappedError = errorHandler ? errorHandler(error) : (error as E);
     return err(mappedError);
   }
 }

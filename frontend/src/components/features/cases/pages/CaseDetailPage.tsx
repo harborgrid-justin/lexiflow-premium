@@ -56,6 +56,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+import { Party } from '@/types';
 import { Case } from '@/types/case';
 import { LegalDocument } from '@/types/documents';
 import { TimeEntry } from '@/types/financial';
@@ -128,7 +129,7 @@ export const CaseDetail = ({
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = CASE_DETAIL_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id);
+      setActiveTab(parent.subTabs[0]!.id);
     }
   }, [setActiveTab]);
 

@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { UINotification } from '@/types/notifications';
 import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
 import React from 'react';
 
@@ -18,7 +17,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
+import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 
@@ -40,6 +39,17 @@ import { TaskStatusBackend } from '@/types';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+interface DomainNotification {
+    id: string;
+    type: "info" | "warning" | "error" | "success";
+    title: string;
+    message: string;
+    read: boolean;
+    timestamp: string;
+    actionUrl?: string;
+    metadata?: unknown;
+}
+
 interface PersonalWorkspaceProps {
     /** Active tab in the workspace. */
     activeTab: 'tasks' | 'notifications';
@@ -54,14 +64,30 @@ interface PersonalWorkspaceProps {
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
 
-    const { data: notifications = [] } = useQuery<UINotification[]>(
+    const { data: notifications = [] } = useQuery<DomainNotification[]>(
         ['notifications'],
-        () => Promise.resolve([]) // Placeholder
+        () => DataService.notifications.getNotifications() as unknown as Promise<DomainNotification[]>
     );
 
-    const handleMarkAsRead = (_id: string) => { };
-    const handleMarkAllAsRead = () => { };
-    const handleDeleteNotification = (_id: string) => { };
+    const handleMarkAsRead = async (id: string) => {
+        await DataService.notifications.update(id, { read: true });
+        queryClient.invalidateQueries(['notifications']);
+    };
+
+    const handleMarkAllAsRead = async () => {
+        // Assuming DataService.notifications has a method for this, or we iterate
+        // Since we don't have markAllAsRead in DataService.notifications (based on previous read),
+        // we might need to implement it or iterate.
+        // For now, let's iterate over unread notifications.
+        const unread = notifications.filter(n => !n.read);
+        await Promise.all(unread.map(n => DataService.notifications.update(n.id, { read: true })));
+        queryClient.invalidateQueries(['notifications']);
+    };
+
+    const handleDeleteNotification = async (id: string) => {
+        await DataService.notifications.delete(id);
+        queryClient.invalidateQueries(['notifications']);
+    };
 
     const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
         QUERY_KEYS.TASKS.ALL,
@@ -78,7 +104,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
 
     const myTasks = safeAllTasks.filter((t: WorkflowTask) => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
-    const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
+    const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task');
 
     const isLoading = tasksLoading || eventsLoading;
     const hasError = tasksError || eventsError;
@@ -160,12 +186,14 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                     {activeTab === 'notifications' && (
                         <div className="lg:col-span-2">
                             <NotificationCenter
-                                notifications={notifications.map(n => ({
+                                notifications={notifications.map((n) => ({
                                     ...n,
-                                    type: n.type as 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task',
-                                    timestamp: typeof n.timestamp === 'number' ? new Date(n.timestamp).toISOString() : n.timestamp
+                                    timestamp: new Date(n.timestamp).getTime(),
+                                    priority: "normal",
                                 }))}
-                                unreadCount={notifications.filter((n: UINotification) => !n.read).length}
+                                unreadCount={
+                                    notifications.filter((n) => !n.read).length
+                                }
                                 onMarkAsRead={handleMarkAsRead}
                                 onMarkAllAsRead={handleMarkAllAsRead}
                                 onDelete={handleDeleteNotification}

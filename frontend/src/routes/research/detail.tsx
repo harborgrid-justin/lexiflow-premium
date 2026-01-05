@@ -6,6 +6,7 @@
  * @module routes/research/detail
  */
 
+import { DataService } from '@/services/data/dataService';
 import type { ResearchSession } from '@/types';
 import { useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -73,8 +74,8 @@ export async function action({ params, request }: Route.ActionArgs) {
       };
 
       if (query) updates.query = query;
-      if (notes) updates.notes = notes;
-      if (status) updates.status = status;
+      if (notes) (updates as any).notes = notes;
+      if (status) (updates as any).status = status;
 
       await DataService.knowledge.research.update(researchId, updates);
       return { success: true, message: "Research session updated successfully" };

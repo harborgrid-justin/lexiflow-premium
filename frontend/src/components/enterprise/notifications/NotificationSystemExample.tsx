@@ -12,19 +12,19 @@
  * - ConnectionStatus indicator
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  ConnectionStatus,
   NotificationBell,
+  NotificationCenter,
   NotificationPanel,
+  NotificationPreferences,
   ToastContainer,
   useToastNotifications,
-  NotificationCenter,
-  NotificationPreferences,
-  ConnectionStatus,
-  type UINotification,
-  type ExtendedNotificationPreferences,
   type ConnectionState,
+  type ExtendedNotificationPreferences,
+  type UINotification,
 } from './index';
 
 // ============================================================================
@@ -163,7 +163,7 @@ export const HeaderWithNotifications: React.FC = () => {
 export const NotificationCenterPage: React.FC = () => {
   const [notifications, setNotifications] = useState<UINotification[]>(mockNotifications);
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   const handleMarkAsRead = useCallback((id: string) => {
     setNotifications((prev) =>
@@ -341,7 +341,7 @@ export const ConnectionStatusExample: React.FC = () => {
         'disconnected',
         'error',
       ];
-      const randomState = states[Math.floor(Math.random() * states.length)];
+      const randomState = states[Math.floor(Math.random() * states.length)] as ConnectionState;
       setConnectionState(randomState);
 
       if (randomState === 'connected') {

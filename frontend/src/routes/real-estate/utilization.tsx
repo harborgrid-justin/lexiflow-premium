@@ -7,6 +7,7 @@
  * @module routes/real-estate/utilization
  */
 
+import { DataService } from '@/services/data/dataService';
 import { Link, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';

@@ -10,7 +10,7 @@
  */
 
 import { DataService } from '@/services/data/dataService';
-import type { CaseId } from '@/types';
+import type { CaseId, PaginatedResponse } from '@/types';
 import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
 import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';

@@ -80,7 +80,7 @@ export async function action({ request }: Route.ActionArgs) {
         const email = formData.get("email") as string;
         const phone = formData.get("phone") as string;
 
-        await api.auth.users.update(user.id, {
+        await api.users.update(user.id, {
           firstName,
           lastName,
           email,
@@ -97,7 +97,7 @@ export async function action({ request }: Route.ActionArgs) {
           return { success: false, error: "New passwords do not match" };
         }
 
-        await api.auth.auth.changePassword(currentPassword, newPassword);
+        await api.auth.changePassword(currentPassword, newPassword);
         return { success: true, message: "Password changed successfully" };
       }
       case "update-preferences": {

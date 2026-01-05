@@ -123,6 +123,11 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
     [isSoundEnabled, isMounted]
   );
 
+  // Remove toast
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  }, []);
+
   // Add toast
   const addToast = useCallback(
     (toast: Omit<ToastNotification, 'id' | 'timestamp'>) => {
@@ -156,11 +161,6 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
     },
     [maxVisible, playSound, removeToast]
   );
-
-  // Remove toast
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
 
   // Clear all toasts
   const clearAllToasts = useCallback(() => {

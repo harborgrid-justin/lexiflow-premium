@@ -35,7 +35,7 @@ export function meta() {
 
 export async function loader() {
   try {
-    const cases = await DataService.cases.getAll();
+    const cases = (await DataService.cases.getAll()) as Case[];
     const activeCases = cases.filter(c => c.status === 'Active' || c.status === 'In Progress');
     const closedCases = cases.filter(c => c.status === 'Closed' || c.status === 'Resolved');
     const wonCases = closedCases.filter(c => c.outcome === 'Won' || c.status === 'Settled');

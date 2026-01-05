@@ -96,7 +96,8 @@ const WithButtonsStory = () => {
   return (
     <ThemeProvider>
       <SearchToolbar
-        onSearch={() => { /* Story demo */ }}
+        value=""
+        onChange={() => { /* Story demo */ }}
         placeholder="Search with buttons"
       />
     </ThemeProvider>

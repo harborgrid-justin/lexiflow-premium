@@ -51,8 +51,3 @@ export interface PaginatedResponse<T> {
   totalPages: number;
   limit?: number;
 }
-
-interface PaginationResult {
-  limit: number;
-  totalPages: number;
-}

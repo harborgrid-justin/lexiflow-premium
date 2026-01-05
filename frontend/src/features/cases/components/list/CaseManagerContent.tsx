@@ -61,9 +61,10 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
     setDateTo('');
   };
 
-  const handleCaseSelect = (c: any) => {
+  const handleCaseSelect = (c: Case | string) => {
     if (onSelectCase) {
-      onSelectCase(c.id || c);
+      const id = typeof c === 'string' ? c : c.id;
+      onSelectCase(id);
     }
   };
 

@@ -46,7 +46,7 @@ export default function DocumentUploadRoute() {
         return await DataService.documents.upload(file, uploadMetadata);
       });
 
-      const results = await Promise.all(uploadPromises);
+      await Promise.all(uploadPromises);
 
       // Navigate back to documents list
       navigate('/documents');

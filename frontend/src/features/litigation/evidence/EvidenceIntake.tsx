@@ -92,13 +92,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
       setTitle(selectedFile.name);
 
       setProcessing(true);
-      setProcessStage('Scanning for Malware...');
-      await new Promise(r => setTimeout(r, 800));
-      setProcessStage('OCR & Text Extraction...');
-      await new Promise(r => setTimeout(r, 800));
-      setProcessStage('Splitting Documents...');
-      await new Promise(r => setTimeout(r, 600));
-      setProcessStage('Generating Blockchain Hash...');
+      setProcessStage('Processing File...');
 
       const data = await DocumentService.processFile(selectedFile);
 
@@ -113,7 +107,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
 
   const handleFinish = () => {
     const newItem: EvidenceItem = {
-      id: `EV-${Date.now()}` as EvidenceId,
+      id: crypto.randomUUID() as EvidenceId,
       trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
       caseId: 'Pending Assignment' as CaseId,
       title: title,
@@ -127,7 +121,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
       tags: generatedData.tags || [],
       blockchainHash: generatedData.hash,
       chainOfCustody: [{
-        id: `cc-${Date.now()}`,
+        id: crypto.randomUUID(),
         date: new Date().toISOString(),
         action: 'Initial Collection',
         actor: 'Current User',

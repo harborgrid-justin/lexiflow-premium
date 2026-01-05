@@ -38,7 +38,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   try {
-    const item = await DataService.discovery.evidence.getById(evidenceId);
+    const item = await DataService.evidence.getById(evidenceId);
     if (!item) {
       throw new Response("Evidence not found", { status: 404 });
     }

@@ -476,8 +476,13 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onCo
         <Button variant="secondary" onClick={currentStep === 1 ? onCancel : handleBack} icon={ChevronLeft}>
           {currentStep === 1 ? 'Cancel' : 'Back'}
         </Button>
-        <Button variant="primary" onClick={handleNext} icon={currentStep === 4 ? Check : ChevronRight}>
-          {currentStep === 4 ? 'Create Production' : 'Next'}
+        <Button
+          variant="primary"
+          onClick={handleNext}
+          icon={currentStep === 4 ? Check : ChevronRight}
+          disabled={isCreating}
+        >
+          {currentStep === 4 ? (isCreating ? 'Creating...' : 'Create Production') : 'Next'}
         </Button>
       </div>
     </div>

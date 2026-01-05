@@ -21,10 +21,8 @@ interface RateNegotiationProps {
     rates?: Rate[];
 }
 
-export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities, rates = [] }) => {
+export const RateNegotiation: React.FC<RateNegotiationProps> = ({ rates = [] }) => {
     const { theme } = useTheme();
-
-    const lawFirms = entities.filter(e => e.type === 'Law Firm');
 
     return (
         <div className="space-y-6">

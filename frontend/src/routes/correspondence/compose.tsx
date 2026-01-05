@@ -12,6 +12,7 @@
  * @module routes/correspondence/compose
  */
 
+import { Correspondence } from '@/api/communications/correspondence-api';
 import type { DraftingTemplate } from '@/api/domains/drafting.api';
 import { DataService } from '@/services/data/dataService';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
@@ -34,7 +35,7 @@ interface LoaderData {
   templates: DraftingTemplate[];
   recentRecipients: Recipient[];
   draftId: string | null;
-  draft?: any; // Using any for now as Correspondence type might need to be imported
+  draft?: Correspondence;
   templateId?: string | null;
 }
 

@@ -18,7 +18,6 @@ import {
   Download,
   Filter,
   PieChart,
-  Plus,
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
@@ -29,23 +28,6 @@ interface FinancialReportsProps {
   dateRange?: { start: string; end: string };
   onExport?: (reportType: string, format: 'pdf' | 'excel' | 'csv') => void;
 }
-
-// Empty state component
-const EmptyState: React.FC<{ message: string; onAdd?: () => void; addLabel?: string }> = ({ message, onAdd, addLabel }) => (
-  <div className="flex flex-col items-center justify-center py-12 text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-    <BarChart3 className="w-12 h-12 mb-3 opacity-50" />
-    <p className="text-sm mb-3">{message}</p>
-    {onAdd && (
-      <button
-        onClick={onAdd}
-        className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-      >
-        <Plus className="w-4 h-4" />
-        {addLabel || 'Add Data'}
-      </button>
-    )}
-  </div>
-);
 
 export const FinancialReports: React.FC<FinancialReportsProps> = ({
   dateRange,
@@ -122,6 +104,22 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
   const formatPercent = (value: number) => {
     return `${value.toFixed(1)}%`;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-gray-500">Loading financial reports...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

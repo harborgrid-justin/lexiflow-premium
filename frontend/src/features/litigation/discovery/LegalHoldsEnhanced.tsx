@@ -39,6 +39,10 @@ export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }
     async () => discoveryRepo.getLegalHoldsEnhanced(caseId)
   );
 
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading legal holds...</div>;
+  }
+
   const getStatusBadge = (status: LegalHoldEnhanced['status']) => {
     switch (status) {
       case 'active': return <Badge variant="success">Active</Badge>;

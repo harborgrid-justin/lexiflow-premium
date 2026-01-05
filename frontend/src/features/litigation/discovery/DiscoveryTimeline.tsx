@@ -26,6 +26,9 @@ export const DiscoveryTimeline: React.FC<DiscoveryTimelineProps> = ({ caseId }) 
     () => (DataService.discovery as unknown as DiscoveryRepository).getTimelineEvents(caseId)
   );
 
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading timeline...</div>;
+  }
 
   const getEventIcon = (eventType: DiscoveryTimelineEvent['eventType']) => {
     switch (eventType) {

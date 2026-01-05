@@ -17,6 +17,7 @@
  */
 
 import { api } from '@/api';
+import { Jurisdiction } from '@/api/intelligence/jurisdiction-api';
 import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { DataService } from '@/services/data/dataService';
@@ -493,7 +494,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             placeholder="Search court..."
             fetchFn={async (search: string) => {
               const courts = await DataService.jurisdiction.getFederal();
-              return courts.filter((c: any) => c.name.toLowerCase().includes(search.toLowerCase()));
+              return courts.filter((c: Jurisdiction) => c.name.toLowerCase().includes(search.toLowerCase()));
             }}
             getLabel={(court) => (court as unknown as { name: string }).name}
             getValue={(court) => (court as unknown as { name: string }).name}

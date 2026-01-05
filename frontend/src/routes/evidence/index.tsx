@@ -7,6 +7,7 @@
  * @module routes/evidence/index
  */
 
+import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";

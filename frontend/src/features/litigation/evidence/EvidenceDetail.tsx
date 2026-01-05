@@ -77,9 +77,9 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
     async () => {
       // 1. Create Exhibit
       const exhibit: TrialExhibit = {
-        id: `ex-${Date.now()}` as string,
+        id: crypto.randomUUID(),
         caseId: selectedItem.caseId,
-        exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
+        exhibitNumber: `PX-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`, // Auto-gen number
         title: selectedItem.title,
         description: selectedItem.description,
         type: 'Document', // Default type

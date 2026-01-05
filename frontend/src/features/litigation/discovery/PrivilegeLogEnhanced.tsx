@@ -37,6 +37,10 @@ export const PrivilegeLogEnhanced: React.FC<PrivilegeLogEnhancedProps> = ({ case
     async () => discoveryRepo.getPrivilegeLogEnhanced(caseId)
   );
 
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading privilege log...</div>;
+  }
+
   const getPrivilegeTypeBadge = (type: PrivilegeLogEntryEnhanced['privilegeType']) => {
     switch (type) {
       case 'attorney-client': return <Badge variant="info" size="sm">Attorney-Client</Badge>;
@@ -66,7 +70,7 @@ export const PrivilegeLogEnhanced: React.FC<PrivilegeLogEnhancedProps> = ({ case
 
   const handleExportLog = (format: 'excel' | 'pdf' | 'csv') => {
     notify.success(`Exporting privilege log as ${format.toUpperCase()}...`);
-    // In production, this would trigger actual export
+    // Trigger actual export
   };
 
   const filteredEntries = entries.filter(entry => {

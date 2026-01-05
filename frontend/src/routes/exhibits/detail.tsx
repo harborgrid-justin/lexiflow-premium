@@ -37,7 +37,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const item = await DataService.trial.exhibits.getById(exhibitId);
+    const item = await DataService.exhibits.getById(exhibitId);
     if (!item) {
       throw new Response("Exhibit not found", { status: 404 });
     }
@@ -80,11 +80,11 @@ export async function action({ params, request }: ActionFunctionArgs) {
         if (exhibitNumber) updates.exhibitNumber = exhibitNumber;
         if (status) updates.status = status;
 
-        await DataService.trial.exhibits.update(exhibitId, updates);
+        await DataService.exhibits.update(exhibitId, updates);
         return { success: true, message: "Exhibit updated successfully" };
       }
       case "delete": {
-        await DataService.trial.exhibits.delete(exhibitId);
+        await DataService.exhibits.delete(exhibitId);
         return {
           success: true,
           message: "Exhibit deleted successfully",

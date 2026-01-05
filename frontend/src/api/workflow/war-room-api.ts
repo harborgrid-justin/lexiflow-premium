@@ -107,7 +107,7 @@ export class WarRoomApiService {
   }
 
   // === OPPOSITION === (Placeholder for future backend implementation)
-  async getOpposition(caseId: string): Promise<unknown[]> {
+  async getOpposition(_caseId: string): Promise<unknown[]> {
     // Return empty array to prevent crash until backend is implemented
     return [];
   }

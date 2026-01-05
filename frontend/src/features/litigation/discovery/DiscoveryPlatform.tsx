@@ -179,7 +179,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
         <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
       </div>
     ),
-  }), [requests, theme, handleNavigate, handleBackToDashboard, setActiveTab]);
+  }), [requests, theme, handleNavigate, handleBackToDashboard, setActiveTab, caseId]);
 
   if (isWizardView) {
     return (

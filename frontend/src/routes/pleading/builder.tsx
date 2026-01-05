@@ -49,6 +49,8 @@ interface ActionData {
   error?: string;
   pleadingId?: string;
   previewUrl?: string;
+  content?: string;
+  errors?: string[];
 }
 
 // ============================================================================
@@ -260,7 +262,6 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
 
     case "export": {
       const format = formData.get("format") as string;
-      const pleadingId = formData.get("pleadingId") as string;
       const content = formData.get("content") as string;
       const title = formData.get("title") as string;
 
@@ -278,10 +279,12 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
             filename = `${title || 'pleading'}.txt`;
             break;
           case 'pdf':
-          default:
+          default: {
             const html = `<!DOCTYPE html><html><head><title>${title}</title></head><body>${content}</body></html>`;
             exportBlob = new Blob([html], { type: 'text/html' });
             filename = `${title || 'pleading'}.html`;
+            break;
+          }
         }
 
         const url = URL.createObjectURL(exportBlob);
@@ -308,7 +311,6 @@ export async function action({ request }: ActionFunctionArgs): Promise<ActionDat
 
     case "validate": {
       const content = formData.get("content") as string;
-      const courtId = formData.get("courtId") as string;
 
       try {
         const validationErrors: string[] = [];

@@ -80,7 +80,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
 
     const handleAddExhibit = async () => {
         const newExhibit: TrialExhibit = {
-            id: `ex-${Date.now()}`,
+            id: crypto.randomUUID(),
             caseId: (caseId || 'General') as CaseId,
             exhibitNumber: `PX-${exhibits.length + 1}`,
             title: 'New Evidence Document',

@@ -91,7 +91,7 @@ interface CaseManagementProps {
   onSelectCase?: (id: string) => void;
 }
 
-export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices }) => {
+export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices, onSelectCase }) => {
   const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('cases_active_tab', 'overview');

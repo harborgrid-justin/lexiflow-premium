@@ -50,7 +50,7 @@ export const Collections: React.FC<CollectionsProps> = ({ caseId }) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(
+        queryClient.invalidate(
           caseId ? DISCOVERY_QUERY_KEYS.collections.byCase(caseId) : DISCOVERY_QUERY_KEYS.collections.all()
         );
         notify.success('Collection created successfully');
@@ -71,7 +71,7 @@ export const Collections: React.FC<CollectionsProps> = ({ caseId }) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(DISCOVERY_QUERY_KEYS.collections.all());
+        queryClient.invalidate(DISCOVERY_QUERY_KEYS.collections.all());
       },
       onError: (error) => {
         console.error('Failed to update collection:', error);

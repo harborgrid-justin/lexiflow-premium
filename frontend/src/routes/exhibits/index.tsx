@@ -7,7 +7,7 @@
  * @module routes/exhibits/index
  */
 
-import { api } from '@/api';
+import { DataService } from '@/services/data/dataService';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -33,7 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const caseId = url.searchParams.get("caseId") || undefined;
 
   try {
-    const exhibits = await api.exhibits.getAll({ caseId });
+    const exhibits = await DataService.exhibits.getAll(caseId);
     return { items: exhibits, totalCount: exhibits.length };
   } catch (error) {
     console.error("Failed to load exhibits:", error);
@@ -52,13 +52,13 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     switch (intent) {
       case "create":
-        // In a real app, we would parse form data and call api.exhibits.create(...)
+        // In a real app, we would parse form data and call DataService.exhibits.add(...)
         return { success: true, message: "Exhibit created" };
       case "delete":
-        // api.exhibits.delete(...)
+        // DataService.exhibits.delete(...)
         return { success: true, message: "Exhibit deleted" };
       case "update-status":
-        // api.exhibits.updateStatus(...)
+        // DataService.exhibits.update(...)
         return { success: true, message: "Status updated" };
       default:
         return { success: false, error: "Invalid action" };

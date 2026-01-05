@@ -16,7 +16,7 @@ interface Permission extends PermissionDefinition {
 
 export async function loader(_args: Route.LoaderArgs) {
   const rolesService = new RolesService();
-  let roleCounts: Record<string, number> = {};
+  const roleCounts: Record<string, number> = {};
 
   try {
     const roles = await rolesService.getRoles();

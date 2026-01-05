@@ -1,0 +1,66 @@
+
+import { DiscoveryRequest } from '../../types.ts';
+
+export const MOCK_DISCOVERY: DiscoveryRequest[] = [
+  {
+    id: 'DR-001',
+    caseId: 'C-2024-001',
+    type: 'Production',
+    propoundingParty: 'TechCorp Industries',
+    respondingParty: 'Martinez (Plaintiff)',
+    serviceDate: '2024-03-01',
+    dueDate: '2024-03-31',
+    status: 'Served',
+    title: 'RFP Set One - Employment Records',
+    description: 'Request for production of all performance reviews, email communications regarding termination, and payroll records.',
+  },
+  {
+    id: 'DR-002',
+    caseId: 'C-2024-001',
+    type: 'Interrogatory',
+    propoundingParty: 'Martinez (Plaintiff)',
+    respondingParty: 'TechCorp Industries',
+    serviceDate: '2024-03-05',
+    dueDate: '2024-04-04',
+    status: 'Overdue',
+    title: 'Special Interrogatories - Set 1',
+    description: 'Identify all individuals involved in the decision to terminate Plaintiff.',
+  },
+  {
+    id: 'DR-003',
+    caseId: 'C-2024-112',
+    type: 'Admission',
+    propoundingParty: 'FTC',
+    respondingParty: 'OmniGlobal Inc.',
+    serviceDate: '2024-02-15',
+    dueDate: '2024-03-16',
+    status: 'Responded',
+    title: 'RFA - Market Share Data',
+    description: 'Admit that OmniGlobal controls >40% of the widget market in the Northeast region.',
+  },
+  {
+    id: 'DR-004',
+    caseId: 'C-2024-001',
+    type: 'Deposition',
+    propoundingParty: 'Martinez (Plaintiff)',
+    respondingParty: 'CEO of TechCorp',
+    serviceDate: '2024-03-10',
+    dueDate: '2024-04-10',
+    status: 'Draft',
+    title: 'Notice of Deposition - CEO',
+    description: 'Deposition of TechCorp CEO regarding corporate culture and hiring practices.',
+  },
+  // Estate of H. Smith
+  {
+    id: 'DR-S-001',
+    caseId: 'C-2024-004',
+    type: 'Production',
+    propoundingParty: 'IRS',
+    respondingParty: 'Smith Estate',
+    serviceDate: '2024-02-20',
+    dueDate: '2024-03-22',
+    status: 'Served',
+    title: 'Request for Financial Records 2020-2023',
+    description: 'Production of all bank statements, investment accounts, and property deeds.',
+  }
+];

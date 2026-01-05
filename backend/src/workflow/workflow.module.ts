@@ -1,8 +1,11 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorkflowController } from './workflow.controller';
-import { WorkflowService } from './workflow.service';
-import { WorkflowTemplate } from './entities/workflow-template.entity';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { WorkflowInstance } from "./entities/workflow-instance.entity";
+import { WorkflowTemplate } from "./entities/workflow-template.entity";
+import { WorkflowInstancesController } from "./workflow-instances.controller";
+import { WorkflowInstancesService } from "./workflow-instances.service";
+import { WorkflowController } from "./workflow.controller";
+import { WorkflowService } from "./workflow.service";
 
 /**
  * Workflow Module
@@ -14,11 +17,9 @@ import { WorkflowTemplate } from './entities/workflow-template.entity';
  * - Task assignment and approval chains
  */
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([WorkflowTemplate]),
-  ],
-  controllers: [WorkflowController],
-  providers: [WorkflowService],
-  exports: [WorkflowService]
+  imports: [TypeOrmModule.forFeature([WorkflowTemplate, WorkflowInstance])],
+  controllers: [WorkflowController, WorkflowInstancesController],
+  providers: [WorkflowService, WorkflowInstancesService],
+  exports: [WorkflowService, WorkflowInstancesService],
 })
 export class WorkflowModule {}

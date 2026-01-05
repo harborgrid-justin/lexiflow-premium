@@ -46,16 +46,6 @@ export class WorkflowController {
     return await this.workflowService.findAll(query || {});
   }
 
-  @Get("instances")
-  @ApiOperation({ summary: "Get workflow instances" })
-  @ApiResponse({ status: 200, description: "Instances retrieved successfully" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden" })
-  async getInstances(@Query() query: any) {
-    // TODO: Implement workflow instances logic
-    return [];
-  }
-
   @Get(":id")
   @ApiOperation({ summary: "Get workflow template by ID" })
   @ApiResponse({ status: 200, description: "Template found" })

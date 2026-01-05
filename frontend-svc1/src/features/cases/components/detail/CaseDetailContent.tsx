@@ -1,0 +1,1 @@
+// Obsolete file - Content located at components/case-detail/CaseDetailContent.tsx

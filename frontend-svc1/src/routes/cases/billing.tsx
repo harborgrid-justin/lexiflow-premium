@@ -1,0 +1,389 @@
+/**
+ * Case Billing Route
+ *
+ * Displays billing summary and financial information for a case.
+ * - Server-side data loading via loader
+ * - Type-safe params via Route types
+ * - Time entries, invoices, and expenses
+ * - Budget tracking and alerts
+ *
+ * @module routes/cases/billing
+ */
+
+import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
+import { DataService } from '@/services/data/dataService';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+// import type { Route } from "./+types/billing";
+
+interface TimeEntry {
+  id: string;
+  description?: string;
+  user?: string;
+  date: string;
+  hours: number;
+  amount: number;
+}
+
+interface ExpenseEntry {
+  amount?: number;
+}
+
+interface Invoice {
+  id: string;
+  number?: string;
+  date: string;
+  status: string;
+  total: number;
+}
+
+// ============================================================================
+// Meta Tags
+// ============================================================================
+
+export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+  const caseTitle = data?.caseData?.title || 'Case Billing';
+  return [
+    { title: `Billing - ${caseTitle} | LexiFlow` },
+    { name: 'description', content: `View billing and financial information for ${caseTitle}` },
+  ];
+}
+
+// ============================================================================
+// Loader
+// ============================================================================
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { caseId } = params;
+
+  if (!caseId) {
+    throw new Response("Case ID is required", { status: 400 });
+  }
+
+  // Fetch case and billing data
+  const [caseData, timeEntries, invoices, expenses] = await Promise.all([
+    DataService.cases.get(caseId),
+    DataService.billing.getTimeEntriesByCaseId?.(caseId).catch(() => []),
+    DataService.billing.getInvoicesByCaseId?.(caseId).catch(() => []),
+    DataService.billing.getExpensesByCaseId?.(caseId).catch(() => []),
+  ]);
+
+  if (!caseData) {
+    throw new Response("Case Not Found", { status: 404 });
+  }
+
+  // Calculate totals
+  const totalHours = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.hours || 0), 0);
+  const totalBilled = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.amount || 0), 0);
+  const totalExpenses = expenses.reduce((sum: number, entry: ExpenseEntry) => sum + (entry.amount || 0), 0);
+  const totalInvoiced = invoices.reduce((sum: number, inv: Invoice) => sum + (inv.total || 0), 0);
+
+  return {
+    caseData,
+    timeEntries,
+    invoices,
+    expenses,
+    totals: {
+      hours: totalHours,
+      billed: totalBilled,
+      expenses: totalExpenses,
+      invoiced: totalInvoiced,
+    },
+  };
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+}
+
+function formatHours(hours: number): string {
+  return `${hours.toFixed(2)} hrs`;
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
+export default function CaseBillingRoute() {
+  const { caseData, timeEntries, invoices, expenses, totals } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const navigate = useNavigate();
+
+  // Calculate budget utilization
+  const budgetAmount = caseData.budget?.amount || 0;
+  const budgetUtilization = budgetAmount > 0 ? (totals.billed / budgetAmount) * 100 : 0;
+  const budgetRemaining = budgetAmount - totals.billed;
+
+  return (
+    <div className="min-h-full bg-gray-50 dark:bg-gray-900">
+      {/* Case Header */}
+      <CaseHeader case={caseData} showBreadcrumbs />
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Page Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Billing Summary</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Financial overview and billing details
+            </p>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate(`/cases/${caseData.id}/time-entry`)}
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Log Time</span>
+            </button>
+            <button
+              onClick={() => navigate(`/cases/${caseData.id}/create-invoice`)}
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Create Invoice</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Financial Summary Cards */}
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Total Hours */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Hours</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{totals.hours.toFixed(1)}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{timeEntries.length} entries</p>
+              </div>
+              <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
+                <svg className="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Total Billed */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Billed</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{formatCurrency(totals.billed)}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Time & fees</p>
+              </div>
+              <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/30">
+                <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Total Expenses */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Expenses</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{formatCurrency(totals.expenses)}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{expenses.length} expenses</p>
+              </div>
+              <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/30">
+                <svg className="h-8 w-8 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Total Invoiced */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Invoiced</p>
+                <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{formatCurrency(totals.invoiced)}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{invoices.length} invoices</p>
+              </div>
+              <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/30">
+                <svg className="h-8 w-8 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Budget Tracker */}
+        {budgetAmount > 0 && (
+          <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Budget Tracking</h3>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {budgetUtilization.toFixed(1)}% utilized
+              </span>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-4 h-4 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+              <div
+                className={`h-full transition-all ${budgetUtilization >= 100
+                  ? 'bg-red-500'
+                  : budgetUtilization >= 80
+                    ? 'bg-orange-500'
+                    : budgetUtilization >= 60
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
+                  }`}
+                style={{ width: `${Math.min(budgetUtilization, 100)}%` }}
+              />
+            </div>
+
+            {/* Budget Details */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Budget</p>
+                <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">
+                  {formatCurrency(budgetAmount)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Spent</p>
+                <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">
+                  {formatCurrency(totals.billed)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Remaining</p>
+                <p className={`mt-1 text-xl font-semibold ${budgetRemaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-white'
+                  }`}>
+                  {formatCurrency(budgetRemaining)}
+                </p>
+              </div>
+            </div>
+
+            {/* Budget Alert */}
+            {budgetUtilization >= 80 && (
+              <div className="mt-4 rounded-lg bg-orange-50 p-4 dark:bg-orange-900/20">
+                <div className="flex items-start gap-3">
+                  <svg className="h-5 w-5 flex-shrink-0 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-orange-800 dark:text-orange-300">
+                      Budget Alert
+                    </p>
+                    <p className="mt-1 text-sm text-orange-700 dark:text-orange-400">
+                      This case has exceeded {budgetUtilization.toFixed(0)}% of its budget. Consider reviewing the budget or billing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Recent Activity */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Recent Time Entries */}
+          <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+            <div className="border-b border-gray-200 p-4 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Time Entries</h3>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {timeEntries.slice(0, 5).map((entry: TimeEntry) => (
+                <div key={entry.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <div className="flex items-center justify-between">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {entry.description || 'No description'}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        {entry.user} • {new Date(entry.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="ml-4 text-right">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                        {formatHours(entry.hours)}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {formatCurrency(entry.amount)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {timeEntries.length === 0 && (
+                <div className="p-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                  No time entries yet
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Recent Invoices */}
+          <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+            <div className="border-b border-gray-200 p-4 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Invoices</h3>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {invoices.slice(0, 5).map((invoice: Invoice) => (
+                <div key={invoice.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <div className="flex items-center justify-between">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        Invoice #{invoice.number || invoice.id.slice(0, 8)}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        {new Date(invoice.date).toLocaleDateString()} • {invoice.status}
+                      </p>
+                    </div>
+                    <div className="ml-4 text-right">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                        {formatCurrency(invoice.total)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {invoices.length === 0 && (
+                <div className="p-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                  No invoices yet
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Error Boundary
+// ============================================================================
+
+export function ErrorBoundary({ error }: { error: unknown }) {
+  return (
+    <RouteErrorBoundary
+      error={error}
+      title="Failed to Load Billing"
+      message="We couldn't load the billing information for this case."
+      backTo="/cases"
+      backLabel="Back to Cases"
+      onRetry={() => window.location.reload()}
+    />
+  );
+}

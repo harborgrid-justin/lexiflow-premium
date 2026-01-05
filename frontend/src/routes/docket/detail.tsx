@@ -74,13 +74,18 @@ export async function action({ params, request }: ActionFunctionArgs) {
       const description = formData.get("description") as string;
       const filingDate = formData.get("filingDate") as string;
 
-      const updates: any = {
+      const updates: Partial<{
+        updatedAt: string;
+        docketNumber: string;
+        description: string;
+        dateFiled: string;
+      }> = {
         updatedAt: new Date().toISOString(),
       };
 
-      if (entryNumber) updates.entryNumber = entryNumber;
+      if (entryNumber) updates.docketNumber = entryNumber;
       if (description) updates.description = description;
-      if (filingDate) updates.filingDate = filingDate;
+      if (filingDate) updates.dateFiled = filingDate;
 
       await DataService.docket.update(docketId, updates);
       return { success: true, message: "Docket entry updated successfully" };

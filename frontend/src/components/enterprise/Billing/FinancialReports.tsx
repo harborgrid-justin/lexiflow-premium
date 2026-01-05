@@ -9,7 +9,8 @@ import {
   type RealizationMetrics,
   type RevenueForecasting,
   type TimekeeperPerformance,
-  type WorkInProgressMetrics
+  type WorkInProgressMetrics,
+  billingApiService
 } from '@/services/api/billing.service';
 import {
   Activity,
@@ -190,7 +191,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Gross Revenue
                   </p>
                   <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                    {formatCurrency(profitability.grossRevenue)}
+                    {profitability ? formatCurrency(profitability.grossRevenue) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -210,7 +211,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Gross Margin
                   </p>
                   <p className="mt-2 text-3xl font-semibold text-green-600 dark:text-green-400">
-                    {formatPercent(profitability.grossMargin)}
+                    {profitability ? formatPercent(profitability.grossMargin) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -230,7 +231,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Net Profit
                   </p>
                   <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                    {formatCurrency(profitability.netProfit)}
+                    {profitability ? formatCurrency(profitability.netProfit) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -250,7 +251,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Net Margin
                   </p>
                   <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                    {formatPercent(profitability.netMargin)}
+                    {profitability ? formatPercent(profitability.netMargin) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
                     <TrendingDown className="h-4 w-4 text-red-600" />
@@ -275,7 +276,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                   Gross Revenue
                 </span>
                 <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {formatCurrency(profitability.grossRevenue)}
+                  {profitability ? formatCurrency(profitability.grossRevenue) : '-'}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
@@ -283,7 +284,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                   Direct Costs
                 </span>
                 <span className="text-lg font-semibold text-red-600 dark:text-red-400">
-                  -{formatCurrency(profitability.grossRevenue - profitability.grossProfit)}
+                  -{profitability ? formatCurrency(profitability.grossRevenue - profitability.grossProfit) : '-'}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
@@ -291,7 +292,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                   Gross Profit
                 </span>
                 <span className="text-lg font-semibold text-green-600 dark:text-green-400">
-                  {formatCurrency(profitability.grossProfit)}
+                  {profitability ? formatCurrency(profitability.grossProfit) : '-'}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
@@ -299,7 +300,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                   Operating Expenses
                 </span>
                 <span className="text-lg font-semibold text-red-600 dark:text-red-400">
-                  -{formatCurrency(profitability.operatingExpenses)}
+                  -{profitability ? formatCurrency(profitability.operatingExpenses) : '-'}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-3">
@@ -307,7 +308,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                   Net Profit
                 </span>
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {formatCurrency(profitability.netProfit)}
+                  {profitability ? formatCurrency(profitability.netProfit) : '-'}
                 </span>
               </div>
             </div>
@@ -324,10 +325,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Billing Realization
               </p>
               <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                {formatPercent(realization.billingRealization)}
+                {realization ? formatPercent(realization.billingRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
-                {formatCurrency(realization.actualBillingRate)} / {formatCurrency(realization.standardBillingRate)}
+                {realization ? `${formatCurrency(realization.actualBillingRate)} / ${formatCurrency(realization.standardBillingRate)}` : '-'}
               </p>
             </div>
 
@@ -336,10 +337,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Collection Realization
               </p>
               <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                {formatPercent(realization.collectionRealization)}
+                {realization ? formatPercent(realization.collectionRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
-                {formatCurrency(realization.actualCollectionAmount)} / {formatCurrency(realization.standardCollectionAmount)}
+                {realization ? `${formatCurrency(realization.actualCollectionAmount)} / ${formatCurrency(realization.standardCollectionAmount)}` : '-'}
               </p>
             </div>
 
@@ -347,8 +348,8 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Overall Realization
               </p>
-              <p className={`mt-2 text-3xl font-semibold ${getPerformanceColor(realization.overallRealization, 85)}`}>
-                {formatPercent(realization.overallRealization)}
+              <p className={`mt-2 text-3xl font-semibold ${realization ? getPerformanceColor(realization.overallRealization, 85) : ''}`}>
+                {realization ? formatPercent(realization.overallRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
                 Combined realization rate
@@ -368,13 +369,13 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Billing Realization Rate
                   </span>
                   <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {formatPercent(realization.billingRealization)}
+                    {realization ? formatPercent(realization.billingRealization) : '-'}
                   </span>
                 </div>
                 <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
                   <div
                     className="absolute h-full bg-blue-600 dark:bg-blue-500"
-                    style={{ width: `${realization.billingRealization}%` }}
+                    style={{ width: `${realization ? realization.billingRealization : 0}%` }}
                   />
                 </div>
               </div>
@@ -385,13 +386,13 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Collection Realization Rate
                   </span>
                   <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {formatPercent(realization.collectionRealization)}
+                    {realization ? formatPercent(realization.collectionRealization) : '-'}
                   </span>
                 </div>
                 <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
                   <div
                     className="absolute h-full bg-green-600 dark:bg-green-500"
-                    style={{ width: `${realization.collectionRealization}%` }}
+                    style={{ width: `${realization ? realization.collectionRealization : 0}%` }}
                   />
                 </div>
               </div>
@@ -402,13 +403,13 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                     Overall Realization Rate
                   </span>
                   <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {formatPercent(realization.overallRealization)}
+                    {realization ? formatPercent(realization.overallRealization) : '-'}
                   </span>
                 </div>
                 <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
                   <div
                     className="absolute h-full bg-purple-600 dark:bg-purple-500"
-                    style={{ width: `${realization.overallRealization}%` }}
+                    style={{ width: `${realization ? realization.overallRealization : 0}%` }}
                   />
                 </div>
               </div>
@@ -426,7 +427,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Total WIP
               </p>
               <p className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                {formatCurrency(wipMetrics.totalWIP)}
+                {wipMetrics ? formatCurrency(wipMetrics.totalWIP) : '-'}
               </p>
             </div>
 
@@ -435,7 +436,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Unbilled Time
               </p>
               <p className="mt-2 text-2xl font-semibold text-yellow-600 dark:text-yellow-400">
-                {formatCurrency(wipMetrics.unbilledTime)}
+                {wipMetrics ? formatCurrency(wipMetrics.unbilledTime) : '-'}
               </p>
             </div>
 
@@ -444,7 +445,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Average Age
               </p>
               <p className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                {wipMetrics.averageAgeDays} days
+                {wipMetrics ? wipMetrics.averageAgeDays : '-'} days
               </p>
             </div>
 
@@ -453,7 +454,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 Write-off Rate
               </p>
               <p className="mt-2 text-2xl font-semibold text-red-600 dark:text-red-400">
-                {formatPercent(wipMetrics.writeOffPercentage)}
+                {wipMetrics ? formatPercent(wipMetrics.writeOffPercentage) : '-'}
               </p>
             </div>
           </div>
@@ -464,7 +465,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               Work in Progress Breakdown
             </h3>
             <div className="space-y-4">
-              {[
+              {wipMetrics && [
                 { label: 'Unbilled Time', amount: wipMetrics.unbilledTime, color: 'bg-blue-600' },
                 { label: 'Unbilled Expenses', amount: wipMetrics.unbilledExpenses, color: 'bg-green-600' },
                 { label: 'Billed Not Collected', amount: wipMetrics.billedNotCollected, color: 'bg-yellow-600' },

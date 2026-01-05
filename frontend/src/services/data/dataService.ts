@@ -1410,7 +1410,7 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.realEstate
    * @features Properties, acquisitions, disposals, encroachments, utilization
    */
-  realEstate: { get: () => RealEstateService, enumerable: true },
+  // realEstate: { get: () => RealEstateService, enumerable: true },
 
   // ─────────────────────────────────────────────────────────────────────────
   // LEGAL CONTENT & RESEARCH

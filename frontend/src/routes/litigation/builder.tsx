@@ -108,8 +108,23 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   }));
 
-  // Existing strategies (placeholder for future API)
+  // Fetch existing strategies from cases that have them
   const existingStrategies: LoaderData['existingStrategies'] = [];
+  for (const c of cases) {
+    try {
+      const warRoomService = await DataService.warRoom.get();
+      const strategy = await warRoomService.getStrategy(c.id);
+      if (strategy && strategy.name) {
+        existingStrategies.push({
+          id: strategy.id || c.id,
+          name: strategy.name,
+          caseId: c.id
+        });
+      }
+    } catch {
+      // Case may not have a strategy - continue
+    }
+  }
 
   return {
     templates,

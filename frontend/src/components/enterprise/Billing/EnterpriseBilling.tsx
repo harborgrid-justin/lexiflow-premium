@@ -13,7 +13,9 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useQuery } from 'react-query';
+import { BillingOverview, dashboardMetricsService } from '../../../services/api/dashboard-metrics.service';
 
 // Types
 interface BillingSummaryMetrics {
@@ -90,7 +92,7 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
     }
 
     const total = billingData.reduce(
-      (acc, curr) => ({
+      (acc, curr: BillingOverview) => ({
         totalOutstanding: acc.totalOutstanding + curr.outstanding,
         collected: acc.collected + curr.collected,
         writeOffs: acc.writeOffs + curr.writeOffs,

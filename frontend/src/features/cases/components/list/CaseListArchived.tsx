@@ -24,9 +24,9 @@ import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/useModalState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -47,13 +47,13 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
   const [retrieveCaseId, setRetrieveCaseId] = React.useState<string | null>(null);
 
   // Enterprise Data Access
-  const { data: archivedCases = [], isLoading } = useQuery<unknown[]>(
+  const { data: archivedCases = [], isLoading } = useQuery<Case[]>(
     ['cases', 'archived'],
     () => DataService.cases.getArchived()
   );
 
   // Ensure archivedCases is always an array
-  const safeArchivedCases = Array.isArray(archivedCases) ? archivedCases : [];
+  const safeArchivedCases = archivedCases;
 
   const handleRetrieve = async (id: string) => {
     setRetrieveCaseId(id);
@@ -86,14 +86,14 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
           <TableHead className="text-right">Action</TableHead>
         </TableHeader>
         <TableBody>
-          {safeArchivedCases.map((c: unknown) => (
-            <TableRow key={(c as { id: string }).id}>
-              <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{(c as { date: string }).date}</TableCell>
-              <TableCell className={cn("font-medium", theme.text.primary)}>{(c as { title: string }).title}</TableCell>
-              <TableCell>{(c as { client: string }).client}</TableCell>
-              <TableCell><Badge variant="success">{(c as { outcome: string }).outcome}</Badge></TableCell>
+          {safeArchivedCases.map((c) => (
+            <TableRow key={c.id}>
+              <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{c.dateTerminated ? new Date(c.dateTerminated.toString()).toLocaleDateString() : 'N/A'}</TableCell>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{c.title}</TableCell>
+              <TableCell>{c.client}</TableCell>
+              <TableCell><Badge variant="success">{c.status}</Badge></TableCell>
               <TableCell className="text-right">
-                <Button variant="ghost" size="sm" onClick={() => handleRetrieve((c as { id: string }).id)}>Retrieve</Button>
+                <Button variant="ghost" size="sm" onClick={() => handleRetrieve(c.id)}>Retrieve</Button>
               </TableCell>
             </TableRow>
           ))}

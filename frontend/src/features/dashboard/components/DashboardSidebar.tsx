@@ -17,10 +17,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
-
-// CRITICAL FIX: Import from the Hooks layer to avoid the SyntaxError
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useBillingStats } from '../hooks/useDashboardData';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -38,17 +35,11 @@ import { cn } from '@/utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 export interface DashboardAlert {
-    id: number;
+    id: number | string;
     message: string;
     detail: string;
     time: string;
     caseId: string | null;
-}
-
-interface BillingStats {
-    realization: number;
-    totalBilled: number;
-    month: string;
 }
 
 interface DashboardSidebarProps {
@@ -66,11 +57,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
     const { theme } = useTheme();
 
     // Data Fetching via the centralized hook system
-    const { data: billingStats } = useQuery<BillingStats>(
-        ['billing', 'overview'],
-        () => DataService.billing.getOverviewStats(),
-        { initialData: { realization: 0, totalBilled: 0, month: 'Loading...' } }
-    );
+    const { billingStats } = useBillingStats();
 
     return (
         <div className="space-y-6">

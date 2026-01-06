@@ -41,14 +41,32 @@ import { cn } from '@/utils/cn';
 import { TimeEntry } from '@/types';
 
 // ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+interface Invoice {
+    id: string;
+    amount: number;
+    clientName: string;
+    caseId: string;
+    entries: TimeEntry[];
+    createdAt: string;
+}
+
+interface QueueItem {
+    entries: TimeEntry[];
+    resolve: (value: Invoice) => void;
+    reject: (error: Error) => void;
+}
+
+// ============================================================================
 // INVOICE GENERATION QUEUE
 // ============================================================================
 class InvoiceGenerationQueue {
-    private queue: Array<{ entries: TimeEntry[]; resolve: (value: unknown) => void; reject: (error: unknown) => void }> = [];
+    private queue: QueueItem[] = [];
     private processing = 0;
     private readonly maxConcurrent = 2; // PDF generation is CPU-intensive
 
-    async add(entries: TimeEntry[]): Promise<unknown> {
+    async add(entries: TimeEntry[]): Promise<Invoice> {
         return new Promise((resolve, reject) => {
             this.queue.push({ entries, resolve, reject });
             this.processQueue();
@@ -156,14 +174,8 @@ const BillingWIPComponent: React.FC = () => {
         },
         {
             invalidateKeys: [billingQueryKeys.billing.wip(), billingQueryKeys.billing.invoices()],
-            onSuccess: (invoice: unknown) => {
-                if (typeof invoice === 'object' && invoice !== null && 'id' in invoice && 'amount' in invoice) {
-                    const invoiceId = String(invoice.id);
-                    const invoiceAmount = typeof invoice.amount === 'number' ? invoice.amount : 0;
-                    notify.success(`Invoice ${invoiceId} generated for $${invoiceAmount.toFixed(2)}`);
-                } else {
-                    notify.success('Invoice generated successfully');
-                }
+            onSuccess: (invoice: Invoice) => {
+                notify.success(`Invoice ${invoice.id} generated for $${invoice.amount.toFixed(2)}`);
                 setSelectedIds(new Set());
                 localStorage.removeItem('billing-wip-draft');
             },

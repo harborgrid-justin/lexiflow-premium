@@ -317,6 +317,68 @@ export class DashboardMetricsService {
       { responseType: "blob" }
     );
   }
+
+  /**
+   * Get AR aging collection items
+   */
+  async getCollectionItems(): Promise<
+    Array<{
+      id: string;
+      clientName: string;
+      invoiceNumber: string;
+      amount: number;
+      daysOverdue: number;
+      lastContactDate?: string;
+      assignedTo?: string;
+      priority: "high" | "medium" | "low";
+      status: "pending" | "in_progress" | "contacted" | "payment_plan";
+    }>
+  > {
+    return apiClient.get<
+      Array<{
+        id: string;
+        clientName: string;
+        invoiceNumber: string;
+        amount: number;
+        daysOverdue: number;
+        lastContactDate?: string;
+        assignedTo?: string;
+        priority: "high" | "medium" | "low";
+        status: "pending" | "in_progress" | "contacted" | "payment_plan";
+      }>
+    >(`${this.baseUrl}/billing/collections`);
+  }
+
+  /**
+   * Get write-off requests
+   */
+  async getWriteOffRequests(): Promise<
+    Array<{
+      id: string;
+      invoiceNumber: string;
+      clientName: string;
+      originalAmount: number;
+      writeOffAmount: number;
+      reason: string;
+      requestedBy: string;
+      requestedDate: string;
+      status: "pending" | "approved" | "rejected";
+    }>
+  > {
+    return apiClient.get<
+      Array<{
+        id: string;
+        invoiceNumber: string;
+        clientName: string;
+        originalAmount: number;
+        writeOffAmount: number;
+        reason: string;
+        requestedBy: string;
+        requestedDate: string;
+        status: "pending" | "approved" | "rejected";
+      }>
+    >(`${this.baseUrl}/billing/writeoffs`);
+  }
 }
 
 // Export singleton instance

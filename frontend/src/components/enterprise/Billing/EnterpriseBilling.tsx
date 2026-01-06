@@ -113,11 +113,42 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
     };
   }, [billingData]);
 
-  const agingBuckets: ARAgingBucket[] = []; // TODO: Fetch from API
+  const agingBuckets: ARAgingBucket[] = useMemo(() => {
+    if (!billingData?.agingBuckets) {
+      return [];
+    }
+    return billingData.agingBuckets.map((bucket: { label: string; amount: number; count: number; total: number }) => ({
+      label: bucket.label,
+      daysRange: bucket.label,
+      amount: bucket.amount,
+      count: bucket.count,
+      percentage: bucket.total > 0 ? (bucket.amount / bucket.total) * 100 : 0,
+    }));
+  }, [billingData]);
 
-  const collectionItems: CollectionItem[] = []; // TODO: Fetch from API
+  const { data: collectionItemsData = [] } = useQuery<CollectionItem[]>(
+    ['billing', 'collections'],
+    async () => {
+      try {
+        return await dashboardMetricsService.getCollectionItems();
+      } catch {
+        return [];
+      }
+    }
+  );
+  const collectionItems: CollectionItem[] = collectionItemsData;
 
-  const writeOffRequests: WriteOffRequest[] = []; // TODO: Fetch from API
+  const { data: writeOffRequestsData = [] } = useQuery<WriteOffRequest[]>(
+    ['billing', 'writeoffs'],
+    async () => {
+      try {
+        return await dashboardMetricsService.getWriteOffRequests();
+      } catch {
+        return [];
+      }
+    }
+  );
+  const writeOffRequests: WriteOffRequest[] = writeOffRequestsData;
 
   const getPriorityBadge = (priority: 'high' | 'medium' | 'low') => {
     const styles = {

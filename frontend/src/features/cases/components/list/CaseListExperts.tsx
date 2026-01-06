@@ -22,8 +22,8 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -46,13 +46,16 @@ export const CaseListExperts: React.FC = () => {
   // Performance Engine: Caching
   const { data: experts = [], isLoading } = useQuery<Expert[]>(
     ['advisors', 'experts'],
-    () => DataService.warRoom.getExperts()
+    async () => {
+      // Safe cast as we define the interface here
+      return (await DataService.warRoom.getExperts()) as Expert[];
+    }
   );
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600" /></div>;
 
   // Ensure experts is an array
-  const expertsList = Array.isArray(experts) ? experts : [];
+  const expertsList = experts;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

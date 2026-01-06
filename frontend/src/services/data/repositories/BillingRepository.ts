@@ -9,6 +9,7 @@ import {
   OperatingSummary,
   RateTable,
   TimeEntry,
+  TrustAccount,
   TrustTransaction,
   UUID,
   WIPStat,
@@ -197,8 +198,8 @@ export class BillingRepository extends Repository<TimeEntry> {
     return db.getByIndex(STORES.TRUST_TX, "accountId", accountId);
   }
 
-  async getTrustAccounts() {
-    return db.getAll<unknown>(STORES.TRUST);
+  async getTrustAccounts(): Promise<TrustAccount[]> {
+    return db.getAll<TrustAccount>(STORES.TRUST);
   }
   async getTopAccounts(): Promise<Client[]> {
     const clients = await db.getAll<Client>(STORES.CLIENTS);

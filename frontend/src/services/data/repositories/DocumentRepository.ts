@@ -153,7 +153,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
       (options.caseId || options.type || options.status)
     ) {
       try {
-        return await this.documentsApi.getAll(options);
+        const result = await this.documentsApi.getAll(options);
+        return result as unknown as LegalDocument[];
       } catch (error) {
         console.warn(
           "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
@@ -190,7 +191,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
     if (this.useBackend) {
       try {
-        return await this.documentsApi.getById(id);
+        const result = await this.documentsApi.getById(id);
+        return result as unknown as LegalDocument;
       } catch (error) {
         console.warn(
           "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
@@ -223,7 +225,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
     if (this.useBackend) {
       try {
-        return await this.documentsApi.add(document);
+        const result = await this.documentsApi.add(document);
+        return result as unknown as LegalDocument;
       } catch (error) {
         console.warn(
           "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
@@ -263,7 +266,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
     if (this.useBackend) {
       try {
-        return await this.documentsApi.update(id, updates);
+        const result = await this.documentsApi.update(id, updates);
+        return result as unknown as LegalDocument;
       } catch (error) {
         console.warn(
           "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",

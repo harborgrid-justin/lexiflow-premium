@@ -1,0 +1,205 @@
+import { adminApi, api } from "@/api";
+import { AuditLog } from "@/api/admin/audit-logs-api";
+import { RiskImpact, TaskStatusBackend, WorkflowTask } from "@/types";
+import { ChartDataPoint } from "@/types/dashboard";
+import { Invoice } from "@/types/financial";
+
+export interface DashboardStats {
+  activeCases: number;
+  pendingMotions: number;
+  billableHours: number;
+  highRisks: number;
+}
+
+export interface DashboardAlert {
+  id: string | number;
+  message: string;
+  detail: string;
+  time: string;
+  caseId: string;
+}
+
+export interface BillingStats {
+  realization: number;
+  totalBilled: number;
+  month: string;
+}
+
+export const dashboardService = {
+  getStats: async (): Promise<DashboardStats> => {
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      ).toISOString();
+      const endOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0
+      ).toISOString();
+
+      const [stats, invoices, risks] = await Promise.all([
+        api.cases.getStats().catch((err: unknown) => {
+          console.warn("Failed to fetch case stats", err);
+          return { totalActive: 0, upcomingDeadlines: 0, utilizationRate: 0 };
+        }),
+        api.invoices
+          .getAll({
+            startDate: startOfMonth,
+            endDate: endOfMonth,
+          })
+          .catch(() => [] as Invoice[]),
+        api.risks.getAll({ impact: RiskImpact.HIGH }).catch(() => []),
+      ]);
+
+      // Calculate derived stats
+      // Assume 'stats' returns object with totalActive
+      // api.cases.getStats() likely returns { totalActive: number, ... }
+
+      // Calculate billable hours sum from invoices (proxy)
+      // or check if api.billing.timeEntries exists for more accuracy
+      const billableRevenue = invoices.reduce(
+        (sum, inv) => sum + (inv.totalAmount || 0),
+        0
+      );
+
+      return {
+        activeCases: stats.totalActive ?? 0,
+        pendingMotions: stats.upcomingDeadlines ?? 0,
+        billableHours: billableRevenue, // Using revenue as proxy based on previous impl
+        highRisks: Array.isArray(risks) ? risks.length : 0,
+      };
+    } catch (error) {
+      console.error("Dashboard Service: Failed to fetch stats", error);
+      return {
+        activeCases: 0,
+        pendingMotions: 0,
+        billableHours: 0,
+        highRisks: 0,
+      };
+    }
+  },
+
+  getBillingStats: async (): Promise<BillingStats> => {
+    try {
+      const now = new Date();
+      const currentMonthName = now.toLocaleString("default", { month: "long" });
+      const startOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      ).toISOString();
+      const endOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0
+      ).toISOString();
+
+      // Fetch invoices for current month to calculate 'totalBilled' and 'realization'
+      const invoices = await api.invoices
+        .getAll({
+          startDate: startOfMonth,
+          endDate: endOfMonth,
+        })
+        .catch(() => [] as Invoice[]);
+
+      const totalBilled = invoices.reduce(
+        (sum, inv) => sum + (inv.totalAmount || 0),
+        0
+      );
+      // Simulating realization rate based on paid/total
+      const totalPaid = invoices
+        .filter((inv) => inv.status === "Paid")
+        .reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
+
+      const realization = totalBilled > 0 ? (totalPaid / totalBilled) * 100 : 0;
+
+      return {
+        realization,
+        totalBilled,
+        month: currentMonthName,
+      };
+    } catch (error) {
+      console.error("Dashboard Service: Failed to fetch billing stats", error);
+      return {
+        realization: 0,
+        totalBilled: 0,
+        month: new Date().toLocaleString("default", { month: "long" }),
+      };
+    }
+  },
+
+  getTasks: async (): Promise<WorkflowTask[]> => {
+    try {
+      return await api.tasks.getAll({ status: "Pending" as TaskStatusBackend });
+    } catch (error) {
+      console.error("Dashboard Service: Failed to fetch tasks", error);
+      return [];
+    }
+  },
+
+  getChartData: async (): Promise<ChartDataPoint[]> => {
+    // Determine where chart data comes from.
+    // Previously: DataService.dashboard.getChartData
+    // We can simulate strict analytics here or fetch from analyticsApi
+    try {
+      // Ideally: await api.analytics.dashboard.getChartData();
+      // But we know that might be missing.
+      // Let's implement a real aggregation for "Cases by Status"
+      const cases = await api.cases.getAll();
+      const statusMap = new Map<string, number>();
+
+      cases.forEach((c) => {
+        const status = c.status || "Unknown";
+        statusMap.set(status, (statusMap.get(status) || 0) + 1);
+      });
+
+      return Array.from(statusMap.entries()).map(([name, value]) => ({
+        name,
+        value,
+      }));
+    } catch (error) {
+      console.error("Dashboard Service: Failed to fetch chart data", error);
+      return [];
+    }
+  },
+
+  getRecentAlerts: async (): Promise<DashboardAlert[]> => {
+    try {
+      // Fetch recent audit logs (last 7 days) as alerts
+      const logs = await adminApi.auditLogs.getAll({
+        startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      });
+
+      // Sort by timestamp desc and take top 5
+      const sortedLogs = logs
+        .sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )
+        .slice(0, 5);
+
+      return sortedLogs.map((log: AuditLog) => {
+        // Safe mapping with strict types
+        const details = log.changes
+          ? JSON.stringify(log.changes)
+          : log.metadata
+            ? JSON.stringify(log.metadata)
+            : "";
+
+        return {
+          id: log.id,
+          message: log.action || "System Event",
+          detail: details || `Entity: ${log.entityType}`,
+          time: log.timestamp || new Date().toISOString(),
+          caseId: (log.metadata?.caseId as string) || "",
+        };
+      });
+    } catch (error) {
+      console.error("Dashboard Service: Failed to fetch alerts", error);
+      return [];
+    }
+  },
+};

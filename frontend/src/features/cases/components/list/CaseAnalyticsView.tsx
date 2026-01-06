@@ -5,17 +5,21 @@
  * @optimization React.memo, useMemo for expensive analytics calculations
  */
 
-import React, { useMemo} from 'react';
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 import { Matter } from '@/types';
-import { BarChart3, TrendingUp, DollarSign, Users, Briefcase} from 'lucide-react';
+import { queryKeys } from '@/utils/queryKeys';
+import { BarChart3, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 export const CaseAnalyticsView: React.FC = React.memo(() => {
-  const { data: matters = []} = useQuery<Matter[]>(
+  const { data: matters = [] } = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
-    () => DataService.cases.getAll(),
+    async () => {
+      // DataServiceImpl return Case[], but analytics view treats them as Matter[] (compatible types)
+      // Performing explicit cast here for type safety
+      return (await DataService.cases.getAll()) as unknown as Matter[];
+    },
     { staleTime: 30000 } // Cache for 30 seconds
   );
 
@@ -152,11 +156,10 @@ export const CaseAnalyticsView: React.FC = React.memo(() => {
                   <div className="flex items-center gap-2">
                     <div className="w-32 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                       <div
-                        className={`h-2 rounded-full ${
-                          priority === 'URGENT' ? 'bg-rose-600' :
-                          priority === 'HIGH' ? 'bg-orange-600' :
-                          priority === 'MEDIUM' ? 'bg-blue-600' : 'bg-slate-600'
-                        }`}
+                        className={`h-2 rounded-full ${priority === 'URGENT' ? 'bg-rose-600' :
+                            priority === 'HIGH' ? 'bg-orange-600' :
+                              priority === 'MEDIUM' ? 'bg-blue-600' : 'bg-slate-600'
+                          }`}
                         style={{ width: `${(count / matters.length) * 100}%` }}
                       />
                     </div>

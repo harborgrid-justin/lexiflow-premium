@@ -21,8 +21,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -48,7 +48,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = () => {
     async () => {
       const all = await DataService.compliance.getConflicts();
       // Return flagged or recent items
-      return all.sort((a: unknown, b: unknown) => new Date((b as { date: string }).date).getTime() - new Date((a as { date: string }).date).getTime()).slice(0, 5);
+      return all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
     }
   );
 

@@ -17,169 +17,214 @@
  * - Proper error handling and logging
  */
 
-import { Citation } from '@/types';
-import { Repository } from '@/services/core/Repository';
-import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/config/network/api.config';
-import { CitationsApiService } from '@/api/intelligence/citations-api';
-import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
-import { SystemEventType } from '@/types/integration-types';
-import { ValidationError, EntityNotFoundError } from '@/services/core/errors';
+import { CitationsApiService } from "@/api/intelligence/citations-api";
+import { isBackendApiEnabled } from "@/config/network/api.config";
+import { EntityNotFoundError, ValidationError } from "@/services/core/errors";
+import { Repository } from "@/services/core/Repository";
+import { STORES } from "@/services/data/db";
+import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
+import { Citation } from "@/types";
+import { SystemEventType } from "@/types/integration-types";
 
 export const CITATION_QUERY_KEYS = {
-    all: () => ['citations'] as const,
-    byId: (id: string) => ['citations', id] as const,
-    byCase: (caseId: string) => ['citations', 'case', caseId] as const,
-    byDocument: (documentId: string) => ['citations', 'document', documentId] as const,
-    byType: (type: string) => ['citations', 'type', type] as const,
+  all: () => ["citations"] as const,
+  byId: (id: string) => ["citations", id] as const,
+  byCase: (caseId: string) => ["citations", "case", caseId] as const,
+  byDocument: (documentId: string) =>
+    ["citations", "document", documentId] as const,
+  byType: (type: string) => ["citations", "type", type] as const,
 } as const;
 
 export class CitationRepository extends Repository<Citation> {
-    private readonly useBackend: boolean;
-    private citationsApi: CitationsApiService;
+  private readonly useBackend: boolean;
+  private citationsApi: CitationsApiService;
 
-    constructor() {
-        super(STORES.CITATIONS);
-        this.useBackend = isBackendApiEnabled();
-        this.citationsApi = new CitationsApiService();
-        console.log(`[CitationRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
+  constructor() {
+    super(STORES.CITATIONS);
+    this.useBackend = isBackendApiEnabled();
+    this.citationsApi = new CitationsApiService();
+  }
+
+  private validateId(id: string, methodName: string): void {
+    if (!id || typeof id !== "string" || id.trim() === "") {
+      throw new Error(
+        `[CitationRepository.${methodName}] Invalid id parameter`
+      );
+    }
+  }
+
+  override async getAll(): Promise<Citation[]> {
+    if (this.useBackend) {
+      try {
+        // Ensure the API returns Citation compatible objects
+        const result = await this.citationsApi.getAll();
+        return result as unknown as Citation[];
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
+    }
+    return await super.getAll();
+  }
+
+  override async getById(id: string): Promise<Citation | undefined> {
+    this.validateId(id, "getById");
+    if (this.useBackend) {
+      try {
+        const result = await this.citationsApi.getById(id);
+        return result as unknown as Citation;
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
+    }
+    return await super.getById(id);
+  }
+
+  override async add(item: Citation): Promise<Citation> {
+    if (!item || typeof item !== "object") {
+      throw new ValidationError(
+        "[CitationRepository.add] Invalid citation data"
+      );
     }
 
-    private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
-            throw new Error(`[CitationRepository.${methodName}] Invalid id parameter`);
-        }
+    let result: Citation;
+    if (this.useBackend) {
+      try {
+        // Cast item to any to satisfy API signature if needed, or better, improve API signature later
+        result = (await this.citationsApi.create(
+          item as any
+        )) as unknown as Citation;
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+        await super.add(item);
+        result = item;
+      }
+    } else {
+      await super.add(item);
+      result = item;
     }
 
-    override async getAll(): Promise<Citation[]> {
-        if (this.useBackend) {
-            try {
-                return await this.citationsApi.getAll() as unknown as Citation[];
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        return await super.getAll();
+    // Publish integration event
+    try {
+      await IntegrationEventPublisher.publish(SystemEventType.CITATION_SAVED, {
+        citation: result,
+        queryContext: (item.caseContext as string) || "",
+      });
+    } catch (eventError) {
+      console.warn(
+        "[CitationRepository] Failed to publish integration event",
+        eventError
+      );
     }
 
-    override async getById(id: string): Promise<Citation | undefined> {
-        this.validateId(id, 'getById');
-        if (this.useBackend) {
-            try {
-                return await this.citationsApi.getById(id) as unknown as Citation;
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        return await super.getById(id);
+    return result;
+  }
+
+  override async update(
+    id: string,
+    updates: Partial<Citation>
+  ): Promise<Citation> {
+    this.validateId(id, "update");
+    if (this.useBackend) {
+      try {
+        const result = await this.citationsApi.update(id, updates as any);
+        return result as unknown as Citation;
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
     }
+    return await super.update(id, updates);
+  }
 
-    override add = async (item: Citation): Promise<Citation> => {
-        if (!item || typeof item !== 'object') {
-            throw new ValidationError('[CitationRepository.add] Invalid citation data');
-        }
-
-        let result: Citation;
-        if (this.useBackend) {
-            try {
-                result = await this.citationsApi.create(item as unknown as Parameters<typeof this.citationsApi.create>[0]) as unknown as Citation;
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-                await super.add(item);
-                result = item;
-            }
-        } else {
-            await super.add(item);
-            result = item;
-        }
-
-        // Publish integration event
-        try {
-            await IntegrationEventPublisher.publish(SystemEventType.CITATION_SAVED, {
-                citation: result,
-                queryContext: (item as { caseContext?: string }).caseContext || ''
-            });
-        } catch (eventError) {
-            console.warn('[CitationRepository] Failed to publish integration event', eventError);
-        }
-
-        return result;
+  override async delete(id: string): Promise<void> {
+    this.validateId(id, "delete");
+    if (this.useBackend) {
+      try {
+        await this.citationsApi.delete(id);
+        return;
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
     }
+    await super.delete(id);
+  }
 
-    override async update(id: string, updates: Partial<Citation>): Promise<Citation> {
-        this.validateId(id, 'update');
-        if (this.useBackend) {
-            try {
-                return await this.citationsApi.update(id, updates as unknown as Parameters<typeof this.citationsApi.update>[1]) as unknown as Citation;
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        return await super.update(id, updates);
-    }
+  async verifyAll(): Promise<{ checked: number; flagged: number }> {
+    return { checked: 150, flagged: 3 };
+  }
 
-    override async delete(id: string): Promise<void> {
-        this.validateId(id, 'delete');
-        if (this.useBackend) {
-            try {
-                await this.citationsApi.delete(id);
-                return;
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        await super.delete(id);
-    }
+  async quickAdd(citation: Citation): Promise<Citation> {
+    return this.add(citation);
+  }
 
-    async verifyAll(): Promise<{ checked: number; flagged: number }> {
-        return { checked: 150, flagged: 3 };
+  async validate(
+    citationText: string
+  ): Promise<{ valid: boolean; formatted?: string; errors?: string[] }> {
+    if (!citationText) {
+      throw new ValidationError(
+        "[CitationRepository.validate] Invalid citationText"
+      );
     }
+    if (this.useBackend) {
+      try {
+        return await this.citationsApi.validate(citationText);
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
+    }
+    return { valid: true, formatted: citationText };
+  }
 
-    async quickAdd(citation: unknown): Promise<Citation> {
-        return this.add(citation as Citation);
+  async shepardize(id: string): Promise<Citation> {
+    this.validateId(id, "shepardize");
+    if (this.useBackend) {
+      try {
+        const result = await this.citationsApi.shepardize(id);
+        return result as unknown as Citation;
+      } catch (error) {
+        console.warn("[CitationRepository] Backend API unavailable", error);
+      }
     }
+    const citation = await this.getById(id);
+    if (!citation) throw new EntityNotFoundError("Citation", id);
+    return {
+      ...citation,
+      shepardized: true,
+      shepardStatus: "good_law",
+    } as Citation;
+  }
 
-    async validate(citationText: string): Promise<{ valid: boolean; formatted?: string; errors?: string[] }> {
-        if (!citationText) {
-            throw new ValidationError('[CitationRepository.validate] Invalid citationText');
-        }
-        if (this.useBackend) {
-            try {
-                return await this.citationsApi.validate(citationText);
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        return { valid: true, formatted: citationText };
-    }
+  async search(criteria: {
+    caseId?: string;
+    documentId?: string;
+    type?: string;
+    query?: string;
+  }): Promise<Citation[]> {
+    let citations = await this.getAll();
+    if (criteria.caseId)
+      citations = citations.filter((c) => c["caseId"] === criteria.caseId);
+    if (criteria.documentId)
+      citations = citations.filter(
+        (c) => c["documentId"] === criteria.documentId
+      );
+    if (criteria.type)
+      citations = citations.filter((c) => c["type"] === criteria.type);
+    if (criteria.query) {
+      const lowerQuery = criteria.query.toLowerCase();
+      citations = citations.filter((c) => {
+        const citationStr =
+          typeof c["citation"] === "string" ? c["citation"] : "";
+        const citationText =
+          typeof c["citationText"] === "string" ? c["citationText"] : "";
+        const bluebookFormat =
+          typeof c["bluebookFormat"] === "string" ? c["bluebookFormat"] : "";
 
-    async shepardize(id: string): Promise<Citation> {
-        this.validateId(id, 'shepardize');
-        if (this.useBackend) {
-            try {
-                return await this.citationsApi.shepardize(id) as unknown as Citation;
-            } catch (error) {
-                console.warn('[CitationRepository] Backend API unavailable', error);
-            }
-        }
-        const citation = await this.getById(id);
-        if (!citation) throw new EntityNotFoundError('Citation', id);
-        return { ...citation, shepardized: true, shepardStatus: 'good_law' } as Citation;
+        return (
+          citationStr.toLowerCase().includes(lowerQuery) ||
+          citationText.toLowerCase().includes(lowerQuery) ||
+          bluebookFormat.toLowerCase().includes(lowerQuery)
+        );
+      });
     }
-
-    async search(criteria: { caseId?: string; documentId?: string; type?: string; query?: string }): Promise<Citation[]> {
-        let citations = await this.getAll();
-        if (criteria.caseId) citations = citations.filter(c => (c as { caseId?: string }).caseId === criteria.caseId);
-        if (criteria.documentId) citations = citations.filter(c => (c as { documentId?: string }).documentId === criteria.documentId);
-        if (criteria.type) citations = citations.filter(c => (c as { type?: string }).type === criteria.type);
-        if (criteria.query) {
-            const lowerQuery = criteria.query.toLowerCase();
-            citations = citations.filter(c =>
-                c.citation?.toLowerCase().includes(lowerQuery) ||
-                (c as { citationText?: string }).citationText?.toLowerCase().includes(lowerQuery) ||
-                (c as { bluebookFormat?: string }).bluebookFormat?.toLowerCase().includes(lowerQuery)
-            );
-        }
-        return citations;
-    }
+    return citations;
+  }
 }

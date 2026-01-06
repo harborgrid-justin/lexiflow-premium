@@ -185,9 +185,6 @@ export class Case extends BaseEntity {
   @Column({ name: "close_date", type: "date", nullable: true })
   closeDate?: Date;
 
-  @Column({ name: "date_terminated", type: "date", nullable: true })
-  dateTerminated?: Date;
-
   @Column({ name: "jury_demand", type: "varchar", length: 50, nullable: true })
   juryDemand?: string;
 

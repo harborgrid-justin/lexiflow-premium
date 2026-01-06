@@ -16,9 +16,12 @@ import React, { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
+import {
+  useDashboardAlerts,
+  useDashboardCharts,
+  useDashboardStats,
+  useDashboardTasks
+} from '../hooks/useDashboardData';
 
 // Components
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
@@ -32,7 +35,6 @@ import { Scheduler } from '@/utils/scheduler';
 // Types
 import type { CaseId, TaskId, WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
-import type { ChartDataPoint as DashboardChartData } from '@/types/dashboard';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -57,48 +59,13 @@ interface ActiveProject {
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
   // Enterprise Data Access: Parallel Queries with Caching
-  const { data: stats, isLoading: statsLoading } = useQuery<{
-    activeCases: number;
-    pendingMotions: number;
-    billableHours: number;
-    highRisks: number;
-  } | null>(['dashboard', 'stats'], () => DataService.dashboard.getStats());
-  const { data: tasks = [] } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
-  const { data: rawChartData = [] } = useQuery<DashboardChartData[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+  const { stats, isLoading: statsLoading } = useDashboardStats();
+  const { tasks } = useDashboardTasks();
+  const { chartData: rawChartData } = useDashboardCharts();
+  const { alerts } = useDashboardAlerts();
 
   // Transform chart data from { name, value } to { name, count } for DashboardAnalytics
   const chartData = rawChartData.map(item => ({ name: item.name, count: item.value }));
-
-  interface RawAlert {
-    id?: number | string;
-    message?: string;
-    detail?: string;
-    time?: string;
-    caseId?: string;
-  }
-
-  const { data: rawAlerts = [] } = useQuery<RawAlert[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
-
-  // Transform alerts to match DashboardAlert type
-  const alerts = rawAlerts.map((alert: unknown, index: number) => {
-    if (typeof alert !== 'object' || alert === null) {
-      return { id: index, message: '', detail: '', time: '', caseId: '' };
-    }
-    const alertId = 'id' in alert && typeof alert.id === 'number' ? alert.id :
-      'id' in alert ? (parseInt(String(alert.id), 10) || index) : index;
-    const alertMessage = 'message' in alert ? String(alert.message) : '';
-    const alertDetail = 'detail' in alert ? String(alert.detail) : '';
-    const alertTime = 'time' in alert ? String(alert.time) : '';
-    const alertCaseId = 'caseId' in alert ? String(alert.caseId) : '';
-
-    return {
-      id: alertId,
-      message: alertMessage,
-      detail: alertDetail,
-      time: alertTime,
-      caseId: alertCaseId
-    };
-  });
 
   // Optimization: Defer heavy processing of tasks to idle time
   const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);

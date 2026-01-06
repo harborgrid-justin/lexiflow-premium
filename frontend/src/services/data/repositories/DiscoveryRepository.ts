@@ -295,11 +295,11 @@ export class DiscoveryRepository {
   /**
    * Get custodian statistics
    *
-   * @returns Promise<unknown[]> Custodian statistics
+   * @returns Promise<any[]> Custodian statistics
    */
-  getCustodianStats = async (): Promise<unknown[]> => {
+  getCustodianStats = async (): Promise<any[]> => {
     try {
-      const stats = await db.get<{ data?: unknown[] }>(
+      const stats = await db.get<{ data?: any[] }>(
         STORES.DISCOVERY_CUSTODIAN_STATS,
         "custodian-main"
       );
@@ -318,21 +318,22 @@ export class DiscoveryRepository {
    * Get all custodians, optionally filtered by case
    *
    * @param caseId - Optional case ID filter
-   * @returns Promise<unknown[]> Array of custodians
+   * @returns Promise<Custodian[]> Array of custodians
    * @throws Error if caseId is invalid or fetch fails
    *
    * @example
    * const allCustodians = await repo.getCustodians();
    * const caseCustodians = await repo.getCustodians('case-123');
    */
-  getCustodians = async (caseId?: string): Promise<unknown[]> => {
+  getCustodians = async (caseId?: string): Promise<Custodian[]> => {
     this.validateCaseId(caseId, "getCustodians");
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.getAll(
+        const result = await discoveryApi.custodians.getAll(
           caseId ? { caseId } : undefined
         );
+        return result as unknown as Custodian[];
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",
@@ -342,11 +343,9 @@ export class DiscoveryRepository {
     }
 
     try {
-      const custodians = await db.getAll<unknown>(STORES.CUSTODIANS);
+      const custodians = await db.getAll<Custodian>(STORES.CUSTODIANS);
       return caseId
-        ? custodians.filter(
-            (c: unknown) => (c as { caseId?: string }).caseId === caseId
-          )
+        ? custodians.filter((c) => c.caseId === caseId)
         : custodians;
     } catch (error) {
       console.error("[DiscoveryRepository.getCustodians] Error:", error);
@@ -355,22 +354,13 @@ export class DiscoveryRepository {
   };
 
   /**
-   * Add a new custodian
-   *
-   * @param custodian - Custodian data to add
-   * @returns Promise<unknown> Created custodian
-import { Custodian } from "@/api/discovery/custodians-api";
-
-// ... existing imports ...
-
-  /**
    * Adds a new custodian
    *
    * @param custodian - Custodian data
    * @returns Promise<Custodian>
    * @throws Error if validation fails or create fails
    */
-  addCustodian = async (custodian: unknown): Promise<unknown> => {
+  addCustodian = async (custodian: Custodian): Promise<Custodian> => {
     if (!custodian || typeof custodian !== "object") {
       throw new ValidationError(
         "[DiscoveryRepository.addCustodian] Invalid custodian data"
@@ -379,7 +369,8 @@ import { Custodian } from "@/api/discovery/custodians-api";
 
     if (this.useBackend) {
       try {
-        return await discoveryApi.custodians.create(custodian as any);
+        const result = await discoveryApi.custodians.create(custodian as any);
+        return result as unknown as Custodian;
       } catch (error) {
         console.warn(
           "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",
@@ -389,7 +380,8 @@ import { Custodian } from "@/api/discovery/custodians-api";
     }
 
     try {
-      return await db.put(STORES.CUSTODIANS, custodian);
+      await db.put(STORES.CUSTODIANS, custodian);
+      return custodian;
     } catch (error) {
       console.error("[DiscoveryRepository.addCustodian] Error:", error);
       throw new OperationError("addCustodian", "Failed to add custodian");

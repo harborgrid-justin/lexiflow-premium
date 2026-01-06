@@ -21,24 +21,9 @@ import { Jurisdiction } from '@/api/intelligence/jurisdiction-api';
 import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { DataService } from '@/services/data/dataService';
-import { Case, CaseStatus } from '@/types';
+import { Case, CaseStatus, CaseType } from '@/types';
 import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
-
-// Federal Case Type enum (matching backend case.entity.ts)
-export enum CaseType {
-  CIVIL = 'Civil',
-  CRIMINAL = 'Criminal',
-  FAMILY = 'Family',
-  BANKRUPTCY = 'Bankruptcy',
-  IMMIGRATION = 'Immigration',
-  INTELLECTUAL_PROPERTY = 'Intellectual Property',
-  CORPORATE = 'Corporate',
-  REAL_ESTATE = 'Real Estate',
-  LABOR = 'Labor',
-  ENVIRONMENTAL = 'Environmental',
-  TAX = 'Tax',
-}
 
 // CreateCaseDto interface matching backend API expectations
 interface CreateCaseDto {

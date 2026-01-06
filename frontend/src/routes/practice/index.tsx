@@ -26,10 +26,14 @@ export function meta() {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader() {
+/**
+ * Fetches practice management data on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader() {
   try {
     const [staff, metrics] = await Promise.all([
       DataService.hr.getAll(),
@@ -43,7 +47,7 @@ export async function loader() {
 
     let pendingTasks = 0;
     try {
-      const tasks = await DataService.workflow.tasks.getAll();
+      const tasks = await DataService.tasks.getAll();
       pendingTasks = tasks.filter((t: { status?: string }) => t.status !== 'completed').length;
     } catch (e) {
       console.error("Failed to fetch tasks", e);
@@ -65,6 +69,9 @@ export async function loader() {
     };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Component

@@ -24,10 +24,16 @@ export const MotionForSanctions: React.FC<MotionForSanctionsProps> = ({ caseId }
     const sanctionModal = useModalState();
     const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
-    const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
+    const { data: rawSanctions = [] } = useQuery<SanctionMotion[]>(
         caseId ? queryKeys.sanctions.byCase(caseId) : queryKeys.sanctions.all(),
-        () => DataService.discovery.getSanctions(caseId)
+        async () => {
+            const result = await DataService.discovery.getSanctions(caseId);
+            return Array.isArray(result) ? result : [];
+        }
     );
+
+    // Runtime array validation
+    const sanctions = Array.isArray(rawSanctions) ? rawSanctions : [];
 
     const { mutate: addSanction } = useMutation(
         DataService.discovery.addSanctionMotion,

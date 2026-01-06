@@ -60,10 +60,14 @@ export function meta() {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
+/**
+ * Fetches correspondence compose data on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader({ request }: Route.ClientLoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
   const draftId = url.searchParams.get('draft');
   const templateId = url.searchParams.get('template');
@@ -79,7 +83,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   // Fetch recent recipients (clients)
   const recentRecipients: Recipient[] = [];
   try {
-    const clientsResponse = await DataService.communications.clients.getAll();
+    const clientsResponse = await DataService.clients.getAll();
     const clients = Array.isArray(clientsResponse) ? clientsResponse : [];
     clients.forEach((client: { id: string; firstName?: string; lastName?: string; email?: string }) => {
       if (client.email) {
@@ -99,7 +103,9 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   let draft = null;
   if (draftId) {
     try {
-      draft = await DataService.communications.correspondence.getById(draftId);
+      draft = await DataService.correspondence.getCommunications().then(comms =>
+        comms.find((c: any) => c.id === draftId) || null
+      );
     } catch (error) {
       console.error("Failed to load draft", error);
     }
@@ -113,6 +119,9 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
     templateId
   };
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

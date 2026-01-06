@@ -23,10 +23,16 @@ export const Examinations: React.FC<ExaminationsProps> = ({ caseId }) => {
     const examModal = useModalState();
     const [newExam, setNewExam] = useState<Partial<Examination>>({});
 
-    const { data: exams = [] } = useQuery<Examination[]>(
+    const { data: examsData = [] } = useQuery<Examination[]>(
         caseId ? ['examinations', 'case', caseId] : ['examinations', 'all'],
-        () => DataService.discovery.getExaminations(caseId)
+        async () => {
+            const result = await DataService.discovery.getExaminations(caseId);
+            return Array.isArray(result) ? result : [];
+        }
     );
+
+    // Runtime array validation to prevent .map() errors
+    const exams = Array.isArray(examsData) ? examsData : [];
 
     const { mutate: addExam } = useMutation(
         DataService.discovery.addExamination,

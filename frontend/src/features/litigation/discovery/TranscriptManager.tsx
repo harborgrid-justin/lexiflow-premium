@@ -1,7 +1,7 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Transcript } from '@/types';
 import { cn } from '@/utils/cn';
@@ -17,10 +17,16 @@ export const TranscriptManager: React.FC = () => {
     const transcriptModal = useModalState();
     const [newTranscript, setNewTranscript] = useState<Partial<Transcript>>({});
 
-    const { data: transcripts = [] } = useQuery<Transcript[]>(
+    const { data: rawTranscripts = [] } = useQuery<Transcript[]>(
         ['transcripts', 'all'],
-        () => DataService.discovery.getTranscripts()
+        async () => {
+            const result = await DataService.discovery.getTranscripts();
+            return Array.isArray(result) ? result : [];
+        }
     );
+
+    // Runtime array validation
+    const transcripts = Array.isArray(rawTranscripts) ? rawTranscripts : [];
 
     const { mutate: addTranscript } = useMutation(
         DataService.discovery.addTranscript,

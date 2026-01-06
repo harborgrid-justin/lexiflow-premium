@@ -1,8 +1,8 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/utils/cn';
@@ -14,11 +14,16 @@ export const RequestForAdmission: React.FC = () => {
     const { theme } = useTheme();
 
     // Reuse requests store but filter for Admissions
-    const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
+    const { data: rawRequests = [] } = useQuery<DiscoveryRequest[]>(
         ['requests', 'all'],
-        DataService.discovery.getRequests
+        async () => {
+            const result = await DataService.discovery.getRequests();
+            return Array.isArray(result) ? result : [];
+        }
     );
 
+    // Runtime array validation
+    const requests = Array.isArray(rawRequests) ? rawRequests : [];
     const rfas = requests.filter(r => r.type === 'Admission');
 
     return (

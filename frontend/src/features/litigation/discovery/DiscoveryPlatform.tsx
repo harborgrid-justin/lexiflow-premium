@@ -84,13 +84,17 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
 
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
-  const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
+  const { data: rawRequests = [] } = useQuery<DiscoveryRequest[]>(
     caseId ? QUERY_KEYS.REQUESTS.BY_CASE(caseId) : QUERY_KEYS.REQUESTS.ALL,
     async () => {
       const discovery = DataService.discovery as unknown as DiscoveryRepository;
-      return discovery.getRequests(caseId);
+      const result = await discovery.getRequests(caseId);
+      return Array.isArray(result) ? result : [];
     }
   );
+
+  // Runtime array validation
+  const requests = Array.isArray(rawRequests) ? rawRequests : [];
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
     async () => {

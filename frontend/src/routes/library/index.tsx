@@ -28,10 +28,14 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: LoaderFunctionArgs) {
+/**
+ * Fetches library resources on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader({ request }: LoaderFunctionArgs) {
   // Parse search/filter params
   const url = new URL(request.url);
   const category = url.searchParams.get("category") || "all";
@@ -44,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       search: search || undefined
     };
 
-    const resources = await DataService.analytics.knowledge.getAll(filter);
+    const resources = await DataService.knowledge.getAll(filter);
 
     return {
       resources,
@@ -68,6 +72,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
+
 // ============================================================================
 // Action
 // ============================================================================
@@ -86,7 +93,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
       case "delete": {
         const id = formData.get("id") as string;
-        if (id) await DataService.analytics.knowledge.delete(id);
+        if (id) await DataService.knowledge.delete(id);
         return { success: true };
       }
 

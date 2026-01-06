@@ -40,8 +40,8 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useModalState } from '@/hooks/core';
 
 // Services & Utils
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -90,10 +90,16 @@ export function VendorManagement() {
   // ==========================================================================
   // HOOKS - Data Fetching
   // ==========================================================================
-  const { data: vendors = [] } = useQuery<Vendor[]>(
+  const { data: rawVendors = [] } = useQuery<Vendor[]>(
     ['vendors', 'all'],
-    () => DataService.discovery.getVendors()
+    async () => {
+      const result = await DataService.discovery.getVendors();
+      return Array.isArray(result) ? result : [];
+    }
   );
+
+  // Runtime array validation
+  const vendors = Array.isArray(rawVendors) ? rawVendors : [];
 
   const { mutate: addVendor } = useMutation(
     DataService.discovery.addVendor,

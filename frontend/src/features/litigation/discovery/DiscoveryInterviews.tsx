@@ -20,10 +20,16 @@ export const DiscoveryInterviews: React.FC<DiscoveryInterviewsProps> = ({ caseId
   const interviewModal = useModalState();
 
   // Enterprise Data Access
-  const { data: interviews = [] } = useQuery<CustodianInterview[]>(
+  const { data: rawInterviews = [] } = useQuery<CustodianInterview[]>(
     ['discovery-interviews', 'all'],
-    () => DataService.discovery.getInterviews(caseId)
+    async () => {
+      const result = await DataService.discovery.getInterviews(caseId);
+      return Array.isArray(result) ? result : [];
+    }
   );
+
+  // Runtime array validation
+  const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
 
   const { mutate: createInterview } = useMutation(
     DataService.discovery.createInterview,

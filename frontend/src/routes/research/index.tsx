@@ -26,10 +26,14 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader() {
+/**
+ * Fetches research history on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader() {
   try {
     const history = await DataService.research.getHistory();
     return { items: [], totalCount: 0, recentSearches: history };
@@ -38,6 +42,9 @@ export async function loader() {
     return { items: [], totalCount: 0, recentSearches: [] };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

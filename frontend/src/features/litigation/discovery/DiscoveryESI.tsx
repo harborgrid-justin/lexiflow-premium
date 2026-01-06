@@ -131,10 +131,16 @@ export const DiscoveryESI: React.FC = () => {
   }
 
   // Enterprise Data Access
-  const { data: sources = [] } = useQuery<ESISource[]>(
+  const { data: rawSources = [] } = useQuery<ESISource[]>(
     discoveryQueryKeys.discovery.esi.all(),
-    () => DataService.discovery.getESISources()
+    async () => {
+      const result = await DataService.discovery.getESISources();
+      return Array.isArray(result) ? result : [];
+    }
   );
+
+  // Runtime array validation
+  const sources = Array.isArray(rawSources) ? rawSources : [];
 
   const { mutate: updateStatus } = useMutation(
     async (payload: { status: string }) => {

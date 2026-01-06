@@ -49,10 +49,14 @@ export function meta({ data }: { data: LoaderData }) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: LoaderFunctionArgs) {
+/**
+ * Fetches reports on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
@@ -82,6 +86,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

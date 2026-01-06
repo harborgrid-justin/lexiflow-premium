@@ -18,8 +18,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
@@ -34,7 +33,7 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard';
 import { cn } from '@/utils/cn';
 
 // Types
-import { WIPStat } from '@/types';
+import { Client } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -49,36 +48,36 @@ interface BillingOverviewProps {
 // ============================================================================
 
 const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
-  // Enterprise Data Access: Parallel Queries with safety check
-  const { data: rawWipData = [] } = useQuery<WIPStat[]>(
-    ['billing', 'wipStats'],
-    () => DataService.billing ? DataService.billing.getWIPStats() : Promise.resolve([])
-  );
+  // Integrated Data Hook
+  const {
+    wipData,
+    realizationData,
+    topClients,
+    totalWip,
+    realizationRate,
+    outstandingAmount,
+    overdueCount, // Using total overdue count for trend context
+    isLoading
+  } = useBillingOverviewData();
 
-  const { data: rawRealizationData = [] } = useQuery(
-    ['billing', 'realization'],
-    () => DataService.billing ? DataService.billing.getRealizationStats(mode) : Promise.resolve([])
-  );
-
-  const { data: rawTopClients = [] } = useQuery(
-    ['billing', 'topAccounts'],
-    () => DataService.billing ? DataService.billing.getTopAccounts() : Promise.resolve([])
-  );
-
-  // Defensive array validation - ensure data is array before using array methods
-  const wipData = Array.isArray(rawWipData) ? rawWipData : [];
-  const realizationData = Array.isArray(rawRealizationData) ? rawRealizationData : [];
-  const topClients = Array.isArray(rawTopClients) ? rawTopClients : [];
-
-  const totalWip = wipData.reduce((acc: number, curr: unknown) => {
-    if (typeof curr === 'object' && curr !== null && 'wip' in curr) {
-      return acc + (typeof curr.wip === 'number' ? curr.wip : 0);
-    }
-    return acc;
-  }, 0);
+  if (isLoading) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className={cn("h-32 rounded-lg bg-slate-100 dark:bg-slate-800")} />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-80 rounded-lg bg-slate-100 dark:bg-slate-800" />
+          <div className="h-80 rounded-lg bg-slate-100 dark:bg-slate-800" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -86,26 +85,25 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           label="Total WIP (Unbilled)"
-          value={totalWip} // Pass number for hydration animation
+          value={totalWip}
           icon={DollarSign}
-          trend="+12% MoM"
-          trendUp={true}
+
           className="border-l-4 border-l-blue-600"
-          isLive={true} // Simulate live financial feed
+          isLive={true}
         />
         <MetricCard
           label="Realization Rate"
-          value="92.4%"
+          value={`${Math.round(realizationRate)}%`}
           icon={Calculator}
           trend="Target: 90%"
-          trendUp={true}
+          trendUp={realizationRate >= 90}
           className="border-l-4 border-l-emerald-500"
         />
         <MetricCard
           label="Outstanding (60+ Days)"
-          value={12450} // Pass number for hydration animation
+          value={outstandingAmount}
           icon={AlertCircle}
-          trend="3 Invoices Overdue"
+          trend={`${overdueCount} Total Overdue`}
           trendUp={false}
           className="border-l-4 border-l-rose-500"
         />
@@ -114,7 +112,7 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
       {/* Main Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="WIP vs Billed (Top Clients)" subtitle="Revenue potential by client">
-          <div className="h-72" style={{ minHeight: '288px' }}>
+          <div className="h-72 min-h-[288px]">
             {wipData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -155,7 +153,7 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
         </Card>
 
         <Card title="Realization Breakdown" subtitle="Collection efficiency analysis">
-          <div className="h-72 flex flex-col items-center justify-center relative" style={{ minHeight: '288px' }}>
+          <div className="h-72 flex flex-col items-center justify-center relative min-h-[288px]">
             {realizationData.length > 0 ? (
               <>
                 <ResponsiveContainer width="100%" height="100%">
@@ -169,8 +167,8 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
                       stroke="none"
                       isAnimationActive={true}
                     >
-                      {realizationData.map((e: unknown, index: number) => {
-                        const name = typeof e === 'object' && e !== null && 'name' in e ? String(e.name) : '';
+                      {realizationData.map((e: any, index: number) => {
+                        const name = e?.name || '';
                         return (
                           <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
                         );
@@ -182,7 +180,7 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
                 </ResponsiveContainer>
                 {/* Center Text */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center -mt-4">
-                  <p className={cn("text-3xl font-bold", theme.text.primary)}>92%</p>
+                  <p className={cn("text-3xl font-bold", theme.text.primary)}>{Math.round(realizationRate)}%</p>
                   <p className={cn("text-xs uppercase", theme.text.tertiary)}>Collected</p>
                 </div>
               </>
@@ -204,35 +202,34 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
           </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x dark:divide-slate-700 divide-slate-200">
-          {topClients.map((client: unknown) => {
-            if (typeof client !== 'object' || client === null) return null;
-            const clientId = 'id' in client ? String(client.id) : '';
-            const clientName = 'name' in client && typeof client.name === 'string' ? client.name : '';
-            const clientIndustry = 'industry' in client && typeof client.industry === 'string' ? client.industry : '';
-            const clientTotalBilled = 'totalBilled' in client && typeof client.totalBilled === 'number' ? client.totalBilled : 0;
-
-            return (
-              <div
-                key={clientId}
-                className={cn("flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer")}
-                onClick={() => onNavigate && onNavigate('accounts')}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-100 text-blue-700")}>
-                    {clientName.substring(0, 2)}
-                  </div>
-                  <div>
-                    <p className={cn("font-bold text-sm", theme.text.primary)}>{clientName}</p>
-                    <p className={cn("text-xs", theme.text.secondary)}>{clientIndustry}</p>
-                  </div>
+          {topClients.map((client: Client) => (
+            <div
+              key={client.id}
+              className={cn("flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer")}
+              onClick={() => onNavigate && onNavigate('accounts')}
+            >
+              <div className="flex items-center gap-3">
+                <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-100 text-blue-700")}>
+                  {client.name ? client.name.substring(0, 2) : '??'}
                 </div>
-                <div className="text-right">
-                  <p className={cn("font-mono font-bold text-sm", theme.text.primary)}><Currency value={clientTotalBilled} hideSymbol={false} /></p>
-                  <span className={cn("text-[10px] font-bold text-green-600")}>Active</span>
+                <div>
+                  <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name}</p>
+                  <p className={cn("text-xs", theme.text.secondary)}>{client.industry || 'Unknown Industry'}</p>
                 </div>
               </div>
-            );
-          })}
+              <div className="text-right">
+                <p className={cn("font-mono font-bold text-sm", theme.text.primary)}><Currency value={client.totalBilled || 0} hideSymbol={false} /></p>
+                <span className={cn("text-[10px] font-bold text-green-600")}>Active</span>
+              </div>
+            </div>
+          ))}
+          {/* Empty State Fillers if less than 4 clients */}
+          {topClients.length === 0 && (
+            <div className="p-8 text-center text-slate-400 col-span-2 bg-slate-50 dark:bg-slate-900/50">
+              <Users className="h-10 w-10 mx-auto mb-2 opacity-20" />
+              <p>No active accounts found</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

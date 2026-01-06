@@ -27,10 +27,17 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+/**
+ * Fetches discovery processes on the client side only
+ * Runs in the browser where localStorage auth tokens are available
+ *
+ * Note: Using clientLoader instead of loader because authentication tokens
+ * are stored in localStorage which is not available during SSR
+ */
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get("caseId") || undefined;
 
@@ -43,6 +50,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     return { items: [], totalCount: 0 };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

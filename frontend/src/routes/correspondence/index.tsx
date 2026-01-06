@@ -25,25 +25,35 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+/**
+ * Fetches correspondence on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const filter = url.searchParams.get("filter") || "all";
 
   try {
-    // Map filter string to API filters if needed
-    const apiFilter = filter === "all" ? {} : { status: filter };
-    const items = await DataService.communications.correspondence.list(apiFilter);
-    return { items, totalCount: items.length };
+    // DataService.correspondence returns CorrespondenceService which has getCommunications()
+    const items = await DataService.correspondence.getCommunications();
+
+    // Apply client-side filtering if needed
+    const filteredItems = filter === "all"
+      ? items
+      : items.filter((item: any) => item.status === filter);
+
+    return { items: filteredItems, totalCount: filteredItems.length };
   } catch (error) {
     console.error("Failed to load correspondence", error);
-    // Return empty list on error to allow UI to render with error state if needed
-    // or let ErrorBoundary handle it if we throw
     return { items: [], totalCount: 0 };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

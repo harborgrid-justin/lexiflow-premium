@@ -9,8 +9,7 @@
 
 import { CitationManager } from '@/features/knowledge/citation/CitationManager';
 import { DataService } from '@/services/data/dataService';
-import { requireAuthentication } from '@/utils/route-guards';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 
@@ -27,12 +26,14 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  await requireAuthentication(request);
-
+/**
+ * Fetches citations on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader() {
   try {
     const citations = await DataService.citations.getAll();
     return { items: citations, totalCount: citations.length };
@@ -41,6 +42,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return { items: [], totalCount: 0 };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

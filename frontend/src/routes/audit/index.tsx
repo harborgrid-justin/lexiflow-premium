@@ -23,7 +23,11 @@ export function meta() {
 
 import { DataService } from '@/services/data/dataService';
 
-export async function loader() {
+/**
+ * Fetches audit logs on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader() {
   try {
     const logs = await DataService.security.getAuditLogs();
     return { logs: logs as AuditLog[] };
@@ -32,6 +36,9 @@ export async function loader() {
     return { logs: [] };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 export default function AuditTrailRoute() {
   const { logs } = useLoaderData<typeof loader>();

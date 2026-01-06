@@ -25,10 +25,14 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+/**
+ * Fetches clauses on the client side only
+ * Note: Using clientLoader because auth tokens are in localStorage (not available during SSR)
+ */
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const category = url.searchParams.get("category");
 
@@ -36,13 +40,16 @@ export async function loader({ request }: Route.LoaderArgs) {
     // Map category string to API filter type if needed, or pass as is if compatible
     // Assuming category from URL matches Clause['category'] or is undefined
     const filter = category ? { category: category as string } : {};
-    const items = await DataService.analytics.clauses.getAll(filter);
+    const items = await DataService.clauses.getAll(filter);
     return { items, totalCount: items.length };
   } catch (error) {
     console.error("Failed to load clauses", error);
     return { items: [], totalCount: 0 };
   }
 }
+
+// Ensure client loader runs on hydration
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action

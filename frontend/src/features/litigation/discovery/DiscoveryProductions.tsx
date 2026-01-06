@@ -48,10 +48,16 @@ export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = ({ onCr
     const { openWindow, closeWindow } = useWindow();
 
     // Enterprise Data Access
-    const { data: productions = [] } = useQuery<ProductionSet[]>(
+    const { data: rawProductions = [] } = useQuery<ProductionSet[]>(
         caseId ? ['discovery-productions', 'case', caseId] : ['discovery-productions', 'all'],
-        () => DataService.discovery.getProductions(caseId)
+        async () => {
+            const result = await DataService.discovery.getProductions(caseId);
+            return Array.isArray(result) ? result : [];
+        }
     );
+
+    // Runtime array validation
+    const productions = Array.isArray(rawProductions) ? rawProductions : [];
 
     const { mutate: downloadVolume, isLoading: _isDownloading } = useMutation(
         DataService.discovery.downloadProduction,

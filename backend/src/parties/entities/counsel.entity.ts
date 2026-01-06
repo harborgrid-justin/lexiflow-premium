@@ -22,6 +22,25 @@ export class Counsel extends BaseEntity {
   @Column({ type: "varchar", length: 50, nullable: true })
   phone?: string;
 
+  @Column({
+    name: "business_phone",
+    type: "varchar",
+    length: 50,
+    nullable: true,
+  })
+  businessPhone?: string;
+
+  @Column({
+    name: "personal_phone",
+    type: "varchar",
+    length: 50,
+    nullable: true,
+  })
+  personalPhone?: string;
+
+  @Column({ type: "varchar", length: 50, nullable: true })
+  fax?: string;
+
   @Column({ type: "text", nullable: true })
   address?: string;
 
@@ -36,6 +55,12 @@ export class Counsel extends BaseEntity {
 
   @Column({ type: "varchar", length: 255, nullable: true })
   appearance?: string; // e.g. "COR NTC Retained"
+
+  @Column({ name: "notice_info", type: "varchar", length: 255, nullable: true })
+  noticeInfo?: string;
+
+  @Column({ name: "termination_date", type: "date", nullable: true })
+  terminationDate?: Date;
 
   @ManyToMany(() => Party, (party) => party.counsels)
   parties?: Party[];

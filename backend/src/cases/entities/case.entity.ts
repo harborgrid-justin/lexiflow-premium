@@ -148,6 +148,12 @@ export class Case extends BaseEntity {
   })
   dateFiledInOriginatingCourt?: Date;
 
+  @Column({ name: "date_filed", type: "date", nullable: true })
+  dateFiled?: Date;
+
+  @Column({ name: "date_terminated", type: "date", nullable: true })
+  dateTerminated?: Date;
+
   @Column({ name: "originating_case_info", type: "jsonb", nullable: true })
   originatingCaseInfo?: Record<string, unknown>;
 

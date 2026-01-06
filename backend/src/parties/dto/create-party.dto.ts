@@ -1,5 +1,13 @@
-import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsEmail } from 'class-validator';
-import { PartyType, PartyRole } from '@parties/entities/party.entity';
+import { PartyRole, PartyType } from "@parties/entities/party.entity";
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from "class-validator";
 
 export class CreatePartyDto {
   @IsUUID()
@@ -23,6 +31,11 @@ export class CreatePartyDto {
   @IsEnum(PartyRole)
   @IsOptional()
   role?: PartyRole;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  prisonerNumber?: string;
 
   @IsString()
   @IsOptional()
@@ -83,7 +96,8 @@ export class CreatePartyDto {
   primaryContactPhone?: string;
 
   @IsString()
-  @IsOptional()  @MaxLength(255)
+  @IsOptional()
+  @MaxLength(255)
   attorneyName?: string;
 
   @IsString()
@@ -125,7 +139,8 @@ export class CreatePartyDto {
   isProSe?: boolean;
 
   @IsString()
-  @IsOptional()  notes?: string;
+  @IsOptional()
+  notes?: string;
 
   @IsOptional()
   metadata?: Record<string, unknown>;

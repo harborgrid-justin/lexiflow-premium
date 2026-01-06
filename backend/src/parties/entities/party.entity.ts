@@ -78,6 +78,14 @@ export class Party extends BaseEntity {
   })
   role!: PartyRole;
 
+  @Column({
+    name: "prisoner_number",
+    type: "varchar",
+    length: 100,
+    nullable: true,
+  })
+  prisonerNumber?: string;
+
   @Column({ type: "varchar", length: 255, nullable: true })
   organization?: string;
 

@@ -40,7 +40,10 @@ async function bootstrap() {
 
   caseEntity.title = caseData.title;
   caseEntity.court = caseData.court;
-  caseEntity.filingDate = new Date(caseData.filingDate);
+  caseEntity.dateFiled = new Date(caseData.filingDate);
+  if (caseData.terminationDate) {
+    caseEntity.dateTerminated = new Date(caseData.terminationDate);
+  }
   // Handle status enum mapping or default
   caseEntity.status = CaseStatus.CONSOLIDATED;
   caseEntity.type = CaseType.BANKRUPTCY;
@@ -60,11 +63,13 @@ async function bootstrap() {
   for (const p of caseData.parties) {
     let party = await partyRepo.findOne({
       where: { caseId: caseEntity.id, name: p.name },
+      relations: ["counsels"],
     });
     if (!party) {
       party = new Party();
       party.case = caseEntity;
       party.name = p.name;
+      party.counsels = [];
     }
 
     party.type =
@@ -81,6 +86,7 @@ async function bootstrap() {
           : PartyRole.INTERESTED_PARTY;
     party.description = p.description;
     party.isProSe = !!p.isProSe;
+    if (p.prisonerNumber) party.prisonerNumber = p.prisonerNumber;
 
     // Handle Counsels
     const counsels: Counsel[] = [];
@@ -96,14 +102,23 @@ async function bootstrap() {
         counsel.lastName = att.lastName;
         counsel.email = att.email;
         counsel.phone = att.phone;
+        counsel.personalPhone = att.personalPhone;
+        counsel.businessPhone = att.businessPhone;
         counsel.address = att.address;
         counsel.city = att.city;
         counsel.state = att.state;
         counsel.zipCode = att.zipCode;
         counsel.appearance = att.appearance;
+        counsel.noticeInfo = att.noticeInfo;
+        if (att.terminationDate) {
+          counsel.terminationDate = new Date(att.terminationDate);
+        }
         await counselRepo.save(counsel);
       }
-      if (counsel) counsels.push(counsel);
+      if (counsel) {
+        // Update existing if fields missing? For now just push.
+        counsels.push(counsel);
+      }
     }
 
     // Multiple attorneys
@@ -134,12 +149,18 @@ async function bootstrap() {
         counsel.lastName = att.lastName;
         counsel.email = att.email;
         counsel.phone = att.phone;
+        counsel.personalPhone = att.personalPhone;
+        counsel.businessPhone = att.businessPhone;
         counsel.address = att.address;
         counsel.city = att.city;
         counsel.state = att.state;
         counsel.zipCode = att.zipCode;
         counsel.firmName = att.firmName;
         counsel.appearance = att.appearance;
+        counsel.noticeInfo = att.noticeInfo;
+        if (att.terminationDate) {
+          counsel.terminationDate = new Date(att.terminationDate);
+        }
 
         await counselRepo.save(counsel);
         counsels.push(counsel);

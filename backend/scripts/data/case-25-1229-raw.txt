@@ -1,0 +1,97 @@
+|25-1229|03/12/2025|3422 Bankruptcy Appeals Rule 28 USC 158|09/29/2025|Justin Saadein-Morales v. Westridge Swim & Racquet Club, Inc.|United States District Court for the Eastern District of Virginia at Alexandria|
+|Bankruptcy-District Court|from the district court|null|
+|ORIG_CRT|0422|1|1:24-cv-01442-LMB-IDD||08/16/2024|https://ecf.vaed.uscourts.gov/cgi-bin/DktRpt.pl?caseNumber=1:24-cv-01442-LMB-IDD||
+|ORIG_PER|Presiding Judge|Leonie|M.|Brinkema||U. S. District Court Judge|
+|ORIG_PER|Ordering Judge|Ivan|Darnell|Davis||U. S. Magistrate Judge|
+|ORIG_DAT|02/26/2025|02/26/2025|03/07/2025||03/11/2025||
+|ASSOC|24-2160|25-1229|Consolidated|04/25/2025||
+|PARTY|JUSTIN JEFFREY SAADEIN-MORALES||
+
+                     Debtor - Appellant
+
+|
+|ATTORNEY|Justin|Jeffrey|Saadein-Morales|||justin.saadein@harborgrid.com||P. O. Box 55268|||||678-650-6400|Washington|DC|20040||[NTC Pro Se]||||
+|PARTY|WESTRIDGE SWIM & RACQUET CLUB, INC., A Community Association||
+
+                     Creditor - Appellee
+
+|
+|ATTORNEY|Thomas|Charles|Junker|||thomas.junker@mercertrigiani.com||112 South Alfred Street|||MERCERTRIGIANI||703-837-5000|Alexandria|VA|22314||[COR NTC Retained]||||
+|ATTORNEY|Richard|A.|Lash|||rlash@bhlpc.com||12355 Sunrise Valley Drive|||BUONASSISSI, HENNING & LASH, PC||703-796-1341|Reston|VA|20190||[NTC Retained]||Suite  650||
+|ATTORNEY|David|Storey|Mercer|||||112 South Alfred Street|||MERCERTRIGIANI||202-659-6935|Alexandria|VA|22314||[On Filing]||||
+|CAPTION|JUSTIN JEFFREY SAADEIN-MORALES
+
+                     Debtor - Appellant
+
+v.
+
+WESTRIDGE SWIM & RACQUET CLUB, INC., A Community Association
+
+                     Creditor - Appellee|
+|ENTRY|03/12/2025|Case docketed. Originating case number: 1:24-cv-01442-LMB-IDD. Case manager: AWalker. [1001734848] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010166501|
+|ENTRY|03/12/2025|INFORMAL BRIEFING ORDER filed. [1001734850] Informal Opening Brief due 04/07/2025 Informal response brief, if any: 14 days after informal opening brief served. [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010166504|
+|ENTRY|03/12/2025|RECORD requested from Clerk of Court
+ [1001734852]. Due: 03/26/2025. [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010166512|
+|ENTRY|03/17/2025|APPEARANCE OF COUNSEL by Thomas C. Junker, Esquire for Westridge Swim &amp; Racquet Club, Inc.. [1001737865] [25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010173382|
+|ENTRY|03/17/2025|DISCLOSURE STATEMENT by Westridge Swim &amp; Racquet Club, Inc..
+ Was any question on Disclosure Form answered yes? Yes [1001737870] [25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010173396|
+|ENTRY|03/28/2025|MOTION by Justin Jeffrey Saadein-Morales to GRANT Summary Reversal; EXERCISE its supervisory authority; CONSIDER transfer to the U.S. District Court for the District of Columbia; GRANT such other and further relief.. Date and method of service: 03/28/2025 ecf. [1001744472] [25-1229]. [1001744472].--[Edited 03/28/2025 by SAC-- reliefs added] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010187964|
+|ENTRY|03/28/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010187964' target='new' ONCLICK=&quot;return doDocPostURL('004010187964','177982');&quot; &gt;6&lt;/A&gt;] Motion
+ [1001744479] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010187981|
+|ENTRY|03/28/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010187964' target='new' ONCLICK=&quot;return doDocPostURL('004010187964','177982');&quot; &gt;6&lt;/A&gt;] Motion, [&lt;A HREF='_SERVLETURL_/docs1/004010187981' target='new' ONCLICK=&quot;return doDocPostURL('004010187981','177982');&quot; &gt;7&lt;/A&gt;] certificate by Justin Jeffrey Saadein-Morales..
+ [1001744487] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010188003|
+|ENTRY|04/01/2025|RULE 45 NOTICE issued to Justin Jeffrey Saadein-Morales re:
+ filing of disclosure form Case may be dismissed if default is not cured within 15 days..
+ [1001746544] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010192716|
+|ENTRY|04/07/2025|DOCUMENT
+ referencing [&lt;A HREF='_SERVLETURL_/docs1/004010187964' target='new' ONCLICK=&quot;return doDocPostURL('004010187964','177982');&quot; &gt;6&lt;/A&gt;] Motion, [&lt;A HREF='_SERVLETURL_/docs1/004010187964' target='new' ONCLICK=&quot;return doDocPostURL('004010187964','177982');&quot; &gt;6&lt;/A&gt;] Motion by Westridge Swim &amp; Racquet Club, Inc.. [1001748988] [25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010198164|
+|ENTRY|04/11/2025|NOTICE re: RELATED PROCEEDINGS PURSUANT TO FRAP 28(j) AND LOCAL RULE 27 by Justin Jeffrey Saadein-Morales.
+ [1001752357] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010205737|
+|ENTRY|04/11/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010205737' target='new' ONCLICK=&quot;return doDocPostURL('004010205737','177982');&quot; &gt;11&lt;/A&gt;] Notice
+ [1001752363] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010205752|
+|ENTRY|04/17/2025|DISCLOSURE STATEMENT by Justin Jeffrey Saadein-Morales.
+ Was any question on Disclosure Form answered yes? No [1001755457] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010212956|
+|ENTRY|04/18/2025|RULE 45 NOTICE issued to Justin Jeffrey Saadein-Morales re:
+ failure to file informal brief..
+ [1001755806] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010213759|
+|ENTRY|04/18/2025|Emergency MOTION by Justin Jeffrey Saadein-Morales to expedite decision , for injunctive relief pending appeal Date of action to be enjoined: April 10, 2025 , for judicial notice of PARALLEL PROCEEDINGS IN D.D.C. CASE NO. 1:25-CV-01087-RC, INCLUDING 4/18/25 HEARING ON SEIZURE OF VETERAN'S VA-BACKED PROPERTY, LEGAL FILES, &amp; RESULTING HOMELESSNESS , for stay pending appeal. Date of action to be stayed, if applicable:April 10, 2025. , to EMERGENCY RELIEF UNDER 28 U.S.C. 1651(a): ACCESS LEGAL FILES, STAY DEADLINES, NOTICE D.C. CASE, ENABLE COURT COMMS, HALT ENFORCEMENT. RELIEF NEEDED TO PROTECT JURISDICTION &amp; ACCESS TO COURTS.. Date and method of service: 04/18/2025 ecf.
+
+
+ [1001758998] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220766|
+|ENTRY|04/19/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for other relief, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for stay pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for judicial notice, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for injunctive relief pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion to expedite decision by Justin Jeffrey Saadein-Morales.
+ [1001759001] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220773|
+|ENTRY|04/19/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010220773' target='new' ONCLICK=&quot;return doDocPostURL('004010220773','177982');&quot; &gt;16&lt;/A&gt;] exhibit(s) , [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for other relief, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for stay pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for judicial notice, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for injunctive relief pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion to expedite decision
+ [1001759009] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220790|
+|ENTRY|04/19/2025|CERTIFICATE OF COMPLIANCE WITH TYPE-VOLUME LIMITATIONS by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for other relief, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for stay pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for judicial notice, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion for injunctive relief pending appeal, [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;] Motion to expedite decision
+ [1001759013] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220805|
+|ENTRY|04/23/2025|SUPPLEMENTAL AUTHORITIES by Justin Jeffrey Saadein-Morales. [1001759016]
+. [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220810|
+|ENTRY|04/23/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010220810' target='new' ONCLICK=&quot;return doDocPostURL('004010220810','177982');&quot; &gt;19&lt;/A&gt;] supplemental authorities
+ [1001759021] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220816|
+|ENTRY|04/23/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010220810' target='new' ONCLICK=&quot;return doDocPostURL('004010220810','177982');&quot; &gt;19&lt;/A&gt;] supplemental authorities by Justin Jeffrey Saadein-Morales..
+ [1001759022] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220823|
+|ENTRY|04/23/2025|SUPPLEMENTAL AUTHORITIES by Justin Jeffrey Saadein-Morales. [1001759024]
+. [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220826|
+|ENTRY|04/23/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010220826' target='new' ONCLICK=&quot;return doDocPostURL('004010220826','177982');&quot; &gt;22&lt;/A&gt;] supplemental authorities
+ [1001759025] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220834|
+|ENTRY|04/23/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010220826' target='new' ONCLICK=&quot;return doDocPostURL('004010220826','177982');&quot; &gt;22&lt;/A&gt;] supplemental authorities by Justin Jeffrey Saadein-Morales..
+ [1001759026] [25-1229] AW|https://ecf.ca4.uscourts.gov/docs1/004010220837|
+|ENTRY|04/24/2025|RESPONSE/ANSWER by Westridge Swim &amp; Racquet Club, Inc.
+ to Motion [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;], Motion [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;], Motion [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;], Motion [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;], Motion [&lt;A HREF='_SERVLETURL_/docs1/004010220766' target='new' ONCLICK=&quot;return doDocPostURL('004010220766','177982');&quot; &gt;15&lt;/A&gt;]. Nature of response: in opposition. [1001759367] [25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010221651|
+|ENTRY|04/24/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010221651' target='new' ONCLICK=&quot;return doDocPostURL('004010221651','177982');&quot; &gt;25&lt;/A&gt;] response by Westridge Swim &amp; Racquet Club, Inc...
+ [1001759368] [25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010221654|
+|ENTRY|04/24/2025|SUPPLEMENTAL AUTHORITIES by Justin Jeffrey Saadein-Morales. [1001759430]
+. [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010221805|
+|ENTRY|04/24/2025|NOTICE by Justin Jeffrey Saadein-Morales that a reply will not be filed.. [1001759432] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010221813|
+|ENTRY|04/24/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010221813' target='new' ONCLICK=&quot;return doDocPostURL('004010221813','177982');&quot; &gt;28&lt;/A&gt;] Notice
+ [1001759437] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010221819|
+|ENTRY|04/24/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010221805' target='new' ONCLICK=&quot;return doDocPostURL('004010221805','177982');&quot; &gt;27&lt;/A&gt;] supplemental authorities
+ [1001759439] [25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010221827|
+|ENTRY|04/25/2025|ORDER filed granting Motion to consolidate case [&lt;A HREF='_SERVLETURL_/docs1/004010188555' target='new' ONCLICK=&quot;return doDocPostURL('004010188555','177028');&quot; &gt;1001744708-3&lt;/A&gt;] in 24-2160.. Copies to all parties.. [1001760090] [24-2160, 25-1229] HMF|https://ecf.ca4.uscourts.gov/docs1/004010223321|
+|ENTRY|04/30/2025|RESPONSE/ANSWER by Westridge Swim &amp; Racquet Club, Inc. in 24-2160, 25-1229
+ to Notice [&lt;A HREF='_SERVLETURL_/docs1/004010221767' target='new' ONCLICK=&quot;return doDocPostURL('004010221767','177028');&quot; &gt;1001759415-2&lt;/A&gt;]. Nature of response: in opposition. [1001762891] [24-2160, 25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010229814|
+|ENTRY|04/30/2025|Exhibit(s) [&lt;A HREF='_SERVLETURL_/docs1/004010229814?caseId=177982' target='new' ONCLICK=&quot;return doDocPostURL('004010229814','177982');&quot; &gt;32&lt;/A&gt;] response by Westridge Swim &amp; Racquet Club, Inc. in 24-2160, 25-1229..
+ [1001762894] [24-2160, 25-1229] Thomas Junker|https://ecf.ca4.uscourts.gov/docs1/004010229820|
+|ENTRY|04/30/2025|NOTICE by Justin Jeffrey Saadein-Morales in 24-2160, 25-1229 that a reply will not be filed.. [1001762932] [24-2160, 25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010229914|
+|ENTRY|04/30/2025|CERTIFICATE OF SERVICE/SERVICE LIST by Justin Jeffrey Saadein-Morales in 24-2160, 25-1229. Related documents: [&lt;A HREF='_SERVLETURL_/docs1/004010229914?caseId=177982' target='new' ONCLICK=&quot;return doDocPostURL('004010229914','177982');&quot; &gt;34&lt;/A&gt;] Notice
+ [1001762940] [24-2160, 25-1229] Justin Saadein-Morales|https://ecf.ca4.uscourts.gov/docs1/004010229926|

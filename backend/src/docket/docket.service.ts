@@ -105,7 +105,7 @@ export class DocketService {
     const result = await this.docketRepository
       .createQueryBuilder()
       .update(DocketEntry)
-      .set(updateDocketEntryDto)
+      .set(updateDocketEntryDto as any)
       .where('id = :id', { id })
       .returning('*')
       .execute();
@@ -151,7 +151,7 @@ export class DocketService {
       result.entriesAdded = 2;
       result.entriesUpdated = 1;
       result.lastSyncDate = new Date();
-      
+
       // In a real implementation, we would fetch entries and save them to the database
       // const entries = await this.pacerService.getDocketSheet(...)
       // await this.saveDocketEntries(entries)

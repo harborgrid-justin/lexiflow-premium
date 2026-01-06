@@ -1,0 +1,107 @@
+{
+  "caseNumber": "25-1229",
+  "title": "Justin Saadein-Morales v. Westridge Swim & Racquet Club, Inc.",
+  "court": "United States District Court for the Eastern District of Virginia at Alexandria",
+  "filingDate": "2025-03-12",
+  "status": "Consolidated",
+  "originatingCourt": "Bankruptcy-District Court",
+  "originatingCaseNumber": "1:24-cv-01442-LMB-IDD",
+  "originatingCaseInfo": {
+    "judges": [
+      {
+        "role": "Presiding Judge",
+        "name": "Leonie M. Brinkema",
+        "title": "U. S. District Court Judge"
+      },
+      {
+        "role": "Ordering Judge",
+        "name": "Ivan Darnell Davis",
+        "title": "U. S. Magistrate Judge"
+      }
+    ],
+    "dates": {
+      "filed": "2024-08-16",
+      "judgment": "2025-02-26"
+    },
+    "url": "https://ecf.vaed.uscourts.gov/cgi-bin/DktRpt.pl?caseNumber=1:24-cv-01442-LMB-IDD"
+  },
+  "relatedCases": [
+    {
+      "court": "US Court of Appeals",
+      "caseNumber": "24-2160",
+      "relationship": "Consolidated"
+    },
+    {
+      "court": "US Court of Appeals",
+      "caseNumber": "25-1229",
+      "relationship": "Self"
+    }
+  ],
+  "parties": [
+    {
+      "name": "JUSTIN JEFFREY SAADEIN-MORALES",
+      "type": "Appellant",
+      "role": "Appellant",
+      "description": "Debtor - Appellant",
+      "isProSe": true,
+      "attorney": {
+        "firstName": "Justin",
+        "middleName": "Jeffrey",
+        "lastName": "Saadein-Morales",
+        "email": "justin.saadein@harborgrid.com",
+        "phone": "678-650-6400",
+        "address": "P. O. Box 55268",
+        "city": "Washington",
+        "state": "DC",
+        "zipCode": "20040",
+        "appearance": "[NTC Pro Se]"
+      }
+    },
+    {
+      "name": "WESTRIDGE SWIM & RACQUET CLUB, INC., A Community Association",
+      "type": "Appellee",
+      "role": "Appellee",
+      "description": "Creditor - Appellee",
+      "attorneys": [
+        {
+          "firstName": "Thomas",
+          "middleName": "Charles",
+          "lastName": "Junker",
+          "email": "thomas.junker@mercertrigiani.com",
+          "phone": "703-837-5000",
+          "address": "112 South Alfred Street",
+          "city": "Alexandria",
+          "state": "VA",
+          "zipCode": "22314",
+          "firmName": "MERCERTRIGIANI",
+          "appearance": "[COR NTC Retained]"
+        },
+        {
+          "firstName": "Richard",
+          "middleName": "A.",
+          "lastName": "Lash",
+          "email": "rlash@bhlpc.com",
+          "phone": "703-796-1341",
+          "address": "12355 Sunrise Valley Drive, Suite 650",
+          "city": "Reston",
+          "state": "VA",
+          "zipCode": "20190",
+          "firmName": "BUONASSISSI, HENNING & LASH, PC",
+          "appearance": "[NTC Retained]"
+        },
+        {
+          "firstName": "David",
+          "middleName": "Storey",
+          "lastName": "Mercer",
+          "phone": "202-659-6935",
+          "address": "112 South Alfred Street",
+          "city": "Alexandria",
+          "state": "VA",
+          "zipCode": "22314",
+          "firmName": "MERCERTRIGIANI",
+          "appearance": "[On Filing]"
+        }
+      ]
+    }
+  ]
+}

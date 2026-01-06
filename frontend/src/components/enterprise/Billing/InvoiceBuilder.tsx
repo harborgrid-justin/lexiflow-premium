@@ -6,9 +6,12 @@
 import {
   Calendar,
   Copy,
+  DollarSign,
   Eye,
   FileText,
   Globe,
+  Minus,
+  Percent,
   Plus,
   Save,
   Send

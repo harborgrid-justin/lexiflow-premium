@@ -6,12 +6,7 @@
  */
 
 export { LegalResearchHub } from "./LegalResearchHub";
-export type {
-  Annotation,
-  LegalResearchHubProps,
-  ResearchResult,
-  ResearchSession,
-} from "./LegalResearchHub";
+export type { LegalResearchHubProps } from "./LegalResearchHub";
 
 export { CitationManager } from "./CitationManager";
 export type {
@@ -26,9 +21,8 @@ export type {
 export { KnowledgeBase } from "./KnowledgeBase";
 export type {
   KnowledgeBaseProps,
-  KnowledgeResource,
   ResourceCategory,
-  ResourceType,
+  SearchFilters,
 } from "./KnowledgeBase";
 
 export { ResearchMemo } from "./ResearchMemo";
@@ -42,12 +36,4 @@ export type {
 } from "./ResearchMemo";
 
 export { StatutoryMonitor } from "./StatutoryMonitor";
-export type {
-  AlertPriority,
-  LegislativeUpdate,
-  MonitoringRule,
-  RegulatoryAlert,
-  StatutoryMonitorProps,
-  UpdateStatus,
-  UpdateType,
-} from "./StatutoryMonitor";
+export type { AlertPriority, StatutoryMonitorProps } from "./StatutoryMonitor";

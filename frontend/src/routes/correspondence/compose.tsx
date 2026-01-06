@@ -103,7 +103,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs): Promise
   let draft = null;
   if (draftId) {
     try {
-      draft = await DataService.correspondence.getCommunications().then(comms =>
+      draft = await DataService.correspondence.getCommunications().then((comms: any[]) =>
         comms.find((c: any) => c.id === draftId) || null
       );
     } catch (error) {
@@ -269,7 +269,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 
 export default function ComposeCorrespondenceRoute() {
   const navigate = useNavigate();
-  const { templates, draftId } = useLoaderData<typeof loader>();
+  const { templates, draftId } = useLoaderData<typeof clientLoader>();
 
   const handleCancel = () => {
     navigate('/correspondence');
@@ -321,7 +321,7 @@ export default function ComposeCorrespondenceRoute() {
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="">Select a template (optional)</option>
-                {templates.map((template) => (
+                {templates.map((template: any) => (
                   <option key={template.id} value={template.id}>
                     {template.name} - {template.category}
                   </option>
@@ -438,7 +438,7 @@ export default function ComposeCorrespondenceRoute() {
               Quick Templates
             </h3>
             <div className="space-y-2">
-              {templates.slice(0, 4).map((template) => (
+              {templates.slice(0, 4).map((template: any) => (
                 <button
                   key={template.id}
                   type="button"

@@ -44,7 +44,10 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { type PaginatedResponse } from "@/services/infrastructure/apiClient";
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 import { IntegrationOrchestrator } from "@/services/integration/integrationOrchestrator";
 import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
@@ -217,18 +220,29 @@ export class DocketRepository {
    * - Max delay: 10000ms
    *
    * @param courtId - Federal court identifier
-   * @param caseNumber - Case number in PACER format
+   * @param caseId - Internal Case ID (UUID)
+   * @param pacerCaseNumber - Case number in PACER format
+   * @param courtId - Optional court identifier
    * @returns Promise<boolean> - Success indicator
    * @throws RetryError if all retries exhausted
-   *
-   * @example
-   * await repo.syncFromPacer('caed', '1:24-cv-01442');
    */
-  async syncFromPacer(_courtId: string, _caseNumber: string): Promise<boolean> {
+  async syncFromPacer(
+    caseId: string,
+    pacerCaseNumber: string,
+    courtId?: string
+  ): Promise<boolean> {
     if (isBackendApiEnabled()) {
-      // TODO: Implement backend sync endpoint
-      console.warn("PACER sync via backend not yet implemented in frontend");
-      return false;
+      try {
+        await apiClient.post("/docket/pacer/sync", {
+          caseId,
+          pacerCaseNumber,
+          court: courtId,
+        });
+        return true;
+      } catch (error) {
+        console.error("PACER sync failed", error);
+        return false;
+      }
     }
     throw new Error("Backend API is required for PACER sync");
   }

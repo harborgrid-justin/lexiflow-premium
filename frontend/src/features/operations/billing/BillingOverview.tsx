@@ -167,11 +167,11 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
                       stroke="none"
                       isAnimationActive={true}
                     >
-                      {realizationData.map((e: any, index: number) => {
+                      {realizationData.map((entry, index: number) => (
                         const name = e?.name || '';
-                        return (
-                          <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
-                        );
+                      return (
+                      <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
+                      );
                       })}
                     </Pie>
                     <Tooltip contentStyle={chartTheme.tooltipStyle} />

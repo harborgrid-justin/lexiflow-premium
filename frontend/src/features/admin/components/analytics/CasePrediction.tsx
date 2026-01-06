@@ -18,11 +18,11 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import { getChartTheme } from '@/utils/chartConfig';
 // Components
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
@@ -55,8 +55,8 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
   // ==========================================================================
   // HOOKS - Context
   // ==========================================================================
-  const { theme } = useTheme();
-  const chartTheme = useChartTheme();
+  const { theme, mode } = useTheme();
+  const chartTheme = getChartTheme(mode as 'light' | 'dark');
 
   // ==========================================================================
   // MAIN RENDER

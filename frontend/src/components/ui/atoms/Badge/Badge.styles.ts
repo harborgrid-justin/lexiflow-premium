@@ -1,4 +1,4 @@
-import type { ThemeStateValue } from "@/contexts/theme/ThemeContext.types";
+import type { ThemeContextValue } from "@/contexts/theme/ThemeContext.types";
 import { cn } from "@/utils/cn";
 
 export const baseBadgeStyles =
@@ -15,32 +15,43 @@ export const getBadgeSizeStyles = (size: "sm" | "md" | "lg" = "md") => {
   }
 };
 
-interface ThemeStatus {
-  success: { bg: string; text: string; border: string };
-  warning: { bg: string; text: string; border: string };
-  error: { bg: string; text: string; border: string };
-  info: { bg: string; text: string; border: string };
-  neutral: { bg: string; text: string; border: string };
-}
-
 export const getBadgeVariantStyles = (
-  theme: ThemeStateValue["theme"],
+  theme: ThemeContextValue["theme"],
   variant: string
 ) => {
-  const status = (theme as unknown as { status: ThemeStatus }).status;
   switch (variant) {
     case "success":
-      return cn(status.success.bg, status.success.text, status.success.border);
+      return cn(
+        theme.status.success.bg,
+        theme.status.success.text,
+        theme.status.success.border
+      );
     case "warning":
-      return cn(status.warning.bg, status.warning.text, status.warning.border);
+      return cn(
+        theme.status.warning.bg,
+        theme.status.warning.text,
+        theme.status.warning.border
+      );
     case "error":
     case "danger":
-      return cn(status.error.bg, status.error.text, status.error.border);
+      return cn(
+        theme.status.error.bg,
+        theme.status.error.text,
+        theme.status.error.border
+      );
     case "info":
-      return cn(status.info.bg, status.info.text, status.info.border);
+      return cn(
+        theme.status.info.bg,
+        theme.status.info.text,
+        theme.status.info.border
+      );
     case "purple":
       return "bg-purple-50 text-purple-700 border-purple-200 ring-1 ring-purple-500/10 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800";
     default:
-      return cn(status.neutral.bg, status.neutral.text, status.neutral.border);
+      return cn(
+        theme.status.neutral.bg,
+        theme.status.neutral.text,
+        theme.status.neutral.border
+      );
   }
 };

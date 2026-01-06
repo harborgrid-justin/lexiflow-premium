@@ -32,7 +32,9 @@ import {
   ValidationError,
 } from "@/services/core/errors";
 import { db, STORES } from "@/services/data/db";
+import { apiClient } from "@/services/infrastructure/apiClient";
 import {
+  Custodian,
   CustodianInterview,
   Deposition,
   DiscoveryRequest,
@@ -67,112 +69,7 @@ import { delay } from "@/utils/async";
  * queryClient.invalidateQueries({ queryKey: DISCOVERY_QUERY_KEYS.depositions.all() });
  * queryClient.invalidateQueries({ queryKey: DISCOVERY_QUERY_KEYS.depositions.byCase(caseId) });
  */
-export const DISCOVERY_QUERY_KEYS = {
-  // Collections
-  collections: {
-    all: () => ["discovery", "collections"] as const,
-    byId: (id: string) => ["discovery", "collections", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "collections", "case", caseId] as const,
-  },
-  // Processing Jobs
-  processing: {
-    all: () => ["discovery", "processing"] as const,
-    byId: (id: string) => ["discovery", "processing", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "processing", "case", caseId] as const,
-  },
-  // Depositions
-  depositions: {
-    all: () => ["discovery", "depositions"] as const,
-    byId: (id: string) => ["discovery", "depositions", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "depositions", "case", caseId] as const,
-  },
-  // ESI Sources
-  esiSources: {
-    all: () => ["discovery", "esi-sources"] as const,
-    byId: (id: string) => ["discovery", "esi-sources", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "esi-sources", "case", caseId] as const,
-  },
-  // Productions
-  productions: {
-    all: () => ["discovery", "productions"] as const,
-    byId: (id: string) => ["discovery", "productions", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "productions", "case", caseId] as const,
-  },
-  // Custodians
-  custodians: {
-    all: () => ["discovery", "custodians"] as const,
-    byId: (id: string) => ["discovery", "custodians", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "custodians", "case", caseId] as const,
-    stats: () => ["discovery", "custodians", "stats"] as const,
-  },
-  // Interviews
-  interviews: {
-    all: () => ["discovery", "interviews"] as const,
-    byId: (id: string) => ["discovery", "interviews", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "interviews", "case", caseId] as const,
-  },
-  // Discovery Requests
-  requests: {
-    all: () => ["discovery", "requests"] as const,
-    byId: (id: string) => ["discovery", "requests", id] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "requests", "case", caseId] as const,
-  },
-  // Legal Holds
-  legalHolds: {
-    all: () => ["discovery", "legal-holds"] as const,
-    byId: (id: string) => ["discovery", "legal-holds", id] as const,
-  },
-  // Privilege Log
-  privilegeLog: {
-    all: () => ["discovery", "privilege-log"] as const,
-    byId: (id: string) => ["discovery", "privilege-log", id] as const,
-  },
-  // Review & Processing
-  reviewBatches: {
-    all: () => ["discovery", "review-batches"] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "review-batches", "case", caseId] as const,
-  },
-  processingJobs: {
-    all: () => ["discovery", "processing-jobs"] as const,
-    byId: (id: string) => ["discovery", "processing-jobs", id] as const,
-  },
-  // Extended discovery
-  examinations: {
-    all: () => ["discovery", "examinations"] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "examinations", "case", caseId] as const,
-  },
-  transcripts: {
-    all: () => ["discovery", "transcripts"] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "transcripts", "case", caseId] as const,
-  },
-  vendors: {
-    all: () => ["discovery", "vendors"] as const,
-  },
-  sanctions: {
-    all: () => ["discovery", "sanctions"] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "sanctions", "case", caseId] as const,
-  },
-  stipulations: {
-    all: () => ["discovery", "stipulations"] as const,
-    byCase: (caseId: string) =>
-      ["discovery", "stipulations", "case", caseId] as const,
-  },
-  // Analytics
-  funnelStats: () => ["discovery", "analytics", "funnel"] as const,
-} as const;
-
+export const DISCOVERY_QUERY_KEYS = ImportedKeys;
 interface FunnelStat {
   name: string;
   value: number;
@@ -259,13 +156,13 @@ export class DiscoveryRepository {
       ).length;
       const produced = docs.filter((d) => d.status === "Produced").length;
 
-      // Return mock data if no documents exist
+      // Return empty data if no documents exist
       if (collected === 0) {
         return [
-          { name: "Collection", value: 120000, label: "120k Docs" },
-          { name: "Processing", value: 85000, label: "85k De-NIST" },
-          { name: "Review", value: 24000, label: "24k Responsive" },
-          { name: "Production", value: 1500, label: "1.5k Produced" },
+          { name: "Collection", value: 0, label: "0 Docs" },
+          { name: "Processing", value: 0, label: "0 Processed" },
+          { name: "Review", value: 0, label: "0 Reviewed" },
+          { name: "Production", value: 0, label: "0 Produced" },
         ];
       }
 
@@ -325,33 +222,8 @@ export class DiscoveryRepository {
    * const allCustodians = await repo.getCustodians();
    * const caseCustodians = await repo.getCustodians('case-123');
    */
-  getCustodians = async (caseId?: string): Promise<Custodian[]> => {
-    this.validateCaseId(caseId, "getCustodians");
-
-    if (this.useBackend) {
-      try {
-        const result = await discoveryApi.custodians.getAll(
-          caseId ? { caseId } : undefined
-        );
-        return result as unknown as Custodian[];
-      } catch (error) {
-        console.warn(
-          "[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
-    try {
-      const custodians = await db.getAll<Custodian>(STORES.CUSTODIANS);
-      return caseId
-        ? custodians.filter((c) => c.caseId === caseId)
-        : custodians;
-    } catch (error) {
-      console.error("[DiscoveryRepository.getCustodians] Error:", error);
-      throw new OperationError("getCustodians", "Failed to fetch custodians");
-    }
-  };
+  getCustodians = async (caseId?: string): Promise<Custodian[]> =>
+    getCustodians(this.useBackend, caseId);
 
   /**
    * Adds a new custodian
@@ -753,7 +625,7 @@ export class DiscoveryRepository {
   };
 
   /**
-   * Download a production (mock implementation)
+   * Download a production
    *
    * @param id - Production ID
    * @returns Promise<string> Download URL
@@ -762,9 +634,32 @@ export class DiscoveryRepository {
   downloadProduction = async (id: string): Promise<string> => {
     this.validateId(id, "downloadProduction");
 
-    // Mock implementation - in production, this would call backend API
-    await delay(800);
-    return `https://example.com/production/${id}.zip`;
+    if (isBackendApiEnabled()) {
+      try {
+        // Check if production exists first via metadata endpoint
+        // Then return constructed download URL
+        // Assuming GET /discovery/productions/:id exists
+        const { data } = await apiClient.get<{
+          id: string;
+          downloadUrl?: string;
+        }>(`/discovery/productions/${id}`);
+        if (data?.downloadUrl) return data.downloadUrl;
+        // Fallback to direct construction
+        return `${apiClient.defaults.baseURL}/discovery/productions/${id}/download`;
+      } catch (error) {
+        console.error(
+          "[DiscoveryRepository] Failed to get production URL",
+          error
+        );
+        throw new OperationError(
+          "downloadProduction",
+          "Failed to retrieve download URL"
+        );
+      }
+    }
+
+    // Fallback for demo/dev without backend
+    return `blob:http://${window.location.host}/production/${id}.zip`;
   };
 
   // =============================================================================
@@ -1560,19 +1455,21 @@ export class DiscoveryRepository {
    */
   syncDeadlines = async (): Promise<void> => {
     try {
-      await delay(500);
-
       const requests = await this.getRequests();
       const pending = requests.filter(
         (r) => r.status === "Served" || r.status === "Overdue"
       );
 
-      // Mock calendar push - in production, this would call calendar API
-      // Calendar integration would create events for each pending request
-
-      console.log(
-        `[DiscoveryRepository] Synced ${pending.length} discovery deadlines to Master Calendar.`
-      );
+      if (isBackendApiEnabled()) {
+        // Future integration: await apiClient.post('/calendar/sync', { requests: pending });
+        console.info(
+          `[DiscoveryRepository] Would sync ${pending.length} deadlines to Calendar Service (endpoint pending).`
+        );
+      } else {
+        console.info(
+          `[DiscoveryRepository] Calendar sync skipped (backend disabled).`
+        );
+      }
     } catch (error) {
       console.error("[DiscoveryRepository.syncDeadlines] Error:", error);
       throw new OperationError(
@@ -1583,7 +1480,7 @@ export class DiscoveryRepository {
   };
 
   /**
-   * Start collection process (mock implementation)
+   * Start collection process
    *
    * @param id - Source ID
    * @returns Promise<string> Job ID
@@ -1593,13 +1490,24 @@ export class DiscoveryRepository {
     this.validateId(id, "startCollection");
 
     if (isBackendApiEnabled()) {
-      await discoveryApi.collections.resume(id);
-      return `job-${Date.now()}`; // Backend should return job ID, but for now we return a generated one or update API to return it
+      try {
+        const response = await discoveryApi.collections.resume(id);
+        // Return job ID from response if available, otherwise construct one
+        return (response as any)?.jobId || `job-${id}-resumed`;
+      } catch (error) {
+        console.error(
+          "[DiscoveryRepository] Failed to start collection:",
+          error
+        );
+        throw new OperationError(
+          "startCollection",
+          "Failed to start collection job"
+        );
+      }
     }
 
-    // Mock implementation - in production, this would call backend job queue
-    await delay(500);
-    return `job-${Date.now()}`;
+    // Local mode fallback
+    return `local-job-${Date.now()}`;
   };
 
   // ============================================================================

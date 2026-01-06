@@ -1,30 +1,30 @@
-import { Module, Global, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Global, MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 
 // Core Services
-import { EncryptionService } from './services/encryption.service';
-import { SecurityHeadersService } from './services/security.headers.service';
-import { RequestFingerprintService } from './services/request.fingerprint.service';
+import { EncryptionService } from "./services/encryption.service";
+import { RequestFingerprintService } from "./services/request.fingerprint.service";
+import { SecurityHeadersService } from "./services/security.headers.service";
 
 // Enhanced Services (v0.5.2)
-import { CorsSecurityService } from './services/cors.security.service';
-import { InputValidationService } from './services/input.validation.service';
-import { SecurityMonitoringService } from './services/security.monitoring.service';
-import { EnhancedAuditService } from './services/enhanced.audit.service';
-import { CspViolationService } from './services/csp.violation.service';
+import { CorsSecurityService } from "./services/cors.security.service";
+import { CspViolationService } from "./services/csp.violation.service";
+import { EnhancedAuditService } from "./services/enhanced.audit.service";
+import { InputValidationService } from "./services/input.validation.service";
+import { SecurityMonitoringService } from "./services/security.monitoring.service";
 
 // Guards
-import { IpReputationGuard } from './guards/ip.reputation.guard';
-import { AbacGuard } from './guards/abac.guard';
+import { AbacGuard } from "./guards/abac.guard";
+import { IpReputationGuard } from "./guards/ip.reputation.guard";
 
 // Middleware
-import { SecurityHeadersMiddleware } from './middleware/security.headers.middleware';
+import { SecurityHeadersMiddleware } from "./middleware/security.headers.middleware";
 
 // Controllers
-import { CspViolationController } from './controllers/csp.violation.controller';
+import { CspViolationController } from "./controllers/csp.violation.controller";
 
 // Dependencies
-import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
+import { RedisCacheManagerService } from "@common/services/redis-cache-manager.service";
 
 /**
  * Enhanced Security Module (v0.5.2)
@@ -65,9 +65,7 @@ import { RedisCacheManagerService } from '@common/services/redis-cache-manager.s
 @Global()
 @Module({
   imports: [ConfigModule],
-  controllers: [
-    CspViolationController,
-  ],
+  controllers: [CspViolationController, MalwareSignaturesController],
   providers: [
     // Core Security Services
     EncryptionService,
@@ -80,6 +78,7 @@ import { RedisCacheManagerService } from '@common/services/redis-cache-manager.s
     SecurityMonitoringService,
     EnhancedAuditService,
     CspViolationService,
+    MalwareSignaturesService,
 
     // Guards
     IpReputationGuard,
@@ -103,6 +102,7 @@ import { RedisCacheManagerService } from '@common/services/redis-cache-manager.s
     SecurityMonitoringService,
     EnhancedAuditService,
     CspViolationService,
+    MalwareSignaturesService,
 
     // Guards
     IpReputationGuard,
@@ -115,8 +115,6 @@ import { RedisCacheManagerService } from '@common/services/redis-cache-manager.s
 export class SecurityModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // Apply security headers middleware to all routes
-    consumer
-      .apply(SecurityHeadersMiddleware)
-      .forRoutes('*');
+    consumer.apply(SecurityHeadersMiddleware).forRoutes("*");
   }
 }

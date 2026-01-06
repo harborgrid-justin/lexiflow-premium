@@ -53,7 +53,7 @@ export class EntityRepository extends Repository<LegalEntity> {
               riskScore: (e as any).riskScore || 0,
               tags: (e as any).tags || [],
               status: (e as any).status || "Active",
-            }) as LegalEntity
+            }) as unknown as LegalEntity
         );
       } catch (error) {
         console.error("[EntityRepository] Backend API unavailable", error);
@@ -132,7 +132,8 @@ export class EntityRepository extends Repository<LegalEntity> {
         return [];
       }
     }
-    // Mocked for now, in real app this would query a relationship table
+
+    // Fallback or legacy mode return empty relationships
     return [];
   }
 

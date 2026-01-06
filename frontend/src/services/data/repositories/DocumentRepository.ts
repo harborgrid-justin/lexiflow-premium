@@ -554,30 +554,17 @@ export class DocumentRepository extends Repository<LegalDocument> {
       const uuid = crypto.randomUUID();
       await yieldToMain();
 
-      // Generate SHA-256 hash (mock for demo)
-      const mockHash =
-        "0x" +
-        Array.from({ length: 64 }, () =>
-          Math.floor(Math.random() * 16).toString(16)
-        ).join("");
+      // Calculate Real SHA-256 hash
+      const arrayBuffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
       await yieldToMain();
 
-      // Extract chunks
-      const chunkCount = Math.floor(Math.random() * 5) + 2;
-      const chunks: FileChunk[] = [];
-
-      for (let i = 1; i <= chunkCount; i++) {
-        await yieldToMain();
-        chunks.push({
-          id: `${uuid}-p${i}`,
-          pageNumber: i,
-          contentPreview: `Extracted content from page ${i} of ${file.name}. This section contains key definitions and clauses verified against the master record.`,
-          hash:
-            "0x" + Math.floor(Math.random() * 10000000).toString(16) + "...",
-        });
-      }
-
-      // Extract tags
+      // Extract tags (Heuristic)
       const tags = ["Uploaded", file.type.split("/")[1] || "Unknown"];
       const lowerName = file.name.toLowerCase();
       if (lowerName.includes("contract")) tags.push("Contract");
@@ -585,12 +572,14 @@ export class DocumentRepository extends Repository<LegalDocument> {
       if (lowerName.includes("motion")) tags.push("Motion");
       if (lowerName.includes("brief")) tags.push("Brief");
 
+      // Note: Real text extraction and summarization requires backend processing.
+      // Returning empty arrays/strings until file is processed by backend.
       return {
-        hash: mockHash,
+        hash: hashHex,
         uuid: uuid,
-        chunks: chunks,
+        chunks: [],
         tags: tags,
-        summary: `Auto-generated summary for ${file.name}. Parsed ${chunkCount} pages. Verified clean of malware. Authenticated source.`,
+        summary: "",
       };
     } catch (error) {
       console.error("[DocumentRepository.processFile] Error:", error);

@@ -92,7 +92,7 @@ class InvoiceGenerationQueue {
             const invoice = await DataService.billing.createInvoice(clientName, primaryCase, item.entries);
             item.resolve(invoice);
         } catch (error) {
-            item.reject(error);
+            item.reject(error as Error);
         } finally {
             this.processing--;
             await this.processQueue();

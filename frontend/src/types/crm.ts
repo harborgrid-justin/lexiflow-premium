@@ -3,7 +3,7 @@
  * @description CRM-related types for leads, contacts, and client relationship management
  */
 
-import type { BaseEntity, EntityId } from "./common";
+import type { BaseEntity, EntityId } from "./primitives";
 
 // ============================================================================
 // LEAD MANAGEMENT

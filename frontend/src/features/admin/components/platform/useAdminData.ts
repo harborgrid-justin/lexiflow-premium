@@ -39,14 +39,14 @@ export const useAdminData = (activeCategory: Category) => {
           return payload.isNew
             ? await DataService.users.add(payload.item)
             : await DataService.users.update(
-                (payload.item as any).id,
+                (payload.item as { id: string }).id,
                 payload.item
               );
         case "cases":
           return payload.isNew
             ? await DataService.cases.add(payload.item)
             : await DataService.cases.update(
-                (payload.item as any).id,
+                (payload.item as { id: string }).id,
                 payload.item
               );
         case "clients":

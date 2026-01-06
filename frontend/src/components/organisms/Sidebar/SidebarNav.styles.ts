@@ -7,7 +7,7 @@
 import { cn } from '@/utils/cn';
 import type { tokens } from '@/components/theme/tokens';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const navContainer = "flex-1 overflow-y-auto py-6 px-3 space-y-8 custom-scrollbar touch-auto";
 

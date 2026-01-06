@@ -70,11 +70,11 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     }, []);
 
     const CHART_COLORS = [
-        chartTheme.colors.primary,
-        chartTheme.colors.secondary,
-        chartTheme.colors.secondary,
-        chartTheme.colors.success,
-        chartTheme.colors.warning
+        chartTheme.colors[0], // primary
+        chartTheme.colors[1], // secondary
+        chartTheme.colors[1], // secondary again
+        chartTheme.colors[3], // success
+        chartTheme.colors[4]  // warning
     ];
 
     // Ensure chartData and activeProjects are arrays

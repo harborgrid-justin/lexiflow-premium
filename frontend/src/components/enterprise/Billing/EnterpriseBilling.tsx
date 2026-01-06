@@ -3,6 +3,7 @@
  * Main enterprise billing dashboard with AR aging, collection tracking, and write-off management
  */
 
+import { useQuery } from '@/hooks/backend';
 import {
   AlertTriangle,
   CheckCircle,
@@ -14,7 +15,6 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
 import { BillingOverview, dashboardMetricsService } from '../../../services/api/dashboard-metrics.service';
 
 // Types

@@ -11,7 +11,7 @@ interface RecentDraftsProps {
 }
 
 export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) => {
-  const { theme } = useTheme();
+  const { tokens } = useTheme();
 
   // Defensive check: ensure drafts is an array
   const draftsList = Array.isArray(drafts) ? drafts : [];
@@ -29,7 +29,7 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
       {draftsList.map((draft) => (
         <div
           key={draft.id}
-          className={styles.getListItem(theme)}
+          className={styles.getListItem(tokens.colors)}
           onClick={() => onSelect(draft)}
         >
           <div className="flex items-center space-x-4 flex-1">
@@ -37,9 +37,9 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
               <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={styles.getItemTitle(theme)}>{(draft as { title?: string }).title}</h4>
+              <h4 className={styles.getItemTitle(tokens.colors)}>{(draft as { title?: string }).title}</h4>
               <div className="flex items-center space-x-2 mt-1">
-                <p className={styles.getItemSubtitle(theme)}>
+                <p className={styles.getItemSubtitle(tokens.colors)}>
                   {(draft.case as { title?: string })?.title || 'No Case Assigned'}
                 </p>
                 <span className="text-slate-400 dark:text-slate-600">•</span>
@@ -59,7 +59,7 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
               </div>
             </div>
           </div>
-          <span className={styles.getStatusBadge(theme, draft.status || 'draft')}>
+          <span className={styles.getStatusBadge(tokens.colors, draft.status || 'draft')}>
             {(draft.status || 'draft').replace('_', ' ')}
           </span>
         </div>

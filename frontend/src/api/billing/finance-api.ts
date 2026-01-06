@@ -36,6 +36,7 @@ import type {
   CreateTrustAccountDto,
   CreateTrustTransactionDto,
   DepositDto,
+  FinancialPerformanceData,
   TimeEntry,
   TrustAccount,
   TrustAccountStatus,

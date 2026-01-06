@@ -96,8 +96,6 @@ export function InlineEditor({
 
   // Handle click outside
   useEffect(() => {
-    if (!isEditing) return;
-
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         handleSave();
@@ -109,7 +107,7 @@ export function InlineEditor({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isEditing, handleSave]);
+  }, [handleSave]);
 
   const handleCancel = useCallback(() => {
     onCancel();

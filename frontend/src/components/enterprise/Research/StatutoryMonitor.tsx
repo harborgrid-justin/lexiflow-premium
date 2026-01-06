@@ -297,7 +297,7 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                 >
                   <div className="flex items-start gap-4">
                     <div className={cn("rounded-lg p-3", theme.surface.highlight)}>
-                      {rule.type === 'STATUTE' ? (
+                      {rule.type === 'Statute' ? (
                         <BookOpen className="h-5 w-5" />
                       ) : (
                         <Gavel className="h-5 w-5" />

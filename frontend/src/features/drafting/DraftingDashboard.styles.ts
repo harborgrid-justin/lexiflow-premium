@@ -1,6 +1,6 @@
 import { tokens } from '@theme/tokens';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const getDashboardContainer = (_theme: Theme) => `
   flex flex-col h-full w-full bg-slate-50 dark:bg-slate-900 overflow-hidden

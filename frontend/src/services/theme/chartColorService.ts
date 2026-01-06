@@ -14,28 +14,19 @@ export class ChartColorService {
   /**
    * Get all chart colors for the current theme mode
    */
-  static getChartColors(mode: ThemeMode) {
-    // Safety check for chart colors
-    if (!tokens.colors[mode]?.chart?.colors) {
-      console.warn(
-        `[ChartColorService] Chart colors not found for mode: ${mode}, using defaults`
-      );
-      return this.getDefaultChartColors();
-    }
-    return tokens.colors[mode].chart.colors;
-  }
-
-  /**
-   * Get default chart colors as fallback
-   */
-  private static getDefaultChartColors() {
+  static getChartColors(_mode: ThemeMode) {
+    const c = tokens.colors;
     return {
-      primary: "#3b82f6",
-      secondary: "#8b5cf6",
-      success: "#10b981",
-      warning: "#f59e0b",
-      danger: "#ef4444",
-      neutral: "#6b7280",
+      primary: c.primary,
+      secondary: c.secondary,
+      success: c.success,
+      warning: c.warning,
+      danger: c.error,
+      info: c.info,
+      neutral: c.textMuted,
+      blue: c.info,
+      emerald: c.success,
+      purple: c.accent,
     };
   }
 
@@ -56,27 +47,14 @@ export class ChartColorService {
    * Get status-based colors for indicators
    * Used by: Status badges, alerts, notifications
    */
-  static getStatusColors(mode: ThemeMode) {
-    // Safety check for status colors
-    if (!tokens.colors[mode]?.status) {
-      console.warn(
-        `[ChartColorService] Status colors not found for mode: ${mode}, using defaults`
-      );
-      return {
-        success: "#10b981",
-        warning: "#f59e0b",
-        error: "#ef4444",
-        info: "#3b82f6",
-        neutral: "#6b7280",
-      };
-    }
-    const status = tokens.colors[mode].status;
+  static getStatusColors(_mode: ThemeMode) {
+    const c = tokens.colors;
     return {
-      success: status.success.icon,
-      warning: status.warning.icon,
-      error: status.error.icon,
-      info: status.info.icon,
-      neutral: status.neutral.icon,
+      success: c.success,
+      warning: c.warning,
+      error: c.error,
+      info: c.info,
+      neutral: c.textMuted,
     };
   }
 
@@ -85,29 +63,16 @@ export class ChartColorService {
    * Used by: Recharts components
    */
   static getChartTheme(mode: ThemeMode) {
-    // Safety check for chart theme
-    if (!tokens.colors[mode]?.chart) {
-      console.warn(
-        `[ChartColorService] Chart theme not found for mode: ${mode}, using defaults`
-      );
-      const colors = this.getDefaultChartColors();
-      return {
-        grid: mode === "dark" ? "#374151" : "#e5e7eb",
-        text: mode === "dark" ? "#9ca3af" : "#6b7280",
-        tooltip: {
-          bg: mode === "dark" ? "#1f2937" : "#ffffff",
-          border: mode === "dark" ? "#374151" : "#e5e7eb",
-          text: mode === "dark" ? "#f3f4f6" : "#111827",
-        },
-        colors,
-      };
-    }
-    const theme = tokens.colors[mode];
+    const colors = this.getChartColors(mode);
     return {
-      grid: theme.chart.grid,
-      text: theme.chart.text,
-      tooltip: theme.chart.tooltip,
-      colors: theme.chart.colors,
+      grid: mode === "dark" ? "#374151" : "#e5e7eb",
+      text: mode === "dark" ? "#9ca3af" : "#6b7280",
+      tooltip: {
+        bg: mode === "dark" ? "#1f2937" : "#ffffff",
+        border: mode === "dark" ? "#374151" : "#e5e7eb",
+        text: mode === "dark" ? "#f3f4f6" : "#111827",
+      },
+      colors,
     };
   }
 
@@ -119,7 +84,7 @@ export class ChartColorService {
    * @param mode - Theme mode
    */
   static getColorByIndex(index: number, mode: ThemeMode): string {
-    const colors = tokens.colors[mode].chart.colors;
+    const colors = this.getChartColors(mode);
     const palette = [
       colors.primary,
       colors.secondary,
@@ -216,8 +181,7 @@ export class ChartColorService {
    * Used directly in Tooltip components
    */
   static getTooltipStyle(mode: ThemeMode) {
-    // Safety check for tooltip colors
-    const tooltip = tokens.colors[mode]?.chart?.tooltip || {
+    const tooltip = {
       bg: mode === "dark" ? "#1f2937" : "#ffffff",
       border: mode === "dark" ? "#374151" : "#e5e7eb",
       text: mode === "dark" ? "#f3f4f6" : "#111827",

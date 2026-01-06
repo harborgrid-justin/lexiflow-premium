@@ -11,14 +11,15 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, CartesianGrid } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { getChartTheme } from '@/utils/chartConfig';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
@@ -30,7 +31,6 @@ import { LoadingState } from '@/components/ui/molecules/LoadingState/LoadingStat
 
 // Utils & Constants
 import {
-  getChartTheme,
   DEFAULT_MARGINS,
   getAxisConfig,
   getGridConfig,
@@ -92,4 +92,3 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
     </div>
   );
 };
-

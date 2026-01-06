@@ -9,36 +9,36 @@ interface DraftingStatsProps {
 }
 
 export const DraftingStats: React.FC<DraftingStatsProps> = ({ stats }) => {
-  const { theme } = useTheme();
+  const { tokens } = useTheme();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div className={styles.getStatCard(theme)}>
+      <div className={styles.getStatCard(tokens.colors)}>
         <div>
-          <div className={styles.getStatValue(theme)}>{stats.drafts}</div>
-          <div className={styles.getStatLabel(theme)}>Active Drafts</div>
+          <div className={styles.getStatValue(tokens.colors)}>{stats.drafts}</div>
+          <div className={styles.getStatLabel(tokens.colors)}>Active Drafts</div>
         </div>
-        <div className={styles.getStatIcon(theme, 'blue')}>
+        <div className={styles.getStatIcon(tokens.colors, 'blue')}>
           <FileText className="h-6 w-6" />
         </div>
       </div>
 
-      <div className={styles.getStatCard(theme)}>
+      <div className={styles.getStatCard(tokens.colors)}>
         <div>
-          <div className={styles.getStatValue(theme)}>{stats.templates}</div>
-          <div className={styles.getStatLabel(theme)}>Templates</div>
+          <div className={styles.getStatValue(tokens.colors)}>{stats.templates}</div>
+          <div className={styles.getStatLabel(tokens.colors)}>Templates</div>
         </div>
-        <div className={styles.getStatIcon(theme, 'emerald')}>
+        <div className={styles.getStatIcon(tokens.colors, 'emerald')}>
           <FileCode className="h-6 w-6" />
         </div>
       </div>
 
-      <div className={styles.getStatCard(theme)}>
+      <div className={styles.getStatCard(tokens.colors)}>
         <div>
-          <div className={styles.getStatValue(theme)}>{stats.pendingReviews}</div>
-          <div className={styles.getStatLabel(theme)}>Pending Review</div>
+          <div className={styles.getStatValue(tokens.colors)}>{stats.pendingReviews}</div>
+          <div className={styles.getStatLabel(tokens.colors)}>Pending Review</div>
         </div>
-        <div className={styles.getStatIcon(theme, 'amber')}>
+        <div className={styles.getStatIcon(tokens.colors, 'amber')}>
           <CheckSquare className="h-6 w-6" />
         </div>
       </div>

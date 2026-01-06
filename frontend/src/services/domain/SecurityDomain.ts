@@ -38,9 +38,9 @@
  * queryClient.invalidateQueries({ queryKey: SECURITY_QUERY_KEYS.malwareSignatures() });
  */
 
+import { isBackendApiEnabled } from "@/api";
 import { OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
 
 export const SECURITY_QUERY_KEYS = {
   all: () => ["security"] as const,
@@ -119,11 +119,6 @@ export const SecurityService = {
       if (isBackendApiEnabled()) {
         return apiClient.get<string[]>("/security/malware-signatures");
       }
-      // TODO: Security API service is not yet implemented in adminApi
-      // Returning empty array until SecurityApiService is added
-      console.warn(
-        "[SecurityService] Security API service not available, returning empty malware signatures"
-      );
       return [];
     } catch (error) {
       console.error("[SecurityService.getMalwareSignatures] Error:", error);

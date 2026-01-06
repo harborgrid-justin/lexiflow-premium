@@ -17,7 +17,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof clientLoader>> }) {
   return createListMeta({
     entityType: 'Citations',
     count: data?.items?.length,

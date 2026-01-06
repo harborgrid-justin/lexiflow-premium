@@ -7,7 +7,7 @@ import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
 import { STORES, db } from "@/services/data/db";
-import { BriefAnalysisSession, JudgeProfile } from "@/types";
+import { BriefAnalysisSession, CounselProfile, JudgeProfile } from "@/types";
 
 export const ANALYSIS_QUERY_KEYS = {
   all: () => ["analysis"] as const,

@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Clause } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
@@ -20,7 +20,7 @@ export const ClauseAnalytics: React.FC = () => {
     );
 
     const clauses = Array.isArray(clausesData) ? clausesData : [];
-    const riskData = getRiskData(clauses, mode);
+    const riskData = getRiskData(clauses, mode as 'light' | 'dark');
     const usageData = getUsageData(clauses);
 
     return (

@@ -54,70 +54,31 @@ export interface PrivilegeLogProps {
 }
 
 // ============================================================================
-// MOCK DATA
-// ============================================================================
-
-const mockPrivilegeEntries: PrivilegeEntry[] = [
-  {
-    id: '1',
-    documentId: 'DOC-2025-001234',
-    batesNumber: 'ABC-0001234',
-    documentDate: new Date('2025-11-15'),
-    author: 'Sarah Johnson',
-    recipients: ['Michael Chen', 'Emily Rodriguez'],
-    subject: 'Re: Litigation Strategy Discussion',
-    description: 'Email chain discussing legal strategy for upcoming motion',
-    privilegeType: 'attorney-client',
-    basis: 'Communication between client and attorney seeking legal advice',
-    reviewedBy: 'John Smith',
-    reviewDate: new Date('2025-12-20'),
-    status: 'reviewed',
-    notes: 'Clear attorney-client communication'
-  },
-  {
-    id: '2',
-    documentId: 'DOC-2025-005678',
-    batesNumber: 'ABC-0005678',
-    documentDate: new Date('2025-12-01'),
-    author: 'Michael Chen',
-    recipients: ['Outside Counsel'],
-    subject: 'Draft Settlement Analysis',
-    description: 'Attorney work product analyzing settlement options',
-    privilegeType: 'work-product',
-    basis: 'Attorney mental impressions and litigation strategy',
-    reviewedBy: 'Jane Doe',
-    reviewDate: new Date('2025-12-22'),
-    status: 'reviewed'
-  },
-  {
-    id: '3',
-    documentId: 'DOC-2025-009012',
-    batesNumber: 'ABC-0009012',
-    documentDate: new Date('2025-12-10'),
-    author: 'Emily Rodriguez',
-    recipients: ['Legal Team'],
-    subject: 'Confidential Financial Analysis',
-    description: 'Financial projections prepared at attorney request',
-    privilegeType: 'both',
-    basis: 'Work product prepared in anticipation of litigation',
-    reviewedBy: 'John Smith',
-    reviewDate: new Date('2025-12-28'),
-    status: 'pending',
-    notes: 'May need additional review for factual content'
-  }
-];
-
-// ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const PrivilegeLog: React.FC<PrivilegeLogProps> = ({
-  className
+  className,
+  caseId
 }) => {
   const { theme } = useTheme();
-  const [entries, setEntries] = useState<PrivilegeEntry[]>(mockPrivilegeEntries);
+  // Initialize with empty array for production
+  const [entries, setEntries] = useState<PrivilegeEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const fetchPrivilegeLog = async () => {
+      try {
+        const data = await DataService.discovery.getPrivilegeLog();
+        // Transform to local type or cast if compatible
+        setEntries((data || []) as unknown as PrivilegeEntry[]);
+      } catch (err) {
+        console.warn('Failed to load privilege log', err);
+      }
+    };
+    fetchPrivilegeLog();
+  }, [caseId]);
   const [filterType, setFilterType] = useState<string>('all');
   const [showBatchActions, setShowBatchActions] = useState(false);
 

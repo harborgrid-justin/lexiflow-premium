@@ -7,7 +7,7 @@
 import { cn } from '@/utils/cn';
 import type { tokens } from '@/components/theme/tokens';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const searchContainer = (className?: string) => cn("relative w-full", className);
 

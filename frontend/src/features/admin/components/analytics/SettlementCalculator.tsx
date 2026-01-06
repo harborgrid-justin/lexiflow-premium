@@ -19,16 +19,16 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import { getChartTheme } from '@/utils/chartConfig';
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
-import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { ThemeStateValue } from '@/contexts/theme/ThemeContext.types';
+import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services
 import { cn } from '@/utils/cn';
@@ -248,8 +248,8 @@ const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
  * - Strategic settlement recommendations
  */
 export const SettlementCalculator: React.FC = () => {
-  const { theme } = useTheme();
-  const chartTheme = useChartTheme() as ChartTheme;
+  const { theme, mode } = useTheme();
+  const chartTheme = getChartTheme(mode as 'light' | 'dark');
 
   const {
     params,

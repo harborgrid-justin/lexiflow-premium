@@ -11,15 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -81,23 +79,42 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
         // For now, let's iterate over unread notifications.
         const unread = notifications.filter(n => !n.read);
         await Promise.all(unread.map(n => DataService.notifications.update(n.id, { read: true })));
-        queryClient.invalidateQueries?.(['notifications']);
+        // queryClient.invalidateQueries?.(['notifications']);
     };
 
     const handleDeleteNotification = async (id: string) => {
         await DataService.notifications.delete(id);
-        queryClient.invalidateQueries?.(['notifications']);
+        // queryClient.invalidateQueries?.(['notifications']);
     };
 
-    const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
-        QUERY_KEYS.TASKS.ALL,
-        () => DataService.tasks.getAll()
-    );
+    const [allTasks, setAllTasks] = useState<WorkflowTask[]>([]);
+    const [allEvents, setAllEvents] = useState<CalendarEventItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const { data: allEvents = [], isLoading: eventsLoading, error: eventsError } = useQuery<CalendarEventItem[]>(
-        QUERY_KEYS.CALENDAR.ALL,
-        () => DataService.calendar.getEvents()
-    );
+    useEffect(() => {
+        const loadData = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const [tasksData, eventsData] = await Promise.all([
+                    DataService.tasks.getAll?.() || Promise.resolve([]),
+                    DataService.calendar.getEvents?.() || Promise.resolve([])
+                ]);
+                setAllTasks(tasksData);
+                setAllEvents(eventsData);
+            } catch (err) {
+                console.error('[PersonalWorkspace] Failed to load data:', err);
+                setError('Failed to load workspace data');
+                setAllTasks([]);
+                setAllEvents([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadData();
+    }, []);
 
     // Ensure allTasks and allEvents are arrays even if API fails
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
@@ -106,8 +123,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const myTasks = safeAllTasks.filter((t: WorkflowTask) => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task');
 
-    const isLoading = tasksLoading || eventsLoading;
-    const hasError = tasksError || eventsError;
+    const hasError = error;
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
@@ -189,8 +205,8 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                 notifications={notifications.map((n) => ({
                                     ...n,
                                     timestamp: new Date(n.timestamp).getTime(),
-                                    priority: "normal",
-                                    type: n.type as any
+                                    priority: "low" as const,
+                                    type: n.type
                                 }))}
                                 unreadCount={
                                     notifications.filter((n) => !n.read).length

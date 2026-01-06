@@ -48,7 +48,7 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
         async () => {
             try {
                 // Query backend for cases linked to this citation
-                const cases = await (DataService as any).knowledge?.getCasesByCitation?.(citation.id) || [];
+                const cases = await DataService.knowledge?.getCasesByCitation?.(citation.id) || [];
                 return Array.isArray(cases) ? cases : [];
             } catch (error) {
                 console.warn('[CitationDetail] Failed to fetch linked cases:', error);

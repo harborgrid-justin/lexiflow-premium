@@ -7,7 +7,7 @@
 import { cn } from '@/utils/cn';
 import type { tokens } from '@/components/theme/tokens';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const getBackdrop = () => cn(
   "fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]",

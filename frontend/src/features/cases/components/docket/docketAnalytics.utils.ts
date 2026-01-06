@@ -60,6 +60,7 @@ export const aggregateJudgeRulings = (entries: DocketEntry[]) => {
   return judgeRulingsCache.getOrCompute(cacheKey, () => {
     let granted = 0;
     let denied = 0;
+    let partial = 0;
 
     // Use for loop for better performance
     for (let i = 0; i < entries.length; i++) {
@@ -67,23 +68,23 @@ export const aggregateJudgeRulings = (entries: DocketEntry[]) => {
       if (!e) continue;
       if (e.type === "Order" && e.description) {
         const desc = e.description.toLowerCase();
-        if (desc.includes("granted")) granted++;
-        else if (desc.includes("denied")) denied++;
+        if (
+          desc.includes("partially") ||
+          (desc.includes("granted") && desc.includes("part"))
+        ) {
+          partial++;
+        } else if (desc.includes("granted")) {
+          granted++;
+        } else if (desc.includes("denied")) {
+          denied++;
+        }
       }
     }
 
-    // Fallback/Simulation to make chart look populated if description matching is sparse in mock data
-    const simulatedGranted = Math.max(granted, 12);
-    const simulatedDenied = Math.max(denied, 8);
-
     return [
-      { name: "Granted", value: simulatedGranted, color: "#10b981" },
-      { name: "Denied", value: simulatedDenied, color: "#ef4444" },
-      {
-        name: "Partial",
-        value: Math.floor((simulatedGranted + simulatedDenied) * 0.3),
-        color: "#f59e0b",
-      },
+      { name: "Granted", value: granted, color: "#10b981" },
+      { name: "Denied", value: denied, color: "#ef4444" },
+      { name: "Partial", value: partial, color: "#f59e0b" },
     ];
   });
 };

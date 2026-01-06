@@ -13,17 +13,17 @@ import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
 
-  const chartTheme = getChartTheme(mode);
-  const riskColors = ChartColorService.getRiskColors(mode);
-  const statusColors = ChartColorService.getStatusColors(mode);
-  const palette = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode as 'light' | 'dark');
+  const riskColors = ChartColorService.getRiskColors(mode as 'light' | 'dark');
+  const statusColors = ChartColorService.getStatusColors(mode as 'light' | 'dark');
+  const palette = ChartColorService.getPalette(mode as 'light' | 'dark');
 
   // Sample data for chart testing - using memoized calculation
   const chartData = useMemo(() => ({

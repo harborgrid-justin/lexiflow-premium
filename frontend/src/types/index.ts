@@ -9,6 +9,7 @@ export * from "./canvas-constants";
 export * from "./case";
 export * from "./case-team";
 export * from "./compliance-risk";
+export * from "./crm";
 export * from "./dashboard";
 export * from "./data-infrastructure";
 export * from "./data-quality";

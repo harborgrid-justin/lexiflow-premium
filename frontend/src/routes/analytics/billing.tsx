@@ -130,8 +130,8 @@ export default function BillingAnalyticsRoute() {
     const weights = [0.30, 0.24, 0.19, 0.15, 0.12]; // Distribution weights
     return areas.map((area, i) => ({
       area,
-      revenue: Math.floor(totalRevenue * weights[i]),
-      hours: Math.floor((totalRevenue * weights[i]) / 250), // ~$250/hr average
+      revenue: Math.floor(totalRevenue * (weights[i] || 0)),
+      hours: Math.floor((totalRevenue * (weights[i] || 0)) / 250), // ~$250/hr average
       avgRate: Math.floor(240 + Math.random() * 30)
     }));
   }, [metrics.totalRevenue]);
@@ -153,7 +153,7 @@ export default function BillingAnalyticsRoute() {
     const attorneys = ['Sarah Chen', 'Michael Torres', 'Jessica Park', 'David Kim', 'Emily Davis'];
     const weights = [0.25, 0.22, 0.20, 0.18, 0.15];
     return attorneys.map((name, i) => {
-      const revenue = Math.floor(totalRevenue * weights[i] * 0.6); // Top 5 = ~60% of revenue
+      const revenue = Math.floor(totalRevenue * (weights[i] || 0) * 0.6); // Top 5 = ~60% of revenue
       return {
         name,
         revenue,
@@ -171,8 +171,8 @@ export default function BillingAnalyticsRoute() {
     const weights = [0.25, 0.21, 0.23, 0.16, 0.15];
     return attorneys.map((name, i) => ({
       name,
-      amount: Math.floor(totalWip * weights[i]),
-      hours: Math.floor((totalWip * weights[i]) / 250)
+      amount: Math.floor(totalWip * (weights[i] || 0)),
+      hours: Math.floor((totalWip * (weights[i] || 0)) / 250)
     }));
   }, [metrics.wipTotal]);
 

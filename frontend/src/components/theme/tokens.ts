@@ -1,5 +1,6 @@
 export type ThemeDensity = "compact" | "normal" | "comfortable";
 export type FontMode = "sans" | "serif";
+export type ThemeMode = "light" | "dark";
 
 export interface DesignTokens {
   fontMode: FontMode;

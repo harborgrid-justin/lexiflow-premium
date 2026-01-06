@@ -119,8 +119,8 @@ interface ClientSegment {
 
 export const ClientAnalytics: React.FC = () => {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode);
-  const chartTheme = getChartTheme(mode);
+  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
+  const chartTheme = getChartTheme(mode as 'light' | 'dark');
   const [activeTab, setActiveTab] = useState<'profitability' | 'ltv' | 'risk' | 'satisfaction'>('profitability');
 
   // Data queries

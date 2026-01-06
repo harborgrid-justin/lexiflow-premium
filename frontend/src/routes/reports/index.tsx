@@ -30,7 +30,7 @@ import { createListMeta } from '../_shared/meta-utils';
 // Types
 // ============================================================================
 
-type LoaderData = Awaited<ReturnType<typeof loader>>;
+type LoaderData = Awaited<ReturnType<typeof clientLoader>>;
 
 interface RouteErrorBoundaryProps {
   error: unknown;

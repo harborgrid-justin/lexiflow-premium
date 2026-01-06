@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Archive, CheckSquare, Download, FolderInput, RefreshCw, Upload } from 'lucide-react';
 import React, { useState } from 'react';
-import { Archive, FolderInput, CheckSquare, Download, Upload, RefreshCw } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -19,13 +19,13 @@ import { Archive, FolderInput, CheckSquare, Download, Upload, RefreshCw } from '
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -49,203 +49,198 @@ export const CaseListMisc: React.FC = () => {
     const { data: activeCases = [] } = useQuery<Case[]>(
         ['cases', 'active'],
         async () => {
-            // Safe cast as we define the interface here - in real usage this is Case[]
-            return (await DataService.cases.getAll()) as Case[];
+            const all = await DataService.cases.getAll();
+            return all.filter((c: Case) => c.status !== 'Closed' && c.status !== 'Archived');
         }
     );
-    async () => {
-        const all = await DataService.cases.getAll();
-        return all.filter((c: Case) => c.status !== 'Closed' && c.status !== 'Archived');
-    }
+
+    const { data: archivedCases = [] } = useQuery<Case[]>(
+        ['cases', 'archived'],
+        async () => {
+            const all = await DataService.cases.getAll();
+            return all.filter((c: Case) => c.status === 'Archived');
+        }
     );
 
-const { data: archivedCases = [] } = useQuery<Case[]>(
-    ['cases', 'archived'],
-    async () => {
-        const all = await DataService.cases.getAll();
-        return all.filter((c: Case) => c.status === 'Archived');
-    }
-);
+    // Archive mutation
+    const { mutate: archiveCase } = useMutation(
+        async (caseId: string) => {
+            const existing = activeCases.find(c => c.id === caseId);
+            if (!existing) throw new Error('Case not found');
+            return DataService.cases.update(caseId, { status: 'Archived' });
+        },
+        {
+            invalidateKeys: [['cases']],
+            onSuccess: () => notify.success('Case archived successfully'),
+            onError: () => notify.error('Failed to archive case')
+        }
+    );
 
-// Archive mutation
-const { mutate: archiveCase } = useMutation(
-    async (caseId: string) => {
-        const existing = activeCases.find(c => c.id === caseId);
-        if (!existing) throw new Error('Case not found');
-        return DataService.cases.update(caseId, { status: 'Archived' });
-    },
-    {
-        invalidateKeys: [['cases']],
-        onSuccess: () => notify.success('Case archived successfully'),
-        onError: () => notify.error('Failed to archive case')
-    }
-);
+    // Restore mutation
+    const { mutate: restoreCase } = useMutation(
+        async (caseId: string) => {
+            const existing = archivedCases.find(c => c.id === caseId);
+            if (!existing) throw new Error('Case not found');
+            return DataService.cases.update(caseId, { status: 'Active' });
+        },
+        {
+            invalidateKeys: [['cases']],
+            onSuccess: () => notify.success('Case restored successfully'),
+            onError: () => notify.error('Failed to restore case')
+        }
+    );
 
-// Restore mutation
-const { mutate: restoreCase } = useMutation(
-    async (caseId: string) => {
-        const existing = archivedCases.find(c => c.id === caseId);
-        if (!existing) throw new Error('Case not found');
-        return DataService.cases.update(caseId, { status: 'Active' });
-    },
-    {
-        invalidateKeys: [['cases']],
-        onSuccess: () => notify.success('Case restored successfully'),
-        onError: () => notify.error('Failed to restore case')
-    }
-);
+    const handleBulkArchive = () => {
+        if (selectedCases.length === 0) {
+            notify.warning('No cases selected');
+            return;
+        }
+        selectedCases.forEach(caseId => archiveCase(caseId));
+        setSelectedCases([]);
+    };
 
-const handleBulkArchive = () => {
-    if (selectedCases.length === 0) {
-        notify.warning('No cases selected');
-        return;
-    }
-    selectedCases.forEach(caseId => archiveCase(caseId));
-    setSelectedCases([]);
-};
+    const handleExport = () => {
+        notify.info('Export functionality coming soon');
+    };
 
-const handleExport = () => {
-    notify.info('Export functionality coming soon');
-};
+    const handleImport = () => {
+        notify.info('Import functionality coming soon');
+    };
 
-const handleImport = () => {
-    notify.info('Import functionality coming soon');
-};
+    return (
+        <div className="flex flex-col h-full space-y-6 p-6">
+            {/* Header */}
+            <div>
+                <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Case Operations</h2>
+                <p className={cn("text-sm", theme.text.secondary)}>Archive, bulk actions, and case transfers</p>
+            </div>
 
-return (
-    <div className="flex flex-col h-full space-y-6 p-6">
-        {/* Header */}
-        <div>
-            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Case Operations</h2>
-            <p className={cn("text-sm", theme.text.secondary)}>Archive, bulk actions, and case transfers</p>
-        </div>
+            {/* Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <MetricCard
+                    label="Active Cases"
+                    value={activeCases.length}
+                    icon={CheckSquare}
+                    className="border-l-4 border-l-blue-600"
+                />
+                <MetricCard
+                    label="Archived Cases"
+                    value={archivedCases.length}
+                    icon={Archive}
+                    className="border-l-4 border-l-slate-500"
+                />
+                <MetricCard
+                    label="Selected"
+                    value={selectedCases.length}
+                    icon={FolderInput}
+                    className="border-l-4 border-l-purple-600"
+                />
+            </div>
 
-        {/* Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <MetricCard
-                label="Active Cases"
-                value={activeCases.length}
-                icon={CheckSquare}
-                className="border-l-4 border-l-blue-600"
+            {/* Tabs */}
+            <Tabs
+                tabs={[
+                    { id: 'archive', label: 'Archive', icon: Archive },
+                    { id: 'bulk', label: 'Bulk Actions', icon: CheckSquare },
+                    { id: 'transfer', label: 'Transfers', icon: FolderInput },
+                ]}
+                activeTab={activeTab}
+                onChange={setActiveTab}
             />
-            <MetricCard
-                label="Archived Cases"
-                value={archivedCases.length}
-                icon={Archive}
-                className="border-l-4 border-l-slate-500"
-            />
-            <MetricCard
-                label="Selected"
-                value={selectedCases.length}
-                icon={FolderInput}
-                className="border-l-4 border-l-purple-600"
-            />
-        </div>
 
-        {/* Tabs */}
-        <Tabs
-            tabs={[
-                { id: 'archive', label: 'Archive', icon: Archive },
-                { id: 'bulk', label: 'Bulk Actions', icon: CheckSquare },
-                { id: 'transfer', label: 'Transfers', icon: FolderInput },
-            ]}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-        />
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-            {activeTab === 'archive' && (
-                <div className="space-y-4">
-                    <Card title="Archive Cases">
-                        <div className="space-y-3">
-                            {activeCases.slice(0, 10).map(c => (
-                                <div
-                                    key={c.id}
-                                    className={cn(
-                                        "flex items-center justify-between p-3 rounded border",
-                                        theme.border.default,
-                                        theme.surface.default
-                                    )}
-                                >
-                                    <div>
-                                        <div className={cn("font-medium", theme.text.primary)}>{c.title}</div>
-                                        <div className={cn("text-sm", theme.text.secondary)}>{c.caseNumber}</div>
-                                    </div>
-                                    <Button
-                                        size="sm"
-                                        variant="secondary"
-                                        icon={Archive}
-                                        onClick={() => archiveCase(c.id)}
-                                    >
-                                        Archive
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </Card>
-
-                    <Card title="Archived Cases">
-                        <div className="space-y-3">
-                            {archivedCases.slice(0, 10).map(c => (
-                                <div
-                                    key={c.id}
-                                    className={cn(
-                                        "flex items-center justify-between p-3 rounded border",
-                                        theme.border.default,
-                                        theme.surface.default
-                                    )}
-                                >
-                                    <div>
-                                        <div className={cn("font-medium", theme.text.primary)}>{c.title}</div>
-                                        <div className={cn("text-sm", theme.text.secondary)}>{c.caseNumber}</div>
-                                    </div>
-                                    <Button
-                                        size="sm"
-                                        variant="primary"
-                                        icon={RefreshCw}
-                                        onClick={() => restoreCase(c.id)}
-                                    >
-                                        Restore
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </Card>
-                </div>
-            )}
-
-            {activeTab === 'bulk' && (
-                <Card title="Bulk Operations">
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto">
+                {activeTab === 'archive' && (
                     <div className="space-y-4">
-                        <div className="flex gap-2">
-                            <Button icon={Archive} onClick={handleBulkArchive}>
-                                Archive Selected
-                            </Button>
-                            <Button icon={Download} onClick={handleExport}>
-                                Export
-                            </Button>
-                            <Button icon={Upload} onClick={handleImport}>
-                                Import
-                            </Button>
-                        </div>
-                        <div className={cn("text-sm", theme.text.secondary)}>
-                            {selectedCases.length} case(s) selected
-                        </div>
-                    </div>
-                </Card>
-            )}
+                        <Card title="Archive Cases">
+                            <div className="space-y-3">
+                                {activeCases.slice(0, 10).map(c => (
+                                    <div
+                                        key={c.id}
+                                        className={cn(
+                                            "flex items-center justify-between p-3 rounded border",
+                                            theme.border.default,
+                                            theme.surface.default
+                                        )}
+                                    >
+                                        <div>
+                                            <div className={cn("font-medium", theme.text.primary)}>{c.title}</div>
+                                            <div className={cn("text-sm", theme.text.secondary)}>{c.caseNumber}</div>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            variant="secondary"
+                                            icon={Archive}
+                                            onClick={() => archiveCase(c.id)}
+                                        >
+                                            Archive
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Card>
 
-            {activeTab === 'transfer' && (
-                <Card title="Case Transfers">
-                    <div className={cn("text-center py-8", theme.text.secondary)}>
-                        Case transfer functionality - assign cases to different attorneys or firms
+                        <Card title="Archived Cases">
+                            <div className="space-y-3">
+                                {archivedCases.slice(0, 10).map(c => (
+                                    <div
+                                        key={c.id}
+                                        className={cn(
+                                            "flex items-center justify-between p-3 rounded border",
+                                            theme.border.default,
+                                            theme.surface.default
+                                        )}
+                                    >
+                                        <div>
+                                            <div className={cn("font-medium", theme.text.primary)}>{c.title}</div>
+                                            <div className={cn("text-sm", theme.text.secondary)}>{c.caseNumber}</div>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            variant="primary"
+                                            icon={RefreshCw}
+                                            onClick={() => restoreCase(c.id)}
+                                        >
+                                            Restore
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Card>
                     </div>
-                </Card>
-            )}
+                )}
+
+                {activeTab === 'bulk' && (
+                    <Card title="Bulk Operations">
+                        <div className="space-y-4">
+                            <div className="flex gap-2">
+                                <Button icon={Archive} onClick={handleBulkArchive}>
+                                    Archive Selected
+                                </Button>
+                                <Button icon={Download} onClick={handleExport}>
+                                    Export
+                                </Button>
+                                <Button icon={Upload} onClick={handleImport}>
+                                    Import
+                                </Button>
+                            </div>
+                            <div className={cn("text-sm", theme.text.secondary)}>
+                                {selectedCases.length} case(s) selected
+                            </div>
+                        </div>
+                    </Card>
+                )}
+
+                {activeTab === 'transfer' && (
+                    <Card title="Case Transfers">
+                        <div className={cn("text-center py-8", theme.text.secondary)}>
+                            Case transfer functionality - assign cases to different attorneys or firms
+                        </div>
+                    </Card>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
 };
 
 export default CaseListMisc;

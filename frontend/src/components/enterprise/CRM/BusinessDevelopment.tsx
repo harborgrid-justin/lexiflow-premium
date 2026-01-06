@@ -130,8 +130,8 @@ interface WinLossAnalysis {
 
 export const BusinessDevelopment: React.FC = () => {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getPalette(mode);
-  const chartTheme = getChartTheme(mode);
+  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
+  const chartTheme = getChartTheme(mode as 'light' | 'dark');
   const [activeTab, setActiveTab] = useState<'leads' | 'pitches' | 'rfps' | 'analysis'>('leads');
 
   // Mock data

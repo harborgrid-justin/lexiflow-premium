@@ -7,7 +7,7 @@
 import { cn } from '@/utils/cn';
 import type { tokens } from '@/components/theme/tokens';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const getHeaderContainer = (theme: Theme) => cn(
   "h-16 flex items-center justify-between px-6 border-b shrink-0",

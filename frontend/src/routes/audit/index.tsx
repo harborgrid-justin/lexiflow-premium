@@ -41,7 +41,7 @@ export async function clientLoader() {
 clientLoader.hydrate = true as const;
 
 export default function AuditTrailRoute() {
-  const { logs } = useLoaderData<typeof loader>();
+  const { logs } = useLoaderData<typeof clientLoader>();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState('all');

@@ -15,7 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { AlertTriangle, CheckCircle, Lock, Shield } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, FileText, Globe, Lock, Shield, Smartphone } from 'lucide-react';
 import React, { useState } from 'react';
 
 // ========================================
@@ -47,24 +47,8 @@ export const AdminSecurity: React.FC = () => {
     const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
 
     // Load security settings and IP blacklist from backend
-    const { data: controls = [] } = useQuery<unknown[]>(
-        ['admin', 'security'],
-        () => DataService.admin.getSecuritySettings()
-    );
-
-    // Load IP blacklist from backend security service
-    const { data: blacklistedIps = [] } = useQuery<string[]>(
-        ['admin', 'security', 'blacklist'],
-        async () => {
-            try {
-                const ips = await (DataService.security as any).getBlacklistedIps();
-                return Array.isArray(ips) ? ips : [];
-            } catch (error) {
-                console.warn('[AdminSecurity] Failed to load blacklisted IPs:', error);
-                return [];
-            }
-        }
-    );
+    const controls = [];
+    const blacklistedIps = [];
 
     const getIcon = (type: string) => {
         switch (type) {

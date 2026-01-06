@@ -482,6 +482,7 @@ export type LegalRuleType =
   | "Local"
   | "Standing Order"
   | "Practice Guide"
+  | "Statute"
   // Legacy types for backward compatibility
   | "FRE"
   | "FRCP"

@@ -62,7 +62,6 @@ export const DocumentTable = ({
       setSelectedDocForHistory={setSelectedDocForHistory}
       setTaggingDoc={setTaggingDoc}
       onRowClick={onRowClick}
-      theme={theme}
     />
   );
 

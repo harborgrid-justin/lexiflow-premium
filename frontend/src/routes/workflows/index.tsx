@@ -9,6 +9,7 @@
 
 import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/workflow-api';
 import type { WorkflowStatus } from '@/types';
+import { requireAuthentication } from '@/utils/route-guards';
 import { useState } from 'react';
 import { Form, Link, redirect, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { api } from '../../api';

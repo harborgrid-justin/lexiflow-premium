@@ -25,6 +25,17 @@ export interface Clause {
   updatedAt?: string;
 }
 
+export interface CreateClauseDto extends Omit<
+  Clause,
+  "id" | "createdAt" | "updatedAt" | "usageCount"
+> {
+  // Optional fields during creation
+}
+
+export interface UpdateClauseDto extends Partial<
+  Omit<Clause, "id" | "createdAt" | "updatedAt">
+> {}
+
 export interface ClauseFilters {
   category?: Clause["category"];
   clauseType?: string;
@@ -72,7 +83,7 @@ export class ClausesApiService {
     return response as Clause;
   }
 
-  async create(data: Partial<Clause>): Promise<Clause> {
+  async create(data: CreateClauseDto): Promise<Clause> {
     const response = await apiClient.post<Clause | { data: Clause }>(
       this.baseUrl,
       data
@@ -83,7 +94,7 @@ export class ClausesApiService {
     return response as Clause;
   }
 
-  async update(id: string, data: Partial<Clause>): Promise<Clause> {
+  async update(id: string, data: UpdateClauseDto): Promise<Clause> {
     const response = await apiClient.put<Clause | { data: Clause }>(
       `${this.baseUrl}/${id}`,
       data

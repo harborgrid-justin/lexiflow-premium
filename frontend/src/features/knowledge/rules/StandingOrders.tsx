@@ -22,7 +22,7 @@ export const StandingOrders: React.FC = () => {
         ['knowledge', 'standing-orders'],
         async () => {
             try {
-                return (await (DataService as any).knowledge?.getStandingOrders?.()) || [];
+                return (await DataService.knowledge?.getStandingOrders?.()) || [];
             } catch (error) {
                 console.warn('[StandingOrders] Failed to fetch orders:', error);
                 return [];

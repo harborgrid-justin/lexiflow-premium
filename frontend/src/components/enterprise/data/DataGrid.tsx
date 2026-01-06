@@ -186,6 +186,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   currentPage: controlledCurrentPage = 0,
   onPageChange,
   onCellEdit,
+  onRowClick,
   onExport,
   className,
   height = 600,

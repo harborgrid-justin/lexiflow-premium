@@ -41,7 +41,7 @@ export const PopoutChatWindow: React.FC<PopoutChatWindowProps> = ({ conversation
       await messengerService.sendMessage({
         conversationId: conversation.id,
         body: inputText,
-        attachments: [] // TODO: Handle file uploads properly
+        attachments: pendingAttachments
       });
 
       setInputText('');

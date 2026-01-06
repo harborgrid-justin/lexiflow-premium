@@ -52,7 +52,12 @@ export const StickerDesigner: React.FC = () => {
             <div className={cn("flex items-center justify-center h-full p-10", theme.surface.default)}>
                 <div className={cn("relative w-full max-w-md shadow-2xl border p-8 aspect-[3/4]", theme.surface.raised, theme.border.default)}>
                     <div className={cn("absolute inset-0 p-8 text-xs leading-loose select-none pointer-events-none", theme.text.tertiary)}>
-                        LOREM IPSUM DOLOR SIT AMET... (MOCK DOC CONTENT)
+                        {/* Document Content Placeholder */}
+                        <div className="space-y-4 opacity-10">
+                            {Array.from({ length: 12 }).map((_, i) => (
+                                <div key={i} className="h-2 bg-current rounded" style={{ width: `${Math.max(40, Math.random() * 100)}%` }}></div>
+                            ))}
+                        </div>
                     </div>
                     <div
                         className={cn(

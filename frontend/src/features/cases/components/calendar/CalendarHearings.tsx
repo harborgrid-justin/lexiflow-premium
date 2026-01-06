@@ -56,9 +56,9 @@ export const CalendarHearings: React.FC = () => {
     id: e.id,
     title: e.title,
     case: e.description || 'Unassigned Matter',
-    time: (e as any).startTime ? new Date((e as any).startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Time TBD',
+    time: e.startDate ? new Date(e.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Time TBD',
     location: e.location || 'Courtroom TBD',
-    judge: (e as any).judge || 'Presiding Judge'
+    judge: 'Presiding Judge'
   }));
 
   return (

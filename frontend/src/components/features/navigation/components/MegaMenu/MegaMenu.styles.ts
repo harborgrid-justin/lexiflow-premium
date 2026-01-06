@@ -10,7 +10,7 @@ import type { tokens } from '@/components/theme/tokens';
 // Define type locally to avoid circular dependency
 export type MegaMenuLayout = 'single' | 'double' | 'triple' | 'quad';
 
-type Theme = typeof tokens.colors.light;
+type Theme = typeof tokens.colors;
 
 export const megaMenuContainer = "relative";
 

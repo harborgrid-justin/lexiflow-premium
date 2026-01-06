@@ -254,13 +254,34 @@ export class WorkflowApiService {
         error instanceof Error &&
         (error.message.includes("401") ||
           error.message.includes("Unauthorized") ||
-          (error as any).statusCode === 401)
+          (error as { statusCode?: number }).statusCode === 401)
       ) {
         throw error;
       }
       // Return empty array instead of throwing to prevent UI crash for other errors
       return [];
     }
+  }
+
+  /**
+   * Get workflow settings
+   * @returns Promise<Array<{label: string, enabled: boolean}>>
+   */
+  async getSettings(): Promise<{ label: string; enabled: boolean }[]> {
+    // TODO: Connect to backend settings endpoint when available
+    // For now returning mock data to match WorkflowRepository interface
+    return [
+      { label: "Auto-Assign Reviewers", enabled: true },
+      { label: "SLA Breach Notifications", enabled: false },
+      { label: "Strict Dependency Enforcement", enabled: true },
+    ];
+  }
+
+  async updateSettings(
+    settings: { label: string; enabled: boolean }[]
+  ): Promise<{ label: string; enabled: boolean }[]> {
+    // TODO: Connect to backend settings endpoint
+    return settings;
   }
 
   /**
@@ -412,14 +433,53 @@ export class WorkflowApiService {
         ? `${this.baseUrl}/instances?${queryString}`
         : `${this.baseUrl}/instances`;
 
-      return await apiClient.get<WorkflowInstance[]>(url);
+      const response = await apiClient.get<
+        | WorkflowInstance[]
+        | PaginatedResponse<WorkflowInstance>
+        | {
+            success: boolean;
+            data: PaginatedResponse<WorkflowInstance> | WorkflowInstance[];
+          }
+      >(url);
+
+      // Handle direct array
+      if (Array.isArray(response)) {
+        return response;
+      }
+
+      // Handle envelope { success: true, data: ... }
+      let data = response;
+      if ("success" in response && "data" in response) {
+        data = response.data as any;
+      }
+
+      // Handle PaginatedResponse { data: [...] }
+      if (
+        data &&
+        typeof data === "object" &&
+        "data" in data &&
+        Array.isArray((data as any).data)
+      ) {
+        return (data as any).data;
+      }
+
+      // Handle direct data property being array (if envelope was { data: [...] })
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      console.warn(
+        "[WorkflowApiService.getInstances] Unexpected response format:",
+        response
+      );
+      return [];
     } catch (error: unknown) {
       // Propagate auth errors
       if (
         error instanceof Error &&
         (error.message.includes("401") ||
           error.message.includes("Unauthorized") ||
-          (error as any).statusCode === 401)
+          (error as { statusCode?: number }).statusCode === 401)
       ) {
         throw error;
       }

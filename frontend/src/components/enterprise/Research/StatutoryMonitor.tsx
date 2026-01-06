@@ -62,7 +62,7 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   onTrackUpdate,
   onCreateRule,
   onMarkRead,
-  onExport,
+  onExport: _onExport,
   className = '',
 }) => {
   const { theme } = useTheme();

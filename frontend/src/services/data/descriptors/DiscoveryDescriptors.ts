@@ -2,9 +2,17 @@ import { api, isBackendApiEnabled } from "@/api";
 import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
 import type { BaseEntity } from "@/types";
 import { STORES } from "../db";
-import { getEvidenceRepository } from "../factories/RepositoryFactories";
+import {
+  getDiscoveryRepository,
+  getEvidenceRepository,
+} from "../factories/RepositoryFactories";
 
 export const DiscoveryDescriptors: PropertyDescriptorMap = {
+  discovery: {
+    get: () =>
+      isBackendApiEnabled() ? api.discovery : getDiscoveryRepository(),
+    enumerable: true,
+  },
   evidence: {
     get: () => (isBackendApiEnabled() ? api.evidence : getEvidenceRepository()),
     enumerable: true,

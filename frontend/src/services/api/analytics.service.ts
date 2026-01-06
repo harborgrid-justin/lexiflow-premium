@@ -165,6 +165,33 @@ export interface AnalyticsFilters {
   period?: string;
 }
 
+interface RawAnalyticsItem {
+  label?: string;
+  month?: string;
+  range?: string;
+  opened?: number;
+  closed?: number;
+  won?: number;
+  lost?: number;
+  settled?: number;
+  winRate?: number;
+  billed?: number;
+  collected?: number;
+  outstanding?: number;
+  writeOffs?: number;
+  realizationRate?: number;
+  newClients?: number;
+  lostClients?: number;
+  totalActive?: number;
+  retentionRate?: number;
+  avgLifetimeValue?: number;
+  amount?: number;
+  value?: number;
+  count?: number;
+  percentage?: number;
+  [key: string]: unknown;
+}
+
 // ============================================================================
 // SERVICE
 // ============================================================================
@@ -234,7 +261,7 @@ export class AnalyticsService {
    */
   async getCaseTrends(filters?: AnalyticsFilters): Promise<CaseTrendData[]> {
     const params = this.buildQueryParams(filters);
-    const response = await apiClient.get<{ data: any[] }>(
+    const response = await apiClient.get<{ data: RawAnalyticsItem[] }>(
       `${this.baseUrl}/charts/case-trends${params}`
     );
     return this.mapToCaseTrends(response.data || []);
@@ -247,7 +274,7 @@ export class AnalyticsService {
     filters?: AnalyticsFilters
   ): Promise<BillingTrendData[]> {
     const params = this.buildQueryParams(filters);
-    const response = await apiClient.get<{ data: any[] }>(
+    const response = await apiClient.get<{ data: RawAnalyticsItem[] }>(
       `${this.baseUrl}/charts/billing-trends${params}`
     );
     return this.mapToBillingTrends(response.data || []);
@@ -270,7 +297,7 @@ export class AnalyticsService {
     filters?: AnalyticsFilters
   ): Promise<ClientAcquisitionData[]> {
     const params = this.buildQueryParams(filters);
-    const response = await apiClient.get<{ data: any[] }>(
+    const response = await apiClient.get<{ data: RawAnalyticsItem[] }>(
       `${this.baseUrl}/charts/client-acquisition${params}`
     );
     return this.mapToClientAcquisition(response.data || []);
@@ -281,7 +308,7 @@ export class AnalyticsService {
    */
   async getARAgingData(filters?: AnalyticsFilters): Promise<ARAgingData[]> {
     const params = this.buildQueryParams(filters);
-    const response = await apiClient.get<{ data: any[] }>(
+    const response = await apiClient.get<{ data: RawAnalyticsItem[] }>(
       `${this.baseUrl}/charts/ar-aging${params}`
     );
     return this.mapToARAgingData(response.data || []);
@@ -315,7 +342,7 @@ export class AnalyticsService {
     return queryString ? `?${queryString}` : "";
   }
 
-  private mapToCaseTrends(data: any[]): CaseTrendData[] {
+  private mapToCaseTrends(data: RawAnalyticsItem[]): CaseTrendData[] {
     return data.map((item) => ({
       month: item.label || item.month || "",
       opened: item.opened || 0,
@@ -327,7 +354,7 @@ export class AnalyticsService {
     }));
   }
 
-  private mapToBillingTrends(data: any[]): BillingTrendData[] {
+  private mapToBillingTrends(data: RawAnalyticsItem[]): BillingTrendData[] {
     return data.map((item) => ({
       month: item.label || item.month || "",
       billed: item.billed || 0,
@@ -350,7 +377,7 @@ export class AnalyticsService {
     }));
   }
 
-  private mapToClientAcquisition(data: any[]): ClientAcquisitionData[] {
+  private mapToClientAcquisition(data: RawAnalyticsItem[]): ClientAcquisitionData[] {
     return data.map((item) => ({
       month: item.label || item.month || "",
       newClients: item.newClients || 0,
@@ -361,7 +388,7 @@ export class AnalyticsService {
     }));
   }
 
-  private mapToARAgingData(data: any[]): ARAgingData[] {
+  private mapToARAgingData(data: RawAnalyticsItem[]): ARAgingData[] {
     return data.map((item) => ({
       range: item.label || item.range || "",
       amount: item.amount || item.value || 0,

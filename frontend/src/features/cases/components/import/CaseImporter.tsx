@@ -12,16 +12,18 @@
  * - Validation against CreateCaseDto requirements
  */
 
-import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader, Plus, X, Edit2, Sparkles, Settings } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/atoms/Button';
 import { api } from '@/api';
+import { PartyTypeBackend } from '@/api/litigation/parties-api';
+import { Button } from '@/components/ui/atoms/Button';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
 import { CaseStatus, MatterType } from '@/types/enums';
-import { UserId, MetadataRecord } from '@/types/primitives';
+import { MetadataRecord, UserId } from '@/types/primitives';
+import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';
+import { cn } from '@/utils/cn';
+import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface ParsedCaseData {
   title?: string;
@@ -55,6 +57,7 @@ export const CaseImporter: React.FC = () => {
 
   const [inputText, setInputText] = useState('');
   const [parsedData, setParsedData] = useState<ParsedCaseData | null>(null);
+  const [xmlData, setXmlData] = useState<XMLParsedCaseData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -77,16 +80,56 @@ export const CaseImporter: React.FC = () => {
     setError(null);
     setSuccessMessage(null);
     setParsedData(null);
+    setXmlData(null);
 
-    try {
-      const trimmedInput = inputText.trim();
+    const trimmedInput = inputText.trim();
+    if (!trimmedInput) {
+      setError('Please paste some content to parse');
+      setIsProcessing(false);
+      return;
+    }
 
-      if (!trimmedInput) {
-        setError('Please paste some content to parse');
+    // Check for XML
+    if (trimmedInput.startsWith('<') || trimmedInput.includes('<?xml')) {
+      try {
+        const xmlResult = parseCaseXml(trimmedInput);
+        setXmlData(xmlResult);
+        // Also populate parsedData for backward compatibility/preview of basic fields
+        setParsedData({
+          title: xmlResult.caseInfo.title,
+          caseNumber: xmlResult.caseInfo.caseNumber,
+          description: xmlResult.caseInfo.description,
+          type: xmlResult.caseInfo.type,
+          status: xmlResult.caseInfo.status,
+          jurisdiction: xmlResult.caseInfo.jurisdiction,
+          court: xmlResult.caseInfo.court,
+          judge: xmlResult.caseInfo.judge,
+          magistrateJudge: xmlResult.caseInfo.magistrateJudge,
+          filingDate: xmlResult.caseInfo.filingDate,
+          dateTerminated: xmlResult.caseInfo.dateTerminated,
+          natureOfSuit: xmlResult.caseInfo.natureOfSuit,
+          // Map associated cases to relatedCases structure
+          relatedCases: xmlResult.associatedCases?.map(ac => ({
+            court: xmlResult.caseInfo.court, // derive court from parent for now, or use 'Unknown'
+            caseNumber: ac.leadCaseNumber, // or memberCaseNumber depending on which is "other"
+            relationship: ac.relationship
+          }))
+        });
+        setSuccessMessage('Successfully parsed XML Case Data!');
         setIsProcessing(false);
         return;
+      } catch (e) {
+        console.error("XML Parse Error, falling back to AI/Standard:", e);
+        // Fallback or show error? Let's trying AI if XML parsing fails but user has AI enabled
+        if (!useAI) {
+          setError(`XML Parsing failed: ${e instanceof Error ? e.message : String(e)}`);
+          setIsProcessing(false);
+          return;
+        }
       }
+    }
 
+    try {
       // Get API key from storage if available
       const apiKey = aiProvider === 'gemini'
         ? (localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY)
@@ -167,7 +210,7 @@ export const CaseImporter: React.FC = () => {
         leadAttorneyId: parsedData.leadAttorneyId,
         clientId: parsedData.clientId as unknown as UserId,
         client: 'Unknown Client',
-        parties: [],
+        parties: [], // Initially empty, added below if xmlData exists
         citations: [],
         arguments: [],
         defenses: [],
@@ -176,15 +219,71 @@ export const CaseImporter: React.FC = () => {
 
       setSuccessMessage(`Case "${newCase.title}" created successfully!`);
 
+      // Handle XML specifics (Parties, Dockets, etc.)
+      if (xmlData) {
+        // Import Parties
+        if (xmlData.parties?.length) {
+          let partyCount = 0;
+          for (const p of xmlData.parties) {
+            try {
+              // Map role to backend type
+              let pType: PartyTypeBackend = 'Other';
+              const roleLower = p.role.toLowerCase();
+              if (roleLower.includes('plaintiff')) pType = 'Plaintiff';
+              else if (roleLower.includes('defendant')) pType = 'Defendant';
+              else if (roleLower.includes('appellant')) pType = 'Appellant';
+              else if (roleLower.includes('appellee')) pType = 'Appellee';
+              else if (roleLower.includes('creditor')) pType = 'organization';
+              else if (roleLower.includes('debtor')) pType = 'individual';
+
+              await api.parties.create({
+                caseId: newCase.id,
+                name: p.name,
+                type: pType,
+                notes: p.attorneys.length > 0 ? `Attorneys: ${p.attorneys.map(a => `${a.name} (${a.firm})`).join('; ')}` : undefined,
+                metadata: { originalRole: p.role, attorneys: p.attorneys }
+              });
+              partyCount++;
+            } catch (e) {
+              console.warn(`Failed to import party ${p.name}`, e);
+            }
+          }
+          if (partyCount > 0) setSuccessMessage(prev => `${prev} \nImported ${partyCount} parties.`);
+        }
+
+        // Import Docket Entries
+        if (xmlData.docketEntries?.length) {
+          let docketCount = 0;
+          for (const d of xmlData.docketEntries) {
+            try {
+              await api.docket.add({
+                caseId: newCase.id,
+                description: d.description,
+                date: d.dateFiled ? new Date(d.dateFiled).toISOString() : new Date().toISOString(),
+                type: 'Filing',
+                metadata: { docLink: d.docLink }
+              });
+              docketCount++;
+            } catch (e) {
+              console.warn(`Failed to import docket entry`, e);
+            }
+          }
+          if (docketCount > 0) setSuccessMessage(prev => `${prev} \nImported ${docketCount} docket entries.`);
+        }
+      }
+
       // Invalidate queries to refresh case lists
       queryClient.invalidate(['cases']);
+      queryClient.invalidate(['parties']);
+      queryClient.invalidate(['docket']);
 
       // Clear form after success
       setTimeout(() => {
         setInputText('');
         setParsedData(null);
+        setXmlData(null);
         setSuccessMessage(null);
-      }, 3000);
+      }, 5000);
     } catch (err) {
       setError(`Failed to create case: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
@@ -327,11 +426,11 @@ export const CaseImporter: React.FC = () => {
       )}
 
       {/* Parsed Data Preview */}
-      {parsedData && (
+      {(parsedData || xmlData) && (
         <div className={cn('rounded-lg border p-6 space-y-4', theme.surface.default, theme.border.default)}>
           <div className="flex items-center justify-between">
             <h3 className={cn('text-lg font-bold', theme.text.primary)}>
-              Extracted Case Data
+              {xmlData ? 'Review Extracted Data' : 'Extracted Case Data'}
             </h3>
             <Button
               onClick={() => setEditMode(!editMode)}
@@ -344,11 +443,14 @@ export const CaseImporter: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Object.entries(parsedData).map(([key, value]) => {
+            {parsedData && Object.entries(parsedData).map(([key, value]) => {
               if (!value || key === 'metadata') return null;
 
               const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
               const isRequired = key === 'title' || key === 'caseNumber';
+
+              // Skip complex objects in basic view if we have xmlData visualizers
+              if (xmlData && (key === 'relatedCases' || key === 'parties')) return null;
 
               return (
                 <div key={key} className="space-y-1">
@@ -379,6 +481,59 @@ export const CaseImporter: React.FC = () => {
             })}
           </div>
 
+          {/* XML Specific Details */}
+          {xmlData && (
+            <div className="mt-6 space-y-6 border-t pt-4">
+              {/* Parties */}
+              {xmlData.parties.length > 0 && (
+                <div>
+                  <h4 className={cn("font-semibold mb-2 flex items-center gap-2", theme.text.primary)}>
+                    <Users className="w-4 h-4" /> Parties ({xmlData.parties.length})
+                  </h4>
+                  <div className={cn("max-h-60 overflow-y-auto border rounded-md divide-y", theme.border.default)}>
+                    {xmlData.parties.map((p, i) => (
+                      <div key={i} className="p-3 text-sm flex flex-col gap-1">
+                        <div className="flex justify-between font-medium">
+                          <span>{p.name}</span>
+                          <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-100", theme.text.secondary)}>{p.role}</span>
+                        </div>
+                        {p.attorneys.length > 0 && (
+                          <div className="text-xs text-slate-500 pl-2 border-l-2 ml-1">
+                            {p.attorneys.map((att, ai) => (
+                              <div key={ai}>{att.name} ({att.firm})</div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Docket Entries */}
+              {xmlData.docketEntries.length > 0 && (
+                <div>
+                  <h4 className={cn("font-semibold mb-2 flex items-center gap-2", theme.text.primary)}>
+                    <FileText className="w-4 h-4" /> Docket Entries ({xmlData.docketEntries.length})
+                  </h4>
+                  <div className={cn("max-h-60 overflow-y-auto border rounded-md divide-y", theme.border.default)}>
+                    {xmlData.docketEntries.map((d, i) => (
+                      <div key={i} className="p-2 text-sm hover:bg-slate-50">
+                        <div className="flex gap-3">
+                          <span className="font-mono text-xs text-slate-500 shrink-0 mt-0.5">{d.dateFiled}</span>
+                          <div>
+                            <p>{d.description}</p>
+                            {d.docLink && <a href={d.docLink} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline">View Document</a>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-2 pt-4 border-t">
             <Button
@@ -386,13 +541,15 @@ export const CaseImporter: React.FC = () => {
               disabled={!canCreateCase || isProcessing}
               icon={Plus}
               variant="primary"
+              className="w-full md:w-auto"
             >
-              Create Case
+              {xmlData ? 'Import Full Case & Data' : 'Create Case'}
             </Button>
 
             <Button
               onClick={() => {
                 setParsedData(null);
+                setXmlData(null);
                 setEditMode(false);
               }}
               icon={X}

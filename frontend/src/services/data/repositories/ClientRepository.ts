@@ -193,7 +193,9 @@ export class ClientRepository extends Repository<Client> {
 
     if (this.useBackend) {
       try {
-        const result = await this.clientsApi.create(item as any);
+        const result = await this.clientsApi.create(
+          item as unknown as Record<string, unknown>
+        );
         return result as unknown as Client;
       } catch (error) {
         console.warn(
@@ -243,7 +245,10 @@ export class ClientRepository extends Repository<Client> {
 
     if (this.useBackend) {
       try {
-        const result = await this.clientsApi.update(id, updates as any);
+        const result = await this.clientsApi.update(
+          id,
+          updates as unknown as Record<string, unknown>
+        );
         return result as unknown as Client;
       } catch (error) {
         console.warn(

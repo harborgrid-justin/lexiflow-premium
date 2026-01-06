@@ -32,7 +32,7 @@ import { ServiceJobsService } from "./service-jobs.service";
  * @class ServiceJobsController
  */
 @ApiTags("Service of Process")
-@Controller("communications/service-jobs")
+@Controller("service-jobs")
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class ServiceJobsController {

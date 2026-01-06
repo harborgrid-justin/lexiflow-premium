@@ -1,3 +1,12 @@
+import { Type } from "class-transformer";
+import {
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
+
 export class AuditLogDto {
   id!: string;
   userId!: string;
@@ -15,42 +24,75 @@ export class AuditLogDto {
 }
 
 export enum AuditAction {
-  CREATE = 'CREATE',
-  READ = 'READ',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  EXPORT = 'EXPORT',
-  APPROVE = 'APPROVE',
-  REJECT = 'REJECT',
-  FILE = 'FILE',
-  SEND = 'SEND',
+  CREATE = "CREATE",
+  READ = "READ",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  LOGIN = "LOGIN",
+  LOGOUT = "LOGOUT",
+  EXPORT = "EXPORT",
+  APPROVE = "APPROVE",
+  REJECT = "REJECT",
+  FILE = "FILE",
+  SEND = "SEND",
 }
 
 export enum AuditEntityType {
-  CASE = 'Case',
-  DOCUMENT = 'Document',
-  TIME_ENTRY = 'TimeEntry',
-  INVOICE = 'Invoice',
-  USER = 'User',
-  CLIENT = 'Client',
-  EVIDENCE = 'Evidence',
-  DISCOVERY = 'Discovery',
-  MOTION = 'Motion',
+  CASE = "Case",
+  DOCUMENT = "Document",
+  TIME_ENTRY = "TimeEntry",
+  INVOICE = "Invoice",
+  USER = "User",
+  CLIENT = "Client",
+  EVIDENCE = "Evidence",
+  DISCOVERY = "Discovery",
+  MOTION = "Motion",
 }
 
 export class QueryAuditLogsDto {
+  @IsOptional()
+  @IsString()
   userId?: string;
+
+  @IsOptional()
+  @IsEnum(AuditEntityType)
   entityType?: AuditEntityType;
+
+  @IsOptional()
+  @IsString()
   entityId?: string;
+
+  @IsOptional()
+  @IsEnum(AuditAction)
   action?: AuditAction;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
   startDate?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
   endDate?: Date;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   page?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   limit?: number;
+
+  @IsOptional()
+  @IsString()
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+
+  @IsOptional()
+  @IsString()
+  sortOrder?: "asc" | "desc";
 }
 
 export class CreateAuditLogDto {
@@ -68,7 +110,7 @@ export class CreateAuditLogDto {
 }
 
 export class ExportAuditLogsDto {
-  format!: 'csv' | 'json' | 'pdf';
+  format!: "csv" | "json" | "pdf";
   startDate?: Date;
   endDate?: Date;
   userId?: string;

@@ -9,12 +9,12 @@ import {
 import { type CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
 import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
 import { JurisdictionService } from "@/services/domain/JurisdictionDomain";
+import { ResearchService } from "@/services/domain/ResearchDomain";
 import { STORES } from "../db";
 
 export const LegalResearchDescriptors: PropertyDescriptorMap = {
   research: {
-    get: () =>
-      import("@/services/domain/ResearchDomain").then((m) => m.ResearchService),
+    get: () => ResearchService,
     enumerable: true,
   },
   playbooks: {

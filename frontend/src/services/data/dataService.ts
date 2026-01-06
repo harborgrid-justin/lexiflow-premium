@@ -106,6 +106,28 @@ export function getDataServiceMemoryStats() {
  * Useful for debugging memory issues and monitoring repository lifecycle.
  * Outputs a detailed breakdown of all active repositories and their state.
  */
+/**
+ * Manually cleanup DataService (clear listeners and legacy caches)
+ *
+ * Use this during app unmount or to prevent memory leaks in hot-reload scenarios.
+ */
+export function cleanupDataService(): void {
+  try {
+    // Clean up legacy repositories
+    legacyRepositoryRegistry.cleanup();
+    console.log("[DataService] ✅ Cleaned up legacy repositories");
+
+    // Clean up backend/refactored repositories if they have dispose methods
+    // RepositoryRegistry is a singleton, so we typically don't destroy it,
+    // but we might want to clear internal caches if implemented.
+    RepositoryRegistry.getInstance().reset?.();
+
+    console.log("[DataService] ✅ Cleanup complete");
+  } catch (error) {
+    console.error("[DataService] ❌ Cleanup failed:", error);
+  }
+}
+
 export function logDataServiceMemory(): void {
   try {
     const stats = getDataServiceMemoryStats();

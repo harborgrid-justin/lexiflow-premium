@@ -122,7 +122,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    * const allEvidence = await repo.getAll();
    * const caseEvidence = await repo.getAll('case-123');
    */
-  override async getAll(arg?: any): Promise<EvidenceItem[]> {
+  override async getAll(arg?: unknown): Promise<EvidenceItem[]> {
     const caseId = typeof arg === "string" ? arg : undefined;
     if (caseId) {
       return this.getByCaseId(caseId);

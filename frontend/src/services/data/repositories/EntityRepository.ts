@@ -48,11 +48,13 @@ export class EntityRepository extends Repository<LegalEntity> {
             ({
               ...e,
               id: e.id as string,
-              type: this.mapEntityType((e as any).entityType || "other"),
-              roles: (e as any).roles || [],
-              riskScore: (e as any).riskScore || 0,
-              tags: (e as any).tags || [],
-              status: (e as any).status || "Active",
+              type: this.mapEntityType(
+                (e as { entityType?: string }).entityType || "other"
+              ),
+              roles: (e as { roles?: string[] }).roles || [],
+              riskScore: (e as { riskScore?: number }).riskScore || 0,
+              tags: (e as { tags?: string[] }).tags || [],
+              status: (e as { status?: string }).status || "Active",
             }) as unknown as LegalEntity
         );
       } catch (error) {
@@ -103,7 +105,14 @@ export class EntityRepository extends Repository<LegalEntity> {
         const entity = await this.legalEntitiesApi.getById(id);
         // Assume API response needs mapping to match frontend model completely or partially
         // Cast to unknown first to avoid partial type mismatch during transformation
-        const entityAny = entity as any;
+        const entityAny = entity as unknown as {
+          entityType?: string;
+          roles?: string[];
+          riskScore?: number;
+          tags?: string[];
+          status?: string;
+          [key: string]: unknown;
+        };
 
         return {
           ...entityAny,
@@ -122,7 +131,7 @@ export class EntityRepository extends Repository<LegalEntity> {
     return await super.getById(id);
   }
 
-  async getRelationships(id: string): Promise<any[]> {
+  async getRelationships(id: string): Promise<Record<string, unknown>[]> {
     this.validateId(id, "getRelationships");
     if (this.useBackend && id !== "all") {
       try {

@@ -57,7 +57,7 @@ export interface LegalResearchHubProps {
 export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSearch,
   onSaveResult,
-  onExport,
+  onExport: _onExport,
   className = ''
 }) => {
   const { theme } = useTheme();
@@ -122,19 +122,6 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
 
   const handleCreateNew = () => {
     setActiveTab('search');
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'case':
-        return theme.badge.blue;
-      case 'statute':
-        return theme.badge.purple;
-      case 'regulation':
-        return theme.badge.green;
-      default:
-        return theme.badge.default;
-    }
   };
 
   const getTypeIcon = (type: string) => {

@@ -26,7 +26,7 @@ export const EventBusManager: React.FC = () => {
   const { data: events = [], isLoading } = useQuery(QUERY_KEYS.EVENT_BUS.EVENTS, async () => {
     try {
       // Fetch event bus events from backend
-      const result = await (DataService as any).admin?.getEventBusEvents?.() || [];
+      const result = await (DataService as unknown as { admin?: { getEventBusEvents?: () => Promise<unknown[]> } }).admin?.getEventBusEvents?.() || [];
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.warn('[EventBusManager] Failed to fetch event bus data:', error);

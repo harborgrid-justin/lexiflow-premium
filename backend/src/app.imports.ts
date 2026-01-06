@@ -58,7 +58,9 @@ import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module";
 import { KnowledgeModule } from "./knowledge/knowledge.module";
 import { LegalEntitiesModule } from "./legal-entities/legal-entities.module";
 import { MessengerModule } from "./messenger/messenger.module";
+import { OperationsModule } from "./operations/operations.module";
 import { OrganizationsModule } from "./organizations/organizations.module";
+import { ResearchModule } from "./research/research.module";
 import { RisksModule } from "./risks/risks.module";
 import { TasksModule } from "./tasks/tasks.module";
 import { TrialModule } from "./trial/trial.module";
@@ -134,6 +136,7 @@ export const APP_IMPORTS = [
 
   // Core Business Services
   TasksModule,
+  OperationsModule,
   RisksModule,
   HRModule,
   WorkflowModule,
@@ -149,6 +152,7 @@ export const APP_IMPORTS = [
   WarRoomModule,
   AnalyticsDashboardModule,
   KnowledgeModule,
+  ResearchModule,
   JurisdictionsModule,
   LegalEntitiesModule,
 

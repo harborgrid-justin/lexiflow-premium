@@ -17,10 +17,10 @@ import React, { useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Components
@@ -258,6 +258,21 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             Clear Filters
           </button>
         )}
+
+        {/* Quick Import Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            sessionStorage.setItem('cases_active_tab', 'import');
+            // Force reload to pick up session storage change since we don't have global state for this tab
+            window.location.reload();
+          }}
+          className={cn("text-xs font-medium px-2 gap-1", theme.primary.text)}
+        >
+          <FileText className="h-3 w-3" />
+          Import Case
+        </Button>
       </div>
 
       <div className="flex-1"></div>

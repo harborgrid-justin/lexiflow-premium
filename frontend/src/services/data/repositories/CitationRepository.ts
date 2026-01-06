@@ -89,9 +89,9 @@ export class CitationRepository extends Repository<Citation> {
     let result: Citation;
     if (this.useBackend) {
       try {
-        // Cast item to any to satisfy API signature if needed, or better, improve API signature later
+        // Cast item to unknown then Record to satisfy API signature if needed
         result = (await this.citationsApi.create(
-          item as any
+          item as unknown as Record<string, unknown>
         )) as unknown as Citation;
       } catch (error) {
         console.warn("[CitationRepository] Backend API unavailable", error);
@@ -126,7 +126,10 @@ export class CitationRepository extends Repository<Citation> {
     this.validateId(id, "update");
     if (this.useBackend) {
       try {
-        const result = await this.citationsApi.update(id, updates as any);
+        const result = await this.citationsApi.update(
+          id,
+          updates as unknown as Record<string, unknown>
+        );
         return result as unknown as Citation;
       } catch (error) {
         console.warn("[CitationRepository] Backend API unavailable", error);

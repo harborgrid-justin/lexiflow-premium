@@ -24,6 +24,7 @@
  * - Type-safe operations
  */
 
+import type { DiscoveryProcess } from "@/api/discovery/discovery-api";
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import {
@@ -69,7 +70,7 @@ import { delay } from "@/utils/async";
  * queryClient.invalidateQueries({ queryKey: DISCOVERY_QUERY_KEYS.depositions.all() });
  * queryClient.invalidateQueries({ queryKey: DISCOVERY_QUERY_KEYS.depositions.byCase(caseId) });
  */
-export const DISCOVERY_QUERY_KEYS = ImportedKeys;
+export { DISCOVERY_QUERY_KEYS } from "@/services/data/query-keys/DiscoveryQueryKeys";
 interface FunnelStat {
   name: string;
   value: number;
@@ -98,6 +99,25 @@ export class DiscoveryRepository {
       : "IndexedDB (Local)";
     console.log(`[DiscoveryRepository] Initialized with ${mode}`);
   }
+
+  /**
+   * Get all discovery processes
+   * @param filters - Optional filters
+   */
+  getAll = async (filters?: {
+    caseId?: string;
+    status?: DiscoveryProcess["status"];
+  }): Promise<DiscoveryProcess[]> => {
+    try {
+      if (this.useBackend) {
+        return await discoveryApi.discovery.getAll(filters);
+      }
+      return [];
+    } catch (error) {
+      console.error("[DiscoveryRepository.getAll] Error:", error);
+      throw new OperationError("getAll", "Failed to get discovery processes");
+    }
+  };
 
   /**
    * Validate and sanitize case ID parameter
@@ -192,11 +212,11 @@ export class DiscoveryRepository {
   /**
    * Get custodian statistics
    *
-   * @returns Promise<any[]> Custodian statistics
+   * @returns Promise<Record<string, unknown>[]> Custodian statistics
    */
-  getCustodianStats = async (): Promise<any[]> => {
+  getCustodianStats = async (): Promise<Record<string, unknown>[]> => {
     try {
-      const stats = await db.get<{ data?: any[] }>(
+      const stats = await db.get<{ data?: Record<string, unknown>[] }>(
         STORES.DISCOVERY_CUSTODIAN_STATS,
         "custodian-main"
       );
@@ -1039,7 +1059,9 @@ export class DiscoveryRepository {
    * Get review documents
    * @param filters Search filters
    */
-  getReviewDocuments = async (filters?: any): Promise<ReviewDocument[]> => {
+  getReviewDocuments = async (
+    filters?: Record<string, unknown>
+  ): Promise<ReviewDocument[]> => {
     if (isBackendApiEnabled()) {
       return discoveryApi.review.getDocuments(filters);
     }
@@ -1493,7 +1515,7 @@ export class DiscoveryRepository {
       try {
         const response = await discoveryApi.collections.resume(id);
         // Return job ID from response if available, otherwise construct one
-        return (response as any)?.jobId || `job-${id}-resumed`;
+        return (response as { jobId?: string })?.jobId || `job-${id}-resumed`;
       } catch (error) {
         console.error(
           "[DiscoveryRepository] Failed to start collection:",
@@ -1561,7 +1583,11 @@ export class DiscoveryRepository {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as DataCollection;
-    await (db as any).add(STORES.DISCOVERY_COLLECTIONS, newCollection as any);
+    await (
+      db as unknown as {
+        add: (store: string, item: unknown) => Promise<unknown>;
+      }
+    ).add(STORES.DISCOVERY_COLLECTIONS, newCollection);
     return newCollection;
   };
 

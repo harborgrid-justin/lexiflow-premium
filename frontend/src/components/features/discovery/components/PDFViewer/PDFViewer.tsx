@@ -182,11 +182,11 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
       setError(null);
       try {
         const loadingTask = pdfjsLib!.getDocument(url);
-        loadingTaskRef.current = loadingTask as any;
+        loadingTaskRef.current = loadingTask as unknown as PDFLoadingTask;
         const doc = await loadingTask.promise;
 
         if (isMounted.current) {
-          setPdfDoc(doc as any);
+          setPdfDoc(doc as unknown as PDFDocumentProxy);
           setPageNum(1);
         }
       } catch (err: unknown) {

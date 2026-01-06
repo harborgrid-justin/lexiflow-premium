@@ -25,10 +25,10 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -53,7 +53,10 @@ export const FacilitiesManager: React.FC = () => {
 
     const { data: locations = [], isLoading: locationsLoading } = useQuery<unknown[]>(
         ['facilities', 'all'],
-        operationsService.getFacilities
+        async () => {
+            const result = await operationsService.getFacilities();
+            return Array.isArray(result) ? result : [];
+        }
     );
 
     const isLoading = ticketsLoading || locationsLoading;
@@ -85,7 +88,7 @@ export const FacilitiesManager: React.FC = () => {
                     <>
                         {activeTab === 'locations' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {locations.map((l: unknown) => {
+                                {Array.isArray(locations) && locations.map((l: unknown) => {
                                     const loc = l as { id: string; name?: string; capacity?: number; staffCount?: number; status?: string };
                                     return (
                                         <Card key={loc.id} title={loc.name || 'Unnamed Location'} className="hover:shadow-md transition-shadow cursor-pointer">

@@ -48,7 +48,8 @@ export async function clientLoader() {
     let pendingTasks = 0;
     try {
       const tasks = await DataService.tasks.getAll();
-      pendingTasks = tasks.filter((t: { status?: string }) => t.status !== 'completed').length;
+      const tasksArray = Array.isArray(tasks) ? tasks : [];
+      pendingTasks = tasksArray.filter((t: { status?: string }) => t.status !== 'completed').length;
     } catch (e) {
       console.error("Failed to fetch tasks", e);
     }

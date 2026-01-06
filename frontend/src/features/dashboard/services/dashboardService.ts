@@ -60,7 +60,8 @@ export const dashboardService = {
 
       // Calculate billable hours sum from invoices (proxy)
       // or check if api.billing.timeEntries exists for more accuracy
-      const billableRevenue = invoices.reduce(
+      const safeInvoices = Array.isArray(invoices) ? invoices : [];
+      const billableRevenue = safeInvoices.reduce(
         (sum, inv) => sum + (inv.totalAmount || 0),
         0
       );
@@ -105,12 +106,14 @@ export const dashboardService = {
         })
         .catch(() => [] as Invoice[]);
 
-      const totalBilled = invoices.reduce(
+      const safeInvoices = Array.isArray(invoices) ? invoices : [];
+
+      const totalBilled = safeInvoices.reduce(
         (sum, inv) => sum + (inv.totalAmount || 0),
         0
       );
       // Simulating realization rate based on paid/total
-      const totalPaid = invoices
+      const totalPaid = safeInvoices
         .filter((inv) => inv.status === "Paid")
         .reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
 
@@ -133,7 +136,8 @@ export const dashboardService = {
 
   getTasks: async (): Promise<WorkflowTask[]> => {
     try {
-      return await api.tasks.getAll({ status: "Pending" as TaskStatusBackend });
+      // Use valid backend enum value
+      return await api.tasks.getAll({ status: TaskStatusBackend.TODO });
     } catch (error) {
       console.error("Dashboard Service: Failed to fetch tasks", error);
       return [];
@@ -169,9 +173,22 @@ export const dashboardService = {
   getRecentAlerts: async (): Promise<DashboardAlert[]> => {
     try {
       // Fetch recent audit logs (last 7 days) as alerts
-      const logs = await adminApi.auditLogs.getAll({
+      const response = await adminApi.auditLogs.getAll({
         startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       });
+
+      // Handle potential paginated response or direct array
+      const logs = Array.isArray(response)
+        ? response
+        : (response as any).items || [];
+
+      if (!Array.isArray(logs)) {
+        console.warn(
+          "Dashboard Service: Unexpected audit logs format",
+          response
+        );
+        return [];
+      }
 
       // Sort by timestamp desc and take top 5
       const sortedLogs = logs

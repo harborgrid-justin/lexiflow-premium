@@ -15,9 +15,7 @@ export const CorrespondenceService = {
   getServiceJobs: async (): Promise<ServiceJob[]> => {
     if (isBackendApiEnabled()) {
       try {
-        return await apiClient.get<ServiceJob[]>(
-          "/communications/service-jobs"
-        );
+        return await apiClient.get<ServiceJob[]>("/service-jobs");
       } catch (e) {
         console.warn("Failed to fetch service jobs", e);
         return [];
@@ -47,7 +45,7 @@ export const CorrespondenceService = {
 
   addServiceJob: async (job: ServiceJob): Promise<ServiceJob> => {
     if (isBackendApiEnabled()) {
-      return apiClient.post<ServiceJob>("/communications/service-jobs", job);
+      return apiClient.post<ServiceJob>("/service-jobs", job);
     }
     throw new Error("Backend API required");
   },
@@ -58,7 +56,7 @@ export const CorrespondenceService = {
   ): Promise<ServiceJob> => {
     if (isBackendApiEnabled()) {
       const job = await apiClient.patch<ServiceJob>(
-        `/communications/service-jobs/${id}`,
+        `/service-jobs/${id}`,
         updates
       );
 

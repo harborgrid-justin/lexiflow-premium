@@ -53,7 +53,7 @@ export const AnalyticsDescriptors: PropertyDescriptorMap = {
     get: () =>
       isBackendApiEnabled()
         ? analyticsApi.search
-        : import("@/services/domain/SearchDomain").then((m) => m.SearchService),
+        : SearchService,
     enumerable: true,
   },
 };

@@ -25,7 +25,7 @@ export class HRApiService {
       ? `${this.baseUrl}/employees?${queryString}`
       : `${this.baseUrl}/employees`;
     const response = await apiClient.get<{ data: StaffMember[] }>(url);
-    return response.data;
+    return response.data || [];
   }
 
   async getById(id: string): Promise<StaffMember> {
@@ -68,7 +68,8 @@ export class HRApiService {
   > {
     try {
       const staff = await this.getAll({ status: "Active" });
-      return staff.map((s) => ({
+      const staffArray = Array.isArray(staff) ? staff : [];
+      return staffArray.map((s) => ({
         name: s.name,
         role: s.role,
         utilization: Math.floor(Math.random() * 40) + 60, // Mock: 60-100%

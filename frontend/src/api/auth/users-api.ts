@@ -44,7 +44,7 @@ import type {
 interface ApiResponse<T> {
   success: boolean;
   data: T;
-  meta: any;
+  meta: Record<string, unknown>;
 }
 
 /**

@@ -10,8 +10,12 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+// External
 import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+// Internal
+import { useQuery, queryClient } from '@/hooks';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -61,6 +65,7 @@ interface PersonalWorkspaceProps {
 
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
+    // const queryClient = useQueryClient(); // Removed as we import the singleton directly
 
     const { data: notifications = [] } = useQuery<DomainNotification[]>(
         ['notifications'],

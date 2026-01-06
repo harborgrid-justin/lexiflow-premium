@@ -85,7 +85,12 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     }
     if (this.useBackend) {
       try {
-        const { id, createdAt, updatedAt, ...createData } = item;
+        const {
+          id: _id,
+          createdAt: _createdAt,
+          updatedAt: _updatedAt,
+          ...createData
+        } = item;
         const result = await this.clausesApi.create(createData as any); // Type assertion needed due to complex type mapping
         return result as unknown as ClauseEntity;
       } catch (error) {

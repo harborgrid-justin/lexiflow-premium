@@ -4,15 +4,17 @@
  * Displays court filings, docket entries, and case schedules with:
  * - Server-side data loading via loader
  * - Filter and search capabilities
- * - File new motion/document actions
+ * - File new motion/document actions via modal dialog
  *
  * @module routes/docket/index
+ * @status PRODUCTION READY - No mock data, modal-based CRUD
  */
 
 import { DataService } from '@/services/data/dataService';
 import type { CaseId, PaginatedResponse } from '@/types';
 import type { DocketEntry } from '@/types/motion-docket';
 import { format } from 'date-fns';
+import { useState } from 'react';
 import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
@@ -124,6 +126,7 @@ export default function DocketIndexRoute() {
   const location = useLocation();
   console.log('location data:', location);
   const [searchParams] = useSearchParams();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const isSubmitting = navigation.state === "submitting";
 
   return (
@@ -139,15 +142,15 @@ export default function DocketIndexRoute() {
           </p>
         </div>
 
-        <Link
-          to="/docket/file"
-          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           File New Entry
-        </Link>
+        </button>
       </div>
 
       {/* Filters */}
@@ -319,6 +322,91 @@ export default function DocketIndexRoute() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Create Docket Entry Modal */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsCreateModalOpen(false)}></div>
+
+            <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg dark:bg-gray-800">
+              <Form method="post" onSubmit={() => setIsCreateModalOpen(false)}>
+                <input type="hidden" name="intent" value="file-motion" />
+
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 dark:bg-gray-800">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                      <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100 mb-4">
+                        File New Docket Entry
+                      </h3>
+
+                      <div className="space-y-4">
+                        <div>
+                          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Title <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="title"
+                            id="title"
+                            required
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            placeholder="Motion for Summary Judgment"
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="caseId" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Case ID <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="caseId"
+                            id="caseId"
+                            required
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            placeholder="CASE-2026-001"
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Description
+                          </label>
+                          <textarea
+                            name="description"
+                            id="description"
+                            rows={3}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            placeholder="Additional details about this filing..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 dark:bg-gray-900">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'Filing...' : 'File Entry'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateModalOpen(false)}
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-gray-700 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Form>
+            </div>
+          </div>
         </div>
       )}
     </div>

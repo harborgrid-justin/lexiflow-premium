@@ -43,7 +43,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
   try {
     // Fetch discovery processes
-    const items = await DataService.discoveryMain.getAll({ caseId });
+    const items = await DataService.discovery.getAll({ caseId });
     return { items, totalCount: items.length };
   } catch (error) {
     console.error("Failed to load discovery data", error);

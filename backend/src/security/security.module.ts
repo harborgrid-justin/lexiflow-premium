@@ -22,6 +22,10 @@ import { SecurityHeadersMiddleware } from "./middleware/security.headers.middlew
 
 // Controllers
 import { CspViolationController } from "./controllers/csp.violation.controller";
+import { MalwareSignaturesController } from "./controllers/malware.signatures.controller";
+
+// Services
+import { MalwareSignaturesService } from "./services/malware.signatures.service";
 
 // Dependencies
 import { RedisCacheManagerService } from "@common/services/redis-cache-manager.service";

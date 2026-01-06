@@ -1,7 +1,10 @@
 import { communicationsApi, isBackendApiEnabled } from "@/api";
 import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
 import { CalendarService } from "@/services/domain/CalendarDomain";
+import { CollaborationService } from "@/services/domain/CollaborationDomain";
 import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
+import { MessengerService } from "@/services/domain/MessengerDomain";
+import { NotificationService } from "@/services/domain/NotificationDomain";
 
 export const CommunicationDescriptors: PropertyDescriptorMap = {
   communications: {
@@ -20,10 +23,7 @@ export const CommunicationDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   notifications: {
-    get: () =>
-      import("@/services/domain/NotificationDomain").then(
-        (m) => m.NotificationService
-      ),
+    get: () => NotificationService,
     enumerable: true,
   },
   calendar: {
@@ -31,17 +31,11 @@ export const CommunicationDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   collaboration: {
-    get: () =>
-      import("@/services/domain/CollaborationDomain").then(
-        (m) => m.CollaborationService
-      ),
+    get: () => CollaborationService,
     enumerable: true,
   },
   messenger: {
-    get: () =>
-      import("@/services/domain/MessengerDomain").then(
-        (m) => m.MessengerService
-      ),
+    get: () => MessengerService,
     enumerable: true,
   },
 };

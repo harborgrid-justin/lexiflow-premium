@@ -14,7 +14,11 @@ interface MemoryInfo {
 
 interface PerformanceMetrics {
   componentRenders: Map<string, number>;
-  slowRenders: Array<{ component: string; duration: number; timestamp: number }>;
+  slowRenders: Array<{
+    component: string;
+    duration: number;
+    timestamp: number;
+  }>;
   memorySnapshots: MemoryInfo[];
   cacheHits: number;
   cacheMisses: number;
@@ -50,11 +54,13 @@ class FrontendMemoryMonitor {
    */
   start(intervalMs: number = 60000): void {
     if (this.monitorInterval) {
-      console.warn('Memory monitor already running');
+      console.warn("Memory monitor already running");
       return;
     }
-
-    console.log('[MemoryMonitor] Starting with interval:', intervalMs);
+    if (typeof window === "undefined") {
+      return;
+    }
+    console.log("[MemoryMonitor] Starting with interval:", intervalMs);
 
     this.monitorInterval = window.setInterval(() => {
       this.takeSnapshot();
@@ -66,10 +72,10 @@ class FrontendMemoryMonitor {
    * Stop monitoring
    */
   stop(): void {
-    if (this.monitorInterval) {
+    if (this.monitorInterval && typeof window !== "undefined") {
       window.clearInterval(this.monitorInterval);
       this.monitorInterval = null;
-      console.log('[MemoryMonitor] Stopped');
+      console.log("[MemoryMonitor] Stopped");
     }
   }
 
@@ -77,11 +83,15 @@ class FrontendMemoryMonitor {
    * Take memory snapshot
    */
   takeSnapshot(): MemoryInfo | null {
-    if (!('memory' in performance)) {
+    if (!("memory" in performance)) {
       return null;
     }
 
-    const memory = (performance as Record<string, unknown>).memory as {usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number};
+    const memory = (performance as Record<string, unknown>).memory as {
+      usedJSHeapSize: number;
+      totalJSHeapSize: number;
+      jsHeapSizeLimit: number;
+    };
     const snapshot: MemoryInfo = {
       usedJSHeapSize: memory.usedJSHeapSize,
       totalJSHeapSize: memory.totalJSHeapSize,
@@ -106,24 +116,25 @@ class FrontendMemoryMonitor {
     const snapshot = this.takeSnapshot();
     if (!snapshot) return;
 
-    const usagePercent = (snapshot.usedJSHeapSize / snapshot.jsHeapSizeLimit) * 100;
+    const usagePercent =
+      (snapshot.usedJSHeapSize / snapshot.jsHeapSizeLimit) * 100;
     const usedMB = snapshot.usedJSHeapSize / 1024 / 1024;
     const totalMB = snapshot.totalJSHeapSize / 1024 / 1024;
 
     if (usagePercent > 90) {
       console.error(
         `[MemoryMonitor] CRITICAL: Memory usage at ${usagePercent.toFixed(1)}% ` +
-        `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
+          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
       );
     } else if (usagePercent > 75) {
       console.warn(
         `[MemoryMonitor] WARNING: Memory usage at ${usagePercent.toFixed(1)}% ` +
-        `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
+          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
       );
     } else {
       console.debug(
         `[MemoryMonitor] Memory OK: ${usagePercent.toFixed(1)}% ` +
-        `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
+          `(${usedMB.toFixed(0)}MB / ${totalMB.toFixed(0)}MB)`
       );
     }
   }
@@ -184,13 +195,14 @@ class FrontendMemoryMonitor {
   getMemoryStats(): {
     current: MemoryInfo | null;
     average: { usedMB: number; totalMB: number } | null;
-    trend: 'stable' | 'growing' | 'declining' | 'unknown';
+    trend: "stable" | "growing" | "declining" | "unknown";
   } {
     if (this.metrics.memorySnapshots.length === 0) {
-      return { current: null, average: null, trend: 'unknown' };
+      return { current: null, average: null, trend: "unknown" };
     }
 
-    const current = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
+    const current =
+      this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
 
     // Calculate average
     const sum = this.metrics.memorySnapshots.reduce(
@@ -207,15 +219,18 @@ class FrontendMemoryMonitor {
     };
 
     // Determine trend (compare first and last snapshots)
-    let trend: 'stable' | 'growing' | 'declining' | 'unknown' = 'stable';
+    let trend: "stable" | "growing" | "declining" | "unknown" = "stable";
     if (this.metrics.memorySnapshots.length >= 5) {
       const first = this.metrics.memorySnapshots[0]!;
-      const last = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
-      const growth = ((last.usedJSHeapSize - first.usedJSHeapSize) / first.usedJSHeapSize) * 100;
+      const last =
+        this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
+      const growth =
+        ((last.usedJSHeapSize - first.usedJSHeapSize) / first.usedJSHeapSize) *
+        100;
 
-      if (growth > 10) trend = 'growing';
-      else if (growth < -10) trend = 'declining';
-      else trend = 'stable';
+      if (growth > 10) trend = "growing";
+      else if (growth < -10) trend = "declining";
+      else trend = "stable";
     }
 
     return { current, average, trend };
@@ -249,7 +264,10 @@ class FrontendMemoryMonitor {
     avgDuration: number;
     count: number;
   }> {
-    const componentDurations = new Map<string, { total: number; count: number }>();
+    const componentDurations = new Map<
+      string,
+      { total: number; count: number }
+    >();
 
     for (const render of this.metrics.slowRenders) {
       const existing = componentDurations.get(render.component);
@@ -283,20 +301,24 @@ class FrontendMemoryMonitor {
     this.metrics.memorySnapshots.length = 0;
     this.metrics.cacheHits = 0;
     this.metrics.cacheMisses = 0;
-    console.log('[MemoryMonitor] Metrics reset');
+    console.log("[MemoryMonitor] Metrics reset");
   }
 
   /**
    * Export metrics for analysis
    */
   exportMetrics(): string {
-    return JSON.stringify({
-      timestamp: Date.now(),
-      metrics: this.getMetrics(),
-      memoryStats: this.getMemoryStats(),
-      cacheStats: this.getCacheStats(),
-      topSlowComponents: this.getTopSlowComponents(),
-    }, null, 2);
+    return JSON.stringify(
+      {
+        timestamp: Date.now(),
+        metrics: this.getMetrics(),
+        memoryStats: this.getMemoryStats(),
+        cacheStats: this.getCacheStats(),
+        topSlowComponents: this.getTopSlowComponents(),
+      },
+      null,
+      2
+    );
   }
 }
 
@@ -304,7 +326,8 @@ class FrontendMemoryMonitor {
 export const memoryMonitor = FrontendMemoryMonitor.getInstance();
 
 // Development mode helper
-if (import.meta.env.DEV) {
-  (window as unknown as Record<string, unknown>).__memoryMonitor = memoryMonitor;
-  console.log('[MemoryMonitor] Available globally as window.__memoryMonitor');
+if (import.meta.env.DEV && typeof window !== "undefined") {
+  (window as unknown as Record<string, unknown>).__memoryMonitor =
+    memoryMonitor;
+  console.log("[MemoryMonitor] Available globally as window.__memoryMonitor");
 }

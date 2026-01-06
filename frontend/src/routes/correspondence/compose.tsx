@@ -100,12 +100,11 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs): Promise
   }
 
   // Load draft if draftId is provided
-  let draft = null;
+  let draft: Correspondence | null = null;
   if (draftId) {
     try {
-      draft = await DataService.correspondence.getCommunications().then((comms: any[]) =>
-        comms.find((c: any) => c.id === draftId) || null
-      );
+      const communications = await DataService.correspondence.getCommunications();
+      draft = (communications as Correspondence[]).find((c) => c.id === draftId) || null;
     } catch (error) {
       console.error("Failed to load draft", error);
     }

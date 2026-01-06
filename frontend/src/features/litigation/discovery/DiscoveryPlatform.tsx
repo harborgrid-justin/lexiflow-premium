@@ -94,7 +94,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   );
 
   // Runtime array validation
-  const requests = Array.isArray(rawRequests) ? rawRequests : [];
+  const requests = useMemo(() => Array.isArray(rawRequests) ? rawRequests : [], [rawRequests]);
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
     async () => {

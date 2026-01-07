@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowImportingTsExtensions": true,
+
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/app/*": ["./app/*"],
+      "@/platform/*": ["./platform/*"],
+      "@/services/*": ["./services/*"],
+      "@/features/*": ["./features/*"],
+      "@/ui/*": ["./ui/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/tests/*": ["./tests/*"],
+
+      /* Convenience aliases for common imports */
+      "@/platform": ["./platform/index.ts"],
+      "@/lib": ["./lib/index.ts"],
+      "@/ui/components": ["./ui/components/index.ts"],
+      "@/ui/primitives": ["./ui/primitives/index.ts"],
+      "@/ui/patterns": ["./ui/patterns/index.ts"],
+      "@/ui/icons": ["./ui/icons/index.ts"]
+    },
+
+    /* Type checking */
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", "build", "coverage"]
+}

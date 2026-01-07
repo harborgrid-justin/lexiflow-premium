@@ -1,0 +1,14 @@
+{
+  "name": "@lexiflow/openapi-codegen",
+  "version": "1.0.0",
+  "description": "OpenAPI client generation for LexiFlow backend",
+  "scripts": {
+    "generate": "openapi-typescript http://localhost:3000/api-json -o ./services/data/api/generated/schemas.ts",
+    "generate:prod": "openapi-typescript $BACKEND_URL/api-json -o ./services/data/api/generated/schemas.ts",
+    "codegen": "npm run generate && npm run build-client",
+    "build-client": "node scripts/buildApiClient.js"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^6.7.3"
+  }
+}

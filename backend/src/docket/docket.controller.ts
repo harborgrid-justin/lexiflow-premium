@@ -29,7 +29,9 @@ export class DocketController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
   async findAll(
-    @Query("caseId") caseId?: string
+    @Query("caseId") caseId?: string,
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 20
   ): Promise<{
     data: DocketEntry[];
     total: number;
@@ -37,9 +39,11 @@ export class DocketController {
     limit: number;
     totalPages: number;
   }> {
+    const options = { page, limit };
     const result = caseId
-      ? await this.docketService.findAllByCaseId(caseId)
-      : await this.docketService.findAll();
+      ? await this.docketService.findAllByCaseId(caseId, options)
+      : await this.docketService.findAll(options);
+
     if (Array.isArray(result)) {
       return {
         data: result,

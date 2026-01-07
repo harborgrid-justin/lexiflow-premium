@@ -1,21 +1,18 @@
 /**
- * useTrustAccounts Hook
+ * useTrustAccounts Hook - Legacy Export
  *
- * ARCHITECTURAL PHILOSOPHY:
- * - **Type Safety**: Every return type is explicitly defined. No implicit any.
- * - **Separation of Concerns**: Business logic isolated from UI components.
- * - **Render Optimization**: useMemo/useCallback prevent unnecessary re-renders.
- * - **Error Handling**: Explicit error states with typed error objects.
- * - **Cache Management**: Strategic invalidation via React Query.
+ * This file now re-exports from the refactored modular structure.
+ * The implementation has been split into:
+ * - types.ts: Type definitions and interfaces
+ * - constants.ts: Query keys and cache configuration
+ * - utils.ts: Pure utility functions (calculations, filters)
+ * - validation.ts: Compliance validation logic
+ * - index.ts: Main hooks composition (90 LOC)
  *
- * WHY THIS DESIGN:
- * 1. Custom hook pattern centralizes data fetching logic
- * 2. React Query handles caching, deduplication, background updates
- * 3. Typed mutations ensure compile-time safety for CUD operations
- * 4. Compliance validation logic lives in hook, not in UI
+ * @deprecated Import from "./useTrustAccounts" instead for better tree-shaking
  */
 
-import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
+export * from "./useTrustAccounts";
 import type {
   CreateTrustAccountDto,
   DepositDto,

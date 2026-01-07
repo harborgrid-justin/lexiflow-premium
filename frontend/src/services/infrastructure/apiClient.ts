@@ -405,7 +405,8 @@ class ApiClient {
 
       throw new ExternalServiceError(
         "API",
-        errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+        response.status
       );
     }
 
@@ -418,7 +419,18 @@ class ApiClient {
       const jsonData = await response.json();
 
       // Convert snake_case keys to camelCase for frontend consumption
-      return keysToCamel<T>(jsonData);
+      const camelData = keysToCamel<any>(jsonData);
+
+      // Auto-unwrap NestJS standard response envelope ({ success: true, data: T })
+      if (
+        camelData &&
+        camelData.success === true &&
+        camelData.data !== undefined
+      ) {
+        return camelData.data as T;
+      }
+
+      return camelData as T;
     } catch (error) {
       console.error("[ApiClient] Failed to parse response:", error);
       throw new ValidationError("Invalid response format from server");

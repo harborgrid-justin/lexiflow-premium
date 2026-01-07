@@ -1,4 +1,3 @@
-import { Public } from "@common/decorators/public.decorator";
 import {
   Body,
   Controller,
@@ -46,7 +45,6 @@ export class CasesController {
     return this.caseImportService.parse(body.content, body.options);
   }
 
-  @Public()
   @Get("stats")
   @ApiOperation({ summary: "Get case statistics and KPIs" })
   @ApiResponse({
@@ -60,7 +58,6 @@ export class CasesController {
     return this.casesService.getStats();
   }
 
-  @Public()
   @Get()
   @ApiOperation({ summary: "List all cases" })
   @ApiResponse({
@@ -107,7 +104,6 @@ export class CasesController {
     return this.casesService.findOne(id);
   }
 
-  @Public() // Temporarily public for import script testing
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "Create a new case" })

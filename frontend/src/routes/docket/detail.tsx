@@ -17,7 +17,7 @@ import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
+export function meta({ data }: { data: Awaited<ReturnType<typeof clientLoader>> }) {
   return createDetailMeta({
     entityType: 'Docket',
     entityName: data?.item?.title || data?.item?.description,
@@ -29,7 +29,7 @@ export function meta({ data }: { data: Awaited<ReturnType<typeof loader>> }) {
 // Loader - WITH PROPER PARAM VALIDATION
 // ============================================================================
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   const { docketId } = params;
 
   // CRITICAL: Validate param exists
@@ -48,11 +48,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
       throw new Response("Docket entry not found", { status: 404 });
     }
     return { item };
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.statusCode === 404) {
+      throw new Response("Docket entry not found", { status: 404 });
+    }
     console.error("Failed to load docket entry:", error);
     throw error;
   }
 }
+
+// Force client-side execution for hydration (needed for localStorage auth)
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action
@@ -108,7 +114,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 // ============================================================================
 
 export default function DocketDetailRoute() {
-  const { item } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { item } = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
   const navigate = useNavigate();
 
   return (

@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowRight, Briefcase, ChevronRight } from 'lucide-react';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
@@ -62,10 +62,24 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     const { theme } = useTheme();
     const chartTheme = useChartTheme();
     const [isMounted, setIsMounted] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Delay chart rendering to ensure container has dimensions
     useEffect(() => {
-        const timer = setTimeout(() => setIsMounted(true), 100);
+        if (containerRef.current) {
+            const observer = new ResizeObserver((entries) => {
+                const { width, height } = entries[0].contentRect;
+                if (width > 0 && height > 0) {
+                    setIsMounted(true);
+                    observer.disconnect();
+                }
+            });
+            observer.observe(containerRef.current);
+            return () => observer.disconnect();
+        }
+
+        // Fallback if ref not available or observer fails
+        const timer = setTimeout(() => setIsMounted(true), 500);
         return () => clearTimeout(timer);
     }, []);
 
@@ -84,7 +98,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     return (
         <div className="xl:col-span-2 space-y-6">
             <Card title="Case Phase Distribution & Volume" subtitle="Active matters by litigation stage" className="h-[28rem]">
-                <div className="h-full w-full min-h-[20rem]">
+                <div ref={containerRef} className="h-full w-full min-h-[20rem]">
                     {isMounted && safeChartData.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                             <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>

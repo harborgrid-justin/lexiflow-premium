@@ -304,11 +304,11 @@ export class BusinessRuleViolationError extends DomainError {
 // ============================================================================
 
 export class ExternalServiceError extends DomainError {
-  constructor(service: string, message: string) {
+  constructor(service: string, message: string, statusCode: number = 502) {
     super(
       `External service error (${service}): ${message}`,
       "EXTERNAL_SERVICE_ERROR",
-      502,
+      statusCode,
       { service }
     );
   }

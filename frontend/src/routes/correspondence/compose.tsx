@@ -13,7 +13,7 @@
  */
 
 import { Correspondence } from '@/api/communications/correspondence-api';
-import type { DraftingTemplate } from '@/api/domains/drafting.api';
+import type { DraftingTemplate } from '@/api/domains/drafting';
 import { DataService } from '@/services/data/dataService';
 import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

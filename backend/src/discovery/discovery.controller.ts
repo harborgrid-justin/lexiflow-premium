@@ -50,6 +50,7 @@ export class DiscoveryController {
   @Public()
   @Get("evidence")
   @Roles(
+    UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.PARTNER,
     UserRole.ATTORNEY,
@@ -66,6 +67,7 @@ export class DiscoveryController {
   @Post("evidence")
   @HttpCode(HttpStatus.CREATED)
   @Roles(
+    UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.PARTNER,
     UserRole.ATTORNEY,
@@ -83,6 +85,7 @@ export class DiscoveryController {
 
   @Get()
   @Roles(
+    UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.PARTNER,
     UserRole.ATTORNEY,
@@ -98,6 +101,7 @@ export class DiscoveryController {
 
   @Get(":id")
   @Roles(
+    UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.PARTNER,
     UserRole.ATTORNEY,
@@ -115,6 +119,7 @@ export class DiscoveryController {
 
   @Post()
   @Roles(
+    UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.PARTNER,
     UserRole.ATTORNEY,

@@ -44,12 +44,18 @@ export const FacilitiesManager: React.FC = () => {
     const operationsService = DataService.operations as {
         getMaintenanceTickets: () => Promise<unknown[]>;
         getFacilities: () => Promise<unknown[]>;
+        getLeaseMetrics: () => Promise<{ totalSqFt: number; monthlyRent: number; expiringLeases: number }>;
     };
 
-    const { data: tickets = [], isLoading: ticketsLoading } = useQuery<unknown[]>(
+    const { data: rawTickets = [], isLoading: ticketsLoading } = useQuery<any>(
         ['maintenance-tickets', 'all'],
         operationsService.getMaintenanceTickets
     );
+
+    // Ensure tickets is always an array
+    const tickets = Array.isArray(rawTickets)
+        ? rawTickets
+        : (Array.isArray(rawTickets?.data) ? rawTickets.data : []);
 
     const { data: locations = [], isLoading: locationsLoading } = useQuery<unknown[]>(
         ['facilities', 'all'],
@@ -59,7 +65,12 @@ export const FacilitiesManager: React.FC = () => {
         }
     );
 
-    const isLoading = ticketsLoading || locationsLoading;
+    const { data: leaseMetrics = { totalSqFt: 0, monthlyRent: 0, expiringLeases: 0 }, isLoading: metricsLoading } = useQuery(
+        ['lease-metrics'],
+        operationsService.getLeaseMetrics
+    );
+
+    const isLoading = ticketsLoading || locationsLoading || metricsLoading;
 
     return (
         <div className="flex flex-col h-full space-y-4">
@@ -107,9 +118,9 @@ export const FacilitiesManager: React.FC = () => {
                         {activeTab === 'leases' && (
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <MetricTile label="Total Sq Ft" value="125,000" icon={Grid} />
-                                    <MetricTile label="Monthly Rent" value="$450k" icon={Key} />
-                                    <MetricTile label="Expiring (Year)" value="1" icon={AlertTriangle} trend="Action Required" trendUp={false} />
+                                    <MetricTile label="Total Sq Ft" value={leaseMetrics.totalSqFt.toLocaleString()} icon={Grid} />
+                                    <MetricTile label="Monthly Rent" value={`$${(leaseMetrics.monthlyRent / 1000).toFixed(0)}k`} icon={Key} />
+                                    <MetricTile label="Expiring (Year)" value={leaseMetrics.expiringLeases.toString()} icon={AlertTriangle} trend="Action Required" trendUp={false} />
                                 </div>
                                 <Card title="Lease Portfolio">
                                     {/* Lease Table logic would go here */}

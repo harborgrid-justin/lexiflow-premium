@@ -7,7 +7,7 @@
  * @module routes/workflows/index
  */
 
-import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/workflow-api';
+import type { WorkflowInstance, WorkflowTemplate } from '@/api/workflow/core';
 import type { WorkflowStatus } from '@/types';
 import { requireAuthentication } from '@/utils/route-guards';
 import { useState } from 'react';

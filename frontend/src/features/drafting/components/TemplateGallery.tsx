@@ -1,6 +1,6 @@
+import { DraftingTemplate } from '@api/domains/drafting';
+import { Edit, FileCode } from 'lucide-react';
 import React from 'react';
-import { FileCode, Edit} from 'lucide-react';
-import { DraftingTemplate } from '@api/domains/drafting.api';
 
 interface TemplateGalleryProps {
   templates: DraftingTemplate[];
@@ -28,8 +28,8 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ templates, onS
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
       {templatesList.map((template) => (
-        <div 
-          key={template.id} 
+        <div
+          key={template.id}
           className="group relative bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer"
           onClick={() => onSelect(template)}
         >
@@ -75,4 +75,3 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ templates, onS
     </div>
   );
 };
-

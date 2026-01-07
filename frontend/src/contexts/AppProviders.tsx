@@ -93,11 +93,11 @@ export function AppProviders({ children }: AppProvidersProps) {
     <ThemeProvider>
       <ToastProvider maxVisible={5} maxQueue={50}>
         <DataSourceProvider>
-          <WindowProviderWithTheme>
-            <SyncProviderWithToast>
+          <SyncProviderWithToast>
+            <WindowProviderWithTheme>
               {children}
-            </SyncProviderWithToast>
-          </WindowProviderWithTheme>
+            </WindowProviderWithTheme>
+          </SyncProviderWithToast>
         </DataSourceProvider>
       </ToastProvider>
     </ThemeProvider>

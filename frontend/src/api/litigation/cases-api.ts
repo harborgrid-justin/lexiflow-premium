@@ -200,16 +200,36 @@ export class CasesApiService {
     sortBy?: string;
     order?: string;
   }): Promise<Case[]> {
-    const response = await apiClient.get<{ items: Case[] } | Case[]>(
-      "/cases",
-      filters
-    );
+    const response = await apiClient.get<any>("/cases", filters);
 
-    // Backend returns paginated response {items, total, page, limit, totalPages}
-    // Handle both paginated response format and direct array format
-    const casesArray = Array.isArray(response)
-      ? response
-      : (response as { items: Case[] }).items || [];
+    // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}, meta: {...}}
+    // Handle multiple response formats:
+    // 1. Direct array: Case[]
+    // 2. Legacy format: {items: Case[]}
+    // 3. Wrapped format: {success, data: {data: Case[], total, page}}
+    // 4. Inner data format: {data: Case[], total, page}
+    let casesArray: Case[];
+    if (Array.isArray(response)) {
+      casesArray = response;
+    } else if (
+      response.success &&
+      response.data &&
+      "data" in response.data &&
+      Array.isArray(response.data.data)
+    ) {
+      // Wrapped response from backend interceptor: {success, data: {data: [...], total, page}}
+      casesArray = response.data.data;
+    } else if ("data" in response && Array.isArray(response.data)) {
+      casesArray = response.data;
+    } else if ("items" in response && Array.isArray(response.items)) {
+      casesArray = response.items;
+    } else {
+      console.error(
+        "[CasesApiService.getAll] Unexpected response format:",
+        response
+      );
+      casesArray = [];
+    }
 
     // Transform each case to use frontend status values and ensure all required fields
     return casesArray.map((c: unknown) => {
@@ -233,7 +253,12 @@ export class CasesApiService {
    */
   async getStats(): Promise<CaseStats> {
     try {
-      return await apiClient.get<CaseStats>("/cases/stats");
+      const response = await apiClient.get<any>("/cases/stats");
+
+      // Unpack response if wrapped (NestJS Enterprise Interceptor format)
+      return response && response.success === true && response.data
+        ? response.data
+        : response;
     } catch (error) {
       console.error("[CasesApiService.getStats] Error:", error);
       throw new Error("Failed to fetch case statistics");
@@ -254,11 +279,18 @@ export class CasesApiService {
     this.validateId(id, "getById");
 
     try {
-      const backendCase = await apiClient.get<Case>(`/cases/${id}`);
+      const response = await apiClient.get<any>(`/cases/${id}`);
+
+      // Unpack response if wrapped
+      const backendCase =
+        response && response.success === true && response.data
+          ? response.data
+          : response;
+
       return this.transformCase(backendCase);
     } catch (error) {
       console.error("[CasesApiService.getById] Error:", error);
-      throw new Error(`Failed to fetch case with id: ${id}`);
+      throw error;
     }
   }
 

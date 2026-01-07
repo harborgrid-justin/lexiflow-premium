@@ -1,11 +1,11 @@
-import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/api/domains/drafting.api';
+import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@/api/domains/drafting';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useToast } from '@/contexts/toast/ToastContext';
 import { cn } from '@/utils/cn';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ApprovalQueue } from './components/ApprovalQueue';
 import { DocumentGenerator } from './components/DocumentGenerator';
 import { DraftingStats } from './components/DraftingStats';
@@ -51,6 +51,10 @@ const DraftingDashboard: React.FC = () => {
       setLoading(false);
     }
   }, [addToast]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleCreateDraft = () => {
     setSelectedTemplateId(undefined);

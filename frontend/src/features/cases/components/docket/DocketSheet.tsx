@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2, Radio } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -33,7 +33,6 @@ import { useModalState } from '@/hooks/core';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToggle } from '@/hooks/useToggle';
-import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
@@ -63,20 +62,69 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const deleteModal = useModalState();
   const [entryToDelete, setEntryToDelete] = React.useState<string | null>(null);
 
-  // --- ENTERPRISE DATA ACCESS ---
-  const { data: docketEntries = [], isLoading } = useQuery<DocketEntry[]>(
-    ['docket', 'all'],
-    async () => {
-      const docketService = DataService.docket as { getAll: () => Promise<DocketEntry[] | { data: DocketEntry[] }> };
-      const result = await docketService.getAll();
-      // Handle both array and paginated response formats
-      if (Array.isArray(result)) return result;
-      if (result && typeof result === 'object' && 'data' in result && Array.isArray(result.data)) {
-        return result.data;
-      }
-      return [];
+  // --- PAGINATION STATE ---
+  const [entries, setEntries] = useState<DocketEntry[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  // Fetch logic
+  const fetchPage = async (pageNum: number, isReset: boolean) => {
+    try {
+      if (!isReset) setIsFetchingMore(true);
+      const limit = 20;
+      const service = DataService.docket as any;
+
+      // Determine type filter
+      let typeFilter: string | undefined = undefined;
+      if (activeTab === 'orders') typeFilter = 'Order';
+      else if (activeTab === 'filings') typeFilter = 'Filing';
+
+      const result = await service.getAll({
+        page: pageNum,
+        limit,
+        caseId: selectedCaseId || undefined,
+        type: typeFilter,
+        search: searchTerm
+      });
+
+      const newEntries = Array.isArray(result) ? result : (result.data || []);
+
+      setEntries(prev => isReset ? newEntries : [...prev, ...newEntries]);
+      setHasMore(newEntries.length === limit);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsFetchingMore(false);
+      setInitialLoading(false);
     }
-  );
+  };
+
+  // Reset and fetch when filters change
+  useEffect(() => {
+    // Debounce search slightly or just fire. For now direct effect.
+    const timeoutId = setTimeout(() => {
+      setPage(1);
+      setEntries([]);
+      setHasMore(true);
+      setInitialLoading(true);
+      fetchPage(1, true);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCaseId, activeTab, searchTerm]);
+
+  const handleLoadMore = () => {
+    if (!isFetchingMore && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchPage(nextPage, false);
+    }
+  };
+
+  const docketEntries = entries; // Compatibility alias
+  const isLoading = initialLoading; // Compatibility alias
 
   const { data: casesData = [] } = useQuery<Case[]>(
     ['cases', 'all'],
@@ -179,43 +227,9 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     );
   };
 
-  const contextFiltered = useMemo(() => {
-    // Ensure docketEntries is always an array
-    const entries = Array.isArray(docketEntries) ? docketEntries : [];
-
-    const data = selectedCaseId
-      ? entries.filter(e => e.caseId === selectedCaseId)
-      : entries;
-
-    return data.filter(entry => {
-      const matchesTab =
-        activeTab === 'all' ? true :
-          activeTab === 'orders' ? entry.type === 'Order' :
-            activeTab === 'filings' ? entry.type === 'Filing' : true;
-      return matchesTab;
-    });
-  }, [activeTab, selectedCaseId, docketEntries]);
-
-  const { filteredItems: filteredEntries, isSearching } = useWorkerSearch({
-    items: contextFiltered,
-    query: searchTerm,
-    fields: ['title', 'description', 'caseId', 'filedBy']
-  });
-
-  const sortedEntries = useMemo(() => {
-    return [...filteredEntries].sort((a, b) => {
-      interface EntryWithDate {
-        date?: string;
-        entryDate?: string;
-        dateFiled?: string;
-      }
-      const entryA = a as EntryWithDate;
-      const entryB = b as EntryWithDate;
-      const dateA = entryA.date || entryA.entryDate || entryA.dateFiled;
-      const dateB = entryB.date || entryB.entryDate || entryB.dateFiled;
-      return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
-    });
-  }, [filteredEntries]);
+  // Filters are now handled server-side in fetchPage
+  const sortedEntries = docketEntries;
+  const isSearching = isLoading;
 
   const renderLinkedText = (text: string) => {
     const parts = text.split(/(Docket #\d+|Motion|Order|Complaint|Exhibit|Answer)/g);
@@ -295,6 +309,9 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                 onSelectEntry={openOrbitalEntry}
                 onSelectCaseId={setSelectedCaseId}
                 showCaseColumn={true}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                isLoadingMore={isFetchingMore}
               />
             </div>
           ) : (
@@ -311,6 +328,9 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                   onSelectEntry={openOrbitalEntry}
                   onSelectCaseId={() => { }}
                   showCaseColumn={false}
+                  onLoadMore={handleLoadMore}
+                  hasMore={hasMore}
+                  isLoadingMore={isFetchingMore}
                 />
               </div>
             </div>

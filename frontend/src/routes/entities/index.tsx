@@ -29,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function clientLoader() {
   try {
     const entities = await DataService.entities.getAll();
     return { items: entities, totalCount: entities.length };
@@ -38,6 +38,8 @@ export async function loader() {
     return { items: [], totalCount: 0 };
   }
 }
+
+clientLoader.hydrate = true;
 
 // ============================================================================
 // Action

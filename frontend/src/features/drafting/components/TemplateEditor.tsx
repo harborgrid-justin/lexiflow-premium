@@ -9,7 +9,7 @@ import {
   TemplateStatus,
   TemplateVariable,
   UpdateTemplateDto
-} from '@api/domains/drafting.api';
+} from '@api/domains/drafting';
 import { Code, Eye, FileText, Save, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 

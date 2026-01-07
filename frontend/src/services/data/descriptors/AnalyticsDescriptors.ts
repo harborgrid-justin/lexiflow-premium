@@ -50,10 +50,7 @@ export const AnalyticsDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   search: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.search
-        : SearchService,
+    get: () => (isBackendApiEnabled() ? analyticsApi.search : SearchService),
     enumerable: true,
   },
 };

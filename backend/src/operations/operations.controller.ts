@@ -29,4 +29,11 @@ export class OperationsController {
   async getFacilities() {
     return this.operationsService.getFacilities();
   }
+
+  @Get("leases/metrics")
+  @ApiOperation({ summary: "Get lease portfolio metrics" })
+  @ApiResponse({ status: 200, description: "Return lease metrics" })
+  async getLeaseMetrics() {
+    return this.operationsService.getLeaseMetrics();
+  }
 }

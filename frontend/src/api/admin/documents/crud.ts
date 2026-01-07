@@ -67,7 +67,14 @@ export async function getAll(filters?: {
 export async function getById(id: string): Promise<LegalDocument> {
   validateId(id, "getById");
   try {
-    return await apiClient.get<LegalDocument>(`/documents/${id}`);
+    const response = await apiClient.get<any>(`/documents/${id}`);
+
+    // Unpack response if wrapped
+    if (response && response.success === true && response.data) {
+      return response.data as LegalDocument;
+    }
+
+    return response as LegalDocument;
   } catch (error) {
     console.error("[DocumentsApiService.getById] Error:", error);
     throw new Error(`Failed to fetch document with id: ${id}`);

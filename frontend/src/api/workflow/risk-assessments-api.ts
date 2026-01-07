@@ -6,8 +6,13 @@
 /**
  * ALIGNED WITH BACKEND: backend/src/risks/risks.controller.ts
  */
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type {
+  Risk,
+  RiskImpact,
+  RiskProbability,
+  RiskStatusEnum,
+} from "@/types";
 
 // DTOs matching backend risks/dto/create-risk.dto.ts
 export interface CreateRiskDto {
@@ -42,18 +47,25 @@ export interface RiskFilters {
 }
 
 export class RisksApiService {
-  private readonly baseUrl = '/risks';
+  private readonly baseUrl = "/risks";
 
   // Backend: GET /risks with query params
   async getAll(filters?: RiskFilters): Promise<Risk[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.impact) params.append('impact', filters.impact);
-    if (filters?.probability) params.append('probability', filters.probability);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.impact) params.append("impact", filters.impact);
+    if (filters?.probability) params.append("probability", filters.probability);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Risk[]>(url);
+    const response = await apiClient.get<any>(url);
+
+    // Handle paginated response
+    if (response && response.data && Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    return Array.isArray(response) ? response : [];
   }
 
   // Backend: GET /risks/:id
@@ -76,7 +88,7 @@ export class RisksApiService {
     return apiClient.patch<Risk>(`${this.baseUrl}/${id}`, data);
   }
 
-  async updateStatus(id: string, status: Risk['status']): Promise<Risk> {
+  async updateStatus(id: string, status: Risk["status"]): Promise<Risk> {
     return apiClient.patch<Risk>(`${this.baseUrl}/${id}/status`, { status });
   }
 

@@ -163,6 +163,23 @@ export function useCaseDetail(
     { enabled: !!caseData?.id }
   );
 
+  // 6. Docket Entries
+  const { data: docketEntries = [] } = useQuery<DocketEntry[]>(
+    queryKeys.docket.byCaseId(caseData?.id),
+    async () => {
+      const response = await DataService.docket.getAll({
+        caseId: caseData.id,
+        limit: 1000,
+      });
+      // Handle PaginatedResponse structure: { data: DocketEntry[], ... }
+      if (response && typeof response === "object" && "data" in response) {
+        return (response as any).data || [];
+      }
+      return Array.isArray(response) ? response : [];
+    },
+    { enabled: !!caseData?.id }
+  );
+
   // 5. Projects
   const { data: projects = [] } = useQuery<Project[]>(
     queryKeys.projects.byCaseId(caseData?.id),
@@ -269,10 +286,26 @@ export function useCaseDetail(
       });
     }
 
+    // Ensure docketEntries is an array before iterating
+    if (Array.isArray(docketEntries)) {
+      docketEntries.forEach((entry) => {
+        events.push({
+          id: `docket-${entry.id}`,
+          date: entry.dateFiled || entry.entryDate,
+          title: entry.sequenceNumber
+            ? `Docket ${entry.sequenceNumber}: ${entry.description}`
+            : entry.description || "Docket Entry",
+          type: "docket", // Specific type for docket entries
+          description: entry.text || entry.description || "",
+          relatedId: entry.id,
+        });
+      });
+    }
+
     return events.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-  }, [caseData, documents, billingEntries, motions]);
+  }, [caseData, documents, billingEntries, motions, docketEntries]);
 
   // --- ACTIONS ---
 

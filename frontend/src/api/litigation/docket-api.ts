@@ -125,10 +125,20 @@ export class DocketApiService {
       const params: Record<string, unknown> =
         typeof filters === "string" ? { caseId: filters } : { ...filters };
 
-      return await apiClient.get<PaginatedResponse<DocketEntry>>(
-        "/docket",
-        params
-      );
+      const response = await apiClient.get<any>("/docket", params);
+
+      // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}}
+      // Extract the inner pagination data
+      if (
+        response.success &&
+        response.data &&
+        typeof response.data === "object"
+      ) {
+        return response.data as PaginatedResponse<DocketEntry>;
+      }
+
+      // Fallback for direct response
+      return response as PaginatedResponse<DocketEntry>;
     } catch (error) {
       console.error("[DocketApiService.getAll] Error:", error);
       throw new Error("Failed to fetch docket entries");
@@ -146,10 +156,17 @@ export class DocketApiService {
     this.validateId(id, "getById");
 
     try {
-      return await apiClient.get<DocketEntry>(`/docket/${id}`);
+      const response = await apiClient.get<any>(`/docket/${id}`);
+
+      // Unpack response if wrapped (handling Backend API standardized format)
+      if (response && response.success === true && response.data) {
+        return response.data as DocketEntry;
+      }
+
+      return response as DocketEntry;
     } catch (error) {
       console.error("[DocketApiService.getById] Error:", error);
-      throw new Error(`Failed to fetch docket entry with id: ${id}`);
+      throw error;
     }
   }
 

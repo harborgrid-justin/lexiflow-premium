@@ -110,7 +110,7 @@ import {
 } from "@/types";
 
 // Backend API Integration (Primary Data Source)
-import { BillingApiService } from "@/api/billing/finance-api";
+import { BillingApiService } from "@/api/billing/finance";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 // Error Classes

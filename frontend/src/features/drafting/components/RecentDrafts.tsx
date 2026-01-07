@@ -1,5 +1,5 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { GeneratedDocument } from '@api/domains/drafting.api';
+import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';
 import { Clock, FileText } from 'lucide-react';
 import React from 'react';

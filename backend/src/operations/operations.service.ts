@@ -27,4 +27,12 @@ export class OperationsService {
       { id: "2", name: "Satellite Branch", status: "Operational" },
     ];
   }
+
+  async getLeaseMetrics() {
+    return {
+      totalSqFt: 125000,
+      monthlyRent: 450000,
+      expiringLeases: 1,
+    };
+  }
 }

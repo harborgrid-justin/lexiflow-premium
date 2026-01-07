@@ -11,19 +11,18 @@ export class AuthApiService {
     email: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
-    const response = await apiClient.post<{
-      success: boolean;
-      data: {
-        accessToken: string;
-        refreshToken: string;
-        user: User;
-      };
+    // Note: The generic logic in apiClient.post automatically unwraps the { success: true, data: ... } envelope.
+    // So 'response' here will be the inner data object directly: { accessToken, refreshToken, user }
+    const data = await apiClient.post<{
+      accessToken: string;
+      refreshToken: string;
+      user: User;
     }>("/auth/login", {
       email,
       password,
     });
 
-    const { accessToken, refreshToken, user } = response.data;
+    const { accessToken, refreshToken, user } = data;
 
     // Store tokens
     apiClient.setAuthTokens(accessToken, refreshToken);
@@ -37,16 +36,14 @@ export class AuthApiService {
     firstName: string;
     lastName: string;
   }): Promise<{ accessToken: string; refreshToken: string; user: User }> {
-    const response = await apiClient.post<{
-      success: boolean;
-      data: {
-        accessToken: string;
-        refreshToken: string;
-        user: User;
-      };
+    // Note: apiClient auto-unwraps the response envelope
+    const data = await apiClient.post<{
+      accessToken: string;
+      refreshToken: string;
+      user: User;
     }>("/auth/register", userData);
 
-    const { accessToken, refreshToken, user } = response.data;
+    const { accessToken, refreshToken, user } = data;
 
     // Store tokens
     apiClient.setAuthTokens(accessToken, refreshToken);

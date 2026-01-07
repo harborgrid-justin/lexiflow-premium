@@ -44,18 +44,29 @@ export const CaseListExperts: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: Caching
-  const { data: experts = [], isLoading } = useQuery<Expert[]>(
+  const { data: expertsData = [], isLoading } = useQuery<any>(
     ['advisors', 'experts'],
     async () => {
-      // Safe cast as we define the interface here
-      return (await DataService.warRoom.getExperts()) as Expert[];
+      return (await DataService.warRoom.getExperts());
     }
   );
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600" /></div>;
 
-  // Ensure experts is an array
-  const expertsList = experts;
+  // Handle both array (mock/legacy) and paginated response (backend)
+  // Ensure we always have an array for rawList to avoid .map errors
+  const rawList = Array.isArray(expertsData)
+    ? expertsData
+    : (Array.isArray(expertsData?.data) ? expertsData.data : []);
+
+  const expertsList: Expert[] = rawList.map((item: any) => ({
+    id: item.id || 'unknown',
+    name: item.name || 'Unknown Expert',
+    specialty: item.specialty || item.expertType || 'General',
+    rate: item.rate || item.hourlyRate || 0,
+    readiness: item.readiness || 85, // Default for demo
+    reports: item.reports || 0
+  }));
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

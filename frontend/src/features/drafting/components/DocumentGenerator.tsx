@@ -4,7 +4,7 @@ import {
   DraftingValidationService,
   GeneratedDocument,
   GenerateDocumentDto
-} from '@/api/domains/drafting.api';
+} from '@/api/domains/drafting';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/contexts/theme/ThemeContext';

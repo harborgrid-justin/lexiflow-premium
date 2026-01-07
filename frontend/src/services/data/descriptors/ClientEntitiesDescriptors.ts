@@ -29,4 +29,11 @@ export const ClientEntitiesDescriptors: PropertyDescriptorMap = {
         : getOrganizationsRepository(),
     enumerable: true,
   },
+  entities: {
+    get: () =>
+      isBackendApiEnabled()
+        ? api.legalEntities
+        : legacyRepositoryRegistry.getOrCreate("entities"),
+    enumerable: true,
+  },
 };

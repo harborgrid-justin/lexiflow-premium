@@ -1,87 +1,22 @@
 /**
- * Evidence Vault Hook
- * Enterprise-grade React hook for evidence vault management with backend API integration
+ * Evidence Manager Hook - Legacy Export
  *
- * @module hooks/useEvidenceVault
- * @category Hooks - Evidence Management
- * @description Manages comprehensive evidence vault operations including:
- * - Multi-view routing (dashboard, inventory, custody, intake, detail)
- * - Advanced filtering (search, type, admissibility, custodian, date range, blockchain)
- * - Chain of custody tracking and updates
- * - Evidence intake workflow with validation
- * - Real-time inventory management
- * - Tab-based detail navigation
- * - Integration event publishing
+ * This file now re-exports from the refactored modular structure.
+ * The implementation has been split into:
+ * - types.ts: Type definitions
+ * - constants.ts: Static configuration
+ * - utils.ts: Pure utility functions
+ * - useEvidenceData.ts: Data fetching sub-hook
+ * - useEvidenceMutations.ts: Mutation operations sub-hook
+ * - useEvidenceFilters.ts: Filtering logic sub-hook
+ * - useEvidenceNavigation.ts: Navigation sub-hook
+ * - useEvidenceOperations.ts: Custody/intake operations sub-hook
+ * - index.ts: Main hook composition (75 LOC)
  *
- * @security
- * - Input validation on all filter parameters
- * - XSS prevention through type enforcement
- * - Case ID scoping for multi-tenant isolation
- * - Proper sanitization of user inputs
- * - Audit trail for custody changes
- *
- * @architecture
- * - Backend API primary (PostgreSQL via DataService)
- * - React Query integration for cache management
- * - Optimistic UI updates for responsiveness
- * - Type-safe operations throughout
- * - Event-driven integration via IntegrationOrchestrator
- *
- * @performance
- * - Memoized filtering for large datasets
- * - Debounced search (if needed in parent)
- * - Efficient re-render control via useMemo
- * - Query cache invalidation strategy
- *
- * @example
- * ```typescript
- * // Case-scoped usage
- * const vault = useEvidenceManager('case-123');
- *
- * // Global usage
- * const vault = useEvidenceManager();
- *
- * // Access filtered evidence
- * const items = vault.filteredItems;
- *
- * // Update chain of custody
- * vault.handleCustodyUpdate(newEvent);
- * ```
+ * @deprecated Import from "./useEvidenceManager" instead for better tree-shaking
  */
 
-// ============================================================================
-// EXTERNAL DEPENDENCIES
-// ============================================================================
-import { useCallback, useEffect, useMemo, useState } from "react";
-
-// ============================================================================
-// INTERNAL DEPENDENCIES
-// ============================================================================
-// Services & Data
-import { DataService } from "@/services/data/dataService";
-import { queryKeys } from "@/utils/queryKeys";
-import { useMutation, useQuery } from "./useQueryHooks";
-
-// Types
-import { CaseId, ChainOfCustodyEvent, EvidenceItem } from "@/types";
-
-// ============================================================================
-// QUERY KEYS FOR REACT QUERY INTEGRATION
-// ============================================================================
-/**
- * Query keys for evidence vault operations
- * Use these constants for cache invalidation and refetching
- *
- * @example
- * queryClient.invalidateQueries({ queryKey: EVIDENCE_VAULT_QUERY_KEYS.all() });
- * queryClient.invalidateQueries({ queryKey: EVIDENCE_VAULT_QUERY_KEYS.byCase(caseId) });
- */
-export const EVIDENCE_VAULT_QUERY_KEYS = {
-  all: () => ["evidence-vault"] as const,
-  byCase: (caseId: string) => ["evidence-vault", "case", caseId] as const,
-  filtered: (filters: Partial<EvidenceFilters>) =>
-    ["evidence-vault", "filtered", filters] as const,
-} as const;
+export * from "./useEvidenceManager";
 
 // ============================================================================
 // TYPES & INTERFACES

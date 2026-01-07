@@ -60,7 +60,7 @@ export function meta({ data }: Route.MetaArgs) {
  * This enables the page to render quickly with essential data
  * while additional data streams in progressively
  */
-export async function loader({ params }: Route.LoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -68,7 +68,17 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   // Critical data - await immediately (blocks render)
-  const caseData = await DataService.cases.get(caseId);
+  let caseData;
+  try {
+    caseData = await DataService.cases.getById(caseId);
+  } catch (error: any) {
+    // Handle 404 Not Found from backend
+    if (error?.statusCode === 404) {
+      caseData = null;
+    } else {
+      throw error;
+    }
+  }
 
   // 404 handling - case doesn't exist
   if (!caseData) {
@@ -90,6 +100,9 @@ export async function loader({ params }: Route.LoaderArgs) {
     parties: partiesPromise,
   };
 }
+
+// Force client-side execution for hydration (needed for localStorage auth)
+clientLoader.hydrate = true as const;
 
 // ============================================================================
 // Action - Form Submissions
@@ -227,7 +240,7 @@ function StreamedDataLoading({ label }: { label: string }) {
 // ============================================================================
 
 export default function CaseDetailRoute() {
-  const { caseData, documents, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { caseData, documents, parties } = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
   const navigate = useNavigate();
 
   // Memoized navigation handlers

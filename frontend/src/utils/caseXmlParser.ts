@@ -57,17 +57,56 @@ interface ParsedAssociatedCase {
 }
 
 /**
+ * Sanitizes XML string to handle common formatting issues before parsing
+ */
+const sanitizeXml = (xml: string): string => {
+  if (!xml) return "";
+
+  // 1. Escape ampersands that aren't already escaped entities
+  let clean = xml.replace(
+    /&(?!(?:apos|quot|[gl]t|amp|#\d+|#x[\da-fA-F]+);)/g,
+    "&amp;"
+  );
+
+  // 2. Fix unescaped < in attributes or text (heuristic: < followed by space or number is not a tag start)
+  clean = clean.replace(
+    /<(?=\s|\d|[!@#$%^&*()_+\-=\[\]{};':"\\|,.\/?])/g,
+    "&lt;"
+  );
+
+  return clean;
+};
+
+/**
  * Parses the provided XML string into a structured object
  * @param xmlString The XML content to parse
  * @returns XMLParsedCaseData
  */
 export const parseCaseXml = (xmlString: string): XMLParsedCaseData => {
   const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-  const parseError = xmlDoc.querySelector("parsererror");
+  // Attempt to parse raw string first to preserve intended structure if valid
+  let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+  let parseError = xmlDoc.querySelector("parsererror");
+
+  // If raw parse fails, try sanitizing
   if (parseError) {
-    throw new Error(`XML Parsing Error: ${parseError.textContent}`);
+    const sanitizedXml = sanitizeXml(xmlString);
+    xmlDoc = parser.parseFromString(sanitizedXml, "text/xml");
+    parseError = xmlDoc.querySelector("parsererror");
+  }
+
+  if (parseError) {
+    // Extract more detail if possible
+    const errorMsg = parseError.textContent || "Unknown XML parsing error";
+    // Log the error for debugging
+    console.error("XML Parse Failure. Error:", errorMsg);
+    console.debug(
+      "Failed XML snippet (first 500 chars):",
+      xmlString.substring(0, 500)
+    );
+
+    throw new Error(`XML Parsing Error: ${errorMsg}`);
   }
 
   // Helper to get attribute safely

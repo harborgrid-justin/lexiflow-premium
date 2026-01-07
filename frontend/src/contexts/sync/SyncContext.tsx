@@ -317,12 +317,20 @@ export const SyncProvider = ({
     retryFailed
   }), [performMutation, retryFailed]);
 
+  // Legacy unified value for backward compatibility
+  const unifiedValue = useMemo<SyncContextType>(() => ({
+    ...stateValue,
+    ...actionsValue
+  }), [stateValue, actionsValue]);
+
   // BP3 & BP8: Multiple providers for split read/write
   return (
-    <SyncStateContext.Provider value={stateValue}>
-      <SyncActionsContext.Provider value={actionsValue}>
-        {children}
-      </SyncActionsContext.Provider>
-    </SyncStateContext.Provider>
+    <SyncContext.Provider value={unifiedValue}>
+      <SyncStateContext.Provider value={stateValue}>
+        <SyncActionsContext.Provider value={actionsValue}>
+          {children}
+        </SyncActionsContext.Provider>
+      </SyncStateContext.Provider>
+    </SyncContext.Provider>
   );
 };

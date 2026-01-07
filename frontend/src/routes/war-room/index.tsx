@@ -37,7 +37,7 @@ export function meta({ data }: { data: { items: unknown[] } }) {
 // Loader
 // ============================================================================
 
-export async function loader({ request: _ }: LoaderFunctionArgs) {
+export async function clientLoader({ request: _ }: LoaderFunctionArgs) {
   try {
     const cases = await DataService.cases.getAll();
     // Filter for cases that might be relevant for war room (e.g. Trial, Litigation)
@@ -49,6 +49,8 @@ export async function loader({ request: _ }: LoaderFunctionArgs) {
     return { items: [], totalCount: 0 };
   }
 }
+
+clientLoader.hydrate = true;
 
 // ============================================================================
 // Action

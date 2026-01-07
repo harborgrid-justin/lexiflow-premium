@@ -102,6 +102,20 @@ export const OperationsService = {
     return [];
   },
 
+  getLeaseMetrics: async () => {
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get("/operations/leases/metrics");
+      } catch (_error) {
+        console.warn(
+          "[OperationsService] Lease Metrics endpoint not available, returning defaults"
+        );
+        return { totalSqFt: 0, monthlyRent: 0, expiringLeases: 0 };
+      }
+    }
+    return { totalSqFt: 0, monthlyRent: 0, expiringLeases: 0 };
+  },
+
   getReplicationStatus: async () => {
     if (isBackendApiEnabled()) {
       try {

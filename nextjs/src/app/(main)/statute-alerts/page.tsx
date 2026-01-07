@@ -1,11 +1,19 @@
 /**
- * Statute Alerts Page - Server Component with Data Fetching
- * Critical deadline alerts with countdown timers
+ * Statute Alerts Page - Client Component
+ * Critical deadline alerts with real-time countdown timers
+ *
+ * Uses 'use client' for:
+ * - Real-time countdown updates via setInterval
+ * - Dynamic state management for alerts
+ * - Browser-side date calculations
  */
 'use client';
 
 import { API_ENDPOINTS, clientFetch } from '@/lib/api-config';
 import { Suspense, useEffect, useState } from 'react';
+
+// Note: Client components cannot export metadata directly
+// Metadata should be exported from parent layout or use next/head
 
 async function StatuteAlerts() {
   const [alerts, setAlerts] = useState<any[]>([]);

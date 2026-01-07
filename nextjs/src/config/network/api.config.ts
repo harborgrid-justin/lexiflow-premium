@@ -61,7 +61,20 @@ export const enableLegacyIndexedDB = () => {};
 /**
  * Check if running in production mode
  */
-export const isProduction = () => import.meta.env.PROD;
+export const isProduction = () => {
+  // Support both Vite (import.meta) and Jest (process.env) environments
+  // In Vite/browser environment, import.meta exists
+  // In Jest/Node environment, use process.env
+  if (typeof process !== "undefined" && process.env) {
+    return process.env.NODE_ENV === "production";
+  }
+  // Fallback for Vite environment
+  try {
+    return (import.meta as any).env.PROD;
+  } catch {
+    return false;
+  }
+};
 
 /**
  * Get the backend URL (alias for getApiBaseUrl)

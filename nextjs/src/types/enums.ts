@@ -3,6 +3,7 @@
 export enum CaseStatus {
   Open = "Open",
   Active = "Active",
+  Pending = "Pending",
   Discovery = "Discovery",
   Trial = "Trial",
   Settled = "Settled",
@@ -15,14 +16,21 @@ export enum CaseStatus {
   Transferred = "Transferred",
 }
 
+/**
+ * Navigation Categories aligned with Enterprise Taxonomy (8 PRIMARY Domains)
+ * @see business-flows/00-ENTERPRISE-TAXONOMY-INDEX.md
+ */
 export type NavCategory =
-  | "Main"
-  | "Case Work"
-  | "Litigation Tools"
-  | "Operations"
-  | "Knowledge"
-  | "Compliance"
-  | "Admin";
+  | "Core" // Essential daily functions (Dashboard, Calendar, Messenger)
+  | "Matters" // PRIMARY 01: Matter Lifecycle Management
+  | "Research" // PRIMARY 02: Legal Research & Intelligence
+  | "Discovery" // PRIMARY 03: Discovery & Evidence Management
+  | "Documents" // PRIMARY 04: Document Management & Automation
+  | "Litigation" // PRIMARY 05: Litigation & Trial Management
+  | "Operations" // PRIMARY 06: Firm Operations & Administration
+  | "Intelligence" // PRIMARY 08: Analytics & Business Intelligence
+  | "Admin"; // System Administration
+
 export type AppView = string;
 
 export type UserRole =

@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Plus } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Discovery | LexiFlow',
+  description: 'Manage document discovery and production requests for litigation',
+};
 
 interface DiscoveryRequest {
   id: string;

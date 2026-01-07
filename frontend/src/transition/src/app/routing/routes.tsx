@@ -4,6 +4,7 @@
  */
 
 import type { RouteConfig } from './types';
+import { CaseList } from '../../features/case/components/CaseList';
 
 // Simple placeholder components for features
 function BillingDashboard() {
@@ -117,6 +118,10 @@ function Home() {
         Enterprise Legal OS combining Case Management, Discovery, Legal Research, and Firm Operations.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+        <a href="/cases" style={{ padding: '1.5rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', textDecoration: 'none', color: 'inherit', transition: 'all var(--transition-base)' }}>
+          <h3 style={{ marginBottom: '0.5rem', color: 'var(--color-primary)' }}>📂 Cases</h3>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Manage legal cases and matters</p>
+        </a>
         <a href="/billing" style={{ padding: '1.5rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', textDecoration: 'none', color: 'inherit', transition: 'all var(--transition-base)' }}>
           <h3 style={{ marginBottom: '0.5rem', color: 'var(--color-primary)' }}>💰 Billing</h3>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Manage invoices, payments, and billing operations</p>
@@ -146,6 +151,7 @@ function NotFound() {
 
 export const routes: RouteConfig[] = [
   { path: '/', element: <Home />, public: true },
+  { path: '/cases', element: <CaseList />, public: false },
   { path: '/billing', element: <BillingDashboard />, public: false },
   { path: '/billing/invoices', element: <InvoiceList />, public: false },
   { path: '/reporting', element: <ReportingDashboard />, public: false },
@@ -156,6 +162,7 @@ export const routes: RouteConfig[] = [
 
 export const PATHS = {
   dashboard: '/',
+  cases: { root: '/cases' },
   billing: { root: '/billing', invoices: '/billing/invoices' },
   reporting: { root: '/reporting' },
   admin: { root: '/admin', users: '/admin/users' }

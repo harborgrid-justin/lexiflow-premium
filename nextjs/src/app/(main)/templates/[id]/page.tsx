@@ -15,7 +15,7 @@ interface TemplateDetailPageProps {
 
 
 // Static Site Generation (SSG) Configuration
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const revalidate = 7200; // Revalidate every 120 minutes
 
 /**

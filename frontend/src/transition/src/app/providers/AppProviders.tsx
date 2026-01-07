@@ -9,7 +9,7 @@ import { I18nProvider } from '../../platform/i18n/I18nProvider';
 import { ErrorBoundaryProvider } from '../../platform/observability/ErrorBoundaryProvider';
 import { ThemeProvider } from '../../platform/theme/ThemeProvider';
 import { DataProvider } from '../../services/data/DataProvider';
-import { AuthProvider } from '../../services/identity/AuthProvider';
+import { DevAuthProvider as AuthProvider } from '../../services/identity/DevAuthProvider';
 import { SessionProvider } from '../../services/session/SessionProvider';
 import { StateProvider } from '../../services/state/StateProvider';
 import { LayoutProvider } from '../layout/LayoutProvider';

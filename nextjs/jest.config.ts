@@ -25,11 +25,25 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
 
+  // Transform configuration
+  transform: {
+    "^.+\\.(t|j)sx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+          esModuleInterop: true,
+        },
+      },
+    ],
+  },
+
   // Globals for import.meta support
   globals: {
     "import.meta": {
       env: {
         DEV: false,
+        PROD: false,
         MODE: "test",
         VITE_ENV: "test",
       },
@@ -49,18 +63,6 @@ const config: Config = {
 
   // Ignore patterns
   testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
-
-  // Transform files
-  transform: {
-    "^.+\\.(ts|tsx)$": [
-      "ts-jest",
-      {
-        tsconfig: {
-          jsx: "react",
-        },
-      },
-    ],
-  },
 
   // Module file extensions
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],

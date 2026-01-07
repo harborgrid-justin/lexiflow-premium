@@ -1,85 +1,69 @@
-/**
+'use client';
 
-* @module components/dashboard/DashboardMetrics
- * @category Dashboard
- * @description Live-updating metrics cards displaying key firm statistics with
- * real-time simulation and trend indicators.
- *
- * THEME SYSTEM USAGE:
- * This component delegates to MetricCard which uses the theme system.
- */
+import { TrendingUp, TrendingDown, Briefcase, FileText, Clock, AlertTriangle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { QuickStat } from '@/lib/dal/dashboard';
 
-// ============================================================================
-// EXTERNAL DEPENDENCIES
-// ============================================================================
-import { AlertTriangle, Briefcase, Clock, FileText } from 'lucide-react';
-import { useState } from 'react';
-
-// ============================================================================
-// INTERNAL DEPENDENCIES
-// ============================================================================
-// Hooks
-import { useInterval } from '@/hooks/useInterval';
-
-// Components
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
 interface DashboardMetricsProps {
-  /** Statistics object with key firm metrics. */
-  stats: {
-    activeCases: number;
-    pendingMotions: number;
-    billableHours: number;
-    highRisks: number;
-  } | null;
+  stats: QuickStat[];
 }
 
-// ============================================================================
-// COMPONENT
-// ============================================================================
-
 export function DashboardMetrics({ stats }: DashboardMetricsProps) {
-  // Use state to allow local simulation of "Live" updates
-  const [liveStats, setLiveStats] = useState(stats || { activeCases: 0, pendingMotions: 0, billableHours: 0, highRisks: 0 });
-
-  // Simulate real-time updates for demo purposes (DOM Hydration effect)
-  useInterval(() => {
-    // 30% chance to update every 3 seconds
-    if (Math.random() > 0.7) {
-      setLiveStats(prev => ({
-        ...prev,
-        billableHours: prev.billableHours + (Math.random() > 0.5 ? 0.5 : 0),
-        pendingMotions: prev.pendingMotions + (Math.random() > 0.8 ? 1 : 0),
-        // Rarely change active cases
-        activeCases: prev.activeCases + (Math.random() > 0.95 ? 1 : 0)
-      }));
-    }
-  }, 3000);
-
-  const metrics = [
-    { label: 'Active Cases', value: liveStats.activeCases, icon: Briefcase, color: 'border-l-blue-600', trend: '+2 New', isLive: true },
-    { label: 'Pending Motions', value: liveStats.pendingMotions, icon: FileText, color: 'border-l-indigo-600', isLive: true },
-    { label: 'Billable Hours (Mo)', value: liveStats.billableHours, icon: Clock, color: 'border-l-emerald-600', trend: '+5% MoM', isLive: true },
-    { label: 'High Risk Items', value: liveStats.highRisks, icon: AlertTriangle, color: 'border-l-rose-600', isLive: false },
-  ];
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {metrics.map((stat, idx) => (
-        <MetricCard
-          key={idx}
-          label={stat.label}
-          value={stat.value} // Passed as number for animation
-          icon={stat.icon}
-          trend={stat.trend}
-          trendUp={true}
-          className={`border-l-4 ${stat.color}`}
-          isLive={stat.isLive}
-        />
-      ))}
+      {stats.map((stat, idx) => {
+        // Map label/icon dynamically or fallback
+        let Icon = Briefcase;
+        let colorClass = "bg-blue-500";
+
+        if (stat.label.includes('Motion')) { Icon = FileText; colorClass = "bg-indigo-500"; }
+        if (stat.label.includes('Hours')) { Icon = Clock; colorClass = "bg-emerald-500"; }
+        if (stat.label.includes('Risk')) { Icon = AlertTriangle; colorClass = "bg-rose-500"; }
+
+        return (
+          <div
+            key={idx}
+            className="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+          >
+            <div className="flex items-center">
+              <div className={cn("rounded-lg p-3", colorClass)}>
+                <Icon className="h-6 w-6 text-white" />
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="truncate text-sm font-medium text-slate-500 dark:text-slate-400">
+                    {stat.label}
+                  </dt>
+                  <dd>
+                    <div className="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white">
+                      {stat.value}
+                    </div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <div className="flex items-center text-sm">
+                {stat.change !== undefined && (
+                  <span
+                    className={cn(
+                      "flex items-center font-medium",
+                      stat.trend === 'up' ? "text-green-600 dark:text-green-400" :
+                        stat.trend === 'down' ? "text-red-600 dark:text-red-400" : "text-slate-500"
+                    )}
+                  >
+                    {stat.trend === 'up' && <TrendingUp className="mr-1 h-4 w-4 shrink-0" />}
+                    {stat.trend === 'down' && <TrendingDown className="mr-1 h-4 w-4 shrink-0" />}
+                    {Math.abs(stat.change)}%
+                  </span>
+                )}
+                <span className="ml-2 text-slate-500 dark:text-slate-400">from last month</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

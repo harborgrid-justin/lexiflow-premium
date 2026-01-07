@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
 import { apiFetch } from '@/lib/api-config';
 import { Plus } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Tasks | LexiFlow',
+  description: 'Track and manage tasks, assignments, and deadlines',
+};
 
 interface Task {
   id: string;

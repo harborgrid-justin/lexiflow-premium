@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, CardHeader, SkeletonLine } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Save } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Settings | LexiFlow',
+  description: 'Configure application settings and preferences',
+};
 
 async function SettingsContent() {
   let settings: Record<string, string> = {};

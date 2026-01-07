@@ -41,7 +41,7 @@ export interface RedisConfig {
 
 export interface ServerConfig {
   port: number;
-  corsOrigin: string;
+  corsOrigin: string | string[];
 }
 
 export interface RateLimitConfig {

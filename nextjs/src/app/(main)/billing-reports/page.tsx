@@ -1,12 +1,26 @@
 /**
- * Billing Reports Page
+ * Billing Reports Page - Server Component
+ * Financial reporting and billing analytics
+ *
+ * ENTERPRISE GUIDELINES COMPLIANCE:
+ * - [✓] Guideline 1: Default export for /billing-reports route
+ * - [✓] Guideline 2: Server Component by default
+ * - [✓] Guideline 5: Data fetching isolated in async components
+ * - [✓] Guideline 7: SEO metadata export
+ * - [✓] Guideline 11: Suspense for loading states
  */
 
 import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, CardHeader, SkeletonLine, StatCard } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { BarChart3, Download } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Billing Reports | LexiFlow',
+  description: 'Financial reporting and billing analytics for law firm operations',
+};
 
 interface BillingStats {
   totalBilled: number;

@@ -5,6 +5,11 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./tests/setup.ts",
+  },
 
   root: ".",
 
@@ -47,7 +52,7 @@ export default defineConfig({
             "./src/services/identity/AuthProvider",
             "./src/services/session/SessionProvider",
             "./src/services/state/StateProvider",
-            "./src/services/data/DataFetchingProvider",
+            "./src/services/data/DataProvider",
           ],
         },
       },

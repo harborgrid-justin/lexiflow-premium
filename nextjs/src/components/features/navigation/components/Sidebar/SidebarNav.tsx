@@ -10,18 +10,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
 import { queryClient } from '@/hooks/useQueryHooks';
+import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
 
 // Hooks & Context
-import { useTheme } from '@/providers';
 import { useHoverIntent } from '@/hooks/useHoverIntent';
+import { useTheme } from '@/providers';
 
 // Utils & Constants
 import { PREFETCH_MAP } from '@/config/prefetchConfig';
@@ -29,7 +29,7 @@ import { Scheduler } from '@/utils/scheduler';
 import * as styles from './SidebarNav.styles';
 
 // Types
-import type { NavCategory, ModuleDefinition } from '@/types';
+import type { ModuleDefinition, NavCategory } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -70,7 +70,17 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
 
   const groupedItems = useMemo(() => {
     const groups: Partial<Record<NavCategory, ModuleDefinition[]>> = {};
-    const categoryOrder: NavCategory[] = ['Main', 'Case Work', 'Litigation Tools', 'Operations', 'Knowledge', 'Admin'];
+    const categoryOrder: NavCategory[] = [
+      'Core',        // Essential daily functions
+      'Matters',     // Matter Lifecycle Management
+      'Research',    // Legal Research & Intelligence
+      'Discovery',   // Discovery & Evidence Management
+      'Documents',   // Document Management & Automation
+      'Litigation',  // Litigation & Trial Management
+      'Operations',  // Firm Operations & Administration
+      'Intelligence',// Analytics & Business Intelligence
+      'Admin'        // System Administration
+    ];
     categoryOrder.forEach(cat => { groups[cat] = []; });
     visibleItems.forEach(item => { if (groups[item.category]) groups[item.category]!.push(item); });
     return groups;
@@ -84,13 +94,13 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
         // 1. Preload Component Code (Lazy Load chunks)
         const component = item.component as unknown as Record<string, unknown>;
         if (component?.preload && typeof component.preload === 'function') (component.preload as () => void)();
-        
+
         // 2. Preload Data (Heavy DB Ops)
         // We only prefetch if the data isn't already fresh in cache
         const prefetchConfig = PREFETCH_MAP[item.id];
         if (prefetchConfig) {
-            // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
-            queryClient.fetch(prefetchConfig.key as readonly (string | number | Record<string, unknown> | undefined)[], prefetchConfig.fn, 120000);
+          // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
+          queryClient.fetch(prefetchConfig.key as readonly (string | number | Record<string, unknown> | undefined)[], prefetchConfig.fn, 120000);
         }
       }, 'background');
     },
@@ -114,7 +124,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                 const Icon = item.icon;
                 const isActive = activeView === item.id;
                 const isChildActive = item.children?.some(child => child.id === activeView);
-                
+
                 return (
                   <div key={item.id}>
                     <button
@@ -127,7 +137,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                       <span className={styles.navItemLabel}>{item.label}</span>
                       {(isActive || isChildActive) && <div className={styles.getActiveIndicator(theme)}></div>}
                     </button>
-                    
+
                     {/* Submenu for children */}
                     {item.children && item.children.length > 0 && (isActive || isChildActive) && (
                       <div className={styles.getSubmenuContainer(theme)}>

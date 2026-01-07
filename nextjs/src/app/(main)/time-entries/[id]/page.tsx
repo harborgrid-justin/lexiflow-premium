@@ -15,7 +15,7 @@ interface TimeEntryDetailPageProps {
 
 
 // Static Site Generation (SSG) Configuration
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const revalidate = 900; // Revalidate every 15 minutes
 
 /**

@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`DocumentUploadPage Component Snapshots should match snapshot after processing complete 1`] = `
+<div>
+  <div
+    class="p-6 max-w-4xl mx-auto"
+  >
+    <h1
+      class="text-2xl font-bold mb-6"
+    >
+      Upload Document
+    </h1>
+    <div
+      data-testid="card"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          data-testid="file-upload-zone"
+        >
+          <input
+            aria-label="Upload file"
+            data-testid="file-input"
+            type="file"
+          />
+          <span
+            data-testid="file-name"
+          >
+            snapshot-test.pdf
+          </span>
+          <span
+            data-testid="process-stage"
+          >
+            Ready to Upload
+          </span>
+          <span
+            data-testid="generated-hash"
+          >
+            simulated-hash-12345
+          </span>
+        </div>
+        <div
+          class="mt-4 flex justify-end"
+        >
+          <button>
+            Upload 
+            snapshot-test.pdf
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DocumentUploadPage Component Snapshots should match snapshot during processing 1`] = `
+<div>
+  <div
+    class="p-6 max-w-4xl mx-auto"
+  >
+    <h1
+      class="text-2xl font-bold mb-6"
+    >
+      Upload Document
+    </h1>
+    <div
+      data-testid="card"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          data-testid="file-upload-zone"
+        >
+          <input
+            aria-label="Upload file"
+            data-testid="file-input"
+            type="file"
+          />
+          <span
+            data-testid="file-name"
+          >
+            snapshot-test.pdf
+          </span>
+          <span
+            data-testid="processing-indicator"
+          >
+            Processing...
+          </span>
+          <span
+            data-testid="process-stage"
+          >
+            Calculating Hash...
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DocumentUploadPage Component Snapshots should match snapshot for initial state 1`] = `
+<div>
+  <div
+    class="p-6 max-w-4xl mx-auto"
+  >
+    <h1
+      class="text-2xl font-bold mb-6"
+    >
+      Upload Document
+    </h1>
+    <div
+      data-testid="card"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          data-testid="file-upload-zone"
+        >
+          <input
+            aria-label="Upload file"
+            data-testid="file-input"
+            type="file"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

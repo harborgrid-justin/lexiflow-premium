@@ -12,10 +12,18 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const statusColors: Record<CaseStatus, string> = {
-  [CaseStatus.ACTIVE]: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-  [CaseStatus.PENDING]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-  [CaseStatus.CLOSED]: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
-  [CaseStatus.ARCHIVED]: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
+  [CaseStatus.Active]: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+  [CaseStatus.Open]: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+  [CaseStatus.Pending]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+  [CaseStatus.Discovery]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+  [CaseStatus.Trial]: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+  [CaseStatus.Settled]: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400',
+  [CaseStatus.Closed]: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
+  [CaseStatus.Archived]: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
+  [CaseStatus.OnHold]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+  [CaseStatus.PreFiling]: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400',
+  [CaseStatus.Appeal]: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+  [CaseStatus.Transferred]: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
 };
 
 const priorityColors: Record<MatterPriority, string> = {

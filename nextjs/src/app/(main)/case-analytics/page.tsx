@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, CardHeader, SkeletonLine, StatCard } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Download, TrendingUp } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Case Analytics | LexiFlow',
+  description: 'Advanced analytics and insights for case management',
+};
 
 interface CaseAnalytics {
   totalCases: number;

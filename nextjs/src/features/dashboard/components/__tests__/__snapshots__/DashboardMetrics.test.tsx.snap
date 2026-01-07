@@ -1,0 +1,659 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`DashboardMetrics Component Snapshots should match snapshot for all icon types 1`] = `
+<div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+  >
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-blue-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="briefcase-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Active Cases
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            12
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-indigo-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="file-text-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Pending Motions
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            12
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-emerald-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="clock-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Billable Hours
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            12
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-rose-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="alert-triangle-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Risk Items
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            12
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DashboardMetrics Component Snapshots should match snapshot for empty stats 1`] = `
+<div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+  />
+</div>
+`;
+
+exports[`DashboardMetrics Component Snapshots should match snapshot for single stat with all trend types 1`] = `
+<div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+  >
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-blue-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="briefcase-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Up Trend
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            15
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-blue-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="briefcase-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Down Trend
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-red-600 dark:text-red-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-down-icon"
+            />
+            10
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-blue-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="briefcase-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Neutral
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-slate-500"
+          >
+            0
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DashboardMetrics Component Snapshots should match snapshot for standard dashboard stats 1`] = `
+<div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+  >
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-blue-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="briefcase-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Active Cases
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                42
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            12
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-indigo-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="file-text-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Pending Motions
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                8
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-red-600 dark:text-red-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-down-icon"
+            />
+            3
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-emerald-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="clock-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              Billable Hours
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                156.5
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            8
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800"
+    >
+      <div
+        class="flex items-center"
+      >
+        <div
+          class="rounded-lg p-3 bg-rose-500"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            data-testid="alert-triangle-icon"
+          />
+        </div>
+        <div
+          class="ml-5 w-0 flex-1"
+        >
+          <dl>
+            <dt
+              class="truncate text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+              High Risk Items
+            </dt>
+            <dd>
+              <div
+                class="flex items-baseline text-2xl font-bold text-slate-900 dark:text-white"
+              >
+                3
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div
+        class="mt-4"
+      >
+        <div
+          class="flex items-center text-sm"
+        >
+          <span
+            class="flex items-center font-medium text-green-600 dark:text-green-400"
+          >
+            <svg
+              class="mr-1 h-4 w-4 shrink-0"
+              data-testid="trending-up-icon"
+            />
+            2
+            %
+          </span>
+          <span
+            class="ml-2 text-slate-500 dark:text-slate-400"
+          >
+            from last month
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

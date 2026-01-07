@@ -10,15 +10,23 @@
 import { authDelete, authPost } from "../../client/authTransport";
 import { buildApiUrl } from "../../client/config";
 import { httpFetch } from "../../client/httpClient";
+import { tokenStorage } from "../../client/tokenStorage";
 
 export interface LoginCredentials {
   email: string;
   password: string;
 }
 
+export interface LoginData {
+  user: unknown;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   message?: string;
+  data?: LoginData;
 }
 
 export interface LogoutResponse {
@@ -49,24 +57,33 @@ export const authGateway = {
         },
       });
 
-      return response.data;
-    } catch (error: any) {
+      const payload = response.data;
+
+      // Store tokens if present (fallback for when cookies aren't used)
+      if (payload.success && payload.data && payload.data.accessToken) {
+        tokenStorage.setToken(payload.data.accessToken);
+        if (payload.data.refreshToken) {
+          tokenStorage.setRefreshToken(payload.data.refreshToken);
+        }
+      }
+
+      return payload;
+    } catch (error) {
       console.error("Login failed:", error);
-      return {
-        success: false,
-        message: error.message || "Login failed",
-      };
+      return { success: false, message: "Network error or server unavailable" };
     }
   },
 
   /**
-   * Logout current session
+   * Logout
    *
    * Backend clears httpOnly cookie.
    */
   async logout(): Promise<LogoutResponse> {
     try {
-      return await authDelete<LogoutResponse>("/auth/logout");
+      tokenStorage.clearTokens();
+      await authPost("/auth/logout");
+      return { success: true };
     } catch (error) {
       console.error("Logout failed:", error);
       return { success: false };
@@ -74,36 +91,15 @@ export const authGateway = {
   },
 
   /**
-   * Refresh session
-   *
-   * Backend validates refresh token from cookie and issues new tokens.
+   * Check session status
    */
-  async refreshSession(): Promise<boolean> {
+  async checkSession(): Promise<boolean> {
     try {
-      const response = await authPost<{ success: boolean }>(
-        "/auth/refresh",
-        {}
-      );
-      return response.success;
-    } catch (error) {
-      console.error("Session refresh failed:", error);
-      return false;
-    }
-  },
-
-  /**
-   * Check if user is authenticated
-   *
-   * Validates session cookie with backend.
-   */
-  async checkAuth(): Promise<boolean> {
-    try {
-      const url = buildApiUrl("/auth/check");
-      const response = await httpFetch<{ authenticated: boolean }>(url, {
-        method: "GET",
-      });
-      return response.data.authenticated;
-    } catch (error) {
+      // Just try to fetch user profile
+      // If 401, interceptor will catch it
+      await authPost("/auth/refresh");
+      return true;
+    } catch {
       return false;
     }
   },

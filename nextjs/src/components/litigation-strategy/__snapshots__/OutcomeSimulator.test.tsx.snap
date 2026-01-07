@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`OutcomeSimulator Snapshot matches snapshot 1`] = `
+<div>
+  <div
+    class="h-full w-full flex items-center justify-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg min-h-[500px]"
+  >
+    <div
+      class="text-center text-slate-400"
+    >
+      <p
+        class="text-lg font-medium mb-2"
+      >
+        Outcome Simulator
+      </p>
+      <p
+        class="text-sm"
+      >
+        Monte Carlo simulation engine coming soon...
+      </p>
+    </div>
+  </div>
+</div>
+`;

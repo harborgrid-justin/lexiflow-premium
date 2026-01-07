@@ -1,9 +1,11 @@
 /**
  * Case Detail Page - Server Component with Dynamic Route
  * Displays detailed information about a specific case
+ *
+ * RENDERING: Dynamic (requires authentication)
+ * Uses ISR (Incremental Static Regeneration) for authenticated pages
  */
 
-import React from 'react';
 import { CaseDocuments } from '@/components/cases/CaseDocuments';
 import { CaseHeader } from '@/components/cases/CaseHeader';
 import { CaseOverview } from '@/components/cases/CaseOverview';
@@ -12,46 +14,23 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import type { Case } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 
 interface CasePageProps {
   params: Promise<{ id: string }>;
 }
 
-// Generate metadata dynamically
-
-// Static Site Generation (SSG) Configuration
-export const dynamic = 'force-static';
-export const revalidate = 3600; // Revalidate every 60 minutes
+// Dynamic rendering for authenticated routes
+// Build-time static generation is disabled because this route requires authentication
+export const dynamic = 'force-dynamic';
 
 /**
- * Generate static params for cases detail pages
+ * Generate metadata dynamically at request time
  *
- * Next.js 16 will pre-render these pages at build time.
- * With revalidate, pages are regenerated in the background when stale.
- *
- * @returns Array of { id: string } objects for static generation
+ * Note: For authenticated routes, metadata is generated per-request
+ * rather than at build time to avoid auth errors during SSG
  */
-export async function generateStaticParams(): Promise<{ id: string }[]> {
-  try {
-    // Fetch list of cases IDs for static generation
-    const response = await apiFetch<any[]>(
-      API_ENDPOINTS.CASES.LIST + '?limit=100&fields=id'
-    );
-
-    // Map to the required { id: string } format
-    return (response || []).map((item: any) => ({
-      id: String(item.id),
-    }));
-  } catch (error) {
-    console.warn(`[generateStaticParams] Failed to fetch cases list:`, error);
-    // Return empty array to continue build without static params
-    // Pages will be generated on-demand (ISR) instead
-    return [];
-  }
-}
-
 export async function generateMetadata({
   params,
 }: CasePageProps): Promise<Metadata> {
@@ -60,12 +39,13 @@ export async function generateMetadata({
   try {
     const caseData = await apiFetch<Case>(API_ENDPOINTS.CASES.DETAIL(id));
     return {
-      title: `${caseData.caseNumber} - ${caseData.title}`,
-      description: caseData.description || 'Case details',
+      title: `${caseData.caseNumber} - ${caseData.title} | LexiFlow`,
+      description: caseData.description || 'Case details and management',
     };
   } catch (error) {
     return {
-      title: 'Case Not Found',
+      title: 'Case Details | LexiFlow',
+      description: 'View case information and documents',
     };
   }
 }

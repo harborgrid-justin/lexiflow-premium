@@ -1,3 +1,4 @@
+import { Sidebar } from "@/components/layout/Sidebar";
 import { Providers } from "@/providers/Providers";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
@@ -53,8 +54,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <Providers>{children}</Providers>
+      <body className={`${inter.variable} font-sans antialiased h-screen overflow-hidden`}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

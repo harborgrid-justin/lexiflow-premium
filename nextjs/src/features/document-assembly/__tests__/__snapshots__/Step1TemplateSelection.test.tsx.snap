@@ -1,0 +1,166 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Step1TemplateSelection Component Snapshots should match snapshot for default state 1`] = `
+<div>
+  <div
+    class="space-y-6"
+  >
+    <div>
+      <h2
+        class="text-2xl font-bold mb-2 text-gray-900"
+      >
+        Select Document Template
+      </h2>
+      <p
+        class="text-gray-600"
+      >
+        Choose a template to start generating your legal document. Each template includes structure and legal language.
+      </p>
+    </div>
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
+      <button
+        class="p-4 rounded-lg border text-left transition-all hover:shadow-md border-gray-200 bg-white hover:border-blue-500 dark:hover:border-blue-400"
+      >
+        <div
+          class="flex items-start gap-3"
+        >
+          <div
+            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+          >
+            <span />
+          </div>
+          <div
+            class="flex-1"
+          >
+            <div
+              class="flex items-center justify-between mb-1"
+            >
+              <h3
+                class="font-semibold text-gray-900"
+              >
+                Motion to Dismiss
+              </h3>
+              <span
+                class="text-xs px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-gray-500"
+              >
+                Motions
+              </span>
+            </div>
+            <p
+              class="text-sm text-gray-600"
+            >
+              Standard motion to dismiss with legal grounds and supporting arguments
+            </p>
+          </div>
+        </div>
+      </button>
+      <button
+        class="p-4 rounded-lg border text-left transition-all hover:shadow-md border-gray-200 bg-white hover:border-blue-500 dark:hover:border-blue-400"
+      >
+        <div
+          class="flex items-start gap-3"
+        >
+          <div
+            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+          >
+            <span />
+          </div>
+          <div
+            class="flex-1"
+          >
+            <div
+              class="flex items-center justify-between mb-1"
+            >
+              <h3
+                class="font-semibold text-gray-900"
+              >
+                Discovery Request
+              </h3>
+              <span
+                class="text-xs px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-gray-500"
+              >
+                Discovery
+              </span>
+            </div>
+            <p
+              class="text-sm text-gray-600"
+            >
+              Interrogatories, requests for production, or requests for admission
+            </p>
+          </div>
+        </div>
+      </button>
+      <button
+        class="p-4 rounded-lg border text-left transition-all hover:shadow-md border-gray-200 bg-white hover:border-blue-500 dark:hover:border-blue-400"
+      >
+        <div
+          class="flex items-start gap-3"
+        >
+          <div
+            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+          >
+            <span />
+          </div>
+          <div
+            class="flex-1"
+          >
+            <div
+              class="flex items-center justify-between mb-1"
+            >
+              <h3
+                class="font-semibold text-gray-900"
+              >
+                Demand Letter
+              </h3>
+              <span
+                class="text-xs px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-gray-500"
+              >
+                Correspondence
+              </span>
+            </div>
+            <p
+              class="text-sm text-gray-600"
+            >
+              Formal demand letter outlining claims and settlement demands
+            </p>
+          </div>
+        </div>
+      </button>
+    </div>
+    <div
+      class="p-4 rounded-lg border bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800"
+    >
+      <p
+        class="text-sm text-gray-600"
+      >
+        <strong
+          class="text-gray-900"
+        >
+          Tip:
+        </strong>
+         After selecting a template, you'll configure specific details and our AI will generate a customized draft based on your case information.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Step1TemplateSelection Component Snapshots should match snapshot for loading state 1`] = `
+<div>
+  <div
+    class="flex items-center justify-center py-12"
+  >
+    <span
+      class="w-8 h-8 animate-spin text-gray-600"
+      data-testid="loader"
+    />
+    <span
+      class="ml-3 text-gray-600"
+    >
+      Loading templates...
+    </span>
+  </div>
+</div>
+`;

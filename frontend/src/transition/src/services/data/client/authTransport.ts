@@ -19,6 +19,7 @@ import {
   type HttpRequestInit,
   type HttpResponse,
 } from "./httpClient";
+import { tokenStorage } from "./tokenStorage";
 
 export interface AuthenticatedRequestInit extends HttpRequestInit {
   /** Skip auth requirement (for public endpoints) */
@@ -28,8 +29,7 @@ export interface AuthenticatedRequestInit extends HttpRequestInit {
 /**
  * Make authenticated request to backend
  *
- * Automatically includes credentials (cookies) in all requests.
- * Backend validates authentication via AuthGuard.
+ * Adds Authorization header with Bearer token.
  *
  * @param endpoint - API endpoint (relative to /api)
  * @param init - Request configuration
@@ -41,8 +41,16 @@ export async function authenticatedFetch<T = unknown>(
 ): Promise<HttpResponse<T>> {
   const url = buildApiUrl(endpoint);
 
+  // Attach token if available
+  const token = tokenStorage.getToken();
+  const headers = { ...init?.headers };
+
+  if (token && !init?.skipAuth) {
+    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
-    return await httpFetch<T>(url, init);
+    return await httpFetch<T>(url, { ...init, headers });
   } catch (error: unknown) {
     // Handle 401 Unauthorized - redirect to login
     if (error instanceof HttpError && error.status === 401 && !init?.skipAuth) {
@@ -65,12 +73,19 @@ export async function authenticatedFetch<T = unknown>(
  * For now, we'll emit an event that AuthProvider can listen to.
  */
 function handleUnauthorized(): void {
+  // Clear any local state/tokens
+  tokenStorage.clearTokens();
+
   if (typeof window !== "undefined") {
     // Dispatch custom event for AuthProvider to handle
     window.dispatchEvent(new CustomEvent("auth:unauthorized"));
 
-    // In production, redirect to login:
-    // window.location.href = '/login';
+    // Redirect to login page only if not already there
+    if (!window.location.pathname.includes("/login")) {
+      window.location.href = `/login?redirect=${encodeURIComponent(
+        window.location.pathname
+      )}`;
+    }
   }
 }
 

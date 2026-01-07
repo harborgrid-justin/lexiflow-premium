@@ -4,12 +4,12 @@ describe('LRUCache', () => {
   describe('Constructor', () => {
     it('should create cache with specified capacity', () => {
       const cache = new LRUCache<string>(5);
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
     });
 
     it('should create cache with capacity 1', () => {
       const cache = new LRUCache<string>(1);
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
     });
   });
 
@@ -33,7 +33,7 @@ describe('LRUCache', () => {
       cache.put('key1', 'value2');
 
       expect(cache.get('key1')).toBe('value2');
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
     });
 
     it('should store complex objects', () => {
@@ -77,7 +77,7 @@ describe('LRUCache', () => {
       expect(cache.get('key2')).toBe('value2');
       expect(cache.get('key3')).toBe('value3');
       expect(cache.get('key4')).toBe('value4');
-      expect(cache.size).toBe(3);
+      expect(cache.size()).toBe(3);
     });
 
     it('should evict correct entry with capacity 1', () => {
@@ -88,7 +88,7 @@ describe('LRUCache', () => {
 
       expect(cache.get('key1')).toBeUndefined();
       expect(cache.get('key2')).toBe('value2');
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
     });
 
     it('should evict oldest after multiple operations', () => {
@@ -172,7 +172,7 @@ describe('LRUCache', () => {
 
       expect(cache.get('key1')).toBeUndefined();
       expect(cache.get('key2')).toBe('value2');
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
     });
 
     it('should handle deleting non-existent key', () => {
@@ -181,7 +181,7 @@ describe('LRUCache', () => {
       cache.put('key1', 'value1');
       cache.delete('nonexistent');
 
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
     });
 
     it('should allow re-adding deleted key', () => {
@@ -205,7 +205,7 @@ describe('LRUCache', () => {
 
       cache.clear();
 
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
       expect(cache.get('key1')).toBeUndefined();
       expect(cache.get('key2')).toBeUndefined();
       expect(cache.get('key3')).toBeUndefined();
@@ -218,14 +218,14 @@ describe('LRUCache', () => {
       cache.clear();
       cache.put('key2', 'value2');
 
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
       expect(cache.get('key2')).toBe('value2');
     });
 
     it('should handle clearing empty cache', () => {
       const cache = new LRUCache<string>(3);
       expect(() => cache.clear()).not.toThrow();
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
     });
   });
 
@@ -233,19 +233,19 @@ describe('LRUCache', () => {
     it('should return correct size', () => {
       const cache = new LRUCache<string>(5);
 
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
 
       cache.put('key1', 'value1');
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
 
       cache.put('key2', 'value2');
-      expect(cache.size).toBe(2);
+      expect(cache.size()).toBe(2);
 
       cache.delete('key1');
-      expect(cache.size).toBe(1);
+      expect(cache.size()).toBe(1);
 
       cache.clear();
-      expect(cache.size).toBe(0);
+      expect(cache.size()).toBe(0);
     });
 
     it('should not exceed capacity', () => {
@@ -255,7 +255,7 @@ describe('LRUCache', () => {
         cache.put(`key${i}`, `value${i}`);
       }
 
-      expect(cache.size).toBe(3);
+      expect(cache.size()).toBe(3);
     });
   });
 
@@ -370,7 +370,7 @@ describe('LRUCache', () => {
         cache.put(`key${i}`, i);
       }
 
-      expect(cache.size).toBe(5000);
+      expect(cache.size()).toBe(5000);
     });
 
     it('should handle rapid put/get operations', () => {
@@ -381,7 +381,7 @@ describe('LRUCache', () => {
         cache.get(`key${i % 50}`);
       }
 
-      expect(cache.size).toBe(100);
+      expect(cache.size()).toBe(100);
     });
   });
 

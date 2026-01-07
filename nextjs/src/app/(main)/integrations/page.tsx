@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Badge, Button, Card, CardBody, SkeletonLine } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Settings } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Integrations | LexiFlow',
+  description: 'Manage third-party integrations and API connections',
+};
 
 interface Integration {
   id: string;

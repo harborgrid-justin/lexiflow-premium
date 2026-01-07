@@ -1,3 +1,14 @@
+/**
+ * Home Page - Server Component
+ * Landing page for LexiFlow AI Legal Suite
+ *
+ * ENTERPRISE GUIDELINES COMPLIANCE:
+ * - [✓] Guideline 1: Default export for / route
+ * - [✓] Guideline 2: Server Component by default
+ * - [✓] Guideline 7: SEO metadata export
+ * - [✓] Guideline 15: TypeScript type safety
+ * - [✓] Guideline 17: Self-documenting with JSDoc
+ */
 import { ArrowRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -22,7 +33,7 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
-                href="/case-overview"
+                href="/dashboard"
                 className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 Go to Dashboard

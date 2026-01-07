@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`AdminPanel Component Snapshots should match snapshot for default state 1`] = `
+<div>
+  <div
+    data-testid="tabbed-page-layout"
+  >
+    <header>
+      <h1
+        data-testid="page-title"
+      >
+        Admin Console
+      </h1>
+      <p
+        data-testid="page-subtitle"
+      >
+        System settings, security audits, and data management.
+      </p>
+    </header>
+    <nav
+      data-testid="tab-navigation"
+      role="tablist"
+    >
+      <button
+        aria-selected="true"
+        data-testid="tab-profile"
+        role="tab"
+      >
+        Profile
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-hierarchy"
+        role="tab"
+      >
+        Hierarchy
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-security"
+        role="tab"
+      >
+        Security
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-db"
+        role="tab"
+      >
+        Database
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-data"
+        role="tab"
+      >
+        Data
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-logs"
+        role="tab"
+      >
+        Logs
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-integrations"
+        role="tab"
+      >
+        Integrations
+      </button>
+    </nav>
+    <main
+      data-testid="tab-content"
+    >
+      <div
+        class=""
+      >
+        <div
+          data-active-tab="profile"
+          data-testid="admin-panel-content"
+        >
+          Content for: 
+          profile
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`AdminPanel Component Snapshots should match snapshot with initialTab 1`] = `
+<div>
+  <div
+    data-testid="tabbed-page-layout"
+  >
+    <header>
+      <h1
+        data-testid="page-title"
+      >
+        Admin Console
+      </h1>
+      <p
+        data-testid="page-subtitle"
+      >
+        System settings, security audits, and data management.
+      </p>
+    </header>
+    <nav
+      data-testid="tab-navigation"
+      role="tablist"
+    >
+      <button
+        aria-selected="false"
+        data-testid="tab-profile"
+        role="tab"
+      >
+        Profile
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-hierarchy"
+        role="tab"
+      >
+        Hierarchy
+      </button>
+      <button
+        aria-selected="true"
+        data-testid="tab-security"
+        role="tab"
+      >
+        Security
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-db"
+        role="tab"
+      >
+        Database
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-data"
+        role="tab"
+      >
+        Data
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-logs"
+        role="tab"
+      >
+        Logs
+      </button>
+      <button
+        aria-selected="false"
+        data-testid="tab-integrations"
+        role="tab"
+      >
+        Integrations
+      </button>
+    </nav>
+    <main
+      data-testid="tab-content"
+    >
+      <div
+        class=""
+      >
+        <div
+          data-active-tab="security"
+          data-testid="admin-panel-content"
+        >
+          Content for: 
+          security
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;

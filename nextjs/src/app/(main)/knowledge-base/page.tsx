@@ -6,7 +6,13 @@ import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Plus } from 'lucide-react';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Knowledge Base | LexiFlow',
+  description: 'Internal knowledge management and legal precedents',
+};
 
 interface KnowledgeArticle {
   id: string;

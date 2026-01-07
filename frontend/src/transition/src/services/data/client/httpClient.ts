@@ -81,6 +81,7 @@ export async function httpFetch<T = unknown>(
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        "X-API-Version": "1", // Ensure backend versioning is satisfied
         ...fetchInit.headers,
       },
     });

@@ -1,0 +1,270 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Step2FormConfiguration Component Snapshots should match snapshot for empty form 1`] = `
+<div>
+  <div
+    class="space-y-6"
+  >
+    <div>
+      <h2
+        class="text-2xl font-bold mb-2 text-gray-900"
+      >
+        Configure: 
+        Motion to Dismiss
+      </h2>
+      <p
+        class="text-gray-600"
+      >
+        Provide the details needed to generate your customized document.
+      </p>
+    </div>
+    <div
+      class="space-y-4"
+    >
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-user"
+          />
+          Recipient / Opposing Party
+          <span
+            class="text-red-500 ml-1"
+          >
+            *
+          </span>
+        </label>
+        <input
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          placeholder="e.g., John Smith, ABC Corporation, Court of Appeals"
+          type="text"
+          value=""
+        />
+      </div>
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-calendar"
+          />
+          Document Date
+        </label>
+        <input
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Select date"
+          type="date"
+          value="2024-01-15"
+        />
+      </div>
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-file-text"
+          />
+          Main Point / Purpose
+          <span
+            class="text-red-500 ml-1"
+          >
+            *
+          </span>
+        </label>
+        <textarea
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none"
+          placeholder="Describe the key arguments, facts, or objectives for this document..."
+          rows="6"
+        />
+        <p
+          class="text-xs mt-1 text-gray-500"
+        >
+          Be specific about legal issues, facts, and desired outcomes. More detail = better results.
+        </p>
+      </div>
+    </div>
+    <div
+      class="p-4 rounded-lg border bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800"
+    >
+      <h4
+        class="font-semibold mb-2 flex items-center text-gray-900"
+      >
+        <span
+          class="w-4 h-4 mr-2 text-purple-600 dark:text-purple-400"
+          data-testid="icon-sparkles"
+        />
+        AI Enhancement Tips
+      </h4>
+      <ul
+        class="text-sm space-y-1 text-gray-600"
+      >
+        <li>
+          • Include relevant case law citations if known
+        </li>
+        <li>
+          • Mention specific statutes or regulations
+        </li>
+        <li>
+          • Provide key facts and timeline information
+        </li>
+        <li>
+          • State your legal position clearly
+        </li>
+      </ul>
+    </div>
+    <div
+      class="flex gap-3 pt-4 border-t"
+    >
+      <button
+        class="flex-1 px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed"
+        disabled=""
+      >
+        <span
+          class="w-5 h-5"
+          data-testid="icon-sparkles"
+        />
+        Generate Draft with AI
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Step2FormConfiguration Component Snapshots should match snapshot for filled form 1`] = `
+<div>
+  <div
+    class="space-y-6"
+  >
+    <div>
+      <h2
+        class="text-2xl font-bold mb-2 text-gray-900"
+      >
+        Configure: 
+        Motion to Dismiss
+      </h2>
+      <p
+        class="text-gray-600"
+      >
+        Provide the details needed to generate your customized document.
+      </p>
+    </div>
+    <div
+      class="space-y-4"
+    >
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-user"
+          />
+          Recipient / Opposing Party
+          <span
+            class="text-red-500 ml-1"
+          >
+            *
+          </span>
+        </label>
+        <input
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          placeholder="e.g., John Smith, ABC Corporation, Court of Appeals"
+          type="text"
+          value="John Smith, Esq."
+        />
+      </div>
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-calendar"
+          />
+          Document Date
+        </label>
+        <input
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Select date"
+          type="date"
+          value="2024-02-15"
+        />
+      </div>
+      <div>
+        <label
+          class="block text-sm font-medium mb-2 text-gray-900"
+        >
+          <span
+            class="inline-block w-4 h-4 mr-1"
+            data-testid="icon-file-text"
+          />
+          Main Point / Purpose
+          <span
+            class="text-red-500 ml-1"
+          >
+            *
+          </span>
+        </label>
+        <textarea
+          class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none"
+          placeholder="Describe the key arguments, facts, or objectives for this document..."
+          rows="6"
+        >
+          The complaint fails to state a claim upon which relief can be granted.
+        </textarea>
+        <p
+          class="text-xs mt-1 text-gray-500"
+        >
+          Be specific about legal issues, facts, and desired outcomes. More detail = better results.
+        </p>
+      </div>
+    </div>
+    <div
+      class="p-4 rounded-lg border bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800"
+    >
+      <h4
+        class="font-semibold mb-2 flex items-center text-gray-900"
+      >
+        <span
+          class="w-4 h-4 mr-2 text-purple-600 dark:text-purple-400"
+          data-testid="icon-sparkles"
+        />
+        AI Enhancement Tips
+      </h4>
+      <ul
+        class="text-sm space-y-1 text-gray-600"
+      >
+        <li>
+          • Include relevant case law citations if known
+        </li>
+        <li>
+          • Mention specific statutes or regulations
+        </li>
+        <li>
+          • Provide key facts and timeline information
+        </li>
+        <li>
+          • State your legal position clearly
+        </li>
+      </ul>
+    </div>
+    <div
+      class="flex gap-3 pt-4 border-t"
+    >
+      <button
+        class="flex-1 px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
+      >
+        <span
+          class="w-5 h-5"
+          data-testid="icon-sparkles"
+        />
+        Generate Draft with AI
+      </button>
+    </div>
+  </div>
+</div>
+`;

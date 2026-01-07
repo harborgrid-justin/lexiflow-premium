@@ -4,7 +4,7 @@
 
 import { render, type RenderOptions } from '@testing-library/react';
 import { type ReactElement } from 'react';
-import { AppProviders } from '../../app/providers/AppProviders';
+import { AppProviders } from '../../src/app/providers/AppProviders';
 
 // Custom render with providers
 export function renderWithProviders(

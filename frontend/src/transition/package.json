@@ -12,7 +12,11 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "codegen": "npm run codegen:fetch && npm run codegen:generate",
+    "codegen:fetch": "curl http://localhost:3000/api-json -o src/services/data/api/openapi.json",
+    "codegen:generate": "openapi-typescript src/services/data/api/openapi.json -o src/services/data/api/generated/schemas.ts",
+    "codegen:prod": "curl $BACKEND_URL/api-json -o src/services/data/api/openapi.json && npm run codegen:generate"
   },
   "dependencies": {
     "react": "^18.3.0",
@@ -34,6 +38,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^23.0.1",
+    "openapi-typescript": "^6.7.4",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
     "vitest": "^1.1.0"

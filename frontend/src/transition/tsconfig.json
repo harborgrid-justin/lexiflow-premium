@@ -21,12 +21,12 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/app/*": ["./app/*"],
-      "@/platform/*": ["./platform/*"],
-      "@/services/*": ["./services/*"],
-      "@/features/*": ["./features/*"],
-      "@/ui/*": ["./ui/*"],
-      "@/lib/*": ["./lib/*"],
+      "@/app/*": ["./src/app/*"],
+      "@/platform/*": ["./src/platform/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/ui/*": ["./src/ui/*"],
+      "@/lib/*": ["./src/lib/*"],
       "@/tests/*": ["./tests/*"],
 
       /* Convenience aliases for common imports */

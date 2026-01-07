@@ -10,13 +10,13 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./"),
-      "@/app": resolve(__dirname, "./app"),
-      "@/platform": resolve(__dirname, "./platform"),
-      "@/services": resolve(__dirname, "./services"),
-      "@/features": resolve(__dirname, "./features"),
-      "@/ui": resolve(__dirname, "./ui"),
-      "@/lib": resolve(__dirname, "./lib"),
+      "@": resolve(__dirname, "./src"),
+      "@/app": resolve(__dirname, "./src/app"),
+      "@/platform": resolve(__dirname, "./src/platform"),
+      "@/services": resolve(__dirname, "./src/services"),
+      "@/features": resolve(__dirname, "./src/features"),
+      "@/ui": resolve(__dirname, "./src/ui"),
+      "@/lib": resolve(__dirname, "./src/lib"),
       "@/tests": resolve(__dirname, "./tests"),
     },
   },
@@ -39,15 +39,15 @@ export default defineConfig({
         manualChunks: {
           "react-vendor": ["react", "react-dom"],
           platform: [
-            "./platform/config/ConfigProvider",
-            "./platform/theme/ThemeProvider",
-            "./platform/i18n/I18nProvider",
+            "./src/platform/config/ConfigProvider",
+            "./src/platform/theme/ThemeProvider",
+            "./src/platform/i18n/I18nProvider",
           ],
           services: [
-            "./services/identity/AuthProvider",
-            "./services/session/SessionProvider",
-            "./services/state/StateProvider",
-            "./services/data/DataFetchingProvider",
+            "./src/services/identity/AuthProvider",
+            "./src/services/session/SessionProvider",
+            "./src/services/state/StateProvider",
+            "./src/services/data/DataFetchingProvider",
           ],
         },
       },

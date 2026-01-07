@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it, vi } from "vitest";
-import { queryClient } from "../../../services/data/client/queryClient";
+import { queryClient } from "../../../src/services/data/client/queryClient";
 
 describe("Data Fetching Integration", () => {
   beforeEach(() => {

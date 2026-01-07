@@ -4,7 +4,7 @@
 
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { AuthProvider, useAuth } from '../../../services/identity/AuthProvider';
+import { AuthProvider, useAuth } from '../../../src/services/identity/AuthProvider';
 
 function TestComponent() {
   const { user, isAuthenticated, login } = useAuth();
@@ -15,7 +15,7 @@ function TestComponent() {
         {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
       </div>
       {user && <div data-testid="user-email">{user.email}</div>}
-      <button onClick={() => login('test@example.com', 'password')}>
+      <button onClick={() => login({ email: 'test@example.com', password: 'password' })}>
         Login
       </button>
     </div>

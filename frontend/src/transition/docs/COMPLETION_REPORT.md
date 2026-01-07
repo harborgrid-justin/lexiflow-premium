@@ -6,16 +6,17 @@ All missing files have been successfully created, achieving **100% architecture 
 
 ## Files Added (16 new files)
 
-### 1. Barrel Export Index Files (6 files)
+### 1. Barrel Export Index Files (7 files)
 
 - ✅ [ui/components/index.ts](ui/components/index.ts) - Components barrel export
 - ✅ [ui/primitives/index.ts](ui/primitives/index.ts) - Primitives barrel export
 - ✅ [ui/patterns/index.ts](ui/patterns/index.ts) - Patterns barrel export
-- ✅ [ui/icons/index.ts](ui/icons/index.ts) - Icons barrel export
+- ✅ [ui/icons/index.ts](ui/icons/index.ts) - Icons barrel export (re-exports from `icons.tsx`)
 - ✅ [lib/index.ts](lib/index.ts) - Library utilities barrel export
 - ✅ [platform/index.ts](platform/index.ts) - Platform services barrel export
+- ✅ [app/routing/paths.ts](app/routing/paths.ts) - Centralized route constants
 
-**Benefits**: Enables clean imports like `import { Button, Card } from '@/ui/components'`
+**Benefits**: Enables clean imports like `import { Button, Card } from '@/ui/components'` and `import { PATHS } from '@/app/routing/paths'`
 
 ### 2. TypeScript Configuration (1 file)
 

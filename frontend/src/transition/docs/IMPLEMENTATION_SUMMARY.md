@@ -6,9 +6,9 @@ Successfully created **127 files** across **89 directories** implementing a prod
 
 ## 📊 Architecture Statistics
 
-- **Total Files**: 127
+- **Total Files**: 128 (added paths.ts)
 - **Total Directories**: 89
-- **Lines of Code**: ~5,000+
+- **Lines of Code**: ~5,100+
 - **Architecture Pattern**: Service-Oriented Architecture (SOA)
 - **Runtime Support**: Node.js SSR + Edge Runtime
 
@@ -16,11 +16,11 @@ Successfully created **127 files** across **89 directories** implementing a prod
 
 ```
 transition/                          # Root directory
-├── app/ (26 files)                 # Composition root & framework wiring
+├── app/ (27 files)                 # Composition root & framework wiring
 │   ├── entry/                      # SSR entry points (Node/Edge/Client)
 │   ├── providers/                  # Provider composition (single source of truth)
 │   ├── shells/                     # Fallback UI shells (Global/App/Feature)
-│   ├── routing/                    # Router + guards (RequireAuth, RequireRole)
+│   ├── routing/                    # Router + guards (RequireAuth, RequireRole) + paths.ts
 │   └── layout/                     # Layout provider + chrome components
 │
 ├── platform/ (21 files)            # Cross-cutting platform services

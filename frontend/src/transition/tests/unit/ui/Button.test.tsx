@@ -2,9 +2,9 @@
  * Example unit test for Button component
  */
 
+import { Button } from '@/ui/components/Button';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { Button } from '../../../ui/components/Button';
 
 describe('Button', () => {
   it('renders with text', () => {

@@ -24,6 +24,10 @@ import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
 import { Consent } from './entities/consent.entity';
 import { DataRetentionPolicy, DataRetentionRecord } from './entities/dataRetention.entity';
+import { ComplianceControl } from './entities/compliance-control.entity';
+import { DataRetentionRule } from './entities/data-retention-rule.entity';
+import { GDPRRequest } from './entities/gdpr-request.entity';
+import { SecurityIncident } from './entities/security-incident.entity';
 
 // Main controller & service
 import { ComplianceController } from './compliance.controller';
@@ -58,8 +62,11 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
 // Enterprise Compliance Services
 import { GdprComplianceService } from './services/gdprCompliance.service';
 import { AuditTrailService } from './services/auditTrail.service';
-import { DataRetentionService } from './services/dataRetention.service';
 import { DataClassificationService } from './services/dataClassification.service';
+import { ComplianceFrameworkService } from './compliance-framework.service';
+import { DataRetentionService as EnhancedDataRetentionService } from './data-retention.service';
+import { HIPAAComplianceService } from './hipaa-compliance.service';
+import { SOC2ControlsService } from './soc2-controls.service';
 
 // User Entity (needed for GDPR service)
 import { User } from '@users/entities/user.entity';
@@ -73,6 +80,10 @@ import { User } from '@users/entities/user.entity';
       Consent,
       DataRetentionPolicy,
       DataRetentionRecord,
+      ComplianceControl,
+      DataRetentionRule,
+      GDPRRequest,
+      SecurityIncident,
       User,
     ]),
   ],
@@ -100,8 +111,11 @@ import { User } from '@users/entities/user.entity';
     // Enterprise Compliance Services
     GdprComplianceService,
     AuditTrailService,
-    DataRetentionService,
     DataClassificationService,
+    ComplianceFrameworkService,
+    EnhancedDataRetentionService,
+    HIPAAComplianceService,
+    SOC2ControlsService,
 
     // Guards and Interceptors
     AuditLogInterceptor,
@@ -122,8 +136,11 @@ import { User } from '@users/entities/user.entity';
     // Export enterprise compliance services
     GdprComplianceService,
     AuditTrailService,
-    DataRetentionService,
     DataClassificationService,
+    ComplianceFrameworkService,
+    EnhancedDataRetentionService,
+    HIPAAComplianceService,
+    SOC2ControlsService,
 
     // Export guards and interceptors
     AuditLogInterceptor,

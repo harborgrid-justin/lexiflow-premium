@@ -19,9 +19,14 @@ import { SessionManagementService } from './services/session.management.service'
 import { BruteForceProtectionService } from './services/brute.force.protection.service';
 import { PasswordPolicyService } from './services/password.policy.service';
 import { TokenSecurityService } from './services/token.security.service';
+import { DeviceFingerprintService } from './services/device.fingerprint.service';
+import { EnterpriseSessionService } from './services/enterprise.session.service';
 import { Session } from './entities/session.entity';
 import { LoginAttempt } from './entities/login-attempt.entity';
 import { RefreshToken } from './entities/refresh-token.entity';
+// Import enterprise auth modules
+import { SamlModule } from './sso/saml.module';
+import { MfaModule } from './mfa/mfa.module';
 
 @Module({
   imports: [
@@ -45,6 +50,9 @@ import { RefreshToken } from './entities/refresh-token.entity';
     }),
     UsersModule,
     ScheduleModule.forRoot(), // Enable scheduled tasks
+    // Enterprise authentication modules
+    SamlModule,
+    MfaModule,
   ],
   controllers: [AuthController, TokenBlacklistAdminController],
   providers: [
@@ -60,6 +68,8 @@ import { RefreshToken } from './entities/refresh-token.entity';
     BruteForceProtectionService,
     PasswordPolicyService,
     TokenSecurityService,
+    DeviceFingerprintService,
+    EnterpriseSessionService,
   ],
   exports: [
     JwtModule,
@@ -72,6 +82,10 @@ import { RefreshToken } from './entities/refresh-token.entity';
     BruteForceProtectionService,
     PasswordPolicyService,
     TokenSecurityService,
+    DeviceFingerprintService,
+    EnterpriseSessionService,
+    SamlModule,
+    MfaModule,
   ],
 })
 export class AuthModule {}

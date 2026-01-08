@@ -5,8 +5,7 @@
 
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { cn } from '@/utils/cn';
-import { Activity, AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
-import React from 'react';
+import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
 import { LTVTab } from './LTVTab';
 import { ProfitabilityTab } from './ProfitabilityTab';
 import { RiskTab } from './RiskTab';

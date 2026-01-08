@@ -65,10 +65,10 @@ interface RequestInfo {
 /**
  * Queued request
  */
-interface QueuedRequest {
+interface QueuedRequest<T = unknown> {
   endpoint: string;
-  execute: () => Promise<unknown>;
-  resolve: (value: unknown) => void;
+  execute: () => Promise<T>;
+  resolve: (value: T | PromiseLike<T>) => void;
   reject: (error: unknown) => void;
   addedAt: number;
 }

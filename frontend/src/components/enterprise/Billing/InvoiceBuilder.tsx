@@ -684,7 +684,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                 {rateCards.map((rc) => (
                   <button
                     key={rc.id}
-                    onClick={() => applyRateCard(rc.id, lineItems[0]?.id)}
+                    onClick={() => applyRateCard(rc.id, lineItems[0]?.id || '')}
                     className="w-full text-left p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-600 dark:hover:bg-blue-900/20"
                   >
                     <div className="font-medium text-gray-900 dark:text-gray-100">{rc.name}</div>

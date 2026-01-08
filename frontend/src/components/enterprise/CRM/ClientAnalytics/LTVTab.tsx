@@ -3,7 +3,6 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import React from 'react';
 import { LTVCard } from './LTVCard';
 import type { ClientLifetimeValue } from './types';
 

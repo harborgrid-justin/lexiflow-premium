@@ -355,7 +355,11 @@ export function parseApiError(error: unknown): ApiErrorBase {
     message?: string;
     response?: unknown;
     status?: number;
+    statusCode?: number;
     code?: string;
+    error?: string;
+    details?: Record<string, unknown>;
+    data?: Record<string, unknown>;
   };
   // Network errors
   if (err.name === "TypeError" && err.message?.includes("fetch")) {

@@ -10,22 +10,12 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 
-// ============================================================================
-// INTERNAL DEPENDENCIES
-// ============================================================================
-// Hooks & Context
-import { useTheme } from '@/providers';
+import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from '@/components/ui/shadcn/button';
+import { cn } from '@/lib/utils';
 
-// Utils & Constants
-import { cn } from '@/utils/cn';
-import { baseStyles, getVariants, sizes } from './Button.styles';
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon';
@@ -34,10 +24,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: React.ReactNode;
 };
 
-/**
- * Button - React 18 optimized with React.memo
- */
-export const Button = React.memo<ButtonProps>(({
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   variant = 'primary',
   size = 'md',
   icon: Icon,
@@ -46,28 +33,45 @@ export const Button = React.memo<ButtonProps>(({
   className = '',
   disabled,
   ...props
-}) => {
-  const { theme } = useTheme();
-  const variants = getVariants(theme);
+}, ref) => {
+  // Map legacy variants to shadcn variants
+  const getVariant = (v: string): ShadcnButtonProps['variant'] => {
+    switch (v) {
+      case 'primary': return 'default';
+      case 'danger': return 'destructive';
+      case 'secondary': return 'secondary';
+      case 'outline': return 'outline';
+      case 'ghost': return 'ghost';
+      case 'link': return 'link';
+      default: return 'default';
+    }
+  };
 
-  const ariaLabel = props['aria-label'] || (typeof children === 'string' ? children : undefined);
+  // Map legacy sizes to shadcn sizes
+  const getSize = (s: string): ShadcnButtonProps['size'] => {
+    switch (s) {
+      case 'xs': return 'sm'; // Map xs to sm as shadcn doesn't have xs
+      case 'sm': return 'sm';
+      case 'md': return 'default';
+      case 'lg': return 'lg';
+      case 'icon': return 'icon';
+      default: return 'default';
+    }
+  };
 
   return (
-    <button
-      className={cn(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        className
-      )}
+    <ShadcnButton
+      ref={ref}
+      variant={getVariant(variant)}
+      size={getSize(size)}
+      className={className}
       disabled={disabled || isLoading}
-      aria-label={ariaLabel}
       {...props}
     >
-      {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-      {Icon && !isLoading && <Icon className={cn("h-4 w-4", children ? "mr-0" : "")} />}
+      {isLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+      {Icon && !isLoading && <Icon className={cn("h-4 w-4", children ? "mr-2" : "")} />}
       {children}
-    </button>
+    </ShadcnButton>
   );
 });
 

@@ -1,46 +1,32 @@
 'use client';
 
 /**
- * Skeleton Component - Loading placeholder
+ * @deprecated Use @/components/ui/shadcn/skeleton instead
+ * Adapter component for backward compatibility
  */
 
-interface SkeletonProps {
-  className?: string;
+import { Skeleton as ShadcnSkeleton } from '@/components/ui/shadcn/skeleton';
+import { cn } from '@/lib/utils';
+import React from 'react';
+
+interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   count?: number;
 }
 
-export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
+export function Skeleton({ className, count = 1, ...props }: SkeletonProps) {
+  if (count === 1) {
+    return <ShadcnSkeleton className={className} {...props} />;
+  }
+
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <div
+        <ShadcnSkeleton
           key={i}
-          className={`
-            bg-slate-200 dark:bg-slate-800
-            rounded-lg
-            animate-pulse
-            ${className}
-          `}
+          className={cn(i > 0 && "mt-2", className)}
+          {...props}
         />
       ))}
     </>
-  );
-}
-
-interface SkeletonLineProps {
-  className?: string;
-  lines?: number;
-}
-
-export function SkeletonLine({ className = 'h-4', lines = 3 }: SkeletonLineProps) {
-  return (
-    <div className="space-y-2">
-      {Array.from({ length: lines }).map((_, i) => (
-        <Skeleton
-          key={i}
-          className={`w-full ${i === lines - 1 ? 'w-4/5' : ''} ${className}`}
-        />
-      ))}
-    </div>
   );
 }

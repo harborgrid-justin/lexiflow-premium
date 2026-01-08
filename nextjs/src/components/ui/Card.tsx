@@ -1,10 +1,19 @@
 'use client';
 
 /**
- * Card Component - Reusable card wrapper
- * Used for organizing content in a contained, bordered box
+ * @deprecated Use @/components/ui/shadcn/card instead
+ * Adapter component for backward compatibility
  */
 
+import { 
+  Card as ShadcnCard,
+  CardHeader as ShadcnCardHeader,
+  CardContent as ShadcnCardContent,
+  CardFooter as ShadcnCardFooter,
+  CardTitle,
+  CardDescription
+} from '@/components/ui/shadcn/card';
+import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 
 interface CardProps {
@@ -21,56 +30,46 @@ export function Card({
   hoverable = false,
 }: CardProps) {
   return (
-    <div
+    <ShadcnCard
       onClick={onClick}
-      className={`
-        rounded-lg bg-white dark:bg-slate-900
-        border border-slate-200 dark:border-slate-800
-        shadow-sm
-        ${hoverable ? 'hover:shadow-md dark:hover:shadow-lg transition-shadow cursor-pointer' : ''}
-        ${className}
-      `}
+      className={cn(
+        hoverable && "hover:shadow-md transition-shadow cursor-pointer",
+        className
+      )}
     >
       {children}
-    </div>
+    </ShadcnCard>
   );
 }
 
-interface CardHeaderProps {
+interface WrapperProps {
   children: ReactNode;
   className?: string;
 }
 
-export function CardHeader({ children, className = '' }: CardHeaderProps) {
+export function CardHeader({ children, className = '' }: WrapperProps) {
   return (
-    <div className={`px-6 py-4 border-b border-slate-200 dark:border-slate-800 ${className}`}>
+    <ShadcnCardHeader className={className}>
       {children}
-    </div>
+    </ShadcnCardHeader>
   );
 }
 
-interface CardBodyProps {
-  children: ReactNode;
-  className?: string;
-}
-
-export function CardBody({ children, className = '' }: CardBodyProps) {
+export const CardBody = ({ children, className = '' }: WrapperProps) => {
   return (
-    <div className={`px-6 py-4 ${className}`}>
+    <ShadcnCardContent className={cn("pt-0", className)}>
       {children}
-    </div>
+    </ShadcnCardContent>
   );
 }
 
-interface CardFooterProps {
-  children: ReactNode;
-  className?: string;
-}
-
-export function CardFooter({ children, className = '' }: CardFooterProps) {
+export function CardFooter({ children, className = '' }: WrapperProps) {
   return (
-    <div className={`px-6 py-4 border-t border-slate-200 dark:border-slate-800 ${className}`}>
+    <ShadcnCardFooter className={className}>
       {children}
-    </div>
+    </ShadcnCardFooter>
   );
 }
+
+// Re-export new components for progressive adoption
+export { CardTitle, CardDescription };

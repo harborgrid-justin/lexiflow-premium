@@ -380,6 +380,7 @@ export interface RealizationStat {
   name: string;
   value: number;
   color: string;
+  [key: string]: string | number | undefined; // Index signature for recharts compatibility
 }
 
 export interface ServiceJob extends BaseEntity {

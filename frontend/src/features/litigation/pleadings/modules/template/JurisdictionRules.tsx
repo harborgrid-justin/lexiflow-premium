@@ -21,7 +21,7 @@ export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdicti
   );
 
   // Format rules from backend or provide empty state
-  const rules = (rulesData as any[]).length > 0 ? (rulesData as any[]).map((rule: any, idx: number) => ({
+  const rules = (rulesData as Array<{ name?: string; description?: string; notes?: string }>).length > 0 ? (rulesData as Array<{ name?: string; description?: string; notes?: string }>).map((rule: { name?: string; description?: string; notes?: string }, idx: number) => ({
     id: idx + 1,
     rule: rule.name || rule.description || 'Rule',
     status: 'Pass' as const,
@@ -51,7 +51,7 @@ export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdicti
         {rules.length === 0 ? (
           <p className={cn("text-xs", theme.text.tertiary)}>No rules available for {jurisdiction || 'this jurisdiction'}.</p>
         ) : (
-          rules.map((rule: any) => (
+          rules.map((rule: { id: number; rule: string; status: 'Pass'; msg?: string }) => (
             <div key={rule.id} className={cn("flex items-start gap-2 p-2 rounded text-xs", theme.surface.highlight)}>
               {rule.status === 'Pass' ? (
                 <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5" />

@@ -5,7 +5,6 @@
 
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
-import React from 'react';
 import type { ClientRiskAssessment } from './types';
 import {
   formatCurrency,
@@ -17,7 +16,7 @@ import {
 
 interface RiskCardProps {
   client: ClientRiskAssessment;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function RiskCard({ client, theme }: RiskCardProps) {

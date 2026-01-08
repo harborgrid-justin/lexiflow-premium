@@ -137,7 +137,7 @@ export const EventBusManager: React.FC = () => {
                       <details className={cn("text-xs", theme.text.tertiary)}>
                         <summary className="cursor-pointer hover:underline">View Payload</summary>
                         <pre className={cn("mt-2 p-2 rounded", theme.surface.highlight)}>
-                          {JSON.stringify(event.payload, null, 2)}
+                          {JSON.stringify((event as { payload?: unknown }).payload, null, 2)}
                         </pre>
                       </details>
                     </div>

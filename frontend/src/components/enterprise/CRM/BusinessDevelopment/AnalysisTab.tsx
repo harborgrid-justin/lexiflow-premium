@@ -22,15 +22,34 @@ import { WinLossCard } from './WinLossCard';
 import type { WinLossAnalysis } from './types';
 import { formatCurrencyMillions } from './utils';
 
+interface ConversionTrendData {
+  month: string;
+  leads: number;
+  won: number;
+  lost: number;
+}
+
+interface LeadsBySourceData {
+  source: string;
+  count: number;
+  color: string;
+}
+
+interface ChartTheme {
+  grid: string;
+  text: string;
+  tooltipStyle: Record<string, unknown>;
+}
+
 interface AnalysisTabProps {
   winLossData: WinLossAnalysis[];
-  conversionTrend: any[];
-  leadsBySource: any[];
+  conversionTrend: ConversionTrendData[];
+  leadsBySource: LeadsBySourceData[];
   pipelineValue: number;
   winRate: string;
   avgSalesCycle: number;
-  theme: any;
-  chartTheme: any;
+  theme: Record<string, unknown>;
+  chartTheme: ChartTheme;
   chartColors: string[];
 }
 
@@ -78,7 +97,7 @@ export function AnalysisTab({
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: any) => {
+                  label={(props: { payload?: LeadsBySourceData; source?: string; count?: number }) => {
                     const { source, count } = props.payload || props;
                     return source && count !== undefined ? `${source}: ${count}` : '';
                   }}

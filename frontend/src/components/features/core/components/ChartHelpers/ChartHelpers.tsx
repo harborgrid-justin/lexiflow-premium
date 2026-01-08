@@ -23,7 +23,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // HOOKS
 // ============================================================================
 export const useChartTheme = () => {
-  const { theme } = useTheme();
+  useTheme();
 
   return useMemo(() => ({
     grid: DEFAULT_TOKENS.colors.border,

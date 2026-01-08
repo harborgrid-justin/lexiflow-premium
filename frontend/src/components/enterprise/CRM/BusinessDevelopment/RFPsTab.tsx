@@ -10,7 +10,7 @@ import type { RFP } from './types';
 
 interface RFPsTabProps {
   rfps: RFP[];
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function RFPsTab({ rfps, theme }: RFPsTabProps) {

@@ -50,7 +50,7 @@ class Logger {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(entry),
       });
-    } catch (error) {
+    } catch {
       // Silently fail for logging errors
     }
   }

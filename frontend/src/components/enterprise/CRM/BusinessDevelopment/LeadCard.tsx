@@ -11,7 +11,7 @@ import { formatCurrency, getStatusColor } from './utils';
 interface LeadCardProps {
   lead: Lead;
   onClick: (id: string) => void;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function LeadCard({ lead, onClick, theme }: LeadCardProps) {

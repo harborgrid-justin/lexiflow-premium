@@ -3,7 +3,6 @@
  * Enterprise-grade repository for legal analysis management with backend API integration
  */
 
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
 import { STORES, db } from "@/services/data/db";
@@ -25,11 +24,11 @@ export interface PredictionData {
 }
 
 export class AnalysisRepository extends Repository<BriefAnalysisSession> {
-  private readonly useBackend: boolean;
+  // private readonly useBackend: boolean; // Unused currently
 
   constructor() {
     super(STORES.ANALYSIS);
-    this.useBackend = isBackendApiEnabled();
+    // this.useBackend = isBackendApiEnabled(); // Unused currently
   }
 
   private validateId(id: string, methodName: string): void {

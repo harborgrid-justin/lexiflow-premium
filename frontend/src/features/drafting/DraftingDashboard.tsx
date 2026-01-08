@@ -35,8 +35,8 @@ const DraftingDashboard: React.FC = () => {
       setLoading(true);
       const [draftsData, templatesData, approvalsData, statsData] = await Promise.all([
         draftingApi.getRecentDrafts(),
-        draftingApi.getTemplates(),
-        draftingApi.getPendingApprovals(),
+        draftingApi.templates.getAll(),
+        draftingApi.dashboard.getPendingApprovals(),
         draftingApi.getStats()
       ]);
 

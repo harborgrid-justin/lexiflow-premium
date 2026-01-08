@@ -7,7 +7,7 @@
  * @module services/data/api/gateways/authGateway
  */
 
-import { authDelete, authPost } from "../../client/authTransport";
+import { authPost } from "../../client/authTransport";
 import { buildApiUrl } from "../../client/config";
 import { httpFetch } from "../../client/httpClient";
 import { tokenStorage } from "../../client/tokenStorage";

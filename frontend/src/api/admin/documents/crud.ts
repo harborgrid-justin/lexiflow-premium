@@ -67,11 +67,18 @@ export async function getAll(filters?: {
 export async function getById(id: string): Promise<LegalDocument> {
   validateId(id, "getById");
   try {
-    const response = await apiClient.get<any>(`/documents/${id}`);
+    const response = await apiClient.get<
+      { success?: boolean; data?: LegalDocument } | LegalDocument
+    >(`/documents/${id}`);
 
     // Unpack response if wrapped
-    if (response && response.success === true && response.data) {
-      return response.data as LegalDocument;
+    if (
+      response &&
+      "success" in response &&
+      response.success === true &&
+      response.data
+    ) {
+      return response.data;
     }
 
     return response as LegalDocument;

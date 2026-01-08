@@ -180,7 +180,7 @@ export const dashboardService = {
       // Handle potential paginated response or direct array
       const logs = Array.isArray(response)
         ? response
-        : (response as any).items || [];
+        : (response as { items?: unknown[] }).items || [];
 
       if (!Array.isArray(logs)) {
         console.warn(

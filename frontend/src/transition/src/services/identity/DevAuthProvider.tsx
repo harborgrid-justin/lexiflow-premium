@@ -29,7 +29,7 @@ export function DevAuthProvider({ children }: DevAuthProviderProps) {
     password: 'password'
   };
 
-  const mapUserIdentity = (identity: any) => {
+  const mapUserIdentity = (identity: UserIdentity) => {
     // Transform API user to Domain user
     // Note: Adjust mapping based on actual API response structure
     const domainUser: User = {
@@ -61,7 +61,7 @@ export function DevAuthProvider({ children }: DevAuthProviderProps) {
     }
   };
 
-  const loadIdentity = async () => {
+  const loadIdentity = useCallback(async () => {
     try {
       const identity = await userGateway.getCurrentIdentity();
       if (identity) {
@@ -70,17 +70,18 @@ export function DevAuthProvider({ children }: DevAuthProviderProps) {
         // If getting identity fails/returns null, try logging in
         await performDevLogin();
       }
-    } catch (error) {
+    } catch {
       console.warn('[DevAuth] Failed to load identity, attempting auto-login...');
       await performDevLogin();
     } finally {
       setIsLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     loadIdentity();
-  }, []);
+  }, [loadIdentity]);
 
   const value: AuthContextValue = {
     user,

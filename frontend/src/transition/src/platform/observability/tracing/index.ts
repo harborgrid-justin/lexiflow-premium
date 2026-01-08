@@ -29,7 +29,7 @@ class Tracer {
     return span.id;
   }
 
-  endTrace(spanId: string, attributes?: Record<string, any>) {
+  endTrace(spanId: string, attributes?: Record<string, unknown>) {
     const span = this.spans.get(spanId);
     if (!span) return;
 

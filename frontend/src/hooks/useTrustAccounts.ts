@@ -13,6 +13,7 @@
  */
 
 export * from "./useTrustAccounts";
+import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
 import type {
   CreateTrustAccountDto,
   DepositDto,
@@ -94,7 +95,7 @@ export function useTrustAccounts(
     error: queryError,
     refetch: originalRefetch,
   } = useQuery<TrustAccount[]>(
-    trustKeys.list(filters) as any,
+    trustKeys.list(filters),
     () => trustAccountsApi.getAll(filters),
     {
       staleTime: 30000, // 30 seconds - balance data should be relatively fresh

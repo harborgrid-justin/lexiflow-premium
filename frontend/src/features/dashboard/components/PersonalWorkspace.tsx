@@ -15,7 +15,7 @@ import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 // Internal
-import { useQuery, queryClient } from '@/hooks';
+import { queryClient, useQuery } from '@/hooks';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -74,7 +74,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
 
     const handleMarkAsRead = async (id: string) => {
         await DataService.notifications.update(id, { read: true });
-        queryClient.invalidateQueries?.(['notifications']);
+        queryClient.invalidate(['notifications']);
     };
 
     const handleMarkAllAsRead = async () => {
@@ -211,7 +211,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                     ...n,
                                     timestamp: new Date(n.timestamp).getTime(),
                                     priority: "low" as const,
-                                    type: n.type
+                                    type: n.type === 'success' ? 'info' : n.type
                                 }))}
                                 unreadCount={
                                     notifications.filter((n) => !n.read).length

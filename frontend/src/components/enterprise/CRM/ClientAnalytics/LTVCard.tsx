@@ -8,7 +8,7 @@ import type { ClientLifetimeValue } from './types';
 
 interface LTVCardProps {
   client: ClientLifetimeValue;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function LTVCard({ client, theme }: LTVCardProps) {

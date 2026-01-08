@@ -18,7 +18,7 @@ export const StandingOrders: React.FC = () => {
     );
 
     // Fetch standing orders from backend
-    const { data: standingOrders = [] } = useQuery<any[]>(
+    const { data: standingOrders = [] } = useQuery<Array<{ id: string; judgeId: string; title?: string }>>(
         ['knowledge', 'standing-orders'],
         async () => {
             try {
@@ -45,8 +45,8 @@ export const StandingOrders: React.FC = () => {
 
                         <div className="flex-1 space-y-3">
                             <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.default)}>Standing Orders</h5>
-                            {standingOrders.filter((order: any) => order.judgeId === judge.id).length > 0 ? (
-                                standingOrders.filter((order: any) => order.judgeId === judge.id).map((order: any) => (
+                            {standingOrders.filter((order: { id: string; judgeId: string; title?: string }) => order.judgeId === judge.id).length > 0 ? (
+                                standingOrders.filter((order: { id: string; judgeId: string; title?: string }) => order.judgeId === judge.id).map((order: { id: string; judgeId: string; title?: string }) => (
                                     <div key={order.id} className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                         <div className="flex items-center gap-2">
                                             <FileIcon />

@@ -6,11 +6,17 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { SatisfactionCard } from './SatisfactionCard';
 import type { ClientSatisfaction } from './types';
 
+interface ChartTheme {
+  grid: string;
+  text: string;
+  tooltipStyle: Record<string, unknown>;
+}
+
 interface SatisfactionTabProps {
   satisfactionData: ClientSatisfaction[];
-  theme: any;
+  theme: Record<string, unknown>;
   chartColors: string[];
-  chartTheme: any;
+  chartTheme: ChartTheme;
 }
 
 export function SatisfactionTab({ satisfactionData, theme, chartColors, chartTheme }: SatisfactionTabProps) {

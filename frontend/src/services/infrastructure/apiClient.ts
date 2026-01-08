@@ -419,15 +419,18 @@ class ApiClient {
       const jsonData = await response.json();
 
       // Convert snake_case keys to camelCase for frontend consumption
-      const camelData = keysToCamel<any>(jsonData);
+      const camelData = keysToCamel<unknown>(jsonData);
 
       // Auto-unwrap NestJS standard response envelope ({ success: true, data: T })
       if (
         camelData &&
-        camelData.success === true &&
-        camelData.data !== undefined
+        typeof camelData === "object" &&
+        "success" in camelData &&
+        (camelData as { success: boolean }).success === true &&
+        "data" in camelData &&
+        (camelData as { data: unknown }).data !== undefined
       ) {
-        return camelData.data as T;
+        return (camelData as { data: T }).data;
       }
 
       return camelData as T;

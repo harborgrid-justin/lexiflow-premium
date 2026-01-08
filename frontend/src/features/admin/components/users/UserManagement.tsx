@@ -61,7 +61,7 @@ export const UserManagement: React.FC = () => {
     }
     try {
       // Use create for backend API
-      await (DataService.users as any).create(formData);
+      await (DataService.users as { create: (data: unknown) => Promise<unknown> }).create(formData);
       await refetch();
       createModal.close();
       setFormData({});
@@ -75,7 +75,7 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Update user via backend API
-      await (DataService.users as any).update(userSelection.selected.id, formData);
+      await (DataService.users as { update: (id: string, data: unknown) => Promise<unknown> }).update(userSelection.selected.id, formData);
       editModal.close();
       userSelection.deselect();
       setFormData({});
@@ -90,7 +90,7 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Delete user via backend API
-      await (DataService.users as any).delete(userSelection.selected.id);
+      await (DataService.users as { delete: (id: string) => Promise<unknown> }).delete(userSelection.selected.id);
       deleteModal.close();
       userSelection.deselect();
       notify.success('User deleted successfully');

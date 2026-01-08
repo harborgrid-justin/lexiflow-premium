@@ -44,7 +44,7 @@ export const CaseListExperts: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: Caching
-  const { data: expertsData = [], isLoading } = useQuery<any>(
+  const { data: expertsData = [], isLoading } = useQuery<{ data?: unknown[] } | unknown[]>(
     ['advisors', 'experts'],
     async () => {
       return (await DataService.warRoom.getExperts());
@@ -59,7 +59,7 @@ export const CaseListExperts: React.FC = () => {
     ? expertsData
     : (Array.isArray(expertsData?.data) ? expertsData.data : []);
 
-  const expertsList: Expert[] = rawList.map((item: any) => ({
+  const expertsList: Expert[] = rawList.map((item: { id?: string; name?: string; specialty?: string; expertType?: string; rate?: number; hourlyRate?: number; readiness?: number; reports?: number }) => ({
     id: item.id || 'unknown',
     name: item.name || 'Unknown Expert',
     specialty: item.specialty || item.expertType || 'General',

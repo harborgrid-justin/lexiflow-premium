@@ -34,7 +34,7 @@ export function validateClauseCompatibility(
     id: string;
     category?: string;
     title?: string;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
     tags?: string[];
   }>
 ): ClauseValidationResult {

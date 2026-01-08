@@ -125,11 +125,15 @@ export class DocketApiService {
       const params: Record<string, unknown> =
         typeof filters === "string" ? { caseId: filters } : { ...filters };
 
-      const response = await apiClient.get<any>("/docket", params);
+      const response = await apiClient.get<
+        | { success?: boolean; data?: PaginatedResponse<DocketEntry> }
+        | PaginatedResponse<DocketEntry>
+      >("/docket", params);
 
       // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}}
       // Extract the inner pagination data
       if (
+        "success" in response &&
         response.success &&
         response.data &&
         typeof response.data === "object"
@@ -156,11 +160,18 @@ export class DocketApiService {
     this.validateId(id, "getById");
 
     try {
-      const response = await apiClient.get<any>(`/docket/${id}`);
+      const response = await apiClient.get<
+        { success?: boolean; data?: DocketEntry } | DocketEntry
+      >(`/docket/${id}`);
 
       // Unpack response if wrapped (handling Backend API standardized format)
-      if (response && response.success === true && response.data) {
-        return response.data as DocketEntry;
+      if (
+        response &&
+        "success" in response &&
+        response.success === true &&
+        response.data
+      ) {
+        return response.data;
       }
 
       return response as DocketEntry;

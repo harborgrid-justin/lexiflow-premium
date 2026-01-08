@@ -114,7 +114,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs): Promise
     templates,
     recentRecipients,
     draftId,
-    draft,
+    draft: draft || undefined,
     templateId
   };
 }
@@ -320,7 +320,7 @@ export default function ComposeCorrespondenceRoute() {
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="">Select a template (optional)</option>
-                {templates.map((template: any) => (
+                {templates.map((template: DraftingTemplate) => (
                   <option key={template.id} value={template.id}>
                     {template.name} - {template.category}
                   </option>
@@ -437,7 +437,7 @@ export default function ComposeCorrespondenceRoute() {
               Quick Templates
             </h3>
             <div className="space-y-2">
-              {templates.slice(0, 4).map((template: any) => (
+              {templates.slice(0, 4).map((template: DraftingTemplate) => (
                 <button
                   key={template.id}
                   type="button"

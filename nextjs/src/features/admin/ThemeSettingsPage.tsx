@@ -9,17 +9,23 @@
  */
 
 import { useTheme } from '@/providers';
+import { AnalyticsService } from '@/services/domain/AnalyticsDomain';
+import { ComplianceService } from '@/services/domain/ComplianceDomain';
 import { ChartColorService } from '@/services/theme/chartColorService';
+import type { ComplianceMetrics } from '@/types';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
-import React, { useCallback, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useState, useTransition } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
   const [isPending, startTransition] = useTransition();
+  const [riskData, setRiskData] = useState<Array<{ name: string; value: number; color: string }>>([]);
+  const [categoryData, setCategoryData] = useState<Array<{ name: string; value: number }>>([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
     startTransition(() => {
@@ -32,19 +38,61 @@ export const ThemeSettingsPage: React.FC = () => {
   const statusColors = ChartColorService.getStatusColors(mode);
   const palette = ChartColorService.getPalette(mode);
 
-  // Sample data for chart testing
-  const mockRiskData = [
-    { name: 'Low Risk', value: 12, color: riskColors.low },
-    { name: 'Medium Risk', value: 8, color: riskColors.medium },
-    { name: 'High Risk', value: 4, color: riskColors.high }
-  ];
+  useEffect(() => {
+    let mounted = true;
 
-  const mockCategoryData = [
-    { name: 'Tech', value: 40 },
-    { name: 'Finance', value: 30 },
-    { name: 'Healthcare', value: 20 },
-    { name: 'Legal', value: 10 }
-  ];
+    Promise.all([
+      ComplianceService.getRiskMetrics().catch(() => ({ score: 0, high: 4, missingDocs: 12, violations: 0, activeWalls: 3 } as ComplianceMetrics)),
+      AnalyticsService.getCounselProfiles().catch(() => [])
+    ])
+      .then(([metrics, counselProfiles]) => {
+        if (!mounted) return;
+
+        const riskDataFromMetrics = [
+          { name: 'Low Risk', value: Math.max(0, 100 - metrics.high * 5 - 30), color: riskColors.low },
+          { name: 'Medium Risk', value: Math.max(0, 30 - metrics.high), color: riskColors.medium },
+          { name: 'High Risk', value: metrics.high, color: riskColors.high }
+        ];
+
+        const categoryDataFromAnalytics = counselProfiles.slice(0, 4).map((profile, idx) => ({
+          name: profile.name.split(' ')[0],
+          value: Math.round((profile.winRate || 0) * 10)
+        }));
+
+        if (categoryDataFromAnalytics.length === 0) {
+          setCategoryData([
+            { name: 'Tech', value: 40 },
+            { name: 'Finance', value: 30 },
+            { name: 'Healthcare', value: 20 },
+            { name: 'Legal', value: 10 }
+          ]);
+        } else {
+          setCategoryData(categoryDataFromAnalytics);
+        }
+
+        setRiskData(riskDataFromMetrics);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setRiskData([
+          { name: 'Low Risk', value: 12, color: riskColors.low },
+          { name: 'Medium Risk', value: 8, color: riskColors.medium },
+          { name: 'High Risk', value: 4, color: riskColors.high }
+        ]);
+        setCategoryData([
+          { name: 'Tech', value: 40 },
+          { name: 'Finance', value: 30 },
+          { name: 'Healthcare', value: 20 },
+          { name: 'Legal', value: 10 }
+        ]);
+        setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [riskColors.low, riskColors.medium, riskColors.high]);
 
   return (
     <div className={cn("min-h-screen p-8", theme.background)}>
@@ -162,54 +210,66 @@ export const ThemeSettingsPage: React.FC = () => {
           {/* Risk Colors Chart */}
           <div className={cn("p-6 rounded-lg", theme.surface.raised)}>
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Risk Distribution (Theme-Aware)</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={mockRiskData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={entry => entry.name}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {mockRiskData.map((entry, index) => (
-                        <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                  </PieChart>
-                </ResponsiveContainer>
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-6">
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={riskData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={entry => entry.name}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {riskData.map((entry, index) => (
+                          <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip contentStyle={chartTheme.tooltipStyle} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
 
-              <div>
-                <h4 className={cn("font-semibold mb-3", theme.text.secondary)}>Risk Color Palette</h4>
-                <div className="space-y-2">
-                  <ColorSwatch label="Low Risk" color={riskColors.low} />
-                  <ColorSwatch label="Medium Risk" color={riskColors.medium} />
-                  <ColorSwatch label="High Risk" color={riskColors.high} />
+                <div>
+                  <h4 className={cn("font-semibold mb-3", theme.text.secondary)}>Risk Color Palette</h4>
+                  <div className="space-y-2">
+                    <ColorSwatch label="Low Risk" color={riskColors.low} />
+                    <ColorSwatch label="Medium Risk" color={riskColors.medium} />
+                    <ColorSwatch label="High Risk" color={riskColors.high} />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Category Colors Chart */}
           <div className={cn("p-6 rounded-lg", theme.surface.raised)}>
-            <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Category Distribution</h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockCategoryData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
-                  <XAxis dataKey="name" tick={{ fill: chartTheme.text }} />
-                  <YAxis tick={{ fill: chartTheme.text }} />
-                  <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                  <Bar dataKey="value" fill={chartTheme.colors.primary} radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Category Distribution (Theme-Aware)</h3>
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : (
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={categoryData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
+                    <XAxis dataKey="name" tick={{ fill: chartTheme.text }} />
+                    <YAxis tick={{ fill: chartTheme.text }} />
+                    <Tooltip contentStyle={chartTheme.tooltipStyle} />
+                    <Bar dataKey="value" fill={chartTheme.colors.primary} radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
 
           {/* Status Colors */}

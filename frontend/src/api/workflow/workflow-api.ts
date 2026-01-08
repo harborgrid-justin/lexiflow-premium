@@ -448,9 +448,9 @@ export class WorkflowApiService {
       }
 
       // Handle envelope { success: true, data: ... }
-      let data = response;
+      let data: unknown = response;
       if ("success" in response && "data" in response) {
-        data = response.data as any;
+        data = response.data;
       }
 
       // Handle PaginatedResponse { data: [...] }
@@ -458,14 +458,14 @@ export class WorkflowApiService {
         data &&
         typeof data === "object" &&
         "data" in data &&
-        Array.isArray((data as any).data)
+        Array.isArray((data as Record<string, unknown>).data)
       ) {
-        return (data as any).data;
+        return (data as { data: Workflow[] }).data;
       }
 
       // Handle direct data property being array (if envelope was { data: [...] })
       if (Array.isArray(data)) {
-        return data;
+        return data as Workflow[];
       }
 
       console.warn(

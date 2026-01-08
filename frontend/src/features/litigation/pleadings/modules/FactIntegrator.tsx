@@ -29,7 +29,7 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
   );
 
   // Convert docket entries to timeline events for display
-  const timelineEvents: TimelineEvent[] = (docketEntries as any[]).map((entry: any) => ({
+  const timelineEvents: TimelineEvent[] = (docketEntries as Array<{ id: string; dateEntered?: string; description?: string; summary?: string }>).map((entry: { id: string; dateEntered?: string; description?: string; summary?: string }) => ({
     id: entry.id,
     date: entry.dateEntered || new Date().toISOString().split('T')[0],
     title: entry.description || entry.summary || 'Docket Entry',

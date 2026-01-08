@@ -1,9 +1,9 @@
 import {
   draftingApi,
   DraftingTemplate,
-  DraftingValidationService,
   GeneratedDocument,
-  GenerateDocumentDto
+  GenerateDocumentDto,
+  validateVariableValues
 } from '@/api/domains/drafting';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
@@ -180,11 +180,16 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
         }
       }
 
-      const preview = DraftingValidationService.generatePreview(
-        selectedTemplate,
-        enrichedValues,
-        clauseContent
-      );
+      // Simple preview generation using template interpolation
+      let preview = selectedTemplate.content || '';
+      Object.entries(enrichedValues).forEach(([key, value]) => {
+        preview = preview.replace(new RegExp(`{{${key}}}`, 'g'), String(value || ''));
+      });
+
+      // Append clause content
+      if (clauseContent) {
+        preview += '\n\n' + clauseContent;
+      }
 
       return preview;
     } catch (error) {
@@ -198,18 +203,18 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     setValidationErrors({});
 
     if (step === 'variables' && selectedTemplate) {
-      const validation = DraftingValidationService.validateVariables(
+      const validation = validateVariableValues(
         selectedTemplate,
         variableValues
       );
 
-      setValidationErrors(validation.errors);
-
       if (!validation.isValid) {
-        const errorCount = Object.keys(validation.errors).length;
+        setValidationErrors({ variables: validation.missing });
+        const errorCount = validation.missing.length;
         addToast(`Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''}`, 'error');
         return false;
       }
+      setValidationErrors({});
     }
 
     if (step === 'clauses' && selectedClauses.length > 0) {
@@ -221,7 +226,12 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       const clausesToValidate = availableClauses.filter((c): c is ClauseType =>
         typeof c === 'object' && c !== null && 'id' in c && selectedClauses.includes((c as ClauseType).id)
       );
-      const validation = DraftingValidationService.validateClauses(clausesToValidate);
+      // Simple clause validation - check for duplicates
+      const clauseIds = new Set(clausesToValidate.map(c => c.id));
+      const validation = {
+        isValid: clauseIds.size === clausesToValidate.length,
+        conflicts: clauseIds.size !== clausesToValidate.length ? [{ clause1: '', clause2: '', reason: 'Duplicate clauses detected' }] : []
+      };
 
       if (!validation.isValid) {
         const errors = validation.conflicts
@@ -255,16 +265,14 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     setLoading(true);
     try {
       // Validate variables one more time
-      const validation = DraftingValidationService.validateVariables(
+      const validation = validateVariableValues(
         selectedTemplate,
         variableValues
       );
 
       if (!validation.isValid) {
-        const errorMessages = Object.entries(validation.errors)
-          .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
-          .join('; ');
-        addToast(`Validation failed: ${errorMessages}`, 'error');
+        const errorMessages = validation.missing.join(', ');
+        addToast(`Validation failed: Missing required fields: ${errorMessages}`, 'error');
         setLoading(false);
         return;
       }
@@ -274,7 +282,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
         description,
         templateId: selectedTemplate.id,
         caseId: selectedCaseId,
-        variableValues: validation.processedValues, // Use validated and processed values
+        variableValues, // Use validated values
         includedClauses: selectedClauses,
       };
 

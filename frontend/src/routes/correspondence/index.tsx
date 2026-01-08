@@ -43,7 +43,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     // Apply client-side filtering if needed
     const filteredItems = filter === "all"
       ? items
-      : items.filter((item: any) => item.status === filter);
+      : items.filter((item: Correspondence) => item.status === filter);
 
     return { items: filteredItems, totalCount: filteredItems.length };
   } catch (error) {

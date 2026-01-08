@@ -4,7 +4,6 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import React from 'react';
 import {
   Bar,
   BarChart,
@@ -23,12 +22,24 @@ import {
 import { ProfitabilityCard } from './ProfitabilityCard';
 import type { ClientProfitability, ClientSegment } from './types';
 
+interface RevenueTrendData {
+  month: string;
+  revenue: number;
+  profit: number;
+}
+
+interface ChartTheme {
+  grid: string;
+  text: string;
+  tooltipStyle: Record<string, unknown>;
+}
+
 interface ProfitabilityTabProps {
   profitabilityData: ClientProfitability[];
   segmentData: ClientSegment[];
-  revenueTrendData: any[];
-  theme: any;
-  chartTheme: any;
+  revenueTrendData: RevenueTrendData[];
+  theme: Record<string, unknown>;
+  chartTheme: ChartTheme;
   chartColors: string[];
 }
 
@@ -71,7 +82,7 @@ export function ProfitabilityTab({ profitabilityData, segmentData, revenueTrendD
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: any) => {
+                  label={(props: { payload?: ClientSegment; segment?: string; revenue?: number }) => {
                     const { segment, revenue } = props.payload || props;
                     return segment && revenue ? `${segment}: $${(revenue / 1000).toFixed(0)}k` : '';
                   }}

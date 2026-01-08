@@ -31,7 +31,7 @@ export const Review: React.FC<ReviewProps> = ({ caseId }) => {
   // Fetch Review Documents
   const { data: documents = [], isLoading } = useQuery<ReviewDocument[]>(
     caseId ? ['discovery', 'review', 'documents', caseId] : ['discovery', 'review', 'documents'],
-    async () => discoveryRepo.getReviewDocuments(caseId)
+    async () => discoveryRepo.getReviewDocuments(caseId ? { caseId } : undefined)
   );
 
   const [currentDocIndex, setCurrentDocIndex] = useState(0);

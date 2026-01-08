@@ -3,13 +3,12 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import React from 'react';
 import { LTVCard } from './LTVCard';
 import type { ClientLifetimeValue } from './types';
 
 interface LTVTabProps {
   ltvData: ClientLifetimeValue[];
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function LTVTab({ ltvData, theme }: LTVTabProps) {

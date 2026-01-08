@@ -71,9 +71,9 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   let caseData;
   try {
     caseData = await DataService.cases.getById(caseId);
-  } catch (error: any) {
+  } catch (error) {
     // Handle 404 Not Found from backend
-    if (error?.statusCode === 404) {
+    if ((error as { statusCode?: number })?.statusCode === 404) {
       caseData = null;
     } else {
       throw error;

@@ -19,12 +19,17 @@ import {
 import { LeadCard } from './LeadCard';
 import type { Lead } from './types';
 
+interface LeadsByStatusData {
+  status: string;
+  count: number;
+}
+
 interface LeadsTabProps {
   leads: Lead[];
-  leadsByStatus: any[];
+  leadsByStatus: LeadsByStatusData[];
   onLeadClick: (id: string) => void;
-  theme: any;
-  chartTheme: any;
+  theme: Record<string, unknown>;
+  chartTheme: Record<string, unknown>;
   chartColors: string[];
 }
 

@@ -14,7 +14,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/okrs");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] OKRs endpoint not available, returning empty array"
         );
@@ -27,7 +27,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/cle");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] CLE endpoint not available, returning empty array"
         );
@@ -40,7 +40,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/vendors/contracts");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Vendor contracts endpoint not available, returning empty array"
         );
@@ -53,7 +53,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/vendors");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Vendor directory endpoint not available, returning empty array"
         );
@@ -66,7 +66,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/rfps");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] RFPs endpoint not available, returning empty array"
         );
@@ -79,7 +79,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/maintenance");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Maintenance endpoint not available, returning empty array"
         );
@@ -92,7 +92,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/facilities");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Facilities endpoint not available, returning empty array"
         );
@@ -106,7 +106,7 @@ export const OperationsService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get("/operations/leases/metrics");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Lease Metrics endpoint not available, returning defaults"
         );
@@ -122,7 +122,7 @@ export const OperationsService = {
         return await apiClient.get<ReplicationStatus>(
           "/operations/replication-status"
         );
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Replication status endpoint not available, returning defaults"
         );
@@ -150,7 +150,7 @@ export const OperationsService = {
         return await apiClient.get<InfrastructureCostMetric[]>(
           "/operations/costs/metrics"
         );
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Cost metrics endpoint not available, returning empty array"
         );
@@ -167,7 +167,7 @@ export const OperationsService = {
         return await apiClient.get<CostForecast[]>(
           "/operations/costs/forecast"
         );
-      } catch (_error) {
+      } catch {
         console.warn(
           "[OperationsService] Cost forecast endpoint not available, returning empty array"
         );

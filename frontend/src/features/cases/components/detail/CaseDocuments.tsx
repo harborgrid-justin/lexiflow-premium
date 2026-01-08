@@ -202,7 +202,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
             analyzingId={analyzingId}
             onAnalyze={onAnalyze}
             onTaskClick={setTaskModalDoc}
-            theme={theme}
           />
         ))}
       </div>

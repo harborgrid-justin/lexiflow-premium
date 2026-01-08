@@ -68,6 +68,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     useEffect(() => {
         if (containerRef.current) {
             const observer = new ResizeObserver((entries) => {
+                if (!entries[0]) return;
                 const { width, height } = entries[0].contentRect;
                 if (width > 0 && height > 0) {
                     setIsMounted(true);

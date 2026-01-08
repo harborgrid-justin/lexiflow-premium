@@ -10,10 +10,10 @@
  * @module services/data/DataProvider
  */
 
-import { createContext, useContext, useMemo, type ReactNode, useCallback, useEffect } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from './client/queryClient';
+import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from 'react';
 import { useAuth } from '../identity/AuthProvider';
+import { queryClient } from './client/queryClient';
 
 // -----------------------------------------------------------------------------
 // Types & Interfaces
@@ -89,7 +89,7 @@ export function DataProvider({ children }: DataProviderProps) {
     refresh,
     clearData,
     isFresh
-  }), [refresh, clearData, isFresh]);
+  }), [isLoading, error, refresh, clearData, isFresh]);
 
   // 5. Lifecycle Effects
   // Auto-clear data when user logs out to prevent leakage

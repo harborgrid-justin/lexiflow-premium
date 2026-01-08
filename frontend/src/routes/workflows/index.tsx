@@ -52,8 +52,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     ]);
 
     return { templates, instances };
-  } catch (error: any) {
-    if (error?.message?.includes('401') || error?.message?.includes('Unauthorized') || error?.statusCode === 401) {
+  } catch (error) {
+    if ((error as Error)?.message?.includes('401') || (error as Error)?.message?.includes('Unauthorized') || (error as { statusCode?: number })?.statusCode === 401) {
       throw redirect('/login');
     }
     throw error;

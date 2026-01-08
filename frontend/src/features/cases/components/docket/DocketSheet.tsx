@@ -74,7 +74,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     try {
       if (!isReset) setIsFetchingMore(true);
       const limit = 20;
-      const service = DataService.docket as any;
+      const service = DataService.docket as { getAll: (params: { page: number; limit: number; type?: string; caseId?: string }) => Promise<{ data?: unknown[]; items?: unknown[] } | unknown[]> };
 
       // Determine type filter
       let typeFilter: string | undefined = undefined;

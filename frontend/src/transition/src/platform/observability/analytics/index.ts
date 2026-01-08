@@ -4,7 +4,7 @@
 
 export interface AnalyticsEvent {
   name: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -12,7 +12,7 @@ class Analytics {
   private queue: AnalyticsEvent[] = [];
   private enabled = process.env.NODE_ENV === "production";
 
-  track(eventName: string, properties?: Record<string, any>) {
+  track(eventName: string, properties?: Record<string, unknown>) {
     if (!this.enabled) {
       console.log("[Analytics]", eventName, properties);
       return;
@@ -28,11 +28,11 @@ class Analytics {
     this.flush();
   }
 
-  identify(userId: string, traits?: Record<string, any>) {
+  identify(userId: string, traits?: Record<string, unknown>) {
     this.track("identify", { userId, ...traits });
   }
 
-  page(name: string, properties?: Record<string, any>) {
+  page(name: string, properties?: Record<string, unknown>) {
     this.track("page_view", { page: name, ...properties });
   }
 

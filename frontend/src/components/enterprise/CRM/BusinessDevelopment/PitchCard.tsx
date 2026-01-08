@@ -10,7 +10,7 @@ import { formatCurrency, getStatusColor } from './utils';
 
 interface PitchCardProps {
   pitch: Pitch;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function PitchCard({ pitch, theme }: PitchCardProps) {

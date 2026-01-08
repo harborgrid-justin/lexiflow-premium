@@ -47,7 +47,7 @@ export const FacilitiesManager: React.FC = () => {
         getLeaseMetrics: () => Promise<{ totalSqFt: number; monthlyRent: number; expiringLeases: number }>;
     };
 
-    const { data: rawTickets = [], isLoading: ticketsLoading } = useQuery<any>(
+    const { data: rawTickets = [], isLoading: ticketsLoading } = useQuery<unknown[]>(
         ['maintenance-tickets', 'all'],
         operationsService.getMaintenanceTickets
     );

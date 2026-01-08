@@ -225,7 +225,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           type: errorCount > 0 ? 'warning' : 'success'
         });
       }
-    } catch (error) {
+    } catch {
       addToast({
         title: 'Validation Failed',
         message: 'An error occurred during validation',

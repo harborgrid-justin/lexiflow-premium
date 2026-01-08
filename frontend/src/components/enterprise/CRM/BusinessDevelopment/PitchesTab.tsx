@@ -10,7 +10,7 @@ import type { Pitch } from './types';
 
 interface PitchesTabProps {
   pitches: Pitch[];
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function PitchesTab({ pitches, theme }: PitchesTabProps) {

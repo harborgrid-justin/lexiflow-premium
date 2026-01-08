@@ -60,7 +60,7 @@ export interface UseTrustAccountDetailResult {
  * Hook return type for useCreateTrustAccount
  */
 export interface UseCreateTrustAccountResult {
-  createAccount: (data: any) => Promise<TrustAccount>;
+  createAccount: (data: Record<string, unknown>) => Promise<TrustAccount>;
   isCreating: boolean;
   error: TrustAccountError | null;
 }
@@ -69,7 +69,10 @@ export interface UseCreateTrustAccountResult {
  * Hook return type for useDepositFunds
  */
 export interface UseDepositFundsResult {
-  deposit: (accountId: string, data: any) => Promise<TrustTransactionEntity>;
+  deposit: (
+    accountId: string,
+    data: Record<string, unknown>
+  ) => Promise<TrustTransactionEntity>;
   isDepositing: boolean;
   error: TrustAccountError | null;
 }
@@ -78,7 +81,10 @@ export interface UseDepositFundsResult {
  * Hook return type for useWithdrawFunds
  */
 export interface UseWithdrawFundsResult {
-  withdraw: (accountId: string, data: any) => Promise<TrustTransactionEntity>;
+  withdraw: (
+    accountId: string,
+    data: Record<string, unknown>
+  ) => Promise<TrustTransactionEntity>;
   isWithdrawing: boolean;
   error: TrustAccountError | null;
 }
@@ -87,7 +93,10 @@ export interface UseWithdrawFundsResult {
  * Hook return type for useReconcileAccount
  */
 export interface UseReconcileAccountResult {
-  reconcile: (accountId: string, data: any) => Promise<void>;
+  reconcile: (
+    accountId: string,
+    data: Record<string, unknown>
+  ) => Promise<void>;
   isReconciling: boolean;
   error: TrustAccountError | null;
 }

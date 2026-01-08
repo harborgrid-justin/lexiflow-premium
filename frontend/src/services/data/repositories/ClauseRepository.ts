@@ -91,7 +91,9 @@ export class ClauseRepository extends Repository<ClauseEntity> {
           updatedAt: _updatedAt,
           ...createData
         } = item;
-        const result = await this.clausesApi.create(createData as any); // Type assertion needed due to complex type mapping
+        const result = await this.clausesApi.create(
+          createData as Omit<ClauseEntity, "id" | "createdAt" | "updatedAt">
+        );
         return result as unknown as ClauseEntity;
       } catch (error) {
         console.warn("[ClauseRepository] Backend API unavailable", error);
@@ -108,7 +110,10 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     this.validateId(id, "update");
     if (this.useBackend) {
       try {
-        const result = await this.clausesApi.update(id, updates as any);
+        const result = await this.clausesApi.update(
+          id,
+          updates as Partial<ClauseEntity>
+        );
         return result as unknown as ClauseEntity;
       } catch (error) {
         console.warn("[ClauseRepository] Backend API unavailable", error);
@@ -145,8 +150,12 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     }
     const clause = await this.getById(id);
     if (!clause) throw new EntityNotFoundError("Clause", id);
-    const clauseAny = clause as any;
-    return (clauseAny.text as string) || (clauseAny.content as string) || "";
+    const clauseWithText = clause as ClauseEntity & { text?: string };
+    return (
+      (clauseWithText.text as string) ||
+      (clauseWithText.content as string) ||
+      ""
+    );
   }
 
   async getByCategory(category: string): Promise<ClauseEntity[]> {
@@ -159,8 +168,8 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     const clauses = await this.getAll();
     const lowerQuery = query.toLowerCase();
     return clauses.filter((c) => {
-      const clauseAny = c as any;
-      const text = clauseAny.text || "";
+      const clauseWithText = c as ClauseEntity & { text?: string };
+      const text = clauseWithText.text || "";
       const textMatches =
         typeof text === "string" && text.toLowerCase().includes(lowerQuery);
       return (

@@ -261,7 +261,7 @@ export const CaseImporter: React.FC = () => {
                 description: d.description,
                 date: d.dateFiled ? new Date(d.dateFiled).toISOString() : new Date().toISOString(),
                 type: 'Filing',
-                metadata: { docLink: d.docLink }
+                metadata: d.docLink ? { docLink: d.docLink } : {}
               });
               docketCount++;
             } catch (e) {

@@ -16,4 +16,9 @@
  * @deprecated Import from "./useDocumentManager" instead for better tree-shaking
  */
 
-export * from "./useDocumentManager";
+export * from "./useDocumentManager/index";
+export { useDocumentManager } from "./useDocumentManager/index";
+export type {
+  UseDocumentManagerOptions,
+  UseDocumentManagerReturn,
+} from "./useDocumentManager/types";

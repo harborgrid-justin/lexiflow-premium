@@ -89,9 +89,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setRoles(identity.roles as Role[]);
       setPermissions(identity.permissions as Permission[]);
-    } catch (error: any) {
+    } catch (error) {
       // 401 = not authenticated (no valid session)
-      if (error.status === 401) {
+      if ((error as { status?: number }).status === 401) {
         console.log('No active session');
       } else {
         console.error('Failed to load identity:', error);

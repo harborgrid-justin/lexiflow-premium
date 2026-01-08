@@ -37,7 +37,7 @@ import { Pleading } from '@/types';
 // ============================================================================
 
 export const PleadingAnalytics: React.FC = () => {
-    const { theme, mode } = useTheme();
+    const { theme } = useTheme();
 
     const { data: pleadings = [] } = useQuery<Pleading[]>(
         ['pleadings', 'all'],
@@ -45,11 +45,11 @@ export const PleadingAnalytics: React.FC = () => {
     );
 
     // Fetch clause usage data
-    const { data: clauseDataFromApi = [] } = useQuery<any[]>(
+    const { data: clauseDataFromApi = [] } = useQuery<Array<{ name?: string; title?: string; count?: number }>>(
         ['analytics', 'clause_usage'],
         async () => {
             try {
-                return await (DataService as any).analytics?.getClauseUsage?.() || [];
+                return await (DataService as { analytics?: { getClauseUsage?: () => Promise<unknown[]> } }).analytics?.getClauseUsage?.() || [];
             } catch (error) {
                 console.warn('[PleadingAnalytics] Clause usage data unavailable:', error);
                 return [];
@@ -80,7 +80,7 @@ export const PleadingAnalytics: React.FC = () => {
         }
 
         // Clause usage - from backend API
-        const clauseUsage = clauseDataFromApi.map((clause: any, idx: number) => ({
+        const clauseUsage = clauseDataFromApi.map((clause: { name?: string; title?: string; count?: number }, idx: number) => ({
             name: clause.name || clause.title,
             count: clause.count || 0,
             color: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'][idx % 5]
@@ -142,7 +142,7 @@ export const PleadingAnalytics: React.FC = () => {
             monthlyTrend: trendData,
             motionTypes,
         };
-    }, [pleadings, clauseDataFromApi, mode]);
+    }, [pleadings, clauseDataFromApi]);
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">

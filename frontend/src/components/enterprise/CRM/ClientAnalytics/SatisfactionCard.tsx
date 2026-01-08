@@ -4,7 +4,6 @@
  */
 
 import { cn } from '@/utils/cn';
-import React from 'react';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -15,11 +14,17 @@ import {
 } from 'recharts';
 import type { ClientSatisfaction } from './types';
 
+interface ChartTheme {
+  grid: string;
+  text: string;
+  tooltipStyle: Record<string, unknown>;
+}
+
 interface SatisfactionCardProps {
   client: ClientSatisfaction;
-  theme: any;
+  theme: Record<string, unknown>;
   chartColors: string[];
-  chartTheme: any;
+  chartTheme: ChartTheme;
 }
 
 export function SatisfactionCard({ client, theme, chartColors, chartTheme }: SatisfactionCardProps) {

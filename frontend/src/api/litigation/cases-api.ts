@@ -200,7 +200,9 @@ export class CasesApiService {
     sortBy?: string;
     order?: string;
   }): Promise<Case[]> {
-    const response = await apiClient.get<any>("/cases", filters);
+    const response = await apiClient.get<
+      { success?: boolean; data?: { data?: Case[]; items?: Case[] } } | Case[]
+    >("/cases", filters);
 
     // Backend returns wrapped response: {success: true, data: {data: [...], total, page, limit, totalPages}, meta: {...}}
     // Handle multiple response formats:
@@ -253,12 +255,17 @@ export class CasesApiService {
    */
   async getStats(): Promise<CaseStats> {
     try {
-      const response = await apiClient.get<any>("/cases/stats");
+      const response = await apiClient.get<
+        { success?: boolean; data?: CaseStats } | CaseStats
+      >("/cases/stats");
 
       // Unpack response if wrapped (NestJS Enterprise Interceptor format)
-      return response && response.success === true && response.data
+      return response &&
+        "success" in response &&
+        response.success === true &&
+        response.data
         ? response.data
-        : response;
+        : (response as CaseStats);
     } catch (error) {
       console.error("[CasesApiService.getStats] Error:", error);
       throw new Error("Failed to fetch case statistics");
@@ -279,11 +286,16 @@ export class CasesApiService {
     this.validateId(id, "getById");
 
     try {
-      const response = await apiClient.get<any>(`/cases/${id}`);
+      const response = await apiClient.get<
+        { success?: boolean; data?: Case } | Case
+      >(`/cases/${id}`);
 
       // Unpack response if wrapped
       const backendCase =
-        response && response.success === true && response.data
+        response &&
+        "success" in response &&
+        response.success === true &&
+        response.data
           ? response.data
           : response;
 

@@ -137,14 +137,16 @@ export const reportingGateway = {
    */
   async getRevenueBreakdown(
     period: "month" | "quarter" | "year"
-  ): Promise<any> {
-    return authGet<any>("/analytics/revenue/breakdown", { params: { period } });
+  ): Promise<unknown> {
+    return authGet<unknown>("/analytics/revenue/breakdown", {
+      params: { period },
+    });
   },
 
   /**
    * Get top performing matters
    */
-  async getTopMatters(limit: number = 10): Promise<any[]> {
-    return authGet<any[]>("/analytics/matters/top", { params: { limit } });
+  async getTopMatters(limit: number = 10): Promise<unknown[]> {
+    return authGet<unknown[]>("/analytics/matters/top", { params: { limit } });
   },
 };

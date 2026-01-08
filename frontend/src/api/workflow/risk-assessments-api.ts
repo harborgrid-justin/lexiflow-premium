@@ -58,10 +58,17 @@ export class RisksApiService {
     if (filters?.probability) params.append("probability", filters.probability);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<
+      { data?: RiskAssessment[] } | RiskAssessment[]
+    >(url);
 
     // Handle paginated response
-    if (response && response.data && Array.isArray(response.data)) {
+    if (
+      response &&
+      "data" in response &&
+      response.data &&
+      Array.isArray(response.data)
+    ) {
       return response.data;
     }
 

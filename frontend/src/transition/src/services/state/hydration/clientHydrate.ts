@@ -8,13 +8,14 @@ export function hydrateClientState(): void {
   if (typeof window === "undefined") return;
 
   // Look for server-rendered state in window object
-  const serverState = (window as any).__INITIAL_STATE__;
+  const serverState = (window as { __INITIAL_STATE__?: unknown })
+    .__INITIAL_STATE__;
 
   if (serverState) {
     store.hydrate(serverState);
 
     // Clean up
-    delete (window as any).__INITIAL_STATE__;
+    delete (window as { __INITIAL_STATE__?: unknown }).__INITIAL_STATE__;
   }
 }
 

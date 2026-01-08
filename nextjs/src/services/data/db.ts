@@ -591,6 +591,74 @@ export class DatabaseManager {
       hasPendingFlush: this.flushTimer !== null,
     };
   }
+
+  // Get database information for admin dashboard
+  async getDbInfo(): Promise<{
+    name: string;
+    version: number;
+    mode: string;
+    totalStores: number;
+    stores: Array<{ name: string; count: number }>;
+  }> {
+    await this.init();
+
+    if (this.mode === "LocalStorage" || !this.db) {
+      return {
+        name: this.dbName,
+        version: this.dbVersion,
+        mode: "LocalStorage",
+        totalStores: 0,
+        stores: [],
+      };
+    }
+
+    const storeNames = Array.from(this.db.objectStoreNames);
+    const stores: Array<{ name: string; count: number }> = [];
+
+    for (const storeName of storeNames) {
+      try {
+        const count = await this.getCount(storeName);
+        stores.push({ name: storeName, count });
+      } catch (error) {
+        console.error(`Failed to get count for ${storeName}:`, error);
+        stores.push({ name: storeName, count: 0 });
+      }
+    }
+
+    return {
+      name: this.dbName,
+      version: this.dbVersion,
+      mode: "IndexedDB",
+      totalStores: storeNames.length,
+      stores: stores.sort((a, b) => b.count - a.count),
+    };
+  }
+
+  // Helper method to get count from a store
+  private async getCount(storeName: string): Promise<number> {
+    if (!this.db || !this.db.objectStoreNames.contains(storeName)) {
+      return 0;
+    }
+
+    return new Promise((resolve, reject) => {
+      if (!this.db) return resolve(0);
+
+      try {
+        const tx = this.db.transaction([storeName], "readonly");
+        const store = tx.objectStore(storeName);
+        const request = store.count();
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => {
+          console.error(`Error counting ${storeName}:`, request.error);
+          resolve(0);
+        };
+      } catch (error) {
+        console.error(`Transaction error for ${storeName}:`, error);
+        resolve(0);
+      }
+    });
+  }
 }
 
 export const db = new DatabaseManager();

@@ -70,7 +70,7 @@ const sanitizeXml = (xml: string): string => {
 
   // 2. Fix unescaped < in attributes or text (heuristic: < followed by space or number is not a tag start)
   clean = clean.replace(
-    /<(?=\s|\d|[!@#$%^&*()_+\-=\[\]{};':"\\|,.\/?])/g,
+    /<(?=\s|\d|[!@#$%^&*()_+\-=[\]{};':"\\|,./?])/g,
     "&lt;"
   );
 

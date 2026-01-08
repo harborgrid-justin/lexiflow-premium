@@ -42,7 +42,7 @@ export const DataSourceService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<DataSource[]>("/data-sources");
-      } catch (_error) {
+      } catch {
         console.warn(
           "[DataSourceService] Backend endpoint not available, returning empty array"
         );

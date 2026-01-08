@@ -169,7 +169,9 @@ export function findLastReconciliationDate(
 /**
  * Transform query error to structured error
  */
-export function transformQueryError(queryError: unknown): any {
+export function transformQueryError(
+  queryError: unknown
+): TrustAccountError | null {
   if (!queryError) return null;
 
   const err = queryError as Error;

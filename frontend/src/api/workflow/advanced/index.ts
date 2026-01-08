@@ -41,15 +41,19 @@ export class WorkflowAdvancedApiService {
     return apiClient.get(`${this.baseUrl}/${workflowId}/enhanced`);
   }
 
-  async createEnhanced(data: any) {
+  async createEnhanced(data: Record<string, unknown>) {
     return apiClient.post(`${this.baseUrl}/enhanced`, data);
   }
 
-  async updateEnhanced(workflowId: string, updates: any) {
+  async updateEnhanced(workflowId: string, updates: Record<string, unknown>) {
     return apiClient.patch(`${this.baseUrl}/${workflowId}/enhanced`, updates);
   }
 
-  async queryEnhanced(filters: any, sort?: any, pagination?: any) {
+  async queryEnhanced(
+    filters: Record<string, unknown>,
+    sort?: Record<string, unknown>,
+    pagination?: { page?: number; limit?: number }
+  ) {
     return apiClient.post(`${this.baseUrl}/enhanced/query`, {
       filters,
       sort,
@@ -57,7 +61,11 @@ export class WorkflowAdvancedApiService {
     });
   }
 
-  async executeEnhanced(workflowId: string, input?: any, options?: any) {
+  async executeEnhanced(
+    workflowId: string,
+    input?: Record<string, unknown>,
+    options?: Record<string, unknown>
+  ) {
     return apiClient.post(`${this.baseUrl}/${workflowId}/execute`, {
       input,
       options,

@@ -5,6 +5,7 @@ import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
+import { db } from '@/services/data/db';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();
@@ -13,17 +14,7 @@ export const DatabaseManagement: React.FC = () => {
   const incrementModal = useModalState();
   const resetModal = useModalState();
 
-  // Note: getDbInfo, incrementVersion, resetDatabase methods need to be implemented in DatabaseManager
-  const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => {
-    // Temporary stub until db.getDbInfo() is implemented
-    return Promise.resolve({
-      name: 'LexiFlow DB',
-      version: 1,
-      mode: 'readwrite',
-      totalStores: 0,
-      stores: [] as Array<{ name: string; count: number }>
-    });
-  });
+  const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => db.getDbInfo());
 
   const handleIncrementVersion = async () => {
     setIsProcessing(true);

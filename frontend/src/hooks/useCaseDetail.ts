@@ -173,7 +173,7 @@ export function useCaseDetail(
       });
       // Handle PaginatedResponse structure: { data: DocketEntry[], ... }
       if (response && typeof response === "object" && "data" in response) {
-        return (response as any).data || [];
+        return (response as { data?: unknown[] }).data || [];
       }
       return Array.isArray(response) ? response : [];
     },
@@ -295,7 +295,7 @@ export function useCaseDetail(
           title: entry.sequenceNumber
             ? `Docket ${entry.sequenceNumber}: ${entry.description}`
             : entry.description || "Docket Entry",
-          type: "docket", // Specific type for docket entries
+          type: "document", // Using valid TimelineEvent type
           description: entry.text || entry.description || "",
           relatedId: entry.id,
         });

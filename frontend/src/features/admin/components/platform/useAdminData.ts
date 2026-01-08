@@ -53,21 +53,29 @@ export const useAdminData = (activeCategory: Category) => {
           return payload.isNew
             ? await DataService.communications.addContact(payload.item)
             : await DataService.communications.updateContact(
-                (payload.item as any).id,
+                (payload.item as Record<string, unknown>).id as string,
                 payload.item
               );
         case "clauses":
           return payload.isNew
-            ? await (DataService.clauses as any).add(payload.item)
-            : await (DataService.clauses as any).update(
-                (payload.item as any).id,
+            ? await (
+                DataService.clauses as {
+                  add: (item: unknown) => Promise<unknown>;
+                }
+              ).add(payload.item)
+            : await (
+                DataService.clauses as {
+                  update: (id: string, item: unknown) => Promise<unknown>;
+                }
+              ).update(
+                (payload.item as Record<string, unknown>).id as string,
                 payload.item
               );
         case "documents":
           return payload.isNew
             ? await DataService.documents.add(payload.item)
             : await DataService.documents.update(
-                (payload.item as any).id,
+                (payload.item as Record<string, unknown>).id as string,
                 payload.item
               );
         default:

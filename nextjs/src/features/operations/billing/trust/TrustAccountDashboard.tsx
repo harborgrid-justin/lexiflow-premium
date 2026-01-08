@@ -371,18 +371,15 @@ export const TrustAccountDashboard: React.FC = () => {
    * WHY: useCallback ensures function identity stability
    */
   const handleViewAccount = useCallback((accountId: string) => {
-    console.log('Navigate to account:', accountId);
-    // TODO: Implement navigation to account detail
+    window.location.href = `/billing/trust/${accountId}`;
   }, []);
 
   const handleCreateAccount = useCallback(() => {
-    console.log('Open create account form');
-    // TODO: Implement create account flow
+    window.location.href = '/billing/trust/create';
   }, []);
 
   const handleReconcileAccount = useCallback((accountId: string) => {
-    console.log('Open reconciliation wizard:', accountId);
-    // TODO: Implement reconciliation flow
+    window.location.href = `/billing/trust/${accountId}/reconcile`;
   }, []);
 
   /**

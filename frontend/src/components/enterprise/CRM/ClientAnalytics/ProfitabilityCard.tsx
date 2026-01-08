@@ -10,7 +10,7 @@ import { formatCurrency, formatPercentage } from './utils';
 
 interface ProfitabilityCardProps {
   client: ClientProfitability;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function ProfitabilityCard({ client, theme }: ProfitabilityCardProps) {

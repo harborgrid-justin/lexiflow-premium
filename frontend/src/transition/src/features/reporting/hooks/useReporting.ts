@@ -35,7 +35,7 @@ export function useReporting() {
 
   const generateReport = async (
     type: string,
-    params: Record<string, any> = {}
+    params: Record<string, unknown> = {}
   ): Promise<Report | null> => {
     setLoading(true);
     setError(null);

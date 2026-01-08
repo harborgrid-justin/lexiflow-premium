@@ -48,8 +48,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       throw new Response("Docket entry not found", { status: 404 });
     }
     return { item };
-  } catch (error: any) {
-    if (error?.statusCode === 404) {
+  } catch (error) {
+    if ((error as { statusCode?: number })?.statusCode === 404) {
       throw new Response("Docket entry not found", { status: 404 });
     }
     console.error("Failed to load docket entry:", error);

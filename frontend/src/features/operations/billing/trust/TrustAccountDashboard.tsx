@@ -388,7 +388,7 @@ export const TrustAccountDashboard: React.FC = () => {
         queryClient.invalidate(queryKeys.billing.trustAccounts());
         createModal.close();
       },
-      onError: (error: any) => {
+      onError: (error: Error) => {
         notify.error(error?.message || 'Failed to create trust account');
       }
     }
@@ -403,7 +403,7 @@ export const TrustAccountDashboard: React.FC = () => {
         reconcileModal.close();
         refetch();
       },
-      onError: (error: any) => {
+      onError: (error: Error) => {
         notify.error(error?.message || 'Failed to initiate reconciliation');
       }
     }

@@ -11,6 +11,7 @@ import { TemplateService } from "./templates.service";
 // Re-export types and utilities
 export * from "./types";
 export * from "./utils";
+export { validateClauseCompatibility, validateVariableValues } from "./utils";
 
 /**
  * Unified Drafting API Service - Composition pattern

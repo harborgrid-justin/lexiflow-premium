@@ -54,6 +54,9 @@ interface WorkflowMetrics {
   tasksDueToday: number;
   automationsRan: number;
   efficiencyGain: number;
+  completionRate?: number;
+  bottlenecks?: number;
+  efficiency?: { trend: string; value: string };
 }
 
 // ============================================================================
@@ -178,13 +181,15 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const metrics = useMemo(() => {
     const calculated = calculateMetrics(casesArray, firmProcessesArray, tasksArray);
 
-    // Safety check - ensure all expected properties exist with defaults
+    // Return all properties with defaults
     return {
       activeWorkflows: calculated?.activeWorkflows || 0,
       tasksDueToday: calculated?.tasksDueToday || 0,
-      completionRate: calculated?.completionRate || 0,
-      bottlenecks: calculated?.bottlenecks || 0,
-      efficiency: calculated?.efficiency || { trend: 'stable', value: '+15%' } // Default fallback
+      automationsRan: calculated?.automationsRan || 0,
+      efficiencyGain: calculated?.efficiencyGain || 0,
+      completionRate: 0, // Placeholder for future implementation
+      bottlenecks: 0, // Placeholder for future implementation
+      efficiency: { trend: 'stable', value: '+15%' } // Placeholder for future implementation
     };
   }, [casesArray, firmProcessesArray, tasksArray]);
 

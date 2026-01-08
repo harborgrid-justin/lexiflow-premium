@@ -60,7 +60,7 @@ export function useTrustAccounts(
     error: queryError,
     refetch: originalRefetch,
   } = useQuery<TrustAccount[]>(
-    trustKeys.list(filters) as any,
+    trustKeys.list(filters),
     () => trustAccountsApi.getAll(filters),
     {
       staleTime: CACHE_CONFIG.STALE_TIME,

@@ -14,8 +14,8 @@ export const PipelineDAG = React.memo(function PipelineDAG() {
 
     // Fetch pipeline stages from backend
     const { data: pipelineData, isLoading } = useQuery(
-        (queryKeys as any).analytics?.pipelines?.() || ['pipelines', 'stages'],
-        () => (DataService as any).dataPlatformApi?.pipelines?.getStages?.() || Promise.resolve([])
+        (queryKeys as { analytics?: { pipelines?: () => string[] } })?.analytics?.pipelines?.() || ['pipelines', 'stages'],
+        () => (DataService as { dataPlatformApi?: { pipelines?: { getStages?: () => Promise<unknown[]> } } }).dataPlatformApi?.pipelines?.getStages?.() || Promise.resolve([])
     );
 
     // Map backend data to step format or provide default structure
@@ -24,7 +24,7 @@ export const PipelineDAG = React.memo(function PipelineDAG() {
             { id: 'loading', label: 'Loading...', icon: Loader2, color: 'text-slate-400', status: 'Loading' }
         ]
         : Array.isArray(pipelineData) && pipelineData.length > 0
-            ? pipelineData.map((step: any) => ({
+            ? pipelineData.map((step: { id: string; name?: string; label?: string; status?: string }) => ({
                 id: step.id,
                 label: step.name || step.label,
                 icon: Database,

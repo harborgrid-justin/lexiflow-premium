@@ -9,7 +9,7 @@ import { formatCurrency, getStatusColor } from './utils';
 
 interface RFPCardProps {
   rfp: RFP;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function RFPCard({ rfp, theme }: RFPCardProps) {

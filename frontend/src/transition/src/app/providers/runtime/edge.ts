@@ -60,9 +60,9 @@ export const cryptoAdapter = {
 export const storageAdapter = {
   async get(key: string): Promise<string | null> {
     // Edge environments typically provide KV storage
-    // @ts-ignore - environment-specific global
+    // @ts-expect-error - environment-specific global
     if (typeof KV !== "undefined") {
-      // @ts-ignore
+      // @ts-expect-error - environment-specific global
       return await KV.get(key);
     }
 
@@ -77,9 +77,9 @@ export const storageAdapter = {
   },
 
   async set(key: string, value: string): Promise<void> {
-    // @ts-ignore
+    // @ts-expect-error - environment-specific global
     if (typeof KV !== "undefined") {
-      // @ts-ignore
+      // @ts-expect-error - environment-specific global
       await KV.put(key, value);
       return;
     }
@@ -91,9 +91,9 @@ export const storageAdapter = {
   },
 
   async delete(key: string): Promise<void> {
-    // @ts-ignore
+    // @ts-expect-error - environment-specific global
     if (typeof KV !== "undefined") {
-      // @ts-ignore
+      // @ts-expect-error - environment-specific global
       await KV.delete(key);
       return;
     }

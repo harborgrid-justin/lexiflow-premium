@@ -243,7 +243,15 @@ export class DiscoveryRepository {
    * const caseCustodians = await repo.getCustodians('case-123');
    */
   getCustodians = async (caseId?: string): Promise<Custodian[]> =>
-    getCustodians(this.useBackend, caseId);
+    this.getCustodiansImpl(caseId);
+
+  /**
+   * Implementation of getCustodians
+   */
+  private async getCustodiansImpl(caseId?: string): Promise<Custodian[]> {
+    // Implementation logic here
+    return getCustodians(this.useBackend, caseId);
+  }
 
   /**
    * Adds a new custodian
@@ -261,7 +269,9 @@ export class DiscoveryRepository {
 
     if (this.useBackend) {
       try {
-        const result = await discoveryApi.custodians.create(custodian as any);
+        const result = await discoveryApi.custodians.create(
+          custodian as Omit<Custodian, "id" | "createdAt" | "updatedAt">
+        );
         return result as unknown as Custodian;
       } catch (error) {
         console.warn(

@@ -9,7 +9,7 @@ import type { WinLossAnalysis } from './types';
 
 interface WinLossCardProps {
   analysis: WinLossAnalysis;
-  theme: any;
+  theme: Record<string, unknown>;
 }
 
 export function WinLossCard({ analysis, theme }: WinLossCardProps) {

@@ -117,10 +117,8 @@ export function cleanupDataService(): void {
     legacyRepositoryRegistry.cleanup();
     console.log("[DataService] ✅ Cleaned up legacy repositories");
 
-    // Clean up backend/refactored repositories if they have dispose methods
-    // RepositoryRegistry is a singleton, so we typically don't destroy it,
-    // but we might want to clear internal caches if implemented.
-    RepositoryRegistry.getInstance().reset?.();
+    // Clean up backend/refactored repositories - clear the registry
+    RepositoryRegistry.clear();
 
     console.log("[DataService] ✅ Cleanup complete");
   } catch (error) {

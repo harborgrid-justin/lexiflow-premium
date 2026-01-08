@@ -42,20 +42,19 @@ export function ConfigProvider({ children, initialConfig }: ConfigProviderProps)
 
   useEffect(() => {
     // Load remote feature flags if needed
-    const loadRemoteConfig = async () => {
-      try {
-        const response = await fetch('/api/config');
-        const remoteConfig = await response.json();
-        setConfig(prev => ({ ...prev, ...remoteConfig }));
-      } catch (error) {
-        console.error('Failed to load remote config:', error);
-      }
-    };
-
     if (config.features?.remoteConfig) {
+      const loadRemoteConfig = async () => {
+        try {
+          const response = await fetch('/api/config');
+          const remoteConfig = await response.json();
+          setConfig(prev => ({ ...prev, ...remoteConfig }));
+        } catch (error) {
+          console.error('Failed to load remote config:', error);
+        }
+      };
       loadRemoteConfig();
     }
-  }, []);
+  }, [config.features?.remoteConfig]);
 
   return (
     <ConfigContext.Provider value={config}>

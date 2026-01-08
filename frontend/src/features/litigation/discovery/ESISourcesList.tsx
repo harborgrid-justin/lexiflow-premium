@@ -119,7 +119,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
       ...formData,
       status: 'identified',
       caseId: caseId
-    } as any);
+    } as Partial<ESISource>);
   };
 
   const stats = {
@@ -235,7 +235,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
                     <div className="text-sm">{source.custodian}</div>
                   </TableCell>
                   <TableCell>
-                    <div className={cn("text-sm font-mono", theme.text.secondary)}>{(source as any).location}</div>
+                    <div className={cn("text-sm font-mono", theme.text.secondary)}>{(source as ESISource & { location?: string }).location}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm">{(source as any).actualSize || (source as any).estimatedSize}</div>
+                    <div className="text-sm">{(source as ESISource & { actualSize?: string; estimatedSize?: string }).actualSize || (source as ESISource & { actualSize?: string; estimatedSize?: string }).estimatedSize}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">

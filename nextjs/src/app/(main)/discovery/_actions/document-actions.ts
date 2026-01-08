@@ -8,7 +8,8 @@
  */
 
 import { revalidateTag } from 'next/cache';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type {
   ActionResponse,
   ReviewDocument,

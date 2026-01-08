@@ -12,7 +12,8 @@
  * - [✓] Guideline 15: Full TypeScript type safety
  * - [✓] Guideline 17: Self-documenting with JSDoc
  */
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { PagePropsWithParams } from '@/lib/types';
 import { Metadata } from 'next';
 import { Suspense } from 'react';

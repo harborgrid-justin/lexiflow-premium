@@ -3,7 +3,7 @@
  * Dynamic route for individual brief view
  */
 import React from 'react';
-import { apiFetch } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';

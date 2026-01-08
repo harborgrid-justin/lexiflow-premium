@@ -27,7 +27,8 @@ import {
   UserX,
   UserCheck,
 } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { AdminUser, UserDetailPageProps } from '../../types';
 import { UserEditForm } from './user-edit-form';
 

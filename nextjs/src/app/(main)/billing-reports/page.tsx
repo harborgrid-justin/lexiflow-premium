@@ -12,7 +12,8 @@
 
 import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, CardHeader, SkeletonLine, StatCard } from '@/components/ui';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { BarChart3, Download } from 'lucide-react';
 import { Metadata } from 'next';
 import { Suspense } from 'react';

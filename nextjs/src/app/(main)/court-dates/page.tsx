@@ -4,7 +4,8 @@
  */
 import React from 'react';
 import { CourtDatesList } from '@/components/court-dates/CourtDatesList';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 

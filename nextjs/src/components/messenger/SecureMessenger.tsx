@@ -1,112 +1,156 @@
 'use client';
 
+import { Contact, Conversation, Message } from '@/api/communications/messaging-api';
+import { communicationsApi } from '@/api/domains/communications.api';
 import { Archive, FileText, MessageSquare, MoreVertical, Paperclip, Plus, Search, Send, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+// Using hardcoded userId for demo matching "Sent" alignment if ProfileDomain complicates things,
+// but better to use real logic if possible.
+// I'll stick to a simple check or local state for userId.
 
-// Mock Data
-const MOCK_CHATS = [
-  { id: '1', name: 'John Doe', lastMessage: 'Can we reschedule?', time: '10:30 AM', unread: 2 },
-  { id: '2', name: 'Jane Smith', lastMessage: 'Documents attached.', time: 'Yesterday', unread: 0 },
-];
+// Helper to format time
+const formatTime = (dateStr?: string) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 
-const MOCK_CONTACTS = [
-  { id: '1', name: 'John Doe', role: 'Client', email: 'john@example.com' },
-  { id: '2', name: 'Jane Smith', role: 'Opposing Counsel', email: 'jane@lawfirm.com' },
-];
+// Mock Sub-components refactored to Real Components
+const MessengerInbox = ({ conversations, loading }: { conversations: Conversation[], loading: boolean }) => {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [msgInput, setMsgInput] = useState('');
+  const [messagesLoading, setMessagesLoading] = useState(false);
 
-// Mock Sub-components
-const MessengerInbox = () => (
-  <div className="flex h-[600px] bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
-    {/* Chat List */}
-    <div className="w-1/3 border-r border-slate-200 dark:border-slate-700 flex flex-col">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-          <input
-            type="text"
-            placeholder="Search messages..."
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+  useEffect(() => {
+    if (conversations.length > 0 && !selectedId) {
+      setSelectedId(conversations[0].id);
+    }
+  }, [conversations, selectedId]);
+
+  useEffect(() => {
+    if (!selectedId) return;
+    async function fetchMessages() {
+      setMessagesLoading(true);
+      try {
+        const msgs = await communicationsApi.messaging.getMessages(selectedId!);
+        setMessages(msgs);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setMessagesLoading(false);
+      }
+    }
+    fetchMessages();
+  }, [selectedId]);
+
+  const selectedConv = conversations.find(c => c.id === selectedId);
+
+  const getConvName = (c: Conversation) => c.name || c.participants.map(p => p.userName).join(', ');
+
+  return (
+    <div className="flex h-150 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+      {/* Chat List */}
+      <div className="w-1/3 border-r border-slate-200 dark:border-slate-700 flex flex-col">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search messages..."
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {loading && <div className="p-4 text-center text-slate-500">Loading chats...</div>}
+          {!loading && conversations.length === 0 && <div className="p-4 text-center text-slate-500">No conversations</div>}
+          {conversations.map((chat) => (
+            <div
+              key={chat.id}
+              onClick={() => setSelectedId(chat.id)}
+              className={`p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer border-b border-slate-100 dark:border-slate-700/50 last:border-0 ${selectedId === chat.id ? 'bg-slate-50 dark:bg-slate-700/50' : ''}`}
+            >
+              <div className="flex justify-between items-start mb-1">
+                <h4 className="font-medium text-slate-900 dark:text-white truncate pr-2">{getConvName(chat)}</h4>
+                <span className="text-xs text-slate-400 whitespace-nowrap">{formatTime(chat.lastMessage?.createdAt || chat.createdAt)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{chat.lastMessage?.content || 'No messages'}</p>
+                {chat.unreadCount > 0 && (
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">
+                    {chat.unreadCount}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto">
-        {MOCK_CHATS.map((chat) => (
-          <div key={chat.id} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer border-b border-slate-100 dark:border-slate-700/50 last:border-0">
-            <div className="flex justify-between items-start mb-1">
-              <h4 className="font-medium text-slate-900 dark:text-white">{chat.name}</h4>
-              <span className="text-xs text-slate-400">{chat.time}</span>
+
+      {/* Chat Window */}
+      <div className="flex-1 flex flex-col">
+        {selectedConv ? (
+          <>
+            <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-medium">
+                  {getConvName(selectedConv).charAt(0)}
+                </div>
+                <div>
+                  <h3 className="font-medium text-slate-900 dark:text-white">{getConvName(selectedConv)}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Online</p>
+                </div>
+              </div>
+              <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <MoreVertical size={20} />
+              </button>
             </div>
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{chat.lastMessage}</p>
-              {chat.unread > 0 && (
-                <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">
-                  {chat.unread}
-                </span>
-              )}
+
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-900/50">
+              {messagesLoading && <div className="text-center text-slate-500 mt-10">Loading messages...</div>}
+              {!messagesLoading && messages.length === 0 && <div className="text-center text-slate-500 mt-10">No messages yet.</div>}
+              {messages.map((msg) => {
+                // Primitive "isMe" check - normally use auth
+                const isMe = msg.senderId === 'current-user-id' || msg.status === 'sent';
+                return (
+                  <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`${isMe ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-none border border-slate-200 dark:border-slate-600'} px-4 py-2 rounded-lg max-w-[70%] shadow-sm`}>
+                      <p className="text-sm">{msg.content}</p>
+                      <span className={`text-[10px] mt-1 block ${isMe ? 'text-blue-100' : 'text-slate-400'}`}>{formatTime(msg.createdAt)}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        ))}
+
+            <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+              <div className="flex items-center gap-2">
+                <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                  <Paperclip size={20} />
+                </button>
+                <input
+                  type="text"
+                  value={msgInput}
+                  onChange={(e) => setMsgInput(e.target.value)}
+                  placeholder="Type a message..."
+                  className="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-slate-500">Select a conversation</div>
+        )}
       </div>
     </div>
+  )
+};
 
-    {/* Chat Window */}
-    <div className="flex-1 flex flex-col">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-medium">
-            JD
-          </div>
-          <div>
-            <h3 className="font-medium text-slate-900 dark:text-white">John Doe</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Online</p>
-          </div>
-        </div>
-        <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-          <MoreVertical size={20} />
-        </button>
-      </div>
-
-      <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-900/50">
-        <div className="flex justify-end">
-          <div className="bg-blue-600 text-white px-4 py-2 rounded-lg rounded-tr-none max-w-[70%]">
-            <p className="text-sm">Hi John, do you have the documents ready?</p>
-            <span className="text-[10px] opacity-70 mt-1 block text-right">10:28 AM</span>
-          </div>
-        </div>
-        <div className="flex justify-start">
-          <div className="bg-white dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg rounded-tl-none max-w-[70%] shadow-sm border border-slate-200 dark:border-slate-600">
-            <p className="text-sm">Almost there, just reviewing the last section.</p>
-            <span className="text-[10px] text-slate-400 mt-1 block">10:29 AM</span>
-          </div>
-        </div>
-        <div className="flex justify-start">
-          <div className="bg-white dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg rounded-tl-none max-w-[70%] shadow-sm border border-slate-200 dark:border-slate-600">
-            <p className="text-sm">Can we reschedule our call to 2 PM?</p>
-            <span className="text-[10px] text-slate-400 mt-1 block">10:30 AM</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
-        <div className="flex items-center gap-2">
-          <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
-            <Paperclip size={20} />
-          </button>
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
-            <Send size={18} />
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const MessengerContacts = () => (
+const MessengerContacts = ({ contacts, loading }: { contacts: Contact[], loading: boolean }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
     <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
       <h3 className="text-lg font-medium text-slate-900 dark:text-white">Contacts</h3>
@@ -116,7 +160,9 @@ const MessengerContacts = () => (
       </button>
     </div>
     <div className="divide-y divide-slate-200 dark:divide-slate-700">
-      {MOCK_CONTACTS.map((contact) => (
+      {loading && <div className="p-4 text-center text-slate-500">Loading contacts...</div>}
+      {!loading && contacts.length === 0 && <div className="p-4 text-center text-slate-500">No contacts</div>}
+      {contacts.map((contact) => (
         <div key={contact.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 font-medium">
@@ -124,7 +170,7 @@ const MessengerContacts = () => (
             </div>
             <div>
               <h4 className="font-medium text-slate-900 dark:text-white">{contact.name}</h4>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{contact.role}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{contact.role || 'Contact'}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -168,6 +214,28 @@ const MessengerArchived = () => (
 
 export default function SecureMessenger() {
   const [activeTab, setActiveTab] = useState('chats');
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const [convs, conts] = await Promise.all([
+          communicationsApi.messaging.getConversations(),
+          communicationsApi.messaging.getContacts()
+        ]);
+        setConversations(convs);
+        setContacts(conts);
+      } catch (error) {
+        console.error("Failed to load messaging data", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const tabs = [
     { id: 'chats', label: 'Inbox', icon: MessageSquare },
@@ -211,9 +279,9 @@ export default function SecureMessenger() {
       </div>
 
       {/* Content */}
-      <div className="min-h-[400px]">
-        {activeTab === 'chats' && <MessengerInbox />}
-        {activeTab === 'contacts' && <MessengerContacts />}
+      <div className="min-h-100">
+        {activeTab === 'chats' && <MessengerInbox conversations={conversations} loading={loading} />}
+        {activeTab === 'contacts' && <MessengerContacts contacts={contacts} loading={loading} />}
         {activeTab === 'files' && <MessengerFiles />}
         {activeTab === 'archived' && <MessengerArchived />}
       </div>

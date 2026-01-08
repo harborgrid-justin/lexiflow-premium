@@ -3,7 +3,7 @@
  * Case operational management tools with backend data
  */
 import React from 'react';
-import { apiFetch } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 

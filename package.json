@@ -34,6 +34,7 @@
     "debug": "^4.4.3"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@react-router/dev": "^7.11.0",
     "@react-router/node": "^7.11.0",
     "@tanstack/react-query": "^5.90.16",

@@ -2,7 +2,8 @@
  * Payment Plan Detail Page - Server Component with Data Fetching
  * Detailed view of payment plan with schedule, transactions, and auto-pay settings
  */
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react';

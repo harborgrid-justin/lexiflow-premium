@@ -7,7 +7,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/shadcn/card';
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/shadcn/chart';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/shadcn/tabs';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';

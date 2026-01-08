@@ -3,7 +3,8 @@
  * New case intake and onboarding with workflow templates
  */
 import React from 'react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 

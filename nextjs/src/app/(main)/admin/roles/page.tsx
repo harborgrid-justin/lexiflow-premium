@@ -7,7 +7,8 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { Shield, Plus, Users, Lock, Edit, Trash2 } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { Role, PermissionGroup } from '../types';
 import { RolesClient } from './roles-client';
 

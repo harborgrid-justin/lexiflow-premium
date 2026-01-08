@@ -4,7 +4,8 @@
 
 import { PageHeader } from '@/components/layout';
 import { Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
 import { Suspense } from 'react';

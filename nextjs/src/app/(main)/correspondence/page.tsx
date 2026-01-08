@@ -3,7 +3,8 @@
  * Manage legal correspondence and letters
  */
 import CorrespondenceManager from '@/features/operations/correspondence/CorrespondenceManager';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import React, { Suspense } from 'react';
 

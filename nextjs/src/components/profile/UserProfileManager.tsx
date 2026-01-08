@@ -1,23 +1,12 @@
-'use client';
-
-import { Activity, Key, Lock, Mail, MapPin, Phone, Settings, Shield, Sliders, UserCircle, Briefcase, Building } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { ProfileDomain } from '@/services/domain/ProfileDomain';
+"use client";
+
 import { ExtendedUserProfile } from '@/types';
+import { Activity, Key, Lock, Mail, MapPin, Phone, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-// Mock Data
-const MOCK_PROFILE = {
-  id: '1',
-  name: 'Jane Doe',
-  role: 'Senior Partner',
-  email: 'jane.doe@lexiflow.com',
-  phone: '+1 (555) 123-4567',
-  location: 'New York, NY',
-  avatar: null,
-};
-
-// Mock Sub-components
-const ProfileOverview = ({ profile }: { profile: any }) => (
+// Sub-components
+const ProfileOverview = ({ profile }: { profile: ExtendedUserProfile }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
     <div className="flex flex-col md:flex-row gap-6 items-start">
       <div className="w-32 h-32 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 text-4xl font-bold">
@@ -36,11 +25,11 @@ const ProfileOverview = ({ profile }: { profile: any }) => (
           </div>
           <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
             <Phone size={18} className="text-slate-400" />
-            <span>{profile.phone}</span>
+            <span>{profile.phone || 'N/A'}</span>
           </div>
           <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
             <MapPin size={18} className="text-slate-400" />
-            <span>{profile.location}</span>
+            <span>{profile.location || 'N/A'}</span>
           </div>
         </div>
 
@@ -54,7 +43,7 @@ const ProfileOverview = ({ profile }: { profile: any }) => (
   </div>
 );
 
-const PreferencePane = () => (
+const PreferencePane = ({ preferences }: { preferences?: ExtendedUserProfile['preferences'] }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
     <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Preferences</h3>
     <div className="space-y-6">
@@ -63,10 +52,13 @@ const PreferencePane = () => (
           <h4 className="font-medium text-slate-900 dark:text-white">Theme</h4>
           <p className="text-sm text-slate-500 dark:text-slate-400">Choose your preferred interface theme.</p>
         </div>
-        <select className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm">
-          <option>System Default</option>
-          <option>Light</option>
-          <option>Dark</option>
+        <select
+          className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm"
+          defaultValue={preferences?.theme || 'system'}
+        >
+          <option value="system">System Default</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
         </select>
       </div>
       <div className="flex items-center justify-between">
@@ -83,17 +75,20 @@ const PreferencePane = () => (
           <h4 className="font-medium text-slate-900 dark:text-white">Language</h4>
           <p className="text-sm text-slate-500 dark:text-slate-400">Select your preferred language.</p>
         </div>
-        <select className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm">
-          <option>English (US)</option>
-          <option>Spanish</option>
-          <option>French</option>
+        <select
+          className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 text-sm"
+          defaultValue={preferences?.locale || 'en-US'}
+        >
+          <option value="en-US">English (US)</option>
+          <option value="es-ES">Spanish</option>
+          <option value="fr-FR">French</option>
         </select>
       </div>
     </div>
   </div>
 );
 
-const AccessMatrixEditor = () => (
+const AccessMatrixEditor = ({ accessMatrix }: { accessMatrix?: ExtendedUserProfile['accessMatrix'] }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
     <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4">Access Matrix</h3>
     <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
@@ -111,7 +106,7 @@ const AccessMatrixEditor = () => (
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-          {['Cases', 'Documents', 'Billing', 'Users'].map((module) => (
+          {(accessMatrix ? accessMatrix.map(p => p.resource) : ['Cases', 'Documents', 'Billing', 'Users']).map((module) => (
             <tr key={module} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
               <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{module}</td>
               <td className="px-6 py-4 text-center text-emerald-600">✓</td>
@@ -126,7 +121,7 @@ const AccessMatrixEditor = () => (
   </div>
 );
 
-const SecurityPane = () => (
+const SecurityPane = ({ security }: { security?: ExtendedUserProfile['security'] }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
     <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Security Settings</h3>
     <div className="space-y-6">
@@ -137,7 +132,7 @@ const SecurityPane = () => (
           </div>
           <div>
             <h4 className="font-medium text-slate-900 dark:text-white">Password</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Last changed 3 months ago</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Last changed {security?.lastPasswordChange || 'Never'}</p>
           </div>
         </div>
         <button className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700">
@@ -151,7 +146,9 @@ const SecurityPane = () => (
           </div>
           <div>
             <h4 className="font-medium text-slate-900 dark:text-white">Two-Factor Authentication</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Enabled via Authenticator App</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {security?.mfaEnabled ? `Enabled via ${security.mfaMethod}` : 'Disabled'}
+            </p>
           </div>
         </div>
         <button className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700">
@@ -178,6 +175,22 @@ const SecurityPane = () => (
 
 export default function UserProfileManager() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [profile, setProfile] = useState<ExtendedUserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await ProfileDomain.getCurrentProfile();
+        setProfile(data);
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProfile();
+  }, []);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: UserCircle },
@@ -186,6 +199,14 @@ export default function UserProfileManager() {
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'audit', label: 'Audit Log', icon: Activity },
   ];
+
+  if (loading) {
+    return <div className="p-8 text-center text-slate-500">Loading user profile...</div>;
+  }
+
+  if (!profile) {
+    return <div className="p-8 text-center text-slate-500">Profile not found.</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -222,11 +243,11 @@ export default function UserProfileManager() {
       </div>
 
       {/* Content */}
-      <div className="min-h-[400px]">
-        {activeTab === 'overview' && <ProfileOverview profile={MOCK_PROFILE} />}
-        {activeTab === 'preferences' && <PreferencePane />}
-        {activeTab === 'access' && <AccessMatrixEditor />}
-        {activeTab === 'security' && <SecurityPane />}
+      <div className="min-h-100">
+        {activeTab === 'overview' && <ProfileOverview profile={profile} />}
+        {activeTab === 'preferences' && <PreferencePane preferences={profile.preferences} />}
+        {activeTab === 'access' && <AccessMatrixEditor accessMatrix={profile.accessMatrix} />}
+        {activeTab === 'security' && <SecurityPane security={profile.security} />}
         {activeTab === 'audit' && (
           <div className="p-6 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
             Audit logs visualization component placeholder.

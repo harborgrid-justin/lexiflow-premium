@@ -12,7 +12,7 @@
  * - [✓] Guideline 15: Full TypeScript type safety
  * - [✓] Guideline 17: Self-documenting with JSDoc
  */
-import { apiFetch } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { PagePropsWithParams } from '@/lib/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';

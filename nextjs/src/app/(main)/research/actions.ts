@@ -13,7 +13,8 @@
  */
 
 import { revalidateTag } from 'next/cache';
-import { API_BASE_URL, API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_BASE_URL, API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type {
   ResearchProject,
   CreateResearchProjectDto,

@@ -7,7 +7,8 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { Settings, Server, Shield, Zap, AlertTriangle, RefreshCw } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { SystemSettings, FeatureFlags } from '../types';
 import { SettingsClient } from './settings-client';
 

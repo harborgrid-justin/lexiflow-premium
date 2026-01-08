@@ -7,7 +7,8 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { Activity, RefreshCw, Server, Database, HardDrive, Cpu, Clock, Zap } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { HealthStatus, SystemMetrics, HealthCheck } from '../types';
 import { HealthClient } from './health-client';
 

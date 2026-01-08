@@ -7,7 +7,8 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { FileText, Download, Search, Filter, Clock, User, Activity, Shield } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { AuditLogEntry, AdminPageProps } from '../types';
 import { AuditClient } from './audit-client';
 

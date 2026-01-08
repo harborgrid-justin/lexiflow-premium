@@ -25,7 +25,8 @@ import {
   Plug,
   Clock,
 } from 'lucide-react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { SystemMetrics, AuditLogEntry, HealthCheck } from './types';
 
 // =============================================================================

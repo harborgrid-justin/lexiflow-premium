@@ -10,7 +10,8 @@
  * @see /workspaces/lexiflow-premium/frontend/src/routes/analytics/clients.tsx
  */
 
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { ClientMetricsSummary } from '@/types/analytics-module';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
@@ -78,7 +79,7 @@ interface ClientAnalyticsData {
 // ============================================================================
 
 async function fetchClientAnalytics(): Promise<ClientAnalyticsData> {
-  'use cache';
+  // 'use cache'; // Disabled due to build error: feature flag required
 
   try {
     const response = await apiFetch<{

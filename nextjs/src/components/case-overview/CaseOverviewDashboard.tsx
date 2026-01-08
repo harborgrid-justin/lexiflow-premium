@@ -1,5 +1,7 @@
 'use client';
 
+import { DashboardKPIs, dashboardMetricsService, RecentActivity } from '@/services/api/dashboard-metrics.service';
+import { CRMService } from '@/services/domain/CRMDomain';
 import {
   Activity,
   AlertCircle,
@@ -9,39 +11,50 @@ import {
   DollarSign,
   Plus,
   Search,
-  TrendingUp,
   Users
 } from 'lucide-react';
-import { useState } from 'react';
-
-// Mock Data
-const MOCK_KPIS = {
-  activeMatters: 142,
-  activeMattersChange: 12,
-  pendingIntake: 28,
-  pendingIntakeChange: 5,
-  upcomingDeadlines: 15,
-  upcomingDeadlinesChange: -2,
-  revenueYTD: 1250000,
-  revenueChange: 8
-};
-
-const MOCK_PIPELINE = [
-  { stage: 'Initial Contact', count: 12, value: 150000 },
-  { stage: 'Conflict Check', count: 8, value: 320000 },
-  { stage: 'Engagement Review', count: 5, value: 85000 },
-  { stage: 'Contract Pending', count: 3, value: 45000 }
-];
-
-const MOCK_ACTIVITIES = [
-  { id: '1', type: 'matter_created', title: 'Smith v. Jones', description: 'New matter created', time: '2 hours ago', priority: 'medium' },
-  { id: '2', type: 'deadline', title: 'TechCorp Merger', description: 'Filing deadline approaching', time: '4 hours ago', priority: 'high' },
-  { id: '3', type: 'status_change', title: 'Estate of H. Doe', description: 'Status changed to Closed', time: '1 day ago', priority: 'low' },
-  { id: '4', type: 'milestone', title: 'City of NY vs. Uber', description: 'Discovery phase completed', time: '2 days ago', priority: 'medium' }
-];
+import { useEffect, useState } from 'react';
 
 export function CaseOverviewDashboard() {
   const [timeRange, setTimeRange] = useState('30d');
+  const [kpis, setKpis] = useState<DashboardKPIs | null>(null);
+  const [pipeline, setPipeline] = useState<any[]>([]);
+  const [activities, setActivities] = useState<RecentActivity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      try {
+        const [kpiData, pipelineData, activitiesData] = await Promise.all([
+          dashboardMetricsService.getKPIs(),
+          CRMService.getPipelineSummary(),
+          dashboardMetricsService.getRecentActivity()
+        ]);
+        setKpis(kpiData);
+        setPipeline(pipelineData);
+        setActivities(activitiesData);
+      } catch (error) {
+        console.error('Failed to load dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [timeRange]);
+
+  const activeMatters = kpis?.activeCases?.value || 0;
+  const activeMattersChange = kpis?.activeCases?.change || 0;
+
+  // Calculate pending intake from pipeline
+  const pendingIntake = pipeline.reduce((acc, curr) => acc + (curr.count || 0), 0);
+  const pendingIntakeChange = 0; // Not available in API currently
+
+  const upcomingDeadlines = kpis?.upcomingDeadlines?.value || 0;
+  const upcomingDeadlinesChange = 0; // Not available in API currently
+
+  const revenueYTD = kpis?.revenue?.value || 0;
+  const revenueChange = kpis?.revenue?.change || 0;
 
   return (
     <div className="space-y-6 p-6 bg-slate-50 dark:bg-slate-900 min-h-screen">
@@ -71,30 +84,30 @@ export function CaseOverviewDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Active Matters"
-          value={MOCK_KPIS.activeMatters}
-          change={MOCK_KPIS.activeMattersChange}
+          value={activeMatters}
+          change={activeMattersChange}
           icon={Briefcase}
           color="blue"
         />
         <KpiCard
           title="Pending Intake"
-          value={MOCK_KPIS.pendingIntake}
-          change={MOCK_KPIS.pendingIntakeChange}
+          value={pendingIntake}
+          change={pendingIntakeChange}
           icon={Users}
           color="purple"
         />
         <KpiCard
           title="Upcoming Deadlines"
-          value={MOCK_KPIS.upcomingDeadlines}
-          change={MOCK_KPIS.upcomingDeadlinesChange}
+          value={upcomingDeadlines}
+          change={upcomingDeadlinesChange}
           icon={Clock}
           color="amber"
           inverse={true}
         />
         <KpiCard
           title="Revenue YTD"
-          value={`$${(MOCK_KPIS.revenueYTD / 1000000).toFixed(2)}M`}
-          change={MOCK_KPIS.revenueChange}
+          value={`$${(revenueYTD / 1000000).toFixed(2)}M`}
+          change={revenueChange}
           icon={DollarSign}
           color="emerald"
         />
@@ -116,11 +129,11 @@ export function CaseOverviewDashboard() {
             </select>
           </div>
           <div className="space-y-4">
-            {MOCK_PIPELINE.map((stage) => (
+            {pipeline.map((stage) => (
               <div key={stage.stage} className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium text-slate-700 dark:text-slate-300">{stage.stage}</span>
-                  <span className="text-slate-500 dark:text-slate-400">{stage.count} matters • ${(stage.value / 1000).toFixed(0)}k</span>
+                  <span className="text-slate-500 dark:text-slate-400">{stage.count} matters • {stage.value}</span>
                 </div>
                 <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                   <div
@@ -137,11 +150,11 @@ export function CaseOverviewDashboard() {
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Recent Activity</h3>
           <div className="space-y-4">
-            {MOCK_ACTIVITIES.map((activity) => (
+            {activities.map((activity) => (
               <div key={activity.id} className="flex gap-3">
                 <div className={`mt-1 p-1.5 rounded-full h-fit ${activity.priority === 'high' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
-                    activity.priority === 'medium' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
-                      'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                  activity.priority === 'medium' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+                    'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                   }`}>
                   {activity.type === 'deadline' ? <AlertCircle className="h-4 w-4" /> :
                     activity.type === 'matter_created' ? <Plus className="h-4 w-4" /> :

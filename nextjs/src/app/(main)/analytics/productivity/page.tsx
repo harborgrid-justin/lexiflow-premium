@@ -10,7 +10,8 @@
  * @see /workspaces/lexiflow-premium/frontend/src/routes/analytics/productivity.tsx
  */
 
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { ProductivityMetricsSummary } from '@/types/analytics-module';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
@@ -73,7 +74,7 @@ interface ProductivityAnalyticsData {
 // ============================================================================
 
 async function fetchProductivityAnalytics(): Promise<ProductivityAnalyticsData> {
-  'use cache';
+  // 'use cache'; // Disabled due to build error: feature flag required
 
   try {
     const response = await apiFetch<{

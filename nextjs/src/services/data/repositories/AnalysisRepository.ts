@@ -9,7 +9,7 @@ import { ValidationError } from "@/services/core/errors";
 import { STORES, db } from "@/services/data/db";
 import { BriefAnalysisSession, JudgeProfile } from "@/types";
 import { delay } from "@/utils/async";
-import { Repository } from "../../../core/Repository";
+import { Repository } from "../../../services/core/Repository";
 
 export const ANALYSIS_QUERY_KEYS = {
   all: () => ["analysis"] as const,

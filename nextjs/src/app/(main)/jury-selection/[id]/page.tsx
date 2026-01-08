@@ -2,7 +2,8 @@
  * Jury Selection Detail Page - Server Component with Data Fetching
  * View juror list, voir dire responses, and peremptory strikes
  */
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';

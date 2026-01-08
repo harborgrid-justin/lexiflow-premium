@@ -2,12 +2,20 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId,
-  EntityId,
-  CaseId, Money, MetadataRecord} from './primitives';
+  BillingModel,
+  InvoiceStatus,
+  LedesActivityCode,
+  TimeEntryStatus,
+} from "./enums";
 import {
-  BillingModel,  LedesActivityCode, TimeEntryStatus, InvoiceStatus} from './enums';
-import { TrustSubLedger } from './trust-accounts';
+  BaseEntity,
+  CaseId,
+  EntityId,
+  MetadataRecord,
+  Money,
+  UserId,
+} from "./primitives";
+import { TrustSubLedger } from "./trust-accounts";
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---
 
@@ -100,7 +108,10 @@ export type TimeEntry = BaseEntity & {
  * Time entry creation payload
  * Frontend-to-backend DTO for creating new time entries
  */
-export type CreateTimeEntryDto = Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateTimeEntryDto = Omit<
+  TimeEntry,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /**
  * Billing transaction entity
@@ -109,7 +120,7 @@ export type CreateTimeEntryDto = Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt
 export type BillingTransaction = {
   readonly id: string;
   readonly date: string;
-  readonly type: 'Revenue' | 'Expense' | 'Deposit' | 'Withdrawal' | 'Transfer';
+  readonly type: "Revenue" | "Expense" | "Deposit" | "Withdrawal" | "Transfer";
   readonly description: string;
   readonly amount: number;
   readonly category?: string;
@@ -120,6 +131,8 @@ export type BillingTransaction = {
   readonly balance?: number;
   readonly reconciled?: boolean;
 };
+
+/**
  * Simplified DTO for creating unbilled time entries
  */
 export type TimeEntryPayload = {
@@ -129,18 +142,18 @@ export type TimeEntryPayload = {
   readonly description: string;
   readonly rate: number;
   readonly total: number;
-  readonly status: 'Unbilled';
+  readonly status: "Unbilled";
 };
 
 /**
  * Invoice billing model type
  */
 export type InvoiceBillingModel =
-  | 'Hourly'
-  | 'Fixed Fee'
-  | 'Contingency'
-  | 'Hybrid'
-  | 'Retainer';
+  | "Hourly"
+  | "Fixed Fee"
+  | "Contingency"
+  | "Hybrid"
+  | "Retainer";
 
 // InvoiceStatus is exported from enums.ts
 
@@ -223,7 +236,7 @@ export interface FirmExpense extends BaseEntity {
   category: string;
   description: string;
   amount: number;
-  status: 'Paid' | 'Pending';
+  status: "Paid" | "Pending";
   vendor: string;
 }
 
@@ -243,8 +256,8 @@ export interface FirmExpense extends BaseEntity {
 
 // Ledger Transaction with Receipt Support
 export interface LedgerTransaction extends BaseEntity {
-  account: 'Operating' | 'Trust' | 'Retainer';
-  type: 'Income' | 'Expense' | 'Deposit' | 'Withdrawal' | 'Transfer';
+  account: "Operating" | "Trust" | "Retainer";
+  type: "Income" | "Expense" | "Deposit" | "Withdrawal" | "Transfer";
   date: string;
   amount: number;
   description: string;
@@ -257,18 +270,18 @@ export interface LedgerTransaction extends BaseEntity {
 }
 // Backend Employee entity enums (from hr/dto/create-employee.dto.ts)
 export enum EmployeeRole {
-  PARTNER = 'Partner',
-  SENIOR_ASSOCIATE = 'Senior Associate',
-  ASSOCIATE = 'Associate',
-  PARALEGAL = 'Paralegal',
-  LEGAL_ASSISTANT = 'Legal Assistant',
-  INTERN = 'Intern'
+  PARTNER = "Partner",
+  SENIOR_ASSOCIATE = "Senior Associate",
+  ASSOCIATE = "Associate",
+  PARALEGAL = "Paralegal",
+  LEGAL_ASSISTANT = "Legal Assistant",
+  INTERN = "Intern",
 }
 
 export enum EmployeeStatus {
-  ACTIVE = 'Active',
-  ON_LEAVE = 'On Leave',
-  TERMINATED = 'Terminated'
+  ACTIVE = "Active",
+  ON_LEAVE = "On Leave",
+  TERMINATED = "Terminated",
 }
 
 export interface Employee extends BaseEntity {
@@ -289,19 +302,19 @@ export interface Employee extends BaseEntity {
 
 // Backend: time_off_requests table (hr module)
 export enum TimeOffType {
-  VACATION = 'Vacation',
-  SICK = 'Sick',
-  PERSONAL = 'Personal',
-  BEREAVEMENT = 'Bereavement',
-  JURY_DUTY = 'Jury Duty',
-  OTHER = 'Other'
+  VACATION = "Vacation",
+  SICK = "Sick",
+  PERSONAL = "Personal",
+  BEREAVEMENT = "Bereavement",
+  JURY_DUTY = "Jury Duty",
+  OTHER = "Other",
 }
 
 export enum TimeOffStatus {
-  PENDING = 'Pending',
-  APPROVED = 'Approved',
-  DENIED = 'Denied',
-  CANCELLED = 'Cancelled'
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  DENIED = "Denied",
+  CANCELLED = "Cancelled",
 }
 
 export interface TimeOffRequest extends BaseEntity {
@@ -320,30 +333,30 @@ export interface TimeOffRequest extends BaseEntity {
 // Backend: clients table - COMPLETE entity with 40+ fields
 // Backend Client entity enums (from clients/entities/client.entity.ts)
 export enum ClientType {
-  INDIVIDUAL = 'individual',
-  CORPORATION = 'corporation',
-  PARTNERSHIP = 'partnership',
-  LLC = 'llc',
-  NONPROFIT = 'nonprofit',
-  GOVERNMENT = 'government',
-  OTHER = 'other'
+  INDIVIDUAL = "individual",
+  CORPORATION = "corporation",
+  PARTNERSHIP = "partnership",
+  LLC = "llc",
+  NONPROFIT = "nonprofit",
+  GOVERNMENT = "government",
+  OTHER = "other",
 }
 
 export enum ClientStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  PROSPECTIVE = 'prospective',
-  FORMER = 'former',
-  BLOCKED = 'blocked'
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  PROSPECTIVE = "prospective",
+  FORMER = "former",
+  BLOCKED = "blocked",
 }
 
 export enum PaymentTerms {
-  NET_15 = 'net_15',
-  NET_30 = 'net_30',
-  NET_45 = 'net_45',
-  NET_60 = 'net_60',
-  DUE_ON_RECEIPT = 'due_on_receipt',
-  CUSTOM = 'custom'
+  NET_15 = "net_15",
+  NET_30 = "net_30",
+  NET_45 = "net_45",
+  NET_60 = "net_60",
+  DUE_ON_RECEIPT = "due_on_receipt",
+  CUSTOM = "custom",
 }
 
 export interface Client extends BaseEntity {

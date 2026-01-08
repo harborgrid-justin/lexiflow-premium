@@ -2,7 +2,8 @@
  * Conflict Alerts Page - Server Component with Data Fetching
  * Real-time conflict detection dashboard
  */
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 

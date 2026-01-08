@@ -1,5 +1,6 @@
 import { analyticsApi, isBackendApiEnabled, workflowApi } from "@/api";
 import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
+import { AnalysisService } from "@/services/domain/AnalysisDomain";
 import {
   getCitationsRepository,
   getKnowledgeRepository,
@@ -15,6 +16,10 @@ export const AnalyticsDescriptors: PropertyDescriptorMap = {
   citations: {
     get: () =>
       isBackendApiEnabled() ? analyticsApi.citations : getCitationsRepository(),
+    enumerable: true,
+  },
+  analysis: {
+    get: () => AnalysisService,
     enumerable: true,
   },
   analytics: { get: () => AnalyticsService, enumerable: true },

@@ -10,7 +10,8 @@
  * @see /workspaces/lexiflow-premium/frontend/src/routes/analytics/billing.tsx
  */
 
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type { BillingMetricsSummary } from '@/types/analytics-module';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
@@ -84,7 +85,7 @@ interface BillingAnalyticsData {
 // ============================================================================
 
 async function fetchBillingAnalytics(): Promise<BillingAnalyticsData> {
-  'use cache';
+  // 'use cache'; // Disabled due to build error: feature flag required
 
   try {
     const response = await apiFetch<{

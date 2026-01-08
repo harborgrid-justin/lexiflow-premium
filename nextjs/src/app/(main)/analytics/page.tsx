@@ -10,7 +10,8 @@
  * @see /workspaces/lexiflow-premium/frontend/src/routes/analytics/index.tsx
  */
 
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import type {
   BillingMetricsSummary,
   CaseMetricsSummary,
@@ -77,7 +78,7 @@ interface ApiDashboardResponse {
  * Uses "use cache" directive for Next.js 16 caching
  */
 async function fetchDashboardMetrics(): Promise<DashboardMetrics> {
-  'use cache';
+  // 'use cache'; // Disabled due to build error: feature flag required
 
   try {
     const response = await apiFetch<ApiDashboardResponse>(API_ENDPOINTS.ANALYTICS.DASHBOARD, {

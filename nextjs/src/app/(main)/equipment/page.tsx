@@ -2,7 +2,8 @@
  * Equipment List Page - Server Component with Data Fetching
  * Manage equipment assets and checkout status
  */
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';

@@ -3,7 +3,8 @@
  * Detailed view of court reporter with contact info, calendar, and transcript history
  */
 import React from 'react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { API_ENDPOINTS } from '@/lib/api-config';
+import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';

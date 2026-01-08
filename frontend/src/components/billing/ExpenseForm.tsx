@@ -86,17 +86,13 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Case/Matter <span className="text-red-500">*</span>
             </label>
-            <select
+            <input
+              type="text"
               name="caseId"
-              required
-              defaultValue={expense?.caseId || ''}
+              defaultValue={expense?.id || ''}
+              placeholder="Enter case ID"
               className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-            >
-              <option value="">Select a case...</option>
-              <option value="C-2024-001">Martinez v. TechCorp</option>
-              <option value="C-2024-112">OmniGlobal Merger</option>
-              <option value="C-2023-892">StartUp Inc - Series A</option>
-            </select>
+            />
           </div>
 
           {/* User (hidden, would come from auth) */}
@@ -219,7 +215,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             Receipt
           </label>
           <div className="mt-1">
-            {!selectedFile && !expense?.receipt ? (
+            {!selectedFile ? (
               <label className="flex cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 py-10 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500">
                 <div className="text-center">
                   <Upload className="mx-auto h-12 w-12 text-gray-400" />
@@ -253,13 +249,13 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
                     )}
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {selectedFile?.name || expense?.receipt?.filename || 'Receipt'}
+                        {selectedFile?.name || 'Receipt'}
                       </p>
                       <p className="text-xs text-gray-500">
                         {selectedFile?.size
                           ? `${(selectedFile.size / 1024).toFixed(1)} KB`
-                          : expense?.receipt?.size
-                            ? `${(expense.receipt.size / 1024).toFixed(1)} KB`
+                          : selectedFile?.size
+                            ? `${(selectedFile.size / 1024).toFixed(1)} KB`
                             : ''}
                       </p>
                     </div>
@@ -283,7 +279,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             type="checkbox"
             name="billable"
             id="billable"
-            defaultChecked={expense?.billable ?? true}
+            defaultChecked={true}
             value="true"
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />

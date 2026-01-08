@@ -147,6 +147,16 @@ export const calculatePasswordStrength = (
 
   const strength = strengthMap[score];
 
+  if (!strength) {
+    return {
+      score: 0 as 0 | 1 | 2 | 3 | 4,
+      label: 'Weak',
+      color: 'bg-red-500',
+      percentage: 0,
+      feedback,
+    };
+  }
+
   return {
     score: score as 0 | 1 | 2 | 3 | 4,
     label: strength.label!,

@@ -11,6 +11,7 @@ interface ChartTheme {
   grid: string;
   text: string;
   tooltipStyle: Record<string, unknown>;
+  [key: string]: string | number | Record<string, unknown>;
 }
 
 interface SatisfactionTabProps {

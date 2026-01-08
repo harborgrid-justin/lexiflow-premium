@@ -209,7 +209,9 @@ export class DiscoveryApiService {
    */
   async getRequests(caseId?: string): Promise<DiscoveryRequest[]> {
     const api = new DiscoveryRequestsApiService();
-    return api.getAll(caseId ? { caseId } : undefined);
+    return api.getAll(caseId ? { caseId } : undefined) as Promise<
+      DiscoveryRequest[]
+    >;
   }
 
   /**

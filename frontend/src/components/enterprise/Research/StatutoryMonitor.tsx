@@ -36,8 +36,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import type { Jurisdiction } from '@/types/jurisdiction';
 import type { LegalRule } from '@/types/legal-research';
+import type { Jurisdiction } from '@/types/system';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

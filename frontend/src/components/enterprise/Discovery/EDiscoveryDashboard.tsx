@@ -461,8 +461,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
                   {custodians.length > 0 ? custodians.map((custodian) => (
                     <tr
                       key={custodian.id}
-                      className={cn('hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer')}
-                      onClick={() => onNavigate?.('custodian', custodian.id)}
+                      className={cn('hover:bg-gray-50 dark:hover:bg-gray-800/50')}
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center">

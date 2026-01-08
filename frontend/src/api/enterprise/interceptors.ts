@@ -116,7 +116,7 @@ export class InterceptorManager {
   ): Promise<T> {
     let currentData = data;
     for (const interceptor of this.responseInterceptors) {
-      currentData = await interceptor(response, currentData);
+      currentData = (await interceptor(response, currentData)) as T;
     }
     return currentData;
   }
@@ -299,7 +299,7 @@ export function createRateLimitInterceptor(): ResponseInterceptor {
  * Transform snake_case to camelCase
  */
 export function createCaseConversionInterceptor(): ResponseInterceptor {
-  return async (response: Response, data: unknown) => {
+  return async (_response: Response, data: unknown) => {
     if (typeof data !== "object" || data === null) {
       return data;
     }

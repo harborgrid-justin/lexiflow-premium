@@ -173,6 +173,8 @@ const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
   ];
 };
 
+import type { BillingOverview, CaseStatusBreakdown, TeamMetrics } from '@/services/api/dashboard-metrics.service';
+
 const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
   if (!data) return [];
   const colors = ['#94A3B8', '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'];
@@ -530,13 +532,13 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                       borderRadius: '8px',
                     }}
                     formatter={(
-                      value: number | string | Array<number | string>,
+                      value: number | string | Array<number | string> | undefined,
                       name: string | number
-                    ) => {
+                    ): [string, string] => {
                       if (name === 'value' && typeof value === 'number') {
                         return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
                       }
-                      return [value, 'Cases'];
+                      return [String(value ?? ''), 'Cases'];
                     }}
                   />
                   <Legend />

@@ -136,6 +136,7 @@ const ROLE_COLORS: Record<TeamMemberRole, string> = {
 
 export const CaseTeam: React.FC<CaseTeamProps> = ({
   members,
+  onAddMember,
   onRemoveMember,
   onUpdateMember,
   onUpdatePermissions,
@@ -222,7 +223,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
           </div>
           {allowEdit && (
             <button
-              onClick={() => onAddMember?.()}
+              onClick={() => onAddMember?.({})}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <UserPlus className="h-4 w-4" />
@@ -478,7 +479,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
           </p>
           {allowEdit && (
             <button
-              onClick={() => onAddMember?.()}
+              onClick={() => onAddMember?.({})}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <UserPlus className="h-4 w-4" />

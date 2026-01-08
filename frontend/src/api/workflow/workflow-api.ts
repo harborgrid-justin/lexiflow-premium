@@ -234,7 +234,7 @@ export class WorkflowApiService {
         "data" in response &&
         Array.isArray((response as { data: unknown[] }).data)
       ) {
-        return (response as { data: unknown[] }).data;
+        return (response as { data: WorkflowTemplate[] }).data;
       }
 
       // Handle direct array response
@@ -435,10 +435,22 @@ export class WorkflowApiService {
 
       const response = await apiClient.get<
         | WorkflowInstance[]
-        | PaginatedResponse<WorkflowInstance>
+        | {
+            data: WorkflowInstance[];
+            total?: number;
+            page?: number;
+            limit?: number;
+          }
         | {
             success: boolean;
-            data: PaginatedResponse<WorkflowInstance> | WorkflowInstance[];
+            data:
+              | {
+                  data: WorkflowInstance[];
+                  total?: number;
+                  page?: number;
+                  limit?: number;
+                }
+              | WorkflowInstance[];
           }
       >(url);
 
@@ -460,12 +472,12 @@ export class WorkflowApiService {
         "data" in data &&
         Array.isArray((data as Record<string, unknown>).data)
       ) {
-        return (data as { data: Workflow[] }).data;
+        return (data as { data: WorkflowInstance[] }).data;
       }
 
       // Handle direct data property being array (if envelope was { data: [...] })
       if (Array.isArray(data)) {
-        return data as Workflow[];
+        return data as WorkflowInstance[];
       }
 
       console.warn(

@@ -62,7 +62,7 @@ export const HeaderWithNotifications: React.FC = () => {
     loadNotifications();
 
     // Set up real-time subscription if available
-    const subscription = DataService.notifications.subscribe?.((updatedNotifications) => {
+    const subscription = DataService.notifications.subscribe?.((updatedNotifications: unknown) => {
       setNotifications(updatedNotifications as UINotification[]);
     });
 

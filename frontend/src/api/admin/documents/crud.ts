@@ -35,16 +35,19 @@ export async function getAll(filters?: {
 
     // Handle wrapped paginated response (e.g. { success: true, data: { data: [], ... } })
     // This happens when NestJS interceptors wrap the response
-    const wrappedResponse = response as { data: { data: LegalDocument[] } };
     if (
       response &&
       typeof response === "object" &&
       "data" in response &&
-      typeof wrappedResponse.data === "object" &&
-      "data" in wrappedResponse.data &&
-      Array.isArray(wrappedResponse.data.data)
+      typeof (response as { data: unknown }).data === "object" &&
+      (response as { data: unknown }).data !== null &&
+      "data" in ((response as { data: unknown }).data as object) &&
+      Array.isArray(
+        ((response as { data: { data: unknown } }).data as { data: unknown })
+          .data
+      )
     ) {
-      return wrappedResponse.data.data;
+      return (response as { data: { data: LegalDocument[] } }).data.data;
     }
 
     // Handle direct array response

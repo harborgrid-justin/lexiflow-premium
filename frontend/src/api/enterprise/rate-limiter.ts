@@ -315,7 +315,7 @@ export class RateLimiter {
       this.queue.push({
         endpoint,
         execute: fn,
-        resolve,
+        resolve: resolve as (value: unknown) => void,
         reject,
         addedAt: Date.now(),
       });

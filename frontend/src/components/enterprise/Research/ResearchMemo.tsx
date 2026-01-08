@@ -108,8 +108,6 @@ export interface ResearchMemoProps {
 export const ResearchMemo: React.FC<ResearchMemoProps> = ({
   memo: initialMemo,
   onSave,
-  _onExport,
-  _onShare,
   onAISummarize,
   className = '',
 }) => {

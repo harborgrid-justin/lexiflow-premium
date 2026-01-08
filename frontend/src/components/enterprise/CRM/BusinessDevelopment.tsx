@@ -1,8 +1,12 @@
 /**
- * @module components/enterprise/CRM/BusinessDevelopment
- * @category Enterprise CRM
- * @description Business development module with lead tracking, pitch management,
- * RFP response tracking, and win/loss analysis.
+ * BusinessDevelopment Component
+ */
+
+import React, { useState } from 'react';
+ * @module components / enterprise / CRM / BusinessDevelopment
+  * @category Enterprise CRM
+    * @description Business development module with lead tracking, pitch management,
+ * RFP response tracking, and win / loss analysis.
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
@@ -699,8 +703,10 @@ export const BusinessDevelopment: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: { payload: { source: string; count: number }; source?: string; count?: number }) => {
-                    const { source, count } = props.payload || props;
+                  label={(props) => {
+                    const payload = props.payload || {};
+                    const source = (payload as { source?: string }).source || (props as { source?: string }).source;
+                    const count = (payload as { count?: number }).count ?? (props as { count?: number }).count;
                     return source && count !== undefined ? `${source}: ${count}` : '';
                   }}
                 >

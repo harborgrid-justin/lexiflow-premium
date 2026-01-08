@@ -4,121 +4,165 @@
  */
 
 // Layout Components
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./accordion";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./accordion";
 export {
   AlertDialog,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "./alert-dialog";
 export { Button, buttonVariants } from "./button";
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./card";
 export {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogTrigger,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "./dialog";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
 export {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup,
-} from "./dropdown-menu";
-export { ScrollArea, ScrollBar } from "./scroll-area";
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from "./table";
-export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
-export {
-  Toast,
-  ToastProvider,
-  ToastViewport,
-  ToastAction,
-  ToastClose,
-  ToastTitle,
-  ToastDescription,
-} from "./toast";
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "./chart";
 export {
   Command,
   CommandDialog,
-  CommandInput,
-  CommandList,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
-  CommandShortcut,
+  CommandList,
   CommandSeparator,
+  CommandShortcut,
 } from "./command";
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
+export {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+export { ScrollArea, ScrollBar } from "./scroll-area";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./table";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+export {
+  Toast,
+  ToastAction,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "./toast";
 
 // Form Components
-export { Input } from "./input";
-export { Label, labelVariants } from "./label";
-export { Textarea } from "./textarea";
-export {
-  Select,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectLabel,
-  SelectItem,
-  SelectSeparator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-} from "./select";
 export { Checkbox, checkboxVariants } from "./checkbox";
-export { RadioGroup, RadioGroupItem, radioGroupVariants, radioItemVariants } from "./radio-group";
-export { Switch, switchVariants, switchThumbVariants } from "./switch";
-export { Slider, sliderVariants } from "./slider";
 export {
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
-} from "./form"
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
+} from "./form";
+export { Input } from "./input";
+export { Label, labelVariants } from "./label";
+export {
+  RadioGroup,
+  RadioGroupItem,
+  radioGroupVariants,
+  radioItemVariants,
+} from "./radio-group";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+export { Slider, sliderVariants } from "./slider";
+export { Switch, switchThumbVariants, switchVariants } from "./switch";
+export { Textarea } from "./textarea";
 
 // Feedback & Utility Components
-export { SonnerToaster } from "./sonner";
-export { Alert, AlertTitle, AlertDescription } from "./alert";
+export { Alert, AlertDescription, AlertTitle } from "./alert";
+export {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./collapsible";
 export { Progress } from "./progress";
 export { Skeleton } from "./skeleton";
+export { SonnerToaster } from "./sonner";
 export { Spinner, spinnerVariants, type SpinnerProps } from "./spinner";
-export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 export { Toggle, toggleVariants } from "./toggle";
 export { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
 // Re-export toast utilities
-export { Toaster, useToast, toast, type ToastProps, type ToastActionElement } from "./toast";
+export {
+  Toaster,
+  toast,
+  useToast,
+  type ToastActionElement,
+  type ToastProps,
+} from "./toast";
 
 // Overlay Components
-export { HoverCard, HoverCardTrigger, HoverCardContent } from "./hover-card";
+export { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 
 // Sidebar Components
 export {
@@ -145,31 +189,31 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from "./sidebar"
+} from "./sidebar";
 
 // Sidebar Types
+export * from "./resizable";
 export type {
-  SidebarState,
-  SidebarVariant,
-  SidebarSide,
+  SidebarCSSProperties,
   SidebarCollapsible,
+  SidebarConfig,
+  SidebarContextValue,
+  SidebarGroupLabelProps,
+  SidebarGroup as SidebarGroupType,
+  SidebarMenuActionProps,
+  SidebarMenuButtonProps,
   SidebarMenuButtonSize,
   SidebarMenuButtonVariant,
-  SidebarContextValue,
-  SidebarProviderProps,
-  SidebarProps,
-  SidebarTriggerProps,
-  SidebarMenuButtonProps,
-  SidebarMenuActionProps,
+  SidebarMenuItem,
+  SidebarMenuItemClickEvent,
   SidebarMenuSkeletonProps,
   SidebarMenuSubButtonProps,
-  SidebarGroupLabelProps,
-  SidebarConfig,
-  SidebarMenuItem,
-  SidebarGroup as SidebarGroupType,
   SidebarNavigation,
+  SidebarProps,
+  SidebarProviderProps,
+  SidebarSide,
+  SidebarState,
   SidebarStateChangeEvent,
-  SidebarMenuItemClickEvent,
-  SidebarCSSProperties,
-} from "./sidebar.types"
-export * from './resizable';
+  SidebarTriggerProps,
+  SidebarVariant,
+} from "./sidebar.types";

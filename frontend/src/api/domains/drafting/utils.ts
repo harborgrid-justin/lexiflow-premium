@@ -62,7 +62,10 @@ export function validateClauseCompatibility(
       }
 
       // Explicit metadata conflicts
-      if (clause1.metadata?.conflictsWith?.includes(clause2.id)) {
+      if (
+        Array.isArray(clause1.metadata?.conflictsWith) &&
+        clause1.metadata.conflictsWith.includes(clause2.id)
+      ) {
         conflicts.push({
           clauseId1: clause1.id,
           clauseId2: clause2.id,
@@ -71,7 +74,10 @@ export function validateClauseCompatibility(
         });
       }
 
-      if (clause2.metadata?.conflictsWith?.includes(clause1.id)) {
+      if (
+        Array.isArray(clause2.metadata?.conflictsWith) &&
+        clause2.metadata.conflictsWith.includes(clause1.id)
+      ) {
         conflicts.push({
           clauseId1: clause1.id,
           clauseId2: clause2.id,

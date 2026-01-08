@@ -34,12 +34,14 @@ interface LeadsBySourceData {
   source: string;
   count: number;
   color: string;
+  [key: string]: string | number;
 }
 
 interface ChartTheme {
   grid: string;
   text: string;
   tooltipStyle: Record<string, unknown>;
+  [key: string]: string | number | Record<string, unknown>;
 }
 
 interface AnalysisTabProps {
@@ -98,8 +100,10 @@ export function AnalysisTab({
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: { payload?: LeadsBySourceData; source?: string; count?: number }) => {
-                    const { source, count } = props.payload || props;
+                  label={(props) => {
+                    const payload = (props as { payload?: LeadsBySourceData }).payload;
+                    const source = payload?.source || (props as { source?: string }).source;
+                    const count = payload?.count ?? (props as { count?: number }).count;
                     return source && count !== undefined ? `${source}: ${count}` : '';
                   }}
                 >

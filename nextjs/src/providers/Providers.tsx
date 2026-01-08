@@ -1,9 +1,12 @@
 'use client';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { TooltipProvider } from '@/components/ui/shadcn/tooltip';
+import { ToastProvider } from '@/providers';
+import { AuthProvider } from '@/providers/AuthProvider';
+import { DataSourceProvider } from '@/providers/DataSourceProvider';
 import { QueryClientProvider } from '@/providers/QueryClientProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
-import { ToastProvider } from '@/providers';
 import { Provider as JotaiProvider } from 'jotai';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -17,9 +20,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            <ToastProvider>
-              {children}
-            </ToastProvider>
+            <AuthProvider>
+              <DataSourceProvider>
+                <TooltipProvider>
+                  <ToastProvider>
+                    {children}
+                  </ToastProvider>
+                </TooltipProvider>
+              </DataSourceProvider>
+            </AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </JotaiProvider>

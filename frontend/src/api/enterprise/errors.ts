@@ -368,9 +368,11 @@ export function parseApiError(error: unknown): ApiErrorBase {
   }
 
   // HTTP errors
-  const statusCode = err.statusCode || err.status;
-  const message = err.message || err.error || "An error occurred";
-  const details = err.details || err.data;
+  const statusCode = (err as { statusCode?: number }).statusCode || err.status;
+  const message =
+    err.message || (err as { error?: string }).error || "An error occurred";
+  const details =
+    (err as { details?: unknown }).details || (err as { data?: unknown }).data;
 
   switch (statusCode) {
     case 400:

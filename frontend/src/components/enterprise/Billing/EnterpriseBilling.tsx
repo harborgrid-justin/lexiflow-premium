@@ -114,10 +114,14 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   }, [billingData]);
 
   const agingBuckets: ARAgingBucket[] = useMemo(() => {
-    if (!billingData?.agingBuckets) {
+    if (!billingData || !Array.isArray(billingData)) {
       return [];
     }
-    return billingData.agingBuckets.map((bucket: { label: string; amount: number; count: number; total: number }) => ({
+    const overviewWithBuckets = billingData.find((item: { agingBuckets?: unknown }) => item.agingBuckets);
+    if (!overviewWithBuckets || !(overviewWithBuckets as { agingBuckets?: unknown[] }).agingBuckets) {
+      return [];
+    }
+    return (overviewWithBuckets as { agingBuckets: { label: string; amount: number; count: number; total: number }[] }).agingBuckets.map((bucket: { label: string; amount: number; count: number; total: number }) => ({
       label: bucket.label,
       daysRange: bucket.label,
       amount: bucket.amount,

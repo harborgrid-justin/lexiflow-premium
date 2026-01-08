@@ -33,6 +33,7 @@ interface ChartTheme {
   grid: string;
   text: string;
   tooltipStyle: Record<string, unknown>;
+  [key: string]: string | number | Record<string, unknown>;
 }
 
 interface ProfitabilityTabProps {
@@ -77,7 +78,7 @@ export function ProfitabilityTab({ profitabilityData, segmentData, revenueTrendD
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={segmentData}
+                  data={segmentData as Array<ClientSegment & { [key: string]: string | number }>}
                   dataKey="revenue"
                   nameKey="segment"
                   cx="50%"

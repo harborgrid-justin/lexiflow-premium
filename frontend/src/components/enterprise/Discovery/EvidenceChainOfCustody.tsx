@@ -126,7 +126,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
   const [custodyTransfers, setTransfers] = useState<CustodyTransfer[]>([]);
   const [handlingLogs, setAuditLogs] = useState<HandlingLog[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceItem | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'transfers' | 'handling' | 'authentication'>('overview');

@@ -363,14 +363,16 @@ export const ClientAnalytics: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <RechartPieChart>
                 <Pie
-                  data={segmentData}
+                  data={segmentData as Array<{ segment: string; revenue: number; color: string;[key: string]: string | number }>}
                   dataKey="revenue"
                   nameKey="segment"
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(props: { payload: { segment: string; revenue: number }; segment?: string; revenue?: number }) => {
-                    const { segment, revenue } = props.payload || props;
+                  label={(props) => {
+                    const payload = (props as { payload?: { segment: string; revenue: number } }).payload;
+                    const segment = payload?.segment || (props as { segment?: string }).segment;
+                    const revenue = payload?.revenue ?? (props as { revenue?: number }).revenue;
                     return segment && revenue ? `${segment}: $${(revenue / 1000).toFixed(0)}k` : '';
                   }}
                 >

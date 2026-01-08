@@ -66,7 +66,6 @@ export const WindowProvider = ({
   };
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [maxZIndex, setMaxZIndex] = useState(BASE_WINDOW_Z);
-  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   // Settings State
   const [isOrbitalEnabled, setIsOrbitalEnabled] = useState(() => {
@@ -345,7 +344,7 @@ export const WindowProvider = ({
         ))}
 
         {!isOrbitalEnabled && windows.some(w => w.isOpen && !w.isMinimized) && portalRoot && createPortal(
-          <div className="fixed inset-0 bg-black/30 backdrop-blur-[1px] z-[1000] transition-opacity" />,
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-[1px] z-1000 transition-opacity" />,
           portalRoot
         )}
 

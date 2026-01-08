@@ -57,6 +57,7 @@ import { HRModule } from "./hr/hr.module";
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module";
 import { KnowledgeModule } from "./knowledge/knowledge.module";
 import { LegalEntitiesModule } from "./legal-entities/legal-entities.module";
+import { LegalResearchModule } from "./legal-research/legal-research.module";
 import { MessengerModule } from "./messenger/messenger.module";
 import { OperationsModule } from "./operations/operations.module";
 import { OrganizationsModule } from "./organizations/organizations.module";
@@ -153,6 +154,7 @@ export const APP_IMPORTS = [
   AnalyticsDashboardModule,
   KnowledgeModule,
   ResearchModule,
+  LegalResearchModule,
   JurisdictionsModule,
   LegalEntitiesModule,
 

@@ -29,7 +29,7 @@
  * - Stateful workflow instance tracking
  */
 
-import { apiClient } from "@/services/infrastructure/apiClient";
+import { apiClient, type PaginatedResponse } from "@/services/infrastructure/apiClient";
 import type {
   AIWorkflowSuggestion,
   EnhancedWorkflowInstance,
@@ -232,9 +232,9 @@ export class WorkflowApiService {
         response &&
         typeof response === "object" &&
         "data" in response &&
-        Array.isArray((response as { data: unknown[] }).data)
+        Array.isArray((response as { data: WorkflowTemplate[] }).data)
       ) {
-        return (response as { data: unknown[] }).data;
+        return (response as { data: WorkflowTemplate[] }).data;
       }
 
       // Handle direct array response

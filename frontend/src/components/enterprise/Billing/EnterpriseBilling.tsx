@@ -114,10 +114,11 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   }, [billingData]);
 
   const agingBuckets: ARAgingBucket[] = useMemo(() => {
-    if (!billingData?.agingBuckets) {
+    const data = billingData as unknown as { agingBuckets?: { label: string; amount: number; count: number; total: number }[] };
+    if (!data?.agingBuckets) {
       return [];
     }
-    return billingData.agingBuckets.map((bucket: { label: string; amount: number; count: number; total: number }) => ({
+    return data.agingBuckets.map((bucket) => ({
       label: bucket.label,
       daysRange: bucket.label,
       amount: bucket.amount,

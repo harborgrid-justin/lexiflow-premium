@@ -454,17 +454,16 @@ export class BillingApiService {
       >("/billing/invoices", filters);
 
       // Handle nested paginated response (NestJS standard response wrapping a paginated result)
-      const wrappedResponse = response as { data: { data: unknown[] } };
       if (
         response &&
         typeof response === "object" &&
         "data" in response &&
-        wrappedResponse.data &&
-        typeof wrappedResponse.data === "object" &&
-        "data" in wrappedResponse.data &&
-        Array.isArray(wrappedResponse.data.data)
+        (response as any).data &&
+        typeof (response as any).data === "object" &&
+        "data" in (response as any).data &&
+        Array.isArray((response as any).data.data)
       ) {
-        return wrappedResponse.data.data;
+        return (response as any).data.data as unknown[];
       }
 
       // Handle paginated response

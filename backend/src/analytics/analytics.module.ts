@@ -4,6 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // Entities
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
+import { DashboardWidget } from './entities/dashboard-widget.entity';
+import { KPIMetric } from './entities/kpi-metric.entity';
+import { AnalyticsSnapshot } from './entities/analytics-snapshot.entity';
+import { ReportTemplate } from './entities/report-template.entity';
+import { ReportExecution } from './entities/report-execution.entity';
 
 // Import BillingModule to access real billing analytics
 import { BillingModule } from '@billing/billing.module';
@@ -37,9 +42,30 @@ import { BillingAnalyticsService } from './billing-analytics/billing-analytics.s
 import { DashboardController } from './dashboard/dashboard.controller';
 import { DashboardService } from './dashboard/dashboard.service';
 
+// Enterprise Analytics Controller
+import { EnterpriseAnalyticsController } from './enterprise-analytics.controller';
+
+// Enterprise Analytics Services
+import { ExecutiveDashboardService } from './executive-dashboard.service';
+import { FirmAnalyticsService } from './firm-analytics.service';
+import { PracticeGroupAnalyticsService } from './practice-group-analytics.service';
+import { AttorneyPerformanceService } from './attorney-performance.service';
+import { ClientAnalyticsService } from './client-analytics.service';
+import { FinancialReportsService } from './financial-reports.service';
+import { KPICalculatorService } from './kpi-calculator.service';
+import { AnalyticsWebSocketGateway } from './analytics-websocket.gateway';
+
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AnalyticsEvent, Dashboard]),
+    TypeOrmModule.forFeature([
+      AnalyticsEvent,
+      Dashboard,
+      DashboardWidget,
+      KPIMetric,
+      AnalyticsSnapshot,
+      ReportTemplate,
+      ReportExecution,
+    ]),
     BillingModule, // Import BillingModule to access BillingAnalyticsService
     AuthModule,
   ],
@@ -51,28 +77,48 @@ import { DashboardService } from './dashboard/dashboard.service';
     DiscoveryAnalyticsController,
     BillingAnalyticsController,
     DashboardController,
+    EnterpriseAnalyticsController,
   ],
   providers: [
     // Main Service
     AnalyticsService,
-    
+
     CaseAnalyticsService,
     JudgeStatsService,
     OutcomePredictionsService,
     DiscoveryAnalyticsService,
     BillingAnalyticsService,
     DashboardService,
+
+    // Enterprise Analytics Services
+    ExecutiveDashboardService,
+    FirmAnalyticsService,
+    PracticeGroupAnalyticsService,
+    AttorneyPerformanceService,
+    ClientAnalyticsService,
+    FinancialReportsService,
+    KPICalculatorService,
+    AnalyticsWebSocketGateway,
   ],
   exports: [
     // Export main service
     AnalyticsService,
-    
+
     CaseAnalyticsService,
     JudgeStatsService,
     OutcomePredictionsService,
     DiscoveryAnalyticsService,
     BillingAnalyticsService,
     DashboardService,
+
+    // Enterprise Analytics Services
+    ExecutiveDashboardService,
+    FirmAnalyticsService,
+    PracticeGroupAnalyticsService,
+    AttorneyPerformanceService,
+    ClientAnalyticsService,
+    FinancialReportsService,
+    KPICalculatorService,
   ],
 })
 export class AnalyticsModule {}

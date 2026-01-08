@@ -27,8 +27,8 @@
  */
 
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from "@/types";
-import { DiscoveryRequestsApiService } from "./discovery-requests-api";
+import { LegalHold, PrivilegeLogEntry } from "@/types";
+import { DiscoveryRequest, DiscoveryRequestsApiService } from "./discovery-requests-api";
 import { LegalHoldsApiService } from "./legal-holds-api";
 import { PrivilegeLogApiService } from "./privilege-log-api";
 import { Production, ProductionsApiService } from "./productions-api";

@@ -3,7 +3,6 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import React from 'react';
 import { RiskCard } from './RiskCard';
 import type { ClientRiskAssessment } from './types';
 

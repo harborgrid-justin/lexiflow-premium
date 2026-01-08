@@ -4,25 +4,42 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 /**
  * Discovery Module
  * Comprehensive discovery management system
- * 
+ *
  * Features:
  * - Evidence tracking and chain of custody
  * - Discovery request management (interrogatories, RFPs, RFAs)
  * - Deposition scheduling and transcript management
  * - Document production with privilege logging
  * - Legal hold and preservation tracking
- * 
+ * - E-Discovery platform with collection, processing, and review
+ * - Technology Assisted Review (TAR) with predictive coding
+ * - Bates numbering and production management
+ *
  * Sub-modules:
  * - Evidence: Physical and digital evidence cataloging
  * - DiscoveryRequests: Interrogatories, RFPs, RFAs
  * - Depositions: Scheduling, transcripts, exhibits
  * - Productions: Document production and Bates numbering
  * - LegalHolds: Preservation and litigation hold management
+ * - E-Discovery: Data collection, processing, review platform, TAR
  */
 
 // Main Discovery Controller & Service
 import { DiscoveryController } from './discovery.controller';
 import { DiscoveryService } from './discovery.service';
+
+// E-Discovery Platform Entities
+import { DiscoveryProject } from './entities/discovery-project.entity';
+import { ReviewDocument } from './entities/review-document.entity';
+import { TARModel } from './entities/tar-model.entity';
+
+// E-Discovery Platform Services
+import { CollectionService } from './collection.service';
+import { ProcessingService } from './processing.service';
+import { ReviewPlatformService } from './review-platform.service';
+import { ProductionService } from './production.service';
+import { TARService } from './tar.service';
+import { BatesNumberingService } from './bates-numbering.service';
 
 // Evidence
 import { Evidence } from './evidence/entities/evidence.entity';
@@ -93,6 +110,10 @@ import { WitnessesService } from './witnesses/witnesses.service';
       Examination,
       CustodianInterview,
       Witness,
+      // E-Discovery Platform Entities
+      DiscoveryProject,
+      ReviewDocument,
+      TARModel,
     ]),
   ],
   controllers: [
@@ -122,6 +143,13 @@ import { WitnessesService } from './witnesses/witnesses.service';
     ExaminationsService,
     CustodianInterviewsService,
     WitnessesService,
+    // E-Discovery Platform Services
+    CollectionService,
+    ProcessingService,
+    ReviewPlatformService,
+    ProductionService,
+    TARService,
+    BatesNumberingService,
   ],
   exports: [
     DiscoveryService,
@@ -136,6 +164,13 @@ import { WitnessesService } from './witnesses/witnesses.service';
     ExaminationsService,
     CustodianInterviewsService,
     WitnessesService,
+    // E-Discovery Platform Services
+    CollectionService,
+    ProcessingService,
+    ReviewPlatformService,
+    ProductionService,
+    TARService,
+    BatesNumberingService,
   ],
 })
 export class DiscoveryModule {}

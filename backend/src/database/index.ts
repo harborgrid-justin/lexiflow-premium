@@ -8,7 +8,20 @@
  * - Performance monitoring
  * - Advanced query building
  * - Database validators
+ * - Enterprise entities
  */
+
+// Enterprise Entities
+export {
+  EnterpriseOrganization,
+  SSOConfiguration,
+  ComplianceRecord,
+  LegalResearchQuery,
+  BillingTransaction,
+  ENTERPRISE_ENTITIES,
+  ENTITY_METADATA,
+  getEntitiesInMigrationOrder,
+} from './entities';
 
 // Constraint Decorators
 export {

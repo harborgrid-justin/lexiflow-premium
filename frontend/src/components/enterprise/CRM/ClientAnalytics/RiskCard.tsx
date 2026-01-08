@@ -5,7 +5,6 @@
 
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
-import React from 'react';
 import type { ClientRiskAssessment } from './types';
 import {
   formatCurrency,

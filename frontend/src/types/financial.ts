@@ -196,13 +196,20 @@ export type Invoice = BaseEntity & {
 //   description: string;
 // }
 
-export interface FirmExpense extends BaseEntity { 
-  date: string; 
-  category: string; 
-  description: string; 
-  amount: number; 
-  status: 'Paid' | 'Pending'; 
-  vendor: string; 
+export interface FirmExpense extends BaseEntity {
+  caseId?: string;
+  date: string;
+  category: string;
+  description: string;
+  amount: number;
+  status: 'Paid' | 'Pending';
+  vendor: string;
+  paymentMethod?: string;
+  receipt?: {
+    filename: string;
+    size: number;
+  };
+  billable?: boolean;
 }
 
 /**

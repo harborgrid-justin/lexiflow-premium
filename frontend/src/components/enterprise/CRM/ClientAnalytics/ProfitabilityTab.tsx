@@ -4,7 +4,6 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
-import React from 'react';
 import {
   Bar,
   BarChart,

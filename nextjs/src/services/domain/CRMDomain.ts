@@ -95,7 +95,6 @@ import {
   UserId,
 } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
-import { delay } from "@/utils/async";
 import { AuditAction, AuditService } from "../core/AuditService";
 import { ConversionError, ErrorCode } from "../core/ErrorCodes";
 import { ValidationService } from "../core/ValidationService";
@@ -141,9 +140,21 @@ interface ConversionLock {
  */
 export const CRMService = {
   getLeads: async (): Promise<Lead[]> => {
-    // CRM leads are managed separately, not via admin API
-    await delay(200);
-    return [];
+    try {
+      const apiLeads = await api.crm.getLeads();
+      // Map API Leads to Domain Leads if necessary, but fields look compatible
+      return apiLeads.map((l) => ({
+        id: l.id,
+        client: l.client,
+        title: l.title,
+        stage: l.stage,
+        value: l.value,
+        source: l.source,
+      }));
+    } catch (e) {
+      console.error("Failed to fetch leads", e);
+      return [];
+    }
   },
 
   getAnalytics: async (mode: "light" | "dark" = "light") => {
@@ -189,34 +200,34 @@ export const CRMService = {
   },
 
   updateLead: async (id: string, updates: { stage: string }): Promise<Lead> => {
-    // In production, this would fetch from CRM API
-    const lead: Lead = {
-      id,
-      client: "Mock Client",
-      title: "Mock Lead",
-      stage: updates.stage,
-      value: "$0",
-    };
+    try {
+      // Fetch current lead primarily to get details for event publishing if needed,
+      // or rely on the return of updateLead API
+      const updatedLead = await api.crm.updateLead(id, updates);
 
-    // Integration Point: CRM -> Compliance
-    if (updates.stage) {
-      await IntegrationEventPublisher.publish(
-        SystemEventType.LEAD_STAGE_CHANGED,
-        {
-          leadId: id,
-          stage: updates.stage,
-          clientName: lead.client,
-          value: lead.value,
-        }
-      );
+      // Integration Point: CRM -> Compliance
+      if (updates.stage) {
+        await IntegrationEventPublisher.publish(
+          SystemEventType.LEAD_STAGE_CHANGED,
+          {
+            leadId: id,
+            stage: updates.stage,
+            clientName: updatedLead.client,
+            value: updatedLead.value,
+          }
+        );
+      }
+
+      // Automation: If Converted, create Client and Case
+      if (updates.stage === "Matter Created") {
+        await CRMService.convertLeadToClient(updatedLead);
+      }
+
+      return updatedLead;
+    } catch (error) {
+      console.error("[CRMService.updateLead] Error:", error);
+      throw error;
     }
-
-    // Automation: If Converted, create Client and Case
-    if (updates.stage === "Matter Created") {
-      await CRMService.convertLeadToClient(lead);
-    }
-
-    return lead;
   },
 
   /**
@@ -226,30 +237,26 @@ export const CRMService = {
   acquireConversionLock: async (leadId: string): Promise<string> => {
     ValidationService.validateId(leadId, "Lead ID");
 
-    const operationId = `conv-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-    const expiresAt = new Date(Date.now() + 60000).toISOString(); // 60s timeout
-
-    const lock: ConversionLock = {
-      leadId,
-      acquiredAt: new Date().toISOString(),
-      expiresAt,
-      operationId,
-    };
-
-    // Store lock (in production, use Redis)
-    const existingLock = await CRMService.getConversionLock(leadId);
-    if (existingLock && new Date(existingLock.expiresAt) > new Date()) {
-      throw new ConversionError(
-        ErrorCode.CONCURRENT_MODIFICATION,
-        `Lead ${leadId} is currently being converted by another operation`,
-        { existingOperation: existingLock.operationId }
-      );
+    try {
+      // API handles Redis locking and concurrency checks (SETNX)
+      const lock = await api.crm.acquireConversionLock(leadId);
+      return lock.operationId;
+    } catch (e: unknown) {
+      // Assuming 409 Conflict for concurrent modification
+      if (
+        typeof e === "object" &&
+        e !== null &&
+        "status" in e &&
+        (e as { status: number }).status === 409
+      ) {
+        throw new ConversionError(
+          ErrorCode.CONCURRENT_MODIFICATION,
+          `Lead ${leadId} is currently being converted by another operation`,
+          { existingOperation: "unknown" }
+        );
+      }
+      throw e;
     }
-
-    // TODO: In production, store in Redis with SETNX
-    localStorage.setItem(`lock:lead:${leadId}`, JSON.stringify(lock));
-
-    return operationId;
   },
 
   /**
@@ -259,9 +266,13 @@ export const CRMService = {
     leadId: string,
     operationId: string
   ): Promise<void> => {
-    const lock = await CRMService.getConversionLock(leadId);
-    if (lock && lock.operationId === operationId) {
-      localStorage.removeItem(`lock:lead:${leadId}`);
+    try {
+      await api.crm.releaseConversionLock(leadId, operationId);
+    } catch (e) {
+      console.error(
+        `[CRMService] Failed to release lock for lead ${leadId}`,
+        e
+      );
     }
   },
 
@@ -269,8 +280,7 @@ export const CRMService = {
    * Get existing conversion lock for a lead
    */
   getConversionLock: async (leadId: string): Promise<ConversionLock | null> => {
-    const lockData = localStorage.getItem(`lock:lead:${leadId}`);
-    return lockData ? JSON.parse(lockData) : null;
+    return await api.crm.getConversionLock(leadId);
   },
 
   /**
@@ -281,20 +291,21 @@ export const CRMService = {
   ): Promise<ConversionMapping | null> => {
     ValidationService.validateId(leadId, "Lead ID");
 
-    // TODO: In production, query from backend /api/crm/conversions/:leadId
-    const mappingData = localStorage.getItem(`conversion:${leadId}`);
-    return mappingData ? JSON.parse(mappingData) : null;
+    return await api.crm.getConversionMapping(leadId);
   },
 
   /**
    * Store conversion mapping for idempotency
    */
   storeConversionMapping: async (mapping: ConversionMapping): Promise<void> => {
-    // TODO: In production, POST to /api/crm/conversions
-    localStorage.setItem(
-      `conversion:${mapping.leadId}`,
-      JSON.stringify(mapping)
-    );
+    // API call to store mapping
+    // We map Domain interface to API interface (should be compatible fields)
+    await api.crm.storeConversionMapping({
+      leadId: mapping.leadId,
+      clientId: mapping.clientId,
+      caseId: mapping.caseId,
+      convertedAt: mapping.convertedAt,
+    });
 
     await AuditService.log({
       action: "LEAD_CONVERSION_MAPPED" as AuditAction,

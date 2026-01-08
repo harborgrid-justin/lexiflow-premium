@@ -1,9 +1,8 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/providers';
-import { useWindow } from '@/providers';
+import { useTheme, useWindow } from '@/providers';
 import { cn } from '@/utils/cn';
 import { MoreVertical } from 'lucide-react';
 import React from 'react';
@@ -17,10 +16,12 @@ interface MessengerChatListProps {
   setSearchTerm: (s: string) => void;
   handleSelectConversation: (id: string) => void;
   formatTime: (iso: string) => string;
+  onSendMessage: (text: string, attachments?: Attachment[]) => void;
+  onAttachFile: (files: File[]) => void;
 }
 
 export function MessengerChatList({
-  conversations, activeConvId, searchTerm, setSearchTerm, handleSelectConversation, formatTime
+  conversations, activeConvId, searchTerm, setSearchTerm, handleSelectConversation, formatTime, onSendMessage, onAttachFile
 }: MessengerChatListProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
@@ -31,18 +32,10 @@ export function MessengerChatList({
     openWindow(
       winId,
       `Chat: ${conv.name}`,
-      <MessengerChatWindow
-        activeConversation={conv}
-        activeConvId={conv.id}
-        setActiveConvId={() => { }} // No-op for detached window
-        inputText=""
-        setInputText={() => { }}
-        pendingAttachments={[]}
-        setPendingAttachments={() => { }}
-        isPrivilegedMode={false}
-        setIsPrivilegedMode={() => { }}
-        handleSendMessage={() => { }} // Mock
-        handleFileSelect={() => { }} // Mock
+      <PoppedOutChatWrapper
+        conversation={conv}
+        onSendMessage={onSendMessage}
+        onAttachFile={onAttachFile}
         formatTime={formatTime}
       />
     );

@@ -141,6 +141,14 @@ export interface JudgeProfile extends BaseEntity {
   appointedBy?: string;
   yearsOnBench?: number;
   priorExperience?: string;
+  // Standing Orders
+  standingOrders?: Array<{
+    id: string;
+    title: string;
+    type: string;
+    url?: string;
+    updatedAt: string;
+  }>;
   // Motion statistics
   motionStats: Array<{
     motionType: string;

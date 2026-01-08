@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Admin Panel Server Actions
@@ -11,20 +11,20 @@
  * - Type-safe operations with Zod validation
  */
 
-import { revalidateTag } from 'next/cache';
-import { API_BASE_URL, API_ENDPOINTS } from '@/lib/api-config';
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-config";
+import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import type {
   ActionResponse,
   AdminUser,
-  CreateUserInput,
-  UpdateUserInput,
-  Role,
+  AuditLogFilters,
   CreateRoleInput,
+  CreateUserInput,
+  Role,
   SystemSettings,
   UpdateSettingsInput,
-  ConnectIntegrationInput,
-  AuditLogFilters,
-} from './types';
+  UpdateUserInput,
+} from "./types";
 
 // =============================================================================
 // Helper Functions
@@ -38,13 +38,21 @@ async function serverFetch<T>(
   options?: RequestInit
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   const response = await fetch(url, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -60,10 +68,12 @@ async function serverFetch<T>(
  * In production, this would verify the session/JWT
  */
 async function requireAdminRole(): Promise<void> {
-  // TODO: Implement actual auth check with cookies()
-  // const cookieStore = await cookies();
-  // const session = cookieStore.get('session');
-  // Verify session has admin privileges
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+
+  if (!token) {
+    throw new Error("Unauthorized: Authentication required");
+  }
 }
 
 /**
@@ -77,7 +87,7 @@ async function logAuditEvent(
 ): Promise<void> {
   try {
     await serverFetch(API_ENDPOINTS.AUDIT_LOGS.LIST, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
         action,
         resourceType,
@@ -87,7 +97,7 @@ async function logAuditEvent(
       }),
     });
   } catch (error) {
-    console.error('Failed to log audit event:', error);
+    console.error("Failed to log audit event:", error);
   }
 }
 
@@ -107,32 +117,34 @@ export async function getUsers(filters?: {
     await requireAdminRole();
 
     const queryParams = new URLSearchParams();
-    if (filters?.role) queryParams.set('role', filters.role);
-    if (filters?.status) queryParams.set('status', filters.status);
-    if (filters?.search) queryParams.set('search', filters.search);
+    if (filters?.role) queryParams.set("role", filters.role);
+    if (filters?.status) queryParams.set("status", filters.status);
+    if (filters?.search) queryParams.set("search", filters.search);
 
-    const endpoint = `${API_ENDPOINTS.USERS.LIST}${queryParams.toString() ? `?${queryParams}` : ''}`;
+    const endpoint = `${API_ENDPOINTS.USERS.LIST}${queryParams.toString() ? `?${queryParams}` : ""}`;
     const users = await serverFetch<AdminUser[]>(endpoint);
 
     return { success: true, data: users };
   } catch (error) {
-    console.error('Failed to fetch users:', error);
-    return { success: false, error: 'Failed to fetch users' };
+    console.error("Failed to fetch users:", error);
+    return { success: false, error: "Failed to fetch users" };
   }
 }
 
 /**
  * Get single user by ID
  */
-export async function getUserById(id: string): Promise<ActionResponse<AdminUser>> {
+export async function getUserById(
+  id: string
+): Promise<ActionResponse<AdminUser>> {
   try {
     await requireAdminRole();
 
     const user = await serverFetch<AdminUser>(API_ENDPOINTS.USERS.DETAIL(id));
     return { success: true, data: user };
   } catch (error) {
-    console.error('Failed to fetch user:', error);
-    return { success: false, error: 'Failed to fetch user' };
+    console.error("Failed to fetch user:", error);
+    return { success: false, error: "Failed to fetch user" };
   }
 }
 
@@ -146,17 +158,17 @@ export async function createUser(
     await requireAdminRole();
 
     const user = await serverFetch<AdminUser>(API_ENDPOINTS.USERS.CREATE, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(input),
     });
 
-    await logAuditEvent('CREATE', 'user', user.id, { email: input.email });
-    revalidateTag('admin-users');
+    await logAuditEvent("CREATE", "user", user.id, { email: input.email });
+    revalidateTag("admin-users");
 
-    return { success: true, data: user, message: 'User created successfully' };
+    return { success: true, data: user, message: "User created successfully" };
   } catch (error) {
-    console.error('Failed to create user:', error);
-    return { success: false, error: 'Failed to create user' };
+    console.error("Failed to create user:", error);
+    return { success: false, error: "Failed to create user" };
   }
 }
 
@@ -171,17 +183,17 @@ export async function updateUser(
     await requireAdminRole();
 
     const user = await serverFetch<AdminUser>(API_ENDPOINTS.USERS.UPDATE(id), {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(input),
     });
 
-    await logAuditEvent('UPDATE', 'user', id, input);
-    revalidateTag('admin-users');
+    await logAuditEvent("UPDATE", "user", id, input);
+    revalidateTag("admin-users");
 
-    return { success: true, data: user, message: 'User updated successfully' };
+    return { success: true, data: user, message: "User updated successfully" };
   } catch (error) {
-    console.error('Failed to update user:', error);
-    return { success: false, error: 'Failed to update user' };
+    console.error("Failed to update user:", error);
+    return { success: false, error: "Failed to update user" };
   }
 }
 
@@ -193,17 +205,17 @@ export async function deactivateUser(id: string): Promise<ActionResponse> {
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.USERS.UPDATE(id), {
-      method: 'PATCH',
-      body: JSON.stringify({ status: 'inactive' }),
+      method: "PATCH",
+      body: JSON.stringify({ status: "inactive" }),
     });
 
-    await logAuditEvent('ACCOUNT_DEACTIVATED', 'user', id);
-    revalidateTag('admin-users');
+    await logAuditEvent("ACCOUNT_DEACTIVATED", "user", id);
+    revalidateTag("admin-users");
 
-    return { success: true, message: 'User deactivated successfully' };
+    return { success: true, message: "User deactivated successfully" };
   } catch (error) {
-    console.error('Failed to deactivate user:', error);
-    return { success: false, error: 'Failed to deactivate user' };
+    console.error("Failed to deactivate user:", error);
+    return { success: false, error: "Failed to deactivate user" };
   }
 }
 
@@ -215,17 +227,17 @@ export async function reactivateUser(id: string): Promise<ActionResponse> {
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.USERS.UPDATE(id), {
-      method: 'PATCH',
-      body: JSON.stringify({ status: 'active' }),
+      method: "PATCH",
+      body: JSON.stringify({ status: "active" }),
     });
 
-    await logAuditEvent('UPDATE', 'user', id, { action: 'reactivated' });
-    revalidateTag('admin-users');
+    await logAuditEvent("UPDATE", "user", id, { action: "reactivated" });
+    revalidateTag("admin-users");
 
-    return { success: true, message: 'User reactivated successfully' };
+    return { success: true, message: "User reactivated successfully" };
   } catch (error) {
-    console.error('Failed to reactivate user:', error);
-    return { success: false, error: 'Failed to reactivate user' };
+    console.error("Failed to reactivate user:", error);
+    return { success: false, error: "Failed to reactivate user" };
   }
 }
 
@@ -239,17 +251,17 @@ export async function inviteUser(
   try {
     await requireAdminRole();
 
-    await serverFetch('/users/invite', {
-      method: 'POST',
+    await serverFetch("/users/invite", {
+      method: "POST",
       body: JSON.stringify({ email, role }),
     });
 
-    await logAuditEvent('INVITE_SENT', 'user', undefined, { email, role });
+    await logAuditEvent("INVITE_SENT", "user", undefined, { email, role });
 
     return { success: true, message: `Invitation sent to ${email}` };
   } catch (error) {
-    console.error('Failed to send invitation:', error);
-    return { success: false, error: 'Failed to send invitation' };
+    console.error("Failed to send invitation:", error);
+    return { success: false, error: "Failed to send invitation" };
   }
 }
 
@@ -261,16 +273,16 @@ export async function deleteUser(id: string): Promise<ActionResponse> {
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.USERS.DELETE(id), {
-      method: 'DELETE',
+      method: "DELETE",
     });
 
-    await logAuditEvent('DELETE', 'user', id);
-    revalidateTag('admin-users');
+    await logAuditEvent("DELETE", "user", id);
+    revalidateTag("admin-users");
 
-    return { success: true, message: 'User deleted successfully' };
+    return { success: true, message: "User deleted successfully" };
   } catch (error) {
-    console.error('Failed to delete user:', error);
-    return { success: false, error: 'Failed to delete user' };
+    console.error("Failed to delete user:", error);
+    return { success: false, error: "Failed to delete user" };
   }
 }
 
@@ -285,11 +297,11 @@ export async function getRoles(): Promise<ActionResponse<Role[]>> {
   try {
     await requireAdminRole();
 
-    const roles = await serverFetch<Role[]>('/roles');
+    const roles = await serverFetch<Role[]>("/roles");
     return { success: true, data: roles };
   } catch (error) {
-    console.error('Failed to fetch roles:', error);
-    return { success: false, error: 'Failed to fetch roles' };
+    console.error("Failed to fetch roles:", error);
+    return { success: false, error: "Failed to fetch roles" };
   }
 }
 
@@ -302,18 +314,18 @@ export async function createRole(
   try {
     await requireAdminRole();
 
-    const role = await serverFetch<Role>('/roles', {
-      method: 'POST',
+    const role = await serverFetch<Role>("/roles", {
+      method: "POST",
       body: JSON.stringify(input),
     });
 
-    await logAuditEvent('CREATE', 'role', role.id, { name: input.name });
-    revalidateTag('admin-roles');
+    await logAuditEvent("CREATE", "role", role.id, { name: input.name });
+    revalidateTag("admin-roles");
 
-    return { success: true, data: role, message: 'Role created successfully' };
+    return { success: true, data: role, message: "Role created successfully" };
   } catch (error) {
-    console.error('Failed to create role:', error);
-    return { success: false, error: 'Failed to create role' };
+    console.error("Failed to create role:", error);
+    return { success: false, error: "Failed to create role" };
   }
 }
 
@@ -328,17 +340,17 @@ export async function updateRole(
     await requireAdminRole();
 
     const role = await serverFetch<Role>(`/roles/${id}`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(input),
     });
 
-    await logAuditEvent('UPDATE', 'role', id, input);
-    revalidateTag('admin-roles');
+    await logAuditEvent("UPDATE", "role", id, input);
+    revalidateTag("admin-roles");
 
-    return { success: true, data: role, message: 'Role updated successfully' };
+    return { success: true, data: role, message: "Role updated successfully" };
   } catch (error) {
-    console.error('Failed to update role:', error);
-    return { success: false, error: 'Failed to update role' };
+    console.error("Failed to update role:", error);
+    return { success: false, error: "Failed to update role" };
   }
 }
 
@@ -350,16 +362,16 @@ export async function deleteRole(id: string): Promise<ActionResponse> {
     await requireAdminRole();
 
     await serverFetch(`/roles/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
 
-    await logAuditEvent('DELETE', 'role', id);
-    revalidateTag('admin-roles');
+    await logAuditEvent("DELETE", "role", id);
+    revalidateTag("admin-roles");
 
-    return { success: true, message: 'Role deleted successfully' };
+    return { success: true, message: "Role deleted successfully" };
   } catch (error) {
-    console.error('Failed to delete role:', error);
-    return { success: false, error: 'Failed to delete role' };
+    console.error("Failed to delete role:", error);
+    return { success: false, error: "Failed to delete role" };
   }
 }
 
@@ -379,16 +391,17 @@ export async function getAuditLogs(
     await requireAdminRole();
 
     const queryParams = new URLSearchParams();
-    queryParams.set('page', String(page));
-    queryParams.set('limit', String(limit));
+    queryParams.set("page", String(page));
+    queryParams.set("limit", String(limit));
 
-    if (filters?.action) queryParams.set('action', filters.action);
-    if (filters?.severity) queryParams.set('severity', filters.severity);
-    if (filters?.userId) queryParams.set('userId', filters.userId);
-    if (filters?.resourceType) queryParams.set('resourceType', filters.resourceType);
-    if (filters?.startDate) queryParams.set('startDate', filters.startDate);
-    if (filters?.endDate) queryParams.set('endDate', filters.endDate);
-    if (filters?.search) queryParams.set('search', filters.search);
+    if (filters?.action) queryParams.set("action", filters.action);
+    if (filters?.severity) queryParams.set("severity", filters.severity);
+    if (filters?.userId) queryParams.set("userId", filters.userId);
+    if (filters?.resourceType)
+      queryParams.set("resourceType", filters.resourceType);
+    if (filters?.startDate) queryParams.set("startDate", filters.startDate);
+    if (filters?.endDate) queryParams.set("endDate", filters.endDate);
+    if (filters?.search) queryParams.set("search", filters.search);
 
     const result = await serverFetch<{ logs: unknown[]; total: number }>(
       `${API_ENDPOINTS.AUDIT_LOGS.LIST}?${queryParams}`
@@ -396,8 +409,8 @@ export async function getAuditLogs(
 
     return { success: true, data: result };
   } catch (error) {
-    console.error('Failed to fetch audit logs:', error);
-    return { success: false, error: 'Failed to fetch audit logs' };
+    console.error("Failed to fetch audit logs:", error);
+    return { success: false, error: "Failed to fetch audit logs" };
   }
 }
 
@@ -411,20 +424,24 @@ export async function exportAuditLogs(
     await requireAdminRole();
 
     const queryParams = new URLSearchParams();
-    if (filters?.action) queryParams.set('action', filters.action);
-    if (filters?.startDate) queryParams.set('startDate', filters.startDate);
-    if (filters?.endDate) queryParams.set('endDate', filters.endDate);
+    if (filters?.action) queryParams.set("action", filters.action);
+    if (filters?.startDate) queryParams.set("startDate", filters.startDate);
+    if (filters?.endDate) queryParams.set("endDate", filters.endDate);
 
     const result = await serverFetch<{ url: string }>(
       `/audit-logs/export?${queryParams}`
     );
 
-    await logAuditEvent('EXPORT', 'audit_logs', undefined, filters);
+    await logAuditEvent("EXPORT", "audit_logs", undefined, filters);
 
-    return { success: true, data: result.url, message: 'Export ready for download' };
+    return {
+      success: true,
+      data: result.url,
+      message: "Export ready for download",
+    };
   } catch (error) {
-    console.error('Failed to export audit logs:', error);
-    return { success: false, error: 'Failed to export audit logs' };
+    console.error("Failed to export audit logs:", error);
+    return { success: false, error: "Failed to export audit logs" };
   }
 }
 
@@ -435,15 +452,19 @@ export async function exportAuditLogs(
 /**
  * Get system settings
  */
-export async function getSystemSettings(): Promise<ActionResponse<SystemSettings>> {
+export async function getSystemSettings(): Promise<
+  ActionResponse<SystemSettings>
+> {
   try {
     await requireAdminRole();
 
-    const settings = await serverFetch<SystemSettings>(API_ENDPOINTS.SYSTEM_SETTINGS.GET);
+    const settings = await serverFetch<SystemSettings>(
+      API_ENDPOINTS.SYSTEM_SETTINGS.GET
+    );
     return { success: true, data: settings };
   } catch (error) {
-    console.error('Failed to fetch settings:', error);
-    return { success: false, error: 'Failed to fetch settings' };
+    console.error("Failed to fetch settings:", error);
+    return { success: false, error: "Failed to fetch settings" };
   }
 }
 
@@ -457,21 +478,22 @@ export async function updateSystemSettings(
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.SYSTEM_SETTINGS.UPDATE, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(input),
     });
 
-    const logDetails = 'category' in input
-      ? { key: input.key, value: input.value }
-      : { settings: 'bulk_update' };
+    const logDetails =
+      "category" in input
+        ? { key: input.key, value: input.value }
+        : { settings: "bulk_update" };
 
-    await logAuditEvent('UPDATE', 'system_settings', 'settings', logDetails);
-    revalidateTag('admin-settings');
+    await logAuditEvent("UPDATE", "system_settings", "settings", logDetails);
+    revalidateTag("admin-settings");
 
-    return { success: true, message: 'Settings updated successfully' };
+    return { success: true, message: "Settings updated successfully" };
   } catch (error) {
-    console.error('Failed to update settings:', error);
-    return { success: false, error: 'Failed to update settings' };
+    console.error("Failed to update settings:", error);
+    return { success: false, error: "Failed to update settings" };
   }
 }
 
@@ -486,28 +508,28 @@ export async function toggleMaintenanceMode(
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.SYSTEM_SETTINGS.UPDATE, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({
-        category: 'general',
-        key: 'maintenanceMode',
+        category: "general",
+        key: "maintenanceMode",
         value: enabled,
         maintenanceMessage: message,
       }),
     });
 
-    await logAuditEvent('UPDATE', 'system_settings', 'maintenance_mode', {
+    await logAuditEvent("UPDATE", "system_settings", "maintenance_mode", {
       enabled,
       message,
     });
-    revalidateTag('admin-settings');
+    revalidateTag("admin-settings");
 
     return {
       success: true,
-      message: `Maintenance mode ${enabled ? 'enabled' : 'disabled'}`,
+      message: `Maintenance mode ${enabled ? "enabled" : "disabled"}`,
     };
   } catch (error) {
-    console.error('Failed to toggle maintenance mode:', error);
-    return { success: false, error: 'Failed to toggle maintenance mode' };
+    console.error("Failed to toggle maintenance mode:", error);
+    return { success: false, error: "Failed to toggle maintenance mode" };
   }
 }
 
@@ -518,16 +540,18 @@ export async function clearSystemCache(): Promise<ActionResponse> {
   try {
     await requireAdminRole();
 
-    await serverFetch('/admin/cache/clear', {
-      method: 'POST',
+    await serverFetch("/admin/cache/clear", {
+      method: "POST",
     });
 
-    await logAuditEvent('UPDATE', 'system', undefined, { action: 'cache_cleared' });
+    await logAuditEvent("UPDATE", "system", undefined, {
+      action: "cache_cleared",
+    });
 
-    return { success: true, message: 'Cache cleared successfully' };
+    return { success: true, message: "Cache cleared successfully" };
   } catch (error) {
-    console.error('Failed to clear cache:', error);
-    return { success: false, error: 'Failed to clear cache' };
+    console.error("Failed to clear cache:", error);
+    return { success: false, error: "Failed to clear cache" };
   }
 }
 
@@ -542,11 +566,13 @@ export async function getIntegrations(): Promise<ActionResponse<unknown[]>> {
   try {
     await requireAdminRole();
 
-    const integrations = await serverFetch<unknown[]>(API_ENDPOINTS.INTEGRATIONS.LIST);
+    const integrations = await serverFetch<unknown[]>(
+      API_ENDPOINTS.INTEGRATIONS.LIST
+    );
     return { success: true, data: integrations };
   } catch (error) {
-    console.error('Failed to fetch integrations:', error);
-    return { success: false, error: 'Failed to fetch integrations' };
+    console.error("Failed to fetch integrations:", error);
+    return { success: false, error: "Failed to fetch integrations" };
   }
 }
 
@@ -561,17 +587,17 @@ export async function connectIntegration(
     await requireAdminRole();
 
     await serverFetch(`/integrations/${integrationId}/connect`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ integrationId, ...config }),
     });
 
-    await logAuditEvent('CREATE', 'integration', integrationId);
-    revalidateTag('admin-integrations');
+    await logAuditEvent("CREATE", "integration", integrationId);
+    revalidateTag("admin-integrations");
 
-    return { success: true, message: 'Integration connected successfully' };
+    return { success: true, message: "Integration connected successfully" };
   } catch (error) {
-    console.error('Failed to connect integration:', error);
-    return { success: false, error: 'Failed to connect integration' };
+    console.error("Failed to connect integration:", error);
+    return { success: false, error: "Failed to connect integration" };
   }
 }
 
@@ -585,16 +611,16 @@ export async function disconnectIntegration(
     await requireAdminRole();
 
     await serverFetch(`/integrations/${integrationId}/disconnect`, {
-      method: 'POST',
+      method: "POST",
     });
 
-    await logAuditEvent('DELETE', 'integration', integrationId);
-    revalidateTag('admin-integrations');
+    await logAuditEvent("DELETE", "integration", integrationId);
+    revalidateTag("admin-integrations");
 
-    return { success: true, message: 'Integration disconnected successfully' };
+    return { success: true, message: "Integration disconnected successfully" };
   } catch (error) {
-    console.error('Failed to disconnect integration:', error);
-    return { success: false, error: 'Failed to disconnect integration' };
+    console.error("Failed to disconnect integration:", error);
+    return { success: false, error: "Failed to disconnect integration" };
   }
 }
 
@@ -608,16 +634,18 @@ export async function syncIntegration(
     await requireAdminRole();
 
     await serverFetch(API_ENDPOINTS.INTEGRATIONS.SYNC(integrationId), {
-      method: 'POST',
+      method: "POST",
     });
 
-    await logAuditEvent('UPDATE', 'integration', integrationId, { action: 'sync' });
-    revalidateTag('admin-integrations');
+    await logAuditEvent("UPDATE", "integration", integrationId, {
+      action: "sync",
+    });
+    revalidateTag("admin-integrations");
 
-    return { success: true, message: 'Integration sync initiated' };
+    return { success: true, message: "Integration sync initiated" };
   } catch (error) {
-    console.error('Failed to sync integration:', error);
-    return { success: false, error: 'Failed to sync integration' };
+    console.error("Failed to sync integration:", error);
+    return { success: false, error: "Failed to sync integration" };
   }
 }
 
@@ -635,8 +663,8 @@ export async function getHealthStatus(): Promise<ActionResponse<unknown>> {
     const health = await serverFetch(API_ENDPOINTS.HEALTH.CHECK);
     return { success: true, data: health };
   } catch (error) {
-    console.error('Failed to fetch health status:', error);
-    return { success: false, error: 'Failed to fetch health status' };
+    console.error("Failed to fetch health status:", error);
+    return { success: false, error: "Failed to fetch health status" };
   }
 }
 
@@ -650,8 +678,8 @@ export async function getSystemMetrics(): Promise<ActionResponse<unknown>> {
     const metrics = await serverFetch(API_ENDPOINTS.METRICS.SYSTEM);
     return { success: true, data: metrics };
   } catch (error) {
-    console.error('Failed to fetch metrics:', error);
-    return { success: false, error: 'Failed to fetch metrics' };
+    console.error("Failed to fetch metrics:", error);
+    return { success: false, error: "Failed to fetch metrics" };
   }
 }
 
@@ -673,14 +701,14 @@ export async function getSystemLogs(
     await requireAdminRole();
 
     const queryParams = new URLSearchParams();
-    queryParams.set('page', String(page));
-    queryParams.set('limit', String(limit));
+    queryParams.set("page", String(page));
+    queryParams.set("limit", String(limit));
 
-    if (filters?.level) queryParams.set('level', filters.level);
-    if (filters?.source) queryParams.set('source', filters.source);
-    if (filters?.startDate) queryParams.set('startDate', filters.startDate);
-    if (filters?.endDate) queryParams.set('endDate', filters.endDate);
-    if (filters?.search) queryParams.set('search', filters.search);
+    if (filters?.level) queryParams.set("level", filters.level);
+    if (filters?.source) queryParams.set("source", filters.source);
+    if (filters?.startDate) queryParams.set("startDate", filters.startDate);
+    if (filters?.endDate) queryParams.set("endDate", filters.endDate);
+    if (filters?.search) queryParams.set("search", filters.search);
 
     const result = await serverFetch<{ logs: unknown[]; total: number }>(
       `/logs?${queryParams}`
@@ -688,7 +716,7 @@ export async function getSystemLogs(
 
     return { success: true, data: result };
   } catch (error) {
-    console.error('Failed to fetch system logs:', error);
-    return { success: false, error: 'Failed to fetch system logs' };
+    console.error("Failed to fetch system logs:", error);
+    return { success: false, error: "Failed to fetch system logs" };
   }
 }

@@ -41,6 +41,7 @@ export function PDFEditorView() {
     const [scale, setScale] = useState(1.0);
     const [rotation, setRotation] = useState(0);
     const [pageNum, setPageNum] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
     const [activeField, setActiveField] = useState<Field | null>(null);
@@ -117,10 +118,10 @@ export function PDFEditorView() {
                             scale={scale} setScale={setScale}
                             rotation={rotation} setRotation={setRotation}
                             pageNum={pageNum} setPageNum={setPageNum}
-                            totalPages={10} // Mock
+                            totalPages={totalPages || 1}
                         />
                         <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
-                            <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
+                            <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims} onLoadSuccess={setTotalPages}>
                                 <InteractiveOverlay activeTool={activeTool} dimensions={pageDims} onFieldClick={handleFieldClick} />
                             </PDFViewer>
                         </div>

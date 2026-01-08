@@ -56,6 +56,7 @@ export { authApi } from "./domains/auth.api";
 export { billingApi } from "./domains/billing.api";
 export { communicationsApi } from "./domains/communications.api";
 export { complianceApi } from "./domains/compliance.api";
+export { crmApi } from "./domains/crm.api";
 export { discoveryApi } from "./domains/discovery.api";
 export { integrationsApi } from "./domains/integrations.api";
 export { litigationApi } from "./domains/litigation.api";
@@ -145,9 +146,9 @@ import * as workflowDomain from "./domains/workflow.api";
 
 // Import operations services
 import { CLEApiService } from "./operations/cle-api";
-import { ProcurementApiService } from "./operations/procurement-api";
 import { FacilitiesApiService } from "./operations/facilities-api";
 import { MarketingApiService } from "./operations/marketing-api";
+import { ProcurementApiService } from "./operations/procurement-api";
 import { SettingsApiService } from "./operations/settings-api";
 
 export const api = {
@@ -249,6 +250,7 @@ export const api = {
   marketing: new MarketingApiService(),
   settings: new SettingsApiService(),
   admin: analyticsDomain.analyticsApi.admin,
+  crm: crmDomain.crmApi.crm,
 } as const;
 
 export default api;

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
@@ -9,27 +9,20 @@ export async function uploadDocument(formData: FormData) {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
 
-  // In a real app we would check token here
-  // if (!token) throw new Error('Unauthorized');
+  if (!token) {
+    return { success: false, message: "Unauthorized: Please log in." };
+  }
 
   // Prepare FormData for backend
-  // The backend likely expects 'file' field
   const file = formData.get("file");
   if (!file) {
     return { success: false, message: "No file provided" };
   }
 
   try {
-    if (!token) {
-      // Mock success for demo
-      console.log("Mock upload successful");
-      revalidateTag("documents");
-      return { success: true, message: "File uploaded (simulated)" };
-    }
-
     const backendFormData = new FormData();
     backendFormData.append("file", file);
-    // Add other fields if needed, e.g. caseId
+
     const caseId = formData.get("caseId");
     if (caseId) backendFormData.append("caseId", caseId);
 
@@ -37,8 +30,6 @@ export async function uploadDocument(formData: FormData) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        // Note: Content-Type header is not set manually for FormData,
-        // fetch handles multipart boundary automatically
       },
       body: backendFormData,
     });
@@ -51,7 +42,7 @@ export async function uploadDocument(formData: FormData) {
       };
     }
 
-    revalidateTag("documents");
+    revalidatePath("/documents");
     return { success: true, message: "Document uploaded successfully" };
   } catch (error) {
     console.error("Upload Action Error:", error);

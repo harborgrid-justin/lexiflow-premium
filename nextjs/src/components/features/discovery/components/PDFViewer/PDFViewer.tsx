@@ -52,6 +52,7 @@ interface PDFViewerProps {
   scale?: number;
   rotation?: number;
   onPageLoad?: (dimensions: { width: number; height: number }) => void;
+  onLoadSuccess?: (totalPages: number) => void;
   children?: React.ReactNode;
 }
 
@@ -63,6 +64,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   scale = 1.0,
   rotation = 0,
   onPageLoad,
+  onLoadSuccess,
   children
 }) => {
   const { theme } = useTheme();
@@ -157,6 +159,9 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
         if (isMounted.current) {
           setPdfDoc(doc);
           setPageNum(1);
+          if (onLoadSuccess) {
+            onLoadSuccess(doc.numPages);
+          }
         }
       } catch (err: unknown) {
         console.error("Error loading PDF:", err);

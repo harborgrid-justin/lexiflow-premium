@@ -54,6 +54,8 @@ export const MessengerInbox = () => {
           setSearchTerm={setSearchTerm}
           handleSelectConversation={handleSelectConversation}
           formatTime={formatTime}
+          onSendMessage={handleSendMessage}
+          onAttachFile={handleFileSelect}
         />
       }
       content={

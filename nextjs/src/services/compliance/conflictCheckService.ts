@@ -20,6 +20,8 @@
  * ```
  */
 
+import { complianceApi } from "@/api/domains/compliance.api";
+
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -830,9 +832,18 @@ class ConflictCheckServiceClass {
   /**
    * Fetches attorney conflicts
    */
-  private async fetchAttorneyConflicts(_attorneyId: string): Promise<any[]> {
-    // TODO: Implement backend API call
-    return [];
+  private async fetchAttorneyConflicts(attorneyId: string): Promise<any[]> {
+    try {
+      return await complianceApi.conflictChecks.getAttorneyConflicts(
+        attorneyId
+      );
+    } catch (error) {
+      console.warn(
+        `[ConflictCheckService] Failed to fetch attorney conflicts for ${attorneyId}`,
+        error
+      );
+      return [];
+    }
   }
 
   /**

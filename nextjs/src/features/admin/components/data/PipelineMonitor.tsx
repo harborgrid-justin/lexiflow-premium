@@ -41,9 +41,20 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
 
     const pipelines = Array.isArray(pipelinesResponse) ? pipelinesResponse : (pipelinesResponse?.data || []);
 
-    // Mock connectors for now - can be implemented later
-    const connectors: Connector[] = [];
-    const isLoadingConnectors = false;
+    // Fetch connectors from data platform API
+    const { data: dataSources = [], isLoading: isLoadingConnectors } = useQuery(
+        ['data-sources', 'all'],
+        () => dataPlatformApi.dataSources.getAll()
+    );
+
+    // Map DataSources to Connectors for display if types differ slightly
+    const connectors: Connector[] = dataSources.map(ds => ({
+        id: ds.id,
+        name: ds.name,
+        type: ds.type,
+        status: ds.status === 'active' ? 'Connected' : ds.status === 'error' ? 'Error' : 'Disconnected',
+        config: ds.config
+    } as any as Connector)); // Use as any cast if Connector type is strict/different, but safer ensuring mapping logic.
 
     const { mutate: executePipeline } = useMutation(
         (id: string) => dataPlatformApi.pipelines.execute(id),

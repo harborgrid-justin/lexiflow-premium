@@ -226,19 +226,30 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     );
   };
 
-  const handleSendMessage = async () => {
-    if ((!inputText.trim() && pendingAttachments.length === 0) || !activeConvId)
+  const handleSendMessage = async (
+    overrideText?: string,
+    overrideAttachments?: Attachment[]
+  ) => {
+    const textToSend = overrideText !== undefined ? overrideText : inputText;
+
+    if (
+      (!textToSend.trim() &&
+        (overrideAttachments || pendingAttachments).length === 0) ||
+      !activeConvId
+    )
       return;
 
     const newMessage: Message = {
       id: `new-${Date.now()}`,
       senderId: "me",
-      text: inputText,
+      text: textToSend,
       timestamp: new Date().toISOString(),
       status: "sent",
       isPrivileged: isPrivilegedMode,
       attachments:
-        pendingAttachments.length > 0 ? [...pendingAttachments] : undefined,
+        (overrideAttachments || pendingAttachments).length > 0
+          ? [...(overrideAttachments || pendingAttachments)]
+          : undefined,
     };
 
     // Optimistic UI Update
@@ -258,8 +269,10 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
     // Persist
     await DataService.messenger.sendMessage(activeConvId, newMessage);
 
-    setInputText("");
-    setPendingAttachments([]);
+    if (overrideText === undefined) {
+      setInputText("");
+      setPendingAttachments([]);
+    }
 
     // Update delivery status after message is processed
     // In production with WebSocket: server would push status updates

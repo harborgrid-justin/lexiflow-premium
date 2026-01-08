@@ -77,27 +77,10 @@
 import { complianceApi } from "@/api/domains/compliance.api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { ComplianceMetrics, ConflictCheck, EthicalWall, Risk } from "@/types";
+import { PartyRelationship } from "@/types/compliance-risk";
 import { AuditAction, AuditService } from "../core/AuditService";
 import { ComplianceError, ErrorCode } from "../core/ErrorCodes";
 import { ValidationService } from "../core/ValidationService";
-
-// Transitive conflict types
-interface PartyRelationship {
-  partyId: string;
-  partyName: string;
-  relationshipType:
-    | "client"
-    | "adverse"
-    | "former_client"
-    | "witness"
-    | "subsidiary"
-    | "parent"
-    | "affiliate";
-  caseId: string;
-  startDate: string;
-  endDate?: string;
-  active: boolean;
-}
 
 interface TransitiveConflict {
   conflictType:
@@ -474,15 +457,7 @@ export const ComplianceService = {
     ValidationService.validateId(partyId, "Party ID");
 
     try {
-      // TODO: In production, GET /api/compliance/parties/:partyId/relationships
-      // This should query:
-      // - Current client relationships (cases.clientId)
-      // - Adverse party relationships (cases.parties where role='defendant')
-      // - Former client relationships (closed cases)
-      // - Corporate affiliations (subsidiaries, parent companies)
-
-      // For now, return empty array (requires backend implementation)
-      return [];
+      return await complianceApi.getPartyRelationships(partyId);
     } catch (err) {
       console.error("[ComplianceService.getPartyRelationships] Error:", err);
       throw new ComplianceError(

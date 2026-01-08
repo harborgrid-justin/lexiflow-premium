@@ -26,6 +26,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
     const [scale, setScale] = useState(1.0);
     const [rotation, setRotation] = useState(0);
     const [pageNum, setPageNum] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
     const [activeField, setActiveField] = useState<Field | null>(null);
@@ -74,7 +75,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
                 setRotation={setRotation}
                 pageNum={pageNum}
                 setPageNum={setPageNum}
-                totalPages={10} // Mock total pages as PDFViewer doesn't bubble it up yet in this simplified version
+                totalPages={totalPages || 1}
             />
 
             {/* PDF Canvas Container */}
@@ -85,6 +86,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
                         scale={scale}
                         rotation={rotation}
                         onPageLoad={setPageDims}
+                        onLoadSuccess={setTotalPages}
                     >
                         <InteractiveOverlay
                             activeTool={activeTool}

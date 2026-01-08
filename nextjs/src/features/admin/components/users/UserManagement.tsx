@@ -26,7 +26,7 @@ interface UserData {
 }
 
 /**
- * @deprecated Mock data - use backend API via DataService.users
+ * User Management Component
  */
 
 export const UserManagement: React.FC = () => {
@@ -74,12 +74,14 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Update user via backend API
-      // await DataService.admin.updateUser(userSelection.selected.id, formData);
-      editModal.close();
-      userSelection.deselect();
-      setFormData({});
-      notify.success('User updated successfully');
-      await refetch();
+      if (userSelection.selected) {
+        await DataService.users.update(userSelection.selected.id, formData);
+        editModal.close();
+        userSelection.deselect();
+        setFormData({});
+        notify.success('User updated successfully');
+        await refetch();
+      }
     } catch (error) {
       notify.error('Failed to update user');
     }
@@ -89,11 +91,13 @@ export const UserManagement: React.FC = () => {
     if (!userSelection.selected) return;
     try {
       // Delete user via backend API
-      // await DataService.admin.deleteUser(userSelection.selected.id);
-      deleteModal.close();
-      userSelection.deselect();
-      notify.success('User deleted successfully');
-      await refetch();
+      if (userSelection.selected) {
+        await DataService.users.delete(userSelection.selected.id);
+        deleteModal.close();
+        userSelection.deselect();
+        notify.success('User deleted successfully');
+        await refetch();
+      }
     } catch (error) {
       notify.error('Failed to delete user');
     }

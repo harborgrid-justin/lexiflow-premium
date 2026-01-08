@@ -126,7 +126,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
           DataService.custodians.getAll({ caseId }),
           DataService.esiSources.getAll({ caseId }),
           analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]);
+        ]) as [any[], any[], any];
 
         setCustodians(custodiansData.map(c => {
           let status: Custodian['status'] = 'active';

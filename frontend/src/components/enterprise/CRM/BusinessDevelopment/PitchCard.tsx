@@ -3,6 +3,7 @@
  * @description Individual pitch card component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Calendar } from 'lucide-react';
 import type { Pitch } from './types';
@@ -10,7 +11,7 @@ import { formatCurrency, getStatusColor } from './utils';
 
 interface PitchCardProps {
   pitch: Pitch;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function PitchCard({ pitch, theme }: PitchCardProps) {

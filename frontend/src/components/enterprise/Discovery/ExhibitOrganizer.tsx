@@ -227,7 +227,7 @@ export const ExhibitOrganizer: React.FC<ExhibitOrganizerProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterParty, setFilterParty] = useState<string>('all');
-  const [selectedExhibit, setSelectedExhibit] = useState<Exhibit | null>(null);
+  const [_selectedExhibit, setSelectedExhibit] = useState<Exhibit | null>(null);
 
   // Filter exhibits
   const filteredExhibits = exhibits.filter(exhibit => {

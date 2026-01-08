@@ -3,6 +3,7 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { SatisfactionCard } from './SatisfactionCard';
 import type { ClientSatisfaction } from './types';
 
@@ -14,7 +15,7 @@ interface ChartTheme {
 
 interface SatisfactionTabProps {
   satisfactionData: ClientSatisfaction[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
   chartColors: string[];
   chartTheme: ChartTheme;
 }

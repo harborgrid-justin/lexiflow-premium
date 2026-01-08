@@ -3,6 +3,7 @@
  * @description Individual lead card component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Clock } from 'lucide-react';
 import type { Lead } from './types';
@@ -11,7 +12,7 @@ import { formatCurrency, getStatusColor } from './utils';
 interface LeadCardProps {
   lead: Lead;
   onClick: (id: string) => void;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function LeadCard({ lead, onClick, theme }: LeadCardProps) {

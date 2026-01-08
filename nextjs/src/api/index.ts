@@ -143,6 +143,13 @@ import * as litigationDomain from "./domains/litigation.api";
 import * as trialDomain from "./domains/trial.api";
 import * as workflowDomain from "./domains/workflow.api";
 
+// Import operations services
+import { CLEApiService } from "./operations/cle-api";
+import { ProcurementApiService } from "./operations/procurement-api";
+import { FacilitiesApiService } from "./operations/facilities-api";
+import { MarketingApiService } from "./operations/marketing-api";
+import { SettingsApiService } from "./operations/settings-api";
+
 export const api = {
   auth: authDomain.authApi.auth,
   users: authDomain.authApi.users,
@@ -234,6 +241,14 @@ export const api = {
   hr: hrDomain.hrApi.hr,
   legalEntities: new LegalEntitiesApiService(),
   drafting: draftingDomain.draftingApi,
+
+  // Operations & Practice Management
+  cle: new CLEApiService(),
+  procurement: new ProcurementApiService(),
+  facilities: new FacilitiesApiService(),
+  marketing: new MarketingApiService(),
+  settings: new SettingsApiService(),
+  admin: analyticsDomain.analyticsApi.admin,
 } as const;
 
 export default api;

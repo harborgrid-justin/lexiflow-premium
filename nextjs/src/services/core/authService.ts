@@ -12,6 +12,10 @@
  */
 
 import { api } from "@/api";
+import {
+  User as BackendUser,
+  UserRole as BackendUserRole,
+} from "@/types/system";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                              TYPE DEFINITIONS
@@ -117,19 +121,39 @@ class AuthenticationService {
    */
   async login(credentials: LoginCredentials): Promise<User> {
     try {
-      const response = await api.auth.login(credentials);
+      const response = await api.auth.login(
+        credentials.email,
+        credentials.password
+      );
 
-      const { user, accessToken, refreshToken, expiresIn } = response;
-      const expiresAt = Date.now() + expiresIn * 1000;
+      const { user, accessToken, refreshToken } = response;
+      // Default expiration: 1 hour (3600 seconds)
+      const expiresAt = Date.now() + 3600 * 1000;
+
+      // Map backend user to frontend User format with permissions
+      const frontendRole = this.mapBackendRole(user.role);
+      const enrichedUser: User = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: frontendRole,
+        permissions: this.getDefaultPermissions(frontendRole),
+        avatarUrl: user.avatarUrl,
+        department: user.department,
+        title: user.title,
+      };
 
       // Store tokens and user
-      this.storeAuthData({ accessToken, refreshToken, expiresAt }, user);
-      this.currentUser = user;
+      this.storeAuthData(
+        { accessToken, refreshToken, expiresAt },
+        enrichedUser
+      );
+      this.currentUser = enrichedUser;
 
       // Schedule token refresh
       this.scheduleTokenRefresh(expiresAt);
 
-      return user;
+      return enrichedUser;
     } catch (error) {
       console.error("[AuthService] Login failed:", error);
       throw new Error("Login failed. Please check your credentials.");
@@ -141,10 +165,7 @@ class AuthenticationService {
    */
   async logout(): Promise<void> {
     try {
-      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-      if (refreshToken) {
-        await api.auth.logout({ refreshToken });
-      }
+      await api.auth.logout();
     } catch (error) {
       console.error("[AuthService] Logout API call failed:", error);
     } finally {
@@ -162,12 +183,14 @@ class AuthenticationService {
         throw new Error("No refresh token available");
       }
 
-      const response = await api.auth.refresh({ refreshToken });
-      const { accessToken, expiresIn } = response;
-      const expiresAt = Date.now() + expiresIn * 1000;
+      const response = await api.auth.refreshToken();
+      const { accessToken, refreshToken: newRefreshToken } = response;
+      // Default expiration: 1 hour
+      const expiresAt = Date.now() + 3600 * 1000;
 
-      // Update stored token
+      // Update stored tokens
       localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
       localStorage.setItem(STORAGE_KEYS.EXPIRES_AT, expiresAt.toString());
 
       // Schedule next refresh
@@ -274,9 +297,14 @@ class AuthenticationService {
 
     try {
       const updatedUser = await api.users.update(this.currentUser.id, updates);
-      this.currentUser = updatedUser;
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
-      return updatedUser;
+      const enrichedUser: User = {
+        ...updatedUser,
+        permissions:
+          (updatedUser as any).permissions || this.currentUser.permissions,
+      };
+      this.currentUser = enrichedUser;
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(enrichedUser));
+      return enrichedUser;
     } catch (error) {
       console.error("[AuthService] Profile update failed:", error);
       throw error;
@@ -339,12 +367,71 @@ class AuthenticationService {
         return false;
       }
 
-      const response = await api.auth.verify({ token });
-      return response.valid;
+      // Try to get current user to verify token
+      await api.auth.getCurrentUser();
+      return true;
     } catch (error) {
       console.error("[AuthService] Token verification failed:", error);
       return false;
     }
+  }
+
+  /**
+   * Map backend UserRole to frontend UserRole format
+   */
+  private mapBackendRole(backendRole: BackendUserRole): UserRole {
+    const roleMap: Record<string, UserRole> = {
+      "Senior Partner": "admin",
+      Associate: "attorney",
+      Paralegal: "paralegal",
+      Administrator: "admin",
+      "Client User": "client",
+      Guest: "client",
+    };
+    return roleMap[backendRole] || "staff";
+  }
+
+  /**
+   * Get default permissions based on user role
+   */
+  private getDefaultPermissions(role: UserRole): Permission[] {
+    const permissionMap: Record<UserRole, Permission[]> = {
+      admin: [
+        "cases:read",
+        "cases:write",
+        "cases:delete",
+        "documents:read",
+        "documents:write",
+        "documents:delete",
+        "billing:read",
+        "billing:write",
+        "admin:users",
+        "admin:settings",
+        "compliance:read",
+        "compliance:write",
+      ],
+      attorney: [
+        "cases:read",
+        "cases:write",
+        "documents:read",
+        "documents:write",
+        "billing:read",
+        "billing:write",
+        "compliance:read",
+        "compliance:write",
+      ],
+      paralegal: [
+        "cases:read",
+        "cases:write",
+        "documents:read",
+        "documents:write",
+        "billing:read",
+        "compliance:read",
+      ],
+      staff: ["cases:read", "documents:read", "billing:read"],
+      client: ["cases:read", "documents:read"],
+    };
+    return permissionMap[role] || [];
   }
 }
 

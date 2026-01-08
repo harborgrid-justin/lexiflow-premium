@@ -160,8 +160,8 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   if (displayActivities.length === 0) {
     return (
       <div className={cn('text-center py-12', className)}>
-        <FileText className={cn('h-12 w-12 mx-auto mb-3', theme.text.muted)} />
-        <p className={cn('text-sm', theme.text.muted)}>{emptyMessage}</p>
+        <FileText className={cn('h-12 w-12 mx-auto mb-3', theme.text.tertiary)} />
+        <p className={cn('text-sm', theme.text.tertiary)}>{emptyMessage}</p>
       </div>
     );
   }
@@ -205,7 +205,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                 <p className={cn('text-sm font-medium', theme.text.primary)}>
                   {activity.title}
                 </p>
-                <time className={cn('text-xs whitespace-nowrap', theme.text.muted)}>
+                <time className={cn('text-xs whitespace-nowrap', theme.text.tertiary)}>
                   {formatTimestamp(activity.timestamp)}
                 </time>
               </div>
@@ -213,7 +213,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                 {activity.description}
               </p>
               {activity.user && (
-                <p className={cn('text-xs', theme.text.muted)}>
+                <p className={cn('text-xs', theme.text.tertiary)}>
                   by {activity.user.name}
                 </p>
               )}

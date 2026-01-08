@@ -3,12 +3,13 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { LTVCard } from './LTVCard';
 import type { ClientLifetimeValue } from './types';
 
 interface LTVTabProps {
   ltvData: ClientLifetimeValue[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function LTVTab({ ltvData, theme }: LTVTabProps) {

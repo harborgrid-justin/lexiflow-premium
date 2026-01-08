@@ -100,7 +100,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
                 {title}
               </h3>
               {subtitle && (
-                <p className={cn('text-sm mt-1', theme.text.muted)}>
+                <p className={cn('text-sm mt-1', theme.text.tertiary)}>
                   {subtitle}
                 </p>
               )}
@@ -161,7 +161,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
           <div className="flex items-center justify-center h-full">
             <div className="flex flex-col items-center gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-3 border-gray-300 border-t-blue-600" />
-              <p className={cn('text-sm', theme.text.muted)}>Loading chart data...</p>
+              <p className={cn('text-sm', theme.text.tertiary)}>Loading chart data...</p>
             </div>
           </div>
         ) : error ? (
@@ -173,7 +173,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
                 </svg>
               </div>
               <p className={cn('text-sm font-medium mb-1', theme.text.primary)}>Failed to load chart</p>
-              <p className={cn('text-xs', theme.text.muted)}>{error}</p>
+              <p className={cn('text-xs', theme.text.tertiary)}>{error}</p>
               {onRefresh && (
                 <Button
                   variant="outline"

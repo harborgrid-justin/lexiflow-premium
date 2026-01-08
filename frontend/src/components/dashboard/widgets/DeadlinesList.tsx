@@ -188,8 +188,8 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
   if (filteredDeadlines.length === 0) {
     return (
       <div className={cn('text-center py-12', className)}>
-        <Calendar className={cn('h-12 w-12 mx-auto mb-3', theme.text.muted)} />
-        <p className={cn('text-sm', theme.text.muted)}>{emptyMessage}</p>
+        <Calendar className={cn('h-12 w-12 mx-auto mb-3', theme.text.tertiary)} />
+        <p className={cn('text-sm', theme.text.tertiary)}>{emptyMessage}</p>
       </div>
     );
   }
@@ -242,7 +242,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
                     </p>
                   )}
                   {deadline.caseName && (
-                    <p className={cn('text-xs', theme.text.muted)}>
+                    <p className={cn('text-xs', theme.text.tertiary)}>
                       {deadline.caseName}
                     </p>
                   )}
@@ -256,12 +256,12 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
               {/* Footer */}
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className={cn('capitalize', theme.text.muted)}>
+                  <span className={cn('capitalize', theme.text.tertiary)}>
                     {deadline.type}
                   </span>
                   {deadline.assignee && (
                     <>
-                      <span className={theme.text.muted}>•</span>
+                      <span className={theme.text.tertiary}>•</span>
                       <span className={theme.text.secondary}>
                         {deadline.assignee.name}
                       </span>

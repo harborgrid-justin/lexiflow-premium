@@ -16,6 +16,14 @@
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   --radius-full: 9999px;
+
+  /* Enterprise Status Colors - Tailwind Integration */
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
 }
 
 /* ============================================================================
@@ -55,7 +63,13 @@
   /* Destructive - Error States */
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-
+  /* Enterprise Legal Status Colors */
+  --warning: oklch(0.84 0.16 84);
+  --warning-foreground: oklch(0.28 0.07 46);
+  --success: oklch(0.7 0.18 150);
+  --success-foreground: oklch(0.98 0 0);
+  --info: oklch(0.6 0.18 240);
+  --info-foreground: oklch(0.98 0 0);
   /* Borders & Inputs */
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -119,6 +133,14 @@
   /* Destructive - Error States */
   --destructive: oklch(0.396 0.141 25.768);
   --destructive-foreground: oklch(0.985 0 0);
+
+  /* Enterprise Legal Status Colors - Dark Mode */
+  --warning: oklch(0.41 0.11 46);
+  --warning-foreground: oklch(0.99 0.02 95);
+  --success: oklch(0.45 0.15 150);
+  --success-foreground: oklch(0.99 0 0);
+  --info: oklch(0.48 0.2 240);
+  --info-foreground: oklch(0.99 0 0);
 
   /* Borders & Inputs */
   --border: oklch(0.269 0 0);
@@ -201,7 +223,9 @@
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 
   /* Smooth scrolling */
@@ -313,53 +337,98 @@
 
 /* Keyframes */
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes slide-in-from-left {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-in-from-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-in-from-top {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-in-from-bottom {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes scale-in {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes caret-blink {
-  0%, 70%, 100% { opacity: 1; }
-  20%, 50% { opacity: 0; }
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes accordion-down {
-  from { height: 0; }
-  to { height: var(--radix-accordion-content-height); }
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
 }
 
 @keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); }
-  to { height: 0; }
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
 }
 
 /* ============================================================================

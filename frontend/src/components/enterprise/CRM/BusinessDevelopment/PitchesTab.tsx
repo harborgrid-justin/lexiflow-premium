@@ -3,6 +3,7 @@
  * @description Pitches tab view component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Plus } from 'lucide-react';
 import { PitchCard } from './PitchCard';
@@ -10,7 +11,7 @@ import type { Pitch } from './types';
 
 interface PitchesTabProps {
   pitches: Pitch[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function PitchesTab({ pitches, theme }: PitchesTabProps) {

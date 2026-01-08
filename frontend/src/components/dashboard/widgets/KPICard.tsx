@@ -210,7 +210,7 @@ export const KPICard: React.FC<KPICardProps> = ({
             {label}
           </p>
           {subtitle && (
-            <p className={cn('text-xs', theme.text.muted)}>
+            <p className={cn('text-xs', theme.text.tertiary)}>
               {subtitle}
             </p>
           )}
@@ -236,7 +236,7 @@ export const KPICard: React.FC<KPICardProps> = ({
               {change.trend === 'neutral' ? '0.0' : Math.abs(change.percentage).toFixed(1)}%
             </span>
           </div>
-          <span className={cn('text-xs', theme.text.muted)}>
+          <span className={cn('text-xs', theme.text.tertiary)}>
             vs previous period
           </span>
         </div>
@@ -246,7 +246,7 @@ export const KPICard: React.FC<KPICardProps> = ({
       {target && progressPercent !== undefined && (
         <div className="mt-3">
           <div className="flex items-center justify-between text-xs mb-1">
-            <span className={theme.text.muted}>Progress to goal</span>
+            <span className={theme.text.tertiary}>Progress to goal</span>
             <span className={cn('font-medium', theme.text.secondary)}>
               {progressPercent.toFixed(0)}%
             </span>

@@ -863,12 +863,41 @@ Object.defineProperties(DataServiceBase, {
    * @features Judge history, ruling patterns, scheduling preferences
    */
   judgeStats: DataSourceRouter.createPropertyDescriptor("judgeStats", () => ({
-    getAll: async () => MOCK_JUDGES,
-    getById: async (id: string) => MOCK_JUDGES.find((j) => j.id === id),
-    search: async (query: string) =>
-      MOCK_JUDGES.filter((j) =>
-        j.name.toLowerCase().includes(query.toLowerCase())
-      ),
+    getAll: async () => {
+      try {
+        return await api.judgeStats.getAll();
+      } catch (error) {
+        console.warn(
+          "[DataService] Failed to fetch judges from backend, using fallback data:",
+          error
+        );
+        return MOCK_JUDGES;
+      }
+    },
+    getById: async (id: string) => {
+      try {
+        return await api.judgeStats.getById(id);
+      } catch (error) {
+        console.warn(
+          "[DataService] Failed to fetch judge from backend, using fallback data:",
+          error
+        );
+        return MOCK_JUDGES.find((j) => j.id === id);
+      }
+    },
+    search: async (query: string) => {
+      try {
+        return await api.judgeStats.search(query);
+      } catch (error) {
+        console.warn(
+          "[DataService] Failed to search judges from backend, using fallback data:",
+          error
+        );
+        return MOCK_JUDGES.filter((j) =>
+          j.name.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+    },
   })),
 
   /**

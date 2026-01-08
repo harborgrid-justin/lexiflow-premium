@@ -4,6 +4,7 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Plus, Search } from 'lucide-react';
 import {
@@ -24,12 +25,18 @@ interface LeadsByStatusData {
   count: number;
 }
 
+interface ChartTheme {
+  grid: string;
+  text: string;
+  tooltipStyle: Record<string, unknown>;
+}
+
 interface LeadsTabProps {
   leads: Lead[];
   leadsByStatus: LeadsByStatusData[];
   onLeadClick: (id: string) => void;
-  theme: Record<string, unknown>;
-  chartTheme: Record<string, unknown>;
+  theme: ThemeObject;
+  chartTheme: ChartTheme;
   chartColors: string[];
 }
 

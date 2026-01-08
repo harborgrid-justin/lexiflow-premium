@@ -108,19 +108,6 @@ export interface CaseTeamProps {
 // Configuration
 // ============================================================================
 
-// Role template definitions for team member management
-// Removed _ROLE_TEMPLATES - use inline configuration as needed
-suggestedBillingRate: 450,
-  description: 'Outside attorney providing specialized expertise',
-  },
-{
-  role: 'Consultant',
-    defaultPermissions: ['view'],
-      suggestedBillingRate: 350,
-        description: 'Advisor providing specialized knowledge or services',
-  },
-];
-
 const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
   view: 'View case details and documents',
   edit: 'Edit case information and documents',
@@ -159,7 +146,6 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
   const [selectedRole, setSelectedRole] = useState<TeamMemberRole | 'All'>('All');
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [showPermissions, setShowPermissions] = useState(false);
-  const [showAddMember, setShowAddMember] = useState(false);
 
   // Calculate workload summary
   const workloadSummary = useMemo((): WorkloadSummary => {
@@ -236,7 +222,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
           </div>
           {allowEdit && (
             <button
-              onClick={() => setShowAddMember(true)}
+              onClick={() => onAddMember?.()}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <UserPlus className="h-4 w-4" />
@@ -492,7 +478,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
           </p>
           {allowEdit && (
             <button
-              onClick={() => setShowAddMember(true)}
+              onClick={() => onAddMember?.()}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <UserPlus className="h-4 w-4" />

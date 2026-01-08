@@ -172,3 +172,4 @@ export type {
   SidebarMenuItemClickEvent,
   SidebarCSSProperties,
 } from "./sidebar.types"
+export * from './resizable';

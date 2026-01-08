@@ -3,12 +3,13 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { RiskCard } from './RiskCard';
 import type { ClientRiskAssessment } from './types';
 
 interface RiskTabProps {
   riskData: ClientRiskAssessment[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function RiskTab({ riskData, theme }: RiskTabProps) {

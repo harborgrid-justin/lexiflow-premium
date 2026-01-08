@@ -101,7 +101,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'documents' | 'cases' | 'invoices' | 'messages' | 'appointments'>('documents');
   const [messageText, setMessageText] = useState('');
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
+  const [_selectedDocument, _setSelectedDocument] = useState<string | null>(null);
 
   // Mock data
   const documents: PortalDocument[] = [
@@ -274,7 +274,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
               theme.surface.default,
               theme.border.default
             )}
-            onClick={() => setSelectedDocument(doc.id)}
+            onClick={() => _setSelectedDocument(doc.id)}
           >
             <div className="flex justify-between items-start">
               <div className="flex items-start gap-3 flex-1">

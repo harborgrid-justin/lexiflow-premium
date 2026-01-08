@@ -156,7 +156,6 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
   className,
 }) => {
   const [activeView, setActiveView] = useState<'overview' | 'categories' | 'expenses' | 'alerts'>('overview');
-  const [showAddExpense, setShowAddExpense] = useState(false);
 
   // Calculate metrics
   const metrics = useMemo(() => {
@@ -217,7 +216,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
             </button>
             {allowEdit && (
               <button
-                onClick={() => setShowAddExpense(true)}
+                onClick={() => console.log('Add Expense clicked')}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 <Plus className="h-4 w-4" />
@@ -549,7 +548,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                 </p>
                 {allowEdit && (
                   <button
-                    onClick={() => setShowAddExpense(true)}
+                    onClick={() => console.log('Add First Expense clicked')}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   >
                     <Plus className="h-4 w-4" />

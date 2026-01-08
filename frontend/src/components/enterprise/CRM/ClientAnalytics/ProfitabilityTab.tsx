@@ -4,6 +4,7 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import {
   Bar,
   BarChart,
@@ -38,7 +39,7 @@ interface ProfitabilityTabProps {
   profitabilityData: ClientProfitability[];
   segmentData: ClientSegment[];
   revenueTrendData: RevenueTrendData[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
   chartTheme: ChartTheme;
   chartColors: string[];
 }

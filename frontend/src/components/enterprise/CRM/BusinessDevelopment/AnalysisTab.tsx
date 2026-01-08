@@ -4,6 +4,7 @@
  */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import {
   CartesianGrid,
@@ -48,7 +49,7 @@ interface AnalysisTabProps {
   pipelineValue: number;
   winRate: string;
   avgSalesCycle: number;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
   chartTheme: ChartTheme;
   chartColors: string[];
 }

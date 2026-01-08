@@ -553,7 +553,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
 
             {/* Events */}
             <div className="space-y-6">
-              {filteredEvents.map((event, index) => (
+              {filteredEvents.map((event) => (
                 <div key={event.id} className="relative pl-20">
                   {/* Date Badge */}
                   <div className="absolute left-0 top-0 flex items-center gap-2">

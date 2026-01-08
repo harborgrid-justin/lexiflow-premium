@@ -29,14 +29,6 @@ export class RepositoryRegistry {
   }
 
   /**
-   * Clear all repository instances
-   * Use during cleanup to prevent memory leaks
-   */
-  static clear(): void {
-    this.instances.clear();
-  }
-
-  /**
    * Checks if a repository instance exists
    */
   static has(key: string): boolean {

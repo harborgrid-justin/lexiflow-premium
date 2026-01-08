@@ -20,7 +20,7 @@
  */
 
 import { useEffect } from "react";
-import type { UseEvidenceManagerReturn } from "./types";
+import type { UseEvidenceManagerReturn, ViewMode } from "./types";
 import { useEvidenceData } from "./useEvidenceData";
 import { useEvidenceFilters } from "./useEvidenceFilters";
 import { useEvidenceMutations } from "./useEvidenceMutations";

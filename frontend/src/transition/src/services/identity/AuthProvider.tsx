@@ -61,6 +61,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         window.removeEventListener('auth:forbidden', handleForbidden);
       };
     }
+
+    // Return no-op cleanup for SSR
+    return () => { };
   }, []);
 
   /**
@@ -132,9 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return permissions.includes(permission);
   };
 
-  type AuthContextValue = typeof value;
-
-  const value: AuthContextValue = {
+  const value = {
     user,
     roles,
     permissions,

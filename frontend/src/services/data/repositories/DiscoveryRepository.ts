@@ -676,13 +676,14 @@ export class DiscoveryRepository {
         // Check if production exists first via metadata endpoint
         // Then return constructed download URL
         // Assuming GET /discovery/productions/:id exists
-        const { data } = await apiClient.get<{
+        const response = await apiClient.get<{
           id: string;
           downloadUrl?: string;
         }>(`/discovery/productions/${id}`);
-        if (data?.downloadUrl) return data.downloadUrl;
-        // Fallback to direct construction
-        return `${apiClient.defaults.baseURL}/discovery/productions/${id}/download`;
+        if (response.data?.downloadUrl) return response.data.downloadUrl;
+        // Fallback to direct construction - use baseURL from client instance
+        const baseURL = (apiClient as any).defaults?.baseURL || "";
+        return `${baseURL}/discovery/productions/${id}/download`;
       } catch (error) {
         console.error(
           "[DiscoveryRepository] Failed to get production URL",

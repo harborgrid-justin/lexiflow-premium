@@ -17,7 +17,11 @@
  * - Proper error handling and logging
  */
 
-import { ClausesApiService } from "@/api/intelligence/clauses-api";
+import {
+  ClausesApiService,
+  type CreateClauseDto,
+  type UpdateClauseDto,
+} from "@/api/intelligence/clauses-api";
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import { EntityNotFoundError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";

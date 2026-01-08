@@ -106,7 +106,9 @@ import {
   Invoice,
   OperatingSummary,
   RateTable,
+  ReconciliationResult,
   TimeEntry,
+  TrustAccount,
   TrustTransaction,
   UUID,
   WIPStat,
@@ -770,22 +772,393 @@ export class BillingRepository extends Repository<TimeEntry> {
   /**
    * Get all trust accounts
    *
-   * @returns Promise<unknown[]> Array of trust accounts
+   * @returns Promise<TrustAccount[]> Array of trust accounts
    * @throws Error if fetch fails
    *
    * @example
    * const accounts = await repo.getTrustAccounts();
    */
-  async getTrustAccounts(): Promise<unknown[]> {
+  async getTrustAccounts(): Promise<TrustAccount[]> {
     try {
       if (this.useBackend) {
-        return await apiClient.get<unknown[]>("/billing/trust/accounts");
+        return await apiClient.get<TrustAccount[]>("/billing/trust/accounts");
       }
 
-      return await db.getAll<unknown>(STORES.TRUST);
+      return await db.getAll<TrustAccount>(STORES.TRUST);
     } catch {
       console.error("[BillingRepository.getTrustAccounts] Error:", error);
       throw new OperationError("Failed to fetch trust accounts");
+    }
+  }
+
+  /**
+   * Get single trust account with validation
+   *
+   * @param accountId - Trust account ID
+   * @returns Promise<TrustAccount> Trust account details
+   * @throws TrustAccountError if account not found or invalid
+   */
+  async getTrustAccount(accountId: string): Promise<TrustAccount> {
+    this.validateId(accountId, "getTrustAccount");
+
+    try {
+      if (this.useBackend) {
+        return await apiClient.get<TrustAccount>(
+          `/billing/trust/accounts/${accountId}`
+        );
+      }
+
+      const account = await db.get<TrustAccount>(STORES.TRUST, accountId);
+      if (!account) {
+        throw new TrustAccountError(
+          `Trust account not found: ${accountId}`,
+          accountId
+        );
+      }
+      return account;
+    } catch (error) {
+      console.error("[BillingRepository.getTrustAccount] Error:", error);
+      if (error instanceof TrustAccountError) throw error;
+      throw new OperationError("Failed to fetch trust account");
+    }
+  }
+
+  /**
+   * Create trust transaction with IOLTA compliance validation
+   *
+   * @compliance ABA Model Rule 1.15 - Safekeeping Property
+   * @compliance IOLTA Rules - Interest on Lawyer Trust Accounts
+   *
+   * @param accountId - Trust account ID
+   * @param transaction - Transaction details
+   * @returns Promise<TrustTransaction> Created transaction
+   * @throws ComplianceError if transaction violates trust accounting rules
+   * @throws TrustAccountError if account issues detected
+   */
+  async createTrustTransaction(
+    accountId: string,
+    transaction: Partial<TrustTransaction>
+  ): Promise<TrustTransaction> {
+    this.validateId(accountId, "createTrustTransaction");
+
+    // VALIDATION
+    ValidationService.validateRequired(transaction.amount, "amount");
+    ValidationService.validateAmount(transaction.amount as number, "amount", {
+      min: 0.01,
+    });
+    ValidationService.validateRequired(transaction.clientId, "clientId");
+    ValidationService.validateRequired(transaction.type, "type");
+    ValidationService.validateEnum(
+      transaction.type as string,
+      ["deposit", "withdrawal", "transfer", "interest"] as const,
+      "type"
+    );
+
+    // COMPLIANCE CHECKS
+    try {
+      // 1. Verify account type (must be trust, not operating)
+      const account = await this.getTrustAccount(accountId);
+      if (account.type === "Operating") {
+        throw new ComplianceError(
+          "Cannot create trust transaction in operating account - IOLTA violation",
+          "ABA-1.15"
+        );
+      }
+
+      // 2. Check sufficient funds for withdrawals
+      if (transaction.type === "withdrawal") {
+        const clientBalance = await this.getClientTrustBalance(
+          accountId,
+          transaction.clientId as string
+        );
+
+        if (clientBalance < (transaction.amount as number)) {
+          throw new ComplianceError(
+            `Insufficient client trust funds: Available=${clientBalance}, Requested=${transaction.amount}`,
+            "ABA-1.15"
+          );
+        }
+      }
+
+      // 3. Create transaction
+      const newTransaction: TrustTransaction = {
+        id: `trust-tx-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        accountId,
+        clientId: transaction.clientId as string,
+        type: transaction.type as
+          | "deposit"
+          | "withdrawal"
+          | "transfer"
+          | "interest",
+        amount: transaction.amount as number,
+        description: transaction.description || "",
+        date: transaction.date || new Date().toISOString(),
+        status: "completed",
+        createdAt: new Date().toISOString(),
+        complianceChecked: true,
+        aba115Compliant: true,
+      };
+
+      if (this.useBackend) {
+        const created = await apiClient.post<TrustTransaction>(
+          `/billing/trust/${accountId}/transactions`,
+          newTransaction
+        );
+
+        // Audit log
+        await AuditService.logTrustOperation(
+          transaction.type === "deposit"
+            ? AuditAction.TRUST_DEPOSIT
+            : transaction.type === "withdrawal"
+              ? AuditAction.TRUST_WITHDRAWAL
+              : AuditAction.TRUST_TRANSFER,
+          accountId,
+          created.id,
+          created.amount,
+          created.clientId,
+          undefined,
+          created
+        );
+
+        return created;
+      }
+
+      // Fallback to local storage
+      await db.add(STORES.TRUST_TX, newTransaction);
+
+      // Audit log
+      await AuditService.logTrustOperation(
+        transaction.type === "deposit"
+          ? AuditAction.TRUST_DEPOSIT
+          : transaction.type === "withdrawal"
+            ? AuditAction.TRUST_WITHDRAWAL
+            : AuditAction.TRUST_TRANSFER,
+        accountId,
+        newTransaction.id,
+        newTransaction.amount,
+        newTransaction.clientId,
+        undefined,
+        newTransaction
+      );
+
+      return newTransaction;
+    } catch (error) {
+      console.error("[BillingRepository.createTrustTransaction] Error:", error);
+
+      // Audit failed operation
+      await AuditService.logFailure(
+        AuditAction.TRUST_DEPOSIT,
+        AuditResource.TRUST_TRANSACTION,
+        accountId,
+        error as Error,
+        { transaction }
+      );
+
+      if (
+        error instanceof ComplianceError ||
+        error instanceof TrustAccountError
+      ) {
+        throw error;
+      }
+      throw new OperationError("Failed to create trust transaction");
+    }
+  }
+
+  /**
+   * Get client trust balance (for withdrawal validation)
+   *
+   * @param accountId - Trust account ID
+   * @param clientId - Client ID
+   * @returns Promise<number> Client's current trust balance
+   */
+  async getClientTrustBalance(
+    accountId: string,
+    clientId: string
+  ): Promise<number> {
+    this.validateId(accountId, "getClientTrustBalance");
+    this.validateId(clientId, "getClientTrustBalance");
+
+    try {
+      if (this.useBackend) {
+        const response = await apiClient.get<{ balance: number }>(
+          `/billing/trust/${accountId}/clients/${clientId}/balance`
+        );
+        return response.balance;
+      }
+
+      // Calculate from transactions
+      const transactions = await this.getTrustTransactions(accountId);
+      const clientTransactions = transactions.filter(
+        (tx) => tx.clientId === clientId
+      );
+
+      return clientTransactions.reduce((balance, tx) => {
+        return balance + (tx.type === "deposit" ? tx.amount : -tx.amount);
+      }, 0);
+    } catch (error) {
+      console.error("[BillingRepository.getClientTrustBalance] Error:", error);
+      throw new OperationError("Failed to fetch client trust balance");
+    }
+  }
+
+  /**
+   * Verify trust account reconciliation (three-way match)
+   * Bank balance = Ledger balance = Sum of client balances
+   *
+   * @compliance IOLTA Rules - Monthly reconciliation required
+   *
+   * @param accountId - Trust account ID
+   * @param bankBalance - Current bank balance
+   * @returns Promise<ReconciliationResult> Reconciliation status
+   * @throws ComplianceError if reconciliation fails
+   */
+  async reconcileTrustAccount(
+    accountId: string,
+    bankBalance: number
+  ): Promise<ReconciliationResult> {
+    this.validateId(accountId, "reconcileTrustAccount");
+    ValidationService.validateAmount(bankBalance, "bankBalance", {
+      allowZero: true,
+      min: 0,
+    });
+
+    try {
+      // Get all transactions
+      const transactions = await this.getTrustTransactions(accountId);
+
+      // Calculate ledger balance
+      const ledgerBalance = transactions.reduce((sum, tx) => {
+        return (
+          sum +
+          (tx.type === "deposit" || tx.type === "interest"
+            ? tx.amount
+            : -tx.amount)
+        );
+      }, 0);
+
+      // Calculate sum of client balances
+      const clientIds = [...new Set(transactions.map((tx) => tx.clientId))];
+      const clientBalances = await Promise.all(
+        clientIds.map((clientId) =>
+          this.getClientTrustBalance(accountId, clientId)
+        )
+      );
+      const totalClientBalances = clientBalances.reduce(
+        (sum, bal) => sum + bal,
+        0
+      );
+
+      // Tolerance of 1 cent for rounding
+      const tolerance = 0.01;
+      const ledgerMatch = Math.abs(ledgerBalance - bankBalance) <= tolerance;
+      const clientMatch =
+        Math.abs(ledgerBalance - totalClientBalances) <= tolerance;
+
+      const result: ReconciliationResult = {
+        accountId,
+        bankBalance,
+        ledgerBalance,
+        totalClientBalances,
+        ledgerMatch,
+        clientMatch,
+        reconciled: ledgerMatch && clientMatch,
+        reconciledAt: new Date().toISOString(),
+        discrepancies: [],
+      };
+
+      // Add discrepancy details
+      if (!ledgerMatch) {
+        result.discrepancies.push({
+          type: "bank-ledger-mismatch",
+          amount: Math.abs(ledgerBalance - bankBalance),
+          description: `Bank balance (${bankBalance}) does not match ledger balance (${ledgerBalance})`,
+        });
+      }
+
+      if (!clientMatch) {
+        result.discrepancies.push({
+          type: "client-ledger-mismatch",
+          amount: Math.abs(ledgerBalance - totalClientBalances),
+          description: `Sum of client balances (${totalClientBalances}) does not match ledger balance (${ledgerBalance})`,
+        });
+      }
+
+      // Audit log
+      await AuditService.logTrustOperation(
+        AuditAction.TRUST_RECONCILE,
+        accountId,
+        `reconcile-${Date.now()}`,
+        bankBalance,
+        "system",
+        { bankBalance, ledgerBalance, totalClientBalances },
+        result
+      );
+
+      // Throw if reconciliation failed
+      if (!result.reconciled) {
+        throw new ComplianceError(
+          `Trust account reconciliation failed: ${result.discrepancies.map((d) => d.description).join("; ")}`,
+          "IOLTA-RECONCILIATION"
+        );
+      }
+
+      return result;
+    } catch (error) {
+      console.error("[BillingRepository.reconcileTrustAccount] Error:", error);
+      if (error instanceof ComplianceError) throw error;
+      throw new OperationError("Failed to reconcile trust account");
+    }
+  }
+
+  /**
+   * Get trust reconciliation history
+   *
+   * @param accountId - Trust account ID
+   * @param startDate - Start date (optional)
+   * @param endDate - End date (optional)
+   * @returns Promise<ReconciliationResult[]> Historical reconciliations
+   */
+  async getTrustReconciliationHistory(
+    accountId: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<ReconciliationResult[]> {
+    this.validateId(accountId, "getTrustReconciliationHistory");
+
+    if (startDate && endDate) {
+      ValidationService.validateDateRange(startDate, endDate, {
+        allowFuture: false,
+      });
+    }
+
+    try {
+      if (this.useBackend) {
+        const params = new URLSearchParams();
+        if (startDate) params.append("startDate", startDate);
+        if (endDate) params.append("endDate", endDate);
+
+        return await apiClient.get<ReconciliationResult[]>(
+          `/billing/trust/${accountId}/reconciliations?${params.toString()}`
+        );
+      }
+
+      // Fallback: query audit log for reconciliation events
+      const auditEntries = await AuditService.query({
+        resource: AuditResource.TRUST_TRANSACTION,
+        action: AuditAction.TRUST_RECONCILE,
+        startDate,
+        endDate,
+      });
+
+      return auditEntries
+        .filter((e) => e.metadata?.accountId === accountId)
+        .map((e) => e.after as ReconciliationResult);
+    } catch (error) {
+      console.error(
+        "[BillingRepository.getTrustReconciliationHistory] Error:",
+        error
+      );
+      throw new OperationError("Failed to fetch reconciliation history");
     }
   }
 

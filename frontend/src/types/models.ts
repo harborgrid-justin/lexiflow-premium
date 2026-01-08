@@ -40,7 +40,30 @@ export * from "./workflow";
 // Re-export domain-specific legacy types
 export * from "./compliance-risk";
 export * from "./discovery";
-export * from "./discovery-enhanced";
+
+// Export discovery-enhanced types explicitly to avoid conflicts with documents.ts and misc.ts
+export type {
+  AnalyticsJob,
+  ConceptCluster,
+  CustodianAcknowledgment,
+  DataCollection,
+  DocumentReview,
+  EmailThread,
+  HoldRelease,
+  LegalHold,
+  LegalHoldNotice,
+  PrivilegeLog,
+  ProcessingJob as ProcessingJobEnhanced,
+  ProductionDelivery,
+  ProductionSet as ProductionSetEnhanced,
+  ProductionSpecification,
+  ReviewDecision,
+  ReviewProject,
+  ReviewWorkspace,
+  SavedSearch,
+  SearchQuery,
+} from "./discovery-enhanced";
+
 export * from "./evidence";
 export * from "./legal-research";
 export * from "./misc";

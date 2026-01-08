@@ -72,10 +72,10 @@ function extractCookies(request: ServerRequest): Record<string, string> {
   }
 
   return Object.fromEntries(
-    cookieHeader.split(';').map((c: string) => {
+    cookieHeader.split(';').map((c: string): [string, string] => {
       const [key, ...rest] = c.trim().split('=');
       return [key, rest.join('=')];
-    }).filter((entry: [string, string | undefined]) => entry[0] && entry[1])
+    }).filter((entry): entry is [string, string] => entry[0] && entry[1])
   );
 }
 

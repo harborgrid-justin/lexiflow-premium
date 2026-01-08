@@ -4,16 +4,16 @@
 // Generated from: backend/src/billing/trust-accounts/entities/trust-transaction.entity.ts
 // Last sync: 2025-01-XX
 
-import { BaseEntity, EntityId, CaseId, UserId, Money } from './primitives';
+import { BaseEntity, CaseId, EntityId, Money, UserId } from "./primitives";
 
 /**
  * Trust Account Types - Matches backend TrustAccountType enum
  * @see backend/src/billing/trust-accounts/entities/trust-account.entity.ts
  */
 export enum TrustAccountType {
-  IOLTA = 'iolta',
-  CLIENT_TRUST = 'client_trust',
-  OPERATING = 'operating',
+  IOLTA = "iolta",
+  CLIENT_TRUST = "client_trust",
+  OPERATING = "operating",
 }
 
 /**
@@ -21,10 +21,10 @@ export enum TrustAccountType {
  * @see backend/src/billing/trust-accounts/entities/trust-account.entity.ts
  */
 export enum TrustAccountStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  CLOSED = 'closed',
-  SUSPENDED = 'suspended',
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  CLOSED = "closed",
+  SUSPENDED = "suspended",
 }
 
 /**
@@ -32,12 +32,12 @@ export enum TrustAccountStatus {
  * CASH and ATM methods are prohibited for trust account withdrawals per state bar rules
  */
 export enum PaymentMethod {
-  CHECK = 'check', // Pre-numbered checks required
-  WIRE = 'wire', // Electronic wire transfer
-  ACH = 'ach', // ACH electronic transfer
-  EFT = 'eft', // Generic electronic funds transfer
-  CASH = 'cash', // PROHIBITED for withdrawals - compliance violation
-  ATM = 'atm', // PROHIBITED - compliance violation
+  CHECK = "check", // Pre-numbered checks required
+  WIRE = "wire", // Electronic wire transfer
+  ACH = "ach", // ACH electronic transfer
+  EFT = "eft", // Generic electronic funds transfer
+  CASH = "cash", // PROHIBITED for withdrawals - compliance violation
+  ATM = "atm", // PROHIBITED - compliance violation
 }
 
 /**
@@ -45,11 +45,11 @@ export enum PaymentMethod {
  * Per state bar requirements: bank statement + main ledger + client ledgers
  */
 export enum ReconciliationStatus {
-  PENDING = 'pending', // Not yet reconciled
-  IN_PROGRESS = 'in_progress', // Reconciliation in progress
-  RECONCILED = 'reconciled', // Fully reconciled (three-way match)
-  DISCREPANCY = 'discrepancy', // Discrepancy found during reconciliation
-  NEEDS_REVIEW = 'needs_review', // Flagged for attorney review
+  PENDING = "pending", // Not yet reconciled
+  IN_PROGRESS = "in_progress", // Reconciliation in progress
+  RECONCILED = "reconciled", // Fully reconciled (three-way match)
+  DISCREPANCY = "discrepancy", // Discrepancy found during reconciliation
+  NEEDS_REVIEW = "needs_review", // Flagged for attorney review
 }
 
 /**
@@ -57,13 +57,13 @@ export enum ReconciliationStatus {
  * @see backend/src/billing/trust-accounts/entities/trust-transaction.entity.ts
  */
 export enum TransactionType {
-  DEPOSIT = 'deposit',
-  WITHDRAWAL = 'withdrawal',
-  TRANSFER = 'transfer',
-  INTEREST = 'interest',
-  FEE = 'fee',
-  ADJUSTMENT = 'adjustment',
-  REFUND = 'refund',
+  DEPOSIT = "deposit",
+  WITHDRAWAL = "withdrawal",
+  TRANSFER = "transfer",
+  INTEREST = "interest",
+  FEE = "fee",
+  ADJUSTMENT = "adjustment",
+  REFUND = "refund",
 }
 
 /**
@@ -71,20 +71,20 @@ export enum TransactionType {
  * @see backend/src/billing/trust-accounts/entities/trust-transaction.entity.ts
  */
 export enum TransactionStatus {
-  PENDING = 'pending',
-  CLEARED = 'cleared',
-  RECONCILED = 'reconciled',
-  CANCELLED = 'cancelled',
-  FAILED = 'failed',
+  PENDING = "pending",
+  CLEARED = "cleared",
+  RECONCILED = "reconciled",
+  CANCELLED = "cancelled",
+  FAILED = "failed",
 }
 
 /**
  * Trust Account Entity - Complete 1:1 mapping with backend
  * COMPLIANCE: Meets state bar requirements for trust account management
- * 
+ *
  * @see backend/src/billing/trust-accounts/entities/trust-account.entity.ts
  * @see backend/src/billing/trust-accounts/dto/create-trust-account.dto.ts
- * 
+ *
  * @compliance
  * - Strict Segregation: Separate accountType field enforces trust vs operating separation
  * - IOLTA Participation: accountType=IOLTA designates IOLTA program accounts
@@ -113,7 +113,7 @@ export interface TrustAccount extends BaseEntity {
   bankName?: string; // Financial institution name
   bankAccountNumber?: string; // Masked/full account number
   routingNumber?: string; // Bank routing number
-  
+
   // COMPLIANCE: Account Setup and Structure
   stateBarApproved?: boolean; // Whether bank is approved by state bar for overdraft reporting
   jurisdiction?: string; // State where account is maintained (e.g., 'CA', 'NY')
@@ -154,9 +154,9 @@ export interface TrustAccount extends BaseEntity {
 /**
  * Trust Transaction Entity - Complete 1:1 mapping with backend
  * COMPLIANCE: Meets state bar requirements for trust transaction tracking
- * 
+ *
  * @see backend/src/billing/trust-accounts/entities/trust-transaction.entity.ts
- * 
+ *
  * @compliance
  * - Prompt Deposit: fundsReceivedDate vs transactionDate tracks deposit timing
  * - No Commingling: transactionSource identifies if funds are client vs firm
@@ -184,9 +184,9 @@ export interface TrustTransactionEntity extends BaseEntity {
   promptDepositCompliant?: boolean; // Whether deposited within 24-48 hours of receipt
   isAdvancedFee?: boolean; // Whether this is an unearned retainer/advanced cost
   isEarnedFee?: boolean; // Whether this fee has been earned and can be withdrawn
-  transactionSource?: 'client' | 'firm' | 'third_party'; // Source of funds (prevents commingling)
+  transactionSource?: "client" | "firm" | "third_party"; // Source of funds (prevents commingling)
   isOperatingFundTransfer?: boolean; // Flag if transferring from trust to operating (earned fee)
-  
+
   // Status & Reference (Pre-numbered Checks)
   status: TransactionStatus; // PENDING | CLEARED | RECONCILED | CANCELLED | FAILED
   referenceNumber?: string; // External reference number
@@ -338,7 +338,7 @@ export interface TrustSubLedger extends BaseEntity {
  */
 export interface TrustTransaction {
   accountId: string;
-  type: 'Deposit' | 'Withdrawal';
+  type: "Deposit" | "Withdrawal";
   amount: Money;
   date: string;
   checkNumber?: string;
@@ -348,8 +348,8 @@ export interface TrustTransaction {
 
 // Re-exports for convenience
 export type {
-  TrustAccount as TrustAccountEntity,
   CreateTrustAccountDto as TrustAccountCreateInput,
+  TrustAccount as TrustAccountEntity,
   UpdateTrustAccountDto as TrustAccountUpdateInput,
 };
 
@@ -359,7 +359,7 @@ export type {
  * 1. Bank statement balance
  * 2. Firm's main trust ledger balance
  * 3. Sum of all individual client ledgers
- * 
+ *
  * @see State Bar Requirements - Monthly Reconciliation
  */
 export interface ThreeWayReconciliation {
@@ -459,7 +459,7 @@ export interface TrustAccountComplianceReport {
   // Violations Detected
   violations: Array<{
     violationType: string;
-    severity: 'critical' | 'major' | 'minor';
+    severity: "critical" | "major" | "minor";
     description: string;
     transactionId?: EntityId;
     clientId?: EntityId;
@@ -483,7 +483,7 @@ export interface TrustAccountComplianceReport {
 
   // Overall Compliance Score
   overallComplianceScore: number; // 0-100 percentage
-  complianceStatus: 'compliant' | 'non_compliant' | 'needs_review';
+  complianceStatus: "compliant" | "non_compliant" | "needs_review";
   recommendations: string[];
 }
 
@@ -571,3 +571,27 @@ export interface TrustAccountFilters {
   jurisdiction?: string;
 }
 
+/**
+ * Reconciliation Result - Three-way reconciliation outcome
+ * Used for verifying bank balance = ledger balance = sum of client balances
+ */
+export interface ReconciliationResult {
+  accountId: string;
+  bankBalance: number;
+  ledgerBalance: number;
+  totalClientBalances: number;
+  ledgerMatch: boolean;
+  clientMatch: boolean;
+  reconciled: boolean;
+  reconciledAt: string;
+  discrepancies: ReconciliationDiscrepancy[];
+}
+
+/**
+ * Reconciliation Discrepancy - Details about reconciliation mismatches
+ */
+export interface ReconciliationDiscrepancy {
+  type: "bank-ledger-mismatch" | "client-ledger-mismatch" | "calculation-error";
+  amount: number;
+  description: string;
+}

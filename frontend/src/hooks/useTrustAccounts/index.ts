@@ -216,7 +216,7 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
 
   return {
     createAccount: ((data: Record<string, unknown>) =>
-      mutation.mutateAsync(data as CreateTrustAccountDto)) as (
+      mutation.mutateAsync(data as unknown as CreateTrustAccountDto)) as (
       data: Record<string, unknown>
     ) => Promise<TrustAccount>,
     isCreating: mutation.isLoading,
@@ -248,16 +248,12 @@ export function useDepositFunds(): UseDepositFundsResult {
     },
   });
 
-  const deposit = useCallback(
-    async (accountId: string, data: DepositDto) => {
-      return mutation.mutateAsync({ accountId, data });
-    },
-    [mutation]
-  );
-
   return {
     deposit: ((accountId: string, data: Record<string, unknown>) =>
-      mutation.mutateAsync({ accountId, data: data as DepositDto })) as (
+      mutation.mutateAsync({
+        accountId,
+        data: data as unknown as DepositDto,
+      })) as (
       accountId: string,
       data: Record<string, unknown>
     ) => Promise<TrustTransactionEntity>,
@@ -290,16 +286,12 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
     },
   });
 
-  const withdraw = useCallback(
-    async (accountId: string, data: WithdrawalDto) => {
-      return mutation.mutateAsync({ accountId, data });
-    },
-    [mutation]
-  );
-
   return {
     withdraw: ((accountId: string, data: Record<string, unknown>) =>
-      mutation.mutateAsync({ accountId, data: data as WithdrawalDto })) as (
+      mutation.mutateAsync({
+        accountId,
+        data: data as unknown as WithdrawalDto,
+      })) as (
       accountId: string,
       data: Record<string, unknown>
     ) => Promise<TrustTransactionEntity>,
@@ -332,18 +324,11 @@ export function useReconcileAccount(): UseReconcileAccountResult {
     },
   });
 
-  const reconcile = useCallback(
-    async (accountId: string, data: ThreeWayReconciliationDto) => {
-      return mutation.mutateAsync({ accountId, data });
-    },
-    [mutation]
-  );
-
   return {
     reconcile: ((accountId: string, data: Record<string, unknown>) =>
       mutation.mutateAsync({
         accountId,
-        data: data as ThreeWayReconciliationDto,
+        data: data as unknown as ThreeWayReconciliationDto,
       })) as (
       accountId: string,
       data: Record<string, unknown>

@@ -1,7 +1,7 @@
 import { discoveryApi } from "@/api/domains/discovery.api";
-import { LegalHold, LegalHoldEnhanced } from "@/types";
-import { db, STORES } from "@/services/data/db";
 import { OperationError } from "@/services/core/errors";
+import { db, STORES } from "@/services/data/db";
+import { LegalHold, LegalHoldEnhanced } from "@/types/discovery-enhanced";
 
 export const getLegalHolds = async (
   useBackend: boolean

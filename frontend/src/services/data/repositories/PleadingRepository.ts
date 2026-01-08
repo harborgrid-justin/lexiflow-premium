@@ -607,14 +607,16 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         const response = await apiClient.post<{ url: string }>(
           `/litigation/pleadings/${pleadingId}/pdf`
         );
-        if (
-          (response as { data?: { url?: string } }).data &&
-          (response as { data: { url?: string } }).data.url
-        ) {
-          return (response as { data: { url: string } }).data.url;
+        // Check for response data
+        if (response && typeof response === "object" && "data" in response) {
+          const responseData = response as { data: { url?: string } };
+          if (responseData.data?.url) {
+            return responseData.data.url;
+          }
         }
         // Fallback if URL not returned but handled
-        return `${apiClient.defaults.baseURL}/litigation/pleadings/${pleadingId}/pdf/download`;
+        const baseURL = (apiClient as any).defaults?.baseURL || "";
+        return `${baseURL}/litigation/pleadings/${pleadingId}/pdf/download`;
       }
 
       // Fallback for local mode: cannot generate PDF client-side without heavy library

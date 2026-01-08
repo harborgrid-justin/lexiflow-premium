@@ -96,6 +96,9 @@ import {
 } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 import { delay } from "@/utils/async";
+import { AuditAction, AuditService } from "../core/AuditService";
+import { ConversionError, ErrorCode } from "../core/ErrorCodes";
+import { ValidationService } from "../core/ValidationService";
 
 // Backend API Services
 import { ClientsApiService } from "@/api/communications/clients-api";
@@ -109,6 +112,23 @@ interface Lead {
   stage: string;
   value: string;
   source?: string;
+}
+
+// Conversion mapping for idempotency
+interface ConversionMapping {
+  leadId: string;
+  clientId: string;
+  caseId: string;
+  convertedAt: string;
+  status: "completed" | "rolled_back" | "in_progress";
+}
+
+// Distributed lock for atomic operations
+interface ConversionLock {
+  leadId: string;
+  acquiredAt: string;
+  expiresAt: string;
+  operationId: string;
 }
 
 // =============================================================================
@@ -199,63 +219,319 @@ export const CRMService = {
     return lead;
   },
 
-  convertLeadToClient: async (lead: Lead) => {
-    console.log(`[CRM] Converting Lead ${lead.id} to Client/Case...`);
+  /**
+   * Acquire distributed lock for conversion operation
+   * Prevents concurrent conversions of the same lead
+   */
+  acquireConversionLock: async (leadId: string): Promise<string> => {
+    ValidationService.validateId(leadId, "Lead ID");
 
-    // Initialize API services
+    const operationId = `conv-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const expiresAt = new Date(Date.now() + 60000).toISOString(); // 60s timeout
+
+    const lock: ConversionLock = {
+      leadId,
+      acquiredAt: new Date().toISOString(),
+      expiresAt,
+      operationId,
+    };
+
+    // Store lock (in production, use Redis)
+    const existingLock = await CRMService.getConversionLock(leadId);
+    if (existingLock && new Date(existingLock.expiresAt) > new Date()) {
+      throw new ConversionError(
+        ErrorCode.CONCURRENT_MODIFICATION,
+        `Lead ${leadId} is currently being converted by another operation`,
+        { existingOperation: existingLock.operationId }
+      );
+    }
+
+    // TODO: In production, store in Redis with SETNX
+    localStorage.setItem(`lock:lead:${leadId}`, JSON.stringify(lock));
+
+    return operationId;
+  },
+
+  /**
+   * Release distributed lock after conversion
+   */
+  releaseConversionLock: async (
+    leadId: string,
+    operationId: string
+  ): Promise<void> => {
+    const lock = await CRMService.getConversionLock(leadId);
+    if (lock && lock.operationId === operationId) {
+      localStorage.removeItem(`lock:lead:${leadId}`);
+    }
+  },
+
+  /**
+   * Get existing conversion lock for a lead
+   */
+  getConversionLock: async (leadId: string): Promise<ConversionLock | null> => {
+    const lockData = localStorage.getItem(`lock:lead:${leadId}`);
+    return lockData ? JSON.parse(lockData) : null;
+  },
+
+  /**
+   * Check if lead has already been converted (idempotency)
+   */
+  getConversionMapping: async (
+    leadId: string
+  ): Promise<ConversionMapping | null> => {
+    ValidationService.validateId(leadId, "Lead ID");
+
+    // TODO: In production, query from backend /api/crm/conversions/:leadId
+    const mappingData = localStorage.getItem(`conversion:${leadId}`);
+    return mappingData ? JSON.parse(mappingData) : null;
+  },
+
+  /**
+   * Store conversion mapping for idempotency
+   */
+  storeConversionMapping: async (mapping: ConversionMapping): Promise<void> => {
+    // TODO: In production, POST to /api/crm/conversions
+    localStorage.setItem(
+      `conversion:${mapping.leadId}`,
+      JSON.stringify(mapping)
+    );
+
+    await AuditService.log({
+      action: "LEAD_CONVERSION_MAPPED" as AuditAction,
+      resource: "Lead",
+      resourceId: mapping.leadId,
+      after: mapping,
+      success: true,
+    });
+  },
+
+  /**
+   * Rollback conversion by deleting created entities
+   */
+  rollbackConversion: async (
+    leadId: string,
+    clientId?: string,
+    caseId?: string
+  ): Promise<void> => {
+    console.log(`[CRM] Rolling back conversion for Lead ${leadId}...`);
+
     const clientsApi = new ClientsApiService();
     const casesApi = new CasesApiService();
 
-    // 1. Create Client via backend API
-    const newClient = await clientsApi.create({
-      name: lead.client,
-      clientType: ClientType.CORPORATION,
-      status: ClientStatus.ACTIVE,
-      industry: "General",
-      totalBilled: 0,
-      currentBalance: 0,
-      creditLimit: 0,
-      totalCases: 1,
-      activeCases: 1,
-      isVip: false,
-      requiresConflictCheck: true,
-      hasRetainer: false,
-      paymentTerms: PaymentTerms.NET_30,
-    });
+    try {
+      // Delete case if created
+      if (caseId) {
+        try {
+          await casesApi.delete(caseId);
+          console.log(`[CRM] Deleted Case ${caseId}`);
+        } catch (err) {
+          console.error(`[CRM] Failed to delete Case ${caseId}:`, err);
+        }
+      }
 
-    // 2. Create Case via backend API
-    const newCase = await casesApi.add({
-      title: lead.title,
-      client: lead.client,
-      clientId: newClient.id as EntityId,
-      matterType: MatterType.OTHER,
-      status: CaseStatus.Active,
-      filingDate: new Date().toISOString().split("T")[0],
-      description: `Converted from Lead ${lead.id}`,
-      ownerId: "usr-admin-justin" as UserId,
-      isArchived: false,
-      parties: [],
-      citations: [],
-      arguments: [],
-      defenses: [],
-    });
+      // Delete client if created
+      if (clientId) {
+        try {
+          await clientsApi.delete(clientId);
+          console.log(`[CRM] Deleted Client ${clientId}`);
+        } catch (err) {
+          console.error(`[CRM] Failed to delete Client ${clientId}:`, err);
+        }
+      }
 
-    // Trigger Integration Events
-    await IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, {
-      caseData: newCase,
-    });
-    await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
-      entity: {
-        ...newClient,
-        type: "Corporation",
-        roles: ["Client"],
-        riskScore: 0,
-        tags: [],
-      } as unknown as Entity,
-    });
+      // Update conversion mapping status
+      const mapping = await CRMService.getConversionMapping(leadId);
+      if (mapping) {
+        mapping.status = "rolled_back";
+        await CRMService.storeConversionMapping(mapping);
+      }
 
-    console.log(
-      `[CRM] Successfully converted Lead ${lead.id} to Client ${newClient.id} and Case ${newCase.id}`
-    );
+      await AuditService.logFailure({
+        action: "LEAD_CONVERSION" as AuditAction,
+        resource: "Lead",
+        resourceId: leadId,
+        error: new ConversionError(
+          ErrorCode.CONVERSION_ROLLBACK,
+          "Conversion rolled back due to error"
+        ),
+      });
+    } catch (rollbackErr) {
+      console.error(`[CRM] Rollback failed for Lead ${leadId}:`, rollbackErr);
+      throw new ConversionError(
+        ErrorCode.CONVERSION_ROLLBACK,
+        `Rollback failed for Lead ${leadId}`,
+        { clientId, caseId, error: rollbackErr }
+      );
+    }
+  },
+
+  /**
+   * Atomic lead-to-client conversion with rollback
+   * Prevents race conditions and ensures data consistency
+   */
+  convertLeadToClient: async (
+    lead: Lead
+  ): Promise<{ clientId: string; caseId: string }> => {
+    console.log(`[CRM] Converting Lead ${lead.id} to Client/Case...`);
+
+    // Validation
+    ValidationService.validateRequired(lead.id, "Lead ID");
+    ValidationService.validateRequired(lead.client, "Client Name");
+    ValidationService.validateRequired(lead.title, "Lead Title");
+
+    // Check for existing conversion (idempotency)
+    const existingMapping = await CRMService.getConversionMapping(lead.id);
+    if (existingMapping && existingMapping.status === "completed") {
+      console.log(`[CRM] Lead ${lead.id} already converted`);
+      return {
+        clientId: existingMapping.clientId,
+        caseId: existingMapping.caseId,
+      };
+    }
+
+    // Acquire distributed lock
+    let operationId: string | null = null;
+    let clientId: string | undefined;
+    let caseId: string | undefined;
+
+    try {
+      operationId = await CRMService.acquireConversionLock(lead.id);
+
+      // Mark conversion as in-progress
+      const inProgressMapping: ConversionMapping = {
+        leadId: lead.id,
+        clientId: "",
+        caseId: "",
+        convertedAt: new Date().toISOString(),
+        status: "in_progress",
+      };
+      await CRMService.storeConversionMapping(inProgressMapping);
+
+      // Initialize API services
+      const clientsApi = new ClientsApiService();
+      const casesApi = new CasesApiService();
+
+      // STEP 1: Create Client via backend API
+      try {
+        const newClient = await clientsApi.create({
+          name: lead.client,
+          clientType: ClientType.CORPORATION,
+          status: ClientStatus.ACTIVE,
+          industry: "General",
+          totalBilled: 0,
+          currentBalance: 0,
+          creditLimit: 0,
+          totalCases: 1,
+          activeCases: 1,
+          isVip: false,
+          requiresConflictCheck: true,
+          hasRetainer: false,
+          paymentTerms: PaymentTerms.NET_30,
+        });
+        clientId = newClient.id;
+        console.log(`[CRM] Created Client ${clientId}`);
+      } catch (err) {
+        throw new ConversionError(
+          ErrorCode.CONVERSION_STEP_FAILED,
+          `Failed to create client for Lead ${lead.id}`,
+          { step: "client_creation", error: err }
+        );
+      }
+
+      // STEP 2: Create Case via backend API
+      try {
+        const newCase = await casesApi.add({
+          title: lead.title,
+          client: lead.client,
+          clientId: clientId as EntityId,
+          matterType: MatterType.OTHER,
+          status: CaseStatus.Active,
+          filingDate: new Date().toISOString().split("T")[0],
+          description: `Converted from Lead ${lead.id}`,
+          ownerId: "usr-admin-justin" as UserId,
+          isArchived: false,
+          parties: [],
+          citations: [],
+          arguments: [],
+          defenses: [],
+        });
+        caseId = newCase.id;
+        console.log(`[CRM] Created Case ${caseId}`);
+      } catch (err) {
+        // Rollback: Delete client
+        await CRMService.rollbackConversion(lead.id, clientId);
+        throw new ConversionError(
+          ErrorCode.CONVERSION_STEP_FAILED,
+          `Failed to create case for Lead ${lead.id}`,
+          { step: "case_creation", error: err, rolledBack: true }
+        );
+      }
+
+      // STEP 3: Trigger Integration Events
+      try {
+        await IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, {
+          caseData: { id: caseId, title: lead.title },
+        });
+        await IntegrationEventPublisher.publish(
+          SystemEventType.ENTITY_CREATED,
+          {
+            entity: {
+              id: clientId,
+              name: lead.client,
+              type: "Corporation",
+              roles: ["Client"],
+              riskScore: 0,
+              tags: [],
+            } as any,
+          }
+        );
+      } catch (err) {
+        // Non-critical: Log but don't rollback
+        console.error(`[CRM] Failed to publish integration events:`, err);
+      }
+
+      // Store completed conversion mapping
+      const completedMapping: ConversionMapping = {
+        leadId: lead.id,
+        clientId: clientId!,
+        caseId: caseId!,
+        convertedAt: new Date().toISOString(),
+        status: "completed",
+      };
+      await CRMService.storeConversionMapping(completedMapping);
+
+      // Audit log
+      await AuditService.logOperation(
+        "LEAD_CONVERSION" as AuditAction,
+        "Lead",
+        lead.id,
+        { lead },
+        { clientId, caseId, mapping: completedMapping }
+      );
+
+      console.log(
+        `[CRM] Successfully converted Lead ${lead.id} to Client ${clientId} and Case ${caseId}`
+      );
+
+      return { clientId: clientId!, caseId: caseId! };
+    } catch (err) {
+      console.error(`[CRM] Conversion failed for Lead ${lead.id}:`, err);
+
+      // Attempt rollback if we created anything
+      if (clientId || caseId) {
+        try {
+          await CRMService.rollbackConversion(lead.id, clientId, caseId);
+        } catch (rollbackErr) {
+          console.error(`[CRM] Rollback failed:`, rollbackErr);
+        }
+      }
+
+      throw err;
+    } finally {
+      // Always release lock
+      if (operationId) {
+        await CRMService.releaseConversionLock(lead.id, operationId);
+      }
+    }
   },
 };

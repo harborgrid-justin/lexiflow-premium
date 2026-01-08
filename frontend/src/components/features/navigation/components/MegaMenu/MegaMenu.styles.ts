@@ -4,13 +4,7 @@
  * @description Style definitions for MegaMenu component.
  */
 
-import { cn } from '@/utils/cn';
-import type { tokens } from '@/components/theme/tokens';
-
-// Define type locally to avoid circular dependency
-export type MegaMenuLayout = 'single' | 'double' | 'triple' | 'quad';
-
-type Theme = typeof tokens.colors;
+import { cn } from '@/utils/cn';\nimport type { ThemeObject } from '@/contexts/theme/ThemeContext';\n\n// Define type locally to avoid circular dependency\nexport type MegaMenuLayout = 'single' | 'double' | 'triple' | 'quad';\n\ntype Theme = ThemeObject;
 
 export const megaMenuContainer = "relative";
 

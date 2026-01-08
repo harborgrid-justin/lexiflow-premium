@@ -349,7 +349,15 @@ export const WorkflowRepository = {
         (t) => t.status !== TaskStatusBackend.COMPLETED
       );
       let nextDeadline = "N/A";
+      let completed = 0;
+      const total = entries.length;
+
       if (entries.length > 0) {
+        // Count completed tasks
+        completed = entries.filter(
+          (t) => t.status === "completed" || t.status === "Completed"
+        ).length;
+
         const dates = entries
           .map((t) => (t.dueDate ? new Date(t.dueDate).getTime() : 0))
           .filter((d) => d > 0)

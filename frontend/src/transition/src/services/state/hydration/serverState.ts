@@ -33,7 +33,7 @@ function extractThemeFromCookies(request: HydrationRequest): "light" | "dark" {
 function extractLocaleFromHeaders(request: HydrationRequest): string {
   const header = request.headers?.["accept-language"];
   const acceptLanguage = Array.isArray(header) ? header[0] : header || "";
-  const locale = acceptLanguage.split(",")[0]?.split("-")[0];
+  const locale = acceptLanguage?.split(",")[0]?.split("-")[0] || "en";
   return locale || "en";
 }
 

@@ -59,7 +59,7 @@ export const CaseListExperts: React.FC = () => {
     ? expertsData
     : (Array.isArray(expertsData?.data) ? expertsData.data : []);
 
-  const expertsList: Expert[] = rawList.map((item: { id?: string; name?: string; specialty?: string; expertType?: string; rate?: number; hourlyRate?: number; readiness?: number; reports?: number }) => ({
+  const expertsList: Expert[] = (rawList as Array<{ id?: string; name?: string; specialty?: string; expertType?: string; rate?: number; hourlyRate?: number; readiness?: number; reports?: number }>).map((item) => ({
     id: item.id || 'unknown',
     name: item.name || 'Unknown Expert',
     specialty: item.specialty || item.expertType || 'General',

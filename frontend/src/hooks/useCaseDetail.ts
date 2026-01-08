@@ -23,6 +23,7 @@ import { DEBUG_API_SIMULATION_DELAY_MS } from "@/config/features/features.config
 import { DataService } from "@/services/data/dataService";
 import {
   Case,
+  DocketEntry,
   LegalDocument,
   Motion,
   Party,

@@ -85,13 +85,12 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
         page: pageNum,
         limit,
         caseId: selectedCaseId || undefined,
-        type: typeFilter,
-        search: searchTerm
+        type: typeFilter
       });
 
       const newEntries = Array.isArray(result) ? result : (result.data || []);
 
-      setEntries(prev => isReset ? newEntries : [...prev, ...newEntries]);
+      setEntries(prev => isReset ? (newEntries as DocketEntry[]) : [...prev, ...(newEntries as DocketEntry[])]);
       setHasMore(newEntries.length === limit);
     } catch (err) {
       console.error(err);

@@ -55,7 +55,7 @@ export const FacilitiesManager: React.FC = () => {
     // Ensure tickets is always an array
     const tickets = Array.isArray(rawTickets)
         ? rawTickets
-        : (Array.isArray(rawTickets?.data) ? rawTickets.data : []);
+        : (Array.isArray((rawTickets as { data?: unknown[] })?.data) ? (rawTickets as { data: unknown[] }).data : []);
 
     const { data: locations = [], isLoading: locationsLoading } = useQuery<unknown[]>(
         ['facilities', 'all'],

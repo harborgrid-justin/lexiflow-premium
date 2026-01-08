@@ -32,6 +32,9 @@ export const cryptoAdapter = {
   async decrypt(encrypted: string, key: string): Promise<string> {
     const crypto = await import("crypto");
     const parts = encrypted.split(":");
+    if (parts.length < 2 || !parts[0] || !parts[1]) {
+      throw new Error("Invalid encrypted format");
+    }
     const iv = Buffer.from(parts[0], "hex");
     const encryptedText = parts[1];
     const keyBuffer = crypto.createHash("sha256").update(key).digest();

@@ -249,8 +249,15 @@ export class DiscoveryRepository {
    * Implementation of getCustodians
    */
   private async getCustodiansImpl(caseId?: string): Promise<Custodian[]> {
-    // Implementation logic here
-    return getCustodians(this.useBackend, caseId);
+    try {
+      if (this.useBackend) {
+        return await discoveryApi.custodians.getAll(caseId ? { caseId } : {});
+      }
+      return [];
+    } catch (error) {
+      console.error("[DiscoveryRepository.getCustodians] Error:", error);
+      return [];
+    }
   }
 
   /**

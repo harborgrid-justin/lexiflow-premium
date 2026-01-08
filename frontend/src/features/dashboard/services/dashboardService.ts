@@ -191,14 +191,14 @@ export const dashboardService = {
       }
 
       // Sort by timestamp desc and take top 5
-      const sortedLogs = logs
+      const sortedLogs = (logs as Array<{ timestamp: string | number | Date }>)
         .sort(
           (a, b) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         )
         .slice(0, 5);
 
-      return sortedLogs.map((log: AuditLog) => {
+      return (sortedLogs as AuditLog[]).map((log) => {
         // Safe mapping with strict types
         const details = log.changes
           ? JSON.stringify(log.changes)

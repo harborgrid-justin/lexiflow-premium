@@ -135,7 +135,8 @@ export class EntityRepository extends Repository<LegalEntity> {
     this.validateId(id, "getRelationships");
     if (this.useBackend && id !== "all") {
       try {
-        return await this.legalEntitiesApi.getRelationships(id);
+        const relationships = await this.legalEntitiesApi.getRelationships(id);
+        return relationships as unknown as Record<string, unknown>[];
       } catch (error) {
         console.error("[EntityRepository] Backend API unavailable", error);
         return [];

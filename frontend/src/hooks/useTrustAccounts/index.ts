@@ -215,7 +215,10 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
   );
 
   return {
-    createAccount: mutation.mutateAsync,
+    createAccount: ((data: Record<string, unknown>) =>
+      mutation.mutateAsync(data as CreateTrustAccountDto)) as (
+      data: Record<string, unknown>
+    ) => Promise<TrustAccount>,
     isCreating: mutation.isLoading,
     error,
   };
@@ -253,7 +256,11 @@ export function useDepositFunds(): UseDepositFundsResult {
   );
 
   return {
-    deposit,
+    deposit: ((accountId: string, data: Record<string, unknown>) =>
+      mutation.mutateAsync({ accountId, data: data as DepositDto })) as (
+      accountId: string,
+      data: Record<string, unknown>
+    ) => Promise<TrustTransactionEntity>,
     isDepositing: mutation.isLoading,
     error,
   };
@@ -291,7 +298,11 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
   );
 
   return {
-    withdraw,
+    withdraw: ((accountId: string, data: Record<string, unknown>) =>
+      mutation.mutateAsync({ accountId, data: data as WithdrawalDto })) as (
+      accountId: string,
+      data: Record<string, unknown>
+    ) => Promise<TrustTransactionEntity>,
     isWithdrawing: mutation.isLoading,
     error,
   };
@@ -329,7 +340,14 @@ export function useReconcileAccount(): UseReconcileAccountResult {
   );
 
   return {
-    reconcile,
+    reconcile: ((accountId: string, data: Record<string, unknown>) =>
+      mutation.mutateAsync({
+        accountId,
+        data: data as ThreeWayReconciliationDto,
+      })) as (
+      accountId: string,
+      data: Record<string, unknown>
+    ) => Promise<void>,
     isReconciling: mutation.isLoading,
     error,
   };

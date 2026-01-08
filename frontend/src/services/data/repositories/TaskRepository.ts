@@ -25,7 +25,7 @@
  * - Event-driven integration
  */
 
-import { TasksApiService } from "@/api/workflow/tasks";
+import { TasksApiService } from "@/api/workflow/tasks-api";
 import { isBackendApiEnabled } from "@/config/network/api.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";

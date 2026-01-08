@@ -211,7 +211,8 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                     ...n,
                                     timestamp: new Date(n.timestamp).getTime(),
                                     priority: "low" as const,
-                                    type: n.type === 'success' ? 'info' : n.type
+                                    type: n.type === 'success' ? 'info' : n.type,
+                                    metadata: (n.metadata as Record<string, unknown>) || {}
                                 }))}
                                 unreadCount={
                                     notifications.filter((n) => !n.read).length

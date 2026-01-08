@@ -101,3 +101,9 @@ export interface UseEvidenceManagerReturn {
   /** Go back to list (alias) */
   handleBack: () => void;
 }
+
+/**
+ * Legacy export alias for backward compatibility
+ * @deprecated Use UseEvidenceManagerReturn instead
+ */
+export type UseEvidenceVaultReturn = UseEvidenceManagerReturn;

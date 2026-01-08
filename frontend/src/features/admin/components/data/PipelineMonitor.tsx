@@ -225,7 +225,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                                     <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>
                                         <div className="flex justify-between items-start mb-4">
                                             <div className={cn("p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
-                                                <Icon className={cn("h-6 w-6", conn.color)} />
+                                                <Icon className={cn("h-6 w-6", (conn as { color?: string }).color || 'text-slate-500')} />
                                             </div>
                                             <div className="flex gap-1">
                                                 <button aria-label="Connector settings" className={cn("p-1.5 rounded transition-colors hover:bg-slate-100 dark:hover:bg-slate-700", theme.text.tertiary)}><Settings className="h-4 w-4" /></button>

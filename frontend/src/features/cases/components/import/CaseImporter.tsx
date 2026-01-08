@@ -258,8 +258,10 @@ export const CaseImporter: React.FC = () => {
             try {
               await api.docket.add({
                 caseId: newCase.id,
+                sequenceNumber: docketCount + 1,
+                dateFiled: d.dateFiled ? new Date(d.dateFiled).toISOString() : new Date().toISOString(),
+                entryDate: d.dateFiled ? new Date(d.dateFiled).toISOString() : new Date().toISOString(),
                 description: d.description,
-                date: d.dateFiled ? new Date(d.dateFiled).toISOString() : new Date().toISOString(),
                 type: 'Filing',
                 metadata: d.docLink ? { docLink: d.docLink } : {}
               });

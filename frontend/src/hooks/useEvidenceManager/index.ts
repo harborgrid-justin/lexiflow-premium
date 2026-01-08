@@ -68,7 +68,7 @@ export function useEvidenceManager(caseId?: string): UseEvidenceManagerReturn {
     setSelectedItem,
     addEvidence,
     updateEvidence,
-    setView,
+    setView: (view: string) => setView(view as ViewMode),
   });
 
   // Initialization logging

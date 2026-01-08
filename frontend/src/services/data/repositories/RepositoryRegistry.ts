@@ -1,9 +1,9 @@
 /**
  * RepositoryRegistry
- * 
+ *
  * Responsibility: Manage singleton repository lifecycle and prevent duplicate instances
  * Pattern: Registry pattern with factory methods
- * 
+ *
  * This module ensures that repositories are created once and reused across
  * the application, preventing memory leaks and inconsistent state.
  */
@@ -16,7 +16,7 @@ export class RepositoryRegistry {
 
   /**
    * Gets or creates a singleton repository instance
-   * 
+   *
    * @param key - Unique identifier for the repository
    * @param factory - Factory function to create the repository
    * @returns The singleton repository instance
@@ -26,6 +26,14 @@ export class RepositoryRegistry {
       this.instances.set(key, factory());
     }
     return this.instances.get(key) as T;
+  }
+
+  /**
+   * Clear all repository instances
+   * Use during cleanup to prevent memory leaks
+   */
+  static clear(): void {
+    this.instances.clear();
   }
 
   /**
@@ -82,7 +90,7 @@ export class RepositoryRegistry {
 
 /**
  * Legacy compatibility - maintains getSingleton pattern from original code
- * 
+ *
  * @deprecated Use RepositoryRegistry.getOrCreate instead
  */
 export function getSingleton<T>(key: string, factory: () => T): T {
@@ -91,7 +99,7 @@ export function getSingleton<T>(key: string, factory: () => T): T {
 
 /**
  * Creates a registry-managed repository factory
- * 
+ *
  * Example:
  * ```ts
  * const getCaseRepository = createRegistryFactory('CaseRepository', () => new CaseRepository());
@@ -106,7 +114,7 @@ export function createRegistryFactory<T>(
 
 /**
  * Batch registration helper for multiple repositories
- * 
+ *
  * Example:
  * ```ts
  * const repositories = registerRepositories({
@@ -116,12 +124,17 @@ export function createRegistryFactory<T>(
  * });
  * ```
  */
-export function registerRepositories<TMap extends Record<string, unknown>>(
-  config: { [K in keyof TMap]: () => TMap[K] }
-): { [K in keyof TMap]: () => TMap[K] } {
+export function registerRepositories<
+  TMap extends Record<string, unknown>,
+>(config: { [K in keyof TMap]: () => TMap[K] }): {
+  [K in keyof TMap]: () => TMap[K];
+} {
   const factories: unknown = {};
   for (const [key, factory] of Object.entries(config)) {
-    (factories as Record<string, unknown>)[key] = createRegistryFactory(key, factory as () => unknown);
+    (factories as Record<string, unknown>)[key] = createRegistryFactory(
+      key,
+      factory as () => unknown
+    );
   }
   return factories as { [K in keyof TMap]: () => TMap[K] };
 }

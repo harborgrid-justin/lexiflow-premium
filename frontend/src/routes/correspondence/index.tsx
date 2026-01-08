@@ -7,6 +7,7 @@
  * @module routes/correspondence/index
  */
 
+import type { Correspondence } from '@/api/communications/correspondence-api';
 import { DataService } from '@/services/data/dataService';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

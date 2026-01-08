@@ -139,7 +139,7 @@ export const ThemeSettingsPage: React.FC = () => {
 
           {/* Status Colors */}
           <ColorTokenSection title="Status Colors" theme={theme}>
-            {Object.entries(theme.status).map(([key, value]) => (
+            {Object.entries(theme.status).map(([key, value]: [string, { bg: string; text: string; icon: string; border: string }]) => (
               <div key={key} className={cn("p-4 rounded-lg border", value.bg, value.border)}>
                 <div className="flex items-center gap-2">
                   <div className={cn("w-3 h-3 rounded-full", value.icon)} />
@@ -161,11 +161,11 @@ export const ThemeSettingsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={chartData.riskData}
+                      data={[...chartData.riskData] as any[]}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={(entry: { name: string }) => entry.name}
+                      label={(entry: { name?: string }) => entry.name || ''}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -195,7 +195,7 @@ export const ThemeSettingsPage: React.FC = () => {
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Category Distribution</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData.categoryData}>
+                <BarChart data={[...chartData.categoryData] as any[]}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
                   <XAxis dataKey="name" tick={{ fill: chartTheme.text }} />
                   <YAxis tick={{ fill: chartTheme.text }} />

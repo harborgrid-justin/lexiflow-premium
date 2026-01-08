@@ -75,7 +75,7 @@ function extractCookies(request: ServerRequest): Record<string, string> {
     cookieHeader.split(';').map((c: string) => {
       const [key, ...rest] = c.trim().split('=');
       return [key, rest.join('=')];
-    }).filter((entry: string[]) => entry[0])
+    }).filter((entry: [string, string | undefined]) => entry[0] && entry[1])
   );
 }
 

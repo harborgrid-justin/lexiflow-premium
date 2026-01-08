@@ -47,9 +47,10 @@ export const PleadingAnalytics: React.FC = () => {
     // Fetch clause usage data
     const { data: clauseDataFromApi = [] } = useQuery<Array<{ name?: string; title?: string; count?: number }>>(
         ['analytics', 'clause_usage'],
-        async () => {
+        async (): Promise<Array<{ name?: string; title?: string; count?: number }>> => {
             try {
-                return await (DataService as { analytics?: { getClauseUsage?: () => Promise<unknown[]> } }).analytics?.getClauseUsage?.() || [];
+                const result = await (DataService as { analytics?: { getClauseUsage?: () => Promise<unknown[]> } }).analytics?.getClauseUsage?.() || [];
+                return result as Array<{ name?: string; title?: string; count?: number }>;
             } catch (error) {
                 console.warn('[PleadingAnalytics] Clause usage data unavailable:', error);
                 return [];

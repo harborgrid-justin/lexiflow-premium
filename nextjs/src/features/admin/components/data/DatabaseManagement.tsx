@@ -1,11 +1,11 @@
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/providers';
+import { db } from '@/services/data/db';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
-import { db } from '@/services/data/db';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();
@@ -55,9 +55,9 @@ export const DatabaseManagement: React.FC = () => {
           message.type === 'error' && "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300",
           message.type === 'info' && "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300"
         )}>
-          {message.type === 'success' && <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />}
-          {message.type === 'error' && <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />}
-          {message.type === 'info' && <Info className="h-5 w-5 flex-shrink-0 mt-0.5" />}
+          {message.type === 'success' && <CheckCircle className="h-5 w-5 shrink-0 mt-0.5" />}
+          {message.type === 'error' && <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5" />}
+          {message.type === 'info' && <Info className="h-5 w-5 shrink-0 mt-0.5" />}
           <p className="text-sm font-medium">{message.text}</p>
         </div>
       )}
@@ -163,7 +163,7 @@ export const DatabaseManagement: React.FC = () => {
       {/* Info Panel */}
       <div className={cn("p-6 rounded-xl border bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800", theme.text.primary)}>
         <div className="flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+          <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           <div className="text-sm space-y-2">
             <p className="font-semibold text-blue-900 dark:text-blue-300">Database Version Management</p>
             <ul className="list-disc list-inside text-blue-800 dark:text-blue-400 space-y-1">

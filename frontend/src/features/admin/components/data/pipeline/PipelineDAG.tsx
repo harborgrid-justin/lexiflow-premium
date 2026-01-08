@@ -24,7 +24,7 @@ export const PipelineDAG = React.memo(function PipelineDAG() {
             { id: 'loading', label: 'Loading...', icon: Loader2, color: 'text-slate-400', status: 'Loading' }
         ]
         : Array.isArray(pipelineData) && pipelineData.length > 0
-            ? pipelineData.map((step: { id: string; name?: string; label?: string; status?: string }) => ({
+            ? (pipelineData as Array<{ id: string; name?: string; label?: string; status?: string }>).map((step) => ({
                 id: step.id,
                 label: step.name || step.label,
                 icon: Database,

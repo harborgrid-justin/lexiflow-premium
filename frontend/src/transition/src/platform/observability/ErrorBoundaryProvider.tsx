@@ -25,7 +25,7 @@ export class ErrorBoundaryProvider extends Component<ErrorBoundaryProps, ErrorBo
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     logger.error('Uncaught error:', error, errorInfo);
 
     // Report to error tracking service
@@ -35,7 +35,7 @@ export class ErrorBoundaryProvider extends Component<ErrorBoundaryProps, ErrorBo
     }
   }
 
-  render() {
+  override render() {
     if (this.state.hasError && this.state.error) {
       if (this.props.fallback) {
         return this.props.fallback(this.state.error);

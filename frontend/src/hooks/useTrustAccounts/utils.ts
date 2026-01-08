@@ -166,6 +166,8 @@ export function findLastReconciliationDate(
   );
 }
 
+import type { TrustAccountError } from "./types";
+
 /**
  * Transform query error to structured error
  */

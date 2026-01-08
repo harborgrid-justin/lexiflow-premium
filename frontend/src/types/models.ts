@@ -2,46 +2,47 @@
 // Main type definitions barrel export - Re-exports from domain-specific files for backward compatibility
 
 // Re-export primitives & base types
-export * from './primitives';
+export * from "./primitives";
 
 // Re-export auth & security types
-export * from './auth';
+export * from "./auth";
 
 // Re-export system & infrastructure types
-export * from './system';
+export * from "./system";
 
 // Re-export data platform types
-export * from './data-infrastructure';
-export * from './data-quality';
+export * from "./data-infrastructure";
+export * from "./data-quality";
 
 // Re-export case & litigation types
-export * from './case';
-export * from './case-team';
+export * from "./case";
+export * from "./case-team";
 
 // Re-export statistics & analytics
-export * from './statistics';
+export * from "./statistics";
 
 // Re-export DTOs
-export * from './dto';
+export * from "./dto";
 
 // Re-export financial & billing types
-export * from './financial';
-export * from './trust-accounts';
+export * from "./financial";
+export * from "./trust-accounts";
 
 // Re-export documents & discovery types
-export * from './documents';
+export * from "./documents";
 
 // Re-export trial & strategy types
-export * from './trial';
+export * from "./trial";
 
 // Re-export workflow & automation types
-export * from './workflow';
+export * from "./workflow";
 
 // Re-export domain-specific legacy types
-export * from './motion-docket';
-export * from './evidence';
-export * from './legal-research';
-export * from './discovery';
-export * from './pleadings';
-export * from './compliance-risk';
-export * from './misc';
+export * from "./compliance-risk";
+export * from "./discovery";
+export * from "./discovery-enhanced";
+export * from "./evidence";
+export * from "./legal-research";
+export * from "./misc";
+export * from "./motion-docket";
+export * from "./pleadings";

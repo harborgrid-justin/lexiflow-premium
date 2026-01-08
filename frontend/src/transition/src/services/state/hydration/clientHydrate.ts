@@ -12,7 +12,7 @@ export function hydrateClientState(): void {
     .__INITIAL_STATE__;
 
   if (serverState) {
-    store.hydrate(serverState);
+    store.hydrate(serverState as StoreState);
 
     // Clean up
     delete (window as { __INITIAL_STATE__?: unknown }).__INITIAL_STATE__;

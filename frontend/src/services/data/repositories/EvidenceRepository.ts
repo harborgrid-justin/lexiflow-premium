@@ -142,7 +142,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
     try {
       // Call super.getAll with empty options if arg is not options
       const options = typeof arg === "object" ? arg : {};
-      return await super.getAll(options);
+      return await super.getAll(options || undefined);
     } catch (error) {
       console.error("[EvidenceRepository.getAll] Error:", error);
       throw new OperationError("getAll", "Failed to fetch evidence items");

@@ -72,7 +72,7 @@ export const EventBusManager: React.FC = () => {
               <div>
                 <p className={cn("text-xs font-semibold uppercase", theme.text.secondary)}>Pending</p>
                 <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
-                  {events.filter(e => e.status === 'pending').length}
+                  {(events as Array<{ status: string }>).filter(e => e.status === 'pending').length}
                 </p>
               </div>
               <Zap className="h-8 w-8 text-yellow-500" />
@@ -84,7 +84,7 @@ export const EventBusManager: React.FC = () => {
               <div>
                 <p className={cn("text-xs font-semibold uppercase", theme.text.secondary)}>Failed</p>
                 <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
-                  {events.filter(e => e.status === 'failed').length}
+                  {(events as Array<{ status: string }>).filter(e => e.status === 'failed').length}
                 </p>
               </div>
               <AlertCircle className="h-8 w-8 text-red-500" />
@@ -112,7 +112,13 @@ export const EventBusManager: React.FC = () => {
           </Card>
         ) : (
           <div className="space-y-3">
-            {events.map(event => (
+            {(events as Array<{
+              id: string;
+              event: string;
+              status: 'delivered' | 'pending' | 'failed';
+              source: string;
+              timestamp: number;
+            }>).map((event) => (
               <Card key={event.id}>
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">

@@ -607,8 +607,11 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         const response = await apiClient.post<{ url: string }>(
           `/litigation/pleadings/${pleadingId}/pdf`
         );
-        if (response.data && response.data.url) {
-          return response.data.url;
+        if (
+          (response as { data?: { url?: string } }).data &&
+          (response as { data: { url?: string } }).data.url
+        ) {
+          return (response as { data: { url: string } }).data.url;
         }
         // Fallback if URL not returned but handled
         return `${apiClient.defaults.baseURL}/litigation/pleadings/${pleadingId}/pdf/download`;

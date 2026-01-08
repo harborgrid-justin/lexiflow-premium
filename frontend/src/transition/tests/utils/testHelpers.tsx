@@ -11,7 +11,7 @@ export function renderWithProviders(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  return render(ui, { wrapper: AppProviders, ...options });
+  return render(ui, { wrapper: AppProviders as React.JSXElementConstructor<{ children: React.ReactNode }>, ...options });
 }
 
 // Mock user factory

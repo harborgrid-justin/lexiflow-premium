@@ -11,7 +11,7 @@ export async function prefetchQueries(
   }>
 ): Promise<void> {
   await Promise.all(
-    queries.map(({ key, fetcher }) => queryClient.query(key, fetcher))
+    queries.map(({ key, fetcher }) => queryClient.prefetchQuery(key, fetcher))
   );
 }
 

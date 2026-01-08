@@ -366,7 +366,7 @@ export const WorkflowRepository = {
         id,
         type,
         status: "Active",
-        progress,
+        progress: Math.round((completed / total) * 100),
         tasksTotal: total,
         tasksCompleted: completed,
         nextDeadline: nextDeadline,

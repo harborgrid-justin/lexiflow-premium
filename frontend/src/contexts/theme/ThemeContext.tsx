@@ -1,6 +1,95 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_TOKENS, DesignTokens, ThemeDensity } from '../../components/theme/tokens';
 
+export type ThemeObject = {
+  background: string;
+  surface: {
+    default: string;
+    raised: string;
+    highlight: string;
+    paper: string;
+    overlay: string;
+    input: string;
+    active: string;
+    primary: string;
+    secondary: string;
+  };
+  border: {
+    default: string;
+    light: string;
+    focused: string;
+    error: string;
+    subtle: string;
+    primary: string;
+  };
+  primary: {
+    DEFAULT: string;
+    light: string;
+    dark: string;
+    text: string;
+    border: string;
+    hover: string;
+    main: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    inverse: string;
+    link: string;
+    code: string;
+  };
+  status: {
+    success: { bg: string; text: string; icon: string; border: string };
+    error: { bg: string; text: string; icon: string; border: string };
+    warning: { bg: string; text: string; icon: string; border: string };
+    info: { bg: string; text: string; icon: string; border: string };
+    neutral: { bg: string; text: string; icon: string; border: string };
+  };
+  action: {
+    primary: { bg: string; text: string; hover: string; border: string };
+    secondary: { bg: string; text: string; hover: string; border: string };
+    ghost: { bg: string; text: string; hover: string; border: string };
+    danger: { bg: string; text: string; hover: string; border: string };
+  };
+  button: {
+    primary: string;
+    secondary: string;
+    ghost: string;
+  };
+  input: {
+    default: string;
+  };
+  focus: {
+    ring: string;
+  };
+  badge: {
+    default: string;
+  };
+  backdrop: string;
+  chart: {
+    grid: string;
+    text: string;
+    colors: {
+      primary: string;
+      secondary: string;
+      success: string;
+      warning: string;
+      danger: string;
+      info: string;
+      neutral: string;
+      blue: string;
+      emerald: string;
+      purple: string;
+    };
+    tooltip: {
+      bg: string;
+      border: string;
+      text: string;
+    };
+  };
+};
+
 interface ThemeContextType {
   tokens: DesignTokens;
   density: ThemeDensity;

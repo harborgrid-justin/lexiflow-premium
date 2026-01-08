@@ -47,8 +47,8 @@ export const AdminSecurity: React.FC = () => {
     const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
 
     // Load security settings and IP blacklist from backend
-    const controls = [];
-    const blacklistedIps = [];
+    const controls: Array<Record<string, unknown>> = [];
+    const blacklistedIps: string[] = [];
 
     const getIcon = (type: string) => {
         switch (type) {

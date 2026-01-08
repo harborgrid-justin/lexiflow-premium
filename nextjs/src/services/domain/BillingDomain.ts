@@ -99,6 +99,7 @@ import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
 import { STORES, db } from "@/services/data/db";
 import {
+  BillingTransaction,
   CaseId,
   Client,
   FinancialPerformanceData,
@@ -338,6 +339,9 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        return await apiClient.get<RateTable[]>(
+          `/billing/rates/timekeeper/${timekeeperId}`
+        );
       }
 
       return await db.getByIndex<RateTable>(
@@ -374,7 +378,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
       // Use backend API for filtered queries
       if (this.useBackend) {
-        return this.billingApi.getTimeEntries(caseId ? { caseId } : undefined);
+        const params = caseId ? { caseId } : {};
+        return this.billingApi.getTimeEntries(params);
       }
 
       // Fallback to IndexedDB
@@ -427,6 +432,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        return await apiClient.post<TimeEntry>("/billing/time-entries", entry);
       }
 
       const result = await this.add(entry);
@@ -471,6 +477,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getWIPStats(): Promise<WIPStat[]> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<WIPStat[]>("/billing/wip/stats");
       }
 
       const clients = await db.getAll<Client>(STORES.CLIENTS);
@@ -498,6 +505,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getRealizationStats(): Promise<unknown> {
     try {
       if (this.useBackend) {
+        return await apiClient.get("/billing/realization/stats");
       }
 
       const stats = await db.get<{ data?: unknown[] }>(
@@ -527,6 +535,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getInvoices(): Promise<Invoice[]> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<Invoice[]>("/billing/invoices");
       }
 
       return await db.getAll<Invoice>(STORES.INVOICES);
@@ -570,6 +579,15 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        const payload = {
+          clientName,
+          caseId,
+          timeEntryIds: entries.map((e) => e.id),
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0],
+        };
+        return await apiClient.post<Invoice>("/billing/invoices", payload);
       }
 
       const totalAmount = entries.reduce((sum, e) => sum + (e.total || 0), 0);
@@ -665,6 +683,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        return await apiClient.patch<Invoice>(
+          `/billing/invoices/${id}`,
+          updates
+        );
       }
 
       const invoice = await db.get<Invoice>(STORES.INVOICES, id);
@@ -697,6 +719,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        await apiClient.post(`/billing/invoices/${id}/send`, {});
+        return true;
       }
 
       await delay(500);
@@ -731,6 +755,9 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        return await apiClient.get<TrustTransaction[]>(
+          `/billing/trust/${accountId}/transactions`
+        );
       }
 
       return await db.getByIndex(STORES.TRUST_TX, "accountId", accountId);
@@ -752,6 +779,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTrustAccounts(): Promise<unknown[]> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<unknown[]>("/billing/trust/accounts");
       }
 
       return await db.getAll<unknown>(STORES.TRUST);
@@ -773,6 +801,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTopAccounts(): Promise<Client[]> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<Client[]>("/billing/clients/top?limit=4");
       }
 
       const clients = await db.getAll<Client>(STORES.CLIENTS);
@@ -802,6 +831,11 @@ export class BillingRepository extends Repository<TimeEntry> {
   }> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<{
+          realization: number;
+          totalBilled: number;
+          month: string;
+        }>("/billing/overview/stats");
       }
 
       await delay(50);
@@ -828,6 +862,9 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getOperatingSummary(): Promise<OperatingSummary> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<OperatingSummary>(
+          "/billing/operating/summary"
+        );
       }
 
       const summary = await db.get<OperatingSummary>(
@@ -859,6 +896,9 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     try {
       if (this.useBackend) {
+        return await apiClient.get<FinancialPerformanceData>(
+          "/billing/performance"
+        );
       }
 
       await delay(200);
@@ -889,6 +929,152 @@ export class BillingRepository extends Repository<TimeEntry> {
   }
 
   // =============================================================================
+  // LEDGER OPERATIONS
+  // =============================================================================
+
+  /**
+   * Get operating ledger transactions (revenue and expenses)
+   *
+   * @returns Promise<BillingTransaction[]> Array of operating transactions
+   * @throws Error if fetch fails
+   *
+   * @example
+   * const transactions = await repo.getOperatingTransactions();
+   */
+  async getOperatingTransactions(): Promise<BillingTransaction[]> {
+    try {
+      if (this.useBackend) {
+        return await apiClient.get<BillingTransaction[]>(
+          "/billing/operating/transactions"
+        );
+      }
+
+      const invoices = await db.getAll<Invoice>(STORES.INVOICES);
+      const expenses = await db.getAll<any>(STORES.EXPENSES);
+
+      const transactions: BillingTransaction[] = [
+        ...invoices.map((inv) => ({
+          id: inv.id,
+          date: inv.invoiceDate,
+          type: "Revenue" as const,
+          description: `Invoice ${inv.invoiceNumber} - ${inv.clientName}`,
+          amount: inv.totalAmount,
+          category: "Legal Services",
+        })),
+        ...expenses.map((exp) => ({
+          id: exp.id,
+          date: exp.date || exp.createdAt,
+          type: "Expense" as const,
+          description: exp.description || exp.category,
+          amount: exp.amount,
+          category: exp.category,
+        })),
+      ];
+
+      return transactions.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+    } catch (error) {
+      console.error(
+        "[BillingRepository.getOperatingTransactions] Error:",
+        error
+      );
+      throw new OperationError("Failed to fetch operating transactions");
+    }
+  }
+
+  /**
+   * Get operating ledger summary
+   *
+   * @returns Promise<OperatingSummary> Operating financial summary
+   * @throws Error if fetch fails
+   *
+   * @example
+   * const summary = await repo.getOperatingSummary();
+   */
+  async getOperatingSummary(): Promise<{
+    totalRevenue: number;
+    totalExpenses: number;
+    netIncome: number;
+  }> {
+    try {
+      if (this.useBackend) {
+        return await apiClient.get("/billing/operating/summary");
+      }
+
+      const invoices = await db.getAll<Invoice>(STORES.INVOICES);
+      const expenses = await db.getAll<any>(STORES.EXPENSES);
+
+      const totalRevenue = invoices.reduce(
+        (sum, inv) => sum + (inv.totalAmount || 0),
+        0
+      );
+      const totalExpenses = expenses.reduce(
+        (sum, exp) => sum + (exp.amount || 0),
+        0
+      );
+      const netIncome = totalRevenue - totalExpenses;
+
+      return { totalRevenue, totalExpenses, netIncome };
+    } catch (error) {
+      console.error("[BillingRepository.getOperatingSummary] Error:", error);
+      throw new OperationError("Failed to fetch operating summary");
+    }
+  }
+
+  /**
+   * Get trust ledger summary
+   *
+   * @returns Promise with trust account summary
+   * @throws Error if fetch fails
+   *
+   * @example
+   * const summary = await repo.getTrustSummary();
+   */
+  async getTrustSummary(): Promise<{
+    currentBalance: number;
+    totalDeposits: number;
+    totalWithdrawals: number;
+    lastReconciliation: string;
+  }> {
+    try {
+      if (this.useBackend) {
+        return await apiClient.get("/billing/trust/summary");
+      }
+
+      const transactions = await db.getAll<TrustTransaction>(STORES.TRUST_TX);
+
+      let currentBalance = 0;
+      let totalDeposits = 0;
+      let totalWithdrawals = 0;
+      let lastReconciliation = new Date(
+        Date.now() - 7 * 24 * 60 * 60 * 1000
+      ).toISOString();
+
+      transactions.forEach((txn) => {
+        const amount = txn.amount || 0;
+        if (txn.type === "Deposit") {
+          totalDeposits += amount;
+          currentBalance += amount;
+        } else if (txn.type === "Withdrawal") {
+          totalWithdrawals += amount;
+          currentBalance -= amount;
+        }
+      });
+
+      return {
+        currentBalance,
+        totalDeposits,
+        totalWithdrawals,
+        lastReconciliation,
+      };
+    } catch (error) {
+      console.error("[BillingRepository.getTrustSummary] Error:", error);
+      throw new OperationError("Failed to fetch trust summary");
+    }
+  }
+
+  // =============================================================================
   // UTILITY OPERATIONS
   // =============================================================================
 
@@ -904,6 +1090,8 @@ export class BillingRepository extends Repository<TimeEntry> {
   async sync(): Promise<void> {
     try {
       if (this.useBackend) {
+        await apiClient.post("/billing/sync", {});
+        return;
       }
 
       await delay(1000);
@@ -939,6 +1127,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     try {
       if (this.useBackend) {
+        const response = await apiClient.get<{ url: string }>(
+          `/billing/export?format=${format}`
+        );
+        return response.url;
       }
 
       await delay(1500);

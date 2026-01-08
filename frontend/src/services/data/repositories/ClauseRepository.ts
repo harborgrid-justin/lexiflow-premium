@@ -92,7 +92,7 @@ export class ClauseRepository extends Repository<ClauseEntity> {
           ...createData
         } = item;
         const result = await this.clausesApi.create(
-          createData as Omit<ClauseEntity, "id" | "createdAt" | "updatedAt">
+          createData as unknown as CreateClauseDto
         );
         return result as unknown as ClauseEntity;
       } catch (error) {
@@ -112,7 +112,7 @@ export class ClauseRepository extends Repository<ClauseEntity> {
       try {
         const result = await this.clausesApi.update(
           id,
-          updates as Partial<ClauseEntity>
+          updates as unknown as UpdateClauseDto
         );
         return result as unknown as ClauseEntity;
       } catch (error) {

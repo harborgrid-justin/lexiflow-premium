@@ -66,8 +66,8 @@ export function getCookie(name: string): string | null {
   const cookies = document.cookie.split(";");
   for (const cookie of cookies) {
     const [key, value] = cookie.trim().split("=");
-    if (decodeURIComponent(key) === name) {
-      return decodeURIComponent(value);
+    if (key && decodeURIComponent(key) === name) {
+      return value ? decodeURIComponent(value) : "";
     }
   }
 
@@ -87,6 +87,6 @@ export function clearAllCookies(): void {
   const cookies = document.cookie.split(";");
   for (const cookie of cookies) {
     const [name] = cookie.trim().split("=");
-    deleteCookie(name);
+    deleteCookie(name || "");
   }
 }

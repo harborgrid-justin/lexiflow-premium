@@ -1,20 +1,18 @@
 /**
  * Document Row Component Story
- * 
+ *
  * Individual document row for table view with actions.
  */
 
+import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentRow } from '../../../../features/operations/documents/table/DocumentRow';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { LegalDocument, UserId, CaseId, DocumentId } from '@/types';
 
 // Wrapper to provide theme to DocumentRow
 const DocumentRowWrapper = (props: React.ComponentProps<typeof DocumentRow>) => {
-  const { theme } = useTheme();
-  return <DocumentRow {...props} theme={theme} />;
+  return <DocumentRow {...props} />;
 };
 
 const meta: Meta<typeof DocumentRowWrapper> = {

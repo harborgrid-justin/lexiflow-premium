@@ -37,7 +37,7 @@ export function DevAuthProvider({ children }: DevAuthProviderProps) {
       email: identity.email,
       firstName: identity.firstName,
       lastName: identity.lastName,
-      roles: [identity.role] as Role[],
+      roles: identity.roles || [] as Role[],
       permissions: (identity.permissions || []) as Permission[],
       name: `${identity.firstName} ${identity.lastName}`,
       avatar: undefined, // Fixed: avatarUrl -> avatar

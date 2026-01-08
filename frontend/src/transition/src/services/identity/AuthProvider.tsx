@@ -132,6 +132,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return permissions.includes(permission);
   };
 
+  type AuthContextValue = typeof value;
+
   const value: AuthContextValue = {
     user,
     roles,

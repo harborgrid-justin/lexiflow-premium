@@ -235,7 +235,6 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
 
       if (!validation.isValid) {
         const errors = validation.conflicts
-          .filter((c: { severity: string }) => c.severity === 'error')
           .map((c: { reason: string }) => c.reason);
         addToast(`Clause conflicts detected: ${errors.join('; ')}`, 'error');
         return false;

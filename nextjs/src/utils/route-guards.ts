@@ -11,20 +11,20 @@
  * @module utils/route-guards
  */
 
-import type { AuthUser } from '@/providers/AuthProvider';
+import type { AuthUser } from "@/providers/AuthProvider";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const AUTH_STORAGE_KEY = 'lexiflow_auth_token';
-const AUTH_USER_KEY = 'lexiflow_auth_user';
+const AUTH_STORAGE_KEY = "lexiflow_auth_token";
+const AUTH_USER_KEY = "lexiflow_auth_user";
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type UserRole = 'admin' | 'attorney' | 'paralegal' | 'client';
+export type UserRole = "admin" | "attorney" | "paralegal" | "client";
 
 export interface RouteGuardResult {
   authenticated: boolean;
@@ -40,7 +40,7 @@ export interface RouteGuardResult {
  * @returns AuthUser if authenticated, null otherwise
  */
 export function getCurrentUser(): AuthUser | null {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return null;
   }
 
@@ -54,7 +54,7 @@ export function getCurrentUser(): AuthUser | null {
 
     return JSON.parse(userJson) as AuthUser;
   } catch (error) {
-    console.error('[RouteGuards] Error getting current user:', error);
+    console.error("[RouteGuards] Error getting current user:", error);
     return null;
   }
 }
@@ -94,6 +94,8 @@ export function requireAuthentication(request: Request): RouteGuardResult {
  * @throws Response with redirect to dashboard if authenticated
  */
 export function requireGuest(request: Request): RouteGuardResult {
+  // request parameter reserved for future redirect logic
+  void request;
   const user = getCurrentUser();
 
   if (user) {
@@ -101,7 +103,7 @@ export function requireGuest(request: Request): RouteGuardResult {
     throw new Response(null, {
       status: 302,
       headers: {
-        Location: '/dashboard',
+        Location: "/dashboard",
       },
     });
   }
@@ -127,11 +129,11 @@ export function requireRole(
 ): RouteGuardResult {
   const { user } = requireAuthentication(request);
 
-  const hasRequiredRole = allowedRoles.some(role => role === user.role);
+  const hasRequiredRole = allowedRoles.some((role) => role === user.role);
   if (!user || !hasRequiredRole) {
-    throw new Response('Forbidden - Insufficient permissions', {
+    throw new Response("Forbidden - Insufficient permissions", {
       status: 403,
-      statusText: 'Forbidden',
+      statusText: "Forbidden",
     });
   }
 
@@ -146,7 +148,7 @@ export function requireRole(
  * @throws Response with 403 Forbidden if user is not an admin
  */
 export function requireAdmin(request: Request): RouteGuardResult {
-  return requireRole(request, 'admin');
+  return requireRole(request, "admin");
 }
 
 /**
@@ -157,7 +159,7 @@ export function requireAdmin(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have required role
  */
 export function requireAttorney(request: Request): RouteGuardResult {
-  return requireRole(request, 'admin', 'attorney');
+  return requireRole(request, "admin", "attorney");
 }
 
 /**
@@ -168,7 +170,7 @@ export function requireAttorney(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have required role
  */
 export function requireStaff(request: Request): RouteGuardResult {
-  return requireRole(request, 'admin', 'attorney', 'paralegal');
+  return requireRole(request, "admin", "attorney", "paralegal");
 }
 
 // ============================================================================
@@ -190,9 +192,9 @@ export function requirePermission(
   const { user } = requireAuthentication(request);
 
   if (!user || !user.permissions.includes(permission)) {
-    throw new Response('Forbidden - Missing required permission', {
+    throw new Response("Forbidden - Missing required permission", {
       status: 403,
-      statusText: 'Forbidden',
+      statusText: "Forbidden",
     });
   }
 
@@ -214,7 +216,7 @@ export function requireAllPermissions(
   const { user } = requireAuthentication(request);
 
   if (!user) {
-    throw new Response('Unauthorized', { status: 401 });
+    throw new Response("Unauthorized", { status: 401 });
   }
 
   const hasAllPermissions = permissions.every((perm) =>
@@ -222,9 +224,9 @@ export function requireAllPermissions(
   );
 
   if (!hasAllPermissions) {
-    throw new Response('Forbidden - Missing required permissions', {
+    throw new Response("Forbidden - Missing required permissions", {
       status: 403,
-      statusText: 'Forbidden',
+      statusText: "Forbidden",
     });
   }
 
@@ -246,7 +248,7 @@ export function requireAnyPermission(
   const { user } = requireAuthentication(request);
 
   if (!user) {
-    throw new Response('Unauthorized', { status: 401 });
+    throw new Response("Unauthorized", { status: 401 });
   }
 
   const hasAnyPermission = permissions.some((perm) =>
@@ -254,9 +256,9 @@ export function requireAnyPermission(
   );
 
   if (!hasAnyPermission) {
-    throw new Response('Forbidden - Missing required permissions', {
+    throw new Response("Forbidden - Missing required permissions", {
       status: 403,
-      statusText: 'Forbidden',
+      statusText: "Forbidden",
     });
   }
 
@@ -286,7 +288,7 @@ export function hasRole(role: UserRole): boolean {
  */
 export function hasAnyRole(...roles: UserRole[]): boolean {
   const user = getCurrentUser();
-  return user ? roles.some(role => role === user.role) : false;
+  return user ? roles.some((role) => role === user.role) : false;
 }
 
 /**

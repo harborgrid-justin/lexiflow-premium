@@ -12,7 +12,7 @@ export interface TabConfigItem {
   label: string;
   icon: LucideIcon;
   subTabs?: TabConfigItem[];
-  component?: React.ComponentType<any>;
+  component?: React.ComponentType<Record<string, unknown>>;
   path?: string;
 }
 

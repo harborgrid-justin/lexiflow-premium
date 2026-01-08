@@ -129,8 +129,7 @@ export class DocketRepository extends Repository<DocketEntry> {
         if (isBackendApiEnabled()) {
             try {
                 return await this.docketApi.getById(id);
-            } catch (error) {
-                console.error('[DocketRepository.getById] Backend error:', error);
+            } catch {                 console.error('[DocketRepository.getById] Backend error:', error);
                 return undefined;
             }
         }

@@ -3,7 +3,7 @@
  * Request/response DTOs for API operations
  */
 
-import type { UserRole } from './enums';
+import type { UserRole } from "./enums";
 
 // User DTOs
 export interface CreateUserDto {
@@ -43,38 +43,38 @@ export interface ChangePasswordDto {
 }
 
 // Party DTOs
-export type PartyTypeBackend = 
-  | 'Plaintiff' 
-  | 'Defendant' 
-  | 'Petitioner' 
-  | 'Respondent' 
-  | 'Appellant' 
-  | 'Appellee' 
-  | 'Third Party' 
-  | 'Witness' 
-  | 'Expert Witness' 
-  | 'Other'
-  | 'individual'
-  | 'corporation'
-  | 'government'
-  | 'organization';
+export type PartyTypeBackend =
+  | "Plaintiff"
+  | "Defendant"
+  | "Petitioner"
+  | "Respondent"
+  | "Appellant"
+  | "Appellee"
+  | "Third Party"
+  | "Witness"
+  | "Expert Witness"
+  | "Other"
+  | "individual"
+  | "corporation"
+  | "government"
+  | "organization";
 
-export type PartyRoleBackend = 
-  | 'Primary' 
-  | 'Co-Party' 
-  | 'Interested Party' 
-  | 'Guardian' 
-  | 'Representative'
-  | 'plaintiff'
-  | 'defendant'
-  | 'petitioner'
-  | 'respondent'
-  | 'appellant'
-  | 'appellee'
-  | 'third_party'
-  | 'intervenor'
-  | 'witness'
-  | 'expert';
+export type PartyRoleBackend =
+  | "Primary"
+  | "Co-Party"
+  | "Interested Party"
+  | "Guardian"
+  | "Representative"
+  | "plaintiff"
+  | "defendant"
+  | "petitioner"
+  | "respondent"
+  | "appellant"
+  | "appellee"
+  | "third_party"
+  | "intervenor"
+  | "witness"
+  | "expert";
 
 export interface CreatePartyDto {
   caseId: string;
@@ -97,7 +97,7 @@ export interface CreatePartyDto {
   metadata?: Record<string, unknown>;
 }
 
-export interface UpdatePartyDto extends Partial<CreatePartyDto> {}
+export type UpdatePartyDto = Partial<CreatePartyDto>;
 
 // Billing DTOs
 export interface CreateTimeEntryDto {
@@ -110,10 +110,10 @@ export interface CreateTimeEntryDto {
   billable?: boolean;
   taskCode?: string;
   activityCode?: string;
-  status?: 'draft' | 'submitted' | 'approved';
+  status?: "draft" | "submitted" | "approved";
 }
 
-export interface UpdateTimeEntryDto extends Partial<CreateTimeEntryDto> {}
+export type UpdateTimeEntryDto = Partial<CreateTimeEntryDto>;
 
 export interface BulkTimeEntryDto {
   entries: CreateTimeEntryDto[];
@@ -136,10 +136,10 @@ export interface CreateExpenseDto {
   receiptUrl?: string;
   billable?: boolean;
   reimbursable?: boolean;
-  status?: 'draft' | 'submitted' | 'approved';
+  status?: "draft" | "submitted" | "approved";
 }
 
-export interface UpdateExpenseDto extends Partial<CreateExpenseDto> {}
+export type UpdateExpenseDto = Partial<CreateExpenseDto>;
 
 export interface ExpenseTotals {
   total: number;
@@ -178,7 +178,7 @@ export interface InvoiceItem {
 export interface InvoicePayment {
   paymentDate: string;
   amount: number;
-  method: 'check' | 'wire' | 'credit_card' | 'ach' | 'other';
+  method: "check" | "wire" | "credit_card" | "ach" | "other";
   reference?: string;
   notes?: string;
 }

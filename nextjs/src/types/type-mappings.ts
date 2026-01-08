@@ -5,24 +5,24 @@
  * and type guards to ensure type safety when converting between systems.
  */
 
-import { MatterType } from './enums';
+import { MatterType } from "./enums";
 
 /**
  * Backend CaseType enum (from backend/src/cases/entities/case.entity.ts)
  * Values match the backend database enum
  */
 export enum BackendCaseType {
-  CIVIL = 'Civil',
-  CRIMINAL = 'Criminal',
-  FAMILY = 'Family',
-  BANKRUPTCY = 'Bankruptcy',
-  IMMIGRATION = 'Immigration',
-  INTELLECTUAL_PROPERTY = 'Intellectual Property',
-  CORPORATE = 'Corporate',
-  REAL_ESTATE = 'Real Estate',
-  LABOR = 'Labor',
-  ENVIRONMENTAL = 'Environmental',
-  TAX = 'Tax',
+  CIVIL = "Civil",
+  CRIMINAL = "Criminal",
+  FAMILY = "Family",
+  BANKRUPTCY = "Bankruptcy",
+  IMMIGRATION = "Immigration",
+  INTELLECTUAL_PROPERTY = "Intellectual Property",
+  CORPORATE = "Corporate",
+  REAL_ESTATE = "Real Estate",
+  LABOR = "Labor",
+  ENVIRONMENTAL = "Environmental",
+  TAX = "Tax",
 }
 
 /**
@@ -49,7 +49,9 @@ export const MATTER_TYPE_TO_CASE_TYPE: Record<MatterType, BackendCaseType> = {
  *
  * Note: Multiple backend types can map to the same frontend type
  */
-export const CASE_TYPE_TO_MATTER_TYPE: Partial<Record<BackendCaseType, MatterType>> = {
+export const CASE_TYPE_TO_MATTER_TYPE: Partial<
+  Record<BackendCaseType, MatterType>
+> = {
   [BackendCaseType.CIVIL]: MatterType.LITIGATION,
   [BackendCaseType.CRIMINAL]: MatterType.LITIGATION,
   [BackendCaseType.FAMILY]: MatterType.LITIGATION,
@@ -73,7 +75,9 @@ export function matterTypeToCaseType(matterType: MatterType): BackendCaseType {
 /**
  * Convert backend CaseType to frontend MatterType
  */
-export function caseTypeToMatterType(caseType: BackendCaseType | string): MatterType {
+export function caseTypeToMatterType(
+  caseType: BackendCaseType | string
+): MatterType {
   // Handle string values from backend
   const mappedType = CASE_TYPE_TO_MATTER_TYPE[caseType as BackendCaseType];
   return mappedType || MatterType.OTHER; // Default to OTHER if no mapping found
@@ -83,7 +87,10 @@ export function caseTypeToMatterType(caseType: BackendCaseType | string): Matter
  * Type guard to check if a value is a valid BackendCaseType
  */
 export function isBackendCaseType(value: unknown): value is BackendCaseType {
-  return typeof value === 'string' && Object.values(BackendCaseType).includes(value as BackendCaseType);
+  return (
+    typeof value === "string" &&
+    Object.values(BackendCaseType).includes(value as BackendCaseType)
+  );
 }
 
 /**
@@ -99,18 +106,18 @@ export function isMatterType(value: unknown): value is MatterType {
     MatterType.EMPLOYMENT,
     MatterType.REAL_ESTATE,
     MatterType.CORPORATE,
-    MatterType.OTHER
+    MatterType.OTHER,
   ];
-  return typeof value === 'string' && validTypes.includes(value as MatterType);
+  return typeof value === "string" && validTypes.includes(value as MatterType);
 }
 
 /**
  * Transform case data from backend to frontend format
  * Automatically converts CaseType to MatterType
  */
-export function transformCaseFromBackend<T extends { type?: string | BackendCaseType }>(
-  backendCase: T
-): T & { matterType?: MatterType } {
+export function transformCaseFromBackend<
+  T extends { type?: string | BackendCaseType },
+>(backendCase: T): T & { matterType?: MatterType } {
   if (!backendCase.type) return backendCase as T & { matterType?: MatterType };
 
   return {
@@ -125,10 +132,11 @@ export function transformCaseFromBackend<T extends { type?: string | BackendCase
  */
 export function transformCaseToBackend<T extends { matterType?: MatterType }>(
   frontendCase: T
-): Omit<T, 'matterType'> & { type?: BackendCaseType } {
+): Omit<T, "matterType"> & { type?: BackendCaseType } {
   if (!frontendCase.matterType) {
-    const { matterType, ...rest } = frontendCase;
-    return rest as Omit<T, 'matterType'> & { type?: BackendCaseType };
+    const { matterType: unusedMatterType, ...rest } = frontendCase;
+    void unusedMatterType;
+    return rest as Omit<T, "matterType"> & { type?: BackendCaseType };
   }
 
   const { matterType, ...rest } = frontendCase;

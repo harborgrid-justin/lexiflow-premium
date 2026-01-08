@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 /**
  * Next.js v16 Route Handler Compliance Script
@@ -7,7 +8,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 
 // Find all route.ts files
 const findRouteFiles = (dir) => {

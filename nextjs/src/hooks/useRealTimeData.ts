@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useWebSocket } from './useWebSocket';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useWebSocket } from "./useWebSocket";
 
 /**
  * Real-time Data Subscription Options
@@ -71,14 +71,14 @@ export interface RealTimeDataState<T> {
  * ```
  */
 export function useRealTimeData<T = unknown>(
-  options: RealTimeDataOptions<T>,
+  options: RealTimeDataOptions<T>
 ): RealTimeDataState<T> & {
   subscribe: () => void;
   unsubscribe: () => void;
   refresh: () => void;
 } {
   const {
-    namespace = '',
+    namespace = "",
     eventName,
     subscribeEvent,
     unsubscribeEvent,
@@ -120,7 +120,7 @@ export function useRealTimeData<T = unknown>(
         onError?.(error);
       }
     },
-    [transform, onData, onError],
+    [transform, onData, onError]
   );
 
   /**
@@ -239,7 +239,7 @@ export function useNotifications() {
   const [unreadCount, setUnreadCount] = useState(0);
 
   const { socket, isConnected, emit, on, off } = useWebSocket({
-    namespace: '/notifications',
+    namespace: "/notifications",
   });
 
   useEffect(() => {
@@ -254,14 +254,20 @@ export function useNotifications() {
     const handleNotificationRead = (data: { notificationId: string }) => {
       setNotifications((prev) =>
         prev.map((n: unknown) =>
-          (n as {id: string}).id === data.notificationId ? { ...(n as object), read: true } : n,
-        ),
+          (n as { id: string }).id === data.notificationId
+            ? { ...(n as object), read: true }
+            : n
+        )
       );
     };
 
     // Listen for notification deleted
     const handleNotificationDeleted = (data: { notificationId: string }) => {
-      setNotifications((prev) => prev.filter((n: unknown) => (n as {id: string}).id !== data.notificationId));
+      setNotifications((prev) =>
+        prev.filter(
+          (n: unknown) => (n as { id: string }).id !== data.notificationId
+        )
+      );
     };
 
     // Listen for unread count
@@ -269,43 +275,48 @@ export function useNotifications() {
       setUnreadCount(data.count);
     };
 
-    on('notification:new', handleNewNotification);
-    on('notification:read', handleNotificationRead);
-    on('notification:deleted', handleNotificationDeleted);
-    on('notification:count', handleUnreadCount);
+    on("notification:new", handleNewNotification);
+    on("notification:read", handleNotificationRead);
+    on("notification:deleted", handleNotificationDeleted);
+    on("notification:count", handleUnreadCount);
 
     return () => {
-      off('notification:new', handleNewNotification);
-      off('notification:read', handleNotificationRead);
-      off('notification:deleted', handleNotificationDeleted);
-      off('notification:count', handleUnreadCount);
+      off("notification:new", handleNewNotification);
+      off("notification:read", handleNotificationRead);
+      off("notification:deleted", handleNotificationDeleted);
+      off("notification:count", handleUnreadCount);
     };
   }, [socket, on, off]);
 
   const markAsRead = useCallback(
     async (notificationId: string) => {
       if (!socket || !isConnected) return;
-      await emit('notification:mark-read', { notificationId });
+      await emit("notification:mark-read", { notificationId });
     },
-    [socket, isConnected, emit],
+    [socket, isConnected, emit]
   );
 
   const markAllAsRead = useCallback(async () => {
     if (!socket || !isConnected) return;
-    await emit('notification:mark-all-read', {});
-    setNotifications((prev) => prev.map((n: unknown) => ({ ...(n as object), read: true })));
+    await emit("notification:mark-all-read", {});
+    setNotifications((prev) =>
+      prev.map((n: unknown) => ({ ...(n as object), read: true }))
+    );
   }, [socket, isConnected, emit]);
 
   const deleteNotification = useCallback(
     async (notificationId: string) => {
       if (!socket || !isConnected) return;
-      const notification = notifications.find((n: unknown) => (n as {id: string}).id === notificationId);
-      await emit('notification:delete', {
+      const notification = notifications.find(
+        (n: unknown) => (n as { id: string }).id === notificationId
+      );
+      await emit("notification:delete", {
         notificationId,
-        wasUnread: notification && !(notification as Record<string, unknown>).read,
+        wasUnread:
+          notification && !(notification as Record<string, unknown>).read,
       });
     },
-    [socket, isConnected, emit, notifications],
+    [socket, isConnected, emit, notifications]
   );
 
   return {
@@ -334,7 +345,7 @@ export function useDashboard() {
   const [caseStats, setCaseStats] = useState<Map<string, unknown>>(new Map());
 
   const { socket, isConnected, emit, on, off } = useWebSocket({
-    namespace: '/dashboard',
+    namespace: "/dashboard",
   });
 
   useEffect(() => {
@@ -349,39 +360,41 @@ export function useDashboard() {
     };
 
     const handleCaseStats = (stats: unknown) => {
-      setCaseStats((prev) => new Map(prev).set((stats as {caseId: string}).caseId, stats));
+      setCaseStats((prev) =>
+        new Map(prev).set((stats as { caseId: string }).caseId, stats)
+      );
     };
 
-    on('dashboard:metrics', handleMetrics);
-    on('dashboard:activity', handleActivity);
-    on('dashboard:case-stats', handleCaseStats);
+    on("dashboard:metrics", handleMetrics);
+    on("dashboard:activity", handleActivity);
+    on("dashboard:case-stats", handleCaseStats);
 
     return () => {
-      off('dashboard:metrics', handleMetrics);
-      off('dashboard:activity', handleActivity);
-      off('dashboard:case-stats', handleCaseStats);
+      off("dashboard:metrics", handleMetrics);
+      off("dashboard:activity", handleActivity);
+      off("dashboard:case-stats", handleCaseStats);
     };
   }, [socket, on, off]);
 
   const subscribe = useCallback(
     async (types: string[]) => {
       if (!socket || !isConnected) return;
-      await emit('dashboard:subscribe', { types });
+      await emit("dashboard:subscribe", { types });
     },
-    [socket, isConnected, emit],
+    [socket, isConnected, emit]
   );
 
   const unsubscribe = useCallback(
     async (types: string[]) => {
       if (!socket || !isConnected) return;
-      await emit('dashboard:unsubscribe', { types });
+      await emit("dashboard:unsubscribe", { types });
     },
-    [socket, isConnected, emit],
+    [socket, isConnected, emit]
   );
 
   const refresh = useCallback(async () => {
     if (!socket || !isConnected) return;
-    await emit('dashboard:request-refresh', {});
+    await emit("dashboard:request-refresh", {});
   }, [socket, isConnected, emit]);
 
   return {
@@ -410,13 +423,16 @@ export function useTypingIndicator(conversationId: string) {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { socket, isConnected, emit, on, off } = useWebSocket({
-    namespace: '/messaging',
+    namespace: "/messaging",
   });
 
   useEffect(() => {
     if (!socket) return;
 
-    const handleTypingStart = (data: { conversationId: string; userId: string }) => {
+    const handleTypingStart = (data: {
+      conversationId: string;
+      userId: string;
+    }) => {
       if (data.conversationId === conversationId) {
         setTypingUsers((prev) => new Set(prev).add(data.userId));
 
@@ -431,7 +447,10 @@ export function useTypingIndicator(conversationId: string) {
       }
     };
 
-    const handleTypingStop = (data: { conversationId: string; userId: string }) => {
+    const handleTypingStop = (data: {
+      conversationId: string;
+      userId: string;
+    }) => {
       if (data.conversationId === conversationId) {
         setTypingUsers((prev) => {
           const newSet = new Set(prev);
@@ -441,19 +460,30 @@ export function useTypingIndicator(conversationId: string) {
       }
     };
 
-    on('typing:start', handleTypingStart);
-    on('typing:stop', handleTypingStop);
+    on("typing:start", handleTypingStart);
+    on("typing:stop", handleTypingStop);
 
     return () => {
-      off('typing:start', handleTypingStart);
-      off('typing:stop', handleTypingStop);
+      off("typing:start", handleTypingStart);
+      off("typing:stop", handleTypingStop);
     };
   }, [socket, conversationId, on, off]);
+
+  const stopTyping = useCallback(() => {
+    if (!socket || !isConnected) return;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    emit("typing:stop", { conversationId });
+  }, [socket, isConnected, conversationId, emit]);
 
   const startTyping = useCallback(() => {
     if (!socket || !isConnected) return;
 
-    emit('typing:start', { conversationId });
+    emit("typing:start", { conversationId });
 
     // Clear existing timeout
     if (typingTimeoutRef.current) {
@@ -464,18 +494,7 @@ export function useTypingIndicator(conversationId: string) {
     typingTimeoutRef.current = setTimeout(() => {
       stopTyping();
     }, 3000);
-  }, [socket, isConnected, conversationId, emit]);
-
-  const stopTyping = useCallback(() => {
-    if (!socket || !isConnected) return;
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
-
-    emit('typing:stop', { conversationId });
-  }, [socket, isConnected, conversationId, emit]);
+  }, [socket, isConnected, conversationId, emit, stopTyping]);
 
   useEffect(() => {
     return () => {

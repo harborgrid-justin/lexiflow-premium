@@ -2,12 +2,12 @@
 
 /**
  * Research Search Section Component
- * Main search interface for legal research
+ * Main search interface for legal research with real-time intent detection
  *
  * @module research/_components/ResearchSearchSection
  */
 
-import { useState, useCallback, useTransition } from 'react';
+import { useState, useCallback, useTransition, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Search,
@@ -16,11 +16,33 @@ import {
   BookOpen,
   FileText,
   Building2,
-  Clock,
   X,
   ChevronDown,
+  Sparkles,
+  Loader2,
+  Gavel,
+  ScrollText,
+  Landmark,
 } from 'lucide-react';
 import type { ResearchSearchFilters, ResearchItemType, LegalDatabaseSource } from '@/types/research';
+import {
+  detectQueryIntent,
+  getIntentDisplayInfo,
+  type IntentType,
+  INTENT_DETECTION_DEBOUNCE_MS,
+  MIN_QUERY_LENGTH,
+} from '@/lib/research/intent-detection';
+import { useDebounce } from '@/hooks/useDebounce';
+
+/**
+ * Intent icon components mapped by type for static rendering.
+ */
+const INTENT_ICONS: Record<IntentType, React.ElementType> = {
+  caselaw: Gavel,
+  statute: ScrollText,
+  regulation: Landmark,
+  general: Sparkles,
+};
 
 const ITEM_TYPES: { value: ResearchItemType; label: string; icon: React.ElementType }[] = [
   { value: 'case_law', label: 'Case Law', icon: Scale },
@@ -70,6 +92,20 @@ export function ResearchSearchSection() {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<ResearchSearchFilters>({});
   const [activeTypes, setActiveTypes] = useState<ResearchItemType[]>([]);
+
+  // Debounced query for intent detection
+  const debouncedQuery = useDebounce(query, INTENT_DETECTION_DEBOUNCE_MS);
+
+  // Detect intent based on debounced query
+  const detectedIntent = useMemo<IntentType>(() => {
+    if (debouncedQuery.length > MIN_QUERY_LENGTH) {
+      return detectQueryIntent(debouncedQuery);
+    }
+    return 'general';
+  }, [debouncedQuery]);
+
+  // Show detecting state when query differs from debounced query
+  const isDetectingIntent = query.length > MIN_QUERY_LENGTH && query !== debouncedQuery;
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
@@ -135,6 +171,10 @@ export function ResearchSearchSection() {
     filters.dateTo ||
     filters.validCitationsOnly;
 
+  // Get intent display information
+  const intentInfo = getIntentDisplayInfo(detectedIntent);
+  const IntentIcon = INTENT_ICONS[detectedIntent];
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
       {/* Search Input */}
@@ -146,8 +186,26 @@ export function ResearchSearchSection() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search case law, statutes, or enter a natural language query..."
-            className="w-full pl-12 pr-4 py-3.5 text-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400"
+            className="w-full pl-12 pr-32 py-3.5 text-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-400"
           />
+
+          {/* Intent Detection Badge */}
+          {query.length > 0 && (
+            <div
+              className={`absolute right-24 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-[10px] font-bold uppercase flex items-center gap-1 transition-all ${
+                isDetectingIntent ? 'opacity-50' : 'opacity-100'
+              } ${intentInfo.bgColorClass} ${intentInfo.colorClass}`}
+              title={intentInfo.description}
+            >
+              {isDetectingIntent ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <IntentIcon className="h-3 w-3" />
+              )}
+              <span>{intentInfo.shortLabel}</span>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={isPending || !query.trim()}

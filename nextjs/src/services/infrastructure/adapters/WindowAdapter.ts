@@ -261,8 +261,9 @@ export class TestWindowAdapter implements IWindowAdapter {
     return handle;
   }
 
-  cancelAnimationFrame(_handle: number): void {
+  cancelAnimationFrame(handle: number): void {
     // No-op in tests
+    void handle;
   }
 
   /**
@@ -316,28 +317,38 @@ export class TestWindowAdapter implements IWindowAdapter {
  * No-op implementation for Node.js environments
  */
 export class SSRWindowAdapter implements IWindowAdapter {
-  setInterval(_callback: () => void, _ms: number): TimerHandle {
+  setInterval(callback: () => void, ms: number): TimerHandle {
+    void callback;
+    void ms;
     throw new EnvironmentError("setInterval not available in SSR environment");
   }
 
-  clearInterval(_handle: TimerHandle): void {
+  clearInterval(handle: TimerHandle): void {
     // No-op
+    void handle;
   }
 
-  setTimeout(_callback: () => void, _ms: number): TimerHandle {
+  setTimeout(callback: () => void, ms: number): TimerHandle {
+    void callback;
+    void ms;
     throw new EnvironmentError("setTimeout not available in SSR environment");
   }
 
-  clearTimeout(_handle: TimerHandle): void {
+  clearTimeout(handle: TimerHandle): void {
     // No-op
+    void handle;
   }
 
-  addEventListener(_event: string, _listener: EventListener): void {
+  addEventListener(event: string, listener: EventListener): void {
     // No-op - no window events in SSR
+    void event;
+    void listener;
   }
 
-  removeEventListener(_event: string, _listener: EventListener): void {
+  removeEventListener(event: string, listener: EventListener): void {
     // No-op
+    void event;
+    void listener;
   }
 
   now(): number {
@@ -348,14 +359,16 @@ export class SSRWindowAdapter implements IWindowAdapter {
     return false;
   }
 
-  requestAnimationFrame(_callback: () => void): number {
+  requestAnimationFrame(callback: () => void): number {
+    void callback;
     throw new EnvironmentError(
       "requestAnimationFrame not available in SSR environment"
     );
   }
 
-  cancelAnimationFrame(_handle: number): void {
+  cancelAnimationFrame(handle: number): void {
     // No-op
+    void handle;
   }
 }
 

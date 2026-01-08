@@ -170,8 +170,7 @@ export const AnalyticsService = {
             // This will need to be updated when the API is added
             console.warn('[AnalyticsService.getCounselProfiles] Counsel profiles API not yet available');
             return [];
-        } catch (error) {
-            console.error('[AnalyticsService.getCounselProfiles] Error:', error);
+        } catch {             console.error('[AnalyticsService.getCounselProfiles] Error:', error);
             throw new Error('Failed to fetch opposing counsel profiles');
         }
     },
@@ -230,8 +229,7 @@ export const AnalyticsService = {
             }
 
             return stats as unknown as JudgeMotionStat[];
-        } catch (error) {
-            console.error('[AnalyticsService.getJudgeMotionStats] Error:', error);
+        } catch {             console.error('[AnalyticsService.getJudgeMotionStats] Error:', error);
             console.warn('[AnalyticsService] Falling back to default judge motion stats');
             return DEFAULT_JUDGE_MOTION_STATS;
         }
@@ -277,8 +275,7 @@ export const AnalyticsService = {
             }
 
             return predictions as unknown as OutcomePredictionData[];
-        } catch (error) {
-            console.error('[AnalyticsService.getOutcomePredictions] Error:', error);
+        } catch {             console.error('[AnalyticsService.getOutcomePredictions] Error:', error);
             throw new Error('Failed to fetch outcome predictions');
         }
     },
@@ -316,8 +313,7 @@ export const AnalyticsService = {
             console.log(`[AnalyticsService] Health check: ${healthPercentage}% (${healthyCount}/${healthResults.length} endpoints)`);
 
             return healthPercentage >= 50; // At least half the endpoints should be healthy
-        } catch (error) {
-            console.error('[AnalyticsService.validateHealth] Error:', error);
+        } catch {             console.error('[AnalyticsService.validateHealth] Error:', error);
             return false;
         }
     }

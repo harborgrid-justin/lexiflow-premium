@@ -1,24 +1,23 @@
 /**
  * Data Source Provider - Type Validation Tests
- * 
+ *
  * This file verifies all types compile correctly and demonstrates usage patterns
  */
 
-import type { 
-  BaseRepository, 
-  RepositoryRegistry,
+import type {
+  BaseRepository,
   DataSourceConfig,
-} from './index';
+  RepositoryRegistry,
+} from "./index";
 
 // Import error classes as values (not types) for instantiation
-import { 
-  RepositoryError,
-  UnauthorizedError,
-} from './index';
+import { RepositoryError, UnauthorizedError } from "./index";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         TYPE VALIDATION TESTS
 // ═══════════════════════════════════════════════════════════════════════════
+
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-unused-expressions */
 
 /**
  * Test 1: Repository interface is stable and type-safe
@@ -26,13 +25,13 @@ import {
 function testRepositoryInterface() {
   const mockRepository: BaseRepository<{ id: string; title: string }> = {
     async getAll() {
-      return [{ id: '1', title: 'Test' }];
+      return [{ id: "1", title: "Test" }];
     },
     async getById(id: string) {
-      return { id, title: 'Test' };
+      return { id, title: "Test" };
     },
     async create(data) {
-      return { id: '1', ...data } as { id: string; title: string };
+      return { id: "1", ...data } as { id: string; title: string };
     },
     async update(id: string, data) {
       return { id, ...data } as { id: string; title: string };
@@ -43,7 +42,8 @@ function testRepositoryInterface() {
   };
 
   // Type inference works
-  const result: Promise<{ id: string; title: string }[]> = mockRepository.getAll();
+  const result: Promise<{ id: string; title: string }[]> =
+    mockRepository.getAll();
   return result;
 }
 
@@ -52,7 +52,7 @@ function testRepositoryInterface() {
  */
 function testRepositoryRegistry() {
   const registry: RepositoryRegistry = {} as RepositoryRegistry;
-  
+
   // All repositories are accessible
   registry.cases;
   registry.documents;
@@ -75,9 +75,9 @@ function testRepositoryRegistry() {
 function testConfiguration() {
   const config: DataSourceConfig = {
     environment: {
-      environment: 'production',
-      apiBaseUrl: 'https://api.example.com',
-      apiVersion: 'v2',
+      environment: "production",
+      apiBaseUrl: "https://api.example.com",
+      apiVersion: "v2",
       features: {
         enableCaching: true,
         enableRetries: true,
@@ -99,10 +99,10 @@ function testConfiguration() {
       initialBackoffMs: 1000,
       maxBackoffMs: 10000,
       backoffMultiplier: 2,
-      retryableErrorCodes: ['NETWORK_ERROR', 'TIMEOUT'],
+      retryableErrorCodes: ["NETWORK_ERROR", "TIMEOUT"],
     },
     observability: {
-      logLevel: 'info',
+      logLevel: "info",
       tracingSampleRate: 0.1,
       metricsSampleRate: 1.0,
     },
@@ -115,19 +115,23 @@ function testConfiguration() {
  * Test 4: Error types are properly structured
  */
 function testErrorTypes() {
-  const error: RepositoryError = new RepositoryError('Test error', 'TEST_ERROR', false);
-  
+  const error: RepositoryError = new RepositoryError(
+    "Test error",
+    "TEST_ERROR",
+    false
+  );
+
   // Error properties are accessible
   error.code;
   error.message;
   error.retryable;
   error.timestamp;
   error.context;
-  
+
   // Specific error types work
   const unauthorizedError: UnauthorizedError = new UnauthorizedError();
   const isError: boolean = unauthorizedError instanceof RepositoryError;
-  
+
   return isError;
 }
 
@@ -140,13 +144,16 @@ function testGenerics() {
     title: string;
     status: string;
   }
-  
-  const caseRepo: BaseRepository<Case, string> = {} as BaseRepository<Case, string>;
-  
+
+  const caseRepo: BaseRepository<Case, string> = {} as BaseRepository<
+    Case,
+    string
+  >;
+
   // Type inference from repository
   const cases: Promise<Case[]> = caseRepo.getAll();
-  const singleCase: Promise<Case | null> = caseRepo.getById('123');
-  
+  const singleCase: Promise<Case | null> = caseRepo.getById("123");
+
   return { cases, singleCase };
 }
 
@@ -155,16 +162,16 @@ function testGenerics() {
  */
 function testOptionalParameters() {
   const repo: BaseRepository<unknown> = {} as BaseRepository<unknown>;
-  
+
   // With filters
-  repo.getAll({ status: 'active' });
-  
+  repo.getAll({ status: "active" });
+
   // Without filters
   repo.getAll();
-  
+
   // Partial data
-  repo.create({ title: 'Test' });
-  repo.update('123', { title: 'Updated' });
+  repo.create({ title: "Test" });
+  repo.update("123", { title: "Updated" });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -173,12 +180,12 @@ function testOptionalParameters() {
 
 /**
  * Test 7: Import chain has no circular dependencies
- * 
+ *
  * Import path:
  * index.ts → types.ts (repository interfaces)
  * index.ts → config.ts (configuration)
  * index.ts → errors.ts (error types)
- * 
+ *
  * No circular dependencies between these modules
  */
 
@@ -192,12 +199,12 @@ export const NO_CIRCULAR_DEPS = true;
 // Verify all exports are available
 export type {
   BaseRepository,
-  RepositoryRegistry,
   DataSourceConfig,
   RepositoryError,
+  RepositoryRegistry,
   UnauthorizedError,
-} from './index';
+} from "./index";
 
-console.log('✅ All types compile successfully');
-console.log('✅ No circular dependencies detected');
-console.log('✅ Repository infrastructure is production-ready');
+console.log("✅ All types compile successfully");
+console.log("✅ No circular dependencies detected");
+console.log("✅ Repository infrastructure is production-ready");

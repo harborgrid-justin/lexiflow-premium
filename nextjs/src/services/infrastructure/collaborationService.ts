@@ -663,7 +663,8 @@ export class CollaborationService extends EventEmitter {
    * ✅ REFACTORED: Now uses ChartColorService for theme-aware colors
    */
   private getUserColor(userId: string): string {
-    // Import at runtime to avoid circular dependencies
+    // Use ChartColorService for theme-aware colors
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { ChartColorService } = require("../theme/chartColorService");
 
     // For user colors, we'll use the current system theme preference

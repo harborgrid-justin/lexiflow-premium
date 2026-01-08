@@ -242,8 +242,12 @@ export function useNexusGraph(
       width,
       height,
     };
-    setNodesMeta(meta);
-    setIsStable(false);
+
+    // Set initial state before effect to avoid cascading render
+    if (nodes.length > 0) {
+      setNodesMeta(meta);
+      setIsStable(false);
+    }
 
     // 3. Spawn Worker
     const worker = createPhysicsWorker();
@@ -275,25 +279,7 @@ export function useNexusGraph(
       workerRef.current?.terminate();
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [initialData]);
-
-  const tickWorker = useCallback(() => {
-    if (!workerRef.current) return;
-    const state = physicsState.current;
-
-    // Transfer ownership of the buffer to the worker (Zero-Copy)
-    workerRef.current.postMessage(
-      {
-        buffer: state.buffer.buffer, // Transfer the ArrayBuffer
-        links: state.links,
-        count: state.count,
-        width: state.width,
-        height: state.height,
-        alpha: state.alpha,
-      },
-      [state.buffer.buffer]
-    );
-  }, []);
+  }, [initialData, tickWorker]);
 
   const reheat = useCallback(() => {
     physicsState.current.alpha = 0.5;

@@ -19,8 +19,7 @@ export const JurisdictionService = {
     getRegulatoryBodies: async () => {
         try {
             return await JurisdictionAPI.getRegulatory();
-        } catch (error) {
-            console.warn('Backend API unavailable, using mock data');
+        } catch {             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
                 { id: 'reg1', name: 'FTC', desc: 'Federal Trade Commission', ref: '15 U.S.C. § 41', iconColor: 'text-blue-600' },
@@ -35,8 +34,7 @@ export const JurisdictionService = {
     getTreaties: async () => {
         try {
             return await JurisdictionAPI.getInternational();
-        } catch (error) {
-            console.warn('Backend API unavailable, using mock data');
+        } catch {             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
                 { id: 't1', name: 'Hague Service Convention', type: 'Service of Process', status: 'Ratified', parties: 79 },
@@ -50,8 +48,7 @@ export const JurisdictionService = {
     getArbitrationProviders: async () => {
         try {
             return await JurisdictionAPI.getArbitration();
-        } catch (error) {
-            console.warn('Backend API unavailable, using mock data');
+        } catch {             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
                 { id: 'aaa', name: 'AAA', fullName: 'American Arbitration Association', rules: ['Commercial', 'Consumer', 'Employment'] },
@@ -64,8 +61,7 @@ export const JurisdictionService = {
     getMapNodes: async () => {
         try {
             return await JurisdictionAPI.getMapNodes();
-        } catch (error) {
-            console.warn('Backend API unavailable, using mock data');
+        } catch {             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
                 { id: 'n1', label: 'SCOTUS', type: 'federal', x: 400, y: 50, radius: 40 },

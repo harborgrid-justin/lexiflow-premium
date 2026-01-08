@@ -5,7 +5,7 @@
  * Provides wrapper components, mock factories, and assertion utilities.
  */
 
-import { render, renderHook, type RenderOptions, type RenderHookOptions } from "@testing-library/react";
+import { render, renderHook, type RenderHookOptions, type RenderOptions } from "@testing-library/react";
 import { type ReactElement, type ReactNode } from "react";
 
 // ============================================================================
@@ -216,6 +216,8 @@ export function createMockProviderWrapper(
 ): React.FC<{ children: ReactNode }> {
   // Dynamic import of actual contexts would go here
   // For now, return a simple wrapper
+  // options parameter reserved for future mock configuration
+  void options;
   return function MockProviderWrapper({ children }: { children: ReactNode }) {
     return <>{children}</>;
   };
@@ -268,7 +270,7 @@ export async function expectHookToThrowOutsideProvider<T>(
   expectedErrorMessage: string
 ): Promise<void> {
   // Suppress console.error for expected error
-  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => { });
 
   try {
     expect(() => {
@@ -467,14 +469,9 @@ export function expectAuthStorageCleared(): void {
 // ============================================================================
 
 export {
-  render,
+  act, cleanup, fireEvent, render,
   renderHook,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-  within,
-  cleanup,
+  screen, waitFor, within
 } from "@testing-library/react";
 
 export { userEvent } from "@testing-library/user-event";

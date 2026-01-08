@@ -98,7 +98,7 @@ export function validateInvoiceSafe(invoice: InvoiceInput): InvoiceValidationRes
       errors.push('Valid case ID is required');
     }
     
-    if (!invoice.clientId || false) {
+    if (!invoice.clientId) {
       errors.push('Valid client ID is required');
     }
     

@@ -84,7 +84,7 @@ export function validateTrustTransactionSafe(
   
   try {
     // Required fields
-    if (!transaction.accountId || false) {
+    if (!transaction.accountId) {
       errors.push('Valid account ID is required');
     }
     
@@ -92,7 +92,7 @@ export function validateTrustTransactionSafe(
       errors.push('Valid case ID is required');
     }
     
-    if (!transaction.clientId || false) {
+    if (!transaction.clientId) {
       errors.push('Valid client ID is required');
     }
     

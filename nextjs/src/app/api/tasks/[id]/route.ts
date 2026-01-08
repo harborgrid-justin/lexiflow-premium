@@ -56,7 +56,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Log request
     console.log(`[API] GET /api/tasks/[id]/${id} - ${request.headers.get('x-forwarded-for') || 'unknown'}`);
 
-    const response = await proxyToBackend(request, "/api/tasks/${id}/${id}");
+    const response = await proxyToBackend(request, `/api/tasks/${id}`);
 
     // Add security headers to response
     const headers = new Headers(response.headers);
@@ -136,7 +136,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Log request
     console.log(`[API] PUT /api/tasks/[id]/${id} - ${request.headers.get('x-forwarded-for') || 'unknown'}`);
 
-    const response = await proxyToBackend(request, "/api/tasks/${id}/${id}");
+    const response = await proxyToBackend(request, `/api/tasks/${id}`);
 
     // Add security headers to response
     const headers = new Headers(response.headers);
@@ -191,7 +191,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     // Log request
     console.log(`[API] DELETE /api/tasks/[id]/${id} - ${request.headers.get('x-forwarded-for') || 'unknown'}`);
 
-    const response = await proxyToBackend(request, "/api/tasks/${id}/${id}");
+    const response = await proxyToBackend(request, `/api/tasks/${id}`);
 
     // Add security headers to response
     const headers = new Headers(response.headers);

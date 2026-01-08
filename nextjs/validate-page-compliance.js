@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Next.js v16 Enterprise Guidelines Compliance Checker
  * Validates page.tsx files against 20 enterprise guidelines
@@ -8,7 +9,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 
 const GUIDELINES = [
   { id: 1, name: "Authoritative Route Entry", check: "hasDefaultExport" },

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Next.js v16 Route Handler (route.ts) Compliance Checker
  * Validates API routes against 20 enterprise guidelines

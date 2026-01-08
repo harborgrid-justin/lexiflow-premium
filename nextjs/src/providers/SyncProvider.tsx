@@ -115,7 +115,7 @@ export const SyncProvider = ({
   }, []);
 
   // BP10: Queue Processor
-  const processQueue = useCallback(async () => {
+  const processQueue = useCallback(async function processNext() {
     if (!navigator.onLine || isProcessingRef.current) return;
 
     const mutation = SyncEngine.peek();
@@ -144,7 +144,7 @@ export const SyncProvider = ({
       refreshCounts();
       isProcessingRef.current = false;
 
-      await processQueue();
+      await processNext();
 
     } catch (err) {
       console.error(`[Sync] Failed ${mutation.type}:`, err);
@@ -175,7 +175,7 @@ export const SyncProvider = ({
         console.log(`[Sync] Retrying in ${delay}ms...`);
 
         isProcessingRef.current = false;
-        setTimeout(() => processQueue(), delay);
+        setTimeout(() => processNext(), delay);
       }
     }
   }, [refreshCounts]);

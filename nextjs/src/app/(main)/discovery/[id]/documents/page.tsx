@@ -14,28 +14,19 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Card, CardBody, Button, Badge, SkeletonLine } from '@/components/ui';
+import { Card, CardBody, Button, SkeletonLine } from '@/components/ui';
 import {
   ArrowLeft,
   Upload,
   Download,
-  Filter,
-  Search,
   FolderOpen,
   FileText,
-  Image,
-  FileSpreadsheet,
-  Mail,
-  File,
-  MoreHorizontal,
   CheckCircle,
   AlertTriangle,
-  Eye,
 } from 'lucide-react';
 import { getDiscoveryRequest, searchDocuments } from '../../_actions';
 import { DocumentFilters } from './_components/DocumentFilters';
-import { DocumentTable } from './_components/DocumentTable';
-import { BulkActions } from './_components/BulkActions';
+import { DocumentsClient } from './_components/DocumentsClient';
 
 // ============================================================================
 // Metadata
@@ -49,6 +40,11 @@ interface PageProps {
     custodian?: string;
     status?: string;
     fileType?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    responsive?: string;
+    privileged?: string;
+    hasAttachments?: string;
   }>;
 }
 
@@ -140,19 +136,9 @@ export default async function DocumentCollectionPage({ params, searchParams }: P
         />
       </div>
 
-      {/* Filters */}
-      <Card className="mb-6">
-        <CardBody>
-          <DocumentFilters discoveryRequestId={resolvedParams.id} />
-        </CardBody>
-      </Card>
-
-      {/* Bulk Actions */}
-      <BulkActions discoveryRequestId={resolvedParams.id} />
-
-      {/* Document Table */}
-      <Suspense fallback={<DocumentTableSkeleton />}>
-        <DocumentsSection
+      {/* Filters and Documents Table with Bulk Actions */}
+      <Suspense fallback={<DocumentsSkeleton discoveryRequestId={resolvedParams.id} />}>
+        <DocumentsWithFilters
           discoveryRequestId={resolvedParams.id}
           searchParams={resolvedSearchParams}
         />
@@ -165,18 +151,25 @@ export default async function DocumentCollectionPage({ params, searchParams }: P
 // Server Components
 // ============================================================================
 
-async function DocumentsSection({
+interface DocumentSearchParams {
+  page?: string;
+  keywords?: string;
+  custodian?: string;
+  status?: string;
+  fileType?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  responsive?: string;
+  privileged?: string;
+  hasAttachments?: string;
+}
+
+async function DocumentsWithFilters({
   discoveryRequestId,
   searchParams,
 }: {
   discoveryRequestId: string;
-  searchParams: {
-    page?: string;
-    keywords?: string;
-    custodian?: string;
-    status?: string;
-    fileType?: string;
-  };
+  searchParams: DocumentSearchParams;
 }) {
   const result = await searchDocuments({
     discoveryRequestId,
@@ -184,50 +177,84 @@ async function DocumentsSection({
     custodians: searchParams.custodian ? [searchParams.custodian] : undefined,
     reviewStatus: searchParams.status ? [searchParams.status as 'not_reviewed' | 'in_review' | 'reviewed' | 'flagged'] : undefined,
     fileTypes: searchParams.fileType ? [searchParams.fileType] : undefined,
+    dateRange: (searchParams.dateFrom || searchParams.dateTo)
+      ? { start: searchParams.dateFrom, end: searchParams.dateTo }
+      : undefined,
+    responsive: searchParams.responsive as 'yes' | 'no' | 'maybe' | 'not_coded' | undefined,
+    privileged: searchParams.privileged as 'yes' | 'no' | 'not_coded' | undefined,
+    hasAttachments: searchParams.hasAttachments
+      ? searchParams.hasAttachments === 'true'
+      : undefined,
     page: searchParams.page ? parseInt(searchParams.page, 10) : 1,
     pageSize: 50,
   });
 
-  if (!result.success || !result.data) {
-    return (
-      <Card>
-        <CardBody>
-          <p className="text-red-600 dark:text-red-400">
-            Failed to load documents: {result.error}
-          </p>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  if (result.data.items.length === 0) {
-    return (
-      <Card>
-        <CardBody>
-          <div className="text-center py-12">
-            <FolderOpen className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-              No Documents Found
-            </h3>
-            <p className="text-slate-500 dark:text-slate-400 mb-4">
-              Upload documents or adjust your filters
-            </p>
-            <Button icon={<Upload className="h-4 w-4" />}>
-              Upload Documents
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
-    );
-  }
+  const resultCount = result.success && result.data ? result.data.total : undefined;
 
   return (
-    <DocumentTable
-      documents={result.data.items}
-      totalCount={result.data.total}
-      currentPage={result.data.page}
-      totalPages={result.data.totalPages}
-    />
+    <>
+      {/* Filters with result count */}
+      <Card className="mb-6">
+        <CardBody>
+          <DocumentFilters
+            discoveryRequestId={discoveryRequestId}
+            resultCount={resultCount}
+          />
+        </CardBody>
+      </Card>
+
+      {/* Documents */}
+      {!result.success || !result.data ? (
+        <Card>
+          <CardBody>
+            <p className="text-red-600 dark:text-red-400">
+              Failed to load documents: {result.error}
+            </p>
+          </CardBody>
+        </Card>
+      ) : result.data.items.length === 0 ? (
+        <Card>
+          <CardBody>
+            <div className="text-center py-12">
+              <FolderOpen className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                No Documents Found
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 mb-4">
+                Upload documents or adjust your filters
+              </p>
+              <Button icon={<Upload className="h-4 w-4" />}>
+                Upload Documents
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+      ) : (
+        <DocumentsClient
+          discoveryRequestId={discoveryRequestId}
+          documents={result.data.items}
+          totalCount={result.data.total}
+          currentPage={result.data.page}
+          totalPages={result.data.totalPages}
+        />
+      )}
+    </>
+  );
+}
+
+function DocumentsSkeleton({ discoveryRequestId }: { discoveryRequestId: string }) {
+  return (
+    <>
+      {/* Filters skeleton - show filters immediately without result count */}
+      <Card className="mb-6">
+        <CardBody>
+          <DocumentFilters discoveryRequestId={discoveryRequestId} />
+        </CardBody>
+      </Card>
+
+      {/* Table skeleton */}
+      <DocumentTableSkeleton />
+    </>
   );
 }
 

@@ -22,6 +22,8 @@ import {
   Plus,
   BarChart3,
   Scale,
+  Phone,
+  Calendar,
 } from 'lucide-react';
 import { getBillingMetrics, getInvoiceStats, getTimeEntries, getExpenses } from './actions';
 import type { BillingMetrics, InvoiceStats, TimeEntry, Expense } from './types';
@@ -587,10 +589,22 @@ export default async function BillingPage() {
                 description="IOLTA accounts and client trust funds"
               />
               <NavigationCard
-                href="/billing-reports"
+                href="/billing/ar-aging"
+                icon={<Calendar className="h-6 w-6" />}
+                title="AR Aging"
+                description="Analyze receivables by aging period"
+              />
+              <NavigationCard
+                href="/billing/collections"
+                icon={<Phone className="h-6 w-6" />}
+                title="Collections"
+                description="Manage overdue invoice collections"
+              />
+              <NavigationCard
+                href="/billing/analytics"
                 icon={<BarChart3 className="h-6 w-6" />}
-                title="Reports"
-                description="Financial analytics and reporting"
+                title="Analytics"
+                description="Profitability and realization metrics"
               />
             </div>
           </div>

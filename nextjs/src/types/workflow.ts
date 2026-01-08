@@ -261,6 +261,46 @@ export interface TaskHistory {
   description?: string;
 }
 
+/**
+ * Subtask entity - represents a child task within a parent task
+ * @see Backend: tasks/entities/task.entity.ts (uses parentTaskId relationship)
+ */
+export interface Subtask {
+  id: string;
+  parentTaskId: string;
+  title: string;
+  description?: string;
+  status: TaskStatusBackend;
+  priority: TaskPriorityBackend;
+  assignedTo?: string;
+  assigneeName?: string;
+  dueDate?: string;
+  completionPercentage?: number;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+/**
+ * DTO for creating a new subtask
+ */
+export interface CreateSubtaskDto {
+  title: string;
+  description?: string;
+  status?: TaskStatusBackend;
+  priority?: TaskPriorityBackend;
+  assignedTo?: string;
+  dueDate?: string;
+  estimatedHours?: number;
+}
+
+/**
+ * DTO for creating a new comment
+ */
+export interface CreateCommentDto {
+  content: string;
+}
+
 // Renamed to avoid conflict with workflow-advanced-types WorkflowAnalytics
 export interface WorkflowProcessAnalytics {
   totalProcesses: number;

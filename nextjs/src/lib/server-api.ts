@@ -1,6 +1,5 @@
-import "server-only";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import "server-only";
 
 // Base URL for the NestJS Backend
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
@@ -19,7 +18,10 @@ export class ServerAPI {
   /**
    * Helper to construct URL with query params
    */
-  private static buildUrl(endpoint: string, params?: Record<string, any>) {
+  private static buildUrl(
+    endpoint: string,
+    params?: Record<string, string | number | boolean | undefined>
+  ) {
     const url = new URL(
       `${BACKEND_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`
     );
@@ -106,9 +108,10 @@ export class ServerAPI {
       }
 
       return (await response.json()) as T;
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Improve error logging here (e.g. sentry)
-      console.error(`[ServerAPI] ${method} ${endpoint} failed:`, error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`[ServerAPI] ${method} ${endpoint} failed:`, message);
       throw error;
     }
   }
@@ -117,21 +120,29 @@ export class ServerAPI {
     return this.request<T>("GET", endpoint, options);
   }
 
-  static async post<T>(endpoint: string, body: any, options?: FetchOptions) {
+  static async post<T>(
+    endpoint: string,
+    body: unknown,
+    options?: FetchOptions
+  ) {
     return this.request<T>("POST", endpoint, {
       ...options,
       body: JSON.stringify(body),
     });
   }
 
-  static async put<T>(endpoint: string, body: any, options?: FetchOptions) {
+  static async put<T>(endpoint: string, body: unknown, options?: FetchOptions) {
     return this.request<T>("PUT", endpoint, {
       ...options,
       body: JSON.stringify(body),
     });
   }
 
-  static async patch<T>(endpoint: string, body: any, options?: FetchOptions) {
+  static async patch<T>(
+    endpoint: string,
+    body: unknown,
+    options?: FetchOptions
+  ) {
     return this.request<T>("PATCH", endpoint, {
       ...options,
       body: JSON.stringify(body),

@@ -1,6 +1,6 @@
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { DataService } from '../services/data/dataService';
 import { SyncEngine } from '../services/data/syncEngine';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   SyncActionsValue,
   SyncProviderProps,
@@ -125,8 +125,17 @@ export const SyncProvider = ({
       ? initialOnlineStatus
       : (typeof navigator !== 'undefined' ? navigator.onLine : true)
   );
-  const [pendingCount, setPendingCount] = useState(0);
-  const [failedCount, setFailedCount] = useState(0);
+
+  // Initialize counts from SyncEngine to avoid setState in effect
+  const [pendingCount, setPendingCount] = useState(() => {
+    const counts = SyncEngine.getCounts();
+    return counts.pending;
+  });
+  const [failedCount, setFailedCount] = useState(() => {
+    const counts = SyncEngine.getCounts();
+    return counts.failed;
+  });
+
   // HYDRATION-SAFE: Sync status initialization also checks environment
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(
     initialOnlineStatus !== undefined
@@ -187,7 +196,7 @@ export const SyncProvider = ({
       isProcessingRef.current = false;
 
       // Process next immediately
-      await processQueue();
+      await processQueueRef.current?.();
 
     } catch (err) {
       console.error(`[Sync] Failed ${mutation.type}:`, err);
@@ -220,14 +229,19 @@ export const SyncProvider = ({
         console.log(`[Sync] Retrying in ${delay}ms...`);
 
         isProcessingRef.current = false;
-        setTimeout(() => processQueue(), delay);
+        setTimeout(() => processQueueRef.current?.(), delay);
       }
     }
   }, [refreshCounts]);
 
+  // Assign ref for recursive calls in effect
+  useEffect(() => {
+    processQueueRef.current = processQueue;
+  }, [processQueue]);
+
   useEffect(() => {
     // BP13: Lifecycle - initialize counts and event listeners
-    refreshCounts();
+    // Initialize counts once on mount - already done via useState initializer
 
     const handleOnline = () => {
       setIsOnline(true);
@@ -260,7 +274,7 @@ export const SyncProvider = ({
     };
     // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally
     // exclude them from dependencies to avoid recreating event handlers on every render
-     
+
   }, [processQueue, refreshCounts]);
 
   // BP10: Stabilize function references with useCallback
@@ -295,7 +309,7 @@ export const SyncProvider = ({
     }
     // Note: _onSyncSuccess is a function prop that may change, but we intentionally
     // exclude it from dependencies to maintain stable callback identity
-     
+
   }, [processQueue, refreshCounts]);
 
   // BP7: Memoize provider values explicitly - state context

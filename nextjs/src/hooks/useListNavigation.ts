@@ -1,10 +1,10 @@
 /**
  * @module hooks/useListNavigation
  * @category Hooks - Keyboard Navigation
- * 
+ *
  * Unified keyboard navigation for dropdowns and WCAG 2.1 AA compliant lists.
  * Supports simple mode (arrow keys, Enter, Escape) and full mode (all keyboard shortcuts).
- * 
+ *
  * @example
  * ```typescript
  * // Simple mode for dropdown
@@ -14,7 +14,7 @@
  *   onActivate: (item) => selectOption(item),
  *   onClose: () => setIsOpen(false)
  * });
- * 
+ *
  * <div onKeyDown={nav.handleKeyDown}>
  *   {options.map((opt, i) => (
  *     <div key={i} className={nav.focusedIndex === i ? 'focused' : ''}>
@@ -28,7 +28,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -37,7 +37,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 /**
  * Navigation mode
  */
-export type NavigationMode = 'simple' | 'full';
+export type NavigationMode = "simple" | "full";
 
 /**
  * Configuration for useListNavigation hook
@@ -75,8 +75,8 @@ export interface UseListNavigationResult {
   /** Get props for focusable items (full mode only) */
   getFocusProps?: (index: number) => {
     tabIndex: number;
-    'data-index': number;
-    'aria-selected': boolean;
+    "data-index": number;
+    "aria-selected": boolean;
     onKeyDown: (e: React.KeyboardEvent) => void;
   };
 }
@@ -87,7 +87,7 @@ export interface UseListNavigationResult {
 
 export function useListNavigation<T>({
   items,
-  mode = 'simple',
+  mode = "simple",
   onSelect,
   onActivate,
   onClose,
@@ -95,35 +95,44 @@ export function useListNavigation<T>({
   initialIndex = -1,
   enabled = true,
   containerRef,
-  circular = true
+  circular = true,
 }: UseListNavigationConfig<T>): UseListNavigationResult {
-  const [focusedIndex, setFocusedIndex] = useState<number>(initialIndex);
+  const [focusedIndex, setFocusedIndex] = useState<number>(() =>
+    mode === "simple" && isOpen && items.length > 0 ? 0 : initialIndex
+  );
   const itemsLengthRef = useRef(items.length);
+  const prevIsOpenRef = useRef(isOpen);
 
   // Simple mode: Reset index when list opens/closes or items change
   useEffect(() => {
-    if (mode === 'simple') {
-      setFocusedIndex(isOpen && items.length > 0 ? 0 : -1);
+    if (mode === "simple") {
+      const newIndex = isOpen && items.length > 0 ? 0 : -1;
+      // Only update if changed to avoid cascading renders
+      if (prevIsOpenRef.current !== isOpen || newIndex !== focusedIndex) {
+        setFocusedIndex(newIndex);
+        prevIsOpenRef.current = isOpen;
+      }
     }
-  }, [isOpen, items.length, mode]);
+  }, [isOpen, items.length, mode, focusedIndex]);
 
   // Full mode: Update focused index when items change
   useEffect(() => {
-    if (mode === 'full' && items.length !== itemsLengthRef.current) {
+    if (mode === "full" && items.length !== itemsLengthRef.current) {
+      const prevLength = itemsLengthRef.current;
       itemsLengthRef.current = items.length;
-      
+
       // Reset focus if current index is out of bounds
-      if (focusedIndex >= items.length) {
-        setFocusedIndex(items.length - 1);
+      if (focusedIndex >= items.length && prevLength !== items.length) {
+        setFocusedIndex(Math.max(0, items.length - 1));
       }
     }
   }, [items.length, focusedIndex, mode]);
 
   // Navigation helpers
   const navigateNext = useCallback(() => {
-    setFocusedIndex(prev => {
+    setFocusedIndex((prev) => {
       let next: number;
-      if (circular && mode === 'simple') {
+      if (circular && mode === "simple") {
         next = (prev + 1) % items.length;
       } else {
         next = Math.min(prev + 1, items.length - 1);
@@ -136,9 +145,9 @@ export function useListNavigation<T>({
   }, [items, onSelect, circular, mode]);
 
   const navigatePrevious = useCallback(() => {
-    setFocusedIndex(prev => {
+    setFocusedIndex((prev) => {
       let next: number;
-      if (circular && mode === 'simple') {
+      if (circular && mode === "simple") {
         next = (prev - 1 + items.length) % items.length;
       } else {
         next = Math.max(prev - 1, 0);
@@ -177,102 +186,107 @@ export function useListNavigation<T>({
   }, [focusedIndex, items, onActivate, onSelect]);
 
   // Keyboard event handler
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!enabled || (mode === 'simple' && !isOpen)) return;
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!enabled || (mode === "simple" && !isOpen)) return;
 
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        navigateNext();
-        break;
-
-      case 'ArrowUp':
-        e.preventDefault();
-        navigatePrevious();
-        break;
-
-      case 'Enter':
-        e.preventDefault();
-        activateCurrent();
-        break;
-
-      case 'Escape':
-        if (mode === 'simple' && onClose) {
+      switch (e.key) {
+        case "ArrowDown":
           e.preventDefault();
-          onClose();
-        }
-        break;
+          navigateNext();
+          break;
 
-      // Full mode additional keys
-      case ' ': // Space
-        if (mode === 'full') {
+        case "ArrowUp":
+          e.preventDefault();
+          navigatePrevious();
+          break;
+
+        case "Enter":
           e.preventDefault();
           activateCurrent();
-        }
-        break;
+          break;
 
-      case 'Home':
-        if (mode === 'full') {
-          e.preventDefault();
-          navigateFirst();
-        }
-        break;
+        case "Escape":
+          if (mode === "simple" && onClose) {
+            e.preventDefault();
+            onClose();
+          }
+          break;
 
-      case 'End':
-        if (mode === 'full') {
-          e.preventDefault();
-          navigateLast();
-        }
-        break;
+        // Full mode additional keys
+        case " ": // Space
+          if (mode === "full") {
+            e.preventDefault();
+            activateCurrent();
+          }
+          break;
 
-      case 'PageDown':
-        if (mode === 'full') {
-          e.preventDefault();
-          // Jump 10 items down
-          setFocusedIndex(prev => {
-            const next = Math.min(prev + 10, items.length - 1);
-            if (onSelect && next !== prev) {
-              onSelect(items[next], next);
-            }
-            return next;
-          });
-        }
-        break;
+        case "Home":
+          if (mode === "full") {
+            e.preventDefault();
+            navigateFirst();
+          }
+          break;
 
-      case 'PageUp':
-        if (mode === 'full') {
-          e.preventDefault();
-          // Jump 10 items up
-          setFocusedIndex(prev => {
-            const next = Math.max(prev - 10, 0);
-            if (onSelect && next !== prev) {
-              onSelect(items[next], next);
-            }
-            return next;
-          });
-        }
-        break;
-    }
-  }, [
-    enabled,
-    isOpen,
-    mode,
-    navigateNext,
-    navigatePrevious,
-    navigateFirst,
-    navigateLast,
-    activateCurrent,
-    onClose,
-    items,
-    onSelect
-  ]);
+        case "End":
+          if (mode === "full") {
+            e.preventDefault();
+            navigateLast();
+          }
+          break;
+
+        case "PageDown":
+          if (mode === "full") {
+            e.preventDefault();
+            // Jump 10 items down
+            setFocusedIndex((prev) => {
+              const next = Math.min(prev + 10, items.length - 1);
+              if (onSelect && next !== prev) {
+                onSelect(items[next], next);
+              }
+              return next;
+            });
+          }
+          break;
+
+        case "PageUp":
+          if (mode === "full") {
+            e.preventDefault();
+            // Jump 10 items up
+            setFocusedIndex((prev) => {
+              const next = Math.max(prev - 10, 0);
+              if (onSelect && next !== prev) {
+                onSelect(items[next], next);
+              }
+              return next;
+            });
+          }
+          break;
+      }
+    },
+    [
+      enabled,
+      isOpen,
+      mode,
+      navigateNext,
+      navigatePrevious,
+      navigateFirst,
+      navigateLast,
+      activateCurrent,
+      onClose,
+      items,
+      onSelect,
+    ]
+  );
 
   // Full mode: Scroll focused item into view
   useEffect(() => {
-    if (mode !== 'full' || focusedIndex < 0 || !containerRef?.current) return;
+    if (mode !== "full" || focusedIndex < 0 || !containerRef?.current) return;
 
     const container = containerRef.current;
-    const focusedElement = container.querySelector(`[data-index="${focusedIndex}"]`) as HTMLElement;
+    const focusedElement = container.querySelector(
+      `[data-index="${focusedIndex}"]`
+    ) as HTMLElement;
 
     if (focusedElement) {
       // Check if element is in view
@@ -284,8 +298,8 @@ export function useListNavigation<T>({
 
       if (isAbove || isBelow) {
         focusedElement.scrollIntoView({
-          behavior: 'smooth',
-          block: isAbove ? 'start' : 'end'
+          behavior: "smooth",
+          block: isAbove ? "start" : "end",
         });
       }
 
@@ -295,33 +309,43 @@ export function useListNavigation<T>({
   }, [focusedIndex, containerRef, mode]);
 
   // Get props for focusable items (full mode only)
-  const getFocusProps = useCallback((index: number): {
-    tabIndex: number;
-    'data-index': number;
-    'aria-selected': boolean;
-    onKeyDown: (e: React.KeyboardEvent) => void;
-  } | undefined => {
-    if (mode !== 'full') return undefined;
+  const getFocusProps = useCallback(
+    (
+      index: number
+    ):
+      | {
+          tabIndex: number;
+          "data-index": number;
+          "aria-selected": boolean;
+          onKeyDown: (e: React.KeyboardEvent) => void;
+        }
+      | undefined => {
+      if (mode !== "full") return undefined;
 
-    return {
-      tabIndex: index === focusedIndex || (focusedIndex === -1 && index === 0) ? 0 : -1,
-      'data-index': index,
-      'aria-selected': index === focusedIndex,
-      onKeyDown: handleKeyDown
-    };
-  }, [focusedIndex, handleKeyDown, mode]);
+      return {
+        tabIndex:
+          index === focusedIndex || (focusedIndex === -1 && index === 0)
+            ? 0
+            : -1,
+        "data-index": index,
+        "aria-selected": index === focusedIndex,
+        onKeyDown: handleKeyDown,
+      };
+    },
+    [focusedIndex, handleKeyDown, mode]
+  );
 
   const result: UseListNavigationResult = {
     focusedIndex,
     setFocusedIndex,
-    handleKeyDown
+    handleKeyDown,
   };
 
-  if (mode === 'full') {
+  if (mode === "full") {
     result.getFocusProps = getFocusProps as (index: number) => {
       tabIndex: number;
-      'data-index': number;
-      'aria-selected': boolean;
+      "data-index": number;
+      "aria-selected": boolean;
       onKeyDown: (e: React.KeyboardEvent) => void;
     };
   }
@@ -343,19 +367,23 @@ export function useKeyboardNav<T>(config: {
   onSelect: (item: T) => void;
   onClose: () => void;
 }) {
-  const { focusedIndex: activeIndex, setFocusedIndex: setActiveIndex, handleKeyDown } = useListNavigation({
+  const {
+    focusedIndex: activeIndex,
+    setFocusedIndex: setActiveIndex,
+    handleKeyDown,
+  } = useListNavigation({
     items: config.items,
-    mode: 'simple',
+    mode: "simple",
     isOpen: config.isOpen,
     onSelect: (item) => config.onSelect(item),
     onClose: config.onClose,
-    circular: true
+    circular: true,
   });
 
   return {
     activeIndex,
     setActiveIndex,
-    handleKeyDown
+    handleKeyDown,
   };
 }
 
@@ -373,7 +401,7 @@ export function useKeyboardNavigation<T>(config: {
 }) {
   return useListNavigation({
     ...config,
-    mode: 'full',
-    circular: false
+    mode: "full",
+    circular: false,
   });
 }

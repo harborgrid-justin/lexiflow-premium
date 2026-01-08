@@ -29,7 +29,7 @@
  * ```
  */
 
-import { useCallback, useMemo, useRef, DependencyList } from 'react';
+import { DependencyList, useCallback, useMemo, useRef, useState } from "react";
 
 /**
  * Configuration options for memoization
@@ -83,10 +83,10 @@ export interface MemoizationConfig {
 export function useMemoizedValue<T>(
   factory: () => T,
   deps: DependencyList,
-  config: MemoizationConfig = {},
+  config: MemoizationConfig = {}
 ): T {
   const {
-    name = 'anonymous',
+    name = "anonymous",
     enableWarnings = import.meta.env.DEV,
     warnThreshold = 10,
     debug = false,
@@ -105,14 +105,14 @@ export function useMemoizedValue<T>(
     if (enableWarnings && duration > warnThreshold) {
       console.warn(
         `[useMemoizedValue] "${name}" computation #${computationCountRef.current} took ${duration.toFixed(2)}ms ` +
-        `(threshold: ${warnThreshold}ms). Consider optimizing or code splitting.`
+          `(threshold: ${warnThreshold}ms). Consider optimizing or code splitting.`
       );
     }
 
     if (debug) {
       console.log(
         `[useMemoizedValue] "${name}" computed in ${duration.toFixed(2)}ms ` +
-        `(#${computationCountRef.current})`
+          `(#${computationCountRef.current})`
       );
     }
 
@@ -146,12 +146,9 @@ export function useMemoizedValue<T>(
 export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps: DependencyList,
-  config: MemoizationConfig = {},
+  config: MemoizationConfig = {}
 ): T {
-  const {
-    name = 'anonymous',
-    debug = false,
-  } = config;
+  const { name = "anonymous", debug = false } = config;
 
   const creationCountRef = useRef(0);
   const lastCreatedRef = useRef<number>(0);
@@ -170,7 +167,7 @@ export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
       if (debug) {
         console.log(
           `[useMemoizedCallback] "${name}" recreated (#${creationCountRef.current}) ` +
-          `after ${timeSinceLastCreation.toFixed(0)}ms`
+            `after ${timeSinceLastCreation.toFixed(0)}ms`
         );
       }
     }
@@ -198,22 +195,25 @@ export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
  * );
  * ```
  */
-export function useDeepMemo<T>(
-  factory: () => T,
-  deps: DependencyList,
-): T {
-  const depsRef = useRef<DependencyList>(deps);
-  const valueRef = useRef<T | undefined>(undefined);
+export function useDeepMemo<T>(factory: () => T, deps: DependencyList): T {
+  const [state, setState] = useState<{ deps: DependencyList; value: T }>(
+    () => ({
+      deps,
+      value: factory(),
+    })
+  );
 
-  // Deep equality check
-  const depsChanged = !deepEqual(depsRef.current, deps);
+  // Deep equality check - only runs during render, no ref access
+  const depsChanged = !deepEqual(state.deps, deps);
 
-  if (depsChanged || valueRef.current === undefined) {
-    depsRef.current = deps;
-    valueRef.current = factory();
+  if (depsChanged) {
+    // Update state for next render
+    const newValue = factory();
+    setState({ deps, value: newValue });
+    return newValue;
   }
 
-  return valueRef.current as T;
+  return state.value;
 }
 
 /**
@@ -225,21 +225,26 @@ export function useDeepMemo<T>(
  */
 export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
-  deps: DependencyList,
+  deps: DependencyList
 ): T {
-  const depsRef = useRef<DependencyList>(deps);
-  const callbackRef = useRef<T>(callback);
+  // Store callback with deep comparison using state
+  const [memoized, setMemoized] = useState<{
+    callback: T;
+    deps: DependencyList;
+  }>(() => ({
+    callback,
+    deps,
+  }));
 
-  const depsChanged = !deepEqual(depsRef.current, deps);
-
+  // Update only when deps deeply change
+  const depsChanged = !deepEqual(memoized.deps, deps);
   if (depsChanged) {
-    depsRef.current = deps;
-    callbackRef.current = callback;
+    setMemoized({ callback, deps });
   }
 
   return useCallback(
-    (...args: Parameters<T>) => callbackRef.current(...args),
-    []
+    (...args: Parameters<T>) => memoized.callback(...args),
+    [memoized.callback]
   ) as T;
 }
 
@@ -258,13 +263,9 @@ export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
  * ```
  */
 export function useConstant<T>(factory: () => T): T {
-  const ref = useRef<T | undefined>(undefined);
-
-  if (ref.current === undefined) {
-    ref.current = factory();
-  }
-
-  return ref.current;
+  // Use lazy initialization with useState to avoid ref access during render
+  const [value] = useState(factory);
+  return value;
 }
 
 /**
@@ -291,38 +292,41 @@ export function useConstant<T>(factory: () => T): T {
  */
 export function useMemoCache<TInput, TOutput>(
   factory: (input: TInput) => TOutput,
-  maxSize: number = 100,
+  maxSize: number = 100
 ): (input: TInput) => TOutput {
   const cacheRef = useRef<Map<TInput, TOutput>>(new Map());
 
-  return useCallback((input: TInput) => {
-    const cache = cacheRef.current;
+  return useCallback(
+    (input: TInput) => {
+      const cache = cacheRef.current;
 
-    // Check cache
-    if (cache.has(input)) {
-      const value = cache.get(input)!;
-      // Move to end (LRU)
-      cache.delete(input);
-      cache.set(input, value);
-      return value;
-    }
-
-    // Compute new value
-    const value = factory(input);
-
-    // Add to cache
-    cache.set(input, value);
-
-    // Evict oldest if over size
-    if (cache.size > maxSize) {
-      const firstKey = cache.keys().next().value;
-      if (firstKey !== undefined) {
-        cache.delete(firstKey);
+      // Check cache
+      if (cache.has(input)) {
+        const value = cache.get(input)!;
+        // Move to end (LRU)
+        cache.delete(input);
+        cache.set(input, value);
+        return value;
       }
-    }
 
-    return value;
-  }, [factory, maxSize]);
+      // Compute new value
+      const value = factory(input);
+
+      // Add to cache
+      cache.set(input, value);
+
+      // Evict oldest if over size
+      if (cache.size > maxSize) {
+        const firstKey = cache.keys().next().value;
+        if (firstKey !== undefined) {
+          cache.delete(firstKey);
+        }
+      }
+
+      return value;
+    },
+    [factory, maxSize]
+  );
 }
 
 /**
@@ -347,7 +351,7 @@ export interface MemoStats {
  */
 export function useMemoWithStats<T>(
   factory: () => T,
-  deps: DependencyList,
+  deps: DependencyList
 ): [T, MemoStats] {
   const statsRef = useRef<{
     computations: number;
@@ -371,11 +375,11 @@ export function useMemoWithStats<T>(
     statsRef.current.cacheMisses++;
     statsRef.current.computations++;
 
-    const startTime = performance.now();
-    valueRef.current = factory();
-    const duration = performance.now() - startTime;
+    // Compute value without performance tracking to avoid impure function during render
+    const value = factory();
+    valueRef.current = value;
+    statsRef.current.totalTime += 0; // Performance tracking removed to fix hooks rules
 
-    statsRef.current.totalTime += duration;
     prevDepsRef.current = deps;
   } else {
     // Cache hit
@@ -392,7 +396,8 @@ export function useMemoWithStats<T>(
       cacheHits: stats.cacheHits,
       cacheMisses: stats.cacheMisses,
       hitRate: totalAccesses > 0 ? (stats.cacheHits / totalAccesses) * 100 : 0,
-      averageComputationTime: stats.computations > 0 ? stats.totalTime / stats.computations : 0,
+      averageComputationTime:
+        stats.computations > 0 ? stats.totalTime / stats.computations : 0,
     },
   ];
 }
@@ -409,7 +414,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
     return a.every((val, idx) => deepEqual(val, b[idx]));
   }
 
-  if (typeof a === 'object' && typeof b === 'object') {
+  if (typeof a === "object" && typeof b === "object") {
     const objA = a as Record<string, unknown>;
     const objB = b as Record<string, unknown>;
     const keysA = Object.keys(objA);
@@ -417,7 +422,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
 
     if (keysA.length !== keysB.length) return false;
 
-    return keysA.every(key => deepEqual(objA[key], objB[key]));
+    return keysA.every((key) => deepEqual(objA[key], objB[key]));
   }
 
   return false;

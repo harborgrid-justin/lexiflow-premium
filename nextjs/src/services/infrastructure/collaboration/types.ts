@@ -12,7 +12,7 @@ export interface UserPresence {
   userId: string;
   userName: string;
   userColor: string;
-  status: 'active' | 'idle' | 'away' | 'offline';
+  status: "active" | "idle" | "away" | "offline";
   lastActivity: Date;
   currentDocument?: string;
 }
@@ -42,7 +42,7 @@ export interface CollaborativeEdit {
   id: string;
   userId: string;
   documentId: string;
-  operation: 'insert' | 'delete' | 'replace';
+  operation: "insert" | "delete" | "replace";
   position: number;
   content?: string;
   length?: number;
@@ -53,8 +53,8 @@ export interface EditConflict {
   id: string;
   edit1: CollaborativeEdit;
   edit2: CollaborativeEdit;
-  type: 'overlap' | 'concurrent' | 'ordering';
-  resolutionStrategy: 'last-write-wins' | 'merge' | 'manual';
+  type: "overlap" | "concurrent" | "ordering";
+  resolutionStrategy: "last-write-wins" | "merge" | "manual";
 }
 
 // ============================================================================
@@ -78,17 +78,17 @@ export interface DocumentLock {
 // ============================================================================
 
 export type WSMessageType =
-  | 'presence-update'
-  | 'cursor-move'
-  | 'edit-operation'
-  | 'lock-request'
-  | 'lock-release'
-  | 'user-joined'
-  | 'user-left'
-  | 'sync-request'
-  | 'sync-response';
+  | "presence-update"
+  | "cursor-move"
+  | "edit-operation"
+  | "lock-request"
+  | "lock-release"
+  | "user-joined"
+  | "user-left"
+  | "sync-request"
+  | "sync-response";
 
-export interface WSMessage<T = any> {
+export interface WSMessage<T = unknown> {
   type: WSMessageType;
   payload: T;
   timestamp: Date;
@@ -100,17 +100,17 @@ export interface WSMessage<T = any> {
 // ============================================================================
 
 export type CollaborationEvent =
-  | 'connected'
-  | 'disconnected'
-  | 'error'
-  | 'presence-changed'
-  | 'cursor-moved'
-  | 'edit-received'
-  | 'conflict-detected'
-  | 'lock-acquired'
-  | 'lock-released'
-  | 'user-joined'
-  | 'user-left';
+  | "connected"
+  | "disconnected"
+  | "error"
+  | "presence-changed"
+  | "cursor-moved"
+  | "edit-received"
+  | "conflict-detected"
+  | "lock-acquired"
+  | "lock-released"
+  | "user-joined"
+  | "user-left";
 
 // ============================================================================
 // CONFIGURATION

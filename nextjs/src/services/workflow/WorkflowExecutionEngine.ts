@@ -5,38 +5,38 @@
  * @features Real-time execution, rollback support, SLA tracking, approval gates
  */
 
-import { EventEmitter } from 'events';
-import { WorkflowExecutionError, OperationError } from '@/services/core/errors';
-import type { WorkflowNode, WorkflowConnection } from '@/types/workflow-types';
+import { OperationError, WorkflowExecutionError } from "@/services/core/errors";
 import type {
-  EnhancedWorkflowInstance,
-  ConditionalBranchingConfig,
   ConditionalBranch,
-  ParallelExecutionConfig,
+  ConditionalBranchingConfig,
+  EnhancedWorkflowInstance,
   ParallelBranch,
+  ParallelExecutionConfig,
   SLAConfig,
-  WorkflowState,
   WorkflowSnapshot,
-} from '@/types/workflow-advanced-types';
+  WorkflowState,
+} from "@/types/workflow-advanced-types";
+import type { WorkflowConnection, WorkflowNode } from "@/types/workflow-types";
+import { EventEmitter } from "events";
 
 export type WorkflowExecutionEvent =
-  | 'started'
-  | 'node_entered'
-  | 'node_completed'
-  | 'node_failed'
-  | 'conditional_evaluated'
-  | 'parallel_started'
-  | 'parallel_completed'
-  | 'approval_required'
-  | 'approval_completed'
-  | 'sla_warning'
-  | 'sla_breached'
-  | 'snapshot_created'
-  | 'paused'
-  | 'resumed'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
+  | "started"
+  | "node_entered"
+  | "node_completed"
+  | "node_failed"
+  | "conditional_evaluated"
+  | "parallel_started"
+  | "parallel_completed"
+  | "approval_required"
+  | "approval_completed"
+  | "sla_warning"
+  | "sla_breached"
+  | "snapshot_created"
+  | "paused"
+  | "resumed"
+  | "completed"
+  | "failed"
+  | "cancelled";
 
 export interface ExecutionContext {
   workflowId: string;
@@ -73,7 +73,13 @@ export class WorkflowExecutionEngine extends EventEmitter {
   private workflow: EnhancedWorkflowInstance;
   private readonly context: ExecutionContext;
   private options: ExecutionOptions;
-  private state: 'idle' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
+  private state:
+    | "idle"
+    | "running"
+    | "paused"
+    | "completed"
+    | "failed"
+    | "cancelled";
   private currentNode: WorkflowNode | null;
   private readonly visitedNodes: Set<string>;
   private nodeMap: Map<string, WorkflowNode>;
@@ -86,7 +92,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   constructor(
     workflow: EnhancedWorkflowInstance,
     context: Partial<ExecutionContext>,
-    options: ExecutionOptions = {},
+    options: ExecutionOptions = {}
   ) {
     super();
 
@@ -97,13 +103,13 @@ export class WorkflowExecutionEngine extends EventEmitter {
       variables: { ...workflow.variables, ...context.variables },
       data: context.data || {},
       metadata: context.metadata || {},
-      userId: context.userId || 'system',
+      userId: context.userId || "system",
       startTime: new Date(),
       executionPath: [],
       errors: [],
     };
     this.options = options;
-    this.state = 'idle';
+    this.state = "idle";
     this.currentNode = null;
     this.visitedNodes = new Set();
     this.nodeMap = new Map(workflow.nodes.map((n: WorkflowNode) => [n.id, n]));
@@ -121,15 +127,25 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Start workflow execution
    */
-  async execute(): Promise<{ success: boolean; result?: unknown; error?: string }> {
+  async execute(): Promise<{
+    success: boolean;
+    result?: unknown;
+    error?: string;
+  }> {
     try {
-      this.state = 'running';
-      this.emit('started', this.context);
+      this.state = "running";
+      this.emit("started", this.context);
 
       // Find start node
-      const startNode = this.workflow.nodes.find((n: WorkflowNode) => n.type === 'Start');
+      const startNode = this.workflow.nodes.find(
+        (n: WorkflowNode) => n.type === "Start"
+      );
       if (!startNode) {
-        throw new WorkflowExecutionError(this.workflow.id, 'none', 'No start node found in workflow');
+        throw new WorkflowExecutionError(
+          this.workflow.id,
+          "none",
+          "No start node found in workflow"
+        );
       }
 
       // Setup auto-snapshots if enabled
@@ -140,8 +156,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
       // Setup timeout if specified
       if (this.options.timeout) {
         this.executionTimeout = setTimeout(() => {
-          if (this.state === 'running') {
-            this.cancel('Execution timeout exceeded');
+          if (this.state === "running") {
+            this.cancel("Execution timeout exceeded");
           }
         }, this.options.timeout);
       }
@@ -149,14 +165,15 @@ export class WorkflowExecutionEngine extends EventEmitter {
       // Execute workflow
       const result = await this._executeNode(startNode);
 
-      this.state = 'completed';
-      this.emit('completed', { context: this.context, result });
+      this.state = "completed";
+      this.emit("completed", { context: this.context, result });
 
       return { success: true, result };
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      this.state = 'failed';
-      this.emit('failed', { context: this.context, error: errorMessage });
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      this.state = "failed";
+      this.emit("failed", { context: this.context, error: errorMessage });
 
       return { success: false, error: errorMessage };
     } finally {
@@ -168,9 +185,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Pause workflow execution
    */
   pause(): void {
-    if (this.state === 'running') {
-      this.state = 'paused';
-      this.emit('paused', this.context);
+    if (this.state === "running") {
+      this.state = "paused";
+      this.emit("paused", this.context);
 
       // Pause SLA timers
       this.slaTimers.forEach((timer) => {
@@ -183,9 +200,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Resume workflow execution
    */
   async resume(): Promise<void> {
-    if (this.state === 'paused' && this.currentNode) {
-      this.state = 'running';
-      this.emit('resumed', this.context);
+    if (this.state === "paused" && this.currentNode) {
+      this.state = "running";
+      this.emit("resumed", this.context);
 
       // Resume SLA timers
       if (this.options.enableSLA) {
@@ -200,8 +217,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Cancel workflow execution
    */
   cancel(reason?: string): void {
-    this.state = 'cancelled';
-    this.emit('cancelled', { context: this.context, reason });
+    this.state = "cancelled";
+    this.emit("cancelled", { context: this.context, reason });
     this._cleanup();
   }
 
@@ -210,7 +227,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   getState(): WorkflowState {
     return {
-      currentNodeId: this.currentNode?.id || '',
+      currentNodeId: this.currentNode?.id || "",
       completedNodes: Array.from(this.visitedNodes),
       pendingNodes: this.workflow.nodes
         .filter((n: WorkflowNode) => !this.visitedNodes.has(n.id))
@@ -244,7 +261,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     this.context.executionPath.push(node.id);
     this.visitedNodes.add(node.id);
 
-    this.emit('node_entered', { node, context: this.context });
+    this.emit("node_entered", { node, context: this.context });
 
     // Setup SLA monitoring if enabled
     if (this.options.enableSLA) {
@@ -256,29 +273,29 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
       // Execute node based on type
       switch (node.type) {
-        case 'Start':
+        case "Start":
           result = await this._executeStartNode();
           break;
-        case 'End':
+        case "End":
           result = await this._executeEndNode(node);
           break;
-        case 'Task':
+        case "Task":
           result = await this._executeTaskNode(node);
           break;
-        case 'Decision':
+        case "Decision":
           result = await this._executeDecisionNode(node);
           break;
-        case 'Parallel':
+        case "Parallel":
           result = await this._executeParallelNode(node);
           break;
-        case 'Delay':
+        case "Delay":
           result = await this._executeDelayNode(node);
           break;
         default:
           result = await this._executeGenericNode(node);
       }
 
-      this.emit('node_completed', { node, context: this.context, result });
+      this.emit("node_completed", { node, context: this.context, result });
 
       // Clear SLA timer
       this._clearSLATimer(node.id);
@@ -298,14 +315,19 @@ export class WorkflowExecutionEngine extends EventEmitter {
         return await this._executeParallelNodes(nextNodes);
       }
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       this.context.errors.push({
         nodeId: node.id,
         error: errorMessage,
         timestamp: new Date(),
       });
 
-      this.emit('node_failed', { node, context: this.context, error: errorMessage });
+      this.emit("node_failed", {
+        node,
+        context: this.context,
+        error: errorMessage,
+      });
 
       // Check if we should retry
       if (this.options.maxRetries && this.options.maxRetries > 0) {
@@ -320,7 +342,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute start node
    */
   private async _executeStartNode(): Promise<unknown> {
-    return { type: 'start', timestamp: new Date() };
+    return { type: "start", timestamp: new Date() };
   }
 
   /**
@@ -328,8 +350,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private async _executeEndNode(node: WorkflowNode): Promise<unknown> {
     return {
-      type: 'end',
-      outcome: node.config.outcome || 'success',
+      type: "end",
+      outcome: node.config.outcome || "success",
       timestamp: new Date(),
       context: this.context,
     };
@@ -343,18 +365,25 @@ export class WorkflowExecutionEngine extends EventEmitter {
     if (this.options.enableApprovals && node.config.requiresApproval) {
       const approved = await this._handleApproval(node);
       if (!approved) {
-        throw new WorkflowExecutionError(this.workflow.id, node.id, 'Approval rejected');
+        throw new WorkflowExecutionError(
+          this.workflow.id,
+          node.id,
+          "Approval rejected"
+        );
       }
     }
 
     // Simulate task execution
-    const estimatedDuration = typeof node.config.estimatedDuration === 'number' ? node.config.estimatedDuration : 1000;
+    const estimatedDuration =
+      typeof node.config.estimatedDuration === "number"
+        ? node.config.estimatedDuration
+        : 1000;
     await this._delay(estimatedDuration);
 
     return {
-      type: 'task',
+      type: "task",
       taskId: node.id,
-      result: 'completed',
+      result: "completed",
       timestamp: new Date(),
     };
   }
@@ -363,23 +392,30 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute decision node (conditional branching)
    */
   private async _executeDecisionNode(node: WorkflowNode): Promise<unknown> {
-    const conditionalConfig = this.workflow.conditionalConfigs.find((c: ConditionalBranchingConfig) => c.nodeId === node.id);
+    const conditionalConfig = this.workflow.conditionalConfigs.find(
+      (c: ConditionalBranchingConfig) => c.nodeId === node.id
+    );
 
     if (!conditionalConfig) {
-      throw new Error(`No conditional config found for decision node ${node.id}`);
+      throw new Error(
+        `No conditional config found for decision node ${node.id}`
+      );
     }
 
     // Evaluate conditional rules
-    const evaluation = await this._evaluateConditionalBranching(conditionalConfig);
+    const evaluation =
+      await this._evaluateConditionalBranching(conditionalConfig);
 
-    this.emit('conditional_evaluated', {
+    this.emit("conditional_evaluated", {
       node,
       branchId: evaluation.branchId,
       evaluationTime: evaluation.evaluationTime,
     });
 
     // Find target node based on selected branch
-    const branch = conditionalConfig.branches.find((b: ConditionalBranch) => b.id === evaluation.branchId);
+    const branch = conditionalConfig.branches.find(
+      (b: ConditionalBranch) => b.id === evaluation.branchId
+    );
     if (!branch) {
       throw new Error(`Branch ${evaluation.branchId} not found`);
     }
@@ -396,16 +432,18 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute parallel node
    */
   private async _executeParallelNode(node: WorkflowNode): Promise<unknown> {
-    const parallelConfig = this.workflow.parallelConfigs.find((c: ParallelExecutionConfig) => c.nodeId === node.id);
+    const parallelConfig = this.workflow.parallelConfigs.find(
+      (c: ParallelExecutionConfig) => c.nodeId === node.id
+    );
 
     if (!parallelConfig) {
       throw new Error(`No parallel config found for node ${node.id}`);
     }
 
-    this.emit('parallel_started', { node, config: parallelConfig });
+    this.emit("parallel_started", { node, config: parallelConfig });
 
-    const branchPromises = parallelConfig.branches.map((branch: ParallelBranch) =>
-      this._executeParallelBranch(branch),
+    const branchPromises = parallelConfig.branches.map(
+      (branch: ParallelBranch) => this._executeParallelBranch(branch)
     );
 
     this.parallelExecutions.set(node.id, branchPromises);
@@ -413,17 +451,17 @@ export class WorkflowExecutionEngine extends EventEmitter {
     // Apply join strategy
     let results: unknown[];
     switch (parallelConfig.joinStrategy) {
-      case 'wait_all':
+      case "wait_all":
         results = await Promise.all(branchPromises);
         break;
-      case 'wait_any':
+      case "wait_any":
         results = [await Promise.race(branchPromises)];
         break;
       default:
         results = await Promise.all(branchPromises);
     }
 
-    this.emit('parallel_completed', { node, results });
+    this.emit("parallel_completed", { node, results });
 
     return results;
   }
@@ -432,11 +470,12 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute delay node
    */
   private async _executeDelayNode(node: WorkflowNode): Promise<unknown> {
-    const delay = typeof node.config.delayMs === 'number' ? node.config.delayMs : 1000;
+    const delay =
+      typeof node.config.delayMs === "number" ? node.config.delayMs : 1000;
     await this._delay(delay);
 
     return {
-      type: 'delay',
+      type: "delay",
       delayMs: delay,
       timestamp: new Date(),
     };
@@ -456,7 +495,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute parallel branch
    */
-  private async _executeParallelBranch(branch: ParallelBranch): Promise<unknown> {
+  private async _executeParallelBranch(
+    branch: ParallelBranch
+  ): Promise<unknown> {
     const results = [];
 
     for (const nodeId of branch.nodeIds) {
@@ -473,23 +514,31 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute multiple nodes in parallel
    */
-  private async _executeParallelNodes(nodes: WorkflowNode[]): Promise<unknown[]> {
-    return Promise.all(nodes.map(node => this._executeNode(node)));
+  private async _executeParallelNodes(
+    nodes: WorkflowNode[]
+  ): Promise<unknown[]> {
+    return Promise.all(nodes.map((node) => this._executeNode(node)));
   }
 
   /**
    * Retry node execution
    */
-  private async _retryNode(node: WorkflowNode, attemptNumber: number = 1): Promise<unknown> {
+  private async _retryNode(
+    node: WorkflowNode,
+    attemptNumber: number = 1
+  ): Promise<unknown> {
     if (attemptNumber > (this.options.maxRetries || 3)) {
-      throw new OperationError(`node_retry_${node.id}`, `Max retries exceeded for node ${node.id}`);
+      throw new OperationError(
+        `node_retry_${node.id}`,
+        `Max retries exceeded for node ${node.id}`
+      );
     }
 
     await this._delay(1000 * attemptNumber); // Exponential backoff
 
     try {
       return await this._executeNode(node);
-    } catch (error) {
+    } catch {
       return await this._retryNode(node, attemptNumber + 1);
     }
   }
@@ -516,7 +565,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   private _getNextNodes(nodeId: string): WorkflowNode[] {
     const connections = this.connectionMap.get(nodeId) || [];
     return connections
-      .map(conn => this.nodeMap.get(conn.to))
+      .map((conn) => this.nodeMap.get(conn.to))
       .filter((node): node is WorkflowNode => node !== undefined);
   }
 
@@ -524,12 +573,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Evaluate conditional branching
    */
   private async _evaluateConditionalBranching(
-    config: ConditionalBranchingConfig,
+    config: ConditionalBranchingConfig
   ): Promise<{ branchId: string; matched: boolean; evaluationTime: number }> {
     const startTime = Date.now();
 
     // Simple evaluation logic (in production, use backend API)
-    for (const branch of config.branches.sort((a: ConditionalBranch, b: ConditionalBranch) => a.priority - b.priority)) {
+    for (const branch of config.branches.sort(
+      (a: ConditionalBranch, b: ConditionalBranch) => a.priority - b.priority
+    )) {
       const matched = this._evaluateRules(branch.rules, this.context);
       if (matched) {
         return {
@@ -541,7 +592,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     }
 
     return {
-      branchId: config.defaultBranchId || '',
+      branchId: config.defaultBranchId || "",
       matched: false,
       evaluationTime: Date.now() - startTime,
     };
@@ -550,15 +601,18 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Evaluate rules
    */
-  private _evaluateRules(rules: Array<{ field: string; operator: string; value: unknown }>, context: ExecutionContext): boolean {
-    return rules.every(rule => {
+  private _evaluateRules(
+    rules: Array<{ field: string; operator: string; value: unknown }>,
+    context: ExecutionContext
+  ): boolean {
+    return rules.every((rule) => {
       const value = context.variables[rule.field];
       switch (rule.operator) {
-        case 'equals':
+        case "equals":
           return value === rule.value;
-        case 'greater_than':
+        case "greater_than":
           return (value as number) > (rule.value as number);
-        case 'less_than':
+        case "less_than":
           return (value as number) < (rule.value as number);
         default:
           return false;
@@ -570,7 +624,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Handle approval gate
    */
   private async _handleApproval(node: WorkflowNode): Promise<boolean> {
-    this.emit('approval_required', { node, context: this.context });
+    this.emit("approval_required", { node, context: this.context });
 
     if (this.options.onApprovalRequired) {
       return await this.options.onApprovalRequired(node.id);
@@ -584,22 +638,26 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Setup SLA monitoring for node
    */
   private _setupSLAMonitoring(node: WorkflowNode): void {
-    const slaConfig = this.workflow.slaConfigs.find((c: SLAConfig) => c.id === node.id);
+    const slaConfig = this.workflow.slaConfigs.find(
+      (c: SLAConfig) => c.id === node.id
+    );
     if (!slaConfig) return;
 
-    const warningTime = slaConfig.targetDuration * (slaConfig.warningThreshold / 100);
-    const criticalTime = slaConfig.targetDuration * (slaConfig.criticalThreshold / 100);
+    const warningTime =
+      slaConfig.targetDuration * (slaConfig.warningThreshold / 100);
+    const criticalTime =
+      slaConfig.targetDuration * (slaConfig.criticalThreshold / 100);
 
     // Warning timer
     const warningTimer = setTimeout(() => {
-      this.emit('sla_warning', { node, status: 'at_risk' });
-      this.options.onSLAWarning?.(node.id, 'at_risk');
+      this.emit("sla_warning", { node, status: "at_risk" });
+      this.options.onSLAWarning?.(node.id, "at_risk");
     }, warningTime);
 
     // Critical timer
     setTimeout(() => {
-      this.emit('sla_breached', { node, status: 'breached' });
-      this.options.onSLAWarning?.(node.id, 'breached');
+      this.emit("sla_breached", { node, status: "breached" });
+      this.options.onSLAWarning?.(node.id, "breached");
     }, criticalTime);
 
     this.slaTimers.set(node.id, warningTimer);
@@ -621,8 +679,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private _setupAutoSnapshots(): void {
     this.snapshotTimer = setInterval(() => {
-      const snapshot = this._createSnapshot('auto');
-      this.emit('snapshot_created', snapshot);
+      const snapshot = this._createSnapshot("auto");
+      this.emit("snapshot_created", snapshot);
       this.options.onSnapshot?.(snapshot);
     }, this.options.snapshotInterval);
   }
@@ -630,7 +688,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Create workflow snapshot
    */
-  private _createSnapshot(type: 'auto' | 'manual' | 'milestone'): WorkflowSnapshot {
+  private _createSnapshot(
+    type: "auto" | "manual" | "milestone"
+  ): WorkflowSnapshot {
     const state = this.getState();
 
     return {
@@ -639,12 +699,12 @@ export class WorkflowExecutionEngine extends EventEmitter {
       version: 1,
       type,
       createdAt: new Date().toISOString(),
-      createdBy: this.context.userId as import('@/types/primitives').UserId,
+      createdBy: this.context.userId as import("@/types/primitives").UserId,
       state,
       checksum: JSON.stringify(state),
       compressed: false,
       sizeBytes: JSON.stringify(state).length,
-      retentionPolicy: type === 'milestone' ? 'permanent' : 'time_based',
+      retentionPolicy: type === "milestone" ? "permanent" : "time_based",
       restoreCount: 0,
     };
   }
@@ -663,7 +723,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       this.executionTimeout = undefined;
     }
 
-    this.slaTimers.forEach(timer => clearTimeout(timer));
+    this.slaTimers.forEach((timer) => clearTimeout(timer));
     this.slaTimers.clear();
   }
 
@@ -684,6 +744,6 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Delay helper
    */
   private _delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

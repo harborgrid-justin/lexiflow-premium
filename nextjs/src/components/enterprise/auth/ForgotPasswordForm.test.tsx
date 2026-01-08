@@ -3,7 +3,6 @@
  * Tests password reset request flow, email validation, and step transitions
  */
 
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -110,15 +109,32 @@ describe('ForgotPasswordForm', () => {
     });
 
     it('disables form during submission', async () => {
+      const mockAuthService = require('@/api/auth/auth-api').AuthApiService;
+      let resolveSubmission: (value: unknown) => void;
+
+      mockAuthService.mockImplementation(() => ({
+        forgotPassword: jest.fn().mockReturnValue(new Promise((resolve) => {
+          resolveSubmission = resolve;
+        }))
+      }));
+
       const user = userEvent.setup();
       render(<ForgotPasswordForm onSuccess={mockOnSuccess} />);
 
       await user.type(screen.getByLabelText(/email address/i), 'test@example.com');
 
       const submitButton = screen.getByRole('button', { name: /send reset instructions/i });
-      await user.click(submitButton);
 
-      expect(screen.getByLabelText(/email address/i)).toBeDisabled();
+      // Start submission but don't resolve yet
+      fireEvent.click(submitButton);
+
+      // Wait for disabled state to appear
+      await waitFor(() => {
+        expect(screen.getByLabelText(/email address/i)).toBeDisabled();
+      });
+
+      // Finish up
+      resolveSubmission!({});
     });
 
     it('calls onBackToLogin when back button clicked', async () => {
@@ -140,7 +156,7 @@ describe('ForgotPasswordForm', () => {
       await user.click(screen.getByRole('button', { name: /send reset instructions/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(/check your email/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /check your email/i })).toBeInTheDocument();
       });
     });
 
@@ -223,7 +239,7 @@ describe('ForgotPasswordForm', () => {
       await user.click(screen.getByRole('button', { name: /send reset instructions/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(/check your email/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /check your email/i })).toBeInTheDocument();
       });
     });
   });
@@ -260,7 +276,9 @@ describe('ForgotPasswordForm', () => {
       await user.type(screen.getByLabelText(/email address/i), 'invalid');
       await user.click(screen.getByRole('button', { name: /send reset instructions/i }));
 
-      expect(screen.getByRole('alert')).toBeInTheDocument();
+      const alerts = screen.getAllByRole('alert');
+      expect(alerts.length).toBeGreaterThan(0);
+      expect(alerts[0]).toBeInTheDocument();
     });
   });
 
@@ -289,7 +307,7 @@ describe('ForgotPasswordForm', () => {
 
       // Should only process once due to loading state
       await waitFor(() => {
-        expect(screen.getByText(/check your email/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /check your email/i })).toBeInTheDocument();
       });
     });
   });

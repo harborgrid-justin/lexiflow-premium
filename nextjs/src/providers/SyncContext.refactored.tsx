@@ -156,6 +156,9 @@ export const SyncProvider = ({
     syncStore.setFailedCount(SyncEngine.getFailed().length);
   }, []);
 
+  // BP10: Forward declare processQueue for mutual recursion
+  const processQueueRef = useRef<() => Promise<void>>();
+
   // BP10: Queue Processor
   const processQueue = useCallback(async () => {
     if (!navigator.onLine || isProcessingRef.current) return;
@@ -186,7 +189,7 @@ export const SyncProvider = ({
       refreshCounts();
       isProcessingRef.current = false;
 
-      await processQueue();
+      await processQueueRef.current?.();
 
     } catch (err) {
       console.error(`[Sync] Failed ${mutation.type}:`, err);
@@ -217,10 +220,15 @@ export const SyncProvider = ({
         console.log(`[Sync] Retrying in ${delay}ms...`);
 
         isProcessingRef.current = false;
-        setTimeout(() => processQueue(), delay);
+        setTimeout(() => processQueueRef.current?.(), delay);
       }
     }
   }, [refreshCounts]);
+
+  // Assign ref for recursive calls in effect
+  useEffect(() => {
+    processQueueRef.current = processQueue;
+  }, [processQueue]);
 
   useEffect(() => {
     refreshCounts();

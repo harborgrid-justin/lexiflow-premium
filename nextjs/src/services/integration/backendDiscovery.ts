@@ -97,7 +97,7 @@ class BackendDiscoveryService {
         try {
           const data = await response.json();
           version = data.version || data.info?.version;
-        } catch (error) {
+        } catch {
           // If response isn't JSON, that's okay
         }
 

@@ -90,8 +90,7 @@ export const ResearchService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<ResearchResult[]>('/research/cases', { q: query });
-      } catch (error) {
-        console.error('[ResearchService.searchCases] Backend error:', error);
+      } catch {         console.error('[ResearchService.searchCases] Backend error:', error);
       }
     }
     
@@ -104,8 +103,7 @@ export const ResearchService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<ResearchResult[]>('/research/statutes', { q: query });
-      } catch (error) {
-        console.error('[ResearchService.searchStatutes] Backend error:', error);
+      } catch {         console.error('[ResearchService.searchStatutes] Backend error:', error);
       }
     }
     
@@ -118,8 +116,7 @@ export const ResearchService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<string[]>(`/research/citations/${documentId}`);
-      } catch (error) {
-        console.error('[ResearchService.getCitations] Backend error:', error);
+      } catch {         console.error('[ResearchService.getCitations] Backend error:', error);
       }
     }
     
@@ -131,8 +128,7 @@ export const ResearchService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.post<CitationValidation>('/research/validate-citation', { citation });
-      } catch (error) {
-        console.error('[ResearchService.validateCitation] Backend error:', error);
+      } catch {         console.error('[ResearchService.validateCitation] Backend error:', error);
       }
     }
     
@@ -153,8 +149,7 @@ export const ResearchService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<ResearchResult[]>(`/research/related-cases/${caseId}`);
-      } catch (error) {
-        console.error('[ResearchService.getRelatedCases] Backend error:', error);
+      } catch {         console.error('[ResearchService.getRelatedCases] Backend error:', error);
       }
     }
     

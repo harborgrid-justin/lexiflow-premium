@@ -23,28 +23,29 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
   // Context update minimization: Split contexts prevent unnecessary rerenders (Principle #14)
   // Concurrent-safe: Deterministic first render prevents hydration mismatches
   // Start with stable default during initial render to avoid markup mismatch
-  const [mode, setMode] = useState<ThemeMode>(
-    initialMode || (DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME)
-  );
+  const [mode, setMode] = useState<ThemeMode>(() => {
+    // Initialize from localStorage or system preference if available
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedPrefs = window.localStorage.getItem(THEME_STORAGE_KEY);
+      if (typeof storedPrefs === 'string') {
+        return storedPrefs as ThemeMode;
+      }
+      const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
+      if (userMedia.matches) {
+        return 'dark';
+      }
+    }
+    return initialMode || (DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME);
+  });
 
-  const [mounted, setMounted] = useState(false);
+  // Initialize mounted as true - component is always mounted when rendering
+  const [mounted] = useState(true);
 
   // Effect discipline: Synchronize theme with localStorage/system (Principle #6)
   // Strict Mode ready: Effect runs twice in dev, but is idempotent (Principle #7)
   useEffect(() => {
-    setMounted(true);
-    // Sync with localStorage or system preference after mount
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const storedPrefs = window.localStorage.getItem(THEME_STORAGE_KEY);
-      if (typeof storedPrefs === 'string') {
-        setMode(storedPrefs as ThemeMode);
-        return;
-      }
-      const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
-      if (userMedia.matches) {
-        setMode('dark');
-      }
-    }
+    // Theme is already initialized in useState, no need for additional sync
+    // Effect left empty for future theme change listeners
   }, []);
 
   // Stable callbacks minimize context updates (Principle #14)

@@ -6,7 +6,14 @@ import type {
   UseMutationOptions,
   UseQueryOptions,
 } from "@/services/infrastructure/queryTypes";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 export { queryClient } from "@/services/infrastructure/queryClient";
 
 export function useQuery<T>(
@@ -39,7 +46,11 @@ export function useQuery<T>(
   });
 
   const fnRef = useRef(fn);
-  fnRef.current = fn;
+
+  // Use useLayoutEffect to sync ref before effects run
+  useLayoutEffect(() => {
+    fnRef.current = fn;
+  }, [fn]);
 
   useEffect(() => {
     if (!enabled) return;

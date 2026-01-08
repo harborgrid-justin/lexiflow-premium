@@ -1,20 +1,20 @@
 /**
  * API Response Types
- * 
+ *
  * Comprehensive type definitions for API responses across all services.
  * These types ensure type safety and consistency for backend API interactions.
- * 
+ *
  * @module ApiResponseTypes
  */
 
-import type { TimeEntry, Invoice } from './financial';
-import type { WorkflowProcess, WorkflowTemplateData } from './workflow';
-import type { TrialExhibit } from './evidence';
-import type { Juror, Witness } from './trial';
-import type { User, Organization } from './system';
-import type { Risk } from './compliance-risk';
-import type { LegalEntity, JudgeProfile } from './misc';
-import type { LegalRule, BriefAnalysisSession } from './legal-research';
+import type { Risk } from "./compliance-risk";
+import type { TrialExhibit } from "./evidence";
+import type { Invoice, TimeEntry } from "./financial";
+import type { BriefAnalysisSession, LegalRule } from "./legal-research";
+import type { JudgeProfile, LegalEntity } from "./misc";
+import type { Organization, User } from "./system";
+import type { Juror, Witness } from "./trial";
+import type { WorkflowProcess, WorkflowTemplateData } from "./workflow";
 
 /**
  * Generic API response wrapper
@@ -87,15 +87,15 @@ export interface FileUploadResponse {
 // BILLING API RESPONSES
 // =============================================================================
 
-export interface TimeEntriesResponse extends PaginatedApiResponse<TimeEntry> {}
+export type TimeEntriesResponse = PaginatedApiResponse<TimeEntry>;
 
-export interface TimeEntryResponse extends ApiResponse<TimeEntry> {}
+export type TimeEntryResponse = ApiResponse<TimeEntry>;
 
-export interface InvoicesResponse extends PaginatedApiResponse<Invoice> {}
+export type InvoicesResponse = PaginatedApiResponse<Invoice>;
 
-export interface InvoiceResponse extends ApiResponse<Invoice> {}
+export type InvoiceResponse = ApiResponse<Invoice>;
 
-export interface WIPStatsResponse extends ApiResponse<{
+export type WIPStatsResponse = ApiResponse<{
   totalWIP: number;
   unbilledHours: number;
   unbilledValue: number;
@@ -117,9 +117,9 @@ export interface WIPStatsResponse extends ApiResponse<{
     sixtyDays: number;
     ninetyDaysPlus: number;
   };
-}> {}
+}>;
 
-export interface RealizationStatsResponse extends ApiResponse<{
+export type RealizationStatsResponse = ApiResponse<{
   realizationRate: number;
   billedAmount: number;
   collectedAmount: number;
@@ -136,9 +136,9 @@ export interface RealizationStatsResponse extends ApiResponse<{
     billedAmount: number;
     collectedAmount: number;
   }>;
-}> {}
+}>;
 
-export interface OperatingStatsResponse extends ApiResponse<{
+export type OperatingStatsResponse = ApiResponse<{
   balance: number;
   expensesMtd: number;
   cashFlowMtd: number;
@@ -152,21 +152,22 @@ export interface OperatingStatsResponse extends ApiResponse<{
     mtd: number;
     ytd: number;
   };
-}> {}
+}>;
 
 // =============================================================================
 // WORKFLOW API RESPONSES
 // =============================================================================
 
-export interface WorkflowProcessesResponse extends PaginatedApiResponse<WorkflowProcess> {}
+export type WorkflowProcessesResponse = PaginatedApiResponse<WorkflowProcess>;
 
-export interface WorkflowProcessResponse extends ApiResponse<WorkflowProcess> {}
+export type WorkflowProcessResponse = ApiResponse<WorkflowProcess>;
 
-export interface WorkflowTemplatesResponse extends PaginatedApiResponse<WorkflowTemplateData> {}
+export type WorkflowTemplatesResponse =
+  PaginatedApiResponse<WorkflowTemplateData>;
 
-export interface WorkflowTemplateResponse extends ApiResponse<WorkflowTemplateData> {}
+export type WorkflowTemplateResponse = ApiResponse<WorkflowTemplateData>;
 
-export interface WorkflowAnalyticsResponse extends ApiResponse<{
+export type WorkflowAnalyticsResponse = ApiResponse<{
   totalProcesses: number;
   activeProcesses: number;
   completedThisMonth: number;
@@ -179,80 +180,80 @@ export interface WorkflowAnalyticsResponse extends ApiResponse<{
     date: string;
     count: number;
   }>;
-}> {}
+}>;
 
 // =============================================================================
 // TRIAL API RESPONSES
 // =============================================================================
 
-export interface TrialExhibitsResponse extends PaginatedApiResponse<TrialExhibit> {}
+export type TrialExhibitsResponse = PaginatedApiResponse<TrialExhibit>;
 
-export interface TrialExhibitResponse extends ApiResponse<TrialExhibit> {}
+export type TrialExhibitResponse = ApiResponse<TrialExhibit>;
 
-export interface JurorsResponse extends ApiResponse<Juror[]> {}
+export type JurorsResponse = ApiResponse<Juror[]>;
 
-export interface JurorResponse extends ApiResponse<Juror> {}
+export type JurorResponse = ApiResponse<Juror>;
 
-export interface WitnessesResponse extends ApiResponse<Witness[]> {}
+export type WitnessesResponse = ApiResponse<Witness[]>;
 
-export interface WitnessResponse extends ApiResponse<Witness> {}
+export type WitnessResponse = ApiResponse<Witness>;
 
 // =============================================================================
 // USER API RESPONSES
 // =============================================================================
 
-export interface UsersResponse extends PaginatedApiResponse<User> {}
+export type UsersResponse = PaginatedApiResponse<User>;
 
-export interface UserResponse extends ApiResponse<User> {}
+export type UserResponse = ApiResponse<User>;
 
-export interface UserSearchResponse extends ApiResponse<User[]> {}
+export type UserSearchResponse = ApiResponse<User[]>;
 
 // =============================================================================
 // ORGANIZATION API RESPONSES
 // =============================================================================
 
-export interface OrganizationsResponse extends PaginatedApiResponse<Organization> {}
+export type OrganizationsResponse = PaginatedApiResponse<Organization>;
 
-export interface OrganizationResponse extends ApiResponse<Organization> {}
+export type OrganizationResponse = ApiResponse<Organization>;
 
-export interface OrganizationSearchResponse extends ApiResponse<Organization[]> {}
+export type OrganizationSearchResponse = ApiResponse<Organization[]>;
 
 // =============================================================================
 // TEMPLATE API RESPONSES
 // =============================================================================
 
-export interface TemplatesResponse extends PaginatedApiResponse<WorkflowTemplateData> {}
+export type TemplatesResponse = PaginatedApiResponse<WorkflowTemplateData>;
 
-export interface TemplateResponse extends ApiResponse<WorkflowTemplateData> {}
+export type TemplateResponse = ApiResponse<WorkflowTemplateData>;
 
 // =============================================================================
 // RISK API RESPONSES
 // =============================================================================
 
-export interface RisksResponse extends PaginatedApiResponse<Risk> {}
+export type RisksResponse = PaginatedApiResponse<Risk>;
 
-export interface RiskResponse extends ApiResponse<Risk> {}
+export type RiskResponse = ApiResponse<Risk>;
 
-export interface RiskAssessmentResponse extends ApiResponse<{
+export type RiskAssessmentResponse = ApiResponse<{
   riskScore: number;
-  riskLevel: 'Low' | 'Medium' | 'High' | 'Critical';
+  riskLevel: "Low" | "Medium" | "High" | "Critical";
   factors: Array<{
     factor: string;
     weight: number;
     contribution: number;
   }>;
   recommendations: string[];
-}> {}
+}>;
 
 // =============================================================================
 // ENTITY API RESPONSES
 // =============================================================================
 
-export interface EntitiesResponse extends PaginatedApiResponse<LegalEntity> {}
+export type EntitiesResponse = PaginatedApiResponse<LegalEntity>;
 
-export interface EntityResponse extends ApiResponse<LegalEntity> {}
+export type EntityResponse = ApiResponse<LegalEntity>;
 
-export interface EntityRelationshipsResponse extends ApiResponse<{
+export type EntityRelationshipsResponse = ApiResponse<{
   entity: LegalEntity;
   relationships: Array<{
     relatedEntity: LegalEntity;
@@ -261,36 +262,37 @@ export interface EntityRelationshipsResponse extends ApiResponse<{
     startDate?: string;
     endDate?: string;
   }>;
-}> {}
+}>;
 
 // =============================================================================
 // RULE API RESPONSES
 // =============================================================================
 
-export interface RulesResponse extends PaginatedApiResponse<LegalRule> {}
+export type RulesResponse = PaginatedApiResponse<LegalRule>;
 
-export interface RuleResponse extends ApiResponse<LegalRule> {}
+export type RuleResponse = ApiResponse<LegalRule>;
 
-export interface RuleSearchResponse extends ApiResponse<{
+export type RuleSearchResponse = ApiResponse<{
   results: LegalRule[];
   totalResults: number;
   searchTime: number;
   facets?: Record<string, Array<{ value: string; count: number }>>;
-}> {}
+}>;
 
 // =============================================================================
 // ANALYSIS API RESPONSES
 // =============================================================================
 
-export interface AnalysisSessionsResponse extends PaginatedApiResponse<BriefAnalysisSession> {}
+export type AnalysisSessionsResponse =
+  PaginatedApiResponse<BriefAnalysisSession>;
 
-export interface AnalysisSessionResponse extends ApiResponse<BriefAnalysisSession> {}
+export type AnalysisSessionResponse = ApiResponse<BriefAnalysisSession>;
 
-export interface JudgeProfilesResponse extends ApiResponse<JudgeProfile[]> {}
+export type JudgeProfilesResponse = ApiResponse<JudgeProfile[]>;
 
-export interface JudgeProfileResponse extends ApiResponse<JudgeProfile> {}
+export type JudgeProfileResponse = ApiResponse<JudgeProfile>;
 
-export interface PredictionResponse extends ApiResponse<{
+export type PredictionResponse = ApiResponse<{
   caseId: string;
   settlementProbability: number;
   trialProbability: number;
@@ -304,11 +306,11 @@ export interface PredictionResponse extends ApiResponse<{
   estimatedDurationMonths: number;
   riskFactors: Array<{
     factor: string;
-    impact: 'Low' | 'Medium' | 'High';
+    impact: "Low" | "Medium" | "High";
     description: string;
   }>;
   recommendations: string[];
-}> {}
+}>;
 
 // =============================================================================
 // ERROR TYPES
@@ -316,34 +318,34 @@ export interface PredictionResponse extends ApiResponse<{
 
 export enum ApiErrorCode {
   // General errors
-  UNKNOWN = 'UNKNOWN_ERROR',
-  NETWORK = 'NETWORK_ERROR',
-  TIMEOUT = 'TIMEOUT_ERROR',
-  
+  UNKNOWN = "UNKNOWN_ERROR",
+  NETWORK = "NETWORK_ERROR",
+  TIMEOUT = "TIMEOUT_ERROR",
+
   // Authentication errors
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  FORBIDDEN = 'FORBIDDEN',
-  TOKEN_EXPIRED = 'TOKEN_EXPIRED',
-  
+  UNAUTHORIZED = "UNAUTHORIZED",
+  FORBIDDEN = "FORBIDDEN",
+  TOKEN_EXPIRED = "TOKEN_EXPIRED",
+
   // Validation errors
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
-  INVALID_INPUT = 'INVALID_INPUT',
-  MISSING_REQUIRED_FIELD = 'MISSING_REQUIRED_FIELD',
-  
+  VALIDATION_ERROR = "VALIDATION_ERROR",
+  INVALID_INPUT = "INVALID_INPUT",
+  MISSING_REQUIRED_FIELD = "MISSING_REQUIRED_FIELD",
+
   // Resource errors
-  NOT_FOUND = 'NOT_FOUND',
-  ALREADY_EXISTS = 'ALREADY_EXISTS',
-  CONFLICT = 'CONFLICT',
-  
+  NOT_FOUND = "NOT_FOUND",
+  ALREADY_EXISTS = "ALREADY_EXISTS",
+  CONFLICT = "CONFLICT",
+
   // Business logic errors
-  INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
-  QUOTA_EXCEEDED = 'QUOTA_EXCEEDED',
-  OPERATION_NOT_ALLOWED = 'OPERATION_NOT_ALLOWED',
-  
+  INSUFFICIENT_PERMISSIONS = "INSUFFICIENT_PERMISSIONS",
+  QUOTA_EXCEEDED = "QUOTA_EXCEEDED",
+  OPERATION_NOT_ALLOWED = "OPERATION_NOT_ALLOWED",
+
   // Server errors
-  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
-  SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
-  DATABASE_ERROR = 'DATABASE_ERROR',
+  INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR",
+  SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE",
+  DATABASE_ERROR = "DATABASE_ERROR",
 }
 
 export interface ApiError {
@@ -362,7 +364,7 @@ export class ApiException extends Error {
     public readonly response?: Response
   ) {
     super(error.message);
-    this.name = 'ApiException';
+    this.name = "ApiException";
   }
 }
 
@@ -374,7 +376,7 @@ export interface BaseFilters {
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   search?: string;
 }
 

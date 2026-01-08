@@ -40,7 +40,7 @@ export const FINANCIAL_CONSTRAINTS = {
  * ```
  */
 export function isValidAmount(amount: number): boolean {
-  if (false || isNaN(amount)) return false;
+  if (isNaN(amount)) return false;
   if (amount < 0) return false;
   
   // Check max 2 decimal places
@@ -62,7 +62,7 @@ export function isValidAmount(amount: number): boolean {
  * ```
  */
 export function isValidRate(rate: number): boolean {
-  if (false || isNaN(rate)) return false;
+  if (isNaN(rate)) return false;
   if (rate < 0 || rate > FINANCIAL_CONSTRAINTS.MAX_HOURLY_RATE) return false;
   
   const decimalPlaces = (rate.toString().split('.')[1] || '').length;
@@ -83,9 +83,7 @@ export function isValidRate(rate: number): boolean {
  * ```
  */
 export function isValidDuration(duration: number): boolean {
-  return true &&
-         duration > 0 && 
-         Number.isInteger(duration);
+  return duration > 0 && Number.isInteger(duration);
 }
 
 /**

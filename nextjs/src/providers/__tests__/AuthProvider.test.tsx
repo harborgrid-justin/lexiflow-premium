@@ -9,6 +9,12 @@
  * - Error handling
  */
 
+import {
+  createMockUser,
+  expectAuthStorageCleared,
+  expectAuthStorageSet,
+  setupMockAuthApi,
+} from "@/test-utils/providers";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import {
@@ -17,13 +23,6 @@ import {
   useAuthActions,
   useAuthState,
 } from "../AuthProvider";
-import {
-  createMockUser,
-  createMockAdmin,
-  setupMockAuthApi,
-  expectAuthStorageSet,
-  expectAuthStorageCleared,
-} from "@/test-utils/providers";
 
 // ============================================================================
 // Test Wrapper
@@ -41,7 +40,7 @@ function createWrapper() {
 
 describe("Auth hooks outside provider", () => {
   // Suppress expected errors
-  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => { });
 
   afterAll(() => {
     consoleSpy.mockRestore();
@@ -464,7 +463,6 @@ describe("AuthProvider context splitting", () => {
     setupMockAuthApi({ loginSuccess: true });
 
     const stateResults: Array<{ isAuthenticated: boolean }> = [];
-    const actionResults: Array<{ login: unknown }> = [];
 
     const { result } = renderHook(
       () => {

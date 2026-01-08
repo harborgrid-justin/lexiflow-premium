@@ -112,22 +112,22 @@ export class LRUCache<T> {
     // Rough estimate: ~100 bytes per entry overhead + value size
     const entryOverhead = 100;
     let totalSize = this.cache.size * entryOverhead;
-    
+
     // Try to estimate value sizes (rough approximation)
     for (const value of this.cache.values()) {
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         totalSize += value.length * 2; // UTF-16 encoding
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         try {
           totalSize += JSON.stringify(value).length * 2;
-        } catch (error) {
+        } catch {
           totalSize += 1000; // Fallback estimate for non-serializable objects
         }
       } else {
         totalSize += 8; // Primitive types (number, boolean, etc.)
       }
     }
-    
+
     return totalSize;
   }
 }

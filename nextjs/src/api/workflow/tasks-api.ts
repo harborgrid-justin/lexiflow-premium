@@ -146,7 +146,7 @@ export class TasksApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === "") {
+    if (!id || id.trim() === "") {
       throw new Error(`[TasksApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -338,7 +338,7 @@ export class TasksApiService {
     actualHours?: number
   ): Promise<WorkflowTask> {
     this.validateId(id, "updateProgress");
-    if (false || completionPercentage < 0 || completionPercentage > 100) {
+    if (completionPercentage < 0 || completionPercentage > 100) {
       throw new Error(
         "[TasksApiService.updateProgress] completionPercentage must be between 0 and 100"
       );
@@ -543,7 +543,7 @@ export class TasksApiService {
    */
   async addComment(taskId: string, content: string): Promise<TaskComment> {
     this.validateId(taskId, "addComment");
-    if (!content || false || content.trim() === "") {
+    if (!content || content.trim() === "") {
       throw new Error("[TasksApiService.addComment] content is required");
     }
     try {

@@ -196,7 +196,36 @@ export interface AuditLogFilters {
 // System Settings Types
 // =============================================================================
 
+/**
+ * Simplified system settings for the settings page
+ */
 export interface SystemSettings {
+  backendUrl: string;
+  dataSource: 'postgresql' | 'mongodb' | 'mysql';
+  cacheEnabled: boolean;
+  cacheTTL: number;
+  maxUploadSize: number;
+  sessionTimeout: number;
+  auditLogging: boolean;
+  maintenanceMode: boolean;
+}
+
+/**
+ * Feature flags for toggling system features
+ */
+export interface FeatureFlags {
+  ocr: boolean;
+  aiAssistant: boolean;
+  realTimeSync: boolean;
+  advancedSearch: boolean;
+  documentVersioning: boolean;
+  [key: string]: boolean;
+}
+
+/**
+ * Full system settings structure (for comprehensive configuration)
+ */
+export interface FullSystemSettings {
   general: {
     siteName: string;
     siteUrl: string;
@@ -221,14 +250,7 @@ export interface SystemSettings {
     rateLimitRequests: number;
     rateLimitWindow: number;
   };
-  features: {
-    ocr: boolean;
-    aiAssistant: boolean;
-    realTimeSync: boolean;
-    advancedSearch: boolean;
-    documentVersioning: boolean;
-    clientPortal: boolean;
-  };
+  features: FeatureFlags;
   email: {
     provider: 'smtp' | 'sendgrid' | 'ses';
     fromAddress: string;

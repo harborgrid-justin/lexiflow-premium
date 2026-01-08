@@ -808,6 +808,12 @@ export async function updateUtilization(
   );
 }
 
+export async function createUtilization(
+  data: Omit<RealEstateUtilization, "id" | "createdAt" | "updatedAt">
+): Promise<RealEstateUtilization> {
+  return ServerAPI.post<RealEstateUtilization>(REAL_ESTATE_ENDPOINTS.UTILIZATION, data);
+}
+
 export async function createAuditItem(
   data: Omit<RealEstateAuditItem, "id" | "createdAt" | "updatedAt">
 ): Promise<RealEstateAuditItem> {

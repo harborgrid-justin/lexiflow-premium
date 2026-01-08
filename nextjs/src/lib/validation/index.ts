@@ -8,9 +8,32 @@
  * - Matter schemas
  * - Financial schemas
  * - Party schemas
+ * - Password policy validation
  */
 
 import { z } from 'zod';
+
+// Re-export password policy module
+export {
+  DEFAULT_PASSWORD_POLICY,
+  RELAXED_PASSWORD_POLICY,
+  STRICT_PASSWORD_POLICY,
+  ABSOLUTE_MAX_PASSWORD_LENGTH,
+  PASSWORD_PATTERNS,
+  EXPIRY_WARNING_DAYS,
+  validatePasswordPolicy,
+  checkPasswordExpiry,
+  checkPasswordReuse,
+  hashPasswordForHistory,
+  createZodPasswordValidator,
+  createZodPasswordSuperRefine,
+  mergeWithDefaultPolicy,
+  getPasswordRequirementsText,
+  type PasswordPolicy,
+  type PasswordValidationResult,
+  type PasswordExpiryResult,
+  type PasswordReuseResult,
+} from './password-policy';
 
 // ============================================================================
 // Common Primitives & Utilities
@@ -778,3 +801,175 @@ export const schemas = {
   id: idInputSchema,
   ids: idsInputSchema,
 } as const;
+
+// =============================================================================
+// Expense Validation Re-exports
+// =============================================================================
+
+export {
+  // Constants
+  RECEIPT_REQUIRED_THRESHOLD,
+  MAX_EXPENSE_AMOUNT,
+  EXPENSE_CATEGORIES as EXPENSE_VALIDATION_CATEGORIES,
+  // Types
+  type ExpenseCategory as ExpenseValidationCategory,
+  type ExpenseInput as ExpenseValidationInput,
+  type ExpenseValidationResult,
+  type ReceiptValidationResult,
+  // Core validation functions
+  requiresReceipt,
+  validateReceiptRequirement,
+  isValidExpenseCategory,
+  validateExpense,
+  // Zod schemas
+  expenseCategorySchema,
+  expenseSchema,
+  validateExpenseSchema,
+  // Utility functions
+  formatAmountWithReceiptIndicator,
+  getReceiptRequirementMessage,
+} from './expense-validation';
+
+// =============================================================================
+// Financial Constraints Validation Re-exports
+// =============================================================================
+
+export {
+  // Constants
+  FINANCIAL_CONSTRAINTS,
+  // Types
+  type FinancialConstraints,
+  type FinancialValidationResult,
+  type BatchValidationResult,
+  // Core validation functions
+  validateHourlyRate,
+  validateInvoiceAmount,
+  validateExpenseAmount,
+  validateTrustTransaction,
+  validateDecimalPlaces,
+  validateDailyDuration,
+  validateDailyHours,
+  // Utility functions
+  roundToBillingIncrement,
+  roundToDecimalPlaces,
+  formatCurrency,
+  isReceiptRequired,
+  minutesToBillableHours,
+  hoursToMinutes,
+  // Batch validation
+  validateFinancialFields,
+  validateTimeEntry as validateTimeEntryFinancials,
+  validateExpense as validateExpenseFinancials,
+  // Type guards
+  isValidMonetaryAmount,
+  isValidDuration,
+} from './financial-constraints';
+
+// =============================================================================
+// Invoice Line Item Validation Re-exports
+// =============================================================================
+
+export {
+  // Constants
+  CALCULATION_TOLERANCE,
+  FINANCIAL_CONSTRAINTS as INVOICE_FINANCIAL_CONSTRAINTS,
+  // Types
+  type InvoiceLineItem,
+  type InvoiceForValidation,
+  type LineItemValidationResult,
+  type InvoiceTotalValidationResult,
+  type InvoiceValidationResult,
+  // Core validation functions
+  validateLineItemCalculation,
+  validateInvoiceTotal,
+  validateInvoiceLineItems,
+  validateInvoice,
+  // Helper functions
+  checkLineItemCalculation,
+  checkInvoiceTotal,
+  // Utility functions
+  roundToTwoDecimals,
+  isWithinTolerance,
+  isValidAmount,
+  isValidRate,
+  isValidQuantity,
+} from './invoice-validation';
+
+// =============================================================================
+// Trust Account Reconciliation Compliance Re-exports
+// =============================================================================
+
+export {
+  // Constants
+  RECONCILIATION_THRESHOLDS,
+  RECONCILIATION_FREQUENCIES,
+  // Types
+  type ClientLedgerEntry,
+  type BankTransaction,
+  type LedgerTransaction,
+  type ReconciliationData,
+  type ReconciliationFrequency,
+  type ComplianceSeverity,
+  type ThreeWayReconciliationResult,
+  type NegativeBalanceClient,
+  type ReconciliationOverdueResult,
+  type UnmatchedTransaction,
+  type UnmatchedReason,
+  type ComplianceIssue,
+  type ComplianceIssueType,
+  type ReconciliationComplianceReport,
+  // Core validation functions
+  validateThreeWayReconciliation,
+  detectNegativeBalanceClients,
+  checkReconciliationOverdue,
+  findUnmatchedTransactions,
+  generateReconciliationReport,
+  // Helper functions
+  validateReconciliationInput,
+  serializeReconciliationReport,
+} from './reconciliation-compliance';
+
+// =============================================================================
+// Time Entry Validation Re-exports
+// =============================================================================
+
+export {
+  // Constants
+  TIME_ENTRY_CONSTRAINTS,
+  TIME_ENTRY_STATUSES,
+  // Types
+  type TimeEntryStatusType,
+  type TimeEntryInput,
+  type TimeEntryValidationResult,
+  type DurationValidationResult,
+  type TimeEntrySchemaInput,
+  type TimeEntrySchemaOutput,
+  type BatchTimeEntryValidationResult,
+  // Core validation functions
+  validateTimeEntry,
+  validateTimeEntrySchema,
+  validateDuration,
+  isValidDuration,
+  isValidDate as isValidTimeEntryDate,
+  isFutureDate as isTimeEntryFutureDate,
+  isValidStringLength,
+  isValidRate as isValidTimeEntryRate,
+  isValidEnum,
+  // Sanitization functions
+  sanitizeString as sanitizeTimeEntryString,
+  sanitizeTimeEntryInput,
+  // Billing increment functions
+  roundToBillingIncrement as roundTimeEntryToBillingIncrement,
+  minutesToRoundedHours,
+  calculateBillableAmount,
+  // Batch validation
+  validateTimeEntries,
+  validateTimeEntriesBatch,
+  // Utility functions
+  formatDuration,
+  formatBillableHours,
+  getValidationSummary as getTimeEntryValidationSummary,
+  // Zod schemas
+  timeEntryStatusSchema,
+  timeEntrySchema,
+} from './time-entry-validation';

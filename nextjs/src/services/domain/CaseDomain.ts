@@ -173,8 +173,7 @@ export class CaseRepository extends Repository<Case> {
         if (isBackendApiEnabled()) {
             try {
                 return await this.casesApi.getById(id);
-            } catch (error) {
-                console.error('[CaseRepository.getById] Backend error:', error);
+            } catch {                 console.error('[CaseRepository.getById] Backend error:', error);
                 return undefined;
             }
         }
@@ -244,8 +243,7 @@ export class CaseRepository extends Repository<Case> {
         if (isBackendApiEnabled()) {
             try {
                 return await this.casesApi.getArchived();
-            } catch (error) {
-                console.error('[CaseRepository.getArchived] Backend error:', error);
+            } catch {                 console.error('[CaseRepository.getArchived] Backend error:', error);
                 // Fallback to local filtering
             }
         }
@@ -366,8 +364,7 @@ export class PhaseRepository extends Repository<CasePhase> {
         if (isBackendApiEnabled()) {
             try {
                 return await apiClient.get<CasePhase[]>('/case-phases');
-            } catch (error) {
-                console.error('[PhaseRepository.getAll] Backend error:', error);
+            } catch {                 console.error('[PhaseRepository.getAll] Backend error:', error);
             }
         }
         return super.getAll();
@@ -383,8 +380,7 @@ export class PhaseRepository extends Repository<CasePhase> {
         if (isBackendApiEnabled()) {
             try {
                 return await apiClient.get<CasePhase>(`/case-phases/${id}`);
-            } catch (error) {
-                console.error('[PhaseRepository.getById] Backend error:', error);
+            } catch {                 console.error('[PhaseRepository.getById] Backend error:', error);
                 return undefined;
             }
         }
@@ -450,8 +446,7 @@ export class PhaseRepository extends Repository<CasePhase> {
                 if (phases && phases.length > 0) {
                     return phases;
                 }
-            } catch (error) {
-                console.error('[PhaseRepository.getByCaseId] Backend error:', error);
+            } catch {                 console.error('[PhaseRepository.getByCaseId] Backend error:', error);
                 // Fall through to IndexedDB or demo data
             }
         }

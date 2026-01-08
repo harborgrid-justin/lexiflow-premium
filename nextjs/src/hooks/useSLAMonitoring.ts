@@ -122,28 +122,34 @@ export function useSLAMonitoring(
   );
 
   // Initialize SLAs from tasks
-  useEffect(() => {
+  // Compute SLA items with useMemo to avoid setState in effect
+  const computedSLAs = useMemo(() => {
     const taskList = (tasks || []) as Task[];
-    if (taskList.length > 0) {
-      const items = taskList
-        .filter((t: Task) => t.dueDate && t.status !== "Completed")
-        .map((t: Task) => {
-          const dueTime = new Date(t.dueDate!).getTime();
-          const { status, progress } = calculateSLAStatus(dueTime);
+    if (taskList.length === 0) return [];
 
-          return {
-            id: t.id,
-            task: t.title,
-            dueTime,
-            status,
-            progress,
-          };
-        })
-        .slice(0, maxItems);
+    return taskList
+      .filter((t: Task) => t.dueDate && t.status !== "Completed")
+      .map((t: Task) => {
+        const dueTime = new Date(t.dueDate!).getTime();
+        const { status, progress } = calculateSLAStatus(dueTime);
 
-      setSLAs(items);
-    }
+        return {
+          id: t.id,
+          task: t.title,
+          dueTime,
+          status,
+          progress,
+        };
+      })
+      .slice(0, maxItems);
   }, [tasks, maxItems, calculateSLAStatus]);
+
+  const [slas, setSLAs] = useState<SLAItem[]>(computedSLAs);
+
+  // Update when computed value changes
+  useEffect(() => {
+    setSLAs(computedSLAs);
+  }, [computedSLAs]);
 
   // Real-time tick update
   useInterval(() => {

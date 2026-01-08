@@ -165,8 +165,7 @@ export const ComplianceService = {
                 { name: 'Medium Risk', value: medium, color: colors.medium },
                 { name: 'High Risk', value: high, color: colors.high },
             ];
-        } catch (error) {
-            console.error('[ComplianceService.getRiskStats] Error:', error);
+        } catch {             console.error('[ComplianceService.getRiskStats] Error:', error);
             throw new Error('Failed to fetch risk statistics');
         }
     },
@@ -202,8 +201,7 @@ export const ComplianceService = {
                 violations: 0, 
                 activeWalls 
             };
-        } catch (error) {
-            console.error('[ComplianceService.getRiskMetrics] Error:', error);
+        } catch {             console.error('[ComplianceService.getRiskMetrics] Error:', error);
             throw new Error('Failed to fetch risk metrics');
         }
     },
@@ -237,8 +235,7 @@ export const ComplianceService = {
                 createdAt: apiCheck.createdAt,
                 updatedAt: apiCheck.updatedAt
             }));
-        } catch (error) {
-            console.error('[ComplianceService.getConflicts] Error:', error);
+        } catch {             console.error('[ComplianceService.getConflicts] Error:', error);
             throw new Error('Failed to fetch conflict checks');
         }
     },
@@ -284,8 +281,7 @@ export const ComplianceService = {
             }
 
             return result;
-        } catch (error) {
-            console.error('[ComplianceService.runConflictCheck] Error:', error);
+        } catch {             console.error('[ComplianceService.runConflictCheck] Error:', error);
             throw new Error('Failed to run conflict check');
         }
     },
@@ -318,8 +314,7 @@ export const ComplianceService = {
                 createdAt: apiWall.createdAt,
                 updatedAt: apiWall.updatedAt
             }));
-        } catch (error) {
-            console.error('[ComplianceService.getEthicalWalls] Error:', error);
+        } catch {             console.error('[ComplianceService.getEthicalWalls] Error:', error);
             throw new Error('Failed to fetch ethical walls');
         }
     },
@@ -374,8 +369,7 @@ export const ComplianceService = {
             }
 
             return result;
-        } catch (error) {
-            console.error('[ComplianceService.createEthicalWall] Error:', error);
+        } catch {             console.error('[ComplianceService.createEthicalWall] Error:', error);
             throw new Error('Failed to create ethical wall');
         }
     },
@@ -399,8 +393,7 @@ export const ComplianceService = {
         try {
             // Policies feature pending backend endpoint
             return [];
-        } catch (error) {
-            console.error('[ComplianceService.getPolicies] Error:', error);
+        } catch {             console.error('[ComplianceService.getPolicies] Error:', error);
             throw new Error('Failed to fetch policies');
         }
     }

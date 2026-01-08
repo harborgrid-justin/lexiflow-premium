@@ -12,7 +12,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -138,17 +138,6 @@ export function useRuleSearchAndSelection(
   const currentExpandedIds = deferredSearchTerm
     ? searchExpandedIds!
     : expandedIds;
-
-  // Initial Auto-expand first article if no search and no user expansion
-  useEffect(() => {
-    if (
-      !deferredSearchTerm &&
-      fullHierarchy.length > 0 &&
-      expandedIds.size === 0
-    ) {
-      setExpandedIds(new Set([fullHierarchy[0].id]));
-    }
-  }, [fullHierarchy, deferredSearchTerm, expandedIds]);
 
   // Toggle expansion for tree view
   const toggleExpand = (id: string) => {

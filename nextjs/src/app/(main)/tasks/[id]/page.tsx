@@ -37,12 +37,12 @@ export const revalidate = 600; // Revalidate every 10 minutes
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   try {
     // Fetch list of tasks IDs for static generation
-    const response = await apiFetch<any[]>(
+    const response = await apiFetch<{ id: string | number }[]>(
       API_ENDPOINTS.TASKS.LIST + '?limit=100&fields=id'
     );
 
     // Map to the required { id: string } format
-    return (response || []).map((item: any) => ({
+    return (response || []).map((item) => ({
       id: String(item.id),
     }));
   } catch (error) {
@@ -75,7 +75,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps): P
   let task: Task;
   try {
     task = (await apiFetch(API_ENDPOINTS.TASKS.DETAIL(id))) as Task;
-  } catch (error) {
+  } catch {
     notFound();
   }
 

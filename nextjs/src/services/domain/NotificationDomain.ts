@@ -83,8 +83,7 @@ export const NotificationService = {
     try {
       await NotificationService.update(notificationId, { read: true });
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
 
@@ -101,8 +100,7 @@ export const NotificationService = {
       );
 
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
 
@@ -124,8 +122,7 @@ export const NotificationService = {
 
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
 
@@ -138,8 +135,7 @@ export const NotificationService = {
       defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
       console.log(`[NotificationService] Unsubscribed from channel: ${channel}`);
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
 };

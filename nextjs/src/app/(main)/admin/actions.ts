@@ -451,7 +451,7 @@ export async function getSystemSettings(): Promise<ActionResponse<SystemSettings
  * Update system settings
  */
 export async function updateSystemSettings(
-  input: UpdateSettingsInput
+  input: UpdateSettingsInput | SystemSettings
 ): Promise<ActionResponse> {
   try {
     await requireAdminRole();
@@ -461,10 +461,11 @@ export async function updateSystemSettings(
       body: JSON.stringify(input),
     });
 
-    await logAuditEvent('UPDATE', 'system_settings', input.category, {
-      key: input.key,
-      value: input.value,
-    });
+    const logDetails = 'category' in input
+      ? { key: input.key, value: input.value }
+      : { settings: 'bulk_update' };
+
+    await logAuditEvent('UPDATE', 'system_settings', 'settings', logDetails);
     revalidateTag('admin-settings');
 
     return { success: true, message: 'Settings updated successfully' };
@@ -553,17 +554,18 @@ export async function getIntegrations(): Promise<ActionResponse<unknown[]>> {
  * Connect an integration
  */
 export async function connectIntegration(
-  input: ConnectIntegrationInput
+  integrationId: string,
+  config: Record<string, unknown>
 ): Promise<ActionResponse> {
   try {
     await requireAdminRole();
 
-    await serverFetch(`/integrations/${input.integrationId}/connect`, {
+    await serverFetch(`/integrations/${integrationId}/connect`, {
       method: 'POST',
-      body: JSON.stringify(input),
+      body: JSON.stringify({ integrationId, ...config }),
     });
 
-    await logAuditEvent('CREATE', 'integration', input.integrationId);
+    await logAuditEvent('CREATE', 'integration', integrationId);
     revalidateTag('admin-integrations');
 
     return { success: true, message: 'Integration connected successfully' };

@@ -2,6 +2,14 @@
 // FORM & VALIDATION CONFIGURATION
 // =============================================================================
 // Form behavior, validation rules, and constraints
+//
+// NOTE: Password configuration is now centralized in @/lib/validation/password-policy.ts
+// Use DEFAULT_PASSWORD_POLICY from that module for password validation.
+
+import {
+  DEFAULT_PASSWORD_POLICY,
+  ABSOLUTE_MAX_PASSWORD_LENGTH,
+} from '@/lib/validation/password-policy';
 
 // Form Behavior
 export const FORM_AUTO_SAVE_ENABLED = true;
@@ -11,13 +19,13 @@ export const FORM_VALIDATE_ON_BLUR = true;
 export const FORM_VALIDATE_ON_SUBMIT = true;
 export const FORM_SHOW_ERROR_SUMMARY = true;
 
-// Password Requirements
-export const PASSWORD_MIN_LENGTH = 8;
-export const PASSWORD_MAX_LENGTH = 128;
-export const PASSWORD_REQUIRE_UPPERCASE = true;
-export const PASSWORD_REQUIRE_LOWERCASE = true;
-export const PASSWORD_REQUIRE_NUMBER = true;
-export const PASSWORD_REQUIRE_SPECIAL = true;
+// Password Requirements - derived from centralized policy
+export const PASSWORD_MIN_LENGTH = DEFAULT_PASSWORD_POLICY.minLength;
+export const PASSWORD_MAX_LENGTH = DEFAULT_PASSWORD_POLICY.maxLength ?? ABSOLUTE_MAX_PASSWORD_LENGTH;
+export const PASSWORD_REQUIRE_UPPERCASE = DEFAULT_PASSWORD_POLICY.requireUppercase;
+export const PASSWORD_REQUIRE_LOWERCASE = DEFAULT_PASSWORD_POLICY.requireLowercase;
+export const PASSWORD_REQUIRE_NUMBER = DEFAULT_PASSWORD_POLICY.requireNumbers;
+export const PASSWORD_REQUIRE_SPECIAL = DEFAULT_PASSWORD_POLICY.requireSpecialChars;
 
 // Email Validation
 export const EMAIL_MAX_LENGTH = 254;

@@ -268,6 +268,13 @@ export const API_ENDPOINTS = {
     ROOT: "/billing",
     METRICS: "/billing/analytics/metrics",
     ANALYTICS: "/billing/analytics",
+    PROFITABILITY: "/billing/analytics/profitability",
+    REALIZATION: "/billing/analytics/realization",
+    WIP: "/billing/analytics/wip",
+    FORECAST: "/billing/analytics/forecast",
+    TIMEKEEPER_PERFORMANCE: "/billing/analytics/timekeeper-performance",
+    MATTER_PROFITABILITY: "/billing/analytics/matter-profitability",
+    CLIENT_PROFITABILITY: "/billing/analytics/client-profitability",
   },
   TIME_ENTRIES: {
     LIST: "/billing/time-entries",

@@ -3,11 +3,9 @@
  * @description Unit tests for DataGridSearch component.
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { DataGridSearch } from './DataGridSearch';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ColumnDefinition } from './DataGridColumn';
+import { DataGridSearch } from './DataGridSearch';
 
 // ============================================================================
 // MOCKS
@@ -179,7 +177,7 @@ describe('DataGridSearch functionality', () => {
     renderSearch({ onSearchResults, initialQuery: 'test' });
 
     const clearButton = screen.getByTitle(/clear search/i);
-    await userEvent.click(clearButton);
+    fireEvent.click(clearButton);
 
     expect(onSearchResults).toHaveBeenCalledWith(testData);
   });
@@ -190,7 +188,7 @@ describe('DataGridSearch functionality', () => {
     const input = screen.getByPlaceholderText('Search...');
     const clearButton = screen.getByTitle(/clear search/i);
 
-    await userEvent.click(clearButton);
+    fireEvent.click(clearButton);
 
     expect(document.activeElement).toBe(input);
   });
@@ -284,7 +282,7 @@ describe('DataGridSearch history', () => {
     });
 
     const clearHistoryButton = screen.getByRole('button', { name: /^clear$/i });
-    await userEvent.click(clearHistoryButton);
+    fireEvent.click(clearHistoryButton);
 
     expect(screen.queryByText('Recent Searches')).not.toBeInTheDocument();
   });
@@ -335,7 +333,7 @@ describe('DataGridSearch advanced options', () => {
     renderSearch({ showAdvancedOptions: true });
 
     const optionsButton = screen.getByTitle('Advanced options');
-    await userEvent.click(optionsButton);
+    fireEvent.click(optionsButton);
 
     expect(screen.getByText('Algorithm')).toBeInTheDocument();
     expect(screen.getByText(/Threshold/)).toBeInTheDocument();
@@ -345,7 +343,7 @@ describe('DataGridSearch advanced options', () => {
   it('should render algorithm selector', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     const algorithmSelect = screen.getByRole('combobox');
     expect(algorithmSelect).toBeInTheDocument();
@@ -359,7 +357,7 @@ describe('DataGridSearch advanced options', () => {
   it('should render threshold slider', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     const slider = screen.getByRole('slider');
     expect(slider).toBeInTheDocument();
@@ -370,7 +368,7 @@ describe('DataGridSearch advanced options', () => {
   it('should render option checkboxes', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     expect(screen.getByLabelText(/ignore case/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/ignore accents/i)).toBeInTheDocument();
@@ -380,7 +378,7 @@ describe('DataGridSearch advanced options', () => {
   it('should update threshold when slider changes', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     const slider = screen.getByRole('slider');
     fireEvent.change(slider, { target: { value: '0.8' } });
@@ -391,12 +389,12 @@ describe('DataGridSearch advanced options', () => {
   it('should toggle ignore case option', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     const checkbox = screen.getByLabelText(/ignore case/i);
     expect(checkbox).toBeChecked();
 
-    await userEvent.click(checkbox);
+    fireEvent.click(checkbox);
     expect(checkbox).not.toBeChecked();
   });
 
@@ -405,10 +403,10 @@ describe('DataGridSearch advanced options', () => {
 
     const optionsButton = screen.getByTitle('Advanced options');
 
-    await userEvent.click(optionsButton);
+    fireEvent.click(optionsButton);
     expect(screen.getByText('Algorithm')).toBeInTheDocument();
 
-    await userEvent.click(optionsButton);
+    fireEvent.click(optionsButton);
     expect(screen.queryByText('Algorithm')).not.toBeInTheDocument();
   });
 });
@@ -486,7 +484,7 @@ describe('DataGridSearch styling', () => {
     renderSearch({ showAdvancedOptions: true });
 
     const optionsButton = screen.getByTitle('Advanced options');
-    await userEvent.click(optionsButton);
+    fireEvent.click(optionsButton);
 
     // Button should have active styling
     expect(optionsButton).toHaveClass('bg-gray-100');
@@ -642,7 +640,7 @@ describe('DataGridSearch accessibility', () => {
   it('should have accessible form controls in advanced options', async () => {
     renderSearch({ showAdvancedOptions: true });
 
-    await userEvent.click(screen.getByTitle('Advanced options'));
+    fireEvent.click(screen.getByTitle('Advanced options'));
 
     expect(screen.getByLabelText(/ignore case/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/ignore accents/i)).toBeInTheDocument();

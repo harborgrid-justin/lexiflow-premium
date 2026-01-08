@@ -52,6 +52,15 @@ export const DocumentCodingResponsive = {
 
 export type DocumentCodingResponsiveValue = typeof DocumentCodingResponsive[keyof typeof DocumentCodingResponsive];
 
+export const DocumentCodingPrivileged = {
+  YES: 'yes',
+  NO: 'no',
+  PARTIAL: 'partial',
+  NOT_CODED: 'not_coded',
+} as const;
+
+export type DocumentCodingPrivilegedValue = typeof DocumentCodingPrivileged[keyof typeof DocumentCodingPrivileged];
+
 export const PrivilegeType = {
   NONE: 'none',
   ATTORNEY_CLIENT: 'attorney-client',
@@ -197,12 +206,16 @@ export interface DataCollection extends BaseEntity {
  */
 export interface DocumentCoding {
   responsive: DocumentCodingResponsiveValue;
-  privileged: 'yes' | 'no' | 'not_coded';
+  privileged: DocumentCodingPrivilegedValue;
   confidential: 'yes' | 'no' | 'not_coded';
+  confidentiality?: 'public' | 'confidential' | 'highly_confidential' | 'not_coded';
   hotDocument: boolean;
   privilegeType?: PrivilegeTypeValue;
   redactionRequired: boolean;
   issues?: string[];
+  issueCode?: string;
+  notes?: string;
+  tags?: string[];
   customFields?: Record<string, string | number | boolean>;
 }
 
@@ -224,6 +237,8 @@ export interface ReviewDocument extends BaseEntity {
   recipients?: string[];
   subject?: string;
   contentPreview?: string;
+  extractedText?: string;
+  pageCount?: number;
   reviewStatus: ReviewStatusValue;
   coding: DocumentCoding;
   batesNumber?: string;
@@ -476,6 +491,7 @@ export interface SearchDocumentsInput {
   reviewStatus?: ReviewStatusValue[];
   responsive?: DocumentCodingResponsiveValue;
   privileged?: 'yes' | 'no' | 'not_coded';
+  hasAttachments?: boolean;
   tags?: string[];
   page?: number;
   pageSize?: number;

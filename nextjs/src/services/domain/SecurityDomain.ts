@@ -113,8 +113,7 @@ export const SecurityService = {
             // Returning empty array until SecurityApiService is added
             console.warn('[SecurityService] Security API service not available, returning empty malware signatures');
             return [];
-        } catch (error) {
-            console.error('[SecurityService.getMalwareSignatures] Error:', error);
+        } catch {             console.error('[SecurityService.getMalwareSignatures] Error:', error);
             throw new OperationError('SecurityService.getMalwareSignatures', 'Failed to fetch malware signatures');
         }
     },
@@ -177,8 +176,7 @@ export const SecurityService = {
             }
 
             return result;
-        } catch (error) {
-            console.error('[SecurityService.scanForMalware] Error:', error);
+        } catch {             console.error('[SecurityService.scanForMalware] Error:', error);
             throw new OperationError('SecurityService.scanForMalware', 'Failed to scan for malware');
         }
     },
@@ -218,8 +216,7 @@ export const SecurityService = {
                 lastUpdated: new Date().toISOString(),
                 factors: []
             };
-        } catch (error) {
-            console.error('[SecurityService.getThreatLevel] Error:', error);
+        } catch {             console.error('[SecurityService.getThreatLevel] Error:', error);
             throw new OperationError('SecurityService.getThreatLevel', 'Failed to fetch threat level');
         }
     },
@@ -248,8 +245,7 @@ export const SecurityService = {
 
 
             return [];
-        } catch (error) {
-            console.error('[SecurityService.getSecurityPolicies] Error:', error);
+        } catch {             console.error('[SecurityService.getSecurityPolicies] Error:', error);
             throw new OperationError('SecurityService.getSecurityPolicies', 'Failed to fetch security policies');
         }
     },
@@ -288,8 +284,7 @@ export const SecurityService = {
 
 
             return [];
-        } catch (error) {
-            console.error('[SecurityService.getAuditLogs] Error:', error);
+        } catch {             console.error('[SecurityService.getAuditLogs] Error:', error);
             throw new OperationError('SecurityService.getAuditLogs', 'Failed to fetch audit logs');
         }
     },
@@ -318,8 +313,7 @@ export const SecurityService = {
 
 
             return [];
-        } catch (error) {
-            console.error('[SecurityService.getVulnerabilities] Error:', error);
+        } catch {             console.error('[SecurityService.getVulnerabilities] Error:', error);
             throw new OperationError('SecurityService.getVulnerabilities', 'Failed to fetch vulnerabilities');
         }
     }

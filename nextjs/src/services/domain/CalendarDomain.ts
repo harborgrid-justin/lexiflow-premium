@@ -207,8 +207,7 @@ export const CalendarService = {
       // This will need to be updated when the API is added
       console.warn("[CalendarService.getAll] Calendar API not yet available");
       return [];
-    } catch (error) {
-      console.error("[CalendarService.getAll] Error:", error);
+    } catch {       console.error("[CalendarService.getAll] Error:", error);
       throw error;
     }
   },
@@ -229,8 +228,7 @@ export const CalendarService = {
       // Note: calendar API is not yet available in integrationsApi
       console.warn("[CalendarService.getById] Calendar API not yet available");
       return null;
-    } catch (error) {
-      console.error("[CalendarService.getById] Error:", error);
+    } catch {       console.error("[CalendarService.getById] Error:", error);
       throw error;
     }
   },
@@ -264,8 +262,7 @@ export const CalendarService = {
       // Note: calendar API is not yet available in integrationsApi
       console.warn("[CalendarService.add] Calendar API not yet available");
       return event;
-    } catch (error) {
-      console.error("[CalendarService.add] Error:", error);
+    } catch {       console.error("[CalendarService.add] Error:", error);
       throw error;
     }
   },
@@ -301,8 +298,7 @@ export const CalendarService = {
         type: updates.type || "reminder",
         ...updates,
       } as CalendarEvent;
-    } catch (error) {
-      console.error("[CalendarService.update] Error:", error);
+    } catch {       console.error("[CalendarService.update] Error:", error);
       throw error;
     }
   },
@@ -323,8 +319,7 @@ export const CalendarService = {
       // Note: calendar API is not yet available in integrationsApi
       console.warn("[CalendarService.delete] Calendar API not yet available");
       return true;
-    } catch (error) {
-      console.error("[CalendarService.delete] Error:", error);
+    } catch {       console.error("[CalendarService.delete] Error:", error);
       throw error;
     }
   },
@@ -401,8 +396,7 @@ export const CalendarService = {
         (a: CalendarEvent, b: CalendarEvent) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       );
-    } catch (error) {
-      console.error("[CalendarService.getEvents] Error:", error);
+    } catch {       console.error("[CalendarService.getEvents] Error:", error);
       throw error;
     }
   },
@@ -436,8 +430,7 @@ export const CalendarService = {
         startDate: now.toISOString(),
         endDate: future.toISOString(),
       });
-    } catch (error) {
-      console.error("[CalendarService.getUpcoming] Error:", error);
+    } catch {       console.error("[CalendarService.getUpcoming] Error:", error);
       throw error;
     }
   },
@@ -487,8 +480,7 @@ export const CalendarService = {
       // await db.put(STORES.CALENDAR_EVENTS, newEvent);
 
       return newEvent;
-    } catch (error) {
-      console.error("[CalendarService.createEvent] Error:", error);
+    } catch {       console.error("[CalendarService.createEvent] Error:", error);
       throw error;
     }
   },
@@ -556,8 +548,7 @@ export const CalendarService = {
         `[CalendarService] Successfully synced with ${provider} calendar`
       );
       return true;
-    } catch (error) {
-      console.error("[CalendarService.sync] Error:", error);
+    } catch {       console.error("[CalendarService.sync] Error:", error);
       throw error;
     }
   },

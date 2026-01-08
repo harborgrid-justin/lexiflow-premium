@@ -5,15 +5,15 @@
 
 import {
   CaseId,
-  UserId,
+  DocketId,
+  DocumentId,
+  EvidenceId,
+  FormattingRule,
+  PartyId,
   PleadingDocument,
   PleadingTemplate,
-  FormattingRule,
-  EvidenceId,
-  DocumentId,
-  DocketId,
-  PartyId
-} from '@/types';
+  UserId,
+} from "@/types";
 
 /**
  * Generates a cryptographically secure random ID
@@ -29,57 +29,57 @@ const generateSecureId = (prefix: string): string => {
  * Type-safe factory functions for generating IDs
  */
 export const IdGenerator = {
-  pleading: (): PleadingDocument['id'] => {
-    return generateSecureId('plead') as PleadingDocument['id'];
+  pleading: (): PleadingDocument["id"] => {
+    return generateSecureId("plead") as PleadingDocument["id"];
   },
 
   section: (): string => {
-    return generateSecureId('sec');
+    return generateSecureId("sec");
   },
 
-  template: (): PleadingTemplate['id'] => {
-    return generateSecureId('tmpl') as PleadingTemplate['id'];
+  template: (): PleadingTemplate["id"] => {
+    return generateSecureId("tmpl") as PleadingTemplate["id"];
   },
 
-  formattingRule: (): FormattingRule['id'] => {
-    return generateSecureId('rule') as FormattingRule['id'];
+  formattingRule: (): FormattingRule["id"] => {
+    return generateSecureId("rule") as FormattingRule["id"];
   },
 
   case: (): CaseId => {
-    return generateSecureId('case') as CaseId;
+    return generateSecureId("case") as CaseId;
   },
 
   user: (): UserId => {
-    return generateSecureId('user') as UserId;
+    return generateSecureId("user") as UserId;
   },
 
   evidence: (): EvidenceId => {
-    return generateSecureId('evid') as EvidenceId;
+    return generateSecureId("evid") as EvidenceId;
   },
 
   document: (): DocumentId => {
-    return generateSecureId('doc') as DocumentId;
+    return generateSecureId("doc") as DocumentId;
   },
 
   docket: (): DocketId => {
-    return generateSecureId('dk') as DocketId;
+    return generateSecureId("dk") as DocketId;
   },
 
   party: (): PartyId => {
-    return generateSecureId('party') as PartyId;
+    return generateSecureId("party") as PartyId;
   },
 
   staff: () => {
-    return generateSecureId('staff');
+    return generateSecureId("staff");
   },
 
   stipulation: () => {
-    return generateSecureId('stip');
+    return generateSecureId("stip");
   },
 
   generic: (prefix: string): string => {
     return generateSecureId(prefix);
-  }
+  },
 };
 
 /**
@@ -95,11 +95,11 @@ export const validateId = (id: string, expectedPrefix: string): boolean => {
  */
 export const getIdTimestamp = (id: string): number | null => {
   try {
-    const parts = id.split('-');
+    const parts = id.split("-");
     if (parts.length >= 2) {
       return parseInt(parts[1]!, 36);
     }
-  } catch (error) {
+  } catch {
     return null;
   }
   return null;

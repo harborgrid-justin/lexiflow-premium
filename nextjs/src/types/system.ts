@@ -1,8 +1,16 @@
 // types/system.ts
 // System Configuration & Infrastructure Types
 
-import { BaseEntity, UserId, OrgId, GroupId, EntityId, MetadataRecord, JsonValue } from './primitives';
-import { UserRole, OrganizationType } from './enums';
+import { OrganizationType, UserRole } from "./enums";
+import {
+  BaseEntity,
+  EntityId,
+  GroupId,
+  JsonValue,
+  MetadataRecord,
+  OrgId,
+  UserId,
+} from "./primitives";
 
 export interface TenantConfig {
   name: string;
@@ -13,7 +21,7 @@ export interface TenantConfig {
 
 export interface ApiMethod {
   name: string;
-  http: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  http: "GET" | "POST" | "PUT" | "DELETE";
   path: string;
   description: string;
   params: { name: string; type: string; desc: string }[];
@@ -63,10 +71,10 @@ export interface User extends BaseEntity {
   // Organization
   orgId?: OrgId;
   groupIds?: GroupId[];
-  userType?: 'Internal' | 'External';
+  userType?: "Internal" | "External";
 
   // Status & security
-  status?: 'online' | 'offline' | 'away' | 'busy'; // Frontend real-time status
+  status?: "online" | "offline" | "away" | "busy"; // Frontend real-time status
   isActive?: boolean; // Backend: boolean (default: true, indexed)
   isVerified?: boolean; // Backend: boolean (default: false)
   verificationToken?: string; // Backend field
@@ -88,24 +96,24 @@ export interface User extends BaseEntity {
 
 // Backend Organization entity enums (from organizations/entities/organization.entity.ts)
 export enum OrganizationTypeEnum {
-  CORPORATION = 'corporation',
-  LLC = 'llc',
-  PARTNERSHIP = 'partnership',
-  SOLE_PROPRIETORSHIP = 'sole_proprietorship',
-  NONPROFIT = 'nonprofit',
-  GOVERNMENT_AGENCY = 'government_agency',
-  TRUST = 'trust',
-  ESTATE = 'estate',
-  OTHER = 'other'
+  CORPORATION = "corporation",
+  LLC = "llc",
+  PARTNERSHIP = "partnership",
+  SOLE_PROPRIETORSHIP = "sole_proprietorship",
+  NONPROFIT = "nonprofit",
+  GOVERNMENT_AGENCY = "government_agency",
+  TRUST = "trust",
+  ESTATE = "estate",
+  OTHER = "other",
 }
 
 export enum OrganizationStatusEnum {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  DISSOLVED = 'dissolved',
-  MERGED = 'merged',
-  ACQUIRED = 'acquired',
-  BANKRUPT = 'bankrupt'
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  DISSOLVED = "dissolved",
+  MERGED = "merged",
+  ACQUIRED = "acquired",
+  BANKRUPT = "bankrupt",
 }
 
 export interface Organization extends BaseEntity {
@@ -153,24 +161,24 @@ export interface Organization extends BaseEntity {
 
 // Backend: jurisdictions table
 export enum JurisdictionSystem {
-  FEDERAL = 'Federal',
-  STATE = 'State',
-  REGULATORY = 'Regulatory',
-  INTERNATIONAL = 'International',
-  ARBITRATION = 'Arbitration',
-  LOCAL = 'Local'
+  FEDERAL = "Federal",
+  STATE = "State",
+  REGULATORY = "Regulatory",
+  INTERNATIONAL = "International",
+  ARBITRATION = "Arbitration",
+  LOCAL = "Local",
 }
 
 export enum JurisdictionType {
-  SUPREME_COURT = 'Supreme Court',
-  CIRCUIT_COURT = 'Circuit Court',
-  DISTRICT_COURT = 'District Court',
-  APPELLATE_COURT = 'Appellate Court',
-  TRIAL_COURT = 'Trial Court',
-  SPECIALIZED_COURT = 'Specialized Court',
-  REGULATORY_BODY = 'Regulatory Body',
-  ARBITRATION_PROVIDER = 'Arbitration Provider',
-  TREATY = 'Treaty'
+  SUPREME_COURT = "Supreme Court",
+  CIRCUIT_COURT = "Circuit Court",
+  DISTRICT_COURT = "District Court",
+  APPELLATE_COURT = "Appellate Court",
+  TRIAL_COURT = "Trial Court",
+  SPECIALIZED_COURT = "Specialized Court",
+  REGULATORY_BODY = "Regulatory Body",
+  ARBITRATION_PROVIDER = "Arbitration Provider",
+  TREATY = "Treaty",
 }
 
 export interface Jurisdiction extends BaseEntity {
@@ -185,10 +193,10 @@ export interface Jurisdiction extends BaseEntity {
   county: string;
   courtName: ReactNode;
   address: ReactNode;
-  phone: any;
+  phone: string;
   caseCount: number;
   judgeCount: number;
-  filingFee: any;
+  filingFee: number;
   name: string; // Backend: varchar(255) (required)
   system: JurisdictionSystem; // Backend: enum (required)
   type: JurisdictionType; // Backend: enum (required)
@@ -226,23 +234,23 @@ export interface IntegrationMapping extends BaseEntity {
   system: string;
   entity: string;
   fieldMap: Record<string, string>;
-  direction: 'Inbound' | 'Outbound' | 'Bi-directional';
+  direction: "Inbound" | "Outbound" | "Bi-directional";
 }
 
 // Granular Profile System
-export type AccessEffect = 'Allow' | 'Deny';
-export type AccessScope = 'Global' | 'Region' | 'Office' | 'Personal';
+export type AccessEffect = "Allow" | "Deny";
+export type AccessScope = "Global" | "Region" | "Office" | "Personal";
 
 export interface AccessCondition {
-  type: 'Time' | 'Location' | 'Device' | 'Network';
-  operator: 'Equals' | 'NotEquals' | 'Between' | 'Includes';
+  type: "Time" | "Location" | "Device" | "Network";
+  operator: "Equals" | "NotEquals" | "Between" | "Includes";
   value: JsonValue;
 }
 
 export interface GranularPermission {
   id: string;
   resource: string; // e.g., "cases", "billing.invoices", "documents.metadata"
-  action: 'create' | 'read' | 'update' | 'delete' | 'export' | 'approve' | '*';
+  action: "create" | "read" | "update" | "delete" | "export" | "approve" | "*";
   effect: AccessEffect;
   scope: AccessScope;
   conditions?: AccessCondition[]; // e.g., Time: 9am-5pm
@@ -251,22 +259,22 @@ export interface GranularPermission {
 }
 
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'system';
+  theme: "light" | "dark" | "system";
   notifications: {
     email: boolean;
     push: boolean;
     slack: boolean;
-    digestFrequency: 'Realtime' | 'Daily' | 'Weekly';
+    digestFrequency: "Realtime" | "Daily" | "Weekly";
   };
   dashboardLayout: string[]; // Widget IDs
-  density: 'comfortable' | 'compact';
+  density: "comfortable" | "compact";
   locale: string;
   timezone: string;
 }
 
 export interface UserSecurityProfile {
   mfaEnabled: boolean;
-  mfaMethod: 'App' | 'SMS' | 'Hardware';
+  mfaMethod: "App" | "SMS" | "Hardware";
   lastPasswordChange: string;
   passwordExpiry: string;
   ipWhitelist?: string[];
@@ -288,7 +296,11 @@ export interface ExtendedUserProfile extends User {
   preferences: UserPreferences;
   security: UserSecurityProfile;
   skills: string[];
-  barAdmissions: { state: string; number: string; status: 'Active' | 'Inactive' }[];
+  barAdmissions: {
+    state: string;
+    number: string;
+    status: "Active" | "Inactive";
+  }[];
 }
 
 // Renamed to avoid conflict with workflow-advanced-types WebhookConfig
@@ -296,7 +308,7 @@ export interface SystemWebhookConfig extends BaseEntity {
   name: string;
   url: string;
   events: string[];
-  status: 'Active' | 'Inactive' | 'Error';
+  status: "Active" | "Inactive" | "Error";
   secret?: string;
   lastTriggered?: string;
   failureCount: number;
@@ -307,15 +319,30 @@ export interface SystemWebhookConfig extends BaseEntity {
 export interface SystemNotificationItem {
   id: string;
   userId: string;
-  type: 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task';
+  type:
+    | "info"
+    | "warning"
+    | "error"
+    | "success"
+    | "deadline"
+    | "system"
+    | "case_update"
+    | "document"
+    | "task";
   title: string;
   message: string;
   read: boolean;
   actionUrl?: string;
   actionLabel?: string;
   relatedEntityId?: string;
-  relatedEntityType?: 'case' | 'document' | 'task' | 'calendar' | 'evidence' | 'docket';
-  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  relatedEntityType?:
+    | "case"
+    | "document"
+    | "task"
+    | "calendar"
+    | "evidence"
+    | "docket";
+  priority?: "low" | "medium" | "high" | "urgent";
   expiresAt?: string;
   metadata?: Record<string, unknown>;
   createdAt: string;

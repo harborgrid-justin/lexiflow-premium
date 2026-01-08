@@ -4,14 +4,14 @@
  * @description Keyboard navigation hook for dropdown/list components with arrow keys, Enter to select,
  * and Escape to close. Manages active index state with circular navigation and auto-reset on list
  * changes. Provides handleKeyDown callback for event binding.
- * 
+ *
  * NO THEME USAGE: Utility hook for keyboard interaction logic
  */
 
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -49,7 +49,7 @@ export interface UseKeyboardNavReturn {
 
 /**
  * Keyboard navigation for dropdown/list components.
- * 
+ *
  * @param props - Configuration options
  * @returns Object with active index and keyboard handler
  */
@@ -57,43 +57,51 @@ export function useKeyboardNav<T>({
   items,
   isOpen,
   onSelect,
-  onClose
+  onClose,
 }: UseKeyboardNavProps<T>): UseKeyboardNavReturn {
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  // Derive initial index from props instead of using effect
+  const derivedIndex = isOpen && items.length > 0 ? 0 : -1;
+  const [activeIndex, setActiveIndex] = useState<number>(derivedIndex);
 
-  // Reset index when list changes or closes
+  // Update when isOpen or items change
   useEffect(() => {
-    setActiveIndex(isOpen && items.length > 0 ? 0 : -1);
-  }, [isOpen, items]); // Dependency on items ensures we reset if search results change
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!isOpen) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setActiveIndex(prev => (prev + 1) % items.length);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActiveIndex(prev => (prev - 1 + items.length) % items.length);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (activeIndex >= 0 && activeIndex < items.length) {
-          onSelect(items[activeIndex]);
-        }
-        break;
-      case 'Escape':
-        e.preventDefault();
-        onClose();
-        break;
+    const newIndex = isOpen && items.length > 0 ? 0 : -1;
+    if (newIndex !== activeIndex) {
+      setActiveIndex(newIndex);
     }
-  }, [isOpen, items, activeIndex, onSelect, onClose]);
+  }, [isOpen, items.length]); // Only depend on primitives
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!isOpen) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          setActiveIndex((prev) => (prev + 1) % items.length);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setActiveIndex((prev) => (prev - 1 + items.length) % items.length);
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (activeIndex >= 0 && activeIndex < items.length) {
+            onSelect(items[activeIndex]);
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          onClose();
+          break;
+      }
+    },
+    [isOpen, items, activeIndex, onSelect, onClose]
+  );
 
   return {
     activeIndex,
     setActiveIndex,
-    handleKeyDown
+    handleKeyDown,
   };
-};
+}

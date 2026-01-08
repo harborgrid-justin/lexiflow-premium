@@ -126,8 +126,7 @@ export const StrategyService = {
     if (isBackendApiEnabled()) {
       try {
         return await apiClient.get<Risk[]>(`/strategies/${strategyId}/risks`);
-      } catch (error) {
-        console.error('[StrategyService.analyzeRisks] Backend error:', error);
+      } catch {         console.error('[StrategyService.analyzeRisks] Backend error:', error);
       }
     }
 

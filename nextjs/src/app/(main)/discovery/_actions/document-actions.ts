@@ -203,6 +203,7 @@ export async function searchDocuments(
     if (input.reviewStatus?.length) searchParams.set('reviewStatus', input.reviewStatus.join(','));
     if (input.responsive) searchParams.set('responsive', input.responsive);
     if (input.privileged) searchParams.set('privileged', input.privileged);
+    if (input.hasAttachments !== undefined) searchParams.set('hasAttachments', input.hasAttachments.toString());
     if (input.tags?.length) searchParams.set('tags', input.tags.join(','));
     if (input.page) searchParams.set('page', input.page.toString());
     if (input.pageSize) searchParams.set('pageSize', input.pageSize.toString());

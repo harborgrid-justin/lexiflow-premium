@@ -156,7 +156,7 @@ export function useLiveDocketFeed({
           const delay = getNextReconnectDelay();
 
           reconnectTimeoutRef.current = setTimeout(() => {
-            connect();
+            connectRef.current?.();
           }, delay);
         } else if (reconnectCountRef.current >= reconnectAttempts) {
           setError(`Failed to reconnect after ${reconnectAttempts} attempts`);
@@ -179,6 +179,9 @@ export function useLiveDocketFeed({
     getNextReconnectDelay,
     resetReconnectState,
   ]);
+
+  // Assign ref for use in callbacks
+  connectRef.current = connect;
 
   /**
    * Disconnect from WebSocket

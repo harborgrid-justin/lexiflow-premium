@@ -197,8 +197,8 @@ export class DatabaseManager {
     store: string;
     item: unknown;
     type: "put" | "delete";
-    resolve: Function;
-    reject: Function;
+    resolve: (value: unknown) => void;
+    reject: (reason?: unknown) => void;
   }[] = [];
   private flushTimer: number | null = null;
   private readonly MAX_BUFFER_SIZE = DB_MAX_BUFFER_SIZE;
@@ -208,6 +208,7 @@ export class DatabaseManager {
     try {
       if (!window.indexedDB) this.mode = "LocalStorage";
     } catch (e) {
+      void e;
       this.mode = "LocalStorage";
     }
   }
@@ -317,7 +318,7 @@ export class DatabaseManager {
     }, 500);
   }
 
-  async findCaseByTitle(title: string): Promise<any | null> {
+  async findCaseByTitle(title: string): Promise<unknown> {
     const id = this.titleIndex.search(title.toLowerCase());
     if (id) {
       return this.get(STORES.CASES, id);
@@ -393,7 +394,8 @@ export class DatabaseManager {
         if (op.type === "put") store.put(op.item);
         else if (op.type === "delete") store.delete(op.item as IDBValidKey);
       } catch (e) {
-        console.error("Coalesced Write Error", e);
+        void e;
+        console.error("Coalesced Write Error");
       }
     });
   };

@@ -93,8 +93,7 @@ export const AssetService = {
 
       console.log(`[AssetService] Assigned asset ${assetId} to user ${userId}`);
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
   
@@ -113,8 +112,7 @@ export const AssetService = {
       
       console.log(`[AssetService] Unassigned asset ${assetId}`);
       return true;
-    } catch (error) {
-      return false;
+    } catch {       return false;
     }
   },
   

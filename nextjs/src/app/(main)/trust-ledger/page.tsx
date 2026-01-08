@@ -79,7 +79,7 @@ async function TrustLedger() {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
-              {transactions.map((txn: any) => (
+              {transactions.map((txn) => (
                 <tr key={txn.id} className="hover:bg-slate-50 dark:hover:bg-slate-700">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {new Date(txn.date).toLocaleDateString()}

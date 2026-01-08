@@ -200,6 +200,20 @@ export interface InvoiceStats {
   outstandingAmount: Money;
 }
 
+/**
+ * Input for creating a line item
+ */
+export interface CreateLineItemInput {
+  type: 'time' | 'expense' | 'fee' | 'discount';
+  description: string;
+  quantity: number;
+  rate: Money;
+  amount: Money;
+  date?: string;
+  timeEntryId?: EntityId;
+  expenseId?: EntityId;
+}
+
 export interface CreateInvoiceInput {
   caseId: CaseId;
   clientId: EntityId;
@@ -211,7 +225,11 @@ export interface CreateInvoiceInput {
   notes?: string;
   terms?: string;
   taxRate?: number;
+  taxAmount?: Money;
   discountAmount?: Money;
+  subtotal?: Money;
+  totalAmount?: Money;
+  lineItems?: CreateLineItemInput[];
 }
 
 export interface UpdateInvoiceInput extends Partial<CreateInvoiceInput> {
@@ -645,4 +663,167 @@ export interface ClientLookup {
   id: EntityId;
   name: string;
   clientNumber: string;
+}
+
+// =============================================================================
+// AR Aging Types
+// =============================================================================
+
+/**
+ * AR Aging client with outstanding balance details
+ */
+export interface ARAgingClient {
+  clientId: EntityId;
+  clientName: string;
+  amount: Money;
+  invoiceCount: number;
+  oldestInvoiceDate: string;
+}
+
+/**
+ * AR Aging bucket representing a date range category
+ */
+export interface ARAgingBucket {
+  range: string;
+  amount: Money;
+  count: number;
+  percentage: number;
+  clients: ARAgingClient[];
+}
+
+/**
+ * AR Aging summary statistics
+ */
+export interface ARAgingSummary {
+  totalOutstanding: Money;
+  totalInvoiceCount: number;
+  averageDaysOutstanding: number;
+  buckets: ARAgingBucket[];
+}
+
+/**
+ * AR Aging filters
+ */
+export interface ARAgingFilters {
+  startDate?: string;
+  endDate?: string;
+  clientId?: string;
+  minAmount?: number;
+}
+
+// =============================================================================
+// Collections Types
+// =============================================================================
+
+/**
+ * Collection item status
+ */
+export enum CollectionStatus {
+  PENDING = 'pending',
+  IN_PROGRESS = 'in_progress',
+  PROMISED = 'promised',
+  ESCALATED = 'escalated',
+  COLLECTED = 'collected',
+  WRITE_OFF = 'write_off',
+}
+
+/**
+ * Collection contact type
+ */
+export enum ContactType {
+  PHONE = 'phone',
+  EMAIL = 'email',
+  LETTER = 'letter',
+  IN_PERSON = 'in_person',
+  VOICEMAIL = 'voicemail',
+}
+
+/**
+ * Contact history entry for collection item
+ */
+export interface CollectionContact {
+  id: EntityId;
+  collectionItemId: EntityId;
+  contactDate: string;
+  contactType: ContactType;
+  contactedBy: UserId;
+  contactedByName?: string;
+  notes: string;
+  outcome?: string;
+  followUpDate?: string;
+  createdAt: string;
+}
+
+/**
+ * Collection item representing an overdue invoice
+ */
+export interface CollectionItem {
+  id: EntityId;
+  clientId: EntityId;
+  clientName: string;
+  invoiceId: EntityId;
+  invoiceNumber: string;
+  amount: Money;
+  originalAmount: Money;
+  daysOverdue: number;
+  dueDate: string;
+  lastContactDate?: string;
+  nextFollowUpDate?: string;
+  status: CollectionStatus;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  assignedTo?: UserId;
+  assignedToName?: string;
+  notes?: string;
+  contacts?: CollectionContact[];
+  paymentPlanId?: EntityId;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Collection item filters
+ */
+export interface CollectionFilters {
+  status?: CollectionStatus | string;
+  priority?: string;
+  assignedTo?: string;
+  clientId?: string;
+  minDaysOverdue?: number;
+  maxDaysOverdue?: number;
+}
+
+/**
+ * Input for updating collection item
+ */
+export interface UpdateCollectionInput {
+  status?: CollectionStatus;
+  priority?: 'low' | 'medium' | 'high' | 'critical';
+  assignedTo?: UserId;
+  notes?: string;
+  nextFollowUpDate?: string;
+}
+
+/**
+ * Input for logging a collection contact
+ */
+export interface LogContactInput {
+  contactDate: string;
+  contactType: ContactType;
+  notes: string;
+  outcome?: string;
+  followUpDate?: string;
+}
+
+/**
+ * Collection summary statistics
+ */
+export interface CollectionSummary {
+  totalItems: number;
+  totalAmount: Money;
+  pendingCount: number;
+  inProgressCount: number;
+  promisedCount: number;
+  escalatedCount: number;
+  collectedThisMonth: Money;
+  averageDaysOverdue: number;
 }

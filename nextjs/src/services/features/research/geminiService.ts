@@ -283,19 +283,32 @@
 // Workaround for broken type definitions in @google/generative-ai
 // The package exports classes/enums at runtime but the .d.ts file has empty export block
 declare module "@google/generative-ai" {
+  export interface GenerativeModel {
+    generateContent(prompt: string): Promise<{ response: { text(): string } }>;
+    generateContentStream(
+      prompt: string
+    ): Promise<{ stream: AsyncIterable<{ text(): string }> }>;
+  }
+
   export interface ModelParams {
     model: string;
-    [key: string]: any;
+    generationConfig?: {
+      responseMimeType?: string;
+      responseSchema?: Record<string, unknown>;
+    };
   }
+
   export interface RequestOptions {
-    [key: string]: any;
+    timeout?: number;
+    maxRetries?: number;
   }
+
   export class GoogleGenerativeAI {
     constructor(apiKey: string);
     getGenerativeModel(
       modelParams: ModelParams,
       requestOptions?: RequestOptions
-    ): any;
+    ): GenerativeModel;
   }
 }
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -437,7 +450,7 @@ export const GeminiService = {
         });
         const result = await model.generateContent(Prompts.Review(text));
         return result.response.text() || "Error reviewing contract.";
-      } catch (e) {
+      } catch {
         return "Contract review service unavailable.";
       }
     });
@@ -458,7 +471,7 @@ export const GeminiService = {
         const chunkText = chunk.text();
         if (chunkText) yield chunkText;
       }
-    } catch (e) {
+    } catch {
       yield "Error streaming content.";
     }
   },
@@ -471,7 +484,7 @@ export const GeminiService = {
         });
         const result = await model.generateContent(Prompts.Refine(desc));
         return result.response.text() || desc;
-      } catch (e) {
+      } catch {
         return desc;
       }
     });
@@ -485,7 +498,7 @@ export const GeminiService = {
         });
         const result = await model.generateContent(Prompts.Draft(prompt, type));
         return result.response.text() || "Error generating content.";
-      } catch (e) {
+      } catch {
         return "Generation failed.";
       }
     });
@@ -510,7 +523,7 @@ export const GeminiService = {
           action: "UNKNOWN",
           confidence: 0,
         });
-      } catch (e) {
+      } catch {
         return { action: "UNKNOWN", confidence: 0 };
       }
     });
@@ -572,7 +585,7 @@ export const GeminiService = {
           sources,
         };
         return researchResponse;
-      } catch (e) {
+      } catch {
         const errorResponse: ResearchResponse = {
           text: "Research service unavailable.",
           sources: [],
@@ -592,7 +605,7 @@ export const GeminiService = {
           `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
         );
         return result.response.text() || "";
-      } catch (e) {
+      } catch {
         return "Unable to generate reply.";
       }
     });
@@ -623,7 +636,7 @@ export const GeminiService = {
           treatment: [],
         };
         return safeParseJSON<ShepardizeResult>(responseText, defaultValue);
-      } catch (e) {
+      } catch {
         return null;
       }
     });
@@ -710,12 +723,14 @@ export const GeminiService = {
   /**
    * Legal research (wrapper for conductResearch)
    * @param query - Research query
-   * @param jurisdiction - Optional jurisdiction filter
+   * @param jurisdiction - Optional jurisdiction filter (reserved for future use)
    */
   async legalResearch(
     query: string,
-    _jurisdiction?: string
+    jurisdiction?: string
   ): Promise<ResearchResponse> {
+    // jurisdiction parameter reserved for future filtering implementation
+    void jurisdiction;
     return this.conductResearch(query);
   },
 

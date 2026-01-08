@@ -56,8 +56,7 @@ export const DataCatalogService = {
                     records: count,
                     size: `${(count * 1.5 + 24).toFixed(1)} KB`
                 });
-            } catch (error) {
-                // Store doesn't exist in IndexedDB yet - skip it
+            } catch {                 // Store doesn't exist in IndexedDB yet - skip it
                 console.debug(`[DataCatalog] Store "${store}" not found in IndexedDB, skipping`);
             }
         }

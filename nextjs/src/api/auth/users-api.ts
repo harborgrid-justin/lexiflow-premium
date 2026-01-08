@@ -1,7 +1,7 @@
 /**
  * Users API Service
  * Enterprise-grade API service for user management with backend integration
- * 
+ *
  * @module UsersApiService
  * @description Manages all user-related operations including:
  * - User CRUD operations aligned with backend API
@@ -10,7 +10,7 @@
  * - User activity tracking and statistics
  * - Department and team assignments
  * - User preferences and settings
- * 
+ *
  * @security
  * - Input validation on all parameters
  * - Password hashing and secure credential handling
@@ -18,7 +18,8 @@
  * - Backend API authentication via bearer tokens
  * - Role-based access control (RBAC)
  * - Sensitive data filtering (passwords never returned)
- * 
+ * - Configurable password policy enforcement
+ *
  * @architecture
  * - Backend API primary (PostgreSQL)
  * - ALIGNED WITH: backend/src/users/users.controller.ts
@@ -30,6 +31,11 @@
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
 import type { User, UserRole, CreateUserDto, UpdateUserDto, UserStatistics, ChangePasswordDto } from '@/types';
+import {
+  DEFAULT_PASSWORD_POLICY,
+  validatePasswordPolicy,
+  type PasswordPolicy,
+} from '@/lib/validation/password-policy';
 
 /**
  * User filters for querying
@@ -64,8 +70,10 @@ export const USERS_QUERY_KEYS = {
  */
 export class UsersApiService {
   private readonly baseUrl = '/users';
+  private readonly passwordPolicy: PasswordPolicy;
 
-  constructor() {
+  constructor(passwordPolicy: PasswordPolicy = DEFAULT_PASSWORD_POLICY) {
+    this.passwordPolicy = passwordPolicy;
     this.logInitialization();
   }
 
@@ -105,6 +113,22 @@ export class UsersApiService {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       throw new Error(`[UsersApiService.${methodName}] Invalid email format`);
+    }
+  }
+
+  /**
+   * Validate password against policy
+   * @private
+   */
+  private validatePassword(password: string, methodName: string): void {
+    if (!password) {
+      throw new Error(`[UsersApiService.${methodName}] Password is required`);
+    }
+
+    const validationResult = validatePasswordPolicy(password, this.passwordPolicy);
+    if (!validationResult.valid) {
+      const errorMessage = validationResult.errors.join('; ');
+      throw new Error(`[UsersApiService.${methodName}] ${errorMessage}`);
     }
   }
 
@@ -158,7 +182,10 @@ export class UsersApiService {
   /**
    * Create a new user
    * Backend: POST /users
-   * 
+   *
+   * Password validation uses configurable policy (default: minLength 12, requires
+   * uppercase, lowercase, numbers, and special characters).
+   *
    * @param data - User creation DTO
    * @returns Promise<User> Created user (password excluded)
    * @throws Error if validation fails or creation fails
@@ -169,9 +196,8 @@ export class UsersApiService {
     if (!data.firstName || !data.lastName) {
       throw new Error('[UsersApiService.create] firstName and lastName are required');
     }
-    if (!data.password || data.password.length < 8) {
-      throw new Error('[UsersApiService.create] password must be at least 8 characters');
-    }
+    // Use policy-based password validation
+    this.validatePassword(data.password, 'create');
     if (!data.role) {
       throw new Error('[UsersApiService.create] role is required');
     }
@@ -231,7 +257,10 @@ export class UsersApiService {
   /**
    * Change user password
    * Backend: POST /users/:id/change-password
-   * 
+   *
+   * Password validation uses configurable policy (default: minLength 12, requires
+   * uppercase, lowercase, numbers, and special characters).
+   *
    * @param id - User ID
    * @param data - Password change DTO
    * @returns Promise<void>
@@ -240,12 +269,11 @@ export class UsersApiService {
   async changePassword(id: string, data: ChangePasswordDto): Promise<void> {
     this.validateId(id, 'changePassword');
     this.validateObject(data, 'data', 'changePassword');
-    if (!data.currentPassword || !data.newPassword) {
-      throw new Error('[UsersApiService.changePassword] currentPassword and newPassword are required');
+    if (!data.currentPassword) {
+      throw new Error('[UsersApiService.changePassword] currentPassword is required');
     }
-    if (data.newPassword.length < 8) {
-      throw new Error('[UsersApiService.changePassword] newPassword must be at least 8 characters');
-    }
+    // Use policy-based password validation for new password
+    this.validatePassword(data.newPassword, 'changePassword');
     try {
       await apiClient.post(`${this.baseUrl}/${id}/change-password`, data);
     } catch (error) {

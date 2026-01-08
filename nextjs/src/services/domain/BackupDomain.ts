@@ -169,8 +169,7 @@ export const BackupService = {
       })).sort((a, b) =>
         new Date(b.created).getTime() - new Date(a.created).getTime()
       );
-    } catch (error) {
-      console.error('[BackupService.getSnapshots] Backend unavailable, using fallback data:', error);
+    } catch {       console.error('[BackupService.getSnapshots] Backend unavailable, using fallback data:', error);
       // Fallback to mock data for development
       await delay(200);
       return [...mockSnapshots].sort((a, b) =>
@@ -202,8 +201,7 @@ export const BackupService = {
         retentionPolicy: '7 Years (WORM)',
         glacierTier: 'Deep Archive'
       };
-    } catch (error) {
-      console.error('[BackupService.getArchiveStats] Error:', error);
+    } catch {       console.error('[BackupService.getArchiveStats] Error:', error);
       throw error;
     }
   },
@@ -246,8 +244,7 @@ export const BackupService = {
 
       console.log(`[BackupService] Created ${type} snapshot: ${newSnap.id}`);
       return newSnap;
-    } catch (error) {
-      console.error('[BackupService.createSnapshot] Error:', error);
+    } catch {       console.error('[BackupService.createSnapshot] Error:', error);
       throw error;
     }
   },
@@ -277,8 +274,7 @@ export const BackupService = {
 
       console.log(`[BackupService] Successfully restored snapshot ${id}`);
       return true;
-    } catch (error) {
-      console.error('[BackupService.restoreSnapshot] Error:', error);
+    } catch {       console.error('[BackupService.restoreSnapshot] Error:', error);
       throw error;
     }
   }

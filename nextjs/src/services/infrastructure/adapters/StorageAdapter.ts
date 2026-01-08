@@ -1,7 +1,7 @@
 /**
  * Storage Adapter Interfaces
  * Browser-agnostic storage abstractions for service layer portability
- * 
+ *
  * @module services/infrastructure/adapters/StorageAdapter
  * @description Provides storage interfaces that services can depend on
  * without direct browser API coupling. Enables:
@@ -9,23 +9,23 @@
  * - Web worker execution
  * - Unit testing with mock storage
  * - Future migration to different storage backends
- * 
+ *
  * @architecture
  * - Pattern: Adapter + Interface Segregation
  * - Implementations: LocalStorageAdapter, MemoryStorageAdapter, SSRStorageAdapter
  * - Injection: Services receive IStorageAdapter via constructor
- * 
+ *
  * @usage
  * ```typescript
  * // In service
  * export class ApiConfigService {
  *   constructor(private readonly storage: IStorageAdapter) {}
- *   
+ *
  *   isBackendEnabled(): boolean {
  *     return this.storage.getItem('VITE_USE_BACKEND_API') !== 'false';
  *   }
  * }
- * 
+ *
  * // In app initialization
  * const storage = new LocalStorageAdapter();
  * const apiConfig = new ApiConfigService(storage);
@@ -106,16 +106,16 @@ export class LocalStorageAdapter implements IStorageAdapter {
    */
   private checkAvailability(): boolean {
     try {
-      if (typeof window === 'undefined' || !window.localStorage) {
+      if (typeof window === "undefined" || !window.localStorage) {
         return false;
       }
       // Test write/read/delete
-      const testKey = '__storage_test__';
-      window.localStorage.setItem(testKey, 'test');
+      const testKey = "__storage_test__";
+      window.localStorage.setItem(testKey, "test");
       window.localStorage.getItem(testKey);
       window.localStorage.removeItem(testKey);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -132,7 +132,7 @@ export class LocalStorageAdapter implements IStorageAdapter {
       try {
         localStorage.setItem(key, value);
       } catch (err) {
-        if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+        if (err instanceof DOMException && err.name === "QuotaExceededError") {
           throw new StorageQuotaExceededError(key);
         }
         throw err;
@@ -196,14 +196,14 @@ export class SessionStorageAdapter implements IStorageAdapter {
 
   private checkAvailability(): boolean {
     try {
-      if (typeof window === 'undefined' || !window.sessionStorage) {
+      if (typeof window === "undefined" || !window.sessionStorage) {
         return false;
       }
-      const testKey = '__session_test__';
-      window.sessionStorage.setItem(testKey, 'test');
+      const testKey = "__session_test__";
+      window.sessionStorage.setItem(testKey, "test");
       window.sessionStorage.removeItem(testKey);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -308,7 +308,7 @@ export class MemoryStorageAdapter implements IStorageAdapter {
 export class StorageQuotaExceededError extends Error {
   constructor(key: string) {
     super(`Storage quota exceeded when setting key: ${key}`);
-    this.name = 'StorageQuotaExceededError';
+    this.name = "StorageQuotaExceededError";
   }
 }
 
@@ -325,4 +325,5 @@ export const defaultStorage: IStorageAdapter = new LocalStorageAdapter();
 /**
  * Default sessionStorage adapter instance
  */
-export const defaultSessionStorage: IStorageAdapter = new SessionStorageAdapter();
+export const defaultSessionStorage: IStorageAdapter =
+  new SessionStorageAdapter();

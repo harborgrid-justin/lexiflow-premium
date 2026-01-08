@@ -55,10 +55,16 @@ export const ToastProvider = ({
 
   // BP13: Document lifecycle - cleanup all timeouts on unmount
   useEffect(() => {
+    const timeoutIds = timeoutIdsRef.current;
     return () => {
-      timeoutIdsRef.current.forEach(id => clearTimeout(id));
-      timeoutIdsRef.current.clear();
+      timeoutIds.forEach(id => clearTimeout(id));
+      timeoutIds.clear();
     };
+  }, []);
+
+  // BP10: Stabilize function references with useCallback
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   // BP10: Stabilize function references with useCallback
@@ -86,7 +92,7 @@ export const ToastProvider = ({
       }
       return prev;
     });
-  }, [maxVisible]);
+  }, [maxVisible, removeToast]);
 
   // Trigger processing whenever toasts state changes (slot frees up)
   useEffect(() => {
@@ -94,11 +100,6 @@ export const ToastProvider = ({
       processQueue();
     }
   }, [toasts.length, processQueue, maxVisible]);
-
-  // BP10: Stabilize function references with useCallback
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
 
   // BP10: Stabilize function references with useCallback
   const addToast = useCallback((message: string, type: ToastType = 'info') => {

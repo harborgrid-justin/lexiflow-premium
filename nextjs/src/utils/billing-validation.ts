@@ -3,7 +3,7 @@
  * Validation rules for time entries, expenses, and invoices
  */
 
-import type { TimeEntry } from '@/types/financial';
+import type { TimeEntry } from "@/types/financial";
 
 /**
  * Time entry validation errors
@@ -26,34 +26,36 @@ export const MAXIMUM_HOURS_PER_DAY = 24;
 /**
  * Validate time entry data
  */
-export function validateTimeEntry(entry: Partial<TimeEntry>): TimeEntryValidationError[] {
+export function validateTimeEntry(
+  entry: Partial<TimeEntry>
+): TimeEntryValidationError[] {
   const errors: TimeEntryValidationError[] = [];
 
   // Required fields
   if (!entry.caseId) {
-    errors.push({ field: 'caseId', message: 'Case is required' });
+    errors.push({ field: "caseId", message: "Case is required" });
   }
 
   if (!entry.userId) {
-    errors.push({ field: 'userId', message: 'User is required' });
+    errors.push({ field: "userId", message: "User is required" });
   }
 
   if (!entry.date) {
-    errors.push({ field: 'date', message: 'Date is required' });
+    errors.push({ field: "date", message: "Date is required" });
   }
 
   if (!entry.description || entry.description.trim().length === 0) {
-    errors.push({ field: 'description', message: 'Description is required' });
+    errors.push({ field: "description", message: "Description is required" });
   }
 
   // Duration validation
   if (entry.duration === undefined || entry.duration === null) {
-    errors.push({ field: 'duration', message: 'Hours is required' });
+    errors.push({ field: "duration", message: "Hours is required" });
   } else {
     // Minimum increment check
     if (entry.duration < MINIMUM_TIME_INCREMENT) {
       errors.push({
-        field: 'duration',
+        field: "duration",
         message: `Minimum billable time is ${MINIMUM_TIME_INCREMENT} hours (6 minutes)`,
       });
     }
@@ -62,15 +64,15 @@ export function validateTimeEntry(entry: Partial<TimeEntry>): TimeEntryValidatio
     const rounded = Math.round(entry.duration * 10) / 10;
     if (Math.abs(entry.duration - rounded) > 0.001) {
       errors.push({
-        field: 'duration',
-        message: 'Time must be in 0.1 hour (6 minute) increments',
+        field: "duration",
+        message: "Time must be in 0.1 hour (6 minute) increments",
       });
     }
 
     // Maximum hours check
     if (entry.duration > MAXIMUM_HOURS_PER_DAY) {
       errors.push({
-        field: 'duration',
+        field: "duration",
         message: `Maximum ${MAXIMUM_HOURS_PER_DAY} hours per entry`,
       });
     }
@@ -78,9 +80,9 @@ export function validateTimeEntry(entry: Partial<TimeEntry>): TimeEntryValidatio
 
   // Rate validation
   if (entry.rate === undefined || entry.rate === null) {
-    errors.push({ field: 'rate', message: 'Rate is required' });
+    errors.push({ field: "rate", message: "Rate is required" });
   } else if (entry.rate < 0) {
-    errors.push({ field: 'rate', message: 'Rate must be positive' });
+    errors.push({ field: "rate", message: "Rate must be positive" });
   }
 
   // Date validation - cannot be in the future
@@ -91,8 +93,8 @@ export function validateTimeEntry(entry: Partial<TimeEntry>): TimeEntryValidatio
 
     if (entryDate > today) {
       errors.push({
-        field: 'date',
-        message: 'Date cannot be in the future',
+        field: "date",
+        message: "Date cannot be in the future",
       });
     }
   }
@@ -105,7 +107,12 @@ export function validateTimeEntry(entry: Partial<TimeEntry>): TimeEntryValidatio
  * Returns true if entries overlap
  */
 export function checkTimeEntryOverlap(
-  newEntry: { userId: string; date: string; startTime?: string; endTime?: string },
+  newEntry: {
+    userId: string;
+    date: string;
+    startTime?: string;
+    endTime?: string;
+  },
   existingEntries: TimeEntry[]
 ): boolean {
   // If no start/end times specified, we can't check for overlap
@@ -123,8 +130,12 @@ export function checkTimeEntryOverlap(
     }
 
     // If existing entry doesn't have times, can't overlap
-    const entryStartTime = (entry as any).startTime;
-    const entryEndTime = (entry as any).endTime;
+    const entryWithTime = entry as TimeEntry & {
+      startTime?: string;
+      endTime?: string;
+    };
+    const entryStartTime = entryWithTime.startTime;
+    const entryEndTime = entryWithTime.endTime;
     if (!entryStartTime || !entryEndTime) {
       return false;
     }
@@ -164,7 +175,7 @@ export function validateDailyHours(
 
   if (newTotal > MAXIMUM_HOURS_PER_DAY) {
     return {
-      field: 'duration',
+      field: "duration",
       message: `Total hours for ${date} would be ${newTotal.toFixed(1)}h (max ${MAXIMUM_HOURS_PER_DAY}h)`,
     };
   }
@@ -185,32 +196,34 @@ export function roundToBillingIncrement(hours: number): number {
 export function formatHoursToTime(hours: number): string {
   const h = Math.floor(hours);
   const m = Math.round((hours - h) * 60);
-  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 }
 
 /**
  * Convert HH:MM to decimal hours
  */
 export function timeToHours(time: string): number {
-  const [hours, minutes] = time.split(':').map(Number);
+  const [hours, minutes] = time.split(":").map(Number);
   return hours + minutes / 60;
 }
 
 /**
  * Validate expense amount
  */
-export function validateExpenseAmount(amount: number): TimeEntryValidationError | null {
+export function validateExpenseAmount(
+  amount: number
+): TimeEntryValidationError | null {
   if (amount <= 0) {
     return {
-      field: 'amount',
-      message: 'Amount must be greater than zero',
+      field: "amount",
+      message: "Amount must be greater than zero",
     };
   }
 
   if (amount > 1000000) {
     return {
-      field: 'amount',
-      message: 'Amount exceeds maximum limit',
+      field: "amount",
+      message: "Amount exceeds maximum limit",
     };
   }
 
@@ -234,15 +247,15 @@ export function validateInvoiceTotals(invoice: {
   // Allow small floating point differences
   if (Math.abs(calculatedTotal - invoice.totalAmount) > 0.01) {
     errors.push({
-      field: 'totalAmount',
+      field: "totalAmount",
       message: `Total amount mismatch. Expected ${calculatedTotal.toFixed(2)}, got ${invoice.totalAmount.toFixed(2)}`,
     });
   }
 
   if (invoice.discountAmount > invoice.subtotal) {
     errors.push({
-      field: 'discountAmount',
-      message: 'Discount cannot exceed subtotal',
+      field: "discountAmount",
+      message: "Discount cannot exceed subtotal",
     });
   }
 

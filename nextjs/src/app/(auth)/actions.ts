@@ -22,6 +22,11 @@ import {
   type LoginFormData,
   type RegisterFormData,
 } from './validation';
+import {
+  validateCSRFFromRequest,
+  rotateCSRFToken,
+  clearCSRFToken,
+} from '@/lib/csrf';
 
 // ============================================================================
 // Constants
@@ -289,6 +294,15 @@ export async function loginAction(
     };
   }
 
+  // CSRF validation
+  const csrfValidation = await validateCSRFFromRequest(formData);
+  if (!csrfValidation.valid) {
+    return {
+      success: false,
+      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+    };
+  }
+
   // Parse form data
   const rawData = {
     email: formData.get('email') as string,
@@ -385,6 +399,9 @@ export async function loginAction(
       rememberMe
     );
 
+    // Rotate CSRF token after successful login (security best practice)
+    await rotateCSRFToken();
+
     // Revalidate auth-related caches
     revalidateTag('auth', 'default');
     revalidateTag('user', 'default');
@@ -410,6 +427,15 @@ export async function loginWithMfaAction(
   _prevState: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
+  // CSRF validation
+  const csrfValidation = await validateCSRFFromRequest(formData);
+  if (!csrfValidation.valid) {
+    return {
+      success: false,
+      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+    };
+  }
+
   const mfaCode = formData.get('mfaCode') as string;
 
   // Validate MFA code format
@@ -498,6 +524,9 @@ export async function loginWithMfaAction(
       challengeData.rememberMe
     );
 
+    // Rotate CSRF token after successful login (security best practice)
+    await rotateCSRFToken();
+
     revalidateTag('auth', 'default');
     revalidateTag('user', 'default');
 
@@ -530,6 +559,15 @@ export async function registerAction(
     return {
       success: false,
       error: 'Too many registration attempts. Please try again later.',
+    };
+  }
+
+  // CSRF validation
+  const csrfValidation = await validateCSRFFromRequest(formData);
+  if (!csrfValidation.valid) {
+    return {
+      success: false,
+      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
     };
   }
 
@@ -681,6 +719,15 @@ export async function resetPasswordAction(
   _prevState: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
+  // CSRF validation
+  const csrfValidation = await validateCSRFFromRequest(formData);
+  if (!csrfValidation.valid) {
+    return {
+      success: false,
+      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+    };
+  }
+
   const rawData = {
     token: formData.get('token') as string,
     password: formData.get('password') as string,
@@ -762,6 +809,9 @@ export async function logoutAction(): Promise<void> {
 
   // Clear all auth cookies
   await clearAuthCookies();
+
+  // Clear CSRF token on logout
+  await clearCSRFToken();
 
   // Revalidate caches
   revalidateTag('auth', 'default');

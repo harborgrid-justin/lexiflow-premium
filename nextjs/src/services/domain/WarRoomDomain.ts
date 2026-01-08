@@ -25,8 +25,7 @@ export const WarRoomService = {
     if (!caseId) return null;
     try {
       return await api.warRoom.getWarRoomData(caseId);
-    } catch (error) {
-      console.warn('[WarRoomService] Failed to fetch data, returning mock:', error);
+    } catch {       console.warn('[WarRoomService] Failed to fetch data, returning mock:', error);
       return {
         caseId,
         strategy: { theme: 'Mock Theme', narrative: 'Mock Narrative' },
@@ -48,24 +47,21 @@ export const WarRoomService = {
   getAdvisors: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getAdvisors(query);
-    } catch (error) {
-      return [];
+    } catch {       return [];
     }
   },
 
   createAdvisor: async (data: CreateAdvisorDto) => {
     try {
       return await api.warRoom.createAdvisor(data);
-    } catch (error) {
-      return { id: 'mock-advisor', ...data };
+    } catch {       return { id: 'mock-advisor', ...data };
     }
   },
 
   deleteAdvisor: async (id: string) => {
     try {
       return await api.warRoom.deleteAdvisor(id);
-    } catch (error) {
-      return true;
+    } catch {       return true;
     }
   },
 
@@ -73,24 +69,21 @@ export const WarRoomService = {
   getExperts: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getExperts(query);
-    } catch (error) {
-      return [];
+    } catch {       return [];
     }
   },
 
   createExpert: async (data: CreateExpertDto) => {
     try {
       return await api.warRoom.createExpert(data);
-    } catch (error) {
-      return { id: 'mock-expert', ...data };
+    } catch {       return { id: 'mock-expert', ...data };
     }
   },
 
   deleteExpert: async (id: string) => {
     try {
       return await api.warRoom.deleteExpert(id);
-    } catch (error) {
-      return true;
+    } catch {       return true;
     }
   },
 
@@ -98,16 +91,14 @@ export const WarRoomService = {
   getStrategy: async (caseId: string) => {
     try {
       return await api.warRoom.getStrategy(caseId);
-    } catch (error) {
-      return { theme: 'Mock Theme', narrative: 'Mock Narrative' };
+    } catch {       return { theme: 'Mock Theme', narrative: 'Mock Narrative' };
     }
   },
 
   updateStrategy: async (caseId: string, data: UpdateStrategyDto) => {
     try {
       return await api.warRoom.updateStrategy(caseId, data);
-    } catch (error) {
-      return { ...data };
+    } catch {       return { ...data };
     }
   },
 };

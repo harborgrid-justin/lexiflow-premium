@@ -17,7 +17,13 @@
  * @module useNotificationWebSocket
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { io, Socket } from "socket.io-client";
 
 /**
@@ -304,31 +310,8 @@ export const useNotificationWebSocket = (
     onError,
     log,
     updateConnectionState,
+    scheduleReconnect,
   ]);
-
-  /**
-   * Schedule reconnection with exponential backoff
-   */
-  const scheduleReconnect = useCallback((): void => {
-    if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-      log("Max reconnect attempts reached");
-      return;
-    }
-
-    const delay = Math.min(
-      reconnectDelay * Math.pow(2, reconnectAttemptsRef.current),
-      30000 // Max 30 seconds
-    );
-
-    log(
-      `Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`
-    );
-
-    reconnectTimerRef.current = setTimeout(() => {
-      reconnectAttemptsRef.current += 1;
-      connect();
-    }, delay);
-  }, [maxReconnectAttempts, reconnectDelay, connect, log]);
 
   /**
    * Disconnect from WebSocket
@@ -395,17 +378,25 @@ export const useNotificationWebSocket = (
     [log]
   );
 
-  // Auto-connect on mount
+  // Auto-connect on mount - use refs with useLayoutEffect to avoid ref mutation during render
+  const connectRef = useRef(connect);
+  const disconnectRef = useRef(disconnect);
+
+  useLayoutEffect(() => {
+    connectRef.current = connect;
+    disconnectRef.current = disconnect;
+  }, [connect, disconnect]);
+
   useEffect(() => {
     if (token) {
-      connect();
+      connectRef.current();
     }
 
     // Cleanup on unmount
     return () => {
-      disconnect();
+      disconnectRef.current();
     };
-  }, [token, connect, disconnect]);
+  }, [token]);
 
   return {
     connectionState,

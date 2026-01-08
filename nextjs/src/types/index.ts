@@ -33,6 +33,7 @@ export * from "./pleading-types";
 export * from "./pleadings";
 export * from "./primitives";
 export * from "./query-keys";
+export * from "./research";
 export * from "./result";
 export * from "./search";
 export * from "./statistics";

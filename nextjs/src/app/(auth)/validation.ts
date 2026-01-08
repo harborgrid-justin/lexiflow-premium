@@ -1,14 +1,28 @@
 /**
  * Authentication Validation Schemas
  * Zod schemas for form validation
+ *
+ * Uses centralized password policy for consistent password validation
+ * across the application.
  */
 
 import { z } from 'zod';
 import type { PasswordStrength } from './types';
+import {
+  DEFAULT_PASSWORD_POLICY,
+  validatePasswordPolicy,
+  createZodPasswordSuperRefine,
+  ABSOLUTE_MAX_PASSWORD_LENGTH,
+  type PasswordPolicy,
+} from '@/lib/validation/password-policy';
 
-// Password requirements
-const PASSWORD_MIN_LENGTH = 8;
-const PASSWORD_MAX_LENGTH = 128;
+// Re-export password policy for convenience
+export { DEFAULT_PASSWORD_POLICY, validatePasswordPolicy };
+export type { PasswordPolicy };
+
+// Password requirements from centralized policy
+const PASSWORD_MIN_LENGTH = DEFAULT_PASSWORD_POLICY.minLength;
+const PASSWORD_MAX_LENGTH = DEFAULT_PASSWORD_POLICY.maxLength ?? ABSOLUTE_MAX_PASSWORD_LENGTH;
 
 // Email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -56,6 +70,16 @@ export const mfaCodeSchema = z
   .regex(/^\d{6}$/, 'Code must contain only digits');
 
 /**
+ * Password schema using centralized policy validation.
+ * Enforces all requirements from DEFAULT_PASSWORD_POLICY.
+ */
+const policyPasswordSchema = z
+  .string()
+  .min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
+  .max(PASSWORD_MAX_LENGTH, `Password cannot exceed ${PASSWORD_MAX_LENGTH} characters`)
+  .superRefine(createZodPasswordSuperRefine(DEFAULT_PASSWORD_POLICY));
+
+/**
  * Registration Schema
  */
 export const registerSchema = z
@@ -65,14 +89,7 @@ export const registerSchema = z
       .min(1, 'Email is required')
       .email('Please enter a valid email address')
       .regex(EMAIL_REGEX, 'Please enter a valid email address'),
-    password: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
-      .max(PASSWORD_MAX_LENGTH, `Password cannot exceed ${PASSWORD_MAX_LENGTH} characters`)
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-      ),
+    password: policyPasswordSchema,
     confirmPassword: z.string().min(1, 'Please confirm your password'),
     firstName: z
       .string()
@@ -123,14 +140,7 @@ export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export const resetPasswordSchema = z
   .object({
     token: z.string().min(1, 'Reset token is required'),
-    password: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
-      .max(PASSWORD_MAX_LENGTH, `Password cannot exceed ${PASSWORD_MAX_LENGTH} characters`)
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-      ),
+    password: policyPasswordSchema,
     confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -146,14 +156,7 @@ export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'Current password is required'),
-    newPassword: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
-      .max(PASSWORD_MAX_LENGTH, `Password cannot exceed ${PASSWORD_MAX_LENGTH} characters`)
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-      ),
+    newPassword: policyPasswordSchema,
     confirmNewPassword: z.string().min(1, 'Please confirm your new password'),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
@@ -181,9 +184,18 @@ export const ssoLoginSchema = z.object({
 export type SSOLoginFormData = z.infer<typeof ssoLoginSchema>;
 
 /**
- * Calculate password strength
+ * Calculate password strength based on policy requirements.
+ *
+ * Uses the centralized password policy for validation and provides
+ * detailed feedback for password improvement.
+ *
+ * @param password - The password to evaluate
+ * @param policy - Optional custom policy (defaults to DEFAULT_PASSWORD_POLICY)
  */
-export function validatePasswordStrength(password: string): PasswordStrength {
+export function validatePasswordStrength(
+  password: string,
+  policy: PasswordPolicy = DEFAULT_PASSWORD_POLICY
+): PasswordStrength {
   let score: 0 | 1 | 2 | 3 | 4 = 0;
   const feedback: string[] = [];
 
@@ -197,27 +209,33 @@ export function validatePasswordStrength(password: string): PasswordStrength {
     };
   }
 
-  // Length checks
-  if (password.length >= 8) score++;
-  else feedback.push('Use at least 8 characters');
+  // Use policy validation for detailed checks
+  const policyResult = validatePasswordPolicy(password, policy);
 
-  if (password.length >= 12) score++;
-  else if (password.length >= 8) feedback.push('Consider using 12+ characters for stronger security');
+  // Length checks - use policy minLength
+  if (password.length >= policy.minLength) score++;
+  else feedback.push(`Use at least ${policy.minLength} characters`);
 
-  // Character variety checks
-  if (/[a-z]/.test(password)) score += 0.25;
-  else feedback.push('Add lowercase letters');
+  // Bonus for longer passwords
+  if (password.length >= 16) score++;
+  else if (password.length >= policy.minLength) {
+    feedback.push('Consider using 16+ characters for stronger security');
+  }
 
-  if (/[A-Z]/.test(password)) score += 0.25;
-  else feedback.push('Add uppercase letters');
+  // Character variety checks from policy validation
+  if (policyResult.details.hasLowercase) score += 0.25;
+  else if (policy.requireLowercase) feedback.push('Add lowercase letters');
 
-  if (/\d/.test(password)) score += 0.25;
-  else feedback.push('Add numbers');
+  if (policyResult.details.hasUppercase) score += 0.25;
+  else if (policy.requireUppercase) feedback.push('Add uppercase letters');
 
-  if (/[^a-zA-Z0-9]/.test(password)) score += 0.25;
-  else feedback.push('Add special characters (!@#$%^&*)');
+  if (policyResult.details.hasNumbers) score += 0.25;
+  else if (policy.requireNumbers) feedback.push('Add numbers');
 
-  // Additional checks
+  if (policyResult.details.hasSpecialChars) score += 0.25;
+  else if (policy.requireSpecialChars) feedback.push('Add special characters (!@#$%^&*)');
+
+  // Additional entropy checks
   if (/(.)\1{2,}/.test(password)) {
     score -= 0.5;
     feedback.push('Avoid repeating characters');
@@ -229,11 +247,14 @@ export function validatePasswordStrength(password: string): PasswordStrength {
   }
 
   // Common patterns check
-  const commonPatterns = ['password', '123456', 'qwerty', 'abc123', 'letmein'];
+  const commonPatterns = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome'];
   if (commonPatterns.some((pattern) => password.toLowerCase().includes(pattern))) {
     score -= 1;
     feedback.push('Avoid common passwords');
   }
+
+  // Add policy validation warnings
+  feedback.push(...policyResult.warnings);
 
   // Normalize score
   const normalizedScore = Math.max(0, Math.min(4, Math.round(score))) as 0 | 1 | 2 | 3 | 4;
@@ -259,7 +280,7 @@ export function validatePasswordStrength(password: string): PasswordStrength {
     label: labels[normalizedScore],
     color: colors[normalizedScore],
     percentage: (normalizedScore / 4) * 100,
-    feedback: feedback.slice(0, 3), // Limit to top 3 suggestions
+    feedback: [...new Set(feedback)].slice(0, 3), // Dedupe and limit to top 3 suggestions
   };
 }
 

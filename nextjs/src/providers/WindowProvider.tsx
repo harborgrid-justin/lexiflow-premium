@@ -91,16 +91,23 @@ export const WindowProvider = ({
     id: null, startX: 0, startY: 0, initialX: 0, initialY: 0
   });
 
-  useEffect(() => {
-    // BP13: Lifecycle - create portal root and attach mouse handlers
+  // Declare isDragging state before the effect that uses it
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Initialize portal root lazily to avoid setState in effect
+  const [portalRoot] = useState<HTMLElement | null>(() => {
+    if (typeof document === 'undefined') return null;
     let root = document.getElementById('window-layer');
     if (!root) {
       root = document.createElement('div');
       root.id = 'window-layer';
       document.body.appendChild(root);
     }
-    setPortalRoot(root);
+    return root;
+  });
 
+  // BP2: Mount Effect - Setup event listeners
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragRef.current.id) return;
 
@@ -128,8 +135,7 @@ export const WindowProvider = ({
     const handleMouseUp = () => {
       if (dragRef.current.id) {
         dragRef.current.id = null;
-        document.body.style.userSelect = '';
-        document.body.style.cursor = '';
+        setIsDragging(false);
       }
     };
 
@@ -218,9 +224,19 @@ export const WindowProvider = ({
       initialX: x,
       initialY: y
     };
-    document.body.style.userSelect = 'none';
-    document.body.style.cursor = 'grabbing';
+    setIsDragging(true);
   };
+
+  // Apply drag styles in effect when drag state changes
+  useEffect(() => {
+    if (isDragging) {
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'grabbing';
+    } else {
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    }
+  }, [isDragging]);
 
   // BP7: Memoize provider values explicitly - state context
   const stateValue = useMemo<WindowStateValue>(() => ({

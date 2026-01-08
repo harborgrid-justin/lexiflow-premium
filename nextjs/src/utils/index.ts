@@ -3,6 +3,7 @@
 export * from "./apiUtils"; // Note: yieldToMain re-exported from here (duplicate exists in async.ts)
 export * from "./bloomFilter";
 export * from "./cacheManager";
+export * from "./caseXmlParser";
 export * from "./circuitBreaker";
 export * from "./cn";
 export * from "./crdt";

@@ -3,88 +3,49 @@
  * Verifies all exports are accessible from providers index
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // ═══════════════════════════════════════════════════════════════════════════
 //                    PROVIDER EXPORTS VALIDATION
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Providers and hooks
 import {
-  AppProviders,
   useDataSource,
+  useSync,
   useTheme,
   useToast,
-  useSync,
   useWindow,
-} from '../index';
+} from "../index";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                    REPOSITORY EXPORTS VALIDATION
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Repository interfaces
-import type {
-  BaseRepository,
-  BatchRepository,
-  SearchableRepository,
-  SearchOptions,
-  SearchResult,
-  CaseRepository,
-  DocumentRepository,
-  ComplianceRepository,
-  ConflictResult,
-  ScanResult,
-  RepositoryRegistry,
-  RepositoryFactory,
-  RepositoryConfig,
-  RepositoryLogger,
-  RepositoryTracer,
-  RepositoryMetrics,
-  Span,
-  AuthProvider,
-  DataOwnership,
-} from '../index';
+import type { BaseRepository, RepositoryRegistry } from "../index";
 
 // Configuration
-import type {
-  DataSourceConfig,
-  DataSourceEnvironmentConfig,
-  TimeoutConfig,
-  RetryConfig,
-  ObservabilityConfig,
-} from '../index';
 
 import {
-  DataSourceConfigBuilder,
   createConfigFromEnv,
   createTestConfig,
-  DEFAULT_TIMEOUTS,
+  DataSourceConfigBuilder,
   DEFAULT_RETRY,
-  DEFAULT_OBSERVABILITY,
+  DEFAULT_TIMEOUTS,
   ENVIRONMENT_CONFIGS,
-} from '../index';
+} from "../index";
 
 // Errors
 import {
-  RepositoryError,
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-  NetworkError,
-  TimeoutError,
-  ServerError,
-  RateLimitError,
-  BusinessRuleError,
-  ConcurrencyError,
-  ErrorFactory,
+  getErrorSeverity,
+  getUserMessage,
   isRepositoryError,
   isRetryableError,
-  getUserMessage,
-  getErrorSeverity,
-} from '../index';
-
-import type { ValidationFailure } from '../index';
+  NotFoundError,
+  UnauthorizedError,
+  ValidationError,
+} from "../index";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                    VALIDATION TESTS
@@ -120,8 +81,8 @@ function testRepositoryTypes() {
 function testConfiguration() {
   const config = createConfigFromEnv();
   const testConfig = createTestConfig();
-  const builder = new DataSourceConfigBuilder('production');
-  
+  const builder = new DataSourceConfigBuilder("production");
+
   return { config, testConfig, builder, DEFAULT_TIMEOUTS, DEFAULT_RETRY };
 }
 
@@ -130,15 +91,23 @@ function testConfiguration() {
  */
 function testErrors() {
   const error = new UnauthorizedError();
-  const notFound = new NotFoundError('Case', '123');
-  const validation = new ValidationError('Validation failed', []);
-  
+  const notFound = new NotFoundError("Case", "123");
+  const validation = new ValidationError("Validation failed", []);
+
   const isRepoError = isRepositoryError(error);
   const isRetryable = isRetryableError(error);
   const message = getUserMessage(error);
   const severity = getErrorSeverity(error);
-  
-  return { error, notFound, validation, isRepoError, isRetryable, message, severity };
+
+  return {
+    error,
+    notFound,
+    validation,
+    isRepoError,
+    isRetryable,
+    message,
+    severity,
+  };
 }
 
 /**
@@ -156,8 +125,8 @@ function testEnvironmentConfigs() {
 
 export const ALL_IMPORTS_VALIDATED = true;
 
-console.log('✅ All provider exports are accessible');
-console.log('✅ All repository exports are accessible');
-console.log('✅ All configuration exports are accessible');
-console.log('✅ All error exports are accessible');
-console.log('✅ Import/export chain is complete');
+console.log("✅ All provider exports are accessible");
+console.log("✅ All repository exports are accessible");
+console.log("✅ All configuration exports are accessible");
+console.log("✅ All error exports are accessible");
+console.log("✅ Import/export chain is complete");

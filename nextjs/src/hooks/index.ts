@@ -262,3 +262,32 @@ export {
   type UserPresence,
   type PresenceOptions,
 } from './usePresence';
+
+// ============================================================================
+// AUTHENTICATION AUDIT LOGGING
+// ============================================================================
+export {
+  useAuthAudit,
+  type UseAuthAuditReturn,
+  type UseAuthAuditOptions,
+  type AuthEvent,
+  type AuthEventMetadata,
+  type AuthEventType,
+  type AuditLogFilter,
+  type AuditExportOptions,
+} from './useAuthAudit';
+
+// ============================================================================
+// SESSION TIMEOUT MANAGEMENT
+// ============================================================================
+export {
+  useSessionTimeout,
+  formatRemainingTime,
+  calculateCountdownProgress,
+  SESSION_WARNING_EVENT,
+  SESSION_EXPIRED_EVENT,
+  type SessionTimeoutConfig,
+  type SessionTimeoutState,
+  type SessionTimeoutActions,
+  type UseSessionTimeoutReturn,
+} from './useSessionTimeout';

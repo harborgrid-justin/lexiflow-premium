@@ -235,6 +235,7 @@ export const api = {
   backups: adminDomain.adminApi.backups,
   serviceJobs: adminDomain.adminApi.serviceJobs,
   metrics: adminDomain.adminApi.metrics,
+  systemSettings: adminDomain.adminApi.settings,
   dataSources: dataPlatformDomain.dataPlatformApi.dataSources,
   rlsPolicies: dataPlatformDomain.dataPlatformApi.rlsPolicies,
   schemaManagement: dataPlatformDomain.dataPlatformApi.schemaManagement,

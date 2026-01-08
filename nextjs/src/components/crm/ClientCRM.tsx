@@ -1,27 +1,31 @@
 'use client';
 
+import { CRMService } from '@/services/domain/CRMDomain';
 import { BarChart2, Briefcase, Globe, MoreVertical, Search, UserPlus, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Mock Data
-const MOCK_CLIENTS = [
-  { id: '1', name: 'Acme Corp', industry: 'Technology', status: 'Active', balance: '$12,500', cases: 3 },
-  { id: '2', name: 'Global Industries', industry: 'Manufacturing', status: 'Active', balance: '$45,200', cases: 8 },
-  { id: '3', name: 'John Smith', industry: 'Individual', status: 'Prospective', balance: '$0', cases: 0 },
-];
+// Types
+interface CRMClient {
+  id: string;
+  name: string;
+  industry: string;
+  status: string;
+  balance: string;
+  cases: number;
+}
 
-const MOCK_PIPELINE = [
-  { id: '1', stage: 'Lead', count: 12, value: '$150k' },
-  { id: '2', stage: 'Intake', count: 5, value: '$75k' },
-  { id: '3', stage: 'Proposal', count: 3, value: '$120k' },
-  { id: '4', stage: 'Retained', count: 8, value: '$350k' },
-];
+interface PipelineStage {
+  id: string;
+  stage: string;
+  count: number;
+  value: string;
+}
 
-// Mock Sub-components
-const CRMDashboard = () => (
+// Sub-components
+const CRMDashboard = ({ pipeline }: { pipeline: PipelineStage[] }) => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      {MOCK_PIPELINE.map((stage) => (
+      {pipeline.map((stage) => (
         <div key={stage.id} className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
           <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{stage.stage}</h3>
           <div className="flex items-end justify-between">
@@ -60,7 +64,7 @@ const CRMDashboard = () => (
   </div>
 );
 
-const ClientDirectory = ({ clients }: { clients: typeof MOCK_CLIENTS }) => (
+const ClientDirectory = ({ clients }: { clients: CRMClient[] }) => (
   <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
     <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="relative max-w-md w-full">
@@ -92,27 +96,35 @@ const ClientDirectory = ({ clients }: { clients: typeof MOCK_CLIENTS }) => (
         </tr>
       </thead>
       <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-        {clients.map((client) => (
-          <tr key={client.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-            <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{client.name}</td>
-            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{client.industry}</td>
-            <td className="px-6 py-4">
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${client.status === 'Active'
-                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
-                : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                }`}>
-                {client.status}
-              </span>
-            </td>
-            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{client.cases}</td>
-            <td className="px-6 py-4 text-slate-900 dark:text-white font-medium">{client.balance}</td>
-            <td className="px-6 py-4">
-              <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <MoreVertical size={16} />
-              </button>
+        {clients.length === 0 ? (
+          <tr>
+            <td colSpan={6} className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
+              No clients found
             </td>
           </tr>
-        ))}
+        ) : (
+          clients.map((client) => (
+            <tr key={client.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+              <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{client.name}</td>
+              <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{client.industry}</td>
+              <td className="px-6 py-4">
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${client.status === 'Active'
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                  : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                  }`}>
+                  {client.status}
+                </span>
+              </td>
+              <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{client.cases}</td>
+              <td className="px-6 py-4 text-slate-900 dark:text-white font-medium">{client.balance}</td>
+              <td className="px-6 py-4">
+                <button className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 p-2 rounded-full transition-colors">
+                  <MoreVertical size={16} />
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   </div>
@@ -133,6 +145,25 @@ const ClientPortal = () => (
 
 export default function ClientCRM() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [clients, setClients] = useState<CRMClient[]>([]);
+  const [pipeline, setPipeline] = useState<PipelineStage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const clientData = await CRMService.getClients();
+        const pipelineData = await CRMService.getPipelineSummary();
+        setClients(clientData as unknown as CRMClient[]);
+        setPipeline(pipelineData);
+      } catch (error) {
+        console.error("Failed to fetch CRM data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart2 },
@@ -140,6 +171,10 @@ export default function ClientCRM() {
     { id: 'pipeline', label: 'Pipeline', icon: Briefcase },
     { id: 'portal', label: 'Client Portal', icon: Globe },
   ];
+
+  if (loading) {
+    return <div className="p-8 text-center text-slate-500">Loading CRM data...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -181,9 +216,20 @@ export default function ClientCRM() {
 
       {/* Content */}
       <div className="min-h-100">
-        {activeTab === 'dashboard' && <CRMDashboard />}
-        {activeTab === 'directory' && <ClientDirectory clients={MOCK_CLIENTS} />}
-        {activeTab === 'pipeline' && <CRMDashboard />} {/* Reusing dashboard for pipeline for now */}
+        {activeTab === 'dashboard' && <CRMDashboard pipeline={pipeline} />}
+        {activeTab === 'directory' && <ClientDirectory clients={clients} />}
+        {activeTab === 'pipeline' && (
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-lg text-center border border-slate-200 dark:border-slate-700">
+            <Briefcase className="mx-auto mb-4 text-slate-400" size={48} />
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Detailed Pipeline View</h3>
+            <p className="text-slate-500 dark:text-slate-400 mb-6">
+              Kanban view of {pipeline.reduce((acc, s) => acc + s.count, 0)} leads across all stages.
+            </p>
+            <button className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Launch Kanban Board
+            </button>
+          </div>
+        )}
         {activeTab === 'portal' && <ClientPortal />}
       </div>
     </div>

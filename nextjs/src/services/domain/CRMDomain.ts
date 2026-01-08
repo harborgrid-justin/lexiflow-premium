@@ -157,6 +157,57 @@ export const CRMService = {
     }
   },
 
+  getClients: async () => {
+    try {
+      const clients = await api.clients.getAll();
+      return clients.map((c) => ({
+        id: c.id,
+        name: c.name,
+        industry: c.industry || "Unknown",
+        status: c.status,
+        balance: c.billing?.balance
+          ? `$${c.billing.balance.toLocaleString()}`
+          : "$0",
+        cases: c.activeCases || 0,
+      }));
+    } catch (e) {
+      console.error("Failed to fetch clients", e);
+      return [];
+    }
+  },
+
+  getPipelineSummary: async () => {
+    try {
+      const leads = await CRMService.getLeads();
+      const summary: Record<string, { count: number; value: number }> = {};
+
+      leads.forEach((lead) => {
+        const stage = lead.stage || "Lead";
+        if (!summary[stage]) summary[stage] = { count: 0, value: 0 };
+        summary[stage].count++;
+        // Parse value "$150k" -> 150000
+        let val = 0;
+        if (lead.value) {
+          const numStr = lead.value.replace(/[^0-9.]/g, "");
+          val = parseFloat(numStr);
+          if (lead.value.toLowerCase().includes("k")) val *= 1000;
+          if (lead.value.toLowerCase().includes("m")) val *= 1000000;
+        }
+        summary[stage].value += val;
+      });
+
+      return Object.entries(summary).map(([stage, data], index) => ({
+        id: (index + 1).toString(),
+        stage,
+        count: data.count,
+        value: `$${(data.value / 1000).toFixed(0)}k`,
+      }));
+    } catch (e) {
+      console.error("Failed to pipeline summary", e);
+      return [];
+    }
+  },
+
   getAnalytics: async (mode: "light" | "dark" = "light") => {
     const leads = await CRMService.getLeads();
 

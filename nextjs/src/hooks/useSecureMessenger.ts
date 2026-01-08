@@ -232,12 +232,13 @@ export function useSecureMessenger(): UseSecureMessengerReturn {
   ) => {
     const textToSend = overrideText !== undefined ? overrideText : inputText;
 
-    if (
-      (!textToSend.trim() &&
-        (overrideAttachments || pendingAttachments).length === 0) ||
-      !activeConvId
-    )
+    const hasNoContent =
+      !textToSend.trim() &&
+      (overrideAttachments || pendingAttachments).length === 0;
+
+    if (hasNoContent || !activeConvId) {
       return;
+    }
 
     const newMessage: Message = {
       id: `new-${Date.now()}`,

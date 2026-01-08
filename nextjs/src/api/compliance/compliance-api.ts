@@ -418,4 +418,14 @@ export class ComplianceApiService {
       return [];
     }
   }
+
+  async getGovernanceRules(): Promise<GovernanceRule[]> {
+    return apiClient.get<GovernanceRule[]>(`${this.baseUrl}/governance/rules`);
+  }
+
+  async getGovernancePolicies(): Promise<GovernancePolicy[]> {
+    return apiClient.get<GovernancePolicy[]>(
+      `${this.baseUrl}/governance/policies`
+    );
+  }
 }

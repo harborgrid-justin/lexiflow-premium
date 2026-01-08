@@ -1,7 +1,9 @@
 'use client';
 
-import { Activity, Key, Lock, Mail, MapPin, Phone, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Activity, Key, Lock, Mail, MapPin, Phone, Settings, Shield, Sliders, UserCircle, Briefcase, Building } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ProfileDomain } from '@/services/domain/ProfileDomain';
+import { ExtendedUserProfile } from '@/types';
 
 // Mock Data
 const MOCK_PROFILE = {

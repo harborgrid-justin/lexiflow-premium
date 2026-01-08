@@ -59,6 +59,7 @@ export type { DataVersion } from "./versioning-api";
 // Import service classes for the unified API instance
 import { AiOpsApiService } from "./ai-ops-api";
 import { BackupsApiService } from "./backups-api";
+import { DataCatalogApiService } from "./data-catalog-api"; // Import DataCatalogApiService
 import { MonitoringApiService } from "./monitoring-api";
 import { PipelinesApiService } from "./pipelines-api";
 import { QueryWorkbenchApiService } from "./query-workbench-api";

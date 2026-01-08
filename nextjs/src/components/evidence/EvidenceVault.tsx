@@ -1,8 +1,8 @@
-'use client';
-
+// Imports
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { cn } from '@/lib/utils';
+import { EvidenceItem } from '@/types';
 import { Box, FileSearch, History, LayoutDashboard, Lock, Plus, Search } from 'lucide-react';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 
@@ -15,15 +15,14 @@ interface EvidenceVaultProps {
   caseId?: string;
 }
 
-// Mock Data
-const MOCK_EVIDENCE_ITEMS = [
-  { id: '1', title: 'Hard Drive - Seagate 2TB', type: 'Physical', status: 'In Custody', custodian: 'John Doe' },
-  { id: '2', title: 'Email Archive - PST', type: 'Digital', status: 'Processing', custodian: 'Jane Smith' },
-  { id: '3', title: 'iPhone 13 Pro', type: 'Physical', status: 'In Custody', custodian: 'Robert Johnson' },
-];
+interface EvidenceStats {
+  total: number;
+  inCustody: number;
+  pending: number;
+}
 
-// Mock Sub-components
-const EvidenceDetail = ({ selectedItem, handleBack }: { selectedItem: any, handleBack: () => void }) => (
+// Sub-components
+const EvidenceDetail = ({ selectedItem, handleBack }: { selectedItem: EvidenceItem, handleBack: () => void }) => (
   <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
     <div className="flex justify-between items-center mb-6">
       <h2 className="text-2xl font-bold">{selectedItem.title}</h2>
@@ -36,31 +35,44 @@ const EvidenceDetail = ({ selectedItem, handleBack }: { selectedItem: any, handl
       </div>
       <div className="p-4 border rounded bg-gray-50 dark:bg-gray-900">
         <p className="text-sm text-gray-500">Status</p>
-        <p className="font-medium">{selectedItem.status}</p>
+        <p className="font-medium">{selectedItem.status || 'Unknown'}</p>
       </div>
       <div className="p-4 border rounded bg-gray-50 dark:bg-gray-900">
         <p className="text-sm text-gray-500">Custodian</p>
-        <p className="font-medium">{selectedItem.custodian}</p>
+        <p className="font-medium">{selectedItem.custodian || 'N/A'}</p>
       </div>
     </div>
   </div>
 );
 
-const EvidenceVaultContent = ({ view, onIntakeClick, onItemClick }: { view: ViewMode, onIntakeClick: () => void, onItemClick: (item: any) => void }) => {
+interface EvidenceVaultContentProps {
+  view: ViewMode;
+  onIntakeClick: () => void;
+  onItemClick: (item: EvidenceItem) => void;
+  items: EvidenceItem[];
+  stats: EvidenceStats | null;
+  loading: boolean;
+}
+
+const EvidenceVaultContent = ({ view, onIntakeClick, onItemClick, items, stats, loading }: EvidenceVaultContentProps) => {
+  if (loading && !items.length) {
+    return <LazyLoader message="Loading Evidence Data..." />;
+  }
+
   if (view === 'dashboard') {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <h3 className="font-semibold mb-2">Total Items</h3>
-          <p className="text-3xl font-bold text-blue-600">142</p>
+          <p className="text-3xl font-bold text-blue-600">{stats?.total || 0}</p>
         </div>
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <h3 className="font-semibold mb-2">In Custody</h3>
-          <p className="text-3xl font-bold text-emerald-600">89</p>
+          <p className="text-3xl font-bold text-emerald-600">{stats?.inCustody || 0}</p>
         </div>
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <h3 className="font-semibold mb-2">Pending Intake</h3>
-          <p className="text-3xl font-bold text-amber-600">12</p>
+          <p className="text-3xl font-bold text-amber-600">{stats?.pending || 0}</p>
         </div>
       </div>
     );
@@ -74,21 +86,25 @@ const EvidenceVaultContent = ({ view, onIntakeClick, onItemClick }: { view: View
           <Button size="sm" onClick={onIntakeClick} icon={Plus}>Log New Item</Button>
         </div>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
-          {MOCK_EVIDENCE_ITEMS.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors flex justify-between items-center"
-              onClick={() => onItemClick(item)}
-            >
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{item.type} • {item.custodian}</p>
+          {items.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">No evidence items found.</div>
+          ) : (
+            items.map((item) => (
+              <div
+                key={item.id}
+                className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors flex justify-between items-center"
+                onClick={() => onItemClick(item)}
+              >
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.type} • {item.custodian}</p>
+                </div>
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  {item.status || 'Pending'}
+                </span>
               </div>
-              <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                {item.status}
-              </span>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     );
@@ -134,9 +150,31 @@ const EVIDENCE_PARENT_TABS = [
 
 export default function EvidenceVault({ onNavigateToCase, initialTab = 'dashboard', caseId }: EvidenceVaultProps) {
   const [view, setView] = useState<ViewMode>(initialTab);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [selectedItem, setSelectedItem] = useState<EvidenceItem | null>(null);
+  const [items, setItems] = useState<EvidenceItem[]>([]);
+  const [stats, setStats] = useState<EvidenceStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleItemClick = (item: any) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [evidenceData, statsData] = await Promise.all([
+          DiscoveryService.getEvidence(caseId),
+          DiscoveryService.getStats()
+        ]);
+        setItems(evidenceData);
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error fetching evidence:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [caseId]);
+
+  const handleItemClick = (item: EvidenceItem) => {
     setSelectedItem(item);
     setView('detail');
   };
@@ -238,6 +276,9 @@ export default function EvidenceVault({ onNavigateToCase, initialTab = 'dashboar
               view={view}
               onIntakeClick={() => setView('intake')}
               onItemClick={handleItemClick}
+              items={items}
+              stats={stats}
+              loading={loading}
             />
           </Suspense>
         </div>

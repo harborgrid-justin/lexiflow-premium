@@ -6,6 +6,7 @@
 
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
@@ -24,7 +25,7 @@ import {
   Upload,
   XCircle
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // TYPES

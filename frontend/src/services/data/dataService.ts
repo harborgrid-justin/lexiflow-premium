@@ -114,7 +114,12 @@ export function getDataServiceMemoryStats() {
 export function cleanupDataService(): void {
   try {
     // Clean up legacy repositories
-    legacyRepositoryRegistry.cleanup();
+    if (
+      legacyRepositoryRegistry &&
+      typeof (legacyRepositoryRegistry as any).cleanup === "function"
+    ) {
+      (legacyRepositoryRegistry as any).cleanup();
+    }
     console.log("[DataService] ✅ Cleaned up legacy repositories");
 
     // Clean up backend/refactored repositories - clear the registry

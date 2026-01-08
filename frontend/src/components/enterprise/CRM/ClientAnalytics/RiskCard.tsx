@@ -3,6 +3,7 @@
  * @description Client risk assessment card component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import type { ClientRiskAssessment } from './types';
@@ -16,7 +17,7 @@ import {
 
 interface RiskCardProps {
   client: ClientRiskAssessment;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function RiskCard({ client, theme }: RiskCardProps) {

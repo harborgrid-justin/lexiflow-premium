@@ -108,54 +108,16 @@ export interface CaseTeamProps {
 // Configuration
 // ============================================================================
 
-const _ROLE_TEMPLATES: RoleTemplate[] = [
-  {
-    role: 'Lead Attorney',
-    defaultPermissions: ['view', 'edit', 'delete', 'manage_team', 'manage_documents', 'manage_billing', 'manage_calendar', 'communicate_with_client'],
-    suggestedBillingRate: 500,
-    description: 'Primary attorney responsible for case strategy and client communication',
+// Role template definitions for team member management
+// Removed _ROLE_TEMPLATES - use inline configuration as needed
+suggestedBillingRate: 450,
+  description: 'Outside attorney providing specialized expertise',
   },
-  {
-    role: 'Co-Counsel',
-    defaultPermissions: ['view', 'edit', 'manage_documents', 'manage_calendar', 'communicate_with_client'],
-    suggestedBillingRate: 450,
-    description: 'Secondary attorney assisting with case management',
-  },
-  {
-    role: 'Associate',
-    defaultPermissions: ['view', 'edit', 'manage_documents'],
-    suggestedBillingRate: 300,
-    description: 'Attorney providing research and document preparation support',
-  },
-  {
-    role: 'Paralegal',
-    defaultPermissions: ['view', 'edit', 'manage_documents', 'manage_calendar'],
-    suggestedBillingRate: 150,
-    description: 'Legal professional handling administrative and research tasks',
-  },
-  {
-    role: 'Legal Assistant',
-    defaultPermissions: ['view', 'manage_documents', 'manage_calendar'],
-    suggestedBillingRate: 100,
-    description: 'Administrative support for case documentation and scheduling',
-  },
-  {
-    role: 'Expert Witness',
+{
+  role: 'Consultant',
     defaultPermissions: ['view'],
-    suggestedBillingRate: 800,
-    description: 'Subject matter expert providing testimony and analysis',
-  },
-  {
-    role: 'External Counsel',
-    defaultPermissions: ['view', 'edit', 'manage_documents'],
-    suggestedBillingRate: 450,
-    description: 'Outside attorney providing specialized expertise',
-  },
-  {
-    role: 'Consultant',
-    defaultPermissions: ['view'],
-    suggestedBillingRate: 350,
-    description: 'Advisor providing specialized knowledge or services',
+      suggestedBillingRate: 350,
+        description: 'Advisor providing specialized knowledge or services',
   },
 ];
 
@@ -197,6 +159,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
   const [selectedRole, setSelectedRole] = useState<TeamMemberRole | 'All'>('All');
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [showPermissions, setShowPermissions] = useState(false);
+  const [showAddMember, setShowAddMember] = useState(false);
 
   // Calculate workload summary
   const workloadSummary = useMemo((): WorkloadSummary => {

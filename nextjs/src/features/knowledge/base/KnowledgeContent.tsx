@@ -1,12 +1,12 @@
-import React, { lazy } from 'react';
 import { KnowledgeView } from '@/config/tabs.config';
+import React, { lazy } from 'react';
 
 // Lazy load all sub-views for the Knowledge Base
 const WikiView = lazy(() => import('./WikiView').then(m => ({ default: m.WikiView })));
 const PrecedentsView = lazy(() => import('./PrecedentsView').then(m => ({ default: m.PrecedentsView })));
 const QAView = lazy(() => import('./QAView').then(m => ({ default: m.QAView })));
 const KnowledgeAnalytics = lazy(() => import('./KnowledgeAnalytics').then(m => ({ default: m.KnowledgeAnalytics })));
-const CLETracker = () => <div className="p-8 text-center text-slate-500">CLE Tracking Module (Placeholder)</div>;
+const CLETracker = lazy(() => import('./CLETracker').then(m => ({ default: m.CLETracker })));
 
 interface KnowledgeContentProps {
   activeTab: KnowledgeView;

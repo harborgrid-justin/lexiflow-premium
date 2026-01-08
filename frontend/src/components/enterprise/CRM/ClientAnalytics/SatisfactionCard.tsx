@@ -3,6 +3,7 @@
  * @description Client satisfaction metrics card component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import {
   PolarAngleAxis,
@@ -22,7 +23,7 @@ interface ChartTheme {
 
 interface SatisfactionCardProps {
   client: ClientSatisfaction;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
   chartColors: string[];
   chartTheme: ChartTheme;
 }

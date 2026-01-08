@@ -310,7 +310,7 @@ const DEFAULT_TEMPLATES: CaseTemplate[] = [
       status: CaseStatus.Active,
       practiceArea: 'Personal Injury',
       matterType: MatterType.LITIGATION,
-      billingModel: 'contingency',
+      billingModel: 'Contingency',
     },
     checklist: [
       { id: 'cl-1', title: 'Obtain police report', order: 1, dueInDays: 3 },

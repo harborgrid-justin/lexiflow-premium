@@ -42,26 +42,21 @@ export * from "./compliance-risk";
 export * from "./discovery";
 
 // Export discovery-enhanced types explicitly to avoid conflicts with documents.ts and misc.ts
+// Only exporting types that actually exist in discovery-enhanced.ts
 export type {
-  AnalyticsJob,
-  ConceptCluster,
-  CustodianAcknowledgment,
+  AdvancedSearchQuery,
   DataCollection,
-  DocumentReview,
-  EmailThread,
-  HoldRelease,
-  LegalHold,
-  LegalHoldNotice,
-  PrivilegeLog,
+  DiscoveryStatistics,
+  DiscoveryTimelineEvent,
+  DocumentCoding,
+  LegalHoldEnhanced,
+  LegalHoldNotification,
+  PrivilegeLogEntryEnhanced,
   ProcessingJob as ProcessingJobEnhanced,
-  ProductionDelivery,
   ProductionSet as ProductionSetEnhanced,
-  ProductionSpecification,
-  ReviewDecision,
-  ReviewProject,
-  ReviewWorkspace,
-  SavedSearch,
-  SearchQuery,
+  ProductionStatistics,
+  ReviewDocument,
+  ReviewQueue,
 } from "./discovery-enhanced";
 
 export * from "./evidence";

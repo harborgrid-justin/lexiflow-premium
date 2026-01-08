@@ -40,7 +40,8 @@ export const AdminService = {
         (a: AuditLogEntry, b: AuditLogEntry) =>
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
-    } catch {       console.error("[AdminService.getLogs] Error fetching audit logs:", error);
+    } catch {
+      console.error("[AdminService.getLogs] Error fetching audit logs:", error);
       return [];
     }
   },
@@ -90,7 +91,8 @@ export const AdminService = {
           })
         );
       }
-    } catch {       console.error(
+    } catch {
+      console.error(
         "[AdminService.getIntegrations] Backend unavailable:",
         error
       );
@@ -157,7 +159,8 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch {       console.error(
+    } catch {
+      console.error(
         "[AdminService.getSecuritySettings] Backend unavailable:",
         error
       );
@@ -287,7 +290,8 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch {       console.error("[AdminService.getAnomalies] Backend unavailable:", error);
+    } catch {
+      console.error("[AdminService.getAnomalies] Backend unavailable:", error);
     }
 
     // Fallback to mock data for development
@@ -343,7 +347,8 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch {       console.error(
+    } catch {
+      console.error(
         "[AdminService.getDataDomains] Backend unavailable:",
         error
       );
@@ -415,7 +420,8 @@ export const AdminService = {
           }
         );
       }
-    } catch {       // Silently fail - backend not available
+    } catch {
+      // Silently fail - backend not available
     }
 
     // Backend not available - return error status connectors
@@ -495,8 +501,20 @@ export const AdminService = {
     ];
   },
 
+  /**
+   * Get API service specifications from backend
+   * Falls back to mock data if backend is unavailable
+   */
   getApiSpec: async (): Promise<ApiServiceSpec[]> => {
-    await delay(100);
-    return MOCK_API_SPEC;
+    try {
+      const response = await api.admin.getApiSpec();
+      return response;
+    } catch (error) {
+      console.warn(
+        "[AdminService] Failed to fetch API spec from backend, using fallback data:",
+        error
+      );
+      return MOCK_API_SPEC;
+    }
   },
 };

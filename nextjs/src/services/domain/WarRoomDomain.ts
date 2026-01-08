@@ -3,8 +3,12 @@
  * @updated 2025-12-19
  */
 
-import { api } from '@/api';
-import type { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from '@/api/workflow/war-room-api';
+import { api } from "@/api";
+import type {
+  CreateAdvisorDto,
+  CreateExpertDto,
+  UpdateStrategyDto,
+} from "@/api/workflow/war-room-api";
 
 export const WarRoomService = {
   getAll: async () => {
@@ -25,15 +29,9 @@ export const WarRoomService = {
     if (!caseId) return null;
     try {
       return await api.warRoom.getWarRoomData(caseId);
-    } catch {       console.warn('[WarRoomService] Failed to fetch data, returning mock:', error);
-      return {
-        caseId,
-        strategy: { theme: 'Mock Theme', narrative: 'Mock Narrative' },
-        advisors: [],
-        experts: [],
-        evidence: [],
-        witnesses: []
-      };
+    } catch (error) {
+      console.error("[WarRoomService] Failed to fetch war room data:", error);
+      throw new Error(`Failed to load war room data for case ${caseId}`);
     }
   },
 
@@ -47,21 +45,25 @@ export const WarRoomService = {
   getAdvisors: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getAdvisors(query);
-    } catch {       return [];
+    } catch {
+      return [];
     }
   },
 
   createAdvisor: async (data: CreateAdvisorDto) => {
     try {
       return await api.warRoom.createAdvisor(data);
-    } catch {       return { id: 'mock-advisor', ...data };
+    } catch (error) {
+      console.error("[WarRoomService] Failed to create advisor:", error);
+      throw new Error("Failed to create advisor");
     }
   },
 
   deleteAdvisor: async (id: string) => {
     try {
       return await api.warRoom.deleteAdvisor(id);
-    } catch {       return true;
+    } catch {
+      return true;
     }
   },
 
@@ -69,21 +71,25 @@ export const WarRoomService = {
   getExperts: async (query?: Record<string, string>) => {
     try {
       return await api.warRoom.getExperts(query);
-    } catch {       return [];
+    } catch {
+      return [];
     }
   },
 
   createExpert: async (data: CreateExpertDto) => {
     try {
       return await api.warRoom.createExpert(data);
-    } catch {       return { id: 'mock-expert', ...data };
+    } catch (error) {
+      console.error("[WarRoomService] Failed to create expert:", error);
+      throw new Error("Failed to create expert witness");
     }
   },
 
   deleteExpert: async (id: string) => {
     try {
       return await api.warRoom.deleteExpert(id);
-    } catch {       return true;
+    } catch {
+      return true;
     }
   },
 
@@ -91,14 +97,18 @@ export const WarRoomService = {
   getStrategy: async (caseId: string) => {
     try {
       return await api.warRoom.getStrategy(caseId);
-    } catch {       return { theme: 'Mock Theme', narrative: 'Mock Narrative' };
+    } catch (error) {
+      console.error("[WarRoomService] Failed to fetch strategy:", error);
+      throw new Error(`Failed to load strategy for case ${caseId}`);
     }
   },
 
   updateStrategy: async (caseId: string, data: UpdateStrategyDto) => {
     try {
       return await api.warRoom.updateStrategy(caseId, data);
-    } catch {       return { ...data };
+    } catch (error) {
+      console.error("[WarRoomService] Failed to update strategy:", error);
+      throw new Error("Failed to update litigation strategy");
     }
   },
 };

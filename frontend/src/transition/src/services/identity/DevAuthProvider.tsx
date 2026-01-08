@@ -7,7 +7,7 @@
  * @module services/identity/DevAuthProvider
  */
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { authGateway } from '../data/api/gateways/authGateway';
 import { userGateway, type UserIdentity } from '../data/api/gateways/userGateway';
 import { AuthContext, type AuthContextValue } from './AuthContext';
@@ -37,7 +37,7 @@ export function DevAuthProvider({ children }: DevAuthProviderProps) {
       email: identity.email,
       firstName: identity.firstName,
       lastName: identity.lastName,
-      roles: identity.roles || [] as Role[],
+      roles: (identity.roles || []) as Role[],
       permissions: (identity.permissions || []) as Permission[],
       name: `${identity.firstName} ${identity.lastName}`,
       avatar: undefined, // Fixed: avatarUrl -> avatar

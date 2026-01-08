@@ -116,13 +116,13 @@ export function DocumentWorkflow({
 
   // Submit step action
   const submitStepAction = async () => {
-    if (!activeStepId) return;
+    if (!workflow || !activeStepId) return;
 
     try {
-      if (actionType === 'approve' && onStepComplete) {
-        await onStepComplete(activeStepId, comment);
-      } else if (actionType === 'reject' && onStepReject) {
-        await onStepReject(activeStepId, comment);
+      if (actionType === 'approve') {
+        await onStepComplete?.(workflow.id, activeStepId, comment);
+      } else if (actionType === 'reject') {
+        await onStepReject?.(workflow.id, activeStepId, comment);
       }
       setShowCommentDialog(false);
       setComment('');

@@ -23,6 +23,8 @@ import { useTheme } from '@/providers';
 import { ChatBubble } from '@/components/ui/molecules/ChatBubble/ChatBubble';
 import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';
 
+// Services
+
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
@@ -43,8 +45,23 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
   // Strict Mode ready: scrollIntoView is idempotent (Principle #7)
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // No cleanup needed - idempotent DOM operation
   }, [conversation.messages]);
+
+  const handleFileDownload = async (attachment: any) => {
+    try {
+      const endpoint = `/api/messenger/attachments/${attachment.id || attachment.name}`;
+      const result = await FileDownloadService.downloadFromBackend(
+        endpoint,
+        attachment.name
+      );
+
+      if (!result.success) {
+        console.error('Download failed:', result.error);
+      }
+    } catch (error) {
+      console.error('File download error:', error);
+    }
+  };
 
   return (
     <div className={cn("flex-1 overflow-y-auto p-4 space-y-4 pt-8 scrollbar-thin", theme.surface.highlight)}>
@@ -68,10 +85,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
                   type={att.type}
                   className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface.default)}
                   variant="card"
-                  onDownload={() => {
-                    // Download handler - delegate to proper side effect channel
-                    // TODO: Implement proper file download service
-                  }}
+                  onDownload={() => handleFileDownload(att)}
                 />
               </div>
             ))}

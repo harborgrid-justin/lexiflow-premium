@@ -3,6 +3,7 @@
  * @description RFPs tab view component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Plus } from 'lucide-react';
 import { RFPCard } from './RFPCard';
@@ -10,7 +11,7 @@ import type { RFP } from './types';
 
 interface RFPsTabProps {
   rfps: RFP[];
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function RFPsTab({ rfps, theme }: RFPsTabProps) {

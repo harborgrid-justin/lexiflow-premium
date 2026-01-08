@@ -6,7 +6,7 @@
 
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { DataService } from '@/services/dataService';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
@@ -90,6 +90,9 @@ export interface HandlingLog {
   witnessName?: string;
 }
 
+// Type alias for audit log entries (same as HandlingLog)
+export type AuditLogEntry = HandlingLog;
+
 export interface AuthenticationRecord {
   id: string;
   evidenceId: string;
@@ -121,8 +124,9 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
 
   // State for data
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
-  const [custodyTransfers] = useState<CustodyTransfer[]>([]);
-  const [handlingLogs] = useState<HandlingLog[]>([]);
+  const [custodyTransfers, setTransfers] = useState<CustodyTransfer[]>([]);
+  const [handlingLogs, setAuditLogs] = useState<HandlingLog[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceItem | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'transfers' | 'handling' | 'authentication'>('overview');

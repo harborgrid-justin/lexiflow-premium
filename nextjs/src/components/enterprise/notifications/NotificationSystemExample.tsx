@@ -12,19 +12,20 @@
  * - ConnectionStatus indicator
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import { api } from '@/api';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  ConnectionStatus,
   NotificationBell,
+  NotificationCenter,
   NotificationPanel,
+  NotificationPreferences,
   ToastContainer,
   useToastNotifications,
-  NotificationCenter,
-  NotificationPreferences,
-  ConnectionStatus,
-  type UINotification,
-  type ExtendedNotificationPreferences,
   type ConnectionState,
+  type ExtendedNotificationPreferences,
+  type UINotification,
 } from './index';
 
 // ============================================================================
@@ -214,10 +215,16 @@ export const NotificationPreferencesPage: React.FC = () => {
     mockPreferences
   );
 
-  const handleSave = useCallback((newPreferences: ExtendedNotificationPreferences) => {
+  const handleSave = useCallback(async (newPreferences: ExtendedNotificationPreferences) => {
     setPreferences(newPreferences);
-    console.log('Saving preferences:', newPreferences);
-    // TODO: Save to backend API
+    try {
+      // Persist notification preferences to backend API
+      await api.settings.updateNotificationPreferences(newPreferences);
+      console.log('[NotificationPreferences] Saved successfully:', newPreferences);
+    } catch (error) {
+      console.error('[NotificationPreferences] Failed to save preferences:', error);
+      // Optionally show error toast/notification to user
+    }
   }, []);
 
   return (

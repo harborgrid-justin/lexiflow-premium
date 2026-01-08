@@ -4,6 +4,9 @@
 
 import { store } from "../store";
 
+// Type for the expected store state structure
+type StoreState = Record<string, unknown>;
+
 export function hydrateClientState(): void {
   if (typeof window === "undefined") return;
 
@@ -11,7 +14,7 @@ export function hydrateClientState(): void {
   const serverState = (window as { __INITIAL_STATE__?: unknown })
     .__INITIAL_STATE__;
 
-  if (serverState) {
+  if (serverState && typeof serverState === "object") {
     store.hydrate(serverState as StoreState);
 
     // Clean up

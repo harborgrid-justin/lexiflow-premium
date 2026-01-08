@@ -12,6 +12,7 @@
 // ============================================================================
 import { AlertTriangle, Grid, Key, Loader2, MapPin, Users, Wrench } from 'lucide-react';
 import React, { useState } from 'react';
+import FacilityMap from './FacilityMap';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,10 +26,10 @@ import { useTheme } from '@/providers';
 
 // Components
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -93,7 +94,9 @@ export const FacilitiesManager: React.FC = () => {
                                                 <div className="flex justify-between"><span className={theme.text.secondary}>Capacity</span> <span className="font-bold">{(loc.capacity || 0) * 100}%</span></div>
                                                 <div className="flex justify-between"><span className={theme.text.secondary}>Staff</span> <span className="font-bold">{loc.staffCount || 0}</span></div>
                                                 <div className="flex justify-between"><span className={theme.text.secondary}>Status</span> <span className="text-green-600 font-bold">{loc.status || 'N/A'}</span></div>
-                                                <div className="w-full h-32 bg-slate-100 rounded mt-4 flex items-center justify-center text-slate-400 text-xs">Map Placeholder</div>
+                                                <div className="w-full h-32 mt-4">
+                                                    <FacilityMap />
+                                                </div>
                                             </div>
                                         </Card>
                                     );

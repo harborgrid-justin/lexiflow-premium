@@ -138,8 +138,20 @@ export * from "./features/research/geminiService";
 export * from "./features/bluebook";
 
 // ==================== AI SERVICES ====================
+export { PIIDetectionService } from "./ai/piiDetectionService";
 export * from "./ai/prompts";
 export * from "./ai/schemas";
+
+// ==================== DOCUMENT SERVICES ====================
+export { PDFPageService } from "./documents/pdfPageService";
+export { RedactionService } from "./documents/redactionService";
+
+// ==================== COMPLIANCE SERVICES ====================
+export { ConflictCheckService } from "./compliance/conflictCheckService";
+
+// ==================== INFRASTRUCTURE ENHANCEMENTS ====================
+export { AuditTrailService } from "./infrastructure/auditTrailService";
+export { FileDownloadService } from "./infrastructure/fileDownloadService";
 
 // ==================== VALIDATION ====================
 // Validation schemas are not re-exported here to avoid barrel file bloat

@@ -107,19 +107,21 @@ export enum AuditResource {
 }
 
 /**
- * Get current user ID (mock implementation - replace with actual auth)
+ * Get current user ID from authentication service
  */
 function getCurrentUserId(): string {
-  // TODO: Replace with actual auth service
-  return "user-current";
+  // Import auth service dynamically to avoid circular dependencies
+  const { getCurrentUserId: getAuthUserId } = require("./authService");
+  return getAuthUserId();
 }
 
 /**
- * Get current user name (mock implementation - replace with actual auth)
+ * Get current user name from authentication service
  */
 function getCurrentUserName(): string {
-  // TODO: Replace with actual auth service
-  return "Current User";
+  // Import auth service dynamically to avoid circular dependencies
+  const { getCurrentUserName: getAuthUserName } = require("./authService");
+  return getAuthUserName();
 }
 
 /**

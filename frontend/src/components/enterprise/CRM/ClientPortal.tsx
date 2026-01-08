@@ -101,6 +101,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'documents' | 'cases' | 'invoices' | 'messages' | 'appointments'>('documents');
   const [messageText, setMessageText] = useState('');
+  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
 
   // Mock data
   const documents: PortalDocument[] = [

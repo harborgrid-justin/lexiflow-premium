@@ -344,26 +344,24 @@ export const WorkflowRepository = {
         "caseId",
         id
       );
-      const total = tasks.length;
-      const entries = tasks.filter(
-        (t) => t.status !== TaskStatusBackend.COMPLETED
-      );
+      const total = tasks?.length || 0;
+      const entries =
+        tasks?.filter((t) => t.status !== TaskStatusBackend.COMPLETED) || [];
       let nextDeadline = "N/A";
       let completed = 0;
-      const total = entries.length;
 
       if (entries.length > 0) {
         // Count completed tasks
-        completed = entries.filter(
-          (t) => t.status === "completed" || t.status === "Completed"
-        ).length;
+        completed =
+          tasks?.filter((t) => t.status === TaskStatusBackend.COMPLETED)
+            .length || 0;
 
         const dates = entries
           .map((t) => (t.dueDate ? new Date(t.dueDate).getTime() : 0))
           .filter((d) => d > 0)
           .sort((a, b) => a - b);
 
-        if (dates.length > 0) {
+        if (dates && dates.length > 0 && dates[0] !== undefined) {
           const diff = dates[0] - Date.now();
           const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
           nextDeadline = days >= 0 ? `${days} Days` : "Overdue";
@@ -374,7 +372,7 @@ export const WorkflowRepository = {
         id,
         type,
         status: "Active",
-        progress: Math.round((completed / total) * 100),
+        progress: total > 0 ? Math.round((completed / total) * 100) : 0,
         tasksTotal: total,
         tasksCompleted: completed,
         nextDeadline: nextDeadline,

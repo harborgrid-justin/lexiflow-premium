@@ -19,6 +19,7 @@ import React, { useState } from 'react';
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import SpendAnalyticsChart from './SpendAnalyticsChart';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -27,10 +28,10 @@ import { useTheme } from '@/providers';
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -164,12 +165,7 @@ export const VendorProcurement: React.FC = () => {
                 )}
 
                 {!isLoading && activeTab === 'spend' && (
-                    <div className={cn("flex items-center justify-center h-full border-2 border-dashed rounded-lg", theme.border.default)}>
-                        <div className="text-center">
-                            <BarChart2 className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)} />
-                            <p className={theme.text.secondary}>Spend analytics visualization placeholder.</p>
-                        </div>
-                    </div>
+                    <SpendAnalyticsChart />
                 )}
             </div>
         </div>

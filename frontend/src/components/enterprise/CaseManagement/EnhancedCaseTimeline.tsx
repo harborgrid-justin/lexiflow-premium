@@ -564,7 +564,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                   </div>
 
                   {/* Event Card */}
-                  {renderEventCard(event, index)}
+                  {renderEventCard(event)}
                 </div>
               ))}
             </div>

@@ -16,11 +16,14 @@
 import { cn } from '@/lib/utils';
 import {
   AlertTriangle,
+  ArrowDownRight,
+  ArrowUpRight,
   Bell,
   CheckCircle, Clock,
   DollarSign,
   Download,
   Edit,
+  PieChart,
   Plus,
   Settings,
   Trash2,
@@ -153,6 +156,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
   className,
 }) => {
   const [activeView, setActiveView] = useState<'overview' | 'categories' | 'expenses' | 'alerts'>('overview');
+  const [showAddExpense, setShowAddExpense] = useState(false);
 
   // Calculate metrics
   const metrics = useMemo(() => {

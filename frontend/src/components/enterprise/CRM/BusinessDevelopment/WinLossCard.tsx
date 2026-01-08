@@ -3,13 +3,14 @@
  * @description Individual win/loss analysis card component
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { WinLossAnalysis } from './types';
 
 interface WinLossCardProps {
   analysis: WinLossAnalysis;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function WinLossCard({ analysis, theme }: WinLossCardProps) {

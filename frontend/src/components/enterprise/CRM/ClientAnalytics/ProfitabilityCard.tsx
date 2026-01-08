@@ -3,6 +3,7 @@
  * @description Individual client profitability card
  */
 
+import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import type { ClientProfitability } from './types';
@@ -10,7 +11,7 @@ import { formatCurrency, formatPercentage } from './utils';
 
 interface ProfitabilityCardProps {
   client: ClientProfitability;
-  theme: Record<string, unknown>;
+  theme: ThemeObject;
 }
 
 export function ProfitabilityCard({ client, theme }: ProfitabilityCardProps) {

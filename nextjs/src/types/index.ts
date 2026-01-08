@@ -1,7 +1,6 @@
 // index.ts - Main types barrel export
 // Alphabetically sorted to prevent duplicates
 
-export * from "./intelligence";
 export * from "./analytics";
 export * from "./api-responses";
 export * from "./auth";
@@ -23,11 +22,13 @@ export * from "./evidence";
 export * from "./filters";
 export * from "./financial";
 export * from "./integration-types";
+export * from "./intelligence";
 export * from "./legal-research";
 export * from "./misc";
 export * from "./motion-docket";
 export * from "./notifications";
 export * from "./pacer";
+export * from "./pagination";
 export * from "./parser";
 export * from "./pleading-types";
 export * from "./pleadings";

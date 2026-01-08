@@ -11,7 +11,7 @@ interface ApprovalQueueProps {
 }
 
 export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onReview }) => {
-  const { tokens } = useTheme();
+  const { theme } = useTheme();
 
   // Safeguard: ensure approvals is an array
   const approvalsList = Array.isArray(approvals) ? approvals : [];
@@ -30,7 +30,7 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
       {approvalsList.map((doc) => (
         <div
           key={doc.id}
-          className={styles.getListItem(tokens.colors)}
+          className={styles.getListItem(theme)}
           onClick={() => onReview(doc)}
         >
           <div className="flex items-center space-x-4 flex-1">
@@ -38,8 +38,8 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
               <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={styles.getItemTitle(tokens.colors)}>{doc.title}</h4>
-              <p className={styles.getItemSubtitle(tokens.colors)}>
+              <h4 className={styles.getItemTitle(theme)}>{doc.title}</h4>
+              <p className={styles.getItemSubtitle(theme)}>
                 Submitted by {(doc.creator as { firstName?: string; lastName?: string })?.firstName || 'Unknown'} {(doc.creator as { firstName?: string; lastName?: string })?.lastName || ''} • {formatDistanceToNow(new Date(doc.updatedAt || new Date()), { addSuffix: true })}
               </p>
             </div>

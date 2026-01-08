@@ -1,73 +1,56 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/providers';
-import { yieldToMain } from '@/utils/apiUtils';
+import { PIIDetectionService, type PIIEntity as PIIEntityType } from '@/services/ai/piiDetectionService';
+import { RedactionService } from '@/services/documents/redactionService';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, Eye, EyeOff, ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface PIIPanelProps {
     content: string;
+    documentId?: string;
     onApplyRedactions: (redactedContent: string) => void;
 }
 
-interface PIIEntity {
-    id: string;
-    type: 'SSN' | 'Email' | 'Phone' | 'CreditCard';
-    value: string;
-    index: number;
-    ignored: boolean;
+interface PIIEntity extends PIIEntityType {
+    confidence: number;
 }
 
-export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
+export function PIIPanel({ content, documentId, onApplyRedactions }: PIIPanelProps) {
     const { theme } = useTheme();
     const [entities, setEntities] = useState<PIIEntity[]>([]);
     const [isScanning, setIsScanning] = useState(true);
+    const [scanDuration, setScanDuration] = useState<number>(0);
 
     useEffect(() => {
         let isCancelled = false;
 
         const scan = async () => {
-            setIsScanning(true);
-            const findings: PIIEntity[] = [];
-
-            // Mock findings based on content patterns
-            const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/g;
-            const phoneRegex = /\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g;
-
-            let match;
-            let count = 0;
-
-            // Process Emails
-            while ((match = emailRegex.exec(content)) !== null) {
-                if (isCancelled) return;
-                findings.push({ id: `pii-e-${match.index}`, type: 'Email', value: match[0], index: match.index, ignored: false });
-                count++;
-                // Yield every 10 matches to keep UI responsive
-                if (count % 10 === 0) await yieldToMain();
-            }
-
-            // Process Phones
-            while ((match = phoneRegex.exec(content)) !== null) {
-                if (isCancelled) return;
-                findings.push({ id: `pii-p-${match.index}`, type: 'Phone', value: match[0], index: match.index, ignored: false });
-                count++;
-                if (count % 10 === 0) await yieldToMain();
-            }
-
-            // Add some mock SSNs if none found just for demo visual
-            if (findings.length === 0 && content.length > 0) {
-                findings.push({ id: 'mock-1', type: 'SSN', value: '***-**-1234', index: 0, ignored: false });
-                findings.push({ id: 'mock-2', type: 'CreditCard', value: '****-****-****-4242', index: 0, ignored: false });
-            }
-
-            if (!isCancelled) {
-                setEntities(findings);
+            if (!content || content.length === 0) {
                 setIsScanning(false);
+                return;
+            }
+
+            setIsScanning(true);
+
+            try {
+                const result = await PIIDetectionService.scanDocument(content);
+
+                if (!isCancelled) {
+                    setEntities(result.entities as PIIEntity[]);
+                    setScanDuration(result.duration);
+                    setIsScanning(false);
+                }
+            } catch (error) {
+                console.error('PII scan failed:', error);
+                if (!isCancelled) {
+                    setEntities([]);
+                    setIsScanning(false);
+                }
             }
         };
 
-        // Small delay to allow initial render
-        const timer = setTimeout(scan, 500);
+        const timer = setTimeout(scan, 300);
 
         return () => {
             isCancelled = true;
@@ -79,8 +62,16 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
         setEntities(prev => prev.map(e => e.id === id ? { ...e, ignored: !e.ignored } : e));
     };
 
-    const handleRedactAll = () => {
-        onApplyRedactions("Redacted Content");
+    const handleRedactAll = async () => {
+        const activeEntities = entities.filter(e => !e.ignored);
+        if (activeEntities.length === 0) return;
+
+        const redactedContent = RedactionService.applyRedactions(content, activeEntities, {
+            preserveLength: true,
+            preserveFormat: true,
+        });
+
+        onApplyRedactions(redactedContent);
     };
 
     return (
@@ -97,28 +88,52 @@ export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {isScanning ? (
                     <div className={cn("text-center py-8", theme.text.tertiary)}>
-                        Scanning document...
+                        <div className="animate-pulse">Scanning document...</div>
+                        <div className="text-xs mt-2">Analyzing {Math.round(content.length / 1024)}KB</div>
+                    </div>
+                ) : entities.length === 0 ? (
+                    <div className={cn("text-center py-8", theme.text.tertiary)}>
+                        <ShieldAlert className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                        <p className="text-sm">No PII detected</p>
+                        <p className="text-xs mt-1">Scan completed in {scanDuration.toFixed(0)}ms</p>
                     </div>
                 ) : (
-                    entities.map(entity => (
-                        <div key={entity.id} className={cn("p-3 rounded border transition-opacity", theme.surface.default, theme.border.default, entity.ignored ? "opacity-50" : "shadow-sm")}>
-                            <div className="flex justify-between items-start mb-1">
-                                <span className={cn("text-[10px] font-bold uppercase tracking-wide px-1.5 rounded border",
-                                    entity.type === 'SSN' ? "bg-red-50 text-red-700 border-red-100" :
-                                        entity.type === 'CreditCard' ? "bg-purple-50 text-purple-700 border-purple-100" :
-                                            "bg-blue-50 text-blue-700 border-blue-100"
-                                )}>
-                                    {entity.type}
-                                </span>
-                                <button onClick={() => handleToggleIgnore(entity.id)} className={cn("hover:text-slate-600", theme.text.tertiary)}>
-                                    {entity.ignored ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                </button>
-                            </div>
-                            <p className={cn("font-mono text-sm", entity.ignored ? "line-through text-slate-400" : theme.text.primary)}>
-                                {entity.value}
-                            </p>
+                    <>
+                        <div className={cn("text-xs pb-2", theme.text.tertiary)}>
+                            Scan time: {scanDuration.toFixed(0)}ms
                         </div>
-                    ))
+                        {entities.map(entity => (
+                            <div key={entity.id} className={cn("p-3 rounded border transition-opacity", theme.surface.default, theme.border.default, entity.ignored ? "opacity-50" : "shadow-sm")}>
+                                <div className="flex justify-between items-start mb-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className={cn("text-[10px] font-bold uppercase tracking-wide px-1.5 rounded border",
+                                            entity.type === 'SSN' ? "bg-red-50 text-red-700 border-red-100" :
+                                                entity.type === 'CreditCard' ? "bg-purple-50 text-purple-700 border-purple-100" :
+                                                    entity.type === 'Phone' ? "bg-blue-50 text-blue-700 border-blue-100" :
+                                                        entity.type === 'Email' ? "bg-green-50 text-green-700 border-green-100" :
+                                                            "bg-amber-50 text-amber-700 border-amber-100"
+                                        )}>
+                                            {entity.type}
+                                        </span>
+                                        <span className={cn("text-[10px]", theme.text.tertiary)}>
+                                            {Math.round(entity.confidence * 100)}%
+                                        </span>
+                                    </div>
+                                    <button onClick={() => handleToggleIgnore(entity.id)} className={cn("hover:text-slate-600", theme.text.tertiary)}>
+                                        {entity.ignored ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </button>
+                                </div>
+                                <p className={cn("font-mono text-sm mb-1", entity.ignored ? "line-through text-slate-400" : theme.text.primary)}>
+                                    {entity.value}
+                                </p>
+                                {entity.context && (
+                                    <p className={cn("text-xs truncate", theme.text.tertiary)}>
+                                        {entity.context}
+                                    </p>
+                                )}
+                            </div>
+                        ))}
+                    </>
                 )}
             </div>
 

@@ -7,6 +7,9 @@ import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
@@ -24,6 +27,14 @@ interface Evidence {
 }
 
 async function EvidenceList() {
+  // Check authentication
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_token')?.value;
+
+  if (!token) {
+    redirect('/login?from=/evidence&error=unauthorized');
+  }
+
   let items: Evidence[] = [];
   let error = null;
 
@@ -32,13 +43,26 @@ async function EvidenceList() {
     items = Array.isArray(response) ? response : [];
   } catch (err) {
     error = err instanceof Error ? err.message : 'Failed to load evidence';
+
+    // If unauthorized, redirect to login
+    if (error.includes('401') || error.includes('Unauthorized')) {
+      redirect('/login?from=/evidence&error=session');
+    }
   }
 
   if (error) {
     return (
       <Card>
         <CardBody>
-          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+          <div className="space-y-4">
+            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+            <Link
+              href="/login?from=/evidence"
+              className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              Sign in to continue
+            </Link>
+          </div>
         </CardBody>
       </Card>
     );

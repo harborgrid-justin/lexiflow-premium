@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Document Server Actions
@@ -11,37 +11,29 @@
  * - OCR processing triggers
  */
 
-import { revalidateTag } from 'next/cache';
-import type { LegalDocument, DocumentVersion } from '@/types/documents';
-import { API_BASE_URL } from '@/lib/api-config';
+import { API_BASE_URL } from "@/lib/api-config";
 import {
-  createAction,
-  createMutation,
-  createQuery,
-  parseInput,
-  ActionResult,
-  success,
-  failure,
-  ActionContext,
-  getActionContext,
-} from './index';
-import {
-  createDocumentSchema,
-  updateDocumentSchema,
-  documentFilterSchema,
-  uploadDocumentSchema,
-  idInputSchema,
-  CreateDocumentInput,
-  UpdateDocumentInput,
-  DocumentFilterInput,
-  UploadDocumentInput,
-} from '@/lib/validation';
-import {
-  CacheTags,
   CacheProfiles,
+  CacheTags,
   invalidateDocumentData,
   invalidateTags,
-} from '@/lib/cache';
+} from "@/lib/cache";
+import {
+  CreateDocumentInput,
+  createDocumentSchema,
+  DocumentFilterInput,
+  documentFilterSchema,
+  idInputSchema,
+  UpdateDocumentInput,
+  updateDocumentSchema,
+  UploadDocumentInput,
+  uploadDocumentSchema,
+} from "@/lib/validation";
+import type { DocumentVersion, LegalDocument } from "@/types/documents";
+import { revalidateTag } from "next/cache";
+import { createMutation, createQuery } from "./helpers";
+import type { ActionContext, ActionResult } from "./index";
+import { failure, getActionContext, parseInput } from "./index";
 
 // ============================================================================
 // Types
@@ -71,20 +63,22 @@ async function apiRequest<T>(
   options: RequestInit = {},
   context?: ActionContext
 ): Promise<T> {
-  const ctx = context ?? await getActionContext();
+  const ctx = context ?? (await getActionContext());
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(ctx.userId && { 'X-User-Id': ctx.userId }),
-      ...(ctx.organizationId && { 'X-Organization-Id': ctx.organizationId }),
+      "Content-Type": "application/json",
+      ...(ctx.userId && { "X-User-Id": ctx.userId }),
+      ...(ctx.organizationId && { "X-Organization-Id": ctx.organizationId }),
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Request failed' }));
+    const error = await response
+      .json()
+      .catch(() => ({ message: "Request failed" }));
     throw new Error(error.message || `API error: ${response.status}`);
   }
 
@@ -102,31 +96,39 @@ async function apiRequest<T>(
 /**
  * Get all documents with optional filtering
  */
-export const getDocuments = createQuery<DocumentFilterInput | undefined, LegalDocument[]>(
+export const getDocuments = createQuery<
+  DocumentFilterInput | undefined,
+  LegalDocument[]
+>(
   async (input, context) => {
     const params = input ? parseInput(documentFilterSchema, input) : {};
 
     const queryString = new URLSearchParams();
-    if (params.page) queryString.set('page', String(params.page));
-    if (params.pageSize) queryString.set('limit', String(params.pageSize));
-    if (params.status?.length) queryString.set('status', params.status.join(','));
-    if (params.type?.length) queryString.set('type', params.type.join(','));
-    if (params.caseId) queryString.set('caseId', params.caseId);
-    if (params.folderId) queryString.set('folderId', params.folderId);
-    if (params.searchQuery) queryString.set('search', params.searchQuery);
-    if (params.sortBy) queryString.set('sortBy', params.sortBy);
-    if (params.sortOrder) queryString.set('sortOrder', params.sortOrder);
+    if (params.page) queryString.set("page", String(params.page));
+    if (params.pageSize) queryString.set("limit", String(params.pageSize));
+    if (params.status?.length)
+      queryString.set("status", params.status.join(","));
+    if (params.type?.length) queryString.set("type", params.type.join(","));
+    if (params.caseId) queryString.set("caseId", params.caseId);
+    if (params.folderId) queryString.set("folderId", params.folderId);
+    if (params.searchQuery) queryString.set("search", params.searchQuery);
+    if (params.sortBy) queryString.set("sortBy", params.sortBy);
+    if (params.sortOrder) queryString.set("sortOrder", params.sortOrder);
 
     const query = queryString.toString();
-    const endpoint = `/documents${query ? `?${query}` : ''}`;
+    const endpoint = `/documents${query ? `?${query}` : ""}`;
 
-    return apiRequest<LegalDocument[]>(endpoint, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.DOCUMENTS],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<LegalDocument[]>(
+      endpoint,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.DOCUMENTS],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -134,20 +136,27 @@ export const getDocuments = createQuery<DocumentFilterInput | undefined, LegalDo
 /**
  * Get a single document by ID
  */
-export const getDocumentById = createQuery<{ id: string }, LegalDocument | null>(
+export const getDocumentById = createQuery<
+  { id: string },
+  LegalDocument | null
+>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
     try {
-      return await apiRequest<LegalDocument>(`/documents/${id}`, {
-        method: 'GET',
-        next: {
-          tags: [CacheTags.DOCUMENT(id)],
-          revalidate: CacheProfiles.FAST,
+      return await apiRequest<LegalDocument>(
+        `/documents/${id}`,
+        {
+          method: "GET",
+          next: {
+            tags: [CacheTags.DOCUMENT(id)],
+            revalidate: CacheProfiles.FAST,
+          },
         },
-      }, context);
+        context
+      );
     } catch (error) {
-      if (error instanceof Error && error.message.includes('404')) {
+      if (error instanceof Error && error.message.includes("404")) {
         return null;
       }
       throw error;
@@ -159,17 +168,26 @@ export const getDocumentById = createQuery<{ id: string }, LegalDocument | null>
 /**
  * Get document versions
  */
-export const getDocumentVersions = createQuery<{ documentId: string }, DocumentVersion[]>(
+export const getDocumentVersions = createQuery<
+  { documentId: string },
+  DocumentVersion[]
+>(
   async (input, context) => {
-    const { id: documentId } = parseInput(idInputSchema, { id: input.documentId });
+    const { id: documentId } = parseInput(idInputSchema, {
+      id: input.documentId,
+    });
 
-    return apiRequest<DocumentVersion[]>(`/documents/${documentId}/versions`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.DOCUMENT_VERSIONS(documentId)],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<DocumentVersion[]>(
+      `/documents/${documentId}/versions`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.DOCUMENT_VERSIONS(documentId)],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -177,17 +195,24 @@ export const getDocumentVersions = createQuery<{ documentId: string }, DocumentV
 /**
  * Get documents by case
  */
-export const getDocumentsByCase = createQuery<{ caseId: string }, LegalDocument[]>(
+export const getDocumentsByCase = createQuery<
+  { caseId: string },
+  LegalDocument[]
+>(
   async (input, context) => {
     const { caseId } = input;
 
-    return apiRequest<LegalDocument[]>(`/documents?caseId=${caseId}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.DOCUMENTS, CacheTags.CASE(caseId)],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<LegalDocument[]>(
+      `/documents?caseId=${caseId}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.DOCUMENTS, CacheTags.CASE(caseId)],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -195,17 +220,24 @@ export const getDocumentsByCase = createQuery<{ caseId: string }, LegalDocument[
 /**
  * Get all folders
  */
-export const getFolders = createQuery<{ parentId?: string } | undefined, DocumentFolder[]>(
+export const getFolders = createQuery<
+  { parentId?: string } | undefined,
+  DocumentFolder[]
+>(
   async (input, context) => {
-    const query = input?.parentId ? `?parentId=${input.parentId}` : '';
+    const query = input?.parentId ? `?parentId=${input.parentId}` : "";
 
-    return apiRequest<DocumentFolder[]>(`/documents/folders/list${query}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.FOLDERS],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<DocumentFolder[]>(
+      `/documents/folders/list${query}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.FOLDERS],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -228,15 +260,19 @@ export const searchDocuments = createQuery<
       q: query.trim(),
       limit: String(limit),
     });
-    if (caseId) params.set('caseId', caseId);
+    if (caseId) params.set("caseId", caseId);
 
-    return apiRequest<LegalDocument[]>(`/search/documents?${params}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.DOCUMENTS],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<LegalDocument[]>(
+      `/search/documents?${params}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.DOCUMENTS],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -248,14 +284,21 @@ export const searchDocuments = createQuery<
 /**
  * Create a new document (metadata only)
  */
-export const createDocument = createMutation<CreateDocumentInput, LegalDocument>(
+export const createDocument = createMutation<
+  CreateDocumentInput,
+  LegalDocument
+>(
   async (input, context) => {
     const validated = parseInput(createDocumentSchema, input);
 
-    const newDocument = await apiRequest<LegalDocument>('/documents', {
-      method: 'POST',
-      body: JSON.stringify(validated),
-    }, context);
+    const newDocument = await apiRequest<LegalDocument>(
+      "/documents",
+      {
+        method: "POST",
+        body: JSON.stringify(validated),
+      },
+      context
+    );
 
     // Invalidate caches
     revalidateTag(CacheTags.DOCUMENTS);
@@ -274,15 +317,22 @@ export const createDocument = createMutation<CreateDocumentInput, LegalDocument>
 /**
  * Update document metadata
  */
-export const updateDocument = createMutation<UpdateDocumentInput, LegalDocument>(
+export const updateDocument = createMutation<
+  UpdateDocumentInput,
+  LegalDocument
+>(
   async (input, context) => {
     const validated = parseInput(updateDocumentSchema, input);
     const { id, ...data } = validated;
 
-    const updatedDocument = await apiRequest<LegalDocument>(`/documents/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    }, context);
+    const updatedDocument = await apiRequest<LegalDocument>(
+      `/documents/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      },
+      context
+    );
 
     // Invalidate document caches
     invalidateDocumentData(id, data.folderId);
@@ -295,18 +345,29 @@ export const updateDocument = createMutation<UpdateDocumentInput, LegalDocument>
 /**
  * Delete a document
  */
-export const deleteDocument = createMutation<{ id: string }, { success: boolean }>(
+export const deleteDocument = createMutation<
+  { id: string },
+  { success: boolean }
+>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
     // Get document first to know which folder to invalidate
-    const document = await apiRequest<LegalDocument>(`/documents/${id}`, {
-      method: 'GET',
-    }, context);
+    const document = await apiRequest<LegalDocument>(
+      `/documents/${id}`,
+      {
+        method: "GET",
+      },
+      context
+    );
 
-    await apiRequest<void>(`/documents/${id}`, {
-      method: 'DELETE',
-    }, context);
+    await apiRequest<void>(
+      `/documents/${id}`,
+      {
+        method: "DELETE",
+      },
+      context
+    );
 
     // Invalidate caches
     invalidateDocumentData(id, document.folderId);
@@ -332,23 +393,25 @@ export const uploadDocument = createMutation<
 
     // Create form data for multipart upload
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('metadata', JSON.stringify(validated));
+    formData.append("file", file);
+    formData.append("metadata", JSON.stringify(validated));
 
-    const ctx = context ?? await getActionContext();
+    const ctx = context ?? (await getActionContext());
 
     const response = await fetch(`${API_BASE_URL}/documents/upload`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        ...(ctx.userId && { 'X-User-Id': ctx.userId }),
-        ...(ctx.organizationId && { 'X-Organization-Id': ctx.organizationId }),
+        ...(ctx.userId && { "X-User-Id": ctx.userId }),
+        ...(ctx.organizationId && { "X-Organization-Id": ctx.organizationId }),
       },
       body: formData,
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Upload failed' }));
-      throw new Error(error.message || 'Document upload failed');
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Upload failed" }));
+      throw new Error(error.message || "Document upload failed");
     }
 
     const result = await response.json();
@@ -377,10 +440,14 @@ export const createDocumentVersion = createMutation<
   async (input, context) => {
     const { documentId, content, notes } = input;
 
-    const newVersion = await apiRequest<DocumentVersion>(`/documents/${documentId}/versions`, {
-      method: 'POST',
-      body: JSON.stringify({ content, notes }),
-    }, context);
+    const newVersion = await apiRequest<DocumentVersion>(
+      `/documents/${documentId}/versions`,
+      {
+        method: "POST",
+        body: JSON.stringify({ content, notes }),
+      },
+      context
+    );
 
     // Invalidate version cache
     revalidateTag(CacheTags.DOCUMENT_VERSIONS(documentId));
@@ -401,10 +468,14 @@ export const updateDocumentContent = createMutation<
   async (input, context) => {
     const { id, content } = input;
 
-    const updatedDocument = await apiRequest<LegalDocument>(`/documents/${id}/content`, {
-      method: 'PUT',
-      body: JSON.stringify({ content }),
-    }, context);
+    const updatedDocument = await apiRequest<LegalDocument>(
+      `/documents/${id}/content`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ content }),
+      },
+      context
+    );
 
     invalidateDocumentData(id);
 
@@ -424,14 +495,22 @@ export const moveDocument = createMutation<
     const { documentId, folderId } = input;
 
     // Get current document to know old folder
-    const document = await apiRequest<LegalDocument>(`/documents/${documentId}`, {
-      method: 'GET',
-    }, context);
+    const document = await apiRequest<LegalDocument>(
+      `/documents/${documentId}`,
+      {
+        method: "GET",
+      },
+      context
+    );
 
-    const updatedDocument = await apiRequest<LegalDocument>(`/documents/${documentId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ folderId }),
-    }, context);
+    const updatedDocument = await apiRequest<LegalDocument>(
+      `/documents/${documentId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ folderId }),
+      },
+      context
+    );
 
     // Invalidate old and new folder caches
     if (document.folderId) {
@@ -457,10 +536,14 @@ export const createFolder = createMutation<
   async (input, context) => {
     const { name, parentId, caseId } = input;
 
-    const newFolder = await apiRequest<DocumentFolder>('/documents/folders', {
-      method: 'POST',
-      body: JSON.stringify({ name, parentId, caseId }),
-    }, context);
+    const newFolder = await apiRequest<DocumentFolder>(
+      "/documents/folders",
+      {
+        method: "POST",
+        body: JSON.stringify({ name, parentId, caseId }),
+      },
+      context
+    );
 
     revalidateTag(CacheTags.FOLDERS);
     if (parentId) {
@@ -478,13 +561,20 @@ export const createFolder = createMutation<
 /**
  * Delete a folder
  */
-export const deleteFolder = createMutation<{ id: string }, { success: boolean }>(
+export const deleteFolder = createMutation<
+  { id: string },
+  { success: boolean }
+>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
-    await apiRequest<void>(`/documents/folders/${id}`, {
-      method: 'DELETE',
-    }, context);
+    await apiRequest<void>(
+      `/documents/folders/${id}`,
+      {
+        method: "DELETE",
+      },
+      context
+    );
 
     revalidateTag(CacheTags.FOLDERS);
     revalidateTag(CacheTags.DOCUMENT_FOLDER(id));
@@ -500,14 +590,21 @@ export const deleteFolder = createMutation<{ id: string }, { success: boolean }>
 /**
  * Rename a folder
  */
-export const renameFolder = createMutation<{ id: string; name: string }, DocumentFolder>(
+export const renameFolder = createMutation<
+  { id: string; name: string },
+  DocumentFolder
+>(
   async (input, context) => {
     const { id, name } = input;
 
-    const updatedFolder = await apiRequest<DocumentFolder>(`/documents/folders/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ name }),
-    }, context);
+    const updatedFolder = await apiRequest<DocumentFolder>(
+      `/documents/folders/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ name }),
+      },
+      context
+    );
 
     revalidateTag(CacheTags.FOLDERS);
     revalidateTag(CacheTags.DOCUMENT_FOLDER(id));
@@ -520,14 +617,21 @@ export const renameFolder = createMutation<{ id: string; name: string }, Documen
 /**
  * Trigger OCR processing for a document
  */
-export const triggerOCR = createMutation<{ documentId: string }, { jobId: string }>(
+export const triggerOCR = createMutation<
+  { documentId: string },
+  { jobId: string }
+>(
   async (input, context) => {
     const { documentId } = input;
 
-    const result = await apiRequest<{ jobId: string }>(`/ocr/process`, {
-      method: 'POST',
-      body: JSON.stringify({ documentId }),
-    }, context);
+    const result = await apiRequest<{ jobId: string }>(
+      `/ocr/process`,
+      {
+        method: "POST",
+        body: JSON.stringify({ documentId }),
+      },
+      context
+    );
 
     return result;
   },
@@ -544,10 +648,14 @@ export const updateDocumentStatus = createMutation<
   async (input, context) => {
     const { id, status } = input;
 
-    const updatedDocument = await apiRequest<LegalDocument>(`/documents/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status }),
-    }, context);
+    const updatedDocument = await apiRequest<LegalDocument>(
+      `/documents/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      },
+      context
+    );
 
     invalidateDocumentData(id);
 
@@ -572,11 +680,14 @@ export const deleteDocuments = createMutation<
 
     await Promise.all(
       ids.map((id) =>
-        apiRequest<void>(`/documents/${id}`, { method: 'DELETE' }, context)
+        apiRequest<void>(`/documents/${id}`, { method: "DELETE" }, context)
       )
     );
 
-    invalidateTags([CacheTags.DOCUMENTS, ...ids.map((id) => CacheTags.DOCUMENT(id))]);
+    invalidateTags([
+      CacheTags.DOCUMENTS,
+      ...ids.map((id) => CacheTags.DOCUMENT(id)),
+    ]);
 
     return { success: true, count: ids.length };
   },
@@ -598,10 +709,14 @@ export const moveDocuments = createMutation<
 
     await Promise.all(
       documentIds.map((id) =>
-        apiRequest<LegalDocument>(`/documents/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ folderId }),
-        }, context)
+        apiRequest<LegalDocument>(
+          `/documents/${id}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({ folderId }),
+          },
+          context
+        )
       )
     );
 
@@ -627,28 +742,31 @@ export async function uploadDocumentFormAction(
   prevState: ActionResult<UploadResult> | null,
   formData: FormData
 ): Promise<ActionResult<UploadResult>> {
-  const file = formData.get('file') as File | null;
-  const caseId = formData.get('caseId') as string;
-  const title = formData.get('title') as string;
-  const folderId = formData.get('folderId') as string | null;
-  const description = formData.get('description') as string | null;
-  const type = formData.get('type') as string | null;
+  const file = formData.get("file") as File | null;
+  const caseId = formData.get("caseId") as string;
+  const title = formData.get("title") as string;
+  const folderId = formData.get("folderId") as string | null;
+  const description = formData.get("description") as string | null;
+  const type = formData.get("type") as string | null;
 
   if (!file) {
-    return failure('File is required', 'VALIDATION_ERROR');
+    return failure("File is required", "VALIDATION_ERROR");
   }
 
   if (!caseId) {
-    return failure('Case ID is required', 'VALIDATION_ERROR');
+    return failure("Case ID is required", "VALIDATION_ERROR");
   }
 
-  const tags = formData.get('tags');
+  const tags = formData.get("tags");
   let parsedTags: string[] = [];
   if (tags) {
     try {
       parsedTags = JSON.parse(tags as string);
     } catch {
-      parsedTags = (tags as string).split(',').map((t) => t.trim()).filter(Boolean);
+      parsedTags = (tags as string)
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
     }
   }
 
@@ -658,7 +776,18 @@ export async function uploadDocumentFormAction(
     title: title || file.name,
     folderId: folderId || undefined,
     description: description || undefined,
-    type: (type as 'Contract' | 'Pleading' | 'Motion' | 'Brief' | 'Discovery' | 'Correspondence' | 'Evidence' | 'Exhibit' | 'Template' | 'Other') || 'Other',
+    type:
+      (type as
+        | "Contract"
+        | "Pleading"
+        | "Motion"
+        | "Brief"
+        | "Discovery"
+        | "Correspondence"
+        | "Evidence"
+        | "Exhibit"
+        | "Template"
+        | "Other") || "Other",
     tags: parsedTags,
   });
 }
@@ -670,12 +799,12 @@ export async function createFolderFormAction(
   prevState: ActionResult<DocumentFolder> | null,
   formData: FormData
 ): Promise<ActionResult<DocumentFolder>> {
-  const name = formData.get('name') as string;
-  const parentId = formData.get('parentId') as string | null;
-  const caseId = formData.get('caseId') as string | null;
+  const name = formData.get("name") as string;
+  const parentId = formData.get("parentId") as string | null;
+  const caseId = formData.get("caseId") as string | null;
 
   if (!name) {
-    return failure('Folder name is required', 'VALIDATION_ERROR');
+    return failure("Folder name is required", "VALIDATION_ERROR");
   }
 
   return createFolder({

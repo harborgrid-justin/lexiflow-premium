@@ -5,14 +5,14 @@
  * Handles email submission for password reset
  */
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useState } from 'react';
 import Link from 'next/link';
+import { useActionState, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import type { AuthFormState } from '../types';
 
 interface ForgotPasswordFormProps {
   action: (prevState: AuthFormState, formData: FormData) => Promise<AuthFormState>;
+  csrfToken: string;
 }
 
 const initialState: AuthFormState = {
@@ -22,7 +22,7 @@ const initialState: AuthFormState = {
   fieldErrors: undefined,
 };
 
-export function ForgotPasswordForm({ action }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ action, csrfToken }: ForgotPasswordFormProps) {
   const [state, formAction] = useActionState(action, initialState);
   const [submittedEmail, setSubmittedEmail] = useState('');
 
@@ -86,11 +86,14 @@ export function ForgotPasswordForm({ action }: ForgotPasswordFormProps) {
       }}
       className="space-y-4"
     >
+      {/* CSRF Token */}
+      <input type="hidden" name="_csrf" value={csrfToken} />
+
       {/* Error Message */}
       {state.error && (
         <div className="rounded-md border border-rose-500/50 bg-rose-500/10 p-3 text-sm text-rose-400">
           <div className="flex items-center gap-2">
-            <AlertIcon className="h-4 w-4 flex-shrink-0" />
+            <AlertIcon className="h-4 w-4 shrink-0" />
             {state.error}
           </div>
         </div>

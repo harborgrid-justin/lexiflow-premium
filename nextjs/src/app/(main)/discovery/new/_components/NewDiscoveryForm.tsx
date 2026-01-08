@@ -5,10 +5,10 @@
  * Client component with form validation and submission
  */
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button, Card, CardBody, Input, Select } from '@/components/ui';
-import { Save, X, FileText, Calendar, Users, MessageSquare } from 'lucide-react';
+import { Calendar, FileText, MessageSquare, Save, Users, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 import { createDiscoveryRequest } from '../../_actions';
 import {
   DiscoveryRequestType,
@@ -133,17 +133,12 @@ export function NewDiscoveryForm() {
                     Request Type *
                   </label>
                   <Select
+                    options={requestTypeOptions}
                     value={formData.requestType || ''}
-                    onChange={(e) => handleChange('requestType', e.target.value as DiscoveryRequestTypeValue)}
-                    className={errors.requestType ? 'border-red-500' : ''}
-                  >
-                    <option value="">Select request type</option>
-                    {requestTypeOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Select>
+                    onChange={(value) => handleChange('requestType', value as DiscoveryRequestTypeValue)}
+                    placeholder="Select request type"
+                    error={errors.requestType}
+                  />
                   {errors.requestType && (
                     <p className="text-sm text-red-600 mt-1">{errors.requestType}</p>
                   )}

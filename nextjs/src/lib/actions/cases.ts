@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Case Server Actions
@@ -11,35 +11,27 @@
  * - Error handling
  */
 
-import { revalidateTag } from 'next/cache';
-import type { Case, Party } from '@/types/case';
-import { API_BASE_URL } from '@/lib/api-config';
+import { API_BASE_URL } from "@/lib/api-config";
 import {
-  createAction,
-  createMutation,
-  createQuery,
-  parseInput,
-  ActionResult,
-  success,
-  failure,
-  ActionContext,
-  getActionContext,
-} from './index';
-import {
-  createCaseSchema,
-  updateCaseSchema,
-  caseFilterSchema,
-  idInputSchema,
-  CreateCaseInput,
-  UpdateCaseInput,
-  CaseFilterInput,
-} from '@/lib/validation';
-import {
-  CacheTags,
   CacheProfiles,
+  CacheTags,
   invalidateCaseData,
   invalidateTags,
-} from '@/lib/cache';
+} from "@/lib/cache";
+import {
+  CaseFilterInput,
+  caseFilterSchema,
+  CreateCaseInput,
+  createCaseSchema,
+  idInputSchema,
+  UpdateCaseInput,
+  updateCaseSchema,
+} from "@/lib/validation";
+import type { Case, Party } from "@/types/case";
+import { revalidateTag } from "next/cache";
+import { createMutation, createQuery } from "./helpers";
+import type { ActionContext, ActionResult } from "./index";
+import { failure, getActionContext, parseInput } from "./index";
 
 // ============================================================================
 // API Helper
@@ -53,20 +45,22 @@ async function apiRequest<T>(
   options: RequestInit = {},
   context?: ActionContext
 ): Promise<T> {
-  const ctx = context ?? await getActionContext();
+  const ctx = context ?? (await getActionContext());
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(ctx.userId && { 'X-User-Id': ctx.userId }),
-      ...(ctx.organizationId && { 'X-Organization-Id': ctx.organizationId }),
+      "Content-Type": "application/json",
+      ...(ctx.userId && { "X-User-Id": ctx.userId }),
+      ...(ctx.organizationId && { "X-Organization-Id": ctx.organizationId }),
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Request failed' }));
+    const error = await response
+      .json()
+      .catch(() => ({ message: "Request failed" }));
     throw new Error(error.message || `API error: ${response.status}`);
   }
 
@@ -90,25 +84,31 @@ export const getCases = createQuery<CaseFilterInput | undefined, Case[]>(
     const params = input ? parseInput(caseFilterSchema, input) : {};
 
     const queryString = new URLSearchParams();
-    if (params.page) queryString.set('page', String(params.page));
-    if (params.pageSize) queryString.set('limit', String(params.pageSize));
-    if (params.status?.length) queryString.set('status', params.status.join(','));
-    if (params.matterType?.length) queryString.set('type', params.matterType.join(','));
-    if (params.clientId) queryString.set('clientId', params.clientId);
-    if (params.searchQuery) queryString.set('search', params.searchQuery);
-    if (params.sortBy) queryString.set('sortBy', params.sortBy);
-    if (params.sortOrder) queryString.set('sortOrder', params.sortOrder);
+    if (params.page) queryString.set("page", String(params.page));
+    if (params.pageSize) queryString.set("limit", String(params.pageSize));
+    if (params.status?.length)
+      queryString.set("status", params.status.join(","));
+    if (params.matterType?.length)
+      queryString.set("type", params.matterType.join(","));
+    if (params.clientId) queryString.set("clientId", params.clientId);
+    if (params.searchQuery) queryString.set("search", params.searchQuery);
+    if (params.sortBy) queryString.set("sortBy", params.sortBy);
+    if (params.sortOrder) queryString.set("sortOrder", params.sortOrder);
 
     const query = queryString.toString();
-    const endpoint = `/cases${query ? `?${query}` : ''}`;
+    const endpoint = `/cases${query ? `?${query}` : ""}`;
 
-    return apiRequest<Case[]>(endpoint, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CASES],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Case[]>(
+      endpoint,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CASES],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -121,16 +121,20 @@ export const getCaseById = createQuery<{ id: string }, Case | null>(
     const { id } = parseInput(idInputSchema, input);
 
     try {
-      return await apiRequest<Case>(`/cases/${id}`, {
-        method: 'GET',
-        next: {
-          tags: [CacheTags.CASE(id)],
-          revalidate: CacheProfiles.DEFAULT,
+      return await apiRequest<Case>(
+        `/cases/${id}`,
+        {
+          method: "GET",
+          next: {
+            tags: [CacheTags.CASE(id)],
+            revalidate: CacheProfiles.DEFAULT,
+          },
         },
-      }, context);
+        context
+      );
     } catch (error) {
       // Return null for 404s so page can handle with notFound()
-      if (error instanceof Error && error.message.includes('404')) {
+      if (error instanceof Error && error.message.includes("404")) {
         return null;
       }
       throw error;
@@ -146,13 +150,17 @@ export const getCaseParties = createQuery<{ caseId: string }, Party[]>(
   async (input, context) => {
     const { id: caseId } = parseInput(idInputSchema, { id: input.caseId });
 
-    return apiRequest<Party[]>(`/cases/${caseId}/parties`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CASE_PARTIES(caseId)],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Party[]>(
+      `/cases/${caseId}/parties`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CASE_PARTIES(caseId)],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -160,7 +168,10 @@ export const getCaseParties = createQuery<{ caseId: string }, Party[]>(
 /**
  * Search cases by query
  */
-export const searchCases = createQuery<{ query: string; limit?: number }, Case[]>(
+export const searchCases = createQuery<
+  { query: string; limit?: number },
+  Case[]
+>(
   async (input, context) => {
     const query = input.query.trim();
     const limit = input.limit ?? 10;
@@ -169,13 +180,17 @@ export const searchCases = createQuery<{ query: string; limit?: number }, Case[]
       return [];
     }
 
-    return apiRequest<Case[]>(`/search/cases?q=${encodeURIComponent(query)}&limit=${limit}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CASES],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<Case[]>(
+      `/search/cases?q=${encodeURIComponent(query)}&limit=${limit}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CASES],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -191,10 +206,14 @@ export const createCase = createMutation<CreateCaseInput, Case>(
   async (input, context) => {
     const validated = parseInput(createCaseSchema, input);
 
-    const newCase = await apiRequest<Case>('/cases', {
-      method: 'POST',
-      body: JSON.stringify(validated),
-    }, context);
+    const newCase = await apiRequest<Case>(
+      "/cases",
+      {
+        method: "POST",
+        body: JSON.stringify(validated),
+      },
+      context
+    );
 
     // Invalidate cases list cache
     revalidateTag(CacheTags.CASES);
@@ -220,10 +239,14 @@ export const updateCase = createMutation<UpdateCaseInput, Case>(
     const validated = parseInput(updateCaseSchema, input);
     const { id, ...data } = validated;
 
-    const updatedCase = await apiRequest<Case>(`/cases/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    }, context);
+    const updatedCase = await apiRequest<Case>(
+      `/cases/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      },
+      context
+    );
 
     // Invalidate case-specific and list caches
     invalidateCaseData(id);
@@ -240,9 +263,13 @@ export const deleteCase = createMutation<{ id: string }, { success: boolean }>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
-    await apiRequest<void>(`/cases/${id}`, {
-      method: 'DELETE',
-    }, context);
+    await apiRequest<void>(
+      `/cases/${id}`,
+      {
+        method: "DELETE",
+      },
+      context
+    );
 
     // Invalidate caches
     invalidateCaseData(id);
@@ -262,10 +289,14 @@ export const archiveCase = createMutation<{ id: string }, Case>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
-    const archivedCase = await apiRequest<Case>(`/cases/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ isArchived: true, status: 'Archived' }),
-    }, context);
+    const archivedCase = await apiRequest<Case>(
+      `/cases/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ isArchived: true, status: "Archived" }),
+      },
+      context
+    );
 
     invalidateCaseData(id);
 
@@ -281,10 +312,14 @@ export const restoreCase = createMutation<{ id: string }, Case>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
-    const restoredCase = await apiRequest<Case>(`/cases/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ isArchived: false, status: 'Active' }),
-    }, context);
+    const restoredCase = await apiRequest<Case>(
+      `/cases/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ isArchived: false, status: "Active" }),
+      },
+      context
+    );
 
     invalidateCaseData(id);
 
@@ -303,10 +338,14 @@ export const updateCaseStatus = createMutation<
   async (input, context) => {
     const { id } = parseInput(idInputSchema, { id: input.id });
 
-    const updatedCase = await apiRequest<Case>(`/cases/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status: input.status }),
-    }, context);
+    const updatedCase = await apiRequest<Case>(
+      `/cases/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status: input.status }),
+      },
+      context
+    );
 
     invalidateCaseData(id);
 
@@ -325,10 +364,14 @@ export const assignLeadAttorney = createMutation<
   async (input, context) => {
     const { caseId, attorneyId } = input;
 
-    const updatedCase = await apiRequest<Case>(`/cases/${caseId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ leadAttorneyId: attorneyId }),
-    }, context);
+    const updatedCase = await apiRequest<Case>(
+      `/cases/${caseId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ leadAttorneyId: attorneyId }),
+      },
+      context
+    );
 
     invalidateCaseData(caseId);
 
@@ -341,16 +384,23 @@ export const assignLeadAttorney = createMutation<
  * Add party to case
  */
 export const addPartyToCase = createMutation<
-  { caseId: string; party: Omit<Party, 'id' | 'caseId' | 'createdAt' | 'updatedAt'> },
+  {
+    caseId: string;
+    party: Omit<Party, "id" | "caseId" | "createdAt" | "updatedAt">;
+  },
   Party
 >(
   async (input, context) => {
     const { caseId, party } = input;
 
-    const newParty = await apiRequest<Party>(`/parties`, {
-      method: 'POST',
-      body: JSON.stringify({ ...party, caseId }),
-    }, context);
+    const newParty = await apiRequest<Party>(
+      `/parties`,
+      {
+        method: "POST",
+        body: JSON.stringify({ ...party, caseId }),
+      },
+      context
+    );
 
     // Invalidate case parties cache
     revalidateTag(CacheTags.CASE_PARTIES(caseId));
@@ -371,9 +421,13 @@ export const removePartyFromCase = createMutation<
   async (input, context) => {
     const { caseId, partyId } = input;
 
-    await apiRequest<void>(`/parties/${partyId}`, {
-      method: 'DELETE',
-    }, context);
+    await apiRequest<void>(
+      `/parties/${partyId}`,
+      {
+        method: "DELETE",
+      },
+      context
+    );
 
     // Invalidate case parties cache
     revalidateTag(CacheTags.CASE_PARTIES(caseId));
@@ -391,14 +445,17 @@ export const removePartyFromCase = createMutation<
 /**
  * Delete multiple cases
  */
-export const deleteCases = createMutation<{ ids: string[] }, { success: boolean; count: number }>(
+export const deleteCases = createMutation<
+  { ids: string[] },
+  { success: boolean; count: number }
+>(
   async (input, context) => {
     const { ids } = input;
 
     // Delete each case
     await Promise.all(
       ids.map((id) =>
-        apiRequest<void>(`/cases/${id}`, { method: 'DELETE' }, context)
+        apiRequest<void>(`/cases/${id}`, { method: "DELETE" }, context)
       )
     );
 
@@ -416,16 +473,23 @@ export const deleteCases = createMutation<{ ids: string[] }, { success: boolean;
 /**
  * Archive multiple cases
  */
-export const archiveCases = createMutation<{ ids: string[] }, { success: boolean; count: number }>(
+export const archiveCases = createMutation<
+  { ids: string[] },
+  { success: boolean; count: number }
+>(
   async (input, context) => {
     const { ids } = input;
 
     await Promise.all(
       ids.map((id) =>
-        apiRequest<Case>(`/cases/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ isArchived: true, status: 'Archived' }),
-        }, context)
+        apiRequest<Case>(
+          `/cases/${id}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({ isArchived: true, status: "Archived" }),
+          },
+          context
+        )
       )
     );
 
@@ -451,32 +515,47 @@ export async function createCaseFormAction(
 
   // Extract form fields
   const fields = [
-    'title', 'description', 'caseNumber', 'type', 'status',
-    'practiceArea', 'jurisdiction', 'court', 'judge',
-    'filingDate', 'trialDate', 'clientId', 'client',
-    'leadAttorneyId', 'billingModel', 'matterType',
+    "title",
+    "description",
+    "caseNumber",
+    "type",
+    "status",
+    "practiceArea",
+    "jurisdiction",
+    "court",
+    "judge",
+    "filingDate",
+    "trialDate",
+    "clientId",
+    "client",
+    "leadAttorneyId",
+    "billingModel",
+    "matterType",
   ];
 
   for (const field of fields) {
     const value = formData.get(field);
-    if (value !== null && value !== '') {
+    if (value !== null && value !== "") {
       data[field] = value;
     }
   }
 
   // Handle numeric fields
-  const valueField = formData.get('value');
-  if (valueField && valueField !== '') {
+  const valueField = formData.get("value");
+  if (valueField && valueField !== "") {
     data.value = parseFloat(valueField as string);
   }
 
   // Handle tags array
-  const tags = formData.get('tags');
+  const tags = formData.get("tags");
   if (tags) {
     try {
       data.tags = JSON.parse(tags as string);
     } catch {
-      data.tags = (tags as string).split(',').map((t) => t.trim()).filter(Boolean);
+      data.tags = (tags as string)
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
     }
   }
 
@@ -490,32 +569,44 @@ export async function updateCaseFormAction(
   prevState: ActionResult<Case> | null,
   formData: FormData
 ): Promise<ActionResult<Case>> {
-  const id = formData.get('id') as string;
+  const id = formData.get("id") as string;
 
   if (!id) {
-    return failure('Case ID is required', 'VALIDATION_ERROR');
+    return failure("Case ID is required", "VALIDATION_ERROR");
   }
 
   const data: Record<string, unknown> = { id };
 
   // Extract form fields
   const fields = [
-    'title', 'description', 'caseNumber', 'type', 'status',
-    'practiceArea', 'jurisdiction', 'court', 'judge',
-    'filingDate', 'trialDate', 'clientId', 'client',
-    'leadAttorneyId', 'billingModel', 'matterType',
+    "title",
+    "description",
+    "caseNumber",
+    "type",
+    "status",
+    "practiceArea",
+    "jurisdiction",
+    "court",
+    "judge",
+    "filingDate",
+    "trialDate",
+    "clientId",
+    "client",
+    "leadAttorneyId",
+    "billingModel",
+    "matterType",
   ];
 
   for (const field of fields) {
     const value = formData.get(field);
-    if (value !== null && value !== '') {
+    if (value !== null && value !== "") {
       data[field] = value;
     }
   }
 
   // Handle numeric fields
-  const valueField = formData.get('value');
-  if (valueField && valueField !== '') {
+  const valueField = formData.get("value");
+  if (valueField && valueField !== "") {
     data.value = parseFloat(valueField as string);
   }
 
@@ -529,10 +620,10 @@ export async function deleteCaseFormAction(
   prevState: ActionResult<{ success: boolean }> | null,
   formData: FormData
 ): Promise<ActionResult<{ success: boolean }>> {
-  const id = formData.get('id') as string;
+  const id = formData.get("id") as string;
 
   if (!id) {
-    return failure('Case ID is required', 'VALIDATION_ERROR');
+    return failure("Case ID is required", "VALIDATION_ERROR");
   }
 
   return deleteCase({ id });

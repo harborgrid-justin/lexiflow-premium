@@ -93,17 +93,28 @@ export const WindowProvider = ({
   // Declare isDragging state before the effect that uses it
   const [isDragging, setIsDragging] = useState(false);
 
-  // Initialize portal root lazily to avoid setState in effect
-  const [portalRoot] = useState<HTMLElement | null>(() => {
-    if (typeof document === 'undefined') return null;
+  // Initialize portal root after mount to avoid SSR hydration issues
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+
+  // BP2: Mount Effect - Create portal root on client side only
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
     let root = document.getElementById('window-layer');
     if (!root) {
       root = document.createElement('div');
       root.id = 'window-layer';
       document.body.appendChild(root);
     }
-    return root;
-  });
+    setPortalRoot(root);
+
+    return () => {
+      // Cleanup: remove portal root on unmount
+      if (root && root.parentNode) {
+        root.parentNode.removeChild(root);
+      }
+    };
+  }, []);
 
   // BP2: Mount Effect - Setup event listeners
   useEffect(() => {

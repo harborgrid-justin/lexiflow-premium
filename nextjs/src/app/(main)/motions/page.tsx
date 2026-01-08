@@ -7,6 +7,7 @@ import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
@@ -26,19 +27,37 @@ interface Motion {
 async function MotionsListContent() {
   let motions: Motion[] = [];
   let error = null;
+  let isAuthError = false;
 
   try {
     const response = await apiFetch(API_ENDPOINTS.MOTIONS?.LIST || '/api/motions');
     motions = Array.isArray(response) ? response : [];
   } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to load motions';
+    const errorMessage = err instanceof Error ? err.message : 'Failed to load motions';
+    // Check if this is an authentication error
+    isAuthError = errorMessage.includes('401') || errorMessage.includes('Unauthorized');
+    error = errorMessage;
   }
 
   if (error) {
     return (
       <Card>
         <CardBody>
-          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+          {isAuthError ? (
+            <EmptyState
+              title="Authentication Required"
+              description="Please log in to view motions"
+              action={
+                <Link href="/login">
+                  <Button variant="primary">
+                    Go to Login
+                  </Button>
+                </Link>
+              }
+            />
+          ) : (
+            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+          )}
         </CardBody>
       </Card>
     );

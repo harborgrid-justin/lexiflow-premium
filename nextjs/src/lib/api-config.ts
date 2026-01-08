@@ -5,6 +5,8 @@
  * Backend-first architecture - all data flows through PostgreSQL + NestJS
  */
 
+import { cookies } from "next/headers";
+
 // Backend API URL - use environment variable or fallback to localhost
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
@@ -793,13 +795,13 @@ export const API_ENDPOINTS = {
     JURORS: (id: string) => `/jury-selection/${id}/jurors`,
   },
   TRIAL_EXHIBITS: {
-    LIST: "/trial-exhibits",
-    DETAIL: (id: string) => `/trial-exhibits/${id}`,
-    CREATE: "/trial-exhibits",
-    UPDATE: (id: string) => `/trial-exhibits/${id}`,
-    DELETE: (id: string) => `/trial-exhibits/${id}`,
-    ADMIT: (id: string) => `/trial-exhibits/${id}/admit`,
-    OBJECTIONS: (id: string) => `/trial-exhibits/${id}/objections`,
+    LIST: "/exhibits",
+    DETAIL: (id: string) => `/exhibits/${id}`,
+    CREATE: "/exhibits",
+    UPDATE: (id: string) => `/exhibits/${id}`,
+    DELETE: (id: string) => `/exhibits/${id}`,
+    ADMIT: (id: string) => `/exhibits/${id}/admit`,
+    OBJECTIONS: (id: string) => `/exhibits/${id}/objections`,
   },
   COURT_REPORTERS: {
     LIST: "/court-reporters",
@@ -860,11 +862,16 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
+  // Get auth token from cookies (Next.js 16: cookies() is async)
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
         "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
         ...options?.headers,
       },
       // Add cache control for Next.js 16

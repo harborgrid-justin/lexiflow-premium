@@ -1,5 +1,3 @@
-'use server';
-
 /**
  * CSRF Protection Utilities
  *
@@ -14,15 +12,15 @@
  * - Timing-safe comparison to prevent timing attacks
  */
 
-import { cookies, headers } from 'next/headers';
-import crypto from 'crypto';
+import crypto from "crypto";
+import { cookies, headers } from "next/headers";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const CSRF_COOKIE_NAME = 'csrf_token';
-const CSRF_HEADER_NAME = 'x-csrf-token';
+const CSRF_COOKIE_NAME = "csrf_token";
+const CSRF_HEADER_NAME = "x-csrf-token";
 const CSRF_TOKEN_LENGTH = 32; // 256 bits
 const CSRF_TOKEN_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
 
@@ -34,7 +32,7 @@ const CSRF_TOKEN_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
  * Generate a cryptographically secure random token
  */
 function generateSecureToken(length: number = CSRF_TOKEN_LENGTH): string {
-  return crypto.randomBytes(length).toString('hex');
+  return crypto.randomBytes(length).toString("hex");
 }
 
 /**
@@ -48,22 +46,34 @@ export async function generateCSRFToken(): Promise<string> {
 
   cookieStore.set(CSRF_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: Math.floor(CSRF_TOKEN_DURATION / 1000), // Convert to seconds
-    path: '/',
+    path: "/",
   });
 
   return token;
 }
 
 /**
- * Get the current CSRF token from cookies
- * If no token exists, generates a new one
+ * Get the current CSRF token from cookies (read-only)
+ * Safe to call from Server Components
+ *
+ * @returns The current CSRF token or empty string if none exists
+ */
+export async function getCSRFToken(): Promise<string> {
+  const cookieStore = await cookies();
+  const existingToken = cookieStore.get(CSRF_COOKIE_NAME)?.value;
+  return existingToken || "";
+}
+
+/**
+ * Get the current CSRF token from cookies, generating if needed
+ * MUST only be called from Server Actions or Route Handlers
  *
  * @returns The current or newly generated CSRF token
  */
-export async function getCSRFToken(): Promise<string> {
+export async function getOrGenerateCSRFToken(): Promise<string> {
   const cookieStore = await cookies();
   const existingToken = cookieStore.get(CSRF_COOKIE_NAME)?.value;
 
@@ -84,7 +94,7 @@ export async function getCSRFToken(): Promise<string> {
  * Prevents timing attacks by ensuring comparison takes constant time
  */
 function timingSafeCompare(a: string, b: string): boolean {
-  if (typeof a !== 'string' || typeof b !== 'string') {
+  if (typeof a !== "string" || typeof b !== "string") {
     return false;
   }
 
@@ -106,8 +116,10 @@ function timingSafeCompare(a: string, b: string): boolean {
  * @param token - The token to validate (from form or header)
  * @returns Boolean indicating if the token is valid
  */
-export async function validateCSRFToken(token: string | null | undefined): Promise<boolean> {
-  if (!token || typeof token !== 'string') {
+export async function validateCSRFToken(
+  token: string | null | undefined
+): Promise<boolean> {
+  if (!token || typeof token !== "string") {
     return false;
   }
 
@@ -125,7 +137,10 @@ export async function validateCSRFToken(token: string | null | undefined): Promi
  * Check if a CSRF token is valid (synchronous validation helper)
  * This is used for quick checks where the token is already known
  */
-export function isValidCSRFToken(submittedToken: string, storedToken: string): boolean {
+export function isValidCSRFToken(
+  submittedToken: string,
+  storedToken: string
+): boolean {
   if (!submittedToken || !storedToken) {
     return false;
   }
@@ -141,8 +156,8 @@ export function isValidCSRFToken(submittedToken: string, storedToken: string): b
  * Extract CSRF token from FormData
  */
 export function extractCSRFFromFormData(formData: FormData): string | null {
-  const token = formData.get('_csrf');
-  return typeof token === 'string' ? token : null;
+  const token = formData.get("_csrf");
+  return typeof token === "string" ? token : null;
 }
 
 /**
@@ -160,6 +175,7 @@ export async function extractCSRFFromHeaders(): Promise<string | null> {
 /**
  * Validate CSRF token from either FormData or headers
  * Checks FormData first, then falls back to header
+ * If no token exists in cookies, generates one (first-time visitors)
  *
  * @param formData - Optional FormData containing _csrf field
  * @returns Object with validation result and error message if invalid
@@ -179,10 +195,21 @@ export async function validateCSRFFromRequest(
     token = await extractCSRFFromHeaders();
   }
 
+  // Check if we have a token in cookies
+  const cookieStore = await cookies();
+  const cookieToken = cookieStore.get(CSRF_COOKIE_NAME)?.value;
+
+  // If no cookie token exists, this is a first-time visitor - generate one and allow request
+  if (!cookieToken) {
+    await generateCSRFToken();
+    return { valid: true };
+  }
+
+  // If cookie exists but no token provided, reject
   if (!token) {
     return {
       valid: false,
-      error: 'CSRF token is missing. Please refresh the page and try again.',
+      error: "CSRF token is missing. Please refresh the page and try again.",
     };
   }
 
@@ -191,7 +218,8 @@ export async function validateCSRFFromRequest(
   if (!isValid) {
     return {
       valid: false,
-      error: 'Invalid or expired CSRF token. Please refresh the page and try again.',
+      error:
+        "Invalid or expired CSRF token. Please refresh the page and try again.",
     };
   }
 
@@ -241,7 +269,7 @@ export async function requireCSRFToken(
   if (!validation.valid) {
     return {
       success: false,
-      error: validation.error || 'CSRF validation failed.',
+      error: validation.error || "CSRF validation failed.",
     };
   }
 

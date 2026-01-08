@@ -12,43 +12,28 @@
  * @module app/(main)/workflows/templates/[id]/page
  */
 
-import { Metadata } from 'next';
-import { Suspense } from 'react';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import type { WorkflowStep, WorkflowTemplate, WorkflowTemplateStatus } from '@/types/workflow-schemas';
+import { STEP_TYPE_LABELS, TEMPLATE_STATUS_LABELS, WORKFLOW_CATEGORIES } from '@/types/workflow-schemas';
 import {
-  ArrowLeft,
-  Play,
-  Edit,
-  Copy,
-  Trash2,
-  MoreVertical,
-  Clock,
-  Users,
   Activity,
-  Settings,
+  AlertCircle,
+  ArrowLeft,
   CheckCircle,
   Circle,
+  Clock,
   GitBranch,
-  AlertCircle,
-  Pause,
-  Archive,
-  ToggleLeft,
-  ToggleRight,
+  Settings,
+  Users
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import {
-  getWorkflowTemplate,
-  activateWorkflowTemplate,
-  deactivateWorkflowTemplate,
-  deleteWorkflowTemplate,
-  startWorkflowInstance,
-  changeTemplateStatusFormAction,
-  deleteTemplateFormAction,
-  startWorkflowFormAction,
+  getWorkflowTemplate
 } from '../../actions';
-import type { WorkflowTemplate, WorkflowStep, WorkflowTemplateStatus } from '@/types/workflow-schemas';
-import { TEMPLATE_STATUS_LABELS, STEP_TYPE_LABELS, WORKFLOW_CATEGORIES } from '@/types/workflow-schemas';
+import { TemplateActions } from './TemplateActions';
 
 // =============================================================================
 // Types
@@ -183,89 +168,6 @@ function StepsTimeline({ steps }: { steps: readonly WorkflowStep[] }) {
 }
 
 // =============================================================================
-// Template Actions Component
-// =============================================================================
-
-function TemplateActions({ template }: { template: WorkflowTemplate }) {
-  return (
-    <div className="flex items-center gap-2">
-      {/* Status Toggle */}
-      <form action={changeTemplateStatusFormAction}>
-        <input type="hidden" name="id" value={template.id} />
-        <input
-          type="hidden"
-          name="action"
-          value={template.status === 'active' ? 'deactivate' : 'activate'}
-        />
-        <button
-          type="submit"
-          className={cn(
-            'inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors',
-            template.status === 'active'
-              ? 'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/50'
-              : 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50'
-          )}
-        >
-          {template.status === 'active' ? (
-            <>
-              <Pause className="h-4 w-4" />
-              Deactivate
-            </>
-          ) : (
-            <>
-              <Play className="h-4 w-4" />
-              Activate
-            </>
-          )}
-        </button>
-      </form>
-
-      {/* Start Workflow */}
-      {template.status === 'active' && (
-        <form action={startWorkflowFormAction}>
-          <input type="hidden" name="templateId" value={template.id} />
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Play className="h-4 w-4" />
-            Start Workflow
-          </button>
-        </form>
-      )}
-
-      {/* Edit in Builder */}
-      <Link
-        href={`/workflows/builder?template=${template.id}`}
-        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-      >
-        <Edit className="h-4 w-4" />
-        Edit
-      </Link>
-
-      {/* Delete */}
-      <form
-        action={deleteTemplateFormAction}
-        onSubmit={(e) => {
-          if (!confirm('Are you sure you want to delete this template?')) {
-            e.preventDefault();
-          }
-        }}
-      >
-        <input type="hidden" name="id" value={template.id} />
-        <button
-          type="submit"
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-        >
-          <Trash2 className="h-4 w-4" />
-          Delete
-        </button>
-      </form>
-    </div>
-  );
-}
-
-// =============================================================================
 // Template Content Component
 // =============================================================================
 
@@ -277,107 +179,107 @@ async function TemplateContent({ id }: { id: string }) {
     result.success && result.data
       ? result.data
       : {
-          id,
-          name: 'Client Onboarding Workflow',
-          description:
-            'Standard process for new client intake, document collection, and case setup.',
-          category: 'client-intake',
-          status: 'active',
-          version: 3,
-          steps: [
-            {
-              id: 'step-1',
-              name: 'Initial Contact',
+        id,
+        name: 'Client Onboarding Workflow',
+        description:
+          'Standard process for new client intake, document collection, and case setup.',
+        category: 'client-intake',
+        status: 'active',
+        version: 3,
+        steps: [
+          {
+            id: 'step-1',
+            name: 'Initial Contact',
+            type: 'task',
+            config: {
               type: 'task',
-              config: {
-                type: 'task',
-                description: 'Record initial client contact details',
-                assigneeType: 'role',
-                assigneeValue: 'intake_specialist',
-              },
-              position: { x: 0, y: 0 },
+              description: 'Record initial client contact details',
+              assigneeType: 'role',
+              assigneeValue: 'intake_specialist',
             },
-            {
-              id: 'step-2',
-              name: 'Conflict Check',
+            position: { x: 0, y: 0 },
+          },
+          {
+            id: 'step-2',
+            name: 'Conflict Check',
+            type: 'approval',
+            config: {
               type: 'approval',
-              config: {
-                type: 'approval',
-                description: 'Run conflict check and obtain clearance',
-                approverType: 'role',
-                approverValue: 'compliance_officer',
-                approvalType: 'single',
-              },
-              position: { x: 0, y: 100 },
+              description: 'Run conflict check and obtain clearance',
+              approverType: 'role',
+              approverValue: 'compliance_officer',
+              approvalType: 'single',
             },
-            {
-              id: 'step-3',
-              name: 'Document Collection',
+            position: { x: 0, y: 100 },
+          },
+          {
+            id: 'step-3',
+            name: 'Document Collection',
+            type: 'task',
+            config: {
               type: 'task',
-              config: {
-                type: 'task',
-                description: 'Collect required documents from client',
-                assigneeType: 'role',
-                assigneeValue: 'paralegal',
-              },
-              position: { x: 0, y: 200 },
+              description: 'Collect required documents from client',
+              assigneeType: 'role',
+              assigneeValue: 'paralegal',
             },
-            {
-              id: 'step-4',
-              name: 'Review & Approval',
+            position: { x: 0, y: 200 },
+          },
+          {
+            id: 'step-4',
+            name: 'Review & Approval',
+            type: 'approval',
+            config: {
               type: 'approval',
-              config: {
-                type: 'approval',
-                description: 'Partner review and case approval',
-                approverType: 'role',
-                approverValue: 'partner',
-                approvalType: 'single',
-              },
-              position: { x: 0, y: 300 },
+              description: 'Partner review and case approval',
+              approverType: 'role',
+              approverValue: 'partner',
+              approvalType: 'single',
             },
-            {
-              id: 'step-5',
-              name: 'Send Welcome Package',
+            position: { x: 0, y: 300 },
+          },
+          {
+            id: 'step-5',
+            name: 'Send Welcome Package',
+            type: 'notification',
+            config: {
               type: 'notification',
-              config: {
-                type: 'notification',
-                description: 'Send welcome email and engagement letter',
-                channel: 'email',
-                recipientType: 'variable',
-                recipientValue: 'client_email',
-              },
-              position: { x: 0, y: 400 },
+              description: 'Send welcome email and engagement letter',
+              channel: 'email',
+              recipientType: 'variable',
+              recipientValue: 'client_email',
             },
-          ],
-          variables: [
-            {
-              id: 'var-1',
-              key: 'client_name',
-              name: 'Client Name',
-              type: 'string',
-              required: true,
-            },
-            {
-              id: 'var-2',
-              key: 'client_email',
-              name: 'Client Email',
-              type: 'string',
-              required: true,
-            },
-            {
-              id: 'var-3',
-              key: 'matter_type',
-              name: 'Matter Type',
-              type: 'string',
-              required: true,
-            },
-          ],
-          triggers: [{ type: 'manual', config: {} }],
-          estimatedDuration: 120,
-          tags: ['intake', 'clients', 'onboarding'],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
+            position: { x: 0, y: 400 },
+          },
+        ],
+        variables: [
+          {
+            id: 'var-1',
+            key: 'client_name',
+            name: 'Client Name',
+            type: 'string',
+            required: true,
+          },
+          {
+            id: 'var-2',
+            key: 'client_email',
+            name: 'Client Email',
+            type: 'string',
+            required: true,
+          },
+          {
+            id: 'var-3',
+            key: 'matter_type',
+            name: 'Matter Type',
+            type: 'string',
+            required: true,
+          },
+        ],
+        triggers: [{ type: 'manual', config: {} }],
+        estimatedDuration: 120,
+        tags: ['intake', 'clients', 'onboarding'],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
 
   if (!template) {
     notFound();

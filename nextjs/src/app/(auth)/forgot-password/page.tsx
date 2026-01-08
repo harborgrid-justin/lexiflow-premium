@@ -6,10 +6,11 @@
  */
 
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { Suspense } from 'react';
+import { getCSRFToken } from '../../../lib/csrf';
 import { forgotPasswordAction } from '../actions';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
 
@@ -30,8 +31,11 @@ async function checkAuth() {
 export default async function ForgotPasswordPage() {
   await checkAuth();
 
+  // Get CSRF token for form protection (Server Action will generate if needed)
+  const csrfToken = await getCSRFToken();
+
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="flex min-h-screen flex-col justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="mx-auto w-full max-w-md px-4">
         {/* Logo */}
         <div className="mb-8 text-center">
@@ -53,7 +57,7 @@ export default async function ForgotPasswordPage() {
           </div>
 
           <Suspense fallback={<FormSkeleton />}>
-            <ForgotPasswordForm action={forgotPasswordAction} />
+            <ForgotPasswordForm action={forgotPasswordAction} csrfToken={csrfToken} />
           </Suspense>
         </div>
 

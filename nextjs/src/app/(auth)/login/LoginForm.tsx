@@ -5,16 +5,16 @@
  * Handles form state and validation with Server Actions
  */
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import type { AuthFormState } from '../types';
 
 interface LoginFormProps {
   action: (prevState: AuthFormState, formData: FormData) => Promise<AuthFormState>;
   callbackUrl: string;
+  csrfToken: string;
 }
 
 const initialState: AuthFormState = {
@@ -24,7 +24,7 @@ const initialState: AuthFormState = {
   fieldErrors: undefined,
 };
 
-export function LoginForm({ action, callbackUrl }: LoginFormProps) {
+export function LoginForm({ action, callbackUrl, csrfToken }: LoginFormProps) {
   const router = useRouter();
   const [state, formAction] = useActionState(action, initialState);
   const [showPassword, setShowPassword] = useState(false);
@@ -46,12 +46,15 @@ export function LoginForm({ action, callbackUrl }: LoginFormProps) {
 
   return (
     <form action={formAction} className="space-y-4">
+      {/* CSRF Token */}
+      <input type="hidden" name="_csrf" value={csrfToken} />
+
       {/* Error Message */}
       {state.error && state.error !== 'MFA_REQUIRED' && (
         <div className="rounded-md border border-rose-500/50 bg-rose-500/10 p-3 text-sm text-rose-400">
           <div className="flex items-center gap-2">
             <svg
-              className="h-4 w-4 flex-shrink-0"
+              className="h-4 w-4 shrink-0"
               fill="currentColor"
               viewBox="0 0 20 20"
             >

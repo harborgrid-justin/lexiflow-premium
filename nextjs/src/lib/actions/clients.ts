@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Client Server Actions
@@ -11,36 +11,28 @@
  * - Retainer management
  */
 
-import { revalidateTag } from 'next/cache';
-import type { Client } from '@/types/financial';
-import type { Case } from '@/types/case';
-import { API_BASE_URL } from '@/lib/api-config';
+import { API_BASE_URL } from "@/lib/api-config";
 import {
-  createAction,
-  createMutation,
-  createQuery,
-  parseInput,
-  ActionResult,
-  success,
-  failure,
-  ActionContext,
-  getActionContext,
-} from './index';
-import {
-  createClientSchema,
-  updateClientSchema,
-  clientFilterSchema,
-  idInputSchema,
-  CreateClientInput,
-  UpdateClientInput,
-  ClientFilterInput,
-} from '@/lib/validation';
-import {
-  CacheTags,
   CacheProfiles,
+  CacheTags,
   invalidateClientData,
   invalidateTags,
-} from '@/lib/cache';
+} from "@/lib/cache";
+import {
+  ClientFilterInput,
+  clientFilterSchema,
+  CreateClientInput,
+  createClientSchema,
+  idInputSchema,
+  UpdateClientInput,
+  updateClientSchema,
+} from "@/lib/validation";
+import type { Case } from "@/types/case";
+import type { Client } from "@/types/financial";
+import { revalidateTag } from "next/cache";
+import { createMutation, createQuery } from "./helpers";
+import type { ActionContext, ActionResult } from "./index";
+import { failure, getActionContext, parseInput } from "./index";
 
 // ============================================================================
 // Types
@@ -79,20 +71,22 @@ async function apiRequest<T>(
   options: RequestInit = {},
   context?: ActionContext
 ): Promise<T> {
-  const ctx = context ?? await getActionContext();
+  const ctx = context ?? (await getActionContext());
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(ctx.userId && { 'X-User-Id': ctx.userId }),
-      ...(ctx.organizationId && { 'X-Organization-Id': ctx.organizationId }),
+      "Content-Type": "application/json",
+      ...(ctx.userId && { "X-User-Id": ctx.userId }),
+      ...(ctx.organizationId && { "X-Organization-Id": ctx.organizationId }),
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Request failed' }));
+    const error = await response
+      .json()
+      .catch(() => ({ message: "Request failed" }));
     throw new Error(error.message || `API error: ${response.status}`);
   }
 
@@ -115,26 +109,34 @@ export const getClients = createQuery<ClientFilterInput | undefined, Client[]>(
     const params = input ? parseInput(clientFilterSchema, input) : {};
 
     const queryString = new URLSearchParams();
-    if (params.page) queryString.set('page', String(params.page));
-    if (params.pageSize) queryString.set('limit', String(params.pageSize));
-    if (params.status?.length) queryString.set('status', params.status.join(','));
-    if (params.clientType?.length) queryString.set('clientType', params.clientType.join(','));
-    if (params.isVip !== undefined) queryString.set('isVip', String(params.isVip));
-    if (params.hasRetainer !== undefined) queryString.set('hasRetainer', String(params.hasRetainer));
-    if (params.searchQuery) queryString.set('search', params.searchQuery);
-    if (params.sortBy) queryString.set('sortBy', params.sortBy);
-    if (params.sortOrder) queryString.set('sortOrder', params.sortOrder);
+    if (params.page) queryString.set("page", String(params.page));
+    if (params.pageSize) queryString.set("limit", String(params.pageSize));
+    if (params.status?.length)
+      queryString.set("status", params.status.join(","));
+    if (params.clientType?.length)
+      queryString.set("clientType", params.clientType.join(","));
+    if (params.isVip !== undefined)
+      queryString.set("isVip", String(params.isVip));
+    if (params.hasRetainer !== undefined)
+      queryString.set("hasRetainer", String(params.hasRetainer));
+    if (params.searchQuery) queryString.set("search", params.searchQuery);
+    if (params.sortBy) queryString.set("sortBy", params.sortBy);
+    if (params.sortOrder) queryString.set("sortOrder", params.sortOrder);
 
     const query = queryString.toString();
-    const endpoint = `/clients${query ? `?${query}` : ''}`;
+    const endpoint = `/clients${query ? `?${query}` : ""}`;
 
-    return apiRequest<Client[]>(endpoint, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENTS],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Client[]>(
+      endpoint,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENTS],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -147,15 +149,19 @@ export const getClientById = createQuery<{ id: string }, Client | null>(
     const { id } = parseInput(idInputSchema, input);
 
     try {
-      return await apiRequest<Client>(`/clients/${id}`, {
-        method: 'GET',
-        next: {
-          tags: [CacheTags.CLIENT(id)],
-          revalidate: CacheProfiles.DEFAULT,
+      return await apiRequest<Client>(
+        `/clients/${id}`,
+        {
+          method: "GET",
+          next: {
+            tags: [CacheTags.CLIENT(id)],
+            revalidate: CacheProfiles.DEFAULT,
+          },
         },
-      }, context);
+        context
+      );
     } catch (error) {
-      if (error instanceof Error && error.message.includes('404')) {
+      if (error instanceof Error && error.message.includes("404")) {
         return null;
       }
       throw error;
@@ -167,18 +173,25 @@ export const getClientById = createQuery<{ id: string }, Client | null>(
 /**
  * Get client by client number
  */
-export const getClientByNumber = createQuery<{ clientNumber: string }, Client | null>(
+export const getClientByNumber = createQuery<
+  { clientNumber: string },
+  Client | null
+>(
   async (input, context) => {
     const { clientNumber } = input;
 
     try {
-      const clients = await apiRequest<Client[]>(`/clients?clientNumber=${encodeURIComponent(clientNumber)}`, {
-        method: 'GET',
-        next: {
-          tags: [CacheTags.CLIENTS],
-          revalidate: CacheProfiles.DEFAULT,
+      const clients = await apiRequest<Client[]>(
+        `/clients?clientNumber=${encodeURIComponent(clientNumber)}`,
+        {
+          method: "GET",
+          next: {
+            tags: [CacheTags.CLIENTS],
+            revalidate: CacheProfiles.DEFAULT,
+          },
         },
-      }, context);
+        context
+      );
 
       return clients[0] ?? null;
     } catch {
@@ -195,13 +208,17 @@ export const getClientCases = createQuery<{ clientId: string }, Case[]>(
   async (input, context) => {
     const { clientId } = input;
 
-    return apiRequest<Case[]>(`/cases?clientId=${clientId}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENT_CASES(clientId)],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Case[]>(
+      `/cases?clientId=${clientId}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENT_CASES(clientId)],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -209,17 +226,24 @@ export const getClientCases = createQuery<{ clientId: string }, Case[]>(
 /**
  * Get client summary (stats)
  */
-export const getClientSummary = createQuery<{ clientId: string }, ClientSummary>(
+export const getClientSummary = createQuery<
+  { clientId: string },
+  ClientSummary
+>(
   async (input, context) => {
     const { clientId } = input;
 
-    return apiRequest<ClientSummary>(`/clients/${clientId}/summary`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENT(clientId)],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<ClientSummary>(
+      `/clients/${clientId}/summary`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENT(clientId)],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -238,13 +262,17 @@ export const searchClients = createQuery<
       return [];
     }
 
-    return apiRequest<Client[]>(`/clients?search=${encodeURIComponent(query.trim())}&limit=${limit}`, {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENTS],
-        revalidate: CacheProfiles.FAST,
+    return apiRequest<Client[]>(
+      `/clients?search=${encodeURIComponent(query.trim())}&limit=${limit}`,
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENTS],
+          revalidate: CacheProfiles.FAST,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -254,13 +282,17 @@ export const searchClients = createQuery<
  */
 export const getVIPClients = createQuery<undefined, Client[]>(
   async (_, context) => {
-    return apiRequest<Client[]>('/clients?isVip=true', {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENTS],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Client[]>(
+      "/clients?isVip=true",
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENTS],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -270,13 +302,17 @@ export const getVIPClients = createQuery<undefined, Client[]>(
  */
 export const getClientsWithRetainers = createQuery<undefined, Client[]>(
   async (_, context) => {
-    return apiRequest<Client[]>('/clients?hasRetainer=true', {
-      method: 'GET',
-      next: {
-        tags: [CacheTags.CLIENTS],
-        revalidate: CacheProfiles.DEFAULT,
+    return apiRequest<Client[]>(
+      "/clients?hasRetainer=true",
+      {
+        method: "GET",
+        next: {
+          tags: [CacheTags.CLIENTS],
+          revalidate: CacheProfiles.DEFAULT,
+        },
       },
-    }, context);
+      context
+    );
   },
   { requireAuth: false }
 );
@@ -292,10 +328,14 @@ export const createClient = createMutation<CreateClientInput, Client>(
   async (input, context) => {
     const validated = parseInput(createClientSchema, input);
 
-    const newClient = await apiRequest<Client>('/clients', {
-      method: 'POST',
-      body: JSON.stringify(validated),
-    }, context);
+    const newClient = await apiRequest<Client>(
+      "/clients",
+      {
+        method: "POST",
+        body: JSON.stringify(validated),
+      },
+      context
+    );
 
     revalidateTag(CacheTags.CLIENTS);
 
@@ -315,10 +355,14 @@ export const updateClient = createMutation<UpdateClientInput, Client>(
     const validated = parseInput(updateClientSchema, input);
     const { id, ...data } = validated;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      },
+      context
+    );
 
     invalidateClientData(id);
 
@@ -330,13 +374,20 @@ export const updateClient = createMutation<UpdateClientInput, Client>(
 /**
  * Delete a client
  */
-export const deleteClient = createMutation<{ id: string }, { success: boolean }>(
+export const deleteClient = createMutation<
+  { id: string },
+  { success: boolean }
+>(
   async (input, context) => {
     const { id } = parseInput(idInputSchema, input);
 
-    await apiRequest<void>(`/clients/${id}`, {
-      method: 'DELETE',
-    }, context);
+    await apiRequest<void>(
+      `/clients/${id}`,
+      {
+        method: "DELETE",
+      },
+      context
+    );
 
     invalidateClientData(id);
 
@@ -352,16 +403,23 @@ export const deleteClient = createMutation<{ id: string }, { success: boolean }>
  * Update client status
  */
 export const updateClientStatus = createMutation<
-  { id: string; status: 'active' | 'inactive' | 'prospective' | 'former' | 'blocked' },
+  {
+    id: string;
+    status: "active" | "inactive" | "prospective" | "former" | "blocked";
+  },
   Client
 >(
   async (input, context) => {
     const { id, status } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status }),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      },
+      context
+    );
 
     invalidateClientData(id);
 
@@ -380,10 +438,14 @@ export const setClientVIP = createMutation<
   async (input, context) => {
     const { id, isVip } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ isVip }),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ isVip }),
+      },
+      context
+    );
 
     invalidateClientData(id);
 
@@ -402,19 +464,27 @@ export const runConflictCheck = createMutation<
   async (input, context) => {
     const { clientId, checkAgainst } = input;
 
-    const result = await apiRequest<ConflictCheckResult>('/compliance/conflicts/run', {
-      method: 'POST',
-      body: JSON.stringify({ clientId, checkAgainst }),
-    }, context);
+    const result = await apiRequest<ConflictCheckResult>(
+      "/compliance/conflicts/run",
+      {
+        method: "POST",
+        body: JSON.stringify({ clientId, checkAgainst }),
+      },
+      context
+    );
 
     // Update client with conflict check date
-    await apiRequest<void>(`/clients/${clientId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        lastConflictCheckDate: new Date().toISOString(),
-        conflictCheckCompleted: true,
-      }),
-    }, context);
+    await apiRequest<void>(
+      `/clients/${clientId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          lastConflictCheckDate: new Date().toISOString(),
+          conflictCheckCompleted: true,
+        }),
+      },
+      context
+    );
 
     invalidateClientData(clientId);
 
@@ -427,16 +497,25 @@ export const runConflictCheck = createMutation<
  * Update retainer information
  */
 export const updateRetainer = createMutation<
-  { clientId: string; hasRetainer: boolean; retainerAmount?: number; retainerBalance?: number },
+  {
+    clientId: string;
+    hasRetainer: boolean;
+    retainerAmount?: number;
+    retainerBalance?: number;
+  },
   Client
 >(
   async (input, context) => {
     const { clientId, ...retainerData } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${clientId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(retainerData),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${clientId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(retainerData),
+      },
+      context
+    );
 
     invalidateClientData(clientId);
 
@@ -455,10 +534,14 @@ export const updateCreditLimit = createMutation<
   async (input, context) => {
     const { clientId, creditLimit } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${clientId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ creditLimit }),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${clientId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ creditLimit }),
+      },
+      context
+    );
 
     invalidateClientData(clientId);
 
@@ -483,10 +566,14 @@ export const updatePrimaryContact = createMutation<
   async (input, context) => {
     const { clientId, ...contactData } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${clientId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(contactData),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${clientId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(contactData),
+      },
+      context
+    );
 
     invalidateClientData(clientId);
 
@@ -512,10 +599,14 @@ export const updateBillingAddress = createMutation<
   async (input, context) => {
     const { clientId, ...addressData } = input;
 
-    const updatedClient = await apiRequest<Client>(`/clients/${clientId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(addressData),
-    }, context);
+    const updatedClient = await apiRequest<Client>(
+      `/clients/${clientId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(addressData),
+      },
+      context
+    );
 
     invalidateClientData(clientId);
 
@@ -534,10 +625,14 @@ export const generatePortalAccess = createMutation<
   async (input, context) => {
     const { clientId } = input;
 
-    const result = await apiRequest<{ portalUrl: string; token: string; expiresAt: string }>(
+    const result = await apiRequest<{
+      portalUrl: string;
+      token: string;
+      expiresAt: string;
+    }>(
       `/client-portal/${clientId}/access`,
       {
-        method: 'POST',
+        method: "POST",
       },
       context
     );
@@ -565,11 +660,14 @@ export const deleteClients = createMutation<
 
     await Promise.all(
       ids.map((id) =>
-        apiRequest<void>(`/clients/${id}`, { method: 'DELETE' }, context)
+        apiRequest<void>(`/clients/${id}`, { method: "DELETE" }, context)
       )
     );
 
-    invalidateTags([CacheTags.CLIENTS, ...ids.map((id) => CacheTags.CLIENT(id))]);
+    invalidateTags([
+      CacheTags.CLIENTS,
+      ...ids.map((id) => CacheTags.CLIENT(id)),
+    ]);
 
     return { success: true, count: ids.length };
   },
@@ -583,7 +681,7 @@ export const deleteClients = createMutation<
  * Update status for multiple clients
  */
 export const updateClientsStatus = createMutation<
-  { ids: string[]; status: 'active' | 'inactive' | 'former' | 'blocked' },
+  { ids: string[]; status: "active" | "inactive" | "former" | "blocked" },
   { success: boolean; count: number }
 >(
   async (input, context) => {
@@ -591,14 +689,21 @@ export const updateClientsStatus = createMutation<
 
     await Promise.all(
       ids.map((id) =>
-        apiRequest<Client>(`/clients/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ status }),
-        }, context)
+        apiRequest<Client>(
+          `/clients/${id}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({ status }),
+          },
+          context
+        )
       )
     );
 
-    invalidateTags([CacheTags.CLIENTS, ...ids.map((id) => CacheTags.CLIENT(id))]);
+    invalidateTags([
+      CacheTags.CLIENTS,
+      ...ids.map((id) => CacheTags.CLIENT(id)),
+    ]);
 
     return { success: true, count: ids.length };
   },
@@ -620,46 +725,68 @@ export async function createClientFormAction(
 
   // String fields
   const stringFields = [
-    'clientNumber', 'name', 'clientType', 'status',
-    'email', 'phone', 'fax', 'website',
-    'address', 'city', 'state', 'zipCode', 'country',
-    'billingAddress', 'billingCity', 'billingState', 'billingZipCode', 'billingCountry',
-    'taxId', 'industry',
-    'primaryContactName', 'primaryContactEmail', 'primaryContactPhone', 'primaryContactTitle',
-    'paymentTerms', 'preferredPaymentMethod',
-    'notes',
+    "clientNumber",
+    "name",
+    "clientType",
+    "status",
+    "email",
+    "phone",
+    "fax",
+    "website",
+    "address",
+    "city",
+    "state",
+    "zipCode",
+    "country",
+    "billingAddress",
+    "billingCity",
+    "billingState",
+    "billingZipCode",
+    "billingCountry",
+    "taxId",
+    "industry",
+    "primaryContactName",
+    "primaryContactEmail",
+    "primaryContactPhone",
+    "primaryContactTitle",
+    "paymentTerms",
+    "preferredPaymentMethod",
+    "notes",
   ];
 
   for (const field of stringFields) {
     const value = formData.get(field);
-    if (value !== null && value !== '') {
+    if (value !== null && value !== "") {
       data[field] = value;
     }
   }
 
   // Numeric fields
-  const numericFields = ['creditLimit', 'retainerAmount'];
+  const numericFields = ["creditLimit", "retainerAmount"];
   for (const field of numericFields) {
     const value = formData.get(field);
-    if (value && value !== '') {
+    if (value && value !== "") {
       data[field] = parseFloat(value as string);
     }
   }
 
   // Boolean fields
-  const booleanFields = ['isVip', 'requiresConflictCheck', 'hasRetainer'];
+  const booleanFields = ["isVip", "requiresConflictCheck", "hasRetainer"];
   for (const field of booleanFields) {
     const value = formData.get(field);
-    data[field] = value === 'true' || value === 'on';
+    data[field] = value === "true" || value === "on";
   }
 
   // Tags
-  const tags = formData.get('tags');
+  const tags = formData.get("tags");
   if (tags) {
     try {
       data.tags = JSON.parse(tags as string);
     } catch {
-      data.tags = (tags as string).split(',').map((t) => t.trim()).filter(Boolean);
+      data.tags = (tags as string)
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
     }
   }
 
@@ -673,48 +800,67 @@ export async function updateClientFormAction(
   prevState: ActionResult<Client> | null,
   formData: FormData
 ): Promise<ActionResult<Client>> {
-  const id = formData.get('id') as string;
+  const id = formData.get("id") as string;
 
   if (!id) {
-    return failure('Client ID is required', 'VALIDATION_ERROR');
+    return failure("Client ID is required", "VALIDATION_ERROR");
   }
 
   const data: Record<string, unknown> = { id };
 
   // String fields
   const stringFields = [
-    'clientNumber', 'name', 'clientType', 'status',
-    'email', 'phone', 'fax', 'website',
-    'address', 'city', 'state', 'zipCode', 'country',
-    'billingAddress', 'billingCity', 'billingState', 'billingZipCode', 'billingCountry',
-    'taxId', 'industry',
-    'primaryContactName', 'primaryContactEmail', 'primaryContactPhone', 'primaryContactTitle',
-    'paymentTerms', 'preferredPaymentMethod',
-    'notes',
+    "clientNumber",
+    "name",
+    "clientType",
+    "status",
+    "email",
+    "phone",
+    "fax",
+    "website",
+    "address",
+    "city",
+    "state",
+    "zipCode",
+    "country",
+    "billingAddress",
+    "billingCity",
+    "billingState",
+    "billingZipCode",
+    "billingCountry",
+    "taxId",
+    "industry",
+    "primaryContactName",
+    "primaryContactEmail",
+    "primaryContactPhone",
+    "primaryContactTitle",
+    "paymentTerms",
+    "preferredPaymentMethod",
+    "notes",
   ];
 
   for (const field of stringFields) {
     const value = formData.get(field);
-    if (value !== null && value !== '') {
+    if (value !== null && value !== "") {
       data[field] = value;
     }
   }
 
   // Numeric fields
-  const numericFields = ['creditLimit', 'retainerAmount', 'retainerBalance'];
+  const numericFields = ["creditLimit", "retainerAmount", "retainerBalance"];
   for (const field of numericFields) {
     const value = formData.get(field);
-    if (value && value !== '') {
+    if (value && value !== "") {
       data[field] = parseFloat(value as string);
     }
   }
 
   // Boolean fields
-  const booleanFields = ['isVip', 'requiresConflictCheck', 'hasRetainer'];
+  const booleanFields = ["isVip", "requiresConflictCheck", "hasRetainer"];
   for (const field of booleanFields) {
     const value = formData.get(field);
     if (value !== null) {
-      data[field] = value === 'true' || value === 'on';
+      data[field] = value === "true" || value === "on";
     }
   }
 
@@ -728,10 +874,10 @@ export async function deleteClientFormAction(
   prevState: ActionResult<{ success: boolean }> | null,
   formData: FormData
 ): Promise<ActionResult<{ success: boolean }>> {
-  const id = formData.get('id') as string;
+  const id = formData.get("id") as string;
 
   if (!id) {
-    return failure('Client ID is required', 'VALIDATION_ERROR');
+    return failure("Client ID is required", "VALIDATION_ERROR");
   }
 
   return deleteClient({ id });

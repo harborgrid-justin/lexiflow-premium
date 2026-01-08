@@ -6,10 +6,11 @@
  */
 
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { Suspense } from 'react';
+import { getCSRFToken } from '../../../lib/csrf';
 import { resetPasswordAction } from '../actions';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
@@ -42,10 +43,13 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
   const token = resolvedParams.token;
   const email = resolvedParams.email;
 
+  // Get CSRF token for form protection (Server Action will generate if needed)
+  const csrfToken = await getCSRFToken();
+
   // No token provided - show error
   if (!token) {
     return (
-      <div className="flex min-h-screen flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="flex min-h-screen flex-col justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="mx-auto w-full max-w-md px-4">
           {/* Logo */}
           <div className="mb-8 text-center">
@@ -101,7 +105,7 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
   }
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="flex min-h-screen flex-col justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="mx-auto w-full max-w-md px-4">
         {/* Logo */}
         <div className="mb-8 text-center">
@@ -133,7 +137,7 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
           )}
 
           <Suspense fallback={<FormSkeleton />}>
-            <ResetPasswordForm action={resetPasswordAction} token={token} />
+            <ResetPasswordForm action={resetPasswordAction} token={token} csrfToken={csrfToken} />
           </Suspense>
         </div>
 
@@ -142,19 +146,19 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
           <h3 className="text-sm font-medium text-slate-300 mb-2">Password Tips</h3>
           <ul className="space-y-1 text-xs text-slate-500">
             <li className="flex items-start gap-2">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
               Use at least 8 characters
             </li>
             <li className="flex items-start gap-2">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
               Include uppercase and lowercase letters
             </li>
             <li className="flex items-start gap-2">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
               Add numbers and special characters
             </li>
             <li className="flex items-start gap-2">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+              <CheckIcon className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
               Avoid common words or personal info
             </li>
           </ul>

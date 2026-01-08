@@ -5,16 +5,16 @@
  * Handles form state, validation, and password strength
  */
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import type { AuthFormState } from '../types';
 import { validatePasswordStrength } from '../validation';
 
 interface RegisterFormProps {
   action: (prevState: AuthFormState, formData: FormData) => Promise<AuthFormState>;
+  csrfToken: string;
 }
 
 const initialState: AuthFormState = {
@@ -24,7 +24,7 @@ const initialState: AuthFormState = {
   fieldErrors: undefined,
 };
 
-export function RegisterForm({ action }: RegisterFormProps) {
+export function RegisterForm({ action, csrfToken }: RegisterFormProps) {
   const router = useRouter();
   const [state, formAction] = useActionState(action, initialState);
   const [showPassword, setShowPassword] = useState(false);
@@ -56,11 +56,14 @@ export function RegisterForm({ action }: RegisterFormProps) {
 
   return (
     <form action={formAction} className="space-y-4">
+      {/* CSRF Token */}
+      <input type="hidden" name="_csrf" value={csrfToken} />
+
       {/* Error Message */}
       {state.error && (
         <div className="rounded-md border border-rose-500/50 bg-rose-500/10 p-3 text-sm text-rose-400">
           <div className="flex items-center gap-2">
-            <AlertIcon className="h-4 w-4 flex-shrink-0" />
+            <AlertIcon className="h-4 w-4 shrink-0" />
             {state.error}
           </div>
         </div>
@@ -70,7 +73,7 @@ export function RegisterForm({ action }: RegisterFormProps) {
       {state.success && (
         <div className="rounded-md border border-emerald-500/50 bg-emerald-500/10 p-3 text-sm text-emerald-400">
           <div className="flex items-center gap-2">
-            <CheckIcon className="h-4 w-4 flex-shrink-0" />
+            <CheckIcon className="h-4 w-4 shrink-0" />
             {state.message}
           </div>
         </div>

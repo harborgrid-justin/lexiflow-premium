@@ -5,10 +5,10 @@
  * Search and filter controls for discovery requests
  */
 
-import { useState, useCallback } from 'react';
+import { Button, Input, Select } from '@/components/ui';
+import { Calendar, Filter, Search, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Input, Select, Button } from '@/components/ui';
-import { Search, Filter, X, Calendar } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import {
   DiscoveryRequestStatus,
   DiscoveryRequestType,
@@ -116,29 +116,19 @@ export function DiscoveryFilters({ onFilterChange }: DiscoveryFiltersProps) {
 
         {/* Status Filter */}
         <Select
+          options={statusOptions}
           value={filters.status}
-          onChange={(e) => updateFilters({ status: e.target.value as DiscoveryRequestStatusValue | '' })}
-          className="w-full sm:w-48"
-        >
-          {statusOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+          onChange={(value) => updateFilters({ status: value as DiscoveryRequestStatusValue | '' })}
+          placeholder="All Statuses"
+        />
 
         {/* Type Filter */}
         <Select
+          options={typeOptions}
           value={filters.type}
-          onChange={(e) => updateFilters({ type: e.target.value as DiscoveryRequestTypeValue | '' })}
-          className="w-full sm:w-48"
-        >
-          {typeOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+          onChange={(value) => updateFilters({ type: value as DiscoveryRequestTypeValue | '' })}
+          placeholder="All Types"
+        />
 
         {/* Advanced Toggle */}
         <Button

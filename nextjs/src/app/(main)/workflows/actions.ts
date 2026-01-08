@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Workflow Server Actions
@@ -14,34 +14,34 @@
  * @module app/(main)/workflows/actions
  */
 
-import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { API_BASE_URL, API_ENDPOINTS } from '@/lib/api-config';
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-config";
 import type {
-  WorkflowTemplate,
-  WorkflowTemplateSummary,
-  WorkflowInstance,
-  WorkflowInstanceSummary,
-  WorkflowActionResult,
-  CreateWorkflowTemplateRequest,
-  UpdateWorkflowTemplateRequest,
-  StartWorkflowInstanceRequest,
   CompleteStepRequest,
-  WorkflowTemplateStatus,
-  WorkflowInstanceStatus,
+  CreateWorkflowTemplateRequest,
+  StartWorkflowInstanceRequest,
+  UpdateWorkflowTemplateRequest,
+  WorkflowActionResult,
   WorkflowCategory,
   WorkflowDashboardStats,
-} from '@/types/workflow-schemas';
+  WorkflowInstance,
+  WorkflowInstanceStatus,
+  WorkflowInstanceSummary,
+  WorkflowTemplate,
+  WorkflowTemplateStatus,
+  WorkflowTemplateSummary,
+} from "@/types/workflow-schemas";
+import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 // =============================================================================
 // Cache Tags
 // =============================================================================
 
 const CACHE_TAGS = {
-  TEMPLATES: 'workflow-templates',
-  INSTANCES: 'workflow-instances',
-  DASHBOARD: 'workflow-dashboard',
+  TEMPLATES: "workflow-templates",
+  INSTANCES: "workflow-instances",
+  DASHBOARD: "workflow-dashboard",
   TEMPLATE_DETAIL: (id: string) => `workflow-template-${id}`,
   INSTANCE_DETAIL: (id: string) => `workflow-instance-${id}`,
 } as const;
@@ -55,10 +55,10 @@ const CACHE_TAGS = {
  */
 async function getAuthHeaders(): Promise<HeadersInit> {
   const cookieStore = await cookies();
-  const token = cookieStore.get('auth-token')?.value;
+  const token = cookieStore.get("auth_token")?.value;
 
   return {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
   };
 }
@@ -66,7 +66,10 @@ async function getAuthHeaders(): Promise<HeadersInit> {
 /**
  * Build API URL with query parameters
  */
-function buildUrl(endpoint: string, params?: Record<string, string | undefined>): string {
+function buildUrl(
+  endpoint: string,
+  params?: Record<string, string | undefined>
+): string {
   const url = new URL(`${API_BASE_URL}${endpoint}`);
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -85,7 +88,7 @@ function handleApiError(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
-  return 'An unexpected error occurred';
+  return "An unexpected error occurred";
 }
 
 /**
@@ -93,7 +96,7 @@ function handleApiError(error: unknown): string {
  */
 async function revalidateWorkflowCaches(tags: string[]): Promise<void> {
   const cookieStore = await cookies();
-  const profile = cookieStore.get('user-profile')?.value || 'default';
+  const profile = cookieStore.get("user-profile")?.value || "default";
 
   for (const tag of tags) {
     revalidateTag(tag, profile as Parameters<typeof revalidateTag>[1]);
@@ -125,7 +128,7 @@ export async function getWorkflowTemplates(filters?: {
     });
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
       next: { tags: [CACHE_TAGS.TEMPLATES], revalidate: 60 },
     });
@@ -137,7 +140,7 @@ export async function getWorkflowTemplates(filters?: {
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error('getWorkflowTemplates error:', error);
+    console.error("getWorkflowTemplates error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -153,14 +156,14 @@ export async function getWorkflowTemplate(
     const url = `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/${id}`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
       next: { tags: [CACHE_TAGS.TEMPLATE_DETAIL(id)], revalidate: 60 },
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        return { success: false, error: 'Template not found' };
+        return { success: false, error: "Template not found" };
       }
       throw new Error(`Failed to fetch template: ${response.statusText}`);
     }
@@ -168,7 +171,7 @@ export async function getWorkflowTemplate(
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error('getWorkflowTemplate error:', error);
+    console.error("getWorkflowTemplate error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -182,28 +185,36 @@ export async function createWorkflowTemplate(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        ...request,
-        status: 'draft',
-        version: 1,
-      }),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          ...request,
+          status: "draft",
+          version: 1,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to create template: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to create template: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
 
-    await revalidateWorkflowCaches([CACHE_TAGS.TEMPLATES, CACHE_TAGS.DASHBOARD]);
+    await revalidateWorkflowCaches([
+      CACHE_TAGS.TEMPLATES,
+      CACHE_TAGS.DASHBOARD,
+    ]);
 
-    return { success: true, data, message: 'Template created successfully' };
+    return { success: true, data, message: "Template created successfully" };
   } catch (error) {
-    console.error('createWorkflowTemplate error:', error);
+    console.error("createWorkflowTemplate error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -218,15 +229,20 @@ export async function updateWorkflowTemplate(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/${id}`, {
-      method: 'PATCH',
-      headers,
-      body: JSON.stringify(request),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/${id}`,
+      {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify(request),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to update template: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to update template: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -237,9 +253,9 @@ export async function updateWorkflowTemplate(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Template updated successfully' };
+    return { success: true, data, message: "Template updated successfully" };
   } catch (error) {
-    console.error('updateWorkflowTemplate error:', error);
+    console.error("updateWorkflowTemplate error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -253,14 +269,19 @@ export async function deleteWorkflowTemplate(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/${id}`, {
-      method: 'DELETE',
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/${id}`,
+      {
+        method: "DELETE",
+        headers,
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to delete template: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to delete template: ${response.statusText}`
+      );
     }
 
     await revalidateWorkflowCaches([
@@ -269,9 +290,9 @@ export async function deleteWorkflowTemplate(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, message: 'Template deleted successfully' };
+    return { success: true, message: "Template deleted successfully" };
   } catch (error) {
-    console.error('deleteWorkflowTemplate error:', error);
+    console.error("deleteWorkflowTemplate error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -282,7 +303,7 @@ export async function deleteWorkflowTemplate(
 export async function activateWorkflowTemplate(
   id: string
 ): Promise<WorkflowActionResult<WorkflowTemplate>> {
-  return updateWorkflowTemplate(id, { status: 'active' });
+  return updateWorkflowTemplate(id, { status: "active" });
 }
 
 /**
@@ -291,7 +312,7 @@ export async function activateWorkflowTemplate(
 export async function deactivateWorkflowTemplate(
   id: string
 ): Promise<WorkflowActionResult<WorkflowTemplate>> {
-  return updateWorkflowTemplate(id, { status: 'inactive' });
+  return updateWorkflowTemplate(id, { status: "inactive" });
 }
 
 /**
@@ -305,7 +326,10 @@ export async function duplicateWorkflowTemplate(
     // First, fetch the original template
     const originalResult = await getWorkflowTemplate(id);
     if (!originalResult.success || !originalResult.data) {
-      return { success: false, error: originalResult.error || 'Failed to fetch original template' };
+      return {
+        success: false,
+        error: originalResult.error || "Failed to fetch original template",
+      };
     }
 
     const original = originalResult.data;
@@ -315,7 +339,7 @@ export async function duplicateWorkflowTemplate(
       name: newName || `${original.name} (Copy)`,
       description: original.description,
       category: original.category,
-      steps: original.steps.map(step => ({
+      steps: original.steps.map((step) => ({
         name: step.name,
         type: step.type,
         config: step.config,
@@ -324,7 +348,7 @@ export async function duplicateWorkflowTemplate(
         previousStepIds: step.previousStepIds,
         metadata: step.metadata,
       })),
-      variables: original.variables.map(v => ({
+      variables: original.variables.map((v) => ({
         key: v.key,
         name: v.name,
         type: v.type,
@@ -339,7 +363,7 @@ export async function duplicateWorkflowTemplate(
 
     return createWorkflowTemplate(duplicateRequest);
   } catch (error) {
-    console.error('duplicateWorkflowTemplate error:', error);
+    console.error("duplicateWorkflowTemplate error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -369,7 +393,7 @@ export async function getWorkflowInstances(filters?: {
     });
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
       next: { tags: [CACHE_TAGS.INSTANCES], revalidate: 30 },
     });
@@ -381,7 +405,7 @@ export async function getWorkflowInstances(filters?: {
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error('getWorkflowInstances error:', error);
+    console.error("getWorkflowInstances error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -397,14 +421,14 @@ export async function getWorkflowInstance(
     const url = `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
       next: { tags: [CACHE_TAGS.INSTANCE_DETAIL(id)], revalidate: 15 },
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        return { success: false, error: 'Instance not found' };
+        return { success: false, error: "Instance not found" };
       }
       throw new Error(`Failed to fetch instance: ${response.statusText}`);
     }
@@ -412,7 +436,7 @@ export async function getWorkflowInstance(
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error('getWorkflowInstance error:', error);
+    console.error("getWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -426,28 +450,36 @@ export async function startWorkflowInstance(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        ...request,
-        status: 'running',
-        startedAt: new Date().toISOString(),
-      }),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          ...request,
+          status: "running",
+          startedAt: new Date().toISOString(),
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to start workflow: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to start workflow: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
 
-    await revalidateWorkflowCaches([CACHE_TAGS.INSTANCES, CACHE_TAGS.DASHBOARD]);
+    await revalidateWorkflowCaches([
+      CACHE_TAGS.INSTANCES,
+      CACHE_TAGS.DASHBOARD,
+    ]);
 
-    return { success: true, data, message: 'Workflow started successfully' };
+    return { success: true, data, message: "Workflow started successfully" };
   } catch (error) {
-    console.error('startWorkflowInstance error:', error);
+    console.error("startWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -461,14 +493,19 @@ export async function pauseWorkflowInstance(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/pause`, {
-      method: 'POST',
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/pause`,
+      {
+        method: "POST",
+        headers,
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to pause workflow: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to pause workflow: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -479,9 +516,9 @@ export async function pauseWorkflowInstance(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Workflow paused successfully' };
+    return { success: true, data, message: "Workflow paused successfully" };
   } catch (error) {
-    console.error('pauseWorkflowInstance error:', error);
+    console.error("pauseWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -495,14 +532,19 @@ export async function resumeWorkflowInstance(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/resume`, {
-      method: 'POST',
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/resume`,
+      {
+        method: "POST",
+        headers,
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to resume workflow: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to resume workflow: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -513,9 +555,9 @@ export async function resumeWorkflowInstance(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Workflow resumed successfully' };
+    return { success: true, data, message: "Workflow resumed successfully" };
   } catch (error) {
-    console.error('resumeWorkflowInstance error:', error);
+    console.error("resumeWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -530,15 +572,20 @@ export async function cancelWorkflowInstance(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/cancel`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ reason }),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/cancel`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ reason }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to cancel workflow: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to cancel workflow: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -549,9 +596,9 @@ export async function cancelWorkflowInstance(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Workflow cancelled successfully' };
+    return { success: true, data, message: "Workflow cancelled successfully" };
   } catch (error) {
-    console.error('cancelWorkflowInstance error:', error);
+    console.error("cancelWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -565,14 +612,19 @@ export async function retryWorkflowInstance(
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/retry`, {
-      method: 'POST',
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${id}/retry`,
+      {
+        method: "POST",
+        headers,
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to retry workflow: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to retry workflow: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -583,9 +635,9 @@ export async function retryWorkflowInstance(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Workflow retry initiated' };
+    return { success: true, data, message: "Workflow retry initiated" };
   } catch (error) {
-    console.error('retryWorkflowInstance error:', error);
+    console.error("retryWorkflowInstance error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -606,7 +658,7 @@ export async function completeWorkflowStep(
     const response = await fetch(
       `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${request.instanceId}/steps/${request.stepId}/complete`,
       {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify({
           result: request.result,
@@ -618,7 +670,9 @@ export async function completeWorkflowStep(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to complete step: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to complete step: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -629,9 +683,9 @@ export async function completeWorkflowStep(
       CACHE_TAGS.DASHBOARD,
     ]);
 
-    return { success: true, data, message: 'Step completed successfully' };
+    return { success: true, data, message: "Step completed successfully" };
   } catch (error) {
-    console.error('completeWorkflowStep error:', error);
+    console.error("completeWorkflowStep error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -650,7 +704,7 @@ export async function skipWorkflowStep(
     const response = await fetch(
       `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${instanceId}/steps/${stepId}/skip`,
       {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify({ reason }),
       }
@@ -658,7 +712,9 @@ export async function skipWorkflowStep(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to skip step: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to skip step: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -668,9 +724,9 @@ export async function skipWorkflowStep(
       CACHE_TAGS.INSTANCE_DETAIL(instanceId),
     ]);
 
-    return { success: true, data, message: 'Step skipped successfully' };
+    return { success: true, data, message: "Step skipped successfully" };
   } catch (error) {
-    console.error('skipWorkflowStep error:', error);
+    console.error("skipWorkflowStep error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -689,7 +745,7 @@ export async function assignWorkflowStep(
     const response = await fetch(
       `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${instanceId}/steps/${stepId}/assign`,
       {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify({ assigneeId }),
       }
@@ -697,7 +753,9 @@ export async function assignWorkflowStep(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to assign step: ${response.statusText}`);
+      throw new Error(
+        errorData.message || `Failed to assign step: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
@@ -707,9 +765,9 @@ export async function assignWorkflowStep(
       CACHE_TAGS.INSTANCE_DETAIL(instanceId),
     ]);
 
-    return { success: true, data, message: 'Step assigned successfully' };
+    return { success: true, data, message: "Step assigned successfully" };
   } catch (error) {
-    console.error('assignWorkflowStep error:', error);
+    console.error("assignWorkflowStep error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -731,7 +789,7 @@ export async function updateWorkflowVariables(
     const response = await fetch(
       `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.INSTANCES}/${instanceId}/variables`,
       {
-        method: 'PATCH',
+        method: "PATCH",
         headers,
         body: JSON.stringify({ variables }),
       }
@@ -739,16 +797,19 @@ export async function updateWorkflowVariables(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Failed to update variables: ${response.statusText}`);
+      throw new Error(
+        errorData.message ||
+          `Failed to update variables: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
 
     await revalidateWorkflowCaches([CACHE_TAGS.INSTANCE_DETAIL(instanceId)]);
 
-    return { success: true, data, message: 'Variables updated successfully' };
+    return { success: true, data, message: "Variables updated successfully" };
   } catch (error) {
-    console.error('updateWorkflowVariables error:', error);
+    console.error("updateWorkflowVariables error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -760,15 +821,20 @@ export async function updateWorkflowVariables(
 /**
  * Fetch workflow dashboard statistics
  */
-export async function getWorkflowDashboardStats(): Promise<WorkflowActionResult<WorkflowDashboardStats>> {
+export async function getWorkflowDashboardStats(): Promise<
+  WorkflowActionResult<WorkflowDashboardStats>
+> {
   try {
     const headers = await getAuthHeaders();
 
-    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/dashboard`, {
-      method: 'GET',
-      headers,
-      next: { tags: [CACHE_TAGS.DASHBOARD], revalidate: 60 },
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.WORKFLOW.TEMPLATES}/dashboard`,
+      {
+        method: "GET",
+        headers,
+        next: { tags: [CACHE_TAGS.DASHBOARD], revalidate: 60 },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Failed to fetch dashboard: ${response.statusText}`);
@@ -777,7 +843,7 @@ export async function getWorkflowDashboardStats(): Promise<WorkflowActionResult<
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error('getWorkflowDashboardStats error:', error);
+    console.error("getWorkflowDashboardStats error:", error);
     return { success: false, error: handleApiError(error) };
   }
 }
@@ -793,12 +859,12 @@ export async function createTemplateFormAction(
   prevState: WorkflowActionResult<WorkflowTemplate> | null,
   formData: FormData
 ): Promise<WorkflowActionResult<WorkflowTemplate>> {
-  const name = formData.get('name') as string;
-  const description = formData.get('description') as string;
-  const category = formData.get('category') as WorkflowCategory;
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const category = formData.get("category") as WorkflowCategory;
 
   if (!name || !category) {
-    return { success: false, error: 'Name and category are required' };
+    return { success: false, error: "Name and category are required" };
   }
 
   const result = await createWorkflowTemplate({ name, description, category });
@@ -818,9 +884,9 @@ export async function updateTemplateFormAction(
   prevState: WorkflowActionResult<WorkflowTemplate> | null,
   formData: FormData
 ): Promise<WorkflowActionResult<WorkflowTemplate>> {
-  const name = formData.get('name') as string;
-  const description = formData.get('description') as string;
-  const category = formData.get('category') as WorkflowCategory;
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const category = formData.get("category") as WorkflowCategory;
 
   const updates: UpdateWorkflowTemplateRequest = {};
   if (name) updates.name = name;
@@ -836,16 +902,16 @@ export async function updateTemplateFormAction(
 export async function deleteTemplateFormAction(
   formData: FormData
 ): Promise<WorkflowActionResult> {
-  const id = formData.get('id') as string;
+  const id = formData.get("id") as string;
 
   if (!id) {
-    return { success: false, error: 'Template ID is required' };
+    return { success: false, error: "Template ID is required" };
   }
 
   const result = await deleteWorkflowTemplate(id);
 
   if (result.success) {
-    redirect('/workflows/templates');
+    redirect("/workflows/templates");
   }
 
   return result;
@@ -857,14 +923,14 @@ export async function deleteTemplateFormAction(
 export async function changeTemplateStatusFormAction(
   formData: FormData
 ): Promise<WorkflowActionResult<WorkflowTemplate>> {
-  const id = formData.get('id') as string;
-  const action = formData.get('action') as 'activate' | 'deactivate';
+  const id = formData.get("id") as string;
+  const action = formData.get("action") as "activate" | "deactivate";
 
   if (!id || !action) {
-    return { success: false, error: 'Template ID and action are required' };
+    return { success: false, error: "Template ID and action are required" };
   }
 
-  if (action === 'activate') {
+  if (action === "activate") {
     return activateWorkflowTemplate(id);
   } else {
     return deactivateWorkflowTemplate(id);
@@ -877,25 +943,29 @@ export async function changeTemplateStatusFormAction(
 export async function instanceControlFormAction(
   formData: FormData
 ): Promise<WorkflowActionResult<WorkflowInstance>> {
-  const id = formData.get('id') as string;
-  const action = formData.get('action') as 'pause' | 'resume' | 'cancel' | 'retry';
-  const reason = formData.get('reason') as string | undefined;
+  const id = formData.get("id") as string;
+  const action = formData.get("action") as
+    | "pause"
+    | "resume"
+    | "cancel"
+    | "retry";
+  const reason = formData.get("reason") as string | undefined;
 
   if (!id || !action) {
-    return { success: false, error: 'Instance ID and action are required' };
+    return { success: false, error: "Instance ID and action are required" };
   }
 
   switch (action) {
-    case 'pause':
+    case "pause":
       return pauseWorkflowInstance(id);
-    case 'resume':
+    case "resume":
       return resumeWorkflowInstance(id);
-    case 'cancel':
+    case "cancel":
       return cancelWorkflowInstance(id, reason);
-    case 'retry':
+    case "retry":
       return retryWorkflowInstance(id);
     default:
-      return { success: false, error: 'Invalid action' };
+      return { success: false, error: "Invalid action" };
   }
 }
 
@@ -905,11 +975,11 @@ export async function instanceControlFormAction(
 export async function startWorkflowFormAction(
   formData: FormData
 ): Promise<WorkflowActionResult<WorkflowInstance>> {
-  const templateId = formData.get('templateId') as string;
-  const caseId = formData.get('caseId') as string | undefined;
+  const templateId = formData.get("templateId") as string;
+  const caseId = formData.get("caseId") as string | undefined;
 
   if (!templateId) {
-    return { success: false, error: 'Template ID is required' };
+    return { success: false, error: "Template ID is required" };
   }
 
   const result = await startWorkflowInstance({ templateId, caseId });

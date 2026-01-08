@@ -6,10 +6,11 @@
  */
 
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { Suspense } from 'react';
+import { getCSRFToken } from '../../../lib/csrf';
 import { loginAction } from '../actions';
 import { LoginForm } from './LoginForm';
 
@@ -49,6 +50,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const reset = resolvedParams.reset;
   const verified = resolvedParams.verified;
 
+  // Get CSRF token for form protection (Server Action will generate if needed)
+  const csrfToken = await getCSRFToken();
+
   // Get success message based on URL params
   const getSuccessMessage = () => {
     if (registered === 'true') {
@@ -66,7 +70,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const successMessage = getSuccessMessage();
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="flex min-h-screen flex-col justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="mx-auto w-full max-w-md px-4">
         {/* Logo */}
         <div className="mb-8 text-center">
@@ -85,7 +89,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <div className="mb-4 rounded-md border border-emerald-500/50 bg-emerald-500/10 p-3 text-sm text-emerald-400">
               <div className="flex items-center gap-2">
                 <svg
-                  className="h-4 w-4 flex-shrink-0"
+                  className="h-4 w-4 shrink-0"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -105,7 +109,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <div className="mb-4 rounded-md border border-rose-500/50 bg-rose-500/10 p-3 text-sm text-rose-400">
               <div className="flex items-center gap-2">
                 <svg
-                  className="h-4 w-4 flex-shrink-0"
+                  className="h-4 w-4 shrink-0"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -124,7 +128,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           )}
 
           <Suspense fallback={<LoginFormSkeleton />}>
-            <LoginForm action={loginAction} callbackUrl={callbackUrl} />
+            <LoginForm action={loginAction} callbackUrl={callbackUrl} csrfToken={csrfToken} />
           </Suspense>
 
           {/* SSO Divider */}

@@ -34,6 +34,15 @@ import { WarRoomService } from "./war-room.service";
 export class WarRoomController {
   constructor(private readonly warRoomService: WarRoomService) {}
 
+  @Get()
+  @ApiOperation({ summary: "Get War Room Dashboard" })
+  @ApiResponse({ status: 200, description: "Returns war room overview" })
+  async getDashboard(@Query("caseId") caseId?: string) {
+    // Default to case-1 for migration compatibility if not provided
+    const targetCaseId = caseId || "case-1";
+    return this.warRoomService.getWarRoomData(targetCaseId);
+  }
+
   @Public()
   @Head("health")
   @Get("health")

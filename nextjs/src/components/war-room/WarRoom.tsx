@@ -13,60 +13,104 @@ import {
 import { useState } from 'react';
 
 // Mock sub-components
-const CommandCenter = () => (
+const CommandCenter = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Command Center</h3>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
         <div className="text-sm text-blue-600 font-medium">Days to Trial</div>
-        <div className="text-2xl font-bold text-blue-900">45</div>
+        <div className="text-2xl font-bold text-blue-900">
+          {data?.commandCenter?.daysToTrial ?? 45}
+        </div>
       </div>
       <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
         <div className="text-sm text-emerald-600 font-medium">Evidence Ready</div>
-        <div className="text-2xl font-bold text-emerald-900">87%</div>
+        <div className="text-2xl font-bold text-emerald-900">
+          {data?.commandCenter?.evidenceReady ?? 87}%
+        </div>
       </div>
       <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
         <div className="text-sm text-amber-600 font-medium">Pending Motions</div>
-        <div className="text-2xl font-bold text-amber-900">3</div>
+        <div className="text-2xl font-bold text-amber-900">
+          {data?.commandCenter?.pendingMotions ?? 3}
+        </div>
       </div>
     </div>
   </div>
 );
 
-const EvidenceWall = () => (
+const EvidenceWall = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Evidence Wall</h3>
     <div className="h-64 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 border-2 border-dashed border-slate-300">
-      Interactive Evidence Map Placeholder
+      {data?.evidenceWall?.length ? (
+        <div>{data.evidenceWall.length} Items on Wall</div>
+      ) : (
+        "Interactive Evidence Map Placeholder"
+      )}
     </div>
   </div>
 );
 
-const WitnessPrep = () => (
+const WitnessPrep = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Witness Preparation</h3>
-    <div className="text-slate-500 text-center py-8">No witnesses scheduled</div>
+    <div className="text-slate-500 text-center py-8">
+      {data?.witnessPrep?.length ? (
+        <ul>{data.witnessPrep.map((w: any) => <li key={w.id}>{w.name}</li>)}</ul>
+      ) : "No witnesses scheduled"}
+    </div>
   </div>
 );
 
-const TrialBinder = () => (
+const TrialBinder = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Trial Binder</h3>
-    <div className="text-slate-500 text-center py-8">Digital Trial Binder Placeholder</div>
+    <div className="text-slate-500 text-center py-8">
+      {data?.trialBinder?.length
+        ? `${data.trialBinder.length} Sections Created`
+        : "Digital Trial Binder Placeholder"}
+    </div>
   </div>
 );
 
-const AdvisoryBoard = () => (
+const AdvisoryBoard = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Advisory Board</h3>
-    <div className="text-slate-500 text-center py-8">Expert Witness & Consultant Management</div>
+    <div className="space-y-4">
+      {data?.advisors?.length > 0 ? (
+        data.advisors.map((advisor: any) => (
+          <div key={advisor.id} className="p-4 border rounded-lg">
+            <div className="font-semibold">{advisor.name}</div>
+            <div className="text-sm text-slate-500">{advisor.specialty}</div>
+          </div>
+        ))
+      ) : (
+        <div className="text-slate-500 text-center py-8">Expert Witness & Consultant Management</div>
+      )}
+    </div>
   </div>
 );
 
-const OppositionManager = () => (
+const OppositionManager = ({ data }: { data: any }) => (
   <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
     <h3 className="text-lg font-medium text-slate-900 mb-4">Opposition Research</h3>
-    <div className="text-slate-500 text-center py-8">Opposing Counsel & Party Analysis</div>
+    <div className="space-y-4">
+      {data?.opposition?.length > 0 ? (
+        data.opposition.map((opp: any) => (
+          <div key={opp.id} className="p-4 border rounded-lg">
+            <div className="font-semibold">{opp.name}</div>
+            <div className="text-sm text-slate-500">{opp.role}</div>
+            {opp.notes && <div className="text-sm text-slate-400 mt-1">{opp.notes}</div>}
+          </div>
+        ))
+      ) : (
+        <div className="text-slate-500 text-center py-8">
+          <p>No opposition research data available.</p>
+          <p className="text-sm mt-2">Track opposing counsel strategies and history here.</p>
+        </div>
+      )}
+    </div>
   </div>
 );
 
@@ -79,19 +123,19 @@ const VIEWS = [
   { id: 'opposition', label: 'Opposition', icon: Swords },
 ];
 
-export function WarRoom() {
+export function WarRoom({ initialData }: { initialData?: any }) {
   const [activeView, setActiveView] = useState('command');
   const [selectedCase, setSelectedCase] = useState<string | null>('case-1'); // Mock selected case
 
   const renderContent = () => {
     switch (activeView) {
-      case 'command': return <CommandCenter />;
-      case 'evidence': return <EvidenceWall />;
-      case 'witnesses': return <WitnessPrep />;
-      case 'binder': return <TrialBinder />;
-      case 'advisory': return <AdvisoryBoard />;
-      case 'opposition': return <OppositionManager />;
-      default: return <CommandCenter />;
+      case 'command': return <CommandCenter data={initialData} />;
+      case 'evidence': return <EvidenceWall data={initialData} />;
+      case 'witnesses': return <WitnessPrep data={initialData} />;
+      case 'binder': return <TrialBinder data={initialData} />;
+      case 'advisory': return <AdvisoryBoard data={initialData} />;
+      case 'opposition': return <OppositionManager data={initialData} />;
+      default: return <CommandCenter data={initialData} />;
     }
   };
 
@@ -124,7 +168,7 @@ export function WarRoom() {
           </div>
           <div className="mt-2 flex items-center gap-2 text-sm text-slate-500 bg-slate-50 p-2 rounded border border-slate-100">
             <Briefcase className="w-3 h-3" />
-            <span className="truncate">Smith v. Jones</span>
+            <span className="truncate">{initialData?.caseId || 'Smith v. Jones'}</span>
           </div>
         </div>
 

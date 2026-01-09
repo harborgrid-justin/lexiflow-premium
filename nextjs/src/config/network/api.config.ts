@@ -7,6 +7,11 @@ import { isBrowser } from "@rendering/utils";
 
 // Lazy getters for Next.js environment
 export const getApiBaseUrl = () => {
+  // Server-side always requires absolute URL
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+  }
+
   // In development, use relative path to leverage Next.js proxy (fixes CORS in Codespaces)
   // Also check for github.dev hostname to ensure we use proxy in Codespaces even if mode is somehow different
   if (

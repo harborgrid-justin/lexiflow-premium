@@ -28,9 +28,9 @@ export const revalidate = 3600; // Revalidate every 60 minutes
  */
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   try {
-    // Fetch list of war-room IDs for static generation
+    // Fetch list of cases for static generation
     const response = await apiFetch<any[]>(
-      API_ENDPOINTS.WAR_ROOM.LIST + '?limit=100&fields=id'
+      API_ENDPOINTS.CASES.LIST + '?limit=100&fields=id'
     );
 
     // Map to the required { id: string } format
@@ -50,35 +50,32 @@ export async function generateMetadata({ params }: WarRoomDetailPageProps): Prom
   try {
     const warRoom = await apiFetch(API_ENDPOINTS.WAR_ROOM.DETAIL(id));
     return {
-      title: `War Room ${warRoom.name || id} | LexiFlow`,
-      description: warRoom.description || 'War room details',
+      title: `War Room - Case ${warRoom.caseId || id} | LexiFlow`,
+      description: 'Strategic trial planning and case preparation',
     };
   } catch {
     return { title: 'War Room Not Found' };
   }
 }
 
+import { WarRoom } from '@/components/war-room/WarRoom';
+import { Suspense } from 'react';
+
+// ... (Metadata part can stay similar but safe access)
+
 export default async function WarRoomDetailPage({ params }: WarRoomDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
-  let warRoom;
+  let warRoomData;
   try {
-    warRoom = await apiFetch(API_ENDPOINTS.WAR_ROOM.DETAIL(id));
+    warRoomData = await apiFetch(API_ENDPOINTS.WAR_ROOM.DETAIL(id));
   } catch (error) {
     notFound();
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-6">
-        War Room: {warRoom.name || id}
-      </h1>
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-lg">
-        <p className="text-slate-600 dark:text-slate-400">{warRoom.description}</p>
-        <div className="mt-4 text-sm text-slate-500">
-          <p>Status: {warRoom.status}</p>
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<div className="p-8">Loading war room for case {id}...</div>}>
+      <WarRoom initialData={warRoomData} />
+    </Suspense>
   );
 }

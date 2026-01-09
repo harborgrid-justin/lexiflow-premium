@@ -374,4 +374,44 @@ export const AdminService = {
       },
     };
   },
+
+  // Database Management
+  getDbInfo: async (): Promise<{
+    name: string;
+    version: number;
+    mode: string;
+    totalStores: number;
+    stores: Array<{ name: string; count: number }>;
+  }> => {
+    if (isBackendApiEnabled()) {
+      try {
+        // Try backend endpoint first
+        return await apiClient.get("/admin/database/info");
+      } catch (error) {
+        console.warn("[AdminService] DB Info backend unavailable", error);
+        throw error;
+      }
+    }
+
+    // Strict backend enforcement - no mocks allowed
+    throw new Error("Legacy DB info not supported in strict backend mode.");
+  },
+
+  incrementVersion: async (): Promise<void> => {
+    if (isBackendApiEnabled()) {
+      await apiClient.post("/admin/database/migrate");
+      return;
+    }
+    console.warn(
+      "Legacy DB version increment not supported in backend-first mode"
+    );
+  },
+
+  resetDatabase: async (): Promise<void> => {
+    if (isBackendApiEnabled()) {
+      await apiClient.post("/admin/database/reset");
+      return;
+    }
+    console.warn("Legacy DB reset not supported in backend-first mode");
+  },
 };

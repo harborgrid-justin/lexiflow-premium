@@ -53,18 +53,17 @@ export const CaseListExperts: React.FC = () => {
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600" /></div>;
 
-  // Handle both array (mock/legacy) and paginated response (backend)
-  // Ensure we always have an array for rawList to avoid .map errors
+  // Strict backend pagination handling
   const rawList = Array.isArray(expertsData)
     ? expertsData
-    : (Array.isArray(expertsData?.data) ? expertsData.data : []);
+    : (expertsData && typeof expertsData === 'object' && 'data' in expertsData && Array.isArray(expertsData.data) ? expertsData.data : []);
 
   const expertsList: Expert[] = (rawList as Array<{ id?: string; name?: string; specialty?: string; expertType?: string; rate?: number; hourlyRate?: number; readiness?: number; reports?: number }>).map((item) => ({
     id: item.id || 'unknown',
     name: item.name || 'Unknown Expert',
     specialty: item.specialty || item.expertType || 'General',
     rate: item.rate || item.hourlyRate || 0,
-    readiness: item.readiness || 85, // Default for demo
+    readiness: item.readiness || 85,
     reports: item.reports || 0
   }));
 

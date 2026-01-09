@@ -21,8 +21,5 @@ export * from './crm';
 // Document Assembly & Automation
 export * from './daf';
 
-// Stub components (temporary)
-import React from 'react';
-export const DocumentPreviewPanel: React.FC<{ documentId?: string; className?: string }> = ({ className }) => {
-    return <div className={className}>Document Preview (stub)</div>;
-};
+// Document Viewer
+export { DocumentPreviewPanel } from './documents/viewer/DocumentPreviewPanel';

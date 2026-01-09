@@ -27,17 +27,16 @@ export { CaseFinancialsCenter } from './components/financials/CaseFinancialsCent
 export { CaseManagement } from './components/list';
 
 // Re-export existing components
-export * from './components/list';
-export * from './components/detail';
+export * from './components/calendar';
 export * from './components/create';
+export * from './components/detail';
 export * from './components/docket';
 export * from './components/entities';
+export * from './components/list';
 export * from './components/workflow';
-export * from './components/calendar';
 
-// Stub components (temporary)
-import React from 'react';
-export const PlanningSidebar: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Planning Sidebar (stub)</div>;
-export const ScheduleTimeline: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Schedule Timeline (stub)</div>;
-export const BuilderToolbar: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Builder Toolbar (stub)</div>;
-export const BuilderCanvas: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Builder Canvas (stub)</div>;
+// Planning & Builder Components
+export { BuilderCanvas } from './components/planning/BuilderCanvas';
+export { BuilderToolbar } from './components/planning/BuilderToolbar';
+export { PlanningSidebar } from './components/planning/PlanningSidebar';
+export { ScheduleTimeline } from './components/planning/ScheduleTimeline';

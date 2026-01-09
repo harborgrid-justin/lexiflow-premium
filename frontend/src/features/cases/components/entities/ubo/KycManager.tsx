@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card } from '@/components/ui/molecules/Card';
-import { Button } from '@/components/ui/atoms/Button';
-import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Card } from '@/shared/ui/molecules/Card';
+import { Button } from '@/shared/ui/atoms/Button';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';

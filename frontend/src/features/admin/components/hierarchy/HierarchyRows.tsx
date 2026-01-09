@@ -1,4 +1,4 @@
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Group, Organization, User as UserType } from '@/types';
 import { cn } from '@/shared/lib/cn';

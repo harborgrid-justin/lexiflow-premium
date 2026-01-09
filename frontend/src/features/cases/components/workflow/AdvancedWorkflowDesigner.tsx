@@ -6,8 +6,8 @@
  *           approval chains, rollback, analytics, AI suggestions, external triggers
  */
 
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';

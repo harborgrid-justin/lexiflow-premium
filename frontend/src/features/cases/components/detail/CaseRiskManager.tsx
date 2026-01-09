@@ -13,8 +13,8 @@ import { AlertTriangle, Loader2, Plus, ShieldAlert, TrendingUp } from 'lucide-re
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/shared/ui/atoms/Button';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { RiskDetail } from './risk/RiskDetail';
 import { RiskList } from './risk/RiskList';
 

@@ -22,7 +22,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 
 // Utils & Constants
 import { CommunicationStatus } from '@/types/enums';

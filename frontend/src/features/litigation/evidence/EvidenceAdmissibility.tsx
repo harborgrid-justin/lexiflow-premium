@@ -9,11 +9,11 @@ import { CheckCircle, Plus, Scale, ShieldAlert } from 'lucide-react';
 import React, { useState } from 'react';
 
 // Common Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { RuleSelector } from '@/shared/ui/molecules/RuleSelector/RuleSelector';
 
 // Context & Utils
 import { useModalState } from '@/hooks/core';

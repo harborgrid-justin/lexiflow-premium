@@ -10,8 +10,8 @@ import { UserCheck, FileText, Gavel } from 'lucide-react';
 
 // Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

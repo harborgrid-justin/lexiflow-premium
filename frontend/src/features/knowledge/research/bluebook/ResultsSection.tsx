@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
 import { cn } from '@/shared/lib/cn';

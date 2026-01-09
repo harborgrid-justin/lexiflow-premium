@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2} from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { TaskDependencyManager } from './TaskDependencyManager';
 import { ParallelTasksManager } from './ParallelTasksManager';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 
 interface EngineDetails {
   id: string;

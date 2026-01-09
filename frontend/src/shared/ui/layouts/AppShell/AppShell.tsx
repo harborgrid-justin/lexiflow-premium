@@ -21,7 +21,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
+import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
 
 // Hooks & Context
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';

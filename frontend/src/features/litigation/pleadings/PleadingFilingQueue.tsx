@@ -23,9 +23,9 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

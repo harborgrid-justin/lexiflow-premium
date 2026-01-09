@@ -5,7 +5,7 @@
  */
 
 import { Production as APIProduction } from '@/api/discovery/productions-api';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

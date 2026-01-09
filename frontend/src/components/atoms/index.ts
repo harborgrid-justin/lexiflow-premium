@@ -5,7 +5,7 @@
  *
  * NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
  * Import directly from specific paths:
- * import { Button } from '@/components/ui/atoms/Button/Button';
+ * import { Button } from '@/shared/ui/atoms/Button/Button';
  */
 
 // export * from '../ui/atoms';

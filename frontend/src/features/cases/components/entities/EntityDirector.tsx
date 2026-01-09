@@ -28,8 +28,8 @@ import { useWindow } from '@/providers';
 
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { DirectorView, EntityNavigation, getEntityFirstTab, getEntityParentTab } from './layout/EntityNavigation';
 
 // Utils & Constants

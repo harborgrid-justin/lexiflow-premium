@@ -9,9 +9,9 @@ import React, { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/ui/molecules/Card';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
+import { Card } from '@/shared/ui/molecules/Card';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { EvidenceTypeIcon } from '@/shared/ui/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

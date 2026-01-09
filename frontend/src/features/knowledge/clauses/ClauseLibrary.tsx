@@ -17,13 +17,13 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

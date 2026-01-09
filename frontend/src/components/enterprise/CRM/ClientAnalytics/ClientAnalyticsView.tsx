@@ -3,7 +3,7 @@
  * @description Main view component (~90 LOC target) - Pure JSX presentation layer
  */
 
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
 import { LTVTab } from './LTVTab';

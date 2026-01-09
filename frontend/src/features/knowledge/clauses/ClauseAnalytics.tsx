@@ -1,5 +1,5 @@
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

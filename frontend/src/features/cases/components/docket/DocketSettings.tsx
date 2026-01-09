@@ -12,8 +12,8 @@ import { AlertTriangle, CheckCircle, Key } from 'lucide-react';
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

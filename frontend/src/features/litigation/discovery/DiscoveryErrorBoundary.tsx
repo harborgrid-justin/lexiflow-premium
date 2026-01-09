@@ -5,7 +5,7 @@
  */
 import React, {Component, ErrorInfo, ReactNode} from 'react';
 import {AlertTriangle, RefreshCw, Home} from 'lucide-react';
-import {Button} from '@/components/ui/atoms/Button';
+import {Button} from '@/shared/ui/atoms/Button';
 
 interface Props {
     children: ReactNode;

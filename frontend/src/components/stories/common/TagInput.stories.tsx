@@ -1,4 +1,4 @@
-import { TagInput } from '@/components/ui/molecules/TagInput/TagInput';
+import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';

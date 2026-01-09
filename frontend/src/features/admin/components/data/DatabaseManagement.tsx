@@ -1,10 +1,10 @@
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/core';
-import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
+import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -29,6 +29,7 @@ export const DatabaseManagement: React.FC = () => {
       setMessage({ type: 'success', text: 'Database version incremented successfully.' });
       refetch();
     } catch (err) {
+      console.error('[DatabaseManagement] Failed to increment version:', err);
       setMessage({ type: 'error', text: 'Failed to increment database version.' });
     } finally {
       setIsProcessing(false);
@@ -43,6 +44,7 @@ export const DatabaseManagement: React.FC = () => {
       setMessage({ type: 'success', text: 'Database reset successfully.' });
       refetch();
     } catch (err) {
+      console.error('[DatabaseManagement] Failed to reset database:', err);
       setMessage({ type: 'error', text: 'Failed to reset database.' });
     } finally {
       setIsProcessing(false);

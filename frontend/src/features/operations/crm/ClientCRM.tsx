@@ -1,6 +1,6 @@
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';

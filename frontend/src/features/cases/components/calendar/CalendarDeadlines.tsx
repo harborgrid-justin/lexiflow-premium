@@ -23,8 +23,8 @@ import { DataService } from '@/services/data/dataService';
 
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { DateText } from '@/components/ui/atoms/DateText/DateText';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { DateText } from '@/shared/ui/atoms/DateText/DateText';
 
 // Types
 import { CalendarEventItem } from '@/types';

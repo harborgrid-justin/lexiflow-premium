@@ -25,8 +25,8 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

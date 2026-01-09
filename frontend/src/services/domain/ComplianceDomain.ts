@@ -75,12 +75,12 @@ console.log('metrics data:', metrics);
  * - Metrics endpoint available at /api/compliance/metrics
  */
 
-import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics } from "@/types";
-import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { complianceApi } from "@/api/domains/compliance.api";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { complianceApi } from "@/api/domains/compliance.api";
 import { ComplianceError } from "@/services/core/errors";
+import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { ComplianceMetrics, ConflictCheck, EthicalWall, Risk } from "@/types";
 
 /**
  * Conflict interfaces for enhanced detection
@@ -308,12 +308,13 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
         status: result.status,
         date: result.date || new Date().toISOString(),
         foundIn: result.foundIn || [],
-        checkedById: result.checkedById || "system",
+        checkedById: (result.checkedById || "system") as UserId,
         checkedBy: result.checkedBy || "System",
         createdAt: result.createdAt || new Date().toISOString(),
         updatedAt: result.updatedAt || new Date().toISOString(),
       };
     } catch (e) {
+      console.error("[ComplianceService] Conflict check failed:", e);
       throw new Error("Legacy conflict check failed");
     }
   },
@@ -356,7 +357,8 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
         // return backendResults;
       } catch (error) {
         console.error(
-          "Backend conflict check failed, falling back to local heuristic"
+          "Backend conflict check failed, falling back to local heuristic",
+          error
         );
       }
     }
@@ -382,7 +384,7 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
           severity: "high",
           description: 'Subsidiary "Tiny Corp" is an adverse party',
           relationship: "subsidiary",
-          depth: 1,
+          depth: depth - 1,
         });
       }
     }

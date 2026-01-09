@@ -1,9 +1,9 @@
 import { dataPlatformApi } from '@/api/data-platform';
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';

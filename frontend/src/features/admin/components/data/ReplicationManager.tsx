@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';
 
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';

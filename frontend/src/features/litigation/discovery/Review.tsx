@@ -4,9 +4,9 @@
  * Full-featured document review with coding panel
  */
 
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';

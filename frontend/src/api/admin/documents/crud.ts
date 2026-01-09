@@ -43,11 +43,11 @@ export async function getAll(filters?: {
       (response as { data: unknown }).data !== null &&
       "data" in ((response as { data: unknown }).data as object) &&
       Array.isArray(
-        ((response as { data: { data: unknown } }).data as { data: unknown })
+        ((response as unknown as { data: { data: unknown } }).data as { data: unknown })
           .data
       )
     ) {
-      return (response as { data: { data: LegalDocument[] } }).data.data;
+      return (response as unknown as { data: { data: LegalDocument[] } }).data.data;
     }
 
     // Handle direct array response

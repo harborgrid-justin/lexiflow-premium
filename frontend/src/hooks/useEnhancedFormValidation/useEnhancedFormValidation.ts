@@ -31,11 +31,17 @@ export const useEnhancedFormValidation = <T extends Record<string, any>>(
 
   const validateField = useCallback(
     async (field: keyof T, value: any, rules: ValidationRule<any>[]) => {
-      for (const rule of rules) {
-        const error = await rule(value);
-        if (error) return error;
+      setIsValidating(true);
+      try {
+        console.log(`Validating field: ${String(field)}`);
+        for (const rule of rules) {
+          const error = await rule(value);
+          if (error) return error;
+        }
+        return null;
+      } finally {
+        setIsValidating(false);
       }
-      return null;
     },
     []
   );

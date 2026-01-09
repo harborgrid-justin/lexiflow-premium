@@ -13,7 +13,7 @@ import { AlertCircle, ChevronDown, ChevronRight, GripVertical, Plus } from 'luci
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

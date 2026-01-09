@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';

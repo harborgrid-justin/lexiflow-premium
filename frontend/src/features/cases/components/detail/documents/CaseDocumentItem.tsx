@@ -13,8 +13,8 @@ import { CheckSquare, FileText, Loader2, Wand2 } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
-import { TagList } from '@/components/ui/molecules/TagList/TagList';
+import { Button } from '@/shared/ui/atoms/Button';
+import { TagList } from '@/shared/ui/molecules/TagList/TagList';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

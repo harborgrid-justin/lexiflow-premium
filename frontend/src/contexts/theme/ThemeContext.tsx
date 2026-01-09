@@ -2,8 +2,10 @@ import React, { createContext, ReactNode, useContext, useEffect, useMemo, useSta
 import { DEFAULT_TOKENS, DesignTokens, ThemeDensity } from '../../components/theme/tokens';
 
 export type ThemeObject = {
+  interactive: any;
   background: string;
   surface: {
+    subtle(arg0: string, subtle: any, default: string): string | undefined;
     default: string;
     raised: string;
     highlight: string;
@@ -32,6 +34,10 @@ export type ThemeObject = {
     main: string;
   };
   text: {
+    accent(arg0: string, accent: any): string | undefined;
+    muted(arg0: string, muted: any): string | undefined;
+    success(success: any, arg1: string): string | undefined;
+    error(error: any, arg1: string): string | undefined;
     primary: string;
     secondary: string;
     tertiary: string;

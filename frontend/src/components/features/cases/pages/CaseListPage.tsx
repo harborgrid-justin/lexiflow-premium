@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CaseManagement } from '@/features/cases/components/list/CaseManagement';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CaseListPageProps {
   onSelectCase?: (caseId: string) => void;

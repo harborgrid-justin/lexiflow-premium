@@ -20,8 +20,8 @@ import { Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

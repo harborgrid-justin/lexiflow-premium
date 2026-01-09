@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Terminal, PlayCircle } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 
 export const SimulationView: React.FC = () => {
   return (

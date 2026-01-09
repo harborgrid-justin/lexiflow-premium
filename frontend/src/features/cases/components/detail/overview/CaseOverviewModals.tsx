@@ -14,8 +14,8 @@ import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { TimeEntryModal } from '@/features/cases/ui/components/TimeEntryModal/TimeEntryModal';
-import { Modal } from '@/components/ui/molecules/Modal';
-import { Button } from '@/components/ui/atoms/Button';
+import { Modal } from '@/shared/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

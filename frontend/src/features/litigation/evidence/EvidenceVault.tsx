@@ -18,8 +18,8 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 // ============================================================================
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceDetailSkeleton, EvidenceInventorySkeleton } from './EvidenceSkeleton';
 import { EvidenceVaultContent } from './EvidenceVaultContent';

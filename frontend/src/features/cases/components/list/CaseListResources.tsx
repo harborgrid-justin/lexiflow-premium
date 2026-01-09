@@ -18,8 +18,8 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

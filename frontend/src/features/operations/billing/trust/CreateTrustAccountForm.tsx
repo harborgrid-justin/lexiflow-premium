@@ -16,7 +16,7 @@
  * 5. Controlled components ensure React owns state (single source of truth)
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
 import type { CreateTrustAccountDto, TrustAccountStatus, TrustAccountType } from '@/types/trust-accounts';

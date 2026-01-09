@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Activity, Edit2, FileSearch, GitMerge, Loader2, Plus, RefreshCw, Settings, Sparkles, Wand2 } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { Button } from '@/components/ui/atoms/Button';
-import { Modal } from '@/components/ui/molecules/Modal';
-import { Tabs } from '@/components/ui/molecules/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Modal } from '@/shared/ui/molecules/Modal';
+import { Tabs } from '@/shared/ui/molecules/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';

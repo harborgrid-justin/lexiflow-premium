@@ -1,10 +1,10 @@
 import { api } from '@/api';
 import { ActionRow, MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { LegalEntity } from '@/types';

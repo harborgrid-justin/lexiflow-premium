@@ -1,4 +1,4 @@
-import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
+import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { encodeHtmlEntities } from '@/shared/lib/sanitize';

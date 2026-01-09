@@ -4,8 +4,8 @@
  * @description AI-powered case data import with intelligent field mapping for XML, docket sheets, and structured data
  */
 
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';

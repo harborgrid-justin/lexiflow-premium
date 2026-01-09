@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

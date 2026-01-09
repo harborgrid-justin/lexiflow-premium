@@ -10,10 +10,10 @@ import React, { useState } from 'react';
 
 // Common Components
 import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

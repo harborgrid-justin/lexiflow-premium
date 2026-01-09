@@ -38,6 +38,8 @@ import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
 import { AppProviders } from "@/providers/AppProviders";
 
+import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
+
 // ============================================================================
 // Meta Tags
 // ============================================================================
@@ -48,11 +50,10 @@ import { AppProviders } from "@/providers/AppProviders";
  */
 export function meta(_args: Route.MetaArgs) {
   return [
-    { title: "LexiFlow AI Legal Suite" },
+    { title: `${APP_NAME} AI Legal Suite` },
     {
       name: "description",
-      content:
-        "Enterprise Legal OS - Case Management, Discovery, Research & Firm Operations",
+      content: APP_DESCRIPTION,
     },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
     { charSet: "utf-8" },

@@ -27,9 +27,9 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // Components
 import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

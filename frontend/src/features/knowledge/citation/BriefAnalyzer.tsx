@@ -25,9 +25,9 @@ import React, { useMemo, useState } from 'react';
 // ============================================================================
 // Components
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';

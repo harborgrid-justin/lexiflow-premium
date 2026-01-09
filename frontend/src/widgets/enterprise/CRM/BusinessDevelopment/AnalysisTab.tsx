@@ -3,7 +3,7 @@
  * @description Win/Loss analysis tab view component
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import {

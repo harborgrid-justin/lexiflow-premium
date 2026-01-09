@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { RulesDashboard } from '@/features/knowledge/rules/RulesDashboard';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { RulesView } from '@/config/tabs.config';
 
 interface RulesPageProps {

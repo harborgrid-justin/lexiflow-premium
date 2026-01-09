@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
-import { CenteredLayout } from '@/components/ui/layouts/CenteredLayout/CenteredLayout';
+import { CenteredLayout } from '@/shared/ui/layouts/CenteredLayout/CenteredLayout';
 
 interface CaseIntakePageProps {
   onComplete?: (caseId: string) => void;

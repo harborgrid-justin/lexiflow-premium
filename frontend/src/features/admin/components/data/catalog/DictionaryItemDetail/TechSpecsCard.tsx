@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Card } from '@/components/ui/molecules/Card';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { DataDictionaryItem } from '@/types';

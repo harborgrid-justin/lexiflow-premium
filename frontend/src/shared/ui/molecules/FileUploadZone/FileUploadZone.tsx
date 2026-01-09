@@ -23,7 +23,7 @@ import { DocumentService } from '@/services/features/documents/documentService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

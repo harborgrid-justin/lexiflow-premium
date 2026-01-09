@@ -2,7 +2,7 @@
  * @module components/enterprise/CRM/ClientAnalytics/RiskTab
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { RiskCard } from './RiskCard';
 import type { ClientRiskAssessment } from './types';

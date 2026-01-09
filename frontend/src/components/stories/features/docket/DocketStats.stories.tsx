@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { DocketStats } from '@/features/cases/components/docket/DocketStats';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';

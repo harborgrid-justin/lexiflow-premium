@@ -7,7 +7,6 @@
  * @module hooks/useStrategyCanvas
  */
 
-import { ContextMenuItem } from "@/components/ui/molecules/ContextMenu/ContextMenu";
 import {
   AddConnectionCommand,
   AddNodeCommand,
@@ -16,6 +15,7 @@ import {
   MoveNodeCommand,
   UpdateNodeCommand,
 } from "@/services/infrastructure/commandHistory";
+import { ContextMenuItem } from "@/shared/ui/molecules/ContextMenu/ContextMenu";
 import { CANVAS_CONSTANTS } from "@/types/canvas-constants";
 import {
   createTypedNode,

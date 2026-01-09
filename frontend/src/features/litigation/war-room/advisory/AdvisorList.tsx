@@ -21,9 +21,9 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

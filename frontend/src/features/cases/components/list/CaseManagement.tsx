@@ -13,8 +13,8 @@
 
 import { api } from '@/api';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 import { PATHS } from '@/config/paths.config';
 import { MatterView } from '@/config/tabs.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';

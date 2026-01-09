@@ -19,9 +19,9 @@ import React from 'react';
 // ============================================================================
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';

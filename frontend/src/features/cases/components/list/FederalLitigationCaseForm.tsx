@@ -18,7 +18,7 @@
 
 import { api } from '@/api';
 import { Jurisdiction } from '@/api/intelligence/jurisdiction-api';
-import { AutocompleteSelect } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
+import { AutocompleteSelect } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { DataService } from '@/services/data/dataService';
 import { Case, CaseStatus, CaseType } from '@/types';

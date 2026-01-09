@@ -3,6 +3,7 @@
  * Display and filter invoices with status tracking
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { Invoice } from '@/types/financial';
 import { FileText, Filter, Send } from 'lucide-react';
 import React, { useState } from 'react';
@@ -14,6 +15,7 @@ interface InvoiceListProps {
 }
 
 export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) => {
+  const { theme } = useTheme();
   const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadge = (status: string) => {
@@ -43,7 +45,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          className={cn("flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm transition-colors", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
         >
           <Filter className="h-4 w-4" />
           Filters
@@ -51,16 +53,16 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+        <Form method="get" className={cn("rounded-lg border p-4", theme.surface.subtle, theme.border.default)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Case
               </label>
               <select
                 name="caseId"
                 defaultValue={(filters?.caseId as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">All Cases</option>
                 <option value="C-2024-001">Martinez v. TechCorp</option>
@@ -69,7 +71,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Client
               </label>
               <input
@@ -77,18 +79,18 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                 name="clientId"
                 defaultValue={(filters?.clientId as string) || ''}
                 placeholder="Client ID or name"
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Status
               </label>
               <select
                 name="status"
                 defaultValue={(filters?.status as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">All Statuses</option>
                 <option value="Draft">Draft</option>
@@ -102,7 +104,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
             <div className="flex items-end">
               <button
                 type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className={cn("w-full rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2", theme.interactive.primary, "focus:ring-blue-500")}
               >
                 Apply Filters
               </button>
@@ -112,68 +114,68 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
       )}
 
       {/* Invoices Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
+      <div className={cn("overflow-hidden rounded-lg border shadow", theme.surface.default, theme.border.default)}>
+        <table className={cn("min-w-full divide-y", theme.border.default)}>
+          <thead className={cn(theme.surface.subtle)}>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Invoice #
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Client
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Matter
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Due Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Amount
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Balance Due
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-right text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+          <tbody className={cn("divide-y", theme.border.default, theme.surface.default)}>
             {invoices.map((invoice) => (
-              <tr key={invoice.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <tr key={invoice.id} className={cn("transition-colors", `hover:${theme.surface.subtle}`)}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <Link
                     to={`/billing/invoices/${invoice.id}`}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                    className={cn("text-sm font-medium", theme.text.accent)}
                   >
                     {invoice.invoiceNumber}
                   </Link>
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   {invoice.clientName}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                <td className={cn("px-6 py-4 text-sm", theme.text.secondary)}>
                   <div className="max-w-xs truncate" title={invoice.matterDescription}>
                     {invoice.matterDescription}
                   </div>
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   {new Date(invoice.invoiceDate).toLocaleDateString()}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   {new Date(invoice.dueDate).toLocaleDateString()}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                   ${invoice.totalAmount.toLocaleString()}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                   ${invoice.balanceDue.toLocaleString()}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
@@ -188,7 +190,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                           type="submit"
                           name="intent"
                           value="send"
-                          className="flex items-center gap-1 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                          className={cn("flex items-center gap-1", theme.text.accent)}
                         >
                           <Send className="h-4 w-4" />
                           Send
@@ -197,7 +199,7 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
                     )}
                     <Link
                       to={`/billing/invoices/${invoice.id}`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      className={cn(theme.text.accent, "hover:underline")}
                     >
                       View
                     </Link>
@@ -210,11 +212,11 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
 
         {invoices.length === 0 && (
           <div className="py-12 text-center">
-            <FileText className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+            <FileText className={cn("mx-auto h-12 w-12", theme.text.muted)} />
+            <h3 className={cn("mt-2 text-sm font-medium", theme.text.primary)}>
               No invoices
             </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className={cn("mt-1 text-sm", theme.text.secondary)}>
               Get started by creating a new invoice.
             </p>
           </div>

@@ -21,8 +21,8 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/shared/lib/cn';

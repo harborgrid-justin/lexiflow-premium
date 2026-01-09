@@ -33,7 +33,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import type { LegalRule } from '@/types/legal-research';

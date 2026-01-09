@@ -6,7 +6,7 @@
 
 import React from 'react';
 import DraftingDashboard from '@/features/drafting/DraftingDashboard';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * DraftingPage - React 18 optimized with React.memo

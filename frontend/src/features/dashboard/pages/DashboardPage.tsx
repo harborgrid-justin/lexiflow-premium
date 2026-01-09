@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Dashboard } from '@/features/dashboard/components/Dashboard';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { User } from '@/types/system';
 
 interface DashboardPageProps {

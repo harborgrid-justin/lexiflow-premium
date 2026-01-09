@@ -1,6 +1,6 @@
 import { DOCUMENTS_QUERY_KEYS } from '@/api/admin/documents';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { UserProfileManager } from '@/features/profile/UserProfileManager';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * ProfilePage - React 18 optimized with React.memo

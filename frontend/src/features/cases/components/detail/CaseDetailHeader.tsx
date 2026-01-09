@@ -13,8 +13,8 @@ import { ArrowLeft, ArrowUpRight, Calendar, CheckSquare, MapPin, MessageCircle, 
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ClientPortalModal } from '@features/operations';
 
 // Internal Dependencies - Hooks & Context

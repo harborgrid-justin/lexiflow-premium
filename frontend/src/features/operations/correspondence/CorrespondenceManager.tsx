@@ -30,7 +30,7 @@ import { useToggle } from '@/shared/hooks/useToggle';
 
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CorrespondenceDetail } from './CorrespondenceDetail';

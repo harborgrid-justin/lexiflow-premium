@@ -21,9 +21,9 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 // ============================================================================
 import { getChartTheme } from '@/utils/chartConfig';
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

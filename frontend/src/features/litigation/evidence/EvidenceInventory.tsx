@@ -20,9 +20,9 @@ import React, { useCallback, useState } from 'react';
 import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { EvidenceTypeIcon } from '@/shared/ui/atoms/EvidenceTypeIcon';
 
 // Context & Utils
 import { EvidenceFilters } from '@/hooks/useEvidenceManager';

@@ -1,5 +1,5 @@
 import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';

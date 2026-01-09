@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { DocumentManager } from '@/features/operations/documents/DocumentManager';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface DocumentsPageProps {
   caseId?: string;

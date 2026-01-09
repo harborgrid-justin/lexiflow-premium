@@ -37,8 +37,8 @@ import { FixedSizeList as List } from 'react-window';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 

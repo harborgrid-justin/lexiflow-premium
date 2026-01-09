@@ -1,5 +1,5 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalEntity } from '@/types';
 import { cn } from '@/shared/lib/cn';

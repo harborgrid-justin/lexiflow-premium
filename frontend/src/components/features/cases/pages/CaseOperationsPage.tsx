@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CaseOperationsCenter } from '@/features/cases/components/operations/CaseOperationsCenter';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CaseOperationsPageProps {
   caseId: string;

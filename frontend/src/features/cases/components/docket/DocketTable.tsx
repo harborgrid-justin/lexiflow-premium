@@ -19,7 +19,7 @@ import React, { useRef } from 'react';
 // Components
 import { InfiniteScrollTrigger } from '@/shared/ui/organisms/InfiniteScrollTrigger';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { DocketRow } from './DocketRow';
 
 // Internal Dependencies - Hooks & Context

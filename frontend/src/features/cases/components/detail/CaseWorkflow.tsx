@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 

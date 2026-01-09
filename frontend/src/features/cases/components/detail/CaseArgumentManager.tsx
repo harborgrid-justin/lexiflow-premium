@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';

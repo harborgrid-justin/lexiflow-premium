@@ -1,6 +1,6 @@
 import { dataPlatformApi } from '@/api/data-platform';
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';

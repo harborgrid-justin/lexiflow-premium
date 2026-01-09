@@ -20,14 +20,14 @@ import { Filter } from 'lucide-react';
 // Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { SwipeableItem } from '@/shared/ui/organisms/SwipeableItem';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
-import { SearchInput } from '@/components/ui/molecules/SearchInput/SearchInput';
-import { Input } from '@/components/ui/atoms/Input';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Currency } from '@/components/ui/atoms/Currency/Currency';
+import { SearchInput } from '@/shared/ui/molecules/SearchInput/SearchInput';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Currency } from '@/shared/ui/atoms/Currency/Currency';
 import { ActiveCaseTable } from './ActiveCaseTable';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 
 // Hooks & Context
 import { useSort } from '@/hooks/useSort';

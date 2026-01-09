@@ -21,8 +21,8 @@ import { CaseListContent } from './CaseListContent';
 // ============================================================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // Hooks
 import { useCaseList } from '@/hooks/useCaseList';

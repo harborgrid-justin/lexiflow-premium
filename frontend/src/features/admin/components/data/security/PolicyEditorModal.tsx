@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { RLSPolicy, SqlCmd } from '@/types';
 import { cn } from '@/shared/lib/cn';

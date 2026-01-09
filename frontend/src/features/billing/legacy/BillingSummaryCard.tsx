@@ -3,8 +3,10 @@
  * Summary card showing billing metrics and KPIs
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/shared/lib/cn';
+import { Clock, DollarSign, FileText, TrendingDown, TrendingUp } from 'lucide-react';
 import React from 'react';
-import { DollarSign, Clock, FileText, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface BillingSummaryCardProps {
   title: string;
@@ -23,6 +25,7 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
   icon = 'dollar',
   color = 'blue',
 }) => {
+  const { theme } = useTheme();
   const icons = {
     dollar: DollarSign,
     clock: Clock,
@@ -62,32 +65,30 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
   const colorClasses = colors[color];
 
   return (
-    <div className={`rounded-lg border ${colorClasses.border} bg-white p-6 shadow-sm dark:bg-gray-800`}>
+    <div className={cn("rounded-lg border p-6 shadow-sm", colorClasses.border, theme.surface.default)}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm font-medium", theme.text.secondary)}>
             {title}
           </p>
-          <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+          <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
             {value}
           </p>
 
           {change !== undefined && (
             <div className="mt-2 flex items-center gap-1">
               {change >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
+                <TrendingUp className={cn("h-4 w-4", theme.text.success)} />
               ) : (
-                <TrendingDown className="h-4 w-4 text-red-600" />
+                <TrendingDown className={cn("h-4 w-4", theme.text.error)} />
               )}
               <span
-                className={`text-sm font-medium ${
-                  change >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}
+                className={cn("text-sm font-medium", change >= 0 ? theme.text.success : theme.text.error)}
               >
                 {change >= 0 ? '+' : ''}{change}%
               </span>
               {changeLabel && (
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className={cn("text-sm", theme.text.muted)}>
                   {changeLabel}
                 </span>
               )}
@@ -95,8 +96,8 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
           )}
         </div>
 
-        <div className={`rounded-full p-3 ${colorClasses.bg}`}>
-          <Icon className={`h-6 w-6 ${colorClasses.icon}`} />
+        <div className={cn("rounded-full p-3", colorClasses.bg)}>
+          <Icon className={cn("h-6 w-6", colorClasses.icon)} />
         </div>
       </div>
     </div>

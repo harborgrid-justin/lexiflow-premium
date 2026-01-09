@@ -8,7 +8,7 @@
 import { useCallback, useState } from "react";
 import type { ZodSchema } from "zod";
 
-export interface WizardStep<T> {
+export interface WizardStep {
   id: string;
   title: string;
   description?: string;
@@ -17,7 +17,7 @@ export interface WizardStep<T> {
 }
 
 export const useEnhancedWizard = <T extends Record<string, any>>(
-  steps: WizardStep<T>[],
+  steps: WizardStep[],
   initialData: Partial<T> = {}
 ) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -34,6 +34,8 @@ export const useEnhancedWizard = <T extends Record<string, any>>(
   }, []);
 
   const next = useCallback(async () => {
+    if (!currentStep) return;
+
     if (currentStep.validationSchema) {
       const result = currentStep.validationSchema.safeParse(formData);
       if (!result.success) {
@@ -61,7 +63,9 @@ export const useEnhancedWizard = <T extends Record<string, any>>(
       // Only allow navigating to completed steps or the next available step
       if (
         index <= currentStepIndex ||
-        (index > 0 && completedSteps.has(steps[index - 1].id))
+        (index > 0 &&
+          steps[index - 1] &&
+          completedSteps.has(steps[index - 1].id))
       ) {
         setCurrentStepIndex(index);
       }

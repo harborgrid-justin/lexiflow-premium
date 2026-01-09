@@ -39,6 +39,8 @@ interface CardProps {
   action?: React.ReactNode;
   /** Footer content. */
   footer?: React.ReactNode;
+  /** Click handler */
+  onClick?: () => void;
 }
 
 // ============================================================================
@@ -55,20 +57,22 @@ export const Card = React.memo<CardProps>(({
   title,
   subtitle,
   action,
-  footer
+  footer,
+  onClick
 }) => {
   const { theme } = useTheme();
   const titleId = useId();
 
   return (
-    <div 
+    <div
       aria-labelledby={title ? titleId : undefined}
+      onClick={onClick}
       className={cn(
-      theme.surface.default,
-      theme.border.default,
-      "rounded-xl border shadow-sm overflow-hidden flex flex-col transition-shadow hover:shadow-md",
-      className
-    )}>
+        theme.surface.default,
+        theme.border.default,
+        "rounded-xl border shadow-sm overflow-hidden flex flex-col transition-shadow hover:shadow-md",
+        className
+      )}>
       {(title || action) && (
         <div className={cn("px-5 py-4 border-b flex justify-between items-center shrink-0 min-h-[60px]", theme.surface.default, theme.border.default)}>
           <div className="min-w-0 flex-1 mr-4">
@@ -78,11 +82,11 @@ export const Card = React.memo<CardProps>(({
           {action && <div className="shrink-0 flex items-center">{action}</div>}
         </div>
       )}
-      
+
       <div className={cn("flex-1 min-h-0", noPadding ? 'p-0' : 'p-5')}>
         {children}
       </div>
-      
+
       {footer && (
         <div className={cn("px-5 py-3 border-t text-xs font-medium shrink-0 bg-opacity-50", theme.surface.highlight, theme.border.subtle, theme.text.secondary)}>
           {footer}

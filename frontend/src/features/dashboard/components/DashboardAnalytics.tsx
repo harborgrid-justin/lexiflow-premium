@@ -23,9 +23,9 @@ import { useChartTheme } from '@/features/core/components/ChartHelpers/ChartHelp
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

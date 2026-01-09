@@ -19,7 +19,7 @@ import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { DateText } from '@/components/ui/atoms/DateText';
+import { DateText } from '@/shared/ui/atoms/DateText';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

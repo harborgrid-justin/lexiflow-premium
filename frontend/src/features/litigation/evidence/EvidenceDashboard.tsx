@@ -10,9 +10,9 @@ import React from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

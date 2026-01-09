@@ -1,7 +1,7 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';

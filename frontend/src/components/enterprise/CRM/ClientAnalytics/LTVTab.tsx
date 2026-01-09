@@ -2,7 +2,7 @@
  * @module components/enterprise/CRM/ClientAnalytics/LTVTab
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import { LTVCard } from './LTVCard';
 import type { ClientLifetimeValue } from './types';

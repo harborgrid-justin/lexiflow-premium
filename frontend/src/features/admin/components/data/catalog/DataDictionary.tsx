@@ -1,8 +1,8 @@
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';

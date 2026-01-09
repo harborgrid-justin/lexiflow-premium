@@ -12,7 +12,7 @@
  */
 
 import { CreatePartyDto, PartyRoleBackend, PartyTypeBackend } from '@/api/litigation';
-import { type CreateComponentProps } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
+import { type CreateComponentProps } from '@/shared/ui/molecules/AutocompleteSelect/AutocompleteSelect';
 import { Building2, Gavel, User, X } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 

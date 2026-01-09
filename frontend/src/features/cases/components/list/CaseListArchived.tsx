@@ -18,10 +18,10 @@ import React from 'react';
 // ============================================================================
 // Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

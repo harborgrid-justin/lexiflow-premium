@@ -19,7 +19,7 @@ import React, { useCallback } from 'react';
 // ============================================================================
 // Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { EmptyListState } from '@/components/ui/molecules/EmptyListState/EmptyListState';
+import { EmptyListState } from '@/shared/ui/molecules/EmptyListState/EmptyListState';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';

@@ -1,6 +1,6 @@
 import { AccessRequest } from '@/api/admin/access-requests-api';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

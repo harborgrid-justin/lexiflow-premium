@@ -30,7 +30,7 @@
 // ATOMIC DESIGN LAYERS
 // ============================================================================
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
-// Import directly from '@/components/ui/atoms', '@/components/ui/molecules', etc.
+// Import directly from '@/shared/ui/atoms', '@/components/ui/molecules', etc.
 // export * from './atoms';
 // export * from './molecules';
 // export * from './organisms';
@@ -40,7 +40,7 @@
 // UI COMPONENT LIBRARY
 // ============================================================================
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES
-// Import directly from '@/components/ui/atoms', '@/components/ui/molecules', etc.
+// Import directly from '@/shared/ui/atoms', '@/components/ui/molecules', etc.
 // export * from './ui';
 
 // ============================================================================

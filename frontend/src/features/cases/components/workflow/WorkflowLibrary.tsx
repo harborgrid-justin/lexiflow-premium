@@ -26,8 +26,8 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

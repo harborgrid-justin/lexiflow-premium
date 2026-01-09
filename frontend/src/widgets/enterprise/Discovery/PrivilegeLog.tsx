@@ -4,7 +4,7 @@
  * @description Privilege log management with batch tagging and export to court format
  */
 
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

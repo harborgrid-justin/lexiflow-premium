@@ -13,11 +13,11 @@ import { CheckCircle, Loader2, Mail, Phone, Plus, Users, Video } from 'lucide-re
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

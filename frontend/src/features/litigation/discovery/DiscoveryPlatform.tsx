@@ -18,8 +18,8 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 // ============================================================================
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { DiscoveryNavigation, getFirstTabOfParent, getParentTabForView } from './layout/DiscoveryNavigation';
 
 // Hooks & Context

@@ -13,10 +13,10 @@ import React, { useState, useEffect } from 'react';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { Input } from '@/components/ui/atoms/Input';
-import { Button } from '@/components/ui/atoms/Button';
-import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Button } from '@/shared/ui/atoms/Button';
+import { RuleSelector } from '@/shared/ui/molecules/RuleSelector/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

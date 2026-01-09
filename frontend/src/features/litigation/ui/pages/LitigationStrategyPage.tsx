@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { LitigationBuilder } from '@/features/litigation/strategy/LitigationBuilder';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface LitigationStrategyPageProps {
   caseId: string;

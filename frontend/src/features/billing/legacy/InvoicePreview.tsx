@@ -3,43 +3,47 @@
  * PDF-like preview of invoice with professional formatting
  */
 
-import React from 'react';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/shared/lib/cn';
 import type { Invoice } from '@/types/financial';
+import React from 'react';
 
 interface InvoicePreviewProps {
   invoice: Invoice;
 }
 
 export const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
+  const { theme } = useTheme();
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div className={cn("rounded-lg border p-8 shadow-sm", theme.surface.default, theme.border.default)}>
       {/* Invoice Header */}
-      <div className="flex items-start justify-between border-b border-gray-200 pb-8 dark:border-gray-700">
+      <div className={cn("flex items-start justify-between border-b pb-8", theme.border.default)}>
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">INVOICE</h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <h2 className={cn("text-3xl font-bold", theme.text.primary)}>INVOICE</h2>
+          <p className={cn("mt-2 text-sm", theme.text.secondary)}>
             Invoice #: {invoice.invoiceNumber}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             Date: {new Date(invoice.invoiceDate).toLocaleDateString()}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             Due Date: {new Date(invoice.dueDate).toLocaleDateString()}
           </p>
         </div>
 
         <div className="text-right">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">LexiFlow Law Firm</h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <h3 className={cn("text-xl font-bold", theme.text.primary)}>LexiFlow Law Firm</h3>
+          <p className={cn("mt-2 text-sm", theme.text.secondary)}>
             123 Legal Avenue, Suite 400
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             San Francisco, CA 94102
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             (415) 555-0123
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             billing@lexiflow.com
           </p>
         </div>
@@ -47,7 +51,7 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
 
       {/* Bill To Section */}
       <div className="mt-8">
-        <h3 className="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">
+        <h3 className={cn("text-sm font-semibold uppercase", theme.text.muted)}>
           Bill To
         </h3>
         <div className="mt-2">

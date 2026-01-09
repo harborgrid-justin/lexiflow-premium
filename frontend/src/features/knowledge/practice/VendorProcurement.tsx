@@ -27,9 +27,9 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants

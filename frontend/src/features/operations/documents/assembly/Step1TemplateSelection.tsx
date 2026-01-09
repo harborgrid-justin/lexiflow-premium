@@ -1,8 +1,8 @@
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
-import { Briefcase, File, FileText, Scale, Loader2 } from 'lucide-react';
+import { Briefcase, File, FileText, Loader2, Scale } from 'lucide-react';
 
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
@@ -73,6 +73,7 @@ export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelect
             </button>
           ))}
         </div>
+      )}
     </div>
   );
 }

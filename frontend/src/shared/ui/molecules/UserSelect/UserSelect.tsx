@@ -20,7 +20,7 @@ import React, { useId } from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

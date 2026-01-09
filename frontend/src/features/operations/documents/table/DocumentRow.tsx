@@ -1,6 +1,6 @@
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
-import { TagList } from '@/components/ui/molecules/TagList/TagList';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
+import { TagList } from '@/shared/ui/molecules/TagList/TagList';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Book, CheckSquare, Clock, Download, Eye, MoreVertical, Tag } from 'lucide-react';

@@ -18,8 +18,8 @@ import React, { useEffect, useState } from 'react';
 // ============================================================================
 // Components
 import { DocketTableSkeleton } from '@/features/cases/ui/components/DocketSkeleton/DocketSkeleton';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketFilterPanel } from './DocketFilterPanel';

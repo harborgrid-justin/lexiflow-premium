@@ -1,4 +1,4 @@
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { PATHS } from '@/config/paths.config';
 import { useModalState } from '@/hooks/useModalState';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -401,98 +401,79 @@ export const CaseDetail: React.FC = () => {
               <div>
                 <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Hourly Rate</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {matter.hourlyRate ? `$${matter.hourlyRate}/hr` : '-'}
+                  {matter.hourlyRate ? formatCurrency(matter.hourlyRate) : '-'}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer</label>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer Amount</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {matter.retainerAmount ? `$${matter.retainerAmount}` : '-'}
+                  {formatCurrency(matter.retainerAmount)}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Cap</label>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Amount</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {matter.budgetAmount ? `$${matter.budgetAmount}` : '-'}
+                  {formatCurrency(matter.budgetAmount)}
                 </p>
               </div>
-              {matter.hourlyRate ? formatCurrency(matter.hourlyRate) : '-'}
-            </p>
-        </div>
-        <div>
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Estimated Value</label>
-          <p className="text-slate-900 dark:text-slate-100 mt-1">
-            {formatCurrency(matter.estimatedValue)}
-          </p>
-        </div>
-        <div>
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Amount</label>
-          <p className="text-slate-900 dark:text-slate-100 mt-1">
-            {formatCurrency(matter.budgetAmount)}
-          </p>
-        </div>
-        <div>
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer Amount</label>
-          <p className="text-slate-900 dark:text-slate-100 mt-1">
-            {formatCurrency(matter.retainerAmount)}
-          </p>
+              <div>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Estimated Value</label>
+                <p className="text-slate-900 dark:text-slate-100 mt-1">
+                  {formatCurrency(matter.estimatedValue)}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Court Information */}
+          {(matter.courtName || matter.judgeAssigned) && (
+            <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                Court Information
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Court Name</label>
+                  <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.courtName || '-'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Judge Assigned</label>
+                  <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.judgeAssigned || '-'}</p>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Tags */}
+          {matter.tags && matter.tags.length > 0 && (
+            <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                Tags
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {matter.tags.map(tag => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
-    </section>
 
-          {/* Court Information */ }
-  {
-    (matter.courtName || matter.judgeAssigned) && (
-      <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-          Court Information
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Court Name</label>
-            <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.courtName || '-'}</p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Judge Assigned</label>
-            <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.judgeAssigned || '-'}</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {/* Tags */ }
-  {
-    matter.tags && matter.tags.length > 0 && (
-      <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-          Tags
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {matter.tags.map(tag => (
-            <span
-              key={tag}
-              className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </section>
-    )
-  }
-        </div >
-      </div >
-
-  <ConfirmDialog
-    isOpen={deleteModal.isOpen}
-    onClose={deleteModal.close}
-    onConfirm={handleDelete}
-    title="Delete Matter"
-    message="Are you sure you want to delete this matter? This action cannot be undone."
-    confirmText="Delete Matter"
-    variant="danger"
-  />
-    </div >
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={handleDelete}
+        title="Delete Matter"
+        message="Are you sure you want to delete this matter? This action cannot be undone."
+        confirmText="Delete Matter"
+        variant="danger"
+      />
+    </div>
   );
 };

@@ -26,8 +26,8 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

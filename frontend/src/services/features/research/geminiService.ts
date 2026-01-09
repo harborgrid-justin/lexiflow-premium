@@ -349,6 +349,8 @@ export type {
 // CLIENT FACTORY (Private)
 // =============================================================================
 
+import { AI_CONFIG, GEMINI_MODEL_DEFAULT } from "@/config/features/ai.config";
+
 /**
  * Singleton-like accessor to ensure consistent config and prevent unnecessary instantiation overhead
  * Checks multiple sources for API key: env vars, localStorage
@@ -356,12 +358,7 @@ export type {
  */
 const getClient = () => {
   // Check environment variables (Vite-prefixed and standard)
-  const apiKey =
-    import.meta.env.VITE_GEMINI_API_KEY ||
-    import.meta.env.GEMINI_API_KEY ||
-    (typeof localStorage !== "undefined"
-      ? localStorage.getItem("gemini_api_key")
-      : null);
+  const apiKey = AI_CONFIG.geminiKey;
 
   if (!apiKey) {
     throw new Error(
@@ -384,7 +381,7 @@ export const GeminiService = {
     return withRetry(async () => {
       try {
         const model = getClient().getGenerativeModel({
-          model: "gemini-2.0-flash-exp",
+          model: GEMINI_MODEL_DEFAULT,
           generationConfig: {
             responseMimeType: "application/json",
             responseSchema: AnalyzedDocSchema,

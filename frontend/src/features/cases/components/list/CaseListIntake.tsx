@@ -19,11 +19,11 @@ import React, { useState } from 'react';
 // ============================================================================
 // Components
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

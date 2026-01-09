@@ -28,9 +28,9 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 // Components
 import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
-import { PeriodSelector } from '@/components/ui/molecules/PeriodSelector';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
+import { PeriodSelector } from '@/shared/ui/molecules/PeriodSelector';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 

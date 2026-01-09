@@ -1,4 +1,4 @@
-import { StatusBadge } from '@/components/ui/atoms/StatusBadge/StatusBadge';
+import { StatusBadge } from '@/shared/ui/atoms/StatusBadge/StatusBadge';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";

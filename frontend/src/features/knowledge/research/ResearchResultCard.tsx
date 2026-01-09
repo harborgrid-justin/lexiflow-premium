@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { SearchResult } from '@/types';

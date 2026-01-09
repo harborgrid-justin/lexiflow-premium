@@ -24,8 +24,8 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

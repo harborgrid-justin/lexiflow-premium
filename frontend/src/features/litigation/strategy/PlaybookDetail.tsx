@@ -13,8 +13,8 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 
-import { Button } from '@/components/ui/atoms/Button';
-import { Tabs } from '@/components/ui/molecules/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs';
 import { ResearchTool } from '@features/knowledge';
 import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';

@@ -36,7 +36,7 @@ import {
 
 // Components
 import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // ============================================================================
 // TYPES

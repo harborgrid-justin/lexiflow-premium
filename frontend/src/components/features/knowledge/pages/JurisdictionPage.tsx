@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { JurisdictionManager } from '@/features/knowledge/jurisdiction/JurisdictionManager';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * JurisdictionPage - React 18 optimized with React.memo

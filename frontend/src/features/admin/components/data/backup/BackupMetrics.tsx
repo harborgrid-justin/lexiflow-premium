@@ -1,4 +1,4 @@
-import { MetricCard } from '@/components/ui/molecules/MetricCard';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard';
 import { Clock, Database, HardDrive } from 'lucide-react';
 import React from 'react';
 

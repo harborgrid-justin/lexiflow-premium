@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LoadingState } from '@/components/ui/molecules/LoadingState/LoadingState';
+import { LoadingState } from '@/shared/ui/molecules/LoadingState/LoadingState';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import React from "react";
 

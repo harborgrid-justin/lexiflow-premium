@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { yieldToMain } from '@/utils/apiUtils';
 import { cn } from '@/shared/lib/cn';

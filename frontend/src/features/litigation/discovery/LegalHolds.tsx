@@ -18,10 +18,10 @@ import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

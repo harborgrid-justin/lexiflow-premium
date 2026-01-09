@@ -14,9 +14,9 @@ import { Download, Clock, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

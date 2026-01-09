@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
@@ -7,8 +7,8 @@ import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
 import React, { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useHistory } from '@/hooks/useHistory';
 import { useSingleSelection } from '@/hooks/useMultiSelection';

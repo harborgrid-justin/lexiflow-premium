@@ -1,8 +1,8 @@
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';

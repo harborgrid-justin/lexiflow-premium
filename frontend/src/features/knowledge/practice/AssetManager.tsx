@@ -30,11 +30,11 @@ import { getTodayString } from '@/shared/lib/dateUtils';
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

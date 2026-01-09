@@ -22,7 +22,7 @@ import { useState } from 'react';
 // ========================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { AccessMatrixEditor } from './AccessMatrixEditor';
 import { PreferencePane } from './PreferencePane';
 import { ProfileOverview } from './ProfileOverview';

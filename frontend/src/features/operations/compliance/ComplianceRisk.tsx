@@ -21,7 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Components
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // ============================================================================
 // COMPONENT

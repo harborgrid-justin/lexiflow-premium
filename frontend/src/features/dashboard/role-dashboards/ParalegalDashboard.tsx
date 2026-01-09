@@ -11,7 +11,7 @@ import { cn } from '@/shared/lib/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { KPICard, StatWidget, ActivityFeed } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 export const ParalegalDashboard: React.FC = () => {
   const { theme } = useTheme();

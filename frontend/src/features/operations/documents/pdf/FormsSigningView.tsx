@@ -1,8 +1,8 @@
 import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
 import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';

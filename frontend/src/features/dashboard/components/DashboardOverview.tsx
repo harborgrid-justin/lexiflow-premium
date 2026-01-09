@@ -24,7 +24,7 @@ import {
 } from '../hooks/useDashboardData';
 
 // Components
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardSidebar } from './DashboardSidebar';

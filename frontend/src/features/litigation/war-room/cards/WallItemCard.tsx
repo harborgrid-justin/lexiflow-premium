@@ -20,7 +20,7 @@ import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangl
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { FileIcon } from '@/components/ui/atoms/FileIcon';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

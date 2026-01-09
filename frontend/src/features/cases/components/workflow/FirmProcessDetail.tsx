@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Play, Loader2} from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 
 interface ProcessDetails {
   id: string;

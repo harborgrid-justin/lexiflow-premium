@@ -13,8 +13,8 @@ import { Wand2 } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
-import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/shared/ui/atoms/Button';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

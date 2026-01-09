@@ -10,8 +10,8 @@ import React from 'react';
 
 // Common Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

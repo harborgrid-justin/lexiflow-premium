@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { PleadingDashboard } from '@/features/litigation/pleadings/PleadingDashboard';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { PleadingDocument } from '@/types';
 
 interface PleadingsPageProps {

@@ -5,7 +5,7 @@
  * Provides loading states, error handling, and export capabilities
  */
 
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';

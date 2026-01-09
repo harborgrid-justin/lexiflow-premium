@@ -22,10 +22,10 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Settings, X, Move, Trash2 } from 'lucide-react';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
-import { Button } from '@/components/ui/atoms/Button';
-import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
+import { Button } from '@/shared/ui/atoms/Button';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/core';
 import { WorkflowNode, getNodeIcon } from './types';
 import { useTheme } from '@/contexts/theme/ThemeContext';

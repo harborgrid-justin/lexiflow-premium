@@ -9,10 +9,10 @@ import { ArrowLeft, CheckCircle, Link, Loader2, Save, ShieldCheck, UploadCloud }
 import React, { useEffect, useRef, useState } from 'react';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
-import { TagInput } from '@/components/ui/molecules/TagInput/TagInput';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
+import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

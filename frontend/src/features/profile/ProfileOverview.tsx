@@ -19,9 +19,9 @@ import { Mail, MapPin, Phone, Scale, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

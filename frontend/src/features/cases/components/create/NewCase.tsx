@@ -17,8 +17,8 @@
  */
 
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
-import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
 import { PATHS } from '@/config/paths.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';

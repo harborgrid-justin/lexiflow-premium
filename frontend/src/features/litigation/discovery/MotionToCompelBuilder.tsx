@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { DiscoveryRequest } from '@/types';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Button } from '@/components/ui/atoms/Button';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';

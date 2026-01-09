@@ -23,10 +23,10 @@ import { useBillingStats } from '../hooks/useDashboardData';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { DateText } from '@/components/ui/atoms/DateText/DateText';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { DateText } from '@/shared/ui/atoms/DateText/DateText';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

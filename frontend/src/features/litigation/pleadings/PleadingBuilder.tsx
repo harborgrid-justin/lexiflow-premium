@@ -30,10 +30,10 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 
 // Utils & Config
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';

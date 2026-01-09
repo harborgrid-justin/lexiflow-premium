@@ -1,5 +1,5 @@
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
-import { Card } from '@/components/ui/molecules/Card';
+import { Card } from '@/shared/ui/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';

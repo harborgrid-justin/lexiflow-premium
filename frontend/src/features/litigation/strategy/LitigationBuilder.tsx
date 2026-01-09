@@ -13,8 +13,8 @@ import React, { Suspense, lazy, useState } from 'react';
 // Internal Components
 import { TabbedPageLayout } from '@/components/layouts';
 import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 
 // Hooks & Context
 import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';

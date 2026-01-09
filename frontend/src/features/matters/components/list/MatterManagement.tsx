@@ -5,15 +5,15 @@
  * @status PRODUCTION READY
  */
 
-import React, { useState, useCallback } from 'react';
 import { litigationApi } from '@/api';
-import { useQuery } from '@/hooks/backend';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Plus, Search, FileText, Briefcase, Filter, MoreVertical, Calendar } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { format } from 'date-fns';
+import { Briefcase, Calendar, MoreVertical, Plus, Search } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const MatterManagement: React.FC = () => {
   const { theme } = useTheme();
@@ -31,7 +31,7 @@ export const MatterManagement: React.FC = () => {
       });
     },
     {
-      keepPreviousData: true,
+      refetchOnWindowFocus: false,
       staleTime: 30000
     }
   );
@@ -90,6 +90,19 @@ export const MatterManagement: React.FC = () => {
         </button>
       </div>
 
+      <div className="flex justify-end gap-2 px-6">
+        <button
+          onClick={() => setViewMode('list')}
+          className={cn("p-2 rounded text-sm", viewMode === 'list' ? theme.surface.highlight : theme.surface.default)}>
+          <List className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setViewMode('grid')}
+          className={cn("p-2 rounded text-sm", viewMode === 'grid' ? theme.surface.highlight : theme.surface.default)}>
+          <LayoutGrid className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Filters and Search */}
       <div className={cn("p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="relative w-full md:w-96">
@@ -117,7 +130,7 @@ export const MatterManagement: React.FC = () => {
                 "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
                 activeFilter === filter
                   ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                  : cn(theme.surface.muted, theme.text.secondary, "hover:bg-gray-200 dark:hover:bg-gray-700")
+                  : cn(theme.surface.secondary, theme.text.secondary, "hover:bg-gray-200 dark:hover:bg-gray-700")
               )}
             >
               {filter.charAt(0).toUpperCase() + filter.slice(1)}
@@ -132,10 +145,14 @@ export const MatterManagement: React.FC = () => {
           icon={Briefcase}
           title={searchQuery ? "No matters found" : "No matters yet"}
           description={searchQuery ? `No matters matching "${searchQuery}"` : "Create your first matter to get started with case management."}
-          action={{
-            label: "Create Matter",
-            onClick: handleCreateMatter
-          }}
+          action={
+            <button
+              onClick={handleCreateMatter}
+              className={cn("px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700")}
+            >
+              Create Matter
+            </button>
+          }
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

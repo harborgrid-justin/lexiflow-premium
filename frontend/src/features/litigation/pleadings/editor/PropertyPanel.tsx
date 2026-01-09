@@ -1,4 +1,4 @@
-import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';

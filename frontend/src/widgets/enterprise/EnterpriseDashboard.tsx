@@ -12,10 +12,10 @@
  * - Custom widget system
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ActivityFeed } from '@/features/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { KPICard } from '@/features/dashboard/widgets/KPICard';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DashboardKPIs, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
@@ -532,7 +532,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                       borderRadius: '8px',
                     }}
                     formatter={(
-                      value: number | string | Array<number | string> | undefined,
+                      value: number | string | Array<number | string>,
                       name: string | number
                     ): [string, string] => {
                       if (name === 'value' && typeof value === 'number') {

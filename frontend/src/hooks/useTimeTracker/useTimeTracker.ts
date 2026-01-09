@@ -6,7 +6,7 @@
  */
 
 import { billingApi } from "@/api";
-import { queryClient, useMutation } from "@/hooks/backend";
+import { useMutation } from "@/hooks/backend";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -25,7 +25,7 @@ export const useTimeTracker = (initialCaseId?: string) => {
   const [caseId, setCaseId] = useState<string | null>(initialCaseId || null);
   const [description, setDescription] = useState("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const { notify } = useNotifications();
+  const { addToast } = useNotifications();
 
   // Load active timer from local storage on mount (persistence)
   useEffect(() => {
@@ -76,8 +76,9 @@ export const useTimeTracker = (initialCaseId?: string) => {
   const startTimer = useCallback(
     (selectedCaseId?: string, taskDescription?: string) => {
       if (isActive) {
-        notify({
+        addToast({
           type: "warning",
+          title: "Timer Active",
           message: "A timer is already running. Please stop it first.",
         });
         return;
@@ -101,17 +102,21 @@ export const useTimeTracker = (initialCaseId?: string) => {
         })
       );
 
-      notify({ type: "success", message: "Timer started" });
+      addToast({
+        type: "success",
+        title: "Timer Started",
+        message: "Timer started",
+      });
     },
-    [isActive, caseId, description, notify]
+    [isActive, caseId, description, addToast]
   );
 
   const pauseTimer = useCallback(() => {
     if (!isActive) return;
     setIsActive(false);
     if (timerRef.current) clearInterval(timerRef.current);
-    notify({ type: "info", message: "Timer paused" });
-  }, [isActive, notify]);
+    addToast({ type: "info", title: "Timer Paused", message: "Timer paused" });
+  }, [isActive, addToast]);
 
   const stopTimer = useCallback(async () => {
     if (!isActive && elapsedSeconds === 0) return;
@@ -141,11 +146,22 @@ export const useTimeTracker = (initialCaseId?: string) => {
   }, []);
 
   const createEntryMutation = useMutation(
-    (entry: any) => billingApi.timeEntries.create(entry),
+    (entry: {
+      caseId: string;
+      description: string;
+      date: string;
+      hours: number;
+      isBillable: boolean;
+      rate: number;
+    }) => billingApi.timeEntries.create(entry),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["time-entries"]);
-        notify({ type: "success", message: "Time entry saved successfully" });
+        billingApi.timeEntries.getAll().then(() => {}); // pseudo-invalidation
+        addToast({
+          type: "success",
+          title: "Success",
+          message: "Time entry saved successfully",
+        });
         resetTimer();
       },
       onError: () => {
@@ -175,7 +191,7 @@ export const useTimeTracker = (initialCaseId?: string) => {
       isBillable: true,
       rate: 0, // Will be calculated by backend based on fee agreement
     });
-  }, [stopTimer, caseId, description, createEntryMutation, notify]);
+  }, [stopTimer, caseId, description, createEntryMutation]);
 
   return {
     isActive,

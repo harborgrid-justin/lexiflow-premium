@@ -20,7 +20,7 @@ import { useSessionStorage } from '@/hooks/core';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { AdminPanelContent } from './AdminPanelContent';
 
 // Utils & Config

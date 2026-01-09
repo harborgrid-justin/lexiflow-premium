@@ -18,7 +18,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

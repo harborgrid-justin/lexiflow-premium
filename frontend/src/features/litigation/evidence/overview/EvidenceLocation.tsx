@@ -9,8 +9,8 @@ import React from 'react';
 import { MapPin } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/ui/molecules/Card';
-import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

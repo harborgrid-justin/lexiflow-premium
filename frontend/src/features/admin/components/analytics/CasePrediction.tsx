@@ -20,7 +20,7 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 // ============================================================================
 import { getChartTheme } from '@/utils/chartConfig';
 // Components
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

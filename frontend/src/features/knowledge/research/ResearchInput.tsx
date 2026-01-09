@@ -17,6 +17,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
 
     // Heuristic-based intent detection
     useEffect(() => {
+        setIsDetecting(true);
         if (query.length > 5) {
             // Instant regex-based intent classification
             if (/section|code|statute|act|usc/i.test(query)) {
@@ -29,6 +30,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
         } else {
             setIntent('general');
         }
+        setIsDetecting(false);
     }, [query]);
 
     return (

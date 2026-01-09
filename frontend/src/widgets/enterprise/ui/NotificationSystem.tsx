@@ -35,7 +35,7 @@ import { createPortal } from 'react-dom';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { } from '@/components/ui/atoms//';
+import { } from '@/shared/ui/atoms//';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 

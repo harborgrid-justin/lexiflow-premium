@@ -24,8 +24,8 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
 import { PrecedentsView } from '../base/PrecedentsView';

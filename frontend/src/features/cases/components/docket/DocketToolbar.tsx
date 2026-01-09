@@ -12,7 +12,7 @@ import { Plus } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

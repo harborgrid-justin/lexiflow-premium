@@ -24,8 +24,8 @@ import { useWindow } from '@/providers';
 // Components
 import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList';
-import { Button } from '@/components/ui/atoms/Button';
-import { FileIcon } from '@/components/ui/atoms/FileIcon';
+import { Button } from '@/shared/ui/atoms/Button';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon';
 import { DocumentPreviewPanel } from '@features/operations';
 
 // Utils & Constants

@@ -9,7 +9,7 @@
 import { Download, Menu, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { StrategyToolbarProps } from './types';

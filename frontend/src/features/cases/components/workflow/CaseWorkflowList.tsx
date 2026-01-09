@@ -1,11 +1,11 @@
 import React from 'react';
 import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } from 'lucide-react';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';
 
 interface CaseWorkflowListProps {

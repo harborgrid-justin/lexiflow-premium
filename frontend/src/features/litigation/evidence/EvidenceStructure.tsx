@@ -9,8 +9,8 @@ import { FileText, Link, Split } from 'lucide-react';
 import React from 'react';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

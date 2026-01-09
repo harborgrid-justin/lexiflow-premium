@@ -50,8 +50,8 @@ import { DataService } from "@/services/data/dataService";
 import { useTheme } from "@/providers";
 
 // Components
-import { Button } from '@/components/ui/atoms/Button';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

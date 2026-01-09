@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { TaskStatusBackend } from '@/types';

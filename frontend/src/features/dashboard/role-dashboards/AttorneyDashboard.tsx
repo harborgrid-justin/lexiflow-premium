@@ -5,7 +5,7 @@
  */
 
 import { ChartCard, DeadlinesList, KPICard, StatWidget } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { type AttorneyDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';

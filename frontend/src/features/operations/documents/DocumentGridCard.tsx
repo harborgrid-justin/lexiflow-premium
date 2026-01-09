@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';

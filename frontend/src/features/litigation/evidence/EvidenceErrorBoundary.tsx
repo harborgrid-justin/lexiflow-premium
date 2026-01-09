@@ -3,7 +3,7 @@
  * @description Error boundary for Evidence Vault to catch and display errors gracefully
  */
 
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AlertOctagon, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 

@@ -103,8 +103,6 @@ import {
   FinancialPerformanceData,
   Invoice,
   OperatingSummary,
-  PaginatedResult,
-  PaginationParams,
   RateTable,
   TimeEntry,
   TrustTransaction,
@@ -115,11 +113,7 @@ import {
 import { BillingApiService } from "@/api/billing/finance";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
-import {
-  OperationError,
-  ComplianceError,
-  ValidationError,
-} from "@/services/core/errors";
+import { ComplianceError, OperationError } from "@/services/core/errors";
 
 /**
  * Query keys for React Query integration
@@ -411,6 +405,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         },
       };
     } catch (error) {
+      console.error("Paginated fetch failed:", error);
       throw new OperationError("Failed to fetch paginated time entries");
     }
   }
@@ -668,6 +663,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         );
       } catch (error) {
         // Fallback for demo if API endpoint doesn't exist yet
+        console.warn("Trust account fetch failed, using fallback", error);
         return { id: accountId, type: "IOLTA" };
       }
     }
@@ -726,11 +722,11 @@ export class BillingRepository extends Repository<TimeEntry> {
         return transactions;
       }
 
-      const transactions = await db.getByIndex(
+      const transactions = (await db.getByIndex(
         STORES.TRUST_TX,
         "accountId",
         accountId
-      );
+      )) as TrustTransaction[];
 
       // Filter by date range (Client-side implementation)
       let filtered = transactions;

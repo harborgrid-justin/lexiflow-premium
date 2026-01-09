@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { Modal } from '@/components/ui/molecules/Modal';
-import { ModalFooter } from '@/components/ui/molecules/ModalFooter';
-import { Tabs } from '@/components/ui/molecules/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Modal } from '@/shared/ui/molecules/Modal';
+import { ModalFooter } from '@/shared/ui/molecules/ModalFooter';
+import { Tabs } from '@/shared/ui/molecules/Tabs';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';

@@ -28,8 +28,8 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

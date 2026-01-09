@@ -33,12 +33,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import type { LegalRule } from '@/types/legal-research';
 import type { Jurisdiction } from '@/types/system';
-import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // Types & Interfaces
@@ -133,13 +133,13 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'statute':
-        return theme.badge.blue;
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
       case 'regulation':
-        return theme.badge.purple;
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300";
       case 'case_law':
-        return theme.badge.green;
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
       case 'constitutional':
-        return theme.badge.amber;
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300";
       default:
         return theme.badge.default;
     }
@@ -148,11 +148,11 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'active':
-        return theme.badge.success;
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
       case 'superseded':
-        return theme.badge.warning;
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300";
       case 'repealed':
-        return theme.badge.error;
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
       case 'draft':
         return theme.badge.default;
       default:

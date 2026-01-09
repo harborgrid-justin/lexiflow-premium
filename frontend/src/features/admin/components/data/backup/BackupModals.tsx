@@ -1,6 +1,6 @@
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
-import { Button } from '@/components/ui/atoms/Button';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Clock, Database } from 'lucide-react';

@@ -1,4 +1,4 @@
-import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
+import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';

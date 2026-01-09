@@ -8,7 +8,7 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/ui/molecules/Card';
+import { Card } from '@/shared/ui/molecules/Card';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

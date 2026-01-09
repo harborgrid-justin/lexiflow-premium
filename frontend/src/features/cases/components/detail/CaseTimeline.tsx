@@ -14,7 +14,7 @@ import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { TimelineItem } from '@/components/ui/molecules/TimelineItem/TimelineItem';
+import { TimelineItem } from '@/shared/ui/molecules/TimelineItem/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 
 // Internal Dependencies - Hooks & Context

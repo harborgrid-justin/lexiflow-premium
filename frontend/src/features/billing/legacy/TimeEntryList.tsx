@@ -3,6 +3,7 @@
  * Display and filter time entries with bulk operations
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
 import React, { useState } from 'react';
@@ -14,6 +15,7 @@ interface TimeEntryListProps {
 }
 
 export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }) => {
+  const { theme } = useTheme();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -60,13 +62,13 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          className={cn("flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm transition-colors", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
         >
           <Filter className="h-4 w-4" />
           Filters
         </button>
 
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className={cn("flex items-center gap-4 text-sm", theme.text.secondary)}>
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
             <span className="font-medium">{totalHours.toFixed(2)}</span> hours
@@ -79,16 +81,16 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+        <Form method="get" className={cn("rounded-lg border p-4", theme.surface.subtle, theme.border.default)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Case
               </label>
               <select
                 name="caseId"
                 defaultValue={(filters?.caseId as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">All Cases</option>
                 <option value="C-2024-001">Martinez v. TechCorp</option>
@@ -97,13 +99,13 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Status
               </label>
               <select
                 name="status"
                 defaultValue={(filters?.status as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">All Statuses</option>
                 <option value="Draft">Draft</option>
@@ -115,13 +117,13 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                 Billable
               </label>
               <select
                 name="billable"
                 defaultValue={(filters?.billable as string) || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn("mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">All</option>
                 <option value="true">Billable Only</option>
@@ -132,7 +134,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
             <div className="flex items-end">
               <button
                 type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className={cn("w-full rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2", theme.interactive.primary, "focus:ring-blue-500")}
               >
                 Apply Filters
               </button>
@@ -143,8 +145,8 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
       {/* Bulk Actions */}
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-700 dark:bg-blue-900/20">
-          <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
+        <div className={cn("flex items-center justify-between rounded-lg p-4", theme.surface.highlight)}>
+          <span className={cn("text-sm font-medium", theme.text.accent)}>
             {selectedIds.length} selected
           </span>
           <Form method="post" className="flex gap-2">
@@ -153,7 +155,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
               type="submit"
               name="intent"
               value="approve-bulk"
-              className="flex items-center gap-2 rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+              className={cn("flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-white shadow-sm", theme.interactive.success)}
             >
               <Check className="h-4 w-4" />
               Approve Selected
@@ -163,9 +165,9 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
       )}
 
       {/* Entries Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
+      <div className={cn("overflow-hidden rounded-lg border shadow", theme.surface.default, theme.border.default)}>
+        <table className={cn("min-w-full divide-y", theme.border.default)}>
+          <thead className={cn(theme.surface.subtle)}>
             <tr>
               <th className="px-4 py-3">
                 <input
@@ -175,35 +177,35 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                   className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Case
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Description
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Hours
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Rate
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Amount
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className={cn("px-6 py-3 text-right text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+          <tbody className={cn("divide-y", theme.border.default, theme.surface.default)}>
             {entries.map((entry) => (
-              <tr key={entry.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <tr key={entry.id} className={cn("transition-colors", `hover:${theme.surface.subtle}`)}>
                 <td className="px-4 py-4">
                   <input
                     type="checkbox"
@@ -212,29 +214,29 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   {new Date(entry.date).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("px-6 py-4 text-sm", theme.text.primary)}>
                   {entry.caseId}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                <td className={cn("px-6 py-4 text-sm", theme.text.secondary)}>
                   <div className="max-w-xs truncate" title={entry.description}>
                     {entry.description}
                   </div>
                   {entry.ledesCode && (
-                    <div className="mt-1 text-xs text-gray-500">
+                    <div className={cn("mt-1 text-xs", theme.text.muted)}>
                       LEDES: {entry.ledesCode}
                     </div>
                   )}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   {entry.duration.toFixed(2)}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                   ${entry.rate}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                   ${entry.total.toLocaleString()}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
@@ -248,14 +250,14 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                         type="submit"
                         name="intent"
                         value="approve"
-                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                        className={cn(theme.text.success, "hover:underline")}
                       >
                         Approve
                       </button>
                     )}
                     <Link
                       to={`/billing/time/${entry.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      className={cn(theme.text.accent, "hover:underline")}
                     >
                       Edit
                     </Link>
@@ -263,7 +265,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                       type="submit"
                       name="intent"
                       value="delete"
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      className={cn(theme.text.error, "hover:underline")}
                       onClick={(e) => {
                         if (!confirm('Delete this time entry?')) {
                           e.preventDefault();
@@ -281,11 +283,11 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
         {entries.length === 0 && (
           <div className="py-12 text-center">
-            <Clock className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+            <Clock className={cn("mx-auto h-12 w-12", theme.text.muted)} />
+            <h3 className={cn("mt-2 text-sm font-medium", theme.text.primary)}>
               No time entries
             </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className={cn("mt-1 text-sm", theme.text.secondary)}>
               Get started by creating a new time entry.
             </p>
           </div>

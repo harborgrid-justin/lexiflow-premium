@@ -24,7 +24,7 @@ import { queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

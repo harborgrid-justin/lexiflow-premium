@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { EvidenceDashboard } from '@/features/litigation/evidence/EvidenceDashboard';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { ViewMode } from '@/hooks/useEvidenceManager';
 
 interface EvidencePageProps {

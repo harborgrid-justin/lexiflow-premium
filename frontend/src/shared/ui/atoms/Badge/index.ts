@@ -3,4 +3,4 @@
  * @description Re-export Badge from ui/atoms for backward compatibility
  */
 
-export * from '../../../shared/ui/atoms/Badge';
+export * from "./Badge";

@@ -19,7 +19,7 @@ import React from 'react';
 // ============================================================================
 import { api } from '@/api';
 import type { OutcomePrediction } from '@/api/intelligence';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';

@@ -7,9 +7,9 @@
  *
  * @example
  * ```tsx
- * import { Button, Badge } from '@/components/ui/atoms';
- * import { Card, Modal } from '@/components/ui/molecules';
- * import { PageContainer } from '@/components/ui/layouts';
+ * import { Button, Badge } from '@/shared/ui/atoms';
+ * import { Card, Modal } from '@/shared/ui/molecules';
+ * import { PageContainer } from '@/shared/ui/layouts';
  * ```
  */
 
@@ -20,8 +20,8 @@
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES during dev
 // Too many barrel exports cause resource exhaustion in the browser
 // Import directly from specific component paths instead:
-// import { Button } from '@/components/ui/atoms/Button/Button';
-// import { Card } from '@/components/ui/molecules/Card/Card';
+// import { Button } from '@/shared/ui/atoms/Button/Button';
+// import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Atoms - Basic UI primitives
 // export * from './atoms';

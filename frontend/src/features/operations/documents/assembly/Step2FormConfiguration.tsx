@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';

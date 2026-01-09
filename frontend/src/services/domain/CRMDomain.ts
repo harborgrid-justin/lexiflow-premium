@@ -100,8 +100,8 @@ import { SystemEventType } from "@/types/integration-types";
 import { isBackendApiEnabled } from "@/api";
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { ConcurrencyError, OperationError } from "@/services/core/errors";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 // In-memory state for fallback mode (simulating database constraints)
 const conversionMap = new Map<string, { clientId: string; caseId: string }>();
@@ -200,100 +200,125 @@ export const CRMService = {
 
     // 1. Idempotency Check
     if (conversionMap.has(lead.id)) {
-        console.log(`[CRM] Lead ${lead.id} already converted.`);
-        return conversionMap.get(lead.id); // Return existing result
+      console.log(`[CRM] Lead ${lead.id} already converted.`);
+      return conversionMap.get(lead.id); // Return existing result
     }
 
     // 2. Optimistic Locking
     const lockKey = `lead-conversion-${lead.id}`;
     if (activeLocks.has(lockKey)) {
-        throw new ConcurrencyError(`Lead conversion for ${lead.id} already in progress`);
+      throw new ConcurrencyError(
+        `Lead conversion for ${lead.id} already in progress`
+      );
     }
     activeLocks.add(lockKey);
 
     try {
-        if (isBackendApiEnabled()) {
-             // Backend handles atomic transaction
-             try {
-                 const result = await apiClient.post<{client: any; case: any}>(
-                    '/crm/leads/convert',
-                    { leadId: lead.id }
-                 );
-                 conversionMap.set(lead.id, { clientId: result.client.id, caseId: result.case.id });
-                 return result;
-             } catch (error) {
-                 // Fallback if endpoint not waiting
-                 console.warn("Backend conversion endpoint failed, trying separate calls");
-             }
-        }
-
-        // Initialize API services
-        const clientsApi = new ClientsApiService();
-        const casesApi = new CasesApiService();
-
-        // 1. Create Client via backend API
-        let newClient;
+      if (isBackendApiEnabled()) {
+        // Backend handles atomic transaction
         try {
-            newClient = await clientsApi.create({
-                name: lead.client,
-                clientType: ClientType.CORPORATION,
-                status: ClientStatus.ACTIVE,
-                industry: "General",
-                totalBilled: 0,
-                currentBalance: 0,
-                creditLimit: 0,
-                totalCases: 1,
-                activeCases: 1,
-                isVip: false,
-                requiresConflictCheck: true,
-                hasRetainer: false,
-                paymentTerms: PaymentTerms.NET_30,
-            });
-        } catch (e) {
-             throw new OperationError("Failed to create client during conversion");
+          const result = await apiClient.post<{ client: any; case: any }>(
+            "/crm/leads/convert",
+            { leadId: lead.id }
+          );
+          conversionMap.set(lead.id, {
+            clientId: result.client.id,
+            caseId: result.case.id,
+          });
+          return result;
+        } catch (error) {
+          // Fallback if endpoint not waiting
+          console.warn(
+            "Backend conversion endpoint failed, trying separate calls",
+            error
+          );
         }
+      }
 
-        // 2. Create Case via backend API
-        let newCase;
-        try {
-            newCase = await casesApi.add({
-                title: lead.title,
-                client: lead.client,
-                clientId: newClient.id as EntityId,
-                matterType: MatterType.OTHER,
-                status: CaseStatus.Active,
-                filingDate: new Date().toISOString().split("T")[0],
-                description: `Converted from Lead ${lead.id}`,
-                ownerId: "usr-admin-justin" as UserId,
-                isArchived: false,
-                parties: [],
-                citations: [],
-                arguments: [],
-                defenses: [],
-            });
-        } catch (e) {
-            console.error("Case creation failed - Manual Rollback Required for Client " + newClient.id);
-            throw new OperationError("Case creation failed. Inconsistent state.");
-        }
+      // Initialize API services
+      const clientsApi = new ClientsApiService();
+      const casesApi = new CasesApiService();
 
-        // Trigger Integration Events
-        await IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, {
-            caseData: newCase,
+      // 1. Create Client via backend API
+      let newClient;
+      try {
+        newClient = await clientsApi.create({
+          name: lead.client,
+          clientType: ClientType.CORPORATION,
+          status: ClientStatus.ACTIVE,
+          industry: "General",
+          totalBilled: 0,
+          currentBalance: 0,
+          creditLimit: 0,
+          totalCases: 1,
+          activeCases: 1,
+          isVip: false,
+          requiresConflictCheck: true,
+          hasRetainer: false,
+          paymentTerms: PaymentTerms.NET_30,
         });
-        await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
-            entity: {
-                ...newClient,
-                type: "Corporation",
-                roles: ["Client"],
-                riskScore: 0,
-                tags: [],
-            } as Record<string, unknown>,
+      } catch (e) {
+        console.error("Client creation failed:", e);
+        throw new OperationError("Failed to create client during conversion");
+      }
+
+      // 2. Create Case via backend API
+      let newCase;
+      try {
+        newCase = await casesApi.add({
+          title: lead.title,
+          client: lead.client,
+          clientId: newClient.id as EntityId,
+          matterType: MatterType.OTHER,
+          status: CaseStatus.Active,
+          filingDate: new Date().toISOString().split("T")[0],
+          description: `Converted from Lead ${lead.id}`,
+          ownerId: "usr-admin-justin" as UserId,
+          isArchived: false,
+          parties: [],
+          citations: [],
+          arguments: [],
+          defenses: [],
         });
+      } catch (e) {
+        console.error(
+          "Case creation failed - Manual Rollback Required for Client " +
+            newClient.id,
+          e
+        );
+        throw new OperationError("Case creation failed. Inconsistent state.");
+      }
 
-        conversionMap.set(lead.id, { clientId: newClient.id, caseId: newCase.id });
+      // Trigger Integration Events
+      await IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, {
+        caseData: newCase,
+      });
+      await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
+        entity: {
+          ...newClient,
+          type: "Corporation",
+          roles: ["Client"],
+          riskScore: 0,
+          tags: [],
+        } as Record<string, unknown>,
+      });
 
-        console.log(
-      `[CRM] Successfully converted Lead ${lead.id} to Client ${newClient.id} and Case ${newCase.id}`
-    );
+      return { client: newClient, case: newCase };
+
+      conversionMap.set(lead.id, {
+        clientId: newClient.id,
+        caseId: newCase.id,
+      });
+
+      console.log(
+        `[CRM] Successfully converted Lead ${lead.id} to Client ${newClient.id} and Case ${newCase.id}`
+      );
+    } catch (error) {
+      console.error(`[CRM] Failed to convert lead ${lead.id}:`, error);
+      throw error;
+    } finally {
+      // Release the lock
+      activeLocks.delete(lockKey);
+    }
   },
 };

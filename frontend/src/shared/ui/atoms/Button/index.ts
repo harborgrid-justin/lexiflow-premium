@@ -3,4 +3,4 @@
  * @description Re-export Button from ui/atoms for backward compatibility
  */
 
-export * from '../../../shared/ui/atoms/Button';
+export * from "./Button";

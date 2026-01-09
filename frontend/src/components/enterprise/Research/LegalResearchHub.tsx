@@ -33,11 +33,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import type { Citation, ResearchSession } from '@/types/legal-research';
 import { cn } from '@/shared/lib/cn';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import type { Citation, ResearchSession } from '@/types/legal-research';
 
 // ============================================================================
 // Types & Interfaces
@@ -57,7 +57,7 @@ export interface LegalResearchHubProps {
 export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSearch,
   onSaveResult,
-  onExport, // Kept for interface compliance but unused
+  onExport,
   className = ''
 }) => {
   const { theme } = useTheme();
@@ -68,8 +68,22 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   const [showAIAssist, setShowAIAssist] = useState(false);
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
 
-  // Data Loading State
+  // Helpers for session selection
+  const toggleSession = (sessionId: string) => {
+    setSelectedSessions(prev =>
+      prev.includes(sessionId)
+        ? prev.filter(id => id !== sessionId)
+        : [...prev, sessionId]
+    );
+  };
+
+  const handleExportSessions = () => {
+    if (onExport && selectedSessions.length > 0) {
+      onExport(selectedSessions);
+    }
+  };
   const [sessions, setSessions] = useState<ResearchSession[]>([]);
   const [citations, setCitations] = useState<Citation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -316,6 +330,18 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
         <div className="flex-1 overflow-y-auto p-6">
           {sessions.length > 0 ? (
             <div className="space-y-4">
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={handleExportSessions}
+                  disabled={selectedSessions.length === 0}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed",
+                    theme.text.secondary
+                  )}
+                >
+                  Export Selected ({selectedSessions.length})
+                </button>
+              </div>
               {sessions.map((session) => (
                 <motion.div
                   key={session.id}
@@ -327,7 +353,13 @@ export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
                     theme.surface.primary
                   )}
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedSessions.includes(session.id)}
+                      onChange={() => toggleSession(session.id)}
+                      className="mt-1 rounded border-gray-300"
+                    />
                     <div className="flex-1">
                       <h4 className={cn("text-sm font-semibold", theme.text.primary)}>
                         {session.query}

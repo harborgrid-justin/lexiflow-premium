@@ -18,8 +18,8 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { api } from '@/api';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';

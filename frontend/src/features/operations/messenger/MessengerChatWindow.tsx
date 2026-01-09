@@ -27,7 +27,7 @@ import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 
 // Components
-import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';
+import { FileAttachment } from '@/shared/ui/molecules/FileAttachment/FileAttachment';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';

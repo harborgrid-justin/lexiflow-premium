@@ -20,7 +20,7 @@ import { AlertTriangle, Briefcase, Clock, FileText } from 'lucide-react';
 // Hooks
 
 // Components
-import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // ============================================================================
 // TYPES & INTERFACES

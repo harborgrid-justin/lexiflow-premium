@@ -13,7 +13,7 @@ import { AlertCircle, BookOpen, Briefcase, Calendar, DollarSign, Gavel, Globe, S
 import React from 'react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/ui/molecules/Card';
+import { Card } from '@/shared/ui/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

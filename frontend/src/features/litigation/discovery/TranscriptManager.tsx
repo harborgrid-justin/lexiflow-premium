@@ -1,5 +1,5 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
@@ -8,8 +8,8 @@ import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Clock, FileText, Search, Upload } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { Input } from '@/components/ui/atoms/Input';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/core';
 
 export const TranscriptManager: React.FC = () => {

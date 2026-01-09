@@ -4,7 +4,7 @@
  * @description Clause library page - reusable legal clauses and templates
  */
 
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import ClauseLibrary from '@/features/knowledge/clauses/ClauseLibrary';
 import type { Clause } from '@/types/pleadings';
 import React from 'react';

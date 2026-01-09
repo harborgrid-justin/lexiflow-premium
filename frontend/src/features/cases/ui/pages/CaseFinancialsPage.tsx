@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CaseFinancialsCenter } from '@/features/cases/components/financials/CaseFinancialsCenter';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CaseFinancialsPageProps {
   caseId: string;

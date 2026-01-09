@@ -13,10 +13,10 @@ import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2, Plus, Fingerprint, Scale, AlertTriangle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Input } from '@/components/ui/atoms/Input';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { ArgumentCoreInfo } from './ArgumentCoreInfo';
 
 // Internal Dependencies - Hooks & Context

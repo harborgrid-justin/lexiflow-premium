@@ -1,9 +1,9 @@
 import { dataPlatformApi } from '@/api/data-platform';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';

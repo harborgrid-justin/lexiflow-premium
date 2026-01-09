@@ -9,8 +9,8 @@ import { ArrowLeft, ExternalLink, FileSearch, Lock, Stamp } from 'lucide-react';
 import React from 'react';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 
 // Sub-components
 import { EvidenceAdmissibility } from './EvidenceAdmissibility';

@@ -21,7 +21,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { SearchInputBar } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 

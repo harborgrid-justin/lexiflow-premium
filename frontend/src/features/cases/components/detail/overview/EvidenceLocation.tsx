@@ -12,8 +12,8 @@ import React from 'react';
 import { MapPin } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

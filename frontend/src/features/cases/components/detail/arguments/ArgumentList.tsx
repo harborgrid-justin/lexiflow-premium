@@ -14,7 +14,7 @@ import { Scale, Fingerprint, ChevronRight } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

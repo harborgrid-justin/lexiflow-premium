@@ -10,7 +10,7 @@ import React, { useMemo, useState } from 'react';
 
 // Common Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';

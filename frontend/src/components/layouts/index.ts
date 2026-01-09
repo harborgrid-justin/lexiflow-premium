@@ -5,10 +5,10 @@
  *
  * Usage:
  * import { AppShellLayout } from '@/components/layouts';  // ← This works
- * import { AppShellLayout } from '@/components/ui/layouts';  // ← This also works
+ * import { AppShellLayout } from '@/shared/ui/layouts';  // ← This also works
  */
 
-export * from "../ui/layouts";
+export * from "../../shared/ui/layouts";
 
 // Re-export from ui/layouts - these are already exported via the wildcard above
 // export { StackLayout } from '../ui/layouts/StackLayout';

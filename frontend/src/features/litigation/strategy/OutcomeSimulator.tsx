@@ -13,9 +13,9 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 
 // Internal Components
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Card } from '@/shared/ui/molecules/Card';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

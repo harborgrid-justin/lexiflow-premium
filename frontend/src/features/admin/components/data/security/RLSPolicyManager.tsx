@@ -1,5 +1,5 @@
 import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';

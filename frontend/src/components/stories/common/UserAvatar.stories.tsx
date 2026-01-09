@@ -1,4 +1,4 @@
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";

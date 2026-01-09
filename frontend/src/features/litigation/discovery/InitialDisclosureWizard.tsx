@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Button } from '@/components/ui/atoms/Button';
-import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';

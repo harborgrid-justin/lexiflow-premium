@@ -11,9 +11,9 @@ import { BookOpen, Settings, X } from 'lucide-react';
 import React from 'react';
 
 // Internal Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Input } from '@/shared/ui/atoms/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

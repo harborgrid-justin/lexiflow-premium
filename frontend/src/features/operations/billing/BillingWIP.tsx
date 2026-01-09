@@ -29,7 +29,7 @@ import { useNotify } from '@/hooks/useNotify';
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { billingQueryKeys } from '@/services/infrastructure/queryKeys';

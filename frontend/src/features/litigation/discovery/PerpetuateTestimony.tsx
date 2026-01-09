@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';

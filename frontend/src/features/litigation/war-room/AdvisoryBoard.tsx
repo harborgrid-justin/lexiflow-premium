@@ -32,9 +32,9 @@ import { useToggle } from '@/shared/hooks/useToggle';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';

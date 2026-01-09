@@ -14,7 +14,7 @@ import React from 'react';
 
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { CaseOverviewModals } from './CaseOverviewModals';
 import { CaseOverviewStats } from './CaseOverviewStats';

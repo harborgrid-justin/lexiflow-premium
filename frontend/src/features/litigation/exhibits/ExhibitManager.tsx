@@ -29,8 +29,8 @@ import React, { useEffect, useState } from 'react';
 // ============================================================================
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
-import { ErrorState } from '@/components/ui/molecules/ErrorState';
+import { Button } from '@/shared/ui/atoms/Button';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState';
 import { ExhibitStats } from './ExhibitStats';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';

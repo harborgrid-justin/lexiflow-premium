@@ -2,6 +2,7 @@
  * Header - Top navigation chrome
  */
 
+import { APP_NAME } from '@/config/app.config';
 import { useAuth } from '../../../services/identity/AuthProvider';
 import { useLayout } from '../LayoutProvider';
 
@@ -16,7 +17,7 @@ export function Header() {
       </button>
 
       <div className="header__logo">
-        <h1>LexiFlow</h1>
+        <h1>{APP_NAME}</h1>
       </div>
 
       <nav className="header__nav">

@@ -20,9 +20,9 @@ import React, { useMemo, useState } from 'react';
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { CitationDetail } from './CitationDetail';
 
 // Hooks & Context

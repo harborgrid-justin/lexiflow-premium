@@ -29,7 +29,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // ============================================================================
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { DocketAnalytics } from './DocketAnalytics';
 import { DocketCalendar } from './DocketCalendar';
 import { DocketSettings } from './DocketSettings';

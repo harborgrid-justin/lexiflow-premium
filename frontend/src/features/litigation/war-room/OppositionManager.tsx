@@ -32,10 +32,10 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { Button } from '@/components/ui/atoms/Button';
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
-import { ErrorState } from '@/components/ui/molecules/ErrorState';
-import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/shared/ui/atoms/Button';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader';
+import { ErrorState } from '@/shared/ui/molecules/ErrorState';
+import { Modal } from '@/shared/ui/molecules/Modal';
 import { OppositionDetail } from './opposition/OppositionDetail';
 import { OppositionEntity, OppositionList } from './opposition/OppositionList';
 import { OppositionSidebar } from './opposition/OppositionSidebar';

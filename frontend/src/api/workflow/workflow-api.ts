@@ -928,7 +928,9 @@ export class WorkflowApiService {
     try {
       // In a real implementation, this would trigger a backend job.
       // For now, we simulate success to trigger the frontend refetch (which is the actual 'sync' effect).
-      // We could also call an endpoint like /workflow/refresh if it existed.
+      console.log(
+        `[WorkflowApiService] Running automation${scope ? ` for scope: ${scope}` : ""}`
+      );
       await new Promise((resolve) => setTimeout(resolve, 500));
       return { success: true, processed: 0, actions: 0 };
     } catch (error) {

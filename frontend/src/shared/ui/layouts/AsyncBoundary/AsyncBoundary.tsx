@@ -17,11 +17,11 @@
 // ============================================================================
 import React, { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
 import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // ============================================================================
 // TYPES & INTERFACES

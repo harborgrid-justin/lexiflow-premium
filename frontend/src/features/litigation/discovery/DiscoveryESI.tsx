@@ -17,10 +17,10 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar';
-import { Card } from '@/components/ui/molecules/Card';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { ProgressBar } from '@/shared/ui/atoms/ProgressBar';
+import { Card } from '@/shared/ui/molecules/Card';
 import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context

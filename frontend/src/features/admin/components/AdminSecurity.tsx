@@ -22,8 +22,8 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

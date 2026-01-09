@@ -3,8 +3,8 @@
  * System-level settings including data source configuration
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
-import { DataSourceSelector } from '@/components/ui/molecules/DataSourceSelector/DataSourceSelector';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { DataSourceSelector } from '@/shared/ui/molecules/DataSourceSelector/DataSourceSelector';
 import { Database, Settings, Zap } from 'lucide-react';
 import React from 'react';
 

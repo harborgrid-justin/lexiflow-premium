@@ -14,7 +14,7 @@ import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { ScheduleTimeline } from './planning/ScheduleTimeline';
 

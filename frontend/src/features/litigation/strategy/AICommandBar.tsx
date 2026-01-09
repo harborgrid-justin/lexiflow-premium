@@ -9,7 +9,7 @@
 import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';

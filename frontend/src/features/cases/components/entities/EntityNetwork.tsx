@@ -24,8 +24,8 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { NexusGraph } from '@features/visual';
 
 // Utils & Constants

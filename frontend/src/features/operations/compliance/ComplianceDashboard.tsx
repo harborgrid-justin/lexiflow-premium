@@ -20,9 +20,9 @@ import React, { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { TabbedPageLayout } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { TabbedPageLayout } from '@/shared/ui/layouts/TabbedPageLayout/TabbedPageLayout';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import type { TabConfigItem } from '@/types/layout';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 

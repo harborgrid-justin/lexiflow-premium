@@ -14,14 +14,14 @@
 
 import { api } from '@/api';
 import { PartyTypeBackend } from '@/api/litigation/parties-api';
-import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
+import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { CaseStatus, MatterType } from '@/types/enums';
 import { MetadataRecord, UserId } from '@/types/primitives';
 import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';
-import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -132,8 +132,8 @@ export const CaseImporter: React.FC = () => {
     try {
       // Get API key from storage if available
       const apiKey = aiProvider === 'gemini'
-        ? (localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY)
-        : (localStorage.getItem('openai_api_key') || import.meta.env.VITE_OPENAI_API_KEY);
+        ? AI_CONFIG.geminiKey
+        : AI_CONFIG.openAiKey;
 
       // Call backend API for parsing
       const parsed = await api.cases.parse(trimmedInput, {

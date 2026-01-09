@@ -1,4 +1,5 @@
 // src/contexts/flags/FlagsContext.tsx
+import { FEATURES_CONFIG } from "@/config/features/features.config";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
@@ -12,10 +13,10 @@ export type Flags = {
 
 const DEFAULT_FLAGS: Flags = {
   enableNewDashboard: true,
-  enableAdminTools: false,
-  ocr: false,
-  aiAssistant: false,
-  realTimeSync: true,
+  enableAdminTools: false, // controlled by RBAC usually
+  ocr: FEATURES_CONFIG.documentComparison, // using document comparison as proxy for OCR features
+  aiAssistant: FEATURES_CONFIG.aiAssistance,
+  realTimeSync: FEATURES_CONFIG.realtimeCollaboration,
 };
 
 type FlagsContextValue = {

@@ -19,7 +19,7 @@ import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

@@ -3,7 +3,7 @@
  * @description Profitability analysis tab view
  */
 
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { ThemeObject } from '@/contexts/theme/ThemeContext';
 import {
   Bar,

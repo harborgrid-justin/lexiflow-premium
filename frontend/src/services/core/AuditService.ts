@@ -1,7 +1,7 @@
-import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
 import { db, STORES } from "@/services/data/db";
-import { UserId } from "@/types";
+import { apiClient } from "@/services/infrastructure/apiClient";
+// UserId import removed as we use string type for userId in methods
 
 export type AuditAction =
   | "CREATE"
@@ -69,7 +69,7 @@ export class AuditService {
     } catch (e) {
       // LAST RESORT: Console log to ensure evidence is not completely lost
       // In production, this should be sent to a dedicated logging service (Sentry, Datadog)
-      console.error("[AUDIT_FAILURE]", JSON.stringify(auditEntry));
+      console.error("[AUDIT_FAILURE]", e, JSON.stringify(auditEntry));
     }
 
     // Dev logging
@@ -138,6 +138,7 @@ export class AuditService {
       const token = localStorage.getItem("access_token");
       if (token) return "authenticated-user"; // Placeholder if we can't parse token
     } catch (e) {
+      console.error("Error retrieving user ID:", e);
       return "error-retrieving-user";
     }
     return "guest";

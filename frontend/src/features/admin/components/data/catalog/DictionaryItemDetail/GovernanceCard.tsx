@@ -1,5 +1,5 @@
-import { Input } from '@/components/ui/atoms/Input';
-import { Card } from '@/components/ui/molecules/Card';
+import { Input } from '@/shared/ui/atoms/Input';
+import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
 import { Shield } from 'lucide-react';

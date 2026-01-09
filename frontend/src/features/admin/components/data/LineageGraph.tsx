@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';

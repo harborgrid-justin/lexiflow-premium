@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
-import { Button } from '@/components/ui/atoms/Button';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';
+import { Button } from '@/shared/ui/atoms/Button';
 import { SearchInputBar, MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '@/types';

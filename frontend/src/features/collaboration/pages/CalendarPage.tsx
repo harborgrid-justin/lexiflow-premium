@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CalendarMaster } from '@/features/cases/components/calendar/CalendarMaster';
-import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CalendarPageProps {
   caseId?: string;

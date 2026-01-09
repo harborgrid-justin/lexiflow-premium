@@ -15,34 +15,26 @@
  */
 
 import { api } from '@/api';
-import { DataService } from '@/services/data/dataService';
-import { Button } from '@/components/ui/atoms/Button';
-import { Card } from '@/components/ui/molecules/Card';
+import { PATHS } from '@/config/paths.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
 import { useNotifications } from '@/hooks/useNotifications';
-import { useNavigate } from 'react-router-dom';
-import { PATHS } from '@/config/paths.config';
-import type { Case, Matter, User as UserType } from '@/types';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
-import { z } from 'zod';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import type { Matter } from '@/types';
 import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
-  Briefcase,
   CheckCircle,
-  DollarSign,
-  FileText,
-  Save,
-  Send,
-  Shield,
-  User,
-  Users,
-  Scale
+  Save
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
 // === Validation Schemas ===
 const ClientSchema = z.object({
@@ -251,6 +243,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
     try {
       await next();
     } catch (err) {
+      console.error('Validation error:', err);
       notify({ type: 'error', message: 'Please correct validation errors before proceeding' });
     }
   };
@@ -577,7 +570,16 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
     <div className={cn("flex h-full", theme.className)}>
       {/* Sidebar Stepper */}
       <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 p-6 flex flex-col gap-6">
-        <h2 className="font-bold text-xl mb-4">New Matter Intake</h2>
+        <div>
+          <h2 className="font-bold text-xl mb-4">New Matter Intake</h2>
+          <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+            <div
+              className="bg-blue-600 h-full transition-all duration-300"
+              style={{ width: `${Math.round(progress)}%` }}
+            />
+          </div>
+          <div className="text-xs text-gray-500 mt-1 text-right">{Math.round(progress)}% Complete</div>
+        </div>
         <div className="space-y-4 relative">
           <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700" />
           {WIZARD_STEPS.map((step, idx) => (
@@ -638,72 +640,3 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
     </div>
   );
 };
-{ id: 'review', title: 'Review & Submit', icon: CheckCircle },
-  ];
-
-const currentStepIndex = steps.findIndex(s => s.id === currentStep);
-
-const handleNext = () => {
-  if (currentStepIndex < steps.length - 1) {
-    setCurrentStep(steps[currentStepIndex + 1]!.id);
-  }
-};
-
-const handlePrev = () => {
-  if (currentStepIndex > 0) {
-    setCurrentStep(steps[currentStepIndex - 1]!.id);
-  }
-};
-
-const handleSubmit = async () => {
-  try {
-    const newMatter: Partial<Matter> = {
-      title: formData.matterTitle,
-      matterNumber: `M-${Date.now()}`,
-      clientName: formData.clientName,
-      clientEmail: formData.clientEmail,
-      clientPhone: formData.clientPhone,
-      matterType: formData.matterType as Matter['matterType'],
-      practiceArea: formData.practiceArea,
-      description: formData.description,
-      jurisdiction: formData.jurisdiction,
-      priority: formData.priority.toUpperCase() as Matter['priority'],
-      status: 'INTAKE' as Matter['status'],
-      leadAttorneyId: formData.leadAttorneyId,
-      teamMembers: formData.supportTeam as unknown as Matter['teamMembers'],
-      billingType: formData.billingType,
-      estimatedValue: parseFloat(formData.estimatedValue) || 0,
-      retainerAmount: parseFloat(formData.retainerAmount) || 0,
-      openedDate: new Date().toISOString().split('T')[0],
-      conflictCheckCompleted: false,
-      createdBy: 'current-user' as Matter['createdBy'],
-    };
-
-    await api.matters.create(newMatter);
-
-    alert('Matter successfully created!');
-    window.location.href = '/matters';
-  } catch (error) {
-    console.error('Failed to submit matter:', error);
-    alert('Failed to create matter. Please try again.');
-  }
-};
-
-return (
-  <div className={cn('h-full min-h-screen flex flex-col', mode === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
-    {/* Progress Stepper */}
-    <div className={cn('shrink-0 border-b px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-      <div className="flex items-center justify-between max-w-5xl mx-auto">
-        {steps.map((step, index) => {
-          const Icon = step.icon;
-          const isActive = step.id === currentStep;
-          const isCompleted = index < currentStepIndex;
-
-          return (
-            <div key={step.id} className="flex items-center flex-1">
-              <div className="flex flex-col items-center flex-1">
-                <div className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center mb-2',
-                  isActive
-                    ? 'bg-blue-500 text-white'
-                    : isCompleted

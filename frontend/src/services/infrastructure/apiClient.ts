@@ -37,7 +37,15 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
+import {
+  API_TIMEOUT_MS,
+  getApiBaseUrl,
+  getApiPrefix,
+} from "@/config/network/api.config";
+import {
+  AUTH_REFRESH_TOKEN_STORAGE_KEY,
+  AUTH_TOKEN_STORAGE_KEY,
+} from "@/config/security/security.config";
 import {
   ApiTimeoutError,
   AuthenticationError,
@@ -130,16 +138,17 @@ class ApiClient {
 
   private readonly authTokenKey: string;
   private readonly refreshTokenKey: string;
-  private readonly DEFAULT_TIMEOUT = 30000; // 30 seconds
+  private readonly DEFAULT_TIMEOUT = API_TIMEOUT_MS;
   private readonly HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds
   private refreshPromise: Promise<boolean> | null = null;
 
   constructor() {
     // this.baseURL is now a getter
     this.authTokenKey =
-      import.meta.env?.VITE_AUTH_TOKEN_KEY || "lexiflow_auth_token";
+      import.meta.env?.VITE_AUTH_TOKEN_KEY || AUTH_TOKEN_STORAGE_KEY;
     this.refreshTokenKey =
-      import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY || "lexiflow_refresh_token";
+      import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY ||
+      AUTH_REFRESH_TOKEN_STORAGE_KEY;
     this.logInitialization();
   }
 

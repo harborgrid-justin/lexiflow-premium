@@ -28,7 +28,7 @@ import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
 
 // Components
-import { HighlightedText } from '@/components/ui/atoms/HighlightedText/HighlightedText';
+import { HighlightedText } from '@/shared/ui/atoms/HighlightedText/HighlightedText';
 
 // Utils & Constants
 import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/features/search.config';

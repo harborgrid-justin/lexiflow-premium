@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card } from '@/components/ui/molecules/Card/Card';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';

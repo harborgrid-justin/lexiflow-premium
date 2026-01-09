@@ -20,7 +20,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 
 // Utils & Constants
 import { ServiceStatus } from '@/types/enums';

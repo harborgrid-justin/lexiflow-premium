@@ -22,8 +22,8 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { NotificationCenter } from '@/components/ui/molecules/NotificationCenter';
-import { UserAvatar } from '@/components/ui/molecules/UserAvatar';
+import { NotificationCenter } from '@/shared/ui/molecules/NotificationCenter';
+import { UserAvatar } from '@/shared/ui/molecules/UserAvatar';
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';

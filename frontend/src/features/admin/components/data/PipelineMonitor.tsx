@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play, Plus, RefreshCw, Server, Settings } from 'lucide-react';
 
 import { dataPlatformApi, Pipeline } from '@/api/data-platform';
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useMutation, useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';

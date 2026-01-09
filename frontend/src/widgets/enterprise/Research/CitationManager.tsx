@@ -78,7 +78,7 @@ export interface CitationManagerProps {
   onAddCitation?: (citation: Citation) => void;
   onUpdateCitation?: (id: string, citation: Partial<Citation>) => void;
   onDeleteCitation?: (id: string) => void;
-  onValidateCitations?: (citations: Citation[]) => void;
+  onValidateCitations?: (citations: Citation[]) => Promise<Citation[]>;
   onExport?: (format: 'word' | 'latex' | 'json') => void;
   className?: string;
 }
@@ -138,9 +138,13 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
       ]
   );
 
-  const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
   const [selectedFormat, setSelectedFormat] = useState<CitationFormat>('bluebook');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
+
+  // Modal handlers
+  const handleCloseAddDialog = () => setShowAddDialog(false);
 
   const [filterType, setType] = useState<CitationType | 'all'>('all');
 
@@ -207,7 +211,9 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
     addToast({
       title: 'Citation Copied',
       message: `${citation.formatted} copied to clipboard`,
-      type: 'success'
+      type: 'success',
+      priority: 'medium',
+      read: false
     });
   };
 
@@ -222,14 +228,18 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
         addToast({
           title: 'Validation Complete',
           message: `${validCount} valid citations, ${errorCount} errors found`,
-          type: errorCount > 0 ? 'warning' : 'success'
+          type: errorCount > 0 ? 'warning' : 'success',
+          priority: 'medium',
+          read: false
         });
       }
     } catch {
       addToast({
         title: 'Validation Failed',
         message: 'An error occurred during validation',
-        type: 'error'
+        type: 'error',
+        priority: 'high',
+        read: false
       });
     }
   };
@@ -568,6 +578,33 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Add Citation Dialog */}
+        {showAddDialog && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800">
+              <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-100">Add New Citation</h3>
+              <p className="mb-4 text-sm text-gray-500">Citation entry form placeholder.</p>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={handleCloseAddDialog}
+                  className="rounded px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Logic to add citation
+                    handleCloseAddDialog();
+                  }}
+                  className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

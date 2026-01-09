@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';

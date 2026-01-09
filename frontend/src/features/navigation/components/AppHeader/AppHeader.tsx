@@ -24,7 +24,7 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // Components
 import { ConnectivityHUD } from '@/shared/ui/organisms/ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '@/shared/ui/organisms/NeuralCommandBar/NeuralCommandBar';
-import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { ConnectionStatus } from '@/shared/ui/organisms/ConnectionStatus/ConnectionStatus';
 
 // Services & Data

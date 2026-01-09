@@ -4,14 +4,17 @@
  * Provides graceful error handling and prevents financial data corruption
  */
 
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { AlertTriangle, DollarSign, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home, DollarSign } from 'lucide-react';
-import { Button } from '@/components/ui/atoms/Button/Button';
 
 interface Props {
   children: ReactNode;
   onReset?: () => void;
 }
+// ...
+// Rest of file
+
 
 interface State {
   hasError: boolean;
@@ -40,7 +43,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
     console.error('Billing Error Boundary caught error:', error, errorInfo);
 
     // Log error for monitoring - integrate with error tracking service in production
-    if (import.meta.env.PROD) {
+    if (getAppEnv() === 'production') {
       // Production error logging can be integrated here
       console.error('Billing Error:', error, errorInfo);
     }
@@ -165,7 +168,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
             </div>
 
             {/* Development Mode Stack Trace */}
-            {process.env.NODE_ENV === 'development' && this.state.errorInfo && (
+            {getAppEnv() === 'development' && this.state.errorInfo && (
               <details className="mt-6">
                 <summary className="cursor-pointer text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
                   Stack Trace (Development Only)

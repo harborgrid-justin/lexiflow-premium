@@ -25,9 +25,9 @@ import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { Currency } from '@/components/ui/atoms/Currency';
-import { Card } from '@/components/ui/molecules/Card';
-import { MetricCard } from '@/components/ui/molecules/MetricCard';
+import { Currency } from '@/shared/ui/atoms/Currency';
+import { Card } from '@/shared/ui/molecules/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

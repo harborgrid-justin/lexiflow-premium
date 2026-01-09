@@ -13,9 +13,9 @@ import { CheckSquare, Save } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Input } from '@/shared/ui/atoms/Input/Input';
+import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';

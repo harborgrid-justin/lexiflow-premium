@@ -1,0 +1,24 @@
+graph TD
+    User([User])
+    AdminAudit["AdminAuditLog Component"]
+    UseQuery["React Query"]
+    DataService[DataService]
+    ChainService["ChainService (Local)"]
+    API["Backend API"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Logs| AdminAudit
+    AdminAudit -->|Fetch Logs| UseQuery
+    UseQuery -->|getLogs| DataService
+    DataService -->|Call| API
+    API -->|GET /admin/audit-logs| Backend
+    Backend -->|Query| DB
+    DB -->|Results| Backend
+    Backend -->|JSON| API
+    API -->|Logs| AdminAudit
+
+    User -->|Verify Chain - Optional| AdminAudit
+    AdminAudit -->|verifyChain localLogs| ChainService
+    ChainService -->|Integrity Result| AdminAudit
+    AdminAudit -->|Show Status| User

@@ -2,18 +2,14 @@
 
 import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { LegalDocument } from '@/types/documents';
-import { useDeferredValue, useState } from 'react';
+import { useState } from 'react';
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentGridCard } from './DocumentGridCard';
 import { DocumentToolbar } from './DocumentToolbar';
 import { DocumentTable } from './table/DocumentTable';
 
-interface DocumentExplorerProps {
-  currentUserRole?: string;
-}
-
-export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExplorerProps) => {
+export const DocumentExplorer = () => {
   const {
     searchTerm, setSearchTerm,
     currentFolder, setCurrentFolder,
@@ -24,7 +20,6 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
     handleDragEnter, handleDragLeave, handleDrop, isDragging
   } = useDocumentManager({ enableDragDrop: true });
 
-  const deferredSearchTerm = useDeferredValue(searchTerm);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -56,7 +51,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
 
   return (
     <div
-      className="flex-1 flex h-full relative overflow-hidden"
+      className="flex-1 flex h-full relative overflow-hidden bg-background"
       onDragEnter={handleDragEnter}
     >
       {isDragging && (
@@ -66,11 +61,11 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         />
       )}
 
-      <div className="w-64 border-r flex-shrink-0 hidden md:flex bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+      <div className="w-64 border-r shrink-0 hidden md:flex">
         <DocumentFilters currentFolder={currentFolder} setCurrentFolder={setCurrentFolder} />
       </div>
 
-      <div className="flex-1 flex flex-col min-w-0 relative bg-white dark:bg-slate-900">
+      <div className="flex-1 flex flex-col min-w-0 relative">
         <DocumentToolbar
           selectedDocsCount={selectedDocs.length}
           searchTerm={searchTerm}
@@ -99,7 +94,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
               onRowClick={setPreviewDoc}
             />
           ) : (
-            <div className="h-full p-4 bg-slate-50 dark:bg-slate-800 overflow-y-auto">
+            <div className="h-full p-4 overflow-y-auto bg-muted/10">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {filtered.map(doc => (
                   <DocumentGridCard
@@ -112,7 +107,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
                 ))}
               </div>
               {filtered.length === 0 && (
-                <div className="flex flex-col items-center justify-center h-64 text-slate-500">
+                <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
                   <p>No documents found.</p>
                 </div>
               )}

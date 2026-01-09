@@ -30,9 +30,15 @@ export default function AuthLayout({
         {children}
 
         {/* Footer */}
-        <p className="text-center text-slate-500 text-sm mt-6">
-          &copy; {new Date().getFullYear()} LexiFlow. All rights reserved.
-        </p>
+        <div className="text-center text-slate-500 text-xs mt-8 space-y-2">
+          <p>&copy; {new Date().getFullYear()} LexiFlow. All rights reserved.</p>
+          <div className="flex justify-center gap-4">
+            <a href="#" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-slate-300 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-slate-300 transition-colors">Support</a>
+          </div>
+          <p className="opacity-50">Authorized Personnel Only</p>
+        </div>
       </div>
     </div>
   );

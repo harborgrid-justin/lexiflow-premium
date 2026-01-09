@@ -5,8 +5,13 @@
 'use client';
 
 import { Document } from '@/types';
-import { FileText } from 'lucide-react';
+import { FileText, MoreHorizontal } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/shadcn/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcn/table';
+import { Button } from '@/components/ui/shadcn/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/shadcn/dropdown-menu';
+import { Skeleton } from '@/components/ui/shadcn/skeleton';
 
 interface CaseDocumentsProps {
   caseId: string;
@@ -34,36 +39,74 @@ export function CaseDocuments({ caseId }: CaseDocumentsProps) {
   }, [caseId]);
 
   if (loading) {
-    return <div>Loading documents...</div>;
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Documents</CardTitle>
+          <CardDescription>Manage and view case files.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6">
-      <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-50 mb-4">
-        Documents
-      </h2>
-      {documents.length === 0 ? (
-        <p className="text-slate-600 dark:text-slate-400">No documents yet</p>
-      ) : (
-        <div className="space-y-3">
-          {documents.map((doc) => (
-            <div
-              key={doc.id}
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"
-            >
-              <FileText className="h-5 w-5 text-slate-400" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-slate-900 dark:text-slate-50">
-                  {doc.title}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {(doc.fileSize / 1024).toFixed(2)} KB
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Documents</CardTitle>
+        <CardDescription>Manage and view case files.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {documents.length === 0 ? (
+          <div className="text-center py-6 text-muted-foreground">
+            No documents uploaded yet.
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]"></TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead className="text-right">Size</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {documents.map((doc) => (
+                <TableRow key={doc.id}>
+                  <TableCell>
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                  </TableCell>
+                  <TableCell className="font-medium">{doc.title}</TableCell>
+                  <TableCell className="text-right text-muted-foreground">
+                    {(doc.fileSize / 1024).toFixed(2)} KB
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>View details</DropdownMenuItem>
+                        <DropdownMenuItem>Download</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+    </Card>
   );
 }

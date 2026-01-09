@@ -1,0 +1,39 @@
+graph TD
+    User([User])
+    KB["KnowledgeBase Component"]
+    Content["KnowledgeContent Component"]
+
+    subgraph Views
+        Wiki[WikiView]
+        Precedents[PrecedentsView]
+        QA[QAView]
+        Analytics[KnowledgeAnalytics]
+    end
+
+    UseQuery["React Query"]
+    DataService["DataService Facade"]
+    API_Knowledge["API: Knowledge"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|Select Tab| KB
+    KB -->|Active Tab| Content
+    Content -->|Route| Wiki
+    Content -->|Route| Precedents
+    Content -->|Route| QA
+    Content -->|Route| Analytics
+
+    Wiki -->|getWikiArticles| UseQuery
+    Precedents -->|getPrecedents| UseQuery
+    QA -->|getQA| UseQuery
+    Analytics -->|getAnalytics| UseQuery
+
+    UseQuery -->|Call| DataService
+    DataService -->|Call| API_Knowledge
+    API_Knowledge -->|GET /knowledge/*| Backend
+    Backend -->|Query| DB
+    DB -->|Result| Backend
+    Backend -->|Response| API_Knowledge
+    API_Knowledge -->|Data| DataService
+    DataService -->|Data| Views
+    Views -->|Render| User

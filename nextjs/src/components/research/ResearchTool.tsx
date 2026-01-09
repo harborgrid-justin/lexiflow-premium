@@ -9,6 +9,11 @@ import {
   Settings
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/shadcn/tabs';
+import { Input } from '@/components/ui/shadcn/input';
+import { Button } from '@/components/ui/shadcn/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcn/select';
 
 interface SearchResult {
   id: string;
@@ -30,9 +35,16 @@ interface ResearchQuery {
   query: string;
   timestamp: string;
   resultCount: number;
+  title?: string;
 }
 
-// Active Research Tab - Fetches from API
+interface ShepardizeResult {
+  status: string;
+  authority?: string;
+}
+
+
+// Active Research Tab
 const ActiveResearch = ({ onSearch }: { onSearch: (query: string) => void }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -59,51 +71,59 @@ const ActiveResearch = ({ onSearch }: { onSearch: (query: string) => void }) => 
 
   return (
     <div className="space-y-4">
-      <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-        <h3 className="text-lg font-medium text-slate-900 mb-4">Search Query</h3>
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Enter keywords, citation, or natural language query..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium disabled:opacity-50"
-          >
-            {loading ? 'Searching...' : 'Search'}
-          </button>
-        </form>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Search Query</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSearch} className="flex gap-2">
+            <Input
+              placeholder="Enter keywords, citation, or natural language query..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Searching...' : 'Search'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
 
       {results.length > 0 ? (
-        <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm space-y-4">
-          <h4 className="font-medium text-slate-900">Results ({results.length})</h4>
-          {results.map((result) => (
-            <div key={result.id} className="border-b border-slate-100 pb-4 last:border-b-0">
-              <h5 className="font-medium text-slate-900">{result.title}</h5>
-              {result.citation && (
-                <p className="text-sm text-slate-600">{result.citation}</p>
-              )}
-              {result.summary && (
-                <p className="text-sm text-slate-700 mt-2">{result.summary}</p>
-              )}
-            </div>
-          ))}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Results ({results.length})</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {results.map((result) => (
+              <div key={result.id} className="border-b last:border-0 pb-4 last:pb-0">
+                <h5 className="font-medium">{result.title}</h5>
+                {result.citation && (
+                  <p className="text-sm text-muted-foreground">{result.citation}</p>
+                )}
+                {result.summary && (
+                  <p className="text-sm mt-2">{result.summary}</p>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
       ) : (
-        <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm min-h-100 flex items-center justify-center text-slate-400">
-          {query ? 'No results found' : 'Enter a search term to begin research'}
-        </div>
+        <Card className="min-h-50 flex items-center justify-center text-muted-foreground">
+          <CardContent>
+            {query ? 'No results found' : 'Enter a search term to begin research'}
+          </CardContent>
+        </Card>
       )}
     </div>
   );
 };
 
-// Research History Tab - Fetches from API
+// Research History Tab
 const ResearchHistory = () => {
   const [history, setHistory] = useState<ResearchQuery[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,31 +145,35 @@ const ResearchHistory = () => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-      <h3 className="text-lg font-medium text-slate-900 mb-4">Recent Research</h3>
-      {loading ? (
-        <div className="text-slate-500 text-center py-8">Loading history...</div>
-      ) : history.length > 0 ? (
-        <div className="space-y-2">
-          {history.map((item: any) => (
-            <div key={item.id} className="p-3 hover:bg-slate-50 rounded cursor-pointer">
-              <p className="text-slate-900 font-medium">{item.title || item.query}</p>
-              {item.timestamp && (
-                <p className="text-xs text-slate-500 mt-1">
-                  {new Date(item.timestamp).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-slate-500 text-center py-8">No recent history</div>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Research</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="text-muted-foreground text-center py-8">Loading history...</div>
+        ) : history.length > 0 ? (
+          <div className="space-y-2">
+            {history.map((item) => (
+              <div key={item.id} className="p-3 hover:bg-muted/50 rounded cursor-pointer border border-transparent hover:border-border transition-colors">
+                <p className="font-medium">{item.title || item.query}</p>
+                {item.timestamp && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {new Date(item.timestamp).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-muted-foreground text-center py-8">No recent history</div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
-// Saved Authorities Tab - Fetches from API
+// Saved Authorities Tab
 const SavedAuthorities = () => {
   const [saved, setSaved] = useState<SavedAuthority[]>([]);
   const [loading, setLoading] = useState(true);
@@ -171,32 +195,36 @@ const SavedAuthorities = () => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-      <h3 className="text-lg font-medium text-slate-900 mb-4">Saved Authorities</h3>
-      {loading ? (
-        <div className="text-slate-500 text-center py-8">Loading authorities...</div>
-      ) : saved.length > 0 ? (
-        <div className="space-y-3">
-          {saved.map((authority: any) => (
-            <div key={authority.id} className="p-3 border border-slate-200 rounded hover:bg-slate-50">
-              <p className="font-medium text-slate-900">{authority.title || authority.citation}</p>
-              {authority.jurisdiction && (
-                <p className="text-xs text-slate-600 mt-1">{authority.jurisdiction}</p>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-slate-500 text-center py-8">No saved authorities</div>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Saved Authorities</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="text-muted-foreground text-center py-8">Loading authorities...</div>
+        ) : saved.length > 0 ? (
+          <div className="space-y-3">
+            {saved.map((authority) => (
+              <div key={authority.id} className="p-3 border rounded hover:bg-muted/50 transition-colors">
+                <p className="font-medium">{authority.title || authority.citation}</p>
+                {authority.jurisdiction && (
+                  <p className="text-xs text-muted-foreground mt-1">{authority.jurisdiction}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-muted-foreground text-center py-8">No saved authorities</div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
-// Shepardizing Tool - Uses API validation
+// Shepardizing Tool
 const ShepardizingTool = () => {
   const [citation, setCitation] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ShepardizeResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleValidate = async (e: React.FormEvent) => {
@@ -218,35 +246,37 @@ const ShepardizingTool = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-      <h3 className="text-lg font-medium text-slate-900 mb-4">Shepards Citation Analysis</h3>
-      <form onSubmit={handleValidate} className="space-y-4">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Enter citation (e.g., 123 F.3d 456)"
-            value={citation}
-            onChange={(e) => setCitation(e.target.value)}
-            className="flex-1 px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium disabled:opacity-50"
-          >
-            {loading ? 'Analyzing...' : 'Analyze'}
-          </button>
-        </div>
-      </form>
-      {result && (
-        <div className="mt-4 p-4 bg-slate-50 rounded">
-          <p className="text-slate-900 font-medium">{result.status || 'Valid Citation'}</p>
-          {result.authority && (
-            <p className="text-sm text-slate-600 mt-2">{result.authority}</p>
-          )}
-        </div>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Shepards Citation Analysis</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleValidate} className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              placeholder="Enter citation (e.g., 123 F.3d 456)"
+              value={citation}
+              onChange={(e) => setCitation(e.target.value)}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Analyzing...' : 'Analyze'}
+            </Button>
+          </div>
+        </form>
+        {result && (
+          <div className="mt-4 p-4 bg-muted/30 rounded border">
+            <p className="font-medium">{result.status || 'Valid Citation'}</p>
+            {result.authority && (
+              <p className="text-sm text-muted-foreground mt-2">{result.authority}</p>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
@@ -255,88 +285,61 @@ const JurisdictionSettings = () => {
   const [jurisdiction, setJurisdiction] = useState('Federal (All Circuits)');
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-      <h3 className="text-lg font-medium text-slate-900 mb-4">Jurisdiction Settings</h3>
-      <div className="space-y-4 max-w-md">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Primary Jurisdiction</label>
-          <select
-            value={jurisdiction}
-            onChange={(e) => setJurisdiction(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option>Federal (All Circuits)</option>
-            <option>California</option>
-            <option>New York</option>
-            <option>Texas</option>
-            <option>Florida</option>
-          </select>
+    <Card>
+      <CardHeader>
+        <CardTitle>Jurisdiction Settings</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4 max-w-md">
+          <div>
+            <label className="block text-sm font-medium mb-1">Primary Jurisdiction</label>
+            <Select value={jurisdiction} onValueChange={setJurisdiction}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select one" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Federal (All Circuits)">Federal (All Circuits)</SelectItem>
+                <SelectItem value="California">California</SelectItem>
+                <SelectItem value="New York">New York</SelectItem>
+                <SelectItem value="Texas">Texas</SelectItem>
+                <SelectItem value="Florida">Florida</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
-const TABS = [
-  { id: 'active', label: 'Active Research', icon: Search },
-  { id: 'history', label: 'History', icon: History },
-  { id: 'saved', label: 'Saved Authorities', icon: Bookmark },
-  { id: 'shepardize', label: 'Shepardize', icon: Scale },
-  { id: 'settings', label: 'Jurisdiction', icon: Settings },
-];
-
 export function ResearchTool() {
-  const [activeTab, setActiveTab] = useState('active');
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'active': return <ActiveResearch onSearch={() => { }} />;
-      case 'history': return <ResearchHistory />;
-      case 'saved': return <SavedAuthorities />;
-      case 'shepardize': return <ShepardizingTool />;
-      case 'settings': return <JurisdictionSettings />;
-      default: return <ActiveResearch onSearch={() => { }} />;
-    }
-  };
-
   return (
-    <div className="flex flex-col h-full bg-slate-50">
-      {/* Header / Tabs */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Legal Research</h1>
-            <p className="text-slate-500">Case law, statutes, and citation analysis</p>
-          </div>
-        </div>
+    <div className="p-6">
+      <Tabs defaultValue="active" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="active" className="gap-2"><Search size={16} /> Active Research</TabsTrigger>
+          <TabsTrigger value="history" className="gap-2"><History size={16} /> History</TabsTrigger>
+          <TabsTrigger value="saved" className="gap-2"><Bookmark size={16} /> Saved Authorities</TabsTrigger>
+          <TabsTrigger value="shepardize" className="gap-2"><Scale size={16} /> Shepardize</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2"><Settings size={16} /> Jurisdiction</TabsTrigger>
+        </TabsList>
 
-        <div className="flex space-x-1 overflow-x-auto no-scrollbar">
-          {TABS.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors
-                  ${isActive
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent'}
-                `}
-              >
-                <Icon className="w-4 h-4 mr-2" />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-auto p-6">
-        {renderContent()}
-      </div>
+        <TabsContent value="active">
+          <ActiveResearch onSearch={() => { }} />
+        </TabsContent>
+        <TabsContent value="history">
+          <ResearchHistory />
+        </TabsContent>
+        <TabsContent value="saved">
+          <SavedAuthorities />
+        </TabsContent>
+        <TabsContent value="shepardize">
+          <ShepardizingTool />
+        </TabsContent>
+        <TabsContent value="settings">
+          <JurisdictionSettings />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

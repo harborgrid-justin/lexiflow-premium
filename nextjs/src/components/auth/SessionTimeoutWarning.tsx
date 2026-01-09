@@ -23,6 +23,19 @@ import {
   formatRemainingTime,
   calculateCountdownProgress,
 } from '@/hooks/useSessionTimeout';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/shadcn/alert-dialog"
+import { Progress } from "@/components/ui/shadcn/progress"
+import { Button } from "@/components/ui/shadcn/button"
+import { AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // Types
@@ -76,8 +89,6 @@ export function SessionTimeoutWarning({
     : internalRemainingSeconds;
 
   // Refs
-  const modalRef = useRef<HTMLDivElement>(null);
-  const extendButtonRef = useRef<HTMLButtonElement>(null);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Calculate display values
@@ -119,14 +130,6 @@ export function SessionTimeoutWarning({
     onLogout();
   }, [onLogout, setShowWarning]);
 
-  // Handle escape key
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      // Escape dismisses but doesn't extend - user must explicitly choose
-      // For security, we don't auto-dismiss on Escape
-    }
-  }, []);
-
   // Start countdown timer (for uncontrolled mode)
   const startCountdown = useCallback((initialSeconds: number) => {
     setInternalRemainingSeconds(initialSeconds);
@@ -153,59 +156,21 @@ export function SessionTimeoutWarning({
   useEffect(() => {
     if (isControlled) return;
 
-    const handleSessionWarning = (event: CustomEvent<{ remainingTime: number }>) => {
-      const remainingTimeMs = event.detail?.remainingTime || defaultWarningDuration * 1000;
-      const remainingSecs = Math.floor(remainingTimeMs / 1000);
+    const handleSessionWarning = (event: Event) => {
+      const customEvent = event as CustomEvent<{ remainingTime: number }>;
+      const remainingTime = customEvent.detail?.remainingTime || defaultWarningDuration * 1000;
+      const remainingSecs = Math.floor(remainingTime / 1000);
 
       setInternalIsOpen(true);
       startCountdown(remainingSecs);
     };
 
-    window.addEventListener(SESSION_WARNING_EVENT, handleSessionWarning as EventListener);
+    window.addEventListener(SESSION_WARNING_EVENT, handleSessionWarning);
 
     return () => {
-      window.removeEventListener(SESSION_WARNING_EVENT, handleSessionWarning as EventListener);
+      window.removeEventListener(SESSION_WARNING_EVENT, handleSessionWarning);
     };
   }, [isControlled, defaultWarningDuration, startCountdown]);
-
-  // Focus management - focus extend button when modal opens
-  useEffect(() => {
-    if (showWarning && extendButtonRef.current) {
-      extendButtonRef.current.focus();
-    }
-  }, [showWarning]);
-
-  // Trap focus within modal
-  useEffect(() => {
-    if (!showWarning) return;
-
-    const handleFocusTrap = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab' || !modalRef.current) return;
-
-      const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-
-      if (focusableElements.length === 0) return;
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (event.shiftKey && document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      } else if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleFocusTrap);
-
-    return () => {
-      document.removeEventListener('keydown', handleFocusTrap);
-    };
-  }, [showWarning]);
 
   // Clean up countdown on unmount
   useEffect(() => {
@@ -216,112 +181,38 @@ export function SessionTimeoutWarning({
     };
   }, []);
 
-  // Don't render if not showing
-  if (!showWarning) {
-    return null;
-  }
-
   return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm ${className}`}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="session-warning-title"
-      aria-describedby="session-warning-description"
-      onKeyDown={handleKeyDown}
-    >
-      <div
-        ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden"
-      >
-        {/* Header */}
-        <div className="bg-amber-500 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3
-                id="session-warning-title"
-                className="text-lg font-semibold text-white"
-              >
-                Session Expiring Soon
-              </h3>
-            </div>
+    <AlertDialog open={showWarning} onOpenChange={setShowWarning}>
+      <AlertDialogContent className={`sm:max-w-md ${className}`}>
+        <AlertDialogHeader>
+          <div className="flex items-center gap-2 text-amber-600 dark:text-amber-500 mb-2">
+            <AlertTriangle className="h-6 w-6" />
+            <AlertDialogTitle>Session Expiring Soon</AlertDialogTitle>
           </div>
-        </div>
-
-        {/* Content */}
-        <div className="px-6 py-6">
-          <p
-            id="session-warning-description"
-            className="text-gray-700 dark:text-gray-300 mb-4"
-          >
-            Your session will expire in{' '}
-            <span
-              className="font-bold text-amber-600 dark:text-amber-400 tabular-nums"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {formattedTime}
-            </span>{' '}
-            due to inactivity.
-          </p>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
-            Would you like to stay signed in? Click &quot;Stay Signed In&quot; to extend your session.
-          </p>
-
-          {/* Timer Progress */}
-          <div className="mb-6" role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100}>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div
-                className="bg-amber-500 h-2 rounded-full transition-all duration-1000"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-3">
-            <button
-              ref={extendButtonRef}
-              type="button"
-              onClick={handleExtend}
-              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-            >
-              Stay Signed In
-            </button>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 focus:bg-gray-300 dark:focus:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-            >
-              Sign Out Now
-            </button>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="bg-gray-50 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            For your security, sessions expire after 30 minutes of inactivity.
-          </p>
-        </div>
-      </div>
-    </div>
+          <AlertDialogDescription className="space-y-4">
+            <p className="text-foreground">
+              Your session will expire in{' '}
+              <span className="font-bold text-amber-600 dark:text-amber-400 tabular-nums">
+                {formattedTime}
+              </span>{' '}
+              due to inactivity.
+            </p>
+            <p>
+              Would you like to stay signed in? Click "Stay Signed In" to extend your session.
+            </p>
+            <Progress value={progressPercent} className="h-2" />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <Button variant="outline" onClick={handleLogout}>
+            Sign Out Now
+          </Button>
+          <Button onClick={handleExtend} className="bg-blue-600 hover:bg-blue-700 text-white">
+            Stay Signed In
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

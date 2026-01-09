@@ -1,6 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/shadcn/table';
+import { Badge } from '@/components/ui/shadcn/badge';
+import { Button } from '@/components/ui/shadcn/button';
+import { LayoutList, Calendar as CalendarIcon } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/shadcn/card';
 
 interface CourtDate {
   id: string;
@@ -18,106 +30,101 @@ interface CourtDatesListProps {
 }
 
 export function CourtDatesList({ initialCourtDates }: CourtDatesListProps) {
-  const [courtDates] = useState<CourtDate[]>(initialCourtDates);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [courtDates, setCourtDates] = useState<CourtDate[]>(initialCourtDates);
   const [view, setView] = useState<'list' | 'calendar'>('list');
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'ready':
+        return <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-100">Ready</Badge>;
+      case 'in-progress':
+        return <Badge variant="secondary" className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900 dark:text-amber-100">In Progress</Badge>;
+      case 'not-started':
+        return <Badge variant="destructive" className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-100">Not Started</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  }
 
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold dark:text-white">Court Dates</h1>
+        <h1 className="text-2xl font-bold">Court Dates</h1>
         <div className="flex gap-2">
-          <button
+          <Button
+            variant={view === 'list' ? 'default' : 'outline'}
             onClick={() => setView('list')}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${view === 'list'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-              }`}
+            size="sm"
+            className="gap-2"
           >
-            List View
-          </button>
-          <button
+            <LayoutList size={16} />
+            List
+          </Button>
+          <Button
+            variant={view === 'calendar' ? 'default' : 'outline'}
             onClick={() => setView('calendar')}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${view === 'calendar'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-              }`}
+            size="sm"
+            className="gap-2"
           >
-            Calendar View
-          </button>
+            <CalendarIcon size={16} />
+            Calendar
+          </Button>
         </div>
       </div>
 
       {view === 'calendar' ? (
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400">Calendar view - Coming soon</p>
-        </div>
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-muted-foreground">Calendar view - Coming soon</p>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-900">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Date & Time
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Court
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Case
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Hearing Type
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Judge
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Preparation
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="rounded-md border bg-background">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date & Time</TableHead>
+                <TableHead>Court</TableHead>
+                <TableHead>Case</TableHead>
+                <TableHead>Hearing Type</TableHead>
+                <TableHead>Judge</TableHead>
+                <TableHead>Preparation</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {courtDates.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                <TableRow>
+                  <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                     No upcoming court dates
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ) : (
                 courtDates.map((courtDate) => (
-                  <tr key={courtDate.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  <TableRow key={courtDate.id}>
+                    <TableCell className="font-medium whitespace-nowrap">
                       {new Date(courtDate.dateTime).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
                       {courtDate.court}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
                       {courtDate.caseNumber}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
                       {courtDate.hearingType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
                       {courtDate.judge}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${courtDate.preparationStatus === 'ready'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : courtDate.preparationStatus === 'in-progress'
-                              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                              : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                          }`}
-                      >
-                        {courtDate.preparationStatus}
-                      </span>
-                    </td>
-                  </tr>
+                    </TableCell>
+                    <TableCell>
+                      {getStatusBadge(courtDate.preparationStatus)}
+                    </TableCell>
+                  </TableRow>
                 ))
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>

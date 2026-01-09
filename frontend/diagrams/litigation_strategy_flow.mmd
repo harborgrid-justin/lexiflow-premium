@@ -1,0 +1,27 @@
+graph TD
+    User([User])
+    LitigationBuilder["LitigationBuilder (Parent)"]
+    Canvas["StrategyCanvas Component"]
+    UseWorkflow["useWorkflowBuilder Hook (implied)"]
+    DataService["DataService Facade"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|Open Strategy| LitigationBuilder
+    LitigationBuilder -->|Load State| UseWorkflow
+    UseWorkflow -->|getWorkflow()| DataService
+    DataService -->|GET /workflow| Backend
+    Backend -->|Return| DataService
+    DataService -->|State| LitigationBuilder
+    LitigationBuilder -->|Pass Nodes/Cxns| Canvas
+    
+    subgraph Editing
+        User -->|Drag/Drop Node| Canvas
+        Canvas -->|onDrop| Canvas
+        Canvas -->|Check Type| Canvas
+        Canvas -->|addNode() Callback| LitigationBuilder
+        LitigationBuilder -->|Update Local State| LitigationBuilder
+        User -->|Save| LitigationBuilder
+        LitigationBuilder -->|saveWorkflow()| DataService
+        DataService -->|PUT /workflow| Backend
+    end

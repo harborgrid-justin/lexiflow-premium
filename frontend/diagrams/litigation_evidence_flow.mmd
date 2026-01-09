@@ -1,0 +1,21 @@
+graph TD
+    User([User])
+    Vault["EvidenceVault Component"]
+    Dashboard["EvidenceDashboard Component"]
+    UseEvidenceMgr["useEvidenceManager Hook (implied)"]
+    DataService["DataService Facade"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Evidence| Vault
+    Vault -->|Fetch Items| UseEvidenceMgr
+    UseEvidenceMgr -->|getAll()| DataService
+    DataService -->|GET /evidence| Backend
+    Backend -->|Query| DB
+    DB -->|Result| Backend
+    Backend -->|Response| DataService
+    DataService -->|Items| Vault
+    
+    Vault -->|Pass Items| Dashboard
+    Dashboard -->|Calc Stats| Dashboard
+    Dashboard -->|Render Charts| User

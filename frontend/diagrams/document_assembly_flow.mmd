@@ -1,0 +1,25 @@
+graph TD
+    User([User])
+    DocAssembly["DocumentAssembly Component"]
+    GeminiService["GeminiService (AI)"]
+    DataService[DataService]
+    API["Backend API"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|Select Template| DocAssembly
+    User -->|Fill Form| DocAssembly
+    User -->|Click Generate| DocAssembly
+    DocAssembly -->|streamDraft()| GeminiService
+    GeminiService -->|Stream Chunks| DocAssembly
+    DocAssembly -->|Update Preview| User
+    User -->|Click Save| DocAssembly
+    DocAssembly -->|mutate(save)| DataService
+    DataService -->|add()| API
+    API -->|POST /documents| Backend
+    Backend -->|INSERT| DB
+    DB -->|Success| Backend
+    Backend -->|Document Object| API
+    API -->|Success| DataService
+    DataService -->|Invalidate Cache| DocAssembly
+    DocAssembly -->|Notify Success| User

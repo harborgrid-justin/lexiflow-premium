@@ -1,10 +1,7 @@
-/**
- * BillingSummaryCard Component
- * Summary card showing billing metrics and KPIs
- */
-
 import React from 'react';
 import { DollarSign, Clock, FileText, TrendingUp, TrendingDown } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/shadcn/card";
+import { cn } from '@/lib/utils';
 
 interface BillingSummaryCardProps {
   title: string;
@@ -30,75 +27,53 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
     trending: TrendingUp,
   };
 
-  const colors = {
-    blue: {
-      bg: 'bg-blue-50 dark:bg-blue-900/20',
-      icon: 'text-blue-600 dark:text-blue-400',
-      border: 'border-blue-200 dark:border-blue-700',
-    },
-    green: {
-      bg: 'bg-green-50 dark:bg-green-900/20',
-      icon: 'text-green-600 dark:text-green-400',
-      border: 'border-green-200 dark:border-green-700',
-    },
-    yellow: {
-      bg: 'bg-yellow-50 dark:bg-yellow-900/20',
-      icon: 'text-yellow-600 dark:text-yellow-400',
-      border: 'border-yellow-200 dark:border-yellow-700',
-    },
-    red: {
-      bg: 'bg-red-50 dark:bg-red-900/20',
-      icon: 'text-red-600 dark:text-red-400',
-      border: 'border-red-200 dark:border-red-700',
-    },
-    purple: {
-      bg: 'bg-purple-50 dark:bg-purple-900/20',
-      icon: 'text-purple-600 dark:text-purple-400',
-      border: 'border-purple-200 dark:border-purple-700',
-    },
+  const accentColors: Record<string, string> = {
+    blue: "bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400",
+    green: "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400",
+    yellow: "bg-amber-50 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400",
+    red: "bg-red-50 text-red-600 dark:bg-red-900/40 dark:text-red-400",
+    purple: "bg-purple-50 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400",
   };
 
   const Icon = icons[icon];
-  const colorClasses = colors[color];
 
   return (
-    <div className={`rounded-lg border ${colorClasses.border} bg-white p-6 shadow-sm dark:bg-gray-800`}>
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            {title}
-          </p>
-          <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
-            {value}
-          </p>
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <div className="text-2xl font-bold">{value}</div>
 
-          {change !== undefined && (
-            <div className="mt-2 flex items-center gap-1">
-              {change >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-600" />
-              )}
-              <span
-                className={`text-sm font-medium ${
-                  change >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {change >= 0 ? '+' : ''}{change}%
-              </span>
-              {changeLabel && (
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {changeLabel}
+            {change !== undefined && (
+              <div className="flex items-center gap-2 mt-1">
+                {change >= 0 ? (
+                  <TrendingUp className="h-4 w-4 text-emerald-500" />
+                ) : (
+                  <TrendingDown className="h-4 w-4 text-red-500" />
+                )}
+                <span
+                  className={cn(
+                    "text-xs font-medium",
+                    change >= 0 ? 'text-emerald-500' : 'text-red-500'
+                  )}
+                >
+                  {change >= 0 ? '+' : ''}{change}%
                 </span>
-              )}
-            </div>
-          )}
-        </div>
+                {changeLabel && (
+                  <span className="text-xs text-muted-foreground ml-1">
+                    {changeLabel}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
 
-        <div className={`rounded-full p-3 ${colorClasses.bg}`}>
-          <Icon className={`h-6 w-6 ${colorClasses.icon}`} />
+          <div className={cn("p-3 rounded-full", accentColors[color])}>
+            <Icon className="h-5 w-5" />
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

@@ -2,6 +2,17 @@
 
 import { useState } from 'react';
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/shadcn/table';
+import { Card, CardContent } from '@/components/ui/shadcn/card';
+import { Badge } from '@/components/ui/shadcn/badge';
+
 interface ClientPortalData {
   id: string;
   clientName: string;
@@ -15,68 +26,67 @@ interface ClientPortalListProps {
 }
 
 export function ClientPortalList({ initialClients }: ClientPortalListProps) {
-  const [clients] = useState<ClientPortalData[]>(initialClients);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [clients, setClients] = useState<ClientPortalData[]>(initialClients);
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-100">Active</Badge>;
+      case 'inactive':
+        return <Badge variant="destructive">Inactive</Badge>;
+      case 'pending':
+        return <Badge variant="secondary" className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900 dark:text-amber-100">Pending</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
 
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold dark:text-white">Client Portal</h1>
+        <h1 className="text-2xl font-bold text-foreground">Client Portal</h1>
       </div>
-      <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Client Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Portal Access
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Last Login
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Documents Shared
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {clients.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                  No client portal data available
-                </td>
-              </tr>
-            ) : (
-              clients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {client.clientName}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${client.portalAccessStatus === 'active'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                          : client.portalAccessStatus === 'inactive'
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                        }`}
-                    >
-                      {client.portalAccessStatus}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {client.lastLogin ? new Date(client.lastLogin).toLocaleDateString() : 'Never'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {client.documentsSharedCount}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Card className="border-border bg-card">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Client Name</TableHead>
+                <TableHead>Portal Access</TableHead>
+                <TableHead>Last Login</TableHead>
+                <TableHead>Documents Shared</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {clients.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
+                    No client portal data available
+                  </TableCell>
+                </TableRow>
+              ) : (
+                clients.map((client) => (
+                  <TableRow key={client.id}>
+                    <TableCell className="font-medium text-foreground">
+                      {client.clientName}
+                    </TableCell>
+                    <TableCell>
+                      {getStatusBadge(client.portalAccessStatus)}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {client.lastLogin ? new Date(client.lastLogin).toLocaleDateString() : 'Never'}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {client.documentsSharedCount}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

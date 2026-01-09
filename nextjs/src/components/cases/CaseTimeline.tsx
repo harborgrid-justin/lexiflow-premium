@@ -1,8 +1,6 @@
-/**
- * Case Timeline Component - Client Component
- */
-
 'use client';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
 
 interface CaseTimelineProps {
   caseId: string;
@@ -10,13 +8,15 @@ interface CaseTimelineProps {
 
 export function CaseTimeline({ caseId }: CaseTimelineProps) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6">
-      <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-50 mb-4">
-        Timeline
-      </h2>
-      <p className="text-slate-600 dark:text-slate-400">
-        Timeline for case {caseId}
-      </p>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Timeline</CardTitle>
+        <CardDescription>Timeline for case {caseId}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {/* Timeline content would go here */}
+        <p className="text-sm text-muted-foreground">No events recorded yet.</p>
+      </CardContent>
+    </Card>
   );
 }

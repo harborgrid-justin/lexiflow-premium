@@ -1,0 +1,17 @@
+graph TD
+    Parent(["Parent Component"])
+    NexusGraph["NexusGraph Component"]
+    UseNexusGraph["useNexusGraph Hook"]
+    WebWorker["Physics Web Worker"]
+    User([User])
+
+    Parent -->|Case Data| NexusGraph
+    Parent -->|Parties Data| NexusGraph
+    Parent -->|Evidence Data| NexusGraph
+    NexusGraph -->|Pass Data| UseNexusGraph
+    UseNexusGraph -->|Init Worker| WebWorker
+    UseNexusGraph -->|Msg: Nodes/Links| WebWorker
+    WebWorker -->|Loop: Calc Forces| WebWorker
+    WebWorker -->|Msg: New Positions (ArrayBuffer)| UseNexusGraph
+    UseNexusGraph -->|State Update| NexusGraph
+    NexusGraph -->|Render Canvas| User

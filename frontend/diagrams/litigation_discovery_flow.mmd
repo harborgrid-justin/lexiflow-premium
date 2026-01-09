@@ -1,0 +1,22 @@
+graph TD
+    User([User])
+    DiscoveryDash["DiscoveryDashboard Component"]
+    UseQuery["React Query"]
+    DataService[DataService]
+    API["Backend API"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Discovery| DiscoveryDash
+    DiscoveryDash -->|Parallel Queries| UseQuery
+    UseQuery -->|getRequests| DataService
+    UseQuery -->|getLegalHolds| DataService
+    UseQuery -->|getPrivilegeLog| DataService
+
+    DataService -->|Call| API
+    API -->|GET /discovery/*| Backend
+    Backend -->|Query| DB
+    DB -->|Results| Backend
+    Backend -->|JSON| API
+    API -->|Data| DiscoveryDash
+    DiscoveryDash -->|Render Compliance/Stats| User

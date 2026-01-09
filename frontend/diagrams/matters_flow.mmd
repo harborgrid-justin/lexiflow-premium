@@ -1,0 +1,12 @@
+graph TD
+    User([User])
+    MatterMgmt["MatterManagement Component"]
+    Note["Placeholder: Coming Soon"]
+
+    User -->|View| MatterMgmt
+    MatterMgmt -->|Render| Note
+
+    subgraph Actual Implementation
+        CaseList["CaseList (in features/cases)"]
+        User -->|Use instead| CaseList
+    end

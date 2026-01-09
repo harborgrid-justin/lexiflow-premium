@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcn/table';
+import { Badge } from '@/components/ui/shadcn/badge';
 
 interface DocumentVersion {
   id: string;
@@ -21,61 +23,51 @@ export function DocumentVersionsList({ initialVersions }: DocumentVersionsListPr
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold dark:text-white">Document Versions</h1>
+        <h1 className="text-2xl font-bold">Document Versions</h1>
       </div>
-      <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Document Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Current Version
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Total Versions
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Last Modified By
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Last Modified
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="rounded-md border bg-background">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Document Name</TableHead>
+              <TableHead>Current Version</TableHead>
+              <TableHead>Total Versions</TableHead>
+              <TableHead>Last Modified By</TableHead>
+              <TableHead>Last Modified</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {versions.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                   No document versions available
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ) : (
               versions.map((version) => (
-                <tr key={version.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                <TableRow key={version.id}>
+                  <TableCell className="font-medium">
                     {version.documentName}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    <span className="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 border-transparent">
                       v{version.currentVersion}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     {version.totalVersions}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  </TableCell>
+                  <TableCell>
                     {version.lastModifiedBy}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  </TableCell>
+                  <TableCell>
                     {new Date(version.lastModifiedAt).toLocaleDateString()}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

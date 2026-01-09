@@ -1,0 +1,29 @@
+graph TD
+    User([User])
+    Dashboard["DashboardOverview Component"]
+    UseDashboard["useDashboardData Hook"]
+    DashboardService[DashboardService]
+    API_Cases["API: Cases"]
+    API_Invoices["API: Invoices"]
+    API_Risks["API: Risks"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Dashboard| Dashboard
+    Dashboard -->|Call| UseDashboard
+    UseDashboard -->|Call| DashboardService
+    DashboardService -->|Promise.all| API_Cases
+    DashboardService -->|Promise.all| API_Invoices
+    DashboardService -->|Promise.all| API_Risks
+
+    API_Cases -->|GET /cases/stats| Backend
+    API_Invoices -->|GET /invoices| Backend
+    API_Risks -->|GET /risks| Backend
+
+    Backend -->|Query| DB
+    DB -->|Results| Backend
+    Backend -->|Responses| DashboardService
+
+    DashboardService -->|Aggregate Data| UseDashboard
+    UseDashboard -->|Stats Object| Dashboard
+    Dashboard -->|Render Charts/Metrics| User

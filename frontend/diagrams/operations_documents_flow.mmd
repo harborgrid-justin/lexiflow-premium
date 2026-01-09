@@ -1,0 +1,19 @@
+graph TD
+    User([User])
+    DocManager["DocumentManager Component"]
+    DocExplorer[DocumentExplorer]
+    UseDocMgr["useDocumentManager Hook"]
+    DataService["DataService.documents"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Documents| DocManager
+    DocManager -->|Render| DocExplorer
+    DocExplorer -->|Call| UseDocMgr
+    UseDocMgr -->|Fetch| DataService
+    DataService -->|api.documents.getAll| Backend
+    Backend -->|Query| DB
+    DB -->|Result| Backend
+    Backend -->|Response| UseDocMgr
+    UseDocMgr -->|State Update| DocExplorer
+    DocExplorer -->|Render List/Grid| User

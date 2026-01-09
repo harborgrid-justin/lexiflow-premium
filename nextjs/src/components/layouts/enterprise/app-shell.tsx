@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Home,
   Command as CommandIcon,
+  Plus,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -174,6 +175,18 @@ function Header({ breadcrumbs, title, notifications = defaultNotifications }: He
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
+  // Auto-generate breadcrumbs if not provided
+  const activeBreadcrumbs = React.useMemo(() => {
+    if (breadcrumbs && breadcrumbs.length > 0) return breadcrumbs;
+    // Don't show breadcrumbs on dashboard home
+    if (pathname === '/dashboard' || pathname === '/') return [];
+
+    return pathname.split('/').filter(Boolean).map((segment, index, arr) => ({
+      label: segment.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+      href: '/' + arr.slice(0, index + 1).join('/')
+    }));
+  }, [breadcrumbs, pathname]);
+
   return (
     <>
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
@@ -181,7 +194,7 @@ function Header({ breadcrumbs, title, notifications = defaultNotifications }: He
         <SidebarTrigger className="-ml-1" />
 
         {/* Breadcrumbs */}
-        {breadcrumbs && breadcrumbs.length > 0 && (
+        {activeBreadcrumbs.length > 0 && (
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -191,13 +204,13 @@ function Header({ breadcrumbs, title, notifications = defaultNotifications }: He
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              {breadcrumbs.map((crumb, index) => (
+              {activeBreadcrumbs.map((crumb, index) => (
                 <React.Fragment key={index}>
                   <BreadcrumbSeparator>
                     <ChevronRight className="h-4 w-4" />
                   </BreadcrumbSeparator>
                   <BreadcrumbItem>
-                    {crumb.href && index < breadcrumbs.length - 1 ? (
+                    {crumb.href && index < activeBreadcrumbs.length - 1 ? (
                       <BreadcrumbLink asChild>
                         <Link href={crumb.href}>{crumb.label}</Link>
                       </BreadcrumbLink>
@@ -212,12 +225,44 @@ function Header({ breadcrumbs, title, notifications = defaultNotifications }: He
         )}
 
         {/* Page Title - Fallback if no breadcrumbs */}
-        {!breadcrumbs && title && (
+        {activeBreadcrumbs.length === 0 && title && (
           <h1 className="text-lg font-semibold">{title}</h1>
         )}
 
         {/* Spacer */}
         <div className="flex-1" />
+
+        {/* Global Action Button */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="sm" className="hidden md:flex gap-1 bg-blue-600 hover:bg-blue-700 text-white">
+              <Plus className="h-4 w-4" />
+              <span>New</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <Link href="/cases/create" className="flex items-center w-full">
+                New Matter
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/documents/upload" className="flex items-center w-full">
+                Upload Document
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/time/log" className="flex items-center w-full">
+                Log Time
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/contacts/add" className="flex items-center w-full">
+                Add Contact
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Command Palette Trigger */}
         <Button

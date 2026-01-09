@@ -1,0 +1,24 @@
+graph TD
+    User([User])
+    CaseList["CaseList Component"]
+    UseCaseList["useCaseList Hook"]
+    UseQuery["React Query (useQuery)"]
+    DataService["DataService Facade"]
+    API["Backend API Service (api.cases)"]
+    Backend["NestJS Backend /api/cases"]
+    DB[(PostgreSQL)]
+
+    User -->|View List| CaseList
+    CaseList -->|Call| UseCaseList
+    UseCaseList -->|Execute| UseQuery
+    UseQuery -->|Fetch| DataService
+    DataService -->|Check Backend Enabled| API
+    API -->|HTTP GET| Backend
+    Backend -->|Query| DB
+    DB -->|Result| Backend
+    Backend -->|JSON Response| API
+    API -->|Data| DataService
+    DataService -->|Data| UseQuery
+    UseQuery -->|Update Cache| UseCaseList
+    UseCaseList -->|State Update| CaseList
+    CaseList -->|Render| User

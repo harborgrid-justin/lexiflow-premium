@@ -1,0 +1,29 @@
+graph TD
+    User([User])
+    BillingDash["BillingDashboard Component"]
+    UseMutation["React Query Mutation"]
+    DataService["DataService Facade"]
+    API_Billing["API: Billing"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Billing| BillingDash
+    BillingDash -->|Initial Render| BillingDash
+    
+    subgraph Sync Process
+        User -->|Click Sync| BillingDash
+        BillingDash -->|mutate(sync)| UseMutation
+        UseMutation -->|sync()| DataService
+        DataService -->|POST /billing/sync| Backend
+        Backend -->|Sync Logic| DB
+        DB -->|Updated| Backend
+        Backend -->|Success| DataService
+        DataService -->|Success| UseMutation
+        UseMutation -->|Invalidate Queries| BillingDash
+        BillingDash -->|Refetch Data| User
+    end
+
+    subgraph Nav
+        User -->|Switch Tab| BillingDash
+        BillingDash -->|Render WIP/Invoices| User
+    end

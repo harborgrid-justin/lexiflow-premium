@@ -1,40 +1,48 @@
-/**
- * ExpenseList Component
- * Display and filter expenses with receipt viewing
- */
-
 import React, { useState } from 'react';
 import { Link, Form } from 'react-router';
-import { Receipt, DollarSign, Filter, FileText } from 'lucide-react';
+import { Receipt, DollarSign, Filter, FileText, MoreHorizontal } from 'lucide-react';
 import type { FirmExpense } from '@/types/financial';
+
+import { Button } from '@/components/ui/shadcn/button';
+import { Badge } from '@/components/ui/shadcn/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcn/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcn/table';
+import { Card, CardContent } from "@/components/ui/shadcn/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/shadcn/dropdown-menu";
+
+interface FirmExpenseWithReceipt extends FirmExpense {
+  receipt?: string;
+}
+
+interface ExpenseFilters {
+  caseId?: string;
+  category?: string;
+  status?: string;
+}
 
 interface ExpenseListProps {
   expenses: FirmExpense[];
-  filters?: any;
+  filters?: ExpenseFilters;
 }
 
 export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const getStatusBadge = (status: string) => {
-    const styles = {
-      Draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      Submitted: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      Approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Billed: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-      Rejected: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      Paid: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+    // Using custom classes for specific colors as Badge variants are limited
+    const colorClass: Record<string, string> = {
+      Approved: "bg-emerald-100 text-emerald-800 hover:bg-emerald-100/80 border-transparent dark:bg-emerald-900/40 dark:text-emerald-400",
+      Paid: "bg-emerald-100 text-emerald-800 hover:bg-emerald-100/80 border-transparent dark:bg-emerald-900/40 dark:text-emerald-400",
+      Rejected: "bg-destructive/10 text-destructive hover:bg-destructive/20 border-transparent",
+      Draft: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent",
+      Submitted: "bg-blue-100 text-blue-800 hover:bg-blue-100/80 border-transparent dark:bg-blue-900/40 dark:text-blue-400",
+      Billed: "bg-purple-100 text-purple-800 hover:bg-purple-100/80 border-transparent dark:bg-purple-900/40 dark:text-purple-400",
     };
 
     return (
-      <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
-      >
+      <Badge variant="outline" className={colorClass[status] || "bg-secondary text-secondary-foreground"}>
         {status}
-      </span>
+      </Badge>
     );
   };
 
@@ -44,201 +52,152 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex items-center justify-between">
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          className="gap-2"
         >
           <Filter className="h-4 w-4" />
           Filters
-        </button>
+        </Button>
 
-        <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-1 text-sm text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
           <DollarSign className="h-4 w-4" />
           <span className="font-medium">Total: ${totalAmount.toLocaleString()}</span>
         </div>
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Case
-              </label>
-              <select
-                name="caseId"
-                defaultValue={filters?.caseId || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All Cases</option>
-                <option value="C-2024-001">Martinez v. TechCorp</option>
-                <option value="C-2024-112">OmniGlobal Merger</option>
-              </select>
-            </div>
+        <Card className="bg-muted/30">
+          <CardContent className="p-4 grid grid-cols-1 gap-4 sm:grid-cols-4 items-end">
+            <Form method="get" className="contents">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Case</label>
+                <Select name="caseId" defaultValue={filters?.caseId || ''}>
+                  <SelectTrigger className="bg-background"><SelectValue placeholder="All Cases" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All Cases</SelectItem>
+                    <SelectItem value="C-2024-001">Martinez v. TechCorp</SelectItem>
+                    <SelectItem value="C-2024-112">OmniGlobal Merger</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Category
-              </label>
-              <select
-                name="category"
-                defaultValue={filters?.category || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All Categories</option>
-                <option value="Filing Fees">Filing Fees</option>
-                <option value="Travel">Travel</option>
-                <option value="Expert Witness">Expert Witness</option>
-              </select>
-            </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Category</label>
+                <Select name="category" defaultValue={filters?.category || ''}>
+                  <SelectTrigger className="bg-background"><SelectValue placeholder="All Categories" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All Categories</SelectItem>
+                    <SelectItem value="Filing Fees">Filing Fees</SelectItem>
+                    <SelectItem value="Travel">Travel</SelectItem>
+                    <SelectItem value="Expert Witness">Expert Witness</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Status
-              </label>
-              <select
-                name="status"
-                defaultValue={filters?.status || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All Statuses</option>
-                <option value="Draft">Draft</option>
-                <option value="Submitted">Submitted</option>
-                <option value="Approved">Approved</option>
-                <option value="Billed">Billed</option>
-              </select>
-            </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <Select name="status" defaultValue={filters?.status || ''}>
+                  <SelectTrigger className="bg-background"><SelectValue placeholder="All Statuses" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All Statuses</SelectItem>
+                    <SelectItem value="Draft">Draft</SelectItem>
+                    <SelectItem value="Submitted">Submitted</SelectItem>
+                    <SelectItem value="Approved">Approved</SelectItem>
+                    <SelectItem value="Billed">Billed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex items-end">
-              <button
-                type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Apply Filters
-              </button>
-            </div>
-          </div>
-        </Form>
+              <Button type="submit">Apply Filters</Button>
+            </Form>
+          </CardContent>
+        </Card>
       )}
 
       {/* Expenses Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Category
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Vendor
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Amount
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Receipt
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-            {expenses.map((expense) => (
-              <tr key={expense.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+      <div className="rounded-md border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Vendor</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Receipt</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {expenses.length > 0 ? expenses.map((expense) => (
+              <TableRow key={expense.id}>
+                <TableCell className="whitespace-nowrap font-medium">
                   {new Date(expense.date).toLocaleDateString()}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                  {expense.category}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                  <div className="max-w-xs truncate" title={expense.description}>
+                </TableCell>
+                <TableCell>{expense.category}</TableCell>
+                <TableCell>
+                  <div className="max-w-50 truncate" title={expense.description}>
                     {expense.description}
                   </div>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                  {expense.vendor}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell>{expense.vendor}</TableCell>
+                <TableCell className="font-medium whitespace-nowrap">
                   ${expense.amount.toLocaleString()}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
+                </TableCell>
+                <TableCell>
                   {getStatusBadge(expense.status)}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {(expense as any).receipt ? (
-                    <button
-                      type="button"
-                      className="flex items-center gap-1 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      <FileText className="h-4 w-4" />
-                      <span className="text-xs">View</span>
-                    </button>
+                </TableCell>
+                <TableCell>
+                  {(expense as FirmExpenseWithReceipt).receipt ? (
+                    <Button variant="ghost" size="sm" className="h-8 gap-1 text-primary">
+                      <FileText className="h-3 w-3" />
+                      View
+                    </Button>
                   ) : (
-                    <span className="text-xs text-gray-400">No receipt</span>
+                    <span className="text-xs text-muted-foreground pl-2">No receipt</span>
                   )}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                  <Form method="post" className="inline-flex gap-2">
-                    <input type="hidden" name="id" value={expense.id} />
-                    {expense.status === 'Submitted' && (
-                      <button
-                        type="submit"
-                        name="intent"
-                        value="approve"
-                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                      >
-                        Approve
-                      </button>
-                    )}
-                    <Link
-                      to={`/billing/expenses/${expense.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      type="submit"
-                      name="intent"
-                      value="delete"
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                      onClick={(e) => {
-                        if (!confirm('Delete this expense?')) {
-                          e.preventDefault();
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </Form>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {expenses.length === 0 && (
-          <div className="py-12 text-center">
-            <Receipt className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-              No expenses
-            </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Get started by creating a new expense.
-            </p>
-          </div>
-        )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link to={`/billing/expenses/${expense.id}/edit`}>Edit</Link>
+                      </DropdownMenuItem>
+                      {expense.status === 'Submitted' && (
+                        <DropdownMenuItem onSelect={() => { /* Submit approve intent */ }}>
+                          Approve
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem className="text-destructive focus:text-destructive">
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            )) : (
+              <TableRow>
+                <TableCell colSpan={8} className="h-32 text-center">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground">
+                    <Receipt className="h-10 w-10 mb-2 opacity-20" />
+                    <p className="text-sm font-medium text-foreground">No expenses</p>
+                    <p className="text-xs">Get started by creating a new expense.</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

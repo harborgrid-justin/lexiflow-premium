@@ -1,0 +1,19 @@
+graph TD
+    User([User])
+    ProfileMgr[UserProfileManager]
+    ProfileOverview["ProfileOverview Component"]
+    UseQuery["React Query"]
+    DataService["DataService.profile"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Profile| ProfileMgr
+    ProfileMgr -->|Fetch Profile| UseQuery
+    UseQuery -->|getCurrentProfile| DataService
+    DataService -->|GET /api/profile/me| Backend
+    Backend -->|Query| DB
+    DB -->|Result| Backend
+    Backend -->|Response| DataService
+    DataService -->|Data| ProfileMgr
+    ProfileMgr -->|Pass Data| ProfileOverview
+    ProfileOverview -->|Render| User

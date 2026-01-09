@@ -1,9 +1,10 @@
 'use client';
 
 import { DraftingApiService, DraftingTemplate } from '@/api/domains/drafting.api';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/components/ui/shadcn/button';
+import { Card, CardContent } from "@/components/ui/shadcn/card";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { cn } from '@/lib/utils';
 import { ArrowRight, FileText, Wand2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -27,14 +28,13 @@ export function DocumentTemplates() {
         const mappedTemplates: Template[] = data.map((t: DraftingTemplate) => ({
           id: t.id,
           title: t.name,
-          category: t.category, // Enum to string works generally
-          popular: t.usageCount > 50, // Arbitrary threshold for 'popular'
+          category: t.category,
+          popular: t.usageCount > 50,
         }));
 
         setTemplates(mappedTemplates);
       } catch (error) {
         console.error('Failed to load templates:', error);
-        // Fallback or empty state could be handled here
       } finally {
         setIsLoading(false);
       }
@@ -45,55 +45,47 @@ export function DocumentTemplates() {
   if (isLoading) return <AdaptiveLoader contentType="dashboard" itemCount={6} shimmer />;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className={cn(
-        "p-6 rounded-lg shadow-sm border flex justify-between items-center",
-        "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
-      )}>
-        <div>
-          <h3 className={cn("text-lg font-bold flex items-center", "text-gray-900 dark:text-gray-100")}>
-            <Wand2 className="h-5 w-5 mr-2 text-purple-600" /> Automated Drafting
-          </h3>
-          <p className={cn("text-sm", "text-gray-500 dark:text-gray-400")}>Select a template to launch the AI-assisted document assembly wizard.</p>
-        </div>
-        <Button variant="primary">Create New Template</Button>
-      </div>
+    <div className="space-y-6 animate-in fade-in">
+      <Card className="bg-muted/40 border-dashed shadow-none">
+        <CardContent className="p-6 flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-semibold flex items-center">
+              <Wand2 className="h-5 w-5 mr-2 text-primary" /> Automated Drafting
+            </h3>
+            <p className="text-sm text-muted-foreground">Select a template to launch the AI-assisted document assembly wizard.</p>
+          </div>
+          <Button>Create New Template</Button>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {templates.map(tpl => (
-          <div
+          <Card
             key={tpl.id}
-            className={cn(
-              "group p-5 rounded-xl border shadow-sm transition-all cursor-pointer hover:shadow-md",
-              "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800",
-              "hover:border-blue-200 dark:hover:border-blue-800"
-            )}
+            className="group cursor-pointer hover:shadow-md transition-all hover:border-primary/50"
           >
-            <div className="flex justify-between items-start mb-3">
-              <div className={cn("p-2 rounded-lg", "bg-gray-50 dark:bg-gray-800")}>
-                <FileText className={cn("h-6 w-6", "text-blue-600 dark:text-blue-400")} />
+            <CardContent className="p-5">
+              <div className="flex justify-between items-start mb-3">
+                <div className="p-2 rounded-lg bg-accent">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
+                {tpl.popular && (
+                  <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400 hover:bg-emerald-100">
+                    Popular
+                  </Badge>
+                )}
               </div>
-              {tpl.popular && (
-                <span className={cn(
-                  "text-[10px] font-bold px-2 py-1 rounded-full uppercase",
-                  "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400"
-                )}>Popular</span>
-              )}
-            </div>
-            <h4 className={cn("font-bold text-sm mb-1", "text-gray-900 dark:text-gray-100")}>{tpl.title}</h4>
-            <p className={cn("text-xs mb-4", "text-gray-500 dark:text-gray-400")}>{tpl.category}</p>
+              <h4 className="font-semibold text-sm mb-1">{tpl.title}</h4>
+              <p className="text-xs text-muted-foreground mb-4">{tpl.category}</p>
 
-            <div className={cn("pt-3 border-t flex justify-between items-center", "border-gray-200 dark:border-gray-800")}>
-              <span className={cn("text-xs font-medium", "text-gray-400 dark:text-gray-500")}>v2.4</span>
-              <span className={cn(
-                "text-xs font-bold flex items-center transition-colors",
-                "text-blue-600 dark:text-blue-400",
-                "group-hover:translate-x-1"
-              )}>
-                Start Draft <ArrowRight className="h-3 w-3 ml-1" />
-              </span>
-            </div>
-          </div>
+              <div className="pt-3 border-t flex justify-between items-center">
+                <span className="text-xs font-medium text-muted-foreground">v2.4</span>
+                <span className="text-xs font-semibold flex items-center text-primary group-hover:translate-x-1 transition-transform">
+                  Start Draft <ArrowRight className="h-3 w-3 ml-1" />
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>

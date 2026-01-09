@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Button } from '@/components/ui/shadcn/button';
+import { Card } from "@/components/ui/shadcn/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/shadcn/table";
 import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
-import { cn } from '@/lib/utils';
 import { LegalDocument } from '@/types/documents';
 import { Clock, Eye, FolderOpen, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -77,68 +78,68 @@ export function RecentFiles() {
   if (isLoading) {
     return (
       <div className="flex justify-center p-8">
-        <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className={cn("p-4 rounded-lg border flex items-center gap-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700")}>
-        <Clock className={cn("h-5 w-5 text-slate-500 dark:text-slate-400")} />
+    <Card className="border-none shadow-none bg-transparent">
+      <div className="p-4 rounded-lg border flex items-center gap-3 bg-muted/40 mb-6">
+        <Clock className="h-5 w-5 text-muted-foreground" />
         <div>
-          <h3 className={cn("font-bold text-sm text-slate-900 dark:text-slate-100")}>Recently Accessed</h3>
-          <p className={cn("text-xs text-slate-500 dark:text-slate-400")}>Files you have viewed or edited in the last 7 days.</p>
+          <h3 className="font-semibold text-sm">Recently Accessed</h3>
+          <p className="text-xs text-muted-foreground">Files you have viewed or edited in the last 7 days.</p>
         </div>
       </div>
 
-      <div className="w-full overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          <div className="col-span-5">Document Name</div>
-          <div className="col-span-2">Type</div>
-          <div className="col-span-2">Last Modified</div>
-          <div className="col-span-2">Location</div>
-          <div className="col-span-1 text-right">Action</div>
-        </div>
-
-        {/* Table Body */}
-        <div className="bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
-          {recentDocs.map(doc => (
-            <div key={doc.id} className="grid grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-              <div className="col-span-5">
-                <div className="flex items-center gap-3">
-                  <FileIcon type={doc.type} className="h-5 w-5 flex-shrink-0" />
-                  <span className={cn("font-medium text-sm text-slate-900 dark:text-slate-100 truncate")}>{doc.title}</span>
-                </div>
-              </div>
-              <div className="col-span-2 text-sm text-slate-600 dark:text-slate-300">{doc.type}</div>
-              <div className="col-span-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-                {new Date(doc.lastModified).toLocaleDateString()}
-              </div>
-              <div className="col-span-2 text-xs text-slate-500 dark:text-slate-400 truncate">
-                {doc.caseId} / {doc.sourceModule || 'General'}
-              </div>
-              <div className="col-span-1 text-right">
-                <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                  <Eye className="h-4 w-4" />
-                  <span className="sr-only">Open</span>
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="rounded-md border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow className="uppercase text-xs hover:bg-transparent">
+              <TableHead className="w-[40%]">Document Name</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Last Modified</TableHead>
+              <TableHead>Location</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {recentDocs.length > 0 ? (
+              recentDocs.map(doc => (
+                <TableRow key={doc.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <FileIcon type={doc.type} className="h-5 w-5 shrink-0" />
+                      <span className="font-medium text-sm truncate">{doc.title}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs">{doc.type}</TableCell>
+                  <TableCell className="text-xs font-mono">{new Date(doc.lastModified).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground truncate max-w-37.5">
+                    {doc.caseId} / {doc.sourceModule || 'General'}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                      <Eye className="h-4 w-4" />
+                      <span className="sr-only">Open</span>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="h-32 text-center">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground">
+                    <FolderOpen className="h-8 w-8 mb-2 opacity-50" />
+                    <p>No recent files</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
-
-      {recentDocs.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-center border rounded-lg border-dashed border-slate-300 dark:border-slate-700">
-          <div className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 mb-3">
-            <FolderOpen className="h-6 w-6 text-slate-400" />
-          </div>
-          <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">No recent files</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Files you view or edit will appear here for quick access.</p>
-        </div>
-      )}
-    </div>
+    </Card>
   );
 }

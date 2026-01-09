@@ -103,6 +103,27 @@ interface SidebarNavProps {
 
 const navigationGroups: NavGroup[] = [
   {
+    title: "Recent Work",
+    items: [
+      {
+        title: "Smith vs Jones",
+        url: "/war-room/smith-v-jones",
+        icon: Target,
+        badge: 2,
+      },
+      {
+        title: "Estate of H. Ford",
+        url: "/cases/case-123",
+        icon: Briefcase,
+      },
+      {
+        title: "TechCorp Merger",
+        url: "/documents/doc-456",
+        icon: FileText,
+      },
+    ],
+  },
+  {
     title: "Cases & Matters",
     items: [
       {
@@ -213,6 +234,14 @@ const navigationGroups: NavGroup[] = [
         title: "War Room",
         url: "/war-room",
         icon: Target,
+        items: [
+          { title: "Command Center", url: "/war-room/command" },
+          { title: "Evidence Wall", url: "/war-room/evidence" },
+          { title: "Witness Prep", url: "/war-room/witnesses" },
+          { title: "Trial Binder", url: "/war-room/binder" },
+          { title: "Advisory Board", url: "/war-room/advisory" },
+          { title: "Opposition Research", url: "/war-room/opposition" },
+        ]
       },
       {
         title: "Witnesses",

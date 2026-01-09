@@ -1,88 +1,89 @@
 'use client';
 
-import { BookOpen, FileText, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { BookOpen, FileText, Plus, Upload } from 'lucide-react';
+import React from 'react';
+import { Button } from '@/components/ui/shadcn/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/shadcn/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/shadcn/tabs';
 
 // Mock sub-components
 const CitationLibrary = () => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Citation Library</h3>
-    <div className="text-slate-500 text-center py-8">No citations found</div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Citation Library</CardTitle>
+      <CardDescription>View and manage your saved legal citations.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-col items-center justify-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
+        <BookOpen className="h-10 w-10 mb-3 opacity-50" />
+        <p>No citations found in library</p>
+        <Button variant="outline" className="mt-4">Import Citations</Button>
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const BriefAnalyzer = () => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Brief Analyzer</h3>
-    <div className="border-2 border-dashed border-slate-300 rounded-lg p-12 text-center">
-      <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-      <p className="text-slate-600">Upload a brief to analyze citations</p>
-      <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-        Upload Brief
-      </button>
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Brief Analyzer</CardTitle>
+      <CardDescription>Upload a legal brief to extract and validate citations.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+        <Upload className="w-12 h-12 text-muted-foreground mb-4" />
+        <h3 className="font-medium text-lg mb-1">Upload Brief</h3>
+        <p className="text-muted-foreground mb-4 max-w-sm">
+          Drag and drop your PDF or DOCX file here, or click to browse.
+          We&apos;ll analyze formatting and validity.
+        </p>
+        <Button>
+          Select File
+        </Button>
+      </div>
+    </CardContent>
+  </Card>
 );
 
-const TABS = [
-  { id: 'library', label: 'Citation Library', icon: BookOpen },
-  { id: 'analyzer', label: 'Brief Analyzer', icon: FileText },
-];
-
 export function CitationManager() {
-  const [activeTab, setActiveTab] = useState('library');
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'library': return <CitationLibrary />;
-      case 'analyzer': return <BriefAnalyzer />;
-      default: return <CitationLibrary />;
-    }
-  };
-
   return (
-    <div className="flex flex-col h-full bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Citation Manager</h1>
-            <p className="text-slate-500">Manage legal citations and analyze briefs with Bluebook formatting.</p>
+    <div className="flex flex-col h-full bg-background">
+      <Tabs defaultValue="library" className="flex flex-col h-full">
+        {/* Header */}
+        <div className="border-b px-6 py-4 bg-background z-10">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Citation Manager</h1>
+              <p className="text-muted-foreground">Manage legal citations and analyze briefs with Bluebook formatting.</p>
+            </div>
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Citation
+            </Button>
           </div>
-          <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Citation
-          </button>
+
+          <TabsList>
+            <TabsTrigger value="library" className="gap-2">
+              <BookOpen className="w-4 h-4" />
+              Citation Library
+            </TabsTrigger>
+            <TabsTrigger value="analyzer" className="gap-2">
+              <FileText className="w-4 h-4" />
+              Brief Analyzer
+            </TabsTrigger>
+          </TabsList>
         </div>
 
-        {/* Tabs */}
-        <div className="flex space-x-1">
-          {TABS.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors
-                  ${isActive
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent'}
-                `}
-              >
-                <Icon className="w-4 h-4 mr-2" />
-                {tab.label}
-              </button>
-            );
-          })}
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6 bg-muted/10">
+          <TabsContent value="library" className="mt-0 space-y-4">
+            <CitationLibrary />
+          </TabsContent>
+          <TabsContent value="analyzer" className="mt-0 space-y-4">
+            <BriefAnalyzer />
+          </TabsContent>
         </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-auto p-6">
-        {renderContent()}
-      </div>
+      </Tabs>
     </div>
   );
 }

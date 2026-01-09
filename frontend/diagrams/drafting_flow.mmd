@@ -1,0 +1,28 @@
+graph TD
+    User([User])
+    DraftingDash["DraftingDashboard Component"]
+    DraftingAPI["draftingApi Service"]
+    API_Drafts["API: getRecentDrafts"]
+    API_Templates["API: templates.getAll"]
+    API_Approvals["API: getPendingApprovals"]
+    API_Stats["API: getStats"]
+    Backend["NestJS Backend"]
+    DB[(PostgreSQL)]
+
+    User -->|View Dashboard| DraftingDash
+    DraftingDash -->|useEffect / loadData| DraftingAPI
+    DraftingAPI -->|Promise.all| API_Drafts
+    DraftingAPI -->|Promise.all| API_Templates
+    DraftingAPI -->|Promise.all| API_Approvals
+    DraftingAPI -->|Promise.all| API_Stats
+
+    API_Templates -->|GET /drafting/templates| Backend
+    API_Drafts -->|GET /drafting/drafts| Backend
+    API_Approvals -->|GET /drafting/approvals| Backend
+    API_Stats -->|GET /drafting/stats| Backend
+
+    Backend -->|Query| DB
+    DB -->|Results| Backend
+    Backend -->|Responses| DraftingAPI
+    DraftingAPI -->|Data| DraftingDash
+    DraftingDash -->|Render Tabs| User

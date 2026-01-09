@@ -1,3 +1,6 @@
+import { Badge } from "@/components/ui/shadcn/badge";
+import { Button } from "@/components/ui/shadcn/button";
+import { ScrollArea } from "@/components/ui/shadcn/scroll-area";
 import { cn } from '@/lib/utils';
 import {
   AlertOctagon, CheckCircle2,
@@ -50,69 +53,71 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
   ];
 
   return (
-    <div className="w-full flex flex-col h-full shrink-0 bg-slate-50 dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-        <h3 className="font-bold text-xs uppercase tracking-wide mb-3 px-2 text-slate-500 dark:text-slate-400">Smart Views</h3>
-        <div className="space-y-0.5">
+    <div className="w-full flex flex-col h-full shrink-0 bg-muted/30 border-r">
+      <div className="p-4 border-b">
+        <h3 className="font-semibold text-xs uppercase tracking-wide mb-3 px-2 text-muted-foreground">Smart Views</h3>
+        <div className="space-y-1">
           {smartViews.map(sf => (
-            <button
+            <Button
               key={sf.id}
-              className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400"
+              variant="ghost"
+              className="w-full justify-start h-9 px-3 font-normal"
             >
-              <div className="flex items-center">
-                <sf.icon className={cn("h-4 w-4 mr-3 opacity-70 group-hover:opacity-100", sf.color || "")} />
-                {sf.label}
-              </div>
-              {sf.count && <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">{sf.count}</span>}
-            </button>
+              <sf.icon className={cn("h-4 w-4 mr-3 opacity-70", sf.color)} />
+              <span className="flex-1 text-left">{sf.label}</span>
+              {sf.count && <Badge variant="secondary" className="ml-auto h-5 px-1.5 min-w-5 justify-center">{sf.count}</Badge>}
+            </Button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-        <h3 className="font-bold text-xs uppercase tracking-wide mb-3 px-2 text-slate-500 dark:text-slate-400">Library Folders</h3>
-        <div className="space-y-0.5 mb-6">
-          {isLoading ? (
-            <div className="p-4 flex justify-center"><Loader2 className="animate-spin h-4 w-4 text-slate-400" /></div>
-          ) : (folders).map((folder) => {
-            const isActive = currentFolder === folder.id;
-            const Icon = isActive ? FolderOpen : Folder;
-            return (
-              <button
-                key={folder.id}
-                onClick={() => setCurrentFolder(folder.id)}
-                className={cn(
-                  "w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                  isActive
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-semibold"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400"
-                )}
-              >
-                <Icon className={cn("h-4 w-4 mr-3", isActive ? "fill-current opacity-20" : "opacity-50")} />
-                {folder.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Facets */}
-        {facets.map((facet, idx) => (
-          <div key={idx} className="mb-6">
-            <h3 className="font-bold text-xs uppercase tracking-wide mb-2 px-2 text-slate-500 dark:text-slate-400">{facet.label}</h3>
-            <div className="space-y-0.5">
-              {facet.items.map(item => (
-                <div key={item.id} className="flex items-center justify-between px-3 py-1.5 rounded cursor-pointer group hover:bg-white dark:hover:bg-slate-700">
-                  <div className="flex items-center text-sm text-slate-600 dark:text-slate-300">
-                    <item.icon className="h-3.5 w-3.5 mr-3 opacity-50" />
-                    {item.label}
-                  </div>
-                  <span className="text-[10px] text-slate-400">{item.count}</span>
-                </div>
-              ))}
-            </div>
+      <ScrollArea className="flex-1">
+        <div className="p-4">
+          <h3 className="font-semibold text-xs uppercase tracking-wide mb-3 px-2 text-muted-foreground">Library Folders</h3>
+          <div className="space-y-1 mb-6">
+            {isLoading ? (
+              <div className="p-4 flex justify-center"><Loader2 className="animate-spin h-4 w-4 text-muted-foreground" /></div>
+            ) : (folders).map((folder) => {
+              const isActive = currentFolder === folder.id;
+              const Icon = isActive ? FolderOpen : Folder;
+              return (
+                <Button
+                  key={folder.id}
+                  variant={isActive ? "secondary" : "ghost"}
+                  onClick={() => setCurrentFolder(folder.id)}
+                  className={cn(
+                    "w-full justify-start h-9 px-3 font-normal",
+                    isActive && "font-medium"
+                  )}
+                >
+                  <Icon className={cn("h-4 w-4 mr-3", isActive ? "fill-current opacity-20" : "opacity-50")} />
+                  {folder.label}
+                </Button>
+              );
+            })}
           </div>
-        ))}
-      </div>
+
+          {/* Facets */}
+          {facets.map((facet, idx) => (
+            <div key={idx} className="mb-6">
+              <h3 className="font-semibold text-xs uppercase tracking-wide mb-2 px-2 text-muted-foreground">{facet.label}</h3>
+              <div className="space-y-1">
+                {facet.items.map(item => (
+                  <Button
+                    key={item.id}
+                    variant="ghost"
+                    className="w-full justify-start h-8 px-3 text-sm font-normal"
+                  >
+                    <item.icon className="h-3.5 w-3.5 mr-3 opacity-50" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    <span className="text-xs text-muted-foreground">{item.count}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 }

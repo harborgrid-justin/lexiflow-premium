@@ -1,7 +1,4 @@
-/**
- * Case Overview Component - Server Component
- */
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
 import { Case } from '@/types';
 
 interface CaseOverviewProps {
@@ -10,15 +7,19 @@ interface CaseOverviewProps {
 
 export function CaseOverview({ caseData }: CaseOverviewProps) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6">
-      <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-50 mb-4">
-        Overview
-      </h2>
-      {caseData.description && (
-        <p className="text-slate-600 dark:text-slate-400">
-          {caseData.description}
-        </p>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Overview</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {caseData.description ? (
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {caseData.description}
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground italic">No description available.</p>
+        )}
+      </CardContent>
+    </Card>
   );
 }

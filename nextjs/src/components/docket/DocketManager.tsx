@@ -1,10 +1,13 @@
 'use client';
 
+import { Badge } from "@/components/ui/shadcn/badge";
+import { Button } from "@/components/ui/shadcn/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
 import { cn } from '@/lib/utils';
 import {
   BarChart2,
   BookOpen,
-  Calendar,
+  Calendar as CalendarIcon,
   Clock,
   Download,
   FileText,
@@ -17,71 +20,89 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 // Mock Components
 const DocketSheet = ({ filterType }: { filterType: string }) => (
-  <div className="p-6 border rounded-lg bg-white shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Docket Sheet: {filterType}</h3>
-    <div className="space-y-4">
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-lg">Docket Sheet: {filterType}</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex items-center justify-between p-4 border rounded hover:bg-slate-50">
+        <div key={i} className="flex items-center justify-between p-4 border rounded-md hover:bg-muted/50 transition-colors">
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded bg-blue-100 flex items-center justify-center text-blue-600">
+            <div className="h-10 w-10 rounded-md bg-blue-100 flex items-center justify-center text-blue-600 dark:bg-blue-900 dark:text-blue-300">
               <FileText className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-slate-900">Document #{100 + i}</p>
-              <p className="text-sm text-slate-500">Filed on Jan {i}, 2026</p>
+              <p className="font-medium">Document #{100 + i}</p>
+              <p className="text-sm text-muted-foreground">Filed on Jan {i}, 2026</p>
             </div>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+          <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-0 hover:bg-emerald-100">
             Filed
-          </span>
+          </Badge>
         </div>
       ))}
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 );
 
 const DocketCalendar = () => (
-  <div className="p-6 border rounded-lg bg-white shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Docket Calendar</h3>
-    <div className="grid grid-cols-7 gap-2">
-      {Array.from({ length: 31 }).map((_, i) => (
-        <div key={i} className="aspect-square border rounded p-2 hover:bg-slate-50">
-          <span className="text-sm text-slate-500">{i + 1}</span>
-        </div>
-      ))}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-lg">Docket Calendar</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-7 gap-2">
+        {Array.from({ length: 31 }).map((_, i) => (
+          <div key={i} className="aspect-square border rounded-md p-2 hover:bg-muted/50 transition-colors">
+            <span className="text-sm text-muted-foreground">{i + 1}</span>
+          </div>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const DocketAnalytics = () => (
-  <div className="p-6 border rounded-lg bg-white shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Analytics</h3>
-    <div className="grid grid-cols-3 gap-4">
-      {['Filings', 'Orders', 'Motions'].map((stat) => (
-        <div key={stat} className="p-4 bg-slate-50 rounded border">
-          <p className="text-sm text-slate-500">{stat}</p>
-          <p className="text-2xl font-bold text-slate-900">{Math.floor(Math.random() * 100)}</p>
-        </div>
-      ))}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-lg">Analytics</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: 'Filings', value: 45 },
+          { label: 'Orders', value: 12 },
+          { label: 'Motions', value: 8 }
+        ].map((stat) => (
+          <div key={stat.label} className="p-4 bg-muted/50 rounded-md border">
+            <p className="text-sm text-muted-foreground">{stat.label}</p>
+            <p className="text-2xl font-bold">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const DocketSettings = () => (
-  <div className="p-6 border rounded-lg bg-white shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Settings & Sync</h3>
-    <div className="space-y-4 max-w-md">
-      <div className="flex items-center justify-between p-4 border rounded">
-        <div>
-          <p className="font-medium">ECF/PACER Sync</p>
-          <p className="text-sm text-slate-500">Last synced: 2 hours ago</p>
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-lg">Settings & Sync</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-4 max-w-md">
+        <div className="flex items-center justify-between p-4 border rounded-md">
+          <div>
+            <p className="font-medium">ECF/PACER Sync</p>
+            <p className="text-sm text-muted-foreground">Last synced: 2 hours ago</p>
+          </div>
+          <Button size="sm">
+            Sync Now
+          </Button>
         </div>
-        <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700">
-          Sync Now
-        </button>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 );
 
 type DocketView = 'all' | 'filings' | 'orders' | 'calendar' | 'upcoming' | 'stats' | 'sync';
@@ -92,7 +113,7 @@ interface DocketManagerProps {
 
 const PARENT_TABS = [
   {
-    id: 'docket', label: 'Docket Sheet', icon: BookOpen,
+    id: 'docket', label: 'Docket', icon: BookOpen,
     subTabs: [
       { id: 'all', label: 'All Entries', icon: List },
       { id: 'filings', label: 'Filings', icon: FileText },
@@ -100,9 +121,9 @@ const PARENT_TABS = [
     ]
   },
   {
-    id: 'deadlines', label: 'Deadlines', icon: Calendar,
+    id: 'deadlines', label: 'Deadlines', icon: CalendarIcon,
     subTabs: [
-      { id: 'calendar', label: 'Calendar View', icon: Calendar },
+      { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
       { id: 'upcoming', label: 'Upcoming', icon: Clock },
     ]
   },
@@ -115,16 +136,19 @@ const PARENT_TABS = [
   {
     id: 'settings', label: 'Settings', icon: Settings,
     subTabs: [
-      { id: 'sync', label: 'ECF/PACER', icon: RefreshCw },
+      { id: 'sync', label: 'Sync', icon: RefreshCw },
     ]
   }
 ];
 
 export default function DocketManager({ initialTab }: DocketManagerProps) {
-  const [activeTab, setActiveTab] = useState<DocketView>('all');
+  const [activeTab, setActiveTab] = useState<DocketView>(initialTab || 'all');
 
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    if (initialTab && initialTab !== activeTab) {
+      setActiveTab(initialTab);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTab]);
 
   const activeParentTab = useMemo(() =>
@@ -157,69 +181,66 @@ export default function DocketManager({ initialTab }: DocketManagerProps) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-50/50">
-      <div className="px-6 pt-6 shrink-0">
-        <div className="flex items-start justify-between mb-6">
+    <Card className="min-h-150 border-0 shadow-none bg-transparent">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Docket & Filings</h1>
-            <p className="text-slate-500 mt-1">Court docket management with ECF/PACER integration, deadline tracking, and comprehensive analytics.</p>
+            <h1 className="text-2xl font-bold tracking-tight">Docket & Filings</h1>
+            <p className="text-muted-foreground mt-1">Court docket management with ECF/PACER integration.</p>
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium text-sm transition-colors">
+            <Button variant="outline" size="sm" className="gap-2">
               <RefreshCw className="h-4 w-4" />
               Sync ECF/PACER
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm transition-colors shadow-sm">
+            </Button>
+            <Button size="sm" className="gap-2">
               <Download className="h-4 w-4" />
               Batch Export
-            </button>
+            </Button>
           </div>
         </div>
 
-        {/* Desktop Parent Navigation */}
-        <div className="hidden md:flex space-x-6 border-b border-slate-200 mb-4">
-          {PARENT_TABS.map(parent => (
-            <button
-              key={parent.id}
-              onClick={() => handleParentTabChange(parent.id)}
-              className={cn(
-                "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                activeParentTab.id === parent.id
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-slate-500 hover:text-slate-900"
-              )}
-            >
-              <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? "text-blue-600" : "text-slate-400")} />
-              {parent.label}
-            </button>
-          ))}
+        {/* Parent Tabs as a high level switcher */}
+        <div className="flex items-center space-x-2 border-b">
+          {PARENT_TABS.map(parent => {
+            const isActive = activeParentTab.id === parent.id;
+            return (
+              <Button
+                key={parent.id}
+                variant="ghost"
+                className={cn(
+                  "rounded-none border-b-2 border-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground hover:text-foreground h-auto",
+                  isActive && "border-primary text-primary hover:text-primary"
+                )}
+                onClick={() => handleParentTabChange(parent.id)}
+              >
+                <parent.icon className="mr-2 h-4 w-4" />
+                {parent.label}
+              </Button>
+            )
+          })}
         </div>
 
-        {/* Sub-Navigation (Pills) */}
-        <div className="flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border border-slate-200 bg-white mb-4">
+        {/* Sub Tabs */}
+        <div className="flex space-x-2">
           {activeParentTab.subTabs.map(tab => (
-            <button
+            <Button
               key={tab.id}
+              variant={activeTab === tab.id ? "secondary" : "ghost"}
+              size="sm"
+              className="gap-2 h-8"
               onClick={() => setActiveTab(tab.id as DocketView)}
-              className={cn(
-                "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                activeTab === tab.id
-                  ? "bg-slate-100 text-blue-700 border-blue-200 shadow-sm"
-                  : "bg-transparent text-slate-600 border-transparent hover:bg-slate-50"
-              )}
             >
-              <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? "text-blue-600" : "text-slate-400")} />
+              <tab.icon className="h-3.5 w-3.5" />
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
-        <div className="h-full overflow-y-auto custom-scrollbar">
-          {renderContent()}
-        </div>
+      <div className="mt-6">
+        {renderContent()}
       </div>
-    </div>
+    </Card>
   );
 }

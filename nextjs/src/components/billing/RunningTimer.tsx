@@ -4,8 +4,13 @@
  * Stores state in localStorage to persist across page reloads
  */
 
+'use client';
+
 import { Clock, Pause, Play, Square } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { Button } from '@/components/ui/shadcn/button';
+import { Card, CardContent } from '@/components/ui/shadcn/card';
 
 interface RunningTimerProps {
   onComplete?: (elapsedHours: number) => void;
@@ -30,7 +35,7 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
 }) => {
   const [timerState, setTimerState] = useState<TimerState>(() => {
     // Load from localStorage on mount
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -109,7 +114,6 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
     if (onComplete) {
       onComplete(parseFloat(hours.toFixed(2)));
     }
-    // Clear timer
     setTimerState({
       isRunning: false,
       startTime: null,
@@ -138,60 +142,62 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
   );
 
   return (
-    <div className="rounded-lg border-2 border-blue-500 bg-blue-50 p-6 dark:border-blue-400 dark:bg-blue-900/20">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Clock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-          <div>
-            <div className="text-3xl font-mono font-bold text-blue-900 dark:text-blue-100">
-              {formattedTime}
+    <Card className="bg-muted/30 border-primary/20">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Clock className="h-8 w-8 text-primary" />
+            <div>
+              <div className="text-3xl font-mono font-bold text-foreground">
+                {formattedTime}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {elapsedHours} hours
+              </div>
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">
-              {elapsedHours} hours
-            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {!timerState.isRunning ? (
+              <Button
+                variant="default"
+                onClick={startTimer}
+                className="gap-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Play className="h-4 w-4" />
+                Start
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                onClick={pauseTimer}
+                className="gap-2 bg-amber-600 hover:bg-amber-700 text-white"
+              >
+                <Pause className="h-4 w-4" />
+                Pause
+              </Button>
+            )}
+
+            <Button
+              variant="destructive"
+              onClick={stopTimer}
+              disabled={timerState.elapsedSeconds === 0}
+              className="gap-2"
+            >
+              <Square className="h-4 w-4" />
+              Stop & Apply
+            </Button>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          {!timerState.isRunning ? (
-            <button
-              type="button"
-              onClick={startTimer}
-              className="flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            >
-              <Play className="h-4 w-4" />
-              Start
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={pauseTimer}
-              className="flex items-center gap-2 rounded-md bg-yellow-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
-            >
-              <Pause className="h-4 w-4" />
-              Pause
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={stopTimer}
-            disabled={timerState.elapsedSeconds === 0}
-            className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            <Square className="h-4 w-4" />
-            Stop & Apply
-          </button>
-        </div>
-      </div>
-
-      {timerState.elapsedSeconds > 0 && (
-        <div className="mt-4 rounded-md bg-white/50 p-3 dark:bg-gray-800/50">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <span className="font-medium">Note:</span> Timer will persist across page reloads. Click "Stop & Apply" to add time to entry.
-          </p>
-        </div>
-      )}
-    </div>
+        {timerState.elapsedSeconds > 0 && (
+          <div className="mt-4 rounded-md bg-background/50 p-3">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Note:</span> Timer will persist across page reloads. Click "Stop & Apply" to add time to entry.
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };

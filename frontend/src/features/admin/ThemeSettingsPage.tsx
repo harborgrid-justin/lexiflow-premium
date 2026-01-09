@@ -161,7 +161,7 @@ export const ThemeSettingsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={[...chartData.riskData] as any[]}
+                      data={[...chartData.riskData]}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
@@ -195,7 +195,7 @@ export const ThemeSettingsPage: React.FC = () => {
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Category Distribution</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={[...chartData.categoryData] as any[]}>
+                <BarChart data={[...chartData.categoryData]}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
                   <XAxis dataKey="name" tick={{ fill: chartTheme.text }} />
                   <YAxis tick={{ fill: chartTheme.text }} />

@@ -20,18 +20,17 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      Draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      Sent: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      Paid: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Overdue: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      Cancelled: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      'Partially Paid': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+      Draft: cn(theme.status.neutral.bg, theme.status.neutral.text),
+      Sent: cn(theme.status.info.bg, theme.status.info.text),
+      Paid: cn(theme.status.success.bg, theme.status.success.text),
+      Overdue: cn(theme.status.error.bg, theme.status.error.text),
+      Cancelled: cn(theme.status.neutral.bg, theme.status.neutral.text),
+      'Partially Paid': cn(theme.status.warning.bg, theme.status.warning.text),
     };
 
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
-          }`}
+        className={cn("inline-flex rounded-full px-2 py-1 text-xs font-semibold", styles[status as keyof typeof styles] || styles.Draft)}
       >
         {status}
       </span>

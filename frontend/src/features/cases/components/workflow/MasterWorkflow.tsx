@@ -1,8 +1,8 @@
-import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
-import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import { DataService } from '@/services/data/dataService';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { DataService } from '@/services/data/dataService';
+import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
@@ -32,9 +32,9 @@ interface FirmProcess {
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { Case } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { getTodayString } from '@/shared/lib/dateUtils';
+import { Case } from '@/types';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 // ✅ Migrated to backend API (2025-12-21)
 import { WorkflowView } from './types';
@@ -176,13 +176,13 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
         const templates = await DataService.workflow.getTemplates();
 
         // Map templates to FirmProcess view model
-        // Using 'any' for template to accommodate both API and Repo types
-        return (templates || []).map((t: any) => ({
+        // Using generic Record for template to accommodate both API and Repo types
+        return (templates || []).map((t: Record<string, unknown>) => ({
           id: t.id,
           name: t.name,
-          status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle') as any,
-          triggers: t.trigger?.type
-            ? `${t.trigger.type.charAt(0).toUpperCase() + t.trigger.type.slice(1)}`
+          status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle'),
+          triggers: (t.trigger as Record<string, string>)?.type
+            ? `${(t.trigger as Record<string, string>).type.charAt(0).toUpperCase() + (t.trigger as Record<string, string>).type.slice(1)}`
             : (t.triggers || 'Manual'), // Fallback for Repo type
           tasks: t.steps?.length || t.tasks || 0,
           completed: t.completed || 0,

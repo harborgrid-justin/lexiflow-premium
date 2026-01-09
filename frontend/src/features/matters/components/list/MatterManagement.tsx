@@ -11,6 +11,7 @@ import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
+import { Matter } from '@/types';
 import { format } from 'date-fns';
 import { Briefcase, Calendar, MoreVertical, Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
@@ -156,7 +157,7 @@ export const MatterManagement: React.FC = () => {
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {matters.map((matter: any) => (
+          {matters?.map((matter: Matter) => (
             <Card
               key={matter.id}
               className="cursor-pointer hover:shadow-md transition-shadow group relative"

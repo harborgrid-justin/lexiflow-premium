@@ -17,6 +17,8 @@ import {
   Send
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useTheme } from '@/theme/ThemeContext';
+import { cn } from '@/lib/utils';
 
 // Types
 interface InvoiceLineItem {
@@ -72,6 +74,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
   onSend,
   onPreview,
 }) => {
+  const { theme } = useTheme();
   const [lineItems, setLineItems] = useState<InvoiceLineItem[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
   const [selectedFeeArrangement, setSelectedFeeArrangement] = useState<string>('');
@@ -245,24 +248,36 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
             Invoice Builder
           </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("mt-1 text-sm", theme.text.secondary)}>
             Create professional invoices with advanced billing features
           </p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => onPreview?.(invoiceData)}
-            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm transition-colors",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              `hover:${theme.surface.highlight}`
+            )}
           >
             <Eye className="h-4 w-4" />
             Preview
           </button>
           <button
             onClick={() => onSave?.(invoiceData)}
-            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm transition-colors",
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary,
+              `hover:${theme.surface.highlight}`
+            )}
           >
             <Save className="h-4 w-4" />
             Save Draft
@@ -278,25 +293,30 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       </div>
 
       {/* Invoice Details */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+        <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
           Invoice Details
         </h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               Invoice Number
             </label>
             <input
               type="text"
               value={invoiceData.invoiceNumber}
               onChange={(e) => setInvoiceData({ ...invoiceData, invoiceNumber: e.target.value })}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={cn(
+                "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                theme.border.default,
+                theme.surface.default,
+                theme.text.primary
+              )}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               <Calendar className="inline-block h-4 w-4 mr-1" />
               Invoice Date
             </label>
@@ -305,25 +325,35 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                 type="date"
                 value={invoiceData.invoiceDate}
                 onChange={(e) => setInvoiceData({ ...invoiceData, invoiceDate: e.target.value })}
-                className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn(
+                  "block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                  theme.border.default,
+                  theme.surface.default,
+                  theme.text.primary
+                )}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               Due Date
             </label>
             <input
               type="date"
               value={invoiceData.dueDate}
               onChange={(e) => setInvoiceData({ ...invoiceData, dueDate: e.target.value })}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={cn(
+                "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                theme.border.default,
+                theme.surface.default,
+                theme.text.primary
+              )}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               Currency
             </label>
             <div className="relative mt-1">
@@ -331,7 +361,12 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
               <select
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e.target.value)}
-                className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn(
+                  "block w-full rounded-md border py-2 pl-10 pr-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                  theme.border.default,
+                  theme.surface.default,
+                  theme.text.primary
+                )}
               >
                 {currencies.map((currency) => (
                   <option key={currency.code} value={currency.code}>
@@ -345,63 +380,75 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               Billing Period Start
             </label>
             <input
               type="date"
               value={invoiceData.periodStart}
               onChange={(e) => setInvoiceData({ ...invoiceData, periodStart: e.target.value })}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={cn(
+                "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                theme.border.default,
+                theme.surface.default,
+                theme.text.primary
+              )}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className={cn("block text-sm font-medium", theme.text.secondary)}>
               Billing Period End
             </label>
             <input
               type="date"
               value={invoiceData.periodEnd}
               onChange={(e) => setInvoiceData({ ...invoiceData, periodEnd: e.target.value })}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className={cn(
+                "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                theme.border.default,
+                theme.surface.default,
+                theme.text.primary
+              )}
             />
           </div>
         </div>
       </div>
 
       {/* Fee Arrangement */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+        <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
           Fee Arrangement
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
           {feeArrangements.map((arrangement) => (
             <div
               key={arrangement.id}
-              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${selectedFeeArrangement === arrangement.id
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                }`}
+              className={cn(
+                "cursor-pointer rounded-lg border-2 p-4 transition-colors",
+                selectedFeeArrangement === arrangement.id
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                  : cn("border-transparent hover:border-gray-300", theme.border.default, `hover:${theme.border.active}`)
+              )}
               onClick={() => setSelectedFeeArrangement(arrangement.id)}
             >
-              <h4 className="font-medium text-gray-900 dark:text-gray-100">
+              <h4 className={cn("font-medium", theme.text.primary)}>
                 {arrangement.description}
               </h4>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className={cn("mt-1 text-sm", theme.text.secondary)}>
                 Type: {arrangement.type.replace('_', ' ').toUpperCase()}
               </p>
               {arrangement.baseRate && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className={cn("text-sm", theme.text.secondary)}>
                   Base Rate: {formatCurrency(arrangement.baseRate)}/hr
                 </p>
               )}
               {arrangement.fixedAmount && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className={cn("text-sm", theme.text.secondary)}>
                   Fixed Amount: {formatCurrency(arrangement.fixedAmount)}
                 </p>
               )}
               {arrangement.contingencyPercent && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className={cn("text-sm", theme.text.secondary)}>
                   Contingency: {arrangement.contingencyPercent}%
                 </p>
               )}
@@ -411,10 +458,10 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       </div>
 
       {/* Line Items */}
-      <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-        <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
+      <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
+        <div className={cn("border-b px-6 py-4", theme.border.default, theme.surface.subtle)}>
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
               Line Items
             </h3>
             <button
@@ -431,20 +478,20 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
           {lineItems.length === 0 ? (
             <div className="py-12 text-center">
               <FileText className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+              <h3 className={cn("mt-2 text-sm font-medium", theme.text.primary)}>
                 No line items
               </h3>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className={cn("mt-1 text-sm", theme.text.secondary)}>
                 Get started by adding a line item to the invoice.
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               {lineItems.map((item) => (
-                <div key={item.id} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                <div key={item.id} className={cn("rounded-lg border p-4", theme.border.default)}> // Should I use surface?
                   <div className="grid gap-4 sm:grid-cols-6">
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         Description
                       </label>
                       <div className="mt-1 flex gap-2">
@@ -452,12 +499,17 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                           type="text"
                           value={item.description}
                           onChange={(e) => updateLineItem(item.id, 'description', e.target.value)}
-                          className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                          className={cn(
+                            "block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                            theme.border.default,
+                            theme.surface.default,
+                            theme.text.primary
+                          )}
                           placeholder="Description of service"
                         />
                         <button
                           onClick={() => handleCopyLineItem(item)}
-                          className="rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className={cn("rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700")}
                           title="Copy line item"
                         >
                           <Copy className="h-4 w-4" />
@@ -466,13 +518,18 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         Type
                       </label>
                       <select
                         value={item.type}
                         onChange={(e) => updateLineItem(item.id, 'type', e.target.value)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                          theme.border.default,
+                          theme.surface.default,
+                          theme.text.primary
+                        )}
                       >
                         <option value="time">Time</option>
                         <option value="expense">Expense</option>
@@ -482,7 +539,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         Qty/Hrs
                       </label>
                       <input
@@ -490,12 +547,17 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                         step="0.01"
                         value={item.quantity}
                         onChange={(e) => updateLineItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                          theme.border.default,
+                          theme.surface.default,
+                          theme.text.primary
+                        )}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         <DollarSign className="inline-block h-4 w-4 mr-1" />
                         Rate
                       </label>
@@ -504,12 +566,17 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                         step="0.01"
                         value={item.rate}
                         onChange={(e) => updateLineItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                          theme.border.default,
+                          theme.surface.default,
+                          theme.text.primary
+                        )}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         Amount
                       </label>
                       <div className="mt-1 flex items-center gap-2">
@@ -517,11 +584,16 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                           type="text"
                           value={formatCurrency(item.amount)}
                           readOnly
-                          className="block w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm shadow-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                          className={cn(
+                            "block w-full rounded-md border px-3 py-2 text-sm shadow-sm",
+                            theme.border.default,
+                            theme.surface.subtle, // Readonly bg
+                            theme.text.primary
+                          )}
                         />
                         <button
                           onClick={() => removeLineItem(item.id)}
-                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          className={cn("text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300")}
                           title="Remove item"
                         >
                           <Minus className="h-4 w-4" />
@@ -532,7 +604,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
                   <div className="mt-3 grid gap-4 sm:grid-cols-3">
                     <div>
-                      <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("flex items-center gap-2 text-sm font-medium", theme.text.secondary)}>
                         <input
                           type="checkbox"
                           checked={item.taxable}
@@ -543,7 +615,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                       </label>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         <Percent className="inline-block h-4 w-4 mr-1" />
                         Discount %
                       </label>
@@ -552,18 +624,28 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                         step="0.1"
                         value={item.discount || 0}
                         onChange={(e) => updateLineItem(item.id, 'discount', parseFloat(e.target.value) || 0)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                          theme.border.default,
+                          theme.surface.default,
+                          theme.text.primary
+                        )}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className={cn("block text-sm font-medium", theme.text.secondary)}>
                         UTBMS Code
                       </label>
                       <input
                         type="text"
                         value={item.utbmsCode || ''}
                         onChange={(e) => updateLineItem(item.id, 'utbmsCode', e.target.value)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                          theme.border.default,
+                          theme.surface.default,
+                          theme.text.primary
+                        )}
                         placeholder="L210"
                       />
                     </div>
@@ -576,55 +658,65 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       </div>
 
       {/* Invoice Summary */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+        <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
           Invoice Summary
         </h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Subtotal</span>
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            <span className={cn("text-sm", theme.text.secondary)}>Subtotal</span>
+            <span className={cn("text-sm font-medium", theme.text.primary)}>
               {formatCurrency(calculateSubtotal())}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Tax</span>
+              <span className={cn("text-sm", theme.text.secondary)}>Tax</span>
               <input
                 type="number"
                 step="0.1"
                 value={invoiceData.taxRate}
                 onChange={(e) => setInvoiceData({ ...invoiceData, taxRate: parseFloat(e.target.value) || 0 })}
-                className="w-20 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn(
+                  "w-20 rounded-md border px-2 py-1 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                  theme.border.default,
+                  theme.surface.default,
+                  theme.text.primary
+                )}
               />
               <span className="text-xs text-gray-500">%</span>
             </div>
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            <span className={cn("text-sm font-medium", theme.text.primary)}>
               {formatCurrency(calculateTaxAmount())}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Discount</span>
+              <span className={cn("text-sm", theme.text.secondary)}>Discount</span>
               <input
                 type="number"
                 step="0.1"
                 value={invoiceData.discountPercent}
                 onChange={(e) => setInvoiceData({ ...invoiceData, discountPercent: parseFloat(e.target.value) || 0 })}
-                className="w-20 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className={cn(
+                  "w-20 rounded-md border px-2 py-1 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+                  theme.border.default,
+                  theme.surface.default,
+                  theme.text.primary
+                )}
               />
               <span className="text-xs text-gray-500">%</span>
             </div>
-            <span className="text-sm font-medium text-red-600 dark:text-red-400">
+            <span className={cn("text-sm font-medium", theme.status.error)}>
               -{formatCurrency(calculateDiscountAmount())}
             </span>
           </div>
 
-          <div className="border-t border-gray-200 pt-3 dark:border-gray-700">
+          <div className={cn("border-t pt-3", theme.border.default)}>
             <div className="flex items-center justify-between">
-              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total</span>
+              <span className={cn("text-lg font-semibold", theme.text.primary)}>Total</span>
               <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                 {formatCurrency(calculateTotal())}
               </span>
@@ -635,28 +727,38 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
       {/* Notes and Terms */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+          <label className={cn("block text-sm font-medium mb-2", theme.text.primary)}>
             Invoice Notes
           </label>
           <textarea
             value={invoiceData.notes}
             onChange={(e) => setInvoiceData({ ...invoiceData, notes: e.target.value })}
             rows={4}
-            className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            className={cn(
+              "block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary
+            )}
             placeholder="Additional notes or comments..."
           />
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+          <label className={cn("block text-sm font-medium mb-2", theme.text.primary)}>
             Payment Terms
           </label>
           <textarea
             value={invoiceData.terms}
             onChange={(e) => setInvoiceData({ ...invoiceData, terms: e.target.value })}
             rows={4}
-            className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            className={cn(
+              "block w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary
+            )}
             placeholder="Payment terms and conditions..."
           />
         </div>
@@ -665,15 +767,15 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       {/* Rate Card Selector Modal */}
       {showRateCardSelector && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="max-w-2xl w-full mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className={cn("max-w-2xl w-full mx-4 rounded-lg shadow-xl", theme.surface.default)}>
+            <div className={cn("p-6 border-b", theme.border.default)}>
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
                   Select Rate Card
                 </h3>
                 <button
                   onClick={() => setShowRateCardSelector(false)}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  className={cn("hover:text-gray-700 dark:hover:text-gray-200", theme.text.secondary)} // Close button might need specific styling
                 >
                   ×
                 </button>
@@ -685,10 +787,13 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                   <button
                     key={rc.id}
                     onClick={() => applyRateCard(rc.id, lineItems[0]?.id || '')}
-                    className="w-full text-left p-4 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-600 dark:hover:bg-blue-900/20"
+                    className={cn(
+                      "w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20",
+                      theme.border.default
+                    )}
                   >
-                    <div className="font-medium text-gray-900 dark:text-gray-100">{rc.name}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className={cn("font-medium", theme.text.primary)}>{rc.name}</div>
+                    <div className={cn("text-sm", theme.text.secondary)}>
                       {rc.timekeeperLevel}: {formatCurrency(rc.standardRate)}/hr
                     </div>
                   </button>

@@ -3,6 +3,7 @@
  * Advanced financial reporting with profitability analysis, realization rates, and revenue forecasting
  */
 
+import { cn } from '@/lib/utils';
 import {
   type MatterProfitability,
   type ProfitabilityMetrics,
@@ -12,6 +13,7 @@ import {
   type WorkInProgressMetrics,
   billingApiService
 } from '@/services/api/billing.service';
+import { useTheme } from '@/theme/ThemeContext';
 import {
   Activity,
   BarChart3,
@@ -34,6 +36,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
   dateRange,
   onExport,
 }) => {
+  const { theme } = useTheme();
   const [selectedTab, setSelectedTab] = useState<'profitability' | 'realization' | 'wip' | 'forecasting' | 'performance'>('profitability');
   const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
   const [showFilters, setShowFilters] = useState(false);
@@ -93,9 +96,9 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
   }, [dateRange]);
 
   const getPerformanceColor = (value: number, threshold: number = 90) => {
-    if (value >= threshold) return 'text-green-600 dark:text-green-400';
-    if (value >= threshold - 10) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
+    if (value >= threshold) return theme.status.success;
+    if (value >= threshold - 10) return theme.status.warning;
+    return theme.status.error;
   };
 
   const formatCurrency = (amount: number) => {
@@ -127,10 +130,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
             Financial Reports & Analytics
           </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("mt-1 text-sm", theme.text.secondary)}>
             Comprehensive financial analysis and performance metrics
           </p>
         </div>
@@ -138,7 +141,13 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value as 'monthly' | 'quarterly' | 'yearly')}
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={cn(
+              "rounded-md border px-4 py-2 text-sm font-medium shadow-sm",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary,
+              `hover:${theme.surface.highlight}`
+            )}
           >
             <option value="monthly">Monthly</option>
             <option value="quarterly">Quarterly</option>
@@ -146,14 +155,23 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
           </select>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary,
+              `hover:${theme.surface.highlight}`
+            )}
           >
             <Filter className="h-4 w-4" />
             Filters
           </button>
           <button
             onClick={() => onExport?.(selectedTab, 'excel')}
-            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm",
+              "bg-blue-600 hover:bg-blue-700" // Interactive buttons often keep brand colors, or could move to theme.interactive.primary
+            )}
           >
             <Download className="h-4 w-4" />
             Export
@@ -162,16 +180,18 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className={cn("border-b", theme.border.default)}>
         <nav className="-mb-px flex space-x-8">
           {(['profitability', 'realization', 'wip', 'forecasting', 'performance'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+              className={cn(
+                "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
+                selectedTab === tab
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : cn("border-transparent hover:border-gray-300", theme.text.secondary)
+              )}
             >
               {tab === 'wip' ? 'WIP' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -184,38 +204,38 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         <div className="space-y-6">
           {/* Summary Metrics */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>
                     Gross Revenue
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                  <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
                     {profitability ? formatCurrency(profitability.grossRevenue) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="text-green-600">+12.3% YoY</span>
+                    <TrendingUp className={cn("h-4 w-4", theme.status.success)} />
+                    <span className={theme.status.success}>+12.3% YoY</span>
                   </div>
                 </div>
-                <div className="rounded-full bg-blue-50 p-3 dark:bg-blue-900/20">
+                <div className={cn("rounded-full p-3 bg-blue-50 dark:bg-blue-900/20")}>
                   <DollarSign className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>
                     Gross Margin
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-green-600 dark:text-green-400">
+                  <p className={cn("mt-2 text-3xl font-semibold", theme.status.success)}>
                     {profitability ? formatPercent(profitability.grossMargin) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="text-green-600">+2.1%</span>
+                    <TrendingUp className={cn("h-4 w-4", theme.status.success)} />
+                    <span className={theme.status.success}>+2.1%</span>
                   </div>
                 </div>
                 <div className="rounded-full bg-green-50 p-3 dark:bg-green-900/20">
@@ -224,18 +244,18 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>
                     Net Profit
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                  <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
                     {profitability ? formatCurrency(profitability.netProfit) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="text-green-600">+8.7%</span>
+                    <TrendingUp className={cn("h-4 w-4", theme.status.success)} />
+                    <span className={theme.status.success}>+8.7%</span>
                   </div>
                 </div>
                 <div className="rounded-full bg-purple-50 p-3 dark:bg-purple-900/20">
@@ -244,18 +264,18 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>
                     Net Margin
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                  <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
                     {profitability ? formatPercent(profitability.netMargin) : '-'}
                   </p>
                   <div className="mt-1 flex items-center gap-1 text-sm">
-                    <TrendingDown className="h-4 w-4 text-red-600" />
-                    <span className="text-red-600">-1.2%</span>
+                    <TrendingDown className={cn("h-4 w-4", theme.status.error)} />
+                    <span className={theme.status.error}>-1.2%</span>
                   </div>
                 </div>
                 <div className="rounded-full bg-yellow-50 p-3 dark:bg-yellow-900/20">
@@ -266,45 +286,45 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
           </div>
 
           {/* Detailed Breakdown */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+            <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
               Profitability Breakdown
             </h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <div className={cn("flex items-center justify-between border-b pb-3", theme.border.default)}>
+                <span className={cn("text-sm font-medium", theme.text.secondary)}>
                   Gross Revenue
                 </span>
-                <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <span className={cn("text-lg font-semibold", theme.text.primary)}>
                   {profitability ? formatCurrency(profitability.grossRevenue) : '-'}
                 </span>
               </div>
-              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <div className={cn("flex items-center justify-between border-b pb-3", theme.border.default)}>
+                <span className={cn("text-sm font-medium", theme.text.secondary)}>
                   Direct Costs
                 </span>
-                <span className="text-lg font-semibold text-red-600 dark:text-red-400">
+                <span className={cn("text-lg font-semibold", theme.status.error)}>
                   -{profitability ? formatCurrency(profitability.grossRevenue - profitability.grossProfit) : '-'}
                 </span>
               </div>
-              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <div className={cn("flex items-center justify-between border-b pb-3", theme.border.default)}>
+                <span className={cn("text-sm font-medium", theme.text.primary)}>
                   Gross Profit
                 </span>
-                <span className="text-lg font-semibold text-green-600 dark:text-green-400">
+                <span className={cn("text-lg font-semibold", theme.status.success)}>
                   {profitability ? formatCurrency(profitability.grossProfit) : '-'}
                 </span>
               </div>
-              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <div className={cn("flex items-center justify-between border-b pb-3", theme.border.default)}>
+                <span className={cn("text-sm font-medium", theme.text.secondary)}>
                   Operating Expenses
                 </span>
-                <span className="text-lg font-semibold text-red-600 dark:text-red-400">
+                <span className={cn("text-lg font-semibold", theme.status.error)}>
                   -{profitability ? formatCurrency(profitability.operatingExpenses) : '-'}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-3">
-                <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <span className={cn("text-base font-semibold", theme.text.primary)}>
                   Net Profit
                 </span>
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
@@ -320,11 +340,11 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         <div className="space-y-6">
           {/* Realization Metrics */}
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Billing Realization
               </p>
-              <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+              <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
                 {realization ? formatPercent(realization.billingRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
@@ -332,11 +352,11 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Collection Realization
               </p>
-              <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+              <p className={cn("mt-2 text-3xl font-semibold", theme.text.primary)}>
                 {realization ? formatPercent(realization.collectionRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
@@ -344,11 +364,11 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Overall Realization
               </p>
-              <p className={`mt-2 text-3xl font-semibold ${realization ? getPerformanceColor(realization.overallRealization, 85) : ''}`}>
+              <p className={cn("mt-2 text-3xl font-semibold", realization ? getPerformanceColor(realization.overallRealization, 85) : '')}>
                 {realization ? formatPercent(realization.overallRealization) : '-'}
               </p>
               <p className="mt-1 text-sm text-gray-500">
@@ -358,21 +378,21 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
           </div>
 
           {/* Realization Analysis */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+            <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
               Realization Analysis
             </h3>
             <div className="space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className={cn("text-sm font-medium", theme.text.secondary)}>
                     Billing Realization Rate
                   </span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  <span className={cn("text-sm font-semibold", theme.text.primary)}>
                     {realization ? formatPercent(realization.billingRealization) : '-'}
                   </span>
                 </div>
-                <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                <div className={cn("relative h-4 rounded-full overflow-hidden", theme.surface.subtle)}>
                   <div
                     className="absolute h-full bg-blue-600 dark:bg-blue-500"
                     style={{ width: `${realization ? realization.billingRealization : 0}%` }}
@@ -382,14 +402,14 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className={cn("text-sm font-medium", theme.text.secondary)}>
                     Collection Realization Rate
                   </span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  <span className={cn("text-sm font-semibold", theme.text.primary)}>
                     {realization ? formatPercent(realization.collectionRealization) : '-'}
                   </span>
                 </div>
-                <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                <div className={cn("relative h-4 rounded-full overflow-hidden", theme.surface.subtle)}>
                   <div
                     className="absolute h-full bg-green-600 dark:bg-green-500"
                     style={{ width: `${realization ? realization.collectionRealization : 0}%` }}
@@ -399,14 +419,14 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className={cn("text-sm font-medium", theme.text.secondary)}>
                     Overall Realization Rate
                   </span>
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  <span className={cn("text-sm font-semibold", theme.text.primary)}>
                     {realization ? formatPercent(realization.overallRealization) : '-'}
                   </span>
                 </div>
-                <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                <div className={cn("relative h-4 rounded-full overflow-hidden", theme.surface.subtle)}>
                   <div
                     className="absolute h-full bg-purple-600 dark:bg-purple-500"
                     style={{ width: `${realization ? realization.overallRealization : 0}%` }}
@@ -422,46 +442,46 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         <div className="space-y-6">
           {/* WIP Summary */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Total WIP
               </p>
-              <p className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+              <p className={cn("mt-2 text-2xl font-semibold", theme.text.primary)}>
                 {wipMetrics ? formatCurrency(wipMetrics.totalWIP) : '-'}
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Unbilled Time
               </p>
-              <p className="mt-2 text-2xl font-semibold text-yellow-600 dark:text-yellow-400">
+              <p className={cn("mt-2 text-2xl font-semibold", theme.status.warning)}>
                 {wipMetrics ? formatCurrency(wipMetrics.unbilledTime) : '-'}
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Average Age
               </p>
-              <p className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+              <p className={cn("mt-2 text-2xl font-semibold", theme.text.primary)}>
                 {wipMetrics ? wipMetrics.averageAgeDays : '-'} days
               </p>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <div className={cn("rounded-lg border p-6 shadow-sm", theme.border.default, theme.surface.default)}>
+              <p className={cn("text-sm font-medium", theme.text.secondary)}>
                 Write-off Rate
               </p>
-              <p className="mt-2 text-2xl font-semibold text-red-600 dark:text-red-400">
+              <p className={cn("mt-2 text-2xl font-semibold", theme.status.error)}>
                 {wipMetrics ? formatPercent(wipMetrics.writeOffPercentage) : '-'}
               </p>
             </div>
           </div>
 
           {/* WIP Breakdown */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+            <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
               Work in Progress Breakdown
             </h3>
             <div className="space-y-4">
@@ -472,14 +492,14 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               ].map((item, index) => (
                 <div key={index}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span className={cn("text-sm font-medium", theme.text.secondary)}>
                       {item.label}
                     </span>
-                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <span className={cn("text-sm font-semibold", theme.text.primary)}>
                       {formatCurrency(item.amount)}
                     </span>
                   </div>
-                  <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                  <div className={cn("relative h-3 rounded-full overflow-hidden", theme.surface.subtle)}>
                     <div
                       className={`absolute h-full ${item.color}`}
                       style={{ width: `${(item.amount / wipMetrics.totalWIP) * 100}%` }}
@@ -493,51 +513,52 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
       )}
 
       {selectedTab === 'forecasting' && (
-        <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-          <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
+          <div className={cn("border-b px-6 py-4", theme.border.default, theme.surface.subtle)}>
+            <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
               Revenue Forecasting
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-900">
+            <table className={cn("min-w-full divide-y", theme.divide.default)}>
+              <thead className={theme.surface.subtle}>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Period
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Projected
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Actual
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Variance
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Variance %
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+              <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                 {revenueForecast.map((period, index) => (
-                  <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <tr key={index} className={cn(`hover:${theme.surface.highlight}`)}>
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                       {period.month}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                       {formatCurrency(period.projectedRevenue)}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                       {period.actualRevenue > 0 ? formatCurrency(period.actualRevenue) : '-'}
                     </td>
-                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variance > 0
-                      ? 'text-green-600 dark:text-green-400'
-                      : period.variance < 0
-                        ? 'text-red-600 dark:text-red-400'
-                        : 'text-gray-500'
-                      }`}>
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium",
+                      period.variance > 0
+                        ? theme.status.success
+                        : period.variance < 0
+                          ? theme.status.error
+                          : theme.text.secondary
+                    )}>
                       {period.variance !== 0 ? (
                         <>
                           {period.variance > 0 ? '+' : ''}
@@ -545,12 +566,13 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                         </>
                       ) : '-'}
                     </td>
-                    <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variancePercent > 0
-                      ? 'text-green-600 dark:text-green-400'
-                      : period.variancePercent < 0
-                        ? 'text-red-600 dark:text-red-400'
-                        : 'text-gray-500'
-                      }`}>
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium",
+                      period.variancePercent > 0
+                        ? theme.status.success
+                        : period.variancePercent < 0
+                          ? theme.status.error
+                          : theme.text.secondary
+                    )}>
                       {period.variancePercent !== 0 ? (
                         <>
                           {period.variancePercent > 0 ? '+' : ''}
@@ -569,65 +591,65 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
       {selectedTab === 'performance' && (
         <div className="space-y-6">
           {/* Timekeeper Performance */}
-          <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-            <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
+            <div className={cn("border-b px-6 py-4", theme.border.default, theme.surface.subtle)}>
+              <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
                 Timekeeper Performance
               </h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className={cn("min-w-full divide-y", theme.divide.default)}>
+                <thead className={theme.surface.subtle}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Timekeeper
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Billable Hours
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Utilization
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Billing Rate
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Revenue
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Realization
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                   {timekeeperPerformance.map((timekeeper) => (
-                    <tr key={timekeeper.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={timekeeper.id} className={cn(`hover:${theme.surface.highlight}`)}>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                          <div className={cn("font-medium", theme.text.primary)}>
                             {timekeeper.name}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className={cn("text-sm", theme.text.secondary)}>
                             {timekeeper.level}
                           </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                         {timekeeper.billableHours} / {timekeeper.targetHours}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <span className={`text-sm font-medium ${getPerformanceColor(timekeeper.utilizationRate)}`}>
+                        <span className={cn("text-sm font-medium", getPerformanceColor(timekeeper.utilizationRate))}>
                           {formatPercent(timekeeper.utilizationRate)}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                         {formatCurrency(timekeeper.billingRate)}/hr
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                         {formatCurrency(timekeeper.revenue)}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <span className={`text-sm font-medium ${getPerformanceColor(timekeeper.realization)}`}>
+                        <span className={cn("text-sm font-medium", getPerformanceColor(timekeeper.realization))}>
                           {formatPercent(timekeeper.realization)}
                         </span>
                       </td>
@@ -639,65 +661,65 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
           </div>
 
           {/* Matter Profitability */}
-          <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-            <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
+            <div className={cn("border-b px-6 py-4", theme.border.default, theme.surface.subtle)}>
+              <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
                 Matter Profitability
               </h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className={cn("min-w-full divide-y", theme.divide.default)}>
+                <thead className={theme.surface.subtle}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Matter
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Total Fees
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Total Costs
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Profit
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Margin
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Realization
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                   {matterProfitability.map((matter) => (
-                    <tr key={matter.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={matter.id} className={cn(`hover:${theme.surface.highlight}`)}>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                          <div className={cn("font-medium", theme.text.primary)}>
                             {matter.matterNumber}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className={cn("text-sm", theme.text.secondary)}>
                             {matter.client}
                           </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                         {formatCurrency(matter.totalFees)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                         {formatCurrency(matter.totalCosts)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-green-600 dark:text-green-400">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.status.success)}>
                         {formatCurrency(matter.profit)}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <span className={`text-sm font-medium ${getPerformanceColor(matter.profitMargin, 70)}`}>
+                        <span className={cn("text-sm font-medium", getPerformanceColor(matter.profitMargin, 70))}>
                           {formatPercent(matter.profitMargin)}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <span className={`text-sm font-medium ${getPerformanceColor(matter.realizationRate)}`}>
+                        <span className={cn("text-sm font-medium", getPerformanceColor(matter.realizationRate))}>
                           {formatPercent(matter.realizationRate)}
                         </span>
                       </td>

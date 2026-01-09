@@ -16,6 +16,8 @@ import {
   Upload,
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useTheme } from '@/theme/ThemeContext';
+import { cn } from '@/lib/utils';
 
 // Types
 interface LEDESFormat {
@@ -86,6 +88,7 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
   onImport,
   onValidate,
 }) => {
+  const { theme } = useTheme();
   const [selectedTab, setSelectedTab] = useState<'formats' | 'utbms' | 'rates' | 'portals'>('formats');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFormat, setSelectedFormat] = useState<'1998B' | '2000'>('1998B');
@@ -212,17 +215,22 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
   return (
     <div className="space-y-6">
       {/* Action Bar */}
-      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <div className={cn("flex items-center justify-between rounded-lg border p-4", theme.border.default, theme.surface.default)}>
         <div className="flex items-center gap-3">
-          <FileText className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <FileText className={cn("h-5 w-5", theme.text.secondary)} />
+          <span className={cn("text-sm font-medium", theme.text.primary)}>
             LEDES Format: {selectedFormat}
           </span>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => handleValidate({})}
-            className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary
+            )}
           >
             <AlertCircle className="h-4 w-4" />
             Validate
@@ -239,28 +247,28 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
 
       {/* Validation Results */}
       {showValidation && validationResults && (
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className={cn("rounded-lg border p-4", theme.border.default, theme.surface.default)}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
               Validation Results
             </h3>
             <button
               onClick={() => setShowValidation(false)}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className={cn("hover:text-gray-700 dark:hover:text-gray-200", theme.text.secondary)}
             >
               ×
             </button>
           </div>
           <div className="space-y-2">
             {validationResults.isValid ? (
-              <div className="flex items-center gap-2 text-green-600">
+              <div className={cn("flex items-center gap-2", theme.status.success)}>
                 <AlertCircle className="h-5 w-5" />
                 <span>All validations passed</span>
               </div>
             ) : (
               <div className="space-y-2">
                 {validationResults.errors.map((error, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-red-600">
+                  <div key={idx} className={cn("flex items-start gap-2", theme.status.error)}>
                     <AlertCircle className="h-5 w-5 mt-0.5" />
                     <span className="text-sm">Line {error.line}: {error.message}</span>
                   </div>
@@ -273,15 +281,20 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
             LEDES Billing Management
           </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("mt-1 text-sm", theme.text.secondary)}>
             LEDES format support and UTBMS code management
           </p>
         </div>
         <div className="flex gap-3">
-          <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+          <label className={cn(
+            "inline-flex cursor-pointer items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700",
+            theme.border.default,
+            theme.surface.default,
+            theme.text.primary,
+          )}>
             <Upload className="h-4 w-4" />
             Import LEDES
             <input
@@ -299,26 +312,28 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
       </div>
 
       {/* Format Selection */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+        <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
           LEDES Format
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
           {ledesFormats.map((format) => (
             <div
               key={format.id}
-              className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${selectedFormat === format.version
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
-                }`}
+              className={cn(
+                "cursor-pointer rounded-lg border-2 p-4 transition-colors",
+                selectedFormat === format.version
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                  : cn("hover:border-gray-300", theme.border.default)
+              )}
               onClick={() => setSelectedFormat(format.version)}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                  <h4 className={cn("font-medium", theme.text.primary)}>
                     {format.name}
                   </h4>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  <p className={cn("mt-1 text-sm", theme.text.secondary)}>
                     {format.description}
                   </p>
                 </div>
@@ -332,16 +347,18 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className={cn("border-b", theme.border.default)}>
         <nav className="-mb-px flex space-x-8">
           {(['formats', 'utbms', 'rates', 'portals'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+              className={cn(
+                "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
+                selectedTab === tab
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : cn("border-transparent hover:border-gray-300", theme.text.secondary)
+              )}
             >
               {tab === 'utbms' ? 'UTBMS Codes' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -356,52 +373,62 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
           <div className="flex gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Search className={cn("absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2", theme.text.secondary)} />
                 <input
                   type="text"
                   placeholder="Search UTBMS codes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                  className={cn(
+                    "w-full rounded-md border py-2 pl-10 pr-4 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500",
+                    theme.border.default,
+                    theme.surface.default,
+                    theme.text.primary
+                  )}
                 />
               </div>
             </div>
-            <button className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+            <button className={cn(
+              "inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700",
+              theme.border.default,
+              theme.surface.default,
+              theme.text.primary
+            )}>
               <Filter className="h-4 w-4" />
               Filter
             </button>
           </div>
 
           {/* UTBMS Codes Table */}
-          <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+          <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className={cn("min-w-full divide-y", theme.divide.default)}>
+                <thead className={theme.surface.subtle}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Code
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Category
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Description
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Phase
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                       Level
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                   {filteredCodes.map((code, index) => (
-                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={index} className={cn("hover:bg-gray-50 dark:hover:bg-gray-700")}>
                       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-blue-600 dark:text-blue-400">
                         {code.code}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                         <span
                           className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${code.category === 'Task'
                             ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
@@ -413,13 +440,13 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                           {code.category}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      <td className={cn("px-6 py-4 text-sm", theme.text.primary)}>
                         {code.description}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.secondary)}>
                         {code.phase || '-'}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.secondary)}>
                         Level {code.level}
                       </td>
                     </tr>
@@ -436,47 +463,47 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
           {rateSchedules.map((schedule) => (
             <div
               key={schedule.id}
-              className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
+              className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}
             >
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
                     {schedule.name}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className={cn("text-sm", theme.text.secondary)}>
                     Effective: {new Date(schedule.effectiveDate).toLocaleDateString()}
                     {schedule.expiryDate && ` - ${new Date(schedule.expiryDate).toLocaleDateString()}`}
                   </p>
                 </div>
-                <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                <button className={cn("hover:text-blue-900 dark:hover:text-blue-300", theme.text.accent)}>
                   <Settings className="h-5 w-5" />
                 </button>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-900">
+                <table className={cn("min-w-full divide-y", theme.divide.default)}>
+                  <thead className={theme.surface.subtle}>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                         Timekeeper Level
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                         Hourly Rate
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                         Currency
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                  <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                     {schedule.rates.map((rate, index) => (
                       <tr key={index}>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                        <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                           {rate.timekeeperLevel}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                           ${rate.hourlyRate.toFixed(2)}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.secondary)}>
                           {rate.currency}
                         </td>
                       </tr>
@@ -490,49 +517,49 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
       )}
 
       {selectedTab === 'portals' && (
-        <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-          <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className={cn("rounded-lg border", theme.border.default, theme.surface.default)}>
+          <div className={cn("border-b px-6 py-4", theme.border.default, theme.surface.subtle)}>
+            <h3 className={cn("text-lg font-semibold", theme.text.primary)}>
               E-Billing Portal Integration
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-900">
+            <table className={cn("min-w-full divide-y", theme.divide.default)}>
+              <thead className={theme.surface.subtle}>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Client
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Portal Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Format
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Last Submission
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Status
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className={cn("px-6 py-3 text-right text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+              <tbody className={cn("divide-y", theme.divide.default, theme.surface.default)}>
                 {eBillingPortals.map((portal) => (
-                  <tr key={portal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <tr key={portal.id} className={cn("hover:bg-gray-50 dark:hover:bg-gray-700")}>
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm font-medium", theme.text.primary)}>
                       {portal.clientName}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.primary)}>
                       {portal.portalName}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.secondary)}>
                       {portal.format}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className={cn("whitespace-nowrap px-6 py-4 text-sm", theme.text.secondary)}>
                       {portal.lastSubmission
                         ? new Date(portal.lastSubmission).toLocaleDateString()
                         : 'Never'}
@@ -548,7 +575,7 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
-                      <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                      <button className={cn("hover:text-blue-900 dark:hover:text-blue-300", theme.text.accent)}>
                         Submit
                       </button>
                     </td>
@@ -561,16 +588,16 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
       )}
 
       {selectedTab === 'formats' && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <div className={cn("rounded-lg border p-6", theme.border.default, theme.surface.default)}>
+          <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
             Format Specifications
           </h3>
           <div className="space-y-4">
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
-              <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+            <div className={cn("rounded-lg border p-4", theme.border.default, theme.surface.subtle)}>
+              <h4 className={cn("font-medium mb-2", theme.text.primary)}>
                 LEDES 1998B Format
               </h4>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <ul className={cn("space-y-2 text-sm", theme.text.secondary)}>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 mt-0.5 text-green-600 flex-shrink-0" />
                   <span>20 required fields including Invoice Number, Client ID, Law Firm Matter ID</span>
@@ -590,11 +617,11 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
               </ul>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
-              <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+            <div className={cn("rounded-lg border p-4", theme.border.default, theme.surface.subtle)}>
+              <h4 className={cn("font-medium mb-2", theme.text.primary)}>
                 LEDES 2000 Format
               </h4>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <ul className={cn("space-y-2 text-sm", theme.text.secondary)}>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 mt-0.5 text-green-600 flex-shrink-0" />
                   <span>Enhanced format with additional invoice-level data</span>
@@ -619,7 +646,12 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                 <Database className="h-4 w-4" />
                 Validate Data
               </button>
-              <button className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+              <button className={cn(
+                "inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700",
+                theme.border.default,
+                theme.surface.default,
+                theme.text.primary
+              )}>
                 <Download className="h-4 w-4" />
                 Download Template
               </button>

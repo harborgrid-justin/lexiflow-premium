@@ -117,6 +117,22 @@ interface Lead {
   source?: string;
 }
 
+interface Pitch {
+  [key: string]: unknown;
+}
+interface RFP {
+  [key: string]: unknown;
+}
+interface WinLossAnalysis {
+  [key: string]: unknown;
+}
+interface BusinessDevelopmentMetrics {
+  [key: string]: unknown;
+}
+interface ClientAnalytics {
+  [key: string]: unknown;
+}
+
 // =============================================================================
 // CRM SERVICE
 // =============================================================================
@@ -134,37 +150,40 @@ export const CRMService = {
     return [];
   },
 
-  getPitches: async (): Promise<any[]> => {
+  getPitches: async (): Promise<Pitch[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/pitches");
+      return apiClient.get<Pitch[]>("/crm/pitches");
     }
     return [];
   },
 
-  getRFPs: async (): Promise<any[]> => {
+  getRFPs: async (): Promise<RFP[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/rfps");
+      return apiClient.get<RFP[]>("/crm/rfps");
     }
     return [];
   },
 
-  getWinLossAnalysis: async (): Promise<any[]> => {
+  getWinLossAnalysis: async (): Promise<WinLossAnalysis[]> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/win-loss");
+      return apiClient.get<WinLossAnalysis[]>("/crm/win-loss");
     }
     return [];
   },
 
-  getBusinessDevelopmentMetrics: async (): Promise<any> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/business-development");
-    }
-    return {};
-  },
+  getBusinessDevelopmentMetrics:
+    async (): Promise<BusinessDevelopmentMetrics> => {
+      if (isBackendApiEnabled()) {
+        return apiClient.get<BusinessDevelopmentMetrics>(
+          "/crm/business-development"
+        );
+      }
+      return {};
+    },
 
-  getClientAnalytics: async (): Promise<any> => {
+  getClientAnalytics: async (): Promise<ClientAnalytics> => {
     if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/client-analytics");
+      return apiClient.get<ClientAnalytics>("/crm/client-analytics");
     }
     return {};
   },
@@ -217,7 +236,7 @@ export const CRMService = {
       if (isBackendApiEnabled()) {
         // Backend handles atomic transaction
         try {
-          const result = await apiClient.post<{ client: any; case: any }>(
+          const result = await apiClient.post<{ client: Client; case: Matter }>(
             "/crm/leads/convert",
             { leadId: lead.id }
           );

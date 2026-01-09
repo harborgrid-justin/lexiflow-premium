@@ -258,7 +258,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
         <p className={cn("text-sm mb-4", theme.text.secondary)}>
           Drag and drop files here or click to browse
         </p>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+        <button className={cn("px-4 py-2 rounded-md transition-colors", theme.status.info)}>
           Select Files
         </button>
       </div>
@@ -284,9 +284,9 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h4 className={cn("font-medium", theme.text.primary)}>{doc.fileName}</h4>
-                    {doc.encrypted && <Lock className="h-4 w-4 text-green-600" aria-label="Encrypted" />}
+                    {doc.encrypted && <Lock className={cn("h-4 w-4", theme.status.success)} aria-label="Encrypted" />}
                     {doc.requiresSignature && (
-                      <span className="px-2 py-0.5 bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 text-xs rounded">
+                      <span className={cn("px-2 py-0.5 text-xs rounded", theme.status.warning)}>
                         Signature Required
                       </span>
                     )}
@@ -303,9 +303,9 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-2 py-1 rounded text-xs",
-                  doc.status === 'Available' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                    doc.status === 'Pending Review' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                  doc.status === 'Available' ? theme.status.success :
+                    doc.status === 'Pending Review' ? theme.status.warning :
+                      theme.status.error
                 )}>
                   {doc.status}
                 </span>
@@ -340,9 +340,9 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
             </div>
             <span className={cn(
               "px-3 py-1 rounded-full text-sm font-medium",
-              caseUpdate.status === 'Active' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                caseUpdate.status === 'Pending' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                  "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+              caseUpdate.status === 'Active' ? theme.status.success :
+                caseUpdate.status === 'Pending' ? theme.status.warning :
+                  cn(theme.surface.subtle, theme.text.secondary)
             )}>
               {caseUpdate.status}
             </span>
@@ -409,7 +409,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
           </div>
           <div>
             <p className={cn("text-sm", theme.text.tertiary)}>Total Paid (YTD)</p>
-            <p className={cn("text-2xl font-bold text-green-600")}>
+            <p className={cn("text-2xl font-bold", theme.text.success)}>
               ${invoices.filter(inv => inv.status === 'Paid').reduce((acc, inv) => acc + inv.amountPaid, 0).toLocaleString()}
             </p>
           </div>
@@ -433,10 +433,10 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
                   <h4 className={cn("font-bold", theme.text.primary)}>{invoice.invoiceNumber}</h4>
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
-                    invoice.status === 'Paid' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                      invoice.status === 'Overdue' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                        invoice.status === 'Partial' ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                          "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                    invoice.status === 'Paid' ? theme.status.success :
+                      invoice.status === 'Overdue' ? theme.status.error :
+                        invoice.status === 'Partial' ? theme.status.warning :
+                          theme.status.info
                   )}>
                     {invoice.status}
                   </span>
@@ -456,7 +456,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
                     View
                   </button>
                   {invoice.status !== 'Paid' && (
-                    <button className="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700">
+                    <button className={cn("px-3 py-1 rounded text-sm text-white hover:opacity-90", theme.status.info)}>
                       <CreditCard className="h-4 w-4 inline mr-1" />
                       Pay
                     </button>
@@ -479,7 +479,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
       {/* Compose Message */}
       <div className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-2 mb-3">
-          <Shield className="h-5 w-5 text-green-600" />
+          <Shield className={cn("h-5 w-5", theme.text.success)} />
           <h3 className={cn("font-medium", theme.text.primary)}>Secure Message</h3>
         </div>
         <input
@@ -498,7 +498,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
             <Paperclip className="h-4 w-4 inline mr-1" />
             Attach File
           </button>
-          <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+          <button className={cn("px-4 py-2 rounded text-white hover:opacity-90", theme.status.info)}>
             <Send className="h-4 w-4 inline mr-1" />
             Send Message
           </button>
@@ -521,9 +521,9 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-2">
                 <h4 className={cn("font-medium", theme.text.primary)}>{msg.subject}</h4>
-                {msg.encrypted && <Lock className="h-4 w-4 text-green-600" aria-label="Encrypted" />}
+                {msg.encrypted && <Lock className={cn("h-4 w-4", theme.text.success)} aria-label="Encrypted" />}
                 {!msg.read && (
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 text-xs rounded">
+                  <span className={cn("px-2 py-0.5 text-xs rounded", theme.status.info)}>
                     New
                   </span>
                 )}
@@ -581,7 +581,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
                   {slot.duration} minutes
                 </span>
               </div>
-              <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 text-sm">
+              <button className={cn("px-4 py-2 rounded text-white hover:opacity-90 text-sm", theme.status.info)}>
                 Book Now
               </button>
             </div>
@@ -601,8 +601,8 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
       <div className={cn("p-6 rounded-lg border", theme.surface.default, theme.border.default)}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={cn("p-3 rounded-full bg-green-100 dark:bg-green-900/30")}>
-              <Shield className="h-6 w-6 text-green-600" />
+            <div className={cn("p-3 rounded-full", theme.surface.highlight)}>
+              <Shield className={cn("h-6 w-6", theme.text.success)} />
             </div>
             <div>
               <h1 className={cn("text-2xl font-bold", theme.text.primary)}>Secure Client Portal</h1>
@@ -612,8 +612,8 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Lock className="h-5 w-5 text-green-600" />
-            <span className={cn("text-sm font-medium text-green-600")}>Secure Connection</span>
+            <Lock className={cn("h-5 w-5", theme.text.success)} />
+            <span className={cn("text-sm font-medium", theme.text.success)}>Secure Connection</span>
           </div>
         </div>
       </div>
@@ -634,7 +634,7 @@ export const ClientPortal: React.FC<{ client?: Client }> = () => {
               className={cn(
                 "flex items-center gap-2 px-4 py-3 border-b-2 transition-colors",
                 activeTab === tab.id
-                  ? "border-blue-600 text-blue-600"
+                  ? cn("border-blue-600", theme.text.accent)
                   : cn("border-transparent", theme.text.secondary, "hover:text-blue-600")
               )}
             >

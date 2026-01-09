@@ -13,6 +13,7 @@
  * @module components/enterprise/CaseManagement/CaseBudget
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/utils';
 import {
   AlertTriangle,
@@ -30,6 +31,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+
 
 // ============================================================================
 // Types & Interfaces
@@ -155,6 +157,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
   allowEdit = false,
   className,
 }) => {
+  const { theme } = useTheme();
   const [activeView, setActiveView] = useState<'overview' | 'categories' | 'expenses' | 'alerts'>('overview');
 
   // Calculate metrics
@@ -190,10 +193,10 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
   // Get status color
   const getStatusColor = (percentage: number) => {
-    if (percentage >= 90) return { bg: 'bg-red-100 dark:bg-red-900/20', text: 'text-red-600 dark:text-red-400', border: 'border-red-300 dark:border-red-700' };
-    if (percentage >= 75) return { bg: 'bg-orange-100 dark:bg-orange-900/20', text: 'text-orange-600 dark:text-orange-400', border: 'border-orange-300 dark:border-orange-700' };
-    if (percentage >= 50) return { bg: 'bg-yellow-100 dark:bg-yellow-900/20', text: 'text-yellow-600 dark:text-yellow-400', border: 'border-yellow-300 dark:border-yellow-700' };
-    return { bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400', border: 'border-green-300 dark:border-green-700' };
+    if (percentage >= 90) return theme.status.error;
+    if (percentage >= 75) return theme.status.warning;
+    if (percentage >= 50) return theme.status.warning;
+    return theme.status.success;
   };
 
   const statusColor = getStatusColor(metrics.utilized);
@@ -204,20 +207,20 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Budget Management</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Budget Management</h2>
+            <p className={cn("text-sm mt-1", theme.text.secondary)}>
               Track expenses and manage case budget
             </p>
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
+            <button className={cn("flex items-center gap-2 px-4 py-2 border rounded-lg", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}>
               <Download className="h-4 w-4" />
               Export Report
             </button>
             {allowEdit && (
               <button
                 onClick={() => console.log('Add Expense clicked')}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}
               >
                 <Plus className="h-4 w-4" />
                 Add Expense
@@ -229,23 +232,23 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Budget */}
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Total Budget</p>
-              <DollarSign className="h-5 w-5 text-gray-400" />
+              <p className={cn("text-xs font-medium", theme.text.secondary)}>Total Budget</p>
+              <DollarSign className={cn("h-5 w-5", theme.text.muted)} />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className={cn("text-2xl font-bold", theme.text.primary)}>
               {formatCurrency(totalBudget)}
             </p>
           </div>
 
           {/* Actual Spent */}
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Actual Spent</p>
-              <TrendingUp className="h-5 w-5 text-gray-400" />
+              <p className={cn("text-xs font-medium", theme.text.secondary)}>Actual Spent</p>
+              <TrendingUp className={cn("h-5 w-5", theme.text.muted)} />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className={cn("text-2xl font-bold", theme.text.primary)}>
               {formatCurrency(totalActual)}
             </p>
             <div className="flex items-center gap-2 mt-2">
@@ -256,30 +259,30 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
           </div>
 
           {/* Remaining */}
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Remaining</p>
+              <p className={cn("text-xs font-medium", theme.text.secondary)}>Remaining</p>
               {metrics.remaining >= 0 ? (
-                <ArrowUpRight className="h-5 w-5 text-green-500" />
+                <ArrowUpRight className={cn("h-5 w-5", theme.status.success.text)} />
               ) : (
-                <ArrowDownRight className="h-5 w-5 text-red-500" />
+                <ArrowDownRight className={cn("h-5 w-5", theme.status.error.text)} />
               )}
             </div>
-            <p className={cn('text-2xl font-bold', metrics.remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
+            <p className={cn('text-2xl font-bold', metrics.remaining >= 0 ? theme.status.success.text : theme.status.error.text)}>
               {formatCurrency(Math.abs(metrics.remaining))}
             </p>
           </div>
 
           {/* Burn Rate */}
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Daily Burn Rate</p>
-              <Clock className="h-5 w-5 text-gray-400" />
+              <p className={cn("text-xs font-medium", theme.text.secondary)}>Daily Burn Rate</p>
+              <Clock className={cn("h-5 w-5", theme.text.muted)} />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className={cn("text-2xl font-bold", theme.text.primary)}>
               {formatCurrency(metrics.burnRate)}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className={cn("text-xs mt-1", theme.text.muted)}>
               Projected: {formatCurrency(metrics.projectedTotal)}
             </p>
           </div>
@@ -287,20 +290,20 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
         {/* Active Alerts Banner */}
         {metrics.criticalAlerts > 0 && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
+          <div className={cn("mt-4 p-4 border rounded-lg", theme.status.error.bg, theme.status.error.border)}>
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+              <AlertTriangle className={cn("h-5 w-5", theme.status.error.text)} />
               <div>
-                <p className="font-semibold text-red-900 dark:text-red-200">
+                <p className={cn("font-semibold", theme.status.error.text)}>
                   {metrics.criticalAlerts} Critical Budget Alert{metrics.criticalAlerts > 1 ? 's' : ''}
                 </p>
-                <p className="text-sm text-red-700 dark:text-red-300">
+                <p className={cn("text-sm", theme.status.error.text)}>
                   Immediate attention required to prevent budget overrun
                 </p>
               </div>
               <button
                 onClick={() => setActiveView('alerts')}
-                className="ml-auto px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+                className={cn("ml-auto px-4 py-2 text-white rounded-lg text-sm hover:opacity-90", theme.status.error.bg)}
               >
                 View Alerts
               </button>
@@ -310,7 +313,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
       </div>
 
       {/* View Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className={cn("border-b", theme.border.default)}>
         <div className="flex gap-6">
           {(['overview', 'categories', 'expenses', 'alerts'] as const).map(view => (
             <button
@@ -319,8 +322,8 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
               className={cn(
                 'pb-3 text-sm font-medium border-b-2 transition-colors',
                 activeView === view
-                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
+                  ? cn('border-blue-600', theme.interactive.primary)
+                  : cn('border-transparent', theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
               {view.charAt(0).toUpperCase() + view.slice(1)}
@@ -335,26 +338,26 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
         {activeView === 'overview' && (
           <div className="space-y-6">
             {/* Budget Progress */}
-            <div className="border border-gray-200 rounded-lg p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Budget Progress</h3>
+            <div className={cn("border rounded-lg p-6", theme.surface.default, theme.border.default)}>
+              <h3 className={cn("font-semibold mb-4", theme.text.primary)}>Budget Progress</h3>
 
               {/* Progress Bar */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className={cn("text-sm", theme.text.secondary)}>
                     {formatCurrency(totalActual)} of {formatCurrency(totalBudget)}
                   </span>
                   <span className={cn('text-sm font-medium', statusColor.text)}>
                     {metrics.utilized.toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+                <div className={cn("w-full rounded-full h-3", theme.surface.raised)}>
                   <div
                     className={cn('h-3 rounded-full transition-all',
-                      metrics.utilized >= 90 ? 'bg-red-600' :
-                        metrics.utilized >= 75 ? 'bg-orange-500' :
-                          metrics.utilized >= 50 ? 'bg-yellow-500' :
-                            'bg-green-500'
+                      metrics.utilized >= 90 ? theme.status.error.bg :
+                        metrics.utilized >= 75 ? theme.status.warning.bg :
+                          metrics.utilized >= 50 ? theme.status.warning.bg :
+                            theme.status.success.bg
                     )}
                     style={{ width: `${Math.min(metrics.utilized, 100)}%` }}
                   />
@@ -363,8 +366,8 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
               {/* Forecast */}
               {metrics.totalForecasted > totalBudget && (
-                <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg dark:bg-orange-900/20 dark:border-orange-800">
-                  <div className="flex items-center gap-2 text-orange-800 dark:text-orange-200">
+                <div className={cn("mt-4 p-3 border rounded-lg", theme.status.warning.bg, theme.status.warning.border)}>
+                  <div className={cn("flex items-center gap-2", theme.status.warning.text)}>
                     <AlertTriangle className="h-4 w-4" />
                     <span className="text-sm font-medium">
                       Projected overrun: {formatCurrency(metrics.projectedOverrun)}
@@ -376,47 +379,47 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border border-gray-200 rounded-lg p-4 bg-white dark:bg-gray-800 dark:border-gray-700">
+              <div className={cn("border rounded-lg p-4", theme.surface.default, theme.border.default)}>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-blue-100 rounded-lg dark:bg-blue-900/30">
-                    <PieChart className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <div className={cn("p-2 rounded-lg", theme.surface.active)}>
+                    <PieChart className={cn("h-5 w-5", theme.interactive.primary)} />
                   </div>
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Categories</p>
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>Categories</p>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{categories.length}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Budget categories</p>
+                <p className={cn("text-2xl font-bold", theme.text.primary)}>{categories.length}</p>
+                <p className={cn("text-xs mt-1", theme.text.muted)}>Budget categories</p>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-4 bg-white dark:bg-gray-800 dark:border-gray-700">
+              <div className={cn("border rounded-lg p-4", theme.surface.default, theme.border.default)}>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-green-100 rounded-lg dark:bg-green-900/30">
-                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <div className={cn("p-2 rounded-lg", theme.surface.subtle)}>
+                    <CheckCircle className={cn("h-5 w-5", theme.status.success.text)} />
                   </div>
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Expenses</p>
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>Expenses</p>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{expenses.length}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className={cn("text-2xl font-bold", theme.text.primary)}>{expenses.length}</p>
+                <p className={cn("text-xs mt-1", theme.text.muted)}>
                   {expenses.filter(e => e.status === 'approved').length} approved
                 </p>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-4 bg-white dark:bg-gray-800 dark:border-gray-700">
+              <div className={cn("border rounded-lg p-4", theme.surface.default, theme.border.default)}>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-orange-100 rounded-lg dark:bg-orange-900/30">
-                    <Bell className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                  <div className={cn("p-2 rounded-lg", theme.surface.subtle)}>
+                    <Bell className={cn("h-5 w-5", theme.status.warning.text)} />
                   </div>
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Alerts</p>
+                  <p className={cn("text-sm font-medium", theme.text.secondary)}>Alerts</p>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{metrics.activeAlerts}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className={cn("text-2xl font-bold", theme.text.primary)}>{metrics.activeAlerts}</p>
+                <p className={cn("text-xs mt-1", theme.text.muted)}>
                   {metrics.criticalAlerts} critical
                 </p>
               </div>
             </div>
 
             {/* Top Categories */}
-            <div className="border border-gray-200 rounded-lg p-6 bg-white dark:bg-gray-800 dark:border-gray-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Top Spending Categories</h3>
+            <div className={cn("border rounded-lg p-6", theme.surface.default, theme.border.default)}>
+              <h3 className={cn("font-semibold mb-4", theme.text.primary)}>Top Spending Categories</h3>
               <div className="space-y-3">
                 {categories
                   .sort((a, b) => b.actual - a.actual)
@@ -426,14 +429,14 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                     return (
                       <div key={category.id}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className={cn("text-sm font-medium", theme.text.primary)}>
                             {category.name}
                           </span>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                          <span className={cn("text-sm", theme.text.secondary)}>
                             {formatCurrency(category.actual)} / {formatCurrency(category.budgeted)}
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                        <div className={cn("w-full rounded-full h-2", theme.surface.raised)}>
                           <div
                             className="h-2 rounded-full"
                             style={{
@@ -461,7 +464,7 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
               return (
                 <div
                   key={category.id}
-                  className="border border-gray-200 rounded-lg p-4 bg-white dark:bg-gray-800 dark:border-gray-700"
+                  className={cn("border rounded-lg p-4", theme.surface.default, theme.border.default)}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -470,18 +473,18 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                         style={{ backgroundColor: category.color || '#3B82F6' }}
                       />
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white">
+                        <h4 className={cn("font-semibold", theme.text.primary)}>
                           {category.name}
                         </h4>
                         {category.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                          <p className={cn("text-sm", theme.text.secondary)}>
                             {category.description}
                           </p>
                         )}
                       </div>
                     </div>
                     {allowEdit && (
-                      <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                      <button className={cn(theme.text.muted, `hover:${theme.text.primary}`)}>
                         <Edit className="h-4 w-4" />
                       </button>
                     )}
@@ -489,33 +492,33 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
                   <div className="grid grid-cols-4 gap-4 mb-3">
                     <div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Budgeted</p>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <p className={cn("text-xs", theme.text.secondary)}>Budgeted</p>
+                      <p className={cn("text-lg font-semibold", theme.text.primary)}>
                         {formatCurrency(category.budgeted)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Actual</p>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <p className={cn("text-xs", theme.text.secondary)}>Actual</p>
+                      <p className={cn("text-lg font-semibold", theme.text.primary)}>
                         {formatCurrency(category.actual)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Variance</p>
-                      <p className={cn('text-lg font-semibold', variance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
+                      <p className={cn("text-xs", theme.text.secondary)}>Variance</p>
+                      <p className={cn('text-lg font-semibold', variance >= 0 ? theme.status.success.text : theme.status.error.text)}>
                         {formatCurrency(Math.abs(variance))}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Forecasted</p>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <p className={cn("text-xs", theme.text.secondary)}>Forecasted</p>
+                      <p className={cn("text-lg font-semibold", theme.text.primary)}>
                         {formatCurrency(category.forecasted || category.actual)}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                    <div className={cn("flex-1 rounded-full h-2", theme.surface.raised)}>
                       <div
                         className="h-2 rounded-full"
                         style={{
@@ -536,20 +539,20 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
         {/* Expenses Tab */}
         {activeView === 'expenses' && (
-          <div className="border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("border rounded-lg", theme.surface.default, theme.border.default)}>
             {expenses.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <DollarSign className="h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <DollarSign className={cn("h-12 w-12 mb-4", theme.text.muted)} />
+                <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
                   No expenses recorded
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <p className={cn("text-sm mb-4", theme.text.secondary)}>
                   Start tracking expenses to monitor your budget
                 </p>
                 {allowEdit && (
                   <button
                     onClick={() => console.log('Add First Expense clicked')}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}
                   >
                     <Plus className="h-4 w-4" />
                     Add First Expense
@@ -558,52 +561,52 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
               </div>
             ) : (
               <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className={cn(theme.surface.subtle)}>
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                    <th className={cn("px-4 py-3 text-left text-xs font-medium uppercase", theme.text.secondary)}>
                       Date
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                    <th className={cn("px-4 py-3 text-left text-xs font-medium uppercase", theme.text.secondary)}>
                       Description
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                    <th className={cn("px-4 py-3 text-left text-xs font-medium uppercase", theme.text.secondary)}>
                       Category
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                    <th className={cn("px-4 py-3 text-right text-xs font-medium uppercase", theme.text.secondary)}>
                       Amount
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                    <th className={cn("px-4 py-3 text-left text-xs font-medium uppercase", theme.text.secondary)}>
                       Status
                     </th>
                     {allowEdit && (
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase dark:text-gray-300">
+                      <th className={cn("px-4 py-3 text-right text-xs font-medium uppercase", theme.text.secondary)}>
                         Actions
                       </th>
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className={cn("divide-y", theme.border.default)}>
                   {expenses.map(expense => (
                     <tr key={expense.id}>
-                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                      <td className={cn("px-4 py-3 text-sm", theme.text.primary)}>
                         {new Date(expense.date).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                      <td className={cn("px-4 py-3 text-sm", theme.text.primary)}>
                         {expense.description}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                      <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                         {expense.category}
                       </td>
-                      <td className="px-4 py-3 text-sm text-right font-medium text-gray-900 dark:text-white">
+                      <td className={cn("px-4 py-3 text-sm text-right font-medium", theme.text.primary)}>
                         {formatCurrency(expense.amount)}
                       </td>
                       <td className="px-4 py-3">
                         <span
                           className={cn(
                             'inline-block px-2 py-1 text-xs font-medium rounded-full',
-                            expense.status === 'approved' && 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-                            expense.status === 'pending' && 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-                            expense.status === 'rejected' && 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            expense.status === 'approved' && cn(theme.status.success.bg, theme.status.success.text),
+                            expense.status === 'pending' && cn(theme.status.warning.bg, theme.status.warning.text),
+                            expense.status === 'rejected' && cn(theme.status.error.bg, theme.status.error.text)
                           )}
                         >
                           {expense.status}
@@ -615,13 +618,13 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                             <div className="flex gap-2 justify-end">
                               <button
                                 onClick={() => onApproveExpense?.(expense.id)}
-                                className="text-green-600 hover:text-green-700 dark:text-green-400"
+                                className={cn("hover:opacity-80", theme.status.success.text)}
                               >
                                 <CheckCircle className="h-4 w-4" />
                               </button>
                               <button
                                 onClick={() => onRejectExpense?.(expense.id)}
-                                className="text-red-600 hover:text-red-700 dark:text-red-400"
+                                className={cn("hover:opacity-80", theme.status.error.text)}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
@@ -645,18 +648,18 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                 key={alert.id}
                 className={cn(
                   'border rounded-lg p-4',
-                  alert.type === 'critical' && 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800',
-                  alert.type === 'warning' && 'bg-orange-50 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800',
-                  alert.type === 'info' && 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
+                  alert.type === 'critical' && cn(theme.status.error.bg, theme.status.error.border),
+                  alert.type === 'warning' && cn(theme.status.warning.bg, theme.status.warning.border),
+                  alert.type === 'info' && cn(theme.status.info.bg, theme.status.info.border)
                 )}
               >
                 <div className="flex items-start gap-3">
                   <Bell
                     className={cn(
                       'h-5 w-5 mt-0.5',
-                      alert.type === 'critical' && 'text-red-600 dark:text-red-400',
-                      alert.type === 'warning' && 'text-orange-600 dark:text-orange-400',
-                      alert.type === 'info' && 'text-blue-600 dark:text-blue-400'
+                      alert.type === 'critical' && theme.status.error.text,
+                      alert.type === 'warning' && theme.status.warning.text,
+                      alert.type === 'info' && theme.status.info.text
                     )}
                   />
                   <div className="flex-1">
@@ -664,15 +667,15 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                       <h4
                         className={cn(
                           'font-semibold',
-                          alert.type === 'critical' && 'text-red-900 dark:text-red-200',
-                          alert.type === 'warning' && 'text-orange-900 dark:text-orange-200',
-                          alert.type === 'info' && 'text-blue-900 dark:text-blue-200'
+                          alert.type === 'critical' && theme.status.error.text,
+                          alert.type === 'warning' && theme.status.warning.text,
+                          alert.type === 'info' && theme.status.info.text
                         )}
                       >
                         Budget Alert: {alert.threshold}% Threshold
                       </h4>
                       {alert.triggered && (
-                        <span className="px-2 py-0.5 text-xs bg-red-600 text-white rounded-full">
+                        <span className={cn("px-2 py-0.5 text-xs text-white rounded-full", theme.status.error.bg)}>
                           Active
                         </span>
                       )}
@@ -680,21 +683,21 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
                     <p
                       className={cn(
                         'text-sm mb-2',
-                        alert.type === 'critical' && 'text-red-700 dark:text-red-300',
-                        alert.type === 'warning' && 'text-orange-700 dark:text-orange-300',
-                        alert.type === 'info' && 'text-blue-700 dark:text-blue-300'
+                        alert.type === 'critical' && theme.status.error.text,
+                        alert.type === 'warning' && theme.status.warning.text,
+                        alert.type === 'info' && theme.status.info.text
                       )}
                     >
                       {alert.message}
                     </p>
                     {alert.triggeredAt && (
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                      <p className={cn("text-xs", theme.text.secondary)}>
                         Triggered on {new Date(alert.triggeredAt).toLocaleDateString()}
                       </p>
                     )}
                   </div>
                   {allowEdit && (
-                    <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <button className={cn(theme.text.muted, `hover:${theme.text.primary}`)}>
                       <Settings className="h-4 w-4" />
                     </button>
                   )}
@@ -704,11 +707,11 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
 
             {alerts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <Bell className="h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <Bell className={cn("h-12 w-12 mb-4", theme.text.muted)} />
+                <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
                   No budget alerts
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className={cn("text-sm", theme.text.secondary)}>
                   Configure alerts to monitor budget thresholds
                 </p>
               </div>

@@ -12,6 +12,7 @@
  * @module components/enterprise/CaseManagement/CaseTeam
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/utils';
 import {
   AlertCircle,
@@ -143,6 +144,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
   allowEdit = false,
   className,
 }) => {
+  const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState<TeamMemberRole | 'All'>('All');
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
@@ -216,15 +218,15 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Case Team</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Case Team</h2>
+            <p className={cn("text-sm mt-1", theme.text.secondary)}>
               {members.length} team members
             </p>
           </div>
           {allowEdit && (
             <button
               onClick={() => onAddMember?.({})}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg", theme.interactive.primary)}
             >
               <UserPlus className="h-4 w-4" />
               Add Member
@@ -234,35 +236,35 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Active Members</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                <p className={cn("text-xs font-medium", theme.text.secondary)}>Active Members</p>
+                <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
                   {workloadSummary.activeMembers}
                 </p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className={cn("h-8 w-8", theme.text.accent)} />
             </div>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Total Hours</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                <p className={cn("text-xs font-medium", theme.text.secondary)}>Total Hours</p>
+                <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
                   {workloadSummary.totalHours.toFixed(1)}
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-green-500" />
+              <Clock className={cn("h-8 w-8", theme.text.success)} />
             </div>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Billable Amount</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                <p className={cn("text-xs font-medium", theme.text.secondary)}>Billable Amount</p>
+                <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
                   ${(workloadSummary.billableAmount / 1000).toFixed(1)}k
                 </p>
               </div>
@@ -270,11 +272,11 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
             </div>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Utilization</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                <p className={cn("text-xs font-medium", theme.text.secondary)}>Utilization</p>
+                <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
                   {workloadSummary.utilizationRate.toFixed(0)}%
                 </p>
               </div>
@@ -287,13 +289,13 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
       {/* Search & Filters */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.muted)} />
           <input
             type="text"
             placeholder="Search team members..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className={cn("w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500", theme.surface.input, theme.border.default, theme.text.primary)}
           />
         </div>
 
@@ -305,8 +307,8 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
                 selectedRole === role
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  ? theme.interactive.primary
+                  : cn(theme.surface.subtle, theme.text.secondary, `hover:${theme.surface.highlight}`)
               )}
             >
               {role}
@@ -320,7 +322,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
         {filteredMembers.map(member => (
           <div
             key={member.id}
-            className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700"
+            className={cn("border rounded-lg p-4 transition-shadow hover:shadow-md", theme.surface.default, theme.border.default)}
           >
             {/* Member Header */}
             <div className="flex items-start justify-between mb-3">
@@ -333,7 +335,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
                 {/* Info */}
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <h3 className={cn("font-semibold", theme.text.primary)}>
                       {member.name}
                     </h3>
                     {member.isStarred && (
@@ -348,7 +350,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 
               {/* Actions Menu */}
               {allowEdit && (
-                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                <button className={cn(theme.text.muted, `hover:${theme.text.primary}`)}>
                   <MoreVertical className="h-4 w-4" />
                 </button>
               )}
@@ -356,22 +358,22 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 
             {/* Contact Info */}
             <div className="space-y-2 mb-3">
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <div className={cn("flex items-center gap-2 text-sm", theme.text.secondary)}>
                 <Mail className="h-4 w-4" />
-                <a href={`mailto:${member.email}`} className="hover:text-blue-600 dark:hover:text-blue-400">
+                <a href={`mailto:${member.email}`} className={cn("hover:underline", theme.text.link)}>
                   {member.email}
                 </a>
               </div>
               {member.phone && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <div className={cn("flex items-center gap-2 text-sm", theme.text.secondary)}>
                   <Phone className="h-4 w-4" />
-                  <a href={`tel:${member.phone}`} className="hover:text-blue-600 dark:hover:text-blue-400">
+                  <a href={`tel:${member.phone}`} className={cn("hover:underline", theme.text.link)}>
                     {member.phone}
                   </a>
                 </div>
               )}
               {member.organization && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <div className={cn("flex items-center gap-2 text-sm", theme.text.secondary)}>
                   <Building className="h-4 w-4" />
                   {member.organization}
                 </div>
@@ -379,22 +381,22 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-3 py-3 border-t border-gray-200 dark:border-gray-700">
+            <div className={cn("grid grid-cols-3 gap-3 py-3 border-t", theme.border.default)}>
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Hours</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                <p className={cn("text-xs", theme.text.secondary)}>Hours</p>
+                <p className={cn("text-sm font-semibold", theme.text.primary)}>
                   {member.hoursLogged || 0}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Rate</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                <p className={cn("text-xs", theme.text.secondary)}>Rate</p>
+                <p className={cn("text-sm font-semibold", theme.text.primary)}>
                   ${member.billingRate || 0}/hr
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Capacity</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                <p className={cn("text-xs", theme.text.secondary)}>Capacity</p>
+                <p className={cn("text-sm font-semibold", theme.text.primary)}>
                   {member.capacity || 100}%
                 </p>
               </div>
@@ -402,12 +404,12 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 
             {/* Tasks */}
             {(member.assignedTasks !== undefined || member.completedTasks !== undefined) && (
-              <div className="flex items-center gap-4 pt-3 border-t border-gray-200 dark:border-gray-700 text-sm">
-                <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+              <div className={cn("flex items-center gap-4 pt-3 border-t text-sm", theme.border.default, theme.text.secondary)}>
+                <div className="flex items-center gap-1">
                   <CheckCircle className="h-4 w-4" />
                   <span>{member.completedTasks || 0} completed</span>
                 </div>
-                <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-1">
                   <AlertCircle className="h-4 w-4" />
                   <span>{(member.assignedTasks || 0) - (member.completedTasks || 0)} pending</span>
                 </div>
@@ -420,13 +422,13 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
                 {member.expertise.slice(0, 3).map(skill => (
                   <span
                     key={skill}
-                    className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-300"
+                    className={cn("px-2 py-0.5 text-xs rounded", theme.surface.subtle, theme.text.secondary)}
                   >
                     {skill}
                   </span>
                 ))}
                 {member.expertise.length > 3 && (
-                  <span className="px-2 py-0.5 text-xs text-gray-500">
+                  <span className={cn("px-2 py-0.5 text-xs", theme.text.muted)}>
                     +{member.expertise.length - 3} more
                   </span>
                 )}
@@ -441,21 +443,21 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
                     setSelectedMember(member);
                     setShowPermissions(true);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                  className={cn("flex-1 flex items-center justify-center gap-2 px-3 py-2 border rounded-lg text-sm", theme.border.default, `hover:${theme.surface.highlight}`)}
                 >
                   <Shield className="h-4 w-4" />
                   Permissions
                 </button>
                 <button
                   onClick={() => onUpdateMember?.(member)}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                  className={cn("flex-1 flex items-center justify-center gap-2 px-3 py-2 border rounded-lg text-sm", theme.border.default, `hover:${theme.surface.highlight}`)}
                 >
                   <Edit className="h-4 w-4" />
                   Edit
                 </button>
                 <button
                   onClick={() => onRemoveMember?.(member.id)}
-                  className="px-3 py-2 border border-red-300 rounded-lg text-sm text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                  className={cn("px-3 py-2 border rounded-lg text-sm", theme.status.error.border, theme.status.error.text, "hover:bg-red-50 dark:hover:bg-red-900/20")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -468,11 +470,11 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
       {/* Empty State */}
       {filteredMembers.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Users className="h-12 w-12 text-gray-400 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <Users className={cn("h-12 w-12 mb-4", theme.text.muted)} />
+          <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
             No team members found
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className={cn("text-sm mb-4", theme.text.secondary)}>
             {searchQuery || selectedRole !== 'All'
               ? 'Try adjusting your search or filters'
               : 'Add team members to start collaborating'}
@@ -480,7 +482,7 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
           {allowEdit && (
             <button
               onClick={() => onAddMember?.({})}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}
             >
               <UserPlus className="h-4 w-4" />
               Add Your First Member
@@ -491,22 +493,22 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
 
       {/* Permissions Modal */}
       {showPermissions && selectedMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className={cn("rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto", theme.surface.default)}>
             {/* Modal Header */}
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
+            <div className={cn("sticky top-0 border-b p-6", theme.surface.default, theme.border.default)}>
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  <h2 className={cn("text-xl font-bold", theme.text.primary)}>
                     Manage Permissions
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className={cn("text-sm mt-1", theme.text.secondary)}>
                     {selectedMember.name} - {selectedMember.role}
                   </p>
                 </div>
                 <button
                   onClick={() => setShowPermissions(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className={cn(theme.text.muted, `hover:${theme.text.primary}`)}
                 >
                   ×
                 </button>
@@ -522,7 +524,11 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
                 return (
                   <label
                     key={permission}
-                    className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700"
+                    className={cn(
+                      "flex items-start gap-3 p-3 border rounded-lg cursor-pointer",
+                      theme.border.default,
+                      `hover:${theme.surface.highlight}`
+                    )}
                   >
                     <input
                       type="checkbox"
@@ -531,10 +537,10 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900 dark:text-white capitalize">
+                      <p className={cn("font-medium capitalize", theme.text.primary)}>
                         {permission.replace(/_/g, ' ')}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className={cn("text-sm", theme.text.secondary)}>
                         {description}
                       </p>
                     </div>
@@ -544,17 +550,17 @@ export const CaseTeam: React.FC<CaseTeamProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-6">
+            <div className={cn("sticky bottom-0 border-t p-6", theme.surface.default, theme.border.default)}>
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setShowPermissions(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className={cn("px-4 py-2 border rounded-lg", theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowPermissions(false)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className={cn("px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}
                 >
                   Save Changes
                 </button>

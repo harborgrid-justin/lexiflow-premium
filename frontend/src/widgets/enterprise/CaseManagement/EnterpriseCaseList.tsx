@@ -12,6 +12,7 @@
  * @module components/enterprise/CaseManagement/EnterpriseCaseList
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/utils';
 import { Case, CaseStatus } from '@/types';
 import {
@@ -121,6 +122,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
   onSaveView,
   className,
 }) => {
+  const { theme } = useTheme();
   // State Management
   const [selectedCases, setSelectedCases] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<FilterCriteria>({});
@@ -328,13 +330,13 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
         <div className="flex-1 flex gap-2 w-full md:w-auto">
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.muted)} />
             <input
               type="text"
               placeholder="Search cases..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className={cn("w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500", theme.surface.input, theme.border.default, theme.text.primary)}
             />
           </div>
 
@@ -344,8 +346,8 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
             className={cn(
               'flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors',
               showFilters
-                ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/30 dark:border-blue-700'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300'
+                ? cn(theme.surface.active, theme.border.primary, theme.text.primary)
+                : cn(theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)
             )}
           >
             <Filter className="h-4 w-4" />
@@ -355,7 +357,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
           {/* Column Config */}
           <button
             onClick={() => setShowColumnConfig(!showColumnConfig)}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+            className={cn("flex items-center gap-2 px-4 py-2 border rounded-lg", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
           >
             <Settings className="h-4 w-4" />
           </button>
@@ -372,7 +374,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                   const view = savedViews.find(v => v.id === e.target.value);
                   if (view) handleLoadView(view);
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+                className={cn("px-4 py-2 border rounded-lg", theme.surface.default, theme.border.default, theme.text.primary)}
               >
                 <option value="">Select View</option>
                 {savedViews.map(view => (
@@ -384,14 +386,14 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
           <button
             onClick={handleSaveView}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+            className={cn("flex items-center gap-2 px-4 py-2 border rounded-lg", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
           >
             <Save className="h-4 w-4" />
             Save View
           </button>
 
           <button
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg", theme.interactive.primary)}
           >
             <Upload className="h-4 w-4" />
             Import
@@ -399,7 +401,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
           <button
             onClick={() => onBulkOperation?.('export', filteredCases.map(c => c.id))}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className={cn("flex items-center gap-2 px-4 py-2 rounded-lg text-white", theme.interactive.primary)}
           >
             <Download className="h-4 w-4" />
             Export
@@ -409,11 +411,11 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
       {/* Advanced Filters Panel */}
       {showFilters && (
-        <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
+        <div className={cn("p-4 border rounded-lg", theme.surface.subtle, theme.border.default)}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className={cn("block text-sm font-medium mb-2", theme.text.secondary)}>
                 Status
               </label>
               <select
@@ -423,7 +425,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                   const selected = Array.from(e.target.selectedOptions, option => option.value as CaseStatus);
                   handleFilterChange({ ...filters, status: selected });
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className={cn("w-full px-3 py-2 border rounded-lg", theme.surface.input, theme.border.default, theme.text.primary)}
               >
                 {Object.values(CaseStatus).map(status => (
                   <option key={status} value={status}>{status}</option>
@@ -433,7 +435,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
             {/* Date Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className={cn("block text-sm font-medium mb-2", theme.text.secondary)}>
                 Filing Date Range
               </label>
               <div className="flex gap-2">
@@ -444,7 +446,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                     ...filters,
                     dateRange: { ...filters.dateRange!, start: e.target.value }
                   })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className={cn("flex-1 px-3 py-2 border rounded-lg", theme.surface.input, theme.border.default, theme.text.primary)}
                 />
                 <input
                   type="date"
@@ -453,14 +455,14 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                     ...filters,
                     dateRange: { ...filters.dateRange!, end: e.target.value }
                   })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className={cn("flex-1 px-3 py-2 border rounded-lg", theme.surface.input, theme.border.default, theme.text.primary)}
                 />
               </div>
             </div>
 
             {/* Budget Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className={cn("block text-sm font-medium mb-2", theme.text.secondary)}>
                 Budget Range
               </label>
               <div className="flex gap-2">
@@ -472,7 +474,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                     ...filters,
                     budgetRange: { ...filters.budgetRange!, min: Number(e.target.value) }
                   })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className={cn("flex-1 px-3 py-2 border rounded-lg", theme.surface.input, theme.border.default, theme.text.primary)}
                 />
                 <input
                   type="number"
@@ -482,7 +484,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                     ...filters,
                     budgetRange: { ...filters.budgetRange!, max: Number(e.target.value) }
                   })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className={cn("flex-1 px-3 py-2 border rounded-lg", theme.surface.input, theme.border.default, theme.text.primary)}
                 />
               </div>
             </div>
@@ -491,7 +493,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
           <div className="flex justify-end gap-2 mt-4">
             <button
               onClick={() => handleFilterChange({})}
-              className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900"
+              className={cn("px-4 py-2 text-sm", theme.text.secondary, `hover:${theme.text.primary}`)}
             >
               Clear Filters
             </button>
@@ -501,8 +503,8 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
       {/* Column Configuration Panel */}
       {showColumnConfig && (
-        <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
-          <h3 className="text-sm font-semibold mb-3 text-gray-900 dark:text-white">Configure Columns</h3>
+        <div className={cn("p-4 border rounded-lg", theme.surface.subtle, theme.border.default)}>
+          <h3 className={cn("text-sm font-semibold mb-3", theme.text.primary)}>Configure Columns</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {columns.map(col => (
               <label key={col.id} className="flex items-center gap-2 cursor-pointer">
@@ -510,9 +512,9 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                   type="checkbox"
                   checked={col.visible}
                   onChange={() => toggleColumnVisibility(col.id)}
-                  className="rounded border-gray-300"
+                  className={cn("rounded", theme.border.default)}
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">{col.label}</span>
+                <span className={cn("text-sm", theme.text.secondary)}>{col.label}</span>
               </label>
             ))}
           </div>
@@ -521,14 +523,14 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
 
       {/* Bulk Actions Bar */}
       {selectedCases.size > 0 && (
-        <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900/20 dark:border-blue-800">
+        <div className={cn("flex items-center justify-between p-4 rounded-lg", theme.surface.highlight)}>
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-blue-900 dark:text-blue-300">
+            <span className={cn("text-sm font-medium", theme.text.accent)}>
               {selectedCases.size} case(s) selected
             </span>
             <button
               onClick={clearSelection}
-              className="text-sm text-blue-700 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-200"
+              className={cn("text-sm", theme.text.accent, "hover:underline")}
             >
               Clear Selection
             </button>
@@ -538,7 +540,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
               <button
                 key={op.type}
                 onClick={() => handleBulkOperation(op)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+                className={cn("flex items-center gap-2 px-3 py-1.5 text-sm border rounded-lg", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.subtle}`)}
               >
                 <op.icon className="h-4 w-4" />
                 {op.label}
@@ -549,9 +551,9 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
       )}
 
       {/* Table */}
-      <div className="flex-1 overflow-auto border border-gray-300 rounded-lg dark:border-gray-600">
+      <div className={cn("flex-1 overflow-auto border rounded-lg", theme.border.default)}>
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-800 sticky top-0 z-10">
+          <thead className={cn("sticky top-0 z-10", theme.surface.subtle)}>
             <tr>
               {/* Select All Checkbox */}
               <th className="w-12 px-4 py-3 text-left">
@@ -559,7 +561,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                   type="checkbox"
                   checked={selectedCases.size === filteredCases.length && filteredCases.length > 0}
                   onChange={toggleSelectAll}
-                  className="rounded border-gray-300"
+                  className={cn("rounded", theme.border.default)}
                 />
               </th>
 
@@ -567,7 +569,7 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
               {columns.filter(col => col.visible).map(col => (
                 <th
                   key={col.id}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className={cn("px-4 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer", theme.text.secondary, `hover:${theme.surface.highlight}`)}
                   style={{ width: col.width }}
                   onClick={() => col.id !== 'actions' && handleSort(col.id)}
                 >
@@ -581,10 +583,10 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+          <tbody className={cn("divide-y", theme.surface.default, theme.border.default)}>
             {filteredCases.length === 0 ? (
               <tr>
-                <td colSpan={columns.filter(c => c.visible).length + 1} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan={columns.filter(c => c.visible).length + 1} className={cn("px-4 py-8 text-center", theme.text.muted)}>
                   No cases found matching your criteria
                 </td>
               </tr>
@@ -593,8 +595,9 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                 <tr
                   key={caseItem.id}
                   className={cn(
-                    'hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors',
-                    selectedCases.has(caseItem.id) && 'bg-blue-50 dark:bg-blue-900/20'
+                    'transition-colors',
+                    `hover:${theme.surface.subtle}`,
+                    selectedCases.has(caseItem.id) && theme.surface.highlight
                   )}
                 >
                   {/* Checkbox */}
@@ -603,28 +606,28 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                       type="checkbox"
                       checked={selectedCases.has(caseItem.id)}
                       onChange={() => toggleCaseSelection(caseItem.id)}
-                      className="rounded border-gray-300"
+                      className={cn("rounded", theme.border.default)}
                     />
                   </td>
 
                   {/* Dynamic Cells */}
                   {columns.find(c => c.id === 'caseNumber')?.visible && (
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className={cn("px-4 py-3 text-sm font-medium", theme.text.primary)}>
                       {caseItem.caseNumber || '-'}
                     </td>
                   )}
                   {columns.find(c => c.id === 'title')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.primary)}>
                       <button
                         onClick={() => onCaseSelect?.(caseItem.id)}
-                        className="hover:text-blue-600 dark:hover:text-blue-400 text-left"
+                        className={cn("hover:underline text-left", theme.text.accent)}
                       >
                         {caseItem.title}
                       </button>
                     </td>
                   )}
                   {columns.find(c => c.id === 'client')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {caseItem.client}
                     </td>
                   )}
@@ -636,33 +639,33 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
                     </td>
                   )}
                   {columns.find(c => c.id === 'practiceArea')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {caseItem.practiceArea || '-'}
                     </td>
                   )}
                   {columns.find(c => c.id === 'leadAttorney')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {caseItem.leadAttorneyId || '-'}
                     </td>
                   )}
                   {columns.find(c => c.id === 'filingDate')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {formatDate(caseItem.filingDate)}
                     </td>
                   )}
                   {columns.find(c => c.id === 'trialDate')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {formatDate(caseItem.trialDate)}
                     </td>
                   )}
                   {columns.find(c => c.id === 'budget')?.visible && (
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                    <td className={cn("px-4 py-3 text-sm", theme.text.secondary)}>
                       {formatCurrency(caseItem.budget?.amount)}
                     </td>
                   )}
                   {columns.find(c => c.id === 'actions')?.visible && (
                     <td className="px-4 py-3">
-                      <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                      <button className={cn(theme.text.muted, `hover:${theme.text.primary}`)}>
                         <MoreVertical className="h-4 w-4" />
                       </button>
                     </td>
@@ -675,12 +678,12 @@ export const EnterpriseCaseList: React.FC<EnterpriseCaseListProps> = ({
       </div>
 
       {/* Footer: Results Count */}
-      <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+      <div className={cn("flex justify-between items-center text-sm", theme.text.secondary)}>
         <span>
           Showing {filteredCases.length} of {cases.length} cases
         </span>
         {selectedCases.size > 0 && (
-          <span className="font-medium text-blue-600 dark:text-blue-400">
+          <span className={cn("font-medium", theme.text.accent)}>
             {selectedCases.size} selected
           </span>
         )}

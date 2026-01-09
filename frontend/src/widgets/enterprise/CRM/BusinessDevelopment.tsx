@@ -371,7 +371,7 @@ export const BusinessDevelopment: React.FC = () => {
           <option>Website</option>
           <option>Conference</option>
         </select>
-        <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        <button className={cn("px-4 py-2 rounded text-white hover:opacity-90", theme.status.info)}>
           <Plus className="h-4 w-4 inline mr-1" />
           Add Lead
         </button>
@@ -400,7 +400,12 @@ export const BusinessDevelopment: React.FC = () => {
         {leads.map(lead => (
           <div
             key={lead.id}
-            className={cn("p-6 rounded-lg border hover:shadow-lg transition-all cursor-pointer", theme.surface.default, theme.border.default)}
+            className={cn(
+              "p-6 rounded-lg border hover:shadow-lg transition-all cursor-pointer",
+              theme.surface.default,
+              theme.border.default,
+              selectedLead === lead.id ? cn("ring-2", theme.text.accent) : ""
+            )}
             onClick={() => setSelectedLead(lead.id)}
           >
             <div className="flex justify-between items-start mb-4">
@@ -411,10 +416,10 @@ export const BusinessDevelopment: React.FC = () => {
                   </h3>
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
-                    lead.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                      lead.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                        lead.status === 'Proposal' || lead.status === 'Negotiation' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    lead.status === 'Won' ? theme.status.success :
+                      lead.status === 'Lost' ? theme.status.error :
+                        lead.status === 'Proposal' || lead.status === 'Negotiation' ? theme.status.info :
+                          theme.status.warning
                   )}>
                     {lead.status}
                   </span>
@@ -475,7 +480,7 @@ export const BusinessDevelopment: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className={cn("font-medium", theme.text.primary)}>Pitch Activities</h3>
-        <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        <button className={cn("px-4 py-2 rounded text-white hover:opacity-90", theme.status.info)}>
           <Plus className="h-4 w-4 inline mr-1" />
           Schedule Pitch
         </button>
@@ -490,10 +495,10 @@ export const BusinessDevelopment: React.FC = () => {
                   <h4 className={cn("font-bold", theme.text.primary)}>{pitch.clientName}</h4>
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
-                    pitch.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                      pitch.status === 'Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                        pitch.status === 'Completed' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    pitch.status === 'Won' ? theme.status.success :
+                      pitch.status === 'Lost' ? theme.status.error :
+                        pitch.status === 'Completed' ? theme.status.info :
+                          theme.status.warning
                   )}>
                     {pitch.status}
                   </span>
@@ -557,7 +562,7 @@ export const BusinessDevelopment: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className={cn("font-medium", theme.text.primary)}>RFP Tracker</h3>
-        <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        <button className={cn("px-4 py-2 rounded text-white hover:opacity-90", theme.status.info)}>
           <Plus className="h-4 w-4 inline mr-1" />
           Add RFP
         </button>
@@ -572,15 +577,15 @@ export const BusinessDevelopment: React.FC = () => {
                   <h4 className={cn("font-bold text-lg", theme.text.primary)}>{rfp.title}</h4>
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-medium",
-                    rfp.status === 'Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                      rfp.status === 'Lost' || rfp.status === 'Declined' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                        rfp.status === 'Submitted' ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
-                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    rfp.status === 'Won' ? theme.status.success :
+                      rfp.status === 'Lost' || rfp.status === 'Declined' ? theme.status.error :
+                        rfp.status === 'Submitted' ? theme.status.info :
+                          theme.status.warning
                   )}>
                     {rfp.status}
                   </span>
                   {rfp.goNoGoDecision === 'Go' && (
-                    <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                    <span className={cn("px-2 py-1 rounded text-xs font-medium", theme.status.success)}>
                       Go Decision
                     </span>
                   )}

@@ -32,6 +32,8 @@ import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { STORES, db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import { IdGenerator } from "@/shared/lib/idGenerator";
+import { validateTemplate } from "@/shared/lib/validation";
 import {
   Case,
   CaseId,
@@ -41,12 +43,10 @@ import {
   PleadingTemplate,
   UserId,
 } from "@/types";
-import { IdGenerator } from "@/shared/lib/idGenerator";
 import {
   createTemplateContext,
   hydrateTemplateSections,
 } from "@/utils/templateEngine";
-import { validateTemplate } from "@/shared/lib/validation";
 
 /**
  * Query keys for React Query integration
@@ -615,7 +615,10 @@ export class PleadingRepository extends Repository<PleadingDocument> {
           }
         }
         // Fallback if URL not returned but handled
-        const baseURL = (apiClient as any).defaults?.baseURL || "";
+        const client = apiClient as unknown as {
+          defaults: { baseURL: string };
+        };
+        const baseURL = client.defaults?.baseURL || "";
         return `${baseURL}/litigation/pleadings/${pleadingId}/pdf/download`;
       }
 

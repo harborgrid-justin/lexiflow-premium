@@ -1,10 +1,10 @@
 import { AccessRequest } from '@/api/admin/access-requests-api';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
 import React from 'react';
 
@@ -14,8 +14,9 @@ export const AccessRequestManager: React.FC = () => {
     const { data: requests = [], isLoading } = useQuery<AccessRequest[]>(
         ['admin', 'access-requests'],
         async () => {
-            // Safe access via any if types are not fully propagated yet
-            return await (DataService.admin as any).accessRequests.getRequests();
+            // Safe access ignoring typed interface gaps
+            const adminService = DataService.admin as unknown as { accessRequests: { getRequests: () => Promise<AccessRequest[]> } };
+            return await adminService.accessRequests.getRequests();
         }
     );
 

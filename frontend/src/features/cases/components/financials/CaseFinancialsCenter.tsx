@@ -18,12 +18,12 @@
  */
 
 import { api } from '@/api';
-import { Badge } from '@/shared/ui/atoms/Badge/Badge';
-import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge/Badge';
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import {
   Clock,
   DollarSign,
@@ -33,31 +33,66 @@ import {
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
+interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  caseId?: string;
+  totalAmount?: number;
+  amount?: number;
+  status?: string;
+  invoiceDate?: string;
+  date?: string;
+  createdAt: string;
+  caseTitle?: string;
+  matterName?: string;
+}
+
+interface Expense {
+  id: string;
+  description: string;
+  amount?: number;
+  cost?: number;
+  date?: string;
+  incurredAt?: string;
+}
+
+interface Matter {
+  id: string;
+  title: string;
+}
+
+interface TimeEntry {
+  date?: string;
+  createdAt?: string;
+  duration?: number;
+  rate?: number;
+}
+
 export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
   const [viewMode, setViewMode] = useState<'overview' | 'billing' | 'expenses' | 'budget'>('overview');
 
   // Fetch invoices
-  const { data: invoices } = useQuery(
+  const { data: invoices } = useQuery<Invoice[]>(
     ['billing', 'invoices', caseId],
     () => api.billing.getInvoices(caseId ? { caseId } : undefined)
   );
 
   // Fetch time entries
-  const { data: timeEntries } = useQuery(
+  const { data: timeEntries } = useQuery<TimeEntry[]>(
     ['billing', 'time-entries', caseId],
     () => api.billing.getTimeEntries(caseId ? { caseId } : undefined)
   );
 
   // Fetch expenses
-  const { data: expenses } = useQuery(
+  const { data: expenses } = useQuery<Expense[]>(
     ['billing', 'expenses', caseId],
     () => api.expenses.getAll(caseId ? { caseId } : undefined)
   );
 
   // Fetch matters for revenue attribution
-  const { data: matters } = useQuery(
+  const { data: matters } = useQuery<Matter[]>(
     ['matters', 'all'],
     () => api.cases.getAll()
   );
@@ -70,25 +105,11 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
     else if (dateRange === '90d') cutoffDate.setDate(now.getDate() - 90);
     else if (dateRange === 'ytd') cutoffDate.setMonth(0, 1);
 
-    interface InvoiceData {
-      createdAt?: string;
-      totalAmount?: number;
-      amount?: number;
-      status?: string;
-    }
-
-    interface TimeEntryData {
-      date?: string;
-      createdAt?: string;
-      duration?: number;
-      rate?: number;
-    }
-
-    const recentInvoices = (invoices as InvoiceData[] | undefined)?.filter(inv =>
+    const recentInvoices = invoices?.filter(inv =>
       inv.createdAt && new Date(inv.createdAt) >= cutoffDate
     ) || [];
 
-    const recentTimeEntries = (timeEntries as TimeEntryData[] | undefined)?.filter(t => {
+    const recentTimeEntries = timeEntries?.filter(t => {
       const entryDate = t.date || (t.createdAt ? t.createdAt : new Date().toISOString());
       return new Date(entryDate) >= cutoffDate;
     }) || [];
@@ -96,6 +117,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
     const totalRevenue = recentInvoices.reduce((sum, inv) =>
       sum + (inv.totalAmount || inv.amount || 0), 0
     );
+
 
     const billableHours = recentTimeEntries.reduce((sum, t) =>
       sum + (t.duration || 0), 0
@@ -236,8 +258,8 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                     const d = new Date();
                     d.setMonth(d.getMonth() - (5 - i));
                     const monthName = d.toLocaleString('default', { month: 'short' });
-                    const total = (invoices as any[])?.filter(inv => {
-                      const invDate = new Date(inv.invoiceDate || inv.createdAt || inv.date);
+                    const total = invoices?.filter(inv => {
+                      const invDate = new Date(inv.invoiceDate || inv.createdAt || inv.date || '');
                       return invDate.getMonth() === d.getMonth() && invDate.getFullYear() === d.getFullYear();
                     }).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
                     return { name: monthName, value: total };
@@ -267,19 +289,8 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
             </h3>
             <div className="space-y-3">
               {matters && (() => {
-                interface MatterData {
-                  id: string;
-                  title: string;
-                }
-
-                interface InvoiceData {
-                  caseId?: string;
-                  totalAmount?: number;
-                  amount?: number;
-                }
-
-                const matterRevenue = (matters as MatterData[]).map(matter => {
-                  const matterInvoices = (invoices as InvoiceData[] | undefined)?.filter(inv => inv.caseId === matter.id) || [];
+                const matterRevenue = matters.map(matter => {
+                  const matterInvoices = invoices?.filter(inv => inv.caseId === matter.id) || [];
                   const revenue = matterInvoices.reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0);
                   return { matter, revenue };
                 }).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
@@ -309,7 +320,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
               <Button variant="ghost" size="sm" onClick={() => setViewMode('expenses')}>View All</Button>
             </div>
             <div className="space-y-4">
-              {((expenses as any[]) || []).slice(0, 3).map((exp: any) => (
+              {(expenses || []).slice(0, 3).map((exp) => (
                 <div key={exp.id || Math.random()} className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
                   <div className={cn('font-medium mb-1', isDark ? 'text-slate-100' : 'text-slate-900')}>
                     {exp.description || 'Expense Entry'}
@@ -324,7 +335,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   </div>
                 </div>
               ))}
-              {(!expenses || (expenses as any[]).length === 0) && (
+              {(!expenses || expenses.length === 0) && (
                 <div className="text-center py-4 text-slate-500 text-sm">No recent expenses recorded</div>
               )}
             </div>
@@ -338,7 +349,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
               <Button variant="ghost" size="sm" onClick={() => setViewMode('billing')}>View All</Button>
             </div>
             <div className="space-y-3">
-              {((invoices as any[]) || []).slice(0, 5).map((inv: any) => (
+              {(invoices || []).slice(0, 5).map((inv) => (
                 <InvoiceItem
                   key={inv.id || inv.invoiceNumber}
                   invoiceNumber={inv.invoiceNumber}
@@ -349,7 +360,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   isDark={isDark}
                 />
               ))}
-              {(!invoices || (invoices as any[]).length === 0) && (
+              {(!invoices || invoices.length === 0) && (
                 <div className="text-center py-4 text-slate-500 text-sm">No invoices found</div>
               )}
             </div>

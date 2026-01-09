@@ -182,7 +182,7 @@ const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
     stage: item.status,
     count: item.count,
     value: 0, // Value not provided by breakdown endpoint, might need another call or update endpoint
-    color: item.color || colors[index % colors.length],
+    color: item.color || colors[index % colors.length] || '#94A3B8',
   }));
 };
 
@@ -240,11 +240,14 @@ const mapFinancialSummary = (data?: BillingOverview[]): FinancialSummary => {
   };
 };
 
-const EmptyChart = () => (
-  <div className="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-dashed border-gray-200 dark:border-gray-800">
-    <span className="text-gray-400 text-sm">No data available</span>
-  </div>
-);
+const EmptyChart = () => {
+  const { theme } = useTheme();
+  return (
+    <div className={cn("w-full h-full flex items-center justify-center rounded-lg border border-dashed", theme.surface.subtle, theme.border.default)}>
+      <span className={cn("text-sm", theme.text.muted)}>No data available</span>
+    </div>
+  );
+};
 
 // ============================================================================
 // COMPONENT
@@ -302,7 +305,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
     return (
       <div className={cn('flex items-center justify-center min-h-[400px]', className)}>
         <div className="text-center max-w-md">
-          <AlertCircle className="h-12 w-12 text-red-600 dark:text-red-400 mx-auto mb-4" />
+          <AlertCircle className={cn("h-12 w-12 mx-auto mb-4", theme.status.error.text)} />
           <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
             Failed to Load Dashboard
           </h3>
@@ -310,7 +313,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
           {onRefresh && (
             <button
               onClick={onRefresh}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className={cn("px-4 py-2 rounded-lg text-white transition-colors", theme.interactive.primary)}
             >
               Try Again
             </button>
@@ -335,7 +338,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
 
         <div className="flex items-center gap-2">
           {/* Timeframe Selector */}
-          <div className="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <div className={cn("flex items-center gap-1 p-1 rounded-lg", theme.surface.subtle)}>
             {(['week', 'month', 'quarter', 'year'] as const).map((timeframe) => (
               <button
                 key={timeframe}
@@ -343,8 +346,8 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                 className={cn(
                   'px-3 py-1.5 text-sm font-medium rounded-md transition-colors capitalize',
                   selectedTimeframe === timeframe
-                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    ? cn(theme.surface.default, theme.text.accent, "shadow-sm")
+                    : cn(theme.text.secondary, `hover:${theme.text.primary}`)
                 )}
               >
                 {timeframe}
@@ -359,7 +362,8 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
               disabled={isLoading}
               className={cn(
                 'p-2 rounded-lg transition-colors',
-                'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700',
+                theme.surface.subtle,
+                `hover:${theme.surface.highlight}`,
                 'disabled:opacity-50 disabled:cursor-not-allowed',
                 isLoading && 'animate-spin'
               )}
@@ -371,7 +375,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
           {onConfigureWidgets && (
             <button
               onClick={onConfigureWidgets}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              className={cn("p-2 rounded-lg transition-colors", theme.surface.subtle, `hover:${theme.surface.highlight}`)}
               title="Configure widgets"
             >
               <Settings className="h-4 w-4" />
@@ -380,7 +384,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
           {onExport && (
             <button
               onClick={onExport}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className={cn("px-4 py-2 rounded-lg text-white transition-colors flex items-center gap-2", theme.interactive.primary)}
             >
               <Download className="h-4 w-4" />
               Export
@@ -397,7 +401,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
             .map((_, i) => (
               <div
                 key={i}
-                className="h-32 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse"
+                className={cn("h-32 rounded-xl animate-pulse", theme.surface.subtle)}
               />
             ))
         ) : kpiMetrics.length > 0 ? (
@@ -426,7 +430,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
             .map((_, i) => (
               <div
                 key={i}
-                className="h-32 rounded-xl bg-gray-50 dark:bg-gray-900 border border-dashed border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-400"
+                className={cn("h-32 rounded-xl border border-dashed flex items-center justify-center", theme.surface.subtle, theme.border.default, theme.text.muted)}
               >
                 No Data
               </div>
@@ -532,7 +536,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                       borderRadius: '8px',
                     }}
                     formatter={(
-                      value: number | string | Array<number | string>,
+                      value: any,
                       name: string | number
                     ): [string, string] => {
                       if (name === 'value' && typeof value === 'number') {

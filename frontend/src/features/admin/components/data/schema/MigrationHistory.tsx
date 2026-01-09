@@ -1,9 +1,9 @@
 import { Migration } from '@/api/admin/schema-api';
-import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
 import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
 import React from 'react';
 
@@ -15,7 +15,10 @@ export const MigrationHistory = React.memo(function MigrationHistory() {
 
     const { data: migrations = [], isLoading } = useQuery<Migration[]>(
         ['admin', 'migrations'],
-        () => (DataService.admin as any).schema.getMigrations()
+        () => {
+            const adminService = DataService.admin as unknown as { schema: { getMigrations: () => Promise<Migration[]> } };
+            return adminService.schema.getMigrations();
+        }
     );
 
     if (isLoading) {

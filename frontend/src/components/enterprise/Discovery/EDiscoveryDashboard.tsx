@@ -7,10 +7,10 @@
 
 import { analyticsApi } from '@/api';
 import { KPICard } from '@/components/enterprise/dashboard/KPICard';
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -126,7 +126,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
           DataService.custodians.getAll({ caseId }),
           DataService.esiSources.getAll({ caseId }),
           analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]) as [any[], any[], any];
+        ]) as [Custodian[], Collection[], ReviewMetrics];
 
         setCustodians(custodiansData.map(c => {
           let status: Custodian['status'] = 'active';

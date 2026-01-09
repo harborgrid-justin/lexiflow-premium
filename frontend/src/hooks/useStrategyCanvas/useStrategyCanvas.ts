@@ -11,7 +11,7 @@ export interface CanvasNode {
   id: string;
   type: "claim" | "evidence" | "person" | "event";
   position: { x: number; y: number };
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface CanvasConnection {

@@ -252,10 +252,10 @@ export const ClientAnalytics: React.FC = () => {
 
   // Segment data
   const segmentData: ClientSegment[] = [
-    { segment: 'Enterprise', count: 15, revenue: 2500000, avgLifetimeValue: 1200000, color: '#3b82f6' },
-    { segment: 'Mid-Market', count: 35, revenue: 1800000, avgLifetimeValue: 450000, color: '#10b981' },
-    { segment: 'Small Business', count: 50, revenue: 850000, avgLifetimeValue: 85000, color: '#f59e0b' },
-    { segment: 'Individual', count: 80, revenue: 320000, avgLifetimeValue: 15000, color: '#8b5cf6' }
+    { segment: 'Enterprise', count: 15, revenue: 2500000, avgLifetimeValue: 1200000, color: chartColors[0] },
+    { segment: 'Mid-Market', count: 35, revenue: 1800000, avgLifetimeValue: 450000, color: chartColors[2] },
+    { segment: 'Small Business', count: 50, revenue: 850000, avgLifetimeValue: 85000, color: chartColors[3] },
+    { segment: 'Individual', count: 80, revenue: 320000, avgLifetimeValue: 15000, color: chartColors[1] }
   ];
 
   // Revenue trend data

@@ -12,6 +12,7 @@
  * @module components/enterprise/CaseManagement/EnhancedCaseTimeline
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/utils';
 import { format, formatDistanceToNow, isFuture, isPast, isToday } from 'date-fns';
 import {
@@ -213,6 +214,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
   allowEdit = false,
   className,
 }) => {
+  const { theme } = useTheme();
   const [selectedTypes, setSelectedTypes] = useState<Set<EventType>>(new Set());
   const [selectedStatuses] = useState<Set<EventStatus>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
@@ -329,7 +331,9 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
       <div
         key={event.id}
         className={cn(
-          'relative bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer',
+          'relative border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer',
+          theme.surface.default,
+          theme.border.default,
           config.borderColor,
           event.priority && PRIORITY_COLORS[event.priority],
           isOverdue && 'ring-2 ring-red-400'
@@ -346,24 +350,28 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h4 className="font-semibold text-gray-900 dark:text-white">
+              <h4 className={cn('font-semibold', theme.text.primary)}>
                 {event.title}
               </h4>
               {event.priority === 'critical' && (
-                <span className="flex-shrink-0 px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-900/30 dark:text-red-400">
+                <span className={cn(
+                  'flex-shrink-0 px-2 py-0.5 text-xs font-medium rounded-full',
+                  theme.status.error.bg,
+                  theme.status.error.text
+                )}>
                   Critical
                 </span>
               )}
             </div>
 
             {event.description && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+              <p className={cn('text-sm mb-2 line-clamp-2', theme.text.secondary)}>
                 {event.description}
               </p>
             )}
 
             {/* Metadata Row */}
-            <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+            <div className={cn('flex flex-wrap items-center gap-3 text-xs', theme.text.muted)}>
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {formatEventDate(event.date)}
@@ -404,7 +412,11 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                 {event.tags.map(tag => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-300"
+                    className={cn(
+                      'px-2 py-0.5 text-xs rounded',
+                      theme.surface.subtle,
+                      theme.text.secondary
+                    )}
                   >
                     {tag}
                   </span>
@@ -416,21 +428,21 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
           {/* Status Badge */}
           <div className="flex-shrink-0">
             {event.status === 'completed' && (
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className={cn('h-5 w-5', theme.status.success.text)} />
             )}
             {event.status === 'cancelled' && (
-              <XCircle className="h-5 w-5 text-gray-400" />
+              <XCircle className={cn('h-5 w-5', theme.status.neutral.text)} />
             )}
             {event.status === 'missed' && (
-              <XCircle className="h-5 w-5 text-red-500" />
+              <XCircle className={cn('h-5 w-5', theme.status.error.text)} />
             )}
           </div>
         </div>
 
         {/* Overdue Warning */}
         {isOverdue && (
-          <div className="mt-3 pt-3 border-t border-red-200 dark:border-red-800">
-            <p className="text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
+          <div className={cn('mt-3 pt-3 border-t', theme.status.error.border)}>
+            <p className={cn('text-sm font-medium flex items-center gap-2', theme.status.error.text)}>
               <AlertTriangle className="h-4 w-4" />
               Overdue - Action Required
             </p>
@@ -445,8 +457,8 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
       {/* Toolbar */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Case Timeline</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <h2 className={cn('text-xl font-bold', theme.text.primary)}>Case Timeline</h2>
+          <p className={cn('text-sm mt-1', theme.text.secondary)}>
             {filteredEvents.length} events
           </p>
         </div>
@@ -456,7 +468,12 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
           <select
             value={currentViewMode}
             onChange={(e) => setCurrentViewMode(e.target.value as ViewMode)}
-            className="px-3 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white text-sm"
+            className={cn(
+              'px-3 py-2 border rounded-lg text-sm',
+              theme.surface.default,
+              theme.border.default,
+              theme.text.primary
+            )}
           >
             <option value="chronological">Chronological</option>
             <option value="grouped">Grouped by Type</option>
@@ -468,7 +485,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
             className={cn(
               'flex items-center gap-2 px-3 py-2 border rounded-lg text-sm transition-colors',
               showCompleted
-                ? 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600'
+                ? cn(theme.surface.default, theme.border.default, theme.text.primary)
                 : 'border-blue-300 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-700'
             )}
           >
@@ -486,19 +503,19 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
             </button>
           )}
 
-          <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
-            <Download className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          <button className={cn('p-2 border rounded-lg hover:bg-opacity-80', theme.border.default, theme.surface.default)}>
+            <Download className={cn('h-4 w-4', theme.text.secondary)} />
           </button>
 
-          <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
-            <Printer className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          <button className={cn('p-2 border rounded-lg hover:bg-opacity-80', theme.border.default, theme.surface.default)}>
+            <Printer className={cn('h-4 w-4', theme.text.secondary)} />
           </button>
         </div>
       </div>
 
       {/* Filters */}
       {showFilters && (
-        <div className="p-4 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
+        <div className={cn('p-4 border rounded-lg', theme.surface.subtle, theme.border.default)}>
           <div className="space-y-4">
             {/* Search */}
             <div className="relative">
@@ -508,13 +525,18 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                 placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className={cn(
+                  'w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+                  theme.surface.default,
+                  theme.border.default,
+                  theme.text.primary
+                )}
               />
             </div>
 
             {/* Type Filters */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className={cn('block text-sm font-medium mb-2', theme.text.primary)}>
                 Event Types
               </label>
               <div className="flex flex-wrap gap-2">
@@ -529,7 +551,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                         'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors',
                         isSelected
                           ? cn(config.bgColor, config.color, 'border-2', config.borderColor)
-                          : 'border border-gray-300 bg-white text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300'
+                          : cn('border', theme.border.default, theme.surface.default, theme.text.secondary)
                       )}
                     >
                       <Icon className="h-3 w-3" />
@@ -558,7 +580,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                   {/* Date Badge */}
                   <div className="absolute left-0 top-0 flex items-center gap-2">
                     <div className="h-4 w-4 rounded-full bg-blue-500 border-4 border-white dark:border-gray-900" />
-                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                    <span className={cn('text-xs font-medium whitespace-nowrap', theme.text.muted)}>
                       {format(new Date(event.date), 'MMM d')}
                     </span>
                   </div>
@@ -575,11 +597,13 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
         {currentViewMode !== 'chronological' && groupedEvents && (
           <div className="space-y-4">
             {groupedEvents.map(group => (
-              <div key={group.id} className="border border-gray-200 rounded-lg dark:border-gray-700">
+              <div key={group.id} className={cn('border rounded-lg', theme.border.default)}>
                 {/* Group Header */}
                 <button
                   onClick={() => toggleGroup(group.id)}
-                  className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className={cn(
+                    'w-full flex items-center justify-between p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800'
+                  )}
                 >
                   <div className="flex items-center gap-3">
                     {group.expanded ? (
@@ -587,10 +611,14 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
                     ) : (
                       <ChevronRight className="h-4 w-4 text-gray-400" />
                     )}
-                    <h3 className="font-semibold text-gray-900 dark:text-white capitalize">
+                    <h3 className={cn('font-semibold capitalize', theme.text.primary)}>
                       {group.name}
                     </h3>
-                    <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                    <span className={cn(
+                      'px-2 py-0.5 text-xs rounded-full',
+                      theme.surface.subtle,
+                      theme.text.secondary
+                    )}>
                       {group.events.length}
                     </span>
                   </div>
@@ -611,10 +639,10 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
         {filteredEvents.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Calendar className="h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className={cn('text-lg font-semibold mb-2', theme.text.primary)}>
               No events found
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className={cn('text-sm', theme.text.secondary)}>
               {searchQuery || selectedTypes.size > 0
                 ? 'Try adjusting your filters'
                 : 'Timeline events will appear here'}

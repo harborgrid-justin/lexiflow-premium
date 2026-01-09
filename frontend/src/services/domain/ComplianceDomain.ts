@@ -91,7 +91,7 @@ export interface Conflict {
   description: string;
   relationship?: string;
   depth?: number;
-  matters?: any[];
+  matters?: Record<string, unknown>[];
 }
 
 export interface ConflictWarning {

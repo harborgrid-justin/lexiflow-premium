@@ -296,7 +296,7 @@ export function DocumentWorkflow({
                 Workflow Steps
               </h3>
               <div className="space-y-4">
-                {workflow.steps.sort((a, b) => a.order - b.order).map((step) => {
+                {workflow.steps.sort((a, b) => a.order - b.order).map((step, index) => {
                   const isActive = step.id === currentStep?.id;
                   const isCompleted = step.status === 'completed';
 

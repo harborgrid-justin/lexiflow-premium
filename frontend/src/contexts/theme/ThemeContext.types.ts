@@ -18,6 +18,7 @@ export interface ThemeObject {
     active: string;
     primary: string;
     secondary: string;
+    subtle: string;
   };
   border: {
     default: string;
@@ -43,6 +44,11 @@ export interface ThemeObject {
     inverse: string;
     link: string;
     code: string;
+    muted: string;
+    accent: string;
+  };
+  interactive: {
+    primary: string;
   };
   status: {
     success: { bg: string; text: string; icon: string; border: string };

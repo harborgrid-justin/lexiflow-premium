@@ -8,16 +8,16 @@
 import { useCallback, useState } from "react";
 import type { ZodSchema } from "zod";
 
-export interface WizardStep {
+export interface WizardStep<T = unknown> {
   id: string;
   title: string;
   description?: string;
-  validationSchema?: ZodSchema<any>;
+  validationSchema?: ZodSchema<T>;
   isOptional?: boolean;
 }
 
-export const useEnhancedWizard = <T extends Record<string, any>>(
-  steps: WizardStep[],
+export const useEnhancedWizard = <T extends Record<string, unknown>>(
+  steps: WizardStep<T>[],
   initialData: Partial<T> = {}
 ) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);

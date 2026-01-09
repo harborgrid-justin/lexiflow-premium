@@ -279,7 +279,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <select
             className={cn("w-full p-2 rounded border", theme.className)}
             value={formData.clientType}
-            onChange={e => updateData({ clientType: e.target.value as any })}
+            onChange={e => updateData({ clientType: e.target.value as IntakeData['clientType'] })}
           >
             <option value="corporate">Corporate</option>
             <option value="individual">Individual</option>
@@ -334,7 +334,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <select
             className={cn("w-full p-2 rounded border", theme.className)}
             value={formData.riskLevel}
-            onChange={e => updateData({ riskLevel: e.target.value as any })}
+            onChange={e => updateData({ riskLevel: e.target.value as IntakeData['riskLevel'] })}
           >
             <option value="low">Low Risk</option>
             <option value="medium">Medium Risk</option>
@@ -425,7 +425,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               <select
                 className={cn("w-full p-2 border rounded", theme.className)}
                 value={formData.priority}
-                onChange={e => updateData({ priority: e.target.value as any })}
+                onChange={e => updateData({ priority: e.target.value as IntakeData['priority'] })}
               >
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -454,7 +454,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               <select
                 className={cn("w-full p-2 rounded border", theme.className)}
                 value={formData.billingType}
-                onChange={e => updateData({ billingType: e.target.value as any })}
+                onChange={e => updateData({ billingType: e.target.value as IntakeData['billingType'] })}
               >
                 <option value="hourly">Hourly Rate</option>
                 <option value="contingency">Contingency Fee</option>
@@ -520,7 +520,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               onChange={e => updateData({ leadAttorneyId: e.target.value })}
             >
               <option value="">Select Lead Attorney...</option>
-              {users?.map((u: any) => (
+              {users?.map((u: User) => (
                 <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
               ))}
             </select>
@@ -529,7 +529,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <div>
             <label className="block text-sm font-medium mb-2">Support Team</label>
             <div className="border rounded p-4 max-h-60 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-2">
-              {users?.filter((u: any) => u.id !== formData.leadAttorneyId).map((u: any) => (
+              {users?.filter((u: User) => u.id !== formData.leadAttorneyId).map((u: User) => (
                 <label key={u.id} className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer">
                   <input
                     type="checkbox"

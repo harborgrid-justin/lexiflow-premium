@@ -10,8 +10,8 @@
  * - Client acquisition (new clients, retention, lifetime value)
  */
 
-import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import {
   analyticsService,
   type ARAgingData,
@@ -104,7 +104,7 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
   selectedWidgets,
   className,
 }) => {
-  useTheme();
+  const { theme } = useTheme();
 
   // State for API data
   const [caseTrends, setCaseTrends] = useState<CaseTrendData[]>([]);
@@ -179,13 +179,13 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
 
   // Empty state component
   const EmptyState: React.FC<{ message: string; onAdd?: () => void }> = ({ message, onAdd }) => (
-    <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-gray-400">
+    <div className={cn("flex flex-col items-center justify-center h-full min-h-[200px]", theme.text.muted)}>
       <BarChart3 className="w-12 h-12 mb-3 opacity-50" />
       <p className="text-sm mb-3">{message}</p>
       {onAdd && (
         <button
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          className={cn("flex items-center gap-2 px-4 py-2 text-sm text-white rounded-md transition-colors", theme.interactive.primary)}
         >
           <Plus className="w-4 h-4" />
           Add Data
@@ -197,7 +197,7 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
   return (
     <div className={cn('space-y-6', className)}>
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-800 dark:text-red-200">
+        <div className={cn("border rounded-lg p-4", theme.status.error.bg, theme.status.error.border, theme.status.error.text)}>
           {error}
         </div>
       )}

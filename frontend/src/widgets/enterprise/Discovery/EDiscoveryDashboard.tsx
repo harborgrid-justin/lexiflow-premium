@@ -7,10 +7,10 @@
 
 import { analyticsApi } from '@/api';
 import { KPICard } from '@/components/enterprise/dashboard/KPICard';
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button/Button';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -97,6 +97,42 @@ export interface EDiscoveryDashboardProps {
   className?: string;
 }
 
+interface CustodianAPIData {
+  id: string;
+  name: string;
+  status: string;
+  email: string;
+  department: string;
+  role: string;
+  updatedAt: string;
+}
+
+interface CollectionAPIData {
+  id: string;
+  collectionName: string;
+  status: string;
+  custodians: string[];
+  totalItems: number;
+  collectedItems: number;
+  createdAt: string;
+  completedAt?: string;
+  actualSize?: string;
+}
+
+interface ReviewMetricsResponse {
+  overview: {
+    totalDocuments: number;
+    reviewedDocuments: number;
+    privilegedDocuments: number;
+    responsiveDocuments: number;
+  };
+  team: {
+    averageReviewRate: number;
+    reviewers: number;
+  };
+  progress: ProcessingStage[];
+}
+
 
 
 
@@ -126,7 +162,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
           DataService.custodians.getAll({ caseId }),
           DataService.esiSources.getAll({ caseId }),
           analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]) as [any[], any[], any];
+        ]) as [CustodianAPIData[], CollectionAPIData[], ReviewMetricsResponse];
 
         setCustodians(custodiansData.map(c => {
           let status: Custodian['status'] = 'active';

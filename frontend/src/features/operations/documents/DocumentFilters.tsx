@@ -20,6 +20,14 @@ interface DocumentFiltersProps {
     setCurrentFolder: (folder: string) => void;
 }
 
+interface DocumentStats {
+    smartViews: { id: string; count: number }[];
+    facets: {
+        fileType: { id: string; count: number }[];
+        status: { id: string; count: number }[];
+    };
+}
+
 export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFiltersProps) {
     const { theme } = useTheme();
 
@@ -29,7 +37,7 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
         () => DataService.documents.getFolders()
     );
 
-    const { data: stats } = useQuery<any>(
+    const { data: stats } = useQuery<DocumentStats>(
         ['documents', 'stats'],
         () => DataService.documents.getStats()
     );
@@ -37,21 +45,21 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
     const smartViews = [
         { id: 'recent', label: 'Recent Files', icon: Clock },
         { id: 'favorites', label: 'Favorites', icon: Star },
-        { id: 'missing_meta', label: 'Missing Metadata', icon: AlertOctagon, count: stats?.smartViews?.find((s: any) => s.id === 'missing_meta')?.count, color: 'text-amber-600' },
+        { id: 'missing_meta', label: 'Missing Metadata', icon: AlertOctagon, count: stats?.smartViews?.find((s: Record<string, unknown>) => s.id === 'missing_meta')?.count, color: 'text-amber-600' },
     ];
 
     const facets = [
         {
             label: 'File Type', items: [
-                { id: 'pdf', label: 'PDF Documents', icon: FileText, count: stats?.facets?.fileType?.find((s: any) => s.id === 'pdf')?.count },
-                { id: 'img', label: 'Images', icon: ImageIcon, count: stats?.facets?.fileType?.find((s: any) => s.id === 'img')?.count },
-                { id: 'media', label: 'Audio/Video', icon: Video, count: stats?.facets?.fileType?.find((s: any) => s.id === 'media')?.count },
+                { id: 'pdf', label: 'PDF Documents', icon: FileText, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'pdf')?.count },
+                { id: 'img', label: 'Images', icon: ImageIcon, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'img')?.count },
+                { id: 'media', label: 'Audio/Video', icon: Video, count: stats?.facets?.fileType?.find((s: Record<string, unknown>) => s.id === 'media')?.count },
             ]
         },
         {
             label: 'Status', items: [
-                { id: 'final', label: 'Finalized', icon: CheckCircle2, count: stats?.facets?.status?.find((s: any) => s.id === 'final')?.count },
-                { id: 'draft', label: 'Drafts', icon: File, count: stats?.facets?.status?.find((s: any) => s.id === 'draft')?.count },
+                { id: 'final', label: 'Finalized', icon: CheckCircle2, count: stats?.facets?.status?.find((s: Record<string, unknown>) => s.id === 'final')?.count },
+                { id: 'draft', label: 'Drafts', icon: File, count: stats?.facets?.status?.find((s: Record<string, unknown>) => s.id === 'draft')?.count },
             ]
         }
     ];

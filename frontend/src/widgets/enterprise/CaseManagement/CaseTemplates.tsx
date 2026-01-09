@@ -11,6 +11,7 @@
  * @module components/enterprise/CaseManagement/CaseTemplates
  */
 
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/utils';
 import { Case, CaseStatus, MatterType } from '@/types';
 import {
@@ -348,6 +349,7 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
   onCloneTemplate,
   className,
 }) => {
+  const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState<PracticeArea | 'All'>('All');
   const [selectedTemplate, setSelectedTemplate] = useState<CaseTemplate | null>(null);
@@ -397,12 +399,12 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Case Templates</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Case Templates</h2>
+          <p className={cn("text-sm mt-1", theme.text.secondary)}>
             Start new cases quickly with pre-configured templates
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button className={cn("flex items-center gap-2 px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}>
           <Plus className="h-4 w-4" />
           Create Template
         </button>
@@ -411,13 +413,13 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
       {/* Search & Filters */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.muted)} />
           <input
             type="text"
             placeholder="Search templates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className={cn("w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500", theme.surface.input, theme.border.default, theme.text.primary)}
           />
         </div>
 
@@ -429,8 +431,8 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
                 selectedPracticeArea === area
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  ? cn(theme.interactive.primary, "text-white")
+                  : cn(theme.surface.subtle, theme.text.secondary, `hover:${theme.surface.highlight}`)
               )}
             >
               {area !== 'All' && React.createElement(PRACTICE_AREA_ICONS[area as PracticeArea], { className: 'h-4 w-4' })}
@@ -445,30 +447,30 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
         {filteredTemplates.map(template => (
           <div
             key={template.id}
-            className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer dark:border-gray-700 dark:bg-gray-800"
+            className={cn("border rounded-lg p-4 transition-shadow hover:shadow-lg cursor-pointer", theme.surface.default, theme.border.default)}
             onClick={() => handleTemplateSelect(template)}
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg dark:bg-blue-900/30">
-                  <template.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className={cn("p-2 rounded-lg", theme.surface.active)}>
+                  <template.icon className={cn("h-5 w-5", theme.interactive.primary)} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{template.name}</h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{template.practiceArea}</p>
+                  <h3 className={cn("font-semibold", theme.text.primary)}>{template.name}</h3>
+                  <p className={cn("text-xs", theme.text.muted)}>{template.practiceArea}</p>
                 </div>
               </div>
               {template.isStarred && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            <p className={cn("text-sm mb-4 line-clamp-2", theme.text.secondary)}>
               {template.description}
             </p>
 
             {/* Metadata */}
-            <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+            <div className={cn("space-y-2 text-xs", theme.text.secondary)}>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <FileText className="h-3 w-3" />
@@ -481,20 +483,20 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
               </div>
               <div className="flex items-center justify-between">
                 <span>~{template.estimatedDuration} days</span>
-                <span className="text-blue-600 dark:text-blue-400 font-medium">
+                <span className={cn("font-medium", theme.text.accent)}>
                   Used {template.usageCount || 0} times
                 </span>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className={cn("flex gap-2 mt-4 pt-4 border-t", theme.border.default)}>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onCreateFromTemplate?.(template);
                 }}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                className={cn("flex-1 flex items-center justify-center gap-2 px-3 py-2 text-white text-sm rounded-lg hover:opacity-90", theme.interactive.primary)}
               >
                 <Plus className="h-4 w-4" />
                 Use Template
@@ -504,9 +506,9 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
                   e.stopPropagation();
                   onCloneTemplate?.(template.id);
                 }}
-                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                className={cn("p-2 border rounded-lg", theme.border.default, `hover:${theme.surface.highlight}`)}
               >
-                <Copy className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <Copy className={cn("h-4 w-4", theme.text.secondary)} />
               </button>
             </div>
           </div>
@@ -516,11 +518,11 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
       {/* Empty State */}
       {filteredTemplates.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <FileText className="h-12 w-12 text-gray-400 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <FileText className={cn("h-12 w-12 mb-4", theme.text.muted)} />
+          <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
             No templates found
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className={cn("text-sm", theme.text.secondary)}>
             Try adjusting your search or filters
           </p>
         </div>
@@ -528,27 +530,27 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
 
       {/* Template Detail Modal */}
       {showTemplateDetail && selectedTemplate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className={cn("rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto", theme.surface.default)}>
             {/* Modal Header */}
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
+            <div className={cn("sticky top-0 border-b p-6", theme.surface.default, theme.border.default)}>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-blue-100 rounded-lg dark:bg-blue-900/30">
-                    <selectedTemplate.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className={cn("p-3 rounded-lg", theme.surface.active)}>
+                    <selectedTemplate.icon className={cn("h-6 w-6", theme.interactive.primary)} />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
                       {selectedTemplate.name}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p className={cn("text-sm mt-1", theme.text.secondary)}>
                       {selectedTemplate.practiceArea} • {selectedTemplate.matterType}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowTemplateDetail(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className={cn(theme.text.muted, `hover:${theme.text.primary}`)}
                 >
                   <X className="h-6 w-6" />
                 </button>
@@ -559,27 +561,27 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
             <div className="p-6 space-y-6">
               {/* Description */}
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedTemplate.description}</p>
+                <h3 className={cn("font-semibold mb-2", theme.text.primary)}>Description</h3>
+                <p className={cn("text-sm", theme.text.secondary)}>{selectedTemplate.description}</p>
               </div>
 
               {/* Overview Stats */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Estimated Duration</p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className={cn("p-4 rounded-lg", theme.surface.subtle)}>
+                  <p className={cn("text-xs mb-1", theme.text.secondary)}>Estimated Duration</p>
+                  <p className={cn("text-lg font-semibold", theme.text.primary)}>
                     {selectedTemplate.estimatedDuration} days
                   </p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Estimated Budget</p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className={cn("p-4 rounded-lg", theme.surface.subtle)}>
+                  <p className={cn("text-xs mb-1", theme.text.secondary)}>Estimated Budget</p>
+                  <p className={cn("text-lg font-semibold", theme.text.primary)}>
                     ${(selectedTemplate.estimatedBudget || 0).toLocaleString()}
                   </p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Usage Count</p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className={cn("p-4 rounded-lg", theme.surface.subtle)}>
+                  <p className={cn("text-xs mb-1", theme.text.secondary)}>Usage Count</p>
+                  <p className={cn("text-lg font-semibold", theme.text.primary)}>
                     {selectedTemplate.usageCount || 0} times
                   </p>
                 </div>
@@ -587,17 +589,17 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
 
               {/* Checklist */}
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                <h3 className={cn("font-semibold mb-3", theme.text.primary)}>
                   Checklist ({selectedTemplate.checklist.length} items)
                 </h3>
                 <div className="space-y-2">
                   {selectedTemplate.checklist.slice(0, 5).map(item => (
-                    <div key={item.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg dark:bg-gray-700">
-                      <div className="h-5 w-5 rounded border-2 border-gray-300 dark:border-gray-600" />
+                    <div key={item.id} className={cn("flex items-center gap-3 p-3 rounded-lg", theme.surface.subtle)}>
+                      <div className={cn("h-5 w-5 rounded border-2", theme.border.default)} />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</p>
+                        <p className={cn("text-sm font-medium", theme.text.primary)}>{item.title}</p>
                         {item.dueInDays && (
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className={cn("text-xs", theme.text.muted)}>
                             Due in {item.dueInDays} days
                           </p>
                         )}
@@ -605,7 +607,7 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
                     </div>
                   ))}
                   {selectedTemplate.checklist.length > 5 && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                    <p className={cn("text-sm text-center", theme.text.muted)}>
                       + {selectedTemplate.checklist.length - 5} more items
                     </p>
                   )}
@@ -614,16 +616,16 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
 
               {/* Documents */}
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                <h3 className={cn("font-semibold mb-3", theme.text.primary)}>
                   Required Documents ({selectedTemplate.documents.length})
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
                   {selectedTemplate.documents.map(doc => (
-                    <div key={doc.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded dark:bg-gray-700">
-                      <FileText className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{doc.name}</span>
+                    <div key={doc.id} className={cn("flex items-center gap-2 p-2 rounded", theme.surface.subtle)}>
+                      <FileText className={cn("h-4 w-4", theme.text.muted)} />
+                      <span className={cn("text-sm", theme.text.primary)}>{doc.name}</span>
                       {doc.required && (
-                        <span className="ml-auto text-xs text-red-600 dark:text-red-400">Required</span>
+                        <span className={cn("ml-auto text-xs", theme.status.error.text)}>Required</span>
                       )}
                     </div>
                   ))}
@@ -632,27 +634,27 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
 
               {/* Milestones */}
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                <h3 className={cn("font-semibold mb-3", theme.text.primary)}>
                   Key Milestones
                 </h3>
                 <div className="space-y-3">
                   {selectedTemplate.milestones.map((milestone, index) => (
                     <div key={milestone.id} className="flex items-center gap-4">
                       <div className="flex flex-col items-center">
-                        <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                          <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
+                        <div className={cn("h-8 w-8 rounded-full flex items-center justify-center", theme.surface.active)}>
+                          <span className={cn("text-xs font-semibold", theme.interactive.primary)}>
                             {index + 1}
                           </span>
                         </div>
                         {index < selectedTemplate.milestones.length - 1 && (
-                          <div className="w-0.5 h-8 bg-gray-200 dark:bg-gray-700" />
+                          <div className={cn("w-0.5 h-8", theme.border.default)} />
                         )}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        <p className={cn("text-sm font-medium", theme.text.primary)}>
                           {milestone.name}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className={cn("text-xs", theme.text.secondary)}>
                           Day {milestone.daysFromStart}
                         </p>
                       </div>
@@ -663,24 +665,24 @@ export const CaseTemplates: React.FC<CaseTemplatesProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-6">
+            <div className={cn("sticky bottom-0 border-t p-6", theme.surface.default, theme.border.default)}>
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setShowTemplateDetail(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className={cn("px-4 py-2 border rounded-lg", theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => onEditTemplate?.(selectedTemplate)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className={cn("px-4 py-2 border rounded-lg", theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}
                 >
                   <Edit className="h-4 w-4 inline mr-2" />
                   Edit Template
                 </button>
                 <button
                   onClick={handleCreateCase}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className={cn("px-4 py-2 text-white rounded-lg hover:opacity-90", theme.interactive.primary)}
                 >
                   <Plus className="h-4 w-4 inline mr-2" />
                   Create Case from Template

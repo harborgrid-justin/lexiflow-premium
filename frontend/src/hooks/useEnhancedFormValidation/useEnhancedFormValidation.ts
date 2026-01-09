@@ -19,18 +19,24 @@ export interface FieldValidation<T> {
   isValidating: boolean;
 }
 
-export const useEnhancedFormValidation = <T extends Record<string, any>>(
+export const useEnhancedFormValidation = <T extends Record<string, unknown>>(
   initialValues: T
 ) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Record<keyof T, string | null>>(
-    {} as any
+    {} as Record<keyof T, string | null>
   );
-  const [isDirty, setIsDirty] = useState<Record<keyof T, boolean>>({} as any);
+  const [isDirty, setIsDirty] = useState<Record<keyof T, boolean>>(
+    {} as Record<keyof T, boolean>
+  );
   const [isValidating, setIsValidating] = useState(false);
 
   const validateField = useCallback(
-    async (field: keyof T, value: any, rules: ValidationRule<any>[]) => {
+    async (
+      field: keyof T,
+      value: unknown,
+      rules: ValidationRule<unknown>[]
+    ) => {
       setIsValidating(true);
       try {
         console.log(`Validating field: ${String(field)}`);
@@ -46,12 +52,15 @@ export const useEnhancedFormValidation = <T extends Record<string, any>>(
     []
   );
 
-  const setFieldValue = useCallback((field: keyof T, value: any) => {
-    setValues((prev) => ({ ...prev, [field]: value }));
-    setIsDirty((prev) => ({ ...prev, [field]: true }));
-    // Clear error on change
-    setErrors((prev) => ({ ...prev, [field]: null }));
-  }, []);
+  const setFieldValue = useCallback(
+    <K extends keyof T>(field: K, value: T[K]) => {
+      setValues((prev) => ({ ...prev, [field]: value }));
+      setIsDirty((prev) => ({ ...prev, [field]: true }));
+      // Clear error on change
+      setErrors((prev) => ({ ...prev, [field]: null }));
+    },
+    []
+  );
 
   return {
     values,

@@ -683,12 +683,16 @@ export class DiscoveryRepository {
         if (
           response &&
           "data" in response &&
-          (response as any).data?.downloadUrl
+          (response as { data: { downloadUrl?: string } }).data?.downloadUrl
         ) {
-          return (response as any).data.downloadUrl;
+          return (response as { data: { downloadUrl: string } }).data
+            .downloadUrl;
         }
         // Fallback to direct construction - use baseURL from client instance
-        const baseURL = (apiClient as any).defaults?.baseURL || "";
+        const client = apiClient as unknown as {
+          defaults: { baseURL: string };
+        };
+        const baseURL = client.defaults?.baseURL || "";
         return `${baseURL}/discovery/productions/${id}/download`;
       } catch (error) {
         console.error(

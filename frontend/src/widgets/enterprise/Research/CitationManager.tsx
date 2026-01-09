@@ -93,6 +93,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   onValidateCitations,
   onExport,
   className = '' }) => {
+  const [activeView, setActiveView] = useState<'list' | 'graph' | 'footnotes'>('list');
   const [citations] = useState<Citation[]>(
     initialCitations.length > 0
       ? initialCitations
@@ -141,7 +142,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   const [selectedFormat, setSelectedFormat] = useState<CitationFormat>('bluebook');
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
+  const [, setSelectedCitation] = useState<Citation | null>(null);
 
   // Modal handlers
   const handleCloseAddDialog = () => setShowAddDialog(false);
@@ -212,7 +213,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
       title: 'Citation Copied',
       message: `${citation.formatted} copied to clipboard`,
       type: 'success',
-      priority: 'medium',
+      priority: 'normal',
       read: false
     });
   };
@@ -229,7 +230,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
           title: 'Validation Complete',
           message: `${validCount} valid citations, ${errorCount} errors found`,
           type: errorCount > 0 ? 'warning' : 'success',
-          priority: 'medium',
+          priority: 'normal',
           read: false
         });
       }

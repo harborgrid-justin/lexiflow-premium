@@ -40,8 +40,8 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({ className }) =
           teamMembers: Array.isArray(team) ? team.length : 0,
           timelineEvents: Array.isArray(events) ? events.length : 0,
           // These would be filtered subsets in a real app
-          milestones: Array.isArray(events) ? events.filter((e: any) => e.type === 'MILESTONE').length : 0,
-          upcomingDeadlines: Array.isArray(tasks) ? tasks.filter((t: any) => t.dueDate && new Date(t.dueDate) > new Date()).length : 0,
+          milestones: Array.isArray(events) ? events.filter((e: Record<string, unknown>) => e.type === 'MILESTONE').length : 0,
+          upcomingDeadlines: Array.isArray(tasks) ? tasks.filter((t: Record<string, unknown>) => t.dueDate && new Date(String(t.dueDate)) > new Date()).length : 0,
         });
       } catch (error) {
         console.error("Failed to load planning stats", error);

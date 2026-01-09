@@ -287,7 +287,7 @@ export const EnterpriseCRM: React.FC = () => {
                 <div className="flex items-center gap-2 mt-2">
                   <span className={cn(
                     "px-2 py-1 rounded-full text-xs font-medium",
-                    clientStatus === 'active' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+                    clientStatus === 'active' ? theme.status.success : cn(theme.surface.subtle, theme.text.secondary)
                   )}>
                     {clientStatus}
                   </span>
@@ -396,9 +396,9 @@ export const EnterpriseCRM: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span className={cn(
                         "px-2 py-1 rounded text-xs",
-                        opp.stage === 'Closed Won' ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
-                          opp.stage === 'Closed Lost' ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
-                            "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                        opp.stage === 'Closed Won' ? theme.status.success :
+                          opp.stage === 'Closed Lost' ? theme.status.error :
+                            theme.status.info
                       )}>
                         {opp.stage}
                       </span>

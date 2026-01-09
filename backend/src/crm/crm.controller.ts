@@ -53,4 +53,39 @@ export class CrmController {
     }
     return lead;
   }
+
+  @Get("business-development")
+  @ApiOperation({ summary: "Get business development metrics and data" })
+  @ApiResponse({ status: 200, description: "Returns business dev data." })
+  async getBusinessDevelopmentData() {
+    return this.crmService.getBusinessDevelopmentData();
+  }
+
+  @Get("pitches")
+  @ApiOperation({ summary: "Get pitches" })
+  @ApiResponse({ status: 200, description: "Returns pitches." })
+  async getPitches() {
+    return this.crmService.getPitches();
+  }
+
+  @Get("rfps")
+  @ApiOperation({ summary: "Get RFPs" })
+  @ApiResponse({ status: 200, description: "Returns RFPs." })
+  async getRFPs() {
+    return this.crmService.getRFPs();
+  }
+
+  @Get("win-loss")
+  @ApiOperation({ summary: "Get Win/Loss Analysis" })
+  @ApiResponse({ status: 200, description: "Returns win/loss data." })
+  async getWinLossAnalysis() {
+    return this.crmService.getWinLossAnalysis();
+  }
+
+  @Get("client-analytics")
+  @ApiOperation({ summary: "Get client analytics data" })
+  @ApiResponse({ status: 200, description: "Returns client analytics data." })
+  async getClientAnalytics() {
+    return this.crmService.getClientAnalytics();
+  }
 }

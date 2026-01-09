@@ -10,10 +10,8 @@ import { AuditLogEntry } from '@/types';
 import { cn } from '@/utils/cn';
 import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { LedgerVisualizer } from './ledger/LedgerVisualizer';
-// ✅ Migrated to backend API (2025-12-21)
-import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 import { AuditLogControls } from './audit/AuditLogControls';
+import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 
 interface AdminAuditLogProps {
     // logs prop is removed; component will fetch its own data.
@@ -44,7 +42,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
     const handleVerifyChain = async () => {
         setIsVerifying(true);
         try {
-            await new Promise(r => setTimeout(r, DEBUG_API_SIMULATION_DELAY_MS));
+            await new Promise(r => setTimeout(r, 500));
             const result = await ChainService.verifyChain(localLogs);
             setVerifyResult(result);
             if (!result.isValid) addToast(`Integrity Check Failed at Block #${result.brokenIndex + 1}`, 'error');
@@ -61,20 +59,6 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
     const handleExport = () => {
         ChainService.exportLedger(localLogs);
         addToast('Ledger exported to JSON', 'success');
-    };
-
-    const handleSimulateTamper = () => {
-        if (localLogs.length < 2) return;
-        const randomIndex = Math.floor(Math.random() * (localLogs.length - 1));
-        const newLogs = [...localLogs];
-        newLogs[randomIndex] = {
-            ...newLogs[randomIndex],
-            action: "UNAUTHORIZED_ACCESS",
-            resource: "/restricted/payroll_db"
-        } as ChainedLogEntry;
-        setLocalLogs(newLogs);
-        addToast(`Simulated Attack: Modified Block #${randomIndex + 1}.`, 'warning');
-        setVerifyResult(null);
     };
 
     const handleReset = () => {

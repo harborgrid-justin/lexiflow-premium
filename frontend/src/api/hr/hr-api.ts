@@ -67,14 +67,16 @@ export class HRApiService {
     }>
   > {
     try {
-      const staff = await this.getAll({ status: "Active" });
-      const staffArray = Array.isArray(staff) ? staff : [];
-      return staffArray.map((s) => ({
-        name: s.name,
-        role: s.role,
-        utilization: Math.floor(Math.random() * 40) + 60, // Mock: 60-100%
-        cases: Math.floor(Math.random() * 10) + 1, // Mock: 1-10 cases
-      }));
+      const response = await apiClient.get<
+        Array<{
+          name: string;
+          role: string;
+          utilization: number;
+          cases: number;
+        }>
+      >(`${this.baseUrl}/utilization`);
+
+      return Array.isArray(response) ? response : [];
     } catch (error) {
       console.warn(
         "[HRApiService] getUtilizationMetrics failed, returning empty array:",

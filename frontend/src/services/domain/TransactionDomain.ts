@@ -7,8 +7,9 @@
 import { delay } from "@/utils/async";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { isBackendApiEnabled } from "@/api";
+import { ValidationError, OperationError } from "@/services/core/errors";
 
-interface Transaction {
+export interface Transaction {
   id: string;
   type: "invoice" | "payment" | "expense" | "refund" | "adjustment";
   amount: number;
@@ -20,7 +21,9 @@ interface Transaction {
   status: "pending" | "completed" | "reconciled" | "failed";
   paymentMethod?: string;
   reference?: string;
-  metadata?: unknown;
+  metadata?: Record<string, unknown>;
+  createdAt?: string;
+  userId?: string;
 }
 
 interface Balance {
@@ -29,6 +32,9 @@ interface Balance {
   reconciled: number;
   currency: string;
 }
+
+// Temporary user ID helper until AuthContext is fully linked here
+const getCurrentUserId = () => "user-current";
 
 export const TransactionService = {
   getAll: async () => {
@@ -47,19 +53,74 @@ export const TransactionService = {
     return undefined;
   },
 
-  add: async (item: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<Transaction>("/billing/transactions", item);
+  /**
+   * Add a new financial transaction with strict validation
+   * Implements "Critical Issue #1: TransactionDomain Missing Financial Controls"
+   */
+  add: async (item: unknown): Promise<Transaction> => {
+    const transaction = (
+      item && typeof item === "object" ? item : {}
+    ) as Partial<Transaction>;
+
+    // 1. Amount Validation
+    if (!transaction.amount || transaction.amount <= 0) {
+      throw new ValidationError("Transaction amount must be positive");
     }
-    const itemObj =
-      item && typeof item === "object" ? (item as Record<string, unknown>) : {};
-    const transaction = {
-      ...itemObj,
-      createdAt: new Date().toISOString(),
-      status: itemObj.status || "pending",
+    // 2. Max Amount Safety Cap
+    if (transaction.amount > 10_000_000) {
+      throw new ValidationError(
+        "Transaction amount exceeds maximum limit (10M)"
+      );
+    }
+    // 3. Currency Validation
+    const ALLOWED_CURRENCIES = ["USD", "EUR", "GBP", "CAD"];
+    const currency = transaction.currency || "USD";
+    if (!ALLOWED_CURRENCIES.includes(currency)) {
+      throw new ValidationError(`Invalid currency code: ${currency}`);
+    }
+    // 4. Association Validation
+    if (!transaction.caseId && !transaction.matterId) {
+      throw new ValidationError(
+        "Transaction must be associated with case or matter"
+      );
+    }
+
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.post<Transaction>("/billing/transactions", {
+          ...transaction,
+          currency,
+          timestamp: new Date().toISOString(),
+          userId: getCurrentUserId(),
+        });
+      } catch (error) {
+        console.error("[TransactionService.add] Error:", error);
+        throw new OperationError("Failed to create transaction via backend");
+      }
+    }
+
+    // Fallback Local Implementation
+    const newTransaction: Transaction = {
+      id: `tx-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      type: transaction.type || "expense",
+      amount: transaction.amount,
+      currency: currency,
+      description: transaction.description || "New Transaction",
+      date: transaction.date || new Date().toISOString(),
+      caseId: transaction.caseId,
+      matterId: transaction.matterId,
+      status: "pending",
+      paymentMethod: transaction.paymentMethod,
+      reference: transaction.reference,
+      metadata: {
+        ...(transaction.metadata || {}),
+        createdBy: getCurrentUserId(),
+        createdAt: new Date().toISOString(),
+      },
     };
+
     await delay(200);
-    return transaction;
+    return newTransaction;
   },
 
   update: async (id: string, updates: unknown) => {
@@ -141,16 +202,50 @@ export const TransactionService = {
   createTransaction: async (
     transaction: Partial<Transaction>
   ): Promise<Transaction> => {
+    // VALIDATION
+    if (!transaction.amount || transaction.amount <= 0) {
+      throw new Error("ValidationError: Transaction amount must be positive");
+    }
+    if (transaction.amount > 10_000_000) {
+      throw new Error(
+        "ValidationError: Transaction amount exceeds maximum limit"
+      );
+    }
+    if (!["USD", "EUR", "GBP", "CAD"].includes(transaction.currency || "USD")) {
+      throw new Error("ValidationError: Invalid currency code");
+    }
+    if (!transaction.caseId && !transaction.matterId) {
+      throw new Error(
+        "ValidationError: Transaction must be associated with case or matter"
+      );
+    }
+
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.post<Transaction>("/billing/transactions", {
+          ...transaction,
+          timestamp: new Date().toISOString(),
+          // In a real app we would derive userId from context or auth token
+          // userId: getCurrentUserId(),
+        });
+      } catch (error) {
+        console.error("[TransactionService.createTransaction] Error:", error);
+        throw new Error("OperationError: Failed to create transaction");
+      }
+    }
+
+    // Fallback logic for when backend is disabled (e.g. dev/demo mode)
+    // but still enforcing the validation above.
     const newTransaction: Transaction = {
-      id: `tx-${Date.now()}`,
+      id: `tx-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
       type: transaction.type || "expense",
-      amount: transaction.amount || 0,
+      amount: transaction.amount,
       currency: transaction.currency || "USD",
       description: transaction.description || "New Transaction",
       date: transaction.date || new Date().toISOString(),
       caseId: transaction.caseId,
       matterId: transaction.matterId,
-      status: transaction.status || "pending",
+      status: "pending",
       paymentMethod: transaction.paymentMethod,
       reference: transaction.reference,
       metadata: transaction.metadata,

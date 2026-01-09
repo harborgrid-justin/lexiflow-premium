@@ -37,6 +37,9 @@ export const STORES = {
   FEE_AGREEMENTS: "fee_agreements", // ✓ Backend: fee_agreements (added)
   BILLING: "billing", // Frontend aggregated view
 
+  // System & Audit
+  AUDIT_LOGS: "audit_logs", // Issue #7: Audit Logs
+
   // Discovery
   LEGAL_HOLDS: "legal_holds", // ✓ Backend: legal_holds
   PRIVILEGE_LOG: "privilege_log_entries", // ✓ Backend: privilege_log_entries (renamed)

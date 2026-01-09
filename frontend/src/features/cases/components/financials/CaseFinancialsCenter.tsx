@@ -25,7 +25,6 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/utils/cn';
 import {
-  BarChart3,
   Clock,
   DollarSign,
   Download,
@@ -49,6 +48,12 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
   const { data: timeEntries } = useQuery(
     ['billing', 'time-entries', caseId],
     () => api.billing.getTimeEntries(caseId ? { caseId } : undefined)
+  );
+
+  // Fetch expenses
+  const { data: expenses } = useQuery(
+    ['billing', 'expenses', caseId],
+    () => api.expenses.getAll(caseId ? { caseId } : undefined)
   );
 
   // Fetch matters for revenue attribution
@@ -223,11 +228,36 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
             <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
               Revenue Trend
             </h3>
-            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-              <BarChart3 className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
-              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
-                Revenue chart will be rendered here
-              </span>
+            <div className={cn('h-64 w-full', isDark ? 'bg-slate-800/50' : 'bg-white')}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={
+                  // Calculate last 6 months revenue dynamically
+                  Array.from({ length: 6 }).map((_, i) => {
+                    const d = new Date();
+                    d.setMonth(d.getMonth() - (5 - i));
+                    const monthName = d.toLocaleString('default', { month: 'short' });
+                    const total = (invoices as any[])?.filter(inv => {
+                      const invDate = new Date(inv.invoiceDate || inv.createdAt || inv.date);
+                      return invDate.getMonth() === d.getMonth() && invDate.getFullYear() === d.getFullYear();
+                    }).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
+                    return { name: monthName, value: total };
+                  })
+                }>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? '#334155' : '#e2e8f0'} />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: isDark ? '#94a3b8' : '#64748b' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fill: isDark ? '#94a3b8' : '#64748b' }} tickFormatter={(value) => `$${value / 1000}k`} />
+                  <RechartsTooltip
+                    cursor={{ fill: isDark ? '#334155' : '#f1f5f9' }}
+                    contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderColor: isDark ? '#334155' : '#e2e8f0', color: isDark ? '#f8fafc' : '#0f172a' }}
+                    formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
+                  />
+                  <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={index === 5 ? '#3b82f6' : isDark ? '#475569' : '#cbd5e1'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </Card>
 
@@ -274,32 +304,29 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className={cn('text-lg font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
-                Budget Performance
+                Recent Expenses
               </h3>
-              <Button variant="ghost" size="sm">View All</Button>
+              <Button variant="ghost" size="sm" onClick={() => setViewMode('expenses')}>View All</Button>
             </div>
             <div className="space-y-4">
-              <BudgetPerformanceItem
-                matter="Smith v. Acme Corp"
-                budget={150000}
-                spent={178000}
-                remaining={-28000}
-                isDark={isDark}
-              />
-              <BudgetPerformanceItem
-                matter="Tech Startup M&A"
-                budget={200000}
-                spent={195000}
-                remaining={5000}
-                isDark={isDark}
-              />
-              <BudgetPerformanceItem
-                matter="Johnson Estate"
-                budget={50000}
-                spent={45000}
-                remaining={5000}
-                isDark={isDark}
-              />
+              {((expenses as any[]) || []).slice(0, 3).map((exp: any) => (
+                <div key={exp.id || Math.random()} className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
+                  <div className={cn('font-medium mb-1', isDark ? 'text-slate-100' : 'text-slate-900')}>
+                    {exp.description || 'Expense Entry'}
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className={isDark ? 'text-slate-400' : 'text-slate-600'}>
+                      {new Date(exp.date || exp.incurredAt || new Date()).toLocaleDateString()}
+                    </span>
+                    <span className="font-semibold text-red-500">
+                      ${(exp.amount || exp.cost || 0).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              {(!expenses || (expenses as any[]).length === 0) && (
+                <div className="text-center py-4 text-slate-500 text-sm">No recent expenses recorded</div>
+              )}
             </div>
           </Card>
 
@@ -308,33 +335,23 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
               <h3 className={cn('text-lg font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
                 Recent Invoices
               </h3>
-              <Button variant="ghost" size="sm">View All</Button>
+              <Button variant="ghost" size="sm" onClick={() => setViewMode('billing')}>View All</Button>
             </div>
             <div className="space-y-3">
-              <InvoiceItem
-                invoiceNumber="INV-2025-0234"
-                matter="Smith v. Acme Corp"
-                amount={25000}
-                status="paid"
-                date="Dec 15, 2025"
-                isDark={isDark}
-              />
-              <InvoiceItem
-                invoiceNumber="INV-2025-0235"
-                matter="Tech Startup M&A"
-                amount={18500}
-                status="pending"
-                date="Dec 18, 2025"
-                isDark={isDark}
-              />
-              <InvoiceItem
-                invoiceNumber="INV-2025-0236"
-                matter="Johnson Estate"
-                amount={8200}
-                status="overdue"
-                date="Dec 1, 2025"
-                isDark={isDark}
-              />
+              {((invoices as any[]) || []).slice(0, 5).map((inv: any) => (
+                <InvoiceItem
+                  key={inv.id || inv.invoiceNumber}
+                  invoiceNumber={inv.invoiceNumber}
+                  matter={inv.matterName || inv.caseTitle || 'Case Invoice'}
+                  amount={inv.totalAmount || inv.amount || 0}
+                  status={(inv.status?.toLowerCase() || 'pending') as 'paid' | 'pending' | 'overdue'}
+                  date={new Date(inv.date || inv.invoiceDate || inv.createdAt).toLocaleDateString()}
+                  isDark={isDark}
+                />
+              ))}
+              {(!invoices || (invoices as any[]).length === 0) && (
+                <div className="text-center py-4 text-slate-500 text-sm">No invoices found</div>
+              )}
             </div>
           </Card>
         </div>
@@ -396,46 +413,6 @@ const MatterRevenueItem: React.FC<{
     </div>
   </div>
 );
-
-const BudgetPerformanceItem: React.FC<{
-  matter: string;
-  budget: number;
-  spent: number;
-  remaining: number;
-  isDark: boolean;
-}> = ({ matter, budget, spent, remaining, isDark }) => {
-  const percentageSpent = (spent / budget) * 100;
-  const isOverBudget = remaining < 0;
-
-  return (
-    <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
-      <div className={cn('font-medium mb-2', isDark ? 'text-slate-100' : 'text-slate-900')}>
-        {matter}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-sm">
-          <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
-            Budget: ${(budget / 1000).toFixed(0)}K
-          </span>
-          <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
-            Spent: ${(spent / 1000).toFixed(0)}K
-          </span>
-        </div>
-        <div className={cn('h-2 rounded-full', isDark ? 'bg-slate-700' : 'bg-slate-200')}>
-          <div
-            className={cn('h-full rounded-full', isOverBudget ? 'bg-red-500' : 'bg-emerald-500')}
-            style={{ width: `${Math.min(percentageSpent, 100)}%` }}
-          />
-        </div>
-        <div className={cn('text-sm font-semibold',
-          isOverBudget ? 'text-red-500' : 'text-emerald-500'
-        )}>
-          {remaining >= 0 ? `$${(remaining / 1000).toFixed(0)}K remaining` : `$${Math.abs(remaining / 1000).toFixed(0)}K over budget`}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const InvoiceItem: React.FC<{
   invoiceNumber: string;

@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminTenantController } from "./admin-tenant.controller";
+import { SecurityController } from "./security.controller";
 import { AdminTenantService } from "./admin-tenant.service";
 import { TenantConfig } from "./entities/tenant-config.entity";
 
@@ -15,7 +16,7 @@ import { TenantConfig } from "./entities/tenant-config.entity";
  */
 @Module({
   imports: [TypeOrmModule.forFeature([TenantConfig])],
-  controllers: [AdminTenantController],
+  controllers: [AdminTenantController, SecurityController],
   providers: [AdminTenantService],
   exports: [AdminTenantService],
 })

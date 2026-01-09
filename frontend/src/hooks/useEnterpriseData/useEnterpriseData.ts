@@ -35,15 +35,7 @@ export const useEnterpriseData = () => {
   // For now we assume this might be part of organization settings
   const { data: offices, isLoading: isOfficesLoading } = useQuery(
     ["enterprise", "offices"],
-    // Fallback/Placeholder until specific simplified endpoint exists
-    async () => [
-      { id: "hq", name: "Headquarters", timezone: "America/New_York" },
-      {
-        id: "west",
-        name: "West Coast Office",
-        timezone: "America/Los_Angeles",
-      },
-    ],
+    () => DataService.operations.getFacilities(),
     { staleTime: Infinity }
   );
 

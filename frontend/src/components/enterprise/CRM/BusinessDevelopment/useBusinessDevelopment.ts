@@ -4,16 +4,11 @@
  */
 
 import { useTheme } from "@/contexts/theme/ThemeContext";
+import { useQuery } from "@/hooks/backend";
+import { DataService } from "@/services/dataService";
 import { ChartColorService } from "@/services/theme/chartColorService";
 import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";
-import {
-  ANALYTICS_DATA,
-  MOCK_LEADS,
-  MOCK_PITCHES,
-  MOCK_RFPS,
-  MOCK_WIN_LOSS_DATA,
-} from "./constants";
 import type { TabType } from "./types";
 import {
   calculateActiveLeads,
@@ -30,11 +25,23 @@ export function useBusinessDevelopment() {
   const [activeTab, setActiveTab] = useState<TabType>("leads");
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
-  // Mock data
-  const leads = MOCK_LEADS;
-  const pitches = MOCK_PITCHES;
-  const rfps = MOCK_RFPS;
-  const winLossData = MOCK_WIN_LOSS_DATA;
+  // Queries
+  const { data: leads = [] } = useQuery(["crm", "leads"], () =>
+    DataService.crm.getLeads()
+  );
+  const { data: pitches = [] } = useQuery(["crm", "pitches"], () =>
+    DataService.crm.getPitches()
+  );
+  const { data: rfps = [] } = useQuery(["crm", "rfps"], () =>
+    DataService.crm.getRFPs()
+  );
+  const { data: winLossData = [] } = useQuery(["crm", "win-loss"], () =>
+    DataService.crm.getWinLossAnalysis()
+  );
+  const { data: analyticsData = {} } = useQuery(
+    ["crm", "business-metrics"],
+    () => DataService.crm.getBusinessDevelopmentMetrics()
+  );
 
   // Calculated metrics
   const metrics = {
@@ -57,7 +64,7 @@ export function useBusinessDevelopment() {
     pitches,
     rfps,
     winLossData,
-    analyticsData: ANALYTICS_DATA,
+    analyticsData,
 
     // Metrics
     metrics,

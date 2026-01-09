@@ -2,7 +2,7 @@
  * @module types/shared
  * @category Types - Shared DTOs
  * @description Shared type definitions for API responses, DTOs, and common structures
- * 
+ *
  * BEST PRACTICES:
  * - Type-safe architecture (Practice #5)
  * - Clear module boundaries (Practice #10)
@@ -23,6 +23,29 @@ export interface BaseEntity {
   createdAt: string;
   updatedAt: string;
   userId?: string;
+}
+
+/**
+ * Pagination request parameters (Issue #8)
+ */
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+/**
+ * Paginated result wrapper (Issue #8)
+ */
+export interface PaginatedResult<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
 }
 
 /**
@@ -64,7 +87,7 @@ export interface ApiError {
 /**
  * Sort direction
  */
-export type SortDirection = 'asc' | 'desc';
+export type SortDirection = "asc" | "desc";
 
 /**
  * Sort configuration
@@ -77,18 +100,18 @@ export interface SortConfig<T = Record<string, unknown>> {
 /**
  * Filter operator types
  */
-export type FilterOperator = 
-  | 'eq'      // equals
-  | 'ne'      // not equals
-  | 'gt'      // greater than
-  | 'gte'     // greater than or equal
-  | 'lt'      // less than
-  | 'lte'     // less than or equal
-  | 'in'      // in array
-  | 'nin'     // not in array
-  | 'contains' // string contains
-  | 'startsWith' // string starts with
-  | 'endsWith'; // string ends with
+export type FilterOperator =
+  | "eq" // equals
+  | "ne" // not equals
+  | "gt" // greater than
+  | "gte" // greater than or equal
+  | "lt" // less than
+  | "lte" // less than or equal
+  | "in" // in array
+  | "nin" // not in array
+  | "contains" // string contains
+  | "startsWith" // string starts with
+  | "endsWith"; // string ends with
 
 /**
  * Filter condition
@@ -117,7 +140,7 @@ export interface QueryParams<T = Record<string, unknown>> {
 /**
  * Loading state for async operations
  */
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+export type LoadingState = "idle" | "loading" | "success" | "error";
 
 /**
  * Async operation result
@@ -207,7 +230,7 @@ export interface ValidationRule<T = unknown> {
  */
 export interface ComponentProps {
   className?: string;
-  'data-testid'?: string;
+  "data-testid"?: string;
 }
 
 /**
@@ -261,9 +284,12 @@ export type KeysOfType<T, V> = {
 /**
  * Omit properties by value type
  */
-export type OmitByType<T, V> = Pick<T, {
-  [K in keyof T]: T[K] extends V ? never : K;
-}[keyof T]>;
+export type OmitByType<T, V> = Pick<
+  T,
+  {
+    [K in keyof T]: T[K] extends V ? never : K;
+  }[keyof T]
+>;
 
 /**
  * Awaited type (for promise resolution)

@@ -32,7 +32,6 @@ interface FirmProcess {
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
 import { Case } from '@/types';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
@@ -81,6 +80,18 @@ const calculateMetrics = (
       t.status !== TaskStatusBackend.CANCELLED
   ).length;
 
+  const completedTasks = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED);
+
+  const completionRate = tasks.length > 0
+    ? Math.round((completedTasks.length / tasks.length) * 100)
+    : 0;
+
+  const bottlenecks = tasks.filter(t =>
+    (t.priority === 'Critical' || t.priority === 'High') &&
+    t.status !== TaskStatusBackend.COMPLETED &&
+    (t.dueDate ? new Date(t.dueDate) < new Date() : false)
+  ).length;
+
   // Calculate automations ran (completed tasks in last 30 days)
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -92,7 +103,6 @@ const calculateMetrics = (
   }).length;
 
   // Calculate efficiency gain based on completed tasks with due dates
-  const completedTasks = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED);
   const tasksWithDueDate = completedTasks.filter(t => t.dueDate);
   const onTimeTasks = tasksWithDueDate.filter(t => {
     // If no updatedAt, assume on time
@@ -108,6 +118,12 @@ const calculateMetrics = (
     tasksDueToday,
     automationsRan,
     efficiencyGain: Math.max(0, efficiencyGain),
+    completionRate,
+    bottlenecks,
+    efficiency: {
+      trend: efficiencyGain > 0 ? 'up' : efficiencyGain < 0 ? 'down' : 'stable',
+      value: `${efficiencyGain > 0 ? '+' : ''}${efficiencyGain}%`
+    }
   };
 };
 
@@ -155,8 +171,27 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   } = useQuery<FirmProcess[]>(
     ['processes', 'all'],
     async () => {
-      const result = await WorkflowRepository.getProcesses();
-      return result as FirmProcess[];
+      try {
+        // Fetch templates from backend API
+        const templates = await DataService.workflow.getTemplates();
+
+        // Map templates to FirmProcess view model
+        // Using 'any' for template to accommodate both API and Repo types
+        return (templates || []).map((t: any) => ({
+          id: t.id,
+          name: t.name,
+          status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle') as any,
+          triggers: t.trigger?.type
+            ? `${t.trigger.type.charAt(0).toUpperCase() + t.trigger.type.slice(1)}`
+            : (t.triggers || 'Manual'), // Fallback for Repo type
+          tasks: t.steps?.length || t.tasks || 0,
+          completed: t.completed || 0,
+          owner: (t.metadata?.owner as string) || t.owner || 'System'
+        }));
+      } catch (error) {
+        console.error("Failed to fetch workflow processes:", error);
+        return [];
+      }
     }
   );
 
@@ -179,18 +214,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
 
   // Calculate metrics from real data
   const metrics = useMemo(() => {
-    const calculated = calculateMetrics(casesArray, firmProcessesArray, tasksArray);
-
-    // Return all properties with defaults
-    return {
-      activeWorkflows: calculated?.activeWorkflows || 0,
-      tasksDueToday: calculated?.tasksDueToday || 0,
-      automationsRan: calculated?.automationsRan || 0,
-      efficiencyGain: calculated?.efficiencyGain || 0,
-      completionRate: 0, // Placeholder for future implementation
-      bottlenecks: 0, // Placeholder for future implementation
-      efficiency: { trend: 'stable', value: '+15%' } // Placeholder for future implementation
-    };
+    return calculateMetrics(casesArray, firmProcessesArray, tasksArray);
   }, [casesArray, firmProcessesArray, tasksArray]);
 
   const activeParentTab = useMemo(() =>
@@ -375,7 +399,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
             {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8" /></div>}
             {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
             {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={casesArray} tasks={tasksArray} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} />}
-            {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcessesArray} onSelectProcess={handleSelectProcess} />}
+            {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcessesArray} onSelectProcess={handleSelectProcess} onCreateProcess={() => handleCreateTemplate()} />}
             {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
             {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}
             {activeTab === 'settings' && <WorkflowConfig />}

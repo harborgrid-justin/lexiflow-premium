@@ -101,9 +101,8 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                         className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface.default)}
                         style={{ transform: `scale(${scale / 100})` }}
                     >
-                        {/* Simulated Document Header */}
                         <div className={cn("h-16 border-b-2 mb-8 mx-12 mt-12 flex justify-between items-end pb-2 opacity-80", theme.border.default)}>
-                            <span className={cn("font-serif font-bold text-2xl uppercase", theme.text.primary)}>Legal Document</span>
+                            <span className={cn("font-serif font-bold text-2xl uppercase", theme.text.primary)}>{doc.title}</span>
                             <span className={cn("font-mono text-sm", theme.text.secondary)}>{docId}</span>
                         </div>
 
@@ -111,9 +110,8 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                             {doc.content as React.ReactNode}
                         </div>
 
-                        {/* Simulated Page Footer */}
                         <div className={cn("mt-20 mx-12 border-t pt-4 flex justify-between text-xs font-mono", theme.border.default, theme.text.tertiary)}>
-                            <span>CONFIDENTIAL - ATTORNEY EYES ONLY</span>
+                            <span>{metadata?.classification || 'UNCLASSIFIED'}</span>
                             <span>Page 1 of 1</span>
                         </div>
                     </div>

@@ -1,9 +1,14 @@
 import { analyticsApi, api, isBackendApiEnabled } from "@/api";
 import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { TransactionService } from "@/services/domain/TransactionDomain";
 import { STORES } from "../db";
 import { getIntegratedBillingRepository } from "../factories/RepositoryFactories";
 
 export const FinancialDescriptors: PropertyDescriptorMap = {
+  transactions: {
+    get: () => TransactionService,
+    enumerable: true,
+  },
   billing: {
     get: () =>
       isBackendApiEnabled() ? api.billing : getIntegratedBillingRepository(),

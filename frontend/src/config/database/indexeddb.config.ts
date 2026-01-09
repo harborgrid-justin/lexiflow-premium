@@ -3,9 +3,9 @@
 // =============================================================================
 // Database-specific settings for IndexedDB operations
 
-export const DB_NAME = 'LexiFlowDB';
-export const DB_VERSION = 31; // Incremented for MATTERS store (Matter Management)
-export const DB_MODE: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
+export const DB_NAME = "LexiFlowDB";
+export const DB_VERSION = 32; // Incremented for AUDIT_LOGS store (Issue #7)
+export const DB_MODE: "IndexedDB" | "LocalStorage" = "IndexedDB";
 
 // Transaction Coalescing
 export const DB_MAX_BUFFER_SIZE = 1000; // Maximum pending operations

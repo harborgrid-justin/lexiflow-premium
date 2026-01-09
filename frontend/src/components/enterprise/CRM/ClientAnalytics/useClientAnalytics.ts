@@ -5,19 +5,11 @@
 
 import { useTheme } from "@/contexts/theme/ThemeContext";
 import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/data/dataService";
+import { DataService } from "@/services/dataService";
 import { QUERY_KEYS } from "@/services/data/queryKeys";
 import { ChartColorService } from "@/services/theme/chartColorService";
 import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";
-import {
-  MOCK_LTV_DATA,
-  MOCK_PROFITABILITY_DATA,
-  MOCK_REVENUE_TREND,
-  MOCK_RISK_DATA,
-  MOCK_SATISFACTION_DATA,
-  MOCK_SEGMENT_DATA,
-} from "./constants";
 import type { TabType } from "./types";
 import {
   calculateAvgNPS,
@@ -36,13 +28,18 @@ export function useClientAnalytics() {
   // Data queries
   useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
 
-  // Mock data
-  const profitabilityData = MOCK_PROFITABILITY_DATA;
-  const ltvData = MOCK_LTV_DATA;
-  const riskData = MOCK_RISK_DATA;
-  const satisfactionData = MOCK_SATISFACTION_DATA;
-  const segmentData = MOCK_SEGMENT_DATA;
-  const revenueTrendData = MOCK_REVENUE_TREND;
+  const { data: analyticsData = {} } = useQuery(
+    ["crm", "client-analytics"],
+    () => DataService.crm.getClientAnalytics()
+  );
+
+  // Extract from combined analytics object
+  const profitabilityData = analyticsData.profitability || [];
+  const ltvData = analyticsData.ltv || [];
+  const riskData = analyticsData.risk || [];
+  const satisfactionData = analyticsData.satisfaction || [];
+  const segmentData = analyticsData.segments || [];
+  const revenueTrendData = analyticsData.revenueTrend || [];
 
   // Calculated metrics
   const metrics = {

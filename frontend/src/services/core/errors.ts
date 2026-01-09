@@ -41,8 +41,33 @@
  */
 
 // ============================================================================
-// BASE ERROR CLASS
+// ERROR CODES & BASE CLASSES
 // ============================================================================
+
+export enum ErrorCode {
+  // Validation errors (1000-1999)
+  VALIDATION_FAILED = 1000,
+  INVALID_EMAIL = 1001,
+  INVALID_PHONE = 1002,
+  INVALID_AMOUNT = 1003,
+  INVALID_CURRENCY = 1004,
+
+  // Business logic errors (2000-2999)
+  INSUFFICIENT_FUNDS = 2000,
+  CONFLICT_DETECTED = 2001,
+  DUPLICATE_ENTRY = 2002,
+  TRUST_VIOLATION = 2003,
+
+  // Authorization errors (3000-3999)
+  UNAUTHORIZED = 3000,
+  FORBIDDEN = 3001,
+  ETHICAL_WALL_VIOLATION = 3002,
+
+  // System errors (9000-9999)
+  BACKEND_UNAVAILABLE = 9000,
+  DATABASE_ERROR = 9001,
+  NETWORK_ERROR = 9002,
+}
 
 /**
  * Base domain error class
@@ -53,7 +78,7 @@ export class DomainError extends Error {
 
   constructor(
     message: string,
-    public readonly code: string,
+    public readonly code: string | number,
     public readonly statusCode: number = 500,
     public readonly context?: Record<string, unknown>
   ) {
@@ -167,7 +192,7 @@ export class WorkflowNotFoundError extends DomainError {
 
 export class ValidationError extends DomainError {
   constructor(message: string, context?: Record<string, unknown>) {
-    super(message, "VALIDATION_ERROR", 400, context);
+    super(message, ErrorCode.VALIDATION_FAILED, 400, context);
   }
 }
 
@@ -338,13 +363,33 @@ export class ServiceUnavailableError extends DomainError {
 // ============================================================================
 
 export class OperationError extends DomainError {
-  constructor(operation: string, reason: string) {
+  constructor(operation: string, reason?: string) {
     super(
-      `Operation failed: ${operation} - ${reason}`,
+      `Operation failed: ${operation}${reason ? ` - ${reason}` : ""}`,
       "OPERATION_ERROR",
       500,
       { operation, reason }
     );
+  }
+}
+
+// ============================================================================
+// CONCURRENCY ERRORS (409)
+// ============================================================================
+
+export class ConcurrencyError extends DomainError {
+  constructor(message: string, context?: Record<string, unknown>) {
+    super(message, ErrorCode.CONFLICT_DETECTED, 409, context);
+  }
+}
+
+// ============================================================================
+// COMPLIANCE ERRORS (422)
+// ============================================================================
+
+export class ComplianceError extends DomainError {
+  constructor(message: string, context?: Record<string, unknown>) {
+    super(message, ErrorCode.CONFLICT_DETECTED, 409, context);
   }
 }
 

@@ -1,4 +1,4 @@
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -6,7 +6,7 @@ import { useQuery } from '@/hooks/backend';
 import { useInterval } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Activity, Database, HardDrive, Server } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from 'recharts';

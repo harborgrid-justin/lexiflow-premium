@@ -35,3 +35,25 @@ export async function getContent(id: string): Promise<string> {
     throw new Error(`Failed to fetch content for document with id: ${id}`);
   }
 }
+
+/** Get document statistics for filters */
+export async function getStats(): Promise<{
+  smartViews: { id: string; count: number }[];
+  facets: {
+    fileType: { id: string; count: number }[];
+    status: { id: string; count: number }[];
+  };
+}> {
+  try {
+    const response = await apiClient.get<any>('/documents/stats');
+    if (response) return response;
+    // Fallback if null
+    return { smartViews: [], facets: { fileType: [], status: [] } };
+  } catch (error) {
+    console.warn('[DocumentsApiService.getStats] Failed to fetch stats, returning empty:', error);
+    return {
+      smartViews: [],
+      facets: { fileType: [], status: [] }
+    };
+  }
+}

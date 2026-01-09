@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { StaffMember } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import React, { useState } from 'react';
 
 interface AddStaffModalProps {

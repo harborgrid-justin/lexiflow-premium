@@ -8,7 +8,7 @@ export * from '@/types/workflow-types';
 import { getNodeIcon as _getNodeIcon, NodeType } from '@/types/workflow-types';
 import React from 'react';
 import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Milestone, MessageSquare } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export const getNodeIcon = _getNodeIcon;
 

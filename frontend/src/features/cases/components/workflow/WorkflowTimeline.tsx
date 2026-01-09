@@ -23,7 +23,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { TaskStatusBackend, WorkflowStage } from '@/types';

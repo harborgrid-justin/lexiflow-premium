@@ -25,14 +25,14 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
+import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

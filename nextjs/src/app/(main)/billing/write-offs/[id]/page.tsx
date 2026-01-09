@@ -26,10 +26,12 @@ import {
 } from 'lucide-react';
 import {
   getWriteOffById,
+} from '../../write-off-actions';
+import {
   type WriteOffRequest,
   type WriteOffStatus,
   WRITE_OFF_CATEGORIES,
-} from '../../write-off-actions';
+} from '../../write-off-types';
 import { WriteOffActions } from './write-off-detail-actions';
 
 // =============================================================================

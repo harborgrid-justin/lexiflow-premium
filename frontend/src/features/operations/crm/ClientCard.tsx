@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Currency } from '@/components/ui/atoms/Currency/Currency';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Client, ClientStatus } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Building, Lock, PieChart } from 'lucide-react';
 import React from 'react';
 

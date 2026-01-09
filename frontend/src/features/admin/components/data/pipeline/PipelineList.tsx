@@ -1,7 +1,7 @@
 import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Pipeline } from '@/api/data-platform';
 
 interface PipelineListProps {

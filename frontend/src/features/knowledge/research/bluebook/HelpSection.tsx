@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';
 import React from 'react';
 

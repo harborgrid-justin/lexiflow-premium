@@ -11,7 +11,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
 import type { Case, DocketEntry, Party } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';
 import React, { useState } from 'react';
 

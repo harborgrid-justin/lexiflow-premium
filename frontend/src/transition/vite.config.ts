@@ -21,7 +21,7 @@ export default defineConfig({
       "@/services": resolve(__dirname, "./src/services"),
       "@/features": resolve(__dirname, "./src/features"),
       "@/ui": resolve(__dirname, "./src/ui"),
-      "@/lib": resolve(__dirname, "./src/lib"),
+      "@/shared/lib": resolve(__dirname, "./src/lib"),
       "@/tests": resolve(__dirname, "./tests"),
     },
   },

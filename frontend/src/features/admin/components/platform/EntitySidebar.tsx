@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, Briefcase, FileText, Book, Building, Database } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export type Category = 'users' | 'cases' | 'clients' | 'clauses' | 'documents';
 

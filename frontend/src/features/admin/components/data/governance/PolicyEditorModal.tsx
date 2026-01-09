@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { RLSPolicy, SqlCmd } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Check, Code, Shield } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

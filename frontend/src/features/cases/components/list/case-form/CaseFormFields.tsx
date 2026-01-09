@@ -24,7 +24,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Search, Split, Wand2, MoreHorizontal, List, Grid, Filter, Layout } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useWindow } from '@/providers';
-import { DiffViewer } from '@/components/features/discovery/components/DiffViewer/DiffViewer';
+import { DiffViewer } from '@/features/discovery/ui/components/DiffViewer/DiffViewer';
 
 interface DocumentToolbarProps {
   selectedDocsCount: number;

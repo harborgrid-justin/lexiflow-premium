@@ -23,7 +23,7 @@ import { EvidenceStructure } from './EvidenceStructure';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { useMutation } from '@/hooks/useQueryHooks';

@@ -6,7 +6,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DedupeCluster } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
 import React from 'react';

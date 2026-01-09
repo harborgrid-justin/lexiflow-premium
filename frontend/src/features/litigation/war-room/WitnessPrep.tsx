@@ -28,7 +28,7 @@ import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { WarRoomData } from '@/types';

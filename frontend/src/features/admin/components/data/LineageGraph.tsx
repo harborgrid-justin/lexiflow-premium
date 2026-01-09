@@ -8,7 +8,7 @@ import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { LineageLink, LineageNode } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 import { LineageCanvas } from './lineage/LineageCanvas';

@@ -4,14 +4,12 @@
  * Uses real API data via API_ENDPOINTS.
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/shadcn/card';
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/shadcn/chart';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/shadcn/tabs';
 import { API_ENDPOINTS } from '@/lib/api-config';
 import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { AnalyticsChart } from './analytics-chart';
 
 interface AnalyticsPageProps {
   params: Promise<{ type: string }>;
@@ -128,23 +126,12 @@ export default async function AnalyticsTypePage({ params }: AnalyticsPageProps) 
             <CardDescription>Monthly trends for {type}</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="min-h-75 w-full">
-              {data.performance.length > 0 ? (
-                <BarChart data={data.performance}>
-                  <CartesianGrid vertical={false} />
-                  <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} tickFormatter={(value) => value.slice(0, 3)} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  {/* @ts-expect-error ChartLegendContent types are inferred during render */}
-                  <ChartLegend content={<ChartLegendContent />} />
-                  <Bar dataKey="value" fill="var(--color-value)" radius={4} name={title} />
-                  {type === 'billing' && <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} name="Revenue" />}
-                </BarChart>
-              ) : (
-                <div className="flex h-75 items-center justify-center text-muted-foreground">
-                  No data available for this period.
-                </div>
-              )}
-            </ChartContainer>
+            <AnalyticsChart
+              data={data.performance}
+              config={chartConfig}
+              title={title}
+              showRevenue={type === 'billing'}
+            />
           </CardContent>
         </Card>
       </div>

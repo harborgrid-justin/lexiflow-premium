@@ -10,7 +10,7 @@
  * @module routes/cases/documents
  */
 
-import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
+import { CaseHeader } from '@/features/cases/ui/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
 import type { Case, LegalDocument } from '@/types';
 import { useState } from 'react';

@@ -5,7 +5,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '@/types/documents';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Download, FileText, Printer, Tag, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useState } from 'react';
 import { DiscoveryDocumentViewerProps } from './types';

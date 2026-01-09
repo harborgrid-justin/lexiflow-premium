@@ -30,7 +30,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
 import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

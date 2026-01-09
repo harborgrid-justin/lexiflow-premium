@@ -24,12 +24,12 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { filterStates } from './utils';
 
 interface StateJurisdiction {

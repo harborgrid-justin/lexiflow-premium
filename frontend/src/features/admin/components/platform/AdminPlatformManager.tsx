@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
 import { EMPTY_TEMPLATES } from './AdminConfig';

@@ -30,7 +30,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { WikiArticle } from '@/types';

@@ -4,7 +4,7 @@ import { DataService } from '@/services/data/dataService';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { SystemNotification } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)

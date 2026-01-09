@@ -27,8 +27,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
-import { sanitizeHtml } from '@/utils/sanitize';
+import { cn } from '@/shared/lib/cn';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

@@ -20,12 +20,12 @@ import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

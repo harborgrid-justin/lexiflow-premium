@@ -29,7 +29,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

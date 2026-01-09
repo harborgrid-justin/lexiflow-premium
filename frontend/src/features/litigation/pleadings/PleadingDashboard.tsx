@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
+import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Case, CaseId, UserId, DocumentId } from '@/types';

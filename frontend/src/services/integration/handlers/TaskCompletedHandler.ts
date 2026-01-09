@@ -24,7 +24,7 @@ export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[t
 
     // Dynamic import to avoid circular dependency
     const { DataService } = await import('@/services/data/dataService');
-    const { getTodayString } = await import('@/utils/dateUtils');
+    const { getTodayString } = await import('@/shared/lib/dateUtils');
 
     const draftTimeEntry: TimeEntry = {
       id: `time-auto-${Date.now()}` as UUID,

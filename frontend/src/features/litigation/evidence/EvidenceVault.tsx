@@ -17,7 +17,7 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
@@ -28,7 +28,7 @@ import { EvidenceVaultContent } from './EvidenceVaultContent';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DetailTab, useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Config & Types
 import { EVIDENCE_PARENT_TABS } from '@/config/tabs.config';

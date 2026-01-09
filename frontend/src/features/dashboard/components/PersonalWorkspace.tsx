@@ -27,12 +27,12 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
+import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { CalendarEventItem, User, WorkflowTask } from '@/types';

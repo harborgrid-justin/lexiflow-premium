@@ -18,7 +18,7 @@ import React, { useRef, useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useClickOutside } from '@/hooks/useClickOutside';
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
@@ -27,7 +27,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { CaseStatus } from '@/types';

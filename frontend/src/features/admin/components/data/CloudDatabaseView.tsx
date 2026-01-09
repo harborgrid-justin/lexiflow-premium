@@ -10,7 +10,7 @@ import { Plus, X, RefreshCw, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import type { ThemeContextValue } from '@/contexts/theme/ThemeContext.types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ConnectionCard } from './ConnectionCard';
 import { SystemHealthDisplay } from './SystemHealthDisplay';
 import { DATA_PROVIDERS } from './constants';

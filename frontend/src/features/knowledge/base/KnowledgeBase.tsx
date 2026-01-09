@@ -27,7 +27,7 @@ import { KnowledgeContent } from './KnowledgeContent';
 
 // Utils & Config
 import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

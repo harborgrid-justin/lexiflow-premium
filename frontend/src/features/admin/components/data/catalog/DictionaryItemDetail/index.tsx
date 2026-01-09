@@ -4,7 +4,7 @@ import { useMutation } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Save } from 'lucide-react';
 import React, { useState } from 'react';
 import { DefinitionCard } from './DefinitionCard';

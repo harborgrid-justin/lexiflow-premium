@@ -28,7 +28,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { MarketingCampaign, MarketingMetric } from '@/types';

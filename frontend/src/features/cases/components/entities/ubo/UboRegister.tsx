@@ -1,6 +1,6 @@
 import { api } from '@/api';
-import { ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { ActionRow, MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
@@ -8,7 +8,7 @@ import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { LegalEntity } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertTriangle, Building, Download, Network, Plus, ShieldCheck, User } from 'lucide-react';
 import React, { useMemo } from 'react';

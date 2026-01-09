@@ -4,7 +4,7 @@
  * Comprehensive privilege assertion and logging
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -13,7 +13,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
 

@@ -27,13 +27,13 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DirectorView, EntityNavigation, getEntityFirstTab, getEntityParentTab } from './layout/EntityNavigation';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { EntityId, LegalEntity } from '@/types';

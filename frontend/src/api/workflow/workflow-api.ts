@@ -268,20 +268,28 @@ export class WorkflowApiService {
    * @returns Promise<Array<{label: string, enabled: boolean}>>
    */
   async getSettings(): Promise<{ label: string; enabled: boolean }[]> {
-    // TODO: Connect to backend settings endpoint when available
-    // For now returning mock data to match WorkflowRepository interface
-    return [
-      { label: "Auto-Assign Reviewers", enabled: true },
-      { label: "SLA Breach Notifications", enabled: false },
-      { label: "Strict Dependency Enforcement", enabled: true },
-    ];
+    try {
+      const response = await apiClient.get<
+        Array<{ label: string; enabled: boolean }>
+      >(`${this.baseUrl}/settings`);
+      return Array.isArray(response) ? response : [];
+    } catch (error) {
+      console.error(
+        "[WorkflowApiService.getSettings] Failed to fetch settings:",
+        error
+      );
+      // Return empty array when data is unavailable or on error, handling missing backend endpoints gracefully
+      return [];
+    }
   }
 
   async updateSettings(
     settings: { label: string; enabled: boolean }[]
   ): Promise<{ label: string; enabled: boolean }[]> {
-    // TODO: Connect to backend settings endpoint
-    return settings;
+    const response = await apiClient.put<
+      Array<{ label: string; enabled: boolean }>
+    >(`${this.baseUrl}/settings`, settings);
+    return response;
   }
 
   /**

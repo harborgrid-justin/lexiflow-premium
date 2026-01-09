@@ -11,7 +11,7 @@ import { DataService } from '@/services/data/dataService';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { CommunicationStatus } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Paperclip, Send, Wand2, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';

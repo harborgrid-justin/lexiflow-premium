@@ -1,15 +1,15 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { Button } from '@/components/ui/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { Clause } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { BookOpen, Check, Copy, History, Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { filterClauses } from './clauseList.utils';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 

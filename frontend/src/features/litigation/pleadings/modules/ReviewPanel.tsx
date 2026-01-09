@@ -3,7 +3,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { CaseId, TaskId, TaskPriorityBackend, TaskStatusBackend, UserId, WorkflowTask } from '@/types';
 import { PleadingComment } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { CheckCircle, MessageSquare, MessagesSquare, Send } from 'lucide-react';
 import React, { useState } from 'react';
 

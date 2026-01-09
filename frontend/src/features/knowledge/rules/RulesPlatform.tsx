@@ -20,14 +20,14 @@ import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'reac
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
 import { RULES_PLATFORM_TABS, RulesView } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

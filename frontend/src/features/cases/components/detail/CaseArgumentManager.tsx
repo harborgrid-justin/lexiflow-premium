@@ -16,13 +16,13 @@ import { Target, Plus, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Case, LegalArgument, EvidenceItem } from '@/types';

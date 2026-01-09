@@ -16,7 +16,7 @@ import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
 
 // Hooks & Context
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 
 // Types
 import { NodeType } from '@/types/workflow-types';

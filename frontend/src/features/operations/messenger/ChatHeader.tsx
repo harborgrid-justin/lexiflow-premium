@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

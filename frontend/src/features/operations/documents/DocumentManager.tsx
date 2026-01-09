@@ -29,7 +29,7 @@ import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
 import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { UserRole } from '@/types';

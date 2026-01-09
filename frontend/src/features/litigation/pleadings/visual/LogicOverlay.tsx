@@ -1,6 +1,6 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { PleadingDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, ArrowRight, CheckCircle, GitBranch } from 'lucide-react';
 import React, { useMemo } from 'react';
 

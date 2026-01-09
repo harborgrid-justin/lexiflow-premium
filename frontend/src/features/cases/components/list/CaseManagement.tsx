@@ -12,7 +12,7 @@
  */
 
 import { api } from '@/api';
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 import { PATHS } from '@/config/paths.config';
@@ -22,7 +22,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { CaseStatus, type Case, type Invoice } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
 import React, { Suspense, useMemo, useTransition } from 'react';
 import { useNavigate } from 'react-router-dom';

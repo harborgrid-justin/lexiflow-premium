@@ -8,7 +8,7 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   AlertCircle,
   Briefcase,
@@ -35,7 +35,7 @@ import {
 } from 'recharts';
 
 // Components
-import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '@/components/dashboard/widgets';
+import { ActivityFeed, ChartCard, DeadlinesList, KPICard } from '@/features/dashboard/widgets';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // ============================================================================

@@ -5,7 +5,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

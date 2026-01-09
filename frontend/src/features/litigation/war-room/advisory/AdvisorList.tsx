@@ -20,13 +20,13 @@ import { Phone, Mail, MoreHorizontal, FileText, CheckSquare } from 'lucide-react
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

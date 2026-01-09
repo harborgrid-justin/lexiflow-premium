@@ -41,12 +41,12 @@ import {
   PleadingTemplate,
   UserId,
 } from "@/types";
-import { IdGenerator } from "@/utils/idGenerator";
+import { IdGenerator } from "@/shared/lib/idGenerator";
 import {
   createTemplateContext,
   hydrateTemplateSections,
 } from "@/utils/templateEngine";
-import { validateTemplate } from "@/utils/validation";
+import { validateTemplate } from "@/shared/lib/validation";
 
 /**
  * Query keys for React Query integration

@@ -19,8 +19,10 @@ import {
 import { useState, useEffect } from 'react';
 import {
   writeOffFormAction,
-  type WriteOffRequest,
 } from '../../write-off-actions';
+import {
+  type WriteOffRequest,
+} from '../../write-off-types';
 import type { ActionResult } from '../../types';
 
 interface WriteOffActionsProps {

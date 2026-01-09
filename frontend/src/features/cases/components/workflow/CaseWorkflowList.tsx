@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';
 

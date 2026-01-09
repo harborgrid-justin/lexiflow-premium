@@ -21,14 +21,14 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useSecureMessenger } from '@/hooks/domain';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { MessengerArchived } from './MessengerArchived';
 import { MessengerContacts } from './MessengerContacts';
 import { MessengerFiles } from './MessengerFiles';
 import { MessengerInbox } from './MessengerInbox';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

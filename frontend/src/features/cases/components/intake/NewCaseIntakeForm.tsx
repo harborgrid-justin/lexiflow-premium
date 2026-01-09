@@ -25,7 +25,7 @@ import { useNotifications } from '@/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
 import { PATHS } from '@/config/paths.config';
 import type { Case, Matter, User as UserType } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { z } from 'zod';
 import {
   AlertTriangle,

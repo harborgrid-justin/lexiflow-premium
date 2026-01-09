@@ -13,14 +13,14 @@ import React from 'react';
 import { Scale, Fingerprint, ChevronRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/ui/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument } from '@/types';

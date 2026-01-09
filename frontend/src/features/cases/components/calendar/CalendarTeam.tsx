@@ -26,7 +26,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

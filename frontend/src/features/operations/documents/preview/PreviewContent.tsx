@@ -1,11 +1,11 @@
-import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
-import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useState } from 'react';
 import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
 import { Field, InteractiveOverlay } from './InteractiveOverlay';

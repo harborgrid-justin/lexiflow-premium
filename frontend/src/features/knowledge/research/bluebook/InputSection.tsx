@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
 import React from 'react';
 import { FormatOptionsCard } from './FormatOptionsCard';

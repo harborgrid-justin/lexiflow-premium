@@ -24,7 +24,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 
 // Utils & Constants
 import { ServiceStatus } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { ServiceJob } from '@/types';

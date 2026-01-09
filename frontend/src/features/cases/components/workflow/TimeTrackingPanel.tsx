@@ -1,6 +1,6 @@
 import { Play, Pause, StopCircle, Clock } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useTimeTracker } from '@/hooks/useTimeTracker';
 
 // ============================================================================

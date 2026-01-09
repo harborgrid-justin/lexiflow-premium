@@ -1,7 +1,7 @@
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Briefcase, ExternalLink } from 'lucide-react';
 import React from 'react';
 

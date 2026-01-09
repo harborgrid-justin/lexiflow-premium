@@ -13,7 +13,7 @@ import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, Ma
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
@@ -23,7 +23,7 @@ import { useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { DocumentRepository } from '@/services/data/repositories/DocumentRepository';

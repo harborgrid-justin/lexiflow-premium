@@ -26,10 +26,10 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
@@ -40,7 +40,7 @@ import { CreateServiceJobModal } from './CreateServiceJobModal';
 import { ServiceTracker } from './ServiceTracker';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { CommunicationItem, ServiceJob } from '@/types';

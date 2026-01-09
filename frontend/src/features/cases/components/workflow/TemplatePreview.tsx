@@ -22,7 +22,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Badge } from '@/components/ui/atoms/Badge';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { WorkflowTemplateData } from '@/types';

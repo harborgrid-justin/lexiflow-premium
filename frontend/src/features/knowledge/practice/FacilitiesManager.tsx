@@ -24,14 +24,14 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

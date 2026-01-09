@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { Process } from './types';
 import { getProcessIcon } from './utils';

@@ -21,7 +21,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useInterval } from '@/hooks/useInterval';
+import { useInterval } from '@/shared/hooks/useInterval';
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
@@ -33,7 +33,7 @@ import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

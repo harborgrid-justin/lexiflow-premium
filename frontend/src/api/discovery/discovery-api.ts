@@ -239,19 +239,41 @@ export class DiscoveryApiService {
   }
 
   /**
+   * Get custodian statistics for dashboard
+   */
+  async getCustodianStats(): Promise<{ name: string; value: number }[]> {
+    try {
+      const response = await apiClient.get<
+        Array<{ name: string; value: number }>
+      >(`${this.baseUrl}/analytics/custodians`);
+      return Array.isArray(response) ? response : [];
+    } catch (error) {
+      console.error(
+        "[DiscoveryApiService.getCustodianStats] Failed to fetch stats:",
+        error
+      );
+      return [];
+    }
+  }
+
+  /**
    * Get funnel statistics for discovery dashboard
    * @returns Promise<Array<{ name: string; value: number; label: string }>>
    */
   async getFunnelStats(): Promise<
     { name: string; value: number; label: string }[]
   > {
-    // TODO: Connect to backend analytics endpoint when available
-    // For now returning mock data to match DiscoveryRepository interface
-    return [
-      { name: "Collection", value: 0, label: "0 Docs" },
-      { name: "Processing", value: 0, label: "0 Processed" },
-      { name: "Review", value: 0, label: "0 Reviewed" },
-      { name: "Production", value: 0, label: "0 Produced" },
-    ];
+    try {
+      const response = await apiClient.get<
+        { name: string; value: number; label: string }[]
+      >(`${this.baseUrl}/analytics/funnel`);
+      return Array.isArray(response) ? response : [];
+    } catch (error) {
+      console.error(
+        "[DiscoveryApiService.getFunnelStats] Failed to fetch data:",
+        error
+      );
+      return [];
+    }
   }
 }

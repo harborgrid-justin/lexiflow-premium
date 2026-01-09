@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RefreshCw, Plus, X, Database } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';

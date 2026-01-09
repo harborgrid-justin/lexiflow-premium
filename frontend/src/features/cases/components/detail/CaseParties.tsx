@@ -13,7 +13,7 @@ import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, P
 import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
@@ -28,7 +28,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Scheduler } from '@/utils/scheduler';
 
 // Types & Interfaces

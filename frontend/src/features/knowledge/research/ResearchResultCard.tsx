@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { SearchResult } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ExternalLink } from 'lucide-react';
 import React from 'react';
 

@@ -1,5 +1,5 @@
-import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
-import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
@@ -10,7 +10,7 @@ import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { LegalDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
 import React, { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';

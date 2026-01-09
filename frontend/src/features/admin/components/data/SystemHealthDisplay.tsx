@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { Activity } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useDataSource } from '@/providers';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { calculateCoverage } from './utils';
 import { BACKEND_ENABLED_SERVICES } from './constants';
 

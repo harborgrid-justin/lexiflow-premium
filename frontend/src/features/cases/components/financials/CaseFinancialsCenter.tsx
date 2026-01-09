@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   Clock,
   DollarSign,

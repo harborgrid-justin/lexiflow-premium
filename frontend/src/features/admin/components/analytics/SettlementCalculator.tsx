@@ -31,7 +31,7 @@ import type { ThemeStateValue } from '@/contexts/theme/ThemeContext.types';
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

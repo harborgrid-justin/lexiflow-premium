@@ -1,8 +1,8 @@
 import React, { useMemo, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, PleadingSection, Case, Party } from '@/types';
 import { GripVertical } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { sanitizeHtml } from '@/utils/sanitize';
+import { cn } from '@/shared/lib/cn';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 import { ViewMode } from '../types';
 
 interface PleadingCanvasProps {

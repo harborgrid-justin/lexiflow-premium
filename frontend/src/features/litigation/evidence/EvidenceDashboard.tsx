@@ -16,7 +16,7 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { ViewMode } from '@/hooks/useEvidenceManager';

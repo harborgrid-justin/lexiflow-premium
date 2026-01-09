@@ -1,5 +1,5 @@
-import { ErrorBoundary } from "@/components/organisms/ErrorBoundary";
-import { cn } from '@/utils/cn';
+import { ErrorBoundary } from "@/shared/ui/organisms/ErrorBoundary";
+import { cn } from '@/shared/lib/cn';
 import { Maximize2, Minus, X } from 'lucide-react';
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';

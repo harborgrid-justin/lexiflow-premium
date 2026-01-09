@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, RLSPermissionLevel as PermissionLevel } from '@/types/data-quality';
 import { useQuery, useMutation, queryClient } from '@/hooks/backend';

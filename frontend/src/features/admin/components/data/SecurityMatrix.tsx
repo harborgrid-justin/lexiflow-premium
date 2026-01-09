@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { RefreshCw, Save } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { AccessMatrix } from './security/AccessMatrix';

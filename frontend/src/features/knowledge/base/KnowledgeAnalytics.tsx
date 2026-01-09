@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
@@ -31,7 +31,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES

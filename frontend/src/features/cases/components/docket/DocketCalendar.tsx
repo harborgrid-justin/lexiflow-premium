@@ -17,7 +17,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 
 import {

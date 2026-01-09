@@ -8,7 +8,7 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { RegionMap } from './replication/RegionMap';
 

@@ -18,7 +18,7 @@ import React, { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
@@ -29,7 +29,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 

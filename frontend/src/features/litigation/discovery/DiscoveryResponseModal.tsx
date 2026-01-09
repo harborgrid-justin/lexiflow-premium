@@ -7,7 +7,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { DiscoveryRequest } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)

@@ -10,7 +10,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
 import React from 'react';
 

@@ -21,7 +21,7 @@ import { getAIProvider, setAIProvider, type AIProvider } from '@/services/featur
 import { CaseStatus, MatterType } from '@/types/enums';
 import { MetadataRecord, UserId } from '@/types/primitives';
 import { parseCaseXml, type XMLParsedCaseData } from '@/utils/caseXmlParser';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle, Edit2, FileText, Loader, Plus, Settings, Sparkles, Upload, Users, X } from 'lucide-react';
 import React, { useState } from 'react';
 

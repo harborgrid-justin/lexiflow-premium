@@ -1,5 +1,5 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Currency } from '@/components/ui/atoms/Currency';
@@ -9,7 +9,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Client, ClientStatus } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ClientCard } from './ClientCard';

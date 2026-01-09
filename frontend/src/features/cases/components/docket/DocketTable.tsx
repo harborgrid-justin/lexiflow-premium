@@ -17,8 +17,8 @@ import React, { useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { InfiniteScrollTrigger } from '@/components/organisms/InfiniteScrollTrigger';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { InfiniteScrollTrigger } from '@/shared/ui/organisms/InfiniteScrollTrigger';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { DocketRow } from './DocketRow';
 
@@ -27,7 +27,7 @@ import { useListNavigation } from '@/hooks/useListNavigation';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { DocketEntry, DocketEntryType } from '@/types';

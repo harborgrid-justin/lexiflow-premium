@@ -4,7 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Annotation } from '@/components/features/documents/components';
+import type { Annotation } from '@/features/documents/ui/components';
 import { validateId, validateObject } from './validation';
 
 /** Get annotations for a document */

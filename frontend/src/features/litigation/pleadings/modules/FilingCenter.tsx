@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { FileCheck, Printer, Stamp, UploadCloud } from 'lucide-react';
 import React from 'react';
 

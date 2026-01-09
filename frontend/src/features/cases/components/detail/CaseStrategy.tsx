@@ -26,7 +26,7 @@ import { useModalState } from '@/hooks/core';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Type, Layout, List, PenTool, Hash, GripVertical, FileText } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface SidebarLibraryProps {
   onAddSection: (type: string) => void;

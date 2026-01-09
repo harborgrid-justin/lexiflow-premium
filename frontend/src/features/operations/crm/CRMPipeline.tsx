@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, DollarSign } from 'lucide-react';
 import { useModalState } from '@/hooks/core';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/features/cases/components/Kanban/Kanban';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '@/features/cases/ui/components/Kanban/Kanban';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 

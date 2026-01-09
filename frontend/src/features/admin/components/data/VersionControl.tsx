@@ -5,7 +5,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
 import React, { useState } from 'react';
 

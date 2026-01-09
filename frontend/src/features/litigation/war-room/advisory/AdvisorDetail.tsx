@@ -24,7 +24,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { Advisor } from './AdvisorList';

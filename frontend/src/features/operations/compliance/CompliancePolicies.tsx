@@ -1,11 +1,11 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Calendar, Download, Eye, FileText } from 'lucide-react';
 import { memo } from 'react';
 // ✅ Migrated to backend API (2025-12-21)

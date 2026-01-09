@@ -14,7 +14,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { EvidenceItem } from '@/types';

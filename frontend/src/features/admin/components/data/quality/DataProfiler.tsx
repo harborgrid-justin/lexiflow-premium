@@ -1,10 +1,10 @@
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DataProfile } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, AlignLeft, Calendar, CheckCircle2, Hash, Loader2 } from 'lucide-react';
 import React from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis } from 'recharts';

@@ -7,7 +7,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 import { useModalState } from '@/hooks/core';
 import { WorkflowNode, getNodeIcon } from './types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface BuilderPropertiesProps {
   isOpen: boolean;

@@ -26,14 +26,14 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
 import { PrecedentsView } from '../base/PrecedentsView';
 import { QAView } from '../base/QAView';
 import { WikiView } from '../base/WikiView';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

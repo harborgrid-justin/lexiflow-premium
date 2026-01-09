@@ -21,9 +21,11 @@ import {
 } from 'lucide-react';
 import {
   writeOffFormAction,
+} from '../../write-off-actions';
+import {
   WRITE_OFF_CATEGORIES,
   type WriteOffCategory,
-} from '../../write-off-actions';
+} from '../../write-off-types';
 import type { ActionResult } from '../../types';
 
 interface PrefillData {

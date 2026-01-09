@@ -20,7 +20,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument } from '@/types';

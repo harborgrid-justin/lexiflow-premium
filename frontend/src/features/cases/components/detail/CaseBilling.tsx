@@ -13,7 +13,7 @@ import React from 'react';
 import { Download, Clock, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { TimeEntry, BillingModel } from '@/types';

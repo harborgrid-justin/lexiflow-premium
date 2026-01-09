@@ -10,8 +10,8 @@
  * @module routes/cases/parties
  */
 
-import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
-import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
+import { CaseHeader } from '@/features/cases/ui/components/CaseHeader';
+import { PartiesTable } from '@/features/cases/ui/components/PartiesTable';
 import { DataService } from '@/services/data/dataService';
 import type { Case } from '@/types';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';

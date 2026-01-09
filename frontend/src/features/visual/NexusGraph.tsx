@@ -23,17 +23,17 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { useResizeObserver } from '@/hooks/useResizeObserver';
+import { useResizeObserver } from '@/shared/hooks/useResizeObserver';
 import { useViewportTransform } from '@/hooks/useViewportTransform';
 
 // Components
 import { GraphOverlay } from './GraphOverlay';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { NODE_STRIDE } from '@/utils/nexusPhysics';
 import { buildGraphData, getNodeLabelYOffset, getNodeRadius, getNodeStrokeColor } from './utils/graphData';
 

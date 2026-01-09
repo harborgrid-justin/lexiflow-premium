@@ -2,7 +2,7 @@ import React from 'react';
 import { Variable, Database, RefreshCw } from 'lucide-react';
 import { PleadingVariable } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface VariableManagerProps {
   variables: PleadingVariable[];

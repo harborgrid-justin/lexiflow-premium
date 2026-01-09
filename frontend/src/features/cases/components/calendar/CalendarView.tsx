@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));

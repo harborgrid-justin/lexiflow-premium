@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { getTodayString } from '@/utils/dateUtils';
+import { getTodayString } from '@/shared/lib/dateUtils';
 import { FileText } from 'lucide-react';
 import React, { useState } from 'react';
 

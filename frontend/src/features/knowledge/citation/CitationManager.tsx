@@ -26,7 +26,7 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

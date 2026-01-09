@@ -19,7 +19,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { CasePhase, WorkflowTask } from '@/types';

@@ -30,7 +30,7 @@ import { api } from '@/api';
 
 // Utils & Config
 import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // MAIN COMPONENT

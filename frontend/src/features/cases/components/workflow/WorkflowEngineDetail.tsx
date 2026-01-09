@@ -10,7 +10,7 @@ import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';

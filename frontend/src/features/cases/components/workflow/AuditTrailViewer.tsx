@@ -1,13 +1,13 @@
 import React from 'react';
 import { History, User, Check, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { AuditLogEntry } from '@/types';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { AuditEvent } from './types';
 
 export const AuditTrailViewer = () => {

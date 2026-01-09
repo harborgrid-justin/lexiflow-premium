@@ -20,7 +20,7 @@ import {
   CitationSignal,
   Author
 } from '@/types/bluebook';
-import { IdGenerator } from '@/utils/idGenerator';
+import { IdGenerator } from '@/shared/lib/idGenerator';
 
 /**
  * Citation parser class with regex-based pattern matching

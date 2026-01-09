@@ -28,10 +28,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
@@ -40,7 +40,7 @@ import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

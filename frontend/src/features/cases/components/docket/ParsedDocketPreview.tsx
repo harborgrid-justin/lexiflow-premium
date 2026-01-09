@@ -20,7 +20,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Type Definitions for Parsed Docket Data
 interface ParsedParty {

@@ -25,11 +25,11 @@ import { DataService } from '@/services/data/dataService';
 import { useModalState } from '@/hooks/core';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { getTodayString } from '@/utils/dateUtils';
+import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
@@ -37,7 +37,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { FirmAsset } from '@/types';

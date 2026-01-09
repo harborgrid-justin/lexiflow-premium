@@ -1,6 +1,6 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { FormattingRule, PleadingSection } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertOctagon, AlertTriangle, Info, Zap } from 'lucide-react';
 import React, { useMemo } from 'react';
 

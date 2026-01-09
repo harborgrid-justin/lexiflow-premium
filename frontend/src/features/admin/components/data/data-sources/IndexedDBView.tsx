@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Database, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataSourceSelector } from './DataSourceSelector';

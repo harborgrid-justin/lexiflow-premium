@@ -1,10 +1,10 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { MoreVertical } from 'lucide-react';
 import React from 'react';
 import { ConversationRow } from './ConversationRow';

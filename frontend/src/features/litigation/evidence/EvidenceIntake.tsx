@@ -19,7 +19,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { DocumentService } from '@/services/features/documents/documentService';

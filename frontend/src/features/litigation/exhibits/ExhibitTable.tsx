@@ -22,14 +22,14 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 
 // Components
-import { EmptyListState, StatusBadge } from '@/components/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Button } from '@/components/ui/atoms/Button';
 import { FileIcon } from '@/components/ui/atoms/FileIcon';
 import { DocumentPreviewPanel } from '@features/operations';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { TrialExhibit } from '@/types';

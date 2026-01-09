@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import React from 'react';
 
 interface DocumentGridCardProps {

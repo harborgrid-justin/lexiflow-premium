@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
@@ -34,7 +34,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { AccessEffect, ExtendedUserProfile, GranularPermission } from '@/types';

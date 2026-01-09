@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/useQueryHooks';

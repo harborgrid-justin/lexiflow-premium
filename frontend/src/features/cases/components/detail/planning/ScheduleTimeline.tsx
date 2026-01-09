@@ -20,7 +20,7 @@ import { useScheduleController } from '@/hooks/useScheduleController';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ScheduleHelpers } from '@/utils/scheduleHelpers';
 
 // Types & Interfaces

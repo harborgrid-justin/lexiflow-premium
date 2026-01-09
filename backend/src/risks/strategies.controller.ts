@@ -1,20 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
-  Query,
+  Controller,
   Delete,
+  Get,
+  Param,
   Patch,
+  Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
-import {
-  ApiTags,
-  ApiOperation,
-  ApiBearerAuth,
-  ApiResponse,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 
 @ApiTags("Strategies")
@@ -79,7 +74,7 @@ export class StrategiesController {
   @Delete(":id")
   @ApiOperation({ summary: "Delete strategy" })
   async delete(@Param("id") id: string) {
-    return { success: true };
+    return { success: true, id };
   }
 
   @Get("recommendations")
@@ -88,6 +83,7 @@ export class StrategiesController {
     return [
       {
         id: "1",
+        caseId,
         type: "motion",
         title: "File Motion to Dismiss",
         description: "Based on lack of personal jurisdiction",
@@ -103,6 +99,7 @@ export class StrategiesController {
     return [
       {
         id: "1",
+        strategyId: id,
         description: "Judge has history of denying similar motions",
         severity: "High",
         probability: 0.7,

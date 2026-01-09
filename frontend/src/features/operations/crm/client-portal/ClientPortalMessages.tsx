@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { MessageSquare } from 'lucide-react';
 
 export const ClientPortalMessages: React.FC = () => {

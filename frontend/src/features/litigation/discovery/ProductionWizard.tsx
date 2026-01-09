@@ -14,7 +14,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { ProductionSet } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
 import React, { useState } from 'react';
 

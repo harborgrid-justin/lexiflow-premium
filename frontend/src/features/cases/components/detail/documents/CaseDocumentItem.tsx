@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { TagList } from '@/components/ui/molecules/TagList/TagList';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { LegalDocument } from '@/types';

@@ -11,18 +11,47 @@ import { useRouter } from 'next/navigation';
 import { Clock, Play, Pause, Square, Save, X, Loader2 } from 'lucide-react';
 import { timeEntryFormAction } from '../../actions';
 import type { ActionResult } from '../../types';
+import { DataService } from '@/services/data/dataService';
+import { Case, User } from '@/types';
+import { useNotify } from '@/hooks/useNotify';
 
 export function TimeEntryForm() {
   const router = useRouter();
+  const { notify } = useNotify();
   const [state, formAction, isPending] = useActionState(
     timeEntryFormAction,
     { success: false } as ActionResult
   );
 
+  // Data state
+  const [cases, setCases] = useState<Case[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
   // Timer state
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [manualHours, setManualHours] = useState('');
+
+  // Fetch Data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [fetchedCases, fetchedUsers] = await Promise.all([
+          DataService.cases.getAll(),
+          DataService.users.getAll()
+        ]);
+        setCases(fetchedCases);
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error('Failed to fetch form data', error);
+        notify({ type: 'error', message: 'Failed to load cases or users' });
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+    fetchData();
+  }, [notify]);
 
   // Timer effect
   useEffect(() => {
@@ -143,7 +172,7 @@ export function TimeEntryForm() {
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {/* Case/Matter - In production, this would be a searchable select */}
+          {/* Case/Matter */}
           <div>
             <label
               htmlFor="caseId"
@@ -155,16 +184,19 @@ export function TimeEntryForm() {
               id="caseId"
               name="caseId"
               required
+              disabled={isLoadingData}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             >
-              <option value="">Select a case...</option>
-              <option value="case-1">Smith v. Johnson - Civil Litigation</option>
-              <option value="case-2">Acme Corp - Contract Review</option>
-              <option value="case-3">Estate of Williams - Probate</option>
+              <option value="">{isLoadingData ? 'Loading cases...' : 'Select a case...'}</option>
+              {cases.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.title || c.caseNumber || 'Untitled Case'}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* User/Timekeeper - In production, this would be the current user */}
+          {/* User/Timekeeper */}
           <div>
             <label
               htmlFor="userId"
@@ -176,12 +208,15 @@ export function TimeEntryForm() {
               id="userId"
               name="userId"
               required
+              disabled={isLoadingData}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             >
-              <option value="">Select timekeeper...</option>
-              <option value="user-1">John Smith (Partner)</option>
-              <option value="user-2">Jane Doe (Associate)</option>
-              <option value="user-3">Mike Johnson (Paralegal)</option>
+              <option value="">{isLoadingData ? 'Loading users...' : 'Select timekeeper...'}</option>
+              {users.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.role})
+                </option>
+              ))}
             </select>
           </div>
 

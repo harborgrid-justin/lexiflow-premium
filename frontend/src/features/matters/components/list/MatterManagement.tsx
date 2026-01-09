@@ -12,7 +12,7 @@ import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Plus, Search, FileText, Briefcase, Filter, MoreVertical, Calendar } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { format } from 'date-fns';
 
 export const MatterManagement: React.FC = () => {

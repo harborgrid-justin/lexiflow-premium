@@ -6,7 +6,7 @@
  * @module routes/documents/upload
  */
 
-import { DocumentUploader, type UploadMetadata } from '@/components/features/documents/components';
+import { DocumentUploader, type UploadMetadata } from '@/features/documents/ui/components';
 import { DataService } from '@/services/data/dataService';
 import { useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';

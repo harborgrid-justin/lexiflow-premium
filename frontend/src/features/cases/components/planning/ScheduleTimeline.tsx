@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 
 interface ScheduleTimelineProps {

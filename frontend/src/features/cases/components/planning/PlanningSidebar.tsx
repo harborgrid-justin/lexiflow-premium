@@ -1,5 +1,5 @@
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Calendar, CheckSquare, Clock, Flag, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

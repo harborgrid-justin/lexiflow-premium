@@ -22,11 +22,11 @@ import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge';
-import { SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchInputBar } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';

@@ -14,7 +14,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { AIValidationService } from '@/services/infrastructure/aiValidationService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {

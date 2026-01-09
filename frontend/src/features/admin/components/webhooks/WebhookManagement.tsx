@@ -1,5 +1,5 @@
 import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
@@ -8,7 +8,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { useModalState, useNotify } from '@/hooks/core';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
 import React, { useState } from 'react';
 

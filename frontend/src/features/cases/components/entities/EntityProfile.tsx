@@ -30,7 +30,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { EmptyState } from '@/components/ui/molecules/EmptyState';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { LegalEntity, EntityRelationship } from '@/types';

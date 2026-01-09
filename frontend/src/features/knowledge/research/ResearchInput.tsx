@@ -1,5 +1,5 @@
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { BookOpen, Filter, Loader2, Search, Sparkles } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

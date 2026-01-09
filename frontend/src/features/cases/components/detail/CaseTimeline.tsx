@@ -13,7 +13,7 @@ import { BookOpen, Briefcase, Calendar, CheckCircle, DollarSign, FileText, Filte
 import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { TimelineItem } from '@/components/ui/molecules/TimelineItem/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 
@@ -21,7 +21,7 @@ import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { TimelineEvent } from '@/types';

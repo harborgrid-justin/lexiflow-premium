@@ -25,7 +25,7 @@ import { StatusBadge } from '@/components/ui/atoms/StatusBadge/StatusBadge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

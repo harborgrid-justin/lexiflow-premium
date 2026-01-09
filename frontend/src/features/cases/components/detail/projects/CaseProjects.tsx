@@ -13,7 +13,7 @@ import { Briefcase, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/ui/atoms/Button';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
@@ -23,7 +23,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { CaseId, Project, ProjectId, WorkflowTask } from '@/types';

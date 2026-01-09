@@ -1,6 +1,6 @@
 import React from 'react';
 import { LegalRule } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { History } from 'lucide-react';
 
 interface ThemeType {

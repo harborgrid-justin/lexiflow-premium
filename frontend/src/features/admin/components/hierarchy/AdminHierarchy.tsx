@@ -3,7 +3,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Group, GroupId, Organization, User as UserType } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Loader2, Plus, Shield, Users } from 'lucide-react';
 import React, { useState } from 'react';

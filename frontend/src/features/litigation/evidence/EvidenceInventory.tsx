@@ -17,9 +17,9 @@ import React, { useCallback, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
-import { FilterPanel } from '@/components/organisms/FilterPanel';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon';
@@ -27,11 +27,11 @@ import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon';
 // Context & Utils
 import { EvidenceFilters } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { AdmissibilityStatusEnum } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { EvidenceItem } from '@/types';

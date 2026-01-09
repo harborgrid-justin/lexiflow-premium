@@ -3,7 +3,7 @@ import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-rea
 import { Card } from '@/components/ui/molecules/Card';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface GovernanceRule {
   id: string;

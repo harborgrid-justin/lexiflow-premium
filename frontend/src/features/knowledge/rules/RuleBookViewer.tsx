@@ -10,7 +10,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Bookmark, BookOpen, ExternalLink, FileText, History, Loader2, Scale, Search, Share2 } from 'lucide-react';
 import { RuleContentDisplay } from './rule-viewer/RuleContentDisplay';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';

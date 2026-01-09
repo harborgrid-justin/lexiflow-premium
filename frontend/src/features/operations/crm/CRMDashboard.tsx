@@ -32,7 +32,7 @@ import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 // Utils & Constants
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { Case, Client, CRMAnalytics, CRMLead } from '@/types';

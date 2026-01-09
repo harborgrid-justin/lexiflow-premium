@@ -13,7 +13,7 @@ import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
 import React, { lazy, Suspense, useRef, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
@@ -27,7 +27,7 @@ import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 // ✅ Migrated to backend API (2025-12-21)
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces

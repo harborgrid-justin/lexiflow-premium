@@ -17,7 +17,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DiscoveryNavigation, getFirstTabOfParent, getParentTabForView } from './layout/DiscoveryNavigation';
@@ -32,7 +32,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================

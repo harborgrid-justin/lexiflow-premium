@@ -16,7 +16,7 @@ import { Zap, Clock, Plus } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export const WorkflowAutomations: React.FC = () => {
   const { theme } = useTheme();

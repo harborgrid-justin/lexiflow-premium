@@ -23,12 +23,12 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useToast } from '@/providers';
-import { getTodayString } from '@/utils/dateUtils';
+import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { CaseId, ConferralMethod, ConferralResult, ConferralSession, UUID } from '@/types';

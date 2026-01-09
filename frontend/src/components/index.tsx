@@ -18,9 +18,9 @@
  * USAGE:
  * Import from the appropriate level or use barrel exports:
  * ```tsx
- * import { Button, Badge } from '@/components/atoms';
- * import { Card, Modal } from '@/components/molecules';
- * import { Sidebar, Table } from '@/components/organisms';
+ * import { Button, Badge } from '@/shared/ui/atoms';
+ * import { Card, Modal } from '@/shared/ui/molecules';
+ * import { Sidebar, Table } from '@/shared/ui/organisms';
  * import { TabbedPageLayout } from '@/components/layouts';
  * import { CaseListPage } from '@/components/pages';
  * ```

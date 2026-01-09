@@ -20,7 +20,7 @@ import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
 // Components
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Hooks & Context
@@ -31,7 +31,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { LegalHoldStatusEnum } from '@/types/enums';

@@ -13,7 +13,7 @@ import { Layers, Plus, TrendingUp } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/ui/atoms/Button';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { ScheduleTimeline } from './planning/ScheduleTimeline';
@@ -27,7 +27,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types & Interfaces

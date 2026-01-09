@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Button } from '@/components/ui/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)

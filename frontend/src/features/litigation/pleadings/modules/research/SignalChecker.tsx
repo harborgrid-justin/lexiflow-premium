@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface SignalCheckerProps {
   citation: string;

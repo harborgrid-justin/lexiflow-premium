@@ -24,7 +24,7 @@ import { Card } from '@/components/ui/molecules/Card';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

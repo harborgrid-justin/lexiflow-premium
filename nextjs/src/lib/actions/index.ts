@@ -27,12 +27,14 @@ import {
   success,
   unwrapResult,
   validateInput,
-  type ActionContext,
-  type ActionOptions,
-  type ActionResult,
-  type CacheProfile,
-  type PaginatedResult,
-  type PaginationMeta,
+} from "./errors";
+import type {
+  ActionContext,
+  ActionOptions,
+  ActionResult,
+  CacheProfile,
+  PaginatedResult,
+  PaginationMeta,
 } from "./errors";
 
 // Re-export types and functions for convenience
@@ -155,20 +157,4 @@ export async function invalidateTags(
     // Next.js 16 revalidateTag signature
     revalidateTag(tag);
   }
-}
-
-/**
- * Chain multiple action results
- */
-export async function chainActions<T>(
-  actions: Array<() => Promise<ActionResult<unknown>>>,
-  finalResult: T
-): Promise<ActionResult<T>> {
-  for (const action of actions) {
-    const result = await action();
-    if (!result.success) {
-      return result as ActionResult<T>;
-    }
-  }
-  return success(finalResult);
 }

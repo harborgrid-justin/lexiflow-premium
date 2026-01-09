@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Write-Off Management Server Actions
@@ -9,101 +9,28 @@
  * @module billing/write-off-actions
  */
 
-import { revalidateTag } from 'next/cache';
-import { API_ENDPOINTS } from '@/lib/api-config';
-import { apiFetch } from '@/lib/api-server';
-import type { ActionResult } from './types';
-
-// =============================================================================
-// Types
-// =============================================================================
-
-export type WriteOffStatus = 'pending' | 'approved' | 'rejected';
-
-export interface WriteOffRequest {
-  id: string;
-  invoiceId: string;
-  invoiceNumber: string;
-  clientId?: string;
-  clientName: string;
-  amount: number;
-  reason: string;
-  category?: WriteOffCategory;
-  requestedBy: string;
-  requestedByName?: string;
-  requestedDate: string;
-  status: WriteOffStatus;
-  approvedBy?: string;
-  approvedByName?: string;
-  approvedDate?: string;
-  rejectedBy?: string;
-  rejectedByName?: string;
-  rejectedDate?: string;
-  rejectionReason?: string;
-  notes?: string;
-  impactedArAmount?: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type WriteOffCategory =
-  | 'uncollectible'
-  | 'client_dispute'
-  | 'billing_error'
-  | 'courtesy_adjustment'
-  | 'bankruptcy'
-  | 'settlement'
-  | 'other';
-
-export const WRITE_OFF_CATEGORIES: { value: WriteOffCategory; label: string }[] = [
-  { value: 'uncollectible', label: 'Uncollectible Debt' },
-  { value: 'client_dispute', label: 'Client Dispute' },
-  { value: 'billing_error', label: 'Billing Error' },
-  { value: 'courtesy_adjustment', label: 'Courtesy Adjustment' },
-  { value: 'bankruptcy', label: 'Client Bankruptcy' },
-  { value: 'settlement', label: 'Settlement Agreement' },
-  { value: 'other', label: 'Other' },
-];
-
-export interface CreateWriteOffInput {
-  invoiceId: string;
-  amount: number;
-  reason: string;
-  category?: WriteOffCategory;
-  notes?: string;
-}
-
-export interface WriteOffFilters {
-  status?: WriteOffStatus | string;
-  invoiceId?: string;
-  clientId?: string;
-  startDate?: string;
-  endDate?: string;
-  requestedBy?: string;
-  category?: WriteOffCategory | string;
-}
-
-export interface WriteOffStats {
-  totalRequests: number;
-  pendingCount: number;
-  approvedCount: number;
-  rejectedCount: number;
-  totalPendingAmount: number;
-  totalApprovedAmount: number;
-  totalRejectedAmount: number;
-  averageApprovalTime?: number; // in hours
-}
+import { revalidateTag } from "next/cache";
+import { API_ENDPOINTS } from "@/lib/api-config";
+import { apiFetch } from "@/lib/api-server";
+import type { ActionResult } from "./types";
+import {
+  WriteOffRequest,
+  // WriteOffStatus, // Not explicitly used as value, but used in type defs if locally defined
+  CreateWriteOffInput,
+  WriteOffFilters,
+  WriteOffStats,
+} from "./write-off-types";
 
 // =============================================================================
 // Cache Tags
 // =============================================================================
 
 const CACHE_TAGS = {
-  WRITE_OFFS: 'billing-write-offs',
+  WRITE_OFFS: "billing-write-offs",
   WRITE_OFF_DETAIL: (id: string) => `billing-write-off-${id}`,
-  WRITE_OFF_STATS: 'billing-write-off-stats',
-  INVOICES: 'billing-invoices',
-  BILLING_METRICS: 'billing-metrics',
+  WRITE_OFF_STATS: "billing-write-off-stats",
+  INVOICES: "billing-invoices",
+  BILLING_METRICS: "billing-metrics",
 } as const;
 
 // =============================================================================
@@ -127,26 +54,38 @@ function safeRevalidateTag(tag: string): void {
 function buildQueryString(filters: Record<string, unknown>): string {
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       params.append(key, String(value));
     }
   });
   const queryString = params.toString();
-  return queryString ? `?${queryString}` : '';
+  return queryString ? `?${queryString}` : "";
 }
 
 /**
  * Validate write-off amount
  */
-function validateWriteOffAmount(amount: number, invoiceBalance?: number): { valid: boolean; error?: string } {
+function validateWriteOffAmount(
+  amount: number,
+  invoiceBalance?: number
+): { valid: boolean; error?: string } {
   if (amount <= 0) {
-    return { valid: false, error: 'Write-off amount must be greater than zero' };
+    return {
+      valid: false,
+      error: "Write-off amount must be greater than zero",
+    };
   }
   if (amount > 10_000_000) {
-    return { valid: false, error: 'Write-off amount exceeds maximum allowed ($10,000,000)' };
+    return {
+      valid: false,
+      error: "Write-off amount exceeds maximum allowed ($10,000,000)",
+    };
   }
   if (invoiceBalance !== undefined && amount > invoiceBalance) {
-    return { valid: false, error: 'Write-off amount cannot exceed invoice balance' };
+    return {
+      valid: false,
+      error: "Write-off amount cannot exceed invoice balance",
+    };
   }
   return { valid: true };
 }
@@ -162,7 +101,7 @@ export async function getWriteOffRequests(
   filters?: WriteOffFilters
 ): Promise<ActionResult<WriteOffRequest[]>> {
   try {
-    const queryString = filters ? buildQueryString(filters) : '';
+    const queryString = filters ? buildQueryString(filters) : "";
     const writeOffs = await apiFetch<WriteOffRequest[]>(
       `${API_ENDPOINTS.WRITE_OFFS.LIST}${queryString}`,
       {
@@ -174,10 +113,13 @@ export async function getWriteOffRequests(
     );
     return { success: true, data: writeOffs };
   } catch (error) {
-    console.error('Failed to fetch write-off requests:', error);
+    console.error("Failed to fetch write-off requests:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch write-off requests',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch write-off requests",
     };
   }
 }
@@ -198,7 +140,7 @@ export async function getWriteOffStats(): Promise<ActionResult<WriteOffStats>> {
     );
     return { success: true, data: stats };
   } catch (error) {
-    console.error('Failed to fetch write-off stats:', error);
+    console.error("Failed to fetch write-off stats:", error);
     // Return default stats on error to allow page to render
     return {
       success: true,
@@ -218,7 +160,9 @@ export async function getWriteOffStats(): Promise<ActionResult<WriteOffStats>> {
 /**
  * Fetch single write-off request by ID
  */
-export async function getWriteOffById(id: string): Promise<ActionResult<WriteOffRequest>> {
+export async function getWriteOffById(
+  id: string
+): Promise<ActionResult<WriteOffRequest>> {
   try {
     const writeOff = await apiFetch<WriteOffRequest>(
       API_ENDPOINTS.WRITE_OFFS.DETAIL(id),
@@ -231,10 +175,11 @@ export async function getWriteOffById(id: string): Promise<ActionResult<WriteOff
     );
     return { success: true, data: writeOff };
   } catch (error) {
-    console.error('Failed to fetch write-off request:', error);
+    console.error("Failed to fetch write-off request:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Write-off request not found',
+      error:
+        error instanceof Error ? error.message : "Write-off request not found",
     };
   }
 }
@@ -262,14 +207,14 @@ export async function createWriteOffRequest(
     if (!input.reason || input.reason.trim().length < 10) {
       return {
         success: false,
-        error: 'Write-off reason must be at least 10 characters',
+        error: "Write-off reason must be at least 10 characters",
       };
     }
 
     if (input.reason.length > 1000) {
       return {
         success: false,
-        error: 'Write-off reason cannot exceed 1000 characters',
+        error: "Write-off reason cannot exceed 1000 characters",
       };
     }
 
@@ -277,17 +222,17 @@ export async function createWriteOffRequest(
     if (!input.invoiceId) {
       return {
         success: false,
-        error: 'Invoice ID is required',
+        error: "Invoice ID is required",
       };
     }
 
     const writeOff = await apiFetch<WriteOffRequest>(
       API_ENDPOINTS.WRITE_OFFS.CREATE,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           ...input,
-          status: 'pending',
+          status: "pending",
           requestedDate: new Date().toISOString(),
         }),
       }
@@ -298,14 +243,17 @@ export async function createWriteOffRequest(
 
     return {
       success: true,
-      message: 'Write-off request submitted for approval',
+      message: "Write-off request submitted for approval",
       data: writeOff,
     };
   } catch (error) {
-    console.error('Failed to create write-off request:', error);
+    console.error("Failed to create write-off request:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to create write-off request',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to create write-off request",
     };
   }
 }
@@ -324,7 +272,7 @@ export async function approveWriteOff(
     const writeOff = await apiFetch<WriteOffRequest>(
       API_ENDPOINTS.WRITE_OFFS.APPROVE(id),
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           approvedDate: new Date().toISOString(),
           notes: approverNotes,
@@ -341,14 +289,15 @@ export async function approveWriteOff(
 
     return {
       success: true,
-      message: 'Write-off approved successfully. Invoice has been updated.',
+      message: "Write-off approved successfully. Invoice has been updated.",
       data: writeOff,
     };
   } catch (error) {
-    console.error('Failed to approve write-off:', error);
+    console.error("Failed to approve write-off:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to approve write-off',
+      error:
+        error instanceof Error ? error.message : "Failed to approve write-off",
     };
   }
 }
@@ -368,14 +317,14 @@ export async function rejectWriteOff(
     if (!rejectionReason || rejectionReason.trim().length < 10) {
       return {
         success: false,
-        error: 'Rejection reason must be at least 10 characters',
+        error: "Rejection reason must be at least 10 characters",
       };
     }
 
     const writeOff = await apiFetch<WriteOffRequest>(
       `${API_ENDPOINTS.WRITE_OFFS.DETAIL(id)}/reject`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           rejectionReason,
           rejectedDate: new Date().toISOString(),
@@ -389,14 +338,15 @@ export async function rejectWriteOff(
 
     return {
       success: true,
-      message: 'Write-off request rejected',
+      message: "Write-off request rejected",
       data: writeOff,
     };
   } catch (error) {
-    console.error('Failed to reject write-off:', error);
+    console.error("Failed to reject write-off:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to reject write-off',
+      error:
+        error instanceof Error ? error.message : "Failed to reject write-off",
     };
   }
 }
@@ -427,13 +377,13 @@ export async function updateWriteOffRequest(
       if (input.reason.trim().length < 10) {
         return {
           success: false,
-          error: 'Write-off reason must be at least 10 characters',
+          error: "Write-off reason must be at least 10 characters",
         };
       }
       if (input.reason.length > 1000) {
         return {
           success: false,
-          error: 'Write-off reason cannot exceed 1000 characters',
+          error: "Write-off reason cannot exceed 1000 characters",
         };
       }
     }
@@ -441,7 +391,7 @@ export async function updateWriteOffRequest(
     const writeOff = await apiFetch<WriteOffRequest>(
       API_ENDPOINTS.WRITE_OFFS.UPDATE(id),
       {
-        method: 'PATCH',
+        method: "PATCH",
         body: JSON.stringify(input),
       }
     );
@@ -452,14 +402,17 @@ export async function updateWriteOffRequest(
 
     return {
       success: true,
-      message: 'Write-off request updated',
+      message: "Write-off request updated",
       data: writeOff,
     };
   } catch (error) {
-    console.error('Failed to update write-off request:', error);
+    console.error("Failed to update write-off request:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to update write-off request',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to update write-off request",
     };
   }
 }
@@ -472,7 +425,7 @@ export async function updateWriteOffRequest(
 export async function deleteWriteOffRequest(id: string): Promise<ActionResult> {
   try {
     await apiFetch(API_ENDPOINTS.WRITE_OFFS.DETAIL(id), {
-      method: 'DELETE',
+      method: "DELETE",
     });
 
     safeRevalidateTag(CACHE_TAGS.WRITE_OFF_DETAIL(id));
@@ -481,13 +434,16 @@ export async function deleteWriteOffRequest(id: string): Promise<ActionResult> {
 
     return {
       success: true,
-      message: 'Write-off request cancelled',
+      message: "Write-off request cancelled",
     };
   } catch (error) {
-    console.error('Failed to delete write-off request:', error);
+    console.error("Failed to delete write-off request:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to cancel write-off request',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to cancel write-off request",
     };
   }
 }
@@ -504,8 +460,10 @@ export async function getWriteOffsByInvoice(
 /**
  * Get pending write-offs for approval queue
  */
-export async function getPendingWriteOffs(): Promise<ActionResult<WriteOffRequest[]>> {
-  return getWriteOffRequests({ status: 'pending' });
+export async function getPendingWriteOffs(): Promise<
+  ActionResult<WriteOffRequest[]>
+> {
+  return getWriteOffRequests({ status: "pending" });
 }
 
 // =============================================================================
@@ -519,61 +477,62 @@ export async function writeOffFormAction(
   prevState: ActionResult,
   formData: FormData
 ): Promise<ActionResult> {
-  const intent = formData.get('intent') as string;
+  const intent = formData.get("intent") as string;
 
   switch (intent) {
-    case 'create': {
+    case "create": {
       const input: CreateWriteOffInput = {
-        invoiceId: formData.get('invoiceId') as string,
-        amount: parseFloat(formData.get('amount') as string),
-        reason: formData.get('reason') as string,
-        category: (formData.get('category') as WriteOffCategory) || undefined,
-        notes: (formData.get('notes') as string) || undefined,
+        invoiceId: formData.get("invoiceId") as string,
+        amount: parseFloat(formData.get("amount") as string),
+        reason: formData.get("reason") as string,
+        category: (formData.get("category") as WriteOffCategory) || undefined,
+        notes: (formData.get("notes") as string) || undefined,
       };
       const result = await createWriteOffRequest(input);
       if (result.success) {
-        return { ...result, redirect: '/billing/write-offs' };
+        return { ...result, redirect: "/billing/write-offs" };
       }
       return result;
     }
 
-    case 'approve': {
-      const id = formData.get('id') as string;
-      const approverNotes = (formData.get('approverNotes') as string) || undefined;
+    case "approve": {
+      const id = formData.get("id") as string;
+      const approverNotes =
+        (formData.get("approverNotes") as string) || undefined;
       return approveWriteOff(id, approverNotes);
     }
 
-    case 'reject': {
-      const id = formData.get('id') as string;
-      const rejectionReason = formData.get('rejectionReason') as string;
+    case "reject": {
+      const id = formData.get("id") as string;
+      const rejectionReason = formData.get("rejectionReason") as string;
       return rejectWriteOff(id, rejectionReason);
     }
 
-    case 'update': {
-      const id = formData.get('id') as string;
+    case "update": {
+      const id = formData.get("id") as string;
       const input: Partial<CreateWriteOffInput> = {};
 
-      const amount = formData.get('amount');
+      const amount = formData.get("amount");
       if (amount) input.amount = parseFloat(amount as string);
 
-      const reason = formData.get('reason');
+      const reason = formData.get("reason");
       if (reason) input.reason = reason as string;
 
-      const category = formData.get('category');
+      const category = formData.get("category");
       if (category) input.category = category as WriteOffCategory;
 
-      const notes = formData.get('notes');
+      const notes = formData.get("notes");
       if (notes) input.notes = notes as string;
 
       return updateWriteOffRequest(id, input);
     }
 
-    case 'delete': {
-      const id = formData.get('id') as string;
+    case "delete": {
+      const id = formData.get("id") as string;
       return deleteWriteOffRequest(id);
     }
 
     default:
-      return { success: false, error: 'Invalid action' };
+      return { success: false, error: "Invalid action" };
   }
 }

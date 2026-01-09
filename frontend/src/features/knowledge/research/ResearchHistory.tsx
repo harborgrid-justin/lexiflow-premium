@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Clock, ExternalLink } from 'lucide-react';
 import React from 'react';

@@ -37,8 +37,8 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Utils & Config
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
-import { validateTemplate } from '@/utils/validation';
+import { cn } from '@/shared/lib/cn';
+import { validateTemplate } from '@/shared/lib/validation';
 
 // Types
 import { Case, PleadingDocument, PleadingTemplate } from '@/types';

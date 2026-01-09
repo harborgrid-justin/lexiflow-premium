@@ -3,7 +3,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { CaseId, CustodianInterview } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { MessageSquare, Plus } from 'lucide-react';
 import React from 'react';
 import { InterviewList } from './interviews/InterviewList';

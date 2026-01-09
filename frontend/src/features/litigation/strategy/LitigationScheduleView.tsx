@@ -17,7 +17,7 @@ import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/de
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types

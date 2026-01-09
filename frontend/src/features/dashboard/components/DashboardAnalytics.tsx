@@ -19,7 +19,7 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/features/core/components/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

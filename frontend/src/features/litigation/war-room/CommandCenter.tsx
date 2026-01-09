@@ -29,7 +29,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { SanctionMotion, WarRoomData } from '@/types';

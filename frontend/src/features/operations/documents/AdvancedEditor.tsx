@@ -1,9 +1,9 @@
-import { EditorToolbar } from '@/components/features/discovery/components/EditorToolbar/EditorToolbar';
+import { EditorToolbar } from '@/features/discovery/ui/components/EditorToolbar/EditorToolbar';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
-import { sanitizeHtml } from '@/utils/sanitize';
+import { cn } from '@/shared/lib/cn';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 import { RotateCcw, Wand2 } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 

@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, ArrowRight, CheckCircle, Database, FileText, Scale } from 'lucide-react';
 import React from 'react';
 // ✅ Migrated to backend API (2025-12-21)

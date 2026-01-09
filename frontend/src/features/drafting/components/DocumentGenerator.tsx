@@ -5,12 +5,12 @@ import {
   GenerateDocumentDto,
   validateVariableValues
 } from '@/api/domains/drafting';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useToast } from '@/contexts/toast/ToastContext';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 

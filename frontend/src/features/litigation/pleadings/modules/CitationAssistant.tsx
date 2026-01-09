@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpen, Search, Plus, ExternalLink } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { SignalChecker } from './research/SignalChecker';
 import { DataService } from '@/services/data/dataService';

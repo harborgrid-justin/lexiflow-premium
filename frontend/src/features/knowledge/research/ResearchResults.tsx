@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ResearchSession } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { ResearchResultCard } from './ResearchResultCard';

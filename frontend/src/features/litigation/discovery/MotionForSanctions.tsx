@@ -9,7 +9,7 @@ import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { SanctionMotion } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { FileWarning, Gavel, Plus } from 'lucide-react';
 import React, { useState } from 'react';

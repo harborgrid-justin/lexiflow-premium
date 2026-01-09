@@ -5,7 +5,7 @@
  * Provides common helpers for HTTP, functional programming, dates, and types.
  *
  * @example
- * import { httpGet, pipe, formatDate, Result } from '@/lib';
+ * import { httpGet, pipe, formatDate, Result } from '@/shared/lib';
  */
 
 // HTTP utilities

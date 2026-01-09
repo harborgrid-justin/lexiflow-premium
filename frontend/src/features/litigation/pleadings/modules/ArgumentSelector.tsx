@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 import { Case, LegalArgument } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface ArgumentSelectorProps {
   caseId: string;

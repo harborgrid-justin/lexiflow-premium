@@ -1,18 +1,32 @@
+import { AccessRequest } from '@/api/admin/access-requests-api';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { CheckCircle, Clock, User, XCircle } from 'lucide-react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
 import React from 'react';
 
 export const AccessRequestManager: React.FC = () => {
     const { theme } = useTheme();
 
-    const requests = [
-        { id: 1, user: 'John Doe', dataset: 'Financial Records Q1', purpose: 'Audit Preparation', date: '2h ago', status: 'Pending' },
-        { id: 2, user: 'Jane Smith', dataset: 'Client Metadata', purpose: 'Marketing Campaign', date: '5h ago', status: 'Approved' },
-        { id: 3, user: 'Mike Brown', dataset: 'HR Salaries', purpose: 'Invalid', date: '1d ago', status: 'Rejected' },
-    ];
+    const { data: requests = [], isLoading } = useQuery<AccessRequest[]>(
+        ['admin', 'access-requests'],
+        async () => {
+            // Safe access via any if types are not fully propagated yet
+            return await (DataService.admin as any).accessRequests.getRequests();
+        }
+    );
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center p-8">
+                <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+            </div>
+        );
+    }
+
 
     return (
         <div className="space-y-6 animate-fade-in p-6">

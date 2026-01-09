@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useDataSource } from '@/providers';
 
 export const DataSourceSelector: React.FC = () => {

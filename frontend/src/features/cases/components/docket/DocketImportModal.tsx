@@ -26,7 +26,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface DocketImportModalProps {
   isOpen: boolean;

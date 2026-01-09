@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import type { StoreInfo } from './types';
 
 interface IndexedDBStoreListProps {

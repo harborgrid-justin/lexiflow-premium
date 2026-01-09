@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';
 import React from 'react';
 import { ResultItem } from './ResultItem';

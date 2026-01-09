@@ -15,7 +15,7 @@ import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon/Evidenc
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services
 import { GeminiService } from '@/services/features/research/geminiService';

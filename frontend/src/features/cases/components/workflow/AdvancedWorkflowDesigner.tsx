@@ -24,7 +24,7 @@ import type {
   WorkflowSnapshot,
   WorkflowVersion,
 } from '@/types/workflow-advanced-types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   AlertTriangle,
   Boxes,

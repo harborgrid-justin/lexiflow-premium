@@ -24,7 +24,7 @@ import React, { useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
@@ -39,7 +39,7 @@ import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

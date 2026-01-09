@@ -1,4 +1,4 @@
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
@@ -7,7 +7,7 @@ import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceId, EvidenceItem, LegalDocument, ServiceJob, UUID, WorkflowTask } from '@/types';
 import { ServiceStatus } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
 import React, { useState } from 'react';
 

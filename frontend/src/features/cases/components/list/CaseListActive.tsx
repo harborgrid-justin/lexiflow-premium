@@ -18,10 +18,10 @@ import { Filter } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
-import { SwipeableItem } from '@/components/organisms/SwipeableItem';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { SwipeableItem } from '@/shared/ui/organisms/SwipeableItem';
 import { Button } from '@/components/ui/atoms/Button';
-import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
 import { SearchInput } from '@/components/ui/molecules/SearchInput/SearchInput';
 import { Input } from '@/components/ui/atoms/Input';
 import { Badge } from '@/components/ui/atoms/Badge';
@@ -33,14 +33,14 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 import { useSort } from '@/hooks/useSort';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { UseCaseListReturn } from '@/hooks/useCaseList';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useModalState } from '@/hooks/useModalState';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 

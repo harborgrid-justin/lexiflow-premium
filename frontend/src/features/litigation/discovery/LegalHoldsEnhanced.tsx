@@ -4,7 +4,7 @@
  * Tracks custodian acknowledgments and escalations
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Modal } from '@/components/ui/molecules/Modal';
@@ -15,7 +15,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, BarChart, CheckCircle, Clock, Eye, Mail, Plus, Send } from 'lucide-react';
 import React, { useState } from 'react';
 

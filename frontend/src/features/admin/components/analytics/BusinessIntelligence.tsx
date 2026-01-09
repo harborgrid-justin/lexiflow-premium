@@ -22,7 +22,7 @@ import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

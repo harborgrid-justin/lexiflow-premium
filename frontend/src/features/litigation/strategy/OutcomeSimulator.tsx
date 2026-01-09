@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // Internal Components
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { Card } from '@/components/ui/molecules/Card';
@@ -21,7 +21,7 @@ import { Card } from '@/components/ui/molecules/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Scheduler } from '@/utils/scheduler';
 import { SimulationEngine } from '@/utils/simulationEngine';
 

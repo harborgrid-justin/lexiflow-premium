@@ -17,20 +17,20 @@ import React, { useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { useWindow } from '@/providers';
 
 // Utils
 import { DiscoveryRequestStatusEnum } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

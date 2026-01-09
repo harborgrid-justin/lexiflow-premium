@@ -29,7 +29,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { NexusGraph } from '@features/visual';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types

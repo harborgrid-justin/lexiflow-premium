@@ -30,7 +30,7 @@ import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { Case } from '@/types';

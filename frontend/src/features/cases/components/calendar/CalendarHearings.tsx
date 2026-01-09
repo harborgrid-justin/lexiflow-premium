@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { CalendarEventItem } from '@/types';

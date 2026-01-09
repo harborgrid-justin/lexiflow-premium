@@ -14,7 +14,7 @@ import { Plus, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/ui/atoms/Button';
-import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 
@@ -27,7 +27,7 @@ import { useWindow } from '@/providers';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '@/types';

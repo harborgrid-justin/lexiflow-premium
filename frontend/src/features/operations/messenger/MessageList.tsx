@@ -24,7 +24,7 @@ import { ChatBubble } from '@/components/ui/molecules/ChatBubble/ChatBubble';
 import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

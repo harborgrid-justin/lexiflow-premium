@@ -26,7 +26,7 @@ import { DataService } from '@/services/data/dataService';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import type { CreateTrustAccountDto, TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';

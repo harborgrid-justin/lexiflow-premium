@@ -5,7 +5,7 @@ import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelection';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument, UserRole } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useState } from 'react';
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
@@ -15,7 +15,7 @@ import { DocumentTable } from './table/DocumentTable';
 import { TagManagementModal } from './TagManagementModal';
 import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
+import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentGridCard } from './DocumentGridCard';
 

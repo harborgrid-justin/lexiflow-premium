@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { BrainCircuit as Brain, Code, GitBranch, History, RefreshCw, Save, Table } from 'lucide-react';
 import React from 'react';
 

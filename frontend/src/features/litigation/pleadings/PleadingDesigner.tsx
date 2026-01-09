@@ -3,7 +3,7 @@ import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
 import React, { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)

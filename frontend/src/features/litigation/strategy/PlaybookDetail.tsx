@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { Button } from '@/components/ui/atoms/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs';

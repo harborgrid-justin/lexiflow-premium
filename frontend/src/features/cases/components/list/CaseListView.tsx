@@ -26,7 +26,7 @@ import {
   Building2
 } from 'lucide-react';
 import { PATHS } from '@/config/paths.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface CaseListViewProps {
   filter?: 'all' | 'active' | 'intake' | 'calendar' | 'financials' | 'team';

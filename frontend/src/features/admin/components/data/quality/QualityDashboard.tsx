@@ -1,4 +1,4 @@
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { useNotify } from '@/hooks/core';
@@ -6,7 +6,7 @@ import { queryClient, useMutation } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertOctagon, Check, CheckCircle2, RefreshCw } from 'lucide-react';
 import React from 'react';

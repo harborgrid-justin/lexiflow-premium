@@ -24,12 +24,12 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useWindow } from '@/providers';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { DocumentPreviewPanel } from '@features/operations';
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { EvidenceItem, LegalDocument, Motion, WarRoomData } from '@/types';

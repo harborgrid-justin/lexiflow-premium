@@ -1,11 +1,11 @@
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { ComplianceMetrics } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Activity, AlertTriangle, CheckCircle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';

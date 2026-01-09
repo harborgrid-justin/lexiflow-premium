@@ -22,7 +22,7 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { DateText } from '@/components/ui/atoms/DateText/DateText';
 

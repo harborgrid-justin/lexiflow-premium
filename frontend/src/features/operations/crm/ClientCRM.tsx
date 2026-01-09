@@ -6,7 +6,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { DataService } from '@/services/data/dataService';
 import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { UserPlus } from 'lucide-react';
 import React, { Suspense, useState, useTransition } from 'react';
 import { ClientCRMContent } from './ClientCRMContent';

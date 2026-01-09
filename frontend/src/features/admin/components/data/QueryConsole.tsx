@@ -1,12 +1,12 @@
 import { dataPlatformApi } from '@/api/data-platform';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';

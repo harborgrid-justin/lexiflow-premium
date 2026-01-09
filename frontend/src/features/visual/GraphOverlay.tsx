@@ -23,7 +23,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

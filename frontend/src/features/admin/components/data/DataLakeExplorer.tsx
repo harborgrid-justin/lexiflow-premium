@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -11,7 +11,7 @@ import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { DataLakeItem } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();

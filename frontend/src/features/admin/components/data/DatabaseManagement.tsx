@@ -4,7 +4,7 @@ import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 

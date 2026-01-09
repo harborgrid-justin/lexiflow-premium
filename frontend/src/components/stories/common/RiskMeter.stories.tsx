@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import React from "react";
 

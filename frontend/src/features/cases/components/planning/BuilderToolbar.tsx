@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowRight, Database, LayoutTemplate, MousePointer2, Save, Square, Type } from 'lucide-react';
 import React from 'react';
 

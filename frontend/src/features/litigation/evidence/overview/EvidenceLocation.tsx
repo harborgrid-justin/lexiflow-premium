@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface EvidenceLocationProps {
   location: string;

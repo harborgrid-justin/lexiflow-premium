@@ -34,7 +34,7 @@ import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

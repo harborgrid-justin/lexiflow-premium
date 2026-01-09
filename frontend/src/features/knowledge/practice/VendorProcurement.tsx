@@ -25,15 +25,15 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES

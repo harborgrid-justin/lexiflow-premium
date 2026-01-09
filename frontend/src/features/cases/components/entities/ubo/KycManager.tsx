@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface KycManagerProps {
   entities: LegalEntity[];

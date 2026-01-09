@@ -12,13 +12,13 @@ import React from 'react';
 import { Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Case } from '@/types';

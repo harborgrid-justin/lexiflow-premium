@@ -3,7 +3,7 @@ import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { WorkflowTask, TaskStatusBackend } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';

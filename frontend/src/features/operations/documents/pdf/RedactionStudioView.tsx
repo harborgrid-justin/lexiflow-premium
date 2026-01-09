@@ -1,4 +1,4 @@
-import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
+import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewer';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -7,7 +7,7 @@ import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { BlobManager } from '@/services/infrastructure/blobManager';
 import { LegalDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Eraser, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

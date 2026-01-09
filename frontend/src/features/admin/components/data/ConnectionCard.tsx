@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { getStatusColor, getStatusLabel, formatLastSync } from './utils';
 import type { DataSourceConnection } from './types';
 

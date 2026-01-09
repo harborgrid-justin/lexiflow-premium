@@ -25,7 +25,7 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Case, CaseId, ClientStatus, EntityId, PaymentTerms } from '@/types';

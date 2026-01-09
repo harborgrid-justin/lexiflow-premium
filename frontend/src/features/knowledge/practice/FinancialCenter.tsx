@@ -31,7 +31,7 @@ import { OperatingLedger } from './finance/OperatingLedger';
 import { TrustLedger } from './finance/TrustLedger';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // COMPONENT

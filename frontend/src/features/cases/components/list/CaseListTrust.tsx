@@ -18,7 +18,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
@@ -26,7 +26,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

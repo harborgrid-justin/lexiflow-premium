@@ -13,7 +13,7 @@ import React from 'react';
 import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TimeEntryModal } from '@/components/features/cases/components/TimeEntryModal/TimeEntryModal';
+import { TimeEntryModal } from '@/features/cases/ui/components/TimeEntryModal/TimeEntryModal';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { Button } from '@/components/ui/atoms/Button';
 
@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Case, TimeEntryPayload } from '@/types';

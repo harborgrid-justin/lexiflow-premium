@@ -1,7 +1,7 @@
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { LegalDocument } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import React, { useCallback, useMemo, useState, useTransition } from 'react';
 import { DocumentRow } from './DocumentRow';

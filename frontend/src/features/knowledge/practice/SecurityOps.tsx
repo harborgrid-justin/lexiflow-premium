@@ -30,7 +30,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { SuffixTree } from '@/utils/datastructures/suffixTree';
 
 // ============================================================================

@@ -13,7 +13,7 @@ import { Users } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { CaseOverviewModals } from './CaseOverviewModals';
@@ -29,7 +29,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Case, Party, TimeEntry } from '@/types';

@@ -8,7 +8,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { CaseId, ServiceJob, UserId } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import React, { useState } from 'react';
 

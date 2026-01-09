@@ -28,7 +28,7 @@ import React, { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState';
 import { ExhibitStats } from './ExhibitStats';
@@ -37,15 +37,15 @@ import { StickerDesigner } from './StickerDesigner';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useToggle } from '@/hooks/useToggle';
-import { cn } from '@/utils/cn';
+import { useToggle } from '@/shared/hooks/useToggle';
+import { cn } from '@/shared/lib/cn';
 
 // Data & Types
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { CaseId, TrialExhibit } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
-import { getTodayString } from '@/utils/dateUtils';
+import { getTodayString } from '@/shared/lib/dateUtils';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';

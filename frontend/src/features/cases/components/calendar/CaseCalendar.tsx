@@ -24,7 +24,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   Calendar as CalendarIcon, ChevronLeft, ChevronRight,
   Clock,

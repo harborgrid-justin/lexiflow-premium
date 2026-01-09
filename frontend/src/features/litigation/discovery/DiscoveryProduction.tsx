@@ -27,7 +27,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateProductionConfigSafe } from '@/services/validation/discoverySchemas';
 

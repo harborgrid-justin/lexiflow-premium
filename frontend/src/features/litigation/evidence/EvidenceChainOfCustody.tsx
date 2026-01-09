@@ -9,7 +9,7 @@ import { AlertOctagon, Layers, Link, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
 // Common Components
-import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
@@ -19,8 +19,8 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/utils/cn';
-import { getTodayString } from '@/utils/dateUtils';
+import { cn } from '@/shared/lib/cn';
+import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Services & Types
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';

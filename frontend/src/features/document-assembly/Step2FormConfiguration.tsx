@@ -5,8 +5,8 @@
  */
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { getTodayString } from '@/utils/dateUtils';
+import { cn } from '@/shared/lib/cn';
+import { getTodayString } from '@/shared/lib/dateUtils';
 import { Calendar, FileText, Sparkles, User } from 'lucide-react';
 import React from 'react';
 

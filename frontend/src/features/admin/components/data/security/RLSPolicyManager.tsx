@@ -1,11 +1,11 @@
-import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
+import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { RLSPolicy } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit2, Pause, Play, Plus, Shield, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';

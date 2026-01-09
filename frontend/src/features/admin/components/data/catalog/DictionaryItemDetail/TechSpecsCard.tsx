@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Card } from '@/components/ui/molecules/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { DataDictionaryItem } from '@/types';
 import React from 'react';
 

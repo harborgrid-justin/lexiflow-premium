@@ -21,7 +21,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
@@ -30,7 +30,7 @@ import { Card } from '@/components/ui/molecules/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { Client } from '@/types';

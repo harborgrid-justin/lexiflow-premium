@@ -1,7 +1,7 @@
 import React from 'react';
 import { UploadCloud } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface DocumentDragOverlayProps {
     onDrop?: (e: React.DragEvent) => void;

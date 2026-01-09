@@ -9,6 +9,7 @@ import {
   CaseId,
   OperatingSummary,
   FinancialPerformanceData,
+  FeeAgreement,
 } from "@/types";
 import { delay } from "@/utils/async";
 import { Repository } from "@/services/core/Repository";
@@ -53,6 +54,35 @@ export class BillingRepository extends Repository<TimeEntry> {
       return rates;
     }
     return db.getByIndex<RateTable>(STORES.RATES, "timekeeperId", timekeeperId);
+  }
+
+  // --- Fee Agreements ---
+  async createFeeAgreement(agreement: any): Promise<any> {
+    // In a real implementation integration with backend API would be here
+    // For now we store in new store FEE_AGREEMENTS
+    const newAgreement = {
+      ...agreement,
+      id: agreement.id || `agmt-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (isBackendApiEnabled()) {
+      // Placeholder for backend API call e.g. this.agreementsApi.create(agreement)
+      // Falling back to local/mock behavior if API not ready, or simulating success
+      console.log(
+        "[BillingRepository] Creating Fee Agreement via API",
+        newAgreement
+      );
+      // await this.agreementsApi.create(newAgreement);
+    }
+
+    await db.put(STORES.FEE_AGREEMENTS, newAgreement);
+    await IntegrationEventPublisher.publishSummary(
+      "Fee Agreement Created",
+      `Agreement for client ${agreement.clientId}`
+    );
+    return newAgreement;
   }
 
   // --- Time & WIP ---

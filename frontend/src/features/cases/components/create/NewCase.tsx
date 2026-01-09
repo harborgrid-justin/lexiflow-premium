@@ -16,7 +16,7 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
 import { PATHS } from '@/config/paths.config';
@@ -34,7 +34,7 @@ import {
   MatterType,
   PracticeArea
 } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import {
   AlertCircle,

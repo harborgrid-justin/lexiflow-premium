@@ -20,10 +20,10 @@ import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
+import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid/VirtualGrid';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import { PleadingDocument } from '@/types';

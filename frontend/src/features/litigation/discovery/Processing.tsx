@@ -4,7 +4,7 @@
  * Manage document processing jobs and workflows
  */
 
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
@@ -14,7 +14,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import type { ProcessingJob } from '@/types/discovery-enhanced';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
 import React from 'react';
 

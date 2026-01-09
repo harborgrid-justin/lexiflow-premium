@@ -30,7 +30,7 @@ import { useTheme } from "@/providers";
 // Services & Utils
 import { GeminiService } from "@/services";
 import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

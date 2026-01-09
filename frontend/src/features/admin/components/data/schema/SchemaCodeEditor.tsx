@@ -1,7 +1,7 @@
 import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { encodeHtmlEntities } from '@/utils/sanitize';
+import { cn } from '@/shared/lib/cn';
+import { encodeHtmlEntities } from '@/shared/lib/sanitize';
 import React from 'react';
 
 interface SchemaCodeEditorProps {

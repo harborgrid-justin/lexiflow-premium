@@ -28,7 +28,7 @@ import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   Activity,
   AlertCircle,

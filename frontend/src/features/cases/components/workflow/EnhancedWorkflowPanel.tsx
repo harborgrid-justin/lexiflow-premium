@@ -7,7 +7,7 @@ import { TimeTrackingPanel } from './TimeTrackingPanel';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES

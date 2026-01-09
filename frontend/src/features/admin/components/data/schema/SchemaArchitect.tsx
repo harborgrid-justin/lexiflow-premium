@@ -7,7 +7,7 @@ import { Modal } from '@/components/ui/molecules/Modal';
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import React, { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaCodeEditor } from './SchemaCodeEditor';

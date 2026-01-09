@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { CheckCircle } from 'lucide-react';
 import React from 'react';
 

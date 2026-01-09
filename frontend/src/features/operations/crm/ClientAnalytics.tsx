@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/molecules/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 export const ClientAnalytics: React.FC = () => {

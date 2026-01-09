@@ -12,7 +12,7 @@ import { Card } from '@/components/ui/molecules/Card';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { Button } from '@/components/ui/atoms/Button';
-import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { SearchInputBar, MetricTile } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 interface AlumniDirectoryProps {
   entities: LegalEntity[];

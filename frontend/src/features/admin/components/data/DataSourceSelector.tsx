@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useDataSource } from '@/providers';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
 

@@ -15,14 +15,14 @@ import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'luci
 // Internal Dependencies - Components
 import { Card } from '@/components/ui/molecules/Card';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { LegalArgument, Defense, Citation, EvidenceItem } from '@/types';

@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/core';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import {
   AlertCircle,
   Briefcase,

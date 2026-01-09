@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { StaffMember, UserId } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
 import React from 'react';
 import { AddStaffModal } from './AddStaffModal';
@@ -18,8 +18,8 @@ type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 import { useModalState } from '@/hooks/core';
 import { useStaff } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
-import { getTodayString } from '@/utils/dateUtils';
-import { IdGenerator } from '@/utils/idGenerator';
+import { getTodayString } from '@/shared/lib/dateUtils';
+import { IdGenerator } from '@/shared/lib/idGenerator';
 
 // ============================================================================
 // CONSTANTS

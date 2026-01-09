@@ -17,10 +17,10 @@
  * @module routes/layout
  */
 
-import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
-import { ErrorBoundary as ComponentErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
-import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkeys';
-import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
+import { AppHeader } from '@/shared/ui/organisms/AppHeader/AppHeader';
+import { ErrorBoundary as ComponentErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
+import { GlobalHotkeys } from '@/shared/ui/organisms/GlobalHotkeys/GlobalHotkeys';
+import { Sidebar } from '@/shared/ui/organisms/Sidebar/Sidebar';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useAuthState } from '@/contexts/auth/AuthProvider';

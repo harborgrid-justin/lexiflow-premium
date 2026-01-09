@@ -1,4 +1,4 @@
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';

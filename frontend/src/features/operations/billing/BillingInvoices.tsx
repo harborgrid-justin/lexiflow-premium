@@ -26,15 +26,15 @@ import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
 import { InvoiceStatusEnum } from '@/types/enums';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 
 // Types

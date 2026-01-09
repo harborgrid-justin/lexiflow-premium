@@ -10,13 +10,13 @@ import { CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
 // Common Components
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';

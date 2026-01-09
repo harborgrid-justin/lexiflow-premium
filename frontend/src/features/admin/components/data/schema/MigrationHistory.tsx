@@ -1,7 +1,10 @@
+import { Migration } from '@/api/admin/schema-api';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
-import { CheckCircle, Clock, FileCode, RotateCcw, XCircle } from 'lucide-react';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
 import React from 'react';
 
 /**
@@ -10,12 +13,18 @@ import React from 'react';
 export const MigrationHistory = React.memo(function MigrationHistory() {
     const { theme } = useTheme();
 
-    const migrations = [
-        { id: 'mig_004', date: 'Today, 09:30 AM', author: 'System', status: 'Applied', desc: 'Add case_value index' },
-        { id: 'mig_003', date: 'Yesterday, 04:15 PM', author: 'Admin User', status: 'Applied', desc: 'Create document_versions table' },
-        { id: 'mig_002', date: 'Oct 15, 2023', author: 'System', status: 'Failed', desc: 'Alter column type: users.role' },
-        { id: 'mig_001', date: 'Oct 10, 2023', author: 'Admin User', status: 'Applied', desc: 'Initial Schema Load' },
-    ];
+    const { data: migrations = [], isLoading } = useQuery<Migration[]>(
+        ['admin', 'migrations'],
+        () => (DataService.admin as any).schema.getMigrations()
+    );
+
+    if (isLoading) {
+        return (
+            <div className="p-6 h-full flex items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+            </div>
+        );
+    }
 
     return (
         <div className="p-6 h-full overflow-y-auto">

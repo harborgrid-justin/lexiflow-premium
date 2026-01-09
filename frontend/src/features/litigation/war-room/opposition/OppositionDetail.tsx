@@ -29,7 +29,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types
 import type { OppositionEntity } from './OppositionList';

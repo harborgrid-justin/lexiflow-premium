@@ -21,7 +21,7 @@ import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { WorkflowStage, StageStatus, TaskStatusBackend } from '@/types';

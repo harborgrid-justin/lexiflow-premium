@@ -11,7 +11,7 @@ import {
   DocumentViewer,
   MetadataPanel,
   VersionHistory
-} from '@/components/features/documents/components';
+} from '@/features/documents/ui/components';
 import { DataService } from '@/services/data/dataService';
 import { DocumentVersion } from '@/types';
 import { useState } from 'react';

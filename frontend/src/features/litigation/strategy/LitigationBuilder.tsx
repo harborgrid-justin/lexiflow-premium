@@ -12,7 +12,7 @@ import React, { Suspense, lazy, useState } from 'react';
 
 // Internal Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 
@@ -21,7 +21,7 @@ import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Constants & Types
 import { LITIGATION_TABS } from './constants';

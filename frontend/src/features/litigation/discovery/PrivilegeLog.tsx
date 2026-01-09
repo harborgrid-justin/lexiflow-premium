@@ -18,7 +18,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
@@ -32,7 +32,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

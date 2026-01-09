@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
 

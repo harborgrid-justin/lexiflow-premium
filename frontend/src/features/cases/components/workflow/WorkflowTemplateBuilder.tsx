@@ -5,14 +5,14 @@ import { BuilderToolbar } from './builder/BuilderToolbar';
 import { BuilderPalette } from './builder/BuilderPalette';
 import { BuilderCanvas } from './builder/BuilderCanvas';
 import { BuilderProperties } from './builder/BuilderProperties';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
-import { useToggle } from '@/hooks/useToggle';
+import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 

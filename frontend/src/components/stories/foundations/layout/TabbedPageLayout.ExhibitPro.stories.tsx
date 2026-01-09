@@ -1,7 +1,7 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   BarChart2,

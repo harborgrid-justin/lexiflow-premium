@@ -26,7 +26,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
+import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
@@ -36,7 +36,7 @@ import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
 import { BILLING_TAB_CONFIG, BillingView } from '@/config/tabs.config';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

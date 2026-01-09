@@ -8,7 +8,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { FileText, Plus } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { AccessGovernance } from './governance/AccessGovernance';

@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/features/cases/ui/components/Kanban/Kanban';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
@@ -33,7 +33,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 export const CaseListIntake: React.FC = () => {
   const { theme } = useTheme();

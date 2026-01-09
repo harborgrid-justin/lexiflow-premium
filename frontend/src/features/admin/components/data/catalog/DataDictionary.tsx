@@ -1,5 +1,5 @@
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
@@ -7,7 +7,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataDictionaryItem } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { Eye, Filter, Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { DictionaryItemDetail } from './DictionaryItemDetail';

@@ -4,7 +4,7 @@
  * @description Dashboard metrics API service for fetching KPIs, analytics, and dashboard data
  */
 
-import type { Deadline } from "@/components/dashboard/widgets";
+import type { Deadline } from "@/features/dashboard/widgets";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { Activity } from "@/types/dashboard";
 

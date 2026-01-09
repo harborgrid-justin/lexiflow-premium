@@ -1,5 +1,5 @@
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { DataService } from '@/services/data/dataService';
@@ -33,8 +33,8 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { Case } from '@/types';
-import { cn } from '@/utils/cn';
-import { getTodayString } from '@/utils/dateUtils';
+import { cn } from '@/shared/lib/cn';
+import { getTodayString } from '@/shared/lib/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 // ✅ Migrated to backend API (2025-12-21)
 import { WorkflowView } from './types';

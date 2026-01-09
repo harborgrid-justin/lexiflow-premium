@@ -13,7 +13,7 @@ import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'luci
 import React from 'react';
 
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge, BadgeProps } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { Motion } from '@/types';

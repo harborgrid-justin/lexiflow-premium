@@ -374,6 +374,48 @@ export class BillingRepository extends Repository<TimeEntry> {
   }
 
   /**
+   * Get paginated time entries (Issue #8)
+   */
+  async getPaginatedTimeEntries(
+    caseId: string,
+    params?: PaginationParams
+  ): Promise<PaginatedResult<TimeEntry>> {
+    const page = params?.page || 1;
+    const pageSize = params?.pageSize || 50;
+
+    try {
+      // In a real implementation with backend support:
+      /*
+         if (this.useBackend) {
+             // Assuming API client supports this url pattern
+             // const query = `page=${page}&pageSize=${pageSize}&caseId=${caseId}`;
+             // return await this.billingApi.get<PaginatedResult<TimeEntry>>(`/billing/time-entries?${query}`);
+         }
+         */
+
+      // Fallback / Current Implementation: Fetch all and slice
+      // This ensures compatibility while satisfying the interface requirement
+      const allEntries = await this.getTimeEntries(caseId);
+
+      const start = (page - 1) * pageSize;
+      const end = start + pageSize;
+      const paginatedData = allEntries.slice(start, end);
+
+      return {
+        data: paginatedData,
+        pagination: {
+          page,
+          pageSize,
+          totalPages: Math.ceil(allEntries.length / pageSize),
+          totalItems: allEntries.length,
+        },
+      };
+    } catch (error) {
+      throw new OperationError("Failed to fetch paginated time entries");
+    }
+  }
+
+  /**
    * Add a new time entry
    *
    * @param entry - Time entry data

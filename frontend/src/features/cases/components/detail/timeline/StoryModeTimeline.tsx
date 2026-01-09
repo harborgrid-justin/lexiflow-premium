@@ -18,7 +18,7 @@ import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
 import { TimelineEvent } from '@/types';

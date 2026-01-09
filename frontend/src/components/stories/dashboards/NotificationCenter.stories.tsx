@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
+import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

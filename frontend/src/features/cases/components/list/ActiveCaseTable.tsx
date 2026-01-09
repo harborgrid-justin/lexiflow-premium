@@ -18,7 +18,7 @@ import React, { useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { EmptyListState } from '@/components/ui/molecules/EmptyListState/EmptyListState';
 import { CaseRow } from './CaseRow';
 
@@ -26,7 +26,7 @@ import { CaseRow } from './CaseRow';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Utils
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

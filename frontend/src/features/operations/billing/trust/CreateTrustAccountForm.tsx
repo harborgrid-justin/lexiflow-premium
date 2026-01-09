@@ -21,7 +21,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
 import type { CreateTrustAccountDto, TrustAccountStatus, TrustAccountType } from '@/types/trust-accounts';
 import { TrustAccountType as AccountType } from '@/types/trust-accounts';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle, ArrowLeft, ArrowRight, Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
 

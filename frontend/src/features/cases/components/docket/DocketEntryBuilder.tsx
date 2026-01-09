@@ -24,10 +24,10 @@ import { useNotify } from '@/hooks/useNotify';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
-import { cn } from '@/utils/cn';
-import { getTodayString } from '@/utils/dateUtils';
+import { cn } from '@/shared/lib/cn';
+import { getTodayString } from '@/shared/lib/dateUtils';
 import { sanitizeDocketEntry, validateDocketEntry } from '@/utils/docketValidation';
-import { IdGenerator } from '@/utils/idGenerator';
+import { IdGenerator } from '@/shared/lib/idGenerator';
 
 // Types & Interfaces
 import { Case, CaseId, DocketEntry, DocketEntryType, TaskId, TaskPriorityBackend, TaskStatusBackend, WorkflowTask } from '@/types';

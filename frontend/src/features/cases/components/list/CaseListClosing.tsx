@@ -26,8 +26,8 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { cn } from '@/utils/cn';
-import { sanitizeHtml } from '@/utils/sanitize';
+import { cn } from '@/shared/lib/cn';
+import { sanitizeHtml } from '@/shared/lib/sanitize';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();

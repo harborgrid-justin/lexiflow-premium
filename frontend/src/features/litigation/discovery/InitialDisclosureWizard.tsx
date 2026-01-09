@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
 import { InitialDisclosureWizardProps } from './types';

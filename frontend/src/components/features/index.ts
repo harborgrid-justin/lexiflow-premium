@@ -12,9 +12,9 @@
  * 
  * @example
  * ```tsx
- * import { CaseList } from '@/components/features/cases';
- * import { DocumentViewer } from '@/components/features/documents';
- * import { DiscoveryDashboard } from '@/components/features/discovery';
+ * import { CaseList } from '@/features/cases/ui';
+ * import { DocumentViewer } from '@/features/documents/ui';
+ * import { DiscoveryDashboard } from '@/features/discovery/ui';
  * ```
  */
 

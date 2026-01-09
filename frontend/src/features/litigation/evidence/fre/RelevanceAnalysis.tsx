@@ -9,14 +9,14 @@ import { Filter, Scale, Wand2 } from 'lucide-react';
 import React from 'react';
 
 // Common Components
-import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 
 // Context & Utils
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';

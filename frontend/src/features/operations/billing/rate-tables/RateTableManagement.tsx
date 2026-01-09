@@ -1,4 +1,4 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
@@ -9,7 +9,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
 import React, { memo, useCallback, useState } from 'react';

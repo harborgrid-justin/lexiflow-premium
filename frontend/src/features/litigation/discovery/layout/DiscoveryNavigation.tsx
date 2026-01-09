@@ -1,6 +1,6 @@
 // components/discovery/layout/DiscoveryNavigation.tsx
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
 import { ClipboardList, Database, FileText, Lock, MessageCircle, Mic2, Package, Scale, Shield, Users } from 'lucide-react';
 import React from 'react';

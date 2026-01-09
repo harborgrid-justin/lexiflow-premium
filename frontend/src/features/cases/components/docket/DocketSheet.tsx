@@ -17,7 +17,7 @@ import React, { useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { DocketTableSkeleton } from '@/components/features/cases/components/DocketSkeleton/DocketSkeleton';
+import { DocketTableSkeleton } from '@/features/cases/ui/components/DocketSkeleton/DocketSkeleton';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
 import { Modal } from '@/components/ui/molecules/Modal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
@@ -32,13 +32,13 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useModalState } from '@/hooks/core';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useToggle } from '@/hooks/useToggle';
+import { useToggle } from '@/shared/hooks/useToggle';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
-import { IdGenerator } from '@/utils/idGenerator';
+import { cn } from '@/shared/lib/cn';
+import { IdGenerator } from '@/shared/lib/idGenerator';
 
 // Types & Interfaces
 import { Case, CaseId, DocketEntry } from '@/types';

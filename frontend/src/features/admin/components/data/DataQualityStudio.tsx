@@ -10,7 +10,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
-import { cn } from '@/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';

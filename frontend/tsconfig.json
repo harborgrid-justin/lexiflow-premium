@@ -55,21 +55,28 @@
     "resolveJsonModule": true,
 
     /* -------------------------------------------------------------------------- */
-    /* PATH MAPPING (DOMAIN DRIVEN DESIGN)                                        */
+    /* PATH MAPPING - ENTERPRISE FEATURE-BASED ARCHITECTURE                       */
+    /* Follows Feature-Sliced Design principles with clear domain boundaries      */
     /* -------------------------------------------------------------------------- */
     "baseUrl": ".",
     "paths": {
+      /* Root */
       "@/*": ["src/*"],
-      "@api/*": ["src/api/*"],
-      "@api/domains/*": ["src/api/domains/*"],
-      "@data/*": ["src/api/data/*"],
+
+      /* Shared Layer - Business-agnostic reusables */
       "@shared/*": ["src/shared/*"],
+      "@shared/ui/*": ["src/shared/ui/*"],
+      "@shared/lib/*": ["src/shared/lib/*"],
+      "@shared/hooks/*": ["src/shared/hooks/*"],
+
+      /* Legacy compatibility aliases (to be deprecated) */
       "@ui/*": ["src/shared/ui/*"],
-      "@components/*": ["src/components/*"],
+      "@components/*": ["src/shared/ui/*"],
       "@components/ui/*": ["src/shared/ui/*"],
       "@theme/*": ["src/shared/theme/*"],
       "@utils/*": ["src/utils/*"],
-      "@providers/*": ["src/providers/*"],
+
+      /* Features - Domain business logic */
       "@features/*": ["src/features/*"],
       "@features/litigation": ["src/features/litigation"],
       "@features/document-assembly": ["src/features/drafting"],
@@ -78,9 +85,9 @@
       "@features/cases": ["src/features/cases"],
       "@features/admin": ["src/features/admin"],
       "@features/visual": ["src/features/visual"],
-      "@hooks/*": ["src/hooks/*"],
-      "@providers/ThemeContext": ["src/contexts/theme/ThemeContext.tsx"],
-      "@providers/ToastContext": ["src/contexts/toast/ToastContext.tsx"],
+      "@features/dashboard": ["src/features/dashboard"],
+
+      /* Services - Data access & infrastructure */
       "@services/*": ["src/services/*"],
       "@services/integrationOrchestrator": [
         "src/services/integrationOrchestrator.ts"
@@ -89,11 +96,28 @@
       "@services/domains": ["src/services/domain"],
       "@services/repositories": ["src/services/data/repositories"],
       "@services/core": ["src/services/core"],
-      "@rendering/*": ["rendering/*"],
-      "@types/*": ["src/types/*"],
+
+      /* API Layer */
+      "@api/*": ["src/api/*"],
+      "@api/domains/*": ["src/api/domains/*"],
+      "@data/*": ["src/api/data/*"],
+
+      /* Providers & Contexts */
+      "@providers/*": ["src/providers/*"],
+      "@providers/ThemeContext": ["src/contexts/theme/ThemeContext.tsx"],
+      "@providers/ToastContext": ["src/contexts/toast/ToastContext.tsx"],
+
+      /* Hooks (domain-specific, generic in @shared/hooks) */
+      "@hooks/*": ["src/hooks/*"],
+
+      /* Configuration & Types */
       "@config/*": ["src/config/*"],
       "@config/tabs.config": ["src/config/tabs.config.ts"],
-      "@constants/*": ["src/constants/*"]
+      "@types/*": ["src/types/*"],
+      "@constants/*": ["src/constants/*"],
+
+      /* Rendering */
+      "@rendering/*": ["rendering/*"]
     },
     "types": ["vite/client"]
   },

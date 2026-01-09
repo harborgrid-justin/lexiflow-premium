@@ -4,7 +4,7 @@
  */
 
 import { InvoicesApiService } from '@/api/billing';
-import { InvoiceDetail } from '@/components/billing/InvoiceDetail';
+import { InvoiceDetail } from '@/features/operations/billing/components/time-tracking/InvoiceDetail';
 import { Link, useActionData, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 

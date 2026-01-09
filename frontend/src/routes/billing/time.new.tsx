@@ -4,7 +4,7 @@
  */
 
 import { TimeEntriesApiService } from '@/api/billing';
-import { TimeEntryForm } from '@/components/billing/TimeEntryForm';
+import { TimeEntryForm } from '@/features/operations/billing/components/time-tracking/TimeEntryForm';
 import { useNavigate, type ActionFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 

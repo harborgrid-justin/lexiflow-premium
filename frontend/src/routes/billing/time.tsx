@@ -4,7 +4,7 @@
  */
 
 import { TimeEntriesApiService } from '@/api/billing';
-import { TimeEntryList } from '@/components/billing/TimeEntryList';
+import { TimeEntryList } from '@/features/operations/billing/components/time-tracking/TimeEntryList';
 import { Link, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

@@ -4,7 +4,7 @@
  */
 
 import { ExpensesApiService } from '@/api/billing';
-import { ExpenseList } from '@/components/billing/ExpenseList';
+import { ExpenseList } from '@/features/operations/billing/components/time-tracking/ExpenseList';
 import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';

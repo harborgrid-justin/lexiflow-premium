@@ -1,27 +1,102 @@
 'use client';
 
-import { BookOpen, FileText, Plus, Upload } from 'lucide-react';
-import React from 'react';
+import { DataService } from '@/services/data/dataService';
+import { BookOpen, FileText, Plus, Upload, Loader2, Search } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/shadcn/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/shadcn/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/shadcn/tabs';
+import { Input } from '@/components/ui/shadcn/input';
 
-// Mock sub-components
-const CitationLibrary = () => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Citation Library</CardTitle>
-      <CardDescription>View and manage your saved legal citations.</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <div className="flex flex-col items-center justify-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-        <BookOpen className="h-10 w-10 mb-3 opacity-50" />
-        <p>No citations found in library</p>
-        <Button variant="outline" className="mt-4">Import Citations</Button>
-      </div>
-    </CardContent>
-  </Card>
-);
+interface Citation {
+  id: string;
+  source: string;
+  reference: string;
+  tags?: string[];
+  notes?: string;
+  created?: string;
+}
+
+// Data-connected Citation Library
+const CitationLibrary = () => {
+  const [citations, setCitations] = useState<Citation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    async function loadCitations() {
+      try {
+        setLoading(true);
+        // Use DataService.citations repository
+        // If not directly available, can map from documents
+        let items: any[] = [];
+
+        if (DataService.citations) {
+          const repo = await DataService.citations;
+          items = await repo.getAll();
+        } else {
+          // Fallback
+          const docs = await DataService.documents.getAll();
+          // Assuming we store citations as a doc type or separate
+          // For now mocking fallback empty
+        }
+
+        setCitations(items);
+      } catch (e) {
+        console.error("Failed to load citations", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCitations();
+  }, []);
+
+  const filtered = citations.filter(c =>
+    c.source.toLowerCase().includes(search.toLowerCase()) ||
+    c.reference.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) return <div className="p-12 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Citation Library</CardTitle>
+        <CardDescription>View and manage your saved legal citations.</CardDescription>
+        <div className="pt-2">
+          <div className="relative max-w-sm">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search citations..."
+              className="pl-9"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
+            <BookOpen className="h-10 w-10 mb-3 opacity-50" />
+            <p>No citations found in library</p>
+            <Button variant="outline" className="mt-4">Import Citations</Button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {filtered.map((c) => (
+              <div key={c.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                <h4 className="font-medium">{c.source}</h4>
+                <p className="text-sm text-blue-600 dark:text-blue-400 font-mono mt-1">{c.reference}</p>
+                {c.notes && <p className="text-xs text-muted-foreground mt-2 italic">{c.notes}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
 const BriefAnalyzer = () => (
   <Card>

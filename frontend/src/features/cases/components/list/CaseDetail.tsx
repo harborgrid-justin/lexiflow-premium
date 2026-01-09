@@ -279,6 +279,43 @@ export const CaseDetail: React.FC = () => {
             </div>
           </section>
 
+
+          {/* Risk Management */}
+          <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
+              <AlertTriangle className="w-5 h-5 mr-2" />
+              Risk Assessment
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Risk Level</label>
+                <div className="mt-1">
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase
+                      ${matter.riskLevel === 'critical' ? 'bg-red-100 text-red-800' :
+                      matter.riskLevel === 'high' ? 'bg-orange-100 text-orange-800' :
+                        matter.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'}`}>
+                    {matter.riskLevel || 'Not Assessed'}
+                  </span>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Ethical Wall</label>
+                <p className="text-slate-900 dark:text-slate-100 mt-1">
+                  {matter.customFields?.ethicalWallRequired ? 'Required' : 'Not Required'}
+                </p>
+              </div>
+              {matter.riskNotes && (
+                <div className="col-span-2">
+                  <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Compliance Notes</label>
+                  <p className="text-slate-900 dark:text-slate-100 mt-1 text-sm bg-slate-50 dark:bg-slate-900 p-3 rounded">
+                    {matter.riskNotes}
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+
           {/* Attorney Assignment */}
           <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
@@ -364,79 +401,98 @@ export const CaseDetail: React.FC = () => {
               <div>
                 <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Hourly Rate</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {matter.hourlyRate ? formatCurrency(matter.hourlyRate) : '-'}
+                  {matter.hourlyRate ? `$${matter.hourlyRate}/hr` : '-'}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Estimated Value</label>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {formatCurrency(matter.estimatedValue)}
+                  {matter.retainerAmount ? `$${matter.retainerAmount}` : '-'}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Amount</label>
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Cap</label>
                 <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {formatCurrency(matter.budgetAmount)}
+                  {matter.budgetAmount ? `$${matter.budgetAmount}` : '-'}
                 </p>
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer Amount</label>
-                <p className="text-slate-900 dark:text-slate-100 mt-1">
-                  {formatCurrency(matter.retainerAmount)}
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Court Information */}
-          {(matter.courtName || matter.judgeAssigned) && (
-            <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                Court Information
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Court Name</label>
-                  <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.courtName || '-'}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Judge Assigned</label>
-                  <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.judgeAssigned || '-'}</p>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Tags */}
-          {matter.tags && matter.tags.length > 0 && (
-            <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                Tags
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {matter.tags.map(tag => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
+              {matter.hourlyRate ? formatCurrency(matter.hourlyRate) : '-'}
+            </p>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Estimated Value</label>
+          <p className="text-slate-900 dark:text-slate-100 mt-1">
+            {formatCurrency(matter.estimatedValue)}
+          </p>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Budget Amount</label>
+          <p className="text-slate-900 dark:text-slate-100 mt-1">
+            {formatCurrency(matter.budgetAmount)}
+          </p>
+        </div>
+        <div>
+          <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Retainer Amount</label>
+          <p className="text-slate-900 dark:text-slate-100 mt-1">
+            {formatCurrency(matter.retainerAmount)}
+          </p>
         </div>
       </div>
+    </section>
 
-      <ConfirmDialog
-        isOpen={deleteModal.isOpen}
-        onClose={deleteModal.close}
-        onConfirm={handleDelete}
-        title="Delete Matter"
-        message="Are you sure you want to delete this matter? This action cannot be undone."
-        confirmText="Delete Matter"
-        variant="danger"
-      />
-    </div>
+          {/* Court Information */ }
+  {
+    (matter.courtName || matter.judgeAssigned) && (
+      <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+          Court Information
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Court Name</label>
+            <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.courtName || '-'}</p>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Judge Assigned</label>
+            <p className="text-slate-900 dark:text-slate-100 mt-1">{matter.judgeAssigned || '-'}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {/* Tags */ }
+  {
+    matter.tags && matter.tags.length > 0 && (
+      <section className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+          Tags
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {matter.tags.map(tag => (
+            <span
+              key={tag}
+              className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </section>
+    )
+  }
+        </div >
+      </div >
+
+  <ConfirmDialog
+    isOpen={deleteModal.isOpen}
+    onClose={deleteModal.close}
+    onConfirm={handleDelete}
+    title="Delete Matter"
+    message="Are you sure you want to delete this matter? This action cannot be undone."
+    confirmText="Delete Matter"
+    variant="danger"
+  />
+    </div >
   );
 };

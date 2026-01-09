@@ -15,6 +15,7 @@ import { api } from '@/api';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { PATHS } from '@/config/paths.config';
 import { MatterView } from '@/config/tabs.config';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -24,6 +25,7 @@ import { CaseStatus, type Case, type Invoice } from '@/types';
 import { cn } from '@/utils/cn';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
 import React, { Suspense, useMemo, useTransition } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CaseManagerContent } from './CaseManagerContent';
 
 // Two-level tab configuration
@@ -93,6 +95,7 @@ interface CaseManagementProps {
 
 export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices, onSelectCase }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('cases_active_tab', 'overview');
 
@@ -157,7 +160,7 @@ export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, in
               <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => window.location.reload()}>
                 Refresh
               </Button>
-              <Button variant="primary" size="sm" icon={Plus} onClick={() => setActiveTab('intake')}>
+              <Button variant="primary" size="sm" icon={Plus} onClick={() => navigate(PATHS.CASES_INTAKE)}>
                 New Case
               </Button>
             </div>

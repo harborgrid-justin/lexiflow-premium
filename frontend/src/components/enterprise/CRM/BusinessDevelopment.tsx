@@ -1,13 +1,12 @@
 /**
  * BusinessDevelopment Component
+ * @module components / enterprise / CRM / BusinessDevelopment
+ * @category Enterprise CRM
+ * @description Business development module with lead tracking, pitch management,
+ * RFP response tracking, and win / loss analysis.
  */
 
 import React, { useState } from 'react';
- * @module components / enterprise / CRM / BusinessDevelopment
-  * @category Enterprise CRM
-    * @description Business development module with lead tracking, pitch management,
- * RFP response tracking, and win / loss analysis.
- */
 
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';

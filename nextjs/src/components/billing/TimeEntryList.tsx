@@ -27,7 +27,7 @@ import { Label } from '@/components/ui/shadcn/label';
 
 interface TimeEntryListProps {
   entries: TimeEntry[];
-  filters?: any;
+  filters?: unknown;
 }
 
 export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }) => {
@@ -177,7 +177,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[50px]">
+              <TableHead className="w-12.5">
                 <Checkbox
                   checked={entries.length > 0 && selectedIds.length === entries.length}
                   onCheckedChange={(checked) => toggleAll(!!checked)}

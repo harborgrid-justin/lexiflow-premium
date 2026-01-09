@@ -57,7 +57,7 @@ export interface LegalResearchHubProps {
 export const LegalResearchHub: React.FC<LegalResearchHubProps> = ({
   onSearch,
   onSaveResult,
-  onExport: _onExport,
+  onExport, // Kept for interface compliance but unused
   className = ''
 }) => {
   const { theme } = useTheme();

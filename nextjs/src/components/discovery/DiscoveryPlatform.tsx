@@ -24,18 +24,23 @@ const DiscoveryDashboard = ({ onNavigate }: { onNavigate: (view: DiscoveryView) 
   useEffect(() => {
     async function load() {
       try {
-        // Use DataService.discovery
-        // If specific stats method exists:
-        // const s = await DataService.discovery.getStats();
-        // Otherwise derive from collections
-        const discovery = DataService.discovery as unknown;
-        const requests = discovery.requests ? await discovery.requests() : []; // Pseudo-method
+        // Use DataService to fetch all discovery items
+        // The service returns a generic list, so we filter by type
+        const allDiscoveryItems = await DataService.discovery.getAll();
 
-        // Fallback to real count if available or 0
+        // Safety check for array
+        const items = Array.isArray(allDiscoveryItems) ? allDiscoveryItems : [];
+
+        // Filter for specific categories (assuming 'type' or similar property exists)
+        // If specific types are not yet strictly defined, we fallback to defaults
+        const requests = items.filter((i: any) => i.type === 'Request' || i.category === 'Request');
+        const deadlines = items.filter((i: any) => i.dueDate && new Date(i.dueDate) > new Date());
+        const holds = items.filter((i: any) => i.status === 'Active' && (i.type === 'LegalHold' || i.isHold));
+
         setStats({
-          requests: requests.length || 0,
-          deadlines: 0, // Implement deadline fetching
-          holds: 0 // Implement hold fetching
+          requests: requests.length,
+          deadlines: deadlines.length,
+          holds: holds.length
         });
       } catch (e) {
         console.error(e);

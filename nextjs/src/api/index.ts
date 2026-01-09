@@ -188,6 +188,7 @@ export const api = {
   trustAccounts: billingDomain.billingApi.trustAccounts,
   trial: trialDomain.trialApi.trial,
   exhibits: trialDomain.trialApi.exhibits,
+  adr: trialDomain.trialApi.adr,
   tasks: workflowDomain.workflowApi.tasks,
   calendar: workflowDomain.workflowApi.calendar,
   workflow: workflowDomain.workflowApi.workflow,

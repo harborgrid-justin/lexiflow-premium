@@ -22,11 +22,14 @@ export function ActivityFeed() {
       try {
         // Use DataService.cases to simulate activity feed
         const cases = await DataService.cases.getAll();
-        const feed = cases.map((c: unknown) => ({
-          id: c.id,
-          description: `Case updated: ${c.title}`,
-          timestamp: c.updatedAt
-        })).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 10);
+        const feed = cases.map((c: unknown) => {
+          const caseItem = c as { id: string; title: string; updatedAt: string };
+          return {
+            id: caseItem.id,
+            description: `Case updated: ${caseItem.title}`,
+            timestamp: caseItem.updatedAt
+          };
+        }).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 10);
 
         setActivities(feed);
       } catch (e) {

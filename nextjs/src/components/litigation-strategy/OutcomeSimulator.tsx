@@ -33,14 +33,14 @@ export const OutcomeSimulator: React.FC<{ caseId?: string }> = ({ caseId }) => {
       const fetchAnalysis = async () => {
         try {
           // Attempt to get analytics for the case
-          // This is hypothetical - mapping to an analytics endpoint
-          const data = await DataService.analytics.getCaseMetrics(caseId);
-          if (data && data.predictive) {
-             setParameters({
-               judgeBias: data.predictive.judgeScore || 50,
-               evidenceStrength: data.predictive.evidenceScore || 50,
-               precedentFavorability: data.predictive.precedentScore || 50
-             });
+          // Fallback to case metadata if analytics service specific method is unavailable
+          const caseItem = await DataService.cases.getById(caseId) as any;
+          if (caseItem && caseItem.metadata?.predictive) {
+            setParameters({
+              judgeBias: caseItem.metadata.predictive.judgeScore || 50,
+              evidenceStrength: caseItem.metadata.predictive.evidenceScore || 50,
+              precedentFavorability: caseItem.metadata.predictive.precedentScore || 50
+            });
           }
         } catch (e) {
           console.error("Failed to load case analytics", e);
@@ -67,7 +67,7 @@ export const OutcomeSimulator: React.FC<{ caseId?: string }> = ({ caseId }) => {
             </div>
             <Slider
               value={[parameters.evidenceStrength]}
-              onValueChange={([v]) => setParameters(p => ({...p, evidenceStrength: v}))}
+              onValueChange={([v]) => setParameters(p => ({ ...p, evidenceStrength: v }))}
               max={100}
               step={1}
               className="w-full"
@@ -81,7 +81,7 @@ export const OutcomeSimulator: React.FC<{ caseId?: string }> = ({ caseId }) => {
             </div>
             <Slider
               value={[parameters.precedentFavorability]}
-              onValueChange={([v]) => setParameters(p => ({...p, precedentFavorability: v}))}
+              onValueChange={([v]) => setParameters(p => ({ ...p, precedentFavorability: v }))}
               max={100}
               step={1}
             />
@@ -94,7 +94,7 @@ export const OutcomeSimulator: React.FC<{ caseId?: string }> = ({ caseId }) => {
             </div>
             <Slider
               value={[parameters.judgeBias]}
-              onValueChange={([v]) => setParameters(p => ({...p, judgeBias: v}))}
+              onValueChange={([v]) => setParameters(p => ({ ...p, judgeBias: v }))}
               max={100}
               step={1}
             />

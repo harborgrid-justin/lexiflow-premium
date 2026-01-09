@@ -5,7 +5,7 @@
  * Displays list of cases with filtering and sorting
  */
 
-import { API_ENDPOINTS } from '@/lib/api-config';
+import { DataService } from '@/services/data/dataService';
 import { Case, CaseStatus, MatterPriority } from '@/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -42,9 +42,8 @@ export function CaseList() {
   useEffect(() => {
     async function fetchCases() {
       try {
-        const response = await fetch(API_ENDPOINTS.CASES.LIST);
-        const data = await response.json();
-        setCases(data.data || []);
+        const data = await DataService.cases.getAll();
+        setCases(data || []);
       } catch (error) {
         console.error('Failed to fetch cases:', error);
       } finally {

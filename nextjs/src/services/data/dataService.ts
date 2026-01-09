@@ -597,6 +597,86 @@ Object.defineProperties(DataServiceBase, {
     legacyRepositoryRegistry.getOrCreate("examinations")
   ),
 
+  /**
+   * ADR API - Alternative Dispute Resolution
+   * @backend api.adr
+   * @features Mediation, arbitration, settlements
+   */
+  adr: { get: () => api.adr, enumerable: true },
+
+  /**
+   * Mediations API - Mediation sessions management
+   * @backend api.adr.getAllMediations
+   * @features Mediation scheduling, outcomes, mediator tracking
+   */
+  mediations: {
+    get: () => ({
+      getAll: () => api.adr.getAllMediations(),
+      getById: (id: string) => api.adr.getMediationById(id),
+      getByCaseId: (caseId: string) => api.adr.getMediationsByCaseId(caseId),
+      create: (data: Parameters<typeof api.adr.createMediation>[0]) =>
+        api.adr.createMediation(data),
+      update: (
+        id: string,
+        data: Parameters<typeof api.adr.updateMediation>[1]
+      ) => api.adr.updateMediation(id, data),
+    }),
+    enumerable: true,
+  },
+
+  /**
+   * Arbitrations API - Arbitration proceedings management
+   * @backend api.adr.getAllArbitrations
+   * @features Arbitration scheduling, awards, panel management
+   */
+  arbitrations: {
+    get: () => ({
+      getAll: () => api.adr.getAllArbitrations(),
+      getById: (id: string) => api.adr.getArbitrationById(id),
+      getByCaseId: (caseId: string) => api.adr.getArbitrationsByCaseId(caseId),
+      create: (data: Parameters<typeof api.adr.createArbitration>[0]) =>
+        api.adr.createArbitration(data),
+      update: (
+        id: string,
+        data: Parameters<typeof api.adr.updateArbitration>[1]
+      ) => api.adr.updateArbitration(id, data),
+      recordAward: (
+        id: string,
+        award: Parameters<typeof api.adr.recordAward>[1]
+      ) => api.adr.recordAward(id, award),
+    }),
+    enumerable: true,
+  },
+
+  /**
+   * Settlements API - Settlement management
+   * @backend api.adr.getAllSettlements
+   * @features Settlement negotiations, approvals, payments
+   */
+  settlements: {
+    get: () => ({
+      getAll: (filters?: Parameters<typeof api.adr.getAllSettlements>[0]) =>
+        api.adr.getAllSettlements(filters),
+      getById: (id: string) => api.adr.getSettlementById(id),
+      getByCaseId: (caseId: string) => api.adr.getSettlementsByCaseId(caseId),
+      create: (data: Parameters<typeof api.adr.createSettlement>[0]) =>
+        api.adr.createSettlement(data),
+      update: (
+        id: string,
+        data: Parameters<typeof api.adr.updateSettlement>[1]
+      ) => api.adr.updateSettlement(id, data),
+      delete: (id: string) => api.adr.deleteSettlement(id),
+      approve: (id: string, approverId: string, notes?: string) =>
+        api.adr.approveSettlement(id, approverId, notes),
+      execute: (id: string) => api.adr.executeSettlement(id),
+      recordPayment: (
+        id: string,
+        paymentData: Parameters<typeof api.adr.recordPayment>[1]
+      ) => api.adr.recordPayment(id, paymentData),
+    }),
+    enumerable: true,
+  },
+
   // ─────────────────────────────────────────────────────────────────────────
   // FINANCIAL MANAGEMENT
   // ─────────────────────────────────────────────────────────────────────────

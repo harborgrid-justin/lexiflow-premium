@@ -31,21 +31,23 @@ export function ClientPortalList() {
       setLoading(true);
       try {
         // Use DataService.crm
-        const crm = DataService.crm as unknown;
-        const clientData = crm.getClients ? await crm.getClients() : [];
+        // Using standard getAll which returns array of clients/entities
+        const crmData = await DataService.crm.getAll();
+
+        const clientData = Array.isArray(crmData) ? crmData : [];
 
         // Transform to ClientPortalData
-        const mapped = clientData.map((c: unknown) => ({
+        const mapped = clientData.map((c: any) => ({
           id: c.id,
-          clientName: c.name,
-          portalAccessStatus: c.status === 'Active' ? 'active' : 'inactive',
+          clientName: c.name || c.companyName || 'Unknown',
+          portalAccessStatus: (c.status === 'Active' ? 'active' : 'inactive') as 'active' | 'inactive' | 'pending',
           lastLogin: c.lastLogin || new Date().toISOString(),
           documentsSharedCount: c.docCount || 0
         }));
 
         setClients(mapped);
       } catch (e) {
-        console.error(e);
+        console.error("Failed to load portal clients", e);
       } finally {
         setLoading(false);
       }

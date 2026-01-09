@@ -23,6 +23,7 @@ export interface Deadline {
   type: 'filing' | 'hearing' | 'meeting' | 'milestone' | 'other';
   priority: 'low' | 'medium' | 'high' | 'critical';
   status?: 'pending' | 'completed' | 'overdue';
+  computedStatus?: 'pending' | 'completed' | 'overdue'; // Optional computed status
   assignee?: {
     id: string;
     name: string;

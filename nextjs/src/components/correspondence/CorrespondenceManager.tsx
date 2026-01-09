@@ -100,16 +100,32 @@ export default function CorrespondenceManager() {
   useEffect(() => {
     async function load() {
       try {
-        // Use DataService.correspondence
-        const comms = await DataService.correspondence.getCommunications ? await DataService.correspondence.getCommunications() : [];
+        // Use DataService.correspondence unique repository
+        // Assuming getAll returns generic items that we filter
+        const allItems: any[] = await DataService.correspondence.getAll();
 
-        // If getServiceJobs doesn't exist, we fallback to empty or implement logic
-        const svcJobs = (DataService.correspondence as unknown).getServiceJobs ? await (DataService.correspondence as unknown).getServiceJobs() : [];
+        const comms = allItems.filter(i => i.type === 'Communication' || !i.type).map(i => ({
+          id: i.id,
+          sender: i.sender || 'Unknown',
+          date: i.date || i.createdAt,
+          subject: i.subject || '(No Subject)',
+          preview: i.content || i.preview || ''
+        }));
+
+        const svcJobs = allItems.filter(i => i.type === 'ServiceJob').map(i => ({
+          id: i.id,
+          caseId: i.caseId,
+          caseName: i.metadata?.caseName || `Case ${i.caseId}`,
+          status: i.status || 'Pending',
+          targetPerson: i.recipient || 'Unknown',
+          dueDate: i.dueDate || new Date().toLocaleDateString(),
+          serverName: i.processServer || 'Unassigned'
+        }));
 
         setCommunications(comms);
         setJobs(svcJobs);
       } catch (e) {
-        console.error(e);
+        console.error("Failed to load correspondence", e);
       } finally {
         setLoading(false);
       }

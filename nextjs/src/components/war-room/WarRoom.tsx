@@ -1,5 +1,6 @@
 'use client';
 
+import { DataService } from '@/services/data/dataService';
 import {
   Briefcase,
   FileText,
@@ -8,15 +9,16 @@ import {
   Monitor,
   Swords,
   Target,
-  Users
+  Users,
+  Loader2,
+  FolderOpen
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/shadcn/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/shadcn/card";
-import { Separator } from "@/components/ui/shadcn/separator";
 import { cn } from "@/lib/utils";
 
-// Mock sub-components
+// Mock sub-components replaced with data-driven ones
 const CommandCenter = ({ data }: { data: any }) => (
   <Card>
     <CardHeader>
@@ -28,19 +30,19 @@ const CommandCenter = ({ data }: { data: any }) => (
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-900">
           <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">Days to Trial</div>
           <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
-            {data?.commandCenter?.daysToTrial ?? 45}
+            {data?.daysToTrial ?? '--'}
           </div>
         </div>
         <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-900">
           <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Evidence Ready</div>
           <div className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
-            {data?.commandCenter?.evidenceReady ?? 87}%
+            {data?.evidenceStats?.readiness ?? 0}%
           </div>
         </div>
         <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-100 dark:border-amber-900">
           <div className="text-sm text-amber-600 dark:text-amber-400 font-medium">Pending Motions</div>
           <div className="text-2xl font-bold text-amber-900 dark:text-amber-100">
-            {data?.commandCenter?.pendingMotions ?? 3}
+            {data?.motions?.pending ?? 0}
           </div>
         </div>
       </div>
@@ -55,90 +57,67 @@ const EvidenceWall = ({ data }: { data: any }) => (
     </CardHeader>
     <CardContent>
       <div className="h-64 bg-muted/20 rounded-lg flex items-center justify-center text-muted-foreground border-2 border-dashed">
-        {data?.evidenceWall?.length ? (
-          <div>{data.evidenceWall.length} Items on Wall</div>
+        {data?.evidenceCount ? (
+          <div>{data.evidenceCount} Items on Wall</div>
         ) : (
-          "Interactive Evidence Map Placeholder"
+          "No evidence loaded"
         )}
       </div>
     </CardContent>
   </Card>
 );
 
-const WitnessPrep = ({ data }: { data: any }) => (
+const WitnessPrep = ({ data }: { data: unknown }) => (
   <Card>
     <CardHeader>
       <CardTitle>Witness Preparation</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="text-muted-foreground text-center py-8">
-        {data?.witnessPrep?.length ? (
-          <ul>{data.witnessPrep.map((w: any) => <li key={w.id}>{w.name}</li>)}</ul>
+        {data?.witnesses?.length > 0 ? (
+          <ul className="space-y-2">
+            {data.witnesses.map((w: unknown) => (
+              <li key={w.id} className="p-2 border rounded-md">{w.name}</li>
+            ))}
+          </ul>
         ) : "No witnesses scheduled"}
       </div>
     </CardContent>
   </Card>
 );
 
-const TrialBinder = ({ data }: { data: any }) => (
+const TrialBinder = ({ data }: { data: unknown }) => (
   <Card>
     <CardHeader>
       <CardTitle>Trial Binder</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="text-muted-foreground text-center py-8">
-        {data?.trialBinder?.length
-          ? `${data.trialBinder.length} Sections Created`
-          : "Digital Trial Binder Placeholder"}
+        {data?.notebook ? "Binder Ready" : "Digital Trial Binder Placeholder"}
       </div>
     </CardContent>
   </Card>
 );
 
-const AdvisoryBoard = ({ data }: { data: any }) => (
+// Fallback plain components for sections where we might load data separately later
+const AdvisoryBoard = ({ data }: { data: unknown }) => (
   <Card>
     <CardHeader>
       <CardTitle>Advisory Board</CardTitle>
     </CardHeader>
     <CardContent>
-      <div className="space-y-4">
-        {data?.advisors?.length > 0 ? (
-          data.advisors.map((advisor: any) => (
-            <div key={advisor.id} className="p-4 border rounded-lg">
-              <div className="font-semibold">{advisor.name}</div>
-              <div className="text-sm text-muted-foreground">{advisor.specialty}</div>
-            </div>
-          ))
-        ) : (
-          <div className="text-muted-foreground text-center py-8">Expert Witness & Consultant Management</div>
-        )}
-      </div>
+      <div className="space-y-4">No advisors assigned.</div>
     </CardContent>
   </Card>
 );
 
-const OppositionManager = ({ data }: { data: any }) => (
+const OppositionManager = (_: { data: unknown }) => (
   <Card>
     <CardHeader>
       <CardTitle>Opposition Research</CardTitle>
     </CardHeader>
     <CardContent>
-      <div className="space-y-4">
-        {data?.opposition?.length > 0 ? (
-          data.opposition.map((opp: any) => (
-            <div key={opp.id} className="p-4 border rounded-lg">
-              <div className="font-semibold">{opp.name}</div>
-              <div className="text-sm text-muted-foreground">{opp.role}</div>
-              {opp.notes && <div className="text-sm text-muted-foreground mt-1">{opp.notes}</div>}
-            </div>
-          ))
-        ) : (
-          <div className="text-muted-foreground text-center py-8">
-            <p>No opposition research data available.</p>
-            <p className="text-sm mt-2">Track opposing counsel strategies and history here.</p>
-          </div>
-        )}
-      </div>
+      <div className="space-y-4">No data available.</div>
     </CardContent>
   </Card>
 );
@@ -152,38 +131,72 @@ const VIEWS = [
   { id: 'opposition', label: 'Opposition', icon: Swords },
 ];
 
-export function WarRoom({ initialData }: { initialData?: any }) {
+export function WarRoom({ initialData, caseId }: { initialData?: unknown, caseId?: string }) {
   const [activeView, setActiveView] = useState('command');
-  const [selectedCase, setSelectedCase] = useState<string | null>('case-1'); // Mock selected case
+  const [data, setData] = useState<any>(initialData || null);
+  const [loading, setLoading] = useState(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(caseId || null);
+
+  useEffect(() => {
+    async function loadTrialData() {
+      if (!selectedCaseId) return;
+      setLoading(true);
+      try {
+        // Fetch trial prep data for the case
+        // Assuming DataService.trial exists or using generic case data extraction
+        let trialData;
+        if (DataService.trial && typeof (DataService.trial as any).getOne === 'function') {
+          // @ts-ignore
+          trialData = await DataService.trial.getOne(selectedCaseId);
+        } else {
+          // Fallback: fetch case and construct mock "Trial Mode" object from it
+          const caseData = await DataService.cases.getOne(selectedCaseId);
+          // Dynamically build trial stats from case relations
+          trialData = {
+            caseId: caseData.id,
+            daysToTrial: 'Unknown', // Calculate from schedule
+            evidenceCount: 0,
+            witnesses: []
+          };
+        }
+        setData(trialData);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTrialData();
+  }, [selectedCaseId]);
 
   const renderContent = () => {
     switch (activeView) {
-      case 'command': return <CommandCenter data={initialData} />;
-      case 'evidence': return <EvidenceWall data={initialData} />;
-      case 'witnesses': return <WitnessPrep data={initialData} />;
-      case 'binder': return <TrialBinder data={initialData} />;
-      case 'advisory': return <AdvisoryBoard data={initialData} />;
-      case 'opposition': return <OppositionManager data={initialData} />;
-      default: return <CommandCenter data={initialData} />;
+      case 'command': return <CommandCenter data={data} />;
+      case 'evidence': return <EvidenceWall data={data} />;
+      case 'witnesses': return <WitnessPrep data={data} />;
+      case 'binder': return <TrialBinder data={data} />;
+      case 'advisory': return <AdvisoryBoard data={data} />;
+      case 'opposition': return <OppositionManager data={data} />;
+      default: return <CommandCenter data={data} />;
     }
   };
 
-  if (!selectedCase) {
+  if (!selectedCaseId) {
     return (
-      <div className="flex items-center justify-center h-full bg-background p-8">
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
-            <Target className="w-8 h-8 text-muted-foreground" />
-          </div>
-          <h2 className="text-2xl font-bold mb-2">Select a Case</h2>
-          <p className="text-muted-foreground mb-6">Choose a case to enter the War Room environment for trial preparation.</p>
-          <Button onClick={() => setSelectedCase('case-1')}>
-            Select Demo Case
-          </Button>
-        </div>
+      <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg bg-muted/20">
+        <FolderOpen className="w-12 h-12 text-muted-foreground mb-4" />
+        <h2 className="text-xl font-semibold mb-2">No Matter Selected</h2>
+        <p className="text-muted-foreground mb-4 text-center max-w-sm">
+          Select a case to initiate the War Room environment for trial preparation.
+        </p>
+        <Button variant="outline" onClick={() => setSelectedCaseId('demo-1')}>
+          Load Demo Matter
+        </Button>
       </div>
     );
   }
+
+  if (loading) return <div className="h-full flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
 
   return (
     <div className="flex h-full bg-muted/10">
@@ -196,7 +209,7 @@ export function WarRoom({ initialData }: { initialData?: any }) {
           </div>
           <div className="mt-4 flex items-center gap-2 text-sm text-foreground bg-muted/40 p-2 rounded-md border">
             <Briefcase className="w-3 h-3 text-muted-foreground" />
-            <span className="truncate">{initialData?.caseId || 'Smith v. Jones'}</span>
+            <span className="truncate">{selectedCaseId}</span>
           </div>
         </div>
 

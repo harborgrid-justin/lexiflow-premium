@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcn/table';
+import { DataService } from '@/services/data/dataService';
 import { Badge } from '@/components/ui/shadcn/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/shadcn/table';
+import { Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface DocumentVersion {
   id: string;
@@ -13,12 +15,39 @@ interface DocumentVersion {
   lastModifiedAt: string;
 }
 
-interface DocumentVersionsListProps {
-  initialVersions: DocumentVersion[];
-}
+export function DocumentVersionsList() {
+  const [versions, setVersions] = useState<DocumentVersion[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export function DocumentVersionsList({ initialVersions }: DocumentVersionsListProps) {
-  const [versions] = useState<DocumentVersion[]>(initialVersions);
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      try {
+        // Use DataService to get documents and map to version view
+        // Assuming documents have version metadata
+        const docs = await DataService.documents.getAll();
+
+        // Map to display format cast as any to handle potential mock schema variations safely
+        const mappedData = docs.map((d: unknown) => ({
+          id: d.id,
+          documentName: d.title || d.name || 'Untitled',
+          currentVersion: d.version || '1.0',
+          totalVersions: d.versionCount || 1,
+          lastModifiedBy: d.author || 'Unknown',
+          lastModifiedAt: d.updatedAt || new Date().toISOString()
+        }));
+
+        setVersions(mappedData);
+      } catch (error) {
+        console.error("Failed to load document versions", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  if (loading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>;
 
   return (
     <div className="p-6">

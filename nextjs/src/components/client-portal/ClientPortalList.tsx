@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-
+import { DataService } from '@/services/data/dataService';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/shadcn/table';
 import { Card, CardContent } from '@/components/ui/shadcn/card';
 import { Badge } from '@/components/ui/shadcn/badge';
+import { Loader2 } from 'lucide-react';
 
 interface ClientPortalData {
   id: string;
@@ -21,13 +22,36 @@ interface ClientPortalData {
   documentsSharedCount: number;
 }
 
-interface ClientPortalListProps {
-  initialClients: ClientPortalData[];
-}
+export function ClientPortalList() {
+  const [clients, setClients] = useState<ClientPortalData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export function ClientPortalList({ initialClients }: ClientPortalListProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [clients, setClients] = useState<ClientPortalData[]>(initialClients);
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      try {
+        // Use DataService.crm
+        const crm = DataService.crm as unknown;
+        const clientData = crm.getClients ? await crm.getClients() : [];
+
+        // Transform to ClientPortalData
+        const mapped = clientData.map((c: unknown) => ({
+          id: c.id,
+          clientName: c.name,
+          portalAccessStatus: c.status === 'Active' ? 'active' : 'inactive',
+          lastLogin: c.lastLogin || new Date().toISOString(),
+          documentsSharedCount: c.docCount || 0
+        }));
+
+        setClients(mapped);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -41,6 +65,8 @@ export function ClientPortalList({ initialClients }: ClientPortalListProps) {
         return <Badge variant="outline">{status}</Badge>;
     }
   };
+
+  if (loading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>;
 
   return (
     <div className="p-6">

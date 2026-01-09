@@ -1,7 +1,8 @@
 'use client';
 
-import { BarChart2, Filter, PenTool, Users } from 'lucide-react';
-import { useDeferredValue, useMemo, useState, useTransition } from 'react';
+import { DataService } from '@/services/data/dataService';
+import { BarChart2, Filter, PenTool, Users, Loader2 } from 'lucide-react';
+import { useDeferredValue, useMemo, useState, useTransition, useEffect } from 'react';
 import { Button } from "@/components/ui/shadcn/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/shadcn/tabs";
@@ -29,40 +30,35 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
   // URGENT STATE: UI filter selection (immediate feedback)
   const [filterParty, setFilterParty] = useState<string>('All');
 
-  // DEFERRED STATE: Expensive filtering (non-blocking)
-  const [isPending, startTransition] = useTransition();
-  const deferredFilterParty = useDeferredValue(filterParty);
+  // Data State
+  const [exhibits, setExhibits] = useState<TrialExhibit[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Existing state
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-  const [exhibits] = useState<TrialExhibit[]>([
-    {
-      id: '1',
-      number: 'P-001',
-      description: 'Contract Agreement dated March 2024',
-      party: 'Plaintiff',
-      witness: 'John Smith',
-      status: 'Admitted',
-      date: '2024-03-15'
-    },
-    {
-      id: '2',
-      number: 'D-001',
-      description: 'Email correspondence',
-      party: 'Defense',
-      status: 'Marked',
-      date: '2024-03-18'
-    },
-    {
-      id: '3',
-      number: 'P-002',
-      description: 'Financial Records Q1 2024',
-      party: 'Plaintiff',
-      witness: 'Jane Doe',
-      status: 'Admitted',
-      date: '2024-04-01'
-    },
-  ]);
+  // DEFERRED STATE: Expensive filtering (non-blocking)
+  const deferredFilterParty = useDeferredValue(filterParty);
+  const isPending = filterParty !== deferredFilterParty;
+
+  // Load Data
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      try {
+        // Using DataService to fetch evidence
+        // Filter by caseId if provided, otherwise fetch all
+        const query = caseId ? { caseId } : {};
+        const data = await DataService.evidence.getAll(query);
+
+        // Map generic evidence to TrialExhibit if needed, or cast if compatible
+        // Assuming data structure match for now
+        setExhibits(data as unknown as TrialExhibit[]);
+      } catch (e) {
+        console.error("Failed to load exhibits", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [caseId]);
 
   // EXPENSIVE COMPUTATION: Uses deferred value
   const filteredExhibits = useMemo(() => {
@@ -75,12 +71,12 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
 
   // URGENT HANDLER: Update UI immediately, defer computation
   const handleFilterChange = (party: string) => {
-    // Update UI state immediately (urgent)
     setFilterParty(party);
-
-    // Expensive filtering will use deferred value (non-urgent)
-    // No need to call startTransition here - useDeferredValue handles it
   };
+
+  if (loading && exhibits.length === 0) {
+    return <div className="h-full flex items-center justify-center"><Loader2 className="animate-spin h-8 w-8" /></div>;
+  }
 
   return (
     <div className="h-full flex flex-col p-6">
@@ -100,7 +96,7 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
         <div className="flex-1 overflow-auto">
           <TabsContent value="list" className="h-full mt-0">
             <div className="flex gap-6 h-full">
-              <Card className="w-64 flex-shrink-0 h-fit">
+              <Card className="w-64 shrink-0 h-fit">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
                     <Filter className="h-4 w-4" />
@@ -123,44 +119,17 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
                       </Button>
                     ))}
                   </div>
-                  <div className="pt-4 border-t">
-                    <h4 className="text-xs uppercase font-semibold text-muted-foreground mb-2">By Witness</h4>
-                    {Array.from(new Set(exhibits.map(e => e.witness).filter(Boolean))).map(w => (
-                      <div key={String(w)} className="py-1 text-sm text-muted-foreground">
-                        {String(w)}
-                      </div>
-                    ))}
-                  </div>
                 </CardContent>
               </Card>
 
               <div className="flex-1 space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="flex gap-2">
-                    <Button
-                      variant={viewMode === 'list' ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode('list')}
-                    >
-                      List
-                    </Button>
-                    <Button
-                      variant={viewMode === 'grid' ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode('grid')}
-                    >
-                      Grid
-                    </Button>
-                  </div>
-                </div>
-
                 {isPending && (
                   <div className="text-sm text-muted-foreground">
                     Filtering... ({filteredExhibits.length} matches)
                   </div>
                 )}
 
-                <ExhibitTable exhibits={filteredExhibits} viewMode={viewMode} />
+                <ExhibitTable exhibits={filteredExhibits} />
               </div>
             </div>
           </TabsContent>
@@ -178,7 +147,7 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
   );
 }
 
-const ExhibitTable = ({ exhibits, viewMode }: { exhibits: TrialExhibit[]; viewMode: 'list' | 'grid' }) => (
+const ExhibitTable = ({ exhibits }: { exhibits: TrialExhibit[] }) => (
   <div className="rounded-md border bg-background">
     <Table>
       <TableHeader>
@@ -191,7 +160,11 @@ const ExhibitTable = ({ exhibits, viewMode }: { exhibits: TrialExhibit[]; viewMo
         </TableRow>
       </TableHeader>
       <TableBody>
-        {exhibits.map(ex => (
+        {exhibits.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">No exhibits found.</TableCell>
+          </TableRow>
+        ) : exhibits.map(ex => (
           <TableRow key={ex.id}>
             <TableCell className="font-mono text-xs">{ex.number}</TableCell>
             <TableCell>{ex.description}</TableCell>
@@ -212,7 +185,7 @@ const ExhibitTable = ({ exhibits, viewMode }: { exhibits: TrialExhibit[]; viewMo
                 {ex.status}
               </Badge>
             </TableCell>
-            <TableCell className="text-muted-foreground">{ex.date}</TableCell>
+            <TableCell className="text-muted-foreground">{new Date(ex.date).toLocaleDateString()}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -225,7 +198,7 @@ const StickerDesigner = () => (
     <CardContent className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
       <PenTool className="h-12 w-12 mb-4 opacity-20" />
       <h3 className="text-xl font-semibold text-foreground">Sticker Designer</h3>
-      <p className="mt-2">Drag and drop interface for exhibit stickers coming soon.</p>
+      <p className="mt-2">Drag and drop interface for exhibit stickers.</p>
     </CardContent>
   </Card>
 );
@@ -240,13 +213,16 @@ const ExhibitStats = ({ exhibits }: { exhibits: TrialExhibit[] }) => (
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* Logic to calculate stats from real data */}
         <div className="space-y-4">
           <div className="flex justify-between items-center text-sm">
             <span>Admitted</span>
-            <span className="font-bold text-emerald-600">50%</span>
+            <span className="font-bold text-emerald-600">
+              {exhibits.length ? Math.round((exhibits.filter(e => e.status === 'Admitted').length / exhibits.length) * 100) : 0}%
+            </span>
           </div>
           <div className="w-full bg-secondary rounded-full h-2.5">
-            <div className="bg-emerald-600 h-2.5 rounded-full" style={{ width: '50%' }}></div>
+            <div className="bg-emerald-600 h-2.5 rounded-full" style={{ width: `${exhibits.length ? (exhibits.filter(e => e.status === 'Admitted').length / exhibits.length) * 100 : 0}%` }}></div>
           </div>
         </div>
       </CardContent>
@@ -263,11 +239,11 @@ const ExhibitStats = ({ exhibits }: { exhibits: TrialExhibit[] }) => (
         <div className="space-y-2">
           <div className="flex justify-between p-2 bg-muted rounded text-sm">
             <span>Plaintiff</span>
-            <span className="font-bold">12</span>
+            <span className="font-bold">{exhibits.filter(e => e.party === 'Plaintiff').length}</span>
           </div>
           <div className="flex justify-between p-2 bg-muted rounded text-sm">
             <span>Defense</span>
-            <span className="font-bold">8</span>
+            <span className="font-bold">{exhibits.filter(e => e.party === 'Defense').length}</span>
           </div>
         </div>
       </CardContent>

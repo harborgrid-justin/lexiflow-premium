@@ -1,84 +1,70 @@
-'use client';
-
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/shadcn/card';
+import React, { useEffect, useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/shadcn/card';
+import { Bell, Megaphone } from 'lucide-react';
+import { DataService } from '@/services/data/dataService';
 import { Badge } from '@/components/ui/shadcn/badge';
 
 interface Announcement {
-  id: string;
-  title: string;
-  author: string;
-  publishDate: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  targetAudience: string;
-  content?: string;
+   id: string;
+   title: string;
+   priority: 'Critical' | 'Normal' | 'Info';
+   date: string;
 }
 
-interface AnnouncementsListProps {
-  initialAnnouncements: Announcement[];
-}
+export const AnnouncementsList: React.FC = () => {
+   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+   const [loading, setLoading] = useState(true);
 
-export function AnnouncementsList({ initialAnnouncements }: AnnouncementsListProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements);
+   useEffect(() => {
+      const fetchAnnouncements = async () => {
+         try {
+            // Mapping to communication or general admin notifications
+            const data = await DataService.communication.getAll({ type: 'announcement' });
 
-  const getPriorityBadge = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return <Badge variant="destructive">Urgent</Badge>;
-      case 'high':
-        return <Badge variant="destructive" className="bg-orange-600 hover:bg-orange-700">High</Badge>;
-      case 'medium':
-        return <Badge variant="secondary" className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900 dark:text-amber-100">Medium</Badge>;
-      case 'low':
-        return <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-100">Low</Badge>;
-      default:
-        return <Badge variant="outline">{priority}</Badge>;
-    }
-  };
+            // Fallback/Transform
+            const mapped = (data.length > 0 ? data : []).map((d: unknown) => ({
+               id: d.id,
+               title: d.subject || d.message,
+               priority: d.priority || 'Normal',
+               date: d.createdAt
+            }));
 
-  return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Announcements</h1>
-      </div>
-      <div className="space-y-4">
-        {announcements.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            No announcements
-          </div>
-        ) : (
-          announcements.map((announcement) => (
-            <Card key={announcement.id}>
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <CardTitle className="text-lg font-semibold">
-                      {announcement.title}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-2">
-                      <span>By {announcement.author}</span>
-                      <span>•</span>
-                      <span>{new Date(announcement.publishDate).toLocaleDateString()}</span>
-                    </CardDescription>
-                  </div>
-                  {getPriorityBadge(announcement.priority)}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Badge variant="outline" className="font-normal">
-                  {announcement.targetAudience}
-                </Badge>
-                {announcement.content && (
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {announcement.content}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
-    </div>
-  );
-}
+            setAnnouncements(mapped);
+         } catch (e) {
+            console.error(e);
+         } finally {
+            setLoading(false);
+         }
+      };
+      fetchAnnouncements();
+   }, []);
+
+   return (
+      <Card>
+         <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+               <Megaphone className="w-5 h-5 text-purple-500" />
+               Firm Announcements
+            </CardTitle>
+         </CardHeader>
+         <CardContent>
+            <div className="space-y-3">
+               {loading ? <div className="text-sm text-muted-foreground">Loading...</div> :
+                  announcements.length === 0 ? <div className="text-sm text-muted-foreground">No active announcements.</div> :
+                     announcements.map(a => (
+                        <div key={a.id} className="flex gap-3 items-start border-b pb-3 last:border-0 last:pb-0">
+                           <Badge variant={a.priority === 'Critical' ? 'destructive' : 'secondary'} className="mt-0.5" >
+                              {a.priority}
+                           </Badge>
+                           <div>
+                              <p className="text-sm font-medium leading-none mb-1">{a.title}</p>
+                              <p className="text-xs text-muted-foreground">{new Date(a.date).toLocaleDateString()}</p>
+                           </div>
+                        </div>
+                     ))
+               }
+            </div>
+         </CardContent>
+      </Card>
+   );
+};

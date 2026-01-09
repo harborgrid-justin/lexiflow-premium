@@ -165,7 +165,7 @@ const AdminIntegrations = () => (
   </Card>
 );
 
-export default function AdminPanel({ initialHealth, initialUsersCount }: { initialHealth?: any; initialUsersCount?: number }) {
+export default function AdminPanel({ initialHealth }: { initialHealth?: unknown }) {
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -201,7 +201,7 @@ export default function AdminPanel({ initialHealth, initialUsersCount }: { initi
           </TabsTrigger>
         </TabsList>
 
-        <div className="min-h-[400px]">
+        <div className="min-h-100">
           <TabsContent value="hierarchy">
             <AdminHierarchy />
           </TabsContent>

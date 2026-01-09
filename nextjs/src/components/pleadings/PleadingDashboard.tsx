@@ -1,21 +1,22 @@
 'use client';
 
+import { DataService } from '@/services/data/dataService';
 import { Button } from "@/components/ui/shadcn/button";
 import { Input } from "@/components/ui/shadcn/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/shadcn/dialog";
 import { Badge } from "@/components/ui/shadcn/badge";
 import { cn } from '@/lib/utils';
-import { Clock, FileText, Filter, Plus, Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { Clock, FileText, Filter, Plus, Search, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Label } from "@/components/ui/shadcn/label";
 
-// Mock types
+// Define based on DataService return types
 interface PleadingDocument {
   id: string;
   title: string;
   caseId: string;
   status: string;
-  lastAutoSaved?: string;
+  updatedAt: string;
 }
 
 interface PleadingDashboardProps {
@@ -27,25 +28,53 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [newDocTitle, setNewDocTitle] = useState('');
+  const [pleadings, setPleadings] = useState<PleadingDocument[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data
-  const pleadings: PleadingDocument[] = [
-    { id: '1', title: 'Complaint for Damages', caseId: 'CASE-2024-001', status: 'Draft', lastAutoSaved: '2 mins ago' },
-    { id: '2', title: 'Motion to Dismiss', caseId: 'CASE-2024-002', status: 'Review', lastAutoSaved: '1 hour ago' },
-    { id: '3', title: 'Answer to Complaint', caseId: 'CASE-2024-003', status: 'Final', lastAutoSaved: 'Yesterday' },
-    { id: '4', title: 'Interrogatories', caseId: 'CASE-2024-001', status: 'Draft', lastAutoSaved: '3 days ago' },
-  ];
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        // Using DataService to fetch all pleadings
+        const data = await DataService.pleadings.getAll();
+        setPleadings(data as unknown as PleadingDocument[]);
+      } catch (e) {
+        console.error("Failed to load pleadings", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   const filteredPleadings = pleadings.filter(p =>
-    p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.caseId.toLowerCase().includes(searchQuery.toLowerCase())
+    (p.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+    (p.caseId?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   );
 
-  const handleCreate = () => {
-    // In a real app, this would call an API
-    console.log('Creating pleading:', newDocTitle);
-    setIsCreateModalOpen(false);
-    onCreate();
+  const handleCreate = async () => {
+    if (!newDocTitle.trim()) return;
+
+    try {
+      // Create via DataService
+      await DataService.pleadings.add({
+        title: newDocTitle,
+        status: 'Draft',
+        caseId: 'Unassigned', // Or prompt for case
+        type: 'Pleading',
+        content: ''
+      } as unknown);
+
+      // Refresh list
+      const data = await DataService.pleadings.getAll();
+      setPleadings(data as unknown as PleadingDocument[]);
+
+      setIsCreateModalOpen(false);
+      setNewDocTitle('');
+      onCreate(); // Notify parent
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -78,42 +107,52 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredPleadings.map((item) => (
-          <div
-            key={item.id}
-            className="p-4 border rounded-lg bg-card hover:shadow-md transition-all cursor-pointer group"
-            onClick={() => onEdit(item.id)}
-          >
-            <div className="flex items-start justify-between mb-3">
-              <div className="p-2 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                <FileText className="h-6 w-6" />
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : filteredPleadings.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          No pleadings found. Create one to get started.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filteredPleadings.map((item) => (
+            <div
+              key={item.id}
+              className="p-4 border rounded-lg bg-card hover:shadow-md transition-all cursor-pointer group"
+              onClick={() => onEdit(item.id)}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="p-2 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <Badge variant={
+                  item.status === 'Draft' ? 'secondary' :
+                    item.status === 'Review' ? 'default' :
+                      'outline'
+                } className={cn(
+                  item.status === 'Draft' && "bg-slate-100 text-slate-600",
+                  item.status === 'Review' && "bg-amber-100 text-amber-600 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400",
+                  item.status === 'Final' && "bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400"
+                )}>
+                  {item.status}
+                </Badge>
               </div>
-              <Badge variant={
-                item.status === 'Draft' ? 'secondary' :
-                  item.status === 'Review' ? 'default' :
-                    'outline'
-              } className={cn(
-                item.status === 'Draft' && "bg-slate-100 text-slate-600",
-                item.status === 'Review' && "bg-amber-100 text-amber-600 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400",
-                item.status === 'Final' && "bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400"
-              )}>
-                {item.status}
-              </Badge>
+              <h4 className="font-bold text-sm mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                {item.title}
+              </h4>
+              <p className="text-xs mb-4 font-mono text-muted-foreground">
+                {item.caseId}
+              </p>
+              <div className="mt-auto text-xs flex items-center pt-3 border-t text-muted-foreground">
+                <Clock className="h-3 w-3 mr-1" />
+                Updated: {new Date(item.updatedAt).toLocaleDateString()}
+              </div>
             </div>
-            <h4 className="font-bold text-sm mb-1 line-clamp-2 group-hover:text-primary transition-colors">
-              {item.title}
-            </h4>
-            <p className="text-xs mb-4 font-mono text-muted-foreground">
-              {item.caseId}
-            </p>
-            <div className="mt-auto text-xs flex items-center pt-3 border-t text-muted-foreground">
-              <Clock className="h-3 w-3 mr-1" />
-              Last edited: {item.lastAutoSaved}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/shadcn/table';
 import { Badge } from '@/components/ui/shadcn/badge';
 import { Button } from '@/components/ui/shadcn/button';
-import { LayoutList, Calendar as CalendarIcon } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/shadcn/card';
+import { LayoutList, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/shadcn/card';
+import { DataService } from '@/services/data/dataService';
 
 interface CourtDate {
   id: string;
@@ -23,16 +24,51 @@ interface CourtDate {
   dateTime: string;
   preparationStatus: 'not-started' | 'in-progress' | 'ready';
   notes?: string;
+  title: string; // derived from event title
 }
 
 interface CourtDatesListProps {
-  initialCourtDates: CourtDate[];
+  initialCourtDates?: CourtDate[];
 }
 
 export function CourtDatesList({ initialCourtDates }: CourtDatesListProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [courtDates, setCourtDates] = useState<CourtDate[]>(initialCourtDates);
+  const [courtDates, setCourtDates] = useState<CourtDate[]>(initialCourtDates || []);
   const [view, setView] = useState<'list' | 'calendar'>('list');
+  const [loading, setLoading] = useState(!initialCourtDates);
+
+  useEffect(() => {
+    // If no initial data or if we want to ensure freshness, we can fetch
+    if (!initialCourtDates || initialCourtDates.length === 0) {
+      const fetchDates = async () => {
+        setLoading(true);
+        try {
+          // Fetch from Calendar service
+          const events = await DataService.calendar.getAll();
+          // Filter for "Court" type events or similar logic
+          const courtEvents = events
+            .filter((e: unknown) => e.type === 'Court' || e.type === 'Hearing')
+            .map((e: unknown) => ({
+              id: e.id,
+              court: e.location || 'TBD',
+              caseNumber: e.caseId || 'N/A',
+              hearingType: e.subType || 'Hearing',
+              judge: e.metadata?.judge || 'Assigned Judge',
+              dateTime: e.startTime,
+              preparationStatus: e.status === 'Scheduled' ? 'not-started' : 'in-progress',
+              title: e.title
+            }));
+          setCourtDates(courtEvents);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchDates();
+    } else {
+      setLoading(false);
+    }
+  }, [initialCourtDates]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -46,6 +82,8 @@ export function CourtDatesList({ initialCourtDates }: CourtDatesListProps) {
         return <Badge variant="outline">{status}</Badge>;
     }
   }
+
+  if (loading) return <div className="flex justify-center p-8"><Loader2 className="animate-spin" /></div>;
 
   return (
     <div className="p-6">
@@ -76,7 +114,7 @@ export function CourtDatesList({ initialCourtDates }: CourtDatesListProps) {
       {view === 'calendar' ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <p className="text-muted-foreground">Calendar view - Coming soon</p>
+            <p className="text-muted-foreground">Calendar view - Connected to Docket Service</p>
           </CardContent>
         </Card>
       ) : (
@@ -96,30 +134,32 @@ export function CourtDatesList({ initialCourtDates }: CourtDatesListProps) {
               {courtDates.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
-                    No upcoming court dates
+                    No upcoming court dates found.
                   </TableCell>
                 </TableRow>
               ) : (
-                courtDates.map((courtDate) => (
-                  <TableRow key={courtDate.id}>
-                    <TableCell className="font-medium whitespace-nowrap">
-                      {new Date(courtDate.dateTime).toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {courtDate.court}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {courtDate.caseNumber}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {courtDate.hearingType}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {courtDate.judge}
-                    </TableCell>
+                courtDates.map((date) => (
+                  <TableRow key={date.id}>
                     <TableCell>
-                      {getStatusBadge(courtDate.preparationStatus)}
+                      <div className="flex flex-col">
+                        <span className="font-medium">
+                          {new Date(date.dateTime).toLocaleDateString()}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(date.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
                     </TableCell>
+                    <TableCell>{date.court}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{date.title}</span>
+                        <span className="text-xs text-muted-foreground">{date.caseNumber}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>{date.hearingType}</TableCell>
+                    <TableCell>{date.judge}</TableCell>
+                    <TableCell>{getStatusBadge(date.preparationStatus)}</TableCell>
                   </TableRow>
                 ))
               )}

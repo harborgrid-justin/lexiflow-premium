@@ -1,13 +1,18 @@
 'use client';
 
+import { Card, CardContent } from "@/components/ui/shadcn/card";
+import { Activity } from "lucide-react";
 
 export const OutcomeSimulator = () => {
   return (
-    <div className="h-full w-full flex items-center justify-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg min-h-[500px]">
-      <div className="text-center text-slate-400">
+    <Card className="h-full border-dashed">
+      <CardContent className="h-full flex flex-col items-center justify-center p-12 text-center text-muted-foreground">
+        <Activity className="h-10 w-10 mb-4 opacity-20" />
         <p className="text-lg font-medium mb-2">Outcome Simulator</p>
-        <p className="text-sm">Monte Carlo simulation engine coming soon...</p>
-      </div>
-    </div>
+        <p className="text-sm max-w-sm mx-auto">
+          The Monte Carlo simulation engine is being initialized. This module will allow you to predict case outcomes based on historical data.
+        </p>
+      </CardContent>
+    </Card>
   );
 };

@@ -1,11 +1,13 @@
 'use client';
 
-import { Button } from '@/components/ui/atoms/Button/Button';
-import { Input } from '@/components/ui/atoms/Input/Input';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Button } from "@/components/ui/shadcn/button";
+import { Input } from "@/components/ui/shadcn/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/shadcn/dialog";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { cn } from '@/lib/utils';
 import { Clock, FileText, Filter, Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
+import { Label } from "@/components/ui/shadcn/label";
 
 // Mock types
 interface PleadingDocument {
@@ -50,8 +52,8 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     <div className="h-full flex flex-col p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Pleadings</h1>
-          <p className="text-slate-500 dark:text-slate-400">Manage and draft legal pleadings</p>
+          <h1 className="text-2xl font-bold">Pleadings</h1>
+          <p className="text-muted-foreground">Manage and draft legal pleadings</p>
         </div>
         <Button onClick={() => setIsCreateModalOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -59,13 +61,13 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         </Button>
       </div>
 
-      <div className="flex gap-4 items-center bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div className="flex gap-4 items-center bg-card p-4 rounded-lg border shadow-sm">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
             type="text"
             placeholder="Search pleadings..."
-            className="w-full pl-10 pr-4 py-2 rounded-md border border-slate-200 dark:border-slate-700 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -80,29 +82,32 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         {filteredPleadings.map((item) => (
           <div
             key={item.id}
-            className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 hover:shadow-md transition-all cursor-pointer group"
+            className="p-4 border rounded-lg bg-card hover:shadow-md transition-all cursor-pointer group"
             onClick={() => onEdit(item.id)}
           >
             <div className="flex items-start justify-between mb-3">
               <div className="p-2 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
                 <FileText className="h-6 w-6" />
               </div>
-              <span className={cn(
-                "text-xs px-2 py-1 rounded font-medium",
-                item.status === 'Draft' ? "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" :
-                  item.status === 'Review' ? "bg-amber-100 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400" :
-                    "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400"
+              <Badge variant={
+                item.status === 'Draft' ? 'secondary' :
+                  item.status === 'Review' ? 'default' :
+                    'outline'
+              } className={cn(
+                item.status === 'Draft' && "bg-slate-100 text-slate-600",
+                item.status === 'Review' && "bg-amber-100 text-amber-600 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400",
+                item.status === 'Final' && "bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400"
               )}>
                 {item.status}
-              </span>
+              </Badge>
             </div>
-            <h4 className="font-bold text-sm mb-1 line-clamp-2 text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <h4 className="font-bold text-sm mb-1 line-clamp-2 group-hover:text-primary transition-colors">
               {item.title}
             </h4>
-            <p className="text-xs mb-4 font-mono text-slate-500 dark:text-slate-400">
+            <p className="text-xs mb-4 font-mono text-muted-foreground">
               {item.caseId}
             </p>
-            <div className="mt-auto text-xs flex items-center pt-3 border-t border-slate-100 dark:border-slate-700 text-slate-400">
+            <div className="mt-auto text-xs flex items-center pt-3 border-t text-muted-foreground">
               <Clock className="h-3 w-3 mr-1" />
               Last edited: {item.lastAutoSaved}
             </div>
@@ -110,26 +115,28 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         ))}
       </div>
 
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="Create New Pleading"
-      >
-        <div className="space-y-4 py-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
-            <Input
-              value={newDocTitle}
-              onChange={(e) => setNewDocTitle(e.target.value)}
-              placeholder="e.g., Motion for Summary Judgment"
-            />
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Pleading</DialogTitle>
+            <DialogDescription>Enter a title for your new legal document.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input
+                value={newDocTitle}
+                onChange={(e) => setNewDocTitle(e.target.value)}
+                placeholder="e.g., Motion for Summary Judgment"
+              />
+            </div>
           </div>
-          <div className="flex justify-end gap-2 mt-6">
+          <DialogFooter>
             <Button variant="ghost" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
             <Button onClick={handleCreate}>Create Document</Button>
-          </div>
-        </div>
-      </Modal>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

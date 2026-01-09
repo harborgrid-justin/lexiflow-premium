@@ -11,107 +11,136 @@ import {
   Users
 } from 'lucide-react';
 import { useState } from 'react';
+import { Button } from "@/components/ui/shadcn/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/shadcn/card";
+import { Separator } from "@/components/ui/shadcn/separator";
+import { cn } from "@/lib/utils";
 
 // Mock sub-components
 const CommandCenter = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Command Center</h3>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-        <div className="text-sm text-blue-600 font-medium">Days to Trial</div>
-        <div className="text-2xl font-bold text-blue-900">
-          {data?.commandCenter?.daysToTrial ?? 45}
+  <Card>
+    <CardHeader>
+      <CardTitle>Command Center</CardTitle>
+      <CardDescription>Real-time trial readiness overview</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-900">
+          <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">Days to Trial</div>
+          <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+            {data?.commandCenter?.daysToTrial ?? 45}
+          </div>
+        </div>
+        <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-900">
+          <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Evidence Ready</div>
+          <div className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
+            {data?.commandCenter?.evidenceReady ?? 87}%
+          </div>
+        </div>
+        <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-100 dark:border-amber-900">
+          <div className="text-sm text-amber-600 dark:text-amber-400 font-medium">Pending Motions</div>
+          <div className="text-2xl font-bold text-amber-900 dark:text-amber-100">
+            {data?.commandCenter?.pendingMotions ?? 3}
+          </div>
         </div>
       </div>
-      <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
-        <div className="text-sm text-emerald-600 font-medium">Evidence Ready</div>
-        <div className="text-2xl font-bold text-emerald-900">
-          {data?.commandCenter?.evidenceReady ?? 87}%
-        </div>
-      </div>
-      <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
-        <div className="text-sm text-amber-600 font-medium">Pending Motions</div>
-        <div className="text-2xl font-bold text-amber-900">
-          {data?.commandCenter?.pendingMotions ?? 3}
-        </div>
-      </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 );
 
 const EvidenceWall = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Evidence Wall</h3>
-    <div className="h-64 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 border-2 border-dashed border-slate-300">
-      {data?.evidenceWall?.length ? (
-        <div>{data.evidenceWall.length} Items on Wall</div>
-      ) : (
-        "Interactive Evidence Map Placeholder"
-      )}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Evidence Wall</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="h-64 bg-muted/20 rounded-lg flex items-center justify-center text-muted-foreground border-2 border-dashed">
+        {data?.evidenceWall?.length ? (
+          <div>{data.evidenceWall.length} Items on Wall</div>
+        ) : (
+          "Interactive Evidence Map Placeholder"
+        )}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const WitnessPrep = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Witness Preparation</h3>
-    <div className="text-slate-500 text-center py-8">
-      {data?.witnessPrep?.length ? (
-        <ul>{data.witnessPrep.map((w: any) => <li key={w.id}>{w.name}</li>)}</ul>
-      ) : "No witnesses scheduled"}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Witness Preparation</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="text-muted-foreground text-center py-8">
+        {data?.witnessPrep?.length ? (
+          <ul>{data.witnessPrep.map((w: any) => <li key={w.id}>{w.name}</li>)}</ul>
+        ) : "No witnesses scheduled"}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const TrialBinder = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Trial Binder</h3>
-    <div className="text-slate-500 text-center py-8">
-      {data?.trialBinder?.length
-        ? `${data.trialBinder.length} Sections Created`
-        : "Digital Trial Binder Placeholder"}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Trial Binder</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="text-muted-foreground text-center py-8">
+        {data?.trialBinder?.length
+          ? `${data.trialBinder.length} Sections Created`
+          : "Digital Trial Binder Placeholder"}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const AdvisoryBoard = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Advisory Board</h3>
-    <div className="space-y-4">
-      {data?.advisors?.length > 0 ? (
-        data.advisors.map((advisor: any) => (
-          <div key={advisor.id} className="p-4 border rounded-lg">
-            <div className="font-semibold">{advisor.name}</div>
-            <div className="text-sm text-slate-500">{advisor.specialty}</div>
-          </div>
-        ))
-      ) : (
-        <div className="text-slate-500 text-center py-8">Expert Witness & Consultant Management</div>
-      )}
-    </div>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Advisory Board</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-4">
+        {data?.advisors?.length > 0 ? (
+          data.advisors.map((advisor: any) => (
+            <div key={advisor.id} className="p-4 border rounded-lg">
+              <div className="font-semibold">{advisor.name}</div>
+              <div className="text-sm text-muted-foreground">{advisor.specialty}</div>
+            </div>
+          ))
+        ) : (
+          <div className="text-muted-foreground text-center py-8">Expert Witness & Consultant Management</div>
+        )}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const OppositionManager = ({ data }: { data: any }) => (
-  <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-    <h3 className="text-lg font-medium text-slate-900 mb-4">Opposition Research</h3>
-    <div className="space-y-4">
-      {data?.opposition?.length > 0 ? (
-        data.opposition.map((opp: any) => (
-          <div key={opp.id} className="p-4 border rounded-lg">
-            <div className="font-semibold">{opp.name}</div>
-            <div className="text-sm text-slate-500">{opp.role}</div>
-            {opp.notes && <div className="text-sm text-slate-400 mt-1">{opp.notes}</div>}
+  <Card>
+    <CardHeader>
+      <CardTitle>Opposition Research</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-4">
+        {data?.opposition?.length > 0 ? (
+          data.opposition.map((opp: any) => (
+            <div key={opp.id} className="p-4 border rounded-lg">
+              <div className="font-semibold">{opp.name}</div>
+              <div className="text-sm text-muted-foreground">{opp.role}</div>
+              {opp.notes && <div className="text-sm text-muted-foreground mt-1">{opp.notes}</div>}
+            </div>
+          ))
+        ) : (
+          <div className="text-muted-foreground text-center py-8">
+            <p>No opposition research data available.</p>
+            <p className="text-sm mt-2">Track opposing counsel strategies and history here.</p>
           </div>
-        ))
-      ) : (
-        <div className="text-slate-500 text-center py-8">
-          <p>No opposition research data available.</p>
-          <p className="text-sm mt-2">Track opposing counsel strategies and history here.</p>
-        </div>
-      )}
-    </div>
-  </div>
+        )}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 const VIEWS = [
@@ -141,33 +170,32 @@ export function WarRoom({ initialData }: { initialData?: any }) {
 
   if (!selectedCase) {
     return (
-      <div className="flex items-center justify-center h-full bg-slate-50">
-        <div className="text-center">
-          <Target className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-slate-900">Select a Case</h2>
-          <p className="text-slate-500 mt-2">Choose a case to enter the War Room</p>
-          <button
-            onClick={() => setSelectedCase('case-1')}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
+      <div className="flex items-center justify-center h-full bg-background p-8">
+        <div className="text-center max-w-md">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+            <Target className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Select a Case</h2>
+          <p className="text-muted-foreground mb-6">Choose a case to enter the War Room environment for trial preparation.</p>
+          <Button onClick={() => setSelectedCase('case-1')}>
             Select Demo Case
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full bg-slate-50">
+    <div className="flex h-full bg-muted/10">
       {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-slate-200 shrink-0 flex flex-col">
-        <div className="p-4 border-b border-slate-200">
-          <div className="flex items-center gap-2 text-slate-900 font-bold">
-            <Target className="w-5 h-5 text-blue-600" />
+      <div className="w-64 bg-background border-r shrink-0 flex flex-col">
+        <div className="p-4 border-b">
+          <div className="flex items-center gap-2 font-bold text-lg">
+            <Target className="w-5 h-5 text-primary" />
             <span>War Room</span>
           </div>
-          <div className="mt-2 flex items-center gap-2 text-sm text-slate-500 bg-slate-50 p-2 rounded border border-slate-100">
-            <Briefcase className="w-3 h-3" />
+          <div className="mt-4 flex items-center gap-2 text-sm text-foreground bg-muted/40 p-2 rounded-md border">
+            <Briefcase className="w-3 h-3 text-muted-foreground" />
             <span className="truncate">{initialData?.caseId || 'Smith v. Jones'}</span>
           </div>
         </div>
@@ -177,19 +205,18 @@ export function WarRoom({ initialData }: { initialData?: any }) {
             const Icon = view.icon;
             const isActive = activeView === view.id;
             return (
-              <button
+              <Button
                 key={view.id}
+                variant={isActive ? "secondary" : "ghost"}
+                className={cn(
+                  "w-full justify-start gap-3",
+                  isActive && "bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-300"
+                )}
                 onClick={() => setActiveView(view.id)}
-                className={`
-                  w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
-                  ${isActive
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
-                `}
               >
-                <Icon className="w-4 h-4 mr-3" />
+                <Icon className="w-4 h-4" />
                 {view.label}
-              </button>
+              </Button>
             );
           })}
         </nav>
@@ -197,8 +224,8 @@ export function WarRoom({ initialData }: { initialData?: any }) {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-slate-200 px-6 py-4">
-          <h1 className="text-2xl font-bold text-slate-900">
+        <header className="bg-background border-b px-6 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">
             {VIEWS.find(v => v.id === activeView)?.label}
           </h1>
         </header>

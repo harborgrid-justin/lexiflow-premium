@@ -35,11 +35,11 @@ export function PageHeader({
       {/* Header Content */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold tracking-tight">
             {title}
           </h1>
           {description && (
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-muted-foreground">
               {description}
             </p>
           )}

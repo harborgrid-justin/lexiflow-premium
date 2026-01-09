@@ -2,28 +2,19 @@
  * @module components/common/UserSelect
  * @category Common
  * @description User dropdown with avatar display.
- *
- * THEME SYSTEM USAGE:
- * Uses useTheme hook to apply semantic colors.
  */
 
-// ============================================================================
-// EXTERNAL DEPENDENCIES
-// ============================================================================
-import { ChevronDown } from 'lucide-react';
-import React, { useId } from 'react';
+'use client';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Hooks & Context
-import { useTheme } from '@/providers';
 
-// Components
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcn/select';
+import { Label } from '@/components/ui/shadcn/label';
 
-// Utils & Constants
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -43,39 +34,34 @@ interface UserSelectProps {
 }
 
 /**
- * UserSelect - React 18 optimized user dropdown with avatar display
- * Uses useId for SSR-safe unique IDs
+ * UserSelect - Shadcn optimized user dropdown
  */
 export function UserSelect({ label, value, onChange, options, className = '' }: UserSelectProps) {
-  const { theme } = useTheme();
-  const selectId = useId();
   const selectedUser = options.find(u => u.name === value || u.id === value);
 
   return (
-    <div className={`relative ${className}`}>
-      {label && <label htmlFor={selectId} className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>}
+    <div className={cn("space-y-1.5", className)}>
+      {label && <Label className="text-xs font-semibold uppercase text-muted-foreground">{label}</Label>}
       <div className="relative">
-        <select
-          id={selectId}
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.target.value)}
-          aria-label={label || "Select user"}
-          className={cn(
-            "w-full pl-10 pr-8 py-2.5 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer",
-            theme.surface.default,
-            theme.border.default,
-            theme.text.primary
-          )}
-        >
-          <option value="">Select User...</option>
-          {options.map(user => (
-            <option key={user.id} value={user.name}>{user.name} {user.role ? `(${user.role})` : ''}</option>
-          ))}
-        </select>
+        <Select value={value} onValueChange={onChange}>
+          <SelectTrigger className="pl-10">
+            <SelectValue placeholder="Select User..." />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map(user => (
+              <SelectItem key={user.id} value={user.name}>
+                {user.name} {user.role && <span className="text-muted-foreground text-xs ml-1">({user.role})</span>}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          {selectedUser ? <UserAvatar name={selectedUser.name} size="sm" /> : <div className={cn("w-6 h-6 rounded-full border", theme.surface.highlight, theme.border.default)} />}
+          {selectedUser ? (
+            <UserAvatar name={selectedUser.name} size="sm" className="h-5 w-5 text-[10px]" />
+          ) : (
+            <div className="w-5 h-5 rounded-full border bg-muted" />
+          )}
         </div>
-        <ChevronDown className={cn("absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)} />
       </div>
     </div>
   );

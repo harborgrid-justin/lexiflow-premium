@@ -1,12 +1,21 @@
 'use client';
 
 /**
- * Table Component - Enterprise data table
- * Supports sorting, filtering, and pagination
+ * Table Component - Wrapper around Shadcn Table for backward compatibility
+ * Supports sorting, filtering, and pagination api
  */
 
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { ReactNode } from 'react';
+import {
+  Table as ShadcnTable,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/shadcn/table";
+import { cn } from "@/lib/utils";
 
 interface TableColumn<T> {
   header: string;
@@ -35,14 +44,14 @@ export function Table<T extends { id: string | number }>({
   emptyMessage = 'No data available',
 }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+    <div className="rounded-md border bg-background">
+      <ShadcnTable>
+        <TableHeader>
+          <TableRow>
             {columns.map((column, idx) => (
-              <th
+              <TableHead
                 key={idx}
-                className={`px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 ${column.width || ''}`}
+                className={cn("whitespace-nowrap", column.width)}
               >
                 <div className="flex items-center gap-2">
                   {column.header}
@@ -55,61 +64,57 @@ export function Table<T extends { id: string | number }>({
                             : 'asc';
                         onSort(column.header, newOrder);
                       }}
-                      className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded transition-colors"
+                      className="p-1 hover:bg-muted rounded transition-colors"
                     >
                       {sortBy === column.header ? (
                         sortOrder === 'asc' ? (
-                          <ChevronUp className="h-4 w-4 text-blue-600" />
+                          <ChevronUp className="h-3 w-3 text-primary" />
                         ) : (
-                          <ChevronDown className="h-4 w-4 text-blue-600" />
+                          <ChevronDown className="h-3 w-3 text-primary" />
                         )
                       ) : (
-                        <ChevronUp className="h-4 w-4 text-slate-400" />
+                        <ChevronUp className="h-3 w-3 text-muted-foreground/30" />
                       )}
                     </button>
                   )}
                 </div>
-              </th>
+              </TableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {isLoading ? (
-            <tr>
-              <td colSpan={columns.length} className="px-6 py-8 text-center">
-                <div className="inline-block">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                <div className="flex justify-center items-center">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ) : data.length === 0 ? (
-            <tr>
-              <td
+            <TableRow>
+              <TableCell
                 colSpan={columns.length}
-                className="px-6 py-8 text-center text-slate-500 dark:text-slate-400"
+                className="h-24 text-center text-muted-foreground"
               >
                 {emptyMessage}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ) : (
-            data.map((row, rowIdx) => (
-              <tr
-                key={row.id}
-                className={`border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-slate-50/50 dark:bg-slate-900/50'
-                  }`}
-              >
+            data.map((row) => (
+              <TableRow key={row.id}>
                 {columns.map((column, colIdx) => (
-                  <td key={colIdx} className={`px-6 py-4 text-sm text-slate-900 dark:text-slate-50 ${column.width || ''}`}>
+                  <TableCell key={colIdx} className={cn(column.width)}>
                     {typeof column.accessor === 'function'
                       ? column.accessor(row)
                       : (row[column.accessor] as ReactNode)}
-                  </td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </ShadcnTable>
     </div>
   );
 }

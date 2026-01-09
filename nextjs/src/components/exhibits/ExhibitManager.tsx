@@ -1,24 +1,12 @@
 'use client';
 
-/**
- * ExhibitManager - REFACTORED for React 18/19 Concurrent Mode
- *
- * Changes from original:
- * 1. Separated urgent UI state from deferred filtering
- * 2. Uses startTransition for expensive filter operations
- * 3. Uses useDeferredValue for consistent UI
- *
- * Performance improvements:
- * - Immediate UI feedback on filter changes
- * - Non-blocking filter computation
- * - Smoother animations and interactions
- *
- * @see /nextjs/REACT_CONCURRENT_MODE_GAP_ANALYSIS.md - Section 3
- */
-
 import { BarChart2, Filter, PenTool, Users } from 'lucide-react';
 import { useDeferredValue, useMemo, useState, useTransition } from 'react';
-import { Button } from '../ui/atoms/Button/Button';
+import { Button } from "@/components/ui/shadcn/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/shadcn/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/shadcn/table";
+import { Badge } from "@/components/ui/shadcn/badge";
 
 interface TrialExhibit {
   id: string;
@@ -36,7 +24,7 @@ interface ExhibitManagerProps {
 }
 
 export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitManagerProps) {
-  const [activeTab, setActiveTab] = useState<'list' | 'sticker' | 'stats'>(initialTab);
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
 
   // URGENT STATE: UI filter selection (immediate feedback)
   const [filterParty, setFilterParty] = useState<string>('All');
@@ -95,206 +83,194 @@ export default function ExhibitManager({ initialTab = 'list', caseId }: ExhibitM
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
+    <div className="h-full flex flex-col p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Exhibit Manager
-        </h2>
-        <div className="flex gap-2">
-          <Button
-            variant={activeTab === 'list' ? 'primary' : 'secondary'}
-            onClick={() => setActiveTab('list')}
-          >
-            List View
-          </Button>
-          <Button
-            variant={activeTab === 'sticker' ? 'primary' : 'secondary'}
-            onClick={() => setActiveTab('sticker')}
-          >
-            Sticker Designer
-          </Button>
-          <Button
-            variant={activeTab === 'stats' ? 'primary' : 'secondary'}
-            onClick={() => setActiveTab('stats')}
-          >
-            Statistics
-          </Button>
+        <h2 className="text-2xl font-bold">Exhibit Manager</h2>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+        <div className="border-b mb-6">
+          <TabsList>
+            <TabsTrigger value="list">List View</TabsTrigger>
+            <TabsTrigger value="sticker">Sticker Designer</TabsTrigger>
+            <TabsTrigger value="stats">Statistics</TabsTrigger>
+          </TabsList>
         </div>
-      </div>
 
-      {/* Tabs Content */}
-      <div className="flex-1 overflow-auto">
-        {activeTab === 'list' && (
-          <div className="flex gap-6 h-full">
-            {/* Left Sidebar (Filters) - Show loading state during transitions */}
-            <div className="w-64 flex-shrink-0 space-y-4">
-              <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                  Filters {isPending && '⏳'}
-                </h3>
-
-                {/* Party Filter - Immediate feedback on click */}
-                <div className="space-y-2">
-                  {['All', 'Plaintiff', 'Defense'].map(p => (
-                    <button
-                      key={p}
-                      onClick={() => handleFilterChange(p)}
-                      className={`w-full text-left px-3 py-2 rounded-md transition-colors ${filterParty === p
-                        ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-100 font-medium'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                        }`}
-                    >
-                      <span className="flex justify-between items-center">
+        <div className="flex-1 overflow-auto">
+          <TabsContent value="list" className="h-full mt-0">
+            <div className="flex gap-6 h-full">
+              <Card className="w-64 flex-shrink-0 h-fit">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <Filter className="h-4 w-4" />
+                    Filters {isPending && '⏳'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-1">
+                    {['All', 'Plaintiff', 'Defense'].map(p => (
+                      <Button
+                        key={p}
+                        variant={filterParty === p ? "secondary" : "ghost"}
+                        className="w-full justify-between h-auto py-2 px-3 font-normal"
+                        onClick={() => handleFilterChange(p)}
+                      >
                         <span>{p}</span>
-                        <span className="text-sm">
+                        <Badge variant="outline" className="ml-2 font-normal">
                           {p === 'All' ? exhibits.length : exhibits.filter(e => e.party === p).length}
-                        </span>
-                      </span>
-                    </button>
-                  ))}
+                        </Badge>
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="pt-4 border-t">
+                    <h4 className="text-xs uppercase font-semibold text-muted-foreground mb-2">By Witness</h4>
+                    {Array.from(new Set(exhibits.map(e => e.witness).filter(Boolean))).map(w => (
+                      <div key={String(w)} className="py-1 text-sm text-muted-foreground">
+                        {String(w)}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex-1 space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-2">
+                    <Button
+                      variant={viewMode === 'list' ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                    >
+                      List
+                    </Button>
+                    <Button
+                      variant={viewMode === 'grid' ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode('grid')}
+                    >
+                      Grid
+                    </Button>
+                  </div>
                 </div>
 
-                {/* Witness Filter */}
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium mb-2">By Witness</h4>
-                  {Array.from(new Set(exhibits.map(e => e.witness).filter(Boolean))).map(w => (
-                    <div key={w} className="py-1 text-sm text-gray-600 dark:text-gray-400">
-                      {w}
-                    </div>
-                  ))}
-                </div>
+                {isPending && (
+                  <div className="text-sm text-muted-foreground">
+                    Filtering... ({filteredExhibits.length} matches)
+                  </div>
+                )}
+
+                <ExhibitTable exhibits={filteredExhibits} viewMode={viewMode} />
               </div>
             </div>
+          </TabsContent>
 
-            {/* Main Content - Show pending state */}
-            <div className="flex-1">
-              <div className="mb-4 flex justify-between items-center">
-                <div className="flex gap-2">
-                  <Button
-                    variant={viewMode === 'list' ? 'primary' : 'secondary'}
-                    onClick={() => setViewMode('list')}
-                  >
-                    List
-                  </Button>
-                  <Button
-                    variant={viewMode === 'grid' ? 'primary' : 'secondary'}
-                    onClick={() => setViewMode('grid')}
-                  >
-                    Grid
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="secondary" icon={Filter} onClick={() => alert("Filter")}>
-                    Filter
-                  </Button>
-                </div>
-              </div>
+          <TabsContent value="sticker">
+            <StickerDesigner />
+          </TabsContent>
 
-              {/* Show subtle loading indicator during transitions */}
-              {isPending && (
-                <div className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  Filtering... ({filteredExhibits.length} matches)
-                </div>
-              )}
-
-              <ExhibitTable exhibits={filteredExhibits} viewMode={viewMode} />
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'sticker' && <StickerDesigner />}
-        {activeTab === 'stats' && <ExhibitStats exhibits={filteredExhibits} />}
-      </div>
+          <TabsContent value="stats">
+            <ExhibitStats exhibits={filteredExhibits} />
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 }
 
-// Supporting components (unchanged)
 const ExhibitTable = ({ exhibits, viewMode }: { exhibits: TrialExhibit[]; viewMode: 'list' | 'grid' }) => (
-  <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-    <table className="w-full">
-      <thead>
-        <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-          <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Exhibit #</th>
-          <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Description</th>
-          <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Party</th>
-          <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Status</th>
-          <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Date</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div className="rounded-md border bg-background">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Exhibit #</TableHead>
+          <TableHead>Description</TableHead>
+          <TableHead>Party</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Date</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {exhibits.map(ex => (
-          <tr key={ex.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-            <td className="p-3 font-mono text-sm">{ex.number}</td>
-            <td className="p-3">{ex.description}</td>
-            <td className="p-3">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${ex.party === 'Plaintiff'
-                ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-100'
-                : 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-100'
-                }`}>
+          <TableRow key={ex.id}>
+            <TableCell className="font-mono text-xs">{ex.number}</TableCell>
+            <TableCell>{ex.description}</TableCell>
+            <TableCell>
+              <Badge variant="outline" className={ex.party === 'Plaintiff' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-purple-200 bg-purple-50 text-purple-700'}>
                 {ex.party}
-              </span>
-            </td>
-            <td className="p-3">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${ex.status === 'Admitted'
-                ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-100'
-                : ex.status === 'Marked'
-                  ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-100'
-                  : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100'
-                }`}>
+              </Badge>
+            </TableCell>
+            <TableCell>
+              <Badge variant={
+                ex.status === 'Admitted' ? 'default' :
+                  ex.status === 'Marked' ? 'secondary' : 'destructive'
+              } className={
+                ex.status === 'Admitted' ? "bg-emerald-600 hover:bg-emerald-700" :
+                  ex.status === 'Marked' ? "bg-amber-100 text-amber-800 hover:bg-amber-200" :
+                    undefined
+              }>
                 {ex.status}
-              </span>
-            </td>
-            <td className="p-3 text-sm text-gray-600 dark:text-gray-400">{ex.date}</td>
-          </tr>
+              </Badge>
+            </TableCell>
+            <TableCell className="text-muted-foreground">{ex.date}</TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   </div>
 );
 
 const StickerDesigner = () => (
-  <div className="flex flex-col items-center justify-center h-96 border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-    <PenTool className="h-12 w-12 text-gray-400 mb-4" />
-    <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300">Sticker Designer</h3>
-    <p className="text-gray-500 dark:text-gray-400 mt-2">Drag and drop interface for exhibit stickers coming soon.</p>
-  </div>
+  <Card className="border-dashed h-96">
+    <CardContent className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
+      <PenTool className="h-12 w-12 mb-4 opacity-20" />
+      <h3 className="text-xl font-semibold text-foreground">Sticker Designer</h3>
+      <p className="mt-2">Drag and drop interface for exhibit stickers coming soon.</p>
+    </CardContent>
+  </Card>
 );
 
 const ExhibitStats = ({ exhibits }: { exhibits: TrialExhibit[] }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-      <h3 className="font-semibold mb-4 flex items-center gap-2">
-        <BarChart2 className="h-5 w-5 text-blue-600" />
-        Admissibility Status
-      </h3>
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <span>Admitted</span>
-          <span className="font-bold text-green-600">50%</span>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <BarChart2 className="h-5 w-5 text-blue-600" />
+          Admissibility Status
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center text-sm">
+            <span>Admitted</span>
+            <span className="font-bold text-emerald-600">50%</span>
+          </div>
+          <div className="w-full bg-secondary rounded-full h-2.5">
+            <div className="bg-emerald-600 h-2.5 rounded-full" style={{ width: '50%' }}></div>
+          </div>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-          <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '50%' }}></div>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <Users className="h-5 w-5 text-purple-600" />
+          Exhibits by Party
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          <div className="flex justify-between p-2 bg-muted rounded text-sm">
+            <span>Plaintiff</span>
+            <span className="font-bold">12</span>
+          </div>
+          <div className="flex justify-between p-2 bg-muted rounded text-sm">
+            <span>Defense</span>
+            <span className="font-bold">8</span>
+          </div>
         </div>
-      </div>
-    </div>
-    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-      <h3 className="font-semibold mb-4 flex items-center gap-2">
-        <Users className="h-5 w-5 text-purple-600" />
-        Exhibits by Party
-      </h3>
-      <div className="space-y-2">
-        <div className="flex justify-between p-2 bg-gray-50 dark:bg-gray-900 rounded">
-          <span>Plaintiff</span>
-          <span className="font-bold">12</span>
-        </div>
-        <div className="flex justify-between p-2 bg-gray-50 dark:bg-gray-900 rounded">
-          <span>Defense</span>
-          <span className="font-bold">8</span>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   </div>
 );

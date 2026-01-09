@@ -1,12 +1,29 @@
 /**
- * TimeEntryList Component
+ * TimeEntryList Component - Rebuilt with Shadcn UI
  * Display and filter time entries with bulk operations
  */
 
+'use client';
+
 import React, { useState } from 'react';
 import { Link, Form } from 'react-router';
-import { Clock, DollarSign, Filter, Check, X } from 'lucide-react';
+import { Clock, DollarSign, Filter, Check } from 'lucide-react';
 import type { TimeEntry } from '@/types/financial';
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/shadcn/table';
+import { Button } from '@/components/ui/shadcn/button';
+import { Badge } from '@/components/ui/shadcn/badge';
+import { Checkbox } from '@/components/ui/shadcn/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/shadcn/select';
+import { Card, CardContent } from '@/components/ui/shadcn/card';
+import { Label } from '@/components/ui/shadcn/label';
 
 interface TimeEntryListProps {
   entries: TimeEntry[];
@@ -17,38 +34,33 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const toggleSelection = (id: string) => {
+  const toggleSelection = (id: string, checked: boolean) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      checked ? [...prev, id] : prev.filter((i) => i !== id)
     );
   };
 
-  const toggleAll = () => {
-    if (selectedIds.length === entries.length) {
-      setSelectedIds([]);
-    } else {
+  const toggleAll = (checked: boolean) => {
+    if (checked) {
       setSelectedIds(entries.map((e) => e.id));
+    } else {
+      setSelectedIds([]);
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const styles = {
-      Draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      Submitted: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      Approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      Billed: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-      Unbilled: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-    };
-
-    return (
-      <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
-      >
-        {status}
-      </span>
-    );
+    switch (status) {
+      case 'Submitted':
+        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300">Submitted</Badge>;
+      case 'Approved':
+        return <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300">Approved</Badge>;
+      case 'Billed':
+        return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-300">Billed</Badge>;
+      case 'Unbilled':
+        return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-300">Unbilled</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
+    }
   };
 
   const totalHours = entries.reduce((sum, e) => sum + e.duration, 0);
@@ -58,239 +70,221 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex items-center justify-between">
-        <button
-          type="button"
+        <Button
+          variant="outline"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+          className="gap-2"
         >
           <Filter className="h-4 w-4" />
           Filters
-        </button>
+        </Button>
 
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
-            <span className="font-medium">{totalHours.toFixed(2)}</span> hours
+            <span className="font-medium text-foreground">{totalHours.toFixed(2)}</span> hours
           </div>
           <div className="flex items-center gap-1">
             <DollarSign className="h-4 w-4" />
-            <span className="font-medium">${totalAmount.toLocaleString()}</span>
+            <span className="font-medium text-foreground">${totalAmount.toLocaleString()}</span>
           </div>
         </div>
       </div>
 
       {showFilters && (
-        <Form method="get" className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Case
-              </label>
-              <select
-                name="caseId"
-                defaultValue={filters?.caseId || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All Cases</option>
-                <option value="C-2024-001">Martinez v. TechCorp</option>
-                <option value="C-2024-112">OmniGlobal Merger</option>
-              </select>
-            </div>
+        <Card className="bg-muted/30">
+          <CardContent className="p-4">
+            <Form method="get">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 items-end">
+                <div className="space-y-2">
+                  <Label>Case</Label>
+                  <Select name="caseId" defaultValue={filters?.caseId || ''}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue placeholder="All Cases" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All Cases</SelectItem>
+                      <SelectItem value="C-2024-001">Martinez v. TechCorp</SelectItem>
+                      <SelectItem value="C-2024-112">OmniGlobal Merger</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Status
-              </label>
-              <select
-                name="status"
-                defaultValue={filters?.status || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All Statuses</option>
-                <option value="Draft">Draft</option>
-                <option value="Submitted">Submitted</option>
-                <option value="Approved">Approved</option>
-                <option value="Billed">Billed</option>
-                <option value="Unbilled">Unbilled</option>
-              </select>
-            </div>
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select name="status" defaultValue={filters?.status || ''}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue placeholder="All Statuses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All Statuses</SelectItem>
+                      <SelectItem value="Draft">Draft</SelectItem>
+                      <SelectItem value="Submitted">Submitted</SelectItem>
+                      <SelectItem value="Approved">Approved</SelectItem>
+                      <SelectItem value="Billed">Billed</SelectItem>
+                      <SelectItem value="Unbilled">Unbilled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Billable
-              </label>
-              <select
-                name="billable"
-                defaultValue={filters?.billable || ''}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-              >
-                <option value="">All</option>
-                <option value="true">Billable Only</option>
-                <option value="false">Non-Billable Only</option>
-              </select>
-            </div>
+                <div className="space-y-2">
+                  <Label>Billable</Label>
+                  <Select name="billable" defaultValue={filters?.billable || ''}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      <SelectItem value="true">Billable Only</SelectItem>
+                      <SelectItem value="false">Non-Billable Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div className="flex items-end">
-              <button
-                type="submit"
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Apply Filters
-              </button>
-            </div>
-          </div>
-        </Form>
+                <Button type="submit" className="w-full">
+                  Apply Filters
+                </Button>
+              </div>
+            </Form>
+          </CardContent>
+        </Card>
       )}
 
       {/* Bulk Actions */}
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-700 dark:bg-blue-900/20">
+        <div className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
           <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
             {selectedIds.length} selected
           </span>
           <Form method="post" className="flex gap-2">
             <input type="hidden" name="ids" value={JSON.stringify(selectedIds)} />
-            <button
+            <Button
               type="submit"
               name="intent"
               value="approve-bulk"
-              className="flex items-center gap-2 rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+              size="sm"
+              className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               <Check className="h-4 w-4" />
               Approve Selected
-            </button>
+            </Button>
           </Form>
         </div>
       )}
 
       {/* Entries Table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th className="px-4 py-3">
-                <input
-                  type="checkbox"
-                  checked={selectedIds.length === entries.length && entries.length > 0}
-                  onChange={toggleAll}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+      <div className="rounded-md border bg-background">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[50px]">
+                <Checkbox
+                  checked={entries.length > 0 && selectedIds.length === entries.length}
+                  onCheckedChange={(checked) => toggleAll(!!checked)}
                 />
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Case
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Hours
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Rate
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Amount
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Status
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-            {entries.map((entry) => (
-              <tr key={entry.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-4 py-4">
-                  <input
-                    type="checkbox"
+              </TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Case</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Hours</TableHead>
+              <TableHead>Rate</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {entries.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={9} className="h-24 text-center">
+                  <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
+                    <Clock className="h-10 w-10 mb-2 opacity-20" />
+                    <p>No time entries found</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : entries.map((entry) => (
+              <TableRow key={entry.id}>
+                <TableCell>
+                  <Checkbox
                     checked={selectedIds.includes(entry.id)}
-                    onChange={() => toggleSelection(entry.id)}
-                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    onCheckedChange={(checked) => toggleSelection(entry.id, !!checked)}
                   />
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell className="whitespace-nowrap">
                   {new Date(entry.date).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell>
                   {entry.caseId}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                </TableCell>
+                <TableCell>
                   <div className="max-w-xs truncate" title={entry.description}>
                     {entry.description}
                   </div>
                   {entry.ledesCode && (
-                    <div className="mt-1 text-xs text-gray-500">
+                    <div className="mt-1 text-xs text-muted-foreground">
                       LEDES: {entry.ledesCode}
                     </div>
                   )}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell>
                   {entry.duration.toFixed(2)}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell>
                   ${entry.rate}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell className="font-medium">
                   ${entry.total.toLocaleString()}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
+                </TableCell>
+                <TableCell>
                   {getStatusBadge(entry.status)}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                  <Form method="post" className="inline-flex gap-2">
-                    <input type="hidden" name="id" value={entry.id} />
-                    {entry.status === 'Submitted' && (
-                      <button
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2 items-center">
+                    <Form method="post" className="inline-flex gap-2 items-center">
+                      <input type="hidden" name="id" value={entry.id} />
+                      {entry.status === 'Submitted' && (
+                        <Button
+                          type="submit"
+                          name="intent"
+                          value="approve"
+                          variant="ghost"
+                          size="sm"
+                          className="text-emerald-600 hover:text-emerald-700"
+                        >
+                          Approve
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-blue-600 hover:text-blue-700"
+                        asChild
+                      >
+                        <Link to={`/billing/time/${entry.id}/edit`}>Edit</Link>
+                      </Button>
+                      <Button
                         type="submit"
                         name="intent"
-                        value="approve"
-                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                        value="delete"
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                        onClick={(e) => {
+                          if (!confirm('Delete this time entry?')) {
+                            e.preventDefault();
+                          }
+                        }}
                       >
-                        Approve
-                      </button>
-                    )}
-                    <Link
-                      to={`/billing/time/${entry.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      type="submit"
-                      name="intent"
-                      value="delete"
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                      onClick={(e) => {
-                        if (!confirm('Delete this time entry?')) {
-                          e.preventDefault();
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </Form>
-                </td>
-              </tr>
+                        Delete
+                      </Button>
+                    </Form>
+                  </div>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-
-        {entries.length === 0 && (
-          <div className="py-12 text-center">
-            <Clock className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-              No time entries
-            </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Get started by creating a new time entry.
-            </p>
-          </div>
-        )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

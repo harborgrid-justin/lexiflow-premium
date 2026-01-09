@@ -3,33 +3,18 @@
 /**
  * @module components/common/RuleSelector
  * @category Common
- * @description Legal rules selector with search.
- *
- * THEME SYSTEM USAGE:
- * Uses useTheme hook to apply semantic colors.
+ * @description Legal rules selector using Shadcn.
  */
 
-// ============================================================================
-// EXTERNAL DEPENDENCIES
-// ============================================================================
-import { Book, Loader2, Search, X } from 'lucide-react';
-import React, { useDeferredValue, useId, useState } from 'react';
+import { Book, X } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { RuleService } from '@/services/features/rules/ruleService';
-
-// Hooks & Context
-import { useTheme } from '@/providers';
-
-// Utils & Constants
-import { cn } from '@/utils/cn';
-
-// Types
-import { LegalRule } from '@/types';
+import { Input } from '@/components/ui/shadcn/input';
+import { Badge } from '@/components/ui/shadcn/badge';
+import { Button } from '@/components/ui/shadcn/button';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -41,23 +26,14 @@ interface RuleSelectorProps {
 }
 
 export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRulesChange, readOnly = false }) => {
-  const { theme } = useTheme();
-  const inputId = useId();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const deferredSearch = useDeferredValue(searchTerm);
+  const [inputValue, setInputValue] = React.useState('');
 
-  // Use Query for caching search results
-  const { data: availableRules = [], isLoading } = useQuery<LegalRule[]>(
-    ['rules', 'search', deferredSearch],
-    () => RuleService.search(deferredSearch),
-    { enabled: !!deferredSearch }
-  );
-
-  const addRule = (code: string) => {
-    onRulesChange([...selectedRules, code]);
-    setSearchTerm('');
-    setIsOpen(false);
+  const addRule = () => {
+    if (!inputValue.trim()) return;
+    if (!selectedRules.includes(inputValue.trim())) {
+      onRulesChange([...selectedRules, inputValue.trim()]);
+    }
+    setInputValue('');
   };
 
   const removeRule = (code: string) => {
@@ -66,73 +42,43 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
   };
 
   return (
-    <div className="w-full">
-      <div className="flex flex-wrap gap-2 mb-2">
+    <div className="w-full space-y-3">
+      <div className="flex flex-wrap gap-2">
         {selectedRules.map(code => {
           return (
-            <div key={code} className={cn("inline-flex items-center px-2 py-1 rounded border text-xs cursor-default group", theme.surface.highlight, theme.border.default, theme.text.primary)}>
-              <Book className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
-              <span className="font-medium mr-1">{code}</span>
+            <Badge key={code} variant="secondary" className="flex items-center gap-1">
+              <Book className="h-3 w-3" />
+              <span>{code}</span>
               {!readOnly && (
                 <button
+                  type="button"
                   onClick={() => removeRule(code)}
-                  className={cn("ml-1 hover:text-red-500", theme.text.tertiary)}
+                  className="ml-1 hover:text-destructive focus:outline-none"
                   aria-label={`Remove rule ${code}`}
                 >
                   <X className="h-3 w-3" />
                 </button>
               )}
-            </div>
+            </Badge>
           );
         })}
-        {selectedRules.length === 0 && readOnly && <span className={cn("text-xs italic", theme.text.tertiary)}>No rules linked.</span>}
+        {selectedRules.length === 0 && readOnly && <span className="text-xs italic text-muted-foreground">No rules linked.</span>}
       </div>
 
       {!readOnly && (
-        <div className="relative">
-          <div className={cn("flex items-center border rounded-md transition-shadow focus-within:ring-1 focus-within:ring-blue-500", theme.surface.default, theme.border.default)}>
-            <Search className={cn("h-4 w-4 ml-2", theme.text.tertiary)} />
-            <input
-              id={inputId}
-              aria-label="Search legal rules"
-              className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
-              placeholder="Search rules (e.g. 'FRCP 12')..."
-              value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSearchTerm(e.target.value); setIsOpen(true); }}
-              onFocus={() => setIsOpen(true)}
-              onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-            />
-            {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin text-blue-600" />}
-          </div>
-
-          {isOpen && searchTerm && (
-            <div className={cn("absolute top-full left-0 right-0 mt-1 border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto", theme.surface.default, theme.border.default)}>
-              {availableRules.length > 0 ? (
-                availableRules.filter(r => !selectedRules.includes(r.code)).map(rule => (
-                  <div
-                    key={rule.id}
-                    className={cn("px-3 py-2 cursor-pointer border-b last:border-0 group transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}
-                    onClick={() => addRule(rule.code)}
-                  >
-                    <div className="flex justify-between items-center mb-0.5">
-                      <span className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
-                        <Book className="h-3 w-3 mr-1.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        {rule.code}
-                      </span>
-                      <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>{rule.type}</span>
-                    </div>
-                    <p className={cn("text-xs truncate pl-4", theme.text.secondary)}>{rule.name}</p>
-                    {rule.summary && <p className={cn("text-[10px] truncate pl-4 mt-0.5 italic", theme.text.tertiary)}>{rule.summary}</p>}
-                  </div>
-                ))
-              ) : (
-                <div className={cn("p-3 text-center text-xs", theme.text.tertiary)}>
-                  {!isLoading ? 'No matching rules found.' : 'Searching...'} <br />
-                  {!isLoading && <span className="text-[10px]">Go to Jurisdiction Manager to add new rules.</span>}
-                </div>
-              )}
-            </div>
-          )}
+        <div className="flex gap-2">
+          <Input
+            placeholder="Type rule code (e.g. FRCP 26) and press Enter"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                addRule();
+              }
+            }}
+          />
+          <Button type="button" variant="secondary" onClick={addRule}>Add</Button>
         </div>
       )}
     </div>

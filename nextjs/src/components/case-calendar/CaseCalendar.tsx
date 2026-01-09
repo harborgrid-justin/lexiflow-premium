@@ -6,50 +6,41 @@ import {
   Filter,
   Plus
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { workflowApi } from '@/api/domains/workflow.api';
+import { CalendarEvent, CalendarEventType } from '@/api/workflow/calendar-api';
 
 type CalendarView = 'month' | 'week' | 'day' | 'agenda';
-
-const MOCK_EVENTS = [
-  {
-    id: '1',
-    title: 'Status Conference',
-    matter: 'Smith v. Jones',
-    time: '10:00 AM',
-    type: 'hearing',
-    priority: 'high'
-  },
-  {
-    id: '2',
-    title: 'Motion to Dismiss Deadline',
-    matter: 'TechCorp Merger',
-    time: '5:00 PM',
-    type: 'deadline',
-    priority: 'high'
-  },
-  {
-    id: '3',
-    title: 'Client Meeting',
-    matter: 'Estate of H. Doe',
-    time: '2:00 PM',
-    type: 'meeting',
-    priority: 'medium'
-  },
-  {
-    id: '4',
-    title: 'Discovery Production',
-    matter: 'City of NY vs. Uber',
-    time: 'All Day',
-    type: 'filing',
-    priority: 'medium'
-  }
-];
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export function CaseCalendar() {
   const [view, setView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      setLoading(true);
+      try {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        // Get range for the whole month
+        const start = new Date(year, month, 1).toISOString();
+        // Last day of month
+        const end = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+
+        const data = await workflowApi.calendar.getAll({ startDate: start, endDate: end });
+        setEvents(data);
+      } catch (e) {
+        console.error("Failed to load calendar events", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEvents();
+  }, [currentDate]);
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -70,27 +61,33 @@ export function CaseCalendar() {
 
     // Days of current month
     for (let i = 1; i <= days; i++) {
-      const hasEvent = i % 5 === 0 || i === 15 || i === 22; // Mock events
+      const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      const dayEvents = events.filter(e => {
+        const d = new Date(e.startDate);
+        return d.getDate() === i && d.getMonth() === currentDate.getMonth() && d.getFullYear() === currentDate.getFullYear();
+      });
+
       grid.push(
-        <div key={i} className="h-32 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group relative">
-          <span className={`text-sm font-medium ${i === new Date().getDate()
-              ? 'bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full'
-              : 'text-slate-700 dark:text-slate-300'
+        <div key={i} className="h-32 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group relative overflow-hidden">
+          <span className={`text-sm font-medium ${i === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear()
+            ? 'bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full'
+            : 'text-slate-700 dark:text-slate-300'
             }`}>
             {i}
           </span>
-          {hasEvent && (
-            <div className="mt-2 space-y-1">
-              <div className="text-xs p-1 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 truncate">
-                Status Conf.
-              </div>
-              {i === 15 && (
-                <div className="text-xs p-1 rounded bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 truncate">
-                  Filing Deadline
+          <div className="mt-2 space-y-1 overflow-y-auto max-h-[calc(100%-2rem)]">
+            {dayEvents.map(ev => {
+              let colorClass = "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+              if (ev.eventType === 'DEADLINE' || (ev.eventType as any) === 'deadline') colorClass = "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300";
+              if (ev.eventType === 'MEETING' || (ev.eventType as any) === 'meeting') colorClass = "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300";
+
+              return (
+                <div key={ev.id} className={`text-xs p-1 rounded ${colorClass} truncate`} title={ev.title}>
+                  {ev.title}
                 </div>
-              )}
-            </div>
-          )}
+              );
+            })}
+          </div>
           <button className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded">
             <Plus className="h-3 w-3 text-slate-500" />
           </button>
@@ -115,8 +112,8 @@ export function CaseCalendar() {
                 key={v}
                 onClick={() => setView(v)}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md capitalize transition-colors ${view === v
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
               >
                 {v}

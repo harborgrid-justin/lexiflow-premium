@@ -32,10 +32,18 @@ export function LoginForm({ action, callbackUrl, csrfToken }: LoginFormProps) {
   // Handle successful login
   useEffect(() => {
     if (state.success) {
+      // Save tokens to localStorage for client-side API requests
+      if (state.data && typeof state.data === 'object' && 'accessToken' in state.data) {
+        localStorage.setItem('authToken', (state.data as any).accessToken);
+        if ((state.data as any).refreshToken) {
+          localStorage.setItem('refreshToken', (state.data as any).refreshToken);
+        }
+      }
+
       router.push(callbackUrl);
       router.refresh();
     }
-  }, [state.success, callbackUrl, router]);
+  }, [state.success, state.data, callbackUrl, router]);
 
   // Handle MFA required
   useEffect(() => {

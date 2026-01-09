@@ -36,8 +36,8 @@ async function BillingStatsContent() {
   let error = null;
 
   try {
-    const response = await apiFetch(API_ENDPOINTS.ANALYTICS?.BILLING || '/api/analytics/billing');
-    stats = (response as BillingStats) || null;
+    const response = await apiFetch(API_ENDPOINTS.BILLING?.METRICS || '/api/analytics/billing/metrics');
+    stats = (response as any) || null;
   } catch (err) {
     error = err instanceof Error ? err.message : 'Failed to load billing stats';
   }

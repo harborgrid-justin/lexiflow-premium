@@ -14,6 +14,7 @@ import { OCRApiService } from "../admin/ocr-api";
 import { ProcessingJobsApiService } from "../admin/processing-jobs-api";
 import { ServiceJobsApiService } from "../admin/service-jobs-api";
 import { SyncApiService } from "../admin/sync-api";
+import { SystemSettingsApiService } from "../admin/system-settings-api";
 import { VersioningApiService } from "../admin/versioning-api";
 import { AnalyticsApiService } from "../intelligence/analytics-api";
 

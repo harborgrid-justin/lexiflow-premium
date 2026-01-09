@@ -3,7 +3,7 @@
  * Billing and revenue analytics
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface BillingAnalytics {
   period: { start: string; end: string };
@@ -42,21 +42,46 @@ export interface BillingAnalytics {
 }
 
 export class BillingAnalyticsApiService {
-  private readonly baseUrl = '/billing-analytics';
+  private readonly baseUrl = "/billing-analytics";
 
-  async getOverview(startDate: string, endDate: string): Promise<BillingAnalytics> {
-    return apiClient.get<BillingAnalytics>(`${this.baseUrl}/overview?start=${startDate}&end=${endDate}`);
+  async getOverview(
+    startDate: string,
+    endDate: string
+  ): Promise<BillingAnalytics> {
+    return apiClient.get<BillingAnalytics>(
+      `${this.baseUrl}/overview?start=${startDate}&end=${endDate}`
+    );
   }
 
-  async getByAttorney(userId: string, startDate: string, endDate: string): Promise<unknown> {
-    return apiClient.get(`${this.baseUrl}/attorney/${userId}?start=${startDate}&end=${endDate}`);
+  async getByAttorney(
+    userId: string,
+    startDate: string,
+    endDate: string
+  ): Promise<unknown> {
+    return apiClient.get(
+      `${this.baseUrl}/attorney/${userId}?start=${startDate}&end=${endDate}`
+    );
   }
 
-  async getByClient(clientId: string, startDate: string, endDate: string): Promise<unknown> {
-    return apiClient.get(`${this.baseUrl}/client/${clientId}?start=${startDate}&end=${endDate}`);
+  async getByClient(
+    clientId: string,
+    startDate: string,
+    endDate: string
+  ): Promise<unknown> {
+    return apiClient.get(
+      `${this.baseUrl}/client/${clientId}?start=${startDate}&end=${endDate}`
+    );
   }
 
   async getForecast(months: number): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/forecast?months=${months}`);
+  }
+
+  async getWIP(): Promise<unknown[]> {
+    return apiClient.get("/analytics/billing/wip");
+  }
+
+  async getRealization(): Promise<unknown> {
+    return apiClient.get("/analytics/billing/realization");
   }
 }

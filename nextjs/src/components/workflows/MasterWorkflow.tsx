@@ -1,16 +1,9 @@
 'use client';
 
+import { workflowApi } from '@/api/domains/workflow.api';
 import { cn } from '@/lib/utils';
 import { BarChart2, BookOpen, Briefcase, FileText, Layout, Play, Plus, RefreshCw, Settings } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
-// Mock Data
-const MOCK_METRICS = {
-  activeWorkflows: 12,
-  tasksDueToday: 5,
-  automationsRan: 142,
-  efficiencyGain: 24
-};
 
 const WORKFLOW_TABS = [
   {
@@ -164,6 +157,27 @@ export default function MasterWorkflow({ initialTab }: MasterWorkflowProps) {
   const [viewMode, setViewMode] = useState<'list' | 'detail' | 'builder'>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<'case' | 'process'>('case');
+  const [metrics, setMetrics] = useState({
+    activeWorkflows: 0,
+    tasksDueToday: 0,
+    automationsRan: 142, // Mock retained
+    efficiencyGain: 24   // Mock retained
+  });
+
+  useEffect(() => {
+    async function loadMetrics() {
+      try {
+        const workflows = await workflowApi.workflow.getInstances({ status: 'running' });
+        const stats = await workflowApi.tasks.getStatistics();
+        setMetrics(prev => ({
+          ...prev,
+          activeWorkflows: workflows.length,
+          tasksDueToday: (stats as any).dueToday || 0
+        }));
+      } catch (e) { console.error(e); }
+    }
+    loadMetrics();
+  }, []);
 
   useEffect(() => {
     if (initialTab) setActiveTab(initialTab);
@@ -217,7 +231,7 @@ export default function MasterWorkflow({ initialTab }: MasterWorkflowProps) {
       case 'processes':
         return <FirmProcessList onSelect={handleSelectProcess} />;
       case 'dashboard':
-        return <WorkflowAnalyticsDashboard metrics={MOCK_METRICS} />;
+        return <WorkflowAnalyticsDashboard metrics={metrics} />;
       case 'templates':
         return <WorkflowLibrary onCreate={handleCreateTemplate} />;
       default:
@@ -271,7 +285,7 @@ export default function MasterWorkflow({ initialTab }: MasterWorkflowProps) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as WorkflowView)}
               className={cn(
-                "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
+                "shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                 activeTab === tab.id
                   ? "bg-slate-100 text-blue-700 border-blue-200 shadow-sm"
                   : "bg-transparent text-slate-600 border-transparent hover:bg-slate-50"

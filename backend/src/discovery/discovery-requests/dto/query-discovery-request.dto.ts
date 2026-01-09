@@ -1,6 +1,16 @@
-import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
-import { Type } from 'class-transformer';
-import { DiscoveryRequestType, DiscoveryRequestStatus } from '@discovery/discovery-requests/entities/discovery-request.entity';
+import {
+  IsOptional,
+  IsEnum,
+  IsUUID,
+  IsString,
+  IsNumber,
+  Min,
+} from "class-validator";
+import { Type } from "class-transformer";
+import {
+  DiscoveryRequestType,
+  DiscoveryRequestStatus,
+} from "@discovery/discovery-requests/entities/discovery-request.entity";
 
 export class QueryDiscoveryRequestDto {
   @IsOptional()
@@ -36,10 +46,16 @@ export class QueryDiscoveryRequestDto {
   limit?: number = 20;
 
   @IsOptional()
-  @IsString()
-  sortBy?: string = 'createdAt';
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  pageSize?: number = 20;
 
   @IsOptional()
-  @IsEnum(['ASC', 'DESC'])
-  sortOrder?: 'ASC' | 'DESC' = 'DESC';
+  @IsString()
+  sortBy?: string = "createdAt";
+
+  @IsOptional()
+  @IsEnum(["ASC", "DESC"])
+  sortOrder?: "ASC" | "DESC" = "DESC";
 }

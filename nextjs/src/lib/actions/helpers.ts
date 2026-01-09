@@ -6,12 +6,13 @@
  */
 
 import type {
-    ActionContext,
-    ActionOptions,
-    ActionResult,
-    CacheProfile,
+  ActionContext,
+  ActionOptions,
+  ActionResult,
+  CacheProfile,
 } from "./errors";
 import { ActionError, failure, success } from "./errors";
+import { getActionContext, checkPermissions, invalidateTags } from "./index";
 
 // These will be provided by the server actions module
 type GetActionContextFn = () => Promise<ActionContext>;
@@ -36,9 +37,7 @@ let isInitialized = false;
 async function ensureInitialized(): Promise<void> {
   if (isInitialized) return;
 
-  // Dynamically import the server actions module to avoid circular dependencies
-  const { getActionContext, checkPermissions, invalidateTags } = await import('./index');
-
+  // Static import ensures dependencies are loaded
   getActionContextFn = getActionContext;
   checkPermissionsFn = checkPermissions;
   invalidateTagsFn = invalidateTags;
@@ -92,9 +91,9 @@ export function createAction<TInput, TOutput>(
     try {
       // Ensure helpers are initialized
       await ensureInitialized();
-      
+
       if (!getActionContextFn || !checkPermissionsFn || !invalidateTagsFn) {
-        throw new Error('Action helpers not properly initialized');
+        throw new Error("Action helpers not properly initialized");
       }
 
       // Get context

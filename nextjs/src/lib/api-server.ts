@@ -4,6 +4,7 @@
  */
 import { API_BASE_URL } from "@/lib/api-config";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
  * Server-side fetch wrapper with proper error handling
@@ -21,8 +22,14 @@ export async function apiFetch<T>(
   const url = `${API_BASE_URL}${endpoint}`;
 
   // Get auth token from cookies (Next.js 16: cookies() is async)
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
+  // Use try-catch to handle contexts where cookies() is not available (e.g. static generation)
+  let token: string | undefined;
+  try {
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+  } catch (error) {
+    // Ignore error in contexts where cookies are not available
+  }
 
   try {
     const response = await fetch(url, {
@@ -39,6 +46,12 @@ export async function apiFetch<T>(
       },
     });
 
+    if (response.status === 401) {
+      // If unauthorized, redirect to login page
+      // Note: This will throw a NEXT_REDIRECT error which is caught by Next.js
+      redirect("/login");
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -48,6 +61,28 @@ export async function apiFetch<T>(
 
     return response.json();
   } catch (error) {
+    // If it's a redirect error, let it bubble up
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+    // Re-throw redirect errors from the response block above
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      (error as any).message === "NEXT_REDIRECT"
+    ) {
+      throw error;
+    }
+
+    // Checking for DIGEST_REDIRECT which is how Next.js handles redirects internally sometimes
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      (error as any).digest?.startsWith("NEXT_REDIRECT")
+    ) {
+      throw error;
+    }
     console.error("API fetch error:", error);
     throw error;
   }

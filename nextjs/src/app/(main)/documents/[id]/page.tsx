@@ -27,6 +27,9 @@ export const revalidate = 600; // Revalidate every 10 minutes
  * @returns Array of { id: string } objects for static generation
  */
 export async function generateStaticParams(): Promise<{ id: string }[]> {
+  // Static generation disabled for authenticated document details
+  return [];
+  /*
   try {
     // Fetch list of documents IDs for static generation
     const response = await apiFetch<any[]>(
@@ -43,6 +46,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
     // Pages will be generated on-demand (ISR) instead
     return [];
   }
+  */
 }
 
 export async function generateMetadata({ params }: DocumentDetailPageProps): Promise<Metadata> {

@@ -134,6 +134,7 @@ import * as authDomain from "./domains/auth.api";
 import * as billingDomain from "./domains/billing.api";
 import * as communicationsDomain from "./domains/communications.api";
 import * as complianceDomain from "./domains/compliance.api";
+import * as crmDomain from "./domains/crm.api";
 import * as dataPlatformDomain from "./domains/data-platform.api";
 import * as discoveryDomain from "./domains/discovery.api";
 import * as draftingDomain from "./domains/drafting.api";

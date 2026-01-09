@@ -28,6 +28,9 @@ export const revalidate = 3600; // Revalidate every 60 minutes
  * @returns Array of { id: string } objects for static generation
  */
 export async function generateStaticParams(): Promise<{ id: string }[]> {
+  // Static generation disabled for authenticated interrogatory details
+  return [];
+  /*
   try {
     // Fetch list of interrogatories IDs for static generation
     const response = await apiFetch<any[]>(
@@ -44,6 +47,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
     // Pages will be generated on-demand (ISR) instead
     return [];
   }
+  */
 }
 
 export async function generateMetadata({

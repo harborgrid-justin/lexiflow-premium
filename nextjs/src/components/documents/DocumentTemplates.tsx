@@ -1,9 +1,11 @@
 'use client';
 
+import { DraftingApiService, DraftingTemplate } from '@/api/domains/drafting.api';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { cn } from '@/lib/utils';
 import { ArrowRight, FileText, Wand2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface Template {
   id: string;
@@ -12,19 +14,33 @@ interface Template {
   popular: boolean;
 }
 
-const MOCK_TEMPLATES: Template[] = [
-  { id: '1', title: 'Non-Disclosure Agreement', category: 'Contracts', popular: true },
-  { id: '2', title: 'Employment Contract', category: 'HR', popular: true },
-  { id: '3', title: 'Cease and Desist Letter', category: 'Litigation', popular: false },
-  { id: '4', title: 'Privacy Policy', category: 'Compliance', popular: false },
-  { id: '5', title: 'Terms of Service', category: 'Compliance', popular: true },
-  { id: '6', title: 'Independent Contractor Agreement', category: 'Contracts', popular: false },
-];
-
 export function DocumentTemplates() {
-  // Mock loading state
-  const isLoading = false;
-  const templates = MOCK_TEMPLATES;
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const api = DraftingApiService.getInstance();
+        const data = await api.getTemplates(6);
+
+        const mappedTemplates: Template[] = data.map((t: DraftingTemplate) => ({
+          id: t.id,
+          title: t.name,
+          category: t.category, // Enum to string works generally
+          popular: t.usageCount > 50, // Arbitrary threshold for 'popular'
+        }));
+
+        setTemplates(mappedTemplates);
+      } catch (error) {
+        console.error('Failed to load templates:', error);
+        // Fallback or empty state could be handled here
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTemplates();
+  }, []);
 
   if (isLoading) return <AdaptiveLoader contentType="dashboard" itemCount={6} shimmer />;
 

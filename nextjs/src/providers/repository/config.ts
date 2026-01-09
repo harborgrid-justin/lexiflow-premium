@@ -3,10 +3,10 @@
  * ║                DATA SOURCE CONFIGURATION                                  ║
  * ║           Environment, Versioning, Timeouts, Observability                ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module providers/repository/config
  * @description Type-safe configuration for data sources
- * 
+ *
  * PRINCIPLES APPLIED:
  * 7. Support Multiple Environments Explicitly
  * 10. Enforce Timeouts and Retries Centrally
@@ -14,12 +14,12 @@
  * 14. Version API Access Explicitly
  */
 
-import type { 
-  RepositoryLogger, 
-  RepositoryTracer, 
+import type {
+  AuthProvider,
+  RepositoryLogger,
   RepositoryMetrics,
-  AuthProvider 
-} from './types';
+  RepositoryTracer,
+} from "./types";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         ENVIRONMENT CONFIGURATION
@@ -32,18 +32,18 @@ export interface DataSourceEnvironmentConfig {
   /**
    * Current environment
    */
-  environment: 'development' | 'staging' | 'production' | 'test';
-  
+  environment: "development" | "staging" | "production" | "test";
+
   /**
    * API base URL (NO query params or headers)
    */
   apiBaseUrl: string;
-  
+
   /**
    * API version (Pattern 14)
    */
-  apiVersion: 'v1' | 'v2' | 'v3';
-  
+  apiVersion: "v1" | "v2" | "v3";
+
   /**
    * Feature toggles
    */
@@ -59,12 +59,12 @@ export interface DataSourceEnvironmentConfig {
  * Default configurations per environment
  */
 export const ENVIRONMENT_CONFIGS: Record<
-  DataSourceEnvironmentConfig['environment'],
+  DataSourceEnvironmentConfig["environment"],
   Partial<DataSourceEnvironmentConfig>
 > = {
   development: {
-    environment: 'development',
-    apiVersion: 'v2',
+    environment: "development",
+    apiVersion: "v2",
     features: {
       enableCaching: true,
       enableRetries: true,
@@ -73,8 +73,8 @@ export const ENVIRONMENT_CONFIGS: Record<
     },
   },
   staging: {
-    environment: 'staging',
-    apiVersion: 'v2',
+    environment: "staging",
+    apiVersion: "v2",
     features: {
       enableCaching: true,
       enableRetries: true,
@@ -83,8 +83,8 @@ export const ENVIRONMENT_CONFIGS: Record<
     },
   },
   production: {
-    environment: 'production',
-    apiVersion: 'v2',
+    environment: "production",
+    apiVersion: "v2",
     features: {
       enableCaching: true,
       enableRetries: true,
@@ -93,8 +93,8 @@ export const ENVIRONMENT_CONFIGS: Record<
     },
   },
   test: {
-    environment: 'test',
-    apiVersion: 'v2',
+    environment: "test",
+    apiVersion: "v2",
     features: {
       enableCaching: false,
       enableRetries: false,
@@ -116,7 +116,7 @@ export interface TimeoutConfig {
    * Default timeout for all operations (ms)
    */
   default: number;
-  
+
   /**
    * Operation-specific timeouts
    */
@@ -136,22 +136,22 @@ export interface RetryConfig {
    * Maximum retry attempts
    */
   maxAttempts: number;
-  
+
   /**
    * Initial backoff delay (ms)
    */
   initialBackoffMs: number;
-  
+
   /**
    * Maximum backoff delay (ms)
    */
   maxBackoffMs: number;
-  
+
   /**
    * Backoff multiplier
    */
   backoffMultiplier: number;
-  
+
   /**
    * Which error codes should be retried
    */
@@ -164,8 +164,8 @@ export interface RetryConfig {
 export const DEFAULT_TIMEOUTS: TimeoutConfig = {
   default: 30000, // 30 seconds
   operations: {
-    read: 15000,   // 15 seconds
-    write: 30000,  // 30 seconds
+    read: 15000, // 15 seconds
+    write: 30000, // 30 seconds
     delete: 15000, // 15 seconds
     search: 20000, // 20 seconds
   },
@@ -180,10 +180,10 @@ export const DEFAULT_RETRY: RetryConfig = {
   maxBackoffMs: 10000,
   backoffMultiplier: 2,
   retryableErrorCodes: [
-    'NETWORK_ERROR',
-    'TIMEOUT',
-    'SERVER_ERROR',
-    'RATE_LIMIT',
+    "NETWORK_ERROR",
+    "TIMEOUT",
+    "SERVER_ERROR",
+    "RATE_LIMIT",
   ],
 };
 
@@ -199,27 +199,27 @@ export interface ObservabilityConfig {
    * Logger instance (optional)
    */
   logger?: RepositoryLogger;
-  
+
   /**
    * Tracer instance (optional)
    */
   tracer?: RepositoryTracer;
-  
+
   /**
    * Metrics collector (optional)
    */
   metrics?: RepositoryMetrics;
-  
+
   /**
    * Log level
    */
-  logLevel: 'debug' | 'info' | 'warn' | 'error';
-  
+  logLevel: "debug" | "info" | "warn" | "error";
+
   /**
    * Sample rate for tracing (0-1)
    */
   tracingSampleRate: number;
-  
+
   /**
    * Sample rate for metrics (0-1)
    */
@@ -230,7 +230,7 @@ export interface ObservabilityConfig {
  * Default observability configuration
  */
 export const DEFAULT_OBSERVABILITY: ObservabilityConfig = {
-  logLevel: 'info',
+  logLevel: "info",
   tracingSampleRate: 0.1, // 10% sampling
   metricsSampleRate: 1.0, // 100% metrics
 };
@@ -248,22 +248,22 @@ export interface DataSourceConfig {
    * Environment configuration (Pattern 7)
    */
   environment: DataSourceEnvironmentConfig;
-  
+
   /**
    * Timeout configuration (Pattern 10)
    */
   timeout: TimeoutConfig;
-  
+
   /**
    * Retry configuration (Pattern 10)
    */
   retry: RetryConfig;
-  
+
   /**
    * Observability configuration (Pattern 11)
    */
   observability: ObservabilityConfig;
-  
+
   /**
    * Authentication provider (Pattern 4)
    * Injected dependency
@@ -281,16 +281,18 @@ export interface DataSourceConfig {
  */
 export class DataSourceConfigBuilder {
   private config: Partial<DataSourceConfig> = {};
-  
-  constructor(environment: DataSourceEnvironmentConfig['environment'] = 'development') {
+
+  constructor(
+    environment: DataSourceEnvironmentConfig["environment"] = "development"
+  ) {
     // Start with environment defaults
     const envDefaults = ENVIRONMENT_CONFIGS[environment];
-    
+
     this.config = {
       environment: {
         environment,
-        apiBaseUrl: '',
-        apiVersion: 'v2',
+        apiBaseUrl: "",
+        apiVersion: "v2",
         features: {
           enableCaching: true,
           enableRetries: true,
@@ -304,7 +306,7 @@ export class DataSourceConfigBuilder {
       observability: DEFAULT_OBSERVABILITY,
     };
   }
-  
+
   /**
    * Set API base URL
    */
@@ -314,17 +316,17 @@ export class DataSourceConfigBuilder {
     }
     return this;
   }
-  
+
   /**
    * Set API version (Pattern 14)
    */
-  withApiVersion(version: 'v1' | 'v2' | 'v3'): this {
+  withApiVersion(version: "v1" | "v2" | "v3"): this {
     if (this.config.environment) {
       this.config.environment.apiVersion = version;
     }
     return this;
   }
-  
+
   /**
    * Configure timeouts
    */
@@ -332,7 +334,7 @@ export class DataSourceConfigBuilder {
     this.config.timeout = { ...DEFAULT_TIMEOUTS, ...timeouts };
     return this;
   }
-  
+
   /**
    * Configure retries
    */
@@ -340,7 +342,7 @@ export class DataSourceConfigBuilder {
     this.config.retry = { ...DEFAULT_RETRY, ...retries };
     return this;
   }
-  
+
   /**
    * Configure observability
    */
@@ -348,7 +350,7 @@ export class DataSourceConfigBuilder {
     this.config.observability = { ...DEFAULT_OBSERVABILITY, ...observability };
     return this;
   }
-  
+
   /**
    * Set authentication provider
    */
@@ -356,26 +358,29 @@ export class DataSourceConfigBuilder {
     this.config.authProvider = authProvider;
     return this;
   }
-  
+
   /**
    * Enable/disable specific features
    */
-  withFeature(feature: keyof DataSourceEnvironmentConfig['features'], enabled: boolean): this {
+  withFeature(
+    feature: keyof DataSourceEnvironmentConfig["features"],
+    enabled: boolean
+  ): this {
     if (this.config.environment) {
       this.config.environment.features[feature] = enabled;
     }
     return this;
   }
-  
+
   /**
    * Build final configuration
    */
   build(): DataSourceConfig {
     // Validate required fields
     if (!this.config.environment?.apiBaseUrl) {
-      throw new Error('API base URL is required');
+      throw new Error("API base URL is required");
     }
-    
+
     return this.config as DataSourceConfig;
   }
 }
@@ -388,10 +393,18 @@ export class DataSourceConfigBuilder {
  * Create configuration from environment variables
  */
 export function createConfigFromEnv(): DataSourceConfig {
-  const env = (import.meta.env.MODE || 'development') as DataSourceEnvironmentConfig['environment'];
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
-  const apiVersion = (import.meta.env.VITE_API_VERSION || 'v2') as 'v1' | 'v2' | 'v3';
-  
+  // Use Next.js process.env instead of Vite's import.meta.env
+  const envRaw = process.env.NODE_ENV || "development";
+  const env = (
+    envRaw === "production" ? "production" : "development"
+  ) as DataSourceEnvironmentConfig["environment"];
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+  const apiVersion = (process.env.NEXT_PUBLIC_API_VERSION || "v2") as
+    | "v1"
+    | "v2"
+    | "v3";
+
   return new DataSourceConfigBuilder(env)
     .withApiBaseUrl(apiBaseUrl)
     .withApiVersion(apiVersion)
@@ -402,13 +415,15 @@ export function createConfigFromEnv(): DataSourceConfig {
  * Create test configuration
  * Pattern 13: Enable mock and stub injection
  */
-export function createTestConfig(overrides?: Partial<DataSourceConfig>): DataSourceConfig {
-  const baseConfig = new DataSourceConfigBuilder('test')
-    .withApiBaseUrl('http://localhost:3000/api')
-    .withFeature('enableRetries', false)
-    .withFeature('enableMetrics', false)
-    .withFeature('enableTracing', false)
+export function createTestConfig(
+  overrides?: Partial<DataSourceConfig>
+): DataSourceConfig {
+  const baseConfig = new DataSourceConfigBuilder("test")
+    .withApiBaseUrl("http://localhost:3000/api")
+    .withFeature("enableRetries", false)
+    .withFeature("enableMetrics", false)
+    .withFeature("enableTracing", false)
     .build();
-  
+
   return { ...baseConfig, ...overrides };
 }

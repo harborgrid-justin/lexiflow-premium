@@ -85,6 +85,29 @@ function buildUrl(
  * Handle API errors consistently
  */
 function handleApiError(error: unknown): string {
+  // If it's a redirect error, let it bubble up
+  if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+    throw error;
+  }
+  // Re-throw redirect errors from the response block above
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    (error as any).message === "NEXT_REDIRECT"
+  ) {
+    throw error;
+  }
+
+  // Checking for DIGEST_REDIRECT which is how Next.js handles redirects internally sometimes
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    (error as any).digest?.startsWith("NEXT_REDIRECT")
+  ) {
+    throw error;
+  }
+
   if (error instanceof Error) {
     return error.message;
   }
@@ -132,6 +155,10 @@ export async function getWorkflowTemplates(filters?: {
       headers,
       next: { tags: [CACHE_TAGS.TEMPLATES], revalidate: 60 },
     });
+
+    if (response.status === 401) {
+      redirect("/login");
+    }
 
     if (!response.ok) {
       throw new Error(`Failed to fetch templates: ${response.statusText}`);
@@ -397,6 +424,10 @@ export async function getWorkflowInstances(filters?: {
       headers,
       next: { tags: [CACHE_TAGS.INSTANCES], revalidate: 30 },
     });
+
+    if (response.status === 401) {
+      redirect("/login");
+    }
 
     if (!response.ok) {
       throw new Error(`Failed to fetch instances: ${response.statusText}`);
@@ -835,6 +866,10 @@ export async function getWorkflowDashboardStats(): Promise<
         next: { tags: [CACHE_TAGS.DASHBOARD], revalidate: 60 },
       }
     );
+
+    if (response.status === 401) {
+      redirect("/login");
+    }
 
     if (!response.ok) {
       throw new Error(`Failed to fetch dashboard: ${response.statusText}`);

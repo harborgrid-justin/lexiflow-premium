@@ -1,14 +1,14 @@
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { DiscoveryRequest } from "./entities/discovery-request.entity";
+import { CreateDiscoveryRequestDto } from "./dto/create-discovery-request.dto";
+import { UpdateDiscoveryRequestDto } from "./dto/update-discovery-request.dto";
+import { QueryDiscoveryRequestDto } from "./dto/query-discovery-request.dto";
 import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull} from 'typeorm';
-import { DiscoveryRequest } from './entities/discovery-request.entity';
-import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
-import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
-import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -42,11 +42,11 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class DiscoveryRequestsService {
   constructor(
     @InjectRepository(DiscoveryRequest)
-    private readonly discoveryRequestRepository: Repository<DiscoveryRequest>,
+    private readonly discoveryRequestRepository: Repository<DiscoveryRequest>
   ) {}
 
   async create(
-    createDto: CreateDiscoveryRequestDto,
+    createDto: CreateDiscoveryRequestDto
   ): Promise<DiscoveryRequest> {
     const discoveryRequest = this.discoveryRequestRepository.create(createDto);
     return await this.discoveryRequestRepository.save(discoveryRequest);
@@ -61,55 +61,59 @@ export class DiscoveryRequestsService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'DESC',
+      pageSize,
+      sortBy = "createdAt",
+      sortOrder = "DESC",
     } = queryDto;
 
+    const take = pageSize || limit;
+    const skip = (page - 1) * take;
+
     const queryBuilder = this.discoveryRequestRepository
-      .createQueryBuilder('discoveryRequest')
-      .where('discoveryRequest.deletedAt IS NULL');
+      .createQueryBuilder("discoveryRequest")
+      .where("discoveryRequest.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('discoveryRequest.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("discoveryRequest.caseId = :caseId", { caseId });
     }
 
     if (type) {
-      queryBuilder.andWhere('discoveryRequest.type = :type', { type });
+      queryBuilder.andWhere("discoveryRequest.type = :type", { type });
     }
 
     if (status) {
-      queryBuilder.andWhere('discoveryRequest.status = :status', { status });
+      queryBuilder.andWhere("discoveryRequest.status = :status", { status });
     }
 
     if (assignedTo) {
-      queryBuilder.andWhere('discoveryRequest.assignedTo = :assignedTo', {
+      queryBuilder.andWhere("discoveryRequest.assignedTo = :assignedTo", {
         assignedTo,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(discoveryRequest.title ILIKE :search OR discoveryRequest.description ILIKE :search OR discoveryRequest.requestNumber ILIKE :search)',
-        { search: `%${search}%` },
+        "(discoveryRequest.title ILIKE :search OR discoveryRequest.description ILIKE :search OR discoveryRequest.requestNumber ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('discoveryRequest', sortBy);
+    const safeSortField = validateSortField("discoveryRequest", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`discoveryRequest.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
-      .skip((page - 1) * limit)
-      .take(limit)
+      .skip(skip)
+      .take(take)
       .getManyAndCount();
 
     return {
       items,
       total,
       page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+      limit: take,
+      totalPages: Math.ceil(total / take),
     };
   }
 
@@ -119,9 +123,7 @@ export class DiscoveryRequestsService {
     });
 
     if (!discoveryRequest) {
-      throw new NotFoundException(
-        `Discovery request with ID ${id} not found`,
-      );
+      throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
 
     return discoveryRequest;
@@ -129,21 +131,19 @@ export class DiscoveryRequestsService {
 
   async update(
     id: string,
-    updateDto: UpdateDiscoveryRequestDto,
+    updateDto: UpdateDiscoveryRequestDto
   ): Promise<DiscoveryRequest> {
     const result = await this.discoveryRequestRepository
       .createQueryBuilder()
       .update(DiscoveryRequest)
       .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
-      throw new NotFoundException(
-        `Discovery request with ID ${id} not found`,
-      );
+      throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
     return result.raw[0];
   }
@@ -152,14 +152,12 @@ export class DiscoveryRequestsService {
     const result = await this.discoveryRequestRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {
-      throw new NotFoundException(
-        `Discovery request with ID ${id} not found`,
-      );
+      throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
   }
 

@@ -34,6 +34,14 @@ async function MotionsListContent() {
     const response = await apiFetch(API_ENDPOINTS.MOTIONS?.LIST || '/api/motions');
     motions = Array.isArray(response) ? response : [];
   } catch (err) {
+    // Re-throw redirect errors to allow next/navigation to handle them
+    if (
+      (err as any)?.message === 'NEXT_REDIRECT' ||
+      (err as any)?.digest?.startsWith('NEXT_REDIRECT')
+    ) {
+      throw err;
+    }
+
     const errorMessage = err instanceof Error ? err.message : 'Failed to load motions';
     // Check if this is an authentication error
     isAuthError = errorMessage.includes('401') || errorMessage.includes('Unauthorized');

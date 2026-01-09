@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 /**
  * Authentication Server Actions
@@ -6,36 +6,34 @@
  * Production-ready with CSRF protection, rate limiting, and comprehensive error handling
  */
 
-import { cookies, headers } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { revalidateTag } from 'next/cache';
-import crypto from 'crypto';
-import { z } from 'zod';
-import type { AuthFormState, User, Session, MFAChallenge } from './types';
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-config";
 import {
-  loginSchema,
-  loginWithMfaSchema,
-  registerSchema,
-  forgotPasswordSchema,
-  resetPasswordSchema,
-  mfaCodeSchema,
-  type LoginFormData,
-  type RegisterFormData,
-} from './validation';
-import {
-  validateCSRFFromRequest,
-  rotateCSRFToken,
   clearCSRFToken,
-} from '@/lib/csrf';
+  rotateCSRFToken,
+  validateCSRFFromRequest,
+} from "@/lib/csrf";
+import crypto from "crypto";
+import { revalidateTag } from "next/cache";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import type { AuthFormState, Session, User } from "./types";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  mfaCodeSchema,
+  registerSchema,
+  resetPasswordSchema,
+} from "./validation";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const AUTH_COOKIE_NAME = 'auth_token';
-const REFRESH_COOKIE_NAME = 'refresh_token';
-const CSRF_COOKIE_NAME = 'csrf_token';
-const MFA_CHALLENGE_COOKIE = 'mfa_challenge';
+const AUTH_COOKIE_NAME = "auth_token";
+const REFRESH_COOKIE_NAME = "refresh_token";
+const CSRF_COOKIE_NAME = "csrf_token";
+const MFA_CHALLENGE_COOKIE = "mfa_challenge";
 const SESSION_DURATION = 15 * 60 * 1000; // 15 minutes
 const REMEMBER_ME_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 const CSRF_TOKEN_DURATION = 60 * 60 * 1000; // 1 hour
@@ -59,9 +57,9 @@ const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 async function getClientIP(): Promise<string> {
   const headersList = await headers();
   return (
-    headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headersList.get('x-real-ip') ||
-    'unknown'
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headersList.get("x-real-ip") ||
+    "unknown"
   );
 }
 
@@ -70,18 +68,24 @@ async function getClientIP(): Promise<string> {
  */
 async function getUserAgent(): Promise<string> {
   const headersList = await headers();
-  return headersList.get('user-agent') || 'unknown';
+  return headersList.get("user-agent") || "unknown";
 }
 
 /**
  * Check rate limit for an identifier
  */
-function checkRateLimit(identifier: string, maxAttempts: number): { allowed: boolean; remaining: number; resetAt?: Date } {
+function checkRateLimit(
+  identifier: string,
+  maxAttempts: number
+): { allowed: boolean; remaining: number; resetAt?: Date } {
   const now = Date.now();
   const record = rateLimitStore.get(identifier);
 
   if (!record || record.resetAt < now) {
-    rateLimitStore.set(identifier, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    rateLimitStore.set(identifier, {
+      count: 1,
+      resetAt: now + RATE_LIMIT_WINDOW,
+    });
     return { allowed: true, remaining: maxAttempts - 1 };
   }
 
@@ -106,7 +110,7 @@ function resetRateLimit(identifier: string): void {
 function formatZodErrors(error: z.ZodError): Record<string, string[]> {
   const errors: Record<string, string[]> = {};
   for (const issue of error.issues) {
-    const path = issue.path.join('.') || 'root';
+    const path = issue.path.join(".") || "root";
     if (!errors[path]) errors[path] = [];
     errors[path].push(issue.message);
   }
@@ -117,14 +121,14 @@ function formatZodErrors(error: z.ZodError): Record<string, string[]> {
  * Generate secure random token
  */
 function generateSecureToken(length: number = 32): string {
-  return crypto.randomBytes(length).toString('hex');
+  return crypto.randomBytes(length).toString("hex");
 }
 
 /**
  * Hash token for storage comparison
  */
 function hashToken(token: string): string {
-  return crypto.createHash('sha256').update(token).digest('hex');
+  return crypto.createHash("sha256").update(token).digest("hex");
 }
 
 // ============================================================================
@@ -146,19 +150,19 @@ async function setAuthCookies(
 
   cookieStore.set(AUTH_COOKIE_NAME, accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge,
-    path: '/',
+    path: "/",
   });
 
   if (refreshToken) {
     cookieStore.set(REFRESH_COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: Math.floor(REMEMBER_ME_DURATION / 1000),
-      path: '/',
+      path: "/",
     });
   }
 }
@@ -184,10 +188,10 @@ export async function generateCSRFToken(): Promise<string> {
 
   cookieStore.set(CSRF_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: Math.floor(CSRF_TOKEN_DURATION / 1000),
-    path: '/',
+    path: "/",
   });
 
   return token;
@@ -220,11 +224,11 @@ export async function getSession(): Promise<Session | null> {
 
   try {
     // Decode JWT payload (in production, verify signature with secret)
-    const parts = token.split('.');
+    const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const payload = JSON.parse(
-      Buffer.from(parts[1], 'base64').toString('utf8')
+      Buffer.from(parts[1], "base64").toString("utf8")
     );
 
     // Check expiration
@@ -299,15 +303,17 @@ export async function loginAction(
   if (!csrfValidation.valid) {
     return {
       success: false,
-      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+      error:
+        csrfValidation.error ||
+        "Security validation failed. Please refresh the page and try again.",
     };
   }
 
   // Parse form data
   const rawData = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-    rememberMe: formData.get('rememberMe') === 'true',
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    rememberMe: formData.get("rememberMe") === "true",
   };
 
   // Validate
@@ -315,7 +321,7 @@ export async function loginAction(
   if (!validation.success) {
     return {
       success: false,
-      error: 'Please check your input',
+      error: "Please check your input",
       fieldErrors: formatZodErrors(validation.error),
     };
   }
@@ -323,38 +329,38 @@ export async function loginAction(
   const { email, password, rememberMe } = validation.data;
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
-    const response = await fetch(`${apiUrl}/api/v1/auth/login`, {
-      method: 'POST',
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-Client-IP': clientIP,
-        'X-User-Agent': userAgent,
+        "Content-Type": "application/json",
+        "X-Client-IP": clientIP,
+        "X-User-Agent": userAgent,
       },
       body: JSON.stringify({ email, password }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
 
     if (!response.ok) {
       // Handle specific error codes
-      if (result.errorCode === 'account_locked') {
+      if (result.errorCode === "account_locked") {
         return {
           success: false,
-          error: 'Your account has been locked due to too many failed attempts. Please contact support or try again later.',
+          error:
+            "Your account has been locked due to too many failed attempts. Please contact support or try again later.",
         };
       }
 
-      if (result.errorCode === 'email_not_verified') {
+      if (result.errorCode === "email_not_verified") {
         return {
           success: false,
-          error: 'Please verify your email address before logging in.',
+          error: "Please verify your email address before logging in.",
           data: { requiresVerification: true, email },
         };
       }
 
-      if (result.errorCode === 'mfa_required' && result.mfaChallenge) {
+      if (result.errorCode === "mfa_required" && result.mfaChallenge) {
         // Store MFA challenge data in secure cookie
         const cookieStore = await cookies();
         const challengeData = {
@@ -367,15 +373,15 @@ export async function loginAction(
 
         cookieStore.set(MFA_CHALLENGE_COOKIE, JSON.stringify(challengeData), {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
           maxAge: 300, // 5 minutes
-          path: '/',
+          path: "/",
         });
 
         return {
           success: false,
-          error: 'MFA_REQUIRED',
+          error: "MFA_REQUIRED",
           data: {
             mfaRequired: true,
             mfaMethod: result.mfaChallenge.method,
@@ -386,36 +392,40 @@ export async function loginAction(
 
       return {
         success: false,
-        error: result.message || 'Invalid email or password',
+        error: result.message || "Invalid email or password",
       };
     }
 
     // Success - reset rate limit and set cookies
     resetRateLimit(`login:${clientIP}`);
 
-    await setAuthCookies(
-      result.accessToken,
-      result.refreshToken,
-      rememberMe
-    );
+    await setAuthCookies(result.accessToken, result.refreshToken, rememberMe);
 
     // Rotate CSRF token after successful login (security best practice)
     await rotateCSRFToken();
 
     // Revalidate auth-related caches
-    revalidateTag('auth', 'default');
-    revalidateTag('user', 'default');
+    revalidateTag("auth", "default");
+    revalidateTag("user", "default");
 
     return {
       success: true,
-      message: 'Login successful',
-      data: { user: result.user },
+      message: "Login successful",
+      data: {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      },
     };
   } catch (error) {
-    console.error('[LoginAction] Error:', error);
+    console.error("[LoginAction] Error:", error);
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: "An unexpected error occurred. Please try again.",
     };
   }
 }
@@ -432,18 +442,20 @@ export async function loginWithMfaAction(
   if (!csrfValidation.valid) {
     return {
       success: false,
-      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+      error:
+        csrfValidation.error ||
+        "Security validation failed. Please refresh the page and try again.",
     };
   }
 
-  const mfaCode = formData.get('mfaCode') as string;
+  const mfaCode = formData.get("mfaCode") as string;
 
   // Validate MFA code format
   const codeValidation = mfaCodeSchema.safeParse(mfaCode);
   if (!codeValidation.success) {
     return {
       success: false,
-      error: 'Please enter a valid 6-digit code',
+      error: "Please enter a valid 6-digit code",
     };
   }
 
@@ -454,7 +466,7 @@ export async function loginWithMfaAction(
   if (!challengeCookie) {
     return {
       success: false,
-      error: 'MFA session expired. Please login again.',
+      error: "MFA session expired. Please login again.",
     };
   }
 
@@ -471,7 +483,7 @@ export async function loginWithMfaAction(
   } catch {
     return {
       success: false,
-      error: 'Invalid MFA session. Please login again.',
+      error: "Invalid MFA session. Please login again.",
     };
   }
 
@@ -480,20 +492,20 @@ export async function loginWithMfaAction(
     cookieStore.delete(MFA_CHALLENGE_COOKIE);
     return {
       success: false,
-      error: 'MFA code expired. Please login again.',
+      error: "MFA code expired. Please login again.",
     };
   }
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
     const response = await fetch(`${apiUrl}/api/v1/auth/verify-mfa`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         challengeId: challengeData.challengeId,
         code: mfaCode,
       }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
@@ -503,13 +515,13 @@ export async function loginWithMfaAction(
         cookieStore.delete(MFA_CHALLENGE_COOKIE);
         return {
           success: false,
-          error: 'Too many failed attempts. Please login again.',
+          error: "Too many failed attempts. Please login again.",
         };
       }
 
       return {
         success: false,
-        error: result.message || 'Invalid verification code',
+        error: result.message || "Invalid verification code",
         data: { attemptsRemaining: result.attemptsRemaining },
       };
     }
@@ -527,19 +539,19 @@ export async function loginWithMfaAction(
     // Rotate CSRF token after successful login (security best practice)
     await rotateCSRFToken();
 
-    revalidateTag('auth', 'default');
-    revalidateTag('user', 'default');
+    revalidateTag("auth", "default");
+    revalidateTag("user", "default");
 
     return {
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
       data: { user: result.user },
     };
   } catch (error) {
-    console.error('[LoginWithMfaAction] Error:', error);
+    console.error("[LoginWithMfaAction] Error:", error);
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: "An unexpected error occurred. Please try again.",
     };
   }
 }
@@ -554,11 +566,14 @@ export async function registerAction(
   const clientIP = await getClientIP();
 
   // Rate limiting (stricter for registration)
-  const rateCheck = checkRateLimit(`register:${clientIP}`, MAX_REGISTER_ATTEMPTS);
+  const rateCheck = checkRateLimit(
+    `register:${clientIP}`,
+    MAX_REGISTER_ATTEMPTS
+  );
   if (!rateCheck.allowed) {
     return {
       success: false,
-      error: 'Too many registration attempts. Please try again later.',
+      error: "Too many registration attempts. Please try again later.",
     };
   }
 
@@ -567,21 +582,23 @@ export async function registerAction(
   if (!csrfValidation.valid) {
     return {
       success: false,
-      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+      error:
+        csrfValidation.error ||
+        "Security validation failed. Please refresh the page and try again.",
     };
   }
 
   // Parse form data
   const rawData = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-    confirmPassword: formData.get('confirmPassword') as string,
-    firstName: formData.get('firstName') as string,
-    lastName: formData.get('lastName') as string,
-    phone: (formData.get('phone') as string) || undefined,
-    organizationName: (formData.get('organizationName') as string) || undefined,
-    acceptTerms: formData.get('acceptTerms') === 'true',
-    marketingOptIn: formData.get('marketingOptIn') === 'true',
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    confirmPassword: formData.get("confirmPassword") as string,
+    firstName: formData.get("firstName") as string,
+    lastName: formData.get("lastName") as string,
+    phone: (formData.get("phone") as string) || undefined,
+    organizationName: (formData.get("organizationName") as string) || undefined,
+    acceptTerms: formData.get("acceptTerms") === "true",
+    marketingOptIn: formData.get("marketingOptIn") === "true",
   };
 
   // Validate
@@ -589,7 +606,7 @@ export async function registerAction(
   if (!validation.success) {
     return {
       success: false,
-      error: 'Please check your input',
+      error: "Please check your input",
       fieldErrors: formatZodErrors(validation.error),
     };
   }
@@ -597,12 +614,12 @@ export async function registerAction(
   const data = validation.data;
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
     const response = await fetch(`${apiUrl}/api/v1/auth/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-Client-IP': clientIP,
+        "Content-Type": "application/json",
+        "X-Client-IP": clientIP,
       },
       body: JSON.stringify({
         email: data.email,
@@ -613,41 +630,41 @@ export async function registerAction(
         organizationName: data.organizationName,
         marketingOptIn: data.marketingOptIn,
       }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      if (result.errorCode === 'email_exists') {
+      if (result.errorCode === "email_exists") {
         return {
           success: false,
-          error: 'An account with this email already exists.',
-          fieldErrors: { email: ['This email is already registered'] },
+          error: "An account with this email already exists.",
+          fieldErrors: { email: ["This email is already registered"] },
         };
       }
 
       return {
         success: false,
-        error: result.message || 'Registration failed. Please try again.',
+        error: result.message || "Registration failed. Please try again.",
       };
     }
 
     return {
       success: true,
       message: result.requiresEmailVerification
-        ? 'Registration successful! Please check your email to verify your account.'
-        : 'Registration successful! You can now sign in.',
+        ? "Registration successful! Please check your email to verify your account."
+        : "Registration successful! You can now sign in.",
       data: {
         requiresEmailVerification: result.requiresEmailVerification,
         email: data.email,
       },
     };
   } catch (error) {
-    console.error('[RegisterAction] Error:', error);
+    console.error("[RegisterAction] Error:", error);
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: "An unexpected error occurred. Please try again.",
     };
   }
 }
@@ -666,17 +683,17 @@ export async function forgotPasswordAction(
   if (!rateCheck.allowed) {
     return {
       success: false,
-      error: 'Too many requests. Please try again later.',
+      error: "Too many requests. Please try again later.",
     };
   }
 
-  const rawData = { email: formData.get('email') as string };
+  const rawData = { email: formData.get("email") as string };
   const validation = forgotPasswordSchema.safeParse(rawData);
 
   if (!validation.success) {
     return {
       success: false,
-      error: 'Please enter a valid email address',
+      error: "Please enter a valid email address",
       fieldErrors: formatZodErrors(validation.error),
     };
   }
@@ -684,12 +701,12 @@ export async function forgotPasswordAction(
   const { email } = validation.data;
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
 
     // Fire and forget - don't wait for response to prevent timing attacks
     fetch(`${apiUrl}/api/v1/auth/forgot-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     }).catch(() => {
       // Silently fail - we don't want to reveal if email exists
@@ -698,15 +715,17 @@ export async function forgotPasswordAction(
     // Always return success to prevent email enumeration
     return {
       success: true,
-      message: 'If an account exists with this email, you will receive password reset instructions.',
+      message:
+        "If an account exists with this email, you will receive password reset instructions.",
       data: { email },
     };
   } catch (error) {
-    console.error('[ForgotPasswordAction] Error:', error);
+    console.error("[ForgotPasswordAction] Error:", error);
     // Still return success to prevent enumeration
     return {
       success: true,
-      message: 'If an account exists with this email, you will receive password reset instructions.',
+      message:
+        "If an account exists with this email, you will receive password reset instructions.",
       data: { email },
     };
   }
@@ -724,21 +743,23 @@ export async function resetPasswordAction(
   if (!csrfValidation.valid) {
     return {
       success: false,
-      error: csrfValidation.error || 'Security validation failed. Please refresh the page and try again.',
+      error:
+        csrfValidation.error ||
+        "Security validation failed. Please refresh the page and try again.",
     };
   }
 
   const rawData = {
-    token: formData.get('token') as string,
-    password: formData.get('password') as string,
-    confirmPassword: formData.get('confirmPassword') as string,
+    token: formData.get("token") as string,
+    password: formData.get("password") as string,
+    confirmPassword: formData.get("confirmPassword") as string,
   };
 
   const validation = resetPasswordSchema.safeParse(rawData);
   if (!validation.success) {
     return {
       success: false,
-      error: 'Please check your input',
+      error: "Please check your input",
       fieldErrors: formatZodErrors(validation.error),
     };
   }
@@ -746,39 +767,44 @@ export async function resetPasswordAction(
   const { token, password } = validation.data;
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
     const response = await fetch(`${apiUrl}/api/v1/auth/reset-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, password }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      if (result.errorCode === 'invalid_token' || result.errorCode === 'expired_token') {
+      if (
+        result.errorCode === "invalid_token" ||
+        result.errorCode === "expired_token"
+      ) {
         return {
           success: false,
-          error: 'This password reset link is invalid or has expired. Please request a new one.',
+          error:
+            "This password reset link is invalid or has expired. Please request a new one.",
         };
       }
 
       return {
         success: false,
-        error: result.message || 'Failed to reset password. Please try again.',
+        error: result.message || "Failed to reset password. Please try again.",
       };
     }
 
     return {
       success: true,
-      message: 'Your password has been reset successfully. You can now sign in with your new password.',
+      message:
+        "Your password has been reset successfully. You can now sign in with your new password.",
     };
   } catch (error) {
-    console.error('[ResetPasswordAction] Error:', error);
+    console.error("[ResetPasswordAction] Error:", error);
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: "An unexpected error occurred. Please try again.",
     };
   }
 }
@@ -793,16 +819,16 @@ export async function logoutAction(): Promise<void> {
   if (token) {
     try {
       // Notify backend to invalidate session/token
-      const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+      const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
       await fetch(`${apiUrl}/api/v1/auth/logout`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
     } catch (error) {
-      console.error('[LogoutAction] Error notifying backend:', error);
+      console.error("[LogoutAction] Error notifying backend:", error);
       // Continue with logout even if backend call fails
     }
   }
@@ -814,11 +840,11 @@ export async function logoutAction(): Promise<void> {
   await clearCSRFToken();
 
   // Revalidate caches
-  revalidateTag('auth', 'default');
-  revalidateTag('user', 'default');
+  revalidateTag("auth", "default");
+  revalidateTag("user", "default");
 
   // Redirect to login
-  redirect('/login');
+  redirect("/login");
 }
 
 /**
@@ -831,18 +857,20 @@ export async function refreshSessionAction(): Promise<AuthFormState> {
   if (!refreshToken) {
     return {
       success: false,
-      error: 'No refresh token available. Please login again.',
+      error: "No refresh token available. Please login again.",
     };
   }
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
-    const response = await fetch(`${apiUrl}/api/v1/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
-      cache: 'no-store',
-    });
+    const response = await fetch(
+      `${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken }),
+        cache: "no-store",
+      }
+    );
 
     const result = await response.json();
 
@@ -850,22 +878,22 @@ export async function refreshSessionAction(): Promise<AuthFormState> {
       await clearAuthCookies();
       return {
         success: false,
-        error: 'Session expired. Please login again.',
+        error: "Session expired. Please login again.",
       };
     }
 
     await setAuthCookies(result.accessToken, result.refreshToken, true);
-    revalidateTag('auth', 'default');
+    revalidateTag("auth", "default");
 
     return {
       success: true,
-      message: 'Session refreshed',
+      message: "Session refreshed",
     };
   } catch (error) {
-    console.error('[RefreshSessionAction] Error:', error);
+    console.error("[RefreshSessionAction] Error:", error);
     return {
       success: false,
-      error: 'Failed to refresh session',
+      error: "Failed to refresh session",
     };
   }
 }
@@ -878,30 +906,30 @@ export async function initiateSSOAction(
   returnUrl?: string
 ): Promise<{ redirectUrl?: string; error?: string }> {
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
     const response = await fetch(`${apiUrl}/api/v1/auth/sso/initiate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         provider,
         callbackUrl: `${appUrl}/api/auth/callback/${provider}`,
-        returnUrl: returnUrl || '/dashboard',
+        returnUrl: returnUrl || "/dashboard",
       }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      return { error: result.message || 'Failed to initiate SSO' };
+      return { error: result.message || "Failed to initiate SSO" };
     }
 
     return { redirectUrl: result.redirectUrl };
   } catch (error) {
-    console.error('[InitiateSSOAction] Error:', error);
-    return { error: 'Failed to initiate SSO' };
+    console.error("[InitiateSSOAction] Error:", error);
+    return { error: "Failed to initiate SSO" };
   }
 }
 
@@ -912,17 +940,17 @@ export async function verifyEmailAction(token: string): Promise<AuthFormState> {
   if (!token) {
     return {
       success: false,
-      error: 'Verification token is missing',
+      error: "Verification token is missing",
     };
   }
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
     const response = await fetch(`${apiUrl}/api/v1/auth/verify-email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     const result = await response.json();
@@ -930,19 +958,21 @@ export async function verifyEmailAction(token: string): Promise<AuthFormState> {
     if (!response.ok) {
       return {
         success: false,
-        error: result.message || 'Failed to verify email. The link may be invalid or expired.',
+        error:
+          result.message ||
+          "Failed to verify email. The link may be invalid or expired.",
       };
     }
 
     return {
       success: true,
-      message: 'Email verified successfully! You can now sign in.',
+      message: "Email verified successfully! You can now sign in.",
     };
   } catch (error) {
-    console.error('[VerifyEmailAction] Error:', error);
+    console.error("[VerifyEmailAction] Error:", error);
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: "An unexpected error occurred. Please try again.",
     };
   }
 }
@@ -950,37 +980,41 @@ export async function verifyEmailAction(token: string): Promise<AuthFormState> {
 /**
  * Resend verification email
  */
-export async function resendVerificationAction(email: string): Promise<AuthFormState> {
+export async function resendVerificationAction(
+  email: string
+): Promise<AuthFormState> {
   const clientIP = await getClientIP();
 
   const rateCheck = checkRateLimit(`resend:${clientIP}`, MAX_FORGOT_ATTEMPTS);
   if (!rateCheck.allowed) {
     return {
       success: false,
-      error: 'Too many requests. Please try again later.',
+      error: "Too many requests. Please try again later.",
     };
   }
 
   try {
-    const apiUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const apiUrl = process.env.BACKEND_URL || "http://localhost:8000";
 
     // Fire and forget to prevent enumeration
     fetch(`${apiUrl}/api/v1/auth/resend-verification`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     }).catch(() => {});
 
     // Always return success
     return {
       success: true,
-      message: 'If your email is registered and unverified, you will receive a new verification email.',
+      message:
+        "If your email is registered and unverified, you will receive a new verification email.",
     };
   } catch (error) {
-    console.error('[ResendVerificationAction] Error:', error);
+    console.error("[ResendVerificationAction] Error:", error);
     return {
       success: true,
-      message: 'If your email is registered and unverified, you will receive a new verification email.',
+      message:
+        "If your email is registered and unverified, you will receive a new verification email.",
     };
   }
 }

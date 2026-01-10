@@ -45,13 +45,14 @@ export function PDFEditorView() {
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
     const [activeField, setActiveField] = useState<Field | null>(null);
+    const [fields, setFields] = useState<Field[]>([]);
 
     // Select first PDF document when documents load
     useEffect(() => {
         if (documents.length > 0 && !documentSelection.selected) {
             documentSelection.select(documents[0]);
         }
-    }, [documents, documentSelection.selected]);
+    }, [documents, documentSelection]);
 
     useEffect(() => {
         let isMounted = true;
@@ -81,7 +82,7 @@ export function PDFEditorView() {
 
     const handleSignatureSave = (signed: boolean) => {
         if (signed && activeField) {
-            activeField.value = "Signed by User";
+            setFields(prev => prev.map(f => f.id === activeField.id ? { ...f, value: "Signed by User" } : f));
             setSignModalOpen(false);
             setActiveField(null);
         }
@@ -122,7 +123,13 @@ export function PDFEditorView() {
                         />
                         <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims} onLoadSuccess={setTotalPages}>
-                                <InteractiveOverlay activeTool={activeTool} dimensions={pageDims} onFieldClick={handleFieldClick} />
+                                <InteractiveOverlay
+                                    activeTool={activeTool}
+                                    dimensions={pageDims}
+                                    onFieldClick={handleFieldClick}
+                                    existingFields={fields}
+                                    onFieldsUpdate={setFields}
+                                />
                             </PDFViewer>
                         </div>
                     </>

@@ -217,7 +217,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
     query?: string;
   }): Promise<TrialExhibit[]> {
     try {
-      const filters: any = {};
+      const filters: Record<string, string> = {};
       if (criteria.caseId) filters.caseId = criteria.caseId;
       if (criteria.status) filters.status = criteria.status;
 

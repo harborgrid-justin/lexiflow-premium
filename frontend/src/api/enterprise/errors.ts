@@ -371,12 +371,15 @@ export function parseApiError(error: unknown): ApiErrorBase {
   const statusCode = (err as { statusCode?: number }).statusCode || err.status;
   const message =
     err.message || (err as { error?: string }).error || "An error occurred";
-  const details: any =
+  const details: unknown =
     (err as { details?: unknown }).details || (err as { data?: unknown }).data;
 
   switch (statusCode) {
     case 400:
-      return new ValidationError(message, details?.fieldErrors || {});
+      return new ValidationError(
+        message,
+        (details as { fieldErrors?: Record<string, string> })?.fieldErrors || {}
+      );
     case 401:
       return new AuthError(message);
     case 403:

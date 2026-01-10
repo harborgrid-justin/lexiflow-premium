@@ -78,12 +78,12 @@ export const BillingSummaryCard: React.FC<BillingSummaryCardProps> = ({
           {change !== undefined && (
             <div className="mt-2 flex items-center gap-1">
               {change >= 0 ? (
-                <TrendingUp className={cn("h-4 w-4", (theme as any).text.success)} />
+                <TrendingUp className={cn("h-4 w-4", (theme.text as Record<string, string>).success)} />
               ) : (
-                <TrendingDown className={cn("h-4 w-4", (theme as any).text.error)} />
+                <TrendingDown className={cn("h-4 w-4", (theme.text as Record<string, string>).error)} />
               )}
               <span
-                className={cn("text-sm font-medium", change >= 0 ? (theme as any).text.success : (theme as any).text.error)}
+                className={cn("text-sm font-medium", change >= 0 ? (theme.text as Record<string, string>).success : (theme.text as Record<string, string>).error)}
               >
                 {change >= 0 ? '+' : ''}{change}%
               </span>

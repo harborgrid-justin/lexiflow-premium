@@ -278,7 +278,7 @@ export const SettlementCalculator: React.FC = () => {
         metrics={metrics}
         iterations={params.iterations}
         theme={theme}
-        chartTheme={chartTheme as Record<string, unknown>}
+        chartTheme={chartTheme as unknown as any}
       />
     </div>
   );

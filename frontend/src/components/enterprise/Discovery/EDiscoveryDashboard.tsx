@@ -122,15 +122,17 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
     const fetchData = async () => {
       setLoading(true);
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const [custodiansData, collectionsData, analyticsData] = await Promise.all([
           DataService.custodians.getAll({ caseId }),
           DataService.esiSources.getAll({ caseId }),
           analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]) as [any[], any[], any];
+        ]) as [Custodian[], any[], Record<string, unknown>];
 
-        setCustodians(custodiansData.map(c => {
+        setCustodians(custodiansData.map((c: Custodian) => {
           let status: Custodian['status'] = 'active';
-          const s = c.status.toLowerCase();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const s = ((c as any).status || 'active').toLowerCase();
           if (s === 'on hold') status = 'hold';
           else if (s === 'released') status = 'released';
           else if (s === 'interviewed') status = 'interviewed';
@@ -140,11 +142,11 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
             name: c.name,
             email: c.email,
             department: c.department,
-            title: c.role,
+            title: (c as any).role || c.title || 'Unknown',
             status,
             dataSources: 0,
             documentsCollected: 0,
-            lastActivity: new Date(c.updatedAt)
+            lastActivity: new Date((c as any).updatedAt || new Date())
           };
         }));
 
@@ -169,21 +171,23 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
         }));
 
         if (analyticsData && analyticsData.overview) {
+          const overview = analyticsData.overview as Record<string, number>;
+          const team = analyticsData.team as Record<string, any>;
           setMetrics({
-            totalDocuments: analyticsData.overview.totalDocuments,
-            reviewed: analyticsData.overview.reviewedDocuments,
-            privileged: analyticsData.overview.privilegedDocuments,
-            responsive: analyticsData.overview.responsiveDocuments,
-            nonResponsive: analyticsData.overview.totalDocuments - analyticsData.overview.responsiveDocuments,
-            needsReview: analyticsData.overview.totalDocuments - analyticsData.overview.reviewedDocuments,
+            totalDocuments: overview.totalDocuments || 0,
+            reviewed: overview.reviewedDocuments || 0,
+            privileged: overview.privilegedDocuments || 0,
+            responsive: overview.responsiveDocuments || 0,
+            nonResponsive: (overview.totalDocuments || 0) - (overview.responsiveDocuments || 0),
+            needsReview: (overview.totalDocuments || 0) - (overview.reviewedDocuments || 0),
             flagged: 0,
-            avgReviewTime: analyticsData.team.averageReviewRate,
-            reviewers: analyticsData.team.reviewers
+            avgReviewTime: team?.averageReviewRate || 0,
+            reviewers: team?.reviewers || []
           });
         }
 
         if (analyticsData && analyticsData.progress) {
-          setProcessingProgress(analyticsData.progress);
+          setProcessingProgress(analyticsData.progress as ProcessingStage[]);
         }
       } catch (error) {
         console.error('Failed to fetch discovery data:', error);

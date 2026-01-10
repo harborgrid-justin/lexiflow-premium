@@ -19,6 +19,19 @@ interface DocumentTableProps {
   onRowClick?: (doc: LegalDocument) => void;
 }
 
+const SortIcon = ({
+  field,
+  currentSortField,
+  currentSortDir
+}: {
+  field: keyof LegalDocument;
+  currentSortField: keyof LegalDocument;
+  currentSortDir: 'asc' | 'desc';
+}) => {
+  if (currentSortField !== field) return null;
+  return currentSortDir === 'asc' ? <ArrowUp className="h-3 w-3 ml-1" /> : <ArrowDown className="h-3 w-3 ml-1" />;
+};
+
 export const DocumentTable = ({
   documents, toggleSelection, selectAll, isAllSelected, isSelected, setSelectedDocForHistory, setTaggingDoc, onRowClick
 }: DocumentTableProps) => {
@@ -36,11 +49,6 @@ export const DocumentTable = ({
       if (sortField !== field) setSortField(field);
     });
   }, [sortField]);
-
-  const SortIcon = ({ field }: { field: keyof LegalDocument }) => {
-    if (sortField !== field) return null;
-    return sortDir === 'asc' ? <ArrowUp className="h-3 w-3 ml-1" /> : <ArrowDown className="h-3 w-3 ml-1" />;
-  };
 
   // Memoization with purpose: Sort is expensive, recalc only when deps change (Principle #13)
   const sortedDocuments = useMemo(() => {
@@ -72,11 +80,11 @@ export const DocumentTable = ({
         <div className="w-10 flex-shrink-0 flex justify-center">
           <input type="checkbox" onChange={selectAll} checked={isAllSelected} className="rounded text-blue-600 focus:ring-blue-500 cursor-pointer" />
         </div>
-        <div className="flex-1 cursor-pointer flex items-center" onClick={() => handleSort('title')}>Document Name <SortIcon field="title" /></div>
-        <div className="w-28 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('sourceModule')}>Source <SortIcon field="sourceModule" /></div>
-        <div className="w-28 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('status')}>Status <SortIcon field="status" /></div>
+        <div className="flex-1 cursor-pointer flex items-center" onClick={() => handleSort('title')}>Document Name <SortIcon field="title" currentSortField={sortField} currentSortDir={sortDir} /></div>
+        <div className="w-28 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('sourceModule')}>Source <SortIcon field="sourceModule" currentSortField={sortField} currentSortDir={sortDir} /></div>
+        <div className="w-28 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('status')}>Status <SortIcon field="status" currentSortField={sortField} currentSortDir={sortDir} /></div>
         <div className="w-48 flex-shrink-0">Tags & Rules</div>
-        <div className="w-32 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('lastModified')}>Modified <SortIcon field="lastModified" /></div>
+        <div className="w-32 flex-shrink-0 cursor-pointer flex items-center" onClick={() => handleSort('lastModified')}>Modified <SortIcon field="lastModified" currentSortField={sortField} currentSortDir={sortDir} /></div>
         <div className="w-24 flex-shrink-0 text-right"></div>
       </div>
 

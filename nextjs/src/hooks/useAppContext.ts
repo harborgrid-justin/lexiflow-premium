@@ -231,10 +231,11 @@ export function useAppContext(): UseAppControllerReturn {
         }
       };
       loadCase();
-    } else {
+    } else if (selectedCase) {
+      // Only clear if currently set to avoid redundant updates
       setSelectedCase(null);
     }
-  }, [selectedCaseId, setSelectedCaseId, addToast]);
+  }, [selectedCaseId, setSelectedCaseId, addToast, selectedCase]);
 
   // ==========================================================================
   // CALLBACK HANDLERS

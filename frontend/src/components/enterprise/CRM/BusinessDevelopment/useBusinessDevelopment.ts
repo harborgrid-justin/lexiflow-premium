@@ -28,20 +28,20 @@ export function useBusinessDevelopment() {
   // Queries
   const { data: leads = [] } = useQuery<any[]>(["crm", "leads"], () =>
     DataService.crm.getLeads()
-  );
+  ) as { data: any[] };
   const { data: pitches = [] } = useQuery<any[]>(["crm", "pitches"], () =>
     DataService.crm.getPitches()
-  );
+  ) as { data: any[] };
   const { data: rfps = [] } = useQuery<any[]>(["crm", "rfps"], () =>
     DataService.crm.getRFPs()
-  );
+  ) as { data: any[] };
   const { data: winLossData = [] } = useQuery<any[]>(["crm", "win-loss"], () =>
     DataService.crm.getWinLossAnalysis()
-  );
+  ) as { data: any[] };
   const { data: analyticsData = {} } = useQuery<any>(
     ["crm", "business-metrics"],
     () => DataService.crm.getBusinessDevelopmentMetrics()
-  );
+  ) as { data: any };
 
   // Calculated metrics
   const metrics = {

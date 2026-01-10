@@ -16,7 +16,7 @@ interface PIIEntity extends PIIEntityType {
     confidence: number;
 }
 
-export function PIIPanel({ content, documentId, onApplyRedactions }: PIIPanelProps) {
+export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
     const { theme } = useTheme();
     const [entities, setEntities] = useState<PIIEntity[]>([]);
     const [isScanning, setIsScanning] = useState(true);

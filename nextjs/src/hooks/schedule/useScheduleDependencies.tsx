@@ -4,12 +4,12 @@
  * @description Manages Gantt chart dependencies with critical path calculation and cascade updates.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import type { ScheduleTask, TaskDependency, UseScheduleDependenciesReturn } from './types';
-import { validateDependency, hasCircularDependency } from './validation';
+import { useCallback, useMemo, useState } from 'react';
 import { calculateCriticalPath } from './criticalPath';
-import { getDependentTasks, getPredecessorTasks, cascadeTaskUpdate } from './dependencies';
-import { getDependencyPath, getDependencyColor } from './visualization';
+import { cascadeTaskUpdate, getDependentTasks, getPredecessorTasks } from './dependencies';
+import type { ScheduleTask, TaskDependency, UseScheduleDependenciesReturn } from './types';
+import { hasCircularDependency, validateDependency } from './validation';
+import { getDependencyColor, getDependencyPath } from './visualization';
 
 export * from './types';
 
@@ -25,20 +25,19 @@ export function useScheduleDependencies(
   initialDependencies: TaskDependency[] = []
 ): UseScheduleDependenciesReturn {
   const [dependencies, setDependencies] = useState<TaskDependency[]>(initialDependencies);
-  const [criticalPath, setCriticalPath] = useState<ReturnType<typeof calculateCriticalPath>>(null);
 
+  // Use useMemo for derived calculation instead of state + effect
   const taskMap = useMemo(() => {
     const map = new Map<string, ScheduleTask>();
     tasks.forEach(task => map.set(task.id, task));
     return map;
   }, [tasks]);
 
-  // Recalculate critical path when tasks or dependencies change
-  useEffect(() => {
-    const path = calculateCriticalPath(tasks, dependencies);
-    setCriticalPath(path);
-  }, [tasks, dependencies]);
+  // Direct calculation of critical path
+  const criticalPath = useMemo(() => calculateCriticalPath(tasks, dependencies), [tasks, dependencies]);
 
+  // Recalculate critical path when tasks or dependencies change
+  // Removed effect causing state update loop in favor of direct useMemo above
   const addDependency = useCallback((dependency: Omit<TaskDependency, 'id'>): string => {
     const validation = validateDependency(dependency, taskMap, dependencies);
 

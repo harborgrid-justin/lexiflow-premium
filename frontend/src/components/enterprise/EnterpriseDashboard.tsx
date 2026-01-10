@@ -89,13 +89,6 @@ interface KPIMetric {
   target?: number;
 }
 
-interface CasePipelineStage {
-  stage: string;
-  count: number;
-  value: number;
-  color: string;
-}
-
 interface TeamMember {
   id: string;
   name: string;
@@ -538,10 +531,8 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
                     }}
-                    formatter={(
-                      value: number | string | Array<number | string> | undefined,
-                      name: number | string
-                    ): [string, string] => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    formatter={(value: any, name: any) => {
                       if (name === 'value' && typeof value === 'number') {
                         return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
                       }

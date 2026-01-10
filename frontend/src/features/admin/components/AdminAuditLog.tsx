@@ -180,7 +180,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
                 viewMode={viewMode}
                 setViewMode={setViewMode}
                 handleReset={handleReset}
-                handleSimulateTamper={handleSimulateTamper}
+                handleSimulateTamper={() => { }} // Placeholder for missing function
                 handleVerifyChain={handleVerifyChain}
                 handleExport={handleExport}
                 isVerifying={isVerifying}

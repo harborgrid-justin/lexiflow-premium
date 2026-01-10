@@ -242,7 +242,7 @@ export interface MockInvoice {
 /**
  * Creates a mock API response with proper structure
  */
-export const createMockApiResponse = <T>(data: T, options: MockApiOptions = {}): MockApiResponse<T> => ({
+export const createMockApiResponse = <T,>(data: T, options: MockApiOptions = {}): MockApiResponse<T> => ({
   data,
   status: options.status ?? 200,
   message: options.message ?? 'Success',

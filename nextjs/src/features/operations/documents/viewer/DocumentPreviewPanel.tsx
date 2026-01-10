@@ -25,8 +25,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/providers';
-import { useWindow } from '@/providers';
+import { useTheme, useWindow } from '@/providers';
 
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';
@@ -76,15 +75,26 @@ export function DocumentPreviewPanel({
 
     useEffect(() => {
         let isMounted = true;
-        if (document && document.tags.includes('Local')) {
+
+        // Ensure consistent reset during transitions
+        if (!document) {
+            setPreviewUrl(null);
+            return;
+        }
+
+        if (document.tags.includes('Local')) {
             const loadBlob = async () => {
                 // Retrieve raw blob from IndexedDB
                 const blob = await DataService.documents.getFile(document.id);
 
-                if (isMounted && blob) {
-                    // Create managed URL
-                    const url = register(blob);
-                    setPreviewUrl(url);
+                if (isMounted) {
+                    if (blob) {
+                        // Create managed URL
+                        const url = register(blob);
+                        setPreviewUrl(url);
+                    } else {
+                        setPreviewUrl(null);
+                    }
                 }
             };
             loadBlob();
@@ -121,10 +131,11 @@ export function DocumentPreviewPanel({
     };
 
     const redactedSummary = useMemo(() => {
-        if (!document?.summary) return '';
-        if (!isRedactionMode) return document.summary;
-        return document.summary.replace(/(\b[A-Z][a-z]*\b)|(\d{2}\/\d{2}\/\d{4})|([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g, '██████');
-    }, [document?.summary, isRedactionMode]);
+        const summary = document?.summary;
+        if (!summary) return '';
+        if (!isRedactionMode) return summary;
+        return summary.replace(/(\b[A-Z][a-z]*\b)|(\d{2}\/\d{2}\/\d{4})|([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g, '██████');
+    }, [document, isRedactionMode]);
 
     if (!document) return <div className="hidden md:flex flex-col items-center justify-center h-full p-6 text-center text-slate-400"><AlertCircle className="h-8 w-8 opacity-50 mb-2" /><p className="text-sm">No document selected</p></div>;
 

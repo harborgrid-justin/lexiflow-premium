@@ -5,15 +5,15 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { getChartTheme } from '@/utils/chartConfig';
 import {
   Activity,
   AlertTriangle,
@@ -363,7 +363,7 @@ export const ClientAnalytics: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <RechartPieChart>
                 <Pie
-                  data={segmentData as any}
+                  data={segmentData as unknown as Record<string, unknown>[]}
                   dataKey="revenue"
                   nameKey="segment"
                   cx="50%"

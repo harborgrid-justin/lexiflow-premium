@@ -11,7 +11,9 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     console.log("[ExpenseRepository] Initialized with Backend API");
   }
 
-  async getAll(options?: Record<string, unknown>): Promise<FirmExpense[]> {
+  override async getAll(
+    options?: Record<string, unknown>
+  ): Promise<FirmExpense[]> {
     try {
       return await this.expensesApi.getAll(options);
     } catch (error) {
@@ -20,7 +22,7 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     }
   }
 
-  async getById(id: string): Promise<FirmExpense | null> {
+  override async getById(id: string): Promise<FirmExpense | null> {
     try {
       return await this.expensesApi.getById(id);
     } catch (error) {
@@ -29,7 +31,7 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     }
   }
 
-  async add(item: Partial<FirmExpense>): Promise<FirmExpense> {
+  override async add(item: Partial<FirmExpense>): Promise<FirmExpense> {
     try {
       // @ts-expect-error - mismatch or missing properties in Partial type vs expected DTO
       return await this.expensesApi.create(item);
@@ -39,7 +41,10 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     }
   }
 
-  async update(id: string, item: Partial<FirmExpense>): Promise<FirmExpense> {
+  override async update(
+    id: string,
+    item: Partial<FirmExpense>
+  ): Promise<FirmExpense> {
     try {
       return await this.expensesApi.update(id, item);
     } catch (error) {
@@ -48,7 +53,7 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  override async delete(id: string): Promise<void> {
     try {
       await this.expensesApi.delete(id);
     } catch (error) {

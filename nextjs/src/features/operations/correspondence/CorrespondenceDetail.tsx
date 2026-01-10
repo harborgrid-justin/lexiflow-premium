@@ -197,8 +197,8 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
                     isOpen={true}
                     onClose={() => setIsTaskModalOpen(false)}
                     initialTitle={`Follow up on: ${correspondenceItem.type === 'communication'
-                            ? correspondenceItem.item.subject
-                            : correspondenceItem.item.documentTitle
+                        ? correspondenceItem.item.subject
+                        : correspondenceItem.item.documentTitle
                         }`}
                     relatedModule={correspondenceItem.type === 'communication' ? 'Correspondence' : 'Service'}
                     relatedItemId={correspondenceItem.item.id}
@@ -255,7 +255,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
                             <div>
                                 <h4 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Content Preview</h4>
                                 <div className={cn("p-4 rounded border text-sm italic leading-relaxed", theme.surface.default, theme.border.default, theme.text.secondary)}>
-                                    "{item.preview}..."
+                                    &quot;{item.preview}...&quot;
                                 </div>
                             </div>
 

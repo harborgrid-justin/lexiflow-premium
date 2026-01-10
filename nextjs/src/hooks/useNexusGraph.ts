@@ -257,7 +257,8 @@ export function useNexusGraph(
       console.warn(
         "[useNexusGraph] Worker not available, physics simulation disabled"
       );
-      setIsStable(true);
+      // Wait for next tick to update state to avoid sync state update in effect
+      setTimeout(() => setIsStable(true), 0);
       return;
     }
 

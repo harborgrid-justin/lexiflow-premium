@@ -9,9 +9,9 @@
  * - Type-safe test utilities
  */
 
-import React, { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React, { ReactElement, ReactNode } from 'react';
 
 // ============================================================================
 // TYPES
@@ -404,7 +404,7 @@ export const isFocusable = (element: HTMLElement): boolean => {
 /**
  * Create a mock API response
  */
-export const createMockApiResponse = <T>(data: T, delay = 0): Promise<T> => {
+export const createMockApiResponse = <T,>(data: T, delay = 0): Promise<T> => {
   return new Promise(resolve => {
     setTimeout(() => resolve(data), delay);
   });
@@ -426,11 +426,10 @@ export const createMockApiError = (message: string, status = 500): Promise<never
 // ============================================================================
 
 export * from '@testing-library/react';
-export { userEvent };
-export { customRender as render };
+export { customRender as render, userEvent };
 
 // Re-export Jest globals for convenience
-export { jest, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from '@jest/globals';
+export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 // Export mock theme for direct access in tests
 export { mockTheme };

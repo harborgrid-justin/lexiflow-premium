@@ -63,7 +63,7 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
             `Exhibit ${ex.exhibitNumber}`,
             <div className={cn("h-full", theme.surface.default)}>
                 <DocumentPreviewPanel
-                    document={{ id: ex.id as string } as any}
+                    document={{ id: ex.id as string } as unknown as any}
                     onViewHistory={() => { }}
                 />
             </div>

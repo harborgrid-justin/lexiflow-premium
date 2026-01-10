@@ -36,12 +36,13 @@ export function useClientAnalytics() {
   );
 
   // Extract from combined analytics object
-  const profitabilityData = analyticsData.profitability || [];
-  const ltvData = analyticsData.ltv || [];
-  const riskData = analyticsData.risk || [];
-  const satisfactionData = analyticsData.satisfaction || [];
-  const segmentData = analyticsData.segments || [];
-  const revenueTrendData = analyticsData.revenueTrend || [];
+  const anyData = analyticsData as Record<string, any[]>;
+  const profitabilityData = anyData.profitability || [];
+  const ltvData = anyData.ltv || [];
+  const riskData = anyData.risk || [];
+  const satisfactionData = anyData.satisfaction || [];
+  const segmentData = anyData.segments || [];
+  const revenueTrendData = anyData.revenueTrend || [];
 
   // Calculated metrics
   const metrics = {

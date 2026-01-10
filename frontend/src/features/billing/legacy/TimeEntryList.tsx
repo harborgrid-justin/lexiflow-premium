@@ -157,7 +157,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
               type="submit"
               name="intent"
               value="approve-bulk"
-              className={cn("flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-white shadow-sm", (theme as any).interactive.success)}
+              className={cn("flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-white shadow-sm", (theme.interactive as Record<string, string>).success)}
             >
               <Check className="h-4 w-4" />
               Approve Selected
@@ -252,7 +252,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                         type="submit"
                         name="intent"
                         value="approve"
-                        className={cn((theme as any).text.success, "hover:underline")}
+                        className={cn((theme.text as Record<string, string>).success, "hover:underline")}
                       >
                         Approve
                       </button>
@@ -267,7 +267,7 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
                       type="submit"
                       name="intent"
                       value="delete"
-                      className={cn((theme as any).text.error, "hover:underline")}
+                      className={cn((theme.text as Record<string, string>).error, "hover:underline")}
                       onClick={(e) => {
                         if (!confirm('Delete this time entry?')) {
                           e.preventDefault();

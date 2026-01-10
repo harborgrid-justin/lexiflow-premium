@@ -9,6 +9,19 @@ import React from 'react';
 import { ConversationRow } from './ConversationRow';
 import { MessengerChatWindow } from './MessengerChatWindow';
 
+// Wrapper for popped out chat window
+const PoppedOutChatWrapper = ({ conversation, onSendMessage, onAttachFile, formatTime }: any) => (
+  <div className="h-full flex flex-col bg-white">
+    <MessengerChatWindow
+      activeConversation={conversation}
+      onSendMessage={onSendMessage}
+      onAttachFile={onAttachFile}
+      formatTime={formatTime}
+      isPoppedOut={true}
+    />
+  </div>
+);
+
 interface MessengerChatListProps {
   conversations: Conversation[];
   activeConvId: string | null;

@@ -60,11 +60,14 @@ export const useEnhancedWizard = <T extends Record<string, unknown>>(
 
   const goToStep = useCallback(
     (index: number) => {
+      const prevStep = index > 0 ? steps[index - 1] : undefined;
+      const prevId = prevStep?.id || "";
       if (
         index <= currentStepIndex ||
         (index > 0 &&
-          steps[index - 1] &&
-          completedSteps.has(steps[index - 1]?.id))
+          prevStep &&
+          prevId && // Ensure ID exists
+          completedSteps.has(prevId))
       ) {
         setCurrentStepIndex(index);
       }

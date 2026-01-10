@@ -3,8 +3,8 @@
  * @description Main view component (~90 LOC target) - Pure JSX presentation layer
  */
 
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { cn } from '@/shared/lib/cn';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { AlertTriangle, Award, DollarSign, Star, TrendingUp } from 'lucide-react';
 import { LTVTab } from './LTVTab';
 import { ProfitabilityTab } from './ProfitabilityTab';
@@ -112,7 +112,7 @@ export function ClientAnalyticsView() {
             segmentData={segmentData}
             revenueTrendData={revenueTrendData}
             theme={theme}
-            chartTheme={chartTheme as any}
+            chartTheme={chartTheme as unknown as any}
             chartColors={chartColors}
           />
         )}
@@ -123,7 +123,8 @@ export function ClientAnalyticsView() {
             satisfactionData={satisfactionData}
             theme={theme}
             chartColors={chartColors}
-            chartTheme={chartTheme as any}
+            // @ts-expect-error - ChartTheme type mismatch with Recharts expecting specific object shape
+            chartTheme={chartTheme as unknown as any}
           />
         )}
       </div>

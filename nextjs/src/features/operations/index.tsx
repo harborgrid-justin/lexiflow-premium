@@ -37,12 +37,13 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({ docu
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        let mounted = true;
+
         if (!documentId) {
             setDocument(null);
             return;
         }
 
-        let mounted = true;
         setLoading(true);
         setError(null);
 

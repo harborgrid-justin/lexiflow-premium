@@ -4,9 +4,9 @@
  * @module hooks/presence/useMultiUserPresence
  */
 
-import { useEffect } from 'react';
-import { PresenceStatus } from './types';
-import { usePresence } from './usePresence';
+import { useEffect } from "react";
+import { PresenceStatus } from "./types";
+import { usePresence } from "./usePresence";
 
 /**
  * Track presence for multiple users efficiently.
@@ -15,9 +15,12 @@ import { usePresence } from './usePresence';
  * const { presenceMap, onlineCount, offlineCount } = useMultiUserPresence(userIds);
  */
 export function useMultiUserPresence(userIds: string[]) {
-  const { getMultiplePresence, subscribeToUsers, unsubscribeFromUsers } = usePresence();
+  const { getMultiplePresence, subscribeToUsers, unsubscribeFromUsers } =
+    usePresence();
 
   const presenceMap = getMultiplePresence(userIds);
+
+  const userIdsStr = userIds.join(",");
 
   useEffect(() => {
     if (userIds.length > 0) {
@@ -27,13 +30,21 @@ export function useMultiUserPresence(userIds: string[]) {
       };
     }
     return undefined;
-  }, [userIds.join(','), subscribeToUsers, unsubscribeFromUsers]);
+  }, [userIdsStr, subscribeToUsers, unsubscribeFromUsers, userIds]);
 
   const presenceValues = Array.from(presenceMap.values());
-  const onlineCount = presenceValues.filter((p) => p.status === PresenceStatus.ONLINE).length;
-  const awayCount = presenceValues.filter((p) => p.status === PresenceStatus.AWAY).length;
-  const busyCount = presenceValues.filter((p) => p.status === PresenceStatus.BUSY).length;
-  const offlineCount = presenceValues.filter((p) => p.status === PresenceStatus.OFFLINE).length;
+  const onlineCount = presenceValues.filter(
+    (p) => p.status === PresenceStatus.ONLINE
+  ).length;
+  const awayCount = presenceValues.filter(
+    (p) => p.status === PresenceStatus.AWAY
+  ).length;
+  const busyCount = presenceValues.filter(
+    (p) => p.status === PresenceStatus.BUSY
+  ).length;
+  const offlineCount = presenceValues.filter(
+    (p) => p.status === PresenceStatus.OFFLINE
+  ).length;
 
   return {
     presenceMap,

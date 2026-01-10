@@ -463,9 +463,19 @@ export class BillingApiService {
         typeof (response as { data: unknown }).data === "object" &&
         (response as { data: unknown }).data !== null &&
         "data" in ((response as { data: unknown }).data as object) &&
-        Array.isArray((response as { data: { data: unknown } }).data.data)
+        Array.isArray(
+          (
+            (response as { data: { data: unknown } }).data as {
+              data: unknown[];
+            }
+          ).data
+        )
       ) {
-        return (response as { data: { data: Invoice[] } }).data.data;
+        return (
+          (response as { data: { data: Invoice[] } }).data as {
+            data: Invoice[];
+          }
+        ).data;
       }
 
       // Handle paginated response

@@ -115,8 +115,8 @@ export const MatterManagement: React.FC = () => {
             onChange={handleSearch}
             className={cn(
               "w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all",
-              (theme.background as Record<string, string>).default,
-              (theme.border as Record<string, string>).default,
+              (theme.background as unknown as Record<string, string>).default,
+              (theme.border as unknown as Record<string, string>).default,
               theme.text.primary
             )}
           />

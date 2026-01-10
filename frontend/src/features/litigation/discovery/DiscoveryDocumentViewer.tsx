@@ -23,7 +23,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
     );
 
     // Fetch Document Content
-    const { data: content, isLoading: isLoadingContent } = useQuery(
+    const { data: content, isLoading: isLoadingContent } = useQuery<string>(
         ['documents', docId, 'content'],
         () => DataService.documents.getContent(docId),
         { enabled: !!metadata }
@@ -107,11 +107,11 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                         </div>
 
                         <div className={cn("px-16 py-4 font-serif text-sm leading-loose whitespace-pre-wrap select-text", theme.text.primary)}>
-                            {doc.content as React.ReactNode}
+                            {doc.content}
                         </div>
 
                         <div className={cn("mt-20 mx-12 border-t pt-4 flex justify-between text-xs font-mono", theme.border.default, theme.text.tertiary)}>
-                            <span>{(metadata as any)?.classification || 'UNCLASSIFIED'}</span>
+                            <span>{(metadata as unknown as Record<string, unknown>)?.classification as string || 'UNCLASSIFIED'}</span>
                             <span>Page 1 of 1</span>
                         </div>
                     </div>

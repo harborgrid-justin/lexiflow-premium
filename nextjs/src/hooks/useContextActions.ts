@@ -178,15 +178,10 @@ export function useContextToolbar(
         );
 
         // Use functional state update to avoid dependency on actionStats
-        setActionStats((_prev) => {
-          // Simple check to avoid redundant updates if possible,
-          // but here we are restoring full state so we just set it.
-          // To satisfy "no synchronous setState in effect" if it's strict,
-          // we can wrap in setTimeout or better, rely on this being a Data load
-          // which is a standard pattern. The warning is usually for derived state from props.
-          // However, if we want to be safe:
-          return statsMap;
-        });
+        // Use setTimeout to move the update to the next tick to avoid "setState in effect" warning
+        setTimeout(() => {
+          setActionStats(() => statsMap);
+        }, 0);
 
         // Restore preferences
         if (data.favorites) setFavorites(new Set(data.favorites));

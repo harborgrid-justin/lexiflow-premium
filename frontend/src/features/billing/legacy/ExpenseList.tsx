@@ -200,7 +200,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                         type="submit"
                         name="intent"
                         value="approve"
-                        className={cn((theme as any).text.success, "hover:underline")}
+                        className={cn((theme.text as Record<string, string>).success, "hover:underline")}
                       >
                         Approve
                       </button>
@@ -215,7 +215,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                       type="submit"
                       name="intent"
                       value="delete"
-                      className={cn((theme as any).text.error, "hover:underline")}
+                      className={cn((theme.text as Record<string, string>).error, "hover:underline")}
                       onClick={(e) => {
                         if (!confirm('Delete this expense?')) {
                           e.preventDefault();

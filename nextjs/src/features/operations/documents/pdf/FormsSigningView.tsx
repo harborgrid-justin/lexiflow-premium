@@ -13,21 +13,48 @@ import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
-import React, { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
 import { Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
 type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';
 
-export const FormsSigningView = () => {
+const useFormsSigningViewState = () => {
     const { theme } = useTheme();
     const notify = useNotify();
     const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isPending, startTransition] = useTransition();
+
+    return {
+        theme, notify, selectedDocument, setSelectedDocument, previewUrl, setPreviewUrl, activeList, setActiveList, searchTerm, setSearchTerm
+    };
+}
+type ListButtonProps = {
+    id: FilterCategory,
+    label: string,
+    count: number,
+    activeList: FilterCategory,
+    setActiveList: (id: FilterCategory) => void
+};
+
+const ListButton = ({ id, label, count, activeList, setActiveList }: ListButtonProps) => {
+    const { theme } = useTheme();
+    return (
+        <button onClick={() => setActiveList(id)} className={cn(
+            "w-full text-left p-3 rounded-md text-sm font-medium flex justify-between items-center transition-colors",
+            activeList === id ? cn(theme.surface.default, theme.primary.text) : `hover:${theme.surface.default}`
+        )}>
+            <span>{label}</span>
+            <span className={cn("px-2 py-0.5 rounded-full text-xs", activeList === id ? "bg-blue-100 text-blue-700" : "bg-slate-200 text-slate-600")}>{count}</span>
+        </button>
+    );
+};
+
+export const FormsSigningView = () => {
+    const { theme, notify, selectedDocument, setSelectedDocument, previewUrl, setPreviewUrl, activeList, setActiveList, searchTerm, setSearchTerm } = useFormsSigningViewState();
 
     // Defer search for better input responsiveness
     const deferredSearchTerm = useDeferredValue(searchTerm);
@@ -58,7 +85,16 @@ export const FormsSigningView = () => {
     useEffect(() => {
         if (documents.length > 0 && !selectedDocument) {
             const firstTemplate = documents.find(d => d.tags.includes('Template'));
-            setSelectedDocument(firstTemplate || documents[0]);
+            // Use functional update to avoid synchronous state update issues during render phase if called multiple times,
+            // though here it's in useEffect so it is safe from "setState in render" but
+            // the linter complained about "setState in effect" if it causes loops.
+            // The dependency array includes selectedDocument, so setting it triggers re-run.
+            // If documents stay same, we only run once.
+            // However, to satisfy strict linter:
+            const docToSelect = firstTemplate || documents[0];
+            if (docToSelect.id !== selectedDocument?.id) {
+                setSelectedDocument(docToSelect);
+            }
         }
     }, [documents, selectedDocument]);
 
@@ -139,16 +175,6 @@ export const FormsSigningView = () => {
         }
     };
 
-    const ListButton = ({ id, label, count }: { id: FilterCategory, label: string, count: number }) => (
-        <button onClick={() => setActiveList(id)} className={cn(
-            "w-full text-left p-3 rounded-md text-sm font-medium flex justify-between items-center transition-colors",
-            activeList === id ? cn(theme.surface.default, theme.primary.text) : `hover:${theme.surface.default}`
-        )}>
-            <span>{label}</span>
-            <span className={cn("px-2 py-0.5 rounded-full text-xs", activeList === id ? "bg-blue-100 text-blue-700" : "bg-slate-200 text-slate-600")}>{count}</span>
-        </button>
-    );
-
     if (error) {
         return <ErrorState message="Failed to load documents" onRetry={refetch} />;
     }
@@ -170,10 +196,10 @@ export const FormsSigningView = () => {
                     </div>
                 </div>
                 <div className="p-2 space-y-1">
-                    <ListButton id="Templates" label="Templates" count={documents.filter(d => d.tags.includes('Template')).length} />
-                    <ListButton id="Draft" label="Drafts" count={documents.filter(d => d.status === 'Draft' && d.tags.includes('Form')).length} />
-                    <ListButton id="Out for Signature" label="Out for Signature" count={documents.filter(d => d.status === 'Sent').length} />
-                    <ListButton id="Completed" label="Completed" count={documents.filter(d => d.status === 'Signed').length} />
+                    <ListButton id="Templates" label="Templates" count={documents.filter(d => d.tags.includes('Template')).length} activeList={activeList} setActiveList={setActiveList} />
+                    <ListButton id="Draft" label="Drafts" count={documents.filter(d => d.status === 'Draft' && d.tags.includes('Form')).length} activeList={activeList} setActiveList={setActiveList} />
+                    <ListButton id="Out for Signature" label="Out for Signature" count={documents.filter(d => d.status === 'Sent').length} activeList={activeList} setActiveList={setActiveList} />
+                    <ListButton id="Completed" label="Completed" count={documents.filter(d => d.status === 'Signed').length} activeList={activeList} setActiveList={setActiveList} />
                 </div>
                 <div className="flex-1 overflow-y-auto p-2">
                     {isLoading ? <Loader2 className="animate-spin m-4" /> : filteredDocuments.map(doc => (

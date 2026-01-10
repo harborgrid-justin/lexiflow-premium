@@ -93,7 +93,7 @@ const ErrorFallback: React.FC<{ error: Error | null; onReset: () => void }> = ({
           </h3>
 
           <p className={cn("text-sm mb-6", theme.text.secondary)}>
-            We encountered an error in the correspondence module. This has been logged and we're working on it.
+            We encountered an error in the correspondence module. This has been logged and we&apos;re working on it.
           </p>
 
           {error && process.env.NODE_ENV === 'development' && (

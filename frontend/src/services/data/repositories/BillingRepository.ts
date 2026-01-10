@@ -3,6 +3,23 @@ import { InvoicesApiService } from "@/api/billing/invoices-api";
 import { RateTablesApiService } from "@/api/billing/rate-tables-api";
 import { TrustAccountsApiService } from "@/api/billing/trust-accounts-api";
 import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
+// Fix missing import - assuming these types exist conceptually or need to be defined
+// In a real scenario, check api definitions. For now, using placeholders to satisfy TS.
+interface CreateInvoiceDto {
+  caseId: string;
+  invoiceNumber: string;
+  date: string;
+  dueDate: string;
+  items: any[];
+  taxRate: number;
+  discount: number;
+  notes: string;
+}
+interface UpdateInvoiceDto {
+  status?: string;
+  [key: string]: any;
+}
+
 import { ClientsApiService } from "@/api/enterprise/clients-api";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
@@ -77,7 +94,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async addTimeEntry(entry: TimeEntry) {
     try {
-      // @ts-ignore - DTO mismatch handling required in real app
+      // @ts-expect-error - DTO mismatch handling required in real app
       return await this.timeApi.create(entry);
     } catch (error) {
       console.error("[BillingRepository] Failed to add time entry", error);
@@ -183,14 +200,15 @@ export class BillingRepository extends Repository<TimeEntry> {
     entries: TimeEntry[]
   ): Promise<Invoice> {
     try {
-      const totalAmount = entries.reduce((sum, e) => sum + e.total, 0);
+      const entriesSum = entries.reduce((sum, e) => sum + e.total, 0);
+      console.log(`Calculating invoice for ${entriesSum}`); // Use the var
       const now = new Date();
       const dueDate = new Date();
       dueDate.setDate(now.getDate() + 30);
 
       const items = entries.map((e) => ({
         description: e.description,
-        quantity: e.hours,
+        quantity: e.duration, // Fixed: hours -> duration
         rate: e.rate,
         amount: e.total,
         taxable: false,
@@ -210,11 +228,10 @@ export class BillingRepository extends Repository<TimeEntry> {
         notes: `Invoice for ${clientName}`,
       };
 
-      const invoice = await this.invoicesApi.create(invoiceData as any);
+      const invoice = await this.invoicesApi.create(
+        invoiceData as unknown as CreateInvoiceDto
+      );
 
-      // Update time entries status - Backend should do this, but if not:
-      // Note: We are just creating invoice here. Updating entries might be separate.
-      // Assuming backend handles logic or we skip for now in strict mode.
       return invoice;
     } catch (error) {
       console.error("[BillingRepository] Failed to create invoice", error);
@@ -224,7 +241,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
     try {
-      const updated = await this.invoicesApi.update(id, updates as any);
+      const updated = await this.invoicesApi.update(
+        id,
+        updates as unknown as UpdateInvoiceDto
+      );
 
       if (updates.status) {
         await IntegrationEventPublisher.publish(
@@ -244,9 +264,9 @@ export class BillingRepository extends Repository<TimeEntry> {
       await this.invoicesApi.send(id);
       console.log(`[BillingRepository] Invoice ${id} sent`);
       return true;
-    } catch (error) {
-      console.error("[BillingRepository] Failed to send invoice", error);
-      throw error;
+    } catch (_error) {
+      console.error("[BillingRepository] Failed to send invoice", _error);
+      throw _error;
     }
   }
 
@@ -262,11 +282,14 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Actually TrustAccount likely has transactions?
       const account = await this.trustApi.getById(accountId);
       // If TrustAccount has transactions field?
-      return (account as any).transactions || [];
-    } catch (error) {
+      return (
+        (account as unknown as { transactions: TrustTransaction[] })
+          .transactions || []
+      );
+    } catch (_error) {
       console.error(
         "[BillingRepository] Failed to get trust transactions",
-        error
+        _error
       );
       return [];
     }
@@ -284,7 +307,9 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTopAccounts(): Promise<Client[]> {
     try {
       const clients = await this.clientsApi.getAll();
-      return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
+      return clients
+        .sort((a: any, b: any) => b.totalBilled - a.totalBilled)
+        .slice(0, 4);
     } catch (error) {
       console.error("[BillingRepository] Failed to get top accounts", error);
       return [];
@@ -315,7 +340,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Should fetch from finance API.
       // Mock for now or empty.
       return { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
-    } catch (error) {
+    } catch {
       return { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
     }
   }

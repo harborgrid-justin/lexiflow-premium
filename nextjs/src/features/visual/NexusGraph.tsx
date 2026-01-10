@@ -250,3 +250,4 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
     </div>
   );
 });
+NexusGraph.displayName = 'NexusGraph';

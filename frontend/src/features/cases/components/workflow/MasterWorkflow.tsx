@@ -177,17 +177,23 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
 
         // Map templates to FirmProcess view model
         // Using generic Record for template to accommodate both API and Repo types
-        return (templates || []).map((t: Record<string, unknown>) => ({
-          id: t.id,
-          name: t.name,
-          status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle'),
-          triggers: (t.trigger as any)?.type
-            ? `${(t.trigger as any).type.charAt(0).toUpperCase() + (t.trigger as any).type.slice(1)}`
-            : (t.triggers || 'Manual'), // Fallback for Repo type
-          tasks: (t as any).steps?.length || (t as any).tasks || 0,
-          completed: t.completed || 0,
-          owner: ((t as any).metadata?.owner as string) || (t as any).owner || 'System'
-        }));
+        return (templates || []).map((t: Record<string, unknown>) => {
+          const trigger = t.trigger as Record<string, unknown> | undefined;
+          const steps = (t.steps || []) as unknown[];
+          const metadata = t.metadata as Record<string, unknown> | undefined;
+
+          return {
+            id: t.id as string,
+            name: t.name as string,
+            status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle'),
+            triggers: trigger?.type && typeof trigger.type === 'string'
+              ? `${trigger.type.charAt(0).toUpperCase() + trigger.type.slice(1)}`
+              : ((t.triggers as string) || 'Manual'),
+            tasks: steps?.length || (t.tasks as number) || 0,
+            completed: (t.completed as number) || 0,
+            owner: (metadata?.owner as string) || (t.owner as string) || 'System'
+          };
+        });
       } catch (error) {
         console.error("Failed to fetch workflow processes:", error);
         return [];

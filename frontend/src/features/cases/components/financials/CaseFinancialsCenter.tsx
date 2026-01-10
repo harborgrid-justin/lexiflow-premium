@@ -122,7 +122,10 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
 
     const recentTimeEntries = timeEntries?.filter(t => {
       const entryDate = t.date || (t.createdAt ? t.createdAt : new Date().toISOString());
-      return new Date(entryDate) >= cutoffDate;
+      if (typeof entryDate === 'string') {
+        return new Date(entryDate) >= cutoffDate;
+      }
+      return false;
     }) || [];
 
     const totalRevenue = recentInvoices.reduce((sum, inv) =>
@@ -270,7 +273,9 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                     d.setMonth(d.getMonth() - (5 - i));
                     const monthName = d.toLocaleString('default', { month: 'short' });
                     const total = invoices?.filter(inv => {
-                      const invDate = new Date(inv.invoiceDate || inv.createdAt || inv.date || '');
+                      const dateStr = inv.invoiceDate || inv.createdAt || inv.date;
+                      if (!dateStr) return false;
+                      const invDate = new Date(dateStr);
                       return invDate.getMonth() === d.getMonth() && invDate.getFullYear() === d.getFullYear();
                     }).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
                     return { name: monthName, value: total };
@@ -282,7 +287,10 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   <RechartsTooltip
                     cursor={{ fill: isDark ? '#334155' : '#f1f5f9' }}
                     contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderColor: isDark ? '#334155' : '#e2e8f0', color: isDark ? '#f8fafc' : '#0f172a' }}
-                    formatter={(value: number, _name: any): any => [`$${value.toLocaleString()}`, 'Revenue']}
+                    formatter={(value: unknown, _name: unknown) => [
+                      `$${typeof value === 'number' ? value.toLocaleString() : value}`,
+                      'Revenue'
+                    ]}
                   />
                   <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                     {Array.from({ length: 6 }).map((_, index) => (

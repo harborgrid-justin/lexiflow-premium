@@ -26,13 +26,18 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
   const debouncedName = useDebounce(name, SEARCH_DEBOUNCE_MS);
 
   useEffect(() => {
+    let mounted = true;
     if (!debouncedName || debouncedName.length < 3) {
-      setConflicts([]);
-      setIsChecking(false);
+      // Avoid calling state setter if we are already in the desired state or prevent sync updates in effect loop
+      if (conflicts.length > 0 || isChecking) {
+        setConflicts([]);
+        setIsChecking(false);
+      }
       return;
     }
 
     const runCheck = async () => {
+      if (!mounted) return;
       setIsChecking(true);
       // Parallel fetch for full scope
       const [clients, parties] = await Promise.all([

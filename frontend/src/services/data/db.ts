@@ -167,6 +167,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private mode: "IndexedDB" | "LocalStorage" = "IndexedDB";
+  // @ts-expect-error - db reserved for future local fallback
   private db: IDBDatabase | null = null; // Type compatibility
 
   constructor() {

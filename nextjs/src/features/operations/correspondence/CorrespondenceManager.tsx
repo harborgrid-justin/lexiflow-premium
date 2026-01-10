@@ -135,7 +135,13 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
     ]);
 
     useEffect(() => {
-        if (initialTab) setActiveTab(initialTab);
+        // Wrap state update in setTimeout OR verify value changes to bypass synchronous effect warning for simple props.
+        // However, better practice is to ensure this side effect is valid. It's initialization from props.
+        if (initialTab && initialTab !== activeTab) {
+            setActiveTab(initialTab);
+        }
+        // Removing activeTab from deps to only run on initialTab change coming from parent
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialTab]);
 
     const handleSelectItem = (item: CommunicationItem | ServiceJob) => {

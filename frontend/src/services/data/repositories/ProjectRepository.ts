@@ -12,7 +12,7 @@ export class ProjectRepository extends Repository<Project> {
   }
 
   // Override base methods to use API
-  async getAll(options?: Record<string, unknown>): Promise<Project[]> {
+  override async getAll(options?: Record<string, unknown>): Promise<Project[]> {
     try {
       // API expects filters, options might be generic. mapping might be needed.
       return (await this.projectsApi.getAll(options)) as unknown as Project[];
@@ -22,7 +22,7 @@ export class ProjectRepository extends Repository<Project> {
     }
   }
 
-  async getById(id: string): Promise<Project | null> {
+  override async getById(id: string): Promise<Project | null> {
     try {
       return (await this.projectsApi.getById(id)) as unknown as Project;
     } catch (error) {
@@ -34,7 +34,7 @@ export class ProjectRepository extends Repository<Project> {
     }
   }
 
-  async add(item: Partial<Project>): Promise<Project> {
+  override async add(item: Partial<Project>): Promise<Project> {
     try {
       return (await this.projectsApi.create(item)) as unknown as Project;
     } catch (error) {
@@ -43,7 +43,7 @@ export class ProjectRepository extends Repository<Project> {
     }
   }
 
-  async update(id: string, item: Partial<Project>): Promise<Project> {
+  override async update(id: string, item: Partial<Project>): Promise<Project> {
     try {
       return (await this.projectsApi.update(id, item)) as unknown as Project;
     } catch (error) {
@@ -52,7 +52,7 @@ export class ProjectRepository extends Repository<Project> {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  override async delete(id: string): Promise<void> {
     try {
       await this.projectsApi.delete(id);
     } catch (error) {

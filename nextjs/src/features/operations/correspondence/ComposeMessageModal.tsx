@@ -37,7 +37,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         status: CommunicationStatus.DRAFT
     });
     const [isDrafting, setIsDrafting] = useState(false);
-    const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+    const [, setValidationErrors] = useState<Record<string, string>>({});
     // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
 
     // Load cases from IndexedDB via useQuery for accurate, cached data

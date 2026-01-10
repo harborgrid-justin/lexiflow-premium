@@ -82,6 +82,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 required
                 className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                suppressHydrationWarning
               />
             </div>
 
@@ -99,6 +100,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 required
                 className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                suppressHydrationWarning
               />
             </div>
 

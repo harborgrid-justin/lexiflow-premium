@@ -99,9 +99,9 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     return (
         <div className="xl:col-span-2 space-y-6">
             <Card title="Case Phase Distribution & Volume" subtitle="Active matters by litigation stage" className="h-[28rem]">
-                <div ref={containerRef} className="h-full w-full min-h-[20rem]">
+                <div ref={containerRef} className="h-full w-full min-h-[20rem] relative overflow-hidden">
                     {isMounted && safeChartData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                        <ResponsiveContainer width="99%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                             <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} dy={10} />

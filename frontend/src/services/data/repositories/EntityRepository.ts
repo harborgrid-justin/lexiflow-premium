@@ -68,6 +68,7 @@ export class EntityRepository extends Repository<LegalEntity> {
       riskScore?: number;
       tags?: string[];
       [key: string]: unknown;
+    };
     return {
       ...entityAny,
       id: entity.id,

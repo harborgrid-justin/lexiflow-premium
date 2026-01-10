@@ -71,8 +71,10 @@ export const MetricCard = React.memo<MetricCardProps>(({
       };
 
       requestAnimationFrame(animate);
-    } else
+    } else {
+      setDisplayValue(normalizedValue);
       prevValueRef.current = normalizedValue;
+    }
   }, [normalizedValue, displayValue]);
 
   // Sparkline Generator (memoized for performance)

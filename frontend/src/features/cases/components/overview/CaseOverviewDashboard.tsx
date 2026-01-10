@@ -130,11 +130,14 @@ export const CaseOverviewDashboard: React.FC<{ caseId?: string }> = ({ caseId })
         const timeEntries = await api.billing.getTimeEntries();
         const users = await api.users.getAll();
 
-        return users.map(user => {
+        const safeUsers = Array.isArray(users) ? users : [];
+        const safeTimeEntries = Array.isArray(timeEntries) ? timeEntries : [];
+
+        return safeUsers.map(user => {
           const userMatters = (matters || []).filter(m =>
             m.leadAttorneyId === user.id || m.ownerId === user.id
           );
-          const userTimeEntries = timeEntries.filter(t => t.userId === user.id);
+          const userTimeEntries = safeTimeEntries.filter(t => t.userId === user.id);
           const totalHours = userTimeEntries.reduce((sum, t) => sum + (t.duration || 0), 0);
           const capacity = 180;
 

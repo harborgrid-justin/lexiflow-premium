@@ -144,8 +144,9 @@ export class DocketApiService {
       // Fallback for direct response
       return response as PaginatedResponse<DocketEntry>;
     } catch (error) {
+      // Re-throw the original error to preserve context (e.g. 401, 500)
       console.error("[DocketApiService.getAll] Error:", error);
-      throw new Error("Failed to fetch docket entries");
+      throw error;
     }
   }
 

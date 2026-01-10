@@ -67,8 +67,8 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card title="Live Query Traffic (QPS)" className="lg:col-span-2 overflow-hidden">
-                    <div className="h-64 w-full min-w-0">
-                        <ResponsiveContainer width="100%" height="100%">
+                    <div className="h-64 w-full min-w-0 relative overflow-hidden">
+                        <ResponsiveContainer width="99%" height="100%" minWidth={0} debounce={50}>
                             <AreaChart data={data}>
                                 <defs>
                                     <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">

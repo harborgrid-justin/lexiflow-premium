@@ -1,9 +1,9 @@
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { ChartColorService } from '@/services/theme/chartColorService';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import React from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 // ✅ Migrated to backend API (2025-12-21)
@@ -27,12 +27,12 @@ const DiscoveryCharts: React.FC = () => {
 
     const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
         ['discovery-funnel-stats', 'main'],
-        DataService.discovery.getFunnelStats as never
+        () => DataService.discovery.getFunnelStats()
     );
 
     const { data: custodianData = [], isLoading: custodianLoading } = useQuery<CustodianDataItem[]>(
         ['discovery-custodian-stats', 'main'],
-        DataService.discovery.getCustodianStats as never
+        () => DataService.discovery.getCustodianStats()
     );
 
     if (funnelLoading || custodianLoading) {

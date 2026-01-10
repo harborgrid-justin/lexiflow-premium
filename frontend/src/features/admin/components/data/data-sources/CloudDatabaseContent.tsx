@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { RefreshCw, Plus, X, Database } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { DataSource } from '@/api/data-platform/data-sources-api';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/shared/lib/cn';
-import { useQuery, useMutation, queryClient } from '@/hooks/backend';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { AnimatePresence } from 'framer-motion';
+import { Database, Plus, RefreshCw, X } from 'lucide-react';
+import React, { useState } from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
-import type { DataConnection, ConnectionFormData, ConnectionStatus, TestConnectionResult } from './types';
+import type { ConnectionFormData, ConnectionStatus, DataConnection } from './types';
 
 interface SyncConnectionResult {
   recordsSynced: number;
@@ -20,6 +21,15 @@ const PROVIDERS = [
   { id: 'mongo', name: 'MongoDB' },
   { id: 's3', name: 'Amazon S3' },
 ];
+
+const toDataConnection = (ds: DataSource): DataConnection => ({
+  id: ds.id,
+  name: ds.name,
+  type: (ds.metadata as any)?.providerName || ds.type,
+  region: (ds.metadata as any)?.region || (ds.config as any)?.region || 'us-east-1',
+  status: (ds.status as ConnectionStatus) || 'disconnected',
+  lastSync: ds.config?.lastSync,
+});
 
 export const CloudDatabaseContent: React.FC = () => {
   const { theme } = useTheme();
@@ -34,7 +44,10 @@ export const CloudDatabaseContent: React.FC = () => {
 
   const { data: connections = [], isLoading, refetch } = useQuery<DataConnection[]>(
     ['admin', 'sources', 'connections'],
-    DataService.sources.getConnections,
+    async () => {
+      const data = await DataService.dataSources.getAll();
+      return data.map(toDataConnection);
+    },
     {
       staleTime: 0,
       refetchOnWindowFocus: false,
@@ -43,7 +56,23 @@ export const CloudDatabaseContent: React.FC = () => {
 
   // Concurrent-safe: Functional state updates in cache (Principle #5)
   const addConnectionMutation = useMutation(
-    DataService.sources.addConnection,
+    async (data: any) => {
+      const payload: Partial<DataSource> = {
+        name: data.name,
+        type: 'database',
+        status: 'active',
+        config: {
+          url: data.host,
+        },
+        metadata: {
+          region: data.region,
+          providerId: data.providerId,
+          providerName: data.type
+        }
+      };
+      const result = await DataService.dataSources.create(payload);
+      return toDataConnection(result);
+    },
     {
       onSuccess: (newConnection: DataConnection) => {
         // Functional update prevents stale closures
@@ -58,46 +87,55 @@ export const CloudDatabaseContent: React.FC = () => {
   );
 
   // Concurrent-safe: Optimistic updates with functional state (Principle #5)
-  const syncMutation = useMutation(DataService.sources.syncConnection, {
-    onMutate: (id: string) => {
-      // Functional update ensures we work with latest state
-      queryClient.setQueryData<DataConnection[]>(
-        ['admin', 'sources', 'connections'],
-        (old) => old ? old.map(c => c.id === id ? { ...c, status: 'syncing' as ConnectionStatus } : c) : []
-      );
-    },
-    onSuccess: (data: unknown, id: string) => {
-      setTimeout(() => {
+  const syncMutation = useMutation(
+    (id: string) => DataService.dataSources.sync(id),
+    {
+      onMutate: (id: string) => {
+        // Functional update ensures we work with latest state
         queryClient.setQueryData<DataConnection[]>(
           ['admin', 'sources', 'connections'],
-          (old) => old ? old.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c) : []
+          (old) => old ? old.map(c => c.id === id ? { ...c, status: 'syncing' as ConnectionStatus } : c) : []
         );
-        if (data && typeof data === 'object' && 'recordsSynced' in data) {
-          notify.success(`Synced ${(data as SyncConnectionResult).recordsSynced} records successfully`);
-        }
-      }, 2000);
-    }
-  });
+      },
+      onSuccess: (data: unknown, id: string) => {
+        setTimeout(() => {
+          queryClient.setQueryData<DataConnection[]>(
+            ['admin', 'sources', 'connections'],
+            (old) => old ? old.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c) : []
+          );
+          if (data && typeof data === 'object' && 'jobId' in (data as any)) {
+            // Adapted notification message since sync return type changed
+            notify.success(`Sync job started successfully`);
+          } else if (data && typeof data === 'object' && 'recordsSynced' in data) {
+            notify.success(`Synced ${(data as SyncConnectionResult).recordsSynced} records successfully`);
+          }
+        }, 2000);
+      }
+    });
 
   // Concurrent-safe: Functional filter for deletions (Principle #5)
-  const deleteMutation = useMutation(DataService.sources.deleteConnection, {
-    onSuccess: (_: unknown, id: string) => {
-      // Functional update prevents race conditions
-      queryClient.setQueryData<DataConnection[]>(
-        ['admin', 'sources', 'connections'],
-        (old) => old ? old.filter(c => c.id !== id) : []
-      );
-    }
-  });
+  const deleteMutation = useMutation(
+    (id: string) => DataService.dataSources.delete(id),
+    {
+      onSuccess: (_: unknown, id: string) => {
+        // Functional update prevents race conditions
+        queryClient.setQueryData<DataConnection[]>(
+          ['admin', 'sources', 'connections'],
+          (old) => old ? old.filter(c => c.id !== id) : []
+        );
+      }
+    });
 
-  const testMutation = useMutation(DataService.sources.testConnection, {
-    onSuccess: (result: TestConnectionResult) => {
-      alert(result.success ? 'Connection test successful!' : 'Connection test failed: ' + result.message);
-    },
-    onError: (error: Error) => {
-      alert('Connection test error: ' + error.message);
-    }
-  });
+  const testMutation = useMutation(
+    (id: string) => DataService.dataSources.test(id),
+    {
+      onSuccess: (result: { success: boolean; message?: string }) => {
+        alert(result.success ? 'Connection test successful!' : 'Connection test failed: ' + result.message);
+      },
+      onError: (error: Error) => {
+        alert('Connection test error: ' + error.message);
+      }
+    });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

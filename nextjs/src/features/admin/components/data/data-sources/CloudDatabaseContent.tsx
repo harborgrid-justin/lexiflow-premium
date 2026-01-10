@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { RefreshCw, Plus, X, Database } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/providers';
-import { cn } from '@/utils/cn';
-import { useQuery, useMutation, queryClient } from '@/hooks/backend';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
+import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { AnimatePresence } from 'framer-motion';
+import { Database, Plus, RefreshCw, X } from 'lucide-react';
+import React, { useState } from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
-import type { DataConnection, ConnectionFormData, ConnectionStatus, TestConnectionResult } from './types';
+import type { ConnectionFormData, ConnectionStatus, DataConnection, TestConnectionResult } from './types';
 
 interface SyncConnectionResult {
   recordsSynced: number;
@@ -34,7 +34,11 @@ export const CloudDatabaseContent: React.FC = () => {
 
   const { data: connections = [], isLoading, refetch } = useQuery<DataConnection[]>(
     ['admin', 'sources', 'connections'],
-    DataService.sources.getConnections,
+    async () => {
+      // Handle lazy loading of sources service
+      const sourcesService = await DataService.sources;
+      return sourcesService.getConnections();
+    },
     {
       staleTime: 0,
       refetchOnWindowFocus: false,

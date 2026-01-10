@@ -30,7 +30,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         : undefined,
       proxy: {
         "/api": {
-          target: env.VITE_API_BASE_URL || "http://127.0.0.1:3000",
+          target: env.VITE_API_BASE_URL || "http://127.0.0.1:3001",
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path,
@@ -46,7 +46,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           },
         },
         "/socket.io": {
-          target: env.VITE_API_BASE_URL || "http://127.0.0.1:3000",
+          target: env.VITE_API_BASE_URL || "http://127.0.0.1:3001",
           changeOrigin: true,
           secure: false,
           ws: true,

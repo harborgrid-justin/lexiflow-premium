@@ -29,7 +29,7 @@
 import { PleadingsApiService } from "@/api/litigation/pleadings-api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { db } from "@/services/db";
+import { db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { IdGenerator } from "@/shared/lib/idGenerator";
 import { validateTemplate } from "@/shared/lib/validation";

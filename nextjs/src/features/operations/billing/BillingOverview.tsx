@@ -114,9 +114,9 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
       {/* Main Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="WIP vs Billed (Top Clients)" subtitle="Revenue potential by client">
-          <div className="h-72" style={{ minHeight: '288px' }}>
+          <div className="h-72 relative overflow-hidden" style={{ minHeight: '288px' }}>
             {wipData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="99%" height="100%" debounce={50}>
                 <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                   <XAxis

@@ -13,20 +13,11 @@
 
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/providers';
+import { TabConfigItem } from '@/types/layout';
 import { cn } from '@/utils/cn';
-import { LucideIcon } from 'lucide-react';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-export interface TabConfigItem {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  subTabs?: {
-    id: string;
-    label: string;
-    icon: LucideIcon;
-  }[];
-}
+// export interface TabConfigItem imported from types
 
 interface TabbedPageLayoutProps {
   pageTitle: string;

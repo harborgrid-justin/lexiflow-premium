@@ -23,7 +23,7 @@ export const ComplianceOverview = memo(() => {
 
     const { data: riskData = [], isLoading: loadingRiskData } = useQuery<RiskChartData[]>(
         ['compliance', 'riskStats'],
-        () => DataService.compliance.getRiskStats(mode) as any
+        () => DataService.compliance.getRiskStats(mode) as unknown as Promise<RiskChartData[]>
     );
 
     const { data: metrics, isLoading: loadingMetrics } = useQuery<ComplianceMetrics>(

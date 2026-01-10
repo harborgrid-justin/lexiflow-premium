@@ -58,7 +58,7 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
       pageTitle="Risk & Compliance Center"
       pageSubtitle="Conflicts, Ethical Walls, and Regulatory Monitoring."
       pageActions={<Button variant="secondary" icon={Download}>Audit Report</Button>}
-      tabConfig={COMPLIANCE_TAB_CONFIG as any}
+      tabConfig={COMPLIANCE_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

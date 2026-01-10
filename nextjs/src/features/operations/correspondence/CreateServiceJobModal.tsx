@@ -26,7 +26,7 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
         attempts: 0,
         method: 'Process Server'
     });
-    const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+    const [, setValidationErrors] = useState<Record<string, string>>({});
     // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
 
     // Load cases from IndexedDB via useQuery for accurate, cached data

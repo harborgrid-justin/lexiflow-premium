@@ -16,14 +16,14 @@
  * 5. Controlled components ensure React owns state (single source of truth)
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { AlertCircle, CheckCircle, Landmark, Building, Shield, Users, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useTheme } from '@/providers';
-import { cn } from '@/utils/cn';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
-import type { CreateTrustAccountDto, TrustAccountType, TrustAccountStatus } from '@/types/trust-accounts';
+import { useTheme } from '@/providers';
+import type { CreateTrustAccountDto, TrustAccountStatus, TrustAccountType } from '@/types/trust-accounts';
 import { TrustAccountType as AccountType } from '@/types/trust-accounts';
+import { cn } from '@/utils/cn';
+import { AlertCircle, ArrowLeft, ArrowRight, Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 /**
  * Form Steps Enum
@@ -102,7 +102,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
    * VALIDATION LOGIC: Step-specific validation
    * WHY: Each step has unique validation requirements
    */
-  const validateStep = useCallback((step: FormStep, data: FormState): StepValidationResult => {
+  const validateStep = useCallback(function _validateStep(step: FormStep, data: FormState): StepValidationResult {
     const errors: FieldError[] = [];
 
     switch (step) {
@@ -163,10 +163,10 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
 
       case FormStep.REVIEW:
         // Final validation - all previous steps must be valid
-        const step1Validation = validateStep(FormStep.ACCOUNT_INFO, data);
-        const step2Validation = validateStep(FormStep.BANK_DETAILS, data);
-        const step3Validation = validateStep(FormStep.COMPLIANCE, data);
-        const step4Validation = validateStep(FormStep.SIGNATORIES, data);
+        const step1Validation = _validateStep(FormStep.ACCOUNT_INFO, data);
+        const step2Validation = _validateStep(FormStep.BANK_DETAILS, data);
+        const step3Validation = _validateStep(FormStep.COMPLIANCE, data);
+        const step4Validation = _validateStep(FormStep.SIGNATORIES, data);
         errors.push(
           ...step1Validation.errors,
           ...step2Validation.errors,
@@ -692,7 +692,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
       default:
         return null;
     }
-  }, [currentStep, formData, updateField, theme, Input, getFieldError, apiError]);
+  }, [currentStep, formData, updateField, theme, Input, apiError]);
 
   /**
    * MAIN RENDER

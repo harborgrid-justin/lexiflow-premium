@@ -111,7 +111,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-gray-50 antialiased dark:bg-gray-900">
+      <body className="min-h-screen bg-gray-50 antialiased dark:bg-gray-900" suppressHydrationWarning>
         {/* Provider order matters: AppProviders composes all required providers */}
         <QueryClientProvider>
           <AuthProvider>

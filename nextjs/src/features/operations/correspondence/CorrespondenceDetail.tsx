@@ -41,11 +41,11 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     // Optimistic mutation for archiving with exponential backoff retry
     const { mutate: archiveItem, isLoading: isArchiving } = useMutation(
         async (id: string) => {
-            const correspondence = DataService.correspondence as any;
+            const correspondence = DataService.correspondence as unknown as { archive: (id: string) => Promise<void> };
             return correspondence.archive(id);
         },
         {
-            onMutate: (_id: string) => {
+            onMutate: () => {
                 notify.info('Archiving...');
             },
             onSuccess: () => {
@@ -66,11 +66,11 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     // Optimistic mutation for service job updates
     const { mutate: updateServiceJob, isLoading: isUpdating } = useMutation(
         async (updates: Partial<ServiceJob> & { id: string }) => {
-            const correspondence = DataService.correspondence as any;
+            const correspondence = DataService.correspondence as unknown as { updateServiceJob: (id: string, updates: Partial<ServiceJob>) => Promise<void> };
             await correspondence.updateServiceJob(updates.id, updates);
         },
         {
-            onMutate: (_updates: Partial<ServiceJob> & { id: string }) => {
+            onMutate: () => {
                 notify.info('Updating service status...');
             },
             onSuccess: () => {
@@ -85,7 +85,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
     );
 
     const handleCreateTask = async (task: WorkflowTask) => {
-        const tasks = DataService.tasks as any;
+        const tasks = DataService.tasks as unknown as { add: (task: WorkflowTask) => Promise<void> };
         await tasks.add(task);
         notify.success('Follow-up task created.');
     };
@@ -110,7 +110,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const documents = DataService.documents as any;
+            const documents = DataService.documents as unknown as { add: (doc: LegalDocument) => Promise<void> };
             await documents.add(doc);
             notify.success('Correspondence saved to Case Documents.');
         } catch (e) {
@@ -139,7 +139,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const docket = DataService.docket as any;
+            const docket = DataService.docket as unknown as { add: (entry: DocketEntry) => Promise<void> };
             await docket.add(entry);
             notify.success('Service Proof linked to Docket.');
         } catch (e) {
@@ -181,7 +181,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         };
 
         try {
-            const evidence = DataService.evidence as any;
+            const evidence = DataService.evidence as unknown as { add: (evidence: EvidenceItem) => Promise<void> };
             await evidence.add(proof);
             notify.success('Return Receipt added to Evidence Vault.');
         } catch (e) {

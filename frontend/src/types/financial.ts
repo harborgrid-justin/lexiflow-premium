@@ -61,7 +61,20 @@ export type RateTable = BaseEntity & {
   readonly expiryDate?: string;
   readonly level: string;
 };
-// TimeEntryStatus is exported from enums.ts
+export type PaginationParams = {
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+};
+
+export type PaginatedResult<T> = {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
 
 /**
  * Time entry entity
@@ -418,4 +431,36 @@ export interface Client extends BaseEntity {
   matters?: CaseId[]; // Deprecated - use cases relation
   trustSubLedgers?: TrustSubLedger[]; // Frontend extension
   billingGuidelineId?: string; // Frontend extension
+}
+
+export interface WIPStat {
+  name: string;
+  wip: number;
+  billed: number;
+  totalHours?: number;
+  totalFees?: number;
+  totalExpenses?: number;
+  unbilledCount?: number;
+  agedWip?: number;
+}
+
+export interface FinancialPerformanceData {
+  period: string;
+  revenue: number | Array<{ month: string; actual: number; target: number }>;
+  expenses: number | Array<{ category: string; value: number }>;
+  profit: number;
+  realizationRate: number;
+  collectionRate: number;
+}
+
+export interface OperatingSummary {
+  balance: number;
+  expensesMtd: number;
+  cashFlowMtd: number;
+  revenueThisMonth?: number;
+  revenueYTD?: number;
+  expensesThisMonth?: number;
+  expensesYTD?: number;
+  netIncome?: number;
+  outstandingInvoices?: number;
 }

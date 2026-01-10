@@ -150,11 +150,6 @@ export interface DataDictionaryItem {
   dataQualityScore: number;
 }
 
-export interface FinancialPerformanceData {
-  revenue: { month: string; actual: number; target: number }[];
-  expenses: { category: string; value: number }[];
-}
-
 export interface MarketingCampaign {
   id: string;
   name: string;

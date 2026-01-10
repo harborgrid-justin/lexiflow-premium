@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import type { UserId } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react';
 import { DashboardPage } from './DashboardPage';
 
 const meta: Meta<typeof DashboardPage> = {
@@ -16,13 +16,15 @@ type Story = StoryObj<typeof DashboardPage>;
 
 export const Default: Story = {
   args: {
-  "onSelectCase": () => {},
-  "currentUser": {
-    id: '1' as UserId,
-    email: 'user@example.com',
-    name: 'John Doe',
-    role: 'Associate',
+    "onSelectCase": () => { },
+    "currentUser": {
+      id: '1' as UserId,
+      email: 'user@example.com',
+      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'Associate',
+    },
+    "initialTab": "Sample Text"
   },
-  "initialTab": "Sample Text"
-},
 };

@@ -64,7 +64,7 @@ export class AuditService {
         }
       } else {
         // Fallback or Local Mode
-        await db.add(STORES.AUDIT_LOGS, auditEntry);
+        await db.put(STORES.AUDIT_LOGS, auditEntry);
       }
     } catch (e) {
       // LAST RESORT: Console log to ensure evidence is not completely lost

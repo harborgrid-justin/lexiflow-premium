@@ -181,12 +181,12 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
           id: t.id,
           name: t.name,
           status: (t.status === 'active' ? 'Active' : t.status === 'draft' ? 'Pending' : 'Idle'),
-          triggers: (t.trigger as Record<string, string>)?.type
-            ? `${(t.trigger as Record<string, string>).type.charAt(0).toUpperCase() + (t.trigger as Record<string, string>).type.slice(1)}`
+          triggers: (t.trigger as any)?.type
+            ? `${(t.trigger as any).type.charAt(0).toUpperCase() + (t.trigger as any).type.slice(1)}`
             : (t.triggers || 'Manual'), // Fallback for Repo type
-          tasks: t.steps?.length || t.tasks || 0,
+          tasks: (t as any).steps?.length || (t as any).tasks || 0,
           completed: t.completed || 0,
-          owner: (t.metadata?.owner as string) || t.owner || 'System'
+          owner: ((t as any).metadata?.owner as string) || (t as any).owner || 'System'
         }));
       } catch (error) {
         console.error("Failed to fetch workflow processes:", error);

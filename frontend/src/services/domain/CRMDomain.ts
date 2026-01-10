@@ -87,9 +87,11 @@
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
   CaseStatus,
+  Client,
   ClientStatus,
   ClientType,
   EntityId,
+  Matter,
   MatterType,
   PaymentTerms,
   UserId,

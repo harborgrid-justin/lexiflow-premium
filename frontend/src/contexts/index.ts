@@ -155,4 +155,4 @@ export type * from "./types";
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from "../components/theme/tokens";
+export type { ThemeMode } from "../shared/theme/tokens";

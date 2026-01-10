@@ -4,10 +4,12 @@
  */
 
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/lib/utils';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
+
 
 interface TimeEntryListProps {
   entries: TimeEntry[];

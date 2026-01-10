@@ -67,10 +67,12 @@ export class RisksApiService {
       response.data &&
       Array.isArray(response.data)
     ) {
-      return response.data;
+      return response.data as any as Risk[];
     }
 
-    return Array.isArray(response) ? response : [];
+    return Array.isArray(response)
+      ? (response as any as Risk[])
+      : ([] as any as Risk[]);
   }
 
   // Backend: GET /risks/:id

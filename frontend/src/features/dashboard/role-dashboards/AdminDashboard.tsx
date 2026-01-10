@@ -4,12 +4,12 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
-import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { type AdminDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { type AdminDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
 import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

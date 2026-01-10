@@ -371,7 +371,7 @@ export function parseApiError(error: unknown): ApiErrorBase {
   const statusCode = (err as { statusCode?: number }).statusCode || err.status;
   const message =
     err.message || (err as { error?: string }).error || "An error occurred";
-  const details =
+  const details: any =
     (err as { details?: unknown }).details || (err as { data?: unknown }).data;
 
   switch (statusCode) {

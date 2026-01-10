@@ -52,22 +52,25 @@ export const UserAvatar = React.memo<UserAvatarProps>(({ name, size = 'md', clas
     online: theme.chart.colors.success,
     offline: theme.chart.colors.neutral,
     busy: theme.chart.colors.danger,
-    away: theme.chart.colors.warning
+    away: theme.chart.colors.warning,
+    active: theme.chart.colors.success,
+    inactive: theme.chart.colors.neutral,
+    pending: theme.chart.colors.warning
   };
 
   const displayName = name || '?';
   const initials = displayName.substring(0, 2).toUpperCase();
   const charCode = displayName.charCodeAt(0) || 0;
-  
+
   let colorClass = cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border);
 
   if (charCode % 4 === 1) {
-     colorClass = cn(theme.status.warning.bg, theme.status.warning.text, theme.status.warning.border);
+    colorClass = cn(theme.status.warning.bg, theme.status.warning.text, theme.status.warning.border);
   } else if (charCode % 4 === 2) {
-     colorClass = cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
+    colorClass = cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
   } else if (charCode % 4 === 3) {
-     // Previously hardcoded purple, now utilizing chart secondary or status info with manual override if needed for variety
-     colorClass = cn(theme.status.neutral.bg, theme.primary.text, theme.status.neutral.border);
+    // Previously hardcoded purple, now utilizing chart secondary or status info with manual override if needed for variety
+    colorClass = cn(theme.status.neutral.bg, theme.primary.text, theme.status.neutral.border);
   }
 
   return (
@@ -81,13 +84,13 @@ export const UserAvatar = React.memo<UserAvatarProps>(({ name, size = 'md', clas
         {initials}
       </div>
       {indicatorStatus && (
-        <span 
-            className={cn(
-                "absolute bottom-0 right-0 block rounded-full ring-2",
-                theme.surface.default.includes('slate-9') ? 'ring-slate-900' : 'ring-white',
-                size === 'xs' ? 'h-1.5 w-1.5' : 'h-2.5 w-2.5'
-            )} 
-            style={{ backgroundColor: indicatorColors[indicatorStatus] }}
+        <span
+          className={cn(
+            "absolute bottom-0 right-0 block rounded-full ring-2",
+            theme.surface.default.includes('slate-9') ? 'ring-slate-900' : 'ring-white',
+            size === 'xs' ? 'h-1.5 w-1.5' : 'h-2.5 w-2.5'
+          )}
+          style={{ backgroundColor: indicatorColors[indicatorStatus] }}
         />
       )}
     </div>

@@ -4,7 +4,7 @@
  * Enterprise role management with permission templates and hierarchy.
  */
 
-import { rolesService, type Role } from '@/services/api/roles.service';
+import { rolesService, type Role } from '@/api/auth/roles-api';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/roles';

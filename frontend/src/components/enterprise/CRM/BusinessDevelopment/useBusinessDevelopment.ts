@@ -5,7 +5,7 @@
 
 import { useTheme } from "@/contexts/theme/ThemeContext";
 import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/dataService";
+import { DataService } from "@/services/data/dataService";
 import { ChartColorService } from "@/services/theme/chartColorService";
 import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";
@@ -26,19 +26,19 @@ export function useBusinessDevelopment() {
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
   // Queries
-  const { data: leads = [] } = useQuery(["crm", "leads"], () =>
+  const { data: leads = [] } = useQuery<any[]>(["crm", "leads"], () =>
     DataService.crm.getLeads()
   );
-  const { data: pitches = [] } = useQuery(["crm", "pitches"], () =>
+  const { data: pitches = [] } = useQuery<any[]>(["crm", "pitches"], () =>
     DataService.crm.getPitches()
   );
-  const { data: rfps = [] } = useQuery(["crm", "rfps"], () =>
+  const { data: rfps = [] } = useQuery<any[]>(["crm", "rfps"], () =>
     DataService.crm.getRFPs()
   );
-  const { data: winLossData = [] } = useQuery(["crm", "win-loss"], () =>
+  const { data: winLossData = [] } = useQuery<any[]>(["crm", "win-loss"], () =>
     DataService.crm.getWinLossAnalysis()
   );
-  const { data: analyticsData = {} } = useQuery(
+  const { data: analyticsData = {} } = useQuery<any>(
     ["crm", "business-metrics"],
     () => DataService.crm.getBusinessDevelopmentMetrics()
   );

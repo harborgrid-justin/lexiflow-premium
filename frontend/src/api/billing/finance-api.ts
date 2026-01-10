@@ -37,6 +37,7 @@ import type {
   CreateTrustTransactionDto,
   DepositDto,
   FinancialPerformanceData,
+  Invoice,
   TimeEntry,
   TrustAccount,
   TrustAccountStatus,
@@ -440,17 +441,17 @@ export class BillingApiService {
    * Get invoices with optional filters
    *
    * @param filters - Optional filters for caseId, clientId, and status
-   * @returns Promise<unknown[]> Array of invoices
+   * @returns Promise<Invoice[]> Array of invoices
    * @throws Error if fetch fails
    */
   async getInvoices(filters?: {
     caseId?: string;
     clientId?: string;
     status?: string;
-  }): Promise<unknown[]> {
+  }): Promise<Invoice[]> {
     try {
       const response = await apiClient.get<
-        PaginatedResponse<unknown> | unknown[]
+        PaginatedResponse<Invoice> | Invoice[]
       >("/billing/invoices", filters);
 
       // Handle nested paginated response (NestJS standard response wrapping a paginated result)
@@ -458,13 +459,13 @@ export class BillingApiService {
         response &&
         typeof response === "object" &&
         "data" in response &&
-        (response as { data: unknown }).data &&
-        typeof (response as { data: unknown }).data === "object" &&
-        (response as { data: unknown }).data !== null &&
-        "data" in ((response as { data: unknown }).data as object) &&
-        Array.isArray((response as { data: { data: unknown } }).data.data)
+        (response as any).data &&
+        typeof (response as any).data === "object" &&
+        (response as any).data !== null &&
+        "data" in (response as any).data &&
+        Array.isArray((response as any).data.data)
       ) {
-        return wrappedResponse.data.data;
+        return (response as any).data.data;
       }
 
       // Handle paginated response
@@ -472,9 +473,9 @@ export class BillingApiService {
         response &&
         typeof response === "object" &&
         "data" in response &&
-        Array.isArray((response as PaginatedResponse<unknown>).data)
+        Array.isArray((response as PaginatedResponse<Invoice>).data)
       ) {
-        return (response as PaginatedResponse<unknown>).data;
+        return (response as PaginatedResponse<Invoice>).data;
       }
 
       // Handle direct array response
@@ -855,7 +856,14 @@ export class BillingApiService {
         "/billing/financial-performance"
       );
     } catch {
-      return { revenue: [], expenses: [] };
+      return {
+        period: "Current",
+        revenue: [],
+        expenses: [],
+        profit: 0,
+        realizationRate: 0,
+        collectionRate: 0,
+      };
     }
   }
 

@@ -2,6 +2,8 @@ import { DEFAULT_TOKENS, DesignTokens, ThemeDensity } from '@/shared/theme/token
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { ThemeObject } from './ThemeContext.types';
 
+export type { ThemeObject } from './ThemeContext.types';
+
 
 interface ThemeContextType {
   tokens: DesignTokens;
@@ -179,6 +181,7 @@ export const useTheme = () => {
     },
     interactive: {
       primary: context.tokens.colors.secondary,
+      success: context.tokens.colors.success,
     },
     border: {
       default: context.tokens.colors.border,
@@ -187,6 +190,9 @@ export const useTheme = () => {
       error: context.tokens.colors.error,
       subtle: context.tokens.colors.borderLight,
       primary: context.tokens.colors.primary,
+    },
+    divide: {
+      default: context.tokens.colors.border,
     },
     primary: {
       DEFAULT: context.tokens.colors.primary,
@@ -206,6 +212,8 @@ export const useTheme = () => {
       code: context.tokens.colors.text,
       muted: context.tokens.colors.textMuted,
       accent: context.tokens.colors.accent,
+      success: context.tokens.colors.success,
+      error: context.tokens.colors.error,
     },
     status: {
       success: { bg: context.tokens.colors.success, text: context.tokens.colors.success, icon: context.tokens.colors.success, border: context.tokens.colors.success },

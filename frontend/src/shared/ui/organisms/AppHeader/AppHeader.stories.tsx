@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import type { UserId } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react';
 import { AppHeader } from './AppHeader';
 
 const meta: Meta<typeof AppHeader> = {
@@ -16,18 +16,20 @@ type Story = StoryObj<typeof AppHeader>;
 
 export const Default: Story = {
   args: {
-  onToggleSidebar: () => {},
-  "globalSearch": "Sample Text",
-  "setGlobalSearch": () => {},
-  onGlobalSearch: () => {},
-  "currentUser": {
-    id: '1' as UserId,
-    email: 'user@example.com',
-    name: 'John Doe',
-    role: 'Associate',
+    onToggleSidebar: () => { },
+    "globalSearch": "Sample Text",
+    "setGlobalSearch": () => { },
+    onGlobalSearch: () => { },
+    "currentUser": {
+      id: '1' as UserId,
+      email: 'user@example.com',
+      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'Associate',
+    },
+    onSwitchUser: () => { },
+    onSearchResultClick: () => { },
+    onNeuralCommand: () => { }
   },
-  onSwitchUser: () => {},
-  onSearchResultClick: () => {},
-  onNeuralCommand: () => {}
-},
 };

@@ -133,30 +133,30 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'statute':
-        return theme.badge.blue;
+        return (theme.badge as any).blue;
       case 'regulation':
-        return theme.badge.purple;
+        return (theme.badge as any).purple;
       case 'case_law':
-        return theme.badge.green;
+        return (theme.badge as any).green;
       case 'constitutional':
-        return theme.badge.amber;
+        return (theme.badge as any).amber;
       default:
-        return theme.badge.default;
+        return (theme.badge as any).default;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'active':
-        return theme.badge.success;
+        return (theme.badge as any).success;
       case 'superseded':
-        return theme.badge.warning;
+        return (theme.badge as any).warning;
       case 'repealed':
-        return theme.badge.error;
+        return (theme.badge as any).error;
       case 'draft':
-        return theme.badge.default;
+        return (theme.badge as any).default;
       default:
-        return theme.badge.default;
+        return (theme.badge as any).default;
     }
   };
 
@@ -416,7 +416,7 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                         </p>
                       )}
                       {jurisdiction.type && (
-                        <span className={cn("mt-2 inline-block rounded-full px-2 py-0.5 text-xs", theme.badge.default)}>
+                        <span className={cn("mt-2 inline-block rounded-full px-2 py-0.5 text-xs", (theme.badge as any).default)}>
                           {jurisdiction.type}
                         </span>
                       )}

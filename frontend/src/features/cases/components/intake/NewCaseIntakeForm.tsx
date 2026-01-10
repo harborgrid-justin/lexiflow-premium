@@ -16,15 +16,14 @@
 
 import { api } from '@/api';
 import { PATHS } from '@/config/paths.config';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useEnhancedWizard, WizardStep } from '@/hooks/useEnhancedWizard/useEnhancedWizard';
-import { useNotifications } from '@/hooks/useNotifications';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card';
-import type { Matter } from '@/types';
+import { showToast } from '@/shared/ui/organisms/notifications/Toast';
+import type { Matter, User } from '@/types';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -62,7 +61,7 @@ const RiskSchema = z.object({
   complianceNotes: z.string().optional()
 });
 
-interface IntakeData {
+interface IntakeData extends Record<string, unknown> {
   // Client & Conflict
   clientName: string;
   clientEmail?: string;
@@ -122,17 +121,15 @@ const INITIAL_DATA: IntakeData = {
 };
 
 const WIZARD_STEPS: WizardStep<IntakeData>[] = [
-  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema },
-  { id: 'matter', title: 'Matter Details', validationSchema: MatterSchema },
-  { id: 'risk', title: 'Risk & Compliance', validationSchema: RiskSchema },
+  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema as unknown },
+  { id: 'matter', title: 'Matter Details', validationSchema: MatterSchema as any },
+  { id: 'risk', title: 'Risk & Compliance', validationSchema: RiskSchema as any },
   { id: 'financial', title: 'Financial Setup' },
   { id: 'team', title: 'Staffing' },
   { id: 'review', title: 'Review & Submit' }
 ];
 
 export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSuccess }) => {
-  const { theme } = useTheme();
-  const { notify } = useNotifications();
   const navigate = useNavigate();
 
   // Use Enterprise Wizard Hook
@@ -211,8 +208,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
         customFields: {
           supportTeamIds: data.supportTeam,
           ethicalWallRequired: data.ethicalWallRequired,
-          complianceNotes: data.complianceNotes,
-          natureOfSuit: data.natureOfSuit
+          complianceNotes: data.complianceNotes ?? null,
+          natureOfSuit: data.natureOfSuit ?? null
         },
 
         openedDate: new Date().toISOString()
@@ -222,10 +219,12 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
     },
     {
       onSuccess: () => {
-        notify({ type: 'success', message: 'Matter successfully created' });
+        showToast({ type: 'success', title: 'Matter Created', message: 'Matter successfully created' });
         onSuccess?.();
-        // Redirect to matters list or the new matter
         navigate(PATHS.CASES);
+      },
+      onError: () => {
+        showToast({ type: 'error', title: 'Error', message: 'Failed to create matter' });
       }
     }
   );
@@ -233,10 +232,10 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
   // === Handlers ===
   const handleConflictCheck = () => {
     if (!formData.clientName) {
-      notify({ type: 'error', message: 'Please enter a client name first' });
+      showToast({ type: 'error', title: 'Error', message: 'Please enter a client name first' });
       return;
     }
-    performConflictCheck.mutate(formData.clientName!);
+    performConflictCheck.mutate(formData.clientName as string);
   };
 
   const handleNext = async () => {
@@ -244,12 +243,12 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
       await next();
     } catch (err) {
       console.error('Validation error:', err);
-      notify({ type: 'error', message: 'Please correct validation errors before proceeding' });
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please correct validation errors before proceeding' });
     }
   };
 
   const handleSubmit = () => {
-    createMatter.mutate(formData as IntakeData);
+    createMatter.mutate(formData as unknown as IntakeData);
   };
 
   // === Renders ===
@@ -261,8 +260,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <div className="flex gap-2">
             <input
               type="text"
-              className={cn("flex-1 p-2 rounded border", theme.className)}
-              value={formData.clientName}
+              className="flex-1 p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+              value={(formData.clientName as string) || ''}
               onChange={e => updateData({ clientName: e.target.value, conflictCheckStatus: 'pending' })}
             />
             <Button
@@ -277,8 +276,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
         <div>
           <label className="block text-sm font-medium mb-1">Client Type</label>
           <select
-            className={cn("w-full p-2 rounded border", theme.className)}
-            value={formData.clientType}
+            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            value={(formData.clientType as string) || 'individual'}
             onChange={e => updateData({ clientType: e.target.value as IntakeData['clientType'] })}
           >
             <option value="corporate">Corporate</option>
@@ -290,8 +289,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <label className="block text-sm font-medium mb-1">Email</label>
           <input
             type="email"
-            className={cn("w-full p-2 rounded border", theme.className)}
-            value={formData.clientEmail || ''}
+            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            value={(formData.clientEmail as string) || ''}
             onChange={e => updateData({ clientEmail: e.target.value })}
           />
         </div>
@@ -299,8 +298,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <label className="block text-sm font-medium mb-1">Phone</label>
           <input
             type="tel"
-            className={cn("w-full p-2 rounded border", theme.className)}
-            value={formData.clientPhone || ''}
+            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            value={(formData.clientPhone as string) || ''}
             onChange={e => updateData({ clientPhone: e.target.value })}
           />
         </div>
@@ -319,7 +318,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
             <p className="font-bold">
               {formData.conflictCheckStatus === 'passed' ? 'No Conflicts Found' : 'Conflicts Detected'}
             </p>
-            <p className="text-sm opacity-90">{formData.conflictNotes}</p>
+            <p className="text-sm opacity-90">{(formData.conflictNotes as string) || ''}</p>
           </div>
         </div>
       )}
@@ -332,8 +331,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
         <div>
           <label className="block text-sm font-medium mb-1">Risk Assessment Level</label>
           <select
-            className={cn("w-full p-2 rounded border", theme.className)}
-            value={formData.riskLevel}
+            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            value={(formData.riskLevel as string) || 'low'}
             onChange={e => updateData({ riskLevel: e.target.value as IntakeData['riskLevel'] })}
           >
             <option value="low">Low Risk</option>
@@ -346,8 +345,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <label className="block text-sm font-medium mb-1">Statute of Limitations</label>
           <input
             type="date"
-            className={cn("w-full p-2 rounded border", theme.className)}
-            value={formData.statuteOfLimitations}
+            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            value={(formData.statuteOfLimitations as string) || ''}
             onChange={e => updateData({ statuteOfLimitations: e.target.value })}
           />
         </div>
@@ -357,7 +356,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
         <input
           type="checkbox"
           id="ethicalWall"
-          checked={formData.ethicalWallRequired}
+          checked={(formData.ethicalWallRequired as boolean) || false}
           onChange={e => updateData({ ethicalWallRequired: e.target.checked })}
           className="h-4 w-4 text-blue-600"
         />
@@ -369,7 +368,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
   );
 
   const renderContent = () => {
-    switch (currentStep.id) {
+    switch (currentStep?.id) {
       case 'client': return renderClientStep();
       case 'matter': return (
         <div className="space-y-4">
@@ -378,16 +377,16 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               <label className="block text-sm font-medium mb-1">Matter Title</label>
               <input
                 placeholder="Matter Title"
-                className={cn("w-full p-2 border rounded", theme.className)}
-                value={formData.matterTitle}
+                className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.matterTitle as string) || ''}
                 onChange={e => updateData({ matterTitle: e.target.value })}
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Matter Type</label>
               <select
-                className={cn("w-full p-2 border rounded", theme.className)}
-                value={formData.matterType}
+                className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.matterType as string) || ''}
                 onChange={e => updateData({ matterType: e.target.value })}
               >
                 {['Litigation', 'Transactional', 'Advisory', 'Compliance', 'Intellectual Property', 'Employment', 'Real Estate', 'Corporate', 'Other'].map(t => (
@@ -400,8 +399,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
             <div>
               <label className="block text-sm font-medium mb-1">Practice Area</label>
               <select
-                className={cn("w-full p-2 border rounded", theme.className)}
-                value={formData.practiceArea}
+                className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.practiceArea as string) || ''}
                 onChange={e => updateData({ practiceArea: e.target.value })}
               >
                 <option value="Litigation">Litigation</option>
@@ -415,16 +414,16 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               <label className="block text-sm font-medium mb-1">Jurisdiction</label>
               <input
                 placeholder="e.g. SDNY"
-                className={cn("w-full p-2 border rounded", theme.className)}
-                value={formData.jurisdiction}
+                className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.jurisdiction as string) || ''}
                 onChange={e => updateData({ jurisdiction: e.target.value })}
               />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Priority</label>
               <select
-                className={cn("w-full p-2 border rounded", theme.className)}
-                value={formData.priority}
+                className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.priority as string) || 'Medium'}
                 onChange={e => updateData({ priority: e.target.value as IntakeData['priority'] })}
               >
                 <option value="Low">Low</option>
@@ -438,8 +437,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
             <label className="block text-sm font-medium mb-1">Description & Nature of Suit</label>
             <textarea
               placeholder="Description & Nature of Suit"
-              className={cn("w-full p-2 border rounded h-32", theme.className)}
-              value={formData.description}
+              className="w-full p-2 border rounded h-32 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+              value={(formData.description as string) || ''}
               onChange={e => updateData({ description: e.target.value })}
             />
           </div>
@@ -452,8 +451,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
             <div>
               <label className="block text-sm font-medium mb-1">Billing Arrangement</label>
               <select
-                className={cn("w-full p-2 rounded border", theme.className)}
-                value={formData.billingType}
+                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                value={(formData.billingType as string) || 'hourly'}
                 onChange={e => updateData({ billingType: e.target.value as IntakeData['billingType'] })}
               >
                 <option value="hourly">Hourly Rate</option>
@@ -469,9 +468,9 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
                   <span className="absolute left-3 top-2 text-gray-500">$</span>
                   <input
                     type="number"
-                    className={cn("w-full p-2 pl-6 rounded border", theme.className)}
+                    className="w-full p-2 pl-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                     placeholder="0.00"
-                    value={formData.hourlyRate}
+                    value={(formData.hourlyRate as string) || ''}
                     onChange={e => updateData({ hourlyRate: e.target.value })}
                   />
                 </div>
@@ -484,9 +483,9 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
                   <span className="absolute left-3 top-2 text-gray-500">$</span>
                   <input
                     type="number"
-                    className={cn("w-full p-2 pl-6 rounded border", theme.className)}
+                    className="w-full p-2 pl-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                     placeholder="0.00"
-                    value={formData.retainerAmount}
+                    value={(formData.retainerAmount as string) || ''}
                     onChange={e => updateData({ retainerAmount: e.target.value })}
                   />
                 </div>
@@ -500,9 +499,9 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
               <span className="absolute left-3 top-2 text-gray-500">$</span>
               <input
                 type="number"
-                className={cn("w-full p-2 pl-6 rounded border", theme.className)}
+                className="w-full p-2 pl-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 placeholder="Ex: 50000"
-                value={formData.budgetCap}
+                value={(formData.budgetCap as string) || ''}
                 onChange={e => updateData({ budgetCap: e.target.value })}
               />
             </div>
@@ -515,8 +514,8 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
           <div>
             <label className="block text-sm font-medium mb-2">Lead Attorney</label>
             <select
-              className={cn("w-full p-2 rounded border", theme.className)}
-              value={formData.leadAttorneyId}
+              className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+              value={(formData.leadAttorneyId as string) || ''}
               onChange={e => updateData({ leadAttorneyId: e.target.value })}
             >
               <option value="">Select Lead Attorney...</option>
@@ -533,11 +532,11 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
                 <label key={u.id} className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={formData.supportTeam.includes(u.id)}
+                    checked={(formData.supportTeam as string[])?.includes(u.id) || false}
                     onChange={e => {
                       const newTeam = e.target.checked
-                        ? [...formData.supportTeam, u.id]
-                        : formData.supportTeam.filter(id => id !== u.id);
+                        ? [...(formData.supportTeam as string[] || []), u.id]
+                        : (formData.supportTeam as string[])?.filter((id: string) => id !== u.id) || [];
                       updateData({ supportTeam: newTeam });
                     }}
                     className="rounded text-blue-600 focus:ring-blue-500"
@@ -556,7 +555,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
         <div className="space-y-4">
           <h3 className="font-bold text-lg">Review Intake Summary</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
-            <div><span className="text-gray-500">Client:</span> {formData.clientName}</div>
+            <div><span className="text-gray-500">Client:</span> {(formData.clientName as string) || ''}</div>
             <div><span className="text-gray-500">Risk:</span> {formData.riskLevel?.toUpperCase()}</div>
             <div><span className="text-gray-500">Conflicts:</span> {formData.conflictCheckStatus?.toUpperCase()}</div>
           </div>
@@ -567,7 +566,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
   };
 
   return (
-    <div className={cn("flex h-full", theme.className)}>
+    <div className="flex h-full">
       {/* Sidebar Stepper */}
       <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 p-6 flex flex-col gap-6">
         <div>
@@ -610,7 +609,7 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold">{currentStep.title}</h1>
+          <h1 className="text-2xl font-bold">{currentStep?.title || ''}</h1>
           <p className="text-gray-500 mt-1">Step {currentStepIndex + 1} of {WIZARD_STEPS.length}</p>
         </div>
 
@@ -640,3 +639,10 @@ export const NewCaseIntakeForm: React.FC<{ onSuccess?: () => void }> = ({ onSucc
     </div>
   );
 };
+function notify({ type, message }: { type: string; message: string }) {
+  showToast({
+    type: type as 'success' | 'error' | 'warning' | 'info',
+    title: type.charAt(0).toUpperCase() + type.slice(1),
+    message
+  });
+}

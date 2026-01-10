@@ -103,6 +103,8 @@ import {
   FinancialPerformanceData,
   Invoice,
   OperatingSummary,
+  // PaginatedResult,
+  PaginationParams,
   RateTable,
   TimeEntry,
   TrustTransaction,
@@ -373,7 +375,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getPaginatedTimeEntries(
     caseId: string,
     params?: PaginationParams
-  ): Promise<PaginatedResult<TimeEntry>> {
+  ): Promise<any> {
     const page = params?.page || 1;
     const pageSize = params?.pageSize || 50;
 
@@ -857,6 +859,8 @@ console.log('accounts data:', accounts);
         balance: 0,
         expensesMtd: 0,
         cashFlowMtd: 0,
+        revenueThisMonth: 0,
+        revenueYTD: 0,
       };
     } catch (error) {
       console.error("[BillingRepository.getOperatingSummary] Error:", error);
@@ -882,8 +886,12 @@ console.log('accounts data:', accounts);
       }
 
       return {
+        period: "Current",
         revenue: [],
         expenses: [],
+        profit: 0,
+        realizationRate: 0,
+        collectionRate: 0,
       };
     } catch (error) {
       console.error(

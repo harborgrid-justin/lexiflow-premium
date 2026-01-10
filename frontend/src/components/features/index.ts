@@ -2,14 +2,14 @@
  * @module features
  * @category Domain Features
  * @description Domain-specific feature modules for LexiFlow Legal OS
- * 
+ *
  * Each domain contains:
  * - components/ - Domain-specific organisms
  * - pages/      - Complete page compositions
  * - hooks/      - Domain-specific React hooks
  * - utils/      - Domain-specific utilities
  * - types/      - Domain-specific TypeScript types
- * 
+ *
  * @example
  * ```tsx
  * import { CaseList } from '@/features/cases/ui';
@@ -23,31 +23,31 @@
 // ============================================================================
 
 // Matter lifecycle management
-export * from './cases';
+export * from "./cases";
 
 // Discovery & evidence management
-export * from './discovery';
+export * from "./discovery";
 
 // Document management & collaboration
-export * from './documents';
+export * from "./documents";
 
 // Trial & litigation management
-export * from './litigation';
+export * from "./litigation";
 
 // Firm operations & administration
-export * from './operations';
+export * from "./operations";
 
 // Communication & collaboration
-export * from './collaboration';
+// export * from './collaboration';
 
 // Legal research & knowledge management
-export * from './knowledge';
+export * from "./knowledge";
 
 // Billing & financial management
-export * from './billing';
+export * from "./billing";
 
 // System administration
-export * from './admin';
+export * from "./admin";
 
 // Analytics & dashboards
-export * from './dashboard';
+export * from "./dashboard";

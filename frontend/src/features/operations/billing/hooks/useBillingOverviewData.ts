@@ -74,7 +74,8 @@ export const useBillingOverviewData = () => {
   const topClients = Array.isArray(rawTopClients) ? rawTopClients : [];
 
   const totalWip = wipData.reduce(
-    (acc, curr) => acc + (typeof curr.wip === "number" ? curr.wip : 0),
+    (acc, curr) =>
+      acc + (typeof curr.totalFees === "number" ? curr.totalFees : 0),
     0
   );
 

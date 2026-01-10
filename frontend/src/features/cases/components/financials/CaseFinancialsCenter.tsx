@@ -21,6 +21,17 @@ import { api } from '@/api';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  XAxis,
+  YAxis
+} from 'recharts';
+
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
@@ -42,7 +53,7 @@ interface Invoice {
   status?: string;
   invoiceDate?: string;
   date?: string;
-  createdAt: string;
+  createdAt?: string;
   caseTitle?: string;
   matterName?: string;
 }
@@ -131,7 +142,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
       ? (totalRevenue / totalBilled) * 100
       : 0;
 
-    const outstandingAR = (invoices as InvoiceData[] | undefined)?.filter(inv =>
+    const outstandingAR = (invoices as any[] | undefined)?.filter(inv =>
       inv.status === 'PENDING' || inv.status === 'OVERDUE'
     ).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
 
@@ -271,7 +282,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   <RechartsTooltip
                     cursor={{ fill: isDark ? '#334155' : '#f1f5f9' }}
                     contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderColor: isDark ? '#334155' : '#e2e8f0', color: isDark ? '#f8fafc' : '#0f172a' }}
-                    formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
+                    formatter={(value: number, name: any): any => [`$${value.toLocaleString()}`, 'Revenue']}
                   />
                   <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                     {Array.from({ length: 6 }).map((_, index) => (

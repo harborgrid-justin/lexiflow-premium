@@ -4,12 +4,12 @@
  * @description Partner-specific dashboard focused on revenue, client acquisition, and case outcomes
  */
 
-import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { type PartnerDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { type PartnerDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Award, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
 import React from 'react';
 import {

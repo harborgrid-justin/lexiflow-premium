@@ -15,7 +15,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-import { BillingOverview, dashboardMetricsService } from '../../../services/api/dashboard-metrics.service';
+// import { BillingOverview, dashboardMetricsService } from '../../../services/api/dashboard-metrics.service';
 
 // Types
 interface BillingSummaryMetrics {
@@ -74,7 +74,7 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
 
   const { data: billingData, isLoading: _isLoading } = useQuery(
     ['billing', 'overview'],
-    () => dashboardMetricsService.getBillingOverview()
+    () => Promise.resolve([]) // TODO: Connect to DataService.billing
   );
 
   const metrics: BillingSummaryMetrics = useMemo(() => {
@@ -91,8 +91,8 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
       };
     }
 
-    const total = billingData.reduce(
-      (acc, curr: BillingOverview) => ({
+    const total = (billingData as any[]).reduce(
+      (acc, curr: any) => ({
         totalOutstanding: acc.totalOutstanding + curr.outstanding,
         collected: acc.collected + curr.collected,
         writeOffs: acc.writeOffs + curr.writeOffs,
@@ -134,7 +134,8 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
     ['billing', 'collections'],
     async () => {
       try {
-        return await dashboardMetricsService.getCollectionItems();
+        // return await dashboardMetricsService.getCollectionItems();
+        return Promise.resolve([]);
       } catch {
         return [];
       }
@@ -146,7 +147,8 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
     ['billing', 'writeoffs'],
     async () => {
       try {
-        return await dashboardMetricsService.getWriteOffRequests();
+        // return await dashboardMetricsService.getWriteOffRequests();
+        return Promise.resolve([]);
       } catch {
         return [];
       }

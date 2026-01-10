@@ -12,12 +12,12 @@
  * - Custom widget system
  */
 
+import { DashboardKPIs, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ActivityFeed } from '@/features/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { KPICard } from '@/features/dashboard/widgets/KPICard';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
-import { DashboardKPIs, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';
 import {
@@ -173,7 +173,7 @@ const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
   ];
 };
 
-import type { BillingOverview, CaseStatusBreakdown, TeamMetrics } from '@/services/api/dashboard-metrics.service';
+import type { BillingOverview, CaseStatusBreakdown, TeamMetrics } from '@/api/intelligence/legacy-dashboard-metrics.service';
 
 const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
   if (!data) return [];
@@ -182,7 +182,7 @@ const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
     stage: item.status,
     count: item.count,
     value: 0, // Value not provided by breakdown endpoint, might need another call or update endpoint
-    color: item.color || colors[index % colors.length],
+    color: item.color || colors[index % colors.length] || '#000000',
   }));
 };
 
@@ -533,7 +533,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                     }}
                     formatter={(
                       value: number | string | Array<number | string> | undefined,
-                      name: string | number
+                      name: any
                     ): [string, string] => {
                       if (name === 'value' && typeof value === 'number') {
                         return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];

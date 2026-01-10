@@ -4,12 +4,12 @@
  * @description Attorney-specific dashboard focused on billable hours, case deadlines, and workload
  */
 
-import { ChartCard, DeadlinesList, KPICard, StatWidget } from '@/features/dashboard/widgets';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { type AttorneyDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartCard, DeadlinesList, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { type AttorneyDashboardData, dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Briefcase, Calendar, Clock, FileText, Target, TrendingUp } from 'lucide-react';
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

@@ -3,21 +3,21 @@
  * Types for authentication, permissions, and security
  */
 
-import type { BaseEntity } from './primitives';
+import type { BaseEntity } from "./primitives";
 
 export interface ApiKey extends BaseEntity {
   name: string;
   key: string;
   scopes: string[];
-  status: 'active' | 'revoked';
+  status: "active" | "revoked";
   expiresAt?: string;
   lastUsedAt?: string;
 }
 
 export interface Permission extends BaseEntity {
   resource: string;
-  action: 'create' | 'read' | 'update' | 'delete' | 'execute' | '*';
-  effect: 'allow' | 'deny';
+  action: "create" | "read" | "update" | "delete" | "execute" | "*";
+  effect: "allow" | "deny";
   conditions?: {
     type: string;
     operator: string;
@@ -35,7 +35,7 @@ export interface RolePermissions {
 export interface BlacklistedToken extends BaseEntity {
   token: string;
   userId?: string;
-  reason: 'logout' | 'expired' | 'security' | 'admin';
+  reason: "logout" | "expired" | "security" | "admin";
   blacklistedAt: string;
   expiresAt: string;
   metadata?: Record<string, unknown>;
@@ -46,14 +46,14 @@ export interface BlacklistedToken extends BaseEntity {
  * Single Sign-On integration types for enterprise authentication
  */
 export type SSOProviderType =
-  | 'saml'
-  | 'google'
-  | 'microsoft'
-  | 'okta'
-  | 'onelogin'
-  | 'auth0'
-  | 'azure-ad'
-  | 'custom';
+  | "saml"
+  | "google"
+  | "microsoft"
+  | "okta"
+  | "onelogin"
+  | "auth0"
+  | "azure-ad"
+  | "custom";
 
 export interface SSOProviderConfig extends BaseEntity {
   type: SSOProviderType;
@@ -130,7 +130,7 @@ export interface EnterpriseBrandingConfig extends BaseEntity {
   // Background
   backgroundImageUrl?: string;
   backgroundGradient?: string;
-  backgroundStyle?: 'solid' | 'gradient' | 'image';
+  backgroundStyle?: "solid" | "gradient" | "image";
   backgroundPosition?: string;
 
   // Legal
@@ -147,7 +147,7 @@ export interface EnterpriseBrandingConfig extends BaseEntity {
  * Security Status Types
  * Account security and authentication status
  */
-export type SecurityLevel = 'secure' | 'warning' | 'danger';
+export type SecurityLevel = "secure" | "warning" | "danger";
 
 export interface SecurityStatus {
   level: SecurityLevel;
@@ -175,7 +175,7 @@ export interface SecurityStatus {
  */
 export interface PasswordStrength {
   score: 0 | 1 | 2 | 3 | 4;
-  label: 'Very Weak' | 'Weak' | 'Fair' | 'Good' | 'Strong';
+  label: "Very Weak" | "Weak" | "Fair" | "Good" | "Strong";
   color: string;
   percentage: number;
   feedback: string[];

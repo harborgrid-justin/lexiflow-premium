@@ -4,8 +4,8 @@
  * Enterprise permission management with granular access control.
  */
 
+import { RolesService } from '@/api/auth/roles-api';
 import { SYSTEM_PERMISSIONS, type PermissionDefinition } from '@/config/permissions';
-import { RolesService } from '@/services/api/roles.service';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/permissions';

@@ -4,14 +4,15 @@
  * Enterprise user management with role assignment, permissions, and audit trails.
  */
 
-import { usersService, type User } from '@/services/api/users.service';
+import { authApi } from '@/api';
+import type { User } from '@/types';
 import { useState } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from './+types/users';
 
 export async function loader(_args: Route.LoaderArgs) {
   try {
-    const users = await usersService.getUsers();
+    const users = await authApi.users.getAll();
     return { users };
   } catch (error) {
     console.error('Failed to load users:', error);
@@ -191,8 +192,8 @@ export default function AdminUsersPage() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(user.status)}`}>
-                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(user.status || 'inactive')}`}>
+                    {(user.status || '').charAt(0).toUpperCase() + (user.status || '').slice(1)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

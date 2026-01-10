@@ -98,6 +98,10 @@ export class BillingRepository extends Repository<TimeEntry> {
         name: (c.name || "").split(" ")[0] || "Unknown",
         wip: 0,
         billed: c.totalBilled,
+        totalHours: 0,
+        totalFees: 0,
+        totalExpenses: 0,
+        unbilledCount: 0,
       }));
     }
     return stats.sort((a, b) => (b.wip || 0) - (a.wip || 0)).slice(0, 5);
@@ -219,6 +223,10 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     await delay(200);
     return {
+      period: "YTD",
+      profit: 1540000,
+      realizationRate: 0.92,
+      collectionRate: 0.88,
       revenue: [
         { month: "Jan", actual: 420000, target: 400000 },
         { month: "Feb", actual: 450000, target: 410000 },

@@ -100,3 +100,17 @@ export interface FirmAsset extends BaseEntity {
   value: number;
   serialNumber?: string;
 }
+
+export interface ComplianceMetrics {
+  score: number;
+  high: number;
+  activeWalls: number;
+  violations: number;
+  totalRisks?: number;
+  openRisks?: number;
+  criticalRisks?: number;
+  conflictChecksThisMonth?: number;
+  ethicalWallsActive?: number;
+  complianceScore?: number;
+  lastAuditDate?: string;
+}

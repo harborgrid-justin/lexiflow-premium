@@ -5,7 +5,7 @@
 
 import { useTheme } from "@/contexts/theme/ThemeContext";
 import { useQuery } from "@/hooks/backend";
-import { DataService } from "@/services/dataService";
+import { DataService } from "@/services/data/dataService";
 import { QUERY_KEYS } from "@/services/data/queryKeys";
 import { ChartColorService } from "@/services/theme/chartColorService";
 import { getChartTheme } from "@/utils/chartConfig";
@@ -28,7 +28,7 @@ export function useClientAnalytics() {
   // Data queries
   useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
 
-  const { data: analyticsData = {} } = useQuery(
+  const { data: analyticsData = {} } = useQuery<any>(
     ["crm", "client-analytics"],
     () => DataService.crm.getClientAnalytics()
   );

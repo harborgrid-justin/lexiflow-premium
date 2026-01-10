@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import type { UserId } from '@/types';
+import type { Meta, StoryObj } from '@storybook/react';
 import { SidebarFooter } from './SidebarFooter';
 
 const meta: Meta<typeof SidebarFooter> = {
@@ -16,14 +16,16 @@ type Story = StoryObj<typeof SidebarFooter>;
 
 export const Default: Story = {
   args: {
-  "currentUser": {
-    id: '1' as UserId,
-    email: 'user@example.com',
-    name: 'John Doe',
-    role: 'Associate',
+    "currentUser": {
+      id: '1' as UserId,
+      email: 'user@example.com',
+      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'Associate',
+    },
+    onSwitchUser: () => { },
+    "onNavigate": () => { },
+    "activeView": "Sample Text"
   },
-  onSwitchUser: () => {},
-  "onNavigate": () => {},
-  "activeView": "Sample Text"
-},
 };

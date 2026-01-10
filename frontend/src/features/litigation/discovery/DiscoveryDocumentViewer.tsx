@@ -1,11 +1,11 @@
 import { DOCUMENTS_QUERY_KEYS } from '@/api/admin/documents';
-import { Button } from '@/shared/ui/atoms/Button';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { LegalDocument } from '@/types/documents';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { LegalDocument } from '@/types/documents';
 import { ArrowLeft, Download, FileText, Printer, Tag, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useState } from 'react';
 import { DiscoveryDocumentViewerProps } from './types';
@@ -111,7 +111,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                         </div>
 
                         <div className={cn("mt-20 mx-12 border-t pt-4 flex justify-between text-xs font-mono", theme.border.default, theme.text.tertiary)}>
-                            <span>{metadata?.classification || 'UNCLASSIFIED'}</span>
+                            <span>{(metadata as any)?.classification || 'UNCLASSIFIED'}</span>
                             <span>Page 1 of 1</span>
                         </div>
                     </div>

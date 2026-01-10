@@ -112,7 +112,7 @@ export function ClientAnalyticsView() {
             segmentData={segmentData}
             revenueTrendData={revenueTrendData}
             theme={theme}
-            chartTheme={chartTheme}
+            chartTheme={chartTheme as any}
             chartColors={chartColors}
           />
         )}
@@ -123,7 +123,7 @@ export function ClientAnalyticsView() {
             satisfactionData={satisfactionData}
             theme={theme}
             chartColors={chartColors}
-            chartTheme={chartTheme}
+            chartTheme={chartTheme as any}
           />
         )}
       </div>

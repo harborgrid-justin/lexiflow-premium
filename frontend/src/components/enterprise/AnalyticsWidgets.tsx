@@ -10,8 +10,6 @@
  * - Client acquisition (new clients, retention, lifetime value)
  */
 
-import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import {
   analyticsService,
   type ARAgingData,
@@ -20,7 +18,9 @@ import {
   type CaseTrendData,
   type ClientAcquisitionData,
   type PracticeAreaPerformanceData,
-} from '@/services/api/analytics.service';
+} from '@/api/intelligence/enterprise-analytics.service';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { cn } from '@/shared/lib/cn';
 import {
   BarChart3,

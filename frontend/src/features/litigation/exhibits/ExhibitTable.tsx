@@ -22,10 +22,10 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useWindow } from '@/providers';
 
 // Components
-import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { Button } from '@/shared/ui/atoms/Button';
 import { FileIcon } from '@/shared/ui/atoms/FileIcon';
+import { EmptyListState, StatusBadge } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList';
 import { DocumentPreviewPanel } from '@features/operations';
 
 // Utils & Constants
@@ -63,7 +63,8 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
             `Exhibit ${ex.exhibitNumber}`,
             <div className={cn("h-full", theme.surface.default)}>
                 <DocumentPreviewPanel
-                    documentId={ex.id as string}
+                    document={{ id: ex.id as string } as any}
+                    onViewHistory={() => { }}
                 />
             </div>
         );

@@ -5,9 +5,9 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
+import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
 import { cn } from '@/shared/lib/cn';
 import {
   AlertCircle,

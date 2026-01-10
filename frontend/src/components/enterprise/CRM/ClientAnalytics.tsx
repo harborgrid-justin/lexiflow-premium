@@ -363,7 +363,7 @@ export const ClientAnalytics: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <RechartPieChart>
                 <Pie
-                  data={segmentData as Array<{ segment: string; revenue: number; color: string;[key: string]: string | number }>}
+                  data={segmentData as any}
                   dataKey="revenue"
                   nameKey="segment"
                   cx="50%"

@@ -8,12 +8,12 @@
 
 import React, { useState } from 'react';
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
+import { getChartTheme } from '@/utils/chartConfig';
 import {
   Award,
   BarChart3,
@@ -28,7 +28,6 @@ import {
   Users,
   XCircle
 } from 'lucide-react';
-import React, { useState } from 'react';
 import {
   Bar,
   BarChart,

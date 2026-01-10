@@ -448,12 +448,6 @@ export interface TimelineEvent {
   relatedId?: string;
 }
 
-export interface WIPStat {
-  name: string;
-  wip: number;
-  billed: number;
-}
-
 export interface WarRoom extends BaseEntity {
   name: string;
   description?: string;

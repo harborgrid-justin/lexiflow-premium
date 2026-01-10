@@ -8,6 +8,8 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AlertTriangle, DollarSign, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 
+const getAppEnv = () => process.env.NODE_ENV;
+
 interface Props {
   children: ReactNode;
   onReset?: () => void;

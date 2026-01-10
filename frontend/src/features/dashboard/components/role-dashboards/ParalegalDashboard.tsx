@@ -4,14 +4,14 @@
  * @description Paralegal-specific dashboard focused on task queue, document review, and support metrics
  */
 
-import React from 'react';
-import { CheckCircle2, FileText, Clock, AlertTriangle } from 'lucide-react';
+import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/shared/lib/cn';
+import { ActivityFeed, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dashboardMetricsService } from '@/services/api/dashboard-metrics.service';
-import { KPICard, StatWidget, ActivityFeed } from '@/features/dashboard/widgets';
+import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
+import { AlertTriangle, CheckCircle2, Clock, FileText } from 'lucide-react';
+import React from 'react';
 
 export const ParalegalDashboard: React.FC = () => {
   const { theme } = useTheme();

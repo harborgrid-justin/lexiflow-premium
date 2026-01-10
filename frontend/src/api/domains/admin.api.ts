@@ -20,7 +20,6 @@ import { AnalyticsApiService } from "../intelligence/analytics-api";
 
 // Export singleton instances
 export const adminApi = {
-  schema: new SchemaApiService(),
   accessRequests: new AccessRequestsApiService(),
   documents: new DocumentsApiService(),
   documentVersions: new DocumentVersionsApiService(),

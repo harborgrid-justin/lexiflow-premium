@@ -80,7 +80,13 @@ import { complianceApi } from "@/api/domains/compliance.api";
 import { ComplianceError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { ComplianceMetrics, ConflictCheck, EthicalWall, Risk } from "@/types";
+import {
+  ComplianceMetrics,
+  ConflictCheck,
+  EthicalWall,
+  Risk,
+  UserId,
+} from "@/types";
 
 /**
  * Conflict interfaces for enhanced detection
@@ -236,18 +242,16 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
         return {
           score: 100,
           high: 0,
-          missingDocs: 0,
-          violations: 0,
           activeWalls: 0,
+          violations: 0
         };
       }
     }
     return {
       score: 100,
       high: 0,
-      missingDocs: 0,
-      violations: 0,
       activeWalls: 0,
+      violations: 0
     };
   },
 

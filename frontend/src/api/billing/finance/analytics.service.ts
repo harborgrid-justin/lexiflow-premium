@@ -90,7 +90,14 @@ export class AnalyticsService {
         "/billing/financial-performance"
       );
     } catch {
-      return { revenue: [], expenses: [] };
+      return {
+        period: "Current",
+        revenue: [],
+        expenses: [],
+        profit: 0,
+        realizationRate: 0,
+        collectionRate: 0,
+      };
     }
   }
 

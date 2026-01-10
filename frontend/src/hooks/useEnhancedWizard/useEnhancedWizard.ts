@@ -60,12 +60,11 @@ export const useEnhancedWizard = <T extends Record<string, unknown>>(
 
   const goToStep = useCallback(
     (index: number) => {
-      // Only allow navigating to completed steps or the next available step
       if (
         index <= currentStepIndex ||
         (index > 0 &&
           steps[index - 1] &&
-          completedSteps.has(steps[index - 1].id))
+          completedSteps.has(steps[index - 1]?.id))
       ) {
         setCurrentStepIndex(index);
       }

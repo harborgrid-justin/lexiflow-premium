@@ -16,8 +16,8 @@ import { useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { DEFAULT_TOKENS } from '@/shared/ui/theme/tokens';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { DEFAULT_TOKENS } from '@/shared/theme/tokens';
 
 // ============================================================================
 // HOOKS

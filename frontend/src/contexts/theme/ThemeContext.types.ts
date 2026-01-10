@@ -3,7 +3,7 @@
  */
 
 import type { ReactNode } from "react";
-import { ThemeMode } from "../../components/theme/tokens";
+import { ThemeMode } from "../../shared/theme/tokens";
 
 // Theme type for the actual theme object returned by useTheme
 export interface ThemeObject {
@@ -28,6 +28,9 @@ export interface ThemeObject {
     subtle: string;
     primary: string;
   };
+  divide: {
+    default: string;
+  };
   primary: {
     DEFAULT: string;
     light: string;
@@ -46,9 +49,12 @@ export interface ThemeObject {
     code: string;
     muted: string;
     accent: string;
+    success: string;
+    error: string;
   };
   interactive: {
     primary: string;
+    success?: string;
   };
   status: {
     success: { bg: string; text: string; icon: string; border: string };

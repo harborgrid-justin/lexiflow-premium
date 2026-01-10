@@ -34,32 +34,25 @@ export interface ApiServiceSpec {
   methods: ApiMethod[];
 }
 
-export interface OperatingSummary {
-  id?: string;
-  balance: number;
-  expensesMtd: number;
-  cashFlowMtd: number;
-}
-
-export interface ComplianceMetrics {
-  score: number;
-  high: number;
-  missingDocs: number;
-  violations: number;
-  activeWalls: number;
-}
-
 export interface User extends BaseEntity {
   id: UserId;
   // Core fields (aligned with backend)
   email: string; // Backend: unique, indexed
   password?: string; // Backend field (not exposed in frontend typically)
-  firstName?: string; // Backend field
-  lastName?: string; // Backend field
+  firstName: string; // Backend field - Required in frontend
+  lastName: string; // Backend field - Required in frontend
   name: string; // Computed from firstName + lastName
   role: UserRole; // Backend: enum (indexed)
   department?: string; // Backend: varchar(200), indexed
   title?: string; // Backend: varchar(100)
+  status?:
+    | "active"
+    | "inactive"
+    | "pending"
+    | "online"
+    | "offline"
+    | "away"
+    | "busy";
 
   // Contact info
   phone?: string; // Backend: varchar(50)
@@ -74,7 +67,7 @@ export interface User extends BaseEntity {
   userType?: "Internal" | "External";
 
   // Status & security
-  status?: "online" | "offline" | "away" | "busy"; // Frontend real-time status
+  // status removed (duplicate)
   isActive?: boolean; // Backend: boolean (default: true, indexed)
   isVerified?: boolean; // Backend: boolean (default: false)
   verificationToken?: string; // Backend field
@@ -92,6 +85,10 @@ export interface User extends BaseEntity {
 
   // Two-factor auth
   twoFactorEnabled?: boolean; // Backend: boolean (default: false)
+  mfaEnabled?: boolean; // Alias for twoFactorEnabled
+
+  // Compatibility fields
+  lastLogin?: string | null; // Alias for lastLoginAt
 }
 
 // Backend Organization entity enums (from organizations/entities/organization.entity.ts)

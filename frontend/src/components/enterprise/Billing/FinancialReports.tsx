@@ -11,7 +11,7 @@ import {
   type TimekeeperPerformance,
   type WorkInProgressMetrics,
   billingApiService
-} from '@/services/api/billing.service';
+} from '@/api/billing/enterprise-billing.service';
 import {
   Activity,
   BarChart3,

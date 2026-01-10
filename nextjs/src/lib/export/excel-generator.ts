@@ -10,18 +10,17 @@
  */
 
 import {
+  type ColumnDataType,
+  DEFAULT_EXPORT_CONFIG,
   type ExcelExportOptions,
   type ExcelSheet,
-  type ExportColumn,
-  type ExportResult,
-  type ExportProgress,
-  type ExportProgressCallback,
-  type ColumnDataType,
   type ExcelStyling,
-  MIME_TYPES,
+  type ExportColumn,
+  type ExportProgressCallback,
+  type ExportResult,
   FILE_EXTENSIONS,
-  DEFAULT_EXPORT_CONFIG,
-} from './types';
+  MIME_TYPES,
+} from "./types";
 
 // =============================================================================
 // Constants
@@ -37,7 +36,7 @@ const MAX_SHEET_NAME_LENGTH = 31;
 const INVALID_SHEET_NAME_CHARS = /[\\/*?:\[\]]/g;
 
 /** Column letters for Excel (A-Z, AA-AZ, etc.) */
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 // =============================================================================
 // Utility Functions
@@ -47,7 +46,7 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
  * Convert column index to Excel column letter (0 = A, 25 = Z, 26 = AA, etc.)
  */
 function getColumnLetter(index: number): string {
-  let letter = '';
+  let letter = "";
   let temp = index;
 
   while (temp >= 0) {
@@ -78,7 +77,7 @@ function dateToExcelSerial(date: Date): number {
  */
 function sanitizeSheetName(name: string): string {
   return name
-    .replace(INVALID_SHEET_NAME_CHARS, '_')
+    .replace(INVALID_SHEET_NAME_CHARS, "_")
     .substring(0, MAX_SHEET_NAME_LENGTH);
 }
 
@@ -87,19 +86,19 @@ function sanitizeSheetName(name: string): string {
  */
 function escapeXML(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 /**
  * Convert hex color to ARGB format (Excel uses ARGB)
  */
 function hexToARGB(hex: string): string {
-  const cleanHex = hex.replace('#', '');
-  return 'FF' + cleanHex.toUpperCase();
+  const cleanHex = hex.replace("#", "");
+  return "FF" + cleanHex.toUpperCase();
 }
 
 // =============================================================================
@@ -111,85 +110,89 @@ function hexToARGB(hex: string): string {
  */
 function formatValue(
   value: unknown,
-  dataType: ColumnDataType = 'string'
-): { value: string; type: 'n' | 's' | 'd' | 'b'; numFmt?: string } {
+  dataType: ColumnDataType = "string"
+): { value: string; type: "n" | "s" | "d" | "b"; numFmt?: string } {
   if (value === null || value === undefined) {
-    return { value: '', type: 's' };
+    return { value: "", type: "s" };
   }
 
   switch (dataType) {
-    case 'number':
-      if (typeof value === 'number') {
-        return { value: value.toString(), type: 'n' };
+    case "number":
+      if (typeof value === "number") {
+        return { value: value.toString(), type: "n" };
       }
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
 
-    case 'currency':
-      if (typeof value === 'number') {
-        return { value: value.toString(), type: 'n', numFmt: '"$"#,##0.00' };
+    case "currency":
+      if (typeof value === "number") {
+        return { value: value.toString(), type: "n", numFmt: '"$"#,##0.00' };
       }
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
 
-    case 'percentage':
-      if (typeof value === 'number') {
-        return { value: (value).toString(), type: 'n', numFmt: '0.00%' };
+    case "percentage":
+      if (typeof value === "number") {
+        return { value: value.toString(), type: "n", numFmt: "0.00%" };
       }
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
 
-    case 'date':
+    case "date":
       if (value instanceof Date) {
         return {
           value: dateToExcelSerial(value).toString(),
-          type: 'd',
-          numFmt: 'mm/dd/yyyy',
+          type: "d",
+          numFmt: "mm/dd/yyyy",
         };
       }
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const parsed = new Date(value);
         if (!isNaN(parsed.getTime())) {
           return {
             value: dateToExcelSerial(parsed).toString(),
-            type: 'd',
-            numFmt: 'mm/dd/yyyy',
+            type: "d",
+            numFmt: "mm/dd/yyyy",
           };
         }
       }
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
 
-    case 'datetime':
+    case "datetime":
       if (value instanceof Date) {
         const serial =
           dateToExcelSerial(value) +
-          (value.getHours() * 3600 + value.getMinutes() * 60 + value.getSeconds()) /
+          (value.getHours() * 3600 +
+            value.getMinutes() * 60 +
+            value.getSeconds()) /
             86400;
         return {
           value: serial.toString(),
-          type: 'd',
-          numFmt: 'mm/dd/yyyy hh:mm',
+          type: "d",
+          numFmt: "mm/dd/yyyy hh:mm",
         };
       }
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const parsed = new Date(value);
         if (!isNaN(parsed.getTime())) {
           const serial =
             dateToExcelSerial(parsed) +
-            (parsed.getHours() * 3600 + parsed.getMinutes() * 60 + parsed.getSeconds()) /
+            (parsed.getHours() * 3600 +
+              parsed.getMinutes() * 60 +
+              parsed.getSeconds()) /
               86400;
           return {
             value: serial.toString(),
-            type: 'd',
-            numFmt: 'mm/dd/yyyy hh:mm',
+            type: "d",
+            numFmt: "mm/dd/yyyy hh:mm",
           };
         }
       }
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
 
-    case 'boolean':
-      return { value: value ? '1' : '0', type: 'b' };
+    case "boolean":
+      return { value: value ? "1" : "0", type: "b" };
 
-    case 'string':
+    case "string":
     default:
-      return { value: String(value), type: 's' };
+      return { value: String(value), type: "s" };
   }
 }
 
@@ -197,7 +200,7 @@ function formatValue(
  * Extract value from data row using column accessor
  */
 function extractValue<T>(row: T, column: ExportColumn<T>): unknown {
-  if (typeof column.accessor === 'function') {
+  if (typeof column.accessor === "function") {
     return column.accessor(row);
   }
   return row[column.accessor as keyof T];
@@ -211,7 +214,7 @@ function extractValue<T>(row: T, column: ExportColumn<T>): unknown {
  * Generate content types XML
  */
 function generateContentTypes(sheetCount: number): string {
-  let sheets = '';
+  let sheets = "";
   for (let i = 1; i <= sheetCount; i++) {
     sheets += `<Override PartName="/xl/worksheets/sheet${i}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`;
   }
@@ -241,7 +244,7 @@ function generateRootRels(): string {
  * Generate workbook relationships XML
  */
 function generateWorkbookRels(sheetCount: number): string {
-  let sheets = '';
+  let sheets = "";
   for (let i = 1; i <= sheetCount; i++) {
     sheets += `<Relationship Id="rId${i}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i}.xml"/>`;
   }
@@ -258,7 +261,7 @@ function generateWorkbookRels(sheetCount: number): string {
  * Generate workbook XML
  */
 function generateWorkbook(sheetNames: string[]): string {
-  let sheets = '';
+  let sheets = "";
   sheetNames.forEach((name, index) => {
     sheets += `<sheet name="${escapeXML(sanitizeSheetName(name))}" sheetId="${index + 1}" r:id="rId${index + 1}"/>`;
   });
@@ -275,9 +278,9 @@ function generateWorkbook(sheetNames: string[]): string {
  * Generate styles XML
  */
 function generateStyles(styling: ExcelStyling): string {
-  const headerBgColor = hexToARGB(styling.headerBgColor ?? '1e3a5f');
-  const headerTextColor = hexToARGB(styling.headerTextColor ?? 'ffffff');
-  const altRowColor = hexToARGB(styling.alternateRowColor ?? 'f8f9fa');
+  const headerBgColor = hexToARGB(styling.headerBgColor ?? "1e3a5f");
+  const headerTextColor = hexToARGB(styling.headerTextColor ?? "ffffff");
+  const altRowColor = hexToARGB(styling.alternateRowColor ?? "f8f9fa");
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
@@ -347,7 +350,7 @@ function generateSharedStrings(strings: string[]): string {
   const uniqueStrings = Array.from(new Set(strings));
   const stringItems = uniqueStrings
     .map((str) => `<si><t>${escapeXML(str)}</t></si>`)
-    .join('');
+    .join("");
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="${strings.length}" uniqueCount="${uniqueStrings.length}">
@@ -374,15 +377,15 @@ function generateWorksheet<T>(
   const rowCount = data.length + 1 + (options.includeTotals ? 1 : 0);
 
   // Generate column definitions
-  let colDefs = '<cols>';
+  let colDefs = "<cols>";
   visibleColumns.forEach((col, idx) => {
     const width = col.width ?? options.styling.defaultColumnWidth ?? 15;
     colDefs += `<col min="${idx + 1}" max="${idx + 1}" width="${width}" customWidth="1"/>`;
   });
-  colDefs += '</cols>';
+  colDefs += "</cols>";
 
   // Generate rows
-  let rows = '';
+  let rows = "";
 
   // Header row
   rows += '<row r="1" ht="20" customHeight="1">';
@@ -391,7 +394,7 @@ function generateWorksheet<T>(
     const stringIndex = options.sharedStrings.get(col.header);
     rows += `<c r="${ref}" t="s" s="1"><v>${stringIndex}</v></c>`;
   });
-  rows += '</row>';
+  rows += "</row>";
 
   // Data rows
   data.forEach((row, rowIdx) => {
@@ -413,17 +416,22 @@ function generateWorksheet<T>(
 
       const formatted = formatValue(displayValue, col.dataType);
 
-      if (formatted.type === 's') {
+      if (formatted.type === "s") {
         const stringIndex = options.sharedStrings.get(formatted.value);
         rows += `<c r="${ref}" t="s" s="${styleIndex}"><v>${stringIndex ?? 0}</v></c>`;
-      } else if (formatted.type === 'n' || formatted.type === 'd') {
-        const numStyle = col.dataType === 'currency' ? 4 : col.dataType === 'date' || col.dataType === 'datetime' ? 5 : styleIndex;
+      } else if (formatted.type === "n" || formatted.type === "d") {
+        const numStyle =
+          col.dataType === "currency"
+            ? 4
+            : col.dataType === "date" || col.dataType === "datetime"
+              ? 5
+              : styleIndex;
         rows += `<c r="${ref}" s="${numStyle}"><v>${formatted.value}</v></c>`;
-      } else if (formatted.type === 'b') {
+      } else if (formatted.type === "b") {
         rows += `<c r="${ref}" t="b" s="${styleIndex}"><v>${formatted.value}</v></c>`;
       }
     });
-    rows += '</row>';
+    rows += "</row>";
   });
 
   // Totals row
@@ -432,19 +440,22 @@ function generateWorksheet<T>(
     rows += `<row r="${totalsRow}">`;
     visibleColumns.forEach((col, colIdx) => {
       const ref = getCellRef(data.length + 1, colIdx);
-      if (col.includeInTotals && (col.dataType === 'number' || col.dataType === 'currency')) {
+      if (
+        col.includeInTotals &&
+        (col.dataType === "number" || col.dataType === "currency")
+      ) {
         const startRef = getCellRef(1, colIdx);
         const endRef = getCellRef(data.length, colIdx);
-        const style = col.dataType === 'currency' ? 4 : 2;
+        const style = col.dataType === "currency" ? 4 : 2;
         rows += `<c r="${ref}" s="${style}"><f>SUM(${startRef}:${endRef})</f></c>`;
       } else if (colIdx === 0) {
-        const stringIndex = options.sharedStrings.get('Total');
+        const stringIndex = options.sharedStrings.get("Total");
         rows += `<c r="${ref}" t="s" s="1"><v>${stringIndex}</v></c>`;
       } else {
         rows += `<c r="${ref}" s="2"/>`;
       }
     });
-    rows += '</row>';
+    rows += "</row>";
   }
 
   // Build dimension reference
@@ -452,7 +463,7 @@ function generateWorksheet<T>(
   const dimension = `A1:${lastCol}${rowCount}`;
 
   // Build freeze pane if needed
-  let sheetViews = '';
+  let sheetViews = "";
   if (options.freezeHeader) {
     sheetViews = `<sheetViews>
       <sheetView tabSelected="1" workbookViewId="0">
@@ -462,7 +473,7 @@ function generateWorksheet<T>(
   }
 
   // Build auto filter if needed
-  let autoFilter = '';
+  let autoFilter = "";
   if (options.autoFilter) {
     autoFilter = `<autoFilter ref="A1:${lastCol}${data.length + 1}"/>`;
   }
@@ -511,6 +522,8 @@ async function createZip(files: Map<string, string>): Promise<Uint8Array> {
     return (crc ^ 0xffffffff) >>> 0;
   }
 
+  // Unused helpers
+  /*
   function writeUint16LE(value: number): Uint8Array {
     return new Uint8Array([value & 0xff, (value >> 8) & 0xff]);
   }
@@ -523,6 +536,7 @@ async function createZip(files: Map<string, string>): Promise<Uint8Array> {
       (value >> 24) & 0xff,
     ]);
   }
+  */
 
   // Write local file headers and data
   for (const [path, content] of Array.from(files.entries())) {
@@ -667,14 +681,14 @@ async function createZip(files: Map<string, string>): Promise<Uint8Array> {
  * Generate filename with date suffix
  */
 function generateFilename<T>(options: ExcelExportOptions<T>): string {
-  const baseName = options.filename ?? options.title ?? 'export';
+  const baseName = options.filename ?? options.title ?? "export";
   const sanitizedName = baseName
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
   const now = new Date();
-  const dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+  const dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
 
   return `${sanitizedName}-${dateSuffix}${FILE_EXTENSIONS.excel}`;
 }
@@ -716,17 +730,17 @@ export async function exportToExcel<T>(
 ): Promise<ExportResult> {
   // Validate input
   if (!options.columns || options.columns.length === 0) {
-    throw new Error('Excel export requires at least one column definition');
+    throw new Error("Excel export requires at least one column definition");
   }
 
   if (!options.data) {
-    throw new Error('Excel export requires data array');
+    throw new Error("Excel export requires data array");
   }
 
   onProgress?.({
-    phase: 'preparing',
+    phase: "preparing",
     percentage: 0,
-    message: 'Preparing Excel export...',
+    message: "Preparing Excel export...",
   });
 
   const styling: ExcelStyling = {
@@ -739,7 +753,7 @@ export async function exportToExcel<T>(
     ? [...options.sheets]
     : [
         {
-          name: options.title ?? 'Sheet1',
+          name: options.title ?? "Sheet1",
           columns: options.columns,
           data: options.data,
           autoFilter: options.autoFilter,
@@ -749,7 +763,7 @@ export async function exportToExcel<T>(
       ];
 
   // Collect all strings for shared strings table
-  const allStrings: string[] = ['Total']; // Always include Total for totals row
+  const allStrings: string[] = ["Total"]; // Always include Total for totals row
   sheets.forEach((sheet) => {
     const visibleColumns = sheet.columns.filter((col) => !col.hidden);
 
@@ -767,7 +781,7 @@ export async function exportToExcel<T>(
           displayValue = rawValue;
         }
         const formatted = formatValue(displayValue, col.dataType);
-        if (formatted.type === 's' && formatted.value) {
+        if (formatted.type === "s" && formatted.value) {
           allStrings.push(formatted.value);
         }
       });
@@ -782,39 +796,36 @@ export async function exportToExcel<T>(
   });
 
   onProgress?.({
-    phase: 'generating',
+    phase: "generating",
     percentage: 20,
-    message: 'Generating worksheets...',
+    message: "Generating worksheets...",
   });
 
   // Generate all XML files
   const files = new Map<string, string>();
 
   // Content types
-  files.set('[Content_Types].xml', generateContentTypes(sheets.length));
+  files.set("[Content_Types].xml", generateContentTypes(sheets.length));
 
   // Root relationships
-  files.set('_rels/.rels', generateRootRels());
+  files.set("_rels/.rels", generateRootRels());
 
   // Workbook relationships
-  files.set('xl/_rels/workbook.xml.rels', generateWorkbookRels(sheets.length));
+  files.set("xl/_rels/workbook.xml.rels", generateWorkbookRels(sheets.length));
 
   // Workbook
-  files.set(
-    'xl/workbook.xml',
-    generateWorkbook(sheets.map((s) => s.name))
-  );
+  files.set("xl/workbook.xml", generateWorkbook(sheets.map((s) => s.name)));
 
   // Styles
-  files.set('xl/styles.xml', generateStyles(styling));
+  files.set("xl/styles.xml", generateStyles(styling));
 
   // Shared strings
-  files.set('xl/sharedStrings.xml', generateSharedStrings(allStrings));
+  files.set("xl/sharedStrings.xml", generateSharedStrings(allStrings));
 
   onProgress?.({
-    phase: 'generating',
+    phase: "generating",
     percentage: 40,
-    message: 'Building worksheets...',
+    message: "Building worksheets...",
   });
 
   // Worksheets
@@ -830,9 +841,9 @@ export async function exportToExcel<T>(
   });
 
   onProgress?.({
-    phase: 'formatting',
+    phase: "formatting",
     percentage: 70,
-    message: 'Creating XLSX file...',
+    message: "Creating XLSX file...",
   });
 
   // Create ZIP file
@@ -844,9 +855,9 @@ export async function exportToExcel<T>(
   const totalRows = sheets.reduce((sum, sheet) => sum + sheet.data.length, 0);
 
   onProgress?.({
-    phase: 'complete',
+    phase: "complete",
     percentage: 100,
-    message: 'Excel export complete',
+    message: "Excel export complete",
   });
 
   return {
@@ -855,7 +866,7 @@ export async function exportToExcel<T>(
     mimeType: MIME_TYPES.excel,
     size: blob.size,
     generatedAt: new Date(),
-    format: 'excel',
+    format: "excel",
     rowCount: totalRows,
   };
 }
@@ -874,12 +885,12 @@ export function validateExcelOptions<T>(
 
   if (!options.columns || options.columns.length === 0) {
     if (!options.sheets || options.sheets.length === 0) {
-      errors.push('At least one column definition or sheet is required');
+      errors.push("At least one column definition or sheet is required");
     }
   }
 
   if (!options.data && !options.sheets) {
-    errors.push('Data array or sheets configuration is required');
+    errors.push("Data array or sheets configuration is required");
   }
 
   if (options.sheets) {
@@ -888,7 +899,9 @@ export function validateExcelOptions<T>(
         errors.push(`Sheet ${idx + 1} requires a name`);
       }
       if (sheet.name && sheet.name.length > MAX_SHEET_NAME_LENGTH) {
-        errors.push(`Sheet name "${sheet.name}" exceeds ${MAX_SHEET_NAME_LENGTH} characters`);
+        errors.push(
+          `Sheet name "${sheet.name}" exceeds ${MAX_SHEET_NAME_LENGTH} characters`
+        );
       }
       if (!sheet.columns || sheet.columns.length === 0) {
         errors.push(`Sheet "${sheet.name}" requires at least one column`);
@@ -909,7 +922,7 @@ export function createExcelOptions<T>(
   overrides: Partial<ExcelExportOptions<T>>
 ): ExcelExportOptions<T> {
   return {
-    title: 'Export',
+    title: "Export",
     columns: [] as unknown as readonly ExportColumn<T>[],
     data: [] as unknown as readonly T[],
     autoFilter: true,

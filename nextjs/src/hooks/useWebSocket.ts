@@ -387,6 +387,5 @@ export function useWebSocketEvent<T = unknown>(
       socket.off(event, handler);
     };
     // Rule #5: Handler should be wrapped in useCallback by caller
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, event, handler]);
 }

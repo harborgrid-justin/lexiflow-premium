@@ -1420,7 +1420,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       let currentBalance = 0;
       let totalDeposits = 0;
       let totalWithdrawals = 0;
-      let lastReconciliation = new Date(
+      const lastReconciliation = new Date(
         Date.now() - 7 * 24 * 60 * 60 * 1000
       ).toISOString();
 

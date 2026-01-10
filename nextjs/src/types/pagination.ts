@@ -48,7 +48,7 @@ export interface PaginatedResult<T> {
     order: "asc" | "desc";
   };
   /** Applied filters */
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 }
 
 /**

@@ -45,15 +45,14 @@ export class RiskRepository extends Repository<Risk> {
 
   override async getByCaseId(caseId: string): Promise<Risk[]> {
     this.validateId(caseId, "getByCaseId");
-    if (this.useBackend) {
-      try {
-        const risks = await this.risksApi.getAll({ caseId });
-        return risks as unknown as Risk[];
-      } catch (error) {
-        console.warn("[RiskRepository] Backend API unavailable", error);
-      }
+    // Removed legacy useBackend check
+    try {
+      const risks = await this.risksApi.getAll({ caseId });
+      return risks as unknown as Risk[];
+    } catch (error) {
+      console.warn("[RiskRepository] Backend API unavailable", error);
+      return await this.getByIndex("caseId", caseId);
     }
-    return await this.getByIndex("caseId", caseId);
   }
 
   override async getById(id: string): Promise<Risk | undefined> {

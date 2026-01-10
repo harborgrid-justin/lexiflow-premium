@@ -1,6 +1,6 @@
 import { BUSINESS_PROCESSES } from "@/api/types/firmProcess";
 import { TEMPLATE_LIBRARY } from "@/api/types/workflowTemplates";
-import { TasksApiService } from "@/api/workflow/tasks/tasks-api";
+import { TasksApiService } from "@/api/workflow/tasks-api";
 import { WorkflowApiService } from "@/api/workflow/workflow-api";
 import {
   CasePhase,
@@ -42,9 +42,9 @@ class WorkflowRepositoryClass {
     }
   };
 
-  getTasks = async () => {
+  getTasks = async (): Promise<WorkflowTask[]> => {
     try {
-      return await this.tasksApi.getAll();
+      return (await this.tasksApi.getAll()) as unknown as WorkflowTask[];
     } catch (error) {
       console.warn(
         "[WorkflowRepository] Error fetching tasks from API:",
@@ -124,12 +124,10 @@ class WorkflowRepositoryClass {
       if (template.id && !template.id.startsWith("temp-")) {
         return await this.workflowApi.updateTemplate(
           template.id,
-          template as unknown as UpdateTemplateDto
+          template as any
         );
       } else {
-        return await this.workflowApi.createTemplate(
-          template as unknown as CreateTemplateDto
-        );
+        return await this.workflowApi.createTemplate(template as any);
       }
     } catch (error) {
       console.error("[WorkflowRepository] Error saving template:", error);
@@ -168,7 +166,7 @@ class WorkflowRepositoryClass {
     try {
       console.log(`[API] Deploying workflow ${templateId}...`);
       // Start workflow instance via API
-      // @ts-expect-error - startWorkflow might be missing in interface
+
       await this.workflowApi.startWorkflow(templateId, context || {});
 
       if (context?.caseId) {
@@ -189,7 +187,7 @@ class WorkflowRepositoryClass {
       if (payload.tasks && payload.tasks.length > 0) {
         await this.tasksApi.createBulk({
           entries: payload.tasks.map((t) => ({ ...t, caseId })),
-        } as unknown as CreateBulkTaskDto);
+        } as any);
       }
       return { success: true };
     } catch (error) {
@@ -248,7 +246,7 @@ class WorkflowRepositoryClass {
       await delay(800);
       console.log(`[API] Running automation scope: ${scope}`);
       return { success: true, processed: 10, actions: 0 };
-    } catch (_error) {
+    } catch {
       return { success: false, processed: 0, actions: 0 };
     }
   };
@@ -260,7 +258,9 @@ class WorkflowRepositoryClass {
   getEngineDetails = async (id: string, type: "case" | "process") => {
     try {
       await delay(100);
-      const tasks = await this.tasksApi.getAll({ caseId: id });
+      const tasks = (await this.tasksApi.getAll({
+        caseId: id,
+      })) as WorkflowTask[];
       const total = tasks?.length || 0;
       const completed =
         tasks?.filter((t) => t.status === TaskStatusBackend.COMPLETED).length ||

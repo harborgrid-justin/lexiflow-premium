@@ -149,21 +149,21 @@ export const DiscoveryService = {
         try {
             const depositions = await api.depositions.getAll(caseId ? { caseId } : undefined);
             return depositions;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     addDeposition: async (dep: Deposition) => {
         try {
             return await api.depositions.create(dep as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return dep;
         }
     },
     updateDepositionStatus: async (id: string, status: string) => {
         try {
             return await api.depositions.update(id, { status } as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return { id, status };
         }
     },
@@ -173,21 +173,21 @@ export const DiscoveryService = {
         try {
             const sources = await api.esiSources.getAll(caseId ? { caseId } : undefined);
             return sources;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     addESISource: async (source: ESISource) => {
         try {
             return await api.esiSources.create(source as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return source;
         }
     },
     updateESISourceStatus: async (id: string, status: string) => {
         try {
             return await api.esiSources.update(id, { status } as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return { id, status };
         }
     },
@@ -197,14 +197,14 @@ export const DiscoveryService = {
         try {
             const productions = await api.productions.getAll(caseId ? { caseId } : undefined);
             return productions;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     createProduction: async (prod: ProductionSet) => {
         try {
             return await api.productions.create(prod as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return prod;
         }
     },
@@ -214,21 +214,21 @@ export const DiscoveryService = {
         try {
             const interviews = await api.custodianInterviews.getAll(caseId ? { caseId } : undefined);
             return interviews;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     updateInterview: async (id: string, updates: Partial<CustodianInterview>) => {
         try {
             return await api.custodianInterviews.update(id, updates as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return { id, ...updates };
         }
     },
     createInterview: async (interview: CustodianInterview) => {
         try {
             return await api.custodianInterviews.create(interview as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return interview;
         }
     },
@@ -238,21 +238,21 @@ export const DiscoveryService = {
         try {
             const requests = await api.discoveryRequests.getAll(caseId ? { caseId } : undefined);
             return requests;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     addRequest: async (req: DiscoveryRequest) => {
         try {
             return await api.discoveryRequests.create(req as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return req;
         }
     },
     updateRequestStatus: async (id: string, status: string) => {
         try {
             return await api.discoveryRequests.update(id, { status } as unknown as Record<string, unknown>);
-        } catch (error) {
+        } catch {
             return { id, status };
         }
     },
@@ -263,14 +263,14 @@ export const DiscoveryService = {
         try {
             const exams = await api.examinations.getAll(caseId ? { caseId } : undefined);
             return exams;
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     addExamination: async (exam: Examination) => {
         try {
             return await api.examinations.create(exam);
-        } catch (error) {
+        } catch {
             return exam;
         }
     },
@@ -309,14 +309,14 @@ export const DiscoveryService = {
     getLegalHolds: async () => {
         try {
             return await api.legalHolds.getAll();
-        } catch (error) {
+        } catch {
             return [];
         }
     },
     getPrivilegeLog: async () => {
         try {
             return await api.privilegeLog.getAll();
-        } catch (error) {
+        } catch {
             return [];
         }
     },

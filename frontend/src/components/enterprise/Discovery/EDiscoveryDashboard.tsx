@@ -132,7 +132,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
         setCustodians(custodiansData.map((c: Custodian) => {
           let status: Custodian['status'] = 'active';
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const s = ((c as any).status || 'active').toLowerCase();
+          const s = ((c as unknown as Record<string, any>).status || 'active').toLowerCase();
           if (s === 'on hold') status = 'hold';
           else if (s === 'released') status = 'released';
           else if (s === 'interviewed') status = 'interviewed';
@@ -142,11 +142,13 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
             name: c.name,
             email: c.email,
             department: c.department,
-            title: (c as any).role || c.title || 'Unknown',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            title: (c as unknown as Record<string, any>).role || c.title || 'Unknown',
             status,
             dataSources: 0,
             documentsCollected: 0,
-            lastActivity: new Date((c as any).updatedAt || new Date())
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            lastActivity: new Date((c as unknown as Record<string, any>).updatedAt || new Date())
           };
         }));
 

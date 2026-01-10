@@ -262,16 +262,15 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      try {
-        await this.evidenceApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn(
-          "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
+    // Removed legacy useBackend check
+    try {
+      await this.evidenceApi.delete(id);
+      return;
+    } catch (error) {
+      console.warn(
+        "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
+        error
+      );
     }
 
     try {

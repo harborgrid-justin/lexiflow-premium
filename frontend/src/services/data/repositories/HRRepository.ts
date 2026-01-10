@@ -94,9 +94,7 @@ class HRRepositoryClass {
 
   deleteStaff = async (id: string) => {
     try {
-      // @ts-expect-error - delete not typed on API interface
       if (this.hrApi.delete) {
-        // @ts-expect-error - delete not typed on API interface
         await this.hrApi.delete(id);
       } else {
         console.warn("[HRRepository] Delete not implemented in API");

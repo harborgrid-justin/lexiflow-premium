@@ -29,6 +29,7 @@
 import { PleadingsApiService } from "@/api/litigation/pleadings-api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
+import { db } from "@/services/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { IdGenerator } from "@/shared/lib/idGenerator";
 import { validateTemplate } from "@/shared/lib/validation";
@@ -253,16 +254,15 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      try {
-        await this.pleadingsApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
+    // Removed legacy useBackend check
+    try {
+      await this.pleadingsApi.delete(id);
+      return;
+    } catch (error) {
+      console.warn(
+        "[PleadingRepository] Backend API failed, falling back",
+        error
+      );
     }
 
     try {

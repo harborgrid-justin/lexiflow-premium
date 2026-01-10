@@ -7,30 +7,29 @@
  * @module hooks/useAuthAudit
  */
 
-'use client';
+"use client";
 
-import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import {
+  type AuditLogFilter,
   type AuthEvent,
   type AuthEventMetadata,
   type AuthEventType,
-  type AuditLogFilter,
-  logAuthEvent,
-  getAuthAuditLogs,
   clearAuthAuditLogs,
-  getAuthAuditLogCount,
-  getLastAuthEvent,
-  exportAuthAuditLogs,
   createServerAuditPayload,
+  exportAuthAuditLogs,
+  getAuthAuditLogs,
+  getLastAuthEvent,
+  logAccessDenied,
+  logAuthEvent,
   logLogin,
   logLogout,
-  logMfaEnabled,
   logMfaDisabled,
+  logMfaEnabled,
   logPasswordChanged,
-  logTokenRefresh,
   logSessionExpired,
-  logAccessDenied,
-} from '@/lib/audit/auth-audit';
+  logTokenRefresh,
+} from "@/lib/audit/auth-audit";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 // ============================================================================
 // Types
@@ -80,7 +79,7 @@ export interface UseAuthAuditReturn {
    * Export logs as JSON or CSV string
    * @param format - Export format
    */
-  exportLogs: (format?: 'json' | 'csv') => string;
+  exportLogs: (format?: "json" | "csv") => string;
 
   /**
    * Create a payload for server-side logging
@@ -105,11 +104,17 @@ export interface UseAuthAuditReturn {
     metadata?: AuthEventMetadata
   ) => AuthEvent;
   /** Log password changed event */
-  logPasswordChanged: (userId: string, metadata?: AuthEventMetadata) => AuthEvent;
+  logPasswordChanged: (
+    userId: string,
+    metadata?: AuthEventMetadata
+  ) => AuthEvent;
   /** Log token refresh event */
   logTokenRefresh: (userId: string, metadata?: AuthEventMetadata) => AuthEvent;
   /** Log session expired event */
-  logSessionExpired: (userId: string, metadata?: AuthEventMetadata) => AuthEvent;
+  logSessionExpired: (
+    userId: string,
+    metadata?: AuthEventMetadata
+  ) => AuthEvent;
   /** Log access denied event */
   logAccessDenied: (
     userId: string | undefined,
@@ -133,7 +138,7 @@ export interface UseAuthAuditOptions {
 // External Store for Reactive Updates
 // ============================================================================
 
-const AUDIT_LOG_KEY = 'auth_audit_log';
+const AUDIT_LOG_KEY = "auth_audit_log";
 
 /**
  * Creates a subscription to localStorage changes for audit logs.
@@ -152,12 +157,12 @@ function subscribeToAuditLogs(callback: () => void): () => void {
     callback();
   };
 
-  window.addEventListener('storage', handleStorageChange);
-  window.addEventListener('audit-log-updated', handleCustomEvent);
+  window.addEventListener("storage", handleStorageChange);
+  window.addEventListener("audit-log-updated", handleCustomEvent);
 
   return () => {
-    window.removeEventListener('storage', handleStorageChange);
-    window.removeEventListener('audit-log-updated', handleCustomEvent);
+    window.removeEventListener("storage", handleStorageChange);
+    window.removeEventListener("audit-log-updated", handleCustomEvent);
   };
 }
 
@@ -165,25 +170,25 @@ function subscribeToAuditLogs(callback: () => void): () => void {
  * Gets a snapshot of the current audit logs for useSyncExternalStore.
  */
 function getAuditLogsSnapshot(): string {
-  if (typeof window === 'undefined') {
-    return '[]';
+  if (typeof window === "undefined") {
+    return "[]";
   }
-  return localStorage.getItem(AUDIT_LOG_KEY) || '[]';
+  return localStorage.getItem(AUDIT_LOG_KEY) || "[]";
 }
 
 /**
  * Server-side snapshot for SSR.
  */
 function getServerSnapshot(): string {
-  return '[]';
+  return "[]";
 }
 
 /**
  * Dispatches a custom event to notify other hook instances of log changes.
  */
 function notifyLogUpdate(): void {
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('audit-log-updated'));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("audit-log-updated"));
   }
 }
 
@@ -256,7 +261,9 @@ function notifyLogUpdate(): void {
  * }
  * ```
  */
-export function useAuthAudit(options?: UseAuthAuditOptions): UseAuthAuditReturn {
+export function useAuthAudit(
+  options?: UseAuthAuditOptions
+): UseAuthAuditReturn {
   const { filter } = options || {};
 
   // Subscribe to audit log changes for reactive updates
@@ -401,8 +408,7 @@ export function useAuthAudit(options?: UseAuthAuditOptions): UseAuthAuditReturn 
       getLogs: getAuthAuditLogs,
       clearLogs: clearLogsWithNotify,
       getLastEvent: getLastAuthEvent,
-      exportLogs: (format?: 'json' | 'csv') =>
-        exportAuthAuditLogs({ format }),
+      exportLogs: (format?: "json" | "csv") => exportAuthAuditLogs({ format }),
       createServerPayload: createServerAuditPayload,
       logLogin: logLoginWithNotify,
       logLogout: logLogoutWithNotify,
@@ -435,9 +441,9 @@ export function useAuthAudit(options?: UseAuthAuditOptions): UseAuthAuditReturn 
 // ============================================================================
 
 export type {
+  AuditExportOptions,
+  AuditLogFilter,
   AuthEvent,
   AuthEventMetadata,
   AuthEventType,
-  AuditLogFilter,
-  AuditExportOptions,
-} from '@/lib/audit/auth-audit';
+} from "@/lib/audit/auth-audit";

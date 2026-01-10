@@ -10,17 +10,17 @@ interface CreateInvoiceDto {
   invoiceNumber: string;
   date: string;
   dueDate: string;
-  items: any[];
+  items: unknown[];
   taxRate: number;
   discount: number;
   notes: string;
 }
 interface UpdateInvoiceDto {
   status?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-import { ClientsApiService } from "@/api/enterprise/clients-api";
+import { ClientsApiService } from "@/api/communications/clients-api";
 import { Repository } from "@/services/core/Repository";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
@@ -111,13 +111,14 @@ export class BillingRepository extends Repository<TimeEntry> {
 
       // Aggregate WIP by Client
       const caseToClientMap: Record<string, string> = {};
-      clients.forEach((c) => {
-        (c.matters || []).forEach((m) => {
+      clients.forEach((c: Client) => {
+        (c.matters || []).forEach((m: string) => {
           caseToClientMap[m] = c.id;
         });
       });
       const wipMap: Record<string, number> = {};
-      entries.forEach((e) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      entries.forEach((e: any) => {
         if (e.status === "Unbilled") {
           const clientId = caseToClientMap[e.caseId];
           if (clientId) {
@@ -125,8 +126,8 @@ export class BillingRepository extends Repository<TimeEntry> {
           }
         }
       });
-      const stats = Object.keys(wipMap).map((clientId) => {
-        const client = clients.find((c) => c.id === clientId);
+      const stats = Object.keys(wipMap).map((clientId: string) => {
+        const client = clients.find((c: Client) => c.id === clientId);
         return {
           name: client
             ? (client.name || "").split(" ")[0] || "Unknown"
@@ -136,7 +137,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         };
       });
       if (stats.length === 0) {
-        return clients.slice(0, 3).map((c) => ({
+        return clients.slice(0, 3).map((c: Client) => ({
           name: (c.name || "").split(" ")[0] || "Unknown",
           wip: 0,
           billed: c.totalBilled,
@@ -307,9 +308,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTopAccounts(): Promise<Client[]> {
     try {
       const clients = await this.clientsApi.getAll();
-      return clients
-        .sort((a: any, b: any) => b.totalBilled - a.totalBilled)
-        .slice(0, 4);
+      return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     } catch (error) {
       console.error("[BillingRepository] Failed to get top accounts", error);
       return [];
@@ -329,20 +328,16 @@ export class BillingRepository extends Repository<TimeEntry> {
         totalBilled: stats.totalRevenue,
         month: "Current",
       };
-    } catch (error) {
+    } catch {
       // Fallback mock
       return { realization: 92.4, totalBilled: 482000, month: "March 2024" };
     }
   }
 
   async getOperatingSummary(): Promise<OperatingSummary> {
-    try {
-      // Should fetch from finance API.
-      // Mock for now or empty.
-      return { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
-    } catch {
-      return { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
-    }
+    // Should fetch from finance API.
+    // Mock for now or empty.
+    return { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
   }
 
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {

@@ -394,7 +394,7 @@ export function exportAuthAuditLogs(options?: AuditExportOptions): string {
   // Default to JSON format
   const exportData = includeMetadata
     ? logs
-    : logs.map(({ metadata: _metadata, ...rest }) => rest);
+    : logs.map(({ metadata: _ignored, ...rest }) => rest);
 
   return JSON.stringify(exportData, null, 2);
 }

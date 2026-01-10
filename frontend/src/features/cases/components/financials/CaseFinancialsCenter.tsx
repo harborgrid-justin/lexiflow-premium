@@ -145,7 +145,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
       ? (totalRevenue / totalBilled) * 100
       : 0;
 
-    const outstandingAR = (invoices as any[] | undefined)?.filter(inv =>
+    const outstandingAR = (invoices || [])?.filter(inv =>
       inv.status === 'PENDING' || inv.status === 'OVERDUE'
     ).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
 
@@ -375,7 +375,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   matter={inv.matterName || inv.caseTitle || 'Case Invoice'}
                   amount={inv.totalAmount || inv.amount || 0}
                   status={(inv.status?.toLowerCase() || 'pending') as 'paid' | 'pending' | 'overdue'}
-                  date={new Date(inv.date || inv.invoiceDate || inv.createdAt).toLocaleDateString()}
+                  date={new Date(inv.date || inv.invoiceDate || inv.createdAt || Date.now()).toLocaleDateString()}
                   isDark={isDark}
                 />
               ))}

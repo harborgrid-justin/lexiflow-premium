@@ -123,7 +123,6 @@ export function ClientAnalyticsView() {
             satisfactionData={satisfactionData}
             theme={theme}
             chartColors={chartColors}
-            // @ts-expect-error - ChartTheme type mismatch with Recharts expecting specific object shape
             chartTheme={chartTheme as unknown as any}
           />
         )}

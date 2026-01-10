@@ -48,19 +48,40 @@ export interface PDFPageDimensions {
   aspectRatio: number;
 }
 
+interface PDFPageProxy {
+  getViewport(params: { scale: number; rotation?: number }): {
+    width: number;
+    height: number;
+    viewBox: number[];
+  };
+  getTextContent(): Promise<{ items: Array<{ str: string }> }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render(params: any): any;
+}
+
+interface PDFDocumentProxy {
+  numPages: number;
+  getPage(num: number): Promise<PDFPageProxy>;
+  destroy(): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getData(): Promise<any>;
+}
+
 // ============================================================================
 // SERVICE CLASS
 // ============================================================================
 
 class PDFPageServiceClass {
-  private pdfCache = new Map<string, any>();
+  private pdfCache = new Map<string, PDFDocumentProxy>();
   private metadataCache = new Map<string, PDFMetadata>();
   private readonly CACHE_DURATION = 300000; // 5 minutes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pdfjsLib: any = null;
 
   /**
    * Lazy-loads pdfjs-dist library
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async loadPDFJS(): Promise<any> {
     if (this.pdfjsLib) return this.pdfjsLib;
 
@@ -233,7 +254,9 @@ class PDFPageServiceClass {
       if (pageNumber < 1 || pageNumber > pdfDoc.numPages) {
         throw new Error(`Invalid page number: ${pageNumber}`);
       }
-
+      {
+        str: string;
+      }
       const page = await pdfDoc.getPage(pageNumber);
       const textContent = await page.getTextContent();
 
@@ -260,7 +283,7 @@ class PDFPageServiceClass {
         const page = await pdfDoc.getPage(i);
         const textContent = await page.getTextContent();
         const pageText = textContent.items
-          .map((item: any) => item.str)
+          .map((item: { str: string }) => item.str)
           .join(" ");
         texts.push(pageText);
 
@@ -332,7 +355,7 @@ class PDFPageServiceClass {
   private async loadPDFDocument(
     url: string,
     options: PDFLoadOptions = {}
-  ): Promise<any> {
+  ): Promise<PDFDocumentProxy> {
     const { cacheKey = url, signal } = options;
 
     // Check cache

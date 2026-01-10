@@ -22,9 +22,12 @@ export class ProjectRepository extends Repository<Project> {
     }
   }
 
-  override async getById(id: string): Promise<Project | null> {
+  override async getById(id: string): Promise<Project | undefined> {
     try {
-      return (await this.projectsApi.getById(id)) as unknown as Project;
+      const project = (await this.projectsApi.getById(
+        id
+      )) as unknown as Project;
+      return project || undefined;
     } catch (error) {
       // getById usually throws if not found in backend or returns null?
       // Repository pattern expects null if not found or throws EntityNotFoundError.
@@ -36,7 +39,7 @@ export class ProjectRepository extends Repository<Project> {
 
   override async add(item: Partial<Project>): Promise<Project> {
     try {
-      return (await this.projectsApi.create(item)) as unknown as Project;
+      return (await this.projectsApi.create(item as any)) as unknown as Project;
     } catch (error) {
       console.error("[ProjectRepository] Error creating project:", error);
       throw error;
@@ -45,7 +48,10 @@ export class ProjectRepository extends Repository<Project> {
 
   override async update(id: string, item: Partial<Project>): Promise<Project> {
     try {
-      return (await this.projectsApi.update(id, item)) as unknown as Project;
+      return (await this.projectsApi.update(
+        id,
+        item as any
+      )) as unknown as Project;
     } catch (error) {
       console.error(`[ProjectRepository] Error updating project ${id}:`, error);
       throw error;

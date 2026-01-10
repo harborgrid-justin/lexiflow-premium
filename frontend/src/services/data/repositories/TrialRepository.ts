@@ -106,7 +106,9 @@ export class TrialRepository extends Repository<TrialExhibit> {
   getWitnesses = async (caseId: string): Promise<Witness[]> => {
     this.validateCaseId(caseId, "getWitnesses");
     try {
-      return await this.witnessesApi.getByCaseId(caseId);
+      return (await this.witnessesApi.getByCaseId(
+        caseId
+      )) as unknown as Witness[];
     } catch (error) {
       console.error("[TrialRepository.getWitnesses] Error:", error);
       throw error;

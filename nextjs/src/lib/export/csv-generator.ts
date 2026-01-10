@@ -7,25 +7,24 @@
  */
 
 import {
+  type ColumnDataType,
   type CSVExportOptions,
   type ExportColumn,
-  type ExportResult,
-  type ExportProgress,
   type ExportProgressCallback,
-  type ColumnDataType,
-  MIME_TYPES,
+  type ExportResult,
   FILE_EXTENSIONS,
-} from './types';
+  MIME_TYPES,
+} from "./types";
 
 // =============================================================================
 // Constants
 // =============================================================================
 
 /** UTF-8 BOM bytes for Excel compatibility */
-const UTF8_BOM = '\ufeff';
+const UTF8_BOM = "\ufeff";
 
-/** Characters that require quoting in CSV */
-const SPECIAL_CHARS_PATTERN = /[",\n\r]/;
+/** Characters that require quoting in CSV - UNUSED */
+// const SPECIAL_CHARS_PATTERN = /[",\n\r]/;
 
 // =============================================================================
 // Value Formatting
@@ -41,57 +40,57 @@ const SPECIAL_CHARS_PATTERN = /[",\n\r]/;
  */
 function formatValue(
   value: unknown,
-  dataType: ColumnDataType = 'string',
-  nullValue: string = ''
+  dataType: ColumnDataType = "string",
+  nullValue: string = ""
 ): string {
   if (value === null || value === undefined) {
     return nullValue;
   }
 
   switch (dataType) {
-    case 'number':
-      return typeof value === 'number' ? value.toString() : String(value);
+    case "number":
+      return typeof value === "number" ? value.toString() : String(value);
 
-    case 'currency':
-      if (typeof value === 'number') {
+    case "currency":
+      if (typeof value === "number") {
         // Format as number without currency symbol for CSV (easier for parsing)
         return value.toFixed(2);
       }
       return String(value);
 
-    case 'percentage':
-      if (typeof value === 'number') {
-        return (value * 100).toFixed(2) + '%';
+    case "percentage":
+      if (typeof value === "number") {
+        return (value * 100).toFixed(2) + "%";
       }
       return String(value);
 
-    case 'date':
+    case "date":
       if (value instanceof Date) {
         return formatDate(value);
       }
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const parsed = new Date(value);
         return isNaN(parsed.getTime()) ? value : formatDate(parsed);
       }
       return String(value);
 
-    case 'datetime':
+    case "datetime":
       if (value instanceof Date) {
         return formatDateTime(value);
       }
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const parsed = new Date(value);
         return isNaN(parsed.getTime()) ? value : formatDateTime(parsed);
       }
       return String(value);
 
-    case 'boolean':
-      if (typeof value === 'boolean') {
-        return value ? 'Yes' : 'No';
+    case "boolean":
+      if (typeof value === "boolean") {
+        return value ? "Yes" : "No";
       }
       return String(value);
 
-    case 'string':
+    case "string":
     default:
       return String(value);
   }
@@ -101,8 +100,8 @@ function formatValue(
  * Format date as MM/DD/YYYY
  */
 function formatDate(date: Date): string {
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   const year = date.getFullYear();
   return `${month}/${day}/${year}`;
 }
@@ -112,8 +111,8 @@ function formatDate(date: Date): string {
  */
 function formatDateTime(date: Date): string {
   const datePart = formatDate(date);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${datePart} ${hours}:${minutes}`;
 }
 
@@ -126,7 +125,7 @@ function formatDateTime(date: Date): string {
  */
 interface CSVEscapeOptions {
   readonly quoteChar?: '"' | "'";
-  readonly escapeChar?: '"' | '\\';
+  readonly escapeChar?: '"' | "\\";
   readonly delimiter?: string;
   readonly quoteAll?: boolean;
 }
@@ -141,15 +140,15 @@ interface CSVEscapeOptions {
 function escapeCSVField(value: string, options: CSVEscapeOptions): string {
   const quoteChar = options.quoteChar ?? '"';
   const escapeChar = options.escapeChar ?? '"';
-  const delimiter = options.delimiter ?? ',';
+  const delimiter = options.delimiter ?? ",";
 
   // Check if quoting is needed
   const needsQuoting =
     options.quoteAll ||
     value.includes(quoteChar) ||
     value.includes(delimiter) ||
-    value.includes('\n') ||
-    value.includes('\r');
+    value.includes("\n") ||
+    value.includes("\r");
 
   if (!needsQuoting) {
     return value;
@@ -157,7 +156,7 @@ function escapeCSVField(value: string, options: CSVEscapeOptions): string {
 
   // Escape quote characters within the value
   const escapedValue = value.replace(
-    new RegExp(quoteChar, 'g'),
+    new RegExp(quoteChar, "g"),
     escapeChar + quoteChar
   );
 
@@ -176,7 +175,7 @@ function escapeCSVField(value: string, options: CSVEscapeOptions): string {
  * @returns Extracted value
  */
 function extractValue<T>(row: T, column: ExportColumn<T>): unknown {
-  if (typeof column.accessor === 'function') {
+  if (typeof column.accessor === "function") {
     return column.accessor(row);
   }
   return row[column.accessor as keyof T];
@@ -202,7 +201,7 @@ function getCellValue<T>(
     return column.formatter(rawValue, row);
   }
 
-  return formatValue(rawValue, column.dataType, options.nullValue ?? '');
+  return formatValue(rawValue, column.dataType, options.nullValue ?? "");
 }
 
 // =============================================================================
@@ -223,11 +222,11 @@ function generateCSVContent<T>(
   const {
     columns,
     data,
-    delimiter = ',',
-    lineEnding = '\n',
+    delimiter = ",",
+    lineEnding = "\n",
     includeBOM = true,
     includeHeaders = true,
-    encoding = 'utf-8',
+    encoding = "utf-8",
   } = options;
 
   // Filter out hidden columns
@@ -239,10 +238,10 @@ function generateCSVContent<T>(
 
   // Report initial progress
   onProgress?.({
-    phase: 'preparing',
+    phase: "preparing",
     percentage: 0,
     totalRows: data.length,
-    message: 'Preparing CSV export...',
+    message: "Preparing CSV export...",
   });
 
   // Generate header row
@@ -254,11 +253,11 @@ function generateCSVContent<T>(
     processedRows++;
 
     onProgress?.({
-      phase: 'generating',
+      phase: "generating",
       percentage: Math.round((processedRows / totalRows) * 100),
       currentRow: 0,
       totalRows: data.length,
-      message: 'Generated headers',
+      message: "Generated headers",
     });
   }
 
@@ -278,7 +277,7 @@ function generateCSVContent<T>(
     // Report progress every 100 rows or at completion
     if (i % 100 === 0 || i === data.length - 1) {
       onProgress?.({
-        phase: 'generating',
+        phase: "generating",
         percentage: Math.round((processedRows / totalRows) * 100),
         currentRow: i + 1,
         totalRows: data.length,
@@ -291,16 +290,16 @@ function generateCSVContent<T>(
   let content = lines.join(lineEnding);
 
   // Add BOM for Excel compatibility if requested
-  if (includeBOM || encoding === 'utf-8-bom') {
+  if (includeBOM || encoding === "utf-8-bom") {
     content = UTF8_BOM + content;
   }
 
   onProgress?.({
-    phase: 'complete',
+    phase: "complete",
     percentage: 100,
     currentRow: data.length,
     totalRows: data.length,
-    message: 'CSV generation complete',
+    message: "CSV generation complete",
   });
 
   return content;
@@ -317,14 +316,14 @@ function generateCSVContent<T>(
  * @returns Generated filename with extension
  */
 function generateFilename<T>(options: CSVExportOptions<T>): string {
-  const baseName = options.filename ?? options.title ?? 'export';
+  const baseName = options.filename ?? options.title ?? "export";
   const sanitizedName = baseName
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
   const now = new Date();
-  const dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+  const dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
 
   return `${sanitizedName}-${dateSuffix}${FILE_EXTENSIONS.csv}`;
 }
@@ -365,14 +364,12 @@ export async function exportToCSV<T>(
 ): Promise<ExportResult> {
   // Validate input
   if (!options.columns || options.columns.length === 0) {
-    throw new Error('CSV export requires at least one column definition');
+    throw new Error("CSV export requires at least one column definition");
   }
 
   if (!options.data) {
-    throw new Error('CSV export requires data array');
+    throw new Error("CSV export requires data array");
   }
-
-  const startTime = Date.now();
 
   // Generate CSV content
   const content = generateCSVContent(options, onProgress);
@@ -390,7 +387,7 @@ export async function exportToCSV<T>(
     mimeType: MIME_TYPES.csv,
     size: blob.size,
     generatedAt: new Date(),
-    format: 'csv',
+    format: "csv",
     rowCount: options.data.length,
   };
 }
@@ -411,10 +408,10 @@ export function parseCSV(
   content: string,
   options: { delimiter?: string; hasHeaders?: boolean } = {}
 ): Record<string, string>[] {
-  const { delimiter = ',', hasHeaders = true } = options;
+  const { delimiter = ",", hasHeaders = true } = options;
 
   // Remove BOM if present
-  const cleanContent = content.replace(/^\ufeff/, '');
+  const cleanContent = content.replace(/^\ufeff/, "");
 
   // Split into lines, handling both \r\n and \n
   const lines = cleanContent.split(/\r?\n/).filter((line) => line.trim());
@@ -426,7 +423,7 @@ export function parseCSV(
   // Parse a single row, handling quoted fields
   const parseRow = (row: string): string[] => {
     const fields: string[] = [];
-    let current = '';
+    let current = "";
     let inQuotes = false;
 
     for (let i = 0; i < row.length; i++) {
@@ -447,7 +444,7 @@ export function parseCSV(
           inQuotes = true;
         } else if (char === delimiter) {
           fields.push(current);
-          current = '';
+          current = "";
         } else {
           current += char;
         }
@@ -471,7 +468,7 @@ export function parseCSV(
 
     if (hasHeaders) {
       headers.forEach((header, idx) => {
-        obj[header] = values[idx] ?? '';
+        obj[header] = values[idx] ?? "";
       });
     } else {
       values.forEach((value, idx) => {
@@ -491,25 +488,26 @@ export function parseCSV(
  * @param options - Options to validate
  * @returns Validation result with errors if any
  */
-export function validateCSVOptions<T>(
-  options: Partial<CSVExportOptions<T>>
-): { valid: boolean; errors: string[] } {
+export function validateCSVOptions<T>(options: Partial<CSVExportOptions<T>>): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
   if (!options.columns || options.columns.length === 0) {
-    errors.push('At least one column definition is required');
+    errors.push("At least one column definition is required");
   }
 
   if (!options.data) {
-    errors.push('Data array is required');
+    errors.push("Data array is required");
   }
 
   if (options.delimiter && options.delimiter.length !== 1) {
-    errors.push('Delimiter must be a single character');
+    errors.push("Delimiter must be a single character");
   }
 
   if (options.quoteChar && options.quoteChar.length !== 1) {
-    errors.push('Quote character must be a single character');
+    errors.push("Quote character must be a single character");
   }
 
   return {
@@ -528,18 +526,18 @@ export function createCSVOptions<T>(
   overrides: Partial<CSVExportOptions<T>>
 ): CSVExportOptions<T> {
   return {
-    title: 'Export',
+    title: "Export",
     columns: [] as unknown as readonly ExportColumn<T>[],
     data: [] as unknown as readonly T[],
-    delimiter: ',',
-    lineEnding: '\n',
+    delimiter: ",",
+    lineEnding: "\n",
     includeBOM: true,
-    encoding: 'utf-8',
+    encoding: "utf-8",
     quoteAll: false,
     quoteChar: '"',
     escapeChar: '"',
     includeHeaders: true,
-    nullValue: '',
+    nullValue: "",
     includeTimestamp: true,
     ...overrides,
   };

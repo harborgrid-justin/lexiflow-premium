@@ -119,7 +119,9 @@ export function cleanupDataService(): void {
       typeof (legacyRepositoryRegistry as { cleanup?: unknown }).cleanup ===
         "function"
     ) {
-      (legacyRepositoryRegistry as { cleanup: () => void }).cleanup();
+      (
+        legacyRepositoryRegistry as unknown as { cleanup: () => void }
+      ).cleanup();
     }
     console.log("[DataService] ✅ Cleaned up legacy repositories");
 

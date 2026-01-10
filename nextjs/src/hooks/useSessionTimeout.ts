@@ -144,17 +144,11 @@ export function useSessionTimeout(
     if (!expiresAt) return sessionDuration - warningThreshold;
     // We use the stored state or ref for stability, or recalculate in effect
     // But since useMemo runs during render, we should rely on 'now' state
-    const currentTime = now || Date.now(); // Fallback if 0 (first render) but standard is using state
-    return expiresAt - currentTime;
+    const currentTime = now; // Only use state, do not call Date.now()
+    if (currentTime === 0) return sessionDuration; // Default to full duration if not initialized
+
+    return expiresAt.getTime() - currentTime;
   }, [expiresAt, sessionDuration, warningThreshold, now]);
-    // Here we just return the static difference based on expiry
-    return Math.max(
-      0,
-      expiresAt.getTime() -
-        (lastActivityAt?.getTime() || now) -
-        warningThreshold
-    );
-  }, [expiresAt, sessionDuration, warningThreshold, lastActivityAt, now]);
 
   // Clear all timers
   const clearAllTimers = useCallback(() => {

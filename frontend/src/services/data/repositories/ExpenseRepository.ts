@@ -22,9 +22,10 @@ export class ExpenseRepository extends Repository<FirmExpense> {
     }
   }
 
-  override async getById(id: string): Promise<FirmExpense | null> {
+  override async getById(id: string): Promise<FirmExpense | undefined> {
     try {
-      return await this.expensesApi.getById(id);
+      const expense = await this.expensesApi.getById(id);
+      return expense || undefined;
     } catch (error) {
       console.error(`[ExpenseRepository] Error fetching expense ${id}:`, error);
       throw error;

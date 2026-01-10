@@ -28,40 +28,49 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
   useEffect(() => {
     let mounted = true;
     if (!debouncedName || debouncedName.length < 3) {
-      // Avoid calling state setter if we are already in the desired state or prevent sync updates in effect loop
-      if (conflicts.length > 0 || isChecking) {
-        setConflicts([]);
-        setIsChecking(false);
-      }
+      // Clear state if name is too short. React optimizations will prevent rerender if state hasn't changed.
+      setConflicts([]);
+      setIsChecking(false);
       return;
     }
 
     const runCheck = async () => {
-      if (!mounted) return;
+      // Set checking true at start
       setIsChecking(true);
-      // Parallel fetch for full scope
-      const [clients, parties] = await Promise.all([
-        DataService.clients.getAll(),
-        // DataService.parties.getAll() // Assuming we implement a party retrieval in DataService facade or fetch cases and flatten parties
-        DataService.cases.getAll().then((cases: Array<{ parties?: Array<{ name: string; role: string }> }>) => cases.flatMap((c: { parties?: Array<{ name: string; role: string }> }) => c.parties || []))
-      ]);
 
-      const q = debouncedName.toLowerCase();
-      const found: string[] = [];
+      try {
+        // Parallel fetch for full scope
+        const [clients, allCases] = await Promise.all([
+          DataService.clients.getAll(),
+          DataService.cases.getAll()
+        ]);
 
-      clients.forEach((c: { name: string }) => {
-        if (c.name.toLowerCase().includes(q)) found.push(`Existing Client: ${c.name}`);
-      });
+        if (!mounted) return;
 
-      parties.forEach((p: { name: string; role: string }) => {
-        if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
-      });
+        const parties = (allCases as any[]).flatMap(c => c.parties || []);
 
-      setConflicts(found);
-      setIsChecking(false);
+        const q = debouncedName.toLowerCase();
+        const found: string[] = [];
+
+        clients.forEach((c: { name: string }) => {
+          if (c.name.toLowerCase().includes(q)) found.push(`Existing Client: ${c.name}`);
+        });
+
+        parties.forEach((p: { name: string; role: string }) => {
+          if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
+        });
+
+        setConflicts(found);
+      } catch (err) {
+        console.error("Conflict check failed", err);
+      } finally {
+        if (mounted) setIsChecking(false);
+      }
     };
 
     runCheck();
+
+    return () => { mounted = false; };
   }, [debouncedName]);
 
   return (

@@ -3,7 +3,6 @@
  * Tests password strength calculation, visual indicators, and NIST compliance
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
@@ -61,7 +60,7 @@ describe('PasswordStrengthMeter', () => {
     });
 
     it('displays Good for good passwords', () => {
-      render(<PasswordStrengthMeter password="Password123!' />);
+      render(<PasswordStrengthMeter password="Password123!" />);
 
       expect(screen.getByText('Good')).toBeInTheDocument();
     });

@@ -67,11 +67,11 @@ export function PDFEditorView() {
                 }
             };
             loadUrl();
-        } else {
+        } else if (previewUrl) {
             setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [documentSelection.selected, register]);
+    }, [documentSelection.selected, register, previewUrl]);
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {

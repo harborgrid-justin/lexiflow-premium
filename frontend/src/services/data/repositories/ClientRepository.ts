@@ -328,6 +328,7 @@ export class ClientRepository extends Repository<Client> {
   async getActive(): Promise<Client[]> {
     try {
       // Use API filtering - explicit cast to ANY for now until ClientStatus is resolved/imported
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await this.clientsApi.getAll({ status: "active" as any });
     } catch (error) {
       console.error("[ClientRepository.getActive] Error:", error);
@@ -344,6 +345,7 @@ export class ClientRepository extends Repository<Client> {
   async getInactive(): Promise<Client[]> {
     try {
       // Use API filtering
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await this.clientsApi.getAll({ status: "inactive" as any });
     } catch (error) {
       console.error("[ClientRepository.getInactive] Error:", error);
@@ -367,6 +369,7 @@ export class ClientRepository extends Repository<Client> {
 
     try {
       // Use API filtering
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await this.clientsApi.getAll({ clientType: type as any });
     } catch (error) {
       console.error("[ClientRepository.getByType] Error:", error);

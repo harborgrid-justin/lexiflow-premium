@@ -22,7 +22,7 @@ export const getCases = async (): Promise<Case[]> => {
     return await ServerAPI.get<Case[]>("/api/cases", {
       tags: ["cases"],
     });
-  } catch (error) {
+  } catch {
     console.error("Failed to fetch cases:", error);
     return [];
   }
@@ -33,7 +33,7 @@ export const getCaseById = async (id: string): Promise<Case | null> => {
     return await ServerAPI.get<Case>(`/api/cases/${id}`, {
       tags: [`case-${id}`],
     });
-  } catch (error) {
+  } catch {
     // Return null so the page can handle 404 with notFound()
     return null;
   }

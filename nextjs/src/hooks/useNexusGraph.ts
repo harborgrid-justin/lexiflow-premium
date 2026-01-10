@@ -282,7 +282,7 @@ export function useNexusGraph(
       workerRef.current?.terminate();
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [initialData, containerRef]); // eslint-disable-next-line
+  }, [initialData, containerRef]);
 
   const reheat = useCallback(() => {
     physicsState.current.alpha = 0.5;

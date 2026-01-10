@@ -68,10 +68,10 @@ export class EntityRepository extends Repository<LegalEntity> {
       riskScore?: number;
       tags?: string[];
       [key: string]: unknown;
-    };
     return {
       ...entityAny,
       id: entity.id,
+      name: (entityAny.name as string) || "Unknown Entity",
       type: this.mapEntityType(entity.entityType || "other"),
       roles: entityAny.roles || [],
       riskScore: entityAny.riskScore || 0,

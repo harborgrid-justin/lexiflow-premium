@@ -374,40 +374,42 @@ export function parseApiError(error: unknown): ApiErrorBase {
   const details: unknown =
     (err as { details?: unknown }).details || (err as { data?: unknown }).data;
 
+  const detailsAny = details as Record<string, any>;
+
   switch (statusCode) {
     case 400:
-      return new ValidationError(
-        message,
-        (details as { fieldErrors?: Record<string, string> })?.fieldErrors || {}
-      );
+      return new ValidationError(message, detailsAny?.fieldErrors || {});
     case 401:
       return new AuthError(message);
     case 403:
-      return new AuthorizationError(message, details?.requiredPermission);
+      return new AuthorizationError(message, detailsAny?.requiredPermission);
     case 404:
-      return new NotFoundError(details?.resourceType, details?.resourceId);
+      return new NotFoundError(
+        detailsAny?.resourceType,
+        detailsAny?.resourceId
+      );
     case 409:
-      return new ConflictError(message, details?.conflictType);
+      return new ConflictError(message, detailsAny?.conflictType);
     case 422:
-      return new BusinessError(message, details?.errorCode, details);
+      return new BusinessError(message, detailsAny?.errorCode, details);
     case 429:
       return new RateLimitError(
-        details?.retryAfter,
-        details?.limit,
-        details?.remaining,
-        details?.resetAt ? new Date(details.resetAt) : undefined
+        detailsAny?.retryAfter,
+        detailsAny?.limit,
+        detailsAny?.remaining,
+        detailsAny?.resetAt ? new Date(detailsAny.resetAt) : undefined
       );
     case 408:
-      return new TimeoutError(details?.timeout);
+      return new TimeoutError(detailsAny?.timeout);
     case 503:
       return new ServiceUnavailableError(
         message,
-        details?.estimatedRecoveryTime
+        detailsAny?.estimatedRecoveryTime
       );
     case 500:
     case 502:
     case 504:
-      return new ServerError(message, statusCode, details?.errorId);
+      return new ServerError(message, statusCode, detailsAny?.errorId);
     default:
       return new ApiErrorBase(message, statusCode, details);
   }

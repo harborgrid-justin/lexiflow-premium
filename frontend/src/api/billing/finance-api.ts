@@ -472,7 +472,7 @@ export class BillingApiService {
         )
       ) {
         return (
-          (response as { data: { data: Invoice[] } }).data as {
+          (response as unknown as { data: { data: Invoice[] } }).data as {
             data: Invoice[];
           }
         ).data;

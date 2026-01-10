@@ -3,6 +3,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Briefcase, File, FileText, Loader2, Scale } from 'lucide-react';
+import React from 'react';
 
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
@@ -66,7 +67,7 @@ export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelect
               )}
             >
               <div className="flex items-center mb-2">
-                {t.icon && React.createElement(t.icon, { className: cn("h-5 w-5 mr-2", theme.primary.text) })}
+                {t.icon && React.createElement(t.icon as any, { className: cn("h-5 w-5 mr-2", theme.primary.text) })}
                 <span className={cn("font-medium", theme.text.primary)}>{t.name}</span>
               </div>
               <p className={cn("text-sm", theme.text.secondary)}>{t.description}</p>

@@ -713,15 +713,8 @@ export function useDocumentManager(
         console.error("[useDocumentManager.addTag] Error:", error);
         notify.error("Failed to add tag");
       }
-      }
     },
-    [
-      documentsArray,
-      validateDocId,
-      validateTag,
-      updateDocument,
-      notify,
-    ]
+    [documentsArray, validateDocId, validateTag, updateDocument, notify]
   );
 
   /**

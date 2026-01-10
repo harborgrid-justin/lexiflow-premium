@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { SafeContent, TrustedHTML } from './SafeContent';
 
@@ -216,7 +215,7 @@ describe('TrustedHTML', () => {
     });
 
     it('handles content with only special characters', () => {
-      const { container } = render(<TrustedHTML content="<>&\"'" />);
+      const { container } = render(<TrustedHTML content={"<>&\"'"} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 

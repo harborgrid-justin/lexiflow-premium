@@ -66,15 +66,21 @@ export function useAutoTimeCapture(
     isIdleRef.current = isIdle;
   }, [isIdle]);
 
+  // use a ref to track activeTime without triggering effect re-runs
+  const activeTimeRef = useRef(activeTime);
+  useEffect(() => {
+    activeTimeRef.current = activeTime;
+  }, [activeTime]);
+
   // Reset timer on path/case change
   useEffect(() => {
-    if (activeTime > 60 && currentCaseId) {
+    if (activeTimeRef.current > 60 && currentCaseId) {
       // In a real app, auto-log here.
     }
     setActiveTime(0);
     lastActivity.current = Date.now();
     setIsIdle(false);
-  }, [currentPath, currentCaseId, activeTime]);
+  }, [currentPath, currentCaseId]); // Removed activeTime to prevents loops
 
   // Throttled Activity Handler using RAF
   const handleActivity = useCallback(() => {

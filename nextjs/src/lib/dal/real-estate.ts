@@ -485,7 +485,7 @@ export async function getPortfolioStats(): Promise<PortfolioStats> {
       tags: [REAL_ESTATE_TAGS.STATS],
       revalidate: 300,
     });
-  } catch (error) {
+  } catch {
     return {
       totalProperties: mockProperties.length,
       totalValue: mockProperties.reduce((sum, p) => sum + (p.currentValue || 0), 0),
@@ -519,7 +519,7 @@ export async function getAllProperties(): Promise<RealEstateProperty[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockProperties;
   }
 }
@@ -535,7 +535,7 @@ export async function getPropertyById(id: string): Promise<RealEstateProperty | 
         tags: [REAL_ESTATE_TAGS.PROPERTIES],
       }
     );
-  } catch (error) {
+  } catch {
     return mockProperties.find((p) => p.id === id) || null;
   }
 }
@@ -553,7 +553,7 @@ export async function getAcquisitions(): Promise<RealEstateAcquisition[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockAcquisitions;
   }
 }
@@ -571,7 +571,7 @@ export async function getDisposals(): Promise<RealEstateDisposal[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockDisposals;
   }
 }
@@ -589,7 +589,7 @@ export async function getOutgrants(): Promise<RealEstateOutgrant[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockOutgrants;
   }
 }
@@ -607,7 +607,7 @@ export async function getEncroachments(): Promise<RealEstateEncroachment[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockEncroachments;
   }
 }
@@ -625,7 +625,7 @@ export async function getRelocations(): Promise<RealEstateRelocation[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockRelocations;
   }
 }
@@ -643,7 +643,7 @@ export async function getAuditItems(): Promise<RealEstateAuditItem[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockAuditItems;
   }
 }
@@ -661,7 +661,7 @@ export async function getSolicitations(): Promise<RealEstateSolicitation[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockSolicitations;
   }
 }
@@ -679,7 +679,7 @@ export async function getCostShares(): Promise<RealEstateCostShare[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockCostShares;
   }
 }
@@ -697,7 +697,7 @@ export async function getUtilization(): Promise<RealEstateUtilization[]> {
       }
     );
     return response.data || [];
-  } catch (error) {
+  } catch {
     return mockUtilization;
   }
 }

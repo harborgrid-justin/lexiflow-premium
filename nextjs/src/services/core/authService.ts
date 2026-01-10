@@ -298,7 +298,8 @@ class AuthenticationService {
       const enrichedUser: User = {
         ...updatedUser,
         permissions:
-          (updatedUser as any).permissions || this.currentUser.permissions,
+          (updatedUser as { permissions?: string[] }).permissions ||
+          this.currentUser.permissions,
       };
       this.currentUser = enrichedUser;
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(enrichedUser));

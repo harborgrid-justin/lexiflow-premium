@@ -166,7 +166,11 @@ export function useContextToolbar(
         // Restore stats
         const statsMap = new Map<string, ActionStats>();
         Object.entries(data.stats || {}).forEach(
-          ([id, stat]: [string, any]) => {
+          ([id, s]: [string, unknown]) => {
+            const stat = s as ActionStats & {
+              contextPatterns?: Record<string, number>;
+            };
+            // Keeping explicit any for JSON parsing safety
             statsMap.set(id, {
               ...stat,
               lastUsed: new Date(stat.lastUsed),
@@ -181,11 +185,9 @@ export function useContextToolbar(
         // Use setTimeout to move the update to the next tick to avoid "setState in effect" warning
         setTimeout(() => {
           setActionStats(() => statsMap);
+          if (data.favorites) setFavorites(new Set(data.favorites));
+          if (data.hidden) setHidden(new Set(data.hidden));
         }, 0);
-
-        // Restore preferences
-        if (data.favorites) setFavorites(new Set(data.favorites));
-        if (data.hidden) setHidden(new Set(data.hidden));
       }
     } catch (error) {
       console.error("Failed to load toolbar context data:", error);

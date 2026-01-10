@@ -3,10 +3,10 @@
  * Enterprise-grade tests for document version history modal.
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import type { DocumentVersion, LegalDocument, UserRole } from '@/types/documents';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DocumentVersions } from './DocumentVersions';
-import type { LegalDocument, DocumentVersion, UserRole } from '@/types/documents';
 
 // Mock @/lib/utils
 jest.mock('@/lib/utils', () => ({
@@ -300,7 +300,7 @@ describe('DocumentVersions', () => {
         render(
           <DocumentVersions
             document={mockDocument}
-            userRole="Paralegal" as UserRole}
+            userRole={"Paralegal" as UserRole}
             onRestore={mockOnRestore}
             onClose={mockOnClose}
           />

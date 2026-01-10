@@ -26,19 +26,19 @@ export function useBusinessDevelopment() {
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
   // Queries
-  const { data: leads = [] } = useQuery<any[]>(["crm", "leads"], () =>
+  const { data: leads = [] } = useQuery(["crm", "leads"], () =>
     DataService.crm.getLeads()
   ) as { data: any[] };
-  const { data: pitches = [] } = useQuery<any[]>(["crm", "pitches"], () =>
+  const { data: pitches = [] } = useQuery(["crm", "pitches"], () =>
     DataService.crm.getPitches()
   ) as { data: any[] };
-  const { data: rfps = [] } = useQuery<any[]>(["crm", "rfps"], () =>
+  const { data: rfps = [] } = useQuery(["crm", "rfps"], () =>
     DataService.crm.getRFPs()
   ) as { data: any[] };
-  const { data: winLossData = [] } = useQuery<any[]>(["crm", "win-loss"], () =>
+  const { data: winLossData = [] } = useQuery(["crm", "win-loss"], () =>
     DataService.crm.getWinLossAnalysis()
   ) as { data: any[] };
-  const { data: analyticsData = {} } = useQuery<any>(
+  const { data: analyticsData = {} } = useQuery(
     ["crm", "business-metrics"],
     () => DataService.crm.getBusinessDevelopmentMetrics()
   ) as { data: any };

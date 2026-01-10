@@ -1,79 +1,46 @@
-import {
-  adminApi,
-  analyticsApi,
-  api,
-  complianceApi,
-  isBackendApiEnabled,
-} from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { adminApi, analyticsApi, api, complianceApi } from "@/api";
 import { AdminService } from "@/services/domain/AdminDomain";
-import { BackupService } from "@/services/domain/BackupDomain";
 import { DataCatalogService } from "@/services/domain/DataCatalogDomain";
-import { STORES } from "../db";
 import { getDataQualityService } from "../factories/RepositoryFactories";
 
 export const AdminDescriptors: PropertyDescriptorMap = {
   admin: { get: () => AdminService, enumerable: true },
   reports: {
-    get: () =>
-      isBackendApiEnabled()
-        ? complianceApi.reports
-        : legacyRepositoryRegistry.getOrCreate(STORES.REPORTERS),
+    get: () => complianceApi.reports,
     enumerable: true,
   },
   quality: { get: () => getDataQualityService(), enumerable: true },
   catalog: { get: () => DataCatalogService, enumerable: true },
   dataSources: {
-    get: () => (isBackendApiEnabled() ? api.dataSources : null),
+    get: () => api.dataSources,
     enumerable: true,
   },
   schemaManagement: {
-    get: () => (isBackendApiEnabled() ? api.schemaManagement : null),
+    get: () => api.schemaManagement,
     enumerable: true,
   },
   queryWorkbench: {
-    get: () => (isBackendApiEnabled() ? api.queryWorkbench : null),
+    get: () => api.queryWorkbench,
     enumerable: true,
   },
   backup: {
-    get: () => (isBackendApiEnabled() ? adminApi.backups : BackupService),
+    get: () => adminApi.backups,
     enumerable: true,
   },
   dashboard: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.dashboard
-        : import("@/services/domain/DashboardDomain").then(
-            (m) => m.DashboardService
-          ),
+    get: () => analyticsApi.dashboard,
     enumerable: true,
   },
   metrics: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.metrics
-        : {
-            getSystem: async () => ({ cpu: 0, memory: 0, disk: 0, network: 0 }),
-            getApplication: async () => ({
-              requests: 0,
-              errors: 0,
-              responseTime: 0,
-            }),
-          },
+    get: () => adminApi.metrics,
     enumerable: true,
   },
   serviceJobs: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.serviceJobs
-        : legacyRepositoryRegistry.getOrCreate("serviceJobs"),
+    get: () => adminApi.serviceJobs,
     enumerable: true,
   },
   dataSourcesIntegration: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.dataSources
-        : legacyRepositoryRegistry.getOrCreate("dataSources"),
+    get: () => api.dataSources,
     enumerable: true,
   },
 };

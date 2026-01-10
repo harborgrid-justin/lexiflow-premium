@@ -310,69 +310,58 @@ export const AdminService = {
   },
 
   getGovernanceRules: async (): Promise<GovernanceRule[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<GovernanceRule[]>("/admin/governance/rules");
-      } catch (error) {
-        console.warn("Failed to fetch governance rules", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<GovernanceRule[]>("/admin/governance/rules");
+    } catch (error) {
+      console.warn("Failed to fetch governance rules", error);
+      return [];
     }
-    return [];
   },
 
   getGovernancePolicies: async (): Promise<GovernancePolicy[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<GovernancePolicy[]>(
-          "/admin/governance/policies"
-        );
-      } catch (error) {
-        console.warn("Failed to fetch governance policies", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<GovernancePolicy[]>(
+        "/admin/governance/policies"
+      );
+    } catch (error) {
+      console.warn("Failed to fetch governance policies", error);
+      return [];
     }
-    return [];
   },
 
   getApiSpec: async (): Promise<ApiServiceSpec[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<ApiServiceSpec[]>("/admin/api-specs");
-      } catch (error) {
-        console.warn("Failed to fetch API specs", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<ApiServiceSpec[]>("/admin/api-specs");
+    } catch (error) {
+      console.warn("Failed to fetch API specs", error);
+      return [];
     }
-    return [];
   },
 
   getSystemSettings: async (): Promise<Record<string, unknown>> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get("/admin/settings");
-      } catch (error) {
-        console.warn("Failed to fetch system settings", error);
-      }
+    try {
+      return await apiClient.get("/admin/settings");
+    } catch (error) {
+      console.warn("Failed to fetch system settings", error);
+      // Fallback or default
+      return {
+        backendUrl: process.env.VITE_API_URL || "/api",
+        dataSource: "postgresql",
+        cacheEnabled: true,
+        cacheTTL: 300,
+        maxUploadSize: 50 * 1024 * 1024,
+        sessionTimeout: 30,
+        auditLogging: true,
+        maintenanceMode: false,
+        features: {
+          ocr: true,
+          aiAssistant: true,
+          realTimeSync: true,
+          advancedSearch: true,
+          documentVersioning: true,
+        },
+      };
     }
-    // Fallback or default
-    return {
-      backendUrl: process.env.VITE_API_URL || "/api",
-      dataSource: "postgresql",
-      cacheEnabled: true,
-      cacheTTL: 300,
-      maxUploadSize: 50 * 1024 * 1024,
-      sessionTimeout: 30,
-      auditLogging: true,
-      maintenanceMode: false,
-      features: {
-        ocr: true,
-        aiAssistant: true,
-        realTimeSync: true,
-        advancedSearch: true,
-        documentVersioning: true,
-      },
-    };
   },
 
   // Database Management
@@ -383,18 +372,13 @@ export const AdminService = {
     totalStores: number;
     stores: Array<{ name: string; count: number }>;
   }> => {
-    if (isBackendApiEnabled()) {
-      try {
-        // Try backend endpoint first
-        return await apiClient.get("/admin/database/info");
-      } catch (error) {
-        console.warn("[AdminService] DB Info backend unavailable", error);
-        throw error;
-      }
+    try {
+      // Try backend endpoint first
+      return await apiClient.get("/admin/database/info");
+    } catch (error) {
+      console.warn("[AdminService] DB Info backend unavailable", error);
+      throw error;
     }
-
-    // Strict backend enforcement - no mocks allowed
-    throw new Error("Legacy DB info not supported in strict backend mode.");
   },
 
   incrementVersion: async (): Promise<void> => {

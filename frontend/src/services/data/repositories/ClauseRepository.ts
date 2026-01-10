@@ -22,10 +22,8 @@ import {
   type CreateClauseDto,
   type UpdateClauseDto,
 } from "@/api/intelligence/clauses-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
-import { EntityNotFoundError, ValidationError } from "@/services/core/errors";
+import { ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { BaseEntity, Clause } from "@/types";
 
 export const CLAUSE_QUERY_KEYS = {
@@ -43,12 +41,10 @@ type ClauseEntity = Omit<Clause, "createdBy" | "updatedBy"> &
   >;
 
 export class ClauseRepository extends Repository<ClauseEntity> {
-  private readonly useBackend: boolean;
   private clausesApi: ClausesApiService;
 
   constructor() {
-    super(STORES.CLAUSES);
-    this.useBackend = isBackendApiEnabled();
+    super("clauses");
     this.clausesApi = new ClausesApiService();
   }
 
@@ -59,52 +55,35 @@ export class ClauseRepository extends Repository<ClauseEntity> {
   }
 
   override async getAll(): Promise<ClauseEntity[]> {
-    if (this.useBackend) {
-      try {
-        const result = await this.clausesApi.getAll();
-        return result as unknown as ClauseEntity[];
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
+    try {
+      const result = await this.clausesApi.getAll();
+      return result as unknown as ClauseEntity[];
+    } catch (error) {
+      console.error("Failed to fetch clauses", error);
+      return [];
     }
-    return await super.getAll();
   }
 
   override async getById(id: string): Promise<ClauseEntity | undefined> {
     this.validateId(id, "getById");
-    if (this.useBackend) {
-      try {
-        const result = await this.clausesApi.getById(id);
-        return result as unknown as ClauseEntity;
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
-    }
-    return await super.getById(id);
+    const result = await this.clausesApi.getById(id);
+    return result as unknown as ClauseEntity;
   }
 
   override async add(item: ClauseEntity): Promise<ClauseEntity> {
     if (!item || typeof item !== "object") {
       throw new ValidationError("[ClauseRepository.add] Invalid clause data");
     }
-    if (this.useBackend) {
-      try {
-        const {
-          id: _id,
-          createdAt: _createdAt,
-          updatedAt: _updatedAt,
-          ...createData
-        } = item;
-        const result = await this.clausesApi.create(
-          createData as unknown as CreateClauseDto
-        );
-        return result as unknown as ClauseEntity;
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
-    }
-    await super.add(item);
-    return item;
+    const {
+      id: _id,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      ...createData
+    } = item;
+    const result = await this.clausesApi.create(
+      createData as unknown as CreateClauseDto
+    );
+    return result as unknown as ClauseEntity;
   }
 
   override async update(
@@ -112,31 +91,16 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     updates: Partial<ClauseEntity>
   ): Promise<ClauseEntity> {
     this.validateId(id, "update");
-    if (this.useBackend) {
-      try {
-        const result = await this.clausesApi.update(
-          id,
-          updates as unknown as UpdateClauseDto
-        );
-        return result as unknown as ClauseEntity;
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
-    }
-    return await super.update(id, updates);
+    const result = await this.clausesApi.update(
+      id,
+      updates as unknown as UpdateClauseDto
+    );
+    return result as unknown as ClauseEntity;
   }
 
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
-    if (this.useBackend) {
-      try {
-        await this.clausesApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
-    }
-    await super.delete(id);
+    await this.clausesApi.delete(id);
   }
 
   async render(
@@ -144,22 +108,8 @@ export class ClauseRepository extends Repository<ClauseEntity> {
     variables: Record<string, unknown>
   ): Promise<string> {
     this.validateId(id, "render");
-    if (this.useBackend) {
-      try {
-        const result = await this.clausesApi.render(id, variables);
-        return result.text;
-      } catch (error) {
-        console.warn("[ClauseRepository] Backend API unavailable", error);
-      }
-    }
-    const clause = await this.getById(id);
-    if (!clause) throw new EntityNotFoundError("Clause", id);
-    const clauseWithText = clause as ClauseEntity & { text?: string };
-    return (
-      (clauseWithText.text as string) ||
-      (clauseWithText.content as string) ||
-      ""
-    );
+    const result = await this.clausesApi.render(id, variables);
+    return result.text;
   }
 
   async getByCategory(category: string): Promise<ClauseEntity[]> {

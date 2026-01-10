@@ -1,33 +1,20 @@
-import { api, isBackendApiEnabled } from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
-import { STORES } from "../db";
-import {
-  getTrialRepository,
-  getWitnessesRepository,
-} from "../factories/RepositoryFactories";
+import { api } from "@/api";
 
 export const TrialDescriptors: PropertyDescriptorMap = {
   trial: {
-    get: () => (isBackendApiEnabled() ? api.trial : getTrialRepository()),
+    get: () => api.trial,
     enumerable: true,
   },
   exhibits: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.exhibits
-        : legacyRepositoryRegistry.getOrCreate(STORES.EXHIBITS),
+    get: () => api.exhibits,
     enumerable: true,
   },
   witnesses: {
-    get: () =>
-      isBackendApiEnabled() ? api.witnesses : getWitnessesRepository(),
+    get: () => api.witnesses,
     enumerable: true,
   },
   examinations: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.examinations
-        : legacyRepositoryRegistry.getOrCreate("examinations"),
+    get: () => api.examinations,
     enumerable: true,
   },
 };

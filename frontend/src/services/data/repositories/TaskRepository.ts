@@ -26,7 +26,6 @@
  */
 
 import { TasksApiService } from "@/api/workflow/tasks-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
 import { STORES } from "@/services/data/db";
@@ -67,12 +66,11 @@ export const TASK_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class TaskRepository extends Repository<WorkflowTaskEntity> {
-  private readonly useBackend: boolean;
+  private readonly useBackend: boolean = true;
   private tasksApi: TasksApiService;
 
   constructor() {
     super(STORES.TASKS);
-    this.useBackend = isBackendApiEnabled();
     this.tasksApi = new TasksApiService();
     this.logInitialization();
   }

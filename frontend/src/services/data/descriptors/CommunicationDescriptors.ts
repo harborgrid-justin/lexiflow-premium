@@ -1,5 +1,4 @@
-import { communicationsApi, isBackendApiEnabled } from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { communicationsApi } from "@/api";
 import { CalendarService } from "@/services/domain/CalendarDomain";
 import { CollaborationService } from "@/services/domain/CollaborationDomain";
 import { CorrespondenceService } from "@/services/domain/CommunicationDomain";
@@ -8,18 +7,12 @@ import { NotificationService } from "@/services/domain/NotificationDomain";
 
 export const CommunicationDescriptors: PropertyDescriptorMap = {
   communications: {
-    get: () =>
-      isBackendApiEnabled()
-        ? communicationsApi.communications
-        : legacyRepositoryRegistry.getOrCreate("communications"),
+    get: () => communicationsApi.communications,
     enumerable: true,
   },
   correspondence: { get: () => CorrespondenceService, enumerable: true },
   messaging: {
-    get: () =>
-      isBackendApiEnabled()
-        ? communicationsApi.messaging
-        : legacyRepositoryRegistry.getOrCreate("messages"),
+    get: () => communicationsApi.messaging,
     enumerable: true,
   },
   notifications: {

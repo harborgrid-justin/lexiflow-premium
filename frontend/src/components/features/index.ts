@@ -28,7 +28,6 @@ export * from "./cases";
 // Discovery & evidence management
 export * from "./discovery";
 
-// Document management & collaboration
 export * from "./documents";
 
 // Trial & litigation management
@@ -37,8 +36,6 @@ export * from "./litigation";
 // Firm operations & administration
 export * from "./operations";
 
-// Communication & collaboration
-// export * from './collaboration';
 
 // Legal research & knowledge management
 export * from "./knowledge";

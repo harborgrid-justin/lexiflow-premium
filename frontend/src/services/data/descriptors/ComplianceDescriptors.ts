@@ -1,14 +1,6 @@
-import {
-  adminApi,
-  api,
-  authApi,
-  complianceApi,
-  isBackendApiEnabled,
-} from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { adminApi, api, authApi, complianceApi } from "@/api";
 import { ComplianceService } from "@/services/domain/ComplianceDomain";
 import { SecurityService } from "@/services/domain/SecurityDomain";
-import { STORES } from "../db";
 
 export const ComplianceDescriptors: PropertyDescriptorMap = {
   compliance: {
@@ -16,57 +8,32 @@ export const ComplianceDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   conflictChecks: {
-    get: () =>
-      isBackendApiEnabled()
-        ? complianceApi.conflictChecks
-        : legacyRepositoryRegistry.getOrCreate("conflictChecks"),
+    get: () => complianceApi.conflictChecks,
     enumerable: true,
   },
   ethicalWalls: {
-    get: () =>
-      isBackendApiEnabled()
-        ? authApi.ethicalWalls
-        : legacyRepositoryRegistry.getOrCreate("ethicalWalls"),
+    get: () => authApi.ethicalWalls,
     enumerable: true,
   },
   auditLogs: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.auditLogs
-        : legacyRepositoryRegistry.getOrCreate("auditLogs"),
+    get: () => adminApi.auditLogs,
     enumerable: true,
   },
   permissions: {
-    get: () =>
-      isBackendApiEnabled()
-        ? authApi.permissions
-        : legacyRepositoryRegistry.getOrCreate("permissions"),
+    get: () => authApi.permissions,
     enumerable: true,
   },
   rlsPolicies: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.rlsPolicies
-        : legacyRepositoryRegistry.getOrCreate(STORES.POLICIES),
+    get: () => api.rlsPolicies,
     enumerable: true,
   },
   complianceReporting: {
-    get: () =>
-      isBackendApiEnabled()
-        ? complianceApi.complianceReporting
-        : legacyRepositoryRegistry.getOrCreate("complianceReports"),
+    get: () => complianceApi.complianceReporting,
     enumerable: true,
   },
   security: { get: () => SecurityService, enumerable: true },
   tokenBlacklist: {
-    get: () =>
-      isBackendApiEnabled()
-        ? authApi.tokenBlacklist
-        : {
-            getAll: async () => [],
-            add: async () => ({ success: false }),
-            remove: async () => ({ success: false }),
-          },
+    get: () => authApi.tokenBlacklist,
     enumerable: true,
   },
 };

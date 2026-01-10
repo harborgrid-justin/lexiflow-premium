@@ -1,5 +1,3 @@
-import { isBackendApiEnabled } from "@/api";
-import { db, STORES } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 // UserId import removed as we use string type for userId in methods
 
@@ -51,20 +49,15 @@ export class AuditService {
     };
 
     try {
-      if (isBackendApiEnabled()) {
-        try {
-          await apiClient.post("/audit/log", auditEntry);
-        } catch (error) {
-          console.error(
-            "[AuditService] Backend log failed, falling back to console/local",
-            error
-          );
-          // Fallback to local is allowed if backend fails to ensure trace exists somewhere?
-          // Usually we queue it, but for now we log error.
-        }
-      } else {
-        // Fallback or Local Mode
-        await db.put(STORES.AUDIT_LOGS, auditEntry);
+      try {
+        await apiClient.post("/audit/log", auditEntry);
+      } catch (error) {
+        console.error(
+          "[AuditService] Backend log failed, falling back to console/local",
+          error
+        );
+        // Fallback to local is allowed if backend fails to ensure trace exists somewhere?
+        // Usually we queue it, but for now we log error.
       }
     } catch (e) {
       // LAST RESORT: Console log to ensure evidence is not completely lost

@@ -1,4 +1,3 @@
-import { isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { JudgeProfile } from "@/types";
 
@@ -21,20 +20,17 @@ export const AnalysisService = {
    * Maps to the backend judge statistics endpoint
    */
   getJudgeProfiles: async (): Promise<JudgeProfile[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        // The Controller endpoint is 'analytics/judge-stats'
-        // We cast to unknown then to JudgeProfile[] as the shapes are likely compatible for frontend needs
-        // (JudgeListItemDto usually contains id, name, court etc.)
-        return (await apiClient.get(
-          "/analytics/judge-stats"
-        )) as unknown as JudgeProfile[];
-      } catch (e) {
-        console.warn("Failed to fetch judge profiles", e);
-        return [];
-      }
+    try {
+      // The Controller endpoint is 'analytics/judge-stats'
+      // We cast to unknown then to JudgeProfile[] as the shapes are likely compatible for frontend needs
+      // (JudgeListItemDto usually contains id, name, court etc.)
+      return (await apiClient.get(
+        "/analytics/judge-stats"
+      )) as unknown as JudgeProfile[];
+    } catch (e) {
+      console.warn("Failed to fetch judge profiles", e);
+      return [];
     }
-    return [];
   },
 
   async predictCaseOutcome(

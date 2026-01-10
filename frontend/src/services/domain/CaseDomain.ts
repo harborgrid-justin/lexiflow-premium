@@ -110,11 +110,9 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { Case, CasePhase, CaseStatus, Party } from "@/types";
 
 // Backend API Integration (Primary Data Source)
-import { isBackendApiEnabled } from "@/api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
@@ -143,22 +141,18 @@ export class CaseRepository extends Repository<Case> {
   private readonly casesApi: CasesApiService;
 
   constructor() {
-    super(STORES.CASES);
+    super("cases");
     this.casesApi = new CasesApiService();
   }
 
   /**
    * Retrieves all cases with optional filtering
-   * Routes to backend API if enabled, otherwise uses IndexedDB
+   * Routes to backend API if enabled
    *
    * @returns Promise<Case[]> - Array of all cases
-   * @complexity O(1) API call or O(n) IndexedDB scan
    */
   override async getAll(): Promise<Case[]> {
-    if (isBackendApiEnabled()) {
-      return this.casesApi.getAll();
-    }
-    return [];
+    return this.casesApi.getAll();
   }
 
   /**
@@ -166,18 +160,14 @@ export class CaseRepository extends Repository<Case> {
    *
    * @param id - Case identifier
    * @returns Promise<Case | undefined>
-   * @complexity O(1) for both backend and IndexedDB
    */
   override async getById(id: string): Promise<Case | undefined> {
-    if (isBackendApiEnabled()) {
-      try {
-        return await this.casesApi.getById(id);
-      } catch (error) {
-        console.error("[CaseRepository.getById] Backend error:", error);
-        return undefined;
-      }
+    try {
+      return await this.casesApi.getById(id);
+    } catch (error) {
+      console.error("[CaseRepository.getById] Backend error:", error);
+      return undefined;
     }
-    return undefined;
   }
 
   /**
@@ -189,10 +179,7 @@ export class CaseRepository extends Repository<Case> {
   override async add(
     caseData: Omit<Case, "id" | "createdAt" | "updatedAt">
   ): Promise<Case> {
-    if (isBackendApiEnabled()) {
-      return this.casesApi.add(caseData);
-    }
-    throw new Error("Backend API required");
+    return this.casesApi.add(caseData);
   }
 
   /**
@@ -203,10 +190,7 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<Case> - Updated case
    */
   override async update(id: string, updates: Partial<Case>): Promise<Case> {
-    if (isBackendApiEnabled()) {
-      return this.casesApi.update(id, updates);
-    }
-    throw new Error("Backend API required");
+    return this.casesApi.update(id, updates);
   }
 
   /**
@@ -216,11 +200,7 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<void>
    */
   override async delete(id: string): Promise<void> {
-    if (isBackendApiEnabled()) {
-      await this.casesApi.delete(id);
-      return;
-    }
-    throw new Error("Backend API required");
+    await this.casesApi.delete(id);
   }
 
   /**
@@ -242,15 +222,12 @@ export class CaseRepository extends Repository<Case> {
    * @complexity O(n) - full scan with filter or O(1) API call
    */
   async getArchived() {
-    if (isBackendApiEnabled()) {
-      try {
-        return await this.casesApi.getArchived();
-      } catch (error) {
-        console.error("[CaseRepository.getArchived] Backend error:", error);
-        return [];
-      }
+    try {
+      return await this.casesApi.getArchived();
+    } catch (error) {
+      console.error("[CaseRepository.getArchived] Backend error:", error);
+      return [];
     }
-    return [];
   }
 
   /**
@@ -261,10 +238,7 @@ export class CaseRepository extends Repository<Case> {
    * @complexity O(log n) IndexedDB index or O(1) API call
    */
   async getByStatus(status: string) {
-    if (isBackendApiEnabled()) {
-      return this.casesApi.getAll({ status });
-    }
-    return [];
+    return this.casesApi.getAll({ status });
   }
 
   /**
@@ -275,11 +249,8 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<boolean> - Success indicator
    */
   async importDocket(caseId: string, data: unknown) {
-    if (isBackendApiEnabled()) {
-      await apiClient.post(`/cases/${caseId}/docket/import`, data);
-      return true;
-    }
-    throw new Error("Backend API required");
+    await apiClient.post(`/cases/${caseId}/docket/import`, data);
+    return true;
   }
 
   /**
@@ -289,11 +260,7 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<void>
    */
   async archive(id: string) {
-    if (isBackendApiEnabled()) {
-      await this.casesApi.update(id, { status: CaseStatus.Closed });
-      return;
-    }
-    throw new Error("Backend API required");
+    await this.casesApi.update(id, { status: CaseStatus.Closed });
   }
 
   /**
@@ -303,11 +270,7 @@ export class CaseRepository extends Repository<Case> {
    * @returns Promise<void>
    */
   async flag(id: string) {
-    if (isBackendApiEnabled()) {
-      await apiClient.post(`/cases/${id}/flag`, {});
-      return;
-    }
-    throw new Error("Backend API required");
+    await apiClient.post(`/cases/${id}/flag`, {});
   }
 }
 
@@ -341,7 +304,7 @@ export class CaseRepository extends Repository<Case> {
  */
 export class PhaseRepository extends Repository<CasePhase> {
   constructor() {
-    super(STORES.PHASES);
+    super("phases");
   }
 
   /**
@@ -351,14 +314,12 @@ export class PhaseRepository extends Repository<CasePhase> {
    * @complexity O(1) API call or O(n) IndexedDB scan
    */
   override async getAll(): Promise<CasePhase[]> {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<CasePhase[]>("/case-phases");
-      } catch (error) {
-        console.error("[PhaseRepository.getAll] Backend error:", error);
-      }
+    try {
+      return await apiClient.get<CasePhase[]>("/case-phases");
+    } catch (error) {
+      console.error("[PhaseRepository.getAll] Backend error:", error);
+      return [];
     }
-    return [];
   }
 
   /**
@@ -368,15 +329,12 @@ export class PhaseRepository extends Repository<CasePhase> {
    * @returns Promise<CasePhase | undefined>
    */
   override async getById(id: string): Promise<CasePhase | undefined> {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<CasePhase>(`/case-phases/${id}`);
-      } catch (error) {
-        console.error("[PhaseRepository.getById] Backend error:", error);
-        return undefined;
-      }
+    try {
+      return await apiClient.get<CasePhase>(`/case-phases/${id}`);
+    } catch (error) {
+      console.error("[PhaseRepository.getById] Backend error:", error);
+      return undefined;
     }
-    return undefined;
   }
 
   /**
@@ -388,10 +346,7 @@ export class PhaseRepository extends Repository<CasePhase> {
   override async add(
     phaseData: Omit<CasePhase, "id" | "createdAt" | "updatedAt">
   ): Promise<CasePhase> {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<CasePhase>("/case-phases", phaseData);
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<CasePhase>("/case-phases", phaseData);
   }
 
   /**
@@ -405,10 +360,7 @@ export class PhaseRepository extends Repository<CasePhase> {
     id: string,
     updates: Partial<CasePhase>
   ): Promise<CasePhase> {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<CasePhase>(`/case-phases/${id}`, updates);
-    }
-    throw new Error("Backend API required");
+    return apiClient.patch<CasePhase>(`/case-phases/${id}`, updates);
   }
 
   /**
@@ -418,11 +370,7 @@ export class PhaseRepository extends Repository<CasePhase> {
    * @returns Promise<void>
    */
   override async delete(id: string): Promise<void> {
-    if (isBackendApiEnabled()) {
-      await apiClient.delete(`/case-phases/${id}`);
-      return;
-    }
-    throw new Error("Backend API required");
+    await apiClient.delete(`/case-phases/${id}`);
   }
 
   /**
@@ -437,14 +385,11 @@ export class PhaseRepository extends Repository<CasePhase> {
    */
   override getByCaseId = async (caseId: string): Promise<CasePhase[]> => {
     // Try backend API first
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<CasePhase[]>(`/case-phases/case/${caseId}`);
-      } catch (error) {
-        console.error("[PhaseRepository.getByCaseId] Backend error:", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<CasePhase[]>(`/case-phases/case/${caseId}`);
+    } catch (error) {
+      console.error("[PhaseRepository.getByCaseId] Backend error:", error);
+      return [];
     }
-    return [];
   };
 }

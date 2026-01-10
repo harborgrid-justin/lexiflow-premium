@@ -1,89 +1,40 @@
-import {
-  adminApi,
-  api,
-  discoveryApi,
-  isBackendApiEnabled,
-  workflowApi,
-} from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { adminApi, api, discoveryApi, workflowApi } from "@/api";
 import { AssetService } from "@/services/domain/AssetDomain";
 import { OperationsService } from "@/services/domain/OperationsDomain";
-import { STORES } from "../db";
-import {
-  getProjectsRepository,
-  getTasksRepository,
-  getWorkflowRepository,
-} from "../factories/RepositoryFactories";
 
 export const OperationsDescriptors: PropertyDescriptorMap = {
   ocr: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.ocr
-        : {
-            processDocument: async () => ({
-              success: false,
-              message: "Backend required",
-            }),
-            getStatus: async () => ({ status: "unavailable" }),
-          },
+    get: () => adminApi.ocr,
     enumerable: true,
   },
   processingJobs: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.processingJobs
-        : legacyRepositoryRegistry.getOrCreate(STORES.PROCESSING_JOBS),
+    get: () => adminApi.processingJobs,
     enumerable: true,
   },
   documentVersions: {
-    get: () =>
-      isBackendApiEnabled()
-        ? adminApi.documentVersions
-        : legacyRepositoryRegistry.getOrCreate("documentVersions"),
+    get: () => adminApi.documentVersions,
     enumerable: true,
   },
   operations: { get: () => OperationsService, enumerable: true },
   assets: { get: () => AssetService, enumerable: true },
   production: {
-    get: () =>
-      isBackendApiEnabled()
-        ? discoveryApi.productions
-        : {
-            getStatus: async () => ({
-              environment: "development",
-              version: "1.0.0",
-              healthy: true,
-            }),
-            deploy: async () => ({
-              success: false,
-              message: "Backend required",
-            }),
-          },
+    get: () => discoveryApi.productions,
     enumerable: true,
   },
   tasks: {
-    get: () => (isBackendApiEnabled() ? api.tasks : getTasksRepository()),
+    get: () => api.tasks,
     enumerable: true,
   },
   projects: {
-    get: () => (isBackendApiEnabled() ? api.projects : getProjectsRepository()),
+    get: () => api.projects,
     enumerable: true,
   },
   workflow: {
-    get: () =>
-      isBackendApiEnabled() && api.workflow
-        ? api.workflow
-        : getWorkflowRepository(),
+    get: () => api.workflow,
     enumerable: true,
   },
   warRoom: {
-    get: () =>
-      isBackendApiEnabled()
-        ? workflowApi.warRoom
-        : import("@/services/domain/WarRoomDomain").then(
-            (m) => m.WarRoomService
-          ),
+    get: () => workflowApi.warRoom,
     enumerable: true,
   },
 };

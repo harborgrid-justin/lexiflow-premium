@@ -1,36 +1,25 @@
-import { api, isBackendApiEnabled } from "@/api";
-import {
-  getIntegratedCaseRepository,
-  getIntegratedDocketRepository,
-  getIntegratedDocumentRepository,
-  getMotionsRepository,
-  getPleadingRepository,
-} from "../factories/RepositoryFactories";
+import { api } from "@/api";
 
 export const LitigationDescriptors: PropertyDescriptorMap = {
   cases: {
-    get: () =>
-      isBackendApiEnabled() ? api.cases : getIntegratedCaseRepository(),
+    get: () => api.cases,
     enumerable: true,
   },
   docket: {
-    get: () =>
-      isBackendApiEnabled() ? api.docket : getIntegratedDocketRepository(),
+    get: () => api.docket,
     enumerable: true,
   },
   documents: {
-    get: () =>
-      isBackendApiEnabled() ? api.documents : getIntegratedDocumentRepository(),
+    get: () => api.documents,
     enumerable: true,
   },
   drafting: { get: () => api.drafting, enumerable: true },
   pleadings: {
-    get: () =>
-      isBackendApiEnabled() ? api.pleadings : getPleadingRepository(),
+    get: () => api.pleadings,
     enumerable: true,
   },
   motions: {
-    get: () => (isBackendApiEnabled() ? api.motions : getMotionsRepository()),
+    get: () => api.motions,
     enumerable: true,
   },
 };

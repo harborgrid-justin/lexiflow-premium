@@ -16,7 +16,6 @@
  * @migrated Backend API integration 2025-01-05
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -304,14 +303,10 @@ export const RealEstateService = {
     state?: string;
   }): Promise<RealEstateProperty[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateProperty[]>(
-          "/real-estate/properties",
-          filters
-        );
-      }
-      // Return empty array when backend is not available
-      return [];
+      return await apiClient.get<RealEstateProperty[]>(
+        "/real-estate/properties",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getAllProperties] Error:", error);
       return [];
@@ -328,12 +323,9 @@ export const RealEstateService = {
     }
 
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateProperty>(
-          `/real-estate/properties/${id}`
-        );
-      }
-      return null;
+      return await apiClient.get<RealEstateProperty>(
+        `/real-estate/properties/${id}`
+      );
     } catch (error) {
       console.error("[RealEstateService.getPropertyById] Error:", error);
       return null;
@@ -346,13 +338,10 @@ export const RealEstateService = {
   createProperty: async (
     property: Omit<RealEstateProperty, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateProperty> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateProperty>(
-        "/real-estate/properties",
-        property
-      );
-    }
-    throw new Error("Backend API required for property creation");
+    return apiClient.post<RealEstateProperty>(
+      "/real-estate/properties",
+      property
+    );
   },
 
   /**
@@ -362,23 +351,17 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateProperty>
   ): Promise<RealEstateProperty> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateProperty>(
-        `/real-estate/properties/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for property update");
+    return apiClient.patch<RealEstateProperty>(
+      `/real-estate/properties/${id}`,
+      updates
+    );
   },
 
   /**
    * Delete a property record
    */
   deleteProperty: async (id: string): Promise<void> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.delete(`/real-estate/properties/${id}`);
-    }
-    throw new Error("Backend API required for property deletion");
+    return apiClient.delete(`/real-estate/properties/${id}`);
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -393,13 +376,10 @@ export const RealEstateService = {
     propertyId?: string;
   }): Promise<RealEstateDisposal[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateDisposal[]>(
-          "/real-estate/disposals",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateDisposal[]>(
+        "/real-estate/disposals",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getDisposals] Error:", error);
       return [];
@@ -412,13 +392,10 @@ export const RealEstateService = {
   createDisposal: async (
     disposal: Omit<RealEstateDisposal, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateDisposal> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateDisposal>(
-        "/real-estate/disposals",
-        disposal
-      );
-    }
-    throw new Error("Backend API required for disposal creation");
+    return apiClient.post<RealEstateDisposal>(
+      "/real-estate/disposals",
+      disposal
+    );
   },
 
   /**
@@ -428,23 +405,17 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateDisposal>
   ): Promise<RealEstateDisposal> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateDisposal>(
-        `/real-estate/disposals/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for disposal update");
+    return apiClient.patch<RealEstateDisposal>(
+      `/real-estate/disposals/${id}`,
+      updates
+    );
   },
 
   /**
    * Delete a disposal record
    */
   deleteDisposal: async (id: string): Promise<void> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.delete(`/real-estate/disposals/${id}`);
-    }
-    throw new Error("Backend API required for disposal deletion");
+    return apiClient.delete(`/real-estate/disposals/${id}`);
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -459,13 +430,10 @@ export const RealEstateService = {
     propertyId?: string;
   }): Promise<RealEstateEncroachment[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateEncroachment[]>(
-          "/real-estate/encroachments",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateEncroachment[]>(
+        "/real-estate/encroachments",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getEncroachments] Error:", error);
       return [];
@@ -478,13 +446,10 @@ export const RealEstateService = {
   createEncroachment: async (
     encroachment: Omit<RealEstateEncroachment, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateEncroachment> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateEncroachment>(
-        "/real-estate/encroachments",
-        encroachment
-      );
-    }
-    throw new Error("Backend API required for encroachment creation");
+    return apiClient.post<RealEstateEncroachment>(
+      "/real-estate/encroachments",
+      encroachment
+    );
   },
 
   /**
@@ -494,13 +459,10 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateEncroachment>
   ): Promise<RealEstateEncroachment> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateEncroachment>(
-        `/real-estate/encroachments/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for encroachment update");
+    return apiClient.patch<RealEstateEncroachment>(
+      `/real-estate/encroachments/${id}`,
+      updates
+    );
   },
 
   /**
@@ -510,13 +472,10 @@ export const RealEstateService = {
     id: string,
     resolution: { method: string; notes?: string }
   ): Promise<RealEstateEncroachment> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateEncroachment>(
-        `/real-estate/encroachments/${id}/resolve`,
-        resolution
-      );
-    }
-    throw new Error("Backend API required for encroachment resolution");
+    return apiClient.post<RealEstateEncroachment>(
+      `/real-estate/encroachments/${id}/resolve`,
+      resolution
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -530,13 +489,10 @@ export const RealEstateService = {
     status?: AcquisitionStatus;
   }): Promise<RealEstateAcquisition[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateAcquisition[]>(
-          "/real-estate/acquisitions",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateAcquisition[]>(
+        "/real-estate/acquisitions",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getAcquisitions] Error:", error);
       return [];
@@ -549,13 +505,10 @@ export const RealEstateService = {
   createAcquisition: async (
     acquisition: Omit<RealEstateAcquisition, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateAcquisition> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateAcquisition>(
-        "/real-estate/acquisitions",
-        acquisition
-      );
-    }
-    throw new Error("Backend API required for acquisition creation");
+    return apiClient.post<RealEstateAcquisition>(
+      "/real-estate/acquisitions",
+      acquisition
+    );
   },
 
   /**
@@ -565,13 +518,10 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateAcquisition>
   ): Promise<RealEstateAcquisition> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateAcquisition>(
-        `/real-estate/acquisitions/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for acquisition update");
+    return apiClient.patch<RealEstateAcquisition>(
+      `/real-estate/acquisitions/${id}`,
+      updates
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -587,13 +537,10 @@ export const RealEstateService = {
     maxRate?: number;
   }): Promise<RealEstateUtilization[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateUtilization[]>(
-          "/real-estate/utilization",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateUtilization[]>(
+        "/real-estate/utilization",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getUtilization] Error:", error);
       return [];
@@ -607,13 +554,10 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateUtilization>
   ): Promise<RealEstateUtilization> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateUtilization>(
-        `/real-estate/utilization/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for utilization update");
+    return apiClient.patch<RealEstateUtilization>(
+      `/real-estate/utilization/${id}`,
+      updates
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -628,13 +572,10 @@ export const RealEstateService = {
     status?: string;
   }): Promise<RealEstateCostShare[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateCostShare[]>(
-          "/real-estate/cost-shares",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateCostShare[]>(
+        "/real-estate/cost-shares",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getCostShares] Error:", error);
       return [];
@@ -647,13 +588,10 @@ export const RealEstateService = {
   createCostShare: async (
     costShare: Omit<RealEstateCostShare, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateCostShare> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateCostShare>(
-        "/real-estate/cost-shares",
-        costShare
-      );
-    }
-    throw new Error("Backend API required for cost share creation");
+    return apiClient.post<RealEstateCostShare>(
+      "/real-estate/cost-shares",
+      costShare
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -668,13 +606,10 @@ export const RealEstateService = {
     propertyId?: string;
   }): Promise<RealEstateOutgrant[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateOutgrant[]>(
-          "/real-estate/outgrants",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateOutgrant[]>(
+        "/real-estate/outgrants",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getOutgrants] Error:", error);
       return [];
@@ -687,13 +622,10 @@ export const RealEstateService = {
   createOutgrant: async (
     outgrant: Omit<RealEstateOutgrant, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateOutgrant> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateOutgrant>(
-        "/real-estate/outgrants",
-        outgrant
-      );
-    }
-    throw new Error("Backend API required for outgrant creation");
+    return apiClient.post<RealEstateOutgrant>(
+      "/real-estate/outgrants",
+      outgrant
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -707,13 +639,10 @@ export const RealEstateService = {
     status?: SolicitationStatus;
   }): Promise<RealEstateSolicitation[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateSolicitation[]>(
-          "/real-estate/solicitations",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateSolicitation[]>(
+        "/real-estate/solicitations",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getSolicitations] Error:", error);
       return [];
@@ -726,13 +655,10 @@ export const RealEstateService = {
   createSolicitation: async (
     solicitation: Omit<RealEstateSolicitation, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateSolicitation> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateSolicitation>(
-        "/real-estate/solicitations",
-        solicitation
-      );
-    }
-    throw new Error("Backend API required for solicitation creation");
+    return apiClient.post<RealEstateSolicitation>(
+      "/real-estate/solicitations",
+      solicitation
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -746,13 +672,10 @@ export const RealEstateService = {
     status?: string;
   }): Promise<RealEstateRelocation[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateRelocation[]>(
-          "/real-estate/relocations",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateRelocation[]>(
+        "/real-estate/relocations",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getRelocations] Error:", error);
       return [];
@@ -765,13 +688,10 @@ export const RealEstateService = {
   createRelocation: async (
     relocation: Omit<RealEstateRelocation, "id" | "createdAt" | "updatedAt">
   ): Promise<RealEstateRelocation> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<RealEstateRelocation>(
-        "/real-estate/relocations",
-        relocation
-      );
-    }
-    throw new Error("Backend API required for relocation creation");
+    return apiClient.post<RealEstateRelocation>(
+      "/real-estate/relocations",
+      relocation
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -786,13 +706,10 @@ export const RealEstateService = {
     status?: string;
   }): Promise<RealEstateAuditItem[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<RealEstateAuditItem[]>(
-          "/real-estate/audit-items",
-          filters
-        );
-      }
-      return [];
+      return await apiClient.get<RealEstateAuditItem[]>(
+        "/real-estate/audit-items",
+        filters
+      );
     } catch (error) {
       console.error("[RealEstateService.getAuditItems] Error:", error);
       return [];
@@ -806,13 +723,10 @@ export const RealEstateService = {
     id: string,
     updates: Partial<RealEstateAuditItem>
   ): Promise<RealEstateAuditItem> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<RealEstateAuditItem>(
-        `/real-estate/audit-items/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required for audit item update");
+    return apiClient.patch<RealEstateAuditItem>(
+      `/real-estate/audit-items/${id}`,
+      updates
+    );
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -824,22 +738,9 @@ export const RealEstateService = {
    */
   getPortfolioStats: async (): Promise<PortfolioStats> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<PortfolioStats>("/real-estate/portfolio/stats");
-      }
-
-      // Return empty stats when backend is not available
-      return {
-        totalProperties: 0,
-        totalValue: 0,
-        activeProperties: 0,
-        pendingAcquisitions: 0,
-        pendingDisposals: 0,
-        activeEncroachments: 0,
-        avgUtilizationRate: 0,
-        totalSquareFootage: 0,
-        totalAcreage: 0,
-      };
+      return await apiClient.get<PortfolioStats>(
+        "/real-estate/portfolio/stats"
+      );
     } catch (error) {
       console.error("[RealEstateService.getPortfolioStats] Error:", error);
       return {
@@ -874,10 +775,7 @@ export const RealEstateService = {
     }>
   > => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get("/real-estate/users");
-      }
-      return [];
+      return await apiClient.get("/real-estate/users");
     } catch (error) {
       console.error("[RealEstateService.getModuleUsers] Error:", error);
       return [];
@@ -891,12 +789,9 @@ export const RealEstateService = {
     userId: string,
     permissions: string[]
   ): Promise<void> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch(`/real-estate/users/${userId}/permissions`, {
-        permissions,
-      });
-    }
-    throw new Error("Backend API required for permission update");
+    return apiClient.patch(`/real-estate/users/${userId}/permissions`, {
+      permissions,
+    });
   },
 };
 

@@ -82,10 +82,9 @@ interface FunnelStat {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class DiscoveryRepository {
-  private readonly useBackend: boolean;
+  private readonly useBackend: boolean = true;
 
   constructor() {
-    this.useBackend = isBackendApiEnabled();
     this.logInitialization();
   }
 
@@ -94,9 +93,7 @@ export class DiscoveryRepository {
    * @private
    */
   private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
+    const mode = "Backend API (PostgreSQL)";
     console.log(`[DiscoveryRepository] Initialized with ${mode}`);
   }
 

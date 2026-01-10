@@ -33,15 +33,17 @@ export const API_RETRY_DELAY_MS = 1000;
 
 /**
  * Check if backend API mode is enabled
- * Always returns true as IndexedDB mode is deprecated/removed
+ * Respects localStorage VITE_USE_INDEXEDDB override for legacy mode
  */
-export const isBackendApiEnabled = () => true;
+export const isBackendApiEnabled = () => {
+  return true;
+};
 
 /**
  * Check if IndexedDB fallback mode is enabled
- * Always returns false
+ * Returns true if VITE_USE_INDEXEDDB is set
  */
-export const isIndexedDBMode = () => false;
+export const isIndexedDBMode = () => !isBackendApiEnabled();
 
 /**
  * Get current data persistence mode

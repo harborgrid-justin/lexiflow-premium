@@ -1,39 +1,24 @@
-import { api, authApi, isBackendApiEnabled, litigationApi } from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
-import { STORES } from "../db";
-import { getHRRepository } from "../factories/RepositoryFactories";
+import { api, authApi, litigationApi } from "@/api";
 
 export const HRDescriptors: PropertyDescriptorMap = {
   hr: {
-    get: () => (isBackendApiEnabled() && api.hr ? api.hr : getHRRepository()),
+    get: () => api.hr,
     enumerable: true,
   },
   users: {
-    get: () =>
-      isBackendApiEnabled()
-        ? authApi.users
-        : legacyRepositoryRegistry.getOrCreate(STORES.USERS),
+    get: () => authApi.users,
     enumerable: true,
   },
   groups: {
-    get: () =>
-      isBackendApiEnabled()
-        ? (authApi as unknown as { groups: unknown }).groups
-        : legacyRepositoryRegistry.getOrCreate("groups"),
+    get: () => (authApi as unknown as { groups: unknown }).groups,
     enumerable: true,
   },
   caseTeams: {
-    get: () =>
-      isBackendApiEnabled()
-        ? litigationApi.caseTeams
-        : legacyRepositoryRegistry.getOrCreate("caseTeams"),
+    get: () => litigationApi.caseTeams,
     enumerable: true,
   },
   casePhases: {
-    get: () =>
-      isBackendApiEnabled()
-        ? litigationApi.casePhases
-        : legacyRepositoryRegistry.getOrCreate(STORES.PHASES),
+    get: () => litigationApi.casePhases,
     enumerable: true,
   },
 };

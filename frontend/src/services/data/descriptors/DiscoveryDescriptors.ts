@@ -1,76 +1,44 @@
-import { api, isBackendApiEnabled } from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
-import type { BaseEntity } from "@/types";
-import { STORES } from "../db";
-import {
-  getDiscoveryRepository,
-  getEvidenceRepository,
-} from "../factories/RepositoryFactories";
+import { api } from "@/api";
 
 export const DiscoveryDescriptors: PropertyDescriptorMap = {
   discovery: {
-    get: () =>
-      isBackendApiEnabled() ? api.discovery : getDiscoveryRepository(),
+    get: () => api.discovery,
     enumerable: true,
   },
   evidence: {
-    get: () => (isBackendApiEnabled() ? api.evidence : getEvidenceRepository()),
+    get: () => api.evidence,
     enumerable: true,
   },
   legalHolds: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.legalHolds
-        : legacyRepositoryRegistry.getOrCreate<BaseEntity>(STORES.LEGAL_HOLDS),
+    get: () => api.legalHolds,
     enumerable: true,
   },
   depositions: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.depositions
-        : legacyRepositoryRegistry.getOrCreate<BaseEntity>("depositions"),
+    get: () => api.depositions,
     enumerable: true,
   },
   discoveryRequests: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.discoveryRequests
-        : legacyRepositoryRegistry.getOrCreate<BaseEntity>("discoveryRequests"),
+    get: () => api.discoveryRequests,
     enumerable: true,
   },
   esiSources: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.esiSources
-        : legacyRepositoryRegistry.getOrCreate("esiSources"),
+    get: () => api.esiSources,
     enumerable: true,
   },
   privilegeLog: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.privilegeLog
-        : legacyRepositoryRegistry.getOrCreate(STORES.PRIVILEGE_LOG),
+    get: () => api.privilegeLog,
     enumerable: true,
   },
   productions: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.productions
-        : legacyRepositoryRegistry.getOrCreate("productions"),
+    get: () => api.productions,
     enumerable: true,
   },
   custodianInterviews: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.custodianInterviews
-        : legacyRepositoryRegistry.getOrCreate("custodianInterviews"),
+    get: () => api.custodianInterviews,
     enumerable: true,
   },
   custodians: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.custodians
-        : legacyRepositoryRegistry.getOrCreate("custodians"),
+    get: () => api.custodians,
     enumerable: true,
   },
 };

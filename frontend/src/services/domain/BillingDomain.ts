@@ -95,9 +95,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { Repository } from "@/services/core/Repository";
-import { STORES, db } from "@/services/data/db";
 import {
   Client,
   FinancialPerformanceData,
@@ -159,25 +157,11 @@ export const BILLING_QUERY_KEYS = {
  * @extends Repository<TimeEntry>
  */
 export class BillingRepository extends Repository<TimeEntry> {
-  private readonly useBackend: boolean;
   private readonly billingApi: BillingApiService;
 
   constructor() {
-    super(STORES.BILLING);
-    this.useBackend = isBackendApiEnabled();
+    super("billing");
     this.billingApi = new BillingApiService();
-    this.logInitialization();
-  }
-
-  /**
-   * Log repository initialization mode
-   * @private
-   */
-  private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[BillingRepository] Initialized with ${mode}`);
   }
 
   /**
@@ -229,10 +213,7 @@ export class BillingRepository extends Repository<TimeEntry> {
    * @complexity O(1) API call or O(n) IndexedDB scan
    */
   override async getAll(): Promise<TimeEntry[]> {
-    if (this.useBackend) {
-      return this.billingApi.getTimeEntries();
-    }
-    return [];
+    return this.billingApi.getTimeEntries();
   }
 
   /**
@@ -244,15 +225,12 @@ export class BillingRepository extends Repository<TimeEntry> {
   override async getById(id: string): Promise<TimeEntry | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        return await apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
-      } catch (error) {
-        console.error("[BillingRepository.getById] Backend error:", error);
-        return undefined;
-      }
+    try {
+      return await apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
+    } catch (error) {
+      console.error("[BillingRepository.getById] Backend error:", error);
+      return undefined;
     }
-    return undefined;
   }
 
   /**
@@ -264,10 +242,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   override async add(
     entry: Omit<TimeEntry, "id" | "createdAt" | "updatedAt">
   ): Promise<TimeEntry> {
-    if (this.useBackend) {
-      return apiClient.post<TimeEntry>("/billing/time-entries", entry);
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<TimeEntry>("/billing/time-entries", entry);
   }
 
   /**
@@ -283,10 +258,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   ): Promise<TimeEntry> {
     this.validateId(id, "update");
 
-    if (this.useBackend) {
-      return apiClient.patch<TimeEntry>(`/billing/time-entries/${id}`, updates);
-    }
-    throw new Error("Backend API required");
+    return apiClient.patch<TimeEntry>(`/billing/time-entries/${id}`, updates);
   }
 
   /**
@@ -298,11 +270,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      await apiClient.delete(`/billing/time-entries/${id}`);
-      return;
-    }
-    throw new Error("Backend API required");
+    await apiClient.delete(`/billing/time-entries/${id}`);
   }
 
   // =============================================================================
@@ -323,13 +291,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     this.validateTimekeeperId(timekeeperId, "getRates");
 
     try {
-      if (this.useBackend) {
-        return await apiClient.get<RateTable[]>(
-          `/billing/rates/${timekeeperId}`
-        );
-      }
-
-      return [];
+      return await apiClient.get<RateTable[]>(`/billing/rates/${timekeeperId}`);
     } catch (error) {
       console.error("[BillingRepository.getRates] Error:", error);
       throw new OperationError("Failed to fetch rate tables");
@@ -358,11 +320,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       }
 
       // Use backend API for filtered queries
-      if (this.useBackend) {
-        return this.billingApi.getTimeEntries(caseId ? { caseId } : undefined);
-      }
-
-      return [];
+      return this.billingApi.getTimeEntries(caseId ? { caseId } : undefined);
     } catch (error) {
       console.error("[BillingRepository.getTimeEntries] Error:", error);
       throw new OperationError("Failed to fetch time entries");
@@ -380,32 +338,8 @@ export class BillingRepository extends Repository<TimeEntry> {
     const pageSize = params?.pageSize || 50;
 
     try {
-      // In a real implementation with backend support:
-      /*
-         if (this.useBackend) {
-             // Assuming API client supports this url pattern
-             // const query = `page=${page}&pageSize=${pageSize}&caseId=${caseId}`;
-             // return await this.billingApi.get<PaginatedResult<TimeEntry>>(`/billing/time-entries?${query}`);
-         }
-         */
-
-      // Fallback / Current Implementation: Fetch all and slice
-      // This ensures compatibility while satisfying the interface requirement
-      const allEntries = await this.getTimeEntries(caseId);
-
-      const start = (page - 1) * pageSize;
-      const end = start + pageSize;
-      const paginatedData = allEntries.slice(start, end);
-
-      return {
-        data: paginatedData,
-        pagination: {
-          page,
-          pageSize,
-          totalPages: Math.ceil(allEntries.length / pageSize),
-          totalItems: allEntries.length,
-        },
-      };
+      const query = `page=${page}&pageSize=${pageSize}&caseId=${caseId}`;
+      return await apiClient.get<any>(`/billing/time-entries?${query}`);
     } catch (error) {
       console.error("Paginated fetch failed:", error);
       throw new OperationError("Failed to fetch paginated time entries");
@@ -450,11 +384,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     try {
-      if (this.useBackend) {
-        return await apiClient.post<TimeEntry>("/billing/time-entries", entry);
-      }
-
-      throw new Error("Backend API required");
+      return await apiClient.post<TimeEntry>("/billing/time-entries", entry);
     } catch (error) {
       console.error("[BillingRepository.addTimeEntry] Error:", error);
       throw new OperationError("Failed to add time entry");
@@ -477,11 +407,7 @@ export class BillingRepository extends Repository<TimeEntry> {
    */
   async getWIPStats(): Promise<WIPStat[]> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<WIPStat[]>("/billing/wip-stats");
-      }
-
-      return [];
+      return await apiClient.get<WIPStat[]>("/billing/wip-stats");
     } catch (error) {
       console.error("[BillingRepository.getWIPStats] Error:", error);
       throw new OperationError("Failed to fetch WIP statistics");
@@ -499,15 +425,7 @@ export class BillingRepository extends Repository<TimeEntry> {
    */
   async getRealizationStats(): Promise<unknown> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<unknown>("/billing/realization-stats");
-      }
-
-      const stats = await db.get<{ data?: unknown }>(
-        STORES.REALIZATION_STATS,
-        "realization-main"
-      );
-      return stats?.data || [];
+      return await apiClient.get<unknown>("/billing/realization-stats");
     } catch (error) {
       console.error("[BillingRepository.getRealizationStats] Error:", error);
       throw new OperationError("Failed to fetch realization statistics");
@@ -529,11 +447,7 @@ export class BillingRepository extends Repository<TimeEntry> {
    */
   async getInvoices(): Promise<Invoice[]> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<Invoice[]>("/billing/invoices");
-      }
-
-      return [];
+      return await apiClient.get<Invoice[]>("/billing/invoices");
     } catch (error) {
       console.error("[BillingRepository.getInvoices] Error:", error);
       throw new OperationError("Failed to fetch invoices");
@@ -573,15 +487,11 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     try {
-      if (this.useBackend) {
-        return await apiClient.post<Invoice>("/billing/invoices", {
-          clientName,
-          caseId,
-          entries: entries.map((e) => e.id),
-        });
-      }
-
-      throw new Error("Backend API required");
+      return await apiClient.post<Invoice>("/billing/invoices", {
+        clientName,
+        caseId,
+        entries: entries.map((e) => e.id),
+      });
     } catch (error) {
       console.error("[BillingRepository.createInvoice] Error:", error);
       throw new OperationError("Failed to create invoice");
@@ -607,14 +517,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     try {
-      if (this.useBackend) {
-        return await apiClient.patch<Invoice>(
-          `/billing/invoices/${id}`,
-          updates
-        );
-      }
-
-      throw new Error("Backend API required");
+      return await apiClient.patch<Invoice>(`/billing/invoices/${id}`, updates);
     } catch (error) {
       console.error("[BillingRepository.updateInvoice] Error:", error);
       throw new OperationError("Failed to update invoice");
@@ -635,12 +538,8 @@ export class BillingRepository extends Repository<TimeEntry> {
     this.validateId(id, "sendInvoice");
 
     try {
-      if (this.useBackend) {
-        await apiClient.post(`/billing/invoices/${id}/send`);
-        return true;
-      }
-
-      throw new Error("Backend API required");
+      await apiClient.post(`/billing/invoices/${id}/send`);
+      return true;
     } catch (error) {
       console.error("[BillingRepository.sendInvoice] Error:", error);
       throw new OperationError("Failed to send invoice");
@@ -658,26 +557,15 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getTrustAccount(
     accountId: string
   ): Promise<{ id: string; type: string }> {
-    if (this.useBackend) {
-      try {
-        return await apiClient.get<{ id: string; type: string }>(
-          `/billing/trust/${accountId}`
-        );
-      } catch (error) {
-        // Fallback for demo if API endpoint doesn't exist yet
-        console.warn("Trust account fetch failed, using fallback", error);
-        return { id: accountId, type: "IOLTA" };
-      }
-    }
-    const account = await db.get<{ id: string; type: string }>(
-      STORES.TRUST,
-      accountId
-    );
-    if (!account) {
-      // Mock return for missing data in dev
+    try {
+      return await apiClient.get<{ id: string; type: string }>(
+        `/billing/trust/${accountId}`
+      );
+    } catch (error) {
+      // Fallback for demo if API endpoint doesn't exist yet
+      console.warn("Trust account fetch failed, using fallback", error);
       return { id: accountId, type: "IOLTA" };
     }
-    return account;
   }
 
   /**
@@ -711,41 +599,16 @@ export class BillingRepository extends Repository<TimeEntry> {
         );
       }
 
-      if (this.useBackend) {
-        const params = new URLSearchParams();
-        if (options?.startDate) params.append("startDate", options.startDate);
-        if (options?.endDate) params.append("endDate", options.endDate);
-        if (options?.includeInterest) params.append("includeInterest", "true");
+      const params = new URLSearchParams();
+      if (options?.startDate) params.append("startDate", options.startDate);
+      if (options?.endDate) params.append("endDate", options.endDate);
+      if (options?.includeInterest) params.append("includeInterest", "true");
 
-        const transactions = await apiClient.get<TrustTransaction[]>(
-          `/billing/trust/${accountId}/transactions?${params.toString()}`
-        );
+      const transactions = await apiClient.get<TrustTransaction[]>(
+        `/billing/trust/${accountId}/transactions?${params.toString()}`
+      );
 
-        return transactions;
-      }
-
-      const transactions = (await db.getByIndex(
-        STORES.TRUST_TX,
-        "accountId",
-        accountId
-      )) as TrustTransaction[];
-
-      // Filter by date range (Client-side implementation)
-      let filtered = transactions;
-      if (options?.startDate || options?.endDate) {
-        filtered = transactions.filter((tx) => {
-          const txDate = new Date(tx.date);
-          const start = options.startDate
-            ? new Date(options.startDate)
-            : new Date(0);
-          const end = options.endDate
-            ? new Date(options.endDate)
-            : new Date(8640000000000000);
-          return txDate >= start && txDate <= end;
-        });
-      }
-
-      return filtered;
+      return transactions;
     } catch (error) {
       console.error("[BillingRepository.getTrustTransactions] Error:", error);
       if (error instanceof ComplianceError) throw error;
@@ -765,11 +628,7 @@ console.log('accounts data:', accounts);
      */
   async getTrustAccounts(): Promise<unknown[]> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<unknown[]>("/billing/trust-accounts");
-      }
-
-      return await db.getAll<unknown>(STORES.TRUST);
+      return await apiClient.get<unknown[]>("/billing/trust-accounts");
     } catch (error) {
       console.error("[BillingRepository.getTrustAccounts] Error:", error);
       throw new OperationError("Failed to fetch trust accounts");
@@ -787,16 +646,7 @@ console.log('accounts data:', accounts);
    */
   async getTopAccounts(): Promise<Client[]> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<Client[]>("/billing/top-accounts");
-      }
-
-      const clients = await db.getAll<Client>(STORES.CLIENTS);
-      return clients
-        .sort(
-          (a: Client, b: Client) => (b.totalBilled || 0) - (a.totalBilled || 0)
-        )
-        .slice(0, 4);
+      return await apiClient.get<Client[]>("/billing/top-accounts");
     } catch (error) {
       console.error("[BillingRepository.getTopAccounts] Error:", error);
       throw new OperationError("Failed to fetch top accounts");
@@ -819,19 +669,11 @@ console.log('accounts data:', accounts);
     month: string;
   }> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<{
-          realization: number;
-          totalBilled: number;
-          month: string;
-        }>("/billing/overview-stats");
-      }
-
-      return {
-        realization: 0,
-        totalBilled: 0,
-        month: "",
-      };
+      return await apiClient.get<{
+        realization: number;
+        totalBilled: number;
+        month: string;
+      }>("/billing/overview-stats");
     } catch (error) {
       console.error("[BillingRepository.getOverviewStats] Error:", error);
       throw new OperationError("Failed to fetch overview statistics");
@@ -849,19 +691,9 @@ console.log('accounts data:', accounts);
    */
   async getOperatingSummary(): Promise<OperatingSummary> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<OperatingSummary>(
-          "/billing/operating-summary"
-        );
-      }
-
-      return {
-        balance: 0,
-        expensesMtd: 0,
-        cashFlowMtd: 0,
-        revenueThisMonth: 0,
-        revenueYTD: 0,
-      };
+      return await apiClient.get<OperatingSummary>(
+        "/billing/operating-summary"
+      );
     } catch (error) {
       console.error("[BillingRepository.getOperatingSummary] Error:", error);
       throw new OperationError("Failed to fetch operating summary");
@@ -879,20 +711,9 @@ console.log('accounts data:', accounts);
    */
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     try {
-      if (this.useBackend) {
-        return await apiClient.get<FinancialPerformanceData>(
-          "/billing/financial-performance"
-        );
-      }
-
-      return {
-        period: "Current",
-        revenue: [],
-        expenses: [],
-        profit: 0,
-        realizationRate: 0,
-        collectionRate: 0,
-      };
+      return await apiClient.get<FinancialPerformanceData>(
+        "/billing/financial-performance"
+      );
     } catch (error) {
       console.error(
         "[BillingRepository.getFinancialPerformance] Error:",
@@ -917,12 +738,7 @@ console.log('accounts data:', accounts);
    */
   async sync(): Promise<void> {
     try {
-      if (this.useBackend) {
-        await apiClient.post("/billing/sync");
-        return;
-      }
-
-      throw new Error("Backend API required");
+      await apiClient.post("/billing/sync");
     } catch (error) {
       console.error("[BillingRepository.sync] Error:", error);
       throw new OperationError("Failed to sync billing data");
@@ -953,15 +769,11 @@ console.log('accounts data:', accounts);
     }
 
     try {
-      if (this.useBackend) {
-        const response = await apiClient.post<{ url: string }>(
-          "/billing/export",
-          { format }
-        );
-        return response.url;
-      }
-
-      throw new Error("Backend API required");
+      const response = await apiClient.post<{ url: string }>(
+        "/billing/export",
+        { format }
+      );
+      return response.url;
     } catch (error) {
       console.error("[BillingRepository.export] Error:", error);
       throw new OperationError("Failed to export billing data");

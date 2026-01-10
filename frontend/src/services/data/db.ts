@@ -1,14 +1,3 @@
-import {
-  DB_BTREE_ORDER,
-  DB_FORCE_FLUSH_THRESHOLD,
-  DB_MAX_BUFFER_SIZE,
-  DB_NAME,
-  DB_VERSION,
-} from "@/config/database/indexeddb.config";
-import { defaultWindowAdapter } from "@/services/infrastructure/adapters/WindowAdapter";
-import { BTree } from "@/utils/datastructures/bTree";
-import { StorageUtils } from "@/utils/storage";
-
 export const STORES = {
   // Core entities (aligned with backend tables)
   CASES: "cases", // ✓ Backend: cases
@@ -177,33 +166,12 @@ export const STORES = {
 };
 
 export class DatabaseManager {
-  private dbName = DB_NAME;
-  private dbVersion = DB_VERSION;
-  private db: IDBDatabase | null = null;
   private mode: "IndexedDB" | "LocalStorage" = "IndexedDB";
-  private initPromise: Promise<void> | null = null;
-
-  // Data Structure Integration: B-Tree for sorted indexes
-  private titleIndex: BTree<string, string> = new BTree(DB_BTREE_ORDER);
-
-  // Transaction Coalescing Buffer with size limits
-  private writeBuffer: {
-    store: string;
-    item: unknown;
-    type: "put" | "delete";
-    resolve: (...args: unknown[]) => unknown;
-    reject: (...args: unknown[]) => unknown;
-  }[] = [];
-  private flushTimer: number | null = null;
-  private readonly MAX_BUFFER_SIZE = DB_MAX_BUFFER_SIZE;
-  private readonly FORCE_FLUSH_THRESHOLD = DB_FORCE_FLUSH_THRESHOLD;
+  private db: IDBDatabase | null = null; // Type compatibility
 
   constructor() {
-    try {
-      if (!window.indexedDB) this.mode = "LocalStorage";
-    } catch {
-      this.mode = "LocalStorage";
-    }
+    // STRICT ENFORCEMENT: Backend Only
+    console.warn("DatabaseManager initialized but storage is disabled.");
   }
 
   getMode() {
@@ -211,301 +179,50 @@ export class DatabaseManager {
   }
 
   async switchMode(newMode: "IndexedDB" | "LocalStorage") {
-    this.mode = newMode;
-    this.initPromise = null;
-    this.db = null;
-    window.location.reload();
+    console.error("Storage switching disabled.");
   }
 
   async init(): Promise<void> {
-    if (this.mode === "LocalStorage") return Promise.resolve();
-    if (this.initPromise) return this.initPromise;
-
-    this.initPromise = new Promise((resolve) => {
-      const request = indexedDB.open(this.dbName, this.dbVersion);
-
-      request.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        Object.values(STORES).forEach((storeName) => {
-          if (!db.objectStoreNames.contains(storeName)) {
-            const store = db.createObjectStore(storeName, { keyPath: "id" });
-            if (!store.indexNames.contains("caseId"))
-              store.createIndex("caseId", "caseId", { unique: false });
-            if (!store.indexNames.contains("status"))
-              store.createIndex("status", "status", { unique: false });
-            if (
-              storeName === STORES.TASKS &&
-              !store.indexNames.contains("caseId_status")
-            ) {
-              store.createIndex("caseId_status", ["caseId", "status"], {
-                unique: false,
-              });
-            }
-          } else {
-            const store = (
-              event.target as IDBOpenDBRequest
-            ).transaction!.objectStore(storeName);
-            if (!store.indexNames.contains("status"))
-              store.createIndex("status", "status", { unique: false });
-            if (
-              storeName === STORES.CASES &&
-              !store.indexNames.contains("client")
-            )
-              store.createIndex("client", "client", { unique: false });
-          }
-        });
-        if (!db.objectStoreNames.contains("files")) {
-          db.createObjectStore("files");
-        }
-      };
-
-      request.onsuccess = (event) => {
-        this.db = (event.target as IDBOpenDBRequest).result;
-
-        this.db.onversionchange = () => {
-          console.warn(
-            "A new version of the database is available. Closing old connection to allow upgrade."
-          );
-          if (this.db) {
-            this.db.close();
-          }
-          alert(
-            "A new version of the application is available. The page will now reload to apply updates."
-          );
-          window.location.reload();
-        };
-
-        this.db.onclose = () => {
-          console.error(
-            "Database connection was unexpectedly closed. Future operations will attempt to re-initialize."
-          );
-          this.initPromise = null;
-          this.db = null;
-        };
-
-        this.buildIndices();
-        resolve();
-      };
-
-      request.onerror = (event) => {
-        console.error("IDB Error:", (event.target as IDBOpenDBRequest).error);
-        this.mode = "LocalStorage";
-        resolve();
-      };
-    });
-
-    return this.initPromise;
-  }
-
-  private async buildIndices() {
-    setTimeout(async () => {
-      const cases = await this.getAll<{ id: string; title: string }>(
-        STORES.CASES
-      );
-      cases.forEach((c) => {
-        if (c && typeof c === "object" && "title" in c && "id" in c) {
-          this.titleIndex.insert(c.title.toLowerCase(), c.id);
-        }
-      });
-      console.log("B-Tree index for case titles built.");
-    }, 500);
+    // No-op
+    return Promise.resolve();
   }
 
   async findCaseByTitle(title: string): Promise<unknown | null> {
-    const id = this.titleIndex.search(title.toLowerCase());
-    if (id) {
-      return this.get(STORES.CASES, id);
-    }
     return null;
   }
 
   async count(storeName: string): Promise<number> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const items = StorageUtils.get<unknown[]>(storeName, []);
-      return items.length;
-    }
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([storeName], "readonly");
-      const store = transaction.objectStore(storeName);
-      const request = store.count();
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
+    return 0;
   }
 
   async getAll<T>(storeName: string): Promise<T[]> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      return StorageUtils.get(storeName, []);
-    }
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([storeName], "readonly");
-      const store = transaction.objectStore(storeName);
-      const request = store.getAll();
-      request.onsuccess = () => resolve(request.result as T[]);
-      request.onerror = () => reject(request.error);
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
   async get<T>(storeName: string, id: string): Promise<T | undefined> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const items = StorageUtils.get<T[]>(storeName, []);
-      return items.find((i: unknown) => (i as { id: string }).id === id);
-    }
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([storeName], "readonly");
-      const store = transaction.objectStore(storeName);
-      const request = store.get(id);
-      request.onsuccess = () => resolve(request.result as T);
-      request.onerror = () => reject(request.error);
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
-  private flushBuffer = () => {
-    if (!this.db || this.writeBuffer.length === 0) return;
-
-    const ops = [...this.writeBuffer];
-    this.writeBuffer = [];
-    this.flushTimer = null;
-
-    const storeNames = Array.from(new Set(ops.map((o) => o.store)));
-    const transaction = this.db.transaction(storeNames, "readwrite");
-
-    transaction.oncomplete = () => {
-      ops.forEach((op) => op.resolve());
-    };
-
-    transaction.onerror = (e) => {
-      ops.forEach((op) => op.reject(e));
-    };
-
-    ops.forEach((op) => {
-      const store = transaction.objectStore(op.store);
-      try {
-        if (op.type === "put") store.put(op.item);
-        else if (op.type === "delete") store.delete(op.item as IDBValidKey);
-      } catch (e) {
-        console.error("Coalesced Write Error", e);
-      }
-    });
-  };
-
   async put<T>(storeName: string, item: T): Promise<void> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const items = StorageUtils.get<T[]>(storeName, []);
-      const idx = items.findIndex(
-        (i: unknown) =>
-          (i as { id: string }).id === (item as Record<string, unknown>).id
-      );
-      if (idx >= 0) items[idx] = item;
-      else items.push(item);
-      StorageUtils.set(storeName, items);
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-      // Safety check: prevent unbounded buffer growth
-      if (this.writeBuffer.length >= this.MAX_BUFFER_SIZE) {
-        console.warn(
-          `[DB] Write buffer at maximum capacity (${this.MAX_BUFFER_SIZE}), forcing immediate flush`
-        );
-        this.flushBuffer();
-      }
-
-      this.writeBuffer.push({
-        store: storeName,
-        item,
-        type: "put",
-        resolve: resolve as (value?: unknown) => void,
-        reject,
-      });
-
-      // Force flush if buffer is getting large
-      if (this.writeBuffer.length >= this.FORCE_FLUSH_THRESHOLD) {
-        if (this.flushTimer) {
-          clearTimeout(this.flushTimer);
-          this.flushTimer = null;
-        }
-        this.flushBuffer();
-      } else if (!this.flushTimer) {
-        this.flushTimer = defaultWindowAdapter.setTimeout(this.flushBuffer, 16);
-      }
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
   async bulkPut<T>(storeName: string, items: T[]): Promise<void> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const currentItems = StorageUtils.get<T[]>(storeName, []);
-      const newItems = [...currentItems];
-      items.forEach((item) => {
-        const idx = newItems.findIndex(
-          (i: unknown) =>
-            (i as { id: string }).id === (item as Record<string, unknown>).id
-        );
-        if (idx >= 0) newItems[idx] = item;
-        else newItems.push(item);
-      });
-      StorageUtils.set(storeName, newItems);
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([storeName], "readwrite");
-      const store = transaction.objectStore(storeName);
-
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = (event) =>
-        reject((event.target as IDBTransaction).error);
-
-      items.forEach((item) => {
-        store.put(item);
-      });
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
   async delete(storeName: string, id: string): Promise<void> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const items = StorageUtils.get<unknown[]>(storeName, []);
-      StorageUtils.set(
-        storeName,
-        items.filter((i: unknown) => (i as { id: string }).id !== id)
-      );
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-      // Safety check: prevent unbounded buffer growth
-      if (this.writeBuffer.length >= this.MAX_BUFFER_SIZE) {
-        console.warn(
-          `[DB] Write buffer at maximum capacity (${this.MAX_BUFFER_SIZE}), forcing immediate flush`
-        );
-        this.flushBuffer();
-      }
-
-      this.writeBuffer.push({
-        store: storeName,
-        item: id,
-        type: "delete",
-        resolve: resolve as (value?: unknown) => void,
-        reject,
-      });
-
-      // Force flush if buffer is getting large
-      if (this.writeBuffer.length >= this.FORCE_FLUSH_THRESHOLD) {
-        if (this.flushTimer) {
-          clearTimeout(this.flushTimer);
-          this.flushTimer = null;
-        }
-        this.flushBuffer();
-      } else if (!this.flushTimer) {
-        this.flushTimer = defaultWindowAdapter.setTimeout(this.flushBuffer, 16);
-      }
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
   async getByIndex<T>(
@@ -513,74 +230,29 @@ export class DatabaseManager {
     indexName: string,
     value: string | unknown[]
   ): Promise<T[]> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      const items = StorageUtils.get<T[]>(storeName, []);
-      const key = Array.isArray(value) ? indexName.split("_")[0] : indexName;
-      const val = Array.isArray(value) ? value[0] : value;
-      return items.filter(
-        (i: unknown) => (i as Record<string, unknown>)[key as string] === val
-      );
-    }
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([storeName], "readonly");
-      const store = transaction.objectStore(storeName);
-      if (!store.indexNames.contains(indexName)) {
-        const request = store.getAll();
-        request.onsuccess = () => {
-          const all = request.result as Record<string, unknown>[];
-          resolve(all.filter((i) => i[indexName] === value) as T[]);
-        };
-        return;
-      }
-      const index = store.index(indexName);
-      const request = index.getAll(value as IDBValidKey | IDBKeyRange);
-      request.onsuccess = () => resolve(request.result as T[]);
-      request.onerror = () => reject(request.error);
-    });
+    throw new Error(
+      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+    );
   }
 
   async putFile(id: string, file: File): Promise<void> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      return;
-    }
-
-    return new Promise((resolve, reject) => {
-      if (!this.db) return reject("DB not ready");
-      if (!this.db.objectStoreNames.contains("files")) {
-        console.error("File store not found, cannot save file.");
-        return resolve();
-      }
-      const tx = this.db.transaction(["files"], "readwrite");
-      tx.objectStore("files").put(file, id);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
+    throw new Error("Frontend storage disabled. Use Backend API.");
   }
 
   async getFile(id: string): Promise<Blob | null> {
-    await this.init();
-    if (this.mode === "LocalStorage" || !this.db) {
-      return null;
-    }
-    return new Promise((resolve) => {
-      if (!this.db || !this.db.objectStoreNames.contains("files"))
-        return resolve(null);
-      const tx = this.db.transaction(["files"], "readonly");
-      const req = tx.objectStore("files").get(id);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
-    });
+    return null;
   }
 
-  // Get buffer stats for monitoring
+  async clear(storeName: string): Promise<void> {
+    throw new Error("Frontend storage disabled. Use Backend API.");
+  }
+
   getBufferStats() {
     return {
-      bufferSize: this.writeBuffer.length,
-      maxBufferSize: this.MAX_BUFFER_SIZE,
-      forceFlushThreshold: this.FORCE_FLUSH_THRESHOLD,
-      hasPendingFlush: this.flushTimer !== null,
+      bufferSize: 0,
+      maxBufferSize: 0,
+      forceFlushThreshold: 0,
+      hasPendingFlush: false,
     };
   }
 }

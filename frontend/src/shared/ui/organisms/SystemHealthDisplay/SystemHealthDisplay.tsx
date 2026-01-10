@@ -1,5 +1,5 @@
 import { useDataSource } from '@/providers';
-import { CheckCircle, Cloud, Database, XCircle } from 'lucide-react';
+import { CheckCircle, Cloud, XCircle } from 'lucide-react';
 import React from 'react';
 
 interface ServiceCoverageProps {
@@ -102,17 +102,6 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
   const totalServices = SERVICE_COVERAGE.length;
   const backendServices = SERVICE_COVERAGE.filter(s => s.hasBackend).length;
   const coveragePercent = Math.round((backendServices / totalServices) * 100);
-
-  if (!isBackendApiEnabled) {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <Database className="w-4 h-4 text-blue-500" />
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          Local Storage (All Services)
-        </span>
-      </div>
-    );
-  }
 
   if (compact) {
     return (

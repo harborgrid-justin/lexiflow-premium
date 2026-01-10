@@ -1,5 +1,6 @@
 import { adminApi, api } from "@/api";
 import { AuditLog } from "@/api/admin/audit-logs-api";
+import { DataService } from "@/services/data/dataService";
 import { RiskImpact, TaskStatusBackend, WorkflowTask } from "@/types";
 import { ChartDataPoint } from "@/types/dashboard";
 import { Invoice } from "@/types/financial";
@@ -41,17 +42,24 @@ export const dashboardService = {
       ).toISOString();
 
       const [stats, invoices, risks] = await Promise.all([
-        api.cases.getStats().catch((err: unknown) => {
+        (typeof DataService.cases.getStats === "function"
+          ? DataService.cases.getStats()
+          : Promise.resolve({
+              totalActive: 0,
+              upcomingDeadlines: 0,
+              utilizationRate: 0,
+            })
+        ).catch((err: unknown) => {
           console.warn("Failed to fetch case stats", err);
           return { totalActive: 0, upcomingDeadlines: 0, utilizationRate: 0 };
         }),
-        api.invoices
+        DataService.invoices
           .getAll({
             startDate: startOfMonth,
             endDate: endOfMonth,
           })
-          .catch(() => [] as Invoice[]),
-        api.risks.getAll({ impact: RiskImpact.HIGH }).catch(() => []),
+          .catch(() => []),
+        DataService.risks.getAll({ impact: RiskImpact.High }).catch(() => []),
       ]);
 
       // Calculate derived stats
@@ -99,10 +107,16 @@ export const dashboardService = {
       ).toISOString();
 
       // Fetch invoices for current month to calculate 'totalBilled' and 'realization'
-      const invoices = await api.invoices
-        .getAll({
-          startDate: startOfMonth,
-          endDate: endOfMonth,
+      const invoices = await DataService.invoices
+        .getAll() // getAll usually doesn't support complex filtering in legacy repo
+        .then((allInvoices: Invoice[]) => {
+          // Manual filtering if needed, or rely on API ignoring args if it was API
+          // But since we use DataService, let's just get everything and filter in memory for safety
+          if (!Array.isArray(allInvoices)) return [];
+          return allInvoices.filter((inv) => {
+            const d = new Date(inv.date || inv.createdAt || 0);
+            return d >= new Date(startOfMonth) && d <= new Date(endOfMonth);
+          });
         })
         .catch(() => [] as Invoice[]);
 
@@ -137,7 +151,10 @@ export const dashboardService = {
   getTasks: async (): Promise<WorkflowTask[]> => {
     try {
       // Use valid backend enum value
-      return await api.tasks.getAll({ status: TaskStatusBackend.TODO });
+      const tasks = await DataService.tasks.getAll({
+        status: TaskStatusBackend.TODO,
+      });
+      return tasks as WorkflowTask[];
     } catch (error) {
       console.error("Dashboard Service: Failed to fetch tasks", error);
       return [];

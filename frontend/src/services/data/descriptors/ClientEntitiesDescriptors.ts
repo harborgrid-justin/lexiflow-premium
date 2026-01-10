@@ -1,39 +1,20 @@
-import {
-  api,
-  integrationsApi,
-  isBackendApiEnabled,
-  litigationApi,
-} from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
-import {
-  getClientsRepository,
-  getOrganizationsRepository,
-} from "../factories/RepositoryFactories";
+import { api, integrationsApi, litigationApi } from "@/api";
 
 export const ClientEntitiesDescriptors: PropertyDescriptorMap = {
   clients: {
-    get: () => (isBackendApiEnabled() ? api.clients : getClientsRepository()),
+    get: () => api.clients,
     enumerable: true,
   },
   parties: {
-    get: () =>
-      isBackendApiEnabled()
-        ? litigationApi.parties
-        : legacyRepositoryRegistry.getOrCreate("parties"),
+    get: () => litigationApi.parties,
     enumerable: true,
   },
   organizations: {
-    get: () =>
-      isBackendApiEnabled()
-        ? integrationsApi.organizations
-        : getOrganizationsRepository(),
+    get: () => integrationsApi.organizations,
     enumerable: true,
   },
   entities: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.legalEntities
-        : legacyRepositoryRegistry.getOrCreate("entities"),
+    get: () => api.legalEntities,
     enumerable: true,
   },
 };

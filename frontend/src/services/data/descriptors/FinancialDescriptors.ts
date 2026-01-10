@@ -1,8 +1,5 @@
-import { analyticsApi, api, isBackendApiEnabled } from "@/api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
+import { analyticsApi, api } from "@/api";
 import { TransactionService } from "@/services/domain/TransactionDomain";
-import { STORES } from "../db";
-import { getIntegratedBillingRepository } from "../factories/RepositoryFactories";
 
 export const FinancialDescriptors: PropertyDescriptorMap = {
   transactions: {
@@ -10,57 +7,35 @@ export const FinancialDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   billing: {
-    get: () =>
-      isBackendApiEnabled() ? api.billing : getIntegratedBillingRepository(),
+    get: () => api.billing,
     enumerable: true,
   },
   timeEntries: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.timeEntries
-        : legacyRepositoryRegistry.getOrCreate(STORES.BILLING),
+    get: () => api.timeEntries,
     enumerable: true,
   },
   invoices: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.invoices
-        : legacyRepositoryRegistry.getOrCreate("invoices"),
+    get: () => api.invoices,
     enumerable: true,
   },
   expenses: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.expenses
-        : legacyRepositoryRegistry.getOrCreate(STORES.EXPENSES),
+    get: () => api.expenses,
     enumerable: true,
   },
   feeAgreements: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.feeAgreements
-        : legacyRepositoryRegistry.getOrCreate("feeAgreements"),
+    get: () => api.feeAgreements,
     enumerable: true,
   },
   rateTables: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.rateTables
-        : legacyRepositoryRegistry.getOrCreate("rateTables"),
+    get: () => api.rateTables,
     enumerable: true,
   },
   trustAccounts: {
-    get: () =>
-      isBackendApiEnabled()
-        ? api.trustAccounts
-        : legacyRepositoryRegistry.getOrCreate("trustAccounts"),
+    get: () => api.trustAccounts,
     enumerable: true,
   },
   billingAnalytics: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.billingAnalytics
-        : legacyRepositoryRegistry.getOrCreate("billingAnalytics"),
+    get: () => analyticsApi.billingAnalytics,
     enumerable: true,
   },
 };

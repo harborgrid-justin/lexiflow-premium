@@ -99,7 +99,6 @@ import {
 import { SystemEventType } from "@/types/integration-types";
 
 // Backend API Services
-import { isBackendApiEnabled } from "@/api";
 import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { ConcurrencyError, OperationError } from "@/services/core/errors";
@@ -145,71 +144,48 @@ interface ClientAnalytics {
  */
 export const CRMService = {
   getLeads: async (): Promise<Lead[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Lead[]>("/crm/leads");
-    }
-    // CRM leads are managed separately, not via admin API
-    return [];
+    return apiClient.get<Lead[]>("/crm/leads");
   },
 
   getPitches: async (): Promise<Pitch[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Pitch[]>("/crm/pitches");
-    }
-    return [];
+    return apiClient.get<Pitch[]>("/crm/pitches");
   },
 
   getRFPs: async (): Promise<RFP[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<RFP[]>("/crm/rfps");
-    }
-    return [];
+    return apiClient.get<RFP[]>("/crm/rfps");
   },
 
   getWinLossAnalysis: async (): Promise<WinLossAnalysis[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<WinLossAnalysis[]>("/crm/win-loss");
-    }
-    return [];
+    return apiClient.get<WinLossAnalysis[]>("/crm/win-loss");
   },
 
   getBusinessDevelopmentMetrics:
     async (): Promise<BusinessDevelopmentMetrics> => {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<BusinessDevelopmentMetrics>(
-          "/crm/business-development"
-        );
-      }
-      return {};
+      return apiClient.get<BusinessDevelopmentMetrics>(
+        "/crm/business-development"
+      );
     },
 
   getClientAnalytics: async (): Promise<ClientAnalytics> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<ClientAnalytics>("/crm/client-analytics");
-    }
-    return {};
+    return apiClient.get<ClientAnalytics>("/crm/client-analytics");
   },
 
   getAnalytics: async (mode: "light" | "dark" = "light") => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get("/crm/analytics", { mode });
+    try {
+      return await apiClient.get("/crm/analytics", { mode });
+    } catch (e) {
+      console.warn("Backend analytics failed", e);
+      return {
+        growth: [],
+        industry: [],
+        revenue: [],
+        sources: [],
+      };
     }
-
-    console.warn("Backend disabled, returning empty analytics");
-    return {
-      growth: [],
-      industry: [],
-      revenue: [],
-      sources: [],
-    };
   },
 
   updateLead: async (id: string, updates: { stage: string }): Promise<Lead> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<Lead>(`/crm/leads/${id}`, updates);
-    }
-
-    throw new Error("Backend disabled, cannot update lead");
+    return apiClient.patch<Lead>(`/crm/leads/${id}`, updates);
   },
 
   /**
@@ -235,25 +211,23 @@ export const CRMService = {
     activeLocks.add(lockKey);
 
     try {
-      if (isBackendApiEnabled()) {
-        // Backend handles atomic transaction
-        try {
-          const result = await apiClient.post<{ client: Client; case: Matter }>(
-            "/crm/leads/convert",
-            { leadId: lead.id }
-          );
-          conversionMap.set(lead.id, {
-            clientId: result.client.id,
-            caseId: result.case.id,
-          });
-          return result;
-        } catch (error) {
-          // Fallback if endpoint not waiting
-          console.warn(
-            "Backend conversion endpoint failed, trying separate calls",
-            error
-          );
-        }
+      // Backend handles atomic transaction
+      try {
+        const result = await apiClient.post<{ client: Client; case: Matter }>(
+          "/crm/leads/convert",
+          { leadId: lead.id }
+        );
+        conversionMap.set(lead.id, {
+          clientId: result.client.id,
+          caseId: result.case.id,
+        });
+        return result;
+      } catch (error) {
+        // Fallback if endpoint not waiting
+        console.warn(
+          "Backend conversion endpoint failed, trying separate calls",
+          error
+        );
       }
 
       // Initialize API services

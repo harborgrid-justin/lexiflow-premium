@@ -183,7 +183,7 @@ const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
     count: item.count,
     value: 0, // Value not provided by breakdown endpoint, might need another call or update endpoint
     color: item.color || colors[index % colors.length] || '#000000',
-  }));
+  })) as any;
 };
 
 const mapTeamPerformance = (data?: TeamMetrics[]): TeamMember[] => {

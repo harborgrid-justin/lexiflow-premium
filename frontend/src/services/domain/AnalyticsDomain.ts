@@ -76,7 +76,6 @@
 
 import { analyticsApi } from "@/api/domains/analytics.api";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
 import {
   JudgeMotionStat,
   OpposingCounselProfile,
@@ -163,17 +162,14 @@ export const AnalyticsService = {
    * - No sensitive case details exposed
    */
   getCounselProfiles: async (): Promise<OpposingCounselProfile[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<OpposingCounselProfile[]>(
-          "/analytics/counsel-profiles"
-        );
-      } catch (error) {
-        console.warn("Failed to fetch opposing counsel profiles", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<OpposingCounselProfile[]>(
+        "/analytics/counsel-profiles"
+      );
+    } catch (error) {
+      console.warn("Failed to fetch opposing counsel profiles", error);
+      return [];
     }
-    return [];
   },
 
   // =============================================================================

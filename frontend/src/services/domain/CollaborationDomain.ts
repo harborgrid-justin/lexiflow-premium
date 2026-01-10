@@ -4,7 +4,6 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 interface Workspace {
@@ -37,88 +36,58 @@ interface Comment {
 
 export const CollaborationService = {
   getAll: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Workspace[]>("/collaboration/workspaces");
-    }
-    return [];
+    return apiClient.get<Workspace[]>("/collaboration/workspaces");
   },
   getById: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Workspace>(`/collaboration/workspaces/${id}`);
-    }
-    return undefined;
+    return apiClient.get<Workspace>(`/collaboration/workspaces/${id}`);
   },
   add: async (item: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<Workspace>("/collaboration/workspaces", item);
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<Workspace>("/collaboration/workspaces", item);
   },
   update: async (id: string, updates: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<Workspace>(
-        `/collaboration/workspaces/${id}`,
-        updates
-      );
-    }
-    throw new Error("Backend API required");
+    return apiClient.patch<Workspace>(
+      `/collaboration/workspaces/${id}`,
+      updates
+    );
   },
   delete: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.delete(`/collaboration/workspaces/${id}`);
-    }
-    throw new Error("Backend API required");
+    return apiClient.delete(`/collaboration/workspaces/${id}`);
   },
 
   // Collaboration specific methods
   getWorkspaces: async (userId?: string): Promise<Workspace[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Workspace[]>("/collaboration/workspaces", {
-        userId,
-      });
-    }
-    return [];
+    return apiClient.get<Workspace[]>("/collaboration/workspaces", {
+      userId,
+    });
   },
 
   createWorkspace: async (
     workspace: Partial<Workspace>
   ): Promise<Workspace> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<Workspace>("/collaboration/workspaces", workspace);
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<Workspace>("/collaboration/workspaces", workspace);
   },
 
   inviteUser: async (workspaceId: string, userId: string): Promise<boolean> => {
-    if (isBackendApiEnabled()) {
-      await apiClient.post(`/collaboration/workspaces/${workspaceId}/invite`, {
-        userId,
-      });
-      return true;
-    }
-    throw new Error("Backend API required");
+    await apiClient.post(`/collaboration/workspaces/${workspaceId}/invite`, {
+      userId,
+    });
+    return true;
   },
 
   getComments: async (resourceId: string): Promise<Comment[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Comment[]>(
-        `/collaboration/comments?resourceId=${resourceId}`
-      );
-    }
-    return [];
+    return apiClient.get<Comment[]>(
+      `/collaboration/comments?resourceId=${resourceId}`
+    );
   },
 
   addComment: async (
     resourceId: string,
     comment: Partial<Comment>
   ): Promise<Comment> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<Comment>("/collaboration/comments", {
-        resourceId,
-        ...comment,
-      });
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<Comment>("/collaboration/comments", {
+      resourceId,
+      ...comment,
+    });
   },
 
   shareResource: async (
@@ -126,14 +95,11 @@ export const CollaborationService = {
     userId: string,
     options?: { permissions?: "view" | "edit" | "admin"; resourceType?: string }
   ): Promise<boolean> => {
-    if (isBackendApiEnabled()) {
-      await apiClient.post("/collaboration/share", {
-        resourceId,
-        userId,
-        ...options,
-      });
-      return true;
-    }
-    throw new Error("Backend API required");
+    await apiClient.post("/collaboration/share", {
+      resourceId,
+      userId,
+      ...options,
+    });
+    return true;
   },
 };

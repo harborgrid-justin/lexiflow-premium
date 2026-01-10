@@ -30,7 +30,6 @@
  * @migrated Backend API integration completed 2025-12-21
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { Precedent, QAItem, WikiArticle } from "@/types";
 
@@ -120,17 +119,14 @@ export class KnowledgeRepository {
    * - Search: Case-insensitive title and content matching
    */
   getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<WikiArticle[]>("/knowledge/wiki", {
-          q: query,
-        });
-      } catch (error) {
-        console.warn("Failed to fetch wiki articles", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<WikiArticle[]>("/knowledge/wiki", {
+        q: query,
+      });
+    } catch (error) {
+      console.warn("Failed to fetch wiki articles", error);
+      return [];
     }
-    return [];
   };
 
   /**
@@ -146,15 +142,12 @@ export class KnowledgeRepository {
   async getWikiArticleById(id: string): Promise<WikiArticle | undefined> {
     this.validateId(id, "getWikiArticleById");
 
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<WikiArticle>(`/knowledge/wiki/${id}`);
-      } catch (error) {
-        console.warn("Failed to fetch wiki article", error);
-        return undefined;
-      }
+    try {
+      return await apiClient.get<WikiArticle>(`/knowledge/wiki/${id}`);
+    } catch (error) {
+      console.warn("Failed to fetch wiki article", error);
+      return undefined;
     }
-    return undefined;
   }
 
   /**
@@ -192,17 +185,12 @@ export class KnowledgeRepository {
       );
     }
 
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.post<WikiArticle>("/knowledge/wiki", article);
-      } catch (error) {
-        console.error("Failed to create wiki article", error);
-        throw error;
-      }
+    try {
+      return await apiClient.post<WikiArticle>("/knowledge/wiki", article);
+    } catch (error) {
+      console.error("Failed to create wiki article", error);
+      throw error;
     }
-
-    // Fallback logic (not implemented for create)
-    throw new Error("Backend API required for creating wiki articles");
   }
 
   /**
@@ -230,19 +218,15 @@ export class KnowledgeRepository {
       );
     }
 
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.patch<WikiArticle>(
-          `/knowledge/wiki/${id}`,
-          updates
-        );
-      } catch (error) {
-        console.error("Failed to update wiki article", error);
-        throw error;
-      }
+    try {
+      return await apiClient.patch<WikiArticle>(
+        `/knowledge/wiki/${id}`,
+        updates
+      );
+    } catch (error) {
+      console.error("Failed to update wiki article", error);
+      throw error;
     }
-
-    throw new Error("Backend API required for updating wiki articles");
   }
 
   // =============================================================================
@@ -259,15 +243,12 @@ export class KnowledgeRepository {
    * const precedents = await repo.getPrecedents();
    */
   getPrecedents = async (): Promise<Precedent[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<Precedent[]>("/knowledge/precedents");
-      } catch (error) {
-        console.warn("Failed to fetch precedents", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<Precedent[]>("/knowledge/precedents");
+    } catch (error) {
+      console.warn("Failed to fetch precedents", error);
+      return [];
     }
-    return [];
   };
 
   /**
@@ -348,15 +329,12 @@ export class KnowledgeRepository {
    * const qaItems = await repo.getQA();
    */
   getQA = async (): Promise<QAItem[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<QAItem[]>("/knowledge/qa");
-      } catch (error) {
-        console.warn("Failed to fetch Q&A items", error);
-        return [];
-      }
+    try {
+      return await apiClient.get<QAItem[]>("/knowledge/qa");
+    } catch (error) {
+      console.warn("Failed to fetch Q&A items", error);
+      return [];
     }
-    return [];
   };
 
   /**
@@ -413,17 +391,14 @@ export class KnowledgeRepository {
     usage: Array<{ name: string; views: number }>;
     topics: Array<{ name: string; value: number; color: string }>;
   }> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get("/knowledge/analytics", {
-          params: { mode },
-        });
-      } catch (error) {
-        console.warn("Failed to fetch knowledge analytics", error);
-        return { usage: [], topics: [] };
-      }
+    try {
+      return await apiClient.get("/knowledge/analytics", {
+        params: { mode },
+      });
+    } catch (error) {
+      console.warn("Failed to fetch knowledge analytics", error);
+      return { usage: [], topics: [] };
     }
-    return { usage: [], topics: [] };
   };
 
   /**

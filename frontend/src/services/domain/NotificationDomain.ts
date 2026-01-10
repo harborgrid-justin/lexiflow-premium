@@ -5,7 +5,6 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { communicationsApi } from "@/api/domains/communications.api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
@@ -66,41 +65,10 @@ export const NotificationService = {
     type?: string;
     limit?: number;
   }): Promise<Notification[]> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Notification[]>(
-        "/communications/notifications",
-        filters
-      );
-    }
-    const rawNotifications =
-      (await communicationsApi.notifications?.getAll?.()) || [];
-    let notifications = rawNotifications as unknown as Notification[];
-
-    // Apply filters
-    if (filters?.read !== undefined) {
-      notifications = notifications.filter(
-        (n: Notification) => n.read === filters.read
-      );
-    }
-
-    if (filters?.type) {
-      notifications = notifications.filter(
-        (n: Notification) => n.type === filters.type
-      );
-    }
-
-    // Sort by timestamp descending
-    notifications.sort(
-      (a: Notification, b: Notification) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    return apiClient.get<Notification[]>(
+      "/communications/notifications",
+      filters
     );
-
-    // Apply limit
-    if (filters?.limit) {
-      notifications = notifications.slice(0, filters.limit);
-    }
-
-    return notifications;
   },
 
   markAsRead: async (notificationId: string): Promise<boolean> => {
@@ -114,21 +82,7 @@ export const NotificationService = {
 
   markAllAsRead: async (): Promise<boolean> => {
     try {
-      if (isBackendApiEnabled()) {
-        await apiClient.post("/communications/notifications/mark-all-read");
-        return true;
-      }
-      const rawNotifications =
-        (await communicationsApi.notifications?.getAll?.()) || [];
-      const notifications = rawNotifications as unknown as Notification[];
-      const unread = notifications.filter((n: Notification) => !n.read);
-
-      await Promise.all(
-        unread.map((n: Notification) =>
-          communicationsApi.notifications?.markAsRead?.(n.id)
-        )
-      );
-
+      await apiClient.post("/communications/notifications/mark-all-read");
       return true;
     } catch {
       return false;
@@ -136,35 +90,17 @@ export const NotificationService = {
   },
 
   getUnreadCount: async (): Promise<number> => {
-    if (isBackendApiEnabled()) {
-      const result = await apiClient.get<{ count: number }>(
-        "/communications/notifications/unread-count"
-      );
-      return result.count;
-    }
-    const rawNotifications =
-      (await communicationsApi.notifications?.getAll?.()) || [];
-    const notifications = rawNotifications as unknown as Notification[];
-    return notifications.filter((n: Notification) => !n.read).length;
+    const result = await apiClient.get<{ count: number }>(
+      "/communications/notifications/unread-count"
+    );
+    return result.count;
   },
 
   subscribe: async (channel: string): Promise<boolean> => {
     try {
-      if (isBackendApiEnabled()) {
-        await apiClient.post("/communications/notifications/subscribe", {
-          channel,
-        });
-        return true;
-      }
-      const stored = localStorage.getItem("subscriptions");
-      const subscriptions = stored ? JSON.parse(stored) : [];
-
-      if (!subscriptions.includes(channel)) {
-        subscriptions.push(channel);
-        localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-      }
-
-      console.log(`[NotificationService] Subscribed to channel: ${channel}`);
+      await apiClient.post("/communications/notifications/subscribe", {
+        channel,
+      });
       return true;
     } catch {
       return false;
@@ -173,20 +109,9 @@ export const NotificationService = {
 
   unsubscribe: async (channel: string): Promise<boolean> => {
     try {
-      if (isBackendApiEnabled()) {
-        await apiClient.post("/communications/notifications/unsubscribe", {
-          channel,
-        });
-        return true;
-      }
-      const stored = localStorage.getItem("subscriptions");
-      const subscriptions = stored ? JSON.parse(stored) : [];
-      const updated = subscriptions.filter((c: string) => c !== channel);
-
-      localStorage.setItem("subscriptions", JSON.stringify(updated));
-      console.log(
-        `[NotificationService] Unsubscribed from channel: ${channel}`
-      );
+      await apiClient.post("/communications/notifications/unsubscribe", {
+        channel,
+      });
       return true;
     } catch {
       return false;

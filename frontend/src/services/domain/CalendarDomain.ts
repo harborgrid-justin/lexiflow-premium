@@ -55,7 +55,6 @@
  * @modified 2025-12-22
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { workflowApi } from "@/api/domains/workflow.api";
 import {
   CalendarEvent as ApiCalendarEvent,
@@ -64,7 +63,6 @@ import {
 import { ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { CalendarEventType } from "@/types";
-import { delay } from "@/utils/async";
 
 // =============================================================================
 // REACT QUERY KEYS
@@ -392,39 +390,13 @@ export const CalendarService = {
         validateEventType(filters.type, "getEvents");
       }
 
-      // Note: calendar API is not yet available in integrationsApi
-      // Debug: console.warn('[CalendarService.getEvents] Calendar API not yet available');
-      const events: CalendarEvent[] = [];
+      const events = await workflowApi.calendar.getAll(filters);
 
-      // Filter by date range
-      if (filters?.startDate || filters?.endDate) {
-        events.filter((e: CalendarEvent) => {
-          const eventStart = new Date(e.startDate);
-          const rangeStart = filters.startDate
-            ? new Date(filters.startDate)
-            : new Date(0);
-          const rangeEnd = filters.endDate
-            ? new Date(filters.endDate)
-            : new Date("2100-01-01");
-          return eventStart >= rangeStart && eventStart <= rangeEnd;
-        });
-      }
-
-      // Filter by case
-      if (filters?.caseId) {
-        events.filter((e: CalendarEvent) => e.caseId === filters.caseId);
-      }
-
-      // Filter by type
-      if (filters?.type) {
-        events.filter((e: CalendarEvent) => e.type === filters.type);
-      }
-
-      // Sort by start date (ascending)
-      return events.sort(
-        (a: CalendarEvent, b: CalendarEvent) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      );
+      // Map API events to domain events
+      return events.map((e: ApiCalendarEvent) => ({
+        ...e,
+        type: e.eventType as unknown as CalendarEvent["type"],
+      }));
     } catch (error) {
       console.error("[CalendarService.getEvents] Error:", error);
       throw error;
@@ -554,17 +526,7 @@ export const CalendarService = {
     provider?: "google" | "outlook" | "ical";
   }): Promise<boolean> => {
     try {
-      if (isBackendApiEnabled()) {
-        await apiClient.post("/calendar/sync", options);
-        return true;
-      }
-      const provider = options?.provider || "default";
-
-      await delay(500);
-
-      console.log(
-        `[CalendarService] Successfully synced with ${provider} calendar`
-      );
+      await apiClient.post("/calendar/sync", options);
       return true;
     } catch (error) {
       console.error("[CalendarService.sync] Error:", error);

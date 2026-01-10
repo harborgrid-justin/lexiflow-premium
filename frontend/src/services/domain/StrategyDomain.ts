@@ -15,8 +15,6 @@
  * with backend API integration for persistent storage and analytics.
  */
 
-import { isBackendApiEnabled } from "@/api";
-import { OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 interface Strategy {
@@ -49,118 +47,70 @@ interface Recommendation {
 
 export const StrategyService = {
   getAll: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Strategy[]>("/strategies");
-    }
-    console.warn(
-      "[StrategyService] Backend API disabled, returning empty array"
-    );
-    return [];
+    return apiClient.get<Strategy[]>("/strategies");
   },
 
   getById: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Strategy>(`/strategies/${id}`);
-    }
-    console.warn("[StrategyService] Backend API disabled", id);
-    return null;
+    return apiClient.get<Strategy>(`/strategies/${id}`);
   },
 
   add: async (item: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post("/strategies", {
-        ...(item && typeof item === "object" ? item : {}),
-        createdAt: new Date().toISOString(),
-      });
-    }
-    throw new OperationError(
-      "StrategyService.add",
-      "Backend API required for add operation"
-    );
+    return apiClient.post("/strategies", {
+      ...(item && typeof item === "object" ? item : {}),
+      createdAt: new Date().toISOString(),
+    });
   },
 
   update: async (id: string, updates: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch(`/strategies/${id}`, {
-        ...(updates && typeof updates === "object" ? updates : {}),
-        updatedAt: new Date().toISOString(),
-      });
-    }
-    throw new OperationError(
-      "StrategyService.update",
-      "Backend API required for update operation"
-    );
+    return apiClient.patch(`/strategies/${id}`, {
+      ...(updates && typeof updates === "object" ? updates : {}),
+      updatedAt: new Date().toISOString(),
+    });
   },
 
   delete: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      await apiClient.delete(`/strategies/${id}`);
-      return;
-    }
-    throw new OperationError(
-      "StrategyService.delete",
-      "Backend API required for delete operation"
-    );
+    await apiClient.delete(`/strategies/${id}`);
+    return;
   },
 
   // Strategy specific methods
   getStrategies: async (caseId?: string): Promise<Strategy[]> => {
-    if (isBackendApiEnabled()) {
-      const params = caseId ? { caseId } : {};
-      return apiClient.get<Strategy[]>("/strategies", params);
-    }
-    console.warn(
-      "[StrategyService] Backend API disabled, returning empty array"
-    );
-    return [];
+    const params = caseId ? { caseId } : {};
+    return apiClient.get<Strategy[]>("/strategies", params);
   },
 
   createStrategy: async (strategy: Partial<Strategy>): Promise<Strategy> => {
-    if (isBackendApiEnabled()) {
-      const payload = {
-        caseId: strategy.caseId || "",
-        name: strategy.name || "New Strategy",
-        description: strategy.description || "",
-        objectives: strategy.objectives || [],
-        risks: strategy.risks || [],
-      };
-      return apiClient.post<Strategy>("/strategies", payload);
-    }
-    throw new OperationError(
-      "StrategyService.createStrategy",
-      "Backend API required for createStrategy"
-    );
+    const payload = {
+      caseId: strategy.caseId || "",
+      name: strategy.name || "New Strategy",
+      description: strategy.description || "",
+      objectives: strategy.objectives || [],
+      risks: strategy.risks || [],
+    };
+    return apiClient.post<Strategy>("/strategies", payload);
   },
 
   analyzeRisks: async (strategyId: string): Promise<Risk[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<Risk[]>(`/strategies/${strategyId}/risks`);
-      } catch (error) {
-        console.error("[StrategyService.analyzeRisks] Backend error:", error);
-      }
+    try {
+      return await apiClient.get<Risk[]>(`/strategies/${strategyId}/risks`);
+    } catch (error) {
+      console.error("[StrategyService.analyzeRisks] Backend error:", error);
+      return [];
     }
-
-    console.warn("[StrategyService] Backend risk analysis unavailable");
-    return [];
   },
 
   getRecommendations: async (caseId: string): Promise<Recommendation[]> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<Recommendation[]>(
-          "/strategies/recommendations",
-          { caseId }
-        );
-      } catch (error) {
-        console.error(
-          "[StrategyService.getRecommendations] Backend error:",
-          error
-        );
-      }
+    try {
+      return await apiClient.get<Recommendation[]>(
+        "/strategies/recommendations",
+        { caseId }
+      );
+    } catch (error) {
+      console.error(
+        "[StrategyService.getRecommendations] Backend error:",
+        error
+      );
+      return [];
     }
-
-    console.warn("[StrategyService] Backend recommendations unavailable");
-    return [];
   },
 };

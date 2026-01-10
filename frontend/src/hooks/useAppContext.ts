@@ -174,36 +174,41 @@ export function useAppContext(): UseAppControllerReturn {
   // Effect discipline: App initialization is synchronization with external systems (Principle #6)
   // Cleanup pattern prevents double-execution in Strict Mode (Principle #7)
   useEffect(() => {
-    // Guard against double-invocation in React 18 Strict Mode
-    if (isInitialized.current) return;
-    isInitialized.current = true;
+    // If we're already initialized (not loading), don't re-run init logic
+    if (!isAppLoading) return;
 
     const init = async () => {
       try {
-        console.log("[useAppController] Starting initialization...");
+        // Run backend check only once (Strict Mode guard)
+        if (!isInitialized.current) {
+          isInitialized.current = true;
+          console.log("[useAppController] Starting initialization...");
 
-        // Authentication is handled by AuthProvider
-        // Just verify backend connectivity
-        const backendApiEnabled = isBackendApiEnabled();
+          // Authentication is handled by AuthProvider
+          // Just verify backend connectivity
+          const backendApiEnabled = isBackendApiEnabled();
 
-        if (backendApiEnabled) {
-          setAppStatusMessage("Connecting to backend API...");
+          if (backendApiEnabled) {
+            setAppStatusMessage("Connecting to backend API...");
 
-          // Check Health
-          try {
-            await apiClient.healthCheck();
-            setAppStatusMessage("Connected to backend");
-          } catch (healthError) {
-            console.error("Backend health check failed:", healthError);
-            setAppStatusMessage(
-              "Backend not reachable. Switching to local mode."
+            // Check Health
+            try {
+              await apiClient.healthCheck();
+              setAppStatusMessage("Connected to backend");
+            } catch (healthError) {
+              console.error("Backend health check failed:", healthError);
+              setAppStatusMessage(
+                "Backend unreachable. Please ensure the API is running."
+              );
+              // CRITICAL FIX: Do NOT switch to local mode or reload.
+              // The backend is the only source of truth.
+              return;
+            }
+          } else {
+            console.warn(
+              "IndexedDB mode is deprecated. Please use backend API."
             );
-            localStorage.setItem("VITE_USE_INDEXEDDB", "true");
-            window.location.reload();
-            return;
           }
-        } else {
-          console.warn("IndexedDB mode is deprecated. Please use backend API.");
         }
 
         // Wait for auth to complete
@@ -221,7 +226,7 @@ export function useAppContext(): UseAppControllerReturn {
     };
 
     init();
-  }, [addToast, authUser, authIsAuthenticated]);
+  }, [addToast, authUser, authIsAuthenticated, isAppLoading]);
 
   // Restore Case Context when ID changes
   useEffect(() => {

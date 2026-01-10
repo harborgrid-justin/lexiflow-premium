@@ -1,21 +1,14 @@
-import { analyticsApi, isBackendApiEnabled, workflowApi } from "@/api";
-import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
+import { analyticsApi, workflowApi } from "@/api";
 import { AnalysisService } from "@/services/domain/AnalysisDomain";
-import {
-  getCitationsRepository,
-  getKnowledgeRepository,
-  getRisksRepository,
-} from "../factories/RepositoryFactories";
+import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
 
 export const AnalyticsDescriptors: PropertyDescriptorMap = {
   knowledge: {
-    get: () =>
-      isBackendApiEnabled() ? analyticsApi.knowledge : getKnowledgeRepository(),
+    get: () => analyticsApi.knowledge,
     enumerable: true,
   },
   citations: {
-    get: () =>
-      isBackendApiEnabled() ? analyticsApi.citations : getCitationsRepository(),
+    get: () => analyticsApi.citations,
     enumerable: true,
   },
   analysis: {
@@ -24,39 +17,20 @@ export const AnalyticsDescriptors: PropertyDescriptorMap = {
   },
   analytics: { get: () => AnalyticsService, enumerable: true },
   judgeStats: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.judgeStats
-        : {
-            getAll: async () => [],
-            getById: async (_id: string) => undefined,
-            search: async (_query: string) => [],
-          },
+    get: () => analyticsApi.judgeStats,
     enumerable: true,
   },
   outcomePredictions: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.outcomePredictions
-        : {
-            predict: async (caseId: string) => ({
-              caseId,
-              prediction: "unavailable",
-              confidence: 0,
-              factors: [],
-            }),
-            getHistory: async () => [],
-          },
+    get: () => analyticsApi.outcomePredictions,
     enumerable: true,
   },
   risks: {
-    get: () =>
-      isBackendApiEnabled() ? workflowApi.risks : getRisksRepository(),
+    get: () => workflowApi.risks,
     enumerable: true,
   },
   search: {
     // Note: SearchService not yet implemented in analytics backend
-    get: () => (isBackendApiEnabled() ? analyticsApi.search : null),
+    get: () => analyticsApi.search,
     enumerable: true,
   },
 };

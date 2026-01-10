@@ -1,4 +1,3 @@
-import { isBackendApiEnabled as checkBackendEnabled } from '@/config/network/api.config';
 import { DataService } from '@/services/data/dataService';
 import { backendDiscovery } from '@/services/integration/backendDiscovery';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -95,8 +94,8 @@ function createRepositories(config: DataSourceConfig): RepositoryRegistry {
 // --- Internal Helpers (Kept outside to avoid closures/circularity) ---
 
 function getInitialDataSource(): DataSourceType {
-  // Use the centralized apiConfig detection logic
-  return checkBackendEnabled() ? 'postgresql' : 'indexeddb';
+  // STRICT BACKEND ENFORCEMENT
+  return 'postgresql';
 }
 
 // BP3: Split contexts for state and actions
@@ -164,32 +163,12 @@ export const DataSourceProvider = ({
    * Updates storage and performs hard reload to reset service registry
    */
   const switchDataSource = useCallback((source: DataSourceType) => {
-    if (source === currentSource) return;
-
-    // Pattern 11: Instrument observability
-    if (config?.observability?.logger) {
-      config.observability.logger.info('Switching data source', {
-        from: currentSource,
-        to: source,
-      });
+    if (source !== 'postgresql') {
+      console.warn('[DataSourceContext] Switching to legacy/local sources is disabled.');
+      return;
     }
-
-    // Update storage so the next load picks up the right source
-    // HYDRATION-SAFE: Only access window/localStorage in browser environment
-    if (typeof window !== 'undefined') {
-      // Use VITE_USE_INDEXEDDB for consistency with apiConfig.ts
-      if (source === 'indexeddb') {
-        localStorage.setItem('VITE_USE_INDEXEDDB', 'true');
-      } else {
-        localStorage.removeItem('VITE_USE_INDEXEDDB');
-      }
-
-      // We do NOT call queryClient here.
-      // The reload ensures a clean slate for all singleton services.
-      window.location.reload();
-    }
-
-    setCurrentSource(source);
+    // No-op effectively, as we are always on postgresql
+    setCurrentSource('postgresql');
   }, [currentSource, config]);
 
   useEffect(() => {

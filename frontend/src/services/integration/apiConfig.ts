@@ -16,8 +16,11 @@
  * - Portable across SSR, workers, and test environments
  */
 
-import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
-import { type IStorageAdapter, defaultStorage } from '@/services/infrastructure/adapters/StorageAdapter';
+import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
+import {
+  type IStorageAdapter,
+  defaultStorage,
+} from "@/services/infrastructure/adapters/StorageAdapter";
 
 const DEPRECATION_WARNING = `
 ЩЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЛ
@@ -47,36 +50,12 @@ const DEPRECATION_WARNING = `
  * @param storage - Storage adapter interface (injected for testing)
  * @returns true if backend API should be used (DEFAULT)
  */
-export function isBackendApiEnabled(storage: IStorageAdapter = defaultStorage): boolean {
-  // Check if explicitly disabled via environment variable
-  const envDisabled = import.meta.env.VITE_USE_BACKEND_API === 'false' ||
-                      import.meta.env.VITE_USE_BACKEND_API === false;
-
-  // Check for storage override
-  const localDisabled = storage.getItem('VITE_USE_BACKEND_API') === 'false';
-
-  if (envDisabled || localDisabled) {
-    console.warn('[API Config] Backend API explicitly disabled via VITE_USE_BACKEND_API=false');
-  }
-
-  // Check for development override (IndexedDB mode)
-  const useIndexedDB = storage.getItem('VITE_USE_INDEXEDDB') === 'true';
-  if (useIndexedDB) {
-    console.warn(DEPRECATION_WARNING);
-    console.warn('[API Config] Using deprecated IndexedDB mode. This will be removed in v2.0.0');
-    return false;
-  }
-
-  // Force enable backend if not explicitly disabled
-  // Clear any legacy disabled flags if we want to force enable
-  if (storage.getItem('VITE_USE_BACKEND_API') === 'false') {
-    console.log('[API Config] Clearing legacy VITE_USE_BACKEND_API=false flag');
-    storage.removeItem('VITE_USE_BACKEND_API');
-    return true;
-  }
-
-  // Default to backend API (production mode)
-  return !(envDisabled || localDisabled);
+export function isBackendApiEnabled(
+  storage: IStorageAdapter = defaultStorage
+): boolean {
+  // STRICT ENFORCEMENT: Backend API is the ONLY supported mode.
+  // Legacy IndexedDB/Offline support has been permanently disabled per architecture requirements.
+  return true;
 }
 
 /**
@@ -86,7 +65,9 @@ export function isBackendApiEnabled(storage: IStorageAdapter = defaultStorage): 
 export function isIndexedDBMode(): boolean {
   const enabled = !isBackendApiEnabled();
   if (enabled) {
-    console.warn('[API Config] isIndexedDBMode() is deprecated. Use isBackendApiEnabled() instead.');
+    console.warn(
+      "[API Config] isIndexedDBMode() is deprecated. Use isBackendApiEnabled() instead."
+    );
   }
   return enabled;
 }
@@ -94,8 +75,8 @@ export function isIndexedDBMode(): boolean {
 /**
  * Get current data persistence mode
  */
-export function getDataMode(): 'backend' | 'indexeddb-deprecated' {
-  return isBackendApiEnabled() ? 'backend' : 'indexeddb-deprecated';
+export function getDataMode(): "backend" | "indexeddb-deprecated" {
+  return isBackendApiEnabled() ? "backend" : "indexeddb-deprecated";
 }
 
 /**
@@ -104,10 +85,14 @@ export function getDataMode(): 'backend' | 'indexeddb-deprecated' {
  *
  * @param storage - Storage adapter interface (injected for testing)
  */
-export function forceBackendMode(storage: IStorageAdapter = defaultStorage): void {
-  storage.removeItem('VITE_USE_INDEXEDDB');
-  storage.setItem('VITE_FORCE_BACKEND', 'true');
-  console.log('[API Config] Forced backend API mode. Reload page to apply changes.');
+export function forceBackendMode(
+  storage: IStorageAdapter = defaultStorage
+): void {
+  storage.removeItem("VITE_USE_INDEXEDDB");
+  storage.setItem("VITE_FORCE_BACKEND", "true");
+  console.log(
+    "[API Config] Forced backend API mode. Reload page to apply changes."
+  );
 }
 
 /**
@@ -116,17 +101,23 @@ export function forceBackendMode(storage: IStorageAdapter = defaultStorage): voi
  *
  * @param storage - Storage adapter interface (injected for testing)
  */
-export function enableLegacyIndexedDB(storage: IStorageAdapter = defaultStorage): void {
+export function enableLegacyIndexedDB(
+  storage: IStorageAdapter = defaultStorage
+): void {
   if (import.meta.env.PROD) {
-    console.error('[API Config] Cannot enable IndexedDB mode in production build');
+    console.error(
+      "[API Config] Cannot enable IndexedDB mode in production build"
+    );
     return;
   }
 
-  storage.setItem('VITE_USE_INDEXEDDB', 'true');
-  storage.removeItem('VITE_FORCE_BACKEND');
+  storage.setItem("VITE_USE_INDEXEDDB", "true");
+  storage.removeItem("VITE_FORCE_BACKEND");
 
   console.warn(DEPRECATION_WARNING);
-  console.log('[API Config] Enabled legacy IndexedDB mode. Reload page to apply changes.');
+  console.log(
+    "[API Config] Enabled legacy IndexedDB mode. Reload page to apply changes."
+  );
 }
 
 /**
@@ -147,14 +138,17 @@ export function getBackendUrl(): string {
  * Display current configuration in console
  */
 export function logApiConfig(): void {
-  console.group('[LexiFlow API Configuration]');
-  console.log('Environment:', import.meta.env.MODE);
-  console.log('Production Build:', isProduction());
-  console.log('Data Mode:', getDataMode());
-  console.log('Backend API:', isBackendApiEnabled() ? '✅ Enabled' : '❌ Disabled');
-  console.log('Backend URL:', getBackendUrl());
+  console.group("[LexiFlow API Configuration]");
+  console.log("Environment:", import.meta.env.MODE);
+  console.log("Production Build:", isProduction());
+  console.log("Data Mode:", getDataMode());
+  console.log(
+    "Backend API:",
+    isBackendApiEnabled() ? "✅ Enabled" : "❌ Disabled"
+  );
+  console.log("Backend URL:", getBackendUrl());
   if (!isBackendApiEnabled()) {
-    console.warn('⚠️  IndexedDB mode is DEPRECATED');
+    console.warn("⚠️  IndexedDB mode is DEPRECATED");
   }
   console.groupEnd();
 }

@@ -87,7 +87,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
   // Fetch invoices
   const { data: invoices } = useQuery<Invoice[]>(
     ['billing', 'invoices', caseId],
-    () => api.billing.getInvoices(caseId ? { caseId } : undefined)
+    () => api.billing.getInvoices(caseId ? { caseId } : undefined) as unknown as Promise<Invoice[]>
   );
 
   // Fetch time entries

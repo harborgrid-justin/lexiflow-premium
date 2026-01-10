@@ -2,15 +2,12 @@ import {
   analyticsApi,
   api,
   draftingApi,
-  isBackendApiEnabled,
   type CreateTemplateDto,
   type UpdateTemplateDto,
 } from "@/api";
 import { type CreateJurisdictionRuleDto } from "@/api/intelligence/jurisdiction-api";
-import { repositoryRegistry as legacyRepositoryRegistry } from "@/services/core/RepositoryFactory";
 import { JurisdictionService } from "@/services/domain/JurisdictionDomain";
 import { ResearchService } from "@/services/domain/ResearchDomain";
-import { STORES } from "../db";
 
 export const LegalResearchDescriptors: PropertyDescriptorMap = {
   research: {
@@ -18,24 +15,18 @@ export const LegalResearchDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   playbooks: {
-    get: () =>
-      isBackendApiEnabled()
-        ? {
-            getAll: () => draftingApi.getAllTemplates(),
-            getById: (id: string) => draftingApi.getTemplateById(id),
-            add: (item: CreateTemplateDto) => draftingApi.createTemplate(item),
-            update: (id: string, item: UpdateTemplateDto) =>
-              draftingApi.updateTemplate(id, item),
-            delete: (id: string) => draftingApi.deleteTemplate(id),
-          }
-        : legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES),
+    get: () => ({
+      getAll: () => draftingApi.getAllTemplates(),
+      getById: (id: string) => draftingApi.getTemplateById(id),
+      add: (item: CreateTemplateDto) => draftingApi.createTemplate(item),
+      update: (id: string, item: UpdateTemplateDto) =>
+        draftingApi.updateTemplate(id, item),
+      delete: (id: string) => draftingApi.deleteTemplate(id),
+    }),
     enumerable: true,
   },
   clauses: {
-    get: () =>
-      isBackendApiEnabled()
-        ? analyticsApi.clauses
-        : legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES),
+    get: () => analyticsApi.clauses,
     enumerable: true,
   },
   rules: {

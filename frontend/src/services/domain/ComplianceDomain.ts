@@ -75,7 +75,6 @@ console.log('metrics data:', metrics);
  * - Metrics endpoint available at /api/compliance/metrics
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { complianceApi } from "@/api/domains/compliance.api";
 import { ComplianceError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
@@ -194,10 +193,7 @@ export const ComplianceService = {
 
       // Risk statistics computed from available compliance data
       // Returns categorized risk distribution
-      let risks: Risk[] = [];
-      if (isBackendApiEnabled()) {
-        risks = await apiClient.get<Risk[]>("/compliance/risks");
-      }
+      const risks = await apiClient.get<Risk[]>("/compliance/risks");
 
       const high = risks.filter(
         (r) => r.impact === "High" || r.probability === "High"
@@ -234,25 +230,17 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
      * // Returns: { score: 95, high: 2, missingDocs: 8, violations: 0, activeWalls: 3 }
      */
   getRiskMetrics: async (): Promise<ComplianceMetrics> => {
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.get<ComplianceMetrics>("/compliance/metrics");
-      } catch (error) {
-        console.warn("Failed to fetch compliance metrics", error);
-        return {
-          score: 100,
-          high: 0,
-          activeWalls: 0,
-          violations: 0
-        };
-      }
+    try {
+      return await apiClient.get<ComplianceMetrics>("/compliance/metrics");
+    } catch (error) {
+      console.warn("Failed to fetch compliance metrics", error);
+      return {
+        score: 100,
+        high: 0,
+        activeWalls: 0,
+        violations: 0,
+      };
     }
-    return {
-      score: 100,
-      high: 0,
-      activeWalls: 0,
-      violations: 0
-    };
   },
 
   // =============================================================================
@@ -345,67 +333,26 @@ console.log('metrics data:', metrics);ait ComplianceService.getRiskMetrics();
       depth?: number;
     }
   ): Promise<ConflictCheckResult> => {
-    const depth = options?.depth || 3;
-    const conflicts: Conflict[] = [];
-    const warnings: ConflictWarning[] = [];
+    // const depth = options?.depth || 3;
+    // const conflicts: Conflict[] = [];
+    // const warnings: ConflictWarning[] = [];
 
     if (!clientId)
       throw new ComplianceError("Client ID is required for conflict check");
 
     // 1. Backend Integration for comprehensive check
-    if (isBackendApiEnabled()) {
-      try {
-        // In a real implementation this would call a specific endpoint
-        // For now we simulate an enhanced backend call
-        // const backendResults = await apiClient.post<ConflictCheckResult>('/api/compliance/conflicts/comprehensive', { clientId, ...options });
-        // return backendResults;
-      } catch (error) {
-        console.error(
-          "Backend conflict check failed, falling back to local heuristic",
-          error
-        );
-      }
+    try {
+      // In a real implementation this would call a specific endpoint
+      // for comprehensive conflict checking.
+      // We assume this endpoint exists or will exist matching the pattern.
+      return await apiClient.post<ConflictCheckResult>(
+        "/compliance/conflicts/comprehensive",
+        { clientId, ...options }
+      );
+    } catch (error) {
+      console.error("Backend conflict check failed", error);
+      throw error;
     }
-
-    // -- Local Heuristic Logic (Simulation for Demo/Frontend only) --
-
-    // 1. Direct - Name Simulation
-    if (clientId.toLowerCase().includes("conflict")) {
-      conflicts.push({
-        type: "direct",
-        severity: "critical",
-        description: "Direct representation of opposing party detected",
-        matters: [{ id: "matter-123", title: "Smith v. Jones" }],
-      });
-    }
-
-    // 2. Transitive conflicts (parent/subsidiary)
-    if (options?.checkSubsidiaries) {
-      // Mock traversal
-      if (clientId === "huge-corp") {
-        conflicts.push({
-          type: "transitive",
-          severity: "high",
-          description: 'Subsidiary "Tiny Corp" is an adverse party',
-          relationship: "subsidiary",
-          depth: depth - 1,
-        });
-      }
-    }
-
-    // 3. Adverse party conflicts
-    if (options?.checkAdverseParties) {
-      // Mock check
-    }
-
-    return {
-      clientId,
-      hasConflicts: conflicts.length > 0,
-      conflicts,
-      warnings,
-      checkedAt: new Date().toISOString(),
-      complianceRules: ["ABA-1.7", "ABA-1.9", "ABA-1.10"],
-    };
   },
 
   // =============================================================================

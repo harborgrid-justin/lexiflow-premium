@@ -4,7 +4,7 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { api, isBackendApiEnabled } from "@/api";
+import { api } from "@/api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { TaskStatusBackend } from "@/types";
 import { Invoice } from "@/types/financial";
@@ -29,76 +29,49 @@ interface DashboardMetrics {
 
 export const DashboardService = {
   getAll: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get("/dashboards");
-    }
-    return [];
+    return apiClient.get("/dashboards");
   },
   getById: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get(`/dashboards/${id}`);
-    }
-    return undefined;
+    return apiClient.get(`/dashboards/${id}`);
   },
   add: async (item: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post("/dashboards", item);
-    }
-    throw new Error("Backend API required");
+    return apiClient.post("/dashboards", item);
   },
   update: async (id: string, updates: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch(`/dashboards/${id}`, updates);
-    }
-    throw new Error("Backend API required");
+    return apiClient.patch(`/dashboards/${id}`, updates);
   },
   delete: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.delete(`/dashboards/${id}`);
-    }
-    throw new Error("Backend API required");
+    return apiClient.delete(`/dashboards/${id}`);
   },
 
   // Dashboard specific methods
   getWidgets: async (dashboardId: string): Promise<DashboardWidget[]> => {
-    if (isBackendApiEnabled()) {
-      const dashboard = await apiClient.get<{ widgets?: DashboardWidget[] }>(
-        `/dashboards/${dashboardId}`
-      );
-      return dashboard?.widgets || [];
-    }
-    return [];
+    const dashboard = await apiClient.get<{ widgets?: DashboardWidget[] }>(
+      `/dashboards/${dashboardId}`
+    );
+    return dashboard?.widgets || [];
   },
 
   addWidget: async (
     dashboardId: string,
     widget: Partial<DashboardWidget>
   ): Promise<DashboardWidget> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.post<DashboardWidget>(
-        `/dashboards/${dashboardId}/widgets`,
-        widget
-      );
-    }
-    throw new Error("Backend API required");
+    return apiClient.post<DashboardWidget>(
+      `/dashboards/${dashboardId}/widgets`,
+      widget
+    );
   },
 
   removeWidget: async (widgetId: string): Promise<boolean> => {
-    if (isBackendApiEnabled()) {
-      await apiClient.delete(`/dashboards/widgets/${widgetId}`);
-      return true;
-    }
-    throw new Error("Backend API required");
+    await apiClient.delete(`/dashboards/widgets/${widgetId}`);
+    return true;
   },
 
   updateLayout: async (
     dashboardId: string,
     layout: unknown
   ): Promise<unknown> => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch(`/dashboards/${dashboardId}/layout`, { layout });
-    }
-    throw new Error("Backend API required");
+    return apiClient.patch(`/dashboards/${dashboardId}/layout`, { layout });
   },
 
   getMetrics: async (): Promise<DashboardMetrics> => {
@@ -122,9 +95,7 @@ export const DashboardService = {
           startDate: startOfMonth,
           endDate: endOfMonth,
         }),
-        isBackendApiEnabled()
-          ? apiClient.get<{ total: number }>("/audit/logs/count?period=recent")
-          : Promise.resolve({ total: 0 }),
+        apiClient.get<{ total: number }>("/audit/logs/count?period=recent"),
       ]);
 
       const revenue = invoices.reduce(
@@ -181,16 +152,10 @@ export const DashboardService = {
   },
 
   getChartData: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get("/dashboards/chart-data");
-    }
-    return [];
+    return apiClient.get("/dashboards/chart-data");
   },
 
   getRecentAlerts: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get("/dashboards/alerts");
-    }
-    return [];
+    return apiClient.get("/dashboards/alerts");
   },
 };

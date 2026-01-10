@@ -38,7 +38,6 @@
  * queryClient.invalidateQueries({ queryKey: SECURITY_QUERY_KEYS.malwareSignatures() });
  */
 
-import { isBackendApiEnabled } from "@/api";
 import { OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
@@ -116,10 +115,7 @@ export const SecurityService = {
    */
   getMalwareSignatures: async (): Promise<string[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get<string[]>("/security/malware-signatures");
-      }
-      return [];
+      return await apiClient.get<string[]>("/security/malware-signatures");
     } catch (error) {
       console.error("[SecurityService.getMalwareSignatures] Error:", error);
       throw new OperationError(
@@ -159,16 +155,7 @@ export const SecurityService = {
     }
 
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.post("/security/scan", { content });
-      }
-
-      console.warn("[SecurityService] Backend security scan unavailable");
-      return {
-        clean: true,
-        threatsFound: [],
-        scannedAt: new Date().toISOString(),
-      };
+      return await apiClient.post("/security/scan", { content });
     } catch (error) {
       console.error("[SecurityService.scanForMalware] Error:", error);
       throw new OperationError(
@@ -204,17 +191,7 @@ export const SecurityService = {
     factors?: string[];
   }> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get("/security/threat-level");
-      }
-
-      console.warn("[SecurityService] Backend threat level unavailable");
-      return {
-        level: "Low",
-        score: 0,
-        lastUpdated: new Date().toISOString(),
-        factors: [],
-      };
+      return await apiClient.get("/security/threat-level");
     } catch (error) {
       console.error("[SecurityService.getThreatLevel] Error:", error);
       throw new OperationError(
@@ -244,11 +221,7 @@ export const SecurityService = {
    */
   getSecurityPolicies: async (): Promise<unknown[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get("/security/policies");
-      }
-
-      return [];
+      return await apiClient.get("/security/policies");
     } catch (error) {
       console.error("[SecurityService.getSecurityPolicies] Error:", error);
       throw new OperationError(
@@ -298,11 +271,9 @@ export const SecurityService = {
         );
       }
 
-      if (isBackendApiEnabled()) {
-        return apiClient.get("/security/audit-logs", { startDate, endDate });
-      }
-
-      return [];
+      return await apiClient.get("/security/audit-logs", {
+        params: { startDate, endDate },
+      });
     } catch (error) {
       console.error("[SecurityService.getAuditLogs] Error:", error);
       throw new OperationError(
@@ -332,11 +303,7 @@ export const SecurityService = {
    */
   getVulnerabilities: async (): Promise<unknown[]> => {
     try {
-      if (isBackendApiEnabled()) {
-        return apiClient.get("/security/vulnerabilities");
-      }
-
-      return [];
+      return await apiClient.get("/security/vulnerabilities");
     } catch (error) {
       console.error("[SecurityService.getVulnerabilities] Error:", error);
       throw new OperationError(

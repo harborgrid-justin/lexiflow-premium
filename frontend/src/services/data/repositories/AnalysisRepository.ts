@@ -5,7 +5,6 @@
 
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { STORES, db } from "@/services/data/db";
 import { BriefAnalysisSession, CounselProfile, JudgeProfile } from "@/types";
 
 export const ANALYSIS_QUERY_KEYS = {
@@ -24,15 +23,15 @@ export interface PredictionData {
 }
 
 export class AnalysisRepository extends Repository<BriefAnalysisSession> {
-  // private readonly useBackend: boolean; // Unused currently
-
   constructor() {
-    super(STORES.ANALYSIS);
-    // this.useBackend = isBackendApiEnabled(); // Unused currently
+    super("analysis");
+    console.log(
+      `[AnalysisRepository] Initialized with Backend API (Not Implemented)`
+    );
   }
 
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === "") {
+    if (!id || id.trim() === "") {
       throw new Error(
         `[AnalysisRepository.${methodName}] Invalid id parameter`
       );
@@ -40,14 +39,20 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
   }
 
   override async getAll(): Promise<BriefAnalysisSession[]> {
-    return await super.getAll();
+    console.warn(
+      "[AnalysisRepository] Backend API not implemented for Analysis Sessions"
+    );
+    return [];
   }
 
   override async getById(
     id: string
   ): Promise<BriefAnalysisSession | undefined> {
     this.validateId(id, "getById");
-    return await super.getById(id);
+    console.warn(
+      "[AnalysisRepository] Backend API not implemented for Analysis Sessions"
+    );
+    return undefined;
   }
 
   override async add(
@@ -58,8 +63,10 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         "[AnalysisRepository.add] Invalid analysis session data"
       );
     }
-    await super.add(item);
-    return item;
+    console.warn(
+      "[AnalysisRepository] Backend API not implemented for Analysis Sessions"
+    );
+    throw new Error("Backend API not implemented for Analysis Sessions");
   }
 
   override async update(
@@ -67,17 +74,23 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
     updates: Partial<BriefAnalysisSession>
   ): Promise<BriefAnalysisSession> {
     this.validateId(id, "update");
-    return await super.update(id, updates);
+    console.warn(
+      "[AnalysisRepository] Backend API not implemented for Analysis Sessions"
+    );
+    throw new Error("Backend API not implemented for Analysis Sessions");
   }
 
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
-    await super.delete(id);
+    console.warn(
+      "[AnalysisRepository] Backend API not implemented for Analysis Sessions"
+    );
+    throw new Error("Backend API not implemented for Analysis Sessions");
   }
 
   async getJudgeProfiles(): Promise<JudgeProfile[]> {
     try {
-      return await db.getAll<JudgeProfile>(STORES.JUDGES);
+      return [];
     } catch (error) {
       console.error("[AnalysisRepository.getJudgeProfiles] Error:", error);
       return [];
@@ -86,7 +99,6 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
 
   async getCounselProfiles(): Promise<CounselProfile[]> {
     try {
-      // Return empty array - this would typically fetch from a COUNSEL_PROFILES store
       return [] as CounselProfile[];
     } catch (error) {
       console.error("[AnalysisRepository.getCounselProfiles] Error:", error);
@@ -96,7 +108,6 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
 
   async getPredictionData(): Promise<PredictionData[]> {
     try {
-      // Return empty array - this would typically fetch from a PREDICTIONS store
       return [] as PredictionData[];
     } catch (error) {
       console.error("[AnalysisRepository.getPredictionData] Error:", error);
@@ -106,17 +117,6 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
 
   async search(query: string): Promise<BriefAnalysisSession[]> {
     if (!query) return [];
-    const sessions = await this.getAll();
-    const lowerQuery = query.toLowerCase();
-    return sessions.filter(
-      (s) =>
-        s.id?.toLowerCase().includes(lowerQuery) ||
-        ((s as unknown as Record<string, unknown>).title as string | undefined)
-          ?.toLowerCase()
-          .includes(lowerQuery) ||
-        ((s as unknown as Record<string, unknown>).caseId as string | undefined)
-          ?.toLowerCase()
-          .includes(lowerQuery)
-    );
+    return [];
   }
 }

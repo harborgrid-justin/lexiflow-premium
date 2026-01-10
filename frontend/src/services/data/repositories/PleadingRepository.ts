@@ -27,10 +27,8 @@
  */
 
 import { PleadingsApiService } from "@/api/litigation/pleadings-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { STORES, db } from "@/services/data/db";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import { IdGenerator } from "@/shared/lib/idGenerator";
 import { validateTemplate } from "@/shared/lib/validation";
@@ -81,15 +79,13 @@ export class VersionConflictError extends Error {
 
 /**
  * Pleading Repository Class
- * Implements backend-first pattern with IndexedDB fallback
+ * Implements backend-first pattern
  */
 export class PleadingRepository extends Repository<PleadingDocument> {
-  private readonly useBackend: boolean;
   private pleadingsApi: PleadingsApiService;
 
   constructor() {
-    super(STORES.PLEADINGS);
-    this.useBackend = isBackendApiEnabled();
+    super("pleadings");
     this.pleadingsApi = new PleadingsApiService();
     this.logInitialization();
   }
@@ -99,10 +95,9 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    * @private
    */
   private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[PleadingRepository] Initialized with ${mode}`);
+    console.log(
+      `[PleadingRepository] Initialized with Backend API (PostgreSQL)`
+    );
   }
 
   /**
@@ -140,19 +135,8 @@ export class PleadingRepository extends Repository<PleadingDocument> {
    * @throws Error if fetch fails
    */
   override async getAll(): Promise<PleadingDocument[]> {
-    if (this.useBackend) {
-      try {
-        return (await this.pleadingsApi.getAll()) as unknown as PleadingDocument[];
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getAll();
+      return (await this.pleadingsApi.getAll()) as unknown as PleadingDocument[];
     } catch (error) {
       console.error("[PleadingRepository.getAll] Error:", error);
       throw new OperationError("getAll", "Failed to fetch pleadings");
@@ -171,21 +155,10 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   ): Promise<PleadingDocument[]> => {
     this.validateCaseId(caseId, "getByCaseId");
 
-    if (this.useBackend) {
-      try {
-        return (await this.pleadingsApi.getByCaseId(
-          caseId
-        )) as unknown as PleadingDocument[];
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("caseId", caseId);
+      return (await this.pleadingsApi.getByCaseId(
+        caseId
+      )) as unknown as PleadingDocument[];
     } catch (error) {
       console.error("[PleadingRepository.getByCaseId] Error:", error);
       throw new OperationError(
@@ -205,21 +178,10 @@ export class PleadingRepository extends Repository<PleadingDocument> {
   override async getById(id: string): Promise<PleadingDocument | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        return (await this.pleadingsApi.getById(
-          id
-        )) as unknown as PleadingDocument;
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getById(id);
+      return (await this.pleadingsApi.getById(
+        id
+      )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.getById] Error:", error);
       throw new OperationError("getById", "Failed to fetch pleading");
@@ -240,22 +202,10 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.pleadingsApi.create(
-          item as unknown as Parameters<typeof this.pleadingsApi.create>[0]
-        )) as unknown as PleadingDocument;
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.add(item);
-      return item;
+      return (await this.pleadingsApi.create(
+        item as unknown as Parameters<typeof this.pleadingsApi.create>[0]
+      )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.add] Error:", error);
       throw new OperationError("add", "Failed to add pleading");
@@ -282,22 +232,11 @@ export class PleadingRepository extends Repository<PleadingDocument> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.pleadingsApi.update(
-          id,
-          updates as unknown as Parameters<typeof this.pleadingsApi.update>[1]
-        )) as unknown as PleadingDocument;
-      } catch (error) {
-        console.warn(
-          "[PleadingRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.update(id, updates);
+      return (await this.pleadingsApi.update(
+        id,
+        updates as unknown as Parameters<typeof this.pleadingsApi.update>[1]
+      )) as unknown as PleadingDocument;
     } catch (error) {
       console.error("[PleadingRepository.update] Error:", error);
       throw new OperationError("update", "Failed to update pleading");

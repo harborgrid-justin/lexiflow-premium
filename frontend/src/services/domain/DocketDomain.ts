@@ -53,7 +53,6 @@ import { DocketEntry } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
 // Backend API Integration (Primary Data Source)
-import { isBackendApiEnabled } from "@/api";
 import {
   DocketApiService,
   type DocketFilterOptions,
@@ -98,7 +97,6 @@ export interface DocketEntryWithVersion extends DocketEntry {
  * **Backend-First Architecture:**
  * - Uses DocketApiService (PostgreSQL + NestJS) by default
  * - Falls back to IndexedDB only if backend is disabled
- * - Automatic routing via isBackendApiEnabled() check
  *
  * @extends Repository<DocketEntry>
  */
@@ -120,10 +118,7 @@ export class DocketRepository {
   async getAll(
     filters?: DocketFilterOptions
   ): Promise<PaginatedResponse<DocketEntry> | DocketEntry[]> {
-    if (isBackendApiEnabled()) {
-      return this.docketApi.getAll(filters);
-    }
-    return [];
+    return this.docketApi.getAll(filters);
   }
 
   /**
@@ -133,15 +128,12 @@ export class DocketRepository {
    * @returns Promise<DocketEntry | undefined>
    */
   async getById(id: string): Promise<DocketEntry | undefined> {
-    if (isBackendApiEnabled()) {
-      try {
-        return await this.docketApi.getById(id);
-      } catch (error) {
-        console.error("[DocketRepository.getById] Backend error:", error);
-        return undefined;
-      }
+    try {
+      return await this.docketApi.getById(id);
+    } catch (error) {
+      console.error("[DocketRepository.getById] Backend error:", error);
+      return undefined;
     }
-    return undefined;
   }
 
   /**
@@ -153,16 +145,13 @@ export class DocketRepository {
   async add(
     entry: Omit<DocketEntry, "id" | "createdAt" | "updatedAt">
   ): Promise<DocketEntry> {
-    if (isBackendApiEnabled()) {
-      const created = await this.docketApi.add(entry);
-      // Publish integration event
-      await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
-        entry: created,
-        caseId: entry.caseId,
-      });
-      return created;
-    }
-    throw new Error("Backend API is required for adding docket entries");
+    const created = await this.docketApi.add(entry);
+    // Publish integration event
+    await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
+      entry: created,
+      caseId: entry.caseId,
+    });
+    return created;
   }
 
   /**
@@ -176,10 +165,7 @@ export class DocketRepository {
     id: string,
     updates: Partial<DocketEntry>
   ): Promise<DocketEntry> {
-    if (isBackendApiEnabled()) {
-      return this.docketApi.update(id, updates);
-    }
-    throw new Error("Backend API is required for updating docket entries");
+    return this.docketApi.update(id, updates);
   }
 
   /**
@@ -189,11 +175,7 @@ export class DocketRepository {
    * @returns Promise<void>
    */
   async delete(id: string): Promise<void> {
-    if (isBackendApiEnabled()) {
-      await this.docketApi.delete(id);
-      return;
-    }
-    throw new Error("Backend API is required for deleting docket entries");
+    await this.docketApi.delete(id);
   }
 
   /**
@@ -204,11 +186,8 @@ export class DocketRepository {
    * @complexity O(1) API call or O(log n) IndexedDB index lookup
    */
   async getByCaseId(caseId: string): Promise<DocketEntry[]> {
-    if (isBackendApiEnabled()) {
-      const response = await this.docketApi.getAll(caseId);
-      return response.data;
-    }
-    return [];
+    const response = await this.docketApi.getAll(caseId);
+    return response.data;
   }
 
   /**
@@ -231,19 +210,16 @@ export class DocketRepository {
     pacerCaseNumber: string,
     courtId?: string
   ): Promise<boolean> {
-    if (isBackendApiEnabled()) {
-      try {
-        await apiClient.post("/docket/pacer/sync", {
-          caseId,
-          pacerCaseNumber,
-          court: courtId,
-        });
-        return true;
-      } catch (error) {
-        console.error("PACER sync failed", error);
-        return false;
-      }
+    try {
+      await apiClient.post("/docket/pacer/sync", {
+        caseId,
+        pacerCaseNumber,
+        court: courtId,
+      });
+      return true;
+    } catch (error) {
+      console.error("PACER sync failed", error);
+      return false;
     }
-    throw new Error("Backend API is required for PACER sync");
   }
 }

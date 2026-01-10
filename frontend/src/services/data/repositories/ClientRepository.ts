@@ -14,23 +14,20 @@
  * @security
  * - Input validation on all parameters
  * - XSS prevention through type enforcement
- * - Backend-first architecture with secure fallback
+ * - Backend-first architecture (Strict)
  * - Secure token generation
  * - Proper error handling and logging
  *
  * @architecture
  * - Backend API primary (PostgreSQL)
- * - IndexedDB fallback (development only)
  * - React Query integration via CLIENT_QUERY_KEYS
  * - Type-safe operations
  * - Event-driven integration
  */
 
 import { ClientsApiService } from "@/api/communications/clients-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { Client } from "@/types";
 
 /**
@@ -52,28 +49,15 @@ export const CLIENT_QUERY_KEYS = {
 
 /**
  * Client Repository Class
- * Implements backend-first pattern with IndexedDB fallback
+ * Implements strict backend pattern
  */
 export class ClientRepository extends Repository<Client> {
-  private readonly useBackend: boolean;
   private clientsApi: ClientsApiService;
 
   constructor() {
-    super(STORES.CLIENTS);
-    this.useBackend = isBackendApiEnabled();
+    super("clients");
     this.clientsApi = new ClientsApiService();
-    this.logInitialization();
-  }
-
-  /**
-   * Log repository initialization mode
-   * @private
-   */
-  private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[ClientRepository] Initialized with ${mode}`);
+    console.log(`[ClientRepository] Initialized with Backend API`);
   }
 
   /**
@@ -81,7 +65,7 @@ export class ClientRepository extends Repository<Client> {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === "") {
+    if (!id || typeof id !== "string" || id.trim() === "") {
       throw new Error(`[ClientRepository.${methodName}] Invalid id parameter`);
     }
   }
@@ -91,7 +75,7 @@ export class ClientRepository extends Repository<Client> {
    * @private
    */
   private validateEmail(email: string, methodName: string): void {
-    if (!email || false) {
+    if (!email) {
       throw new Error(
         `[ClientRepository.${methodName}] Invalid email parameter`
       );
@@ -112,28 +96,14 @@ export class ClientRepository extends Repository<Client> {
    *
    * @returns Promise<Client[]> Array of clients
    * @throws Error if fetch fails
-   *
-   * @example
-   * const allClients = await repo.getAll();
    */
   override async getAll(): Promise<Client[]> {
-    if (this.useBackend) {
-      try {
-        const result = await this.clientsApi.getAll();
-        return result as unknown as Client[];
-      } catch (error) {
-        console.warn(
-          "[ClientRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getAll();
+      const result = await this.clientsApi.getAll();
+      return result;
     } catch (error) {
       console.error("[ClientRepository.getAll] Error:", error);
-      throw new OperationError("getAll", "Failed to fetch clients");
+      throw error;
     }
   }
 
@@ -147,23 +117,11 @@ export class ClientRepository extends Repository<Client> {
   override async getById(id: string): Promise<Client | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        const result = await this.clientsApi.getById(id);
-        return result as unknown as Client;
-      } catch (error) {
-        console.warn(
-          "[ClientRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getById(id);
+      return await this.clientsApi.getById(id);
     } catch (error) {
       console.error("[ClientRepository.getById] Error:", error);
-      throw new OperationError("getById", "Failed to fetch client");
+      return undefined;
     }
   }
 
@@ -191,26 +149,11 @@ export class ClientRepository extends Repository<Client> {
       }
     }
 
-    if (this.useBackend) {
-      try {
-        const result = await this.clientsApi.create(
-          item as unknown as Record<string, unknown>
-        );
-        return result as unknown as Client;
-      } catch (error) {
-        console.warn(
-          "[ClientRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.add(item);
-      return item;
+      return await this.clientsApi.create(item);
     } catch (error) {
       console.error("[ClientRepository.add] Error:", error);
-      throw new OperationError("add", "Failed to add client");
+      throw error;
     }
   }
 
@@ -243,26 +186,11 @@ export class ClientRepository extends Repository<Client> {
       }
     }
 
-    if (this.useBackend) {
-      try {
-        const result = await this.clientsApi.update(
-          id,
-          updates as unknown as Record<string, unknown>
-        );
-        return result as unknown as Client;
-      } catch (error) {
-        console.warn(
-          "[ClientRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.update(id, updates);
+      return await this.clientsApi.update(id, updates);
     } catch (error) {
       console.error("[ClientRepository.update] Error:", error);
-      throw new OperationError("update", "Failed to update client");
+      throw error;
     }
   }
 
@@ -276,23 +204,11 @@ export class ClientRepository extends Repository<Client> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      try {
-        await this.clientsApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn(
-          "[ClientRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.delete(id);
+      await this.clientsApi.delete(id);
     } catch (error) {
       console.error("[ClientRepository.delete] Error:", error);
-      throw new OperationError("delete", "Failed to delete client");
+      throw error;
     }
   }
 
@@ -306,10 +222,6 @@ export class ClientRepository extends Repository<Client> {
    * @param clientId - Client ID
    * @returns Promise<string> Generated portal token
    * @throws Error if clientId is invalid
-   *
-   * @example
-   * const token = await repo.generatePortalToken('client-123');
-   * // Returns: "token-client-123-1703260800000-a1b2c3"
    */
   async generatePortalToken(clientId: string): Promise<string> {
     this.validateId(clientId, "generatePortalToken");
@@ -359,6 +271,9 @@ export class ClientRepository extends Repository<Client> {
     }
 
     try {
+      // Use API search if available or fetch all
+      // For conflict check, fetching all (or strict search) is safer to do in backend.
+      // But preserving logic:
       const allClients = await this.getAll();
       const conflicts: Client[] = [];
       const lowerClientName = clientName.toLowerCase();
@@ -396,7 +311,7 @@ export class ClientRepository extends Repository<Client> {
       };
     } catch (error) {
       console.error("[ClientRepository.checkConflicts] Error:", error);
-      throw new OperationError("checkConflicts", "Failed to check conflicts");
+      throw error;
     }
   }
 
@@ -412,14 +327,11 @@ export class ClientRepository extends Repository<Client> {
    */
   async getActive(): Promise<Client[]> {
     try {
-      const clients = await this.getAll();
-      return clients.filter(
-        (client) =>
-          client.status?.toString().toLowerCase() === "active" || !client.status
-      );
+      // Use API filtering
+      return await this.clientsApi.getAll({ status: "active" as any });
     } catch (error) {
       console.error("[ClientRepository.getActive] Error:", error);
-      throw new OperationError("getActive", "Failed to fetch active clients");
+      throw error;
     }
   }
 
@@ -431,16 +343,11 @@ export class ClientRepository extends Repository<Client> {
    */
   async getInactive(): Promise<Client[]> {
     try {
-      const clients = await this.getAll();
-      return clients.filter(
-        (client) => client.status?.toString().toLowerCase() === "inactive"
-      );
+      // Use API filtering
+      return await this.clientsApi.getAll({ status: "inactive" as any });
     } catch (error) {
       console.error("[ClientRepository.getInactive] Error:", error);
-      throw new OperationError(
-        "getInactive",
-        "Failed to fetch inactive clients"
-      );
+      throw error;
     }
   }
 
@@ -459,15 +366,11 @@ export class ClientRepository extends Repository<Client> {
     }
 
     try {
-      const clients = await this.getAll();
-      return clients.filter(
-        (client) =>
-          (client as unknown as { type?: string }).type === type ||
-          client.clientType === type
-      );
+      // Use API filtering
+      return await this.clientsApi.getAll({ clientType: type as any });
     } catch (error) {
       console.error("[ClientRepository.getByType] Error:", error);
-      throw new OperationError("getByType", "Failed to fetch clients by type");
+      throw error;
     }
   }
 
@@ -487,28 +390,11 @@ export class ClientRepository extends Repository<Client> {
     }
 
     try {
-      const clients = await this.getAll();
-      const lowerQuery = query.toLowerCase();
-
-      return clients.filter((client) => {
-        const clientExt = client as unknown as {
-          company?: string;
-          firstName?: string;
-          lastName?: string;
-        };
-        return (
-          client.name?.toLowerCase().includes(lowerQuery) ||
-          client.email?.toLowerCase().includes(lowerQuery) ||
-          clientExt.company?.toLowerCase().includes(lowerQuery) ||
-          client.notes?.toLowerCase().includes(lowerQuery) ||
-          clientExt.firstName?.toLowerCase().includes(lowerQuery) ||
-          clientExt.lastName?.toLowerCase().includes(lowerQuery) ||
-          client.phone?.includes(query)
-        );
-      });
+      // Use API filtering
+      return await this.clientsApi.getAll({ search: query });
     } catch (error) {
       console.error("[ClientRepository.search] Error:", error);
-      throw new OperationError("search", "Failed to search clients");
+      throw error;
     }
   }
 
@@ -523,13 +409,16 @@ export class ClientRepository extends Repository<Client> {
     this.validateEmail(email, "findByEmail");
 
     try {
-      const clients = await this.getAll();
-      return clients.find(
+      // API search for email typically works via search param or specific endpoint.
+      // We'll trust search param or fetch all as fallback if search isn't specific enough.
+      // But searching "email" string in search param is supported by ClientsApiService in backend usually.
+      const results = await this.clientsApi.getAll({ search: email });
+      return results.find(
         (client) => client.email?.toLowerCase() === email.toLowerCase()
       );
     } catch (error) {
       console.error("[ClientRepository.findByEmail] Error:", error);
-      throw new OperationError("findByEmail", "Failed to find client by email");
+      throw error;
     }
   }
 
@@ -552,7 +441,6 @@ export class ClientRepository extends Repository<Client> {
   }> {
     try {
       const clients = await this.getAll();
-      console.log("clients data:", clients);
       const byType: Record<string, number> = {};
       let active = 0;
       let inactive = 0;
@@ -591,10 +479,7 @@ export class ClientRepository extends Repository<Client> {
       };
     } catch (error) {
       console.error("[ClientRepository.getStatistics] Error:", error);
-      throw new OperationError(
-        "getStatistics",
-        "Failed to get client statistics"
-      );
+      throw error;
     }
   }
 
@@ -628,10 +513,7 @@ export class ClientRepository extends Repository<Client> {
         );
     } catch (error) {
       console.error("[ClientRepository.getRecentlyAdded] Error:", error);
-      throw new OperationError(
-        "getRecentlyAdded",
-        "Failed to fetch recently added clients"
-      );
+      throw error;
     }
   }
 }

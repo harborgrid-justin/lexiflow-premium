@@ -4,10 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { delay } from "@/utils/async";
+import { OperationError, ValidationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import { isBackendApiEnabled } from "@/api";
-import { ValidationError, OperationError } from "@/services/core/errors";
 
 export interface Transaction {
   id: string;
@@ -38,19 +36,20 @@ const getCurrentUserId = () => "user-current";
 
 export const TransactionService = {
   getAll: async () => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Transaction[]>("/billing/transactions");
+    try {
+      return await apiClient.get<Transaction[]>("/billing/transactions");
+    } catch (error) {
+      console.error("[TransactionService.getAll] Error:", error);
+      return [];
     }
-    // Transactions API not yet available, return empty array
-    await delay(200);
-    return [];
   },
   getById: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.get<Transaction>(`/billing/transactions/${id}`);
+    try {
+      return await apiClient.get<Transaction>(`/billing/transactions/${id}`);
+    } catch (error) {
+      console.error("[TransactionService.getById] Error:", error);
+      return undefined;
     }
-    await delay(200);
-    return undefined;
   },
 
   /**
@@ -85,64 +84,38 @@ export const TransactionService = {
       );
     }
 
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.post<Transaction>("/billing/transactions", {
-          ...transaction,
-          currency,
-          timestamp: new Date().toISOString(),
-          userId: getCurrentUserId(),
-        });
-      } catch (error) {
-        console.error("[TransactionService.add] Error:", error);
-        throw new OperationError("Failed to create transaction via backend");
-      }
+    try {
+      return await apiClient.post<Transaction>("/billing/transactions", {
+        ...transaction,
+        currency,
+        timestamp: new Date().toISOString(),
+        userId: getCurrentUserId(),
+      });
+    } catch (error) {
+      console.error("[TransactionService.add] Error:", error);
+      throw new OperationError("Failed to create transaction via backend");
     }
-
-    // Fallback Local Implementation
-    const newTransaction: Transaction = {
-      id: `tx-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      type: transaction.type || "expense",
-      amount: transaction.amount,
-      currency: currency,
-      description: transaction.description || "New Transaction",
-      date: transaction.date || new Date().toISOString(),
-      caseId: transaction.caseId,
-      matterId: transaction.matterId,
-      status: "pending",
-      paymentMethod: transaction.paymentMethod,
-      reference: transaction.reference,
-      metadata: {
-        ...(transaction.metadata || {}),
-        createdBy: getCurrentUserId(),
-        createdAt: new Date().toISOString(),
-      },
-    };
-
-    await delay(200);
-    return newTransaction;
   },
 
   update: async (id: string, updates: unknown) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.patch<Transaction>(
+    try {
+      return await apiClient.patch<Transaction>(
         `/billing/transactions/${id}`,
         updates
       );
+    } catch (error) {
+      console.error("[TransactionService.update] Error:", error);
+      throw error;
     }
-    await delay(200);
-    return {
-      id,
-      ...(updates && typeof updates === "object" ? updates : {}),
-    };
   },
 
   delete: async (id: string) => {
-    if (isBackendApiEnabled()) {
-      return apiClient.delete(`/billing/transactions/${id}`);
+    try {
+      return await apiClient.delete(`/billing/transactions/${id}`);
+    } catch (error) {
+      console.error("[TransactionService.delete] Error:", error);
+      throw error;
     }
-    await delay(200);
-    return { success: true, id };
   },
 
   // Transaction specific methods
@@ -153,50 +126,12 @@ export const TransactionService = {
     startDate?: string;
     endDate?: string;
   }): Promise<Transaction[]> => {
-    if (isBackendApiEnabled()) {
+    try {
       return apiClient.get<Transaction[]>("/billing/transactions", filters);
+    } catch (error) {
+      console.error("[TransactionService.getTransactions] Error:", error);
+      return [];
     }
-    // Transactions API not yet available
-    await delay(200);
-    const transactions: Transaction[] = [];
-
-    // Client-side filtering as fallback
-    let filtered = transactions;
-
-    if (filters?.type) {
-      filtered = filtered.filter((t: Transaction) => t.type === filters.type);
-    }
-
-    if (filters?.status) {
-      filtered = filtered.filter(
-        (t: Transaction) => t.status === filters.status
-      );
-    }
-
-    if (filters?.caseId) {
-      filtered = filtered.filter(
-        (t: Transaction) => t.caseId === filters.caseId
-      );
-    }
-
-    if (filters?.startDate || filters?.endDate) {
-      filtered = filtered.filter((t: Transaction) => {
-        const txDate = new Date(t.date);
-        const start = filters.startDate
-          ? new Date(filters.startDate)
-          : new Date(0);
-        const end = filters.endDate
-          ? new Date(filters.endDate)
-          : new Date("2100-01-01");
-        return txDate >= start && txDate <= end;
-      });
-    }
-
-    // Sort by date descending
-    return filtered.sort(
-      (a: Transaction, b: Transaction) =>
-        new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
   },
 
   createTransaction: async (
@@ -220,74 +155,40 @@ export const TransactionService = {
       );
     }
 
-    if (isBackendApiEnabled()) {
-      try {
-        return await apiClient.post<Transaction>("/billing/transactions", {
-          ...transaction,
-          timestamp: new Date().toISOString(),
-          // In a real app we would derive userId from context or auth token
-          // userId: getCurrentUserId(),
-        });
-      } catch (error) {
-        console.error("[TransactionService.createTransaction] Error:", error);
-        throw new Error("OperationError: Failed to create transaction");
-      }
+    try {
+      return await apiClient.post<Transaction>("/billing/transactions", {
+        ...transaction,
+        timestamp: new Date().toISOString(),
+        // In a real app we would derive userId from context or auth token
+        // userId: getCurrentUserId(),
+      });
+    } catch (error) {
+      console.error("[TransactionService.createTransaction] Error:", error);
+      throw new Error("OperationError: Failed to create transaction");
     }
-
-    // Fallback logic for when backend is disabled (e.g. dev/demo mode)
-    // but still enforcing the validation above.
-    const newTransaction: Transaction = {
-      id: `tx-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-      type: transaction.type || "expense",
-      amount: transaction.amount,
-      currency: transaction.currency || "USD",
-      description: transaction.description || "New Transaction",
-      date: transaction.date || new Date().toISOString(),
-      caseId: transaction.caseId,
-      matterId: transaction.matterId,
-      status: "pending",
-      paymentMethod: transaction.paymentMethod,
-      reference: transaction.reference,
-      metadata: transaction.metadata,
-    };
-
-    await delay(200);
-    return newTransaction;
   },
 
   getBalance: async (): Promise<Balance> => {
-    // Fallback calculation (API not available)
-    await delay(50);
-    const transactions: Transaction[] = [];
-
-    const balance: Balance = {
-      total: 0,
-      pending: 0,
-      reconciled: 0,
-      currency: "USD",
-    };
-
-    transactions.forEach((t: Transaction) => {
-      const amount =
-        t.type === "expense" || t.type === "refund" ? -t.amount : t.amount;
-
-      balance.total += amount;
-
-      if (t.status === "pending") {
-        balance.pending += amount;
-      } else if (t.status === "reconciled") {
-        balance.reconciled += amount;
-      }
-    });
-
-    return balance;
+    try {
+      return await apiClient.get<Balance>("/billing/balance");
+    } catch (error) {
+      console.error("[TransactionService.getBalance] Error:", error);
+      return {
+        total: 0,
+        pending: 0,
+        reconciled: 0,
+        currency: "USD",
+      };
+    }
   },
 
   reconcile: async (transactionId: string): Promise<boolean> => {
-    await delay(100);
-    console.log(
-      `[TransactionService] Reconciled transaction: ${transactionId}`
-    );
-    return true;
+    try {
+      await apiClient.post(`/billing/transactions/${transactionId}/reconcile`);
+      return true;
+    } catch (error) {
+      console.error("[TransactionService.reconcile] Error:", error);
+      return false;
+    }
   },
 };

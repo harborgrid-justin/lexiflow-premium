@@ -27,14 +27,12 @@
  */
 
 import { EvidenceApiService } from "@/api/discovery/evidence-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import {
   EntityNotFoundError,
   OperationError,
   ValidationError,
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { EvidenceItem } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
@@ -59,15 +57,13 @@ export const EVIDENCE_QUERY_KEYS = {
 
 /**
  * Evidence Repository Class
- * Implements backend-first pattern with IndexedDB fallback
+ * Implements backend-first pattern
  */
 export class EvidenceRepository extends Repository<EvidenceItem> {
-  private readonly useBackend: boolean;
   private evidenceApi: EvidenceApiService;
 
   constructor() {
-    super(STORES.EVIDENCE);
-    this.useBackend = isBackendApiEnabled();
+    super("evidence");
     this.evidenceApi = new EvidenceApiService();
     this.logInitialization();
   }
@@ -77,10 +73,9 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
    * @private
    */
   private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[EvidenceRepository] Initialized with ${mode}`);
+    console.log(
+      `[EvidenceRepository] Initialized with Backend API (PostgreSQL)`
+    );
   }
 
   /**
@@ -128,21 +123,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       return this.getByCaseId(caseId);
     }
 
-    if (this.useBackend) {
-      try {
-        return await this.evidenceApi.getAll();
-      } catch (error) {
-        console.warn(
-          "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      // Call super.getAll with empty options if arg is not options
-      const options = typeof arg === "object" ? arg : {};
-      return await super.getAll(options || undefined);
+      return await this.evidenceApi.getAll();
     } catch (error) {
       console.error("[EvidenceRepository.getAll] Error:", error);
       throw new OperationError("getAll", "Failed to fetch evidence items");
@@ -159,19 +141,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   override getByCaseId = async (caseId: string): Promise<EvidenceItem[]> => {
     this.validateCaseId(caseId, "getByCaseId");
 
-    if (this.useBackend) {
-      try {
-        return await this.evidenceApi.getAll(caseId);
-      } catch (error) {
-        console.warn(
-          "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("caseId", caseId);
+      return await this.evidenceApi.getAll(caseId);
     } catch (error) {
       console.error("[EvidenceRepository.getByCaseId] Error:", error);
       throw new OperationError(
@@ -191,19 +162,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
   override async getById(id: string): Promise<EvidenceItem | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        return await this.evidenceApi.getById(id);
-      } catch (error) {
-        console.warn(
-          "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getById(id);
+      return await this.evidenceApi.getById(id);
     } catch (error) {
       console.error("[EvidenceRepository.getById] Error:", error);
       throw new OperationError("getById", "Failed to fetch evidence item");
@@ -224,20 +184,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return await this.evidenceApi.add(item);
-      } catch (error) {
-        console.warn(
-          "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.add(item);
-      return item;
+      return await this.evidenceApi.add(item);
     } catch (error) {
       console.error("[EvidenceRepository.add] Error:", error);
       throw new OperationError("add", "Failed to add evidence item");
@@ -273,21 +221,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
       }
 
       // Perform the update
-      let result: EvidenceItem;
-
-      if (this.useBackend) {
-        try {
-          result = await this.evidenceApi.update(id, updates);
-        } catch (error) {
-          console.warn(
-            "[EvidenceRepository] Backend API unavailable, falling back to IndexedDB",
-            error
-          );
-          result = await super.update(id, updates);
-        }
-      } else {
-        result = await super.update(id, updates);
-      }
+      const result = await this.evidenceApi.update(id, updates);
 
       // If admissibility status changed, publish event
       if (

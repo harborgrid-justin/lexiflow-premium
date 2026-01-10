@@ -3,251 +3,240 @@
  * Enterprise-grade repository for trial management with backend API integration
  */
 
-import { Juror, Witness, TrialExhibit, Fact} from '@/types';
-import { Repository } from '@/services/core/Repository';
-import { ValidationError, OperationError } from '@/services/core/errors';
-import { STORES, db } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/config/network/api.config';
+import { WitnessesApiService } from "@/api/discovery/witnesses-api";
+import { ExhibitsApiService } from "@/api/trial/exhibits-api";
+import { Repository } from "@/services/core/Repository";
+import { ValidationError } from "@/services/core/errors";
+import { Fact, Juror, TrialExhibit, Witness } from "@/types";
 
 export const TRIAL_QUERY_KEYS = {
-    exhibits: {
-        all: () => ['trial', 'exhibits'] as const,
-        byId: (id: string) => ['trial', 'exhibits', id] as const,
-        byCase: (caseId: string) => ['trial', 'exhibits', 'case', caseId] as const,
-    },
-    jurors: {
-        all: () => ['trial', 'jurors'] as const,
-        byCase: (caseId: string) => ['trial', 'jurors', 'case', caseId] as const,
-    },
-    witnesses: {
-        all: () => ['trial', 'witnesses'] as const,
-        byCase: (caseId: string) => ['trial', 'witnesses', 'case', caseId] as const,
-    },
-    facts: {
-        byCase: (caseId: string) => ['trial', 'facts', 'case', caseId] as const,
-    },
+  exhibits: {
+    all: () => ["trial", "exhibits"] as const,
+    byId: (id: string) => ["trial", "exhibits", id] as const,
+    byCase: (caseId: string) => ["trial", "exhibits", "case", caseId] as const,
+  },
+  jurors: {
+    all: () => ["trial", "jurors"] as const,
+    byCase: (caseId: string) => ["trial", "jurors", "case", caseId] as const,
+  },
+  witnesses: {
+    all: () => ["trial", "witnesses"] as const,
+    byCase: (caseId: string) => ["trial", "witnesses", "case", caseId] as const,
+  },
+  facts: {
+    byCase: (caseId: string) => ["trial", "facts", "case", caseId] as const,
+  },
 } as const;
 
 export class TrialRepository extends Repository<TrialExhibit> {
-    private readonly useBackend: boolean;
+  private exhibitsApi: ExhibitsApiService;
+  private witnessesApi: WitnessesApiService;
 
-    constructor() {
-        super(STORES.EXHIBITS);
-        this.useBackend = isBackendApiEnabled();
-        console.log(`[TrialRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
+  constructor() {
+    super("exhibits");
+    this.exhibitsApi = new ExhibitsApiService();
+    this.witnessesApi = new WitnessesApiService();
+    console.log(`[TrialRepository] Initialized with Backend API`);
+  }
+
+  private validateId(id: string, methodName: string): void {
+    if (!id || typeof id !== "string" || id.trim() === "") {
+      throw new Error(`[TrialRepository.${methodName}] Invalid id parameter`);
+    }
+  }
+
+  private validateCaseId(caseId: string, methodName: string): void {
+    if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
+      throw new Error(
+        `[TrialRepository.${methodName}] Invalid caseId parameter`
+      );
+    }
+  }
+
+  // =============================================================================
+  // JUROR OPERATIONS
+  // =============================================================================
+
+  getJurors = async (caseId: string): Promise<Juror[]> => {
+    this.validateCaseId(caseId, "getJurors");
+    console.warn(
+      "[TrialRepository.getJurors] Juror backend API not implemented"
+    );
+    return [];
+  };
+
+  addJuror = async (juror: Juror): Promise<void> => {
+    if (!juror || typeof juror !== "object") {
+      throw new ValidationError(
+        "[TrialRepository.addJuror] Invalid juror data"
+      );
+    }
+    console.error(
+      "[TrialRepository.addJuror] Juror backend API not implemented"
+    );
+    throw new Error("Juror operations not yet implemented in backend");
+  };
+
+  strikeJuror = async (
+    id: string,
+    party: "Plaintiff" | "Defense",
+    cause?: string
+  ): Promise<void> => {
+    this.validateId(id, "strikeJuror");
+    console.error(
+      "[TrialRepository.strikeJuror] Juror backend API not implemented"
+    );
+    throw new Error("Juror operations not yet implemented in backend");
+  };
+
+  // =============================================================================
+  // FACT OPERATIONS
+  // =============================================================================
+
+  getFacts = async (caseId: string): Promise<Fact[]> => {
+    this.validateCaseId(caseId, "getFacts");
+    console.warn("[TrialRepository.getFacts] Fact backend API not implemented");
+    return [];
+  };
+
+  // =============================================================================
+  // WITNESS OPERATIONS
+  // =============================================================================
+
+  getWitnesses = async (caseId: string): Promise<Witness[]> => {
+    this.validateCaseId(caseId, "getWitnesses");
+    try {
+      return await this.witnessesApi.getByCaseId(caseId);
+    } catch (error) {
+      console.error("[TrialRepository.getWitnesses] Error:", error);
+      throw error;
+    }
+  };
+
+  rateWitness = async (id: string, score: number): Promise<void> => {
+    this.validateId(id, "rateWitness");
+    if (typeof score !== "number" || score < 0 || score > 100) {
+      throw new ValidationError(
+        "[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)"
+      );
     }
 
-    private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
-            throw new Error(`[TrialRepository.${methodName}] Invalid id parameter`);
-        }
+    try {
+      await this.witnessesApi.update(id, { credibilityScore: score });
+    } catch (error) {
+      console.error("[TrialRepository.rateWitness] Error:", error);
+      throw error;
     }
+  };
 
-    private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
-            throw new Error(`[TrialRepository.${methodName}] Invalid caseId parameter`);
-        }
+  // =============================================================================
+  // EXHIBIT OPERATIONS
+  // =============================================================================
+
+  addExhibit = async (exhibit: TrialExhibit): Promise<TrialExhibit> => {
+    if (!exhibit || typeof exhibit !== "object") {
+      throw new ValidationError(
+        "[TrialRepository.addExhibit] Invalid exhibit data"
+      );
     }
+    return await this.add(exhibit);
+  };
 
-    // =============================================================================
-    // JUROR OPERATIONS
-    // =============================================================================
-
-    getJurors = async (caseId: string): Promise<Juror[]> => {
-        this.validateCaseId(caseId, 'getJurors');
-        try {
-            return await db.getByIndex(STORES.JURORS, 'caseId', caseId);
-        } catch (error) {
-            console.error('[TrialRepository.getJurors] Error:', error);
-            return [];
-        }
+  getExhibits = async (caseId?: string): Promise<TrialExhibit[]> => {
+    try {
+      if (caseId) {
+        this.validateCaseId(caseId, "getExhibits");
+        return await this.exhibitsApi.getByCaseId(caseId);
+      }
+      return await this.exhibitsApi.getAll();
+    } catch (error) {
+      console.error("[TrialRepository.getExhibits] Error:", error);
+      throw error;
     }
+  };
 
-    addJuror = async (juror: Juror): Promise<void> => {
-        if (!juror || typeof juror !== 'object') {
-            throw new ValidationError('[TrialRepository.addJuror] Invalid juror data');
-        }
-        try {
-            // Direct DB put for Jurors store which isn't wrapped in a full Repository class yet
-            await db.put(STORES.JURORS, juror);
-        } catch (error) {
-            console.error('[TrialRepository.addJuror] Error:', error);
-            throw new OperationError('addJuror', 'Failed to add juror to database');
-        }
+  override getAll = async (): Promise<TrialExhibit[]> => {
+    try {
+      return await this.exhibitsApi.getAll();
+    } catch (error) {
+      console.error("[TrialRepository.getAll] Error:", error);
+      throw error;
     }
+  };
 
-    strikeJuror = async (id: string, party: 'Plaintiff' | 'Defense', cause?: string): Promise<void> => {
-        this.validateId(id, 'strikeJuror');
-        if (!party || !['Plaintiff', 'Defense'].includes(party)) {
-            throw new ValidationError('[TrialRepository.strikeJuror] Invalid party parameter');
-        }
-
-        try {
-            const juror = await db.get<Juror>(STORES.JURORS, id);
-            if (juror) {
-                await db.put(STORES.JURORS, { 
-                    ...juror, 
-                    status: 'Struck', 
-                    strikeParty: party, 
-                    notes: cause 
-                });
-            }
-        } catch (error) {
-            console.error('[TrialRepository.strikeJuror] Error:', error);
-            throw new OperationError('strikeJuror', 'Failed to strike juror in database');
-        }
+  override async getById(id: string): Promise<TrialExhibit | undefined> {
+    this.validateId(id, "getById");
+    try {
+      return await this.exhibitsApi.getById(id);
+    } catch (error) {
+      console.error("[TrialRepository.getById] Error:", error);
+      return undefined;
     }
+  }
 
-    // =============================================================================
-    // FACT OPERATIONS
-    // =============================================================================
-
-    getFacts = async (caseId: string): Promise<Fact[]> => {
-        this.validateCaseId(caseId, 'getFacts');
-        try {
-            // Facts store not defined in STORES enum, assuming 'facts' for now or mapping to 'evidence' tags
-            // For strictness, let's assume we store facts in a new store or use Evidence with type 'Fact'
-            // For this phase, we'll simulate a Fact store access
-            return []; 
-        } catch (error) {
-            console.error('[TrialRepository.getFacts] Error:', error);
-            return [];
-        }
+  override async getByCaseId(caseId: string): Promise<TrialExhibit[]> {
+    this.validateCaseId(caseId, "getByCaseId");
+    try {
+      return await this.exhibitsApi.getByCaseId(caseId);
+    } catch (error) {
+      console.error("[TrialRepository.getByCaseId] Error:", error);
+      throw error;
     }
+  }
 
-    // =============================================================================
-    // WITNESS OPERATIONS
-    // =============================================================================
-
-    getWitnesses = async (caseId: string): Promise<Witness[]> => {
-        this.validateCaseId(caseId, 'getWitnesses');
-        try {
-            return await db.getByIndex(STORES.WITNESSES, 'caseId', caseId);
-        } catch (error) {
-            console.error('[TrialRepository.getWitnesses] Error:', error);
-            return [];
-        }
+  override async update(
+    id: string,
+    updates: Partial<TrialExhibit>
+  ): Promise<TrialExhibit> {
+    this.validateId(id, "update");
+    try {
+      return await this.exhibitsApi.update(id, updates);
+    } catch (error) {
+      console.error("[TrialRepository.update] Error:", error);
+      throw error;
     }
+  }
 
-    rateWitness = async (id: string, score: number): Promise<void> => {
-        this.validateId(id, 'rateWitness');
-        if (typeof score !== 'number' || score < 0 || score > 100) {
-            throw new ValidationError('[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)');
-        }
-
-        try {
-            const witness = await db.get<Witness>(STORES.WITNESSES, id);
-            if (witness) {
-                await db.put(STORES.WITNESSES, { ...witness, credibilityScore: score });
-            }
-        } catch (error) {
-            console.error('[TrialRepository.rateWitness] Error:', error);
-            throw new OperationError('rateWitness', 'Failed to rate witness in database');
-        }
+  override async delete(id: string): Promise<void> {
+    this.validateId(id, "delete");
+    try {
+      await this.exhibitsApi.delete(id);
+    } catch (error) {
+      console.error("[TrialRepository.delete] Error:", error);
+      throw error;
     }
+  }
 
-    // =============================================================================
-    // EXHIBIT OPERATIONS
-    // =============================================================================
+  // =============================================================================
+  // SEARCH & FILTERING
+  // =============================================================================
 
-    addExhibit = async (exhibit: TrialExhibit): Promise<TrialExhibit> => {
-        if (!exhibit || typeof exhibit !== 'object') {
-            throw new ValidationError('[TrialRepository.addExhibit] Invalid exhibit data');
-        }
-        return await this.add(exhibit);
+  async search(criteria: {
+    caseId?: string;
+    status?: string;
+    query?: string;
+  }): Promise<TrialExhibit[]> {
+    try {
+      const filters: any = {};
+      if (criteria.caseId) filters.caseId = criteria.caseId;
+      if (criteria.status) filters.status = criteria.status;
+
+      let exhibits = await this.exhibitsApi.getAll(filters);
+
+      if (criteria.query) {
+        const lowerQuery = criteria.query.toLowerCase();
+        exhibits = exhibits.filter(
+          (e) =>
+            e.title?.toLowerCase().includes(lowerQuery) ||
+            e.description?.toLowerCase().includes(lowerQuery) ||
+            e.exhibitNumber?.toLowerCase().includes(lowerQuery)
+        );
+      }
+
+      return exhibits;
+    } catch (error) {
+      console.error("[TrialRepository.search] Error:", error);
+      return [];
     }
-    
-    getExhibits = async (caseId?: string): Promise<TrialExhibit[]> => {
-        try {
-            if (caseId) {
-                this.validateCaseId(caseId, 'getExhibits');
-                return await this.getByIndex('caseId', caseId);
-            }
-            return await this.getAll();
-        } catch (error) {
-            console.error('[TrialRepository.getExhibits] Error:', error);
-            return [];
-        }
-    }
-
-    override getAll = async (): Promise<TrialExhibit[]> => {
-        try {
-            return await db.getAll<TrialExhibit>(STORES.EXHIBITS);
-        } catch (error) {
-            console.error('[TrialRepository.getAll] Error:', error);
-            return [];
-        }
-    }
-
-    override async getById(id: string): Promise<TrialExhibit | undefined> {
-        this.validateId(id, 'getById');
-        try {
-            return await super.getById(id);
-        } catch (error) {
-            console.error('[TrialRepository.getById] Error:', error);
-            return undefined;
-        }
-    }
-
-    override async getByCaseId(caseId: string): Promise<TrialExhibit[]> {
-        this.validateCaseId(caseId, 'getByCaseId');
-        try {
-            return await this.getByIndex('caseId', caseId);
-        } catch (error) {
-            console.error('[TrialRepository.getByCaseId] Error:', error);
-            return [];
-        }
-    }
-
-    override async update(id: string, updates: Partial<TrialExhibit>): Promise<TrialExhibit> {
-        this.validateId(id, 'update');
-        try {
-            return await super.update(id, updates);
-        } catch (error) {
-            console.error('[TrialRepository.update] Error:', error);
-            throw new OperationError('updateExhibit', 'Failed to update exhibit in database');
-        }
-    }
-
-    override async delete(id: string): Promise<void> {
-        this.validateId(id, 'delete');
-        try {
-            await super.delete(id);
-        } catch (error) {
-            console.error('[TrialRepository.delete] Error:', error);
-            throw new OperationError('deleteExhibit', 'Failed to delete exhibit from database');
-        }
-    }
-
-    // =============================================================================
-    // SEARCH & FILTERING
-    // =============================================================================
-
-    async search(criteria: { caseId?: string; status?: string; query?: string }): Promise<TrialExhibit[]> {
-        try {
-            let exhibits = await this.getAll();
-            
-            if (criteria.caseId) {
-                exhibits = exhibits.filter(e => e.caseId === criteria.caseId);
-            }
-            
-            if (criteria.status) {
-                exhibits = exhibits.filter(e => e.status === criteria.status);
-            }
-            
-            if (criteria.query) {
-                const lowerQuery = criteria.query.toLowerCase();
-                exhibits = exhibits.filter(e =>
-                    e.title?.toLowerCase().includes(lowerQuery) ||
-                    e.description?.toLowerCase().includes(lowerQuery) ||
-                    e.exhibitNumber?.toLowerCase().includes(lowerQuery)
-                );
-            }
-            
-            return exhibits;
-        } catch (error) {
-            console.error('[TrialRepository.search] Error:', error);
-            return [];
-        }
-    }
+  }
 }

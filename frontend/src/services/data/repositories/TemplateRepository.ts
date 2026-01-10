@@ -3,59 +3,130 @@
  * Enterprise-grade repository for workflow template management
  */
 
-import { WorkflowTemplateData } from '@/types';
-import { Repository } from '@/services/core/Repository';
-import { ValidationError } from '@/services/core/errors';
-import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/config/network/api.config';
+import { WorkflowTemplateService } from "@/api/workflow/core/template.service";
+import { Repository } from "@/services/core/Repository";
+import { ValidationError } from "@/services/core/errors";
+import { WorkflowTemplateData } from "@/types";
 
 export const TEMPLATE_QUERY_KEYS = {
-    all: () => ['templates'] as const,
-    byId: (id: string) => ['templates', id] as const,
-    byCategory: (category: string) => ['templates', 'category', category] as const,
+  all: () => ["templates"] as const,
+  byId: (id: string) => ["templates", id] as const,
+  byCategory: (category: string) =>
+    ["templates", "category", category] as const,
 } as const;
 
 export class TemplateRepository extends Repository<WorkflowTemplateData> {
-    private readonly useBackend: boolean;
+  private templateService: WorkflowTemplateService;
 
-    constructor() {
-        super(STORES.TEMPLATES);
-        this.useBackend = isBackendApiEnabled();
-        console.log(`[TemplateRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
-    }
+  constructor() {
+    super("templates");
+    this.templateService = new WorkflowTemplateService();
+    console.log(`[TemplateRepository] Initialized with Backend API`);
+  }
 
-    private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
-            throw new Error(`[TemplateRepository.${methodName}] Invalid id parameter`);
-        }
+  private validateId(id: string, methodName: string): void {
+    if (!id || id.trim() === "") {
+      throw new Error(
+        `[TemplateRepository.${methodName}] Invalid id parameter`
+      );
     }
+  }
 
-    override async add(item: WorkflowTemplateData): Promise<WorkflowTemplateData> {
-        if (!item || typeof item !== 'object') {
-            throw new ValidationError('[TemplateRepository.add] Invalid template data');
-        }
-        await super.add(item);
-        return item;
+  override async getAll(): Promise<WorkflowTemplateData[]> {
+    try {
+      const templates = await this.templateService.getTemplates();
+      return templates as unknown as WorkflowTemplateData[];
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
     }
+  }
 
-    override async update(id: string, updates: Partial<WorkflowTemplateData>): Promise<WorkflowTemplateData> {
-        this.validateId(id, 'update');
-        return await super.update(id, updates);
+  override async getById(
+    id: string
+  ): Promise<WorkflowTemplateData | undefined> {
+    this.validateId(id, "getById");
+    try {
+      const template = await this.templateService.getTemplateById(id);
+      return template as unknown as WorkflowTemplateData;
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
     }
+  }
 
-    async getByCategory(category: string): Promise<WorkflowTemplateData[]> {
-        const templates = await this.getAll();
-        return templates.filter(t => t.category === category);
+  override async add(
+    item: WorkflowTemplateData
+  ): Promise<WorkflowTemplateData> {
+    if (!item || typeof item !== "object") {
+      throw new ValidationError(
+        "[TemplateRepository.add] Invalid template data"
+      );
     }
+    try {
+      const template = await this.templateService.createTemplate(item as any);
+      return template as unknown as WorkflowTemplateData;
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
+    }
+  }
 
-    async search(query: string): Promise<WorkflowTemplateData[]> {
-        if (!query) return [];
-        const templates = await this.getAll();
-        const lowerQuery = query.toLowerCase();
-        return templates.filter(t =>
-            ((t as Record<string, unknown>).name as string | undefined)?.toLowerCase().includes(lowerQuery) ||
-            ((t as Record<string, unknown>).description as string | undefined)?.toLowerCase().includes(lowerQuery) ||
-            t.id?.toLowerCase().includes(lowerQuery)
-        );
+  override async update(
+    id: string,
+    updates: Partial<WorkflowTemplateData>
+  ): Promise<WorkflowTemplateData> {
+    this.validateId(id, "update");
+    try {
+      const template = await this.templateService.updateTemplate(
+        id,
+        updates as any
+      );
+      return template as unknown as WorkflowTemplateData;
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
     }
+  }
+
+  override async delete(id: string): Promise<void> {
+    this.validateId(id, "delete");
+    try {
+      await this.templateService.deleteTemplate(id);
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
+    }
+  }
+
+  async getByCategory(category: string): Promise<WorkflowTemplateData[]> {
+    try {
+      const templates = await this.getAll();
+      return templates.filter((t) => t.category === category);
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
+    }
+  }
+
+  async search(query: string): Promise<WorkflowTemplateData[]> {
+    if (!query) return [];
+    try {
+      const templates = await this.getAll();
+      const lowerQuery = query.toLowerCase();
+      return templates.filter(
+        (t) =>
+          ((t as Record<string, unknown>).name as string | undefined)
+            ?.toLowerCase()
+            .includes(lowerQuery) ||
+          ((t as Record<string, unknown>).description as string | undefined)
+            ?.toLowerCase()
+            .includes(lowerQuery) ||
+          t.id?.toLowerCase().includes(lowerQuery)
+      );
+    } catch (error) {
+      console.error("[TemplateRepository] Backend API error", error);
+      throw error;
+    }
+  }
 }

@@ -27,14 +27,13 @@
  */
 
 import { DocumentsApiService } from "@/api/admin/documents-api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import {
   EntityNotFoundError,
   OperationError,
   ValidationError,
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { db, STORES } from "@/services/data/db";
+import { db } from "@/services/data/db";
 import { BlobManager } from "@/services/infrastructure/blobManager";
 import {
   CaseId,
@@ -67,15 +66,13 @@ export const DOCUMENT_QUERY_KEYS = {
 
 /**
  * Document Repository Class
- * Implements backend-first pattern with IndexedDB fallback
+ * Implements backend-first pattern
  */
 export class DocumentRepository extends Repository<LegalDocument> {
-  private readonly useBackend: boolean;
   private documentsApi: DocumentsApiService;
 
   constructor() {
-    super(STORES.DOCUMENTS);
-    this.useBackend = isBackendApiEnabled();
+    super("documents");
     this.documentsApi = new DocumentsApiService();
     this.logInitialization();
   }
@@ -85,10 +82,9 @@ export class DocumentRepository extends Repository<LegalDocument> {
    * @private
    */
   private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[DocumentRepository] Initialized with ${mode}`);
+    console.log(
+      `[DocumentRepository] Initialized with Backend API (PostgreSQL)`
+    );
   }
 
   /**
@@ -147,35 +143,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
     limit?: number;
     cursor?: string;
   }): Promise<LegalDocument[]> {
-    if (
-      this.useBackend &&
-      options &&
-      (options.caseId || options.type || options.status)
-    ) {
-      try {
-        const result = await this.documentsApi.getAll(options);
-        return result as unknown as LegalDocument[];
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const docs = await super.getAll(options);
-      if (!options || (!options.caseId && !options.type && !options.status))
-        return docs;
-
-      return docs.filter((doc) => {
-        if (options.caseId && doc.caseId !== options.caseId) return false;
-        if (options.type && doc.type !== options.type) return false;
-        return !(options.status && doc.status !== options.status);
-      });
+      const result = await this.documentsApi.getAll(options);
+      return result as unknown as LegalDocument[];
     } catch (error) {
-      console.error("[DocumentRepository.getAll] Error:", error);
-      throw new OperationError("getAll", "Failed to fetch documents");
+      console.error("[DocumentRepository] Backend API error", error);
+      throw error;
     }
   }
 
@@ -189,23 +162,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
   override async getById(id: string): Promise<LegalDocument | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        const result = await this.documentsApi.getById(id);
-        return result as unknown as LegalDocument;
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getById(id);
+      const result = await this.documentsApi.getById(id);
+      return result as unknown as LegalDocument;
     } catch (error) {
-      console.error("[DocumentRepository.getById] Error:", error);
-      throw new OperationError("getById", "Failed to fetch document");
+      console.error("[DocumentRepository] Backend API error", error);
+      throw error;
     }
   }
 
@@ -223,24 +185,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        const result = await this.documentsApi.add(document);
-        return result as unknown as LegalDocument;
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.add(document);
-      return document;
+      const result = await this.documentsApi.add(document);
+      return result as unknown as LegalDocument;
     } catch (error) {
-      console.error("[DocumentRepository.add] Error:", error);
-      throw new OperationError("add", "Failed to add document");
+      console.error("[DocumentRepository] Backend API error", error);
+      throw error;
     }
   }
 
@@ -264,23 +214,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        const result = await this.documentsApi.update(id, updates);
-        return result as unknown as LegalDocument;
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.update(id, updates);
+      const result = await this.documentsApi.update(id, updates);
+      return result as unknown as LegalDocument;
     } catch (error) {
-      console.error("[DocumentRepository.update] Error:", error);
-      throw new OperationError("update", "Failed to update document");
+      console.error("[DocumentRepository] Backend API error", error);
+      throw error;
     }
   }
 
@@ -294,23 +233,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      try {
-        await this.documentsApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.delete(id);
+      await this.documentsApi.delete(id);
+      return;
     } catch (error) {
-      console.error("[DocumentRepository.delete] Error:", error);
-      throw new OperationError("delete", "Failed to delete document");
+      console.error("[DocumentRepository] Backend API error", error);
+      throw error;
     }
   }
 

@@ -131,9 +131,9 @@ import { apiClient } from "@/services/infrastructure/apiClient";
  * • Case flagging and annotations
  *
  * **Backend-First Architecture:**
- * - Uses CasesApiService (PostgreSQL + NestJS) by default
- * - Falls back to IndexedDB only if backend is disabled
- * - Automatic routing via isBackendApiEnabled() check
+ * - Uses CasesApiService (PostgreSQL + NestJS) for all operations
+ * - Legacy IndexedDB logic removed (Zero Tolerance for Local Storage)
+ * - Pure Backend Implementation via apiClient
  *
  * @extends Repository<Case>
  */

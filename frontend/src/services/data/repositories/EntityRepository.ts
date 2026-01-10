@@ -3,11 +3,12 @@
  * Enterprise-grade repository for legal entity management with backend API integration
  */
 
-import { LegalEntitiesApiService } from "@/api/domains/legal-entities.api";
-import { isBackendApiEnabled } from "@/config/network/api.config";
+import {
+  LegalEntitiesApiService,
+  LegalEntityApi,
+} from "@/api/domains/legal-entities.api";
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
-import { STORES } from "@/services/data/db";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { LegalEntity } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
@@ -20,70 +21,32 @@ export const ENTITY_QUERY_KEYS = {
 } as const;
 
 export class EntityRepository extends Repository<LegalEntity> {
-  private readonly useBackend: boolean;
   private legalEntitiesApi: LegalEntitiesApiService;
 
   constructor() {
-    super(STORES.ENTITIES);
-    this.useBackend = isBackendApiEnabled();
+    super("entities");
     this.legalEntitiesApi = new LegalEntitiesApiService();
-    console.log(
-      `[EntityRepository] Initialized with ${this.useBackend ? "Backend API" : "IndexedDB"}`
-    );
+    console.log(`[EntityRepository] Initialized with Backend API`);
   }
 
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === "") {
+    if (!id || id.trim() === "") {
       throw new Error(`[EntityRepository.${methodName}] Invalid id parameter`);
     }
   }
 
   override async getAll(): Promise<LegalEntity[]> {
-    if (this.useBackend) {
-      try {
-        const entities = await this.legalEntitiesApi.getAll();
-        // Transform API format to frontend format
-        return entities.map(
-          (e) =>
-            ({
-              ...e,
-              id: e.id as string,
-              type: this.mapEntityType(
-                (e as { entityType?: string }).entityType || "other"
-              ),
-              roles: (e as { roles?: string[] }).roles || [],
-              riskScore: (e as { riskScore?: number }).riskScore || 0,
-              tags: (e as { tags?: string[] }).tags || [],
-              status: (e as { status?: string }).status || "Active",
-            }) as unknown as LegalEntity
-        );
-      } catch (error) {
-        console.error("[EntityRepository] Backend API unavailable", error);
-        return await super.getAll();
-      }
+    try {
+      const entities = await this.legalEntitiesApi.getAll();
+      return entities.map((e) => this.mapToFrontend(e));
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
     }
-    return await super.getAll();
   }
 
-  private mapEntityType(
-    apiType: string
-  ):
-    | "Individual"
-    | "Corporation"
-    | "Court"
-    | "Government"
-    | "Vendor"
-    | "Law Firm" {
-    // Map API entity types to frontend EntityType values
-    const typeMap: Record<
-      string,
-      | "Individual"
-      | "Corporation"
-      | "Court"
-      | "Government"
-      | "Vendor"
-      | "Law Firm"
-    > = {
+  private mapEntityType(apiType: string): LegalEntity["type"] {
+    const typeMap: Record<string, LegalEntity["type"]> = {
       individual: "Individual",
       corporation: "Corporation",
       llc: "Corporation",
@@ -94,56 +57,51 @@ export class EntityRepository extends Repository<LegalEntity> {
       government: "Government",
       foreign_entity: "Corporation",
       other: "Vendor",
+      court: "Court", // Added based on inference
     };
     return typeMap[apiType.toLowerCase()] || "Vendor";
   }
 
+  private mapToFrontend(entity: LegalEntityApi): LegalEntity {
+    const entityAny = entity as unknown as {
+      roles?: string[];
+      riskScore?: number;
+      tags?: string[];
+      [key: string]: unknown;
+    };
+    return {
+      ...entityAny,
+      id: entity.id,
+      type: this.mapEntityType(entity.entityType || "other"),
+      roles: entityAny.roles || [],
+      riskScore: entityAny.riskScore || 0,
+      tags: entityAny.tags || [],
+      status: entity.status || "Active",
+    } as LegalEntity;
+  }
+
   override async getById(id: string): Promise<LegalEntity | undefined> {
     this.validateId(id, "getById");
-    if (this.useBackend) {
-      try {
-        const entity = await this.legalEntitiesApi.getById(id);
-        // Assume API response needs mapping to match frontend model completely or partially
-        // Cast to unknown first to avoid partial type mismatch during transformation
-        const entityAny = entity as unknown as {
-          entityType?: string;
-          roles?: string[];
-          riskScore?: number;
-          tags?: string[];
-          status?: string;
-          [key: string]: unknown;
-        };
-
-        return {
-          ...entityAny,
-          id: entity.id as string,
-          type: this.mapEntityType(entityAny.entityType || "other"),
-          roles: entityAny.roles || [],
-          riskScore: entityAny.riskScore || 0,
-          tags: entityAny.tags || [],
-          status: entityAny.status || "Active",
-        } as LegalEntity;
-      } catch (error) {
-        console.error("[EntityRepository] Backend API unavailable", error);
-        return await super.getById(id);
-      }
+    try {
+      const entity = await this.legalEntitiesApi.getById(id);
+      return this.mapToFrontend(entity);
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
     }
-    return await super.getById(id);
   }
 
   async getRelationships(id: string): Promise<Record<string, unknown>[]> {
     this.validateId(id, "getRelationships");
-    if (this.useBackend && id !== "all") {
+    if (id !== "all") {
       try {
         const relationships = await this.legalEntitiesApi.getRelationships(id);
         return relationships as unknown as Record<string, unknown>[];
       } catch (error) {
-        console.error("[EntityRepository] Backend API unavailable", error);
+        console.error("[EntityRepository] Backend API error", error);
         return [];
       }
     }
-
-    // Fallback or legacy mode return empty relationships
     return [];
   }
 
@@ -152,20 +110,32 @@ export class EntityRepository extends Repository<LegalEntity> {
       throw new ValidationError("[EntityRepository.add] Invalid entity data");
     }
 
-    const result = await super.add(item);
-
     try {
-      await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
-        entity: result,
-      });
-    } catch (eventError) {
-      console.warn(
-        "[EntityRepository] Failed to publish entity creation event",
-        eventError
-      );
-    }
+      const apiItem = item as unknown as Partial<LegalEntityApi>;
+      // Simplified mapping (direct cast) for now, assuming BE handles flexibility or item matches reasonably well.
+      // Ideally should map types back to enums.
 
-    return result;
+      const resultApi = await this.legalEntitiesApi.create(apiItem);
+      const result = this.mapToFrontend(resultApi);
+
+      try {
+        await IntegrationEventPublisher.publish(
+          SystemEventType.ENTITY_CREATED,
+          {
+            entity: result,
+          }
+        );
+      } catch (eventError) {
+        console.warn(
+          "[EntityRepository] Failed to publish entity creation event",
+          eventError
+        );
+      }
+      return result;
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
+    }
   }
 
   override async update(
@@ -173,12 +143,24 @@ export class EntityRepository extends Repository<LegalEntity> {
     updates: Partial<LegalEntity>
   ): Promise<LegalEntity> {
     this.validateId(id, "update");
-    return await super.update(id, updates);
+    try {
+      const apiUpdates = updates as unknown as Partial<LegalEntityApi>;
+      const resultApi = await this.legalEntitiesApi.update(id, apiUpdates);
+      return this.mapToFrontend(resultApi);
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
+    }
   }
 
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
-    await super.delete(id);
+    try {
+      await this.legalEntitiesApi.delete(id);
+    } catch (error) {
+      console.error("[EntityRepository] Backend API error", error);
+      throw error;
+    }
   }
 
   async getByType(type: string): Promise<LegalEntity[]> {

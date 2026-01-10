@@ -149,9 +149,9 @@ export const BILLING_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  *
  * **Backend-First Architecture:**
- * - Uses BillingApiService (PostgreSQL + NestJS) by default
- * - Falls back to IndexedDB only if backend is disabled
- * - Automatic routing via isBackendApiEnabled() check
+ * - Uses BillingApiService (PostgreSQL + NestJS) for all operations
+ * - Legacy IndexedDB logic removed (Zero Tolerance for Local Storage)
+ * - Pure Backend Implementation via apiClient
  *
  * @class BillingRepository
  * @extends Repository<TimeEntry>

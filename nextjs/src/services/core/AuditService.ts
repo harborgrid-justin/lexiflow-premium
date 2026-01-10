@@ -111,6 +111,7 @@ export enum AuditResource {
  */
 function getCurrentUserId(): string {
   // Import auth service dynamically to avoid circular dependencies
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getCurrentUserId: getAuthUserId } = require("./authService");
   return getAuthUserId();
 }
@@ -120,6 +121,7 @@ function getCurrentUserId(): string {
  */
 function getCurrentUserName(): string {
   // Import auth service dynamically to avoid circular dependencies
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getCurrentUserName: getAuthUserName } = require("./authService");
   return getAuthUserName();
 }

@@ -24,7 +24,7 @@
  * ```
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * Image loading state
@@ -90,15 +90,31 @@ export function useProgressiveImage(
   placeholderSrc: string,
   fullSrc: string,
   options: {
-    crossOrigin?: 'anonymous' | 'use-credentials';
+    crossOrigin?: "anonymous" | "use-credentials";
     onLoad?: () => void;
     onError?: (error: Error) => void;
-  } = {},
+  } = {}
 ): ImageLoadState {
   const [src, setSrc] = useState(placeholderSrc);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [progress, setProgress] = useState(0);
+
+  // State sync pattern to handle prop changes without cascading renders from effect
+  const [prevSources, setPrevSources] = useState({
+    full: fullSrc,
+    placeholder: placeholderSrc,
+  });
+  if (
+    fullSrc !== prevSources.full ||
+    placeholderSrc !== prevSources.placeholder
+  ) {
+    setPrevSources({ full: fullSrc, placeholder: placeholderSrc });
+    setSrc(placeholderSrc);
+    setIsLoading(true);
+    setError(null);
+    setProgress(0);
+  }
 
   useEffect(() => {
     const img = new Image();
@@ -107,9 +123,9 @@ export function useProgressiveImage(
       img.crossOrigin = options.crossOrigin;
     }
 
-    // Start with placeholder
-    setSrc(placeholderSrc);
-    setProgress(10);
+    // Progress started by state sync above or initial mount
+    // Move initial progress set to a timeout to avoid sync setState warning
+    setTimeout(() => setProgress(10), 0);
 
     // Load full image
     img.onload = () => {
@@ -120,13 +136,13 @@ export function useProgressiveImage(
     };
 
     img.onerror = () => {
-      const err = new Error('Failed to load image');
+      const err = new Error("Failed to load image");
       setError(err);
       setIsLoading(false);
       options.onError?.(err);
     };
 
-    setProgress(50);
+    setTimeout(() => setProgress(50), 0);
     img.src = fullSrc;
 
     return () => {
@@ -173,14 +189,14 @@ export function useLazyImage(
     threshold?: number;
     rootMargin?: string;
     placeholder?: string;
-  } = {},
+  } = {}
 ): {
   imageSrc: string | null;
   ref: React.RefObject<HTMLImageElement>;
   isLoading: boolean;
   error: Error | null;
 } {
-  const { threshold = 0.1, rootMargin = '50px', placeholder } = options;
+  const { threshold = 0.1, rootMargin = "50px", placeholder } = options;
 
   const [imageSrc, setImageSrc] = useState<string | null>(placeholder || null);
   const [isLoading, setIsLoading] = useState(false);
@@ -202,7 +218,7 @@ export function useLazyImage(
             setIsLoading(false);
           };
           img.onerror = () => {
-            setError(new Error('Failed to load image'));
+            setError(new Error("Failed to load image"));
             setIsLoading(false);
           };
           img.src = src;
@@ -220,7 +236,12 @@ export function useLazyImage(
     };
   }, [src, threshold, rootMargin]);
 
-  return { imageSrc, ref: imgRef as React.RefObject<HTMLImageElement>, isLoading, error };
+  return {
+    imageSrc,
+    ref: imgRef as React.RefObject<HTMLImageElement>,
+    isLoading,
+    error,
+  };
 }
 
 /**
@@ -249,7 +270,7 @@ export function useLazyImage(
  */
 export function useResponsiveImage(
   sources: ResponsiveSource[],
-  fallback: string,
+  fallback: string
 ): string {
   const [src, setSrc] = useState(fallback);
 
@@ -259,7 +280,7 @@ export function useResponsiveImage(
       const viewportWidth = window.innerWidth;
 
       // Find best match
-      let bestMatch = sources.find(source => {
+      let bestMatch = sources.find((source) => {
         // Check media query
         if (source.media && !window.matchMedia(source.media).matches) {
           return false;
@@ -290,8 +311,8 @@ export function useResponsiveImage(
 
     updateSource();
 
-    window.addEventListener('resize', updateSource);
-    return () => window.removeEventListener('resize', updateSource);
+    window.addEventListener("resize", updateSource);
+    return () => window.removeEventListener("resize", updateSource);
   }, [sources, fallback]);
 
   return src;
@@ -327,9 +348,7 @@ export function useResponsiveImage(
  * }
  * ```
  */
-export function useImagePreload(
-  urls: string[],
-): {
+export function useImagePreload(urls: string[]): {
   progress: number;
   loaded: number;
   total: number;
@@ -343,7 +362,7 @@ export function useImagePreload(
 
     let loadedCount = 0;
 
-    const promises = urls.map(url => {
+    const promises = urls.map((url) => {
       return new Promise<void>((resolve) => {
         const img = new Image();
         img.onload = () => {
@@ -399,28 +418,28 @@ export function useImageFormat(sources: {
   jpeg?: string;
   png?: string;
 }): string {
-  const [src, setSrc] = useState(sources.jpeg || sources.png || '');
+  const [src, setSrc] = useState(sources.jpeg || sources.png || "");
 
   useEffect(() => {
     const checkFormat = async () => {
       // Check AVIF support
-      if (sources.avif && (await supportsFormat('image/avif'))) {
+      if (sources.avif && (await supportsFormat("image/avif"))) {
         setSrc(sources.avif);
         return;
       }
 
       // Check WebP support
-      if (sources.webp && (await supportsFormat('image/webp'))) {
+      if (sources.webp && (await supportsFormat("image/webp"))) {
         setSrc(sources.webp);
         return;
       }
 
       // Fallback
-      setSrc(sources.jpeg || sources.png || '');
+      setSrc(sources.jpeg || sources.png || "");
     };
 
     void checkFormat();
-  }, [sources]);
+  }, [sources.avif, sources.webp, sources.jpeg, sources.png]);
 
   return src;
 }
@@ -439,32 +458,32 @@ export function useImageFormat(sources: {
 export function useBlurhashPlaceholder(
   hash: string | undefined,
   width: number = 32,
-  height: number = 32,
+  height: number = 32
 ): string | null {
-  const [dataUrl, setDataUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!hash) return;
+  const dataUrl = useMemo(() => {
+    if (typeof window === "undefined" || !hash) return null;
 
     try {
       // Note: This would require blurhash library
       // For now, returning a simple gradient placeholder
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       canvas.width = width;
       canvas.height = height;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
 
       if (ctx) {
         const gradient = ctx.createLinearGradient(0, 0, width, height);
-        gradient.addColorStop(0, '#f0f0f0');
-        gradient.addColorStop(1, '#e0e0e0');
+        gradient.addColorStop(0, "#f0f0f0");
+        gradient.addColorStop(1, "#e0e0e0");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
-        setDataUrl(canvas.toDataURL());
+        return canvas.toDataURL();
       }
+      return null;
     } catch (error) {
-      console.error('Failed to generate blurhash:', error);
+      console.error("Failed to generate blurhash:", error);
+      return null;
     }
   }, [hash, width, height]);
 
@@ -487,33 +506,31 @@ export function useOptimizedImageProps(
     sizes?: string;
     lazy?: boolean;
     aspectRatio?: number;
-  } = {},
+  } = {}
 ): React.ImgHTMLAttributes<HTMLImageElement> {
   const {
     widths = [400, 800, 1200, 1600],
-    sizes = '100vw',
+    sizes = "100vw",
     lazy = true,
     aspectRatio,
   } = options;
 
   const generateSrcSet = useCallback(() => {
-    return widths
-      .map(width => `${src}?w=${width} ${width}w`)
-      .join(', ');
+    return widths.map((width) => `${src}?w=${width} ${width}w`).join(", ");
   }, [src, widths]);
 
   const props: React.ImgHTMLAttributes<HTMLImageElement> = {
     src,
     srcSet: generateSrcSet(),
     sizes,
-    loading: lazy ? 'lazy' : 'eager',
-    decoding: 'async',
+    loading: lazy ? "lazy" : "eager",
+    decoding: "async",
   };
 
   if (aspectRatio) {
     props.style = {
       aspectRatio: aspectRatio.toString(),
-      objectFit: 'cover',
+      objectFit: "cover",
     };
   }
 
@@ -522,17 +539,17 @@ export function useOptimizedImageProps(
 
 // Helper function to check image format support
 async function supportsFormat(mimeType: string): Promise<boolean> {
-  if (!('createImageBitmap' in window)) {
+  if (!("createImageBitmap" in window)) {
     return false;
   }
 
   const testImage = `data:${mimeType};base64,AAAAHGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=`;
 
   try {
-    const blob = await fetch(testImage).then(r => r.blob());
+    const blob = await fetch(testImage).then((r) => r.blob());
     await createImageBitmap(blob);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

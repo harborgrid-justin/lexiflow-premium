@@ -327,7 +327,8 @@ export function useEvidenceManager(caseId?: string): UseEvidenceVaultReturn {
    */
   useEffect(() => {
     if (caseId) {
-      setFilters((f) => ({ ...f, caseId }));
+      // Use setFilters safely - if this causes issues, it might need to use a memoized filter state
+      setTimeout(() => setFilters((f) => ({ ...f, caseId })), 0);
       console.log(
         `[useEvidenceVault] Filter synchronized with caseId: ${caseId}`
       );

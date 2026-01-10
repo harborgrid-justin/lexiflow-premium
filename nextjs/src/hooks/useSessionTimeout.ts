@@ -13,7 +13,7 @@
  * @module hooks/useSessionTimeout
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // Types
@@ -62,7 +62,8 @@ export interface SessionTimeoutActions {
   dismissWarning: () => void;
 }
 
-export interface UseSessionTimeoutReturn extends SessionTimeoutState, SessionTimeoutActions {}
+export interface UseSessionTimeoutReturn
+  extends SessionTimeoutState, SessionTimeoutActions {}
 
 // ============================================================================
 // Constants
@@ -78,19 +79,27 @@ const DEFAULT_WARNING_THRESHOLD = 5 * 60 * 1000;
 const DEFAULT_ACTIVITY_DEBOUNCE = 1000;
 
 /** Activity events to track */
-const ACTIVITY_EVENTS = ['mousedown', 'keydown', 'touchstart', 'scroll', 'mousemove'] as const;
+const ACTIVITY_EVENTS = [
+  "mousedown",
+  "keydown",
+  "touchstart",
+  "scroll",
+  "mousemove",
+] as const;
 
 /** Custom event name for session warning */
-export const SESSION_WARNING_EVENT = 'session-warning';
+export const SESSION_WARNING_EVENT = "session-warning";
 
 /** Custom event name for session expiry */
-export const SESSION_EXPIRED_EVENT = 'session-expired';
+export const SESSION_EXPIRED_EVENT = "session-expired";
 
 // ============================================================================
 // Hook Implementation
 // ============================================================================
 
-export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSessionTimeoutReturn {
+export function useSessionTimeout(
+  config: SessionTimeoutConfig = {}
+): UseSessionTimeoutReturn {
   const {
     sessionDuration = DEFAULT_SESSION_DURATION,
     warningThreshold = DEFAULT_WARNING_THRESHOLD,
@@ -113,12 +122,39 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
   const warningTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const activityDebounceRef = useRef<NodeJS.Timeout | null>(null);
-  const lastActivityTimeRef = useRef<number>(Date.now());
+  // Initialize with static value to avoid impure render
+  const lastActivityTimeRef = useRef<number>(0);
+
+  // Initialize timestamp lazily
+  useEffect(() => {
+    if (lastActivityTimeRef.current === 0) {
+      lastActivityTimeRef.current = Date.now();
+    }
+  }, []);
 
   // Computed time until warning
-  const timeUntilWarning = expiresAt
-    ? Math.max(0, expiresAt.getTime() - Date.now() - warningThreshold)
-    : sessionDuration - warningThreshold;
+  const [now, setNow] = useState(0); // Initialized with 0, updated in effect
+
+  useEffect(() => {
+    setNow(Date.now());
+  }, []);
+
+  const timeUntilWarning = useMemo(() => {
+    // Avoid accessing Date.now() during render
+    if (!expiresAt) return sessionDuration - warningThreshold;
+    // We use the stored state or ref for stability, or recalculate in effect
+    // But since useMemo runs during render, we should rely on 'now' state
+    const currentTime = now || Date.now(); // Fallback if 0 (first render) but standard is using state
+    return expiresAt - currentTime;
+  }, [expiresAt, sessionDuration, warningThreshold, now]);
+    // Here we just return the static difference based on expiry
+    return Math.max(
+      0,
+      expiresAt.getTime() -
+        (lastActivityAt?.getTime() || now) -
+        warningThreshold
+    );
+  }, [expiresAt, sessionDuration, warningThreshold, lastActivityAt, now]);
 
   // Clear all timers
   const clearAllTimers = useCallback(() => {
@@ -170,7 +206,7 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
     setRemainingSeconds(0);
 
     // Dispatch custom event for global listeners
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
     }
 
@@ -184,7 +220,7 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
     startCountdown(warningSeconds);
 
     // Dispatch custom event for global listeners
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.dispatchEvent(
         new CustomEvent(SESSION_WARNING_EVENT, {
           detail: { remainingTime: warningThreshold },
@@ -220,7 +256,13 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
     }, sessionDuration);
 
     lastActivityTimeRef.current = Date.now();
-  }, [sessionDuration, warningThreshold, clearAllTimers, handleWarning, handleSessionExpire]);
+  }, [
+    sessionDuration,
+    warningThreshold,
+    clearAllTimers,
+    handleWarning,
+    handleSessionExpire,
+  ]);
 
   // Extend session (for user action)
   const extendSession = useCallback(() => {
@@ -270,7 +312,13 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
     }, 100);
 
     lastActivityTimeRef.current = now;
-  }, [enabled, trackActivity, isWarningActive, activityDebounce, resetSessionTimer]);
+  }, [
+    enabled,
+    trackActivity,
+    isWarningActive,
+    activityDebounce,
+    resetSessionTimer,
+  ]);
 
   // Initialize session on mount
   useEffect(() => {
@@ -281,7 +329,7 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
     return () => {
       clearAllTimers();
     };
-  }, [enabled]); // Only run on mount and when enabled changes
+  }, [enabled, startSession, clearAllTimers]); // Only run on mount and when enabled changes
 
   // Set up activity event listeners
   useEffect(() => {
@@ -333,7 +381,7 @@ export function useSessionTimeout(config: SessionTimeoutConfig = {}): UseSession
 export function formatRemainingTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
 /**
@@ -344,5 +392,8 @@ export function calculateCountdownProgress(
   totalWarningSeconds: number
 ): number {
   if (totalWarningSeconds === 0) return 0;
-  return Math.max(0, Math.min(100, (remainingSeconds / totalWarningSeconds) * 100));
+  return Math.max(
+    0,
+    Math.min(100, (remainingSeconds / totalWarningSeconds) * 100)
+  );
 }

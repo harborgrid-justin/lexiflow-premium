@@ -159,10 +159,11 @@ export function useDiscoveryPlatform(
       setActiveTab("dashboard");
     }
     setContextId(null);
-  }, [activeTab, setActiveTab]);
+  }, [activeTab, setContextId, setActiveTab]); // Added setActiveTab to deps
 
   const handleSaveResponse = useCallback(
-    async (reqId: string, _text: string) => {
+    async (reqId: string) => {
+      // Kept _text to signal unused but preserved signature - REMOVED
       await DataService.discovery.updateRequestStatus(reqId, "Responded");
       queryClient.invalidate(queryKeys.discovery.byCaseId(caseId || "all"));
       notify.success(`Response saved for ${reqId}.`);

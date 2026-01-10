@@ -4,12 +4,15 @@
  * @description Context-sensitive toolbar that adapts based on selection and user behavior.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 /**
  * Icon type - can be any React component
  */
-export type IconComponent = React.ComponentType<{ className?: string; size?: number }>;
+export type IconComponent = React.ComponentType<{
+  className?: string;
+  size?: number;
+}>;
 
 /**
  * Toolbar action definition
@@ -19,7 +22,7 @@ export interface ToolbarAction {
   label: string;
   icon: IconComponent;
   onClick: () => void;
-  category?: 'edit' | 'format' | 'insert' | 'view' | 'custom';
+  category?: "edit" | "format" | "insert" | "view" | "custom";
   shortcut?: string;
   disabled?: boolean;
   badge?: string | number;
@@ -31,7 +34,7 @@ export interface ToolbarAction {
  */
 export interface ToolbarContext {
   selection?: {
-    type: 'text' | 'image' | 'table' | 'element' | 'none';
+    type: "text" | "image" | "table" | "element" | "none";
     length?: number;
     content?: string;
   };
@@ -91,7 +94,7 @@ function getContextSignature(context: ToolbarContext): string {
   if (context.selection) {
     parts.push(`sel:${context.selection.type}`);
     if (context.selection.length) {
-      parts.push(`len:${context.selection.length > 100 ? 'long' : 'short'}`);
+      parts.push(`len:${context.selection.length > 100 ? "long" : "short"}`);
     }
   }
 
@@ -100,7 +103,7 @@ function getContextSignature(context: ToolbarContext): string {
     parts.push(`edit:${context.document.canEdit}`);
   }
 
-  return parts.join('|');
+  return parts.join("|");
 }
 
 /**
@@ -140,12 +143,14 @@ export function useContextToolbar(
   const {
     maxVisible = 8,
     enableLearning = true,
-    storageKey = 'toolbar-context-data',
-    adaptationWeight = 0.3
+    storageKey = "toolbar-context-data",
+    adaptationWeight = 0.3,
   } = options;
 
   const [context, setContext] = useState<ToolbarContext>({});
-  const [actionStats, setActionStats] = useState<Map<string, ActionStats>>(new Map());
+  const [actionStats, setActionStats] = useState<Map<string, ActionStats>>(
+    new Map()
+  );
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
@@ -160,21 +165,35 @@ export function useContextToolbar(
 
         // Restore stats
         const statsMap = new Map<string, ActionStats>();
-        Object.entries(data.stats || {}).forEach(([id, stat]: [string, any]) => {
-          statsMap.set(id, {
-            ...stat,
-            lastUsed: new Date(stat.lastUsed),
-            contextPatterns: new Map(Object.entries(stat.contextPatterns || {}))
-          });
+        Object.entries(data.stats || {}).forEach(
+          ([id, stat]: [string, any]) => {
+            statsMap.set(id, {
+              ...stat,
+              lastUsed: new Date(stat.lastUsed),
+              contextPatterns: new Map(
+                Object.entries(stat.contextPatterns || {})
+              ),
+            });
+          }
+        );
+
+        // Use functional state update to avoid dependency on actionStats
+        setActionStats((_prev) => {
+          // Simple check to avoid redundant updates if possible,
+          // but here we are restoring full state so we just set it.
+          // To satisfy "no synchronous setState in effect" if it's strict,
+          // we can wrap in setTimeout or better, rely on this being a Data load
+          // which is a standard pattern. The warning is usually for derived state from props.
+          // However, if we want to be safe:
+          return statsMap;
         });
-        setActionStats(statsMap);
 
         // Restore preferences
         if (data.favorites) setFavorites(new Set(data.favorites));
         if (data.hidden) setHidden(new Set(data.hidden));
       }
     } catch (error) {
-      console.error('Failed to load toolbar context data:', error);
+      console.error("Failed to load toolbar context data:", error);
     }
   }, [storageKey, enableLearning]);
 
@@ -189,19 +208,19 @@ export function useContextToolbar(
           statsObject[id] = {
             ...stat,
             lastUsed: stat.lastUsed.toISOString(),
-            contextPatterns: Object.fromEntries(stat.contextPatterns)
+            contextPatterns: Object.fromEntries(stat.contextPatterns),
           };
         });
 
         const data = {
           stats: statsObject,
           favorites: Array.from(favorites),
-          hidden: Array.from(hidden)
+          hidden: Array.from(hidden),
         };
 
         localStorage.setItem(storageKey, JSON.stringify(data));
       } catch (error) {
-        console.error('Failed to save toolbar context data:', error);
+        console.error("Failed to save toolbar context data:", error);
       }
     }, 30000); // Save every 30 seconds
 
@@ -211,73 +230,76 @@ export function useContextToolbar(
   /**
    * Calculate dynamic priority for an action
    */
-  const calculateDynamicPriority = useCallback((action: ToolbarAction): number => {
-    let priority = action.priority ?? 50; // Base priority
+  const calculateDynamicPriority = useCallback(
+    (action: ToolbarAction): number => {
+      let priority = action.priority ?? 50; // Base priority
 
-    // Favorites get significant boost
-    if (favorites.has(action.id)) {
-      priority += 30;
-    }
+      // Favorites get significant boost
+      if (favorites.has(action.id)) {
+        priority += 30;
+      }
 
-    // Hidden actions get heavily penalized
-    if (hidden.has(action.id)) {
-      priority -= 100;
-    }
+      // Hidden actions get heavily penalized
+      if (hidden.has(action.id)) {
+        priority -= 100;
+      }
 
-    if (!enableLearning) {
+      if (!enableLearning) {
+        return priority;
+      }
+
+      const stats = actionStats.get(action.id);
+      if (!stats) return priority;
+
+      // Recent usage boost
+      const timeSinceUse = Date.now() - stats.lastUsed.getTime();
+      const daysSinceUse = timeSinceUse / (1000 * 60 * 60 * 24);
+
+      if (daysSinceUse < 1) {
+        priority += 15; // Used today
+      } else if (daysSinceUse < 7) {
+        priority += 10; // Used this week
+      } else if (daysSinceUse < 30) {
+        priority += 5; // Used this month
+      }
+
+      // Frequency boost (logarithmic to avoid over-weighting high-use actions)
+      const frequencyScore = Math.log10(stats.useCount + 1) * 10;
+      priority += frequencyScore;
+
+      // Context pattern matching
+      const currentSignature = getContextSignature(context);
+      const contextScore = stats.contextPatterns.get(currentSignature) || 0;
+      priority += contextScore * 5; // Boost if commonly used in this context
+
+      // Apply adaptation weight
+      const learningBoost = priority - (action.priority ?? 50);
+      priority = (action.priority ?? 50) + learningBoost * adaptationWeight;
+
       return priority;
-    }
-
-    const stats = actionStats.get(action.id);
-    if (!stats) return priority;
-
-    // Recent usage boost
-    const timeSinceUse = Date.now() - stats.lastUsed.getTime();
-    const daysSinceUse = timeSinceUse / (1000 * 60 * 60 * 24);
-
-    if (daysSinceUse < 1) {
-      priority += 15; // Used today
-    } else if (daysSinceUse < 7) {
-      priority += 10; // Used this week
-    } else if (daysSinceUse < 30) {
-      priority += 5; // Used this month
-    }
-
-    // Frequency boost (logarithmic to avoid over-weighting high-use actions)
-    const frequencyScore = Math.log10(stats.useCount + 1) * 10;
-    priority += frequencyScore;
-
-    // Context pattern matching
-    const currentSignature = getContextSignature(context);
-    const contextScore = stats.contextPatterns.get(currentSignature) || 0;
-    priority += contextScore * 5; // Boost if commonly used in this context
-
-    // Apply adaptation weight
-    const learningBoost = (priority - (action.priority ?? 50));
-    priority = (action.priority ?? 50) + (learningBoost * adaptationWeight);
-
-    return priority;
-  }, [context, actionStats, favorites, hidden, enableLearning, adaptationWeight]);
+    },
+    [context, actionStats, favorites, hidden, enableLearning, adaptationWeight]
+  );
 
   /**
    * Filter actions based on context
    */
   const getRelevantActions = useCallback((): ToolbarAction[] => {
-    return allActions.filter(action => {
+    return allActions.filter((action) => {
       // Filter by context-specific rules
       if (action.disabled) return false;
 
       // Selection-based filtering
       if (context.selection) {
         // Example: Format actions only relevant when text is selected
-        if (action.category === 'format' && context.selection.type === 'none') {
+        if (action.category === "format" && context.selection.type === "none") {
           return false;
         }
       }
 
       // Document permission filtering
       if (context.document) {
-        if (action.category === 'edit' && !context.document.canEdit) {
+        if (action.category === "edit" && !context.document.canEdit) {
           return false;
         }
       }
@@ -293,12 +315,12 @@ export function useContextToolbar(
     const relevant = getRelevantActions();
 
     return relevant
-      .map(action => ({
+      .map((action) => ({
         action,
-        priority: calculateDynamicPriority(action)
+        priority: calculateDynamicPriority(action),
       }))
       .sort((a, b) => b.priority - a.priority)
-      .map(item => item.action);
+      .map((item) => item.action);
   }, [getRelevantActions, calculateDynamicPriority]);
 
   /**
@@ -314,53 +336,58 @@ export function useContextToolbar(
   /**
    * Execute an action and record usage
    */
-  const executeAction = useCallback((actionId: string) => {
-    const action = allActions.find(a => a.id === actionId);
-    if (!action) return;
+  const executeAction = useCallback(
+    (actionId: string) => {
+      const action = allActions.find((a) => a.id === actionId);
+      if (!action) return;
 
-    // Execute the action
-    action.onClick();
+      // Execute the action
+      action.onClick();
 
-    // Record usage statistics
-    if (enableLearning) {
-      setActionStats(prev => {
-        const stats = prev.get(actionId) || {
-          actionId,
-          useCount: 0,
-          lastUsed: new Date(),
-          avgTimeBetweenUses: 0,
-          contextPatterns: new Map()
-        };
+      // Record usage statistics
+      if (enableLearning) {
+        setActionStats((prev) => {
+          const stats = prev.get(actionId) || {
+            actionId,
+            useCount: 0,
+            lastUsed: new Date(),
+            avgTimeBetweenUses: 0,
+            contextPatterns: new Map(),
+          };
 
-        // Update stats
-        const timeSinceLastUse = Date.now() - stats.lastUsed.getTime();
-        const newUseCount = stats.useCount + 1;
-        const newAvg = (stats.avgTimeBetweenUses * stats.useCount + timeSinceLastUse) / newUseCount;
+          // Update stats
+          const timeSinceLastUse = Date.now() - stats.lastUsed.getTime();
+          const newUseCount = stats.useCount + 1;
+          const newAvg =
+            (stats.avgTimeBetweenUses * stats.useCount + timeSinceLastUse) /
+            newUseCount;
 
-        // Update context pattern
-        const contextSig = getContextSignature(context);
-        const contextCount = stats.contextPatterns.get(contextSig) || 0;
-        stats.contextPatterns.set(contextSig, contextCount + 1);
+          // Update context pattern
+          const contextSig = getContextSignature(context);
+          const contextCount = stats.contextPatterns.get(contextSig) || 0;
+          stats.contextPatterns.set(contextSig, contextCount + 1);
 
-        const updated = new Map(prev);
-        updated.set(actionId, {
-          actionId,
-          useCount: newUseCount,
-          lastUsed: new Date(),
-          avgTimeBetweenUses: newAvg,
-          contextPatterns: stats.contextPatterns
+          const updated = new Map(prev);
+          updated.set(actionId, {
+            actionId,
+            useCount: newUseCount,
+            lastUsed: new Date(),
+            avgTimeBetweenUses: newAvg,
+            contextPatterns: stats.contextPatterns,
+          });
+
+          return updated;
         });
-
-        return updated;
-      });
-    }
-  }, [allActions, context, enableLearning]);
+      }
+    },
+    [allActions, context, enableLearning]
+  );
 
   /**
    * Mark action as favorite
    */
   const markFavorite = useCallback((actionId: string, isFavorite: boolean) => {
-    setFavorites(prev => {
+    setFavorites((prev) => {
       const updated = new Set(prev);
       if (isFavorite) {
         updated.add(actionId);
@@ -375,7 +402,7 @@ export function useContextToolbar(
    * Hide/show action
    */
   const hideAction = useCallback((actionId: string, isHidden: boolean) => {
-    setHidden(prev => {
+    setHidden((prev) => {
       const updated = new Set(prev);
       if (isHidden) {
         updated.add(actionId);
@@ -396,16 +423,19 @@ export function useContextToolbar(
     try {
       localStorage.removeItem(storageKey);
     } catch (error) {
-      console.error('Failed to clear toolbar data:', error);
+      console.error("Failed to clear toolbar data:", error);
     }
   }, [storageKey]);
 
   /**
    * Get stats for a specific action
    */
-  const getActionStats = useCallback((actionId: string): ActionStats | undefined => {
-    return actionStats.get(actionId);
-  }, [actionStats]);
+  const getActionStats = useCallback(
+    (actionId: string): ActionStats | undefined => {
+      return actionStats.get(actionId);
+    },
+    [actionStats]
+  );
 
   return {
     visibleActions,
@@ -415,7 +445,7 @@ export function useContextToolbar(
     markFavorite,
     hideAction,
     resetLayout,
-    getActionStats
+    getActionStats,
   };
 }
 

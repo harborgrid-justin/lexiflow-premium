@@ -49,7 +49,7 @@ export class RuleRepository extends Repository<LegalRule> {
 
   override async update(
     id: string,
-    updates: Partial<LegalRule>
+    _updates: Partial<LegalRule>
   ): Promise<LegalRule> {
     this.validateId(id, "update");
     console.warn("[RuleRepository] Backend API not implemented for Rules");

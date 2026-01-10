@@ -71,7 +71,7 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
 
   override async update(
     id: string,
-    updates: Partial<BriefAnalysisSession>
+    _updates: Partial<BriefAnalysisSession>
   ): Promise<BriefAnalysisSession> {
     this.validateId(id, "update");
     console.warn(

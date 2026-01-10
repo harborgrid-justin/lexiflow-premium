@@ -19,6 +19,8 @@ import {
   countHighRiskClients,
 } from "./utils";
 
+import { CRMAnalytics } from "@/types/crm";
+
 export function useClientAnalytics() {
   const { theme, mode } = useTheme();
   const chartColors = ChartColorService.getPalette(mode as "light" | "dark");
@@ -28,7 +30,7 @@ export function useClientAnalytics() {
   // Data queries
   useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
 
-  const { data: analyticsData = {} } = useQuery<any>(
+  const { data: analyticsData = {} } = useQuery<CRMAnalytics>(
     ["crm", "client-analytics"],
     () => DataService.crm.getClientAnalytics()
   );

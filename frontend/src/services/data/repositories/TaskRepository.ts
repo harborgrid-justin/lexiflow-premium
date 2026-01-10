@@ -28,7 +28,6 @@
 import { TasksApiService } from "@/api/workflow/tasks-api";
 import { OperationError, ValidationError } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { STORES } from "@/services/data/db";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import {
   CaseId,
@@ -63,27 +62,15 @@ export const TASK_QUERY_KEYS = {
 
 /**
  * Task Repository Class
- * Implements backend-first pattern with IndexedDB fallback
+ * Implements strict backend pattern
  */
 export class TaskRepository extends Repository<WorkflowTaskEntity> {
-  private readonly useBackend: boolean = true;
   private tasksApi: TasksApiService;
 
   constructor() {
-    super(STORES.TASKS);
+    super("tasks");
     this.tasksApi = new TasksApiService();
-    this.logInitialization();
-  }
-
-  /**
-   * Log repository initialization mode
-   * @private
-   */
-  private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[TaskRepository] Initialized with ${mode}`);
+    console.log(`[TaskRepository] Initialized with Backend API`);
   }
 
   /**
@@ -134,22 +121,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
    * const allTasks = await repo.getAll();
    */
   override async getAll(): Promise<WorkflowTaskEntity[]> {
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getAll()) as WorkflowTaskEntity[];
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getAll();
+      return (await this.tasksApi.getAll()) as WorkflowTaskEntity[];
     } catch (error) {
       console.error("[TaskRepository.getAll] Error:", error);
-      throw new OperationError("getAll", "Failed to fetch tasks");
+      throw error;
     }
   }
 
@@ -163,25 +139,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   override async getByCaseId(caseId: CaseId): Promise<WorkflowTaskEntity[]> {
     this.validateCaseId(caseId, "getByCaseId");
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getAll({ caseId })) as WorkflowTaskEntity[];
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("caseId", caseId);
+      return (await this.tasksApi.getAll({ caseId })) as WorkflowTaskEntity[];
     } catch (error) {
       console.error("[TaskRepository.getByCaseId] Error:", error);
-      throw new OperationError(
-        "getByCaseId",
-        "Failed to fetch tasks by case ID"
-      );
+      throw error;
     }
   }
 
@@ -201,10 +163,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         .length;
     } catch (error) {
       console.error("[TaskRepository.countByCaseId] Error:", error);
-      throw new OperationError(
-        "countByCaseId",
-        "Failed to count tasks by case ID"
-      );
+      throw error;
     }
   }
 
@@ -218,22 +177,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   override async getById(id: string): Promise<WorkflowTaskEntity | undefined> {
     this.validateId(id, "getById");
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getById(id)) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await super.getById(id);
+      return (await this.tasksApi.getById(id)) as WorkflowTaskEntity;
     } catch (error) {
       console.error("[TaskRepository.getById] Error:", error);
-      throw new OperationError("getById", "Failed to fetch task");
+      return undefined;
     }
   }
 
@@ -249,23 +197,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       throw new ValidationError("[TaskRepository.add] Invalid task data");
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.create(item)) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const result = await super.add(item);
-      return result;
+      return (await this.tasksApi.create(item)) as WorkflowTaskEntity;
     } catch (error) {
       console.error("[TaskRepository.add] Error:", error);
-      throw new OperationError("add", "Failed to add task");
+      throw error;
     }
   }
 
@@ -290,21 +226,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
     let result: WorkflowTaskEntity;
 
-    if (this.useBackend) {
-      try {
-        result = (await this.tasksApi.update(
-          id,
-          updates
-        )) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-        result = await super.update(id, updates);
-      }
-    } else {
-      result = await super.update(id, updates);
+    try {
+      result = (await this.tasksApi.update(id, updates)) as WorkflowTaskEntity;
+    } catch (error) {
+      console.error("[TaskRepository.update] Error:", error);
+      throw error;
     }
 
     // Integration Point: Publish event when task is completed
@@ -337,23 +263,11 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   override async delete(id: string): Promise<void> {
     this.validateId(id, "delete");
 
-    if (this.useBackend) {
-      try {
-        await this.tasksApi.delete(id);
-        return;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      await super.delete(id);
+      await this.tasksApi.delete(id);
     } catch (error) {
       console.error("[TaskRepository.delete] Error:", error);
-      throw new OperationError("delete", "Failed to delete task");
+      throw error;
     }
   }
 
@@ -411,31 +325,14 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.updateStatus(
-          id,
-          status
-        )) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const updates: Partial<WorkflowTaskEntity> = { status };
-
-      if (status === TaskStatusBackend.COMPLETED) {
-        updates.completionPercentage = 100;
-      }
-
-      return await this.update(id, updates);
+      return (await this.tasksApi.updateStatus(
+        id,
+        status
+      )) as WorkflowTaskEntity;
     } catch (error) {
       console.error("[TaskRepository.updateStatus] Error:", error);
-      throw new OperationError("updateStatus", "Failed to update task status");
+      throw error;
     }
   }
 
@@ -510,20 +407,14 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
     this.validateId(id, "assignToUser");
     this.validateUserId(userId, "assignToUser");
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.patch(id, {
-          assignedTo: userId,
-        })) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
+    try {
+      return (await this.tasksApi.patch(id, {
+        assignedTo: userId,
+      })) as WorkflowTaskEntity;
+    } catch (error) {
+      console.error("[TaskRepository.assignToUser] Error:", error);
+      throw error;
     }
-
-    return await this.update(id, { assignedTo: userId });
   }
 
   /**
@@ -536,20 +427,14 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   async unassignTask(id: string): Promise<WorkflowTaskEntity> {
     this.validateId(id, "unassignTask");
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.patch(id, {
-          assignedTo: undefined,
-        })) as WorkflowTaskEntity;
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
+    try {
+      return (await this.tasksApi.patch(id, {
+        assignedTo: undefined,
+      })) as WorkflowTaskEntity;
+    } catch (error) {
+      console.error("[TaskRepository.unassignTask] Error:", error);
+      throw error;
     }
-
-    return await this.update(id, { assignedTo: undefined });
   }
 
   /**
@@ -562,27 +447,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
   async getByAssignee(userId: UserId): Promise<WorkflowTaskEntity[]> {
     this.validateUserId(userId, "getByAssignee");
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getAll({
-          assignedTo: userId,
-        })) as WorkflowTaskEntity[];
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("assignedTo", userId);
+      return (await this.tasksApi.getAll({
+        assignedTo: userId,
+      })) as WorkflowTaskEntity[];
     } catch (error) {
       console.error("[TaskRepository.getByAssignee] Error:", error);
-      throw new OperationError(
-        "getByAssignee",
-        "Failed to fetch tasks by assignee"
-      );
+      throw error;
     }
   }
 
@@ -651,27 +522,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getAll({
-          status: status as TaskStatusBackend,
-        })) as WorkflowTaskEntity[];
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("status", status);
+      return (await this.tasksApi.getAll({
+        status: status as TaskStatusBackend,
+      })) as WorkflowTaskEntity[];
     } catch (error) {
       console.error("[TaskRepository.getByStatus] Error:", error);
-      throw new OperationError(
-        "getByStatus",
-        "Failed to fetch tasks by status"
-      );
+      throw error;
     }
   }
 
@@ -689,27 +546,13 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
       );
     }
 
-    if (this.useBackend) {
-      try {
-        return (await this.tasksApi.getAll({
-          priority: priority as TaskPriorityBackend,
-        })) as WorkflowTaskEntity[];
-      } catch (error) {
-        console.warn(
-          "[TaskRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      return await this.getByIndex("priority", priority);
+      return (await this.tasksApi.getAll({
+        priority: priority as TaskPriorityBackend,
+      })) as WorkflowTaskEntity[];
     } catch (error) {
       console.error("[TaskRepository.getByPriority] Error:", error);
-      throw new OperationError(
-        "getByPriority",
-        "Failed to fetch tasks by priority"
-      );
+      throw error;
     }
   }
 

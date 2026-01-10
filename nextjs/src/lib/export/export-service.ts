@@ -8,34 +8,31 @@
  */
 
 import {
-  type ExportFormat,
-  type ReportType,
-  type ExportResult,
-  type ExportProgress,
-  type ExportProgressCallback,
-  type PDFExportOptions,
-  type ExcelExportOptions,
-  type CSVExportOptions,
-  type ExportColumn,
-  type ReportTemplate,
-  type ExportServiceConfig,
   type BillingReportRow,
-  type TrustReportRow,
-  type TimeEntryReportRow,
-  type TrustTransactionReportRow,
-  type ExpenseReportRow,
+  type CSVExportOptions,
   type DateRange,
-  type FirmInfo,
-  type OptionsForFormat,
-  MIME_TYPES,
-  FILE_EXTENSIONS,
   DEFAULT_EXPORT_CONFIG,
+  type ExcelExportOptions,
+  type ExpenseReportRow,
+  type ExportColumn,
+  type ExportFormat,
+  type ExportProgressCallback,
+  type ExportResult,
+  type ExportServiceConfig,
+  FILE_EXTENSIONS,
   isExportFormat,
-} from './types';
+  MIME_TYPES,
+  type PDFExportOptions,
+  type ReportTemplate,
+  type ReportType,
+  type TimeEntryReportRow,
+  type TrustReportRow,
+  type TrustTransactionReportRow,
+} from "./types";
 
-import { exportToPDF, validatePDFOptions } from './pdf-generator';
-import { exportToExcel, validateExcelOptions } from './excel-generator';
-import { exportToCSV, validateCSVOptions } from './csv-generator';
+import { exportToCSV, validateCSVOptions } from "./csv-generator";
+import { exportToExcel, validateExcelOptions } from "./excel-generator";
+import { exportToPDF, validatePDFOptions } from "./pdf-generator";
 
 // =============================================================================
 // Report Templates
@@ -45,78 +42,180 @@ import { exportToCSV, validateCSVOptions } from './csv-generator';
  * Billing report column definitions
  */
 const BILLING_REPORT_COLUMNS: readonly ExportColumn<BillingReportRow>[] = [
-  { header: 'Invoice #', accessor: 'invoiceNumber', width: 80 },
-  { header: 'Client', accessor: 'clientName', width: 150 },
-  { header: 'Matter', accessor: 'matterDescription', width: 180 },
-  { header: 'Invoice Date', accessor: 'invoiceDate', dataType: 'date', width: 90 },
-  { header: 'Due Date', accessor: 'dueDate', dataType: 'date', width: 90 },
-  { header: 'Time Charges', accessor: 'timeCharges', dataType: 'currency', width: 100, align: 'right', includeInTotals: true },
-  { header: 'Expenses', accessor: 'expenseCharges', dataType: 'currency', width: 90, align: 'right', includeInTotals: true },
-  { header: 'Total Amount', accessor: 'amount', dataType: 'currency', width: 100, align: 'right', includeInTotals: true },
-  { header: 'Paid', accessor: 'paidAmount', dataType: 'currency', width: 90, align: 'right', includeInTotals: true },
-  { header: 'Balance Due', accessor: 'balanceDue', dataType: 'currency', width: 100, align: 'right', includeInTotals: true },
-  { header: 'Status', accessor: 'status', width: 80 },
+  { header: "Invoice #", accessor: "invoiceNumber", width: 80 },
+  { header: "Client", accessor: "clientName", width: 150 },
+  { header: "Matter", accessor: "matterDescription", width: 180 },
+  {
+    header: "Invoice Date",
+    accessor: "invoiceDate",
+    dataType: "date",
+    width: 90,
+  },
+  { header: "Due Date", accessor: "dueDate", dataType: "date", width: 90 },
+  {
+    header: "Time Charges",
+    accessor: "timeCharges",
+    dataType: "currency",
+    width: 100,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Expenses",
+    accessor: "expenseCharges",
+    dataType: "currency",
+    width: 90,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Total Amount",
+    accessor: "amount",
+    dataType: "currency",
+    width: 100,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Paid",
+    accessor: "paidAmount",
+    dataType: "currency",
+    width: 90,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Balance Due",
+    accessor: "balanceDue",
+    dataType: "currency",
+    width: 100,
+    align: "right",
+    includeInTotals: true,
+  },
+  { header: "Status", accessor: "status", width: 80 },
 ];
 
 /**
  * Trust account report column definitions
  */
 const TRUST_REPORT_COLUMNS: readonly ExportColumn<TrustReportRow>[] = [
-  { header: 'Account #', accessor: 'accountNumber', width: 100 },
-  { header: 'Account Name', accessor: 'accountName', width: 180 },
-  { header: 'Client', accessor: 'clientName', width: 150 },
-  { header: 'Type', accessor: 'accountType', width: 100 },
-  { header: 'Balance', accessor: 'balance', dataType: 'currency', width: 120, align: 'right', includeInTotals: true },
-  { header: 'Last Reconciled', accessor: 'lastReconciled', dataType: 'date', width: 100 },
-  { header: 'Jurisdiction', accessor: 'jurisdiction', width: 80 },
-  { header: 'Status', accessor: 'status', width: 80 },
+  { header: "Account #", accessor: "accountNumber", width: 100 },
+  { header: "Account Name", accessor: "accountName", width: 180 },
+  { header: "Client", accessor: "clientName", width: 150 },
+  { header: "Type", accessor: "accountType", width: 100 },
+  {
+    header: "Balance",
+    accessor: "balance",
+    dataType: "currency",
+    width: 120,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Last Reconciled",
+    accessor: "lastReconciled",
+    dataType: "date",
+    width: 100,
+  },
+  { header: "Jurisdiction", accessor: "jurisdiction", width: 80 },
+  { header: "Status", accessor: "status", width: 80 },
 ];
 
 /**
  * Time entry report column definitions
  */
 const TIME_ENTRY_REPORT_COLUMNS: readonly ExportColumn<TimeEntryReportRow>[] = [
-  { header: 'Date', accessor: 'date', dataType: 'date', width: 80 },
-  { header: 'Timekeeper', accessor: 'timekeeper', width: 120 },
-  { header: 'Client', accessor: 'clientName', width: 130 },
-  { header: 'Matter', accessor: 'matterDescription', width: 150 },
-  { header: 'Activity', accessor: 'activity', width: 100 },
-  { header: 'Description', accessor: 'description', width: 200 },
-  { header: 'Hours', accessor: 'duration', dataType: 'number', width: 60, align: 'right', includeInTotals: true },
-  { header: 'Rate', accessor: 'rate', dataType: 'currency', width: 80, align: 'right' },
-  { header: 'Amount', accessor: 'total', dataType: 'currency', width: 90, align: 'right', includeInTotals: true },
-  { header: 'Billable', accessor: 'billable', dataType: 'boolean', width: 60 },
-  { header: 'Status', accessor: 'status', width: 80 },
+  { header: "Date", accessor: "date", dataType: "date", width: 80 },
+  { header: "Timekeeper", accessor: "timekeeper", width: 120 },
+  { header: "Client", accessor: "clientName", width: 130 },
+  { header: "Matter", accessor: "matterDescription", width: 150 },
+  { header: "Activity", accessor: "activity", width: 100 },
+  { header: "Description", accessor: "description", width: 200 },
+  {
+    header: "Hours",
+    accessor: "duration",
+    dataType: "number",
+    width: 60,
+    align: "right",
+    includeInTotals: true,
+  },
+  {
+    header: "Rate",
+    accessor: "rate",
+    dataType: "currency",
+    width: 80,
+    align: "right",
+  },
+  {
+    header: "Amount",
+    accessor: "total",
+    dataType: "currency",
+    width: 90,
+    align: "right",
+    includeInTotals: true,
+  },
+  { header: "Billable", accessor: "billable", dataType: "boolean", width: 60 },
+  { header: "Status", accessor: "status", width: 80 },
 ];
 
 /**
  * Trust transaction report column definitions
  */
-const TRUST_TRANSACTION_COLUMNS: readonly ExportColumn<TrustTransactionReportRow>[] = [
-  { header: 'Date', accessor: 'transactionDate', dataType: 'date', width: 80 },
-  { header: 'Type', accessor: 'transactionType', width: 80 },
-  { header: 'Client', accessor: 'clientName', width: 130 },
-  { header: 'Description', accessor: 'description', width: 200 },
-  { header: 'Check #', accessor: 'checkNumber', width: 70 },
-  { header: 'Payee/Payor', accessor: (row) => row.payee || row.payor, width: 120 },
-  { header: 'Amount', accessor: 'amount', dataType: 'currency', width: 100, align: 'right', includeInTotals: true },
-  { header: 'Balance', accessor: 'balanceAfter', dataType: 'currency', width: 100, align: 'right' },
-  { header: 'Status', accessor: 'status', width: 80 },
-];
+const TRUST_TRANSACTION_COLUMNS: readonly ExportColumn<TrustTransactionReportRow>[] =
+  [
+    {
+      header: "Date",
+      accessor: "transactionDate",
+      dataType: "date",
+      width: 80,
+    },
+    { header: "Type", accessor: "transactionType", width: 80 },
+    { header: "Client", accessor: "clientName", width: 130 },
+    { header: "Description", accessor: "description", width: 200 },
+    { header: "Check #", accessor: "checkNumber", width: 70 },
+    {
+      header: "Payee/Payor",
+      accessor: (row) => row.payee || row.payor,
+      width: 120,
+    },
+    {
+      header: "Amount",
+      accessor: "amount",
+      dataType: "currency",
+      width: 100,
+      align: "right",
+      includeInTotals: true,
+    },
+    {
+      header: "Balance",
+      accessor: "balanceAfter",
+      dataType: "currency",
+      width: 100,
+      align: "right",
+    },
+    { header: "Status", accessor: "status", width: 80 },
+  ];
 
 /**
  * Expense report column definitions
  */
 const EXPENSE_REPORT_COLUMNS: readonly ExportColumn<ExpenseReportRow>[] = [
-  { header: 'Date', accessor: 'date', dataType: 'date', width: 80 },
-  { header: 'Category', accessor: 'category', width: 100 },
-  { header: 'Description', accessor: 'description', width: 200 },
-  { header: 'Vendor', accessor: 'vendor', width: 120 },
-  { header: 'Client', accessor: 'clientName', width: 120 },
-  { header: 'Matter', accessor: 'matterDescription', width: 150 },
-  { header: 'Amount', accessor: 'amount', dataType: 'currency', width: 100, align: 'right', includeInTotals: true },
-  { header: 'Billable', accessor: 'billable', dataType: 'boolean', width: 60 },
-  { header: 'Status', accessor: 'status', width: 80 },
+  { header: "Date", accessor: "date", dataType: "date", width: 80 },
+  { header: "Category", accessor: "category", width: 100 },
+  { header: "Description", accessor: "description", width: 200 },
+  { header: "Vendor", accessor: "vendor", width: 120 },
+  { header: "Client", accessor: "clientName", width: 120 },
+  { header: "Matter", accessor: "matterDescription", width: 150 },
+  {
+    header: "Amount",
+    accessor: "amount",
+    dataType: "currency",
+    width: 100,
+    align: "right",
+    includeInTotals: true,
+  },
+  { header: "Billable", accessor: "billable", dataType: "boolean", width: 60 },
+  { header: "Status", accessor: "status", width: 80 },
 ];
 
 /**
@@ -124,14 +223,14 @@ const EXPENSE_REPORT_COLUMNS: readonly ExportColumn<ExpenseReportRow>[] = [
  */
 const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
   billing: {
-    id: 'billing-report',
-    name: 'Billing Report',
-    description: 'Invoice and billing summary report',
-    reportType: 'billing',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "billing-report",
+    name: "Billing Report",
+    description: "Invoice and billing summary report",
+    reportType: "billing",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: BILLING_REPORT_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
       includeSummary: true,
     },
@@ -142,14 +241,14 @@ const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
     },
   },
   trust: {
-    id: 'trust-account-report',
-    name: 'Trust Account Report',
-    description: 'Client trust account balances and status',
-    reportType: 'trust',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "trust-account-report",
+    name: "Trust Account Report",
+    description: "Client trust account balances and status",
+    reportType: "trust",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: TRUST_REPORT_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
     },
     excelDefaults: {
@@ -158,15 +257,15 @@ const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
       includeTotals: true,
     },
   },
-  'time-entries': {
-    id: 'time-entry-report',
-    name: 'Time Entry Report',
-    description: 'Detailed time entry records',
-    reportType: 'time-entries',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+  "time-entries": {
+    id: "time-entry-report",
+    name: "Time Entry Report",
+    description: "Detailed time entry records",
+    reportType: "time-entries",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: TIME_ENTRY_REPORT_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
       includeSummary: true,
     },
@@ -177,14 +276,14 @@ const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
     },
   },
   invoices: {
-    id: 'invoice-report',
-    name: 'Invoice Report',
-    description: 'Invoice details and payment status',
-    reportType: 'invoices',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "invoice-report",
+    name: "Invoice Report",
+    description: "Invoice details and payment status",
+    reportType: "invoices",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: BILLING_REPORT_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
     },
     excelDefaults: {
@@ -194,14 +293,14 @@ const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
     },
   },
   expenses: {
-    id: 'expense-report',
-    name: 'Expense Report',
-    description: 'Firm and client expense records',
-    reportType: 'expenses',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "expense-report",
+    name: "Expense Report",
+    description: "Firm and client expense records",
+    reportType: "expenses",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: EXPENSE_REPORT_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
     },
     excelDefaults: {
@@ -211,49 +310,49 @@ const REPORT_TEMPLATES: Record<ReportType, ReportTemplate<unknown>> = {
     },
   },
   clients: {
-    id: 'client-report',
-    name: 'Client Report',
-    description: 'Client listing and details',
-    reportType: 'clients',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "client-report",
+    name: "Client Report",
+    description: "Client listing and details",
+    reportType: "clients",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: [],
     pdfDefaults: {
-      orientation: 'portrait',
+      orientation: "portrait",
       includePageNumbers: true,
     },
   },
   reconciliation: {
-    id: 'reconciliation-report',
-    name: 'Trust Reconciliation Report',
-    description: 'Three-way trust account reconciliation',
-    reportType: 'reconciliation',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "reconciliation-report",
+    name: "Trust Reconciliation Report",
+    description: "Three-way trust account reconciliation",
+    reportType: "reconciliation",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: TRUST_TRANSACTION_COLUMNS as readonly ExportColumn<unknown>[],
     pdfDefaults: {
-      orientation: 'landscape',
+      orientation: "landscape",
       includePageNumbers: true,
       includeSummary: true,
     },
   },
   compliance: {
-    id: 'compliance-report',
-    name: 'Compliance Audit Report',
-    description: 'Trust account compliance status',
-    reportType: 'compliance',
-    supportedFormats: ['pdf'],
+    id: "compliance-report",
+    name: "Compliance Audit Report",
+    description: "Trust account compliance status",
+    reportType: "compliance",
+    supportedFormats: ["pdf"],
     columns: [],
     pdfDefaults: {
-      orientation: 'portrait',
+      orientation: "portrait",
       includePageNumbers: true,
       includeCoverPage: true,
     },
   },
   custom: {
-    id: 'custom-report',
-    name: 'Custom Report',
-    description: 'User-defined report format',
-    reportType: 'custom',
-    supportedFormats: ['pdf', 'excel', 'csv'],
+    id: "custom-report",
+    name: "Custom Report",
+    description: "User-defined report format",
+    reportType: "custom",
+    supportedFormats: ["pdf", "excel", "csv"],
     columns: [],
   },
 };
@@ -315,11 +414,14 @@ export class ExportService {
     };
 
     switch (format) {
-      case 'pdf':
+      case "pdf":
         return exportToPDF(mergedOptions as PDFExportOptions<T>, onProgress);
-      case 'excel':
-        return exportToExcel(mergedOptions as ExcelExportOptions<T>, onProgress);
-      case 'csv':
+      case "excel":
+        return exportToExcel(
+          mergedOptions as ExcelExportOptions<T>,
+          onProgress
+        );
+      case "csv":
         return exportToCSV(mergedOptions as CSVExportOptions<T>, onProgress);
       default:
         throw new Error(`Unsupported export format: ${format}`);
@@ -342,7 +444,9 @@ export class ExportService {
       data: readonly T[];
       columns?: readonly ExportColumn<T>[];
       dateRange?: DateRange;
-      additionalOptions?: Partial<PDFExportOptions<T> | ExcelExportOptions<T> | CSVExportOptions<T>>;
+      additionalOptions?: Partial<
+        PDFExportOptions<T> | ExcelExportOptions<T> | CSVExportOptions<T>
+      >;
     },
     onProgress?: ExportProgressCallback
   ): Promise<ExportResult> {
@@ -359,7 +463,8 @@ export class ExportService {
     }
 
     // Build export options from template
-    const columns = options.columns ?? (template.columns as readonly ExportColumn<T>[]);
+    const columns =
+      options.columns ?? (template.columns as readonly ExportColumn<T>[]);
 
     const baseOptions = {
       title: options.title,
@@ -373,24 +478,27 @@ export class ExportService {
     };
 
     // Merge with format-specific defaults from template
-    let exportOptions: PDFExportOptions<T> | ExcelExportOptions<T> | CSVExportOptions<T>;
+    let exportOptions:
+      | PDFExportOptions<T>
+      | ExcelExportOptions<T>
+      | CSVExportOptions<T>;
 
     switch (options.format) {
-      case 'pdf':
+      case "pdf":
         exportOptions = {
           ...baseOptions,
           ...template.pdfDefaults,
           ...options.additionalOptions,
         } as PDFExportOptions<T>;
         break;
-      case 'excel':
+      case "excel":
         exportOptions = {
           ...baseOptions,
           ...template.excelDefaults,
           ...options.additionalOptions,
         } as ExcelExportOptions<T>;
         break;
-      case 'csv':
+      case "csv":
         exportOptions = {
           ...baseOptions,
           ...template.csvDefaults,
@@ -409,7 +517,7 @@ export class ExportService {
     options: PDFExportOptions<T>,
     onProgress?: ExportProgressCallback
   ): Promise<ExportResult> {
-    return this.export('pdf', options, onProgress);
+    return this.export("pdf", options, onProgress);
   }
 
   /**
@@ -419,7 +527,7 @@ export class ExportService {
     options: ExcelExportOptions<T>,
     onProgress?: ExportProgressCallback
   ): Promise<ExportResult> {
-    return this.export('excel', options, onProgress);
+    return this.export("excel", options, onProgress);
   }
 
   /**
@@ -429,7 +537,7 @@ export class ExportService {
     options: CSVExportOptions<T>,
     onProgress?: ExportProgressCallback
   ): Promise<ExportResult> {
-    return this.export('csv', options, onProgress);
+    return this.export("csv", options, onProgress);
   }
 
   /**
@@ -461,14 +569,16 @@ export class ExportService {
    */
   validateOptions<T>(
     format: ExportFormat,
-    options: Partial<PDFExportOptions<T> | ExcelExportOptions<T> | CSVExportOptions<T>>
+    options: Partial<
+      PDFExportOptions<T> | ExcelExportOptions<T> | CSVExportOptions<T>
+    >
   ): { valid: boolean; errors: string[] } {
     switch (format) {
-      case 'pdf':
+      case "pdf":
         return validatePDFOptions(options as Partial<PDFExportOptions<T>>);
-      case 'excel':
+      case "excel":
         return validateExcelOptions(options as Partial<ExcelExportOptions<T>>);
-      case 'csv':
+      case "csv":
         return validateCSVOptions(options as Partial<CSVExportOptions<T>>);
       default:
         return { valid: false, errors: [`Unknown format: ${format}`] };
@@ -508,7 +618,7 @@ export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
 
   // Create temporary anchor element
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
 
@@ -534,25 +644,25 @@ export function downloadBlob(blob: Blob, filename: string): void {
 export function generateFilename(
   baseName: string,
   format: ExportFormat,
-  options: { includeDate?: boolean; dateFormat?: 'short' | 'long' } = {}
+  options: { includeDate?: boolean; dateFormat?: "short" | "long" } = {}
 ): string {
-  const { includeDate = true, dateFormat = 'short' } = options;
+  const { includeDate = true, dateFormat = "short" } = options;
 
   // Sanitize base name
   let sanitizedName = baseName
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
   // Add date suffix
   if (includeDate) {
     const now = new Date();
     let dateSuffix: string;
 
-    if (dateFormat === 'long') {
-      dateSuffix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    if (dateFormat === "long") {
+      dateSuffix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     } else {
-      dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      dateSuffix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
     }
 
     sanitizedName = `${sanitizedName}-${dateSuffix}`;
@@ -589,10 +699,13 @@ export function isSupportedFormat(format: unknown): format is ExportFormat {
  * @returns Formatted file size string
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
+  if (bytes === 0) return "0 B";
 
-  const units = ['B', 'KB', 'MB', 'GB'];
-  const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  const units = ["B", "KB", "MB", "GB"];
+  const exponent = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(1024)),
+    units.length - 1
+  );
   const value = bytes / Math.pow(1024, exponent);
 
   return `${value.toFixed(exponent === 0 ? 0 : 2)} ${units[exponent]}`;
@@ -674,9 +787,22 @@ export const exportService = new ExportService();
 // =============================================================================
 
 // Re-export generators for direct use
-export { exportToPDF, validatePDFOptions, createPDFOptions } from './pdf-generator';
-export { exportToExcel, validateExcelOptions, createExcelOptions } from './excel-generator';
-export { exportToCSV, validateCSVOptions, createCSVOptions, parseCSV } from './csv-generator';
+export {
+  createCSVOptions,
+  exportToCSV,
+  parseCSV,
+  validateCSVOptions,
+} from "./csv-generator";
+export {
+  createExcelOptions,
+  exportToExcel,
+  validateExcelOptions,
+} from "./excel-generator";
+export {
+  createPDFOptions,
+  exportToPDF,
+  validatePDFOptions,
+} from "./pdf-generator";
 
 // Re-export types
-export * from './types';
+export * from "./types";

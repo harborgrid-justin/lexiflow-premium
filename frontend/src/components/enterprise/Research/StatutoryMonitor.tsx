@@ -33,12 +33,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 // ============================================================================
 // Internal Dependencies
 // ============================================================================
-import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
+import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import type { LegalRule } from '@/types/legal-research';
 import type { Jurisdiction } from '@/types/system';
-import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // Types & Interfaces
@@ -131,32 +131,34 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
   };
 
   const getTypeColor = (type: string) => {
+    const badgeTheme = theme.badge as Record<string, string>;
     switch (type.toLowerCase()) {
       case 'statute':
-        return (theme.badge as any).blue;
+        return badgeTheme.blue;
       case 'regulation':
-        return (theme.badge as any).purple;
+        return badgeTheme.purple;
       case 'case_law':
-        return (theme.badge as any).green;
+        return badgeTheme.green;
       case 'constitutional':
-        return (theme.badge as any).amber;
+        return badgeTheme.amber;
       default:
-        return (theme.badge as any).default;
+        return badgeTheme.default;
     }
   };
 
   const getStatusColor = (status: string) => {
+    const badgeTheme = theme.badge as Record<string, string>;
     switch (status?.toLowerCase()) {
       case 'active':
-        return (theme.badge as any).success;
+        return badgeTheme.success;
       case 'superseded':
-        return (theme.badge as any).warning;
+        return badgeTheme.warning;
       case 'repealed':
-        return (theme.badge as any).error;
+        return badgeTheme.error;
       case 'draft':
-        return (theme.badge as any).default;
+        return badgeTheme.default;
       default:
-        return (theme.badge as any).default;
+        return badgeTheme.default;
     }
   };
 
@@ -416,7 +418,7 @@ export const StatutoryMonitor: React.FC<StatutoryMonitorProps> = ({
                         </p>
                       )}
                       {jurisdiction.type && (
-                        <span className={cn("mt-2 inline-block rounded-full px-2 py-0.5 text-xs", (theme.badge as any).default)}>
+                        <span className={cn("mt-2 inline-block rounded-full px-2 py-0.5 text-xs", (theme.badge as Record<string, string>).default)}>
                           {jurisdiction.type}
                         </span>
                       )}

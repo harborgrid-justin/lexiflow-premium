@@ -16,6 +16,7 @@ const BACKEND_URL =
   process.env.BACKEND_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
   "http://localhost:3000";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BACKEND_API_PREFIX = "/api";
 
 /**
@@ -179,15 +180,16 @@ export async function proxyToBackend(
         "X-Correlation-ID": correlationId,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error & { code?: string };
     console.error("[Backend Proxy Error]", {
       path: backendPath,
       method: request.method,
-      error: error.message,
+      error: err.message,
     });
 
     // Handle timeout
-    if (error.name === "AbortError") {
+    if (err.name === "AbortError") {
       return NextResponse.json(
         { error: "Backend request timeout" },
         { status: 504 }
@@ -195,10 +197,7 @@ export async function proxyToBackend(
     }
 
     // Handle connection errors
-    if (
-      error.code === "ECONNREFUSED" ||
-      error.message.includes("fetch failed")
-    ) {
+    if (err.code === "ECONNREFUSED" || err.message.includes("fetch failed")) {
       return NextResponse.json(
         {
           error: "Backend service unavailable",
@@ -214,7 +213,7 @@ export async function proxyToBackend(
     return NextResponse.json(
       {
         error: "Internal server error",
-        message: error.message,
+        message: err.message,
       },
       { status: 500 }
     );
@@ -306,12 +305,13 @@ export async function checkBackendHealth(): Promise<{
       url: BACKEND_URL,
       responseTime: Date.now() - start,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     return {
       healthy: false,
       url: BACKEND_URL,
       responseTime: Date.now() - start,
-      error: error.message,
+      error: err.message,
     };
   }
 }

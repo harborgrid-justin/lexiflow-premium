@@ -79,8 +79,8 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
   strikeJuror = async (
     id: string,
-    party: "Plaintiff" | "Defense",
-    cause?: string
+    _party: "Plaintiff" | "Defense",
+    _cause?: string
   ): Promise<void> => {
     this.validateId(id, "strikeJuror");
     console.error(

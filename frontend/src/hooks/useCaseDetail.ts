@@ -19,7 +19,6 @@
  * ```
  */
 
-import { DEBUG_API_SIMULATION_DELAY_MS } from "@/config/features/features.config";
 import { DataService } from "@/services/data/dataService";
 import {
   Case,
@@ -125,10 +124,10 @@ export function useCaseDetail(
 ): UseCaseDetailReturn {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [generatingWorkflow, setGeneratingWorkflow] = useState(false);
-  const [analyzingId] = useState<string | null>(null);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
   const [draftPrompt, setDraftPrompt] = useState("");
-  const [draftResult] = useState("");
-  const [isDrafting] = useState(false);
+  const [draftResult, setDraftResult] = useState("");
+  const [isDrafting, setIsDrafting] = useState(false);
   const notify = useNotify();
 
   // --- DATA QUERIES (Parallel Fetching) ---
@@ -311,12 +310,40 @@ export function useCaseDetail(
   // --- ACTIONS ---
 
   const handleGenerateWorkflow = async () => {
+    if (generatingWorkflow) return;
     setGeneratingWorkflow(true);
-    // In real app, this would call a mutation to add tasks to DB
-    setTimeout(
-      () => setGeneratingWorkflow(false),
-      DEBUG_API_SIMULATION_DELAY_MS + 500
-    );
+
+    try {
+      // Fetch active templates to find a suitable one
+      const templates =
+        (await DataService.workflow.workflow.getTemplates()) || [];
+      const activeTemplate = templates.find(
+        (t: { status: string }) => t.status === "active"
+      );
+
+      if (!activeTemplate) {
+        notify.error(
+          "No active workflow templates found. Please create a template first."
+        );
+        return;
+      }
+
+      // Start workflow for this case
+      await DataService.workflow.workflow.startWorkflow(activeTemplate.id, {
+        caseId: caseData.id,
+      });
+
+      notify.success("Workflow generated successfully.");
+
+      // Invalidate queries to refresh task lists and projects
+      queryClient.invalidate(queryKeys.tasks.byCaseId(caseData.id));
+      queryClient.invalidate(queryKeys.projects.byCaseId(caseData.id));
+    } catch (error) {
+      console.error("Workflow generation failed:", error);
+      notify.error("Failed to generate workflow. Please try again.");
+    } finally {
+      setGeneratingWorkflow(false);
+    }
   };
 
   const setDocumentsWrapper = (
@@ -385,6 +412,61 @@ export function useCaseDetail(
     }
   };
 
+  const handleAnalyzeWithAI = async (docId: string) => {
+    if (!docId) return;
+    setAnalyzingId(docId);
+    try {
+      // Use AI Ops service for analysis
+      await DataService.analytics.aiOps.execute({
+        operationType: "summarization",
+        model: "legal-bert-v1",
+        input: { documentId: docId },
+      });
+      notify.success("Document analysis complete.");
+    } catch (error) {
+      console.error("Analysis failed:", error);
+      notify.error("Document analysis failed.");
+    } finally {
+      setAnalyzingId(null);
+    }
+  };
+
+  const handleDraftDocument = async (docType: string, prompt: string) => {
+    if (isDrafting) return;
+    setIsDrafting(true);
+    try {
+      // Find template matching docType
+      const templates = await DataService.drafting.getAllTemplates({
+        search: docType,
+      });
+
+      const templateId = templates[0]?.id;
+
+      if (!templateId) {
+        notify.error(`No template found for ${docType}`);
+        return;
+      }
+
+      const result = await DataService.drafting.generateDocument({
+        title: `Draft: ${docType}`,
+        templateId: templateId,
+        caseId: caseData.id,
+        variableValues: { userPrompt: prompt },
+      });
+
+      if (result) {
+        setDraftResult(result.content || "Draft generated.");
+        notify.success("Document draft generated.");
+        queryClient.invalidate(queryKeys.documents.byCaseId(caseData.id));
+      }
+    } catch (error) {
+      console.error("Drafting failed:", error);
+      notify.error("Document drafting failed.");
+    } finally {
+      setIsDrafting(false);
+    }
+  };
+
   return {
     activeTab,
     setActiveTab,
@@ -403,12 +485,12 @@ export function useCaseDetail(
     setBillingEntries: setBillingWrapper,
     generatingWorkflow,
     generateAIWorkflow: handleGenerateWorkflow,
-    analyzeWithAI: async () => {}, // Not implemented
+    analyzeWithAI: handleAnalyzeWithAI,
     analyzingId,
     draftPrompt,
     setDraftPrompt,
     draftResult,
-    draftDocument: async () => {}, // Not implemented
+    draftDocument: handleDraftDocument,
     isDrafting,
     timelineEvents,
   };

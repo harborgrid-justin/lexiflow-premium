@@ -12,7 +12,7 @@ export const apiClient = {
     return response.json();
   },
 
-  async post<T>(endpoint: string, body: any): Promise<T> {
+  async post<T>(endpoint: string, body: unknown): Promise<T> {
     const response = await fetch(`/api${endpoint}`, {
       method: "POST",
       headers: {
@@ -27,7 +27,7 @@ export const apiClient = {
     return response.json();
   },
 
-  async put<T>(endpoint: string, body: any): Promise<T> {
+  async put<T>(endpoint: string, body: unknown): Promise<T> {
     const response = await fetch(`/api${endpoint}`, {
       method: "PUT",
       headers: {

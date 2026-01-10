@@ -53,6 +53,7 @@ export interface ConflictCheckRequest {
   relatedEntities?: string[];
   practiceArea?: string;
   assignedAttorneys?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: Record<string, any>;
 }
 
@@ -738,14 +739,20 @@ class ConflictCheckServiceClass {
     _matches: ConflictMatch[]
   ): boolean {
     // TODO: Implement rule evaluation logic
+    void _rule;
+    void _request;
+    void _matches;
     return false;
   }
 
   /**
    * Checks if attorney conflict is relevant to case
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private isRelevantToCase(_conflict: any, _caseItem: any): boolean {
     // TODO: Implement relevance check
+    void _conflict;
+    void _caseItem;
     return true;
   }
 
@@ -776,6 +783,7 @@ class ConflictCheckServiceClass {
   /**
    * Fetches clients from backend or cache
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchClients(): Promise<any[]> {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/api/clients`, {
@@ -790,6 +798,7 @@ class ConflictCheckServiceClass {
   /**
    * Fetches client by ID
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchClient(clientId: string): Promise<any> {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/api/clients/${clientId}`, {
@@ -804,6 +813,7 @@ class ConflictCheckServiceClass {
   /**
    * Fetches cases from backend
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchCases(): Promise<any[]> {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/api/cases`, {
@@ -818,6 +828,7 @@ class ConflictCheckServiceClass {
   /**
    * Fetches case by ID
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchCase(caseId: string): Promise<any> {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/api/cases/${caseId}`, {
@@ -832,6 +843,7 @@ class ConflictCheckServiceClass {
   /**
    * Fetches attorney conflicts
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchAttorneyConflicts(attorneyId: string): Promise<any[]> {
     try {
       return await complianceApi.conflictChecks.getAttorneyConflicts(

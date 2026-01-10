@@ -51,7 +51,7 @@ const DEPRECATION_WARNING = `
  * @returns true if backend API should be used (DEFAULT)
  */
 export function isBackendApiEnabled(
-  storage: IStorageAdapter = defaultStorage
+  _storage: IStorageAdapter = defaultStorage
 ): boolean {
   // STRICT ENFORCEMENT: Backend API is the ONLY supported mode.
   // Legacy IndexedDB/Offline support has been permanently disabled per architecture requirements.

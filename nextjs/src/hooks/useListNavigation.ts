@@ -28,7 +28,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -100,33 +100,26 @@ export function useListNavigation<T>({
   const [focusedIndex, setFocusedIndex] = useState<number>(() =>
     mode === "simple" && isOpen && items.length > 0 ? 0 : initialIndex
   );
-  const itemsLengthRef = useRef(items.length);
-  const prevIsOpenRef = useRef(isOpen);
+  const [prevItemsLength, setPrevItemsLength] = useState(items.length);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
-  // Simple mode: Reset index when list opens/closes or items change
-  useEffect(() => {
-    if (mode === "simple") {
-      const newIndex = isOpen && items.length > 0 ? 0 : -1;
-      // Only update if changed to avoid cascading renders
-      if (prevIsOpenRef.current !== isOpen || newIndex !== focusedIndex) {
-        setFocusedIndex(newIndex);
-        prevIsOpenRef.current = isOpen;
-      }
+  // State sync pattern for simple mode
+  if (mode === "simple" && prevIsOpen !== isOpen) {
+    setPrevIsOpen(isOpen);
+    const newIndex = isOpen && items.length > 0 ? 0 : -1;
+    if (focusedIndex !== newIndex) {
+      setFocusedIndex(newIndex);
     }
-  }, [isOpen, items.length, mode, focusedIndex]);
+  }
 
-  // Full mode: Update focused index when items change
-  useEffect(() => {
-    if (mode === "full" && items.length !== itemsLengthRef.current) {
-      const prevLength = itemsLengthRef.current;
-      itemsLengthRef.current = items.length;
-
-      // Reset focus if current index is out of bounds
-      if (focusedIndex >= items.length && prevLength !== items.length) {
-        setFocusedIndex(Math.max(0, items.length - 1));
-      }
+  // State sync pattern for full mode items change
+  if (mode === "full" && items.length !== prevItemsLength) {
+    setPrevItemsLength(items.length);
+    // Reset focus if current index is out of bounds
+    if (focusedIndex >= items.length) {
+      setFocusedIndex(Math.max(0, items.length - 1));
     }
-  }, [items.length, focusedIndex, mode]);
+  }
 
   // Navigation helpers
   const navigateNext = useCallback(() => {

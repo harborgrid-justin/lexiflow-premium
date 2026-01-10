@@ -178,7 +178,7 @@ export class DatabaseManager {
     return this.mode;
   }
 
-  async switchMode(newMode: "IndexedDB" | "LocalStorage") {
+  async switchMode(_newMode: "IndexedDB" | "LocalStorage") {
     console.error("Storage switching disabled.");
   }
 
@@ -187,63 +187,63 @@ export class DatabaseManager {
     return Promise.resolve();
   }
 
-  async findCaseByTitle(title: string): Promise<unknown | null> {
+  async findCaseByTitle(_title: string): Promise<unknown | null> {
     return null;
   }
 
-  async count(storeName: string): Promise<number> {
+  async count(_storeName: string): Promise<number> {
     return 0;
   }
 
-  async getAll<T>(storeName: string): Promise<T[]> {
+  async getAll<T>(_storeName: string): Promise<T[]> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
-  async get<T>(storeName: string, id: string): Promise<T | undefined> {
+  async get<T>(_storeName: string, _id: string): Promise<T | undefined> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
-  async put<T>(storeName: string, item: T): Promise<void> {
+  async put<T>(_storeName: string, _item: T): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
-  async bulkPut<T>(storeName: string, items: T[]): Promise<void> {
+  async bulkPut<T>(_storeName: string, _items: T[]): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
-  async delete(storeName: string, id: string): Promise<void> {
+  async delete(_storeName: string, _id: string): Promise<void> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
   async getByIndex<T>(
-    storeName: string,
-    indexName: string,
-    value: string | unknown[]
+    _storeName: string,
+    _indexName: string,
+    _value: string | unknown[]
   ): Promise<T[]> {
     throw new Error(
-      `Frontend storage disabled (Accessing ${storeName}). Use Backend API.`
+      `Frontend storage disabled (Accessing ${_storeName}). Use Backend API.`
     );
   }
 
-  async putFile(id: string, file: File): Promise<void> {
+  async putFile(_id: string, _file: File): Promise<void> {
     throw new Error("Frontend storage disabled. Use Backend API.");
   }
 
-  async getFile(id: string): Promise<Blob | null> {
+  async getFile(_id: string): Promise<Blob | null> {
     return null;
   }
 
-  async clear(storeName: string): Promise<void> {
+  async clear(_storeName: string): Promise<void> {
     throw new Error("Frontend storage disabled. Use Backend API.");
   }
 

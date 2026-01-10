@@ -33,15 +33,8 @@ import {
   ValidationError,
 } from "@/services/core/errors";
 import { Repository } from "@/services/core/Repository";
-import { db } from "@/services/data/db";
 import { BlobManager } from "@/services/infrastructure/blobManager";
-import {
-  CaseId,
-  DocumentId,
-  DocumentVersion,
-  FileChunk,
-  LegalDocument,
-} from "@/types";
+import { DocumentVersion, FileChunk, LegalDocument } from "@/types";
 
 const yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -257,8 +250,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
     this.validateId(id, "getFile");
 
     try {
-      // Backend download handled separately via download() method
-      return await db.getFile(id);
+      return await this.documentsApi.download(id);
     } catch (error) {
       console.error("[DocumentRepository.getFile] Error:", error);
       return null;
@@ -311,44 +303,11 @@ export class DocumentRepository extends Repository<LegalDocument> {
   ): Promise<LegalDocument> {
     this.validateFile(file, "uploadDocument");
 
-    if (this.useBackend) {
-      try {
-        return await this.documentsApi.upload(file, meta || {});
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const id = `doc-${Date.now()}` as DocumentId;
-
-      // Create document metadata
-      const newDoc: LegalDocument = {
-        id,
-        caseId: (meta.caseId || "General") as CaseId,
-        title: file.name,
-        type: meta.type || file.type.split("/")[1]?.toUpperCase() || "File",
-        content: "Binary content stored in secure blob storage.",
-        uploadDate: new Date().toISOString().split("T")[0] || "",
-        lastModified: new Date().toISOString().split("T")[0] || "",
-        tags: meta.tags || ["Uploaded", "Local"],
-        versions: [],
-        fileSize: this.formatBytes(file.size),
-        sourceModule: meta.sourceModule || "General",
-        status: meta.status || "Draft",
-        isEncrypted: false,
-      };
-
-      await this.add(newDoc);
-      await db.putFile(id, file);
-
-      return newDoc;
+      return await this.documentsApi.upload(file, meta || {});
     } catch (error) {
       console.error("[DocumentRepository.uploadDocument] Error:", error);
-      throw new OperationError("uploadDocument", "Failed to upload document");
+      throw error;
     }
   }
 
@@ -362,29 +321,11 @@ export class DocumentRepository extends Repository<LegalDocument> {
   async downloadDocument(id: string): Promise<Blob> {
     this.validateId(id, "downloadDocument");
 
-    if (this.useBackend) {
-      try {
-        return await this.documentsApi.download(id);
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const blob = await this.getFile(id);
-      if (!blob) {
-        throw new EntityNotFoundError("Document file", id);
-      }
-      return blob;
+      return await this.documentsApi.download(id);
     } catch (error) {
       console.error("[DocumentRepository.downloadDocument] Error:", error);
-      throw new OperationError(
-        "downloadDocument",
-        "Failed to download document"
-      );
+      throw error;
     }
   }
 
@@ -433,27 +374,11 @@ export class DocumentRepository extends Repository<LegalDocument> {
       this.validateFile(file, `bulkUpload[${index}]`);
     });
 
-    if (this.useBackend) {
-      try {
-        return await this.documentsApi.bulkUpload(files, metadata);
-      } catch (error) {
-        console.warn(
-          "[DocumentRepository] Backend API unavailable, falling back to IndexedDB",
-          error
-        );
-      }
-    }
-
     try {
-      const results: LegalDocument[] = [];
-      for (const file of files) {
-        const doc = await this.uploadDocument(file, metadata);
-        results.push(doc);
-      }
-      return results;
+      return await this.documentsApi.bulkUpload(files, metadata);
     } catch (error) {
       console.error("[DocumentRepository.bulkUpload] Error:", error);
-      throw new OperationError("bulkUpload", "Failed to bulk upload documents");
+      throw error;
     }
   }
 

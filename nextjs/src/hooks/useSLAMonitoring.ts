@@ -149,7 +149,7 @@ export function useSLAMonitoring(
   // Update when computed value changes
   useEffect(() => {
     setSLAs(computedSLAs);
-  }, [computedSLAs]);
+  }, [computedSLAs, setSLAs]); // Added setSLAs to deps
 
   // Real-time tick update
   useInterval(() => {

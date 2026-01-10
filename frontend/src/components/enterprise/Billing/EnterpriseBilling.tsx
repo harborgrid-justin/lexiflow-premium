@@ -29,6 +29,13 @@ interface BillingSummaryMetrics {
   overdueCount: number;
 }
 
+interface BillingDataItem {
+  outstanding: number;
+  collected: number;
+  writeOffs: number;
+  billed: number;
+}
+
 interface ARAgingBucket {
   label: string;
   daysRange: string;
@@ -91,8 +98,8 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
       };
     }
 
-    const total = (billingData as any[]).reduce(
-      (acc, curr: any) => ({
+    const total = (billingData as BillingDataItem[]).reduce(
+      (acc, curr: BillingDataItem) => ({
         totalOutstanding: acc.totalOutstanding + curr.outstanding,
         collected: acc.collected + curr.collected,
         writeOffs: acc.writeOffs + curr.writeOffs,

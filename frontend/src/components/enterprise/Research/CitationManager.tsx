@@ -219,16 +219,18 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
 
   const handleValidateAll = async () => {
     try {
-      const results = await onValidateCitations?.(citations);
+      const results = await onValidateCitations?.(citations) as unknown as Citation[];
 
       if (results) {
-        const validCount = (results as any[]).filter((r: { status: string }) => r.status === 'valid').length;
-        const errorCount = (results as any[]).filter((r: { status: string }) => r.status === 'error').length;
+        const validCount = results.filter((r) => r.status === 'valid').length;
+        const errorCount = results.filter((r) => r.status === 'error').length;
 
         addToast({
           title: 'Validation Complete',
           message: `${validCount} valid citations, ${errorCount} errors found`,
-          type: errorCount > 0 ? 'warning' : 'success' as any, priority: 'normal' as any, read: false
+          type: errorCount > 0 ? 'warning' : 'success',
+          priority: 'normal',
+          read: false
         });
       }
     } catch {
@@ -236,7 +238,8 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
         title: 'Validation Failed',
         message: 'An error occurred during validation',
         type: 'error'
-      , priority: 'normal', read: false});
+        , priority: 'normal', read: false
+      });
     }
   };
 

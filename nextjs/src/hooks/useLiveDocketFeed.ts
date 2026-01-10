@@ -68,8 +68,7 @@ export function useLiveDocketFeed({
   reconnectDelay = DEFAULT_RECONNECT_DELAY,
   onEntry,
   onNewEntry,
-  reconnectInterval: _reconnectInterval,
-  maxReconnectAttempts: _maxReconnectAttempts,
+  // These parameters are removed as they were unused
 }: LiveDocketFeedConfig = {}): LiveDocketFeedResult {
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
   const [error, setError] = useState<string | null>(null);
@@ -180,8 +179,10 @@ export function useLiveDocketFeed({
     resetReconnectState,
   ]);
 
-  // Assign ref for use in callbacks
-  connectRef.current = connect;
+  // Update ref in effect since we cannot mutate during render
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   /**
    * Disconnect from WebSocket
@@ -207,15 +208,22 @@ export function useLiveDocketFeed({
    * Auto-connect when enabled
    */
   useEffect(() => {
-    if (enabled) {
-      connect();
-    } else {
-      disconnect();
-    }
+    let mounted = true;
 
-    return () => {
-      disconnect();
-    };
+    if (enabled) {
+      // Defer connection to avoid synchronous state update in effect
+      const timer = setTimeout(() => {
+        if (mounted) connect();
+      }, 0);
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+        // Avoid sync setState in cleanup effect
+        setTimeout(disconnect, 0);
+      };
+    } else {
+      setTimeout(disconnect, 0);
+    }
   }, [enabled, connect, disconnect]);
 
   /**

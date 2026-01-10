@@ -38,7 +38,6 @@ export function useVirtualizedDocket<T>({
   items,
   estimatedItemHeight,
   overscan = 5,
-  containerHeight: _containerHeight = "100%",
 }: VirtualizedDocketConfig<T>): VirtualizedDocketResult<T> {
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeightPx, setContainerHeightPx] = useState(600);
@@ -48,17 +47,6 @@ export function useVirtualizedDocket<T>({
 
   // Container ref for imperative scrolling
   const scrollElementRef = useRef<HTMLElement | null>(null);
-
-  /**
-   * Get height for a specific index (measured or estimated)
-   */
-  const getItemHeight = useCallback(
-    (index: number): number => {
-      // eslint-disable-next-line react-compiler/react-compiler
-      return measurementsRef.current.get(index) ?? estimatedItemHeight;
-    },
-    [estimatedItemHeight]
-  );
 
   /**
    * Calculate total height of all items (using state to avoid ref access in useMemo)
@@ -77,9 +65,15 @@ export function useVirtualizedDocket<T>({
       offsets.push(offsets[i] + itemHeight);
     }
 
-    setTotalHeight(height);
-    setItemOffsets(offsets);
+    // Use requestAnimationFrame to avoid synchronous state update warning during effect
+    requestAnimationFrame(() => {
+      setTotalHeight(height);
+      setItemOffsets(offsets);
+    });
   }, [items.length, estimatedItemHeight]);
+
+  const findStartIndex = useCallback(
+    (scrollTop: number) => {
       let low = 0;
       let high = items.length - 1;
 
@@ -200,7 +194,10 @@ export function useVirtualizedDocket<T>({
       scrollElementRef.current = scrollContainer;
 
       // Initial container height measurement
-      setContainerHeightPx(scrollContainer.clientHeight);
+      // Use requestAnimationFrame to avoid synchronous state update warning during effect
+      requestAnimationFrame(() => {
+        setContainerHeightPx(scrollContainer.clientHeight);
+      });
 
       return () => {
         scrollContainer.removeEventListener("scroll", handleScroll);

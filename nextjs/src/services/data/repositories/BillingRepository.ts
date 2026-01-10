@@ -1,26 +1,25 @@
-import {
-  TimeEntry,
-  Invoice,
-  RateTable,
-  TrustTransaction,
-  Client,
-  WIPStat,
-  UUID,
-  CaseId,
-  OperatingSummary,
-  FinancialPerformanceData,
-  FeeAgreement,
-} from "@/types";
-import { delay } from "@/utils/async";
+import { isBackendApiEnabled } from "@/api";
+import { BillingAnalyticsApiService } from "@/api/billing/billing-analytics-api";
+import { InvoicesApiService } from "@/api/billing/invoices-api";
+import { RateTablesApiService } from "@/api/billing/rate-tables-api";
+import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
 import { Repository } from "@/services/core/Repository";
 import { STORES, db } from "@/services/data/db";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
+import {
+  CaseId,
+  Client,
+  FinancialPerformanceData,
+  Invoice,
+  OperatingSummary,
+  RateTable,
+  TimeEntry,
+  TrustTransaction,
+  UUID,
+  WIPStat,
+} from "@/types";
 import { SystemEventType } from "@/types/integration-types";
-import { isBackendApiEnabled } from "@/api";
-import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
-import { InvoicesApiService } from "@/api/billing/invoices-api";
-import { BillingAnalyticsApiService } from "@/api/billing/billing-analytics-api";
-import { RateTablesApiService } from "@/api/billing/rate-tables-api";
+import { delay } from "@/utils/async";
 
 export class BillingRepository extends Repository<TimeEntry> {
   private timeEntriesApi: TimeEntriesApiService;
@@ -57,6 +56,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   }
 
   // --- Fee Agreements ---
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createFeeAgreement(agreement: any): Promise<any> {
     // In a real implementation integration with backend API would be here
     // For now we store in new store FEE_AGREEMENTS
@@ -92,6 +92,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       | string
   ) {
     if (isBackendApiEnabled()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let apiFilters: any = {};
       if (typeof filters === "string") {
         apiFilters = { caseId: filters };
@@ -118,7 +119,9 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async addTimeEntry(entry: TimeEntry) {
     if (isBackendApiEnabled()) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, createdAt, updatedAt, ...dto } = entry;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return this.timeEntriesApi.create(dto as any);
     }
     return this.add(entry);
@@ -172,6 +175,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     mode: "light" | "dark" = "light"
   ): Promise<unknown> {
     if (isBackendApiEnabled()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await this.analyticsApi.getRealization();
       const rate = data?.rate || 0;
 
@@ -225,6 +229,7 @@ export class BillingRepository extends Repository<TimeEntry> {
           amount: e.total,
           hours: e.hours,
           rate: e.rate,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         })),
       } as any);
       return invoice;
@@ -330,9 +335,11 @@ export class BillingRepository extends Repository<TimeEntry> {
   }
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     if (isBackendApiEnabled()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const forecast: any = await this.analyticsApi.getForecast(6);
       return {
         revenue:
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           forecast?.map((f: any) => ({
             month: f.month,
             actual: f.revenue,

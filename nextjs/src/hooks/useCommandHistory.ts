@@ -57,47 +57,60 @@ export interface UseCommandHistoryReturn {
  */
 export function useCommandHistory(maxSize?: number): UseCommandHistoryReturn {
   const historyRef = useRef(new CommandHistory(maxSize));
-  const [_updateTrigger, setUpdateTrigger] = useState(0);
+  // Use state to track history status to trigger re-renders and avoid reading refs in render
+  const [historyState, setHistoryState] = useState({
+    canUndo: false,
+    canRedo: false,
+    undoCount: 0,
+    redoCount: 0,
+    lastCommand: null as string | null,
+  });
 
-  // Force re-render helper
-  const forceUpdate = useCallback(() => {
-    setUpdateTrigger((prev) => prev + 1);
+  // Force re-render and sync state helper
+  const updateState = useCallback(() => {
+    setHistoryState({
+      canUndo: historyRef.current.canUndo(),
+      canRedo: historyRef.current.canRedo(),
+      undoCount: historyRef.current.getUndoCount(),
+      redoCount: historyRef.current.getRedoCount(),
+      lastCommand: historyRef.current.getLastCommandDescription(),
+    });
   }, []);
 
   const execute = useCallback(
     (command: Command) => {
       historyRef.current.execute(command);
-      forceUpdate();
+      updateState();
     },
-    [forceUpdate]
+    [updateState]
   );
 
   const undo = useCallback(() => {
     if (historyRef.current.undo()) {
-      forceUpdate();
+      updateState();
     }
-  }, [forceUpdate]);
+  }, [updateState]);
 
   const redo = useCallback(() => {
     if (historyRef.current.redo()) {
-      forceUpdate();
+      updateState();
     }
-  }, [forceUpdate]);
+  }, [updateState]);
 
   const clear = useCallback(() => {
     historyRef.current.clear();
-    forceUpdate();
-  }, [forceUpdate]);
+    updateState();
+  }, [updateState]);
 
   return {
     execute,
     undo,
     redo,
-    canUndo: historyRef.current.canUndo(),
-    canRedo: historyRef.current.canRedo(),
-    undoCount: historyRef.current.getUndoCount(),
-    redoCount: historyRef.current.getRedoCount(),
+    canUndo: historyState.canUndo,
+    canRedo: historyState.canRedo,
+    undoCount: historyState.undoCount,
+    redoCount: historyState.redoCount,
     clear,
-    lastCommand: historyRef.current.getLastCommandDescription(),
+    lastCommand: historyState.lastCommand,
   };
 }

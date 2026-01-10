@@ -3,8 +3,8 @@
  * @description Main view component (90 LOC target) - Pure JSX presentation layer
  */
 
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { cn } from '@/shared/lib/cn';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { Award, DollarSign, Target, Users } from 'lucide-react';
 import { AnalysisTab } from './AnalysisTab';
 import { TABS } from './constants';
@@ -95,7 +95,7 @@ export function BusinessDevelopmentView() {
             leadsByStatus={analyticsData.leadsByStatus}
             onLeadClick={setSelectedLead}
             theme={theme}
-            chartTheme={chartTheme as any}
+            chartTheme={chartTheme as Record<string, unknown>}
             chartColors={chartColors}
           />
         )}
@@ -110,7 +110,7 @@ export function BusinessDevelopmentView() {
             winRate={metrics.winRate}
             avgSalesCycle={metrics.avgSalesCycle}
             theme={theme}
-            chartTheme={chartTheme as any}
+            chartTheme={chartTheme as Record<string, unknown>}
             chartColors={chartColors}
           />
         )}

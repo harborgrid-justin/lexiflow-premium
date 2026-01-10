@@ -15,6 +15,14 @@
 import { revalidateTag } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import type {
+  ActionContext,
+  ActionOptions,
+  ActionResult,
+  CacheProfile,
+  PaginatedResult,
+  PaginationMeta,
+} from "./errors";
 import {
   ActionError,
   buildTag,
@@ -27,14 +35,6 @@ import {
   success,
   unwrapResult,
   validateInput,
-} from "./errors";
-import type {
-  ActionContext,
-  ActionOptions,
-  ActionResult,
-  CacheProfile,
-  PaginatedResult,
-  PaginationMeta,
 } from "./errors";
 
 // Re-export types and functions for convenience
@@ -129,6 +129,7 @@ export async function requireAuth(
  */
 export async function checkPermissions(
   context: ActionContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   requiredPermissions: string[]
 ): Promise<boolean> {
   if (!context.isAuthenticated || !context.userId) {
@@ -151,6 +152,7 @@ export async function checkPermissions(
  */
 export async function invalidateTags(
   tags: string[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   profile: CacheProfile = "default"
 ): Promise<void> {
   for (const tag of tags) {

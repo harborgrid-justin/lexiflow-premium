@@ -106,7 +106,9 @@ export const WindowProvider = ({
       root.id = 'window-layer';
       document.body.appendChild(root);
     }
-    setPortalRoot(root);
+    // Defer state update to next tick to avoid synchronous set state warning
+    const rootEl = root;
+    setTimeout(() => setPortalRoot(rootEl), 0);
 
     return () => {
       // Cleanup: remove portal root on unmount

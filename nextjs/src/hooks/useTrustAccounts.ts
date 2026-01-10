@@ -1,13 +1,13 @@
 /**
  * useTrustAccounts Hook
- * 
+ *
  * ARCHITECTURAL PHILOSOPHY:
  * - **Type Safety**: Every return type is explicitly defined. No implicit any.
  * - **Separation of Concerns**: Business logic isolated from UI components.
  * - **Render Optimization**: useMemo/useCallback prevent unnecessary re-renders.
  * - **Error Handling**: Explicit error states with typed error objects.
  * - **Cache Management**: Strategic invalidation via React Query.
- * 
+ *
  * WHY THIS DESIGN:
  * 1. Custom hook pattern centralizes data fetching logic
  * 2. React Query handles caching, deduplication, background updates
@@ -15,33 +15,36 @@
  * 4. Compliance validation logic lives in hook, not in UI
  */
 
-import {queryClient, useMutation, useQuery} from './useQueryHooks';
-import { trustAccountsApi } from '@/api/billing/trust-accounts-api';
+import { trustAccountsApi } from "@/api/billing/trust-accounts-api";
 import type {
-    CreateTrustAccountDto,
-    DepositDto,
-    ThreeWayReconciliationDto,
-    TrustAccount,
-    TrustAccountFilters,
-    TrustAccountValidationResult,
-    TrustTransactionEntity,
-    WithdrawalDto,
-} from '@/types';
-import { PaymentMethod, TrustAccountStatus } from '@/types';
-import {useCallback, useMemo, useState} from 'react';
+  CreateTrustAccountDto,
+  DepositDto,
+  ThreeWayReconciliationDto,
+  TrustAccount,
+  TrustAccountFilters,
+  TrustAccountValidationResult,
+  TrustTransactionEntity,
+  WithdrawalDto,
+} from "@/types";
+import { PaymentMethod, TrustAccountStatus } from "@/types";
+import { useCallback, useMemo, useState } from "react";
+import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 
 /**
  * Query key factory pattern for cache management
  * WHY: Centralized key management prevents cache inconsistencies
  */
 const trustKeys = {
-  all: () => ['trust-accounts'] as const,
-  lists: () => [...trustKeys.all(), 'list'] as const,
-  list: (filters?: TrustAccountFilters) => [...trustKeys.lists(), filters] as const,
-  details: () => [...trustKeys.all(), 'detail'] as const,
+  all: () => ["trust-accounts"] as const,
+  lists: () => [...trustKeys.all(), "list"] as const,
+  list: (filters?: TrustAccountFilters) =>
+    [...trustKeys.lists(), filters] as const,
+  details: () => [...trustKeys.all(), "detail"] as const,
   detail: (id: string) => [...trustKeys.details(), id] as const,
-  transactions: (accountId: string) => [...trustKeys.detail(accountId), 'transactions'] as const,
-  compliance: (accountId: string) => [...trustKeys.detail(accountId), 'compliance'] as const,
+  transactions: (accountId: string) =>
+    [...trustKeys.detail(accountId), "transactions"] as const,
+  compliance: (accountId: string) =>
+    [...trustKeys.detail(accountId), "compliance"] as const,
 } as const;
 
 /**
@@ -49,7 +52,7 @@ const trustKeys = {
  * WHY: Structured error handling allows UI to display specific error messages
  */
 interface TrustAccountError {
-  code: 'VALIDATION_ERROR' | 'API_ERROR' | 'COMPLIANCE_ERROR' | 'NETWORK_ERROR';
+  code: "VALIDATION_ERROR" | "API_ERROR" | "COMPLIANCE_ERROR" | "NETWORK_ERROR";
   message: string;
   field?: string;
   details?: Record<string, unknown>;
@@ -65,13 +68,17 @@ interface UseTrustAccountsResult {
   isError: boolean;
   error: TrustAccountError | null;
   refetch: () => Promise<void>;
-  
+
   // Computed values (memoized for performance)
   totalBalance: number;
   ioltaAccounts: TrustAccount[];
   activeAccounts: TrustAccount[];
   accountsNeedingReconciliation: TrustAccount[];
-  complianceIssues: Array<{ accountId: string; issue: string; severity: 'warning' | 'error' }>;
+  complianceIssues: Array<{
+    accountId: string;
+    issue: string;
+    severity: "warning" | "error";
+  }>;
 }
 
 /**
@@ -79,8 +86,9 @@ interface UseTrustAccountsResult {
  * @param filters - Optional filters for account list
  * @returns Typed result with accounts and computed values
  */
-export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccountsResult {
-
+export function useTrustAccounts(
+  filters?: TrustAccountFilters
+): UseTrustAccountsResult {
   // Primary data fetching with React Query
   const {
     data: accounts = [],
@@ -89,11 +97,11 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
     error: queryError,
     refetch: originalRefetch,
   } = useQuery<TrustAccount[]>(
-    [...trustKeys.list(filters)] as any,
+    trustKeys.list(filters),
     () => trustAccountsApi.getAll(filters),
     {
-      staleTime: 30000, // 30 seconds - balance data should be relatively fresh
-      cacheTime: 300000, // 5 minutes
+      staleTime: 30000,
+      cacheTime: 300000,
       refetchOnWindowFocus: true, // Refetch when user returns to app (compliance data must be current)
     }
   );
@@ -106,11 +114,11 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
   // Transform React Query error to structured error
   const error: TrustAccountError | null = useMemo(() => {
     if (!queryError) return null;
-    
+
     const err = queryError as Error;
     return {
-      code: 'API_ERROR',
-      message: err.message || 'Failed to load trust accounts',
+      code: "API_ERROR",
+      message: err.message || "Failed to load trust accounts",
       details: { originalError: err },
     };
   }, [queryError]);
@@ -119,17 +127,22 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
    * COMPUTED VALUES: Memoized to prevent unnecessary recalculations
    * WHY: These are derived from accounts array, so only recalculate when accounts change
    */
-  
+
   const totalBalance = useMemo(() => {
-    return accounts.reduce((sum: number, account: TrustAccount) => sum + account.balance, 0);
+    return accounts.reduce(
+      (sum: number, account: TrustAccount) => sum + account.balance,
+      0
+    );
   }, [accounts]);
 
   const ioltaAccounts = useMemo(() => {
-    return accounts.filter((acc: TrustAccount) => acc.accountType === 'iolta');
+    return accounts.filter((acc: TrustAccount) => acc.accountType === "iolta");
   }, [accounts]);
 
   const activeAccounts = useMemo(() => {
-    return accounts.filter((acc: TrustAccount) => acc.status === TrustAccountStatus.ACTIVE);
+    return accounts.filter(
+      (acc: TrustAccount) => acc.status === TrustAccountStatus.ACTIVE
+    );
   }, [accounts]);
 
   const accountsNeedingReconciliation = useMemo(() => {
@@ -146,15 +159,19 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
    * WHY: Proactive compliance monitoring - surface issues before audits
    */
   const complianceIssues = useMemo(() => {
-    const issues: Array<{ accountId: string; issue: string; severity: 'warning' | 'error' }> = [];
+    const issues: Array<{
+      accountId: string;
+      issue: string;
+      severity: "warning" | "error";
+    }> = [];
 
     accounts.forEach((account: TrustAccount) => {
       // Negative balance check (zero balance principle violation)
       if (account.balance < 0) {
         issues.push({
           accountId: account.id,
-          issue: 'Negative balance detected - violates zero balance principle',
-          severity: 'error',
+          issue: "Negative balance detected - violates zero balance principle",
+          severity: "error",
         });
       }
 
@@ -162,8 +179,9 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
       if (!account.accountTitleCompliant) {
         issues.push({
           accountId: account.id,
-          issue: 'Account title must include "Trust Account" or "Escrow Account"',
-          severity: 'error',
+          issue:
+            'Account title must include "Trust Account" or "Escrow Account"',
+          severity: "error",
         });
       }
 
@@ -171,13 +189,15 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
       if (account.nextReconciliationDue) {
         const dueDate = new Date(account.nextReconciliationDue);
         const now = new Date();
-        const daysOverdue = Math.floor((now.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24));
-        
+        const daysOverdue = Math.floor(
+          (now.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
         if (daysOverdue > 0) {
           issues.push({
             accountId: account.id,
             issue: `Reconciliation overdue by ${daysOverdue} day(s)`,
-            severity: daysOverdue > 7 ? 'error' : 'warning',
+            severity: daysOverdue > 7 ? "error" : "warning",
           });
         }
       }
@@ -186,17 +206,20 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
       if (!account.stateBarApproved) {
         issues.push({
           accountId: account.id,
-          issue: 'Bank is not approved by state bar for overdraft reporting',
-          severity: 'warning',
+          issue: "Bank is not approved by state bar for overdraft reporting",
+          severity: "warning",
         });
       }
 
       // Missing authorized signatories
-      if (!account.authorizedSignatories || account.authorizedSignatories.length === 0) {
+      if (
+        !account.authorizedSignatories ||
+        account.authorizedSignatories.length === 0
+      ) {
         issues.push({
           accountId: account.id,
-          issue: 'No authorized signatories defined',
-          severity: 'error',
+          issue: "No authorized signatories defined",
+          severity: "error",
         });
       }
     });
@@ -229,7 +252,7 @@ interface UseTrustAccountDetailResult {
   isError: boolean;
   error: TrustAccountError | null;
   refetch: () => Promise<void>;
-  
+
   // Computed transaction summaries
   totalDeposits: number;
   totalWithdrawals: number;
@@ -237,7 +260,9 @@ interface UseTrustAccountDetailResult {
   lastReconciliationDate: string | null;
 }
 
-export function useTrustAccountDetail(accountId: string): UseTrustAccountDetailResult {
+export function useTrustAccountDetail(
+  accountId: string
+): UseTrustAccountDetailResult {
   // Account details query
   const {
     data: account = null,
@@ -272,14 +297,14 @@ export function useTrustAccountDetail(accountId: string): UseTrustAccountDetailR
 
   const isLoading = accountLoading || transactionsLoading;
   const isError = accountError || transactionsError;
-  
+
   const error: TrustAccountError | null = useMemo(() => {
     const err = accountQueryError || transactionsQueryError;
     if (!err) return null;
-    
+
     return {
-      code: 'API_ERROR',
-      message: (err as Error).message || 'Failed to load account details',
+      code: "API_ERROR",
+      message: (err as Error).message || "Failed to load account details",
     };
   }, [accountQueryError, transactionsQueryError]);
 
@@ -290,30 +315,39 @@ export function useTrustAccountDetail(accountId: string): UseTrustAccountDetailR
   // Computed transaction summaries
   const totalDeposits = useMemo(() => {
     return transactions
-      .filter((tx: TrustTransactionEntity) => tx.transactionType === 'deposit')
+      .filter((tx: TrustTransactionEntity) => tx.transactionType === "deposit")
       .reduce((sum: number, tx: TrustTransactionEntity) => sum + tx.amount, 0);
   }, [transactions]);
 
   const totalWithdrawals = useMemo(() => {
     return transactions
-      .filter((tx: TrustTransactionEntity) => tx.transactionType === 'withdrawal')
+      .filter(
+        (tx: TrustTransactionEntity) => tx.transactionType === "withdrawal"
+      )
       .reduce((sum: number, tx: TrustTransactionEntity) => sum + tx.amount, 0);
   }, [transactions]);
 
   const pendingTransactions = useMemo(() => {
-    return transactions.filter((tx: TrustTransactionEntity) => tx.status === 'pending');
+    return transactions.filter(
+      (tx: TrustTransactionEntity) => tx.status === "pending"
+    );
   }, [transactions]);
 
   const lastReconciliationDate = useMemo(() => {
-    const reconciledTransactions = transactions.filter((tx: TrustTransactionEntity) => tx.reconciled);
+    const reconciledTransactions = transactions.filter(
+      (tx: TrustTransactionEntity) => tx.reconciled
+    );
     if (reconciledTransactions.length === 0) return null;
 
-    return reconciledTransactions.reduce((latest: string | null, tx: TrustTransactionEntity) => {
+    return reconciledTransactions.reduce(
+      (latest: string | null, tx: TrustTransactionEntity) => {
         if (!tx.reconciledDate) return latest;
         return !latest || new Date(tx.reconciledDate) > new Date(latest)
-            ? tx.reconciledDate
-            : latest;
-    }, null as string | null);
+          ? tx.reconciledDate
+          : latest;
+      },
+      null as string | null
+    );
   }, [transactions]);
 
   return {
@@ -354,8 +388,8 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
       },
       onError: (err: Error) => {
         setError({
-          code: 'API_ERROR',
-          message: err.message || 'Failed to create trust account',
+          code: "API_ERROR",
+          message: err.message || "Failed to create trust account",
         });
       },
     }
@@ -369,7 +403,10 @@ export function useCreateTrustAccount(): UseCreateTrustAccountResult {
 }
 
 interface UseDepositFundsResult {
-  deposit: (accountId: string, data: DepositDto) => Promise<TrustTransactionEntity>;
+  deposit: (
+    accountId: string,
+    data: DepositDto
+  ) => Promise<TrustTransactionEntity>;
   isDepositing: boolean;
   error: TrustAccountError | null;
 }
@@ -381,9 +418,13 @@ export function useDepositFunds(): UseDepositFundsResult {
     TrustTransactionEntity,
     { accountId: string; data: DepositDto }
   >(
-    ({ accountId, data }: { accountId: string; data: DepositDto }) => trustAccountsApi.deposit(accountId, data),
+    ({ accountId, data }: { accountId: string; data: DepositDto }) =>
+      trustAccountsApi.deposit(accountId, data),
     {
-      onSuccess: (_: TrustTransactionEntity, variables: { accountId: string; data: DepositDto }) => {
+      onSuccess: (
+        _: TrustTransactionEntity,
+        variables: { accountId: string; data: DepositDto }
+      ) => {
         // Invalidate account detail and transactions
         queryClient.invalidate(trustKeys.detail(variables.accountId));
         queryClient.invalidate(trustKeys.transactions(variables.accountId));
@@ -392,8 +433,8 @@ export function useDepositFunds(): UseDepositFundsResult {
       },
       onError: (err: Error) => {
         setError({
-          code: 'COMPLIANCE_ERROR',
-          message: err.message || 'Failed to deposit funds',
+          code: "COMPLIANCE_ERROR",
+          message: err.message || "Failed to deposit funds",
         });
       },
     }
@@ -414,7 +455,10 @@ export function useDepositFunds(): UseDepositFundsResult {
 }
 
 interface UseWithdrawFundsResult {
-  withdraw: (accountId: string, data: WithdrawalDto) => Promise<TrustTransactionEntity>;
+  withdraw: (
+    accountId: string,
+    data: WithdrawalDto
+  ) => Promise<TrustTransactionEntity>;
   isWithdrawing: boolean;
   error: TrustAccountError | null;
 }
@@ -426,9 +470,13 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
     TrustTransactionEntity,
     { accountId: string; data: WithdrawalDto }
   >(
-    ({ accountId, data }: { accountId: string; data: WithdrawalDto }) => trustAccountsApi.withdraw(accountId, data),
+    ({ accountId, data }: { accountId: string; data: WithdrawalDto }) =>
+      trustAccountsApi.withdraw(accountId, data),
     {
-      onSuccess: (_: TrustTransactionEntity, variables: { accountId: string; data: WithdrawalDto }) => {
+      onSuccess: (
+        _: TrustTransactionEntity,
+        variables: { accountId: string; data: WithdrawalDto }
+      ) => {
         queryClient.invalidate(trustKeys.detail(variables.accountId));
         queryClient.invalidate(trustKeys.transactions(variables.accountId));
         queryClient.invalidate(trustKeys.lists());
@@ -436,8 +484,8 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
       },
       onError: (err: Error) => {
         setError({
-          code: 'COMPLIANCE_ERROR',
-          message: err.message || 'Failed to withdraw funds',
+          code: "COMPLIANCE_ERROR",
+          message: err.message || "Failed to withdraw funds",
         });
       },
     }
@@ -458,7 +506,10 @@ export function useWithdrawFunds(): UseWithdrawFundsResult {
 }
 
 interface UseReconcileAccountResult {
-  reconcile: (accountId: string, data: ThreeWayReconciliationDto) => Promise<void>;
+  reconcile: (
+    accountId: string,
+    data: ThreeWayReconciliationDto
+  ) => Promise<void>;
   isReconciling: boolean;
   error: TrustAccountError | null;
 }
@@ -470,9 +521,18 @@ export function useReconcileAccount(): UseReconcileAccountResult {
     void,
     { accountId: string; data: ThreeWayReconciliationDto }
   >(
-    ({ accountId, data }: { accountId: string; data: ThreeWayReconciliationDto }) => trustAccountsApi.reconcile(accountId, data),
+    ({
+      accountId,
+      data,
+    }: {
+      accountId: string;
+      data: ThreeWayReconciliationDto;
+    }) => trustAccountsApi.reconcile(accountId, data),
     {
-      onSuccess: (_: void, variables: { accountId: string; data: ThreeWayReconciliationDto }) => {
+      onSuccess: (
+        _: void,
+        variables: { accountId: string; data: ThreeWayReconciliationDto }
+      ) => {
         queryClient.invalidate(trustKeys.detail(variables.accountId));
         queryClient.invalidate(trustKeys.transactions(variables.accountId));
         queryClient.invalidate(trustKeys.lists());
@@ -480,8 +540,8 @@ export function useReconcileAccount(): UseReconcileAccountResult {
       },
       onError: (err: Error) => {
         setError({
-          code: 'COMPLIANCE_ERROR',
-          message: err.message || 'Reconciliation failed',
+          code: "COMPLIANCE_ERROR",
+          message: err.message || "Reconciliation failed",
         });
       },
     }
@@ -513,8 +573,8 @@ export function useTrustAccountValidation() {
   const validateAccountTitle = useCallback((accountName: string): boolean => {
     const normalizedName = accountName.toLowerCase();
     return (
-      normalizedName.includes('trust account') ||
-      normalizedName.includes('escrow account')
+      normalizedName.includes("trust account") ||
+      normalizedName.includes("escrow account")
     );
   }, []);
 
@@ -523,7 +583,10 @@ export function useTrustAccountValidation() {
    * Per state bar rules: CASH and ATM withdrawals are PROHIBITED
    */
   const validatePaymentMethod = useCallback(
-    (paymentMethod: PaymentMethod, isWithdrawal: boolean): TrustAccountValidationResult => {
+    (
+      paymentMethod: PaymentMethod,
+      isWithdrawal: boolean
+    ): TrustAccountValidationResult => {
       if (!isWithdrawal) {
         return { valid: true, errors: [] };
       }
@@ -532,7 +595,9 @@ export function useTrustAccountValidation() {
       if (prohibitedMethods.includes(paymentMethod)) {
         return {
           valid: false,
-          errors: [`${paymentMethod.toUpperCase()} withdrawals are prohibited by state bar rules`],
+          errors: [
+            `${paymentMethod.toUpperCase()} withdrawals are prohibited by state bar rules`,
+          ],
           warnings: [],
         };
       }
@@ -549,7 +614,8 @@ export function useTrustAccountValidation() {
   const validatePromptDeposit = useCallback(
     (fundsReceivedDate: Date, depositDate: Date): boolean => {
       const hoursDifference =
-        (depositDate.getTime() - fundsReceivedDate.getTime()) / (1000 * 60 * 60);
+        (depositDate.getTime() - fundsReceivedDate.getTime()) /
+        (1000 * 60 * 60);
       return hoursDifference <= 48;
     },
     []
@@ -560,9 +626,12 @@ export function useTrustAccountValidation() {
    * Per state bar rules: Account balance must never be negative
    */
   const validateZeroBalance = useCallback(
-    (currentBalance: number, withdrawalAmount: number): TrustAccountValidationResult => {
+    (
+      currentBalance: number,
+      withdrawalAmount: number
+    ): TrustAccountValidationResult => {
       const newBalance = currentBalance - withdrawalAmount;
-      
+
       if (newBalance < 0) {
         return {
           valid: false,

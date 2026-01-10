@@ -50,6 +50,7 @@ interface CacheEntry<T> {
  * Handles pagination, caching, and performance monitoring
  */
 export class PerformanceService {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static cache = new Map<string, CacheEntry<any>>();
   private static metrics: PerformanceMetrics[] = [];
   private static readonly MAX_CACHE_SIZE = 1000;
@@ -91,7 +92,9 @@ export class PerformanceService {
     // Apply sorting if specified
     if (sortBy) {
       filteredItems.sort((a, b) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const aVal = (a as any)[sortBy];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const bVal = (b as any)[sortBy];
 
         if (aVal === bVal) return 0;
@@ -435,6 +438,7 @@ export class PerformanceService {
    * @param delay - Delay in milliseconds
    * @returns Debounced function
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static debounce<T extends (...args: any[]) => any>(
     fn: T,
     delay: number
@@ -455,6 +459,7 @@ export class PerformanceService {
    * @param interval - Interval in milliseconds
    * @returns Throttled function
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static throttle<T extends (...args: any[]) => any>(
     fn: T,
     interval: number
@@ -478,6 +483,7 @@ export class PerformanceService {
    * @param fn - Function to execute
    * @returns Promise that resolves when operation completes
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static pendingRequests = new Map<string, Promise<any>>();
 
   static async deduplicate<T>(key: string, fn: () => Promise<T>): Promise<T> {

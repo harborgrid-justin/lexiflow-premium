@@ -73,9 +73,12 @@ export function useWorkerSearch<T>(
   const { items, query, fields, idKey = "id" as keyof T } = props;
 
   // Stabilize items based on idKey to prevent unnecessary re-indexing
-  const stableItems = useMemo(() => items, [
-    items.map(item => String(item[idKey])).join(',')
-  ]);
+  const itemsFingerprint = items.map((item) => String(item[idKey])).join(",");
+  const stableItems = useMemo(
+    () => items,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [itemsFingerprint]
+  );
 
   const [filteredItems, setFilteredItems] = useState<T[]>(stableItems);
   const [isSearching, setIsSearching] = useState(false);

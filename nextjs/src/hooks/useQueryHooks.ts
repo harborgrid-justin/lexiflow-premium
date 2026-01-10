@@ -64,7 +64,7 @@ export function useQuery<T>(
       .catch(() => {});
 
     return unsubscribe;
-  }, [hashedKey, enabled, staleTime]);
+  }, [hashedKey, enabled, staleTime, key]); // Added key to deps
 
   return {
     ...state,

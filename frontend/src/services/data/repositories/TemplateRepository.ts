@@ -64,7 +64,9 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
       );
     }
     try {
-      const template = await this.templateService.createTemplate(item as any);
+      const template = await this.templateService.createTemplate(
+        item as unknown as CreateTemplateDto
+      );
       return template as unknown as WorkflowTemplateData;
     } catch (error) {
       console.error("[TemplateRepository] Backend API error", error);
@@ -80,7 +82,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
     try {
       const template = await this.templateService.updateTemplate(
         id,
-        updates as any
+        updates as unknown as UpdateTemplateDto
       );
       return template as unknown as WorkflowTemplateData;
     } catch (error) {

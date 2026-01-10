@@ -333,13 +333,23 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getPaginatedTimeEntries(
     caseId: string,
     params?: PaginationParams
-  ): Promise<any> {
+  ): Promise<{
+    data: TimeEntry[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
     const page = params?.page || 1;
     const pageSize = params?.pageSize || 50;
 
     try {
       const query = `page=${page}&pageSize=${pageSize}&caseId=${caseId}`;
-      return await apiClient.get<any>(`/billing/time-entries?${query}`);
+      return await apiClient.get<{
+        data: TimeEntry[];
+        total: number;
+        page: number;
+        pageSize: number;
+      }>(`/billing/time-entries?${query}`);
     } catch (error) {
       console.error("Paginated fetch failed:", error);
       throw new OperationError("Failed to fetch paginated time entries");

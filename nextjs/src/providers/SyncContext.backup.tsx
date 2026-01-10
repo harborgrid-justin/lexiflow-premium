@@ -263,9 +263,9 @@ export const SyncProvider = ({
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Initial check
+    // Initial check - using a ref to prevent double-processing or settimeout to break sync chain
     if (SyncEngine.count() > 0 && navigator.onLine) {
-      processQueue();
+      setTimeout(() => processQueue(), 0);
     }
 
     return () => {

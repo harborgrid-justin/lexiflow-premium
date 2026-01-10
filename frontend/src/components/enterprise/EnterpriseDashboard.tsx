@@ -175,7 +175,14 @@ const mapKPIs = (data?: DashboardKPIs): KPIMetric[] => {
 
 import type { BillingOverview, CaseStatusBreakdown, TeamMetrics } from '@/api/intelligence/legacy-dashboard-metrics.service';
 
-const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
+interface CasePipelineItem {
+  stage: string;
+  count: number;
+  value: number;
+  color: string;
+}
+
+const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineItem[] => {
   if (!data) return [];
   const colors = ['#94A3B8', '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'];
   return data.map((item, index) => ({
@@ -183,7 +190,7 @@ const mapCasePipeline = (data?: CaseStatusBreakdown[]): CasePipelineStage[] => {
     count: item.count,
     value: 0, // Value not provided by breakdown endpoint, might need another call or update endpoint
     color: item.color || colors[index % colors.length] || '#000000',
-  })) as any;
+  }));
 };
 
 const mapTeamPerformance = (data?: TeamMetrics[]): TeamMember[] => {
@@ -533,7 +540,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                     }}
                     formatter={(
                       value: number | string | Array<number | string> | undefined,
-                      name: any
+                      name: number | string
                     ): [string, string] => {
                       if (name === 'value' && typeof value === 'number') {
                         return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];

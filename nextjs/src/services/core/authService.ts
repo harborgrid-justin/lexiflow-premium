@@ -12,10 +12,7 @@
  */
 
 import { api } from "@/api";
-import {
-  User as BackendUser,
-  UserRole as BackendUserRole,
-} from "@/types/system";
+import { UserRole as BackendUserRole } from "@/types/system";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                              TYPE DEFINITIONS
@@ -297,6 +294,7 @@ class AuthenticationService {
 
     try {
       const updatedUser = await api.users.update(this.currentUser.id, updates);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const enrichedUser: User = {
         ...updatedUser,
         permissions:

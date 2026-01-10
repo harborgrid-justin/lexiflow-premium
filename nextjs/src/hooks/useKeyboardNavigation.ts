@@ -5,7 +5,7 @@
  * WCAG 2.1 AA compliant
  */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -45,22 +45,15 @@ export function useKeyboardNavigation<T>({
   containerRef,
 }: KeyboardNavigationConfig<T>): KeyboardNavigationResult {
   const [focusedIndex, setFocusedIndex] = useState(initialIndex);
-  const itemsLengthRef = useRef(items.length);
+  const [prevItemsLength, setPrevItemsLength] = useState(items.length);
 
-  /**
-   * Update focused index when items change
-   */
-  useEffect(() => {
-    if (items.length !== itemsLengthRef.current) {
-      const prevLength = itemsLengthRef.current;
-      itemsLengthRef.current = items.length;
-
-      // Reset focus if current index is out of bounds
-      if (focusedIndex >= items.length && prevLength !== items.length) {
-        setFocusedIndex(Math.max(0, items.length - 1));
-      }
+  // Adjust focus when items change (Synchronous state update pattern)
+  if (items.length !== prevItemsLength) {
+    setPrevItemsLength(items.length);
+    if (focusedIndex >= items.length) {
+      setFocusedIndex(Math.max(0, items.length - 1));
     }
-  }, [items.length, focusedIndex]);
+  }
 
   /**
    * Navigate to next item

@@ -282,7 +282,7 @@ export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                   <RechartsTooltip
                     cursor={{ fill: isDark ? '#334155' : '#f1f5f9' }}
                     contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderColor: isDark ? '#334155' : '#e2e8f0', color: isDark ? '#f8fafc' : '#0f172a' }}
-                    formatter={(value: number, name: any): any => [`$${value.toLocaleString()}`, 'Revenue']}
+                    formatter={(value: number, _name: any): any => [`$${value.toLocaleString()}`, 'Revenue']}
                   />
                   <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                     {Array.from({ length: 6 }).map((_, index) => (

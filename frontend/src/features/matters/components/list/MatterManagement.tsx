@@ -13,7 +13,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { Matter } from '@/types';
 import { format } from 'date-fns';
-import { Briefcase, Calendar, MoreVertical, Plus, Search, List, LayoutGrid } from 'lucide-react';
+import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';
 import React, { useState } from 'react';
 
 export const MatterManagement: React.FC = () => {
@@ -105,7 +105,7 @@ export const MatterManagement: React.FC = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className={cn("p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm", theme.surface.default, (theme.border as any).default)}>
+      <div className={cn("p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm", theme.surface.default, (theme.border as Record<string, string>).default)}>
         <div className="relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
@@ -115,8 +115,8 @@ export const MatterManagement: React.FC = () => {
             onChange={handleSearch}
             className={cn(
               "w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all",
-              (theme.background as any).default,
-              (theme.border as any).default,
+              (theme.background as Record<string, string>).default,
+              (theme.border as Record<string, string>).default,
               theme.text.primary
             )}
           />

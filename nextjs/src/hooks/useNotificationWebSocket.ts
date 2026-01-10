@@ -310,7 +310,6 @@ export const useNotificationWebSocket = (
     onError,
     log,
     updateConnectionState,
-    scheduleReconnect,
   ]);
 
   /**

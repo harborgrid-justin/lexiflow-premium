@@ -1,34 +1,40 @@
-import { db, STORES } from "@/services/data/db";
+import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
+import { HRApiService } from "@/api/hr/hr-api";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
-import { StaffMember, TimeEntry } from "@/types";
+import { StaffMember } from "@/types";
 import { SystemEventType } from "@/types/integration-types";
 
-export const HRRepository = {
-  getStaff: async () => {
+class HRRepositoryClass {
+  private hrApi: HRApiService;
+  private timeApi: TimeEntriesApiService;
+
+  constructor() {
+    this.hrApi = new HRApiService();
+    this.timeApi = new TimeEntriesApiService();
+  }
+
+  getStaff = async () => {
     try {
-      // Fetch staff and their time entries to calculate utilization
       const [staff, timeEntries] = await Promise.all([
-        db.getAll<StaffMember>(STORES.STAFF),
-        db.getAll<TimeEntry>(STORES.BILLING),
+        this.hrApi.getAll(),
+        this.timeApi.getAll(),
       ]);
 
       return staff.map((s) => {
-        // Filter entries for this user
-        // Note: In real app we'd filter by current year/period
         const userEntries = timeEntries.filter((t) => t.userId === s.userId);
-        const totalHours = userEntries.reduce(
-          (acc, t) => acc + t.duration / 60,
-          0
-        );
+        // Fallback: check hours or duration/60
+        const totalHours = userEntries.reduce((acc, t) => {
+          // @ts-expect-error - hours property might be missing on type
+          const hours = t.hours || (t.duration ? t.duration / 60 : 0);
+          return acc + hours;
+        }, 0);
 
-        // Calculate utilization (Billable / Target)
-        // Assuming target is annual, normalized for YTD
         const utilization =
           s.billableTarget > 0
             ? Math.min(
                 100,
                 Math.round((totalHours / (s.billableTarget / 4)) * 100)
-              ) // Divide target by 4 for ~Q1 view
+              )
             : 0;
 
         return {
@@ -44,16 +50,16 @@ export const HRRepository = {
       );
       return [];
     }
-  },
+  };
 
-  getUtilizationMetrics: async () => {
+  getUtilizationMetrics = async () => {
     try {
-      const staff = await HRRepository.getStaff();
+      const staff = await this.getStaff();
       return staff.map((s) => ({
         name: s.name,
         role: s.role,
         utilization: s.utilizationRate,
-        cases: 0, // Placeholder until case assignment data is available
+        cases: 0,
       }));
     } catch (error) {
       console.warn(
@@ -62,23 +68,44 @@ export const HRRepository = {
       );
       return [];
     }
-  },
+  };
 
-  addStaff: async (staff: StaffMember) => {
-    const newStaff = { ...staff, id: staff.id || crypto.randomUUID() };
-    await db.put(STORES.STAFF, newStaff);
-    // Opp #9 Integration Point
-    await IntegrationEventPublisher.publish(SystemEventType.STAFF_HIRED, {
-      staff: newStaff,
-    });
-    return newStaff;
-  },
+  addStaff = async (staff: StaffMember) => {
+    try {
+      const newStaff = await this.hrApi.create(staff);
+      await IntegrationEventPublisher.publish(SystemEventType.STAFF_HIRED, {
+        staff: newStaff,
+      });
+      return newStaff;
+    } catch (error) {
+      console.error("[HRRepository] Error adding staff:", error);
+      throw error;
+    }
+  };
 
-  updateStaff: async (id: string, updates: Partial<StaffMember>) => {
-    const current = await db.get<StaffMember>(STORES.STAFF, id);
-    if (!current) throw new Error("Staff not found");
-    return db.put(STORES.STAFF, { ...current, ...updates });
-  },
+  updateStaff = async (id: string, updates: Partial<StaffMember>) => {
+    try {
+      return await this.hrApi.update(id, updates);
+    } catch (error) {
+      console.error("[HRRepository] Error updating staff:", error);
+      throw error;
+    }
+  };
 
-  deleteStaff: async (id: string) => db.delete(STORES.STAFF, id),
-};
+  deleteStaff = async (id: string) => {
+    try {
+      // @ts-expect-error - delete not typed on API interface
+      if (this.hrApi.delete) {
+        // @ts-expect-error - delete not typed on API interface
+        await this.hrApi.delete(id);
+      } else {
+        console.warn("[HRRepository] Delete not implemented in API");
+      }
+    } catch (error) {
+      console.error("[HRRepository] Error deleting staff:", error);
+      throw error;
+    }
+  };
+}
+
+export const HRRepository = new HRRepositoryClass();

@@ -242,9 +242,10 @@ export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
     setMemoized({ callback, deps });
   }
 
+  // We depend on the memoized container which is updated via state
   return useCallback(
     (...args: Parameters<T>) => memoized.callback(...args),
-    [memoized.callback]
+    [memoized]
   ) as T;
 }
 
@@ -365,41 +366,56 @@ export function useMemoWithStats<T>(
     totalTime: 0,
   });
 
-  const prevDepsRef = useRef<DependencyList>(deps);
-  const valueRef = useRef<T | undefined>(undefined);
+  const justComputedRef = useRef(false);
 
-  const depsChanged = !shallowEqual(prevDepsRef.current, deps);
+  const value = useMemo(() => {
+    const start = performance.now();
+    const result = factory();
+    const end = performance.now();
 
-  if (depsChanged || valueRef.current === undefined) {
-    // Cache miss
-    statsRef.current.cacheMisses++;
+    justComputedRef.current = true;
     statsRef.current.computations++;
+    statsRef.current.cacheMisses++;
+    statsRef.current.totalTime += end - start;
 
-    // Compute value without performance tracking to avoid impure function during render
-    const value = factory();
-    valueRef.current = value;
-    statsRef.current.totalTime += 0; // Performance tracking removed to fix hooks rules
+    return result;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
 
-    prevDepsRef.current = deps;
-  } else {
-    // Cache hit
-    statsRef.current.cacheHits++;
-  }
+  useEffect(() => {
+    if (!justComputedRef.current) {
+      statsRef.current.cacheHits++;
+    }
+    justComputedRef.current = false;
+  });
 
-  const stats = statsRef.current;
-  const totalAccesses = stats.cacheHits + stats.cacheMisses;
+  const statsProxy = useMemo(
+    () => ({
+      get computations() {
+        return statsRef.current.computations;
+      },
+      get cacheHits() {
+        return statsRef.current.cacheHits;
+      },
+      get cacheMisses() {
+        return statsRef.current.cacheMisses;
+      },
+      get hitRate() {
+        const stats = statsRef.current;
+        const totalAccesses = stats.cacheHits + stats.cacheMisses;
+        return totalAccesses > 0 ? (stats.cacheHits / totalAccesses) * 100 : 0;
+      },
+      get averageComputationTime() {
+        const stats = statsRef.current;
+        return stats.computations > 0
+          ? stats.totalTime / stats.computations
+          : 0;
+      },
+    }),
+    []
+  );
 
-  return [
-    valueRef.current as T,
-    {
-      computations: stats.computations,
-      cacheHits: stats.cacheHits,
-      cacheMisses: stats.cacheMisses,
-      hitRate: totalAccesses > 0 ? (stats.cacheHits / totalAccesses) * 100 : 0,
-      averageComputationTime:
-        stats.computations > 0 ? stats.totalTime / stats.computations : 0,
-    },
-  ];
+  return [value, statsProxy];
 }
 
 // Helper functions
@@ -426,9 +442,4 @@ function deepEqual(a: unknown, b: unknown): boolean {
   }
 
   return false;
-}
-
-function shallowEqual(deps1: DependencyList, deps2: DependencyList): boolean {
-  if (deps1.length !== deps2.length) return false;
-  return deps1.every((dep, i) => Object.is(dep, deps2[i]));
 }

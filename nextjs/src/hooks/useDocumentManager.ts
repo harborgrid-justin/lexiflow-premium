@@ -500,7 +500,7 @@ export function useDocumentManager(
         console.error("[useDocumentManager.setDocuments] Error:", error);
       }
     },
-    []
+    [queryClient]
   );
 
   // ============================================================================
@@ -713,8 +713,15 @@ export function useDocumentManager(
         console.error("[useDocumentManager.addTag] Error:", error);
         notify.error("Failed to add tag");
       }
+      }
     },
-    [documentsArray, validateDocId, validateTag, updateDocument, notify]
+    [
+      documentsArray,
+      validateDocId,
+      validateTag,
+      updateDocument,
+      notify,
+    ]
   );
 
   /**
@@ -904,7 +911,7 @@ export function useDocumentManager(
         setIsUploading(false);
       }
     },
-    [enableDragDrop, currentFolder, validateFile, notify]
+    [enableDragDrop, currentFolder, validateFile, notify, queryClient]
   );
 
   // ============================================================================

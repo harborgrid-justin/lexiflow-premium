@@ -1,4 +1,3 @@
-import { useDataSource } from '@/providers';
 import { CheckCircle, Cloud, XCircle } from 'lucide-react';
 import React from 'react';
 
@@ -97,7 +96,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
  * ServiceCoverageBadge - React 18 optimized with React.memo
  */
 const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCoverageBadge({ className = '', compact = false }) {
-  const { isBackendApiEnabled } = useDataSource();
+  // const { isBackendApiEnabled } = useDataSource();
 
   const totalServices = SERVICE_COVERAGE.length;
   const backendServices = SERVICE_COVERAGE.filter(s => s.hasBackend).length;

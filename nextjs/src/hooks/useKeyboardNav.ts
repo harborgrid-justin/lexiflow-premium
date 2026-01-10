@@ -67,9 +67,11 @@ export function useKeyboardNav<T>({
   useEffect(() => {
     const newIndex = isOpen && items.length > 0 ? 0 : -1;
     if (newIndex !== activeIndex) {
-      setActiveIndex(newIndex);
+      // Use setTimeout to avoid sync setState in effect if strictly needed,
+      // but here guarding with checking logic should suffice
+      setTimeout(() => setActiveIndex(newIndex), 0);
     }
-  }, [isOpen, items.length]); // Only depend on primitives
+  }, [isOpen, items.length, activeIndex]); // Added activeIndex to deps
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

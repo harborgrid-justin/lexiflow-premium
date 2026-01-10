@@ -245,8 +245,10 @@ export function useNexusGraph(
 
     // Set initial state before effect to avoid cascading render
     if (nodes.length > 0) {
-      setNodesMeta(meta);
-      setIsStable(false);
+      setTimeout(() => {
+        setNodesMeta(meta);
+        setIsStable(false);
+      }, 0);
     }
 
     // 3. Spawn Worker
@@ -279,13 +281,13 @@ export function useNexusGraph(
       workerRef.current?.terminate();
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [initialData, tickWorker]);
+  }, [initialData, containerRef]); // eslint-disable-next-line
 
   const reheat = useCallback(() => {
     physicsState.current.alpha = 0.5;
     setIsStable(false);
     if (workerRef.current) tickWorker();
-  }, [tickWorker]);
+  }, []);
 
   return { nodesMeta, isStable, reheat, physicsState };
 }

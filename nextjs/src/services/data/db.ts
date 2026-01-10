@@ -640,7 +640,7 @@ export class DatabaseManager {
       return 0;
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       if (!this.db) return resolve(0);
 
       try {

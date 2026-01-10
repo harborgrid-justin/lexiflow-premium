@@ -1,10 +1,10 @@
 /**
  * @module hooks/useElasticScroll
  * @category Hooks - Scroll
- * 
+ *
  * Physics-based elastic scrolling with momentum and boundaries.
  * Provides smooth anchor navigation and scroll shadows.
- * 
+ *
  * @example
  * ```tsx
  * const {
@@ -21,7 +21,7 @@
  * ```
  */
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Scroll physics configuration
@@ -64,14 +64,14 @@ export interface UseElasticScrollReturn {
 
 /**
  * Elastic Scroll Hook
- * 
+ *
  * Provides physics-based scrolling with:
  * - Momentum and friction
  * - Elastic boundaries
  * - Smooth anchor navigation
  * - Scroll shadows
  * - Progress tracking
- * 
+ *
  * @example
  * ```tsx
  * const {
@@ -85,7 +85,7 @@ export interface UseElasticScrollReturn {
  *   elasticity: 0.4,
  *   showShadows: true
  * });
- * 
+ *
  * return (
  *   <div style={{ position: 'relative' }}>
  *     <div style={topShadowStyle} />
@@ -97,15 +97,16 @@ export interface UseElasticScrollReturn {
  * );
  * ```
  */
-export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticScrollReturn {
+export function useElasticScroll(
+  config: ElasticScrollConfig = {}
+): UseElasticScrollReturn {
   const {
     friction = 0.92,
     elasticity = 0.4,
     minVelocity = 0.1,
     maxVelocity = 50,
     scrollPadding = 20,
-    snapToAnchors: _snapToAnchors = false,
-    showShadows = true
+    showShadows = true,
   } = config;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -114,13 +115,16 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
   const lastTouchRef = useRef<{ y: number; time: number } | null>(null);
   const isMomentumScrolling = useRef(false);
 
+  // Ref to hold the update function to avoid circular dependency in useCallback
+  const updateScrollRef = useRef<() => void>(undefined);
+
   const [scrollState, setScrollState] = useState<ScrollState>({
     position: 0,
     velocity: 0,
     isScrolling: false,
     isAtTop: true,
     isAtBottom: false,
-    progress: 0
+    progress: 0,
   });
 
   /**
@@ -135,30 +139,33 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
     return {
       min: 0,
       max: Math.max(0, maxScroll),
-      height: element.clientHeight
+      height: element.clientHeight,
     };
   }, []);
 
   /**
    * Apply elastic bounce at boundaries
    */
-  const applyElasticity = useCallback((position: number): number => {
-    const bounds = getScrollBounds();
+  const applyElasticity = useCallback(
+    (position: number): number => {
+      const bounds = getScrollBounds();
 
-    if (position < bounds.min) {
-      // Bounce at top
-      const overflow = bounds.min - position;
-      return bounds.min - overflow * elasticity;
-    }
+      if (position < bounds.min) {
+        // Bounce at top
+        const overflow = bounds.min - position;
+        return bounds.min - overflow * elasticity;
+      }
 
-    if (position > bounds.max) {
-      // Bounce at bottom
-      const overflow = position - bounds.max;
-      return bounds.max + overflow * elasticity;
-    }
+      if (position > bounds.max) {
+        // Bounce at bottom
+        const overflow = position - bounds.max;
+        return bounds.max + overflow * elasticity;
+      }
 
-    return position;
-  }, [getScrollBounds, elasticity]);
+      return position;
+    },
+    [getScrollBounds, elasticity]
+  );
 
   /**
    * Update scroll position with physics
@@ -202,38 +209,48 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
       isScrolling: isMomentumScrolling.current,
       isAtTop,
       isAtBottom,
-      progress
+      progress,
     });
 
     velocityRef.current = currentVelocity;
 
     // Continue animation if scrolling
-    if (isMomentumScrolling.current) {
-      animationFrameRef.current = requestAnimationFrame(updateScroll);
+    if (isMomentumScrolling.current && updateScrollRef.current) {
+      animationFrameRef.current = requestAnimationFrame(
+        updateScrollRef.current
+      );
     }
   }, [getScrollBounds, friction, minVelocity, applyElasticity]);
+
+  // Keep the ref updated with the latest callback
+  useEffect(() => {
+    updateScrollRef.current = updateScroll;
+  }, [updateScroll]);
 
   /**
    * Handle wheel events
    */
-  const handleWheel = useCallback((e: WheelEvent) => {
-    e.preventDefault();
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      e.preventDefault();
 
-    // Start momentum
-    isMomentumScrolling.current = true;
+      // Start momentum
+      isMomentumScrolling.current = true;
 
-    // Add velocity (cap at max)
-    const deltaVelocity = e.deltaY * 0.3; // Scale factor
-    velocityRef.current = Math.max(
-      -maxVelocity,
-      Math.min(maxVelocity, velocityRef.current + deltaVelocity)
-    );
+      // Add velocity (cap at max)
+      const deltaVelocity = e.deltaY * 0.3; // Scale factor
+      velocityRef.current = Math.max(
+        -maxVelocity,
+        Math.min(maxVelocity, velocityRef.current + deltaVelocity)
+      );
 
-    // Start animation if not already running
-    if (!animationFrameRef.current) {
-      animationFrameRef.current = requestAnimationFrame(updateScroll);
-    }
-  }, [maxVelocity, updateScroll]);
+      // Start animation if not already running
+      if (!animationFrameRef.current) {
+        animationFrameRef.current = requestAnimationFrame(updateScroll);
+      }
+    },
+    [maxVelocity, updateScroll]
+  );
 
   /**
    * Handle touch start
@@ -241,7 +258,7 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
   const handleTouchStart = useCallback((e: TouchEvent) => {
     lastTouchRef.current = {
       y: e.touches[0].clientY,
-      time: Date.now()
+      time: Date.now(),
     };
 
     // Stop current momentum
@@ -266,12 +283,12 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
 
     // Calculate velocity for momentum on release
     if (deltaTime > 0) {
-      velocityRef.current = deltaY / deltaTime * 16; // Convert to pixels per frame (60fps)
+      velocityRef.current = (deltaY / deltaTime) * 16; // Convert to pixels per frame (60fps)
     }
 
     lastTouchRef.current = {
       y: currentY,
-      time: currentTime
+      time: currentTime,
     };
   }, []);
 
@@ -294,53 +311,63 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
   /**
    * Scroll to specific position
    */
-  const scrollTo = useCallback((position: number, smooth = true) => {
-    if (!containerRef.current) return;
+  const scrollTo = useCallback(
+    (position: number, smooth = true) => {
+      if (!containerRef.current) return;
 
-    if (smooth) {
-      // Calculate velocity needed to reach target
-      const currentPos = containerRef.current.scrollTop;
-      const distance = position - currentPos;
-      
-      velocityRef.current = distance * 0.1; // Ease into target
-      isMomentumScrolling.current = true;
-      
-      animationFrameRef.current = requestAnimationFrame(updateScroll);
-    } else {
-      // Immediate scroll
-      containerRef.current.scrollTop = position;
-      velocityRef.current = 0;
-    }
-  }, [updateScroll]);
+      if (smooth) {
+        // Calculate velocity needed to reach target
+        const currentPos = containerRef.current.scrollTop;
+        const distance = position - currentPos;
+
+        velocityRef.current = distance * 0.1; // Ease into target
+        isMomentumScrolling.current = true;
+
+        animationFrameRef.current = requestAnimationFrame(updateScroll);
+      } else {
+        // Immediate scroll
+        containerRef.current.scrollTop = position;
+        velocityRef.current = 0;
+      }
+    },
+    [updateScroll]
+  );
 
   /**
    * Scroll to anchor element
    */
-  const scrollToAnchor = useCallback((anchorId: string, smooth = true) => {
-    if (!containerRef.current) return;
+  const scrollToAnchor = useCallback(
+    (anchorId: string, smooth = true) => {
+      if (!containerRef.current) return;
 
-    const anchorElement = document.getElementById(anchorId);
-    if (!anchorElement) return;
+      const anchorElement = document.getElementById(anchorId);
+      if (!anchorElement) return;
 
-    // Calculate position relative to container
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const anchorRect = anchorElement.getBoundingClientRect();
-    
-    const relativeTop = anchorRect.top - containerRect.top + containerRef.current.scrollTop;
-    const targetPosition = relativeTop - scrollPadding;
+      // Calculate position relative to container
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const anchorRect = anchorElement.getBoundingClientRect();
 
-    scrollTo(targetPosition, smooth);
-  }, [scrollTo, scrollPadding]);
+      const relativeTop =
+        anchorRect.top - containerRect.top + containerRef.current.scrollTop;
+      const targetPosition = relativeTop - scrollPadding;
+
+      scrollTo(targetPosition, smooth);
+    },
+    [scrollTo, scrollPadding]
+  );
 
   /**
    * Scroll by delta amount
    */
-  const scrollBy = useCallback((delta: number) => {
-    if (!containerRef.current) return;
+  const scrollBy = useCallback(
+    (delta: number) => {
+      if (!containerRef.current) return;
 
-    const currentPos = containerRef.current.scrollTop;
-    scrollTo(currentPos + delta, true);
-  }, [scrollTo]);
+      const currentPos = containerRef.current.scrollTop;
+      scrollTo(currentPos + delta, true);
+    },
+    [scrollTo]
+  );
 
   /**
    * Reset scroll to top
@@ -357,16 +384,16 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
     if (!element) return;
 
     // Passive: false to allow preventDefault
-    element.addEventListener('wheel', handleWheel, { passive: false });
-    element.addEventListener('touchstart', handleTouchStart, { passive: true });
-    element.addEventListener('touchmove', handleTouchMove, { passive: true });
-    element.addEventListener('touchend', handleTouchEnd, { passive: true });
+    element.addEventListener("wheel", handleWheel, { passive: false });
+    element.addEventListener("touchstart", handleTouchStart, { passive: true });
+    element.addEventListener("touchmove", handleTouchMove, { passive: true });
+    element.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
-      element.removeEventListener('wheel', handleWheel);
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      element.removeEventListener("wheel", handleWheel);
+      element.removeEventListener("touchstart", handleTouchStart);
+      element.removeEventListener("touchmove", handleTouchMove);
+      element.removeEventListener("touchend", handleTouchEnd);
 
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -377,31 +404,37 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
   /**
    * Calculate shadow styles
    */
-  const topShadowStyle: React.CSSProperties = showShadows ? {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '20px',
-    background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), transparent)',
-    opacity: scrollState.isAtTop ? 0 : Math.min(1, scrollState.position / 100),
-    pointerEvents: 'none',
-    transition: 'opacity 0.2s ease',
-    zIndex: 10
-  } : {};
+  const topShadowStyle: React.CSSProperties = showShadows
+    ? {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "20px",
+        background: "linear-gradient(to bottom, rgba(0,0,0,0.1), transparent)",
+        opacity: scrollState.isAtTop
+          ? 0
+          : Math.min(1, scrollState.position / 100),
+        pointerEvents: "none",
+        transition: "opacity 0.2s ease",
+        zIndex: 10,
+      }
+    : {};
 
-  const bottomShadowStyle: React.CSSProperties = showShadows ? {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '20px',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.1), transparent)',
-    opacity: scrollState.isAtBottom ? 0 : 1 - scrollState.progress,
-    pointerEvents: 'none',
-    transition: 'opacity 0.2s ease',
-    zIndex: 10
-  } : {};
+  const bottomShadowStyle: React.CSSProperties = showShadows
+    ? {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: "20px",
+        background: "linear-gradient(to top, rgba(0,0,0,0.1), transparent)",
+        opacity: scrollState.isAtBottom ? 0 : 1 - scrollState.progress,
+        pointerEvents: "none",
+        transition: "opacity 0.2s ease",
+        zIndex: 10,
+      }
+    : {};
 
   return {
     scrollState,
@@ -411,7 +444,7 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
     resetScroll,
     containerRef: containerRef as React.RefObject<HTMLDivElement>,
     topShadowStyle,
-    bottomShadowStyle
+    bottomShadowStyle,
   };
 }
 

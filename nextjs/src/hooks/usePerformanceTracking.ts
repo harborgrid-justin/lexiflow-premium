@@ -1,10 +1,10 @@
 /**
  * @module hooks/usePerformanceTracking
  * @category Hooks - Performance
- * 
+ *
  * Tracks component render performance with memory monitoring.
  * Warns when renders exceed threshold.
- * 
+ *
  * @example
  * ```typescript
  * function MyComponent() {
@@ -12,14 +12,14 @@
  *     componentName: 'MyComponent',
  *     warnThreshold: 16, // Warn if render > 16ms
  *   });
- *   
+ *
  *   return <div>...</div>;
  * }
  * ```
  */
 
-import { useEffect, useRef } from 'react';
-import { memoryMonitor } from '@/utils/memoryMonitor';
+import { memoryMonitor } from "@/utils/memoryMonitor";
+import { useEffect, useRef } from "react";
 
 /**
  * Options for performance tracking
@@ -35,13 +35,16 @@ export interface PerformanceTrackingOptions {
 
 /**
  * Tracks component render performance.
- * 
+ *
  * @param options - Configuration options
  */
-export function usePerformanceTracking(options: PerformanceTrackingOptions): void {
+export function usePerformanceTracking(
+  options: PerformanceTrackingOptions
+): void {
   const {
     componentName,
-    enabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_PERF_TRACKING === 'true',
+    enabled = import.meta.env.DEV ||
+      import.meta.env.VITE_ENABLE_PERF_TRACKING === "true",
     warnThreshold = 16,
   } = options;
 
@@ -53,6 +56,7 @@ export function usePerformanceTracking(options: PerformanceTrackingOptions): voi
 
     renderStartRef.current = performance.now();
     renderCountRef.current++;
+    const currentRenderCount = renderCountRef.current;
 
     return () => {
       const duration = performance.now() - renderStartRef.current;
@@ -60,7 +64,7 @@ export function usePerformanceTracking(options: PerformanceTrackingOptions): voi
 
       if (duration > warnThreshold) {
         console.warn(
-          `[Performance] ${componentName} render #${renderCountRef.current} took ${duration.toFixed(2)}ms`
+          `[Performance] ${componentName} render #${currentRenderCount} took ${duration.toFixed(2)}ms`
         );
       }
     };
@@ -78,16 +82,15 @@ export function usePerformanceTracking(options: PerformanceTrackingOptions): voi
  * );
  * ```
  */
-export function useTrackedMemo<T>(
-  factory: () => T,
-  name: string
-): T {
+export function useTrackedMemo<T>(factory: () => T, name: string): T {
   const startTime = performance.now();
   const value = factory();
   const duration = performance.now() - startTime;
 
   if (duration > 10) {
-    console.warn(`[Performance] Expensive memo "${name}" took ${duration.toFixed(2)}ms`);
+    console.warn(
+      `[Performance] Expensive memo "${name}" took ${duration.toFixed(2)}ms`
+    );
   }
 
   return value;

@@ -89,10 +89,15 @@ export interface UseGanttDragReturn {
  * @returns Object with initDrag method
  */
 export function useScheduleController({
-  pixelsPerDay,
-  tasks,
-  onTaskUpdate,
+  pixelsPerDay: _pixelsPerDay,
+  tasks: _tasks,
+  onTaskUpdate: _onTaskUpdate,
 }: DragOptions): UseGanttDragReturn {
+  // Suppress unused vars
+  void _pixelsPerDay;
+  void _tasks;
+  void _onTaskUpdate;
+
   const dragRef = useRef<{
     taskId: string;
     mode: DragMode;
@@ -122,31 +127,28 @@ export function useScheduleController({
   }, []);
 
   // 60fps Loop for smooth visual updates without React re-renders
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!dragRef.current) return;
-      const { startX, initialWidth, element, mode } = dragRef.current;
-      const dx = e.clientX - startX;
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!dragRef.current) return;
+    const { startX, initialWidth, element, mode } = dragRef.current;
+    const dx = e.clientX - startX;
 
-      requestAnimationFrame(() => {
-        if (mode === "move") {
+    requestAnimationFrame(() => {
+      if (mode === "move") {
+        element.style.transform = `translate3d(${dx}px, 0, 0)`;
+        element.style.zIndex = "50";
+      } else if (mode === "resize-right") {
+        element.style.width = `${Math.max(20, initialWidth + dx)}px`;
+      } else if (mode === "resize-left") {
+        // For left resize, we translate right and shrink width, or translate left and grow width
+        // Visual trick: translate X and change width
+        const newWidth = Math.max(20, initialWidth - dx);
+        if (newWidth > 20) {
           element.style.transform = `translate3d(${dx}px, 0, 0)`;
-          element.style.zIndex = "50";
-        } else if (mode === "resize-right") {
-          element.style.width = `${Math.max(20, initialWidth + dx)}px`;
-        } else if (mode === "resize-left") {
-          // For left resize, we translate right and shrink width, or translate left and grow width
-          // Visual trick: translate X and change width
-          const newWidth = Math.max(20, initialWidth - dx);
-          if (newWidth > 20) {
-            element.style.transform = `translate3d(${dx}px, 0, 0)`;
-            element.style.width = `${newWidth}px`;
-          }
+          element.style.width = `${newWidth}px`;
         }
-      });
-    },
-    [handleMouseUp]
-  );
+      }
+    });
+  }, []);
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent, taskId: string, mode: DragMode) => {
@@ -182,7 +184,7 @@ export function useScheduleController({
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     },
-    [handleMouseMove, handleMouseUp]
+    [handleMouseMove]
   );
 
   return { initDrag: onMouseDown, onMouseDown };

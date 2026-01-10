@@ -109,7 +109,7 @@ export function useWebSocket(options: WebSocketOptions = {}) {
       try {
         const authData = JSON.parse(storedAuth);
         return authData.accessToken || authData.token;
-      } catch (error) {
+      } catch {
         return null;
       }
     }

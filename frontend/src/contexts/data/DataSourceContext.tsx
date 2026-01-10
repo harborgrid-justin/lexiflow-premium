@@ -169,7 +169,7 @@ export const DataSourceProvider = ({
     }
     // No-op effectively, as we are always on postgresql
     setCurrentSource('postgresql');
-  }, [currentSource, config]);
+  }, []);
 
   useEffect(() => {
     // Pattern 11: Lifecycle logging

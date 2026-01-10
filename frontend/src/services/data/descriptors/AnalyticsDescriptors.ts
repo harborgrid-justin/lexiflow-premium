@@ -3,6 +3,10 @@ import { AnalysisService } from "@/services/domain/AnalysisDomain";
 import { AnalyticsService } from "@/services/domain/AnalyticsDomain";
 
 export const AnalyticsDescriptors: PropertyDescriptorMap = {
+  aiOps: {
+    get: () => analyticsApi.aiOps,
+    enumerable: true,
+  },
   knowledge: {
     get: () => analyticsApi.knowledge,
     enumerable: true,

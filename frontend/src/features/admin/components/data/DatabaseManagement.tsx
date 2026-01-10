@@ -8,6 +8,19 @@ import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
+interface StoreInfo {
+  name: string;
+  count: number;
+}
+
+interface DatabaseInfo {
+  name: string;
+  version: string;
+  mode: string;
+  totalStores: number;
+  stores: StoreInfo[];
+}
+
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();
@@ -17,7 +30,7 @@ export const DatabaseManagement: React.FC = () => {
   const resetModal = useModalState();
 
   // Note: getDbInfo, incrementVersion, resetDatabase methods need to be implemented in DatabaseManager
-  const { data: dbInfo, refetch } = useQuery(QUERY_KEYS.DB.INFO, () => {
+  const { data: dbInfo, refetch } = useQuery<DatabaseInfo>(QUERY_KEYS.DB.INFO, () => {
     // Uses DataService facade which routes to Backend implementation
     return DataService.admin.getDbInfo();
   });
@@ -93,19 +106,19 @@ export const DatabaseManagement: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className={cn("p-4 rounded-lg border", theme.border.default)}>
                 <div className="text-xs text-gray-500 mb-1">Database Name</div>
-                <div className={cn("font-bold", theme.text.primary)}>{(dbInfo as any).name}</div>
+                <div className={cn("font-bold", theme.text.primary)}>{dbInfo.name}</div>
               </div>
               <div className={cn("p-4 rounded-lg border", theme.border.default)}>
                 <div className="text-xs text-gray-500 mb-1">Version</div>
-                <div className={cn("font-bold text-blue-600 dark:text-blue-400")}>{(dbInfo as any).version}</div>
+                <div className={cn("font-bold text-blue-600 dark:text-blue-400")}>{dbInfo.version}</div>
               </div>
               <div className={cn("p-4 rounded-lg border", theme.border.default)}>
                 <div className="text-xs text-gray-500 mb-1">Mode</div>
-                <div className={cn("font-bold", theme.text.primary)}>{(dbInfo as any).mode}</div>
+                <div className={cn("font-bold", theme.text.primary)}>{dbInfo.mode}</div>
               </div>
               <div className={cn("p-4 rounded-lg border", theme.border.default)}>
                 <div className="text-xs text-gray-500 mb-1">Total Stores</div>
-                <div className={cn("font-bold", theme.text.primary)}>{(dbInfo as any).totalStores}</div>
+                <div className={cn("font-bold", theme.text.primary)}>{dbInfo.totalStores}</div>
               </div>
             </div>
 
@@ -121,7 +134,7 @@ export const DatabaseManagement: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {(dbInfo as any).stores.map((store: any) => (
+                    {dbInfo.stores.map((store) => (
                       <tr key={store.name} className={cn("border-b", theme.border.default)}>
                         <td className={cn("p-2", theme.text.primary)}>{store.name}</td>
                         <td className={cn("p-2 text-right font-mono", theme.text.primary)}>{store.count}</td>

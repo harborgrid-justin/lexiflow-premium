@@ -31,7 +31,7 @@ export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelect
     return File;
   };
 
-  const templates = fetchedTemplates.map((t: any) => ({
+  const templates = fetchedTemplates.map((t: { name: string; category: string; description?: string }) => ({
     name: t.name,
     icon: getIconForTemplate(t.name, t.category),
     description: t.description || 'No description available'
@@ -54,7 +54,7 @@ export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelect
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {templates.map((t: any) => (
+          {templates.map((t: { name: string; icon: React.ReactNode; description: string }) => (
             <button
               key={t.name}
               onClick={() => onSelectTemplate(t.name)}

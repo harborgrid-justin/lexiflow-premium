@@ -27,7 +27,7 @@ export async function apiFetch<T>(
   try {
     const cookieStore = await cookies();
     token = cookieStore.get("auth_token")?.value;
-  } catch (error) {
+  } catch {
     // Ignore error in contexts where cookies are not available
   }
 
@@ -70,7 +70,7 @@ export async function apiFetch<T>(
       typeof error === "object" &&
       error !== null &&
       "message" in error &&
-      (error as any).message === "NEXT_REDIRECT"
+      (error as { message: string }).message === "NEXT_REDIRECT"
     ) {
       throw error;
     }
@@ -79,7 +79,7 @@ export async function apiFetch<T>(
     if (
       typeof error === "object" &&
       error !== null &&
-      (error as any).digest?.startsWith("NEXT_REDIRECT")
+      (error as { digest?: string }).digest?.startsWith("NEXT_REDIRECT")
     ) {
       throw error;
     }

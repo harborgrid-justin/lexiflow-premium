@@ -12,7 +12,7 @@
 // ============================================================================
 
 /** localStorage key for storing audit events */
-const AUDIT_LOG_KEY = 'auth_audit_log';
+const AUDIT_LOG_KEY = "auth_audit_log";
 
 /** Maximum number of events to retain in localStorage */
 const MAX_EVENTS = 100;
@@ -26,14 +26,14 @@ const MAX_EVENTS = 100;
  * Each type represents a distinct authentication-related action.
  */
 export type AuthEventType =
-  | 'login'
-  | 'logout'
-  | 'mfa_enabled'
-  | 'mfa_disabled'
-  | 'password_changed'
-  | 'token_refresh'
-  | 'session_expired'
-  | 'access_denied';
+  | "login"
+  | "logout"
+  | "mfa_enabled"
+  | "mfa_disabled"
+  | "password_changed"
+  | "token_refresh"
+  | "session_expired"
+  | "access_denied";
 
 /**
  * Metadata associated with an authentication event.
@@ -98,7 +98,7 @@ export interface AuditLogFilter {
  */
 export interface AuditExportOptions {
   /** Format for export (json or csv) */
-  format?: 'json' | 'csv';
+  format?: "json" | "csv";
   /** Include metadata in export */
   includeMetadata?: boolean;
 }
@@ -125,7 +125,7 @@ function generateEventId(): string {
  * @returns true if running in browser, false otherwise
  */
 function isBrowser(): boolean {
-  return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
 }
 
 /**
@@ -190,7 +190,7 @@ export function logAuthEvent(
   if (isBrowser()) {
     try {
       const existingLogs = localStorage.getItem(AUDIT_LOG_KEY);
-      const logs: AuthEvent[] = safeJsonParse(existingLogs || '[]', []);
+      const logs: AuthEvent[] = safeJsonParse(existingLogs || "[]", []);
 
       logs.push(event);
 
@@ -202,11 +202,11 @@ export function logAuthEvent(
       localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(logs));
 
       // Log to console in development mode for debugging
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Auth Audit]', event);
+      if (process.env.NODE_ENV === "development") {
+        console.log("[Auth Audit]", event);
       }
-    } catch (error) {
-      console.error('[Auth Audit] Failed to log event:', error);
+    } catch (error: unknown) {
+      console.error("[Auth Audit] Failed to log event:", error);
     }
   }
 
@@ -243,7 +243,7 @@ export function getAuthAuditLogs(filter?: AuditLogFilter): AuthEvent[] {
 
   try {
     const existingLogs = localStorage.getItem(AUDIT_LOG_KEY);
-    let logs: AuthEvent[] = safeJsonParse(existingLogs || '[]', []);
+    let logs: AuthEvent[] = safeJsonParse(existingLogs || "[]", []);
 
     if (filter) {
       // Filter by event type
@@ -260,7 +260,7 @@ export function getAuthAuditLogs(filter?: AuditLogFilter): AuthEvent[] {
       // Filter by time range (after)
       if (filter.after) {
         const afterTimestamp =
-          typeof filter.after === 'string'
+          typeof filter.after === "string"
             ? new Date(filter.after).getTime()
             : filter.after.getTime();
         logs = logs.filter(
@@ -271,7 +271,7 @@ export function getAuthAuditLogs(filter?: AuditLogFilter): AuthEvent[] {
       // Filter by time range (before)
       if (filter.before) {
         const beforeTimestamp =
-          typeof filter.before === 'string'
+          typeof filter.before === "string"
             ? new Date(filter.before).getTime()
             : filter.before.getTime();
         logs = logs.filter(
@@ -286,8 +286,8 @@ export function getAuthAuditLogs(filter?: AuditLogFilter): AuthEvent[] {
     }
 
     return logs;
-  } catch (error) {
-    console.error('[Auth Audit] Failed to retrieve logs:', error);
+  } catch (error: unknown) {
+    console.error("[Auth Audit] Failed to retrieve logs:", error);
     return [];
   }
 }
@@ -307,8 +307,8 @@ export function clearAuthAuditLogs(): boolean {
   try {
     localStorage.removeItem(AUDIT_LOG_KEY);
     return true;
-  } catch (error) {
-    console.error('[Auth Audit] Failed to clear logs:', error);
+  } catch (error: unknown) {
+    console.error("[Auth Audit] Failed to clear logs:", error);
     return false;
   }
 }
@@ -369,29 +369,26 @@ export function getLastAuthEvent(
  */
 export function exportAuthAuditLogs(options?: AuditExportOptions): string {
   const logs = getAuthAuditLogs();
-  const format = options?.format || 'json';
+  const format = options?.format || "json";
   const includeMetadata = options?.includeMetadata !== false;
 
-  if (format === 'csv') {
-    const headers = ['id', 'type', 'timestamp', 'userId'];
+  if (format === "csv") {
+    const headers = ["id", "type", "timestamp", "userId"];
     if (includeMetadata) {
-      headers.push('metadata');
+      headers.push("metadata");
     }
 
     const rows = logs.map((event) => {
-      const row = [
-        event.id,
-        event.type,
-        event.timestamp,
-        event.userId || '',
-      ];
+      const row = [event.id, event.type, event.timestamp, event.userId || ""];
       if (includeMetadata) {
-        row.push(event.metadata ? JSON.stringify(event.metadata) : '');
+        row.push(event.metadata ? JSON.stringify(event.metadata) : "");
       }
-      return row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',');
+      return row
+        .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
+        .join(",");
     });
 
-    return [headers.join(','), ...rows].join('\n');
+    return [headers.join(","), ...rows].join("\n");
   }
 
   // Default to JSON format
@@ -421,8 +418,8 @@ export function createServerAuditPayload(events?: AuthEvent[]): {
   const logsToExport = events || getAuthAuditLogs();
 
   return {
-    source: 'lexiflow-nextjs',
-    version: '1.0.0',
+    source: "lexiflow-nextjs",
+    version: "1.0.0",
     exportedAt: new Date().toISOString(),
     eventCount: logsToExport.length,
     events: logsToExport,
@@ -444,7 +441,7 @@ export function logLogin(
   userId: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('login', userId, metadata);
+  return logAuthEvent("login", userId, metadata);
 }
 
 /**
@@ -458,7 +455,7 @@ export function logLogout(
   userId: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('logout', userId, metadata);
+  return logAuthEvent("logout", userId, metadata);
 }
 
 /**
@@ -474,7 +471,7 @@ export function logMfaEnabled(
   mfaMethod: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('mfa_enabled', userId, { ...metadata, mfaMethod });
+  return logAuthEvent("mfa_enabled", userId, { ...metadata, mfaMethod });
 }
 
 /**
@@ -490,7 +487,7 @@ export function logMfaDisabled(
   mfaMethod: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('mfa_disabled', userId, { ...metadata, mfaMethod });
+  return logAuthEvent("mfa_disabled", userId, { ...metadata, mfaMethod });
 }
 
 /**
@@ -504,7 +501,7 @@ export function logPasswordChanged(
   userId: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('password_changed', userId, metadata);
+  return logAuthEvent("password_changed", userId, metadata);
 }
 
 /**
@@ -518,7 +515,7 @@ export function logTokenRefresh(
   userId: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('token_refresh', userId, metadata);
+  return logAuthEvent("token_refresh", userId, metadata);
 }
 
 /**
@@ -532,7 +529,7 @@ export function logSessionExpired(
   userId: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('session_expired', userId, metadata);
+  return logAuthEvent("session_expired", userId, metadata);
 }
 
 /**
@@ -550,5 +547,9 @@ export function logAccessDenied(
   reason: string,
   metadata?: AuthEventMetadata
 ): AuthEvent {
-  return logAuthEvent('access_denied', userId, { ...metadata, resource, reason });
+  return logAuthEvent("access_denied", userId, {
+    ...metadata,
+    resource,
+    reason,
+  });
 }

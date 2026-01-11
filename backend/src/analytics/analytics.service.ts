@@ -1,18 +1,21 @@
-import { Injectable, NotFoundException, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
-import { AnalyticsEvent } from './entities/analytics-event.entity';
-import { Dashboard } from './entities/dashboard.entity';
-import { CreateAnalyticsEventDto } from '@analytics/dto';
-import { CreateDashboardDto } from '@analytics/dto';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
-import { AnalyticsGenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
+import { CreateAnalyticsEventDto, CreateDashboardDto } from "@analytics/dto";
+import { Injectable, NotFoundException, OnModuleDestroy } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Between, Repository } from "typeorm";
 import {
-  AnalyticsCaseMetricsDto,
-  UserActivityMetricsDto,
+  AnalyticsGenerateReportDto,
+  GenerateReportResponseDto,
+  ReportFormat,
+} from "./dto/generate-report.dto";
+import {
   AnalyticsBillingMetricsDto,
+  AnalyticsCaseMetricsDto,
   TimeSeriesDataPointDto,
-} from './dto/metrics-response.dto';
+  UserActivityMetricsDto,
+} from "./dto/metrics-response.dto";
+import { UpdateDashboardDto } from "./dto/update-dashboard.dto";
+import { AnalyticsEvent } from "./entities/analytics-event.entity";
+import { Dashboard } from "./entities/dashboard.entity";
 
 /**
  * Widget interface for dashboard widgets
@@ -26,7 +29,6 @@ interface Widget {
   size: { width: number; height: number };
 }
 
-
 /**
  * Analytics cache data types
  */
@@ -39,7 +41,7 @@ type AnalyticsCacheData =
 
 /**
  * Analytics Service with Memory Optimizations
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - LRU cache with 2K entry limit for metrics and time series data
  * - 30-minute TTL for cached results
@@ -85,14 +87,17 @@ export class AnalyticsService implements OnModuleDestroy {
   private readonly MAX_EVENTS_PER_QUERY = 10000;
 
   // LRU cache for expensive analytics computations
-  private analyticsCache: Map<string, { data: AnalyticsCacheData; timestamp: number }> = new Map();
+  private analyticsCache: Map<
+    string,
+    { data: AnalyticsCacheData; timestamp: number }
+  > = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
     @InjectRepository(AnalyticsEvent)
     private readonly analyticsEventRepository: Repository<AnalyticsEvent>,
     @InjectRepository(Dashboard)
-    private readonly dashboardRepository: Repository<Dashboard>,
+    private readonly dashboardRepository: Repository<Dashboard>
   ) {
     this.startCacheCleanup();
   }
@@ -127,7 +132,7 @@ export class AnalyticsService implements OnModuleDestroy {
       }
     }
 
-    toDelete.forEach(key => this.analyticsCache.delete(key));
+    toDelete.forEach((key) => this.analyticsCache.delete(key));
 
     // If still over limit, remove oldest entries
     if (this.analyticsCache.size > this.MAX_CACHE_ENTRIES) {
@@ -146,13 +151,16 @@ export class AnalyticsService implements OnModuleDestroy {
   /**
    * Get cached data or compute and cache result
    */
-  private getCachedData<T extends AnalyticsCacheData>(cacheKey: string, computeFn: () => Promise<T>): Promise<T> {
+  private getCachedData<T extends AnalyticsCacheData>(
+    cacheKey: string,
+    computeFn: () => Promise<T>
+  ): Promise<T> {
     const cached = this.analyticsCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return Promise.resolve(cached.data as T);
     }
 
-    return computeFn().then(data => {
+    return computeFn().then((data) => {
       this.analyticsCache.set(cacheKey, { data, timestamp: Date.now() });
       return data;
     });
@@ -161,75 +169,80 @@ export class AnalyticsService implements OnModuleDestroy {
   async trackEvent(data: CreateAnalyticsEventDto): Promise<AnalyticsEvent> {
     const event = this.analyticsEventRepository.create({
       eventType: data.eventName,
-      entityType: data.caseId ? 'case' : 'system',
-      entityId: data.caseId || 'system',
-      userId: data.userId || 'system',
+      entityType: data.caseId ? "case" : "system",
+      entityId: data.caseId || "system",
+      userId: data.userId || "system",
       metadata: data.metadata || {},
       timestamp: new Date(),
     });
-    const saved = await this.analyticsEventRepository.save(event);
-    // TypeORM save can return array or single item, ensure we get a single item
-    if (Array.isArray(saved)) {
-      const result = saved[0];
-      if (!result) {
-        throw new Error('Failed to save analytics event');
-      }
-      return result;
-    }
+    const saved = (await this.analyticsEventRepository.save(
+      event
+    )) as AnalyticsEvent;
     return saved;
   }
 
   async getEventsByType(eventType: string): Promise<AnalyticsEvent[]> {
     return this.analyticsEventRepository.find({
       where: { eventType },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
-  async getEventsByEntity(entityType: string, entityId: string): Promise<AnalyticsEvent[]> {
+  async getEventsByEntity(
+    entityType: string,
+    entityId: string
+  ): Promise<AnalyticsEvent[]> {
     return this.analyticsEventRepository.find({
       where: { entityType, entityId },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
   async getEventsByUser(userId: string): Promise<AnalyticsEvent[]> {
     return this.analyticsEventRepository.find({
       where: { userId },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
-  async getEventsByDateRange(startDate: Date, endDate: Date): Promise<AnalyticsEvent[]> {
+  async getEventsByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): Promise<AnalyticsEvent[]> {
     return this.analyticsEventRepository.find({
       where: {
         timestamp: Between(startDate, endDate),
       },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
   async getCaseMetrics(): Promise<AnalyticsCaseMetricsDto> {
-    const cacheKey = 'case_metrics';
-    
+    const cacheKey = "case_metrics";
+
     return this.getCachedData(cacheKey, async () => {
       // Limit query to recent events to prevent memory bloat
       const recentEvents = await this.analyticsEventRepository.find({
-        where: { eventType: 'case_created' },
-        order: { timestamp: 'DESC' },
+        where: { eventType: "case_created" },
+        order: { timestamp: "DESC" },
         take: this.MAX_EVENTS_PER_QUERY,
       });
 
-      const casesByStatus = recentEvents.reduce((acc: Record<string, number>, event: AnalyticsEvent) => {
-        const metadata = event.metadata as Record<string, unknown> | undefined;
-        const status = (metadata?.status as string) || 'Unknown';
-        acc[status] = (acc[status] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const casesByStatus = recentEvents.reduce(
+        (acc: Record<string, number>, event: AnalyticsEvent) => {
+          const metadata = event.metadata as
+            | Record<string, unknown>
+            | undefined;
+          const status = (metadata?.status as string) || "Unknown";
+          acc[status] = (acc[status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       const totalCases = recentEvents.length;
-      const activeCases = casesByStatus['active'] || 0;
-      const closedCases = casesByStatus['closed'] || 0;
+      const activeCases = casesByStatus["active"] || 0;
+      const closedCases = casesByStatus["closed"] || 0;
 
       return {
         totalCases,
@@ -241,25 +254,28 @@ export class AnalyticsService implements OnModuleDestroy {
   }
 
   async getUserActivityMetrics(): Promise<UserActivityMetricsDto> {
-    const cacheKey = 'user_activity_metrics';
-    
+    const cacheKey = "user_activity_metrics";
+
     return this.getCachedData(cacheKey, async () => {
       // Limit to recent events and use streaming approach
       const events = await this.analyticsEventRepository.find({
-        order: { timestamp: 'DESC' },
+        order: { timestamp: "DESC" },
         take: this.MAX_EVENTS_PER_QUERY,
       });
 
-      const uniqueUsers = new Set(events.map(e => e.userId));
-      const activityByType = events.reduce((acc: Record<string, number>, event: AnalyticsEvent) => {
-        acc[event.eventType] = (acc[event.eventType] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const uniqueUsers = new Set(events.map((e) => e.userId));
+      const activityByType = events.reduce(
+        (acc: Record<string, number>, event: AnalyticsEvent) => {
+          acc[event.eventType] = (acc[event.eventType] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       const now = new Date();
       const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      const dailyEvents = events.filter(e => e.timestamp >= yesterday);
-      const dailyUniqueUsers = new Set(dailyEvents.map(e => e.userId));
+      const dailyEvents = events.filter((e) => e.timestamp >= yesterday);
+      const dailyUniqueUsers = new Set(dailyEvents.map((e) => e.userId));
 
       return {
         totalActiveUsers: uniqueUsers.size,
@@ -269,9 +285,14 @@ export class AnalyticsService implements OnModuleDestroy {
     });
   }
 
-  async getTimeSeriesData(eventType: string, _granularity: string, startDate: Date, endDate: Date): Promise<TimeSeriesDataPointDto[]> {
+  async getTimeSeriesData(
+    eventType: string,
+    _granularity: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<TimeSeriesDataPointDto[]> {
     const cacheKey = `time_series_${eventType}_${startDate.toISOString()}_${endDate.toISOString()}`;
-    
+
     return this.getCachedData(cacheKey, async () => {
       // Limit query results to prevent memory bloat
       const events = await this.analyticsEventRepository.find({
@@ -279,7 +300,7 @@ export class AnalyticsService implements OnModuleDestroy {
           eventType,
           timestamp: Between(startDate, endDate),
         },
-        order: { timestamp: 'ASC' },
+        order: { timestamp: "ASC" },
         take: this.MAX_EVENTS_PER_QUERY,
       });
 
@@ -301,24 +322,29 @@ export class AnalyticsService implements OnModuleDestroy {
   }
 
   async getBillingMetrics(): Promise<AnalyticsBillingMetricsDto> {
-    const cacheKey = 'billing_metrics';
-    
+    const cacheKey = "billing_metrics";
+
     return this.getCachedData(cacheKey, async () => {
       // Limit queries to recent events
       const timeLoggedEvents = await this.analyticsEventRepository.find({
-        where: { eventType: 'time_logged' },
-        order: { timestamp: 'DESC' },
+        where: { eventType: "time_logged" },
+        order: { timestamp: "DESC" },
         take: this.MAX_EVENTS_PER_QUERY,
       });
 
-      const totalBilled = timeLoggedEvents.reduce((sum: number, event: AnalyticsEvent) => {
-        const metadata = event.metadata as Record<string, unknown> | undefined;
-        return sum + ((metadata?.amount as number) || 0);
-      }, 0);
+      const totalBilled = timeLoggedEvents.reduce(
+        (sum: number, event: AnalyticsEvent) => {
+          const metadata = event.metadata as
+            | Record<string, unknown>
+            | undefined;
+          return sum + ((metadata?.amount as number) || 0);
+        },
+        0
+      );
 
       const invoiceEvents = await this.analyticsEventRepository.find({
-        where: { eventType: 'invoice_created' },
-        order: { timestamp: 'DESC' },
+        where: { eventType: "invoice_created" },
+        order: { timestamp: "DESC" },
         take: this.MAX_EVENTS_PER_QUERY,
       });
 
@@ -330,11 +356,13 @@ export class AnalyticsService implements OnModuleDestroy {
       for (let i = 0; i < invoiceEvents.length; i += 100) {
         const chunk = invoiceEvents.slice(i, i + 100);
         chunk.forEach((event: AnalyticsEvent) => {
-          const metadata = event.metadata as Record<string, unknown> | undefined;
+          const metadata = event.metadata as
+            | Record<string, unknown>
+            | undefined;
           const status = metadata?.status as string;
           const amount = (metadata?.amount as number) || 0;
 
-          if (status === 'paid') {
+          if (status === "paid") {
             paidInvoices++;
           } else {
             pendingInvoices++;
@@ -355,7 +383,7 @@ export class AnalyticsService implements OnModuleDestroy {
   async getAllDashboards(userId: string): Promise<Dashboard[]> {
     return this.dashboardRepository.find({
       where: { userId },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -368,44 +396,35 @@ export class AnalyticsService implements OnModuleDestroy {
   }
 
   async createDashboard(data: CreateDashboardDto): Promise<Dashboard> {
-    const widgets: Record<string, unknown>[] = (data.widgets || []).map(w => ({
-      id: w.id,
-      type: w.type,
-      title: w.title,
-      config: w.config,
-      position: { x: w.position.x, y: w.position.y },
-      size: { width: w.position.w, height: w.position.h },
-    }));
+    const widgets: Record<string, unknown>[] = (data.widgets || []).map(
+      (w) => ({
+        id: w.id,
+        type: w.type,
+        title: w.title,
+        config: w.config,
+        position: { x: w.position.x, y: w.position.y },
+        size: { width: w.position.w, height: w.position.h },
+      })
+    );
 
     const dashboard = this.dashboardRepository.create({
-      userId: data.ownerId || 'system',
+      userId: data.ownerId || "system",
       name: data.title,
       description: data.description,
       widgets,
       isPublic: data.isShared || false,
     });
-    const saved = await this.dashboardRepository.save(dashboard);
-    if (Array.isArray(saved)) {
-      const result = saved[0];
-      if (!result) {
-        throw new Error('Failed to save dashboard');
-      }
-      return result;
-    }
+    const saved = (await this.dashboardRepository.save(dashboard)) as Dashboard;
     return saved;
   }
 
-  async updateDashboard(id: string, data: UpdateDashboardDto): Promise<Dashboard> {
+  async updateDashboard(
+    id: string,
+    data: UpdateDashboardDto
+  ): Promise<Dashboard> {
     const dashboard = await this.getDashboardById(id);
     Object.assign(dashboard, data);
-    const saved = await this.dashboardRepository.save(dashboard);
-    if (Array.isArray(saved)) {
-      const result = saved[0];
-      if (!result) {
-        throw new Error('Failed to update dashboard');
-      }
-      return result;
-    }
+    const saved = (await this.dashboardRepository.save(dashboard)) as Dashboard;
     return saved;
   }
 
@@ -417,48 +436,42 @@ export class AnalyticsService implements OnModuleDestroy {
   async getPublicDashboards(): Promise<Dashboard[]> {
     return this.dashboardRepository.find({
       where: { isPublic: true },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
-  async addWidgetToDashboard(dashboardId: string, widget: Widget): Promise<Dashboard> {
+  async addWidgetToDashboard(
+    dashboardId: string,
+    widget: Widget
+  ): Promise<Dashboard> {
     const dashboard = await this.getDashboardById(dashboardId);
     dashboard.widgets.push(widget as unknown as Record<string, unknown>);
-    const saved = await this.dashboardRepository.save(dashboard);
-    if (Array.isArray(saved)) {
-      const result = saved[0];
-      if (!result) {
-        throw new Error('Failed to add widget to dashboard');
-      }
-      return result;
-    }
+    const saved = (await this.dashboardRepository.save(dashboard)) as Dashboard;
     return saved;
   }
 
-  async removeWidgetFromDashboard(dashboardId: string, widgetIndex: number): Promise<Dashboard> {
+  async removeWidgetFromDashboard(
+    dashboardId: string,
+    widgetIndex: number
+  ): Promise<Dashboard> {
     const dashboard = await this.getDashboardById(dashboardId);
     dashboard.widgets.splice(widgetIndex, 1);
-    const saved = await this.dashboardRepository.save(dashboard);
-    if (Array.isArray(saved)) {
-      const result = saved[0];
-      if (!result) {
-        throw new Error('Failed to remove widget from dashboard');
-      }
-      return result;
-    }
+    const saved = (await this.dashboardRepository.save(dashboard)) as Dashboard;
     return saved;
   }
 
-  async generateReport(params: AnalyticsGenerateReportDto): Promise<GenerateReportResponseDto> {
+  async generateReport(
+    params: AnalyticsGenerateReportDto
+  ): Promise<GenerateReportResponseDto> {
     const { reportType, startDate, endDate, format } = params;
 
     const start = startDate ? new Date(startDate) : new Date();
     const end = endDate ? new Date(endDate) : new Date();
 
     let data: Record<string, unknown>;
-    if (reportType === 'user_activity') {
+    if (reportType === "user_activity") {
       data = { events: await this.getEventsByDateRange(start, end) };
-    } else if (reportType === 'billing_summary') {
+    } else if (reportType === "billing_summary") {
       const billingMetrics = await this.getBillingMetrics();
       data = { ...billingMetrics };
     } else {
@@ -469,80 +482,128 @@ export class AnalyticsService implements OnModuleDestroy {
       reportId: `report-${Date.now()}`,
       reportType,
       format: format || ReportFormat.PDF,
-      status: 'completed',
+      status: "completed",
       data,
       generatedAt: new Date().toISOString(),
     };
   }
 
-  async bulkImportEvents(importDto: { events?: unknown[] }): Promise<{ importedCount: number; failedCount: number; timestamp: string }> {
+  async bulkImportEvents(importDto: {
+    events?: unknown[];
+  }): Promise<{
+    importedCount: number;
+    failedCount: number;
+    timestamp: string;
+  }> {
     const { events = [] } = importDto;
     return {
       importedCount: events.length,
       failedCount: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
-  async bulkRecalculateMetrics(recalculateDto: { metricIds?: string[] }): Promise<{ recalculatedCount: number; failedCount: number; timestamp: string }> {
+  async bulkRecalculateMetrics(recalculateDto: {
+    metricIds?: string[];
+  }): Promise<{
+    recalculatedCount: number;
+    failedCount: number;
+    timestamp: string;
+  }> {
     const { metricIds = [] } = recalculateDto;
     return {
       recalculatedCount: metricIds.length,
       failedCount: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
-  async bulkArchiveEvents(archiveDto: { eventIds?: string[] }): Promise<{ archivedCount: number; failedCount: number; failedIds: string[]; timestamp: string }> {
+  async bulkArchiveEvents(archiveDto: {
+    eventIds?: string[];
+  }): Promise<{
+    archivedCount: number;
+    failedCount: number;
+    failedIds: string[];
+    timestamp: string;
+  }> {
     const { eventIds = [] } = archiveDto;
     return {
       archivedCount: eventIds.length,
       failedCount: 0,
       failedIds: [],
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
-  async bulkDeleteEvents(deleteDto: { eventIds?: string[] }): Promise<{ deletedCount: number; failedCount: number; failedIds: string[]; timestamp: string }> {
+  async bulkDeleteEvents(deleteDto: {
+    eventIds?: string[];
+  }): Promise<{
+    deletedCount: number;
+    failedCount: number;
+    failedIds: string[];
+    timestamp: string;
+  }> {
     const { eventIds = [] } = deleteDto;
     return {
       deletedCount: eventIds.length,
       failedCount: 0,
       failedIds: [],
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
-  async exportAnalyticsData(exportDto: { format?: string; dataType?: string; startDate?: string; endDate?: string }): Promise<{ jobId: string; format: string; status: string; createdAt: string }> {
-    const { format = 'csv' } = exportDto;
+  async exportAnalyticsData(exportDto: {
+    format?: string;
+    dataType?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<{
+    jobId: string;
+    format: string;
+    status: string;
+    createdAt: string;
+  }> {
+    const { format = "csv" } = exportDto;
     return {
       jobId: `export-${Date.now()}`,
       format,
-      status: 'pending',
-      createdAt: new Date().toISOString()
+      status: "pending",
+      createdAt: new Date().toISOString(),
     };
   }
 
-  async listExportJobs(_page?: number, _limit?: number): Promise<{ jobs: unknown[]; total: number }> {
+  async listExportJobs(
+    _page?: number,
+    _limit?: number
+  ): Promise<{ jobs: unknown[]; total: number }> {
     return {
       jobs: [],
-      total: 0
+      total: 0,
     };
   }
 
-  async getExportJobStatus(jobId: string): Promise<{ jobId: string; status: string; url: string; completedAt: string }> {
+  async getExportJobStatus(
+    jobId: string
+  ): Promise<{
+    jobId: string;
+    status: string;
+    url: string;
+    completedAt: string;
+  }> {
     return {
       jobId,
-      status: 'completed',
+      status: "completed",
       url: `/exports/${jobId}.csv`,
-      completedAt: new Date().toISOString()
+      completedAt: new Date().toISOString(),
     };
   }
 
-  async cancelExportJob(jobId: string): Promise<{ success: boolean; message: string }> {
+  async cancelExportJob(
+    jobId: string
+  ): Promise<{ success: boolean; message: string }> {
     return {
       success: true,
-      message: `Export job ${jobId} cancelled successfully`
+      message: `Export job ${jobId} cancelled successfully`,
     };
   }
 }

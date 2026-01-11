@@ -63,8 +63,7 @@ export class ExistsValidator implements ValidatorConstraintInterface {
  * }
  */
 export function Exists(
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  entityClass: Function,
+  entityClass: new (...args: unknown[]) => unknown,
   property: string = "id",
   validationOptions?: ValidationOptions
 ) {
@@ -104,9 +103,8 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
 
     // If we're updating, exclude the current entity
     const obj = args.object as Record<string, unknown>;
-     
-    if (exceptId && obj[exceptId]) {
-       
+
+    if (exceptId && obj[exceptId] && typeof obj[exceptId] === "string") {
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 
@@ -142,8 +140,7 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
  * }
  */
 export function IsUnique(
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  entityClass: Function,
+  entityClass: new (...args: unknown[]) => unknown,
   property: string,
   exceptIdProperty?: string,
   validationOptions?: ValidationOptions
@@ -274,7 +271,7 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
  * @param validationOptions - Validation options
  */
 export function NotDeleted(
-  entityClass: Function,
+  entityClass: new (...args: unknown[]) => unknown,
   property: string = "id",
   validationOptions?: ValidationOptions
 ) {
@@ -353,7 +350,7 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
  * @param validationOptions - Validation options
  */
 export function RelationCount(
-  entityClass: Function,
+  entityClass: new (...args: unknown[]) => unknown,
   relationProperty: string,
   min?: number,
   max?: number,

@@ -1,5 +1,5 @@
-import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Injectable, Logger, NestMiddleware } from "@nestjs/common";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Enterprise Request Sanitization Middleware
@@ -20,7 +20,7 @@ export class SanitizationMiddleware implements NestMiddleware {
 
   use(req: Request, _res: Response, next: NextFunction) {
     // Sanitize query parameters (XSS prevention)
-    if (req.query && typeof req.query === 'object') {
+    if (req.query && typeof req.query === "object") {
       const sanitized = this.sanitizeObject(req.query);
       for (const key in req.query) {
         delete req.query[key];
@@ -29,7 +29,7 @@ export class SanitizationMiddleware implements NestMiddleware {
     }
 
     // Sanitize URL parameters (XSS prevention)
-    if (req.params && typeof req.params === 'object') {
+    if (req.params && typeof req.params === "object") {
       const sanitized = this.sanitizeObject(req.params);
       for (const key in req.params) {
         delete req.params[key];
@@ -45,7 +45,7 @@ export class SanitizationMiddleware implements NestMiddleware {
     // 3. Output encoding at render time for XSS prevention
 
     // Prevent prototype pollution in body (security critical)
-    if (req.body && typeof req.body === 'object') {
+    if (req.body && typeof req.body === "object") {
       this.preventPrototypePollution(req.body);
     }
 
@@ -61,13 +61,15 @@ export class SanitizationMiddleware implements NestMiddleware {
       return obj.map((item) => this.sanitizeValue(item)) as T;
     }
 
-    if (obj !== null && typeof obj === 'object') {
+    if (obj !== null && typeof obj === "object") {
       const sanitized: Record<string, unknown> = {};
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
           // Prevent prototype pollution
           const sanitizedKey = this.sanitizeKey(key);
-          sanitized[sanitizedKey] = this.sanitizeValue((obj as Record<string, unknown>)[key]);
+          sanitized[sanitizedKey] = this.sanitizeValue(
+            (obj as Record<string, unknown>)[key]
+          );
         }
       }
       return sanitized as T;
@@ -80,7 +82,7 @@ export class SanitizationMiddleware implements NestMiddleware {
    * Sanitize object keys to prevent prototype pollution
    */
   private sanitizeKey(key: string): string {
-    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
       this.logger.warn(`Blocked prototype pollution attempt with key: ${key}`);
       return `blocked_${key}`;
     }
@@ -91,7 +93,7 @@ export class SanitizationMiddleware implements NestMiddleware {
    * Sanitize individual values
    */
   private sanitizeValue<T = unknown>(value: T): T {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       return this.sanitizeString(value) as T;
     }
 
@@ -100,7 +102,7 @@ export class SanitizationMiddleware implements NestMiddleware {
       return value.map((item) => this.sanitizeValue(item)) as T;
     }
 
-    if (value !== null && typeof value === 'object') {
+    if (value !== null && typeof value === "object") {
       return this.sanitizeObject(value);
     }
 
@@ -115,18 +117,18 @@ export class SanitizationMiddleware implements NestMiddleware {
     if (!str) return str;
 
     // Remove null bytes (always dangerous)
-    str = str.replace(/\0/g, '');
+    str = str.replace(/\0/g, "");
 
     // Remove script tags and javascript: protocol
-    str = str.replace(/<script[^>]*>.*?</script>/gi, '');
-    str = str.replace(/javascript:/gi, '');
+    str = str.replace(/<script[^>]*>.*?<\/script>/gi, "");
+    str = str.replace(/javascript:/gi, "");
 
     // Remove event handlers
-    str = str.replace(/on\w+\s*=/gi, '');
+    str = str.replace(/on\w+\s*=/gi, "");
 
     // Remove dangerous SQL patterns (defense in depth)
-    str = str.replace(/;\s*(DROP|DELETE|TRUNCATE|ALTER|EXEC|EXECUTE)\s+/gi, '');
-    str = str.replace(/UNION\s+SELECT/gi, '');
+    str = str.replace(/;\s*(DROP|DELETE|TRUNCATE|ALTER|EXEC|EXECUTE)\s+/gi, "");
+    str = str.replace(/UNION\s+SELECT/gi, "");
 
     return str.trim();
   }
@@ -135,10 +137,13 @@ export class SanitizationMiddleware implements NestMiddleware {
    * Prevent prototype pollution in request body
    * This is critical for security
    */
-  private preventPrototypePollution(obj: Record<string, unknown>, depth = 0): void {
+  private preventPrototypePollution(
+    obj: Record<string, unknown>,
+    depth = 0
+  ): void {
     if (depth > 10) return; // Prevent infinite recursion
 
-    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+    const dangerousKeys = ["__proto__", "constructor", "prototype"];
 
     for (const key of Object.keys(obj)) {
       if (dangerousKeys.includes(key)) {
@@ -148,8 +153,11 @@ export class SanitizationMiddleware implements NestMiddleware {
       }
 
       const value = obj[key];
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        this.preventPrototypePollution(value as Record<string, unknown>, depth + 1);
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        this.preventPrototypePollution(
+          value as Record<string, unknown>,
+          depth + 1
+        );
       }
     }
   }

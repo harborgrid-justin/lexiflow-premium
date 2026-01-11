@@ -1,5 +1,10 @@
-import { Injectable, NestMiddleware, Logger, BadRequestException } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NestMiddleware,
+} from "@nestjs/common";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Enterprise Request Validation Middleware
@@ -28,23 +33,23 @@ export class RequestValidationMiddleware implements NestMiddleware {
 
   // Allowed content types
   private readonly ALLOWED_CONTENT_TYPES = [
-    'application/json',
-    'application/x-www-form-urlencoded',
-    'multipart/form-data',
-    'text/plain',
-    'application/octet-stream',
-    'application/pdf',
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data",
+    "text/plain",
+    "application/octet-stream",
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
   ];
 
   // Suspicious header patterns
   private readonly SUSPICIOUS_HEADERS = [
-    'x-forwarded-host',
-    'x-original-url',
-    'x-rewrite-url',
+    "x-forwarded-host",
+    "x-original-url",
+    "x-rewrite-url",
   ];
 
   use(req: Request, _res: Response, next: NextFunction): void {
@@ -76,8 +81,8 @@ export class RequestValidationMiddleware implements NestMiddleware {
         throw error;
       }
 
-      this.logger.error('Request validation error:', error);
-      throw new BadRequestException('Invalid request format');
+      this.logger.error("Request validation error:", error);
+      throw new BadRequestException("Invalid request format");
     }
   }
 
@@ -88,8 +93,10 @@ export class RequestValidationMiddleware implements NestMiddleware {
     const url = req.originalUrl || req.url;
 
     if (url.length > this.MAX_URL_LENGTH) {
-      this.logger.warn(`URL too long: ${url.length} bytes (max: ${this.MAX_URL_LENGTH})`);
-      throw new BadRequestException('URL too long');
+      this.logger.warn(
+        `URL too long: ${url.length} bytes (max: ${this.MAX_URL_LENGTH})`
+      );
+      throw new BadRequestException("URL too long");
     }
   }
 
@@ -100,8 +107,10 @@ export class RequestValidationMiddleware implements NestMiddleware {
     // Check total header size
     const headerSize = JSON.stringify(req.headers).length;
     if (headerSize > this.MAX_HEADER_SIZE) {
-      this.logger.warn(`Headers too large: ${headerSize} bytes (max: ${this.MAX_HEADER_SIZE})`);
-      throw new BadRequestException('Request headers too large');
+      this.logger.warn(
+        `Headers too large: ${headerSize} bytes (max: ${this.MAX_HEADER_SIZE})`
+      );
+      throw new BadRequestException("Request headers too large");
     }
 
     // Check for suspicious headers
@@ -117,15 +126,15 @@ export class RequestValidationMiddleware implements NestMiddleware {
     if (host) {
       if (this.containsSuspiciousPatterns(host)) {
         this.logger.warn(`Suspicious Host header: ${host}`);
-        throw new BadRequestException('Invalid Host header');
+        throw new BadRequestException("Invalid Host header");
       }
     }
 
     // Check for NULL bytes in headers
     for (const [key, value] of Object.entries(req.headers)) {
-      if (typeof value === 'string' && value.includes('\0')) {
+      if (typeof value === "string" && value.includes("\0")) {
         this.logger.warn(`NULL byte in header ${key}`);
-        throw new BadRequestException('Invalid header format');
+        throw new BadRequestException("Invalid header format");
       }
     }
   }
@@ -135,32 +144,36 @@ export class RequestValidationMiddleware implements NestMiddleware {
    */
   private validateContentType(req: Request): void {
     // Only validate for methods that typically have a body
-    if (!['POST', 'PUT', 'PATCH'].includes(req.method)) {
+    if (!["POST", "PUT", "PATCH"].includes(req.method)) {
       return;
     }
 
-    const contentType = req.headers['content-type'];
+    const contentType = req.headers["content-type"];
     if (!contentType) {
       // Allow requests without content type if no body
-      const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+      const contentLength = parseInt(req.headers["content-length"] || "0", 10);
       if (contentLength > 0) {
-        this.logger.warn('Request has body but no Content-Type header');
-        throw new BadRequestException('Content-Type header required');
+        this.logger.warn("Request has body but no Content-Type header");
+        throw new BadRequestException("Content-Type header required");
       }
       return;
     }
 
     // Extract base content type (before semicolon)
-    const baseContentType = (contentType.split(';')[0] || '').trim().toLowerCase();
+    const baseContentType = (contentType.split(";")[0] || "")
+      .trim()
+      .toLowerCase();
 
     // Check if content type is allowed
     const isAllowed = this.ALLOWED_CONTENT_TYPES.some((allowed) =>
-      baseContentType.startsWith(allowed.toLowerCase()),
+      baseContentType.startsWith(allowed.toLowerCase())
     );
 
     if (!isAllowed) {
       this.logger.warn(`Unsupported Content-Type: ${contentType}`);
-      throw new BadRequestException(`Unsupported Content-Type: ${baseContentType}`);
+      throw new BadRequestException(
+        `Unsupported Content-Type: ${baseContentType}`
+      );
     }
   }
 
@@ -173,27 +186,29 @@ export class RequestValidationMiddleware implements NestMiddleware {
 
     // Check for common path traversal patterns
     const pathTraversalPatterns = [
-      /..//g,      // ../
-      /..\/g,      // ..\
-      /%2e%2e%2f/gi,  // URL encoded ../
-      /%2e%2e%5c/gi,  // URL encoded ..\
-      /../g,        // ..
+      /\.\.\//g, // ../
+      /\.\.\\/g, // ..\
+      /%2e%2e%2f/gi, // URL encoded ../
+      /%2e%2e%5c/gi, // URL encoded ..\
+      /\.\./g, // ..
     ];
 
     for (const pattern of pathTraversalPatterns) {
       if (pattern.test(url) || pattern.test(path)) {
         this.logger.warn(`Path traversal attempt detected: ${url}`);
-        throw new BadRequestException('Invalid path');
+        throw new BadRequestException("Invalid path");
       }
     }
 
     // Check for absolute paths (Unix and Windows)
-    if (path.startsWith('/etc/') ||
-        path.startsWith('/var/') ||
-        path.startsWith('/root/') ||
-        /^[a-zA-Z]:\/i.test(path)) {
+    if (
+      path.startsWith("/etc/") ||
+      path.startsWith("/var/") ||
+      path.startsWith("/root/") ||
+      /^[a-zA-Z]:\//.test(path)
+    ) {
       this.logger.warn(`Absolute path attempt detected: ${path}`);
-      throw new BadRequestException('Invalid path');
+      throw new BadRequestException("Invalid path");
     }
   }
 
@@ -201,13 +216,13 @@ export class RequestValidationMiddleware implements NestMiddleware {
    * Validate request size
    */
   private validateRequestSize(req: Request): void {
-    const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+    const contentLength = parseInt(req.headers["content-length"] || "0", 10);
 
     if (contentLength > this.MAX_JSON_SIZE) {
       this.logger.warn(
-        `Request too large: ${contentLength} bytes (max: ${this.MAX_JSON_SIZE})`,
+        `Request too large: ${contentLength} bytes (max: ${this.MAX_JSON_SIZE})`
       );
-      throw new BadRequestException('Request payload too large');
+      throw new BadRequestException("Request payload too large");
     }
   }
 
@@ -217,9 +232,9 @@ export class RequestValidationMiddleware implements NestMiddleware {
   private checkNullBytes(req: Request): void {
     const url = req.originalUrl || req.url;
 
-    if (url.includes('\0') || url.includes('%00')) {
+    if (url.includes("\0") || url.includes("%00")) {
       this.logger.warn(`NULL byte detected in URL: ${url}`);
-      throw new BadRequestException('Invalid URL format');
+      throw new BadRequestException("Invalid URL format");
     }
   }
 
@@ -228,18 +243,18 @@ export class RequestValidationMiddleware implements NestMiddleware {
    */
   private validateHttpMethod(req: Request): void {
     const allowedMethods = [
-      'GET',
-      'POST',
-      'PUT',
-      'PATCH',
-      'DELETE',
-      'OPTIONS',
-      'HEAD',
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+      "HEAD",
     ];
 
     if (!allowedMethods.includes(req.method.toUpperCase())) {
       this.logger.warn(`Invalid HTTP method: ${req.method}`);
-      throw new BadRequestException('Invalid HTTP method');
+      throw new BadRequestException("Invalid HTTP method");
     }
   }
 
@@ -254,7 +269,7 @@ export class RequestValidationMiddleware implements NestMiddleware {
       /<iframe/i,
       /<embed/i,
       /<object/i,
-      /\0/,  // NULL byte
+      /\0/, // NULL byte
     ];
 
     return suspiciousPatterns.some((pattern) => pattern.test(value));

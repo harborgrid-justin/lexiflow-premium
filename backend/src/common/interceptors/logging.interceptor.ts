@@ -33,8 +33,9 @@ export class LoggingInterceptor implements NestInterceptor {
     }
     const userAgent = headers["user-agent"] || "";
     const ip = request.ip;
-    const correlationId = (request as any).correlationId;
-    const userId = (request as any).user?.id;
+    const correlationId = (request as unknown as Record<string, unknown>)
+      .correlationId;
+    const userId = (request as unknown as { user?: { id: string } }).user?.id;
     const now = Date.now();
 
     // Set context for this request

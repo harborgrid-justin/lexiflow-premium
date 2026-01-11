@@ -42,7 +42,11 @@ export function calculateExecutionTime(startTime: number): number {
  * @param max - Maximum possible score
  * @returns Normalized score between 0 and 1
  */
-export function normalizeScore(score: number, min: number = 0, max: number = 1): number {
+export function normalizeScore(
+  score: number,
+  min: number = 0,
+  max: number = 1
+): number {
   if (max === min) return 0;
   return Math.max(0, Math.min(1, (score - min) / (max - min)));
 }
@@ -54,7 +58,11 @@ export function normalizeScore(score: number, min: number = 0, max: number = 1):
  * @param decimals - Number of decimal places (default: 1)
  * @returns Percentage value
  */
-export function calculatePercentage(value: number, total: number, decimals: number = 1): number {
+export function calculatePercentage(
+  value: number,
+  total: number,
+  decimals: number = 1
+): number {
   if (total === 0) return 0;
   const multiplier = Math.pow(10, decimals);
   return Math.round((value / total) * 100 * multiplier) / multiplier;
@@ -90,17 +98,17 @@ export function roundTo(value: number, decimals: number = 2): number {
  */
 export function weightedAverage(values: number[], weights: number[]): number {
   if (values.length !== weights.length || values.length === 0) {
-    throw new Error('Values and weights must have the same non-zero length');
+    throw new Error("Values and weights must have the same non-zero length");
   }
 
   let sum = 0;
   let weightSum = 0;
 
   for (let i = 0; i < values.length; i++) {
-      // TODO: Remove non-null assertion with proper check
-    sum += values[i]! * weights[i]!;
-      // TODO: Remove non-null assertion with proper check
-    weightSum += weights[i]!;
+    const val = values[i] ?? 0;
+    const weight = weights[i] ?? 0;
+    sum += val * weight;
+    weightSum += weight;
   }
 
   return weightSum === 0 ? 0 : sum / weightSum;
@@ -119,7 +127,7 @@ export function movingAverage(values: number[], windowSize: number): number[] {
   }
 
   const result: number[] = [];
-  
+
   for (let i = 0; i < values.length; i++) {
     const start = Math.max(0, i - windowSize + 1);
     const end = i + 1;
@@ -140,8 +148,9 @@ export function standardDeviation(values: number[]): number {
   if (values.length === 0) return 0;
 
   const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
-  const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
-  const variance = squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;
+  const squaredDiffs = values.map((val) => Math.pow(val - mean, 2));
+  const variance =
+    squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;
 
   return Math.sqrt(variance);
 }
@@ -154,7 +163,11 @@ export function standardDeviation(values: number[]): number {
  * @param maxDelay - Maximum delay cap
  * @returns Delay in milliseconds
  */
-export function exponentialBackoff(attempt: number, baseDelay: number = 1000, maxDelay: number = 30000): number {
+export function exponentialBackoff(
+  attempt: number,
+  baseDelay: number = 1000,
+  maxDelay: number = 30000
+): number {
   const delay = baseDelay * Math.pow(2, attempt);
   return Math.min(delay, maxDelay);
 }

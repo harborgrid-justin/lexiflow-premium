@@ -1,16 +1,20 @@
 import {
-  ExceptionFilter,
-  Catch,
+  ErrorCategory,
+  ErrorCodes,
+  ErrorSeverity,
+} from "@errors/constants/error.codes.constant";
+import { BusinessException } from "@errors/exceptions/business.exceptions";
+import {
   ArgumentsHost,
+  Catch,
+  ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger,
   Injectable,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
-import { QueryFailedError } from 'typeorm';
-import { BusinessException } from '@errors/exceptions/business.exceptions';
-import { ErrorCategory, ErrorSeverity, ErrorCodes } from '@errors/constants/error.codes.constant';
+  Logger,
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { QueryFailedError } from "typeorm";
 
 /**
  * Enhanced Error Response
@@ -59,7 +63,11 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     const status = this.getHttpStatus(exception);
-    const errorResponse = this.buildEnhancedErrorResponse(exception, request, status);
+    const errorResponse = this.buildEnhancedErrorResponse(
+      exception,
+      request,
+      status
+    );
 
     // Log error with appropriate level
     this.logError(exception, request, errorResponse);
@@ -89,9 +97,10 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   private buildEnhancedErrorResponse(
     exception: unknown,
     request: Request,
-    status: number,
+    status: number
   ): EnhancedErrorResponse {
-    const correlationId = (request as any).correlationId || this.generateCorrelationId();
+    const correlationId =
+      (request as any).correlationId || this.generateCorrelationId();
     const timestamp = new Date().toISOString();
     const path = request.url;
     const method = request.method;
@@ -113,13 +122,16 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       severity: errorInfo.severity,
       retryable: errorInfo.retryable,
       requestContext: this.buildRequestContext(request),
-      suggestedAction: this.getSuggestedAction(errorInfo.code, errorInfo.retryable),
+      suggestedAction: this.getSuggestedAction(
+        errorInfo.code,
+        errorInfo.retryable
+      ),
     };
 
     // Add validation errors if present
     if (exception instanceof HttpException) {
       const response = exception.getResponse();
-      if (typeof response === 'object' && 'message' in response) {
+      if (typeof response === "object" && "message" in response) {
         const msg = (response as any).message;
         if (Array.isArray(msg)) {
           errorResponse.validationErrors = msg;
@@ -195,9 +207,9 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       const errorDef = ErrorCodes.getByCode(dbErrorCode);
 
       return {
-        name: 'DatabaseError',
+        name: "DatabaseError",
         code: dbErrorCode,
-        message: 'A database error occurred',
+        message: "A database error occurred",
         category: ErrorCategory.DATABASE,
         severity: errorDef?.severity || ErrorSeverity.HIGH,
         retryable: errorDef?.retryable || true,
@@ -208,7 +220,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     if (exception instanceof Error) {
       return {
         name: exception.name,
-        code: 'SYS_INTERNAL_ERROR',
+        code: "SYS_INTERNAL_ERROR",
         message: exception.message,
         category: ErrorCategory.SYSTEM,
         severity: ErrorSeverity.CRITICAL,
@@ -218,9 +230,9 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
 
     // Unknown errors
     return {
-      name: 'UnknownError',
-      code: 'SYS_INTERNAL_ERROR',
-      message: 'An unexpected error occurred',
+      name: "UnknownError",
+      code: "SYS_INTERNAL_ERROR",
+      message: "An unexpected error occurred",
       category: ErrorCategory.SYSTEM,
       severity: ErrorSeverity.CRITICAL,
       retryable: false,
@@ -233,13 +245,13 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   private extractHttpExceptionMessage(exception: HttpException): string {
     const response = exception.getResponse();
 
-    if (typeof response === 'string') {
+    if (typeof response === "string") {
       return response;
     }
 
-    if (typeof response === 'object' && 'message' in response) {
+    if (typeof response === "object" && "message" in response) {
       const msg = (response as any).message;
-      return Array.isArray(msg) ? msg.join(', ') : msg;
+      return Array.isArray(msg) ? msg.join(", ") : msg;
     }
 
     return exception.message;
@@ -250,20 +262,20 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private mapHttpStatusToErrorCode(status: number): string {
     const statusMap: Record<number, string> = {
-      [HttpStatus.BAD_REQUEST]: 'VAL_INVALID_INPUT',
-      [HttpStatus.UNAUTHORIZED]: 'AUTH_TOKEN_INVALID',
-      [HttpStatus.FORBIDDEN]: 'AUTHZ_INSUFFICIENT_PERMISSIONS',
-      [HttpStatus.NOT_FOUND]: 'RESOURCE_NOT_FOUND',
-      [HttpStatus.CONFLICT]: 'DB_DUPLICATE_ENTRY',
-      [HttpStatus.REQUEST_TIMEOUT]: 'SYS_TIMEOUT',
-      [HttpStatus.PAYLOAD_TOO_LARGE]: 'DOC_FILE_TOO_LARGE',
-      [HttpStatus.TOO_MANY_REQUESTS]: 'RATE_LIMIT_EXCEEDED',
-      [HttpStatus.INTERNAL_SERVER_ERROR]: 'SYS_INTERNAL_ERROR',
-      [HttpStatus.SERVICE_UNAVAILABLE]: 'EXT_SERVICE_UNAVAILABLE',
-      [HttpStatus.GATEWAY_TIMEOUT]: 'EXT_SERVICE_TIMEOUT',
+      [HttpStatus.BAD_REQUEST]: "VAL_INVALID_INPUT",
+      [HttpStatus.UNAUTHORIZED]: "AUTH_TOKEN_INVALID",
+      [HttpStatus.FORBIDDEN]: "AUTHZ_INSUFFICIENT_PERMISSIONS",
+      [HttpStatus.NOT_FOUND]: "RESOURCE_NOT_FOUND",
+      [HttpStatus.CONFLICT]: "DB_DUPLICATE_ENTRY",
+      [HttpStatus.REQUEST_TIMEOUT]: "SYS_TIMEOUT",
+      [HttpStatus.PAYLOAD_TOO_LARGE]: "DOC_FILE_TOO_LARGE",
+      [HttpStatus.TOO_MANY_REQUESTS]: "RATE_LIMIT_EXCEEDED",
+      [HttpStatus.INTERNAL_SERVER_ERROR]: "SYS_INTERNAL_ERROR",
+      [HttpStatus.SERVICE_UNAVAILABLE]: "EXT_SERVICE_UNAVAILABLE",
+      [HttpStatus.GATEWAY_TIMEOUT]: "EXT_SERVICE_TIMEOUT",
     };
 
-    return statusMap[status] || 'SYS_INTERNAL_ERROR';
+    return statusMap[status] || "SYS_INTERNAL_ERROR";
   }
 
   /**
@@ -275,26 +287,26 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     // PostgreSQL error codes
     if (driverError?.code) {
       switch (driverError.code) {
-        case '23505': // unique_violation
-          return 'DB_DUPLICATE_ENTRY';
-        case '23503': // foreign_key_violation
-        case '23502': // not_null_violation
-        case '23514': // check_violation
-          return 'DB_CONSTRAINT_VIOLATION';
-        case '40P01': // deadlock_detected
-          return 'DB_DEADLOCK_DETECTED';
-        case '57014': // query_canceled
-          return 'DB_QUERY_TIMEOUT';
-        case '08000': // connection_exception
-        case '08003': // connection_does_not_exist
-        case '08006': // connection_failure
-          return 'DB_CONNECTION_FAILED';
+        case "23505": // unique_violation
+          return "DB_DUPLICATE_ENTRY";
+        case "23503": // foreign_key_violation
+        case "23502": // not_null_violation
+        case "23514": // check_violation
+          return "DB_CONSTRAINT_VIOLATION";
+        case "40P01": // deadlock_detected
+          return "DB_DEADLOCK_DETECTED";
+        case "57014": // query_canceled
+          return "DB_QUERY_TIMEOUT";
+        case "08000": // connection_exception
+        case "08003": // connection_does_not_exist
+        case "08006": // connection_failure
+          return "DB_CONNECTION_FAILED";
         default:
-          return 'DB_TRANSACTION_FAILED';
+          return "DB_TRANSACTION_FAILED";
       }
     }
 
-    return 'DB_TRANSACTION_FAILED';
+    return "DB_TRANSACTION_FAILED";
   }
 
   /**
@@ -303,15 +315,15 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   private getStatusFromDatabaseError(exception: QueryFailedError): number {
     const driverError = exception.driverError as any;
 
-    if (driverError?.code === '23505') {
+    if (driverError?.code === "23505") {
       return HttpStatus.CONFLICT;
     }
 
-    if (driverError?.code === '23503' || driverError?.code === '23502') {
+    if (driverError?.code === "23503" || driverError?.code === "23502") {
       return HttpStatus.BAD_REQUEST;
     }
 
-    if (driverError?.code === '57014') {
+    if (driverError?.code === "57014") {
       return HttpStatus.REQUEST_TIMEOUT;
     }
 
@@ -345,7 +357,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
 
     return {
       ip: this.getClientIp(request),
-      userAgent: request.headers['user-agent'],
+      userAgent: request.headers["user-agent"],
       userId: user?.id || user?.userId,
     };
   }
@@ -354,13 +366,15 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    * Get client IP address
    */
   private getClientIp(request: Request): string {
-    const forwarded = request.headers['x-forwarded-for'];
+    const forwarded = request.headers["x-forwarded-for"];
 
     if (forwarded) {
-      return Array.isArray(forwarded) ? (forwarded[0] || 'unknown') : (forwarded.split(',')[0] || 'unknown');
+      return Array.isArray(forwarded)
+        ? forwarded[0] || "unknown"
+        : forwarded.split(",")[0] || "unknown";
     }
 
-    return request.ip || request.socket.remoteAddress || 'unknown';
+    return request.ip || request.socket.remoteAddress || "unknown";
   }
 
   /**
@@ -368,42 +382,50 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private getSuggestedAction(errorCode: string, retryable: boolean): string {
     if (retryable) {
-      return 'This error is retryable. Please try again in a few moments.';
+      return "This error is retryable. Please try again in a few moments.";
     }
 
-    if (errorCode.startsWith('AUTH_')) {
-      return 'Please check your authentication credentials and try again.';
+    if (errorCode.startsWith("AUTH_")) {
+      return "Please check your authentication credentials and try again.";
     }
 
-    if (errorCode.startsWith('AUTHZ_')) {
-      return 'You do not have permission to perform this action. Please contact your administrator.';
+    if (errorCode.startsWith("AUTHZ_")) {
+      return "You do not have permission to perform this action. Please contact your administrator.";
     }
 
-    if (errorCode.startsWith('VAL_')) {
-      return 'Please check your input data and try again.';
+    if (errorCode.startsWith("VAL_")) {
+      return "Please check your input data and try again.";
     }
 
-    if (errorCode.startsWith('DOC_')) {
-      return 'Please verify your document and try uploading again.';
+    if (errorCode.startsWith("DOC_")) {
+      return "Please verify your document and try uploading again.";
     }
 
-    if (errorCode.startsWith('RATE_')) {
-      return 'You have exceeded the rate limit. Please wait before trying again.';
+    if (errorCode.startsWith("RATE_")) {
+      return "You have exceeded the rate limit. Please wait before trying again.";
     }
 
-    return 'If this problem persists, please contact support.';
+    return "If this problem persists, please contact support.";
   }
 
   /**
    * Sanitize error details for response
    */
-  private sanitizeDetails(details: Record<string, unknown>): Record<string, unknown> {
+  private sanitizeDetails(
+    details: Record<string, unknown>
+  ): Record<string, unknown> {
     const sanitized: Record<string, unknown> = {};
-    const sensitiveFields = ['password', 'token', 'secret', 'apiKey', 'accessToken'];
+    const sensitiveFields = [
+      "password",
+      "token",
+      "secret",
+      "apiKey",
+      "accessToken",
+    ];
 
     Object.keys(details).forEach((key) => {
       if (sensitiveFields.some((field) => key.toLowerCase().includes(field))) {
-        sanitized[key] = '[REDACTED]';
+        sanitized[key] = "[REDACTED]";
       } else {
         sanitized[key] = details[key];
       }
@@ -416,11 +438,13 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    * Sanitize database error
    * SECURITY: Only return error type, do not expose schema details
    */
-  private sanitizeDatabaseError(exception: QueryFailedError): Record<string, unknown> {
+  private sanitizeDatabaseError(
+    exception: QueryFailedError
+  ): Record<string, unknown> {
     const driverError = exception.driverError as any;
 
     // Log detailed database error for debugging (server-side only)
-    this.logger.debug('Database error details', {
+    this.logger.debug("Database error details", {
       constraint: driverError?.constraint,
       table: driverError?.table,
       column: driverError?.column,
@@ -430,7 +454,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     // Return only non-sensitive information to client
     // Do NOT expose table, column, or constraint names as this reveals schema
     return {
-      errorType: 'database_error',
+      errorType: "database_error",
     };
   }
 
@@ -441,17 +465,17 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     if (!stack) return undefined;
 
     return stack
-      .split('\n')
-      .filter((line) => !line.includes('node_modules'))
+      .split("\n")
+      .filter((line) => !line.includes("node_modules"))
       .slice(0, 10)
-      .join('\n');
+      .join("\n");
   }
 
   /**
    * Check if stack should be included
    */
   private shouldIncludeStack(): boolean {
-    return process.env.NODE_ENV !== 'production';
+    return process.env.NODE_ENV !== "production";
   }
 
   /**
@@ -461,7 +485,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     exception: unknown,
     // request parameter kept for potential future use
     _request: Request,
-    errorResponse: EnhancedErrorResponse,
+    errorResponse: EnhancedErrorResponse
   ): void {
     const logContext = {
       correlationId: errorResponse.correlationId,
@@ -479,7 +503,10 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
 
     switch (errorResponse.severity) {
       case ErrorSeverity.CRITICAL:
-        this.logger.error(`CRITICAL: ${logMessage}`, JSON.stringify(logContext));
+        this.logger.error(
+          `CRITICAL: ${logMessage}`,
+          JSON.stringify(logContext)
+        );
         break;
 
       case ErrorSeverity.HIGH:
@@ -513,7 +540,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private generateCorrelationId(): string {
     // Use crypto for unpredictable, globally unique correlation IDs
-    import crypto from \'crypto\';
+    import crypto from "crypto";
     return crypto.randomUUID();
   }
 }

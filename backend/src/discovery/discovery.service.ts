@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LessThan, Not, Repository, DeepPartial } from "typeorm";
+import { DeepPartial, LessThan, Not, Repository } from "typeorm";
 import { Custodian } from "./custodians/entities/custodian.entity";
 import {
   DiscoveryRequest,
@@ -74,7 +74,7 @@ export interface PaginatedResult<T> {
  */
 @Injectable()
 export class DiscoveryService {
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<DiscoveryRequest[]> {
     const result = await this.findAllRequests();
     return Array.isArray(result) ? result : result.data || [];
   }

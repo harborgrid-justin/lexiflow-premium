@@ -1,10 +1,20 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual } from 'typeorm';
-import { DataRetentionPolicy, DataRetentionRecord, RetentionPolicyStatus, RetentionAction } from '@compliance/entities/dataRetention.entity';
-import { CreateRetentionPolicyDto, RetentionStatusQueryDto, LegalHoldDto, RemoveLegalHoldDto } from '@compliance/dto/compliance.dto';
-import { AuditLog } from '@compliance/entities/audit-log.entity';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import {
+  CreateRetentionPolicyDto,
+  LegalHoldDto,
+  RemoveLegalHoldDto,
+  RetentionStatusQueryDto,
+} from "@compliance/dto/compliance.dto";
+import { AuditLog } from "@compliance/entities/audit-log.entity";
+import {
+  DataRetentionPolicy,
+  DataRetentionRecord,
+  RetentionAction,
+  RetentionPolicyStatus,
+} from "@compliance/entities/dataRetention.entity";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
+import { InjectRepository } from "@nestjs/typeorm";
+import { LessThanOrEqual, Repository } from "typeorm";
 
 export interface RetentionStatusResult {
   data: DataRetentionRecord[];
@@ -30,7 +40,7 @@ interface RetentionExecutionResult {
     entityType: string;
     entityId: string;
     action: RetentionAction;
-    status: 'success' | 'error';
+    status: "success" | "error";
     error?: string;
   }>;
 }
@@ -73,10 +83,13 @@ export class DataRetentionService {
     @InjectRepository(DataRetentionRecord)
     private readonly recordRepository: Repository<DataRetentionRecord>,
     @InjectRepository(AuditLog)
-    private readonly auditLogRepository: Repository<AuditLog>,
+    private readonly auditLogRepository: Repository<AuditLog>
   ) {}
 
-  async createPolicy(dto: CreateRetentionPolicyDto, createdBy: string): Promise<DataRetentionPolicy> {
+  async createPolicy(
+    dto: CreateRetentionPolicyDto,
+    createdBy: string
+  ): Promise<DataRetentionPolicy> {
     this.logger.log(`Creating retention policy: ${dto.name}`);
 
     const policy = this.policyRepository.create({
@@ -90,7 +103,9 @@ export class DataRetentionService {
       jurisdictions: dto.jurisdictions || [],
       conditions: dto.conditions,
       priority: dto.priority || 0,
-      effectiveDate: dto.effectiveDate ? new Date(dto.effectiveDate) : new Date(),
+      effectiveDate: dto.effectiveDate
+        ? new Date(dto.effectiveDate)
+        : new Date(),
       tags: dto.tags || [],
       createdBy,
     });
@@ -99,12 +114,12 @@ export class DataRetentionService {
 
     await this.auditLogRepository.save({
       userId: createdBy,
-      action: 'create',
-      entityType: 'retention_policy',
+      action: "create",
+      entityType: "retention_policy",
       entityId: saved.id,
       timestamp: new Date(),
       description: `Created retention policy: ${saved.name}`,
-      result: 'success',
+      result: "success",
     } as AuditLog);
 
     return saved;
@@ -120,7 +135,7 @@ export class DataRetentionService {
 
   async getAllPolicies(): Promise<DataRetentionPolicy[]> {
     return this.policyRepository.find({
-      order: { priority: 'DESC', createdAt: 'DESC' },
+      order: { priority: "DESC", createdAt: "DESC" },
     });
   }
 
@@ -129,11 +144,15 @@ export class DataRetentionService {
       where: {
         status: RetentionPolicyStatus.ACTIVE,
       },
-      order: { priority: 'DESC' },
+      order: { priority: "DESC" },
     });
   }
 
-  async updatePolicy(id: string, updates: Partial<DataRetentionPolicy>, updatedBy: string): Promise<DataRetentionPolicy> {
+  async updatePolicy(
+    id: string,
+    updates: Partial<DataRetentionPolicy>,
+    updatedBy: string
+  ): Promise<DataRetentionPolicy> {
     const policy = await this.getPolicy(id);
 
     Object.assign(policy, {
@@ -145,33 +164,46 @@ export class DataRetentionService {
 
     await this.auditLogRepository.save({
       userId: updatedBy,
-      action: 'update',
-      entityType: 'retention_policy',
+      action: "update",
+      entityType: "retention_policy",
       entityId: saved.id,
       timestamp: new Date(),
       description: `Updated retention policy: ${saved.name}`,
-      result: 'success',
-      changes: updates as any,
+      result: "success",
+      changes: updates as Record<string, unknown>,
     } as AuditLog);
 
     return saved;
   }
 
-  async deactivatePolicy(id: string, deactivatedBy: string): Promise<DataRetentionPolicy> {
-    return this.updatePolicy(id, { status: RetentionPolicyStatus.INACTIVE }, deactivatedBy);
+  async deactivatePolicy(
+    id: string,
+    deactivatedBy: string
+  ): Promise<DataRetentionPolicy> {
+    return this.updatePolicy(
+      id,
+      { status: RetentionPolicyStatus.INACTIVE },
+      deactivatedBy
+    );
   }
 
-  async applyRetentionPolicy(entityType: string, entityId: string, createdDate: Date): Promise<DataRetentionRecord | null> {
+  async applyRetentionPolicy(
+    entityType: string,
+    entityId: string,
+    createdDate: Date
+  ): Promise<DataRetentionRecord | null> {
     const policies = await this.policyRepository.find({
       where: {
         entityType,
         status: RetentionPolicyStatus.ACTIVE,
       },
-      order: { priority: 'DESC' },
+      order: { priority: "DESC" },
     });
 
     if (policies.length === 0) {
-      this.logger.warn(`No active retention policy found for entity type: ${entityType}`);
+      this.logger.warn(
+        `No active retention policy found for entity type: ${entityType}`
+      );
       return null;
     }
 
@@ -182,16 +214,22 @@ export class DataRetentionService {
     });
 
     if (existingRecord) {
-      this.logger.debug(`Retention record already exists for ${entityType}:${entityId}`);
+      this.logger.debug(
+        `Retention record already exists for ${entityType}:${entityId}`
+      );
       return existingRecord;
     }
 
     if (!applicablePolicy) {
-      throw new Error(`No retention policy found for entity type: ${entityType}`);
+      throw new Error(
+        `No retention policy found for entity type: ${entityType}`
+      );
     }
 
     const retentionExpiresAt = new Date(createdDate);
-    retentionExpiresAt.setDate(retentionExpiresAt.getDate() + applicablePolicy.retentionPeriodDays);
+    retentionExpiresAt.setDate(
+      retentionExpiresAt.getDate() + applicablePolicy.retentionPeriodDays
+    );
 
     const record = this.recordRepository.create({
       policyId: applicablePolicy.id,
@@ -199,7 +237,7 @@ export class DataRetentionService {
       entityId,
       retentionExpiresAt,
       scheduledAction: applicablePolicy.retentionAction,
-      status: 'active',
+      status: "active",
       legalHold: false,
     });
 
@@ -207,40 +245,48 @@ export class DataRetentionService {
 
     await this.policyRepository.update(
       { id: applicablePolicy.id },
-      { entitiesAffected: () => 'entities_affected + 1' },
+      { entitiesAffected: () => "entities_affected + 1" }
     );
 
-    this.logger.log(`Applied retention policy ${applicablePolicy.name} to ${entityType}:${entityId}, expires: ${retentionExpiresAt.toISOString()}`);
+    this.logger.log(
+      `Applied retention policy ${applicablePolicy.name} to ${entityType}:${entityId}, expires: ${retentionExpiresAt.toISOString()}`
+    );
 
     return saved;
   }
 
-  async getRetentionStatus(query: RetentionStatusQueryDto): Promise<RetentionStatusResult> {
+  async getRetentionStatus(
+    query: RetentionStatusQueryDto
+  ): Promise<RetentionStatusResult> {
     const queryBuilder = this.recordRepository
-      .createQueryBuilder('record')
-      .orderBy('record.retentionExpiresAt', 'ASC');
+      .createQueryBuilder("record")
+      .orderBy("record.retentionExpiresAt", "ASC");
 
     if (query.entityType) {
-      queryBuilder.andWhere('record.entityType = :entityType', {
+      queryBuilder.andWhere("record.entityType = :entityType", {
         entityType: query.entityType,
       });
     }
 
     if (query.status) {
-      queryBuilder.andWhere('record.status = :status', { status: query.status });
+      queryBuilder.andWhere("record.status = :status", {
+        status: query.status,
+      });
     }
 
     if (query.legalHoldOnly) {
-      queryBuilder.andWhere('record.legalHold = :legalHold', { legalHold: true });
+      queryBuilder.andWhere("record.legalHold = :legalHold", {
+        legalHold: true,
+      });
     }
 
     if (query.expiringWithinDays) {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + query.expiringWithinDays);
-      queryBuilder.andWhere('record.retentionExpiresAt <= :futureDate', {
+      queryBuilder.andWhere("record.retentionExpiresAt <= :futureDate", {
         futureDate,
       });
-      queryBuilder.andWhere('record.status = :status', { status: 'active' });
+      queryBuilder.andWhere("record.status = :status", { status: "active" });
     }
 
     const page = query.page || 1;
@@ -256,9 +302,9 @@ export class DataRetentionService {
     const expiringSoon = await this.recordRepository.count({
       where: {
         retentionExpiresAt: LessThanOrEqual(
-          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         ),
-        status: 'active',
+        status: "active",
       },
     });
     const onLegalHold = await this.recordRepository.count({
@@ -267,7 +313,7 @@ export class DataRetentionService {
     const readyForProcessing = await this.recordRepository.count({
       where: {
         retentionExpiresAt: LessThanOrEqual(new Date()),
-        status: 'active',
+        status: "active",
         legalHold: false,
       },
     });
@@ -286,7 +332,10 @@ export class DataRetentionService {
     };
   }
 
-  async placeLegalHold(dto: LegalHoldDto, placedBy: string): Promise<DataRetentionRecord> {
+  async placeLegalHold(
+    dto: LegalHoldDto,
+    placedBy: string
+  ): Promise<DataRetentionRecord> {
     this.logger.log(`Placing legal hold on ${dto.entityType}:${dto.entityId}`);
 
     let record = await this.recordRepository.findOne({
@@ -299,21 +348,25 @@ export class DataRetentionService {
           entityType: dto.entityType,
           status: RetentionPolicyStatus.ACTIVE,
         },
-        order: { priority: 'DESC' },
+        order: { priority: "DESC" },
       });
 
       const policy = applicablePolicies[0];
       if (!policy) {
-        throw new NotFoundException(`No retention policy found for entity type: ${dto.entityType}`);
+        throw new NotFoundException(
+          `No retention policy found for entity type: ${dto.entityType}`
+        );
       }
 
       record = this.recordRepository.create({
         policyId: policy.id,
         entityType: dto.entityType,
         entityId: dto.entityId,
-        retentionExpiresAt: new Date(Date.now() + policy.retentionPeriodDays * 24 * 60 * 60 * 1000),
+        retentionExpiresAt: new Date(
+          Date.now() + policy.retentionPeriodDays * 24 * 60 * 60 * 1000
+        ),
         scheduledAction: policy.retentionAction,
-        status: 'hold',
+        status: "hold",
         legalHold: true,
         legalHoldReason: dto.reason,
         legalHoldBy: placedBy,
@@ -326,58 +379,73 @@ export class DataRetentionService {
       record.legalHoldReason = dto.reason;
       record.legalHoldBy = placedBy;
       record.legalHoldAt = new Date();
-      record.status = 'hold';
+      record.status = "hold";
       if (dto.notes) {
         record.notes = dto.notes;
       }
-      record.metadata = { ...record.metadata, relatedCaseId: dto.relatedCaseId };
+      record.metadata = {
+        ...record.metadata,
+        relatedCaseId: dto.relatedCaseId,
+      };
     }
 
     const saved = await this.recordRepository.save(record);
 
     await this.auditLogRepository.save({
       userId: placedBy,
-      action: 'update',
-      entityType: 'retention_record',
+      action: "update",
+      entityType: "retention_record",
       entityId: saved.id,
       timestamp: new Date(),
       description: `Legal hold placed on ${dto.entityType}:${dto.entityId}`,
-      result: 'success',
+      result: "success",
       details: dto.reason,
     } as AuditLog);
 
     return saved;
   }
 
-  async removeLegalHold(dto: RemoveLegalHoldDto, removedBy: string): Promise<DataRetentionRecord> {
-    this.logger.log(`Removing legal hold from retention record: ${dto.retentionRecordId}`);
+  async removeLegalHold(
+    dto: RemoveLegalHoldDto,
+    removedBy: string
+  ): Promise<DataRetentionRecord> {
+    this.logger.log(
+      `Removing legal hold from retention record: ${dto.retentionRecordId}`
+    );
 
     const record = await this.recordRepository.findOne({
       where: { id: dto.retentionRecordId },
     });
 
     if (!record) {
-      throw new NotFoundException(`Retention record with ID ${dto.retentionRecordId} not found`);
+      throw new NotFoundException(
+        `Retention record with ID ${dto.retentionRecordId} not found`
+      );
     }
 
     if (!record.legalHold) {
-      this.logger.warn(`Record ${dto.retentionRecordId} does not have a legal hold`);
+      this.logger.warn(
+        `Record ${dto.retentionRecordId} does not have a legal hold`
+      );
     }
 
     record.legalHold = false;
-    record.status = record.retentionExpiresAt < new Date() ? 'expired' : 'active';
-    record.notes = dto.reason ? `Legal hold removed: ${dto.reason}` : 'Legal hold removed';
+    record.status =
+      record.retentionExpiresAt < new Date() ? "expired" : "active";
+    record.notes = dto.reason
+      ? `Legal hold removed: ${dto.reason}`
+      : "Legal hold removed";
 
     const saved = await this.recordRepository.save(record);
 
     await this.auditLogRepository.save({
       userId: removedBy,
-      action: 'update',
-      entityType: 'retention_record',
+      action: "update",
+      entityType: "retention_record",
       entityId: saved.id,
       timestamp: new Date(),
       description: `Legal hold removed from ${record.entityType}:${record.entityId}`,
-      result: 'success',
+      result: "success",
       details: dto.reason,
     } as AuditLog);
 
@@ -386,18 +454,20 @@ export class DataRetentionService {
 
   @Cron(CronExpression.EVERY_DAY_AT_2AM)
   async processExpiredRetentions(): Promise<RetentionExecutionResult> {
-    this.logger.log('Starting automated retention processing');
+    this.logger.log("Starting automated retention processing");
 
     const expiredRecords = await this.recordRepository.find({
       where: {
         retentionExpiresAt: LessThanOrEqual(new Date()),
-        status: 'active',
+        status: "active",
         legalHold: false,
       },
       take: 1000,
     });
 
-    this.logger.log(`Found ${expiredRecords.length} expired retention records to process`);
+    this.logger.log(
+      `Found ${expiredRecords.length} expired retention records to process`
+    );
 
     const result: RetentionExecutionResult = {
       totalProcessed: 0,
@@ -430,47 +500,53 @@ export class DataRetentionService {
           entityType: record.entityType,
           entityId: record.entityId,
           action: record.scheduledAction,
-          status: 'success',
+          status: "success",
         });
 
-        record.status = 'processed';
+        record.status = "processed";
         record.processedAt = new Date();
-        record.processedBy = 'system';
+        record.processedBy = "system";
         await this.recordRepository.save(record);
       } catch (error) {
-        this.logger.error(`Error processing retention record ${record.id}: ${error}`);
+        this.logger.error(
+          `Error processing retention record ${record.id}: ${error}`
+        );
         result.errors++;
         result.details.push({
           recordId: record.id,
           entityType: record.entityType,
           entityId: record.entityId,
           action: record.scheduledAction,
-          status: 'error',
-          error: error instanceof Error ? error.message : 'Unknown error',
+          status: "error",
+          error: error instanceof Error ? error.message : "Unknown error",
         });
       }
     }
 
     this.logger.log(
-      `Retention processing completed: ${result.totalProcessed} processed, ${result.errors} errors`,
+      `Retention processing completed: ${result.totalProcessed} processed, ${result.errors} errors`
     );
 
     await this.auditLogRepository.save({
-      userId: 'system',
-      action: 'other',
-      entityType: 'retention_processing',
-      entityId: 'automated',
+      userId: "system",
+      action: "other",
+      entityType: "retention_processing",
+      entityId: "automated",
       timestamp: new Date(),
-      description: 'Automated retention processing completed',
-      result: result.errors === 0 ? 'success' : 'warning',
+      description: "Automated retention processing completed",
+      result: result.errors === 0 ? "success" : "warning",
       details: JSON.stringify(result),
     } as AuditLog);
 
     return result;
   }
 
-  private async executeRetentionAction(record: DataRetentionRecord): Promise<void> {
-    this.logger.log(`Executing ${record.scheduledAction} for ${record.entityType}:${record.entityId}`);
+  private async executeRetentionAction(
+    record: DataRetentionRecord
+  ): Promise<void> {
+    this.logger.log(
+      `Executing ${record.scheduledAction} for ${record.entityType}:${record.entityId}`
+    );
 
     switch (record.scheduledAction) {
       case RetentionAction.ARCHIVE:
@@ -483,20 +559,31 @@ export class DataRetentionService {
         await this.anonymizeEntity(record.entityType, record.entityId);
         break;
       case RetentionAction.RETAIN:
-        this.logger.log(`Retain action - no operation for ${record.entityType}:${record.entityId}`);
+        this.logger.log(
+          `Retain action - no operation for ${record.entityType}:${record.entityId}`
+        );
         break;
     }
   }
 
-  private async archiveEntity(entityType: string, entityId: string): Promise<void> {
+  private async archiveEntity(
+    entityType: string,
+    entityId: string
+  ): Promise<void> {
     this.logger.log(`Archiving ${entityType}:${entityId}`);
   }
 
-  private async deleteEntity(entityType: string, entityId: string): Promise<void> {
+  private async deleteEntity(
+    entityType: string,
+    entityId: string
+  ): Promise<void> {
     this.logger.log(`Deleting ${entityType}:${entityId}`);
   }
 
-  private async anonymizeEntity(entityType: string, entityId: string): Promise<void> {
+  private async anonymizeEntity(
+    entityType: string,
+    entityId: string
+  ): Promise<void> {
     this.logger.log(`Anonymizing ${entityType}:${entityId}`);
   }
 
@@ -514,15 +601,15 @@ export class DataRetentionService {
     });
 
     const activeRecords = await this.recordRepository.count({
-      where: { status: 'active' },
+      where: { status: "active" },
     });
 
     const expiringSoon = await this.recordRepository.count({
       where: {
         retentionExpiresAt: LessThanOrEqual(
-          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         ),
-        status: 'active',
+        status: "active",
       },
     });
 
@@ -536,8 +623,10 @@ export class DataRetentionService {
     const byAction: Record<string, number> = {};
 
     for (const record of allRecords) {
-      byEntityType[record.entityType] = (byEntityType[record.entityType] || 0) + 1;
-      byAction[record.scheduledAction] = (byAction[record.scheduledAction] || 0) + 1;
+      byEntityType[record.entityType] =
+        (byEntityType[record.entityType] || 0) + 1;
+      byAction[record.scheduledAction] =
+        (byAction[record.scheduledAction] || 0) + 1;
     }
 
     return {

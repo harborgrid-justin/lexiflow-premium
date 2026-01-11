@@ -1,5 +1,5 @@
-import { Column, ColumnOptions, ValueTransformer } from 'typeorm';
-import { ColumnEncryptionService } from '@database/security/services/column.encryption.service';
+import { ColumnEncryptionService } from "@database/security/services/column.encryption.service";
+import { Column, ColumnOptions, ValueTransformer } from "typeorm";
 
 let encryptionService: ColumnEncryptionService | null = null;
 
@@ -10,13 +10,13 @@ export function setEncryptionService(service: ColumnEncryptionService): void {
 export function getEncryptionService(): ColumnEncryptionService {
   if (!encryptionService) {
     throw new Error(
-      'EncryptionService not initialized. Make sure DatabaseSecurityModule is imported in your app module.'
+      "EncryptionService not initialized. Make sure DatabaseSecurityModule is imported in your app module."
     );
   }
   return encryptionService;
 }
 
-export interface EncryptedColumnOptions extends Omit<ColumnOptions, 'type'> {
+export interface EncryptedColumnOptions extends Omit<ColumnOptions, "type"> {
   nullable?: boolean;
   length?: number;
   type?: unknown;
@@ -24,7 +24,7 @@ export interface EncryptedColumnOptions extends Omit<ColumnOptions, 'type'> {
 
 const encryptionTransformer: ValueTransformer = {
   to(value: string | null | undefined): string | null {
-    if (value === null || value === undefined || value === '') {
+    if (value === null || value === undefined || value === "") {
       return null;
     }
 
@@ -32,13 +32,13 @@ const encryptionTransformer: ValueTransformer = {
       const service = getEncryptionService();
       return service.encrypt(value);
     } catch (error) {
-      console.error('Encryption error in transformer:', error);
+      console.error("Encryption error in transformer:", error);
       throw error;
     }
   },
 
   from(value: string | null | undefined): string | null {
-    if (value === null || value === undefined || value === '') {
+    if (value === null || value === undefined || value === "") {
       return null;
     }
 
@@ -46,15 +46,17 @@ const encryptionTransformer: ValueTransformer = {
       const service = getEncryptionService();
       return service.decrypt(value);
     } catch (error) {
-      console.error('Decryption error in transformer:', error);
+      console.error("Decryption error in transformer:", error);
       return null;
     }
   },
 };
 
-export function EncryptedColumn(options?: EncryptedColumnOptions): PropertyDecorator {
-  const columnOptions: unknown = {
-    type: 'text' as any,
+export function EncryptedColumn(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
+  const columnOptions = {
+    type: "text" as const,
     nullable: options?.nullable !== false,
     transformer: encryptionTransformer,
     ...options,
@@ -68,10 +70,13 @@ export interface SensitiveFieldOptions {
   auditAccess?: boolean;
 }
 
-export function SensitiveField(options?: SensitiveFieldOptions): PropertyDecorator {
+export function SensitiveField(
+  options?: SensitiveFieldOptions
+): PropertyDecorator {
   return (target: unknown, propertyKey: string | symbol) => {
-    const metadataKey = 'sensitiveFields';
-    const existingFields = Reflect.getMetadata(metadataKey, (target as any).constructor) || [];
+    const metadataKey = "sensitiveFields";
+    const constructor = (target as { constructor: object }).constructor;
+    const existingFields = Reflect.getMetadata(metadataKey, constructor) || [];
 
     existingFields.push({
       propertyKey,
@@ -79,68 +84,85 @@ export function SensitiveField(options?: SensitiveFieldOptions): PropertyDecorat
       auditAccess: options?.auditAccess === true,
     });
 
-    Reflect.defineMetadata(metadataKey, existingFields, (target as any).constructor);
+    Reflect.defineMetadata(metadataKey, existingFields, constructor);
   };
 }
 
 export function getSensitiveFields(target: unknown): string[] {
-  const metadataKey = 'sensitiveFields';
-  const fields = Reflect.getMetadata(metadataKey, (target as any).constructor) || [];
-  return fields.map((f: unknown) => (f as any).propertyKey);
+  const metadataKey = "sensitiveFields";
+  const constructor = (target as { constructor: object }).constructor;
+  const fields = Reflect.getMetadata(metadataKey, constructor) || [];
+  return fields.map((f: unknown) => (f as { propertyKey: string }).propertyKey);
 }
 
-export function EncryptedSSN(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedSSN(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Social Security Number',
+    comment: "Encrypted Social Security Number",
   });
 }
 
-export function EncryptedCreditCard(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedCreditCard(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Credit Card Number',
+    comment: "Encrypted Credit Card Number",
   });
 }
 
-export function EncryptedBankAccount(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedBankAccount(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Bank Account Number',
+    comment: "Encrypted Bank Account Number",
   });
 }
 
-export function EncryptedDriverLicense(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedDriverLicense(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Driver License Number',
+    comment: "Encrypted Driver License Number",
   });
 }
 
-export function EncryptedPassport(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedPassport(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Passport Number',
+    comment: "Encrypted Passport Number",
   });
 }
 
-export function EncryptedTaxId(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedTaxId(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Tax ID',
+    comment: "Encrypted Tax ID",
   });
 }
 
-export function EncryptedHealthRecord(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedHealthRecord(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Health Record',
+    comment: "Encrypted Health Record",
   });
 }
 
-export function EncryptedPersonalInfo(options?: EncryptedColumnOptions): PropertyDecorator {
+export function EncryptedPersonalInfo(
+  options?: EncryptedColumnOptions
+): PropertyDecorator {
   return EncryptedColumn({
     ...options,
-    comment: 'Encrypted Personal Information',
+    comment: "Encrypted Personal Information",
   });
 }

@@ -1,14 +1,14 @@
+import { Logger } from "@nestjs/common";
 import {
+  DataSource,
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
-  UpdateEvent,
+  RecoverEvent,
   RemoveEvent,
   SoftRemoveEvent,
-  RecoverEvent,
-  DataSource,
+  UpdateEvent,
 } from "typeorm";
-import { Logger } from "@nestjs/common";
 
 export interface AuditLogEntry {
   entityName: string;
@@ -116,12 +116,14 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
     if (dataSource && e) {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-        const metadata = dataSource.getMetadata((e as any).constructor);
+        const entityConstructor = (
+          e as { constructor: new (...args: unknown[]) => unknown }
+        ).constructor;
+        const metadata = dataSource.getMetadata(entityConstructor);
         const primaryColumn = metadata.primaryColumns[0];
-         
+
         return primaryColumn?.propertyName
-          ? String((e as any)[primaryColumn.propertyName])
+          ? String((e as Record<string, unknown>)[primaryColumn.propertyName])
           : "unknown";
       } catch {
         return "unknown";

@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { Invoice } from '@billing/invoices/entities/invoice.entity';
-import { TransactionManagerService } from '@common/services/transaction-manager.service';
+import {
+  Invoice,
+  InvoiceStatus,
+} from "@billing/invoices/entities/invoice.entity";
+import { TransactionManagerService } from "@common/services/transaction-manager.service";
+import { Injectable } from "@nestjs/common";
 
 /**
  * ╔=================================================================================================================╗
@@ -32,21 +35,23 @@ import { TransactionManagerService } from '@common/services/transaction-manager.
 
 @Injectable()
 export class InvoicePaymentService {
-  constructor(
-    private transactionManager: TransactionManagerService,
-  ) {}
+  constructor(private transactionManager: TransactionManagerService) {}
 
   /**
    * Process payment with pessimistic locking to prevent race conditions
    */
-  async processPayment(invoiceId: string, amount: number, paymentMethod: string) {
+  async processPayment(
+    invoiceId: string,
+    amount: number,
+    paymentMethod: string
+  ) {
     return this.transactionManager.executeInTransaction(
       async (manager) => {
         // Pessimistic write lock (SELECT ... FOR UPDATE)
         const invoice = await manager
-          .createQueryBuilder(Invoice, 'invoice')
-          .where('invoice.id = :id', { id: invoiceId })
-          .setLock('pessimistic_write')
+          .createQueryBuilder(Invoice, "invoice")
+          .where("invoice.id = :id", { id: invoiceId })
+          .setLock("pessimistic_write")
           .getOne();
 
         if (!invoice) {
@@ -54,11 +59,13 @@ export class InvoicePaymentService {
         }
 
         if (amount <= 0) {
-          throw new Error('Payment amount must be positive');
+          throw new Error("Payment amount must be positive");
         }
 
         if (amount > invoice.balanceDue) {
-          throw new Error(`Payment amount ${amount} exceeds balance due ${invoice.balanceDue}`);
+          throw new Error(
+            `Payment amount ${amount} exceeds balance due ${invoice.balanceDue}`
+          );
         }
 
         // Update invoice
@@ -67,50 +74,56 @@ export class InvoicePaymentService {
         invoice.paymentMethod = paymentMethod;
 
         if (invoice.balanceDue === 0) {
-          invoice.status = 'Paid' as any;
+          invoice.status = InvoiceStatus.PAID;
           invoice.paidAt = new Date();
         } else if (invoice.paidAmount > 0) {
-          invoice.status = 'Partial' as any;
+          invoice.status = InvoiceStatus.PARTIAL;
         }
 
         // Save with optimistic locking check
         return manager.save(Invoice, invoice);
       },
-      { isolationLevel: 'SERIALIZABLE' }
+      { isolationLevel: "SERIALIZABLE" }
     );
   }
 
   /**
    * Transfer funds between trust accounts with locking
    */
-  async transferBetweenInvoices(fromInvoiceId: string, toInvoiceId: string, amount: number) {
+  async transferBetweenInvoices(
+    fromInvoiceId: string,
+    toInvoiceId: string,
+    amount: number
+  ) {
     return this.transactionManager.executeInTransaction(
       async (manager) => {
         // Lock in deterministic order to prevent deadlocks
         const [firstId, secondId] = [fromInvoiceId, toInvoiceId].sort();
 
         const firstInvoice = await manager
-          .createQueryBuilder(Invoice, 'invoice')
-          .where('invoice.id = :id', { id: firstId })
-          .setLock('pessimistic_write')
+          .createQueryBuilder(Invoice, "invoice")
+          .where("invoice.id = :id", { id: firstId })
+          .setLock("pessimistic_write")
           .getOne();
 
         const secondInvoice = await manager
-          .createQueryBuilder(Invoice, 'invoice')
-          .where('invoice.id = :id', { id: secondId })
-          .setLock('pessimistic_write')
+          .createQueryBuilder(Invoice, "invoice")
+          .where("invoice.id = :id", { id: secondId })
+          .setLock("pessimistic_write")
           .getOne();
 
         if (!firstInvoice || !secondInvoice) {
-          throw new Error('One or both invoices not found');
+          throw new Error("One or both invoices not found");
         }
 
         // Determine which is source and which is destination
-        const fromInvoice = firstId === fromInvoiceId ? firstInvoice : secondInvoice;
-        const toInvoice = firstId === toInvoiceId ? firstInvoice : secondInvoice;
+        const fromInvoice =
+          firstId === fromInvoiceId ? firstInvoice : secondInvoice;
+        const toInvoice =
+          firstId === toInvoiceId ? firstInvoice : secondInvoice;
 
         if (fromInvoice.paidAmount < amount) {
-          throw new Error('Insufficient paid amount for transfer');
+          throw new Error("Insufficient paid amount for transfer");
         }
 
         // Perform transfer
@@ -124,7 +137,7 @@ export class InvoicePaymentService {
 
         return { fromInvoice, toInvoice };
       },
-      { isolationLevel: 'SERIALIZABLE' }
+      { isolationLevel: "SERIALIZABLE" }
     );
   }
 }

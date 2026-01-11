@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as crypto from 'crypto';
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import * as crypto from "crypto";
 
 export interface EncryptionKeyConfig {
   current: string;
@@ -45,7 +45,7 @@ export interface EncryptedValue {
 @Injectable()
 export class ColumnEncryptionService {
   private readonly logger = new Logger(ColumnEncryptionService.name);
-  private readonly algorithm = 'aes-256-gcm';
+  private readonly algorithm = "aes-256-gcm";
   private readonly ivLength = 16;
   private readonly currentKeyVersion = 1;
 
@@ -56,17 +56,22 @@ export class ColumnEncryptionService {
   }
 
   private initializeKeys(): void {
-    const encryptionKey = this.configService.get<string>('ENCRYPTION_KEY') ||
-      this.configService.get<string>('DATABASE_ENCRYPTION_KEY');
+    const encryptionKey =
+      this.configService.get<string>("ENCRYPTION_KEY") ||
+      this.configService.get<string>("DATABASE_ENCRYPTION_KEY");
 
     if (!encryptionKey) {
-      throw new Error('ENCRYPTION_KEY or DATABASE_ENCRYPTION_KEY must be set in environment variables');
+      throw new Error(
+        "ENCRYPTION_KEY or DATABASE_ENCRYPTION_KEY must be set in environment variables"
+      );
     }
 
     const keyBuffer = this.deriveKey(encryptionKey, this.currentKeyVersion);
     this.encryptionKeys.set(this.currentKeyVersion, keyBuffer);
 
-    const previousKeys = this.configService.get<string>('ENCRYPTION_PREVIOUS_KEYS');
+    const previousKeys = this.configService.get<string>(
+      "ENCRYPTION_PREVIOUS_KEYS"
+    );
     if (previousKeys) {
       try {
         const keys = JSON.parse(previousKeys);
@@ -77,20 +82,22 @@ export class ColumnEncryptionService {
           }
         });
       } catch (error) {
-        this.logger.warn('Failed to parse previous encryption keys', error);
+        this.logger.warn("Failed to parse previous encryption keys", error);
       }
     }
 
-    this.logger.log(`Initialized encryption with ${this.encryptionKeys.size} key version(s)`);
+    this.logger.log(
+      `Initialized encryption with ${this.encryptionKeys.size} key version(s)`
+    );
   }
 
   private deriveKey(key: string, version: number): Buffer {
     const salt = `lexiflow-encryption-v${version}`;
-    return crypto.pbkdf2Sync(key, salt, 100000, 32, 'sha256');
+    return crypto.pbkdf2Sync(key, salt, 100000, 32, "sha256");
   }
 
   encrypt(plaintext: string | null | undefined): string | null {
-    if (plaintext === null || plaintext === undefined || plaintext === '') {
+    if (plaintext === null || plaintext === undefined || plaintext === "") {
       return null;
     }
 
@@ -99,63 +106,76 @@ export class ColumnEncryptionService {
       const key = this.encryptionKeys.get(this.currentKeyVersion);
 
       if (!key) {
-        throw new Error('Encryption key not found');
+        throw new Error("Encryption key not found");
       }
 
       const cipher = crypto.createCipheriv(this.algorithm, key, iv);
 
-      let encrypted = cipher.update(plaintext, 'utf8', 'hex');
-      encrypted += cipher.final('hex');
+      let encrypted = cipher.update(plaintext, "utf8", "hex");
+      encrypted += cipher.final("hex");
 
       const authTag = cipher.getAuthTag();
 
       const encryptedValue: EncryptedValue = {
         data: encrypted,
         keyVersion: this.currentKeyVersion,
-        iv: iv.toString('hex'),
-        authTag: authTag.toString('hex'),
+        iv: iv.toString("hex"),
+        authTag: authTag.toString("hex"),
       };
 
-      return Buffer.from(JSON.stringify(encryptedValue)).toString('base64');
+      return Buffer.from(JSON.stringify(encryptedValue)).toString("base64");
     } catch (error) {
-      this.logger.error('Encryption failed', error);
-      throw new Error('Failed to encrypt data');
+      this.logger.error("Encryption failed", error);
+      throw new Error("Failed to encrypt data");
     }
   }
 
   decrypt(encryptedData: string | null | undefined): string | null {
-    if (encryptedData === null || encryptedData === undefined || encryptedData === '') {
+    if (
+      encryptedData === null ||
+      encryptedData === undefined ||
+      encryptedData === ""
+    ) {
       return null;
     }
 
     try {
       const encryptedValue: EncryptedValue = JSON.parse(
-        Buffer.from(encryptedData, 'base64').toString('utf8')
+        Buffer.from(encryptedData, "base64").toString("utf8")
       );
 
       const key = this.encryptionKeys.get(encryptedValue.keyVersion);
 
       if (!key) {
-        throw new Error(`Encryption key version ${encryptedValue.keyVersion} not found`);
+        throw new Error(
+          `Encryption key version ${encryptedValue.keyVersion} not found`
+        );
       }
 
-      const iv = Buffer.from(encryptedValue.iv, 'hex');
-      const authTag = Buffer.from(encryptedValue.authTag, 'hex');
+      const iv = Buffer.from(encryptedValue.iv, "hex");
+      const authTag = Buffer.from(encryptedValue.authTag, "hex");
 
       const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
       decipher.setAuthTag(authTag);
 
-      let decrypted = decipher.update(encryptedValue.data, 'hex', 'utf8');
-      decrypted += decipher.final('utf8');
+      let decrypted = decipher.update(encryptedValue.data, "hex", "utf8");
+      decrypted += decipher.final("utf8");
 
       return decrypted;
     } catch (error) {
-      this.logger.error('Decryption failed', error);
-      throw new Error('Failed to decrypt data');
+      this.logger.error("Decryption failed", error);
+      throw new Error("Failed to decrypt data");
     }
   }
 
-  async rotateKey(columnName: string, _entityClass: unknown, repository: unknown): Promise<number> {
+  async rotateKey(
+    columnName: string,
+    _entityClass: unknown,
+    repository: {
+      find(options: { take: number; skip: number }): Promise<unknown[]>;
+      save(entity: unknown): Promise<unknown>;
+    }
+  ): Promise<number> {
     this.logger.log(`Starting key rotation for column ${columnName}`);
 
     let rotatedCount = 0;
@@ -164,7 +184,7 @@ export class ColumnEncryptionService {
 
     try {
       while (true) {
-        const entities = await (repository as any).find({
+        const entities = await repository.find({
           take: batchSize,
           skip: offset,
         });
@@ -174,11 +194,12 @@ export class ColumnEncryptionService {
         }
 
         for (const entity of entities) {
-          const encryptedValue = entity[columnName];
-          if (encryptedValue) {
+          const entityRecord = entity as Record<string, unknown>;
+          const encryptedValue = entityRecord[columnName];
+          if (typeof encryptedValue === "string") {
             const decrypted = this.decrypt(encryptedValue);
-            entity[columnName] = this.encrypt(decrypted);
-            await (repository as any).save(entity);
+            entityRecord[columnName] = this.encrypt(decrypted);
+            await repository.save(entity);
             rotatedCount++;
           }
         }
@@ -186,11 +207,13 @@ export class ColumnEncryptionService {
         offset += batchSize;
       }
 
-      this.logger.log(`Key rotation completed. Rotated ${rotatedCount} records`);
+      this.logger.log(
+        `Key rotation completed. Rotated ${rotatedCount} records`
+      );
       return rotatedCount;
     } catch (error) {
-      this.logger.error('Key rotation failed', error);
-      throw new Error('Failed to rotate encryption keys');
+      this.logger.error("Key rotation failed", error);
+      throw new Error("Failed to rotate encryption keys");
     }
   }
 
@@ -198,9 +221,13 @@ export class ColumnEncryptionService {
     const encrypted: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         encrypted[key] = this.encrypt(value);
-      } else if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      } else if (
+        value !== null &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
         encrypted[key] = this.encryptObject(value as Record<string, unknown>);
       } else {
         encrypted[key] = value;
@@ -214,13 +241,17 @@ export class ColumnEncryptionService {
     const decrypted: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'string' && this.isEncrypted(value)) {
+      if (typeof value === "string" && this.isEncrypted(value)) {
         try {
           decrypted[key] = this.decrypt(value);
         } catch {
           decrypted[key] = value;
         }
-      } else if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      } else if (
+        value !== null &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
         decrypted[key] = this.decryptObject(value as Record<string, unknown>);
       } else {
         decrypted[key] = value;
@@ -232,27 +263,29 @@ export class ColumnEncryptionService {
 
   private isEncrypted(value: string): boolean {
     try {
-      const decoded = Buffer.from(value, 'base64').toString('utf8');
-      const parsed = JSON.parse(decoded);
-      return parsed.data && parsed.keyVersion && parsed.iv && parsed.authTag;
+      const decoded = Buffer.from(value, "base64").toString("utf8");
+      const parsed = JSON.parse(decoded) as Record<string, unknown>;
+      return (
+        typeof parsed.data === "string" &&
+        typeof parsed.keyVersion === "number" &&
+        typeof parsed.iv === "string" &&
+        typeof parsed.authTag === "string"
+      );
     } catch {
       return false;
     }
   }
 
   generateEncryptionKey(): string {
-    return crypto.randomBytes(32).toString('hex');
+    return crypto.randomBytes(32).toString("hex");
   }
 
   hashValue(value: string): string {
-    return crypto.createHash('sha256').update(value).digest('hex');
+    return crypto.createHash("sha256").update(value).digest("hex");
   }
 
   compareHash(value: string, hash: string): boolean {
     const valueHash = this.hashValue(value);
-    return crypto.timingSafeEqual(
-      Buffer.from(valueHash),
-      Buffer.from(hash)
-    );
+    return crypto.timingSafeEqual(Buffer.from(valueHash), Buffer.from(hash));
   }
 }

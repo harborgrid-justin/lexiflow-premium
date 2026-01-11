@@ -438,7 +438,12 @@ export class PolicyService {
   }
 
   private getNestedValue(obj: unknown, path: string): unknown {
-    return path.split('.').reduce((current, key) => (current as any)?.[key], obj);
+    return path.split('.').reduce((current, key) => {
+      if (current && typeof current === 'object') {
+        return (current as Record<string, unknown>)[key];
+      }
+      return undefined;
+    }, obj);
   }
 
   private getTimeAttribute(attribute: string, timestamp: Date): unknown {
@@ -495,7 +500,7 @@ export class PolicyService {
     }
 
     switch (evaluationMode) {
-      case PolicyEvaluationMode.DENY_OVERRIDES:
+      case PolicyEvaluationMode.DENY_OVERRIDES: {
         const denyPolicy = policies.find(p => p.effect === PolicyEffect.DENY);
         if (denyPolicy) {
           return {
@@ -505,8 +510,9 @@ export class PolicyService {
           };
         }
         break;
+      }
 
-      case PolicyEvaluationMode.ALLOW_OVERRIDES:
+      case PolicyEvaluationMode.ALLOW_OVERRIDES: {
         const allowPolicy = policies.find(p => p.effect === PolicyEffect.ALLOW);
         if (allowPolicy) {
           return {

@@ -1,7 +1,7 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { InsufficientPermissionsException } from '@common/exceptions';
-import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from "@common/decorators/public.decorator";
+import { InsufficientPermissionsException } from "@common/exceptions";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 
 interface UserWithPermissions {
   permissions?: string[];
@@ -41,11 +41,11 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const requiredPermissions =
-      this.reflector.getAllAndOverride<string[]>('permissions', [
+      this.reflector.getAllAndOverride<string[]>("permissions", [
         context.getHandler(),
         context.getClass(),
       ]) ||
-      this.reflector.getAllAndOverride<string[]>('PERMISSIONS_KEY', [
+      this.reflector.getAllAndOverride<string[]>("PERMISSIONS_KEY", [
         context.getHandler(),
         context.getClass(),
       ]);
@@ -61,14 +61,15 @@ export class PermissionsGuard implements CanActivate {
       throw new InsufficientPermissionsException(requiredPermissions);
     }
 
+    const userPermissions = user.permissions;
+
     const hasAllPermissions = requiredPermissions.every((permission) =>
-      // TODO: Remove non-null assertion with proper check
-      user.permissions!.includes(permission),
+      userPermissions.includes(permission)
     );
 
     if (!hasAllPermissions) {
-      console.log('PermissionsGuard failed:', {
-        userRole: (user as any).role,
+      console.log("PermissionsGuard failed:", {
+        userRole: (user as unknown as Record<string, unknown>).role,
         userPermissions: user.permissions,
         requiredPermissions,
       });

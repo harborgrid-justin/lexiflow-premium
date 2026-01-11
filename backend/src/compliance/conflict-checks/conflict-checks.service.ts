@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import {
   ConflictCheckDto,
-  RunConflictCheckDto,
-  ResolveConflictDto,
-  WaiveConflictDto,
-  QueryConflictChecksDto,
   ConflictCheckStatus,
-  ConflictResult,
   ConflictCheckType,
+  ConflictResult,
+  QueryConflictChecksDto,
+  ResolveConflictDto,
+  RunConflictCheckDto,
+  WaiveConflictDto,
 } from "./dto/conflict-check.dto";
 
 /**
@@ -95,10 +95,12 @@ export class ConflictChecksService {
       );
     }
     if (query.startDate) {
-      checks = checks.filter((check) => check.createdAt >= query.startDate!);
+      const startDate = query.startDate;
+      checks = checks.filter((check) => check.createdAt >= startDate);
     }
     if (query.endDate) {
-      checks = checks.filter((check) => check.createdAt <= query.endDate!);
+      const endDate = query.endDate;
+      checks = checks.filter((check) => check.createdAt <= endDate);
     }
 
     // Sort by creation date (newest first)
@@ -260,9 +262,9 @@ export class ConflictChecksService {
   }
 
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix: number[][] = Array(str2.length + 1)
-      .fill(null)
-      .map(() => Array(str1.length + 1).fill(0));
+    const matrix: number[][] = Array.from({ length: str2.length + 1 }, () =>
+      Array.from({ length: str1.length + 1 }, () => 0)
+    );
 
     for (let i = 0; i <= str2.length; i++) {
       const row = matrix[i];

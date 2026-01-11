@@ -1,13 +1,13 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-  UnauthorizedException,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
+  UnauthorizedException,
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Request } from "express";
 
 /**
  * User information attached to request
@@ -32,10 +32,10 @@ export interface RequestWithUser extends Request {
 /**
  * Metadata keys for security decorators
  */
-export const ROLES_KEY = 'roles';
-export const PERMISSIONS_KEY = 'permissions';
-export const IP_WHITELIST_KEY = 'ipWhitelist';
-export const RATE_LIMIT_KEY = 'rateLimit';
+export const ROLES_KEY = "roles";
+export const PERMISSIONS_KEY = "permissions";
+export const IP_WHITELIST_KEY = "ipWhitelist";
+export const RATE_LIMIT_KEY = "rateLimit";
 
 /**
  * Roles Guard
@@ -48,10 +48,10 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()]
+    );
 
     if (!requiredRoles || requiredRoles.length === 0) {
       return true;
@@ -61,19 +61,19 @@ export class RolesGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      throw new UnauthorizedException('User not authenticated');
+      throw new UnauthorizedException("User not authenticated");
     }
 
     const hasRole = requiredRoles.some((role: string) =>
-      user.roles?.includes(role),
+      user.roles?.includes(role)
     );
 
     if (!hasRole) {
       this.logger.warn(
-        `User ${user.id} attempted to access resource requiring roles: ${requiredRoles.join(', ')}`,
+        `User ${user.id} attempted to access resource requiring roles: ${requiredRoles.join(", ")}`
       );
       throw new ForbiddenException(
-        `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}`,
+        `Insufficient permissions. Required roles: ${requiredRoles.join(", ")}`
       );
     }
 
@@ -94,7 +94,7 @@ export class PermissionsGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
       PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()]
     );
 
     if (!requiredPermissions || requiredPermissions.length === 0) {
@@ -105,19 +105,19 @@ export class PermissionsGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      throw new UnauthorizedException('User not authenticated');
+      throw new UnauthorizedException("User not authenticated");
     }
 
     const hasPermission = requiredPermissions.every((permission: string) =>
-      user.permissions?.includes(permission),
+      user.permissions?.includes(permission)
     );
 
     if (!hasPermission) {
       this.logger.warn(
-        `User ${user.id} attempted to access resource requiring permissions: ${requiredPermissions.join(', ')}`,
+        `User ${user.id} attempted to access resource requiring permissions: ${requiredPermissions.join(", ")}`
       );
       throw new ForbiddenException(
-        `Insufficient permissions. Required: ${requiredPermissions.join(', ')}`,
+        `Insufficient permissions. Required: ${requiredPermissions.join(", ")}`
       );
     }
 
@@ -138,7 +138,7 @@ export class IpWhitelistGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const whitelistedIps = this.reflector.getAllAndOverride<string[]>(
       IP_WHITELIST_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()]
     );
 
     if (!whitelistedIps || whitelistedIps.length === 0) {
@@ -149,16 +149,16 @@ export class IpWhitelistGuard implements CanActivate {
     const clientIp = this.getClientIp(request);
 
     if (!clientIp) {
-      throw new ForbiddenException('Unable to determine client IP address');
+      throw new ForbiddenException("Unable to determine client IP address");
     }
 
     const isWhitelisted = whitelistedIps.some((ip: string) =>
-      this.matchIp(clientIp, ip),
+      this.matchIp(clientIp, ip)
     );
 
     if (!isWhitelisted) {
       this.logger.warn(`Request from non-whitelisted IP: ${clientIp}`);
-      throw new ForbiddenException('Access denied from your IP address');
+      throw new ForbiddenException("Access denied from your IP address");
     }
 
     return true;
@@ -168,10 +168,10 @@ export class IpWhitelistGuard implements CanActivate {
    * Get client IP from request
    */
   private getClientIp(request: Request): string | undefined {
-    const forwarded = request.headers['x-forwarded-for'];
+    const forwarded = request.headers["x-forwarded-for"];
 
     if (forwarded) {
-      const ips = Array.isArray(forwarded) ? forwarded : forwarded.split(',');
+      const ips = Array.isArray(forwarded) ? forwarded : forwarded.split(",");
       return ips[0]?.trim();
     }
 
@@ -188,21 +188,21 @@ export class IpWhitelistGuard implements CanActivate {
     }
 
     // CIDR notation support (basic implementation)
-    if (allowedIp.includes('/')) {
+    if (allowedIp.includes("/")) {
       // For production, use a proper CIDR library like 'ip-range-check'
-      const [network, bits] = allowedIp.split('/');
+      const [network, bits] = allowedIp.split("/");
       if (!network || !bits) {
         return false;
       }
       const prefixLength = parseInt(bits, 10) / 8;
       return clientIp.startsWith(
-        network.split('.').slice(0, prefixLength).join('.'),
+        network.split(".").slice(0, prefixLength).join(".")
       );
     }
 
     // Wildcard support
-    if (allowedIp.includes('*')) {
-      const pattern = allowedIp.replace(/./g, '\.').replace(/\*/g, '.*');
+    if (allowedIp.includes("*")) {
+      const pattern = allowedIp.replace(/./g, "\.").replace(/\*/g, ".*");
       return new RegExp(`^${pattern}$`).test(clientIp);
     }
 
@@ -223,7 +223,7 @@ export class OwnerGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      throw new UnauthorizedException('User not authenticated');
+      throw new UnauthorizedException("User not authenticated");
     }
 
     // Get resource ID from params
@@ -245,9 +245,11 @@ export class OwnerGuard implements CanActivate {
 
     if (!isOwner) {
       this.logger.warn(
-        `User ${user.id} attempted to access resource owned by ${resourceOwnerId}`,
+        `User ${user.id} attempted to access resource owned by ${resourceOwnerId}`
       );
-      throw new ForbiddenException('You do not have permission to access this resource');
+      throw new ForbiddenException(
+        "You do not have permission to access this resource"
+      );
     }
 
     return true;
@@ -267,15 +269,17 @@ export class ApiKeyGuard implements CanActivate {
     const apiKey = this.extractApiKey(request);
 
     if (!apiKey) {
-      throw new UnauthorizedException('API key is required');
+      throw new UnauthorizedException("API key is required");
     }
 
     // Validate API key (this would typically check against database)
     const isValid = this.validateApiKey(apiKey);
 
     if (!isValid) {
-      this.logger.warn(`Invalid API key attempt: ${apiKey.substring(0, 10)}...`);
-      throw new UnauthorizedException('Invalid API key');
+      this.logger.warn(
+        `Invalid API key attempt: ${apiKey.substring(0, 10)}...`
+      );
+      throw new UnauthorizedException("Invalid API key");
     }
 
     return true;
@@ -286,12 +290,13 @@ export class ApiKeyGuard implements CanActivate {
    */
   private extractApiKey(request: Request): string | undefined {
     // Check headers
-    const headerKey = request.headers['x-api-key'] || request.headers['authorization'];
+    const headerKey =
+      request.headers["x-api-key"] || request.headers["authorization"];
 
     if (headerKey) {
-      if (typeof headerKey === 'string') {
+      if (typeof headerKey === "string") {
         // Remove 'Bearer ' prefix if present
-        return headerKey.replace(/^Bearer\s+/i, '');
+        return headerKey.replace(/^Bearer\s+/i, "");
       }
       if (Array.isArray(headerKey)) {
         return headerKey[0];
@@ -323,11 +328,13 @@ export class RequestSignatureGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();
-    const signature = request.headers['x-signature'];
-    const timestamp = request.headers['x-timestamp'];
+    const signature = request.headers["x-signature"];
+    const timestamp = request.headers["x-timestamp"];
 
     if (!signature || !timestamp) {
-      throw new UnauthorizedException('Request signature and timestamp required');
+      throw new UnauthorizedException(
+        "Request signature and timestamp required"
+      );
     }
 
     // Validate timestamp (prevent replay attacks)
@@ -337,15 +344,19 @@ export class RequestSignatureGuard implements CanActivate {
 
     // Allow 5 minute window
     if (timeDiff > 5 * 60 * 1000) {
-      throw new UnauthorizedException('Request timestamp is too old');
+      throw new UnauthorizedException("Request timestamp is too old");
     }
 
     // Validate signature
-    const isValid = this.validateSignature(request, signature as string, timestamp as string);
+    const isValid = this.validateSignature(
+      request,
+      signature as string,
+      timestamp as string
+    );
 
     if (!isValid) {
-      this.logger.warn('Invalid request signature');
-      throw new UnauthorizedException('Invalid request signature');
+      this.logger.warn("Invalid request signature");
+      throw new UnauthorizedException("Invalid request signature");
     }
 
     return true;
@@ -357,29 +368,29 @@ export class RequestSignatureGuard implements CanActivate {
   private validateSignature(
     request: Request,
     signature: string,
-    timestamp: string,
+    timestamp: string
   ): boolean {
     // TODO: Implement actual signature validation
     // This would use crypto.createHmac with a shared secret
-     
-    import crypto from \'crypto\';
+
+    import crypto from "crypto";
 
     // Get secret from environment or database
-    const secret = process.env.WEBHOOK_SECRET || 'default-secret';
+    const secret = process.env.WEBHOOK_SECRET || "default-secret";
 
     // Create signature payload
     const payload = `${timestamp}.${request.method}.${request.url}.${JSON.stringify(request.body)}`;
 
     // Generate expected signature
     const expectedSignature = crypto
-      .createHmac('sha256', secret)
+      .createHmac("sha256", secret)
       .update(payload)
-      .digest('hex');
+      .digest("hex");
 
     // Compare signatures (timing-safe comparison)
     return crypto.timingSafeEqual(
       Buffer.from(signature),
-      Buffer.from(expectedSignature),
+      Buffer.from(expectedSignature)
     );
   }
 }
@@ -392,8 +403,8 @@ export class RequestSignatureGuard implements CanActivate {
 export class CorsGuard implements CanActivate {
   private readonly logger = new Logger(CorsGuard.name);
 
-  private readonly allowedOrigins = (process.env.CORS_ORIGINS || '')
-    .split(',')
+  private readonly allowedOrigins = (process.env.CORS_ORIGINS || "")
+    .split(",")
     .map((origin) => origin.trim())
     .filter((origin) => origin.length > 0);
 
@@ -412,7 +423,7 @@ export class CorsGuard implements CanActivate {
     }
 
     const isAllowed = this.allowedOrigins.some((allowedOrigin) => {
-      if (allowedOrigin === '*') {
+      if (allowedOrigin === "*") {
         return true;
       }
       return origin === allowedOrigin || origin.endsWith(`.${allowedOrigin}`);
@@ -420,7 +431,7 @@ export class CorsGuard implements CanActivate {
 
     if (!isAllowed) {
       this.logger.warn(`Request from non-whitelisted origin: ${origin}`);
-      throw new ForbiddenException('Origin not allowed');
+      throw new ForbiddenException("Origin not allowed");
     }
 
     return true;

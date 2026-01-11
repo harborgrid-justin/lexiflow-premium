@@ -1,22 +1,21 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  BadRequestException,
-  OnModuleDestroy,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Like } from "typeorm";
-import { Document } from "./entities/document.entity";
-import { CreateDocumentDto } from "./dto/create-document.dto";
-import { UpdateDocumentDto } from "./dto/update-document.dto";
-import { DocumentFilterDto } from "./dto/document-filter.dto";
-import { FileStorageService } from "@file-storage/file-storage.service";
 import { TransactionManagerService } from "@common/services/transaction-manager.service";
 import {
   validateSortField,
   validateSortOrder,
 } from "@common/utils/query-validation.util";
+import { FileStorageService } from "@file-storage/file-storage.service";
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnModuleDestroy,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
+import { CreateDocumentDto } from "./dto/create-document.dto";
+import { DocumentFilterDto } from "./dto/document-filter.dto";
+import { Document } from "./entities/document.entity";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -259,7 +258,7 @@ export class DocumentsService implements OnModuleDestroy {
    */
   async update(
     id: string,
-    updateDocumentDto: UpdateDocumentDto,
+    updateDocumentDto: Partial<Document>,
     userId?: string
   ): Promise<Document> {
     const updateData = {

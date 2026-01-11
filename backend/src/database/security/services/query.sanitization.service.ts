@@ -335,7 +335,7 @@ export class QuerySanitizationService {
       .replace(/"/g, '\\"')
       .replace(/\n/g, "\\n")
       .replace(/\r/g, "\\r")
-      .replace(/\u0000/g, "\\0")
-      .replace(/\u001a/g, "\\Z");
+      .replace(new RegExp("\\x00", "g"), "\\0")
+      .replace(new RegExp("\\x1a", "g"), "\\Z");
   }
 }

@@ -1,27 +1,27 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthController } from './auth.controller';
-import { TokenBlacklistAdminController } from './token-blacklist-admin.controller';
-import { AuthService } from './auth.service';
-import { TokenStorageService } from './token-storage.service';
-import { UsersModule } from '@users/users.module';
-import { LocalStrategy } from './strategies/local.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { RefreshStrategy } from './strategies/refresh.strategy';
-import { TokenBlacklistService } from './token-blacklist.service';
-import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service';
-import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
-import { SessionManagementService } from './services/session.management.service';
-import { BruteForceProtectionService } from './services/brute.force.protection.service';
-import { PasswordPolicyService } from './services/password.policy.service';
-import { TokenSecurityService } from './services/token.security.service';
-import { Session } from './entities/session.entity';
-import { LoginAttempt } from './entities/login-attempt.entity';
-import { RefreshToken } from './entities/refresh-token.entity';
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
+import { ScheduleModule } from "@nestjs/schedule";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UsersModule } from "@users/users.module";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { LoginAttempt } from "./entities/login-attempt.entity";
+import { RefreshToken } from "./entities/refresh-token.entity";
+import { Session } from "./entities/session.entity";
+import { TokenBlacklistGuard } from "./guards/token-blacklist.guard";
+import { BruteForceProtectionService } from "./services/brute.force.protection.service";
+import { PasswordPolicyService } from "./services/password.policy.service";
+import { SessionManagementService } from "./services/session.management.service";
+import { TokenSecurityService } from "./services/token.security.service";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { LocalStrategy } from "./strategies/local.strategy";
+import { RefreshStrategy } from "./strategies/refresh.strategy";
+import { TokenBlacklistAdminController } from "./token-blacklist-admin.controller";
+import { TokenBlacklistCleanupService } from "./token-blacklist-cleanup.service";
+import { TokenBlacklistService } from "./token-blacklist.service";
+import { TokenStorageService } from "./token-storage.service";
 
 @Module({
   imports: [
@@ -34,11 +34,15 @@ import { RefreshToken } from './entities/refresh-token.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const expiresIn = configService.get<string>('app.jwt.expiresIn') ?? '900';
+        const expiresIn =
+          configService.get<string>("app.jwt.expiresIn") ?? "900";
         return {
-          secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
+          secret:
+            configService.get<string>("app.jwt.secret") ?? "default-jwt-secret",
           signOptions: {
-            expiresIn: (isNaN(Number(expiresIn)) ? expiresIn : parseInt(expiresIn, 10)) as any,
+            expiresIn: (isNaN(Number(expiresIn))
+              ? expiresIn
+              : parseInt(expiresIn, 10)) as string | number,
           },
         };
       },

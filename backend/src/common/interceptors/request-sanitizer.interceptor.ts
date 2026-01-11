@@ -1,12 +1,12 @@
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
   CallHandler,
+  ExecutionContext,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { Request } from 'express';
+  NestInterceptor,
+} from "@nestjs/common";
+import { Request } from "express";
+import { Observable } from "rxjs";
 
 /**
  * Request Sanitizer Interceptor
@@ -19,7 +19,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
 
   // Patterns that might indicate injection attacks
   private readonly suspiciousPatterns = [
-    /<script[^>]*>.*?</script>/gi, // Script tags
+    /<script[^>]*>.*?<\/script>/gi, // Script tags
     /javascript:/gi, // JavaScript protocol
     /on\w+\s*=/gi, // Event handlers (onclick, onload, etc.)
     /<iframe[^>]*>/gi, // Iframes
@@ -31,17 +31,17 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest<Request>();
 
     // Sanitize request body
-    if (request.body && typeof request.body === 'object') {
+    if (request.body && typeof request.body === "object") {
       request.body = this.sanitizeObject(request.body);
     }
 
     // Sanitize query parameters
-    if (request.query && typeof request.query === 'object') {
+    if (request.query && typeof request.query === "object") {
       request.query = this.sanitizeObject(request.query);
     }
 
     // Sanitize route parameters
-    if (request.params && typeof request.params === 'object') {
+    if (request.params && typeof request.params === "object") {
       request.params = this.sanitizeObject(request.params);
     }
 
@@ -60,7 +60,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
       return obj.map((item) => this.sanitizeObject(item)) as unknown as T;
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === "object") {
       const sanitized: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(obj)) {
@@ -68,9 +68,9 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
         const sanitizedKey = this.sanitizeString(key);
 
         // Recursively sanitize the value
-        if (typeof value === 'string') {
+        if (typeof value === "string") {
           sanitized[sanitizedKey] = this.sanitizeString(value);
-        } else if (typeof value === 'object') {
+        } else if (typeof value === "object") {
           sanitized[sanitizedKey] = this.sanitizeObject(value);
         } else {
           sanitized[sanitizedKey] = value;
@@ -80,7 +80,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
       return sanitized as T;
     }
 
-    if (typeof obj === 'string') {
+    if (typeof obj === "string") {
       return this.sanitizeString(obj) as unknown as T;
     }
 
@@ -91,7 +91,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
    * Sanitize a string value
    */
   private sanitizeString(value: string): string {
-    if (!value || typeof value !== 'string') {
+    if (!value || typeof value !== "string") {
       return value;
     }
 
@@ -102,14 +102,14 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
     for (const pattern of this.suspiciousPatterns) {
       if (pattern.test(sanitized)) {
         foundSuspicious = true;
-        sanitized = sanitized.replace(pattern, '');
+        sanitized = sanitized.replace(pattern, "");
       }
     }
 
     // Log if suspicious content was found and removed
     if (foundSuspicious && this.isDevelopment()) {
       this.logger.warn(
-        `Suspicious content detected and sanitized: ${value.substring(0, 100)}...`,
+        `Suspicious content detected and sanitized: ${value.substring(0, 100)}...`
       );
     }
 
@@ -125,11 +125,11 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
    */
   private encodeHtmlEntities(str: string): string {
     const htmlEntities: Record<string, string> = {
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-      '/': '&#x2F;',
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+      "/": "&#x2F;",
     };
 
     return str.replace(/[<>"'/]/g, (match) => htmlEntities[match] || match);
@@ -139,6 +139,6 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
    * Check if running in development mode
    */
   private isDevelopment(): boolean {
-    return process.env.NODE_ENV !== 'production';
+    return process.env.NODE_ENV !== "production";
   }
 }

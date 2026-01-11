@@ -1,7 +1,12 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 export interface ConnectionPoolMetrics {
   activeConnections: number;
@@ -90,17 +95,22 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
-    this.healthCheckIntervalMs = this.configService.get<number>('DB_HEALTH_CHECK_INTERVAL') || 30000;
-    this.metricsIntervalMs = this.configService.get<number>('DB_METRICS_INTERVAL') || 60000;
-    this.leakDetectionIntervalMs = this.configService.get<number>('DB_LEAK_DETECTION_INTERVAL') || 120000;
-    this.idleTimeoutMs = this.configService.get<number>('DB_IDLE_TIMEOUT') || 30000;
-    this.maxConnectionAge = this.configService.get<number>('DB_MAX_CONNECTION_AGE') || 3600000;
+    this.healthCheckIntervalMs =
+      this.configService.get<number>("DB_HEALTH_CHECK_INTERVAL") || 30000;
+    this.metricsIntervalMs =
+      this.configService.get<number>("DB_METRICS_INTERVAL") || 60000;
+    this.leakDetectionIntervalMs =
+      this.configService.get<number>("DB_LEAK_DETECTION_INTERVAL") || 120000;
+    this.idleTimeoutMs =
+      this.configService.get<number>("DB_IDLE_TIMEOUT") || 30000;
+    this.maxConnectionAge =
+      this.configService.get<number>("DB_MAX_CONNECTION_AGE") || 3600000;
   }
 
   async onModuleInit(): Promise<void> {
-    this.logger.log('Initializing connection pool monitoring');
+    this.logger.log("Initializing connection pool monitoring");
 
     this.startHealthCheck();
     this.startMetricsCollection();
@@ -110,7 +120,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
-    this.logger.log('Shutting down connection pool monitoring');
+    this.logger.log("Shutting down connection pool monitoring");
 
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
@@ -129,18 +139,26 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
   private async validatePoolConfiguration(): Promise<void> {
     const driver = this.dataSource.driver;
-    const options = this.dataSource.options;
+    const options = this.dataSource.options as {
+      extra?: {
+        max?: number;
+        min?: number;
+        idleTimeoutMillis?: number;
+        connectionTimeoutMillis?: number;
+      };
+      poolSize?: number;
+    };
 
-    this.logger.log('Connection pool configuration:', {
+    this.logger.log("Connection pool configuration:", {
       type: driver.options.type,
-      poolSize: (options as any).extra?.max || (options as any).poolSize,
-      minConnections: (options as any).extra?.min,
-      idleTimeout: (options as any).extra?.idleTimeoutMillis,
-      connectionTimeout: (options as any).extra?.connectionTimeoutMillis,
+      poolSize: options.extra?.max || options.poolSize,
+      minConnections: options.extra?.min,
+      idleTimeout: options.extra?.idleTimeoutMillis,
+      connectionTimeout: options.extra?.connectionTimeoutMillis,
     });
 
     if (!this.dataSource.isInitialized) {
-      throw new Error('DataSource is not initialized');
+      throw new Error("DataSource is not initialized");
     }
   }
 
@@ -149,7 +167,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       try {
         await this.performHealthCheck();
       } catch (error) {
-        this.logger.error('Health check failed', error);
+        this.logger.error("Health check failed", error);
       }
     }, this.healthCheckIntervalMs);
   }
@@ -159,7 +177,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       try {
         this.collectMetrics();
       } catch (error) {
-        this.logger.error('Metrics collection failed', error);
+        this.logger.error("Metrics collection failed", error);
       }
     }, this.metricsIntervalMs);
   }
@@ -169,7 +187,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       try {
         this.detectLeakedConnections();
       } catch (error) {
-        this.logger.error('Leak detection failed', error);
+        this.logger.error("Leak detection failed", error);
       }
     }, this.leakDetectionIntervalMs);
   }
@@ -180,7 +198,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
     try {
       const startTime = Date.now();
-      await this.dataSource.query('SELECT 1');
+      await this.dataSource.query("SELECT 1");
       const queryTime = Date.now() - startTime;
 
       if (queryTime > 1000) {
@@ -189,14 +207,14 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       }
 
       if (!this.dataSource.isInitialized) {
-        errors.push('DataSource is not initialized');
+        errors.push("DataSource is not initialized");
         isHealthy = false;
       }
 
       const poolMetrics = await this.getPoolMetrics();
 
       if (poolMetrics.activeConnections === poolMetrics.totalConnections) {
-        errors.push('Connection pool is fully utilized');
+        errors.push("Connection pool is fully utilized");
         isHealthy = false;
       }
 
@@ -209,7 +227,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
         lastCheck: new Date(),
       };
     } catch (error) {
-      this.logger.error('Health check error', error);
+      this.logger.error("Health check error", error);
       errors.push(`Health check failed: ${(error as Error).message}`);
 
       return {
@@ -236,7 +254,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       this.queryTimes = [];
     }
 
-    this.logger.debug('Connection pool metrics', this.metrics);
+    this.logger.debug("Connection pool metrics", this.metrics);
   }
 
   private detectLeakedConnections(): void {
@@ -248,7 +266,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       const idleTime = now - info.lastActivity.getTime();
 
       if (age > this.maxConnectionAge) {
-        this.logger.warn('Potential connection leak detected', {
+        this.logger.warn("Potential connection leak detected", {
           age: age / 1000,
           idleTime: idleTime / 1000,
           queryCount: info.queryCount,
@@ -267,31 +285,39 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
     return { ...this.metrics };
   }
 
-  async reconnectWithBackoff(maxRetries: number = 5, baseDelay: number = 1000): Promise<void> {
+  async reconnectWithBackoff(
+    maxRetries: number = 5,
+    baseDelay: number = 1000
+  ): Promise<void> {
     let retries = 0;
 
     while (retries < maxRetries) {
       try {
         if (!this.dataSource.isInitialized) {
           await this.dataSource.initialize();
-          this.logger.log('Database connection re-established');
+          this.logger.log("Database connection re-established");
           return;
         }
 
-        await this.dataSource.query('SELECT 1');
-        this.logger.log('Database connection verified');
+        await this.dataSource.query("SELECT 1");
+        this.logger.log("Database connection verified");
         return;
       } catch (error) {
         retries++;
         const delay = baseDelay * Math.pow(2, retries - 1);
 
-        this.logger.error(`Connection attempt ${retries} failed. Retrying in ${delay}ms`, error);
+        this.logger.error(
+          `Connection attempt ${retries} failed. Retrying in ${delay}ms`,
+          error
+        );
 
         if (retries >= maxRetries) {
-          throw new Error('Failed to reconnect to database after maximum retries');
+          throw new Error(
+            "Failed to reconnect to database after maximum retries"
+          );
         }
 
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
@@ -301,7 +327,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
     const info: ConnectionInfo = {
       acquiredAt: new Date(),
-      stackTrace: new Error().stack || '',
+      stackTrace: new Error().stack || "",
       queryCount: 0,
       lastActivity: new Date(),
     };
@@ -332,16 +358,16 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
   async validateConnection(): Promise<boolean> {
     try {
-      const result = await this.dataSource.query('SELECT 1');
+      const result = await this.dataSource.query("SELECT 1");
       return result !== null && result !== undefined;
     } catch (error) {
-      this.logger.error('Connection validation failed', error);
+      this.logger.error("Connection validation failed", error);
       return false;
     }
   }
 
   async closeIdleConnections(): Promise<number> {
-    this.logger.log('Closing idle connections');
+    this.logger.log("Closing idle connections");
     let closedCount = 0;
 
     try {
@@ -359,35 +385,43 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       this.logger.log(`Closed ${closedCount} idle connections`);
       return closedCount;
     } catch (error) {
-      this.logger.error('Failed to close idle connections', error);
+      this.logger.error("Failed to close idle connections", error);
       return closedCount;
     }
   }
 
   private async gracefulShutdown(): Promise<void> {
-    this.logger.log('Initiating graceful connection pool shutdown');
+    this.logger.log("Initiating graceful connection pool shutdown");
 
     const timeout = 10000;
     const startTime = Date.now();
 
-    while (this.activeConnections.size > 0 && Date.now() - startTime < timeout) {
-      this.logger.log(`Waiting for ${this.activeConnections.size} active connections to close`);
-      await new Promise(resolve => setTimeout(resolve, 500));
+    while (
+      this.activeConnections.size > 0 &&
+      Date.now() - startTime < timeout
+    ) {
+      this.logger.log(
+        `Waiting for ${this.activeConnections.size} active connections to close`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     if (this.activeConnections.size > 0) {
-      this.logger.warn(`Forcefully closing ${this.activeConnections.size} remaining connections`);
+      this.logger.warn(
+        `Forcefully closing ${this.activeConnections.size} remaining connections`
+      );
     }
 
     this.activeConnections.clear();
-    this.logger.log('Connection pool shutdown complete');
+    this.logger.log("Connection pool shutdown complete");
   }
 
   getHealthStatus(): string {
-    const health = this.metrics.failedQueries / Math.max(this.metrics.totalQueries, 1);
+    const health =
+      this.metrics.failedQueries / Math.max(this.metrics.totalQueries, 1);
 
-    if (health < 0.01) return 'healthy';
-    if (health < 0.05) return 'degraded';
-    return 'unhealthy';
+    if (health < 0.01) return "healthy";
+    if (health < 0.05) return "degraded";
+    return "unhealthy";
   }
 }

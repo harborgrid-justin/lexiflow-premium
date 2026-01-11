@@ -5,54 +5,54 @@
  * in a production enterprise application.
  */
 
-import { Entity, Column, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BaseEntity } from '@common/base/base.entity';
+import { BaseEntity } from "@common/base/base.entity";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Column, Entity, Repository } from "typeorm";
 import {
-  EncryptedColumn,
-  EncryptedSSN,
-  EncryptedCreditCard,
-  EncryptedBankAccount,
   ColumnEncryptionService,
-  QuerySanitizationService,
-  DataMaskingService,
   ConnectionPoolService,
-} from './index';
+  DataMaskingService,
+  EncryptedBankAccount,
+  EncryptedColumn,
+  EncryptedCreditCard,
+  EncryptedSSN,
+  QuerySanitizationService,
+} from "./index";
 
-@Entity('secure_clients')
+@Entity("secure_clients")
 export class SecureClient extends BaseEntity {
-  @Column({ name: 'full_name', type: 'varchar', length: 255 })
+  @Column({ name: "full_name", type: "varchar", length: 255 })
   fullName!: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: "varchar", length: 255 })
   email!: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: "varchar", length: 50, nullable: true })
   phone!: string;
 
-  @EncryptedSSN({ name: 'social_security_number', nullable: true })
+  @EncryptedSSN({ name: "social_security_number", nullable: true })
   socialSecurityNumber!: string;
 
-  @EncryptedCreditCard({ name: 'credit_card_number', nullable: true })
+  @EncryptedCreditCard({ name: "credit_card_number", nullable: true })
   creditCardNumber!: string;
 
-  @EncryptedBankAccount({ name: 'bank_account_number', nullable: true })
+  @EncryptedBankAccount({ name: "bank_account_number", nullable: true })
   bankAccountNumber!: string;
 
-  @EncryptedColumn({ name: 'drivers_license', nullable: true })
+  @EncryptedColumn({ name: "drivers_license", nullable: true })
   driversLicense!: string;
 
-  @EncryptedColumn({ name: 'passport_number', nullable: true })
+  @EncryptedColumn({ name: "passport_number", nullable: true })
   passportNumber!: string;
 
-  @EncryptedColumn({ name: 'medical_record_number', nullable: true })
+  @EncryptedColumn({ name: "medical_record_number", nullable: true })
   medicalRecordNumber!: string;
 
-  @Column({ name: 'date_of_birth', type: 'date', nullable: true })
+  @Column({ name: "date_of_birth", type: "date", nullable: true })
   dateOfBirth!: Date;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: "text", nullable: true })
   notes!: string;
 }
 
@@ -64,7 +64,7 @@ export class SecureClientService {
     private readonly encryptionService: ColumnEncryptionService,
     private readonly sanitizationService: QuerySanitizationService,
     private readonly maskingService: DataMaskingService,
-    private readonly poolService: ConnectionPoolService,
+    private readonly poolService: ConnectionPoolService
   ) {}
 
   async createSecureClient(data: Partial<SecureClient>): Promise<SecureClient> {
@@ -83,30 +83,34 @@ export class SecureClientService {
 
   async findClientsByQuery(
     searchQuery: string,
-    limit: number = 100,
+    limit: number = 100
   ): Promise<SecureClient[]> {
-    const safeLimit = this.sanitizationService.createSafeLimit(limit, 100, 1000);
+    const safeLimit = this.sanitizationService.createSafeLimit(
+      limit,
+      100,
+      1000
+    );
 
     const result = this.sanitizationService.validateQuery(searchQuery);
     if (!result.isSafe) {
-      throw new Error(`Invalid query: ${result.violations.join(', ')}`);
+      throw new Error(`Invalid query: ${result.violations.join(", ")}`);
     }
 
     return await this.clientRepository
-      .createQueryBuilder('client')
-      .where('client.fullName ILIKE :search', { search: `%${searchQuery}%` })
+      .createQueryBuilder("client")
+      .where("client.fullName ILIKE :search", { search: `%${searchQuery}%` })
       .take(safeLimit)
       .getMany();
   }
 
   async exportClientData(
     clientId: string,
-    userRole: 'public' | 'internal' | 'restricted',
+    userRole: "public" | "internal" | "restricted"
   ): Promise<unknown> {
     const client = await this.findClientById(clientId);
 
     if (!client) {
-      throw new Error('Client not found');
+      throw new Error("Client not found");
     }
 
     const masked = this.maskingService.maskForExport(client, userRole);
@@ -117,7 +121,7 @@ export class SecureClientService {
   async logClientAccess(client: SecureClient): Promise<void> {
     const maskedData = this.maskingService.maskForLogging(client);
 
-    console.log('Client accessed:', {
+    console.log("Client accessed:", {
       id: client.id,
       name: client.fullName,
       data: maskedData,
@@ -127,19 +131,19 @@ export class SecureClientService {
   async rotateEncryptionKeys(): Promise<number> {
     const totalRotated =
       (await this.encryptionService.rotateKey(
-        'socialSecurityNumber',
+        "socialSecurityNumber",
         SecureClient,
-        this.clientRepository,
+        this.clientRepository
       )) +
       (await this.encryptionService.rotateKey(
-        'creditCardNumber',
+        "creditCardNumber",
         SecureClient,
-        this.clientRepository,
+        this.clientRepository
       )) +
       (await this.encryptionService.rotateKey(
-        'bankAccountNumber',
+        "bankAccountNumber",
         SecureClient,
-        this.clientRepository,
+        this.clientRepository
       ));
 
     console.log(`Rotated encryption keys for ${totalRotated} records`);
@@ -174,8 +178,8 @@ export class SecureClientService {
     tableName: string,
     whereClause: Record<string, unknown>,
     limit: number,
-    offset: number,
-  ): Promise<any[]> {
+    offset: number
+  ): Promise<SecureClient[]> {
     this.sanitizationService.sanitizeTableName(tableName);
 
     this.sanitizationService.validateWhereClause(whereClause);
@@ -192,7 +196,7 @@ export class SecureClientService {
 
   async bulkUpdateWithAudit(
     clientIds: string[],
-    updates: Partial<SecureClient>,
+    updates: Partial<SecureClient>
   ): Promise<void> {
     for (const id of clientIds) {
       const client = await this.findClientById(id);
@@ -204,11 +208,11 @@ export class SecureClientService {
   }
 
   async encryptSensitiveField(value: string): Promise<string> {
-    return this.encryptionService.encrypt(value) || '';
+    return this.encryptionService.encrypt(value) || "";
   }
 
   async decryptSensitiveField(encryptedValue: string): Promise<string> {
-    return this.encryptionService.decrypt(encryptedValue) || '';
+    return this.encryptionService.decrypt(encryptedValue) || "";
   }
 
   async hashForSearch(value: string): Promise<string> {
@@ -233,7 +237,7 @@ export class SecureClientService {
 
   async unmaskReversible(
     maskedValue: string,
-    isAuthorized: boolean,
+    isAuthorized: boolean
   ): Promise<string> {
     return this.maskingService.reversibleUnmask(maskedValue, isAuthorized);
   }
@@ -251,7 +255,7 @@ export class DatabaseSecurityHealthService {
     const health = await this.poolService.performHealthCheck();
 
     return {
-      status: health.isHealthy ? 'healthy' : 'unhealthy',
+      status: health.isHealthy ? "healthy" : "unhealthy",
       timestamp: health.lastCheck,
       database: {
         poolSize: health.poolSize,
@@ -291,13 +295,13 @@ export class QuerySecurityService {
     if (!result.isSafe) {
       this.sanitizer.logSuspiciousQuery(query, params, {
         timestamp: new Date().toISOString(),
-        source: 'QuerySecurityService',
+        source: "QuerySecurityService",
       });
 
-      throw new Error(`Unsafe query detected: ${result.violations.join(', ')}`);
+      throw new Error(`Unsafe query detected: ${result.violations.join(", ")}`);
     }
 
-    console.log('Query validated successfully');
+    console.log("Query validated successfully");
   }
 
   sanitizeUserInput(input: {
@@ -307,7 +311,7 @@ export class QuerySecurityService {
   }): unknown {
     return {
       tableName: this.sanitizer.sanitizeTableName(input.tableName),
-      columns: input.columns.map(c => this.sanitizer.sanitizeColumnName(c)),
+      columns: input.columns.map((c) => this.sanitizer.sanitizeColumnName(c)),
       whereClause: input.whereClause,
     };
   }

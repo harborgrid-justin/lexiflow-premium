@@ -1,7 +1,7 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import * as crypto from 'crypto';
-import axios, { AxiosError } from 'axios';
-import * as MasterConfig from '@config/master.config';
+import * as MasterConfig from "@config/master.config";
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import axios, { AxiosError } from "axios";
+import * as crypto from "crypto";
 
 export interface WebhookPayload {
   event: string;
@@ -16,7 +16,7 @@ export interface WebhookDelivery {
   url: string;
   payload: WebhookPayload;
   signature: string;
-  status: 'pending' | 'delivered' | 'failed' | 'retrying';
+  status: "pending" | "delivered" | "failed" | "retrying";
   attempts: number;
   maxAttempts: number;
   lastAttemptAt?: Date;
@@ -100,7 +100,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
   generateSignature(payload: string, secret: string): string {
     const hmac = crypto.createHmac(this.algorithm, secret);
     hmac.update(payload);
-    return hmac.digest('hex');
+    return hmac.digest("hex");
   }
 
   verifySignature(payload: string, signature: string, secret: string): boolean {
@@ -116,7 +116,12 @@ export class WebhookSecurityService implements OnModuleDestroy {
     }
   }
 
-  async sendWebhook(webhookId: string, event: string, data: Record<string, unknown>, metadata?: Record<string, unknown>): Promise<WebhookDelivery> {
+  async sendWebhook(
+    webhookId: string,
+    event: string,
+    data: Record<string, unknown>,
+    metadata?: Record<string, unknown>
+  ): Promise<WebhookDelivery> {
     const webhook = this.webhooks.get(webhookId);
 
     if (!webhook) {
@@ -127,8 +132,10 @@ export class WebhookSecurityService implements OnModuleDestroy {
       throw new Error(`Webhook ${webhookId} is not active`);
     }
 
-    if (!webhook.events.includes(event) && !webhook.events.includes('*')) {
-      this.logger.debug(`Webhook ${webhookId} not subscribed to event ${event}`);
+    if (!webhook.events.includes(event) && !webhook.events.includes("*")) {
+      this.logger.debug(
+        `Webhook ${webhookId} not subscribed to event ${event}`
+      );
       throw new Error(`Webhook ${webhookId} not subscribed to event ${event}`);
     }
 
@@ -148,7 +155,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
       url: webhook.url,
       payload,
       signature,
-      status: 'pending',
+      status: "pending",
       attempts: 0,
       maxAttempts: webhook.maxRetries || MasterConfig.WEBHOOK_MAX_RETRIES,
       createdAt: new Date(),
@@ -163,7 +170,10 @@ export class WebhookSecurityService implements OnModuleDestroy {
     return delivery;
   }
 
-  private async attemptDelivery(delivery: WebhookDelivery, webhook: WebhookConfig): Promise<void> {
+  private async attemptDelivery(
+    delivery: WebhookDelivery,
+    webhook: WebhookConfig
+  ): Promise<void> {
     delivery.attempts++;
     delivery.lastAttemptAt = new Date();
     delivery.updatedAt = new Date();
@@ -177,18 +187,18 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
       const response = await axios.post(webhook.url, delivery.payload, {
         headers: {
-          'Content-Type': 'application/json',
-          'X-Webhook-Signature': delivery.signature,
-          'X-Webhook-Signature-Algorithm': this.algorithm,
-          'X-Webhook-Timestamp': delivery.payload.timestamp.toString(),
-          'X-Webhook-Event': delivery.payload.event,
-          'X-Webhook-Delivery-Id': delivery.id,
+          "Content-Type": "application/json",
+          "X-Webhook-Signature": delivery.signature,
+          "X-Webhook-Signature-Algorithm": this.algorithm,
+          "X-Webhook-Timestamp": delivery.payload.timestamp.toString(),
+          "X-Webhook-Event": delivery.payload.event,
+          "X-Webhook-Delivery-Id": delivery.id,
         },
         timeout: timeoutMs,
         validateStatus: (status) => status >= 200 && status < 300,
       });
 
-      delivery.status = 'delivered';
+      delivery.status = "delivered";
       delivery.deliveredAt = new Date();
       delivery.responseStatus = response.status;
       delivery.responseBody = JSON.stringify(response.data).substring(0, 1000);
@@ -206,14 +216,14 @@ export class WebhookSecurityService implements OnModuleDestroy {
       delivery.error = axiosError.message;
 
       if (delivery.attempts >= delivery.maxAttempts) {
-        delivery.status = 'failed';
+        delivery.status = "failed";
         delivery.failedAt = new Date();
 
         this.logger.error(
           `Webhook delivery ${delivery.id} failed permanently after ${delivery.attempts} attempts: ${delivery.error}`
         );
       } else {
-        delivery.status = 'retrying';
+        delivery.status = "retrying";
 
         // Calculate exponential backoff
         const retryDelay = this.calculateRetryDelay(delivery.attempts);
@@ -221,7 +231,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
         this.logger.warn(
           `Webhook delivery ${delivery.id} failed (attempt ${delivery.attempts}/${delivery.maxAttempts}), ` +
-          `will retry at ${delivery.nextRetryAt.toISOString()}: ${delivery.error}`
+            `will retry at ${delivery.nextRetryAt.toISOString()}: ${delivery.error}`
         );
       }
     }
@@ -231,9 +241,9 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
   private calculateRetryDelay(attempt: number): number {
     // Use configured delays if available
-    if (MasterConfig.WEBHOOK_RETRY_DELAYS && MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1] !== undefined) {
-      // TODO: Remove non-null assertion with proper check
-      return MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1]!;
+    const configuredDelay = MasterConfig.WEBHOOK_RETRY_DELAYS?.[attempt - 1];
+    if (configuredDelay !== undefined) {
+      return configuredDelay;
     }
 
     // Exponential backoff: 2^attempt * 1000ms with max of 15 minutes
@@ -246,7 +256,11 @@ export class WebhookSecurityService implements OnModuleDestroy {
     const retriesProcessed: string[] = [];
 
     for (const [deliveryId, delivery] of this.deliveries.entries()) {
-      if (delivery.status === 'retrying' && delivery.nextRetryAt && delivery.nextRetryAt <= now) {
+      if (
+        delivery.status === "retrying" &&
+        delivery.nextRetryAt &&
+        delivery.nextRetryAt <= now
+      ) {
         const webhook = this.webhooks.get(delivery.webhookId);
 
         if (webhook) {
@@ -270,7 +284,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
     for (const [deliveryId, delivery] of this.deliveries.entries()) {
       if (
-        (delivery.status === 'delivered' || delivery.status === 'failed') &&
+        (delivery.status === "delivered" || delivery.status === "failed") &&
         delivery.updatedAt < sevenDaysAgo
       ) {
         this.deliveries.delete(deliveryId);
@@ -289,7 +303,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
   getDeliveriesForWebhook(webhookId: string): WebhookDelivery[] {
     return Array.from(this.deliveries.values())
-      .filter(d => d.webhookId === webhookId)
+      .filter((d) => d.webhookId === webhookId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
@@ -310,10 +324,10 @@ export class WebhookSecurityService implements OnModuleDestroy {
     const deliveries = this.getDeliveriesForWebhook(webhookId);
 
     const total = deliveries.length;
-    const delivered = deliveries.filter(d => d.status === 'delivered').length;
-    const failed = deliveries.filter(d => d.status === 'failed').length;
-    const pending = deliveries.filter(d => d.status === 'pending').length;
-    const retrying = deliveries.filter(d => d.status === 'retrying').length;
+    const delivered = deliveries.filter((d) => d.status === "delivered").length;
+    const failed = deliveries.filter((d) => d.status === "failed").length;
+    const pending = deliveries.filter((d) => d.status === "pending").length;
+    const retrying = deliveries.filter((d) => d.status === "retrying").length;
     const successRate = total > 0 ? (delivered / total) * 100 : 0;
 
     return {
@@ -333,7 +347,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
       throw new Error(`Delivery ${deliveryId} not found`);
     }
 
-    if (delivery.status === 'delivered') {
+    if (delivery.status === "delivered") {
       throw new Error(`Delivery ${deliveryId} already delivered`);
     }
 
@@ -344,16 +358,21 @@ export class WebhookSecurityService implements OnModuleDestroy {
     }
 
     // Reset status for retry
-    delivery.status = 'pending';
+    delivery.status = "pending";
     delivery.nextRetryAt = undefined;
 
     await this.attemptDelivery(delivery, webhook);
   }
 
-  verifyWebhookRequest(payload: string, signature: string, secret: string, timestampHeader?: string): boolean {
+  verifyWebhookRequest(
+    payload: string,
+    signature: string,
+    secret: string,
+    timestampHeader?: string
+  ): boolean {
     // Verify signature
     if (!this.verifySignature(payload, signature, secret)) {
-      this.logger.warn('Webhook signature verification failed');
+      this.logger.warn("Webhook signature verification failed");
       return false;
     }
 
@@ -365,7 +384,9 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
       // Allow 5 minute tolerance
       if (diff > 300000) {
-        this.logger.warn(`Webhook timestamp too old or in future. Diff: ${diff}ms`);
+        this.logger.warn(
+          `Webhook timestamp too old or in future. Diff: ${diff}ms`
+        );
         return false;
       }
     }
@@ -374,6 +395,6 @@ export class WebhookSecurityService implements OnModuleDestroy {
   }
 
   private generateDeliveryId(): string {
-    return `whd_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
+    return `whd_${Date.now()}_${crypto.randomBytes(8).toString("hex")}`;
   }
 }

@@ -68,11 +68,11 @@ export const RATE_LIMIT_DEFAULTS = {
  */
 export const CSRF_CONFIG = {
   TOKEN_LENGTH: 32,
-  TOKEN_COOKIE_NAME: 'csrf-token',
-  TOKEN_HEADER_NAME: 'x-csrf-token',
+  TOKEN_COOKIE_NAME: "csrf-token",
+  TOKEN_HEADER_NAME: "x-csrf-token",
   COOKIE_OPTIONS: {
     httpOnly: false, // Must be readable by JavaScript
-    sameSite: 'strict' as const,
+    sameSite: "strict" as const,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
 } as const;
@@ -86,23 +86,23 @@ export const XSS_CONFIG = {
   REMOVE_SCRIPT_TAGS: true,
   REMOVE_EVENT_HANDLERS: true,
   ALLOWED_HTML_TAGS: [
-    'p',
-    'br',
-    'strong',
-    'em',
-    'u',
-    'a',
-    'ul',
-    'ol',
-    'li',
-    'h1',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'h6',
+    "p",
+    "br",
+    "strong",
+    "em",
+    "u",
+    "a",
+    "ul",
+    "ol",
+    "li",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
   ],
-  ALLOWED_ATTRIBUTES: ['href', 'title', 'target'],
+  ALLOWED_ATTRIBUTES: ["href", "title", "target"],
 } as const;
 
 /**
@@ -117,15 +117,15 @@ export const INPUT_VALIDATION = {
   MAX_OBJECT_DEPTH: 10,
   MAX_FILE_SIZE: 100 * 1024 * 1024, // 100 MB
   ALLOWED_FILE_TYPES: [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.ms-excel',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ],
 } as const;
 
@@ -136,17 +136,17 @@ export const SECURITY_HEADERS_CONFIG = {
   HSTS_MAX_AGE: 31536000, // 1 year in seconds
   HSTS_INCLUDE_SUBDOMAINS: true,
   HSTS_PRELOAD: true,
-  FRAME_OPTIONS: 'DENY',
-  CONTENT_TYPE_OPTIONS: 'nosniff',
-  XSS_PROTECTION: '1; mode=block',
-  REFERRER_POLICY: 'strict-origin-when-cross-origin',
+  FRAME_OPTIONS: "DENY",
+  CONTENT_TYPE_OPTIONS: "nosniff",
+  XSS_PROTECTION: "1; mode=block",
+  REFERRER_POLICY: "strict-origin-when-cross-origin",
 } as const;
 
 /**
  * Encryption Configuration
  */
 export const ENCRYPTION_CONFIG = {
-  ALGORITHM: 'aes-256-gcm',
+  ALGORITHM: "aes-256-gcm",
   KEY_LENGTH: 32,
   IV_LENGTH: 16,
   AUTH_TAG_LENGTH: 16,
@@ -186,7 +186,7 @@ export const IP_SECURITY = {
  */
 export const API_KEY_CONFIG = {
   KEY_LENGTH: 32,
-  PREFIX: 'lxf_',
+  PREFIX: "lxf_",
   ROTATION_INTERVAL: 90 * 24 * 60 * 60 * 1000, // 90 days
   MAX_KEYS_PER_USER: 10,
   REQUIRE_IP_WHITELIST: false,
@@ -199,7 +199,7 @@ export const SQL_INJECTION_PATTERNS = [
   /(\s|^)(UNION|SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)(\s|$)/gi,
   /--/g,
   /;(\s)*(DROP|DELETE|TRUNCATE)/gi,
-  //\*.*\*//g,
+  /\/\*.*?\*\//g,
   /xp_/gi,
   /sp_/gi,
 ] as const;
@@ -208,11 +208,11 @@ export const SQL_INJECTION_PATTERNS = [
  * Path Traversal Prevention
  */
 export const PATH_TRAVERSAL_PATTERNS = [
-  /..//g,
-  /..\/g,
+  /\.\.\//g,
+  /\.\.\\/g,
   /%2e%2e%2f/gi,
   /%2e%2e%5c/gi,
-  /../g,
+  /\.\./g,
 ] as const;
 
 /**
@@ -220,27 +220,27 @@ export const PATH_TRAVERSAL_PATTERNS = [
  */
 export const SUSPICIOUS_PATTERNS = {
   PATHS: [
-    '/admin',
-    '/wp-admin',
-    '/phpmyadmin',
-    '/.env',
-    '/.git',
-    '/config',
-    '/backup',
-    '/.aws',
-    '/.ssh',
+    "/admin",
+    "/wp-admin",
+    "/phpmyadmin",
+    "/.env",
+    "/.git",
+    "/config",
+    "/backup",
+    "/.aws",
+    "/.ssh",
   ],
   USER_AGENTS: [
-    'scanner',
-    'nikto',
-    'sqlmap',
-    'nmap',
-    'masscan',
-    'metasploit',
-    'burp',
-    'acunetix',
+    "scanner",
+    "nikto",
+    "sqlmap",
+    "nmap",
+    "masscan",
+    "metasploit",
+    "burp",
+    "acunetix",
   ],
-  HEADERS: ['x-forwarded-host', 'x-original-url', 'x-rewrite-url'],
+  HEADERS: ["x-forwarded-host", "x-original-url", "x-rewrite-url"],
 } as const;
 
 /**
@@ -259,16 +259,18 @@ export const WEBSOCKET_CONFIG = {
  * CORS Configuration
  */
 export const CORS_CONFIG = {
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
-  ALLOWED_METHODS: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  ALLOWED_HEADERS: [
-    'Content-Type',
-    'Authorization',
-    'X-Requested-With',
-    'X-API-Key',
-    'X-CSRF-Token',
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(",") || [
+    "http://localhost:3000",
   ],
-  EXPOSED_HEADERS: ['X-Total-Count', 'X-Page-Count'],
+  ALLOWED_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  ALLOWED_HEADERS: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "X-API-Key",
+    "X-CSRF-Token",
+  ],
+  EXPOSED_HEADERS: ["X-Total-Count", "X-Page-Count"],
   MAX_AGE: 86400, // 24 hours
   CREDENTIALS: true,
 } as const;
@@ -277,49 +279,49 @@ export const CORS_CONFIG = {
  * Security Events for Monitoring
  */
 export enum SecurityEvent {
-  FAILED_LOGIN = 'FAILED_LOGIN',
-  SUCCESSFUL_LOGIN = 'SUCCESSFUL_LOGIN',
-  PASSWORD_CHANGED = 'PASSWORD_CHANGED',
-  ACCOUNT_LOCKED = 'ACCOUNT_LOCKED',
-  ACCOUNT_UNLOCKED = 'ACCOUNT_UNLOCKED',
-  PERMISSION_DENIED = 'PERMISSION_DENIED',
-  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
-  SUSPICIOUS_ACTIVITY = 'SUSPICIOUS_ACTIVITY',
-  CSRF_VIOLATION = 'CSRF_VIOLATION',
-  XSS_ATTEMPT = 'XSS_ATTEMPT',
-  SQL_INJECTION_ATTEMPT = 'SQL_INJECTION_ATTEMPT',
-  PATH_TRAVERSAL_ATTEMPT = 'PATH_TRAVERSAL_ATTEMPT',
-  API_KEY_CREATED = 'API_KEY_CREATED',
-  API_KEY_REVOKED = 'API_KEY_REVOKED',
-  DATA_EXPORTED = 'DATA_EXPORTED',
-  BULK_OPERATION = 'BULK_OPERATION',
+  FAILED_LOGIN = "FAILED_LOGIN",
+  SUCCESSFUL_LOGIN = "SUCCESSFUL_LOGIN",
+  PASSWORD_CHANGED = "PASSWORD_CHANGED",
+  ACCOUNT_LOCKED = "ACCOUNT_LOCKED",
+  ACCOUNT_UNLOCKED = "ACCOUNT_UNLOCKED",
+  PERMISSION_DENIED = "PERMISSION_DENIED",
+  RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED",
+  SUSPICIOUS_ACTIVITY = "SUSPICIOUS_ACTIVITY",
+  CSRF_VIOLATION = "CSRF_VIOLATION",
+  XSS_ATTEMPT = "XSS_ATTEMPT",
+  SQL_INJECTION_ATTEMPT = "SQL_INJECTION_ATTEMPT",
+  PATH_TRAVERSAL_ATTEMPT = "PATH_TRAVERSAL_ATTEMPT",
+  API_KEY_CREATED = "API_KEY_CREATED",
+  API_KEY_REVOKED = "API_KEY_REVOKED",
+  DATA_EXPORTED = "DATA_EXPORTED",
+  BULK_OPERATION = "BULK_OPERATION",
 }
 
 /**
  * Security Risk Levels
  */
 export enum SecurityRiskLevel {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  CRITICAL = 'critical',
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+  CRITICAL = "critical",
 }
 
 /**
  * Sensitive Data Fields (for masking in logs)
  */
 export const SENSITIVE_FIELDS = [
-  'password',
-  'passwordHash',
-  'token',
-  'refreshToken',
-  'accessToken',
-  'apiKey',
-  'secret',
-  'privateKey',
-  'creditCard',
-  'ssn',
-  'taxId',
-  'bankAccount',
-  'pin',
+  "password",
+  "passwordHash",
+  "token",
+  "refreshToken",
+  "accessToken",
+  "apiKey",
+  "secret",
+  "privateKey",
+  "creditCard",
+  "ssn",
+  "taxId",
+  "bankAccount",
+  "pin",
 ] as const;

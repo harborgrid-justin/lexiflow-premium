@@ -1,6 +1,11 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { Request } from "express";
 import { Observable } from "rxjs";
 import { EthicalWallsService } from "./ethical-walls.service";
+
+interface RequestWithUser extends Request {
+  user?: { id: string };
+}
 
 @Injectable()
 export class EthicalWallGuard implements CanActivate {
@@ -9,12 +14,12 @@ export class EthicalWallGuard implements CanActivate {
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
     return this.validateRequest(request);
   }
 
-  private async validateRequest(request: unknown): Promise<boolean> {
-    const user = (request as any).user;
+  private async validateRequest(request: RequestWithUser): Promise<boolean> {
+    const user = request.user;
     if (!user) {
       // No user context, allow (auth should be handled by another guard)
       return true;
@@ -43,12 +48,12 @@ export class EthicalWallGuard implements CanActivate {
     return true;
   }
 
-  private extractEntityInfo(request: unknown): {
+  private extractEntityInfo(request: RequestWithUser): {
     entityType: string;
     entityId: string;
   } | null {
     // Extract from URL params
-    const url = (request as any).url;
+    const url = request.url;
 
     // Pattern matching for common entity routes
     const patterns = [
@@ -69,20 +74,21 @@ export class EthicalWallGuard implements CanActivate {
     }
 
     // Check body for entity information
-    if ((request as any).body) {
-      if ((request as any).body.caseId) {
-        return { entityType: "Case", entityId: (request as any).body.caseId };
+    const body = request.body as Record<string, unknown> | undefined;
+    if (body) {
+      if (typeof body.caseId === "string") {
+        return { entityType: "Case", entityId: body.caseId };
       }
-      if ((request as any).body.clientId) {
+      if (typeof body.clientId === "string") {
         return {
           entityType: "Client",
-          entityId: (request as any).body.clientId,
+          entityId: body.clientId,
         };
       }
-      if ((request as any).body.documentId) {
+      if (typeof body.documentId === "string") {
         return {
           entityType: "Document",
-          entityId: (request as any).body.documentId,
+          entityId: body.documentId,
         };
       }
     }

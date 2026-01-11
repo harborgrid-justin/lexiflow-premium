@@ -1,17 +1,17 @@
+import { BadRequestException, Logger, NotFoundException } from "@nestjs/common";
 import {
-  Repository,
+  DeepPartial,
+  EntityManager,
   FindManyOptions,
   FindOneOptions,
-  DeepPartial,
-  ObjectLiteral,
   FindOptionsWhere,
-  SelectQueryBuilder,
   In,
-  EntityManager,
+  ObjectLiteral,
+  Repository,
+  SelectQueryBuilder,
   UpdateResult,
-} from 'typeorm';
-import { Logger, BadRequestException, NotFoundException } from '@nestjs/common';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+} from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 /**
  * Advanced filter options for complex queries
@@ -27,7 +27,7 @@ export interface AdvancedFilterOptions<T> {
   filters?: Partial<Record<keyof T, unknown>>;
   sort?: {
     field: keyof T;
-    order: 'ASC' | 'DESC';
+    order: "ASC" | "DESC";
   }[];
 }
 
@@ -73,7 +73,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
 
   constructor(
     protected readonly repository: Repository<T>,
-    loggerContext: string,
+    loggerContext: string
   ) {
     this.logger = new Logger(loggerContext);
   }
@@ -83,14 +83,19 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    * Optimized with query hints and index usage
    */
   async findAll(options?: FindManyOptions<T>): Promise<T[]> {
-    this.logger.debug(`Finding all entities with options: ${JSON.stringify(options)}`);
+    this.logger.debug(
+      `Finding all entities with options: ${JSON.stringify(options)}`
+    );
     return this.repository.find(options);
   }
 
   /**
    * Find one entity by ID with optimized single-row lookup
    */
-  async findById(id: string | number, options?: FindOneOptions<T>): Promise<T | null> {
+  async findById(
+    id: string | number,
+    options?: FindOneOptions<T>
+  ): Promise<T | null> {
     this.logger.debug(`Finding entity by ID: ${id}`);
     return this.repository.findOne({
       where: { id } as unknown as FindOptionsWhere<T>,
@@ -101,7 +106,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   /**
    * Find one entity by ID or throw NotFoundException
    */
-  async findByIdOrFail(id: string | number, options?: FindOneOptions<T>): Promise<T> {
+  async findByIdOrFail(
+    id: string | number,
+    options?: FindOneOptions<T>
+  ): Promise<T> {
     const entity = await this.findById(id, options);
     if (!entity) {
       throw new NotFoundException(`Entity with ID ${id} not found`);
@@ -123,7 +131,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async findOneOrFail(options: FindOneOptions<T>): Promise<T> {
     const entity = await this.findOne(options);
     if (!entity) {
-      throw new NotFoundException('Entity not found');
+      throw new NotFoundException("Entity not found");
     }
     return entity;
   }
@@ -131,8 +139,11 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   /**
    * Find entities by IDs with optimized IN query
    */
-  async findByIds(ids: (string | number)[], options?: FindOneOptions<T>): Promise<T[]> {
-    this.logger.debug(`Finding entities by IDs: ${ids.join(', ')}`);
+  async findByIds(
+    ids: (string | number)[],
+    options?: FindOneOptions<T>
+  ): Promise<T[]> {
+    this.logger.debug(`Finding entities by IDs: ${ids.join(", ")}`);
     if (ids.length === 0) return [];
 
     return this.repository.find({
@@ -161,10 +172,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     if (data.length === 0) return [];
 
     const entities = this.repository.create(
-      data.map(item => ({
+      data.map((item) => ({
         ...item,
         ...(userId && { createdBy: userId, updatedBy: userId }),
-      })) as DeepPartial<T>[],
+      })) as DeepPartial<T>[]
     );
 
     // Use batch insert for better performance
@@ -178,7 +189,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     id: string | number,
     data: QueryDeepPartialEntity<T>,
     userId?: string,
-    expectedVersion?: number,
+    expectedVersion?: number
   ): Promise<T> {
     this.logger.debug(`Updating entity with ID: ${id}`);
 
@@ -192,12 +203,12 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     if (expectedVersion !== undefined) {
       const result = await this.repository.update(
         { id, version: expectedVersion } as unknown as FindOptionsWhere<T>,
-        updateData,
+        updateData
       );
 
       if (result.affected === 0) {
         throw new BadRequestException(
-          `Entity with ID ${id} has been modified by another user. Please refresh and try again.`,
+          `Entity with ID ${id} has been modified by another user. Please refresh and try again.`
         );
       }
     } else {
@@ -206,7 +217,9 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
 
     const updated = await this.findById(id);
     if (!updated) {
-      throw new NotFoundException(`Entity with ID ${id} not found after update`);
+      throw new NotFoundException(
+        `Entity with ID ${id} not found after update`
+      );
     }
     return updated;
   }
@@ -217,7 +230,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async updateMany(
     where: FindOptionsWhere<T>,
     data: QueryDeepPartialEntity<T>,
-    userId?: string,
+    userId?: string
   ): Promise<number> {
     this.logger.debug(`Bulk updating entities`);
     const updateData = {
@@ -235,7 +248,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async upsert(
     data: DeepPartial<T>,
     conflictColumns: (keyof T)[],
-    userId?: string,
+    userId?: string
   ): Promise<T> {
     this.logger.debug(`Upserting entity`);
     const entityData = {
@@ -243,13 +256,18 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
       ...(userId && { createdBy: userId, updatedBy: userId }),
     };
 
-    await this.repository.upsert(entityData as any, conflictColumns as string[]);
+    await this.repository.upsert(
+      entityData as unknown as QueryDeepPartialEntity<T>,
+      conflictColumns as string[]
+    );
 
     // Find and return the upserted entity
-    const where = conflictColumns.reduce((acc, col) => {
-      acc[col] = (data as any)[col];
-      return acc;
-    }, {} as any);
+    const whereCondition: Record<string, unknown> = {};
+    for (const col of conflictColumns) {
+      const colName = col as string;
+      whereCondition[colName] = (data as Record<string, unknown>)[colName];
+    }
+    const where = whereCondition as unknown as FindOptionsWhere<T>;
 
     return this.findOneOrFail({ where });
   }
@@ -289,7 +307,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   /**
    * Bulk soft delete entities
    */
-  async softDeleteMany(where: FindOptionsWhere<T>, userId?: string): Promise<number> {
+  async softDeleteMany(
+    where: FindOptionsWhere<T>,
+    userId?: string
+  ): Promise<number> {
     this.logger.debug(`Bulk soft deleting entities`);
 
     if (userId) {
@@ -360,7 +381,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async findWithPagination(
     page: number = 1,
     limit: number = 10,
-    options?: FindManyOptions<T>,
+    options?: FindManyOptions<T>
   ): Promise<PaginatedResult<T>> {
     this.logger.debug(`Finding with pagination: page=${page}, limit=${limit}`);
 
@@ -395,17 +416,17 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    */
   async findWithFilters(
     filterOptions: AdvancedFilterOptions<T>,
-    paginationOptions?: { page?: number; limit?: number },
+    paginationOptions?: { page?: number; limit?: number }
   ): Promise<PaginatedResult<T>> {
     this.logger.debug(`Finding with advanced filters`);
 
-    const queryBuilder = this.repository.createQueryBuilder('entity');
+    const queryBuilder = this.repository.createQueryBuilder("entity");
 
     // Apply search across multiple fields
     if (filterOptions.search && filterOptions.searchFields) {
       const searchConditions = filterOptions.searchFields
-        .map(field => `entity.${String(field)} ILIKE :search`)
-        .join(' OR ');
+        .map((field) => `entity.${String(field)} ILIKE :search`)
+        .join(" OR ");
       queryBuilder.andWhere(`(${searchConditions})`, {
         search: `%${filterOptions.search}%`,
       });
@@ -475,7 +496,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    * Execute a transaction
    */
   async transaction<R>(
-    operation: (manager: EntityManager) => Promise<R>,
+    operation: (manager: EntityManager) => Promise<R>
   ): Promise<R> {
     this.logger.debug(`Executing transaction`);
     return this.repository.manager.transaction(operation);
@@ -486,7 +507,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    */
   async bulkOperation(
     items: DeepPartial<T>[],
-    operation: (item: DeepPartial<T>, manager: EntityManager) => Promise<void>,
+    operation: (item: DeepPartial<T>, manager: EntityManager) => Promise<void>
   ): Promise<BulkOperationResult> {
     this.logger.debug(`Executing bulk operation on ${items.length} items`);
 
@@ -520,7 +541,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async increment(
     where: FindOptionsWhere<T>,
     field: keyof T,
-    value: number = 1,
+    value: number = 1
   ): Promise<UpdateResult> {
     this.logger.debug(`Incrementing field ${String(field)} by ${value}`);
     return this.repository.increment(where, field as string, value);
@@ -532,7 +553,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async decrement(
     where: FindOptionsWhere<T>,
     field: keyof T,
-    value: number = 1,
+    value: number = 1
   ): Promise<UpdateResult> {
     this.logger.debug(`Decrementing field ${String(field)} by ${value}`);
     return this.repository.decrement(where, field as string, value);

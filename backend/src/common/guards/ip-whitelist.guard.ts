@@ -1,16 +1,16 @@
 import {
-  Injectable,
+  IP_WHITELIST_KEY,
+  IpWhitelistOptions,
+} from "@common/decorators/ip-whitelist.decorator";
+import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
-import {
-  IP_WHITELIST_KEY,
-  IpWhitelistOptions,
-} from '@common/decorators/ip-whitelist.decorator';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Request } from "express";
 
 /**
  * IP Whitelist Guard
@@ -44,7 +44,7 @@ export class IpWhitelistGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const options = this.reflector.getAllAndOverride<IpWhitelistOptions>(
       IP_WHITELIST_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()]
     );
 
     if (!options) {
@@ -57,16 +57,16 @@ export class IpWhitelistGuard implements CanActivate {
     // Check if IP is allowed
     if (!this.isIpAllowed(clientIp, options)) {
       this.logger.warn(
-        `IP whitelist rejection: ${clientIp} attempted to access ${request.method} ${request.path}`,
+        `IP whitelist rejection: ${clientIp} attempted to access ${request.method} ${request.path}`
       );
 
       throw new ForbiddenException(
-        'Access denied: Your IP address is not authorized to access this resource',
+        "Access denied: Your IP address is not authorized to access this resource"
       );
     }
 
     this.logger.debug(
-      `IP whitelist passed: ${clientIp} accessing ${request.method} ${request.path}`,
+      `IP whitelist passed: ${clientIp} accessing ${request.method} ${request.path}`
     );
 
     return true;
@@ -108,9 +108,9 @@ export class IpWhitelistGuard implements CanActivate {
    */
   private getClientIp(request: Request): string {
     // Check various headers for IP (in order of trust)
-    const cfConnectingIp = request.headers['cf-connecting-ip'] as string;
-    const xRealIp = request.headers['x-real-ip'] as string;
-    const xForwardedFor = request.headers['x-forwarded-for'] as string;
+    const cfConnectingIp = request.headers["cf-connecting-ip"] as string;
+    const xRealIp = request.headers["x-real-ip"] as string;
+    const xForwardedFor = request.headers["x-forwarded-for"] as string;
 
     if (cfConnectingIp) {
       return cfConnectingIp;
@@ -122,11 +122,11 @@ export class IpWhitelistGuard implements CanActivate {
 
     if (xForwardedFor) {
       // X-Forwarded-For can contain multiple IPs, take the first one
-      const firstIp = xForwardedFor.split(',')[0]?.trim();
-      return firstIp || 'unknown';
+      const firstIp = xForwardedFor.split(",")[0]?.trim();
+      return firstIp || "unknown";
     }
 
-    return request.ip || request.socket?.remoteAddress || 'unknown';
+    return request.ip || request.socket?.remoteAddress || "unknown";
   }
 
   /**
@@ -134,10 +134,10 @@ export class IpWhitelistGuard implements CanActivate {
    */
   private isLocalhost(ip: string): boolean {
     const localhostPatterns = [
-      '127.0.0.1',
-      '::1',
-      '::ffff:127.0.0.1',
-      'localhost',
+      "127.0.0.1",
+      "::1",
+      "::ffff:127.0.0.1",
+      "localhost",
     ];
 
     return localhostPatterns.includes(ip);
@@ -148,14 +148,14 @@ export class IpWhitelistGuard implements CanActivate {
    */
   private isPrivateNetwork(ip: string): boolean {
     // Remove IPv6 prefix if present
-    const cleanIp = ip.replace('::ffff:', '');
+    const cleanIp = ip.replace("::ffff:", "");
 
     // Private network ranges (RFC 1918)
     const privateRanges = [
-      '10.0.0.0/8',
-      '172.16.0.0/12',
-      '192.168.0.0/16',
-      '127.0.0.0/8',
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+      "127.0.0.0/8",
     ];
 
     for (const range of privateRanges) {
@@ -172,7 +172,7 @@ export class IpWhitelistGuard implements CanActivate {
    */
   private isIpInRange(ip: string, range: string): boolean {
     try {
-      const [rangeIp, rangeMask] = range.split('/');
+      const [rangeIp, rangeMask] = range.split("/");
 
       if (!rangeIp || !rangeMask) {
         this.logger.error(`Invalid CIDR range format: ${range}`);
@@ -207,17 +207,20 @@ export class IpWhitelistGuard implements CanActivate {
   private ipToNumber(ip: string): number | null {
     try {
       // Remove IPv6 prefix if present
-      const cleanIp = ip.replace('::ffff:', '');
+      const cleanIp = ip.replace("::ffff:", "");
 
-      const parts = cleanIp.split('.');
+      const parts = cleanIp.split(".");
       if (parts.length !== 4) {
         return null;
       }
 
       let num = 0;
       for (let i = 0; i < 4; i++) {
-      // TODO: Remove non-null assertion with proper check
-        const part = parseInt(parts[i]!, 10);
+        const partString = parts[i];
+        if (partString === undefined) {
+          return null;
+        }
+        const part = parseInt(partString, 10);
         if (isNaN(part) || part < 0 || part > 255) {
           return null;
         }

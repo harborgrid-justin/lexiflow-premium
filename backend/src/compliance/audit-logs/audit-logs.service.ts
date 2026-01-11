@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
+  AuditEntityType,
   AuditLogDto,
   CreateAuditLogDto,
-  QueryAuditLogsDto,
   ExportAuditLogsDto,
-  AuditEntityType,
-} from './dto/audit-log.dto';
+  QueryAuditLogsDto,
+} from "./dto/audit-log.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -72,19 +72,21 @@ export class AuditLogsService {
       logs = logs.filter((log) => log.action === query.action);
     }
     if (query.startDate) {
-      logs = logs.filter((log) => log.timestamp >= query.startDate!);
+      const startDate = query.startDate;
+      logs = logs.filter((log) => log.timestamp >= startDate);
     }
     if (query.endDate) {
-      logs = logs.filter((log) => log.timestamp <= query.endDate!);
+      const endDate = query.endDate;
+      logs = logs.filter((log) => log.timestamp <= endDate);
     }
 
     // Sort
-    const sortBy = (query.sortBy || 'timestamp') as keyof AuditLogDto;
-    const sortOrder = query.sortOrder || 'desc';
+    const sortBy = (query.sortBy || "timestamp") as keyof AuditLogDto;
+    const sortOrder = query.sortOrder || "desc";
     logs.sort((a, b) => {
       const aVal = a[sortBy];
       const bVal = b[sortBy];
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return (aVal ?? 0) > (bVal ?? 0) ? 1 : -1;
       }
       return (aVal ?? 0) < (bVal ?? 0) ? 1 : -1;
@@ -115,11 +117,11 @@ export class AuditLogsService {
 
   async findByEntity(
     entityType: AuditEntityType,
-    entityId: string,
+    entityId: string
   ): Promise<AuditLogDto[]> {
     return Array.from(this.auditLogs.values())
       .filter(
-        (log) => log.entityType === entityType && log.entityId === entityId,
+        (log) => log.entityType === entityType && log.entityId === entityId
       )
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   }
@@ -142,28 +144,28 @@ export class AuditLogsService {
     const { data } = await this.findAll(query);
 
     switch (exportDto.format) {
-      case 'json':
-        return { data, format: 'json' };
-      case 'csv':
+      case "json":
+        return { data, format: "json" };
+      case "csv":
         return this.convertToCSV(data);
-      case 'pdf':
-        return { data, format: 'pdf', message: 'PDF generation placeholder' };
+      case "pdf":
+        return { data, format: "pdf", message: "PDF generation placeholder" };
       default:
-        return { data, format: 'json' };
+        return { data, format: "json" };
     }
   }
 
   private convertToCSV(logs: AuditLogDto[]): string {
-    if (logs.length === 0) return '';
+    if (logs.length === 0) return "";
 
     const headers = [
-      'ID',
-      'User',
-      'Action',
-      'Entity Type',
-      'Entity ID',
-      'Timestamp',
-      'IP Address',
+      "ID",
+      "User",
+      "Action",
+      "Entity Type",
+      "Entity ID",
+      "Timestamp",
+      "IP Address",
     ];
     const rows = logs.map((log) => [
       log.id,
@@ -172,13 +174,13 @@ export class AuditLogsService {
       log.entityType,
       log.entityId,
       log.timestamp.toISOString(),
-      log.ipAddress || '',
+      log.ipAddress || "",
     ]);
 
     return [
-      headers.join(','),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
-    ].join('\n');
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n");
   }
 
   private generateId(): string {

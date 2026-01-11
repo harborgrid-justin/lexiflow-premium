@@ -1,25 +1,25 @@
-import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
-import { UseGuards } from "@nestjs/common";
+import { CurrentUser } from "@auth/decorators/current-user.decorator";
+import { GqlAuthGuard } from "@auth/guards/gql-auth.guard";
+import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
+import { DepositionsService } from "@discovery/depositions/depositions.service";
+import { DiscoveryService } from "@discovery/discovery.service";
+import { PrivilegeLogService } from "@discovery/privilege-log/privilege-log.service";
 import {
-  DiscoveryRequestType,
+  CreateDepositionInput,
+  CreateDiscoveryRequestInput,
+  CreateLegalHoldInput,
+  CreatePrivilegeLogEntryInput,
+  UpdateDepositionInput,
+  UpdateDiscoveryRequestInput,
+} from "@graphql/inputs/discovery.input";
+import {
   DepositionType,
+  DiscoveryRequestType,
   LegalHoldType,
   PrivilegeLogEntryType,
 } from "@graphql/types/discovery.type";
-import {
-  CreateDiscoveryRequestInput,
-  UpdateDiscoveryRequestInput,
-  CreateDepositionInput,
-  UpdateDepositionInput,
-  CreateLegalHoldInput,
-  CreatePrivilegeLogEntryInput,
-} from "@graphql/inputs/discovery.input";
-import { CurrentUser } from "@auth/decorators/current-user.decorator";
-import { GqlAuthGuard } from "@auth/guards/gql-auth.guard";
-import { DiscoveryService } from "@discovery/discovery.service";
-import { DepositionsService } from "@discovery/depositions/depositions.service";
-import { PrivilegeLogService } from "@discovery/privilege-log/privilege-log.service";
-import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
+import { UseGuards } from "@nestjs/common";
+import { Args, ID, Mutation, Query, Resolver } from "@nestjs/graphql";
 
 @Resolver(() => DiscoveryRequestType)
 export class DiscoveryResolver {
@@ -84,7 +84,7 @@ export class DiscoveryResolver {
     @Args("caseId", { type: () => ID }) caseId: string
   ): Promise<DepositionType[]> {
     const result = await this.depositionsService.findAll({ caseId });
-    return result.items as any[];
+    return result.items as DepositionType[];
   }
 
   @Query(() => DepositionType, { name: "deposition", nullable: true })
@@ -130,7 +130,7 @@ export class DiscoveryResolver {
     @Args("caseId", { type: () => ID }) caseId: string
   ): Promise<LegalHoldType[]> {
     const holds = await this.discoveryService.findHoldsByCaseId(caseId);
-    return holds as any[];
+    return holds as LegalHoldType[];
   }
 
   @Mutation(() => LegalHoldType)
@@ -159,7 +159,7 @@ export class DiscoveryResolver {
     @Args("caseId", { type: () => ID }) caseId: string
   ): Promise<PrivilegeLogEntryType[]> {
     const result = await this.privilegeLogService.findAll({ caseId });
-    return result.items as any[];
+    return result.items as PrivilegeLogEntryType[];
   }
 
   @Mutation(() => PrivilegeLogEntryType)

@@ -1,12 +1,12 @@
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
   CallHandler,
+  ExecutionContext,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+  NestInterceptor,
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 /**
  * XSS Protection Interceptor
@@ -29,9 +29,9 @@ export class XssProtectionInterceptor implements NestInterceptor {
 
   // XSS patterns to detect
   private readonly XSS_PATTERNS = [
-    /<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>/gi,
-    /<iframe\b[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi,
-    /<object\b[^<]*(?:(?!</object>)<[^<]*)*</object>/gi,
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+    /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
     /<embed\b[^>]*>/gi,
     /javascript:/gi,
     /on\w+\s*=/gi,
@@ -44,17 +44,20 @@ export class XssProtectionInterceptor implements NestInterceptor {
     const response = context.switchToHttp().getResponse();
 
     // Set XSS protection header
-    response.setHeader('X-XSS-Protection', '1; mode=block');
+    response.setHeader("X-XSS-Protection", "1; mode=block");
 
     return next.handle().pipe(
       map((data) => {
         // Only sanitize for non-binary responses
-        const contentType = response.getHeader('content-type');
-        if (typeof contentType === 'string' && this.shouldSanitize(contentType)) {
+        const contentType = response.getHeader("content-type");
+        if (
+          typeof contentType === "string" &&
+          this.shouldSanitize(contentType)
+        ) {
           return this.sanitizeData(data);
         }
         return data;
-      }),
+      })
     );
   }
 
@@ -63,15 +66,15 @@ export class XssProtectionInterceptor implements NestInterceptor {
    */
   private shouldSanitize(contentType: string): boolean {
     const sanitizableTypes = [
-      'application/json',
-      'text/html',
-      'text/plain',
-      'application/xml',
-      'text/xml',
+      "application/json",
+      "text/html",
+      "text/plain",
+      "application/xml",
+      "text/xml",
     ];
 
     return sanitizableTypes.some((type) =>
-      contentType.toLowerCase().includes(type),
+      contentType.toLowerCase().includes(type)
     );
   }
 
@@ -83,7 +86,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
       return data;
     }
 
-    if (typeof data === 'string') {
+    if (typeof data === "string") {
       return this.sanitizeString(data) as T;
     }
 
@@ -91,12 +94,16 @@ export class XssProtectionInterceptor implements NestInterceptor {
       return data.map((item) => this.sanitizeData(item)) as T;
     }
 
-    if (typeof data === 'object' && data !== null) {
+    if (typeof data === "object" && data !== null) {
       const sanitized: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(data)) {
         // Skip prototype pollution
-        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        if (
+          key === "__proto__" ||
+          key === "constructor" ||
+          key === "prototype"
+        ) {
           continue;
         }
 
@@ -113,28 +120,30 @@ export class XssProtectionInterceptor implements NestInterceptor {
    * Sanitize string for XSS
    */
   private sanitizeString(str: string): string {
-    if (!str || typeof str !== 'string') {
+    if (!str || typeof str !== "string") {
       return str;
     }
 
     // Check for XSS patterns
     for (const pattern of this.XSS_PATTERNS) {
       if (pattern.test(str)) {
-        this.logger.warn(`Potential XSS detected in response: ${str.substring(0, 100)}...`);
+        this.logger.warn(
+          `Potential XSS detected in response: ${str.substring(0, 100)}...`
+        );
       }
     }
 
     // HTML entity encoding for critical characters
     let sanitized = str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .replace(///g, '&#x2F;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
 
     // Remove NULL bytes
-    sanitized = sanitized.replace(/\0/g, '');
+    sanitized = sanitized.replace(/\0/g, "");
 
     return sanitized;
   }
@@ -151,22 +160,20 @@ export class XssProtectionInterceptor implements NestInterceptor {
 export class SelectiveXssProtectionInterceptor implements NestInterceptor {
   // Fields that should always be sanitized
   private readonly SANITIZE_FIELDS = [
-    'username',
-    'displayName',
-    'bio',
-    'comment',
-    'message',
-    'description',
-    'title',
+    "username",
+    "displayName",
+    "bio",
+    "comment",
+    "message",
+    "description",
+    "title",
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const response = context.switchToHttp().getResponse();
-    response.setHeader('X-XSS-Protection', '1; mode=block');
+    response.setHeader("X-XSS-Protection", "1; mode=block");
 
-    return next.handle().pipe(
-      map((data) => this.selectivelySanitize(data)),
-    );
+    return next.handle().pipe(map((data) => this.selectivelySanitize(data)));
   }
 
   /**
@@ -181,19 +188,23 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
       return data.map((item) => this.selectivelySanitize(item)) as T;
     }
 
-    if (typeof data === 'object' && data !== null) {
+    if (typeof data === "object" && data !== null) {
       const sanitized: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(data)) {
         // Skip prototype pollution
-        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        if (
+          key === "__proto__" ||
+          key === "constructor" ||
+          key === "prototype"
+        ) {
           continue;
         }
 
         // Sanitize if field is in the list
-        if (this.SANITIZE_FIELDS.includes(key) && typeof value === 'string') {
+        if (this.SANITIZE_FIELDS.includes(key) && typeof value === "string") {
           sanitized[key] = this.sanitizeHtml(value);
-        } else if (typeof value === 'object') {
+        } else if (typeof value === "object") {
           sanitized[key] = this.selectivelySanitize(value);
         } else {
           sanitized[key] = value;
@@ -210,21 +221,21 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
    * Sanitize HTML while preserving safe tags
    */
   private sanitizeHtml(html: string): string {
-    if (!html || typeof html !== 'string') {
+    if (!html || typeof html !== "string") {
       return html;
     }
 
     // Remove dangerous tags and attributes
     let sanitized = html
-      .replace(/<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>/gi, '')
-      .replace(/<iframe\b[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi, '')
-      .replace(/on\w+\s*=/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/<object\b[^<]*(?:(?!</object>)<[^<]*)*</object>/gi, '')
-      .replace(/<embed\b[^>]*>/gi, '');
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+      .replace(/on\w+\s*=/gi, "")
+      .replace(/javascript:/gi, "")
+      .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+      .replace(/<embed\b[^>]*>/gi, "");
 
     // Remove NULL bytes
-    sanitized = sanitized.replace(/\0/g, '');
+    sanitized = sanitized.replace(/\0/g, "");
 
     return sanitized;
   }

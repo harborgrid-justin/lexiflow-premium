@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 /**
  * Query Performance Statistics
@@ -116,7 +116,11 @@ export class DatabasePerformanceMonitor {
   /**
    * Record a query execution
    */
-  recordQuery(query: string, executionTime: number, parameters?: unknown[]): void {
+  recordQuery(
+    query: string,
+    executionTime: number,
+    parameters?: unknown[]
+  ): void {
     const stats: QueryStats = {
       query: this.normalizeQuery(query),
       executionTime,
@@ -134,7 +138,7 @@ export class DatabasePerformanceMonitor {
     // Log slow queries
     if (executionTime > this.slowQueryThreshold) {
       this.logger.warn(
-        `Slow query detected (${executionTime}ms): ${query.substring(0, 200)}...`,
+        `Slow query detected (${executionTime}ms): ${query.substring(0, 200)}...`
       );
     }
   }
@@ -194,7 +198,7 @@ export class DatabasePerformanceMonitor {
 
     const executionTimes = this.queryStats.map((s) => s.executionTime);
     const slowQueries = this.queryStats.filter(
-      (s) => s.executionTime > this.slowQueryThreshold,
+      (s) => s.executionTime > this.slowQueryThreshold
     ).length;
 
     return {
@@ -230,7 +234,9 @@ export class DatabasePerformanceMonitor {
       }
 
       const [result] = await this.dataSource.query<PoolQueryResult>(query);
-      if (!result) {\n        throw new Error('Failed to retrieve pool stats');\n      }
+      if (!result) {
+        throw new Error("Failed to retrieve pool stats");
+      }
 
       return {
         totalConnections: parseInt(result.total_connections),
@@ -239,7 +245,7 @@ export class DatabasePerformanceMonitor {
         waitingConnections: parseInt(result.waiting_connections),
       };
     } catch (error) {
-      this.logger.error('Failed to get pool stats', error);
+      this.logger.error("Failed to get pool stats", error);
       throw error;
     }
   }
@@ -247,7 +253,7 @@ export class DatabasePerformanceMonitor {
   /**
    * Get table statistics
    */
-  async getTableStats(schemaName: string = 'public'): Promise<TableStats[]> {
+  async getTableStats(schemaName: string = "public"): Promise<TableStats[]> {
     try {
       const query = `
         SELECT
@@ -269,7 +275,9 @@ export class DatabasePerformanceMonitor {
         table_size: string;
       }
 
-      const results = await this.dataSource.query<TableQueryResult>(query, [schemaName]);
+      const results = await this.dataSource.query<TableQueryResult>(query, [
+        schemaName,
+      ]);
 
       return results.map((row) => ({
         tableName: String(row.table_name),
@@ -279,7 +287,7 @@ export class DatabasePerformanceMonitor {
         tableSize: String(row.table_size),
       }));
     } catch (error) {
-      this.logger.error('Failed to get table stats', error);
+      this.logger.error("Failed to get table stats", error);
       throw error;
     }
   }
@@ -287,7 +295,7 @@ export class DatabasePerformanceMonitor {
   /**
    * Get index usage statistics
    */
-  async getIndexStats(schemaName: string = 'public'): Promise<IndexStats[]> {
+  async getIndexStats(schemaName: string = "public"): Promise<IndexStats[]> {
     try {
       const query = `
         SELECT
@@ -311,9 +319,11 @@ export class DatabasePerformanceMonitor {
         idx_tup_fetch: string;
       }
 
-      const results = await this.dataSource.query<IndexQueryResult>(query, [schemaName]);
+      const results = await this.dataSource.query<IndexQueryResult>(query, [
+        schemaName,
+      ]);
 
-      return results.map(row => ({
+      return results.map((row) => ({
         schemaName: String(row.schemaname),
         tableName: String(row.tablename),
         indexName: String(row.indexname),
@@ -322,7 +332,7 @@ export class DatabasePerformanceMonitor {
         tuplesFetched: parseInt(String(row.idx_tup_fetch)),
       }));
     } catch (error) {
-      this.logger.error('Failed to get index stats', error);
+      this.logger.error("Failed to get index stats", error);
       throw error;
     }
   }
@@ -330,7 +340,7 @@ export class DatabasePerformanceMonitor {
   /**
    * Find unused indexes
    */
-  async findUnusedIndexes(schemaName: string = 'public'): Promise<string[]> {
+  async findUnusedIndexes(schemaName: string = "public"): Promise<string[]> {
     try {
       const query = `
         SELECT
@@ -346,10 +356,12 @@ export class DatabasePerformanceMonitor {
         index_name: string;
       }
 
-      const results = await this.dataSource.query<UnusedIndexResult>(query, [schemaName]);
+      const results = await this.dataSource.query<UnusedIndexResult>(query, [
+        schemaName,
+      ]);
       return results.map((row) => String(row.index_name));
     } catch (error) {
-      this.logger.error('Failed to find unused indexes', error);
+      this.logger.error("Failed to find unused indexes", error);
       throw error;
     }
   }
@@ -357,16 +369,19 @@ export class DatabasePerformanceMonitor {
   /**
    * Get query execution plan
    */
-  async explainQuery(query: string, analyze: boolean = false): Promise<Record<string, unknown>[]> {
+  async explainQuery(
+    query: string,
+    analyze: boolean = false
+  ): Promise<Record<string, unknown>[]> {
     try {
       const explainQuery = analyze
         ? `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`
         : `EXPLAIN (FORMAT JSON) ${query}`;
 
       const result = await this.dataSource.query(explainQuery);
-      return result[0]['QUERY PLAN'] as Record<string, unknown>[];
+      return result[0]["QUERY PLAN"] as Record<string, unknown>[];
     } catch (error) {
-      this.logger.error('Failed to explain query', error);
+      this.logger.error("Failed to explain query", error);
       throw error;
     }
   }
@@ -389,23 +404,23 @@ export class DatabasePerformanceMonitor {
 
       // Analyze plan for sequential scans
       const planStr = JSON.stringify(plan);
-      if (planStr.includes('Seq Scan')) {
+      if (planStr.includes("Seq Scan")) {
         suggestions.push(
-          'Query contains sequential scans. Consider adding indexes.',
+          "Query contains sequential scans. Consider adding indexes."
         );
       }
 
       // Check for full table scans on large tables
-      if (planStr.includes('Rows Removed by Filter')) {
+      if (planStr.includes("Rows Removed by Filter")) {
         suggestions.push(
-          'Query is filtering many rows. Consider adding a more selective index.',
+          "Query is filtering many rows. Consider adding a more selective index."
         );
       }
 
       // Check for nested loops on large datasets
-      if (planStr.includes('Nested Loop') && planStr.includes('rows=')) {
+      if (planStr.includes("Nested Loop") && planStr.includes("rows=")) {
         suggestions.push(
-          'Nested loop detected. Consider optimizing join conditions or adding indexes.',
+          "Nested loop detected. Consider optimizing join conditions or adding indexes."
         );
       }
 
@@ -415,7 +430,7 @@ export class DatabasePerformanceMonitor {
         suggestions,
       };
     } catch (error) {
-      this.logger.error('Failed to analyze query', error);
+      this.logger.error("Failed to analyze query", error);
       throw error;
     }
   }
@@ -434,7 +449,7 @@ export class DatabasePerformanceMonitor {
       const [result] = await this.dataSource.query(query);
       return parseFloat(result.cache_hit_ratio) || 0;
     } catch (error) {
-      this.logger.error('Failed to get cache hit ratio', error);
+      this.logger.error("Failed to get cache hit ratio", error);
       throw error;
     }
   }
@@ -442,7 +457,7 @@ export class DatabasePerformanceMonitor {
   /**
    * Get bloat information for tables
    */
-  async getTableBloat(schemaName: string = 'public'): Promise<
+  async getTableBloat(schemaName: string = "public"): Promise<
     Array<{
       tableName: string;
       bloatPercent: number;
@@ -512,7 +527,7 @@ export class DatabasePerformanceMonitor {
         bloatSize: String(row.bloat_size),
       }));
     } catch (error) {
-      this.logger.error('Failed to get table bloat', error);
+      this.logger.error("Failed to get table bloat", error);
       return [];
     }
   }
@@ -520,9 +535,7 @@ export class DatabasePerformanceMonitor {
   /**
    * Get active long-running queries
    */
-  async getLongRunningQueries(
-    thresholdSeconds: number = 30,
-  ): Promise<
+  async getLongRunningQueries(thresholdSeconds: number = 30): Promise<
     Array<{
       pid: number;
       duration: string;
@@ -550,16 +563,17 @@ export class DatabasePerformanceMonitor {
         state: string;
       }
 
-      const results = await this.dataSource.query<LongRunningQueryResult>(query);
+      const results =
+        await this.dataSource.query<LongRunningQueryResult>(query);
 
-      return results.map(row => ({
+      return results.map((row) => ({
         pid: Number(row.pid),
         duration: String(row.duration),
         query: String(row.query),
         state: String(row.state),
       }));
     } catch (error) {
-      this.logger.error('Failed to get long running queries', error);
+      this.logger.error("Failed to get long running queries", error);
       throw error;
     }
   }
@@ -582,7 +596,7 @@ export class DatabasePerformanceMonitor {
    */
   clearStats(): void {
     this.queryStats = [];
-    this.logger.log('Query statistics cleared');
+    this.logger.log("Query statistics cleared");
   }
 
   /**
@@ -590,10 +604,10 @@ export class DatabasePerformanceMonitor {
    */
   private normalizeQuery(query: string): string {
     return query
-      .replace(/\$\d+/g, '$?') // Replace $1, $2 with $?
+      .replace(/\$\d+/g, "$?") // Replace $1, $2 with $?
       .replace(/'[^']*'/g, "'?'") // Replace string literals
-      .replace(/\d+/g, '?') // Replace numbers
-      .replace(/\s+/g, ' ') // Normalize whitespace
+      .replace(/\d+/g, "?") // Replace numbers
+      .replace(/\s+/g, " ") // Normalize whitespace
       .trim();
   }
 }

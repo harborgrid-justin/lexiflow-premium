@@ -1,37 +1,37 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { Public } from '@common/decorators/public.decorator';
+import { Roles } from '@common/decorators/roles.decorator';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { RolesGuard } from '@common/guards/roles.guard';
-import { Roles } from '@common/decorators/roles.decorator';
+import { Body, Controller, Delete, Get, Head, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@users/entities/user.entity';
 import { AnalyticsService } from './analytics.service';
-import { AnalyticsEvent } from './entities/analytics-event.entity';
-import { Dashboard } from './entities/dashboard.entity';
-import { Public } from '@common/decorators/public.decorator';
+import {
+    BulkArchiveAnalyticsEventsDto,
+    BulkArchiveResponseDto,
+    BulkDeleteAnalyticsEventsDto,
+    BulkDeleteAnalyticsResponseDto,
+    BulkImportEventsDto,
+    BulkImportResponseDto,
+    BulkRecalculateMetricsDto,
+    BulkRecalculateResponseDto,
+} from './dto/bulk-analytics.dto';
 import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
+import {
+    ExportAnalyticsDataDto,
+    ExportAnalyticsResponseDto,
+    ListExportJobsResponseDto,
+} from './dto/export-analytics.dto';
 import { AnalyticsGenerateReportDto, GenerateReportResponseDto } from './dto/generate-report.dto';
 import {
-  AnalyticsCaseMetricsDto,
-  UserActivityMetricsDto,
-  AnalyticsBillingMetricsDto,
-  TimeSeriesDataPointDto,
+    AnalyticsBillingMetricsDto,
+    AnalyticsCaseMetricsDto,
+    TimeSeriesDataPointDto,
+    UserActivityMetricsDto,
 } from './dto/metrics-response.dto';
-import {
-  BulkImportEventsDto,
-  BulkImportResponseDto,
-  BulkRecalculateMetricsDto,
-  BulkRecalculateResponseDto,
-  BulkArchiveAnalyticsEventsDto,
-  BulkArchiveResponseDto,
-  BulkDeleteAnalyticsEventsDto,
-  BulkDeleteAnalyticsResponseDto,
-} from './dto/bulk-analytics.dto';
-import {
-  ExportAnalyticsDataDto,
-  ExportAnalyticsResponseDto,
-  ListExportJobsResponseDto,
-} from './dto/export-analytics.dto';
+import { AnalyticsEvent } from './entities/analytics-event.entity';
+import { Dashboard } from './entities/dashboard.entity';
 
 @ApiTags('analytics')
 @ApiBearerAuth()
@@ -267,7 +267,9 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async exportAnalyticsData(@Body() exportDto: ExportAnalyticsDataDto): Promise<ExportAnalyticsResponseDto> {
-    return this.analyticsService.exportAnalyticsData(exportDto) as any;
+    return this.analyticsService.exportAnalyticsData(
+      exportDto
+    ) as unknown as ExportAnalyticsResponseDto;
   }
 
   @Get('export/jobs')
@@ -281,7 +283,10 @@ export class AnalyticsController {
     @Query('page') page?: number,
     @Query('limit') limit?: number
   ): Promise<ListExportJobsResponseDto> {
-    return this.analyticsService.listExportJobs(page, limit) as any;
+    return this.analyticsService.listExportJobs(
+      page,
+      limit
+    ) as unknown as ListExportJobsResponseDto;
   }
 
   @Get('export/:jobId')
@@ -293,7 +298,9 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getExportJobStatus(@Param('jobId') jobId: string): Promise<ExportAnalyticsResponseDto> {
-    return this.analyticsService.getExportJobStatus(jobId) as any;
+    return this.analyticsService.getExportJobStatus(
+      jobId
+    ) as unknown as ExportAnalyticsResponseDto;
   }
 
   @Delete('export/:jobId')

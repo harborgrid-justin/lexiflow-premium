@@ -1,10 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
-import * as crypto from 'crypto';
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import * as MasterConfig from '@config/master.config';
-import * as PathsConfig from '@config/paths.config';
-import { calculateChecksum, generateUniqueFilename, isAllowedMimeType } from '@common/utils/file.utils';
+import {
+  calculateChecksum,
+  generateUniqueFilename,
+  isAllowedMimeType,
+} from "@common/utils/file.utils";
+import * as MasterConfig from "@config/master.config";
+import * as PathsConfig from "@config/paths.config";
+import { Injectable, Logger } from "@nestjs/common";
+import * as crypto from "crypto";
+import * as fs from "fs/promises";
+import * as path from "path";
 
 /**
  * File Upload Configuration
@@ -29,7 +33,7 @@ export interface UploadResult {
   path: string;
   hash: string;
   thumbnail?: string;
-  virusScanStatus?: 'clean' | 'infected' | 'pending';
+  virusScanStatus?: "clean" | "infected" | "pending";
   uploadedAt: Date;
 }
 
@@ -37,7 +41,7 @@ export interface UploadResult {
  * File Upload Service
  * Provides enterprise file upload with chunking, virus scanning, and validation
  * Supports resumable uploads and deduplication via hashing
- * 
+ *
  * @example
  * const result = await fileUploadService.uploadFile(
  *   buffer,
@@ -74,7 +78,8 @@ export interface UploadResult {
  */
 
 @Injectable()
-export class FileUploadService { private readonly logger = new Logger(FileUploadService.name);
+export class FileUploadService {
+  private readonly logger = new Logger(FileUploadService.name);
   private readonly UPLOAD_DIR = PathsConfig.UPLOAD_DIR;
   private readonly MAX_FILE_SIZE = MasterConfig.FILE_MAX_SIZE;
   // private readonly CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
@@ -89,7 +94,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
   async uploadFile(
     buffer: Buffer,
     originalName: string,
-    config: FileUploadConfig = {},
+    config: FileUploadConfig = {}
   ): Promise<UploadResult> {
     // Validate file size
     const maxSize = config.maxSize || this.MAX_FILE_SIZE;
@@ -101,7 +106,10 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     const mimeType = this.detectMimeType(buffer, originalName);
 
     // Validate MIME type
-    if (config.allowedMimeTypes && !isAllowedMimeType(mimeType, config.allowedMimeTypes)) {
+    if (
+      config.allowedMimeTypes &&
+      !isAllowedMimeType(mimeType, config.allowedMimeTypes)
+    ) {
       throw new Error(`File type ${mimeType} is not allowed`);
     }
 
@@ -137,9 +145,9 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     // Virus scan
     if (config.scanForViruses) {
       result.virusScanStatus = await this.scanForViruses(filePath);
-      if (result.virusScanStatus === 'infected') {
+      if (result.virusScanStatus === "infected") {
         await this.deleteFile(fileId);
-        throw new Error('File failed virus scan');
+        throw new Error("File failed virus scan");
       }
     }
 
@@ -148,7 +156,9 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
       result.thumbnail = await this.generateThumbnail(filePath, fileId);
     }
 
-    this.logger.log(`File uploaded successfully: ${fileId} (${buffer.length} bytes)`);
+    this.logger.log(
+      `File uploaded successfully: ${fileId} (${buffer.length} bytes)`
+    );
     return result;
   }
 
@@ -159,7 +169,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     chunk: Buffer,
     chunkIndex: number,
     totalChunks: number,
-    uploadId: string,
+    uploadId: string
   ): Promise<{ complete: boolean; uploadId: string }> {
     const chunkDir = PathsConfig.getChunkDir(uploadId);
     await fs.mkdir(chunkDir, { recursive: true });
@@ -167,7 +177,9 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     const chunkPath = path.join(chunkDir, `chunk_${chunkIndex}`);
     await fs.writeFile(chunkPath, chunk);
 
-    this.logger.debug(`Uploaded chunk ${chunkIndex + 1}/${totalChunks} for ${uploadId}`);
+    this.logger.debug(
+      `Uploaded chunk ${chunkIndex + 1}/${totalChunks} for ${uploadId}`
+    );
 
     // Check if all chunks uploaded
     const uploadedChunks = await fs.readdir(chunkDir);
@@ -196,10 +208,13 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
 
       // Delete thumbnail if exists
       if (info.thumbnail) {
-        const thumbnailPath = path.join(PathsConfig.THUMBNAILS_DIR, info.thumbnail);
+        const thumbnailPath = path.join(
+          PathsConfig.THUMBNAILS_DIR,
+          info.thumbnail
+        );
         try {
           await fs.unlink(thumbnailPath);
-        } catch (error) {
+        } catch (_error) {
           this.logger.warn(`Failed to delete thumbnail: ${info.thumbnail}`);
         }
       }
@@ -219,7 +234,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     try {
       // Search for file by ID pattern in upload directory
       const files = await fs.readdir(this.UPLOAD_DIR);
-      const matchingFile = files.find(f => f.includes(fileId));
+      const matchingFile = files.find((f) => f.includes(fileId));
 
       if (!matchingFile) {
         return null;
@@ -252,7 +267,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
   async downloadFile(fileId: string): Promise<Buffer> {
     const info = await this.getFileInfo(fileId);
     if (!info) {
-      throw new Error('File not found');
+      throw new Error("File not found");
     }
 
     return fs.readFile(info.path);
@@ -264,37 +279,48 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
       await fs.mkdir(PathsConfig.CHUNKS_DIR, { recursive: true });
       await fs.mkdir(PathsConfig.THUMBNAILS_DIR, { recursive: true });
     } catch (error) {
-      this.logger.error('Failed to create upload directories', error);
+      this.logger.error("Failed to create upload directories", error);
     }
   }
 
   private detectMimeType(buffer: Buffer, filename: string): string {
     // Check magic numbers
-    if (buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46) {
-      return 'application/pdf';
+    if (
+      buffer[0] === 0x25 &&
+      buffer[1] === 0x50 &&
+      buffer[2] === 0x44 &&
+      buffer[3] === 0x46
+    ) {
+      return "application/pdf";
     }
 
-    if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
-      return 'image/jpeg';
+    if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+      return "image/jpeg";
     }
 
-    if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
-      return 'image/png';
+    if (
+      buffer[0] === 0x89 &&
+      buffer[1] === 0x50 &&
+      buffer[2] === 0x4e &&
+      buffer[3] === 0x47
+    ) {
+      return "image/png";
     }
 
     // Fallback to extension
     const ext = path.extname(filename).toLowerCase();
     const mimeMap: Record<string, string> = {
-      '.pdf': 'application/pdf',
-      '.doc': 'application/msword',
-      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      '.txt': 'text/plain',
-      '.jpg': 'image/jpeg',
-      '.jpeg': 'image/jpeg',
-      '.png': 'image/png',
+      ".pdf": "application/pdf",
+      ".doc": "application/msword",
+      ".docx":
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ".txt": "text/plain",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
     };
 
-    return mimeMap[ext] || 'application/octet-stream';
+    return mimeMap[ext] || "application/octet-stream";
   }
 
   private async findByHash(hash: string): Promise<UploadResult | null> {
@@ -314,7 +340,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
           if (fileHash === hash) {
             const buffer = await fs.readFile(filePath);
             return {
-              fileId: filename.split('_')[0] || crypto.randomUUID(),
+              fileId: filename.split("_")[0] || crypto.randomUUID(),
               filename,
               originalName: filename,
               mimeType: this.detectMimeType(buffer, filename),
@@ -324,7 +350,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
               uploadedAt: stats.birthtime,
             };
           }
-        } catch (error) {
+        } catch (_error) {
           // Skip files that can't be read
           continue;
         }
@@ -332,77 +358,84 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
 
       return null;
     } catch (error) {
-      this.logger.error('Error searching for file by hash', error);
+      this.logger.error("Error searching for file by hash", error);
       return null;
     }
   }
 
-  private async scanForViruses(filePath: string): Promise<'clean' | 'infected' | 'pending'> {
+  private async scanForViruses(
+    filePath: string
+  ): Promise<"clean" | "infected" | "pending"> {
     try {
       this.logger.debug(`Scanning file for viruses: ${filePath}`);
 
       // Check file size - suspiciously large files
       const stats = await fs.stat(filePath);
       if (stats.size > this.MAX_FILE_SIZE) {
-        this.logger.warn(`File exceeds maximum size during virus scan: ${filePath}`);
-        return 'infected';
+        this.logger.warn(
+          `File exceeds maximum size during virus scan: ${filePath}`
+        );
+        return "infected";
       }
 
       // Read file header to detect malicious patterns
       const buffer = await fs.readFile(filePath);
-      const header = buffer.slice(0, 1024).toString('binary');
+      const header = buffer.slice(0, 1024).toString("binary");
 
       // Check for common malware signatures
       const malwareSignatures = [
-        'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR', // EICAR test signature
-        'MZ', // PE executable header (for non-exe file types)
-        '\x4d\x5a', // Alternative PE header
+        "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR", // EICAR test signature
+        "MZ", // PE executable header (for non-exe file types)
+        "\x4d\x5a", // Alternative PE header
       ];
 
       for (const signature of malwareSignatures) {
         if (header.includes(signature)) {
           this.logger.warn(`Potential malware detected in file: ${filePath}`);
-          return 'infected';
+          return "infected";
         }
       }
 
       // Additional check: validate file matches claimed MIME type
-      
+
       const ext = path.extname(filePath).toLowerCase();
 
       // Detect executable masquerading as document
-      if (['.pdf', '.doc', '.docx', '.txt', '.jpg', '.png'].includes(ext)) {
+      if ([".pdf", ".doc", ".docx", ".txt", ".jpg", ".png"].includes(ext)) {
         if (buffer[0] === 0x4d && buffer[1] === 0x5a) {
           // PE executable header in document file
-          this.logger.warn(`Executable file disguised as document: ${filePath}`);
-          return 'infected';
+          this.logger.warn(
+            `Executable file disguised as document: ${filePath}`
+          );
+          return "infected";
         }
       }
 
       this.logger.debug(`Virus scan completed successfully: ${filePath}`);
-      return 'clean';
+      return "clean";
     } catch (error) {
       this.logger.error(`Virus scan failed for ${filePath}`, error);
-      return 'pending';
+      return "pending";
     }
   }
 
   private isImage(mimeType: string): boolean {
-    return mimeType.startsWith('image/');
+    return mimeType.startsWith("image/");
   }
 
-  private async generateThumbnail(filePath: string, fileId: string): Promise<string> {
+  private async generateThumbnail(
+    filePath: string,
+    fileId: string
+  ): Promise<string> {
     try {
       this.logger.debug(`Generating thumbnail for ${fileId}`);
 
       const thumbnailFilename = `${fileId}_thumb.jpg`;
-      
 
       // Ensure thumbnails directory exists
       await fs.mkdir(PathsConfig.THUMBNAILS_DIR, { recursive: true });
 
       // Read original image
-      
 
       // For now, create a basic thumbnail by copying the file
       // In production environment, integrate with sharp library for actual resizing:
@@ -419,8 +452,8 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
           originalPath: filePath,
           fileId,
           createdAt: new Date().toISOString(),
-          thumbnailSize: '200x200',
-        }),
+          thumbnailSize: "200x200",
+        })
       );
 
       this.logger.debug(`Thumbnail metadata created for ${fileId}`);
@@ -431,11 +464,14 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
     }
   }
 
-  private async assembleChunks(uploadId: string, totalChunks: number): Promise<void> {
+  private async assembleChunks(
+    uploadId: string,
+    totalChunks: number
+  ): Promise<void> {
     const chunkDir = PathsConfig.getChunkDir(uploadId);
     const outputPath = path.join(this.UPLOAD_DIR, uploadId);
 
-    const writeStream = await fs.open(outputPath, 'w');
+    const writeStream = await fs.open(outputPath, "w");
 
     try {
       for (let i = 0; i < totalChunks; i++) {

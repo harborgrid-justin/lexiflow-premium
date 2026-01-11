@@ -1,14 +1,25 @@
-import { Injectable, NotFoundException, ConflictException, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository} from 'typeorm';
-import { Case, CaseStatus } from './entities/case.entity';
-import { CreateCaseDto } from './dto/create-case.dto';
-import { UpdateCaseDto } from './dto/update-case.dto';
-import { CaseFilterDto } from './dto/case-filter.dto';
-import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
-import { CaseStatsDto } from './dto/case-stats.dto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  OnModuleDestroy,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CaseFilterDto } from "./dto/case-filter.dto";
+import {
+  CaseResponseDto,
+  PaginatedCaseResponseDto,
+} from "./dto/case-response.dto";
+import { CaseStatsDto } from "./dto/case-stats.dto";
+import { CreateCaseDto } from "./dto/create-case.dto";
+import { UpdateCaseDto } from "./dto/update-case.dto";
+import { Case, CaseStatus } from "./entities/case.entity";
 
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -78,14 +89,18 @@ export class CasesService implements OnModuleDestroy {
   private readonly QUERY_CACHE_TTL_MS = 60000; // 1 minute
 
   // Caches for memory optimization
-  private caseCache: Map<string, { data: CaseResponseDto; timestamp: number }> = new Map();
+  private caseCache: Map<string, { data: CaseResponseDto; timestamp: number }> =
+    new Map();
   private statsCache: { data: CaseStatsDto; timestamp: number } | null = null;
   private metricsCache: { data: unknown; timestamp: number } | null = null;
-  private queryCache: Map<string, { data: PaginatedCaseResponseDto; timestamp: number }> = new Map();
+  private queryCache: Map<
+    string,
+    { data: PaginatedCaseResponseDto; timestamp: number }
+  > = new Map();
 
   constructor(
     @InjectRepository(Case)
-    private readonly caseRepository: Repository<Case>,
+    private readonly caseRepository: Repository<Case>
   ) {}
 
   onModuleDestroy() {
@@ -112,7 +127,7 @@ export class CasesService implements OnModuleDestroy {
     if (cache.size > maxSize) {
       const entriesToRemove = Math.ceil(maxSize * 0.1); // Remove 10% of entries
       const keysToDelete = Array.from(cache.keys()).slice(0, entriesToRemove);
-      keysToDelete.forEach(key => cache.delete(key));
+      keysToDelete.forEach((key) => cache.delete(key));
     }
   }
 
@@ -129,21 +144,21 @@ export class CasesService implements OnModuleDestroy {
 
   async getStats(): Promise<CaseStatsDto> {
     // Check cache first
-    if (this.statsCache && this.isCacheValid(this.statsCache.timestamp, this.STATS_CACHE_TTL_MS)) {
+    if (
+      this.statsCache &&
+      this.isCacheValid(this.statsCache.timestamp, this.STATS_CACHE_TTL_MS)
+    ) {
       return this.statsCache.data;
     }
 
     // Compute stats with memory-efficient queries
     const totalActive = await this.caseRepository.count({
       where: { status: CaseStatus.ACTIVE },
-      cache: 60000 // 1 minute cache
+      cache: 60000, // 1 minute cache
     });
 
     const intakePipeline = await this.caseRepository.count({
-        where: [
-            { status: CaseStatus.OPEN },
-            { status: CaseStatus.PENDING }
-        ]
+      where: [{ status: CaseStatus.OPEN }, { status: CaseStatus.PENDING }],
     });
 
     const sevenDaysFromNow = new Date();
@@ -151,27 +166,33 @@ export class CasesService implements OnModuleDestroy {
     const now = new Date();
 
     const upcomingDeadlines = await this.caseRepository
-        .createQueryBuilder('case')
-        .where('case.trialDate BETWEEN :now AND :sevenDaysFromNow', { now, sevenDaysFromNow })
-        .getCount();
+      .createQueryBuilder("case")
+      .where("case.trialDate BETWEEN :now AND :sevenDaysFromNow", {
+        now,
+        sevenDaysFromNow,
+      })
+      .getCount();
 
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     const atRisk = await this.caseRepository
-        .createQueryBuilder('case')
-        .where('case.status = :status', { status: CaseStatus.ACTIVE })
-        .andWhere('case.updatedAt < :thirtyDaysAgo', { thirtyDaysAgo })
-        .getCount();
+      .createQueryBuilder("case")
+      .where("case.status = :status", { status: CaseStatus.ACTIVE })
+      .andWhere("case.updatedAt < :thirtyDaysAgo", { thirtyDaysAgo })
+      .getCount();
 
     const totalValue = 0;
     const utilizationRate = 0;
 
     const { avgAge } = await this.caseRepository
-        .createQueryBuilder('case')
-        .select('AVG(EXTRACT(EPOCH FROM (NOW() - case.createdAt)) / 86400)', 'avgAge')
-        .where('case.status = :status', { status: CaseStatus.ACTIVE })
-        .getRawOne();
+      .createQueryBuilder("case")
+      .select(
+        "AVG(EXTRACT(EPOCH FROM (NOW() - case.createdAt)) / 86400)",
+        "avgAge"
+      )
+      .where("case.status = :status", { status: CaseStatus.ACTIVE })
+      .getRawOne();
 
     const conversionRate = 0;
 
@@ -183,7 +204,7 @@ export class CasesService implements OnModuleDestroy {
       totalValue,
       utilizationRate,
       averageAge: Math.round(parseFloat(avgAge) || 0),
-      conversionRate
+      conversionRate,
     };
 
     // Cache the result
@@ -206,7 +227,10 @@ export class CasesService implements OnModuleDestroy {
     byStatus: Array<{ status: string; count: number }>;
   }> {
     // Check cache first
-    if (this.metricsCache && this.isCacheValid(this.metricsCache.timestamp, this.METRICS_CACHE_TTL_MS)) {
+    if (
+      this.metricsCache &&
+      this.isCacheValid(this.metricsCache.timestamp, this.METRICS_CACHE_TTL_MS)
+    ) {
       return this.metricsCache.data as {
         totalCases: number;
         activeCases: number;
@@ -224,21 +248,21 @@ export class CasesService implements OnModuleDestroy {
 
     // Get counts by status using database aggregation
     const statusCounts = await this.caseRepository
-      .createQueryBuilder('case')
-      .select('case.status', 'status')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('case.status')
+      .createQueryBuilder("case")
+      .select("case.status", "status")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("case.status")
       .cache(30000)
-      .getRawMany();
+      .getRawMany<{ status: string; count: string }>();
 
     // Get counts by type using database aggregation
     const typeCounts = await this.caseRepository
-      .createQueryBuilder('case')
-      .select('case.type', 'type')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('case.type')
+      .createQueryBuilder("case")
+      .select("case.type", "type")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("case.type")
       .cache(30000)
-      .getRawMany();
+      .getRawMany<{ type: string; count: string }>();
 
     // Calculate specific status counts from aggregated data
     let activeCases = 0;
@@ -267,11 +291,11 @@ export class CasesService implements OnModuleDestroy {
       closedCases,
       pendingCases,
       byType: typeCounts.map((row) => ({
-        type: row.type || 'Unknown',
+        type: row.type || "Unknown",
         count: parseInt(row.count, 10),
       })),
       byStatus: statusCounts.map((row) => ({
-        status: row.status || 'Unknown',
+        status: row.status || "Unknown",
         count: parseInt(row.count, 10),
       })),
     };
@@ -293,8 +317,8 @@ export class CasesService implements OnModuleDestroy {
       isArchived,
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'DESC',
+      sortBy = "createdAt",
+      sortOrder = "DESC",
       includeParties,
       includeTeam,
       includePhases,
@@ -321,73 +345,84 @@ export class CasesService implements OnModuleDestroy {
 
     // Check cache first
     const cachedResult = this.queryCache.get(cacheKey);
-    if (cachedResult && this.isCacheValid(cachedResult.timestamp, this.QUERY_CACHE_TTL_MS)) {
+    if (
+      cachedResult &&
+      this.isCacheValid(cachedResult.timestamp, this.QUERY_CACHE_TTL_MS)
+    ) {
       return cachedResult.data;
     }
 
     // Enforce LRU on query cache
     this.enforceCacheLRU(this.queryCache, 100); // Max 100 cached queries
 
-    const queryBuilder = this.caseRepository.createQueryBuilder('case');
+    const queryBuilder = this.caseRepository.createQueryBuilder("case");
 
     // Full-text search on title, caseNumber, and description
     if (search) {
       queryBuilder.andWhere(
-        '(case.title ILIKE :search OR case.caseNumber ILIKE :search OR case.description ILIKE :search)',
-        { search: `%${search}%` },
+        "(case.title ILIKE :search OR case.caseNumber ILIKE :search OR case.description ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // Filter by status
     if (status) {
-      queryBuilder.andWhere('case.status = :status', { status });
+      queryBuilder.andWhere("case.status = :status", { status });
     }
 
     // Filter by type
     if (type) {
-      queryBuilder.andWhere('case.type = :type', { type });
+      queryBuilder.andWhere("case.type = :type", { type });
     }
 
     // Filter by practice area
     if (practiceArea) {
-      queryBuilder.andWhere('case.practiceArea = :practiceArea', { practiceArea });
+      queryBuilder.andWhere("case.practiceArea = :practiceArea", {
+        practiceArea,
+      });
     }
 
     // Filter by assigned team
     if (assignedTeamId) {
-      queryBuilder.andWhere('case.assignedTeamId = :assignedTeamId', { assignedTeamId });
+      queryBuilder.andWhere("case.assignedTeamId = :assignedTeamId", {
+        assignedTeamId,
+      });
     }
 
     // Filter by lead attorney
     if (leadAttorneyId) {
-      queryBuilder.andWhere('case.leadAttorneyId = :leadAttorneyId', { leadAttorneyId });
+      queryBuilder.andWhere("case.leadAttorneyId = :leadAttorneyId", {
+        leadAttorneyId,
+      });
     }
 
     // Filter by jurisdiction
     if (jurisdiction) {
-      queryBuilder.andWhere('case.jurisdiction = :jurisdiction', { jurisdiction });
+      queryBuilder.andWhere("case.jurisdiction = :jurisdiction", {
+        jurisdiction,
+      });
     }
 
     // Filter by archived status
     if (isArchived !== undefined) {
-      queryBuilder.andWhere('case.isArchived = :isArchived', { isArchived });
+      queryBuilder.andWhere("case.isArchived = :isArchived", { isArchived });
     }
 
     // Include related entities - eagerly load to prevent N+1 queries
     if (includeParties) {
-      queryBuilder.leftJoinAndSelect('case.parties', 'parties');
+      queryBuilder.leftJoinAndSelect("case.parties", "parties");
     }
 
     if (includeTeam) {
-      queryBuilder.leftJoinAndSelect('case.team', 'team');
+      queryBuilder.leftJoinAndSelect("case.team", "team");
     }
 
     if (includePhases) {
-      queryBuilder.leftJoinAndSelect('case.phases', 'phases');
+      queryBuilder.leftJoinAndSelect("case.phases", "phases");
     }
 
     // Sorting - SQL injection protection
-    const safeSortField = validateSortField('case', sortBy);
+    const safeSortField = validateSortField("case", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`case.${safeSortField}`, safeSortOrder);
 
@@ -414,7 +449,10 @@ export class CasesService implements OnModuleDestroy {
   async findOne(id: string): Promise<CaseResponseDto> {
     // Check cache first
     const cached = this.caseCache.get(id);
-    if (cached && this.isCacheValid(cached.timestamp, this.QUERY_CACHE_TTL_MS)) {
+    if (
+      cached &&
+      this.isCacheValid(cached.timestamp, this.QUERY_CACHE_TTL_MS)
+    ) {
       return cached.data;
     }
 
@@ -444,7 +482,7 @@ export class CasesService implements OnModuleDestroy {
 
     if (existingCase) {
       throw new ConflictException(
-        `Case with number ${createCaseDto.caseNumber} already exists`,
+        `Case with number ${createCaseDto.caseNumber} already exists`
       );
     }
 
@@ -457,7 +495,10 @@ export class CasesService implements OnModuleDestroy {
     return this.toCaseResponse(savedCase);
   }
 
-  async update(id: string, updateCaseDto: UpdateCaseDto): Promise<CaseResponseDto> {
+  async update(
+    id: string,
+    updateCaseDto: UpdateCaseDto
+  ): Promise<CaseResponseDto> {
     // If updating case number, check for duplicates
     if (updateCaseDto.caseNumber) {
       const existingCase = await this.caseRepository.findOne({
@@ -466,7 +507,7 @@ export class CasesService implements OnModuleDestroy {
 
       if (existingCase && existingCase.id !== id) {
         throw new ConflictException(
-          `Case with number ${updateCaseDto.caseNumber} already exists`,
+          `Case with number ${updateCaseDto.caseNumber} already exists`
         );
       }
     }
@@ -477,10 +518,10 @@ export class CasesService implements OnModuleDestroy {
       .update(Case)
       .set({
         ...restDto,
-        ...(metadata ? { metadata: JSON.stringify(metadata) as any } : {})
-      } as any)
-      .where('id = :id', { id })
-      .returning('*')
+        ...(metadata ? { metadata: metadata } : {}),
+      } as unknown as QueryDeepPartialEntity<Case>)
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
@@ -490,7 +531,7 @@ export class CasesService implements OnModuleDestroy {
     // Invalidate caches after update
     this.invalidateCaches();
 
-    return this.toCaseResponse(result.raw[0]);
+    return this.toCaseResponse(result.raw[0] as Case);
   }
 
   async remove(id: string): Promise<void> {
@@ -511,7 +552,9 @@ export class CasesService implements OnModuleDestroy {
     return this.findOne(id);
   }
 
-  async findArchived(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
+  async findArchived(
+    filterDto: CaseFilterDto
+  ): Promise<PaginatedCaseResponseDto> {
     // Force isArchived filter and add status filters for closed cases
     const archivedFilter = {
       ...filterDto,
@@ -520,17 +563,22 @@ export class CasesService implements OnModuleDestroy {
 
     // If no status specified, default to closed/settled cases
     if (!archivedFilter.status) {
-      const queryBuilder = this.caseRepository.createQueryBuilder('case');
+      const queryBuilder = this.caseRepository.createQueryBuilder("case");
 
-      queryBuilder.where('case.isArchived = :isArchived', { isArchived: true });
-      queryBuilder.orWhere('case.status IN (:...statuses)', {
-        statuses: ['Closed', 'closed', 'Settled', 'Archived', 'archived']
+      queryBuilder.where("case.isArchived = :isArchived", { isArchived: true });
+      queryBuilder.orWhere("case.status IN (:...statuses)", {
+        statuses: ["Closed", "closed", "Settled", "Archived", "archived"],
       });
 
-      const { page = 1, limit = 20, sortBy = 'closeDate', sortOrder = 'DESC' } = filterDto;
+      const {
+        page = 1,
+        limit = 20,
+        sortBy = "closeDate",
+        sortOrder = "DESC",
+      } = filterDto;
       const skip = (page - 1) * limit;
 
-      const safeSortField = validateSortField('case', sortBy);
+      const safeSortField = validateSortField("case", sortBy);
       const safeSortOrder = validateSortOrder(sortOrder);
       queryBuilder.orderBy(`case.${safeSortField}`, safeSortOrder);
       queryBuilder.skip(skip).take(limit);

@@ -10,15 +10,15 @@
  * @returns Formatted string (e.g., "1.5 MB")
  */
 export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
 /**
@@ -41,15 +41,15 @@ export function parseSize(sizeString: string): number {
     throw new Error(`Invalid size format: ${sizeString}`);
   }
 
-  const value = parseFloat(match[1] || '0');
-  const unit = (match[2] || '').toUpperCase();
+  const value = parseFloat(match[1] || "0");
+  const unit = (match[2] || "").toUpperCase();
 
   if (!(unit in units)) {
     throw new Error(`Unknown unit: ${unit}`);
   }
 
   const unitValue = units[unit as keyof typeof units];
-  return Math.floor(value * unitValue!);
+  return Math.floor(value * (unitValue ?? 0));
 }
 
 /**
@@ -72,12 +72,16 @@ export function formatDuration(ms: number): string {
 
   if (hours > 0) {
     const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+    return remainingMinutes > 0
+      ? `${hours}h ${remainingMinutes}m`
+      : `${hours}h`;
   }
 
   if (minutes > 0) {
     const remainingSeconds = seconds % 60;
-    return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`;
+    return remainingSeconds > 0
+      ? `${minutes}m ${remainingSeconds}s`
+      : `${minutes}m`;
   }
 
   return `${seconds}s`;
@@ -89,7 +93,7 @@ export function formatDuration(ms: number): string {
  * @param locale - Locale string (default: 'en-US')
  * @returns Formatted string
  */
-export function formatNumber(num: number, locale: string = 'en-US'): string {
+export function formatNumber(num: number, locale: string = "en-US"): string {
   return num.toLocaleString(locale);
 }
 
@@ -100,8 +104,12 @@ export function formatNumber(num: number, locale: string = 'en-US'): string {
  * @param decimals - Number of decimal places (default: 1)
  * @returns Formatted percentage string
  */
-export function formatPercentage(value: number, total: number, decimals: number = 1): string {
-  if (total === 0) return '0%';
+export function formatPercentage(
+  value: number,
+  total: number,
+  decimals: number = 1
+): string {
+  if (total === 0) return "0%";
   const percentage = (value / total) * 100;
   return `${percentage.toFixed(decimals)}%`;
 }
@@ -113,7 +121,11 @@ export function formatPercentage(value: number, total: number, decimals: number 
  * @param ellipsis - Ellipsis string (default: '...')
  * @returns Truncated string
  */
-export function truncate(str: string, maxLength: number, ellipsis: string = '...'): string {
+export function truncate(
+  str: string,
+  maxLength: number,
+  ellipsis: string = "..."
+): string {
   if (str.length <= maxLength) return str;
   return str.substring(0, maxLength - ellipsis.length) + ellipsis;
 }
@@ -127,11 +139,11 @@ export function truncate(str: string, maxLength: number, ellipsis: string = '...
 export function formatPath(filePath: string, maxLength: number = 50): string {
   if (filePath.length <= maxLength) return filePath;
 
-  const parts = filePath.split('/');
+  const parts = filePath.split("/");
   if (parts.length <= 2) return truncate(filePath, maxLength);
 
-  const fileName = (parts[parts.length - 1] ?? '') || '';
-  const firstPart = parts[0] || '';
+  const fileName = (parts[parts.length - 1] ?? "") || "";
+  const firstPart = parts[0] || "";
   const remainingLength = maxLength - fileName.length - firstPart.length - 6; // 6 for '/...//'
 
   if (remainingLength < 0) {

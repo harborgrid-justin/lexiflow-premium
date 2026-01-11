@@ -274,7 +274,9 @@ export class AnalyticsDashboardController {
   async getRealtimeMetrics(
     @Query() query: GetRealtimeMetricsDto
   ): Promise<RealtimeMetricsResponseDto> {
-    return this.analyticsDashboardService.getRealtimeMetrics(query) as any;
+    return this.analyticsDashboardService.getRealtimeMetrics(
+      query
+    ) as unknown as RealtimeMetricsResponseDto;
   }
 
   @Get("realtime/active-users")
@@ -358,7 +360,9 @@ export class AnalyticsDashboardController {
   async exportAnalyticsData(
     @Body() exportDto: BulkExportAnalyticsDto
   ): Promise<BulkExportResponseDto> {
-    return this.analyticsDashboardService.exportAnalyticsData(exportDto) as any;
+    return this.analyticsDashboardService.exportAnalyticsData(
+      exportDto
+    ) as unknown as BulkExportResponseDto;
   }
 
   @Get("export/:jobId")
@@ -375,7 +379,9 @@ export class AnalyticsDashboardController {
   async getExportJobStatus(
     @Param("jobId") jobId: string
   ): Promise<BulkExportResponseDto> {
-    return this.analyticsDashboardService.getExportJobStatus(jobId) as any;
+    return this.analyticsDashboardService.getExportJobStatus(
+      jobId
+    ) as unknown as BulkExportResponseDto;
   }
 
   @Post("bulk/refresh")
@@ -394,7 +400,7 @@ export class AnalyticsDashboardController {
   ): Promise<BulkRefreshResponseDto> {
     return this.analyticsDashboardService.bulkRefreshDashboards(
       refreshDto
-    ) as any;
+    ) as unknown as BulkRefreshResponseDto;
   }
 
   @Delete("bulk/events")

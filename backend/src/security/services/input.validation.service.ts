@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 
 /**
  * Validated value types (what we accept after validation)
@@ -163,9 +163,9 @@ export class InputValidationService {
   private readonly LDAP_PATTERNS = [/[*()\\|&]/g];
 
   private readonly SSRF_PATTERNS = [
-    /^file:///gi,
-    /^gopher:///gi,
-    /^dict:///gi,
+    /^file:\/\//gi,
+    /^gopher:/gi,
+    /^dict:\/\//gi,
     /localhost/gi,
     /127.0.0.1/g,
     /0.0.0.0/g,

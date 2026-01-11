@@ -1,10 +1,20 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
-import { Consent, ConsentStatus } from '@compliance/entities/consent.entity';
-import { User } from '@users/entities/user.entity';
-import { AuditLog } from '@compliance/entities/audit-log.entity';
-import { DataExportRequestDto, DataDeletionRequestDto, ConsentDto, RevokeConsentDto } from '@compliance/dto/compliance.dto';
+import {
+  ConsentDto,
+  DataDeletionRequestDto,
+  DataExportRequestDto,
+  RevokeConsentDto,
+} from "@compliance/dto/compliance.dto";
+import { AuditLog } from "@compliance/entities/audit-log.entity";
+import { Consent, ConsentStatus } from "@compliance/entities/consent.entity";
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "@users/entities/user.entity";
+import { In, Repository } from "typeorm";
 
 export interface DataExportResult {
   userId: string;
@@ -33,7 +43,7 @@ export interface DataDeletionResult {
   deletedCategories: string[];
   recordsDeleted: number;
   recordsAnonymized: number;
-  status: 'completed' | 'partial' | 'failed';
+  status: "completed" | "partial" | "failed";
   details: Record<string, unknown>;
 }
 
@@ -89,25 +99,29 @@ export class GdprComplianceService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(AuditLog)
-    private readonly auditLogRepository: Repository<AuditLog>,
+    private readonly auditLogRepository: Repository<AuditLog>
   ) {}
 
-  async handleDataSubjectAccessRequest(request: DataExportRequestDto): Promise<DataExportResult> {
+  async handleDataSubjectAccessRequest(
+    request: DataExportRequestDto
+  ): Promise<DataExportResult> {
     this.logger.log(`Processing DSAR for user: ${request.userId}`);
 
-    const user = await this.userRepository.findOne({ where: { id: request.userId } });
+    const user = await this.userRepository.findOne({
+      where: { id: request.userId },
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${request.userId} not found`);
     }
 
     const consents = await this.consentRepository.find({
       where: { userId: request.userId },
-      order: { grantedAt: 'DESC' },
+      order: { grantedAt: "DESC" },
     });
 
     const auditLogs = await this.auditLogRepository.find({
       where: { userId: request.userId },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
       take: 1000,
     });
 
@@ -134,14 +148,14 @@ export class GdprComplianceService {
     const exportData: DataExportResult = {
       userId: request.userId,
       exportDate: new Date(),
-      format: request.format || 'json',
+      format: request.format || "json",
       data: {
         personalInfo,
         cases: [],
         documents: [],
         communications: [],
         billing: [],
-        auditLogs: auditLogs.map(log => ({
+        auditLogs: auditLogs.map((log) => ({
           id: log.id,
           action: log.action,
           entityType: log.entityType,
@@ -151,7 +165,7 @@ export class GdprComplianceService {
           result: log.result,
           description: log.description,
         })),
-        consents: consents.map(consent => ({
+        consents: consents.map((consent) => ({
           id: consent.id,
           consentType: consent.consentType,
           purpose: consent.purpose,
@@ -167,29 +181,35 @@ export class GdprComplianceService {
       },
       metadata: {
         totalRecords: auditLogs.length + consents.length + 1,
-        dataCategories: request.dataCategories || ['all'],
-        exportedBy: 'system',
+        dataCategories: request.dataCategories || ["all"],
+        exportedBy: "system",
       },
     };
 
     await this.auditLogRepository.save({
       userId: request.userId,
-      action: 'export',
-      entityType: 'user',
+      action: "export",
+      entityType: "user",
       entityId: request.userId,
       timestamp: new Date(),
-      description: 'GDPR data export request processed',
-      result: 'success',
+      description: "GDPR data export request processed",
+      result: "success",
       details: `Exported ${exportData.metadata.totalRecords} records`,
     } as AuditLog);
 
     return exportData;
   }
 
-  async handleRightToBeForgotten(request: DataDeletionRequestDto): Promise<DataDeletionResult> {
-    this.logger.log(`Processing Right to Be Forgotten request for user: ${request.userId}`);
+  async handleRightToBeForgotten(
+    request: DataDeletionRequestDto
+  ): Promise<DataDeletionResult> {
+    this.logger.log(
+      `Processing Right to Be Forgotten request for user: ${request.userId}`
+    );
 
-    const user = await this.userRepository.findOne({ where: { id: request.userId } });
+    const user = await this.userRepository.findOne({
+      where: { id: request.userId },
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${request.userId} not found`);
     }
@@ -202,7 +222,9 @@ export class GdprComplianceService {
     });
 
     if (activeConsents.length > 0 && !request.softDelete) {
-      this.logger.warn(`User ${request.userId} has active consents, will anonymize instead of delete`);
+      this.logger.warn(
+        `User ${request.userId} has active consents, will anonymize instead of delete`
+      );
     }
 
     const recordsDeleted = 0;
@@ -211,15 +233,15 @@ export class GdprComplianceService {
 
     if (request.softDelete !== false) {
       user.email = `deleted-${user.id}@anonymized.local`;
-      user.firstName = 'Deleted';
-      user.lastName = 'User';
-      user.phone = '';
-      user.avatarUrl = '';
+      user.firstName = "Deleted";
+      user.lastName = "User";
+      user.phone = "";
+      user.avatarUrl = "";
       user.preferences = {};
-      user.status = 'inactive' as any;
+      user.status = "inactive" as "active" | "inactive";
       await this.userRepository.save(user);
       recordsAnonymized = 1;
-      deletedCategories.push('personal_info');
+      deletedCategories.push("personal_info");
     }
 
     await this.consentRepository.update(
@@ -227,8 +249,9 @@ export class GdprComplianceService {
       {
         status: ConsentStatus.REVOKED,
         revokedAt: new Date(),
-        revocationReason: request.reason || 'User requested data deletion (GDPR Article 17)',
-      },
+        revocationReason:
+          request.reason || "User requested data deletion (GDPR Article 17)",
+      }
     );
 
     const result: DataDeletionResult = {
@@ -237,7 +260,7 @@ export class GdprComplianceService {
       deletedCategories,
       recordsDeleted,
       recordsAnonymized,
-      status: 'completed',
+      status: "completed",
       details: {
         reason: request.reason,
         softDelete: request.softDelete !== false,
@@ -247,19 +270,22 @@ export class GdprComplianceService {
 
     await this.auditLogRepository.save({
       userId: request.userId,
-      action: 'delete',
-      entityType: 'user',
+      action: "delete",
+      entityType: "user",
       entityId: request.userId,
       timestamp: new Date(),
-      description: 'GDPR Right to Be Forgotten request processed',
-      result: 'success',
+      description: "GDPR Right to Be Forgotten request processed",
+      result: "success",
       details: JSON.stringify(result),
     } as AuditLog);
 
     return result;
   }
 
-  async exportUserData(userId: string, format: string = 'json'): Promise<DataExportResult> {
+  async exportUserData(
+    userId: string,
+    format: string = "json"
+  ): Promise<DataExportResult> {
     return this.handleDataSubjectAccessRequest({
       userId,
       format,
@@ -268,12 +294,22 @@ export class GdprComplianceService {
     });
   }
 
-  async grantConsent(consentDto: ConsentDto, ipAddress?: string, userAgent?: string): Promise<Consent> {
-    this.logger.log(`Granting consent for user ${consentDto.userId}: ${consentDto.consentType}`);
+  async grantConsent(
+    consentDto: ConsentDto,
+    ipAddress?: string,
+    userAgent?: string
+  ): Promise<Consent> {
+    this.logger.log(
+      `Granting consent for user ${consentDto.userId}: ${consentDto.consentType}`
+    );
 
-    const user = await this.userRepository.findOne({ where: { id: consentDto.userId } });
+    const user = await this.userRepository.findOne({
+      where: { id: consentDto.userId },
+    });
     if (!user) {
-      throw new NotFoundException(`User with ID ${consentDto.userId} not found`);
+      throw new NotFoundException(
+        `User with ID ${consentDto.userId} not found`
+      );
     }
 
     const existingConsent = await this.consentRepository.findOne({
@@ -282,11 +318,13 @@ export class GdprComplianceService {
         consentType: consentDto.consentType,
         status: In([ConsentStatus.GRANTED, ConsentStatus.PENDING]),
       },
-      order: { grantedAt: 'DESC' },
+      order: { grantedAt: "DESC" },
     });
 
     if (existingConsent) {
-      this.logger.warn(`Consent already exists for ${consentDto.userId}: ${consentDto.consentType}`);
+      this.logger.warn(
+        `Consent already exists for ${consentDto.userId}: ${consentDto.consentType}`
+      );
       return existingConsent;
     }
 
@@ -297,10 +335,10 @@ export class GdprComplianceService {
       scope: consentDto.scope,
       status: ConsentStatus.GRANTED,
       grantedAt: new Date(),
-      consentVersion: consentDto.consentVersion || '1.0',
+      consentVersion: consentDto.consentVersion || "1.0",
       dataCategories: consentDto.dataCategories || [],
       thirdParties: consentDto.thirdParties || [],
-      legalBasis: consentDto.legalBasis || 'consent',
+      legalBasis: consentDto.legalBasis || "consent",
       ipAddress,
       userAgent,
       metadata: consentDto.metadata,
@@ -311,12 +349,12 @@ export class GdprComplianceService {
 
     await this.auditLogRepository.save({
       userId: consentDto.userId,
-      action: 'create',
-      entityType: 'consent',
+      action: "create",
+      entityType: "consent",
       entityId: saved.id,
       timestamp: new Date(),
       description: `User granted consent: ${consentDto.consentType}`,
-      result: 'success',
+      result: "success",
       ipAddress,
       userAgent,
     } as AuditLog);
@@ -332,27 +370,29 @@ export class GdprComplianceService {
     });
 
     if (!consent) {
-      throw new NotFoundException(`Consent with ID ${revokeDto.consentId} not found`);
+      throw new NotFoundException(
+        `Consent with ID ${revokeDto.consentId} not found`
+      );
     }
 
     if (consent.status === ConsentStatus.REVOKED) {
-      throw new BadRequestException('Consent is already revoked');
+      throw new BadRequestException("Consent is already revoked");
     }
 
     consent.status = ConsentStatus.REVOKED;
     consent.revokedAt = new Date();
-    consent.revocationReason = revokeDto.reason || 'User revoked consent';
+    consent.revocationReason = revokeDto.reason || "User revoked consent";
 
     const saved = await this.consentRepository.save(consent);
 
     await this.auditLogRepository.save({
       userId: consent.userId,
-      action: 'update',
-      entityType: 'consent',
+      action: "update",
+      entityType: "consent",
       entityId: consent.id,
       timestamp: new Date(),
       description: `Consent revoked: ${consent.consentType}`,
-      result: 'success',
+      result: "success",
       details: revokeDto.reason,
     } as AuditLog);
 
@@ -362,7 +402,7 @@ export class GdprComplianceService {
   async getUserConsents(userId: string): Promise<Consent[]> {
     return this.consentRepository.find({
       where: { userId },
-      order: { grantedAt: 'DESC' },
+      order: { grantedAt: "DESC" },
     });
   }
 
@@ -372,19 +412,25 @@ export class GdprComplianceService {
         userId,
         status: ConsentStatus.GRANTED,
       },
-      order: { grantedAt: 'DESC' },
+      order: { grantedAt: "DESC" },
     });
   }
 
-  async checkConsentValidity(userId: string, consentType: string): Promise<boolean> {
+  async checkConsentValidity(
+    userId: string,
+    consentType: string
+  ): Promise<boolean> {
     const now = new Date();
     const consent = await this.consentRepository.findOne({
       where: {
         userId,
-        consentType: consentType as any,
+        consentType: consentType as
+          | "data_processing"
+          | "marketing"
+          | "analytics",
         status: ConsentStatus.GRANTED,
       },
-      order: { grantedAt: 'DESC' },
+      order: { grantedAt: "DESC" },
     });
 
     if (!consent) {
@@ -394,7 +440,7 @@ export class GdprComplianceService {
     if (consent.expiresAt && consent.expiresAt < now) {
       await this.consentRepository.update(
         { id: consent.id },
-        { status: ConsentStatus.EXPIRED },
+        { status: ConsentStatus.EXPIRED }
       );
       return false;
     }
@@ -402,25 +448,27 @@ export class GdprComplianceService {
     return true;
   }
 
-  async generateDataProcessingRecord(userId: string): Promise<DataProcessingRecord> {
+  async generateDataProcessingRecord(
+    userId: string
+  ): Promise<DataProcessingRecord> {
     this.logger.log(`Generating data processing record for user: ${userId}`);
 
     const consents = await this.getActiveConsents(userId);
 
-    const processingActivities = consents.map(consent => ({
+    const processingActivities = consents.map((consent) => ({
       activity: consent.consentType,
       purpose: consent.purpose,
-      legalBasis: consent.legalBasis || 'consent',
+      legalBasis: consent.legalBasis || "consent",
       dataCategories: consent.dataCategories,
       recipients: consent.thirdParties,
       retentionPeriod: consent.expiresAt
         ? `Until ${consent.expiresAt.toISOString()}`
-        : 'As long as account is active',
+        : "As long as account is active",
       securityMeasures: [
-        'Encryption at rest and in transit',
-        'Access control and authentication',
-        'Regular security audits',
-        'Incident response procedures',
+        "Encryption at rest and in transit",
+        "Access control and authentication",
+        "Regular security audits",
+        "Incident response procedures",
       ],
     }));
 
@@ -432,12 +480,12 @@ export class GdprComplianceService {
 
     await this.auditLogRepository.save({
       userId,
-      action: 'read',
-      entityType: 'data_processing_record',
+      action: "read",
+      entityType: "data_processing_record",
       entityId: userId,
       timestamp: new Date(),
-      description: 'Generated data processing record (GDPR Article 30)',
-      result: 'success',
+      description: "Generated data processing record (GDPR Article 30)",
+      result: "success",
     } as AuditLog);
 
     return record;
@@ -449,9 +497,9 @@ export class GdprComplianceService {
       .createQueryBuilder()
       .update(Consent)
       .set({ status: ConsentStatus.EXPIRED })
-      .where('status = :status', { status: ConsentStatus.GRANTED })
-      .andWhere('expires_at IS NOT NULL')
-      .andWhere('expires_at < :now', { now })
+      .where("status = :status", { status: ConsentStatus.GRANTED })
+      .andWhere("expires_at IS NOT NULL")
+      .andWhere("expires_at < :now", { now })
       .execute();
 
     this.logger.log(`Expired ${result.affected || 0} consents`);

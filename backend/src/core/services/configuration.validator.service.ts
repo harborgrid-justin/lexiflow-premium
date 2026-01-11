@@ -1,15 +1,15 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
-import Redis from 'ioredis';
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { DataSource } from "typeorm";
+import Redis from "ioredis";
 
 /**
  * Configuration issue severity levels
  */
 export enum ConfigIssueSeverity {
-  ERROR = 'error',
-  WARNING = 'warning',
-  INFO = 'info',
+  ERROR = "error",
+  WARNING = "warning",
+  INFO = "info",
 }
 
 /**
@@ -75,11 +75,11 @@ export class ConfigurationValidatorService implements OnModuleInit {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   async onModuleInit() {
-    this.logger.log('Initializing configuration validator...');
+    this.logger.log("Initializing configuration validator...");
   }
 
   /**
@@ -88,7 +88,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
   async validateAll(): Promise<ConfigValidationResult> {
     this.issues.length = 0;
 
-    this.logger.log('Starting comprehensive configuration validation...');
+    this.logger.log("Starting comprehensive configuration validation...");
 
     // Run all validation checks
     this.validateEnvironment();
@@ -102,14 +102,26 @@ export class ConfigurationValidatorService implements OnModuleInit {
     this.validateFileStorage();
 
     // Categorize issues
-    const errors = this.issues.filter(i => i.severity === ConfigIssueSeverity.ERROR);
-    const warnings = this.issues.filter(i => i.severity === ConfigIssueSeverity.WARNING);
-    const info = this.issues.filter(i => i.severity === ConfigIssueSeverity.INFO);
+    const errors = this.issues.filter(
+      (i) => i.severity === ConfigIssueSeverity.ERROR
+    );
+    const warnings = this.issues.filter(
+      (i) => i.severity === ConfigIssueSeverity.WARNING
+    );
+    const info = this.issues.filter(
+      (i) => i.severity === ConfigIssueSeverity.INFO
+    );
 
     const valid = errors.length === 0;
 
     // Log results
-    this.logValidationResults({ valid, issues: this.issues, errors, warnings, info });
+    this.logValidationResults({
+      valid,
+      issues: this.issues,
+      errors,
+      warnings,
+      info,
+    });
 
     return {
       valid,
@@ -125,48 +137,51 @@ export class ConfigurationValidatorService implements OnModuleInit {
    */
   private validateEnvironment(): void {
     // Use process.env directly as config is namespaced under 'app.app.nodeEnv'
-    const nodeEnv = process.env.NODE_ENV || this.configService.get<string>('app.app.nodeEnv');
+    const nodeEnv =
+      process.env.NODE_ENV || this.configService.get<string>("app.app.nodeEnv");
 
     if (!nodeEnv) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'environment',
-        'NODE_ENV is not set',
-        'NODE_ENV',
-        'Set NODE_ENV to one of: development, staging, production'
+        "environment",
+        "NODE_ENV is not set",
+        "NODE_ENV",
+        "Set NODE_ENV to one of: development, staging, production"
       );
-    } else if (!['development', 'production', 'test', 'staging'].includes(nodeEnv)) {
+    } else if (
+      !["development", "production", "test", "staging"].includes(nodeEnv)
+    ) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'environment',
+        "environment",
         `NODE_ENV has unexpected value: ${nodeEnv}`,
-        'NODE_ENV',
-        'Use one of: development, staging, production, test'
+        "NODE_ENV",
+        "Use one of: development, staging, production, test"
       );
     }
 
-    if (nodeEnv === 'production') {
+    if (nodeEnv === "production") {
       // Production-specific validations
-      const demoMode = this.configService.get<boolean>('DEMO_MODE');
+      const demoMode = this.configService.get<boolean>("DEMO_MODE");
       if (demoMode) {
         this.addIssue(
           ConfigIssueSeverity.WARNING,
-          'environment',
-          'DEMO_MODE is enabled in production',
-          'DEMO_MODE',
-          'Disable DEMO_MODE in production environments'
+          "environment",
+          "DEMO_MODE is enabled in production",
+          "DEMO_MODE",
+          "Disable DEMO_MODE in production environments"
         );
       }
     }
 
-    const port = parseInt(process.env.PORT || '3001', 10);
+    const port = parseInt(process.env.PORT || "3001", 10);
     if (!port || port < 1 || port > 65535) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'environment',
-        'Invalid or missing PORT configuration',
-        'PORT',
-        'Set PORT to a valid port number (1-65535)'
+        "environment",
+        "Invalid or missing PORT configuration",
+        "PORT",
+        "Set PORT to a valid port number (1-65535)"
       );
     }
   }
@@ -182,27 +197,27 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (!jwtSecret) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'security',
-        'JWT_SECRET is not configured',
-        'JWT_SECRET',
-        'Generate a strong random secret (minimum 32 characters)'
+        "security",
+        "JWT_SECRET is not configured",
+        "JWT_SECRET",
+        "Generate a strong random secret (minimum 32 characters)"
       );
     } else {
       if (jwtSecret.length < 32) {
         this.addIssue(
           ConfigIssueSeverity.ERROR,
-          'security',
+          "security",
           `JWT_SECRET is too short (${jwtSecret.length} characters)`,
-          'JWT_SECRET',
-          'Use a secret with at least 32 characters'
+          "JWT_SECRET",
+          "Use a secret with at least 32 characters"
         );
       } else if (jwtSecret.length < 64) {
         this.addIssue(
           ConfigIssueSeverity.WARNING,
-          'security',
+          "security",
           `JWT_SECRET should be longer for better security (current: ${jwtSecret.length} characters)`,
-          'JWT_SECRET',
-          'Consider using a 64+ character secret'
+          "JWT_SECRET",
+          "Consider using a 64+ character secret"
         );
       }
 
@@ -210,10 +225,10 @@ export class ConfigurationValidatorService implements OnModuleInit {
       if (this.isWeakSecret(jwtSecret)) {
         this.addIssue(
           ConfigIssueSeverity.ERROR,
-          'security',
-          'JWT_SECRET appears to be weak or predictable',
-          'JWT_SECRET',
-          'Use a cryptographically random secret'
+          "security",
+          "JWT_SECRET appears to be weak or predictable",
+          "JWT_SECRET",
+          "Use a cryptographically random secret"
         );
       }
     }
@@ -222,18 +237,18 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (!jwtRefreshSecret) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'security',
-        'JWT_REFRESH_SECRET is not configured',
-        'JWT_REFRESH_SECRET',
-        'Generate a strong random secret (minimum 32 characters)'
+        "security",
+        "JWT_REFRESH_SECRET is not configured",
+        "JWT_REFRESH_SECRET",
+        "Generate a strong random secret (minimum 32 characters)"
       );
     } else if (jwtRefreshSecret.length < 32) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'security',
+        "security",
         `JWT_REFRESH_SECRET is too short (${jwtRefreshSecret.length} characters)`,
-        'JWT_REFRESH_SECRET',
-        'Use a secret with at least 32 characters'
+        "JWT_REFRESH_SECRET",
+        "Use a secret with at least 32 characters"
       );
     }
 
@@ -241,10 +256,10 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (jwtSecret && jwtRefreshSecret && jwtSecret === jwtRefreshSecret) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'security',
-        'JWT_SECRET and JWT_REFRESH_SECRET must be different',
-        'JWT_REFRESH_SECRET',
-        'Generate different secrets for access and refresh tokens'
+        "security",
+        "JWT_SECRET and JWT_REFRESH_SECRET must be different",
+        "JWT_REFRESH_SECRET",
+        "Generate different secrets for access and refresh tokens"
       );
     }
   }
@@ -260,10 +275,10 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (!databaseUrl && !databaseHost) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'database',
-        'No database connection configured',
-        'DATABASE_URL',
-        'Set DATABASE_URL or individual database connection parameters'
+        "database",
+        "No database connection configured",
+        "DATABASE_URL",
+        "Set DATABASE_URL or individual database connection parameters"
       );
     }
 
@@ -271,24 +286,24 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (!databaseName && !databaseUrl) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'database',
-        'Database name not specified',
-        'DATABASE_NAME',
-        'Specify a database name'
+        "database",
+        "Database name not specified",
+        "DATABASE_NAME",
+        "Specify a database name"
       );
     }
 
     // Check SSL configuration in production
     const nodeEnv = process.env.NODE_ENV;
-    const dbSsl = process.env.DB_SSL === 'true';
+    const dbSsl = process.env.DB_SSL === "true";
 
-    if (nodeEnv === 'production' && !dbSsl) {
+    if (nodeEnv === "production" && !dbSsl) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'database',
-        'Database SSL is not enabled in production',
-        'DB_SSL',
-        'Enable SSL for production database connections'
+        "database",
+        "Database SSL is not enabled in production",
+        "DB_SSL",
+        "Enable SSL for production database connections"
       );
     }
   }
@@ -301,27 +316,27 @@ export class ConfigurationValidatorService implements OnModuleInit {
       if (!this.dataSource.isInitialized) {
         this.addIssue(
           ConfigIssueSeverity.ERROR,
-          'database',
-          'Database is not initialized',
+          "database",
+          "Database is not initialized",
           undefined,
-          'Check database connection parameters'
+          "Check database connection parameters"
         );
         return;
       }
 
-      await this.dataSource.query('SELECT 1');
+      await this.dataSource.query("SELECT 1");
       this.addIssue(
         ConfigIssueSeverity.INFO,
-        'database',
-        'Database connection successful',
+        "database",
+        "Database connection successful"
       );
     } catch (error) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'database',
+        "database",
         `Database connection failed: ${error instanceof Error ? error.message : String(error)}`,
         undefined,
-        'Verify database is running and credentials are correct'
+        "Verify database is running and credentials are correct"
       );
     }
   }
@@ -330,15 +345,15 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate Redis configuration
    */
   private validateRedis(): void {
-    const redisEnabled = process.env.REDIS_ENABLED !== 'false';
+    const redisEnabled = process.env.REDIS_ENABLED !== "false";
 
     if (!redisEnabled) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'redis',
-        'Redis is disabled - some features may not work',
-        'REDIS_ENABLED',
-        'Enable Redis for full functionality (caching, queues, sessions)'
+        "redis",
+        "Redis is disabled - some features may not work",
+        "REDIS_ENABLED",
+        "Enable Redis for full functionality (caching, queues, sessions)"
       );
       return;
     }
@@ -349,10 +364,10 @@ export class ConfigurationValidatorService implements OnModuleInit {
     if (!redisUrl && !redisHost) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'redis',
-        'No Redis connection configured',
-        'REDIS_HOST',
-        'Configure Redis for caching and queue management'
+        "redis",
+        "No Redis connection configured",
+        "REDIS_HOST",
+        "Configure Redis for caching and queue management"
       );
     }
   }
@@ -361,7 +376,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate Redis connection
    */
   private async validateRedisConnection(): Promise<void> {
-    const redisEnabled = process.env.REDIS_ENABLED !== 'false';
+    const redisEnabled = process.env.REDIS_ENABLED !== "false";
 
     if (!redisEnabled) {
       return;
@@ -371,8 +386,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
 
     try {
       const redisUrl = process.env.REDIS_URL;
-      const redisHost = process.env.REDIS_HOST || 'localhost';
-      const redisPort = parseInt(process.env.REDIS_PORT || '6379', 10);
+      const redisHost = process.env.REDIS_HOST || "localhost";
+      const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
       const redisPassword = process.env.REDIS_PASSWORD;
 
       if (redisUrl) {
@@ -391,18 +406,18 @@ export class ConfigurationValidatorService implements OnModuleInit {
 
       this.addIssue(
         ConfigIssueSeverity.INFO,
-        'redis',
-        'Redis connection successful',
+        "redis",
+        "Redis connection successful"
       );
 
       await redisClient.quit();
     } catch (error) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'redis',
+        "redis",
         `Redis connection failed: ${error instanceof Error ? error.message : String(error)}`,
         undefined,
-        'Verify Redis is running and credentials are correct'
+        "Verify Redis is running and credentials are correct"
       );
     } finally {
       if (redisClient) {
@@ -417,16 +432,16 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate security settings
    */
   private validateSecurity(): void {
-    const corsOrigin = this.configService.get<string>('cors.origin');
-    const nodeEnv = this.configService.get<string>('nodeEnv');
+    const corsOrigin = this.configService.get<string>("cors.origin");
+    const nodeEnv = this.configService.get<string>("nodeEnv");
 
-    if (nodeEnv === 'production' && corsOrigin === '*') {
+    if (nodeEnv === "production" && corsOrigin === "*") {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
-        'security',
-        'CORS is configured to allow all origins in production',
-        'CORS_ORIGIN',
-        'Restrict CORS to specific allowed origins'
+        "security",
+        "CORS is configured to allow all origins in production",
+        "CORS_ORIGIN",
+        "Restrict CORS to specific allowed origins"
       );
     }
   }
@@ -435,26 +450,26 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate rate limiting configuration
    */
   private validateRateLimiting(): void {
-    const rateLimit = this.configService.get<number>('RATE_LIMIT_LIMIT');
-    const rateLimitTtl = this.configService.get<number>('RATE_LIMIT_TTL');
+    const rateLimit = this.configService.get<number>("RATE_LIMIT_LIMIT");
+    const rateLimitTtl = this.configService.get<number>("RATE_LIMIT_TTL");
 
     if (!rateLimit) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'security',
-        'Rate limiting is not configured',
-        'RATE_LIMIT_LIMIT',
-        'Configure rate limiting to protect against abuse'
+        "security",
+        "Rate limiting is not configured",
+        "RATE_LIMIT_LIMIT",
+        "Configure rate limiting to protect against abuse"
       );
     }
 
     if (!rateLimitTtl) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'security',
-        'Rate limiting TTL is not configured',
-        'RATE_LIMIT_TTL',
-        'Set rate limit time window'
+        "security",
+        "Rate limiting TTL is not configured",
+        "RATE_LIMIT_TTL",
+        "Set rate limit time window"
       );
     }
   }
@@ -463,15 +478,15 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate file storage configuration
    */
   private validateFileStorage(): void {
-    const uploadDir = this.configService.get<string>('UPLOAD_DIR');
+    const uploadDir = this.configService.get<string>("UPLOAD_DIR");
 
     if (!uploadDir) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
-        'storage',
-        'Upload directory is not configured',
-        'UPLOAD_DIR',
-        'Specify upload directory for file storage'
+        "storage",
+        "Upload directory is not configured",
+        "UPLOAD_DIR",
+        "Specify upload directory for file storage"
       );
     }
   }
@@ -487,7 +502,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
       /^(.)\1{5,}$/, // Repeated characters
     ];
 
-    return weakPatterns.some(pattern => pattern.test(secret));
+    return weakPatterns.some((pattern) => pattern.test(secret));
   }
 
   /**
@@ -498,7 +513,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
     category: string,
     message: string,
     key?: string,
-    recommendation?: string,
+    recommendation?: string
   ): void {
     this.issues.push({
       severity,
@@ -515,12 +530,12 @@ export class ConfigurationValidatorService implements OnModuleInit {
   private logValidationResults(result: ConfigValidationResult): void {
     const { valid, errors, warnings, info } = result;
 
-    this.logger.log('═══════════════════════════════════════════════════════');
-    this.logger.log('         Configuration Validation Results');
-    this.logger.log('═══════════════════════════════════════════════════════');
+    this.logger.log("═══════════════════════════════════════════════════════");
+    this.logger.log("         Configuration Validation Results");
+    this.logger.log("═══════════════════════════════════════════════════════");
 
     if (valid) {
-      this.logger.log('✓ Configuration is valid');
+      this.logger.log("✓ Configuration is valid");
     } else {
       this.logger.error(`✗ Configuration has ${errors.length} error(s)`);
     }
@@ -533,12 +548,12 @@ export class ConfigurationValidatorService implements OnModuleInit {
       this.logger.log(`ℹ ${info.length} info message(s)`);
     }
 
-    this.logger.log('═══════════════════════════════════════════════════════');
+    this.logger.log("═══════════════════════════════════════════════════════");
 
     // Log errors
     if (errors.length > 0) {
-      this.logger.error('ERRORS:');
-      errors.forEach(issue => {
+      this.logger.error("ERRORS:");
+      errors.forEach((issue) => {
         this.logger.error(`  [${issue.category}] ${issue.message}`);
         if (issue.recommendation) {
           this.logger.error(`    → ${issue.recommendation}`);
@@ -548,8 +563,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
 
     // Log warnings
     if (warnings.length > 0) {
-      this.logger.warn('WARNINGS:');
-      warnings.forEach(issue => {
+      this.logger.warn("WARNINGS:");
+      warnings.forEach((issue) => {
         this.logger.warn(`  [${issue.category}] ${issue.message}`);
         if (issue.recommendation) {
           this.logger.warn(`    → ${issue.recommendation}`);
@@ -559,11 +574,11 @@ export class ConfigurationValidatorService implements OnModuleInit {
 
     // Log info (only in debug mode)
     if (info.length > 0) {
-      info.forEach(issue => {
+      info.forEach((issue) => {
         this.logger.debug(`[${issue.category}] ${issue.message}`);
       });
     }
 
-    this.logger.log('═══════════════════════════════════════════════════════');
+    this.logger.log("═══════════════════════════════════════════════════════");
   }
 }

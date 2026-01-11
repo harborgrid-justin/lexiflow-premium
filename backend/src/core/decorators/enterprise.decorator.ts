@@ -1,19 +1,29 @@
-import { applyDecorators, UseGuards, UseInterceptors, SetMetadata } from '@nestjs/common';
-import { ApiTags, ApiSecurity, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
-import { RolesGuard } from '@common/guards/roles.guard';
-import { PermissionsGuard } from '@common/guards/permissions.guard';
-import { AuditLogInterceptor } from '@compliance/audit-logs/audit-log.interceptor';
-import { PerformanceInterceptor } from '@monitoring/interceptors/performance.interceptor';
+import {
+  applyDecorators,
+  UseGuards,
+  UseInterceptors,
+  SetMetadata,
+} from "@nestjs/common";
+import {
+  ApiTags,
+  ApiSecurity,
+  ApiBearerAuth,
+  ApiOperation,
+} from "@nestjs/swagger";
+import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
+import { RolesGuard } from "@common/guards/roles.guard";
+import { PermissionsGuard } from "@common/guards/permissions.guard";
+import { AuditLogInterceptor } from "@compliance/audit-logs/audit-log.interceptor";
+import { PerformanceInterceptor } from "@monitoring/interceptors/performance.interceptor";
 
 /**
  * Metadata keys for enterprise decorators
  */
-export const ROLES_KEY = 'roles';
-export const PERMISSIONS_KEY = 'permissions';
-export const AUDIT_KEY = 'audit';
-export const PERFORMANCE_TRACK_KEY = 'performanceTrack';
-export const PUBLIC_KEY = 'isPublic';
+export const ROLES_KEY = "roles";
+export const PERMISSIONS_KEY = "permissions";
+export const AUDIT_KEY = "audit";
+export const PERFORMANCE_TRACK_KEY = "performanceTrack";
+export const PUBLIC_KEY = "isPublic";
 
 /**
  * Enterprise Controller Decorator
@@ -32,15 +42,10 @@ export function EnterpriseController(
   const requireAuth = options?.requireAuth !== false;
   const apiSecurity = options?.apiSecurity !== false;
 
-  const decorators = [
-    ApiTags(tag || 'Enterprise'),
-  ];
+  const decorators = [ApiTags(tag || "Enterprise")];
 
   if (requireAuth && apiSecurity) {
-    decorators.push(
-      ApiBearerAuth(),
-      ApiSecurity('api-key'),
-    );
+    decorators.push(ApiBearerAuth(), ApiSecurity("api-key"));
   }
 
   return applyDecorators(...decorators);
@@ -68,7 +73,7 @@ export function EnterpriseMethod(options?: {
   if (audit) {
     decorators.push(
       UseInterceptors(AuditLogInterceptor),
-      SetMetadata(AUDIT_KEY, true),
+      SetMetadata(AUDIT_KEY, true)
     );
   }
 
@@ -76,7 +81,7 @@ export function EnterpriseMethod(options?: {
   if (performanceTrack) {
     decorators.push(
       UseInterceptors(PerformanceInterceptor),
-      SetMetadata(PERFORMANCE_TRACK_KEY, true),
+      SetMetadata(PERFORMANCE_TRACK_KEY, true)
     );
   }
 
@@ -84,7 +89,7 @@ export function EnterpriseMethod(options?: {
   if (options?.roles && options.roles.length > 0) {
     decorators.push(
       UseGuards(RolesGuard),
-      SetMetadata(ROLES_KEY, options.roles),
+      SetMetadata(ROLES_KEY, options.roles)
     );
   }
 
@@ -92,15 +97,13 @@ export function EnterpriseMethod(options?: {
   if (options?.permissions && options.permissions.length > 0) {
     decorators.push(
       UseGuards(PermissionsGuard),
-      SetMetadata(PERMISSIONS_KEY, options.permissions),
+      SetMetadata(PERMISSIONS_KEY, options.permissions)
     );
   }
 
   // Add API documentation
   if (options?.summary) {
-    decorators.push(
-      ApiOperation({ summary: options.summary }),
-    );
+    decorators.push(ApiOperation({ summary: options.summary }));
   }
 
   return applyDecorators(...decorators);
@@ -113,26 +116,20 @@ export function EnterpriseMethod(options?: {
  * @param roles - Required roles for access
  * @param permissions - Required permissions for access
  */
-export function SecuredEndpoint(
-  roles?: string[],
-  permissions?: string[],
-) {
+export function SecuredEndpoint(roles?: string[], permissions?: string[]) {
   const decorators = [
     UseGuards(JwtAuthGuard),
     UseInterceptors(AuditLogInterceptor, PerformanceInterceptor),
   ];
 
   if (roles && roles.length > 0) {
-    decorators.push(
-      UseGuards(RolesGuard),
-      SetMetadata(ROLES_KEY, roles),
-    );
+    decorators.push(UseGuards(RolesGuard), SetMetadata(ROLES_KEY, roles));
   }
 
   if (permissions && permissions.length > 0) {
     decorators.push(
       UseGuards(PermissionsGuard),
-      SetMetadata(PERMISSIONS_KEY, permissions),
+      SetMetadata(PERMISSIONS_KEY, permissions)
     );
   }
 
@@ -151,9 +148,7 @@ export function PublicEndpoint(options?: {
   const audit = options?.audit !== false;
   const performanceTrack = options?.performanceTrack !== false;
 
-  const decorators = [
-    SetMetadata(PUBLIC_KEY, true),
-  ];
+  const decorators = [SetMetadata(PUBLIC_KEY, true)];
 
   if (audit) {
     decorators.push(UseInterceptors(AuditLogInterceptor));
@@ -173,9 +168,9 @@ export function PublicEndpoint(options?: {
 export function AdminOnly() {
   return applyDecorators(
     UseGuards(JwtAuthGuard, RolesGuard),
-    SetMetadata(ROLES_KEY, ['admin', 'superadmin']),
+    SetMetadata(ROLES_KEY, ["admin", "superadmin"]),
     UseInterceptors(AuditLogInterceptor, PerformanceInterceptor),
-    ApiOperation({ summary: 'Admin only endpoint' }),
+    ApiOperation({ summary: "Admin only endpoint" })
   );
 }
 
@@ -191,7 +186,7 @@ export function AuditedEndpoint(action?: string) {
 
   return applyDecorators(
     UseInterceptors(AuditLogInterceptor),
-    SetMetadata(AUDIT_KEY, metadata),
+    SetMetadata(AUDIT_KEY, metadata)
   );
 }
 
@@ -207,7 +202,7 @@ export function PerformanceTracked(threshold?: number) {
 
   return applyDecorators(
     UseInterceptors(PerformanceInterceptor),
-    SetMetadata(PERFORMANCE_TRACK_KEY, metadata),
+    SetMetadata(PERFORMANCE_TRACK_KEY, metadata)
   );
 }
 
@@ -216,10 +211,7 @@ export function PerformanceTracked(threshold?: number) {
  * Shorthand for setting required roles
  */
 export function RequiresRoles(...roles: string[]) {
-  return applyDecorators(
-    UseGuards(RolesGuard),
-    SetMetadata(ROLES_KEY, roles),
-  );
+  return applyDecorators(UseGuards(RolesGuard), SetMetadata(ROLES_KEY, roles));
 }
 
 /**
@@ -229,7 +221,7 @@ export function RequiresRoles(...roles: string[]) {
 export function RequiresPermissions(...permissions: string[]) {
   return applyDecorators(
     UseGuards(PermissionsGuard),
-    SetMetadata(PERMISSIONS_KEY, permissions),
+    SetMetadata(PERMISSIONS_KEY, permissions)
   );
 }
 
@@ -257,14 +249,14 @@ export function HighValueOperation(options: {
   if (options.roles && options.roles.length > 0) {
     decorators.push(
       UseGuards(RolesGuard),
-      SetMetadata(ROLES_KEY, options.roles),
+      SetMetadata(ROLES_KEY, options.roles)
     );
   }
 
   if (options.permissions && options.permissions.length > 0) {
     decorators.push(
       UseGuards(PermissionsGuard),
-      SetMetadata(PERMISSIONS_KEY, options.permissions),
+      SetMetadata(PERMISSIONS_KEY, options.permissions)
     );
   }
 
@@ -284,9 +276,11 @@ export function ComplianceRequired(complianceType?: string) {
     UseInterceptors(AuditLogInterceptor),
     SetMetadata(AUDIT_KEY, {
       enabled: true,
-      compliance: complianceType || 'general',
+      compliance: complianceType || "general",
     }),
-    ApiOperation({ summary: `Compliance required: ${complianceType || 'general'}` }),
+    ApiOperation({
+      summary: `Compliance required: ${complianceType || "general"}`,
+    })
   );
 }
 
@@ -303,7 +297,7 @@ export function SensitiveDataAccess(dataType: string) {
       dataType,
       sensitive: true,
     }),
-    ApiOperation({ summary: `Sensitive data access: ${dataType}` }),
+    ApiOperation({ summary: `Sensitive data access: ${dataType}` })
   );
 }
 
@@ -324,6 +318,6 @@ export function BatchOperation(options?: {
       batch: true,
       maxBatchSize: options?.maxBatchSize || 1000,
     }),
-    ApiOperation({ summary: 'Batch operation' }),
+    ApiOperation({ summary: "Batch operation" })
   );
 }

@@ -1,23 +1,25 @@
-import { DataSource } from 'typeorm';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as PathsConfig from '@config/paths.config';
+import { DataSource } from "typeorm";
+import * as fs from "fs";
+import * as path from "path";
+import * as PathsConfig from "@config/paths.config";
 
 export async function seedDocuments(dataSource: DataSource): Promise<void> {
-  console.log('Seeding documents...');
+  console.log("Seeding documents...");
 
-  const documentRepository = dataSource.getRepository('Document');
-  const caseRepository = dataSource.getRepository('Case');
-  const userRepository = dataSource.getRepository('User');
+  const documentRepository = dataSource.getRepository("Document");
+  const caseRepository = dataSource.getRepository("Case");
+  const userRepository = dataSource.getRepository("User");
 
   // Load documents from JSON file
-  const documentsPath = path.join(PathsConfig.TEST_DATA_DIR, 'documents.json');
-  const documentsData = JSON.parse(fs.readFileSync(documentsPath, 'utf-8')) as Array<Record<string, unknown>>;
+  const documentsPath = path.join(PathsConfig.TEST_DATA_DIR, "documents.json");
+  const documentsData = JSON.parse(
+    fs.readFileSync(documentsPath, "utf-8")
+  ) as Array<Record<string, unknown>>;
 
   // Check if documents already exist
   const existingDocuments = await documentRepository.count();
   if (existingDocuments > 0) {
-    console.log('Documents already seeded, skipping...');
+    console.log("Documents already seeded, skipping...");
     return;
   }
 
@@ -26,7 +28,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
   const users = await userRepository.find();
 
   if (cases.length === 0 || users.length === 0) {
-    console.error('Cannot seed documents: cases or users not found');
+    console.error("Cannot seed documents: cases or users not found");
     return;
   }
 
@@ -46,7 +48,9 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
           /\w\S*/g,
           (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
         );
-      const documentType = toTitleCase(String(documentData.documentType || 'Document'));
+      const documentType = toTitleCase(
+        String(documentData.documentType || "Document")
+      );
 
       const document = documentRepository.create({
         ...documentData,
@@ -59,8 +63,11 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
 
       await documentRepository.save(document);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`Error seeding document ${String(documentData.title || 'unknown')}:`, message);
+      const message = error instanceof Error ? error.message : "Unknown error";
+      console.error(
+        `Error seeding document ${String(documentData.title || "unknown")}:`,
+        message
+      );
     }
   }
 

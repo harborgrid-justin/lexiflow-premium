@@ -1,9 +1,9 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
-import { ConfigurationValidatorService } from './configuration.validator.service';
-import { CRITICAL_MODULES } from '../constants/module.order.constant';
-import { ModuleStartupResult } from '../interfaces/module.config.interface';
+import { Injectable, Logger, OnApplicationBootstrap } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { DataSource } from "typeorm";
+import { ConfigurationValidatorService } from "./configuration.validator.service";
+import { CRITICAL_MODULES } from "../constants/module.order.constant";
+import { ModuleStartupResult } from "../interfaces/module.config.interface";
 
 /**
  * Bootstrap Service
@@ -47,22 +47,29 @@ export class BootstrapService implements OnApplicationBootstrap {
   constructor(
     private readonly configService: ConfigService,
     private readonly configValidator: ConfigurationValidatorService,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   /**
    * Main bootstrap hook - called after all modules are initialized
    */
   async onApplicationBootstrap() {
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('      LexiFlow Premium - Enterprise Bootstrap Sequence');
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("      LexiFlow Premium - Enterprise Bootstrap Sequence");
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
 
     try {
       await this.runBootstrapSequence();
       this.printBootstrapSummary();
     } catch (error) {
-      this.logger.error('Bootstrap sequence failed:', error instanceof Error ? error.stack : String(error));
+      this.logger.error(
+        "Bootstrap sequence failed:",
+        error instanceof Error ? error.stack : String(error)
+      );
       throw error;
     }
   }
@@ -95,34 +102,41 @@ export class BootstrapService implements OnApplicationBootstrap {
    */
   private async validateConfiguration(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[1/6] Validating configuration...');
+    this.logger.log("[1/6] Validating configuration...");
 
     try {
       const result = await this.configValidator.validateAll();
 
       if (!result.valid) {
         const errorCount = result.errors.length;
-        this.logger.error(`Configuration validation failed with ${errorCount} error(s)`);
+        this.logger.error(
+          `Configuration validation failed with ${errorCount} error(s)`
+        );
 
         this.startupResults.push({
-          module: 'Configuration',
+          module: "Configuration",
           success: false,
           duration: Date.now() - startTime,
           error: `${errorCount} configuration error(s) found`,
         });
 
-        throw new Error('Configuration validation failed. Please check the logs above.');
+        throw new Error(
+          "Configuration validation failed. Please check the logs above."
+        );
       }
 
       this.startupResults.push({
-        module: 'Configuration',
+        module: "Configuration",
         success: true,
         duration: Date.now() - startTime,
       });
 
-      this.logger.log('✓ Configuration validated successfully');
+      this.logger.log("✓ Configuration validated successfully");
     } catch (error) {
-      this.logger.error('Configuration validation failed:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Configuration validation failed:",
+        error instanceof Error ? error.message : String(error)
+      );
       throw error;
     }
   }
@@ -132,40 +146,49 @@ export class BootstrapService implements OnApplicationBootstrap {
    */
   private async verifyDatabaseConnection(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[2/6] Verifying database connection...');
+    this.logger.log("[2/6] Verifying database connection...");
 
     try {
       if (!this.dataSource.isInitialized) {
-        throw new Error('Database connection is not initialized');
+        throw new Error("Database connection is not initialized");
       }
 
       // Test query
-      await this.dataSource.query('SELECT NOW()');
+      await this.dataSource.query("SELECT NOW()");
 
       // Get database info
       const dbInfo = await this.getDatabaseInfo();
 
       this.startupResults.push({
-        module: 'Database',
+        module: "Database",
         success: true,
         duration: Date.now() - startTime,
         metadata: dbInfo,
       });
 
       const dbInfoRecord = dbInfo as Record<string, unknown>;
-      this.logger.log('✓ Database connection verified');
-      this.logger.log(`  Database: ${String(dbInfoRecord.database || 'unknown')}`);
-      this.logger.log(`  Version: ${String(dbInfoRecord.version || 'unknown')}`);
-      this.logger.log(`  Connection pool: ${String(dbInfoRecord.poolSize || 0)} connections`);
+      this.logger.log("✓ Database connection verified");
+      this.logger.log(
+        `  Database: ${String(dbInfoRecord.database || "unknown")}`
+      );
+      this.logger.log(
+        `  Version: ${String(dbInfoRecord.version || "unknown")}`
+      );
+      this.logger.log(
+        `  Connection pool: ${String(dbInfoRecord.poolSize || 0)} connections`
+      );
     } catch (error) {
       this.startupResults.push({
-        module: 'Database',
+        module: "Database",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
 
-      this.logger.error('Database connection verification failed:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Database connection verification failed:",
+        error instanceof Error ? error.message : String(error)
+      );
       throw error;
     }
   }
@@ -175,14 +198,16 @@ export class BootstrapService implements OnApplicationBootstrap {
    */
   private async verifyRedisConnection(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[3/6] Verifying Redis connection...');
+    this.logger.log("[3/6] Verifying Redis connection...");
 
-    const redisEnabled = this.configService.get<boolean>('REDIS_ENABLED', true);
+    const redisEnabled = this.configService.get<boolean>("REDIS_ENABLED", true);
 
-    if (!redisEnabled || this.configService.get<boolean>('DEMO_MODE')) {
-      this.logger.warn('⚠ Redis is disabled - running without cache/queue support');
+    if (!redisEnabled || this.configService.get<boolean>("DEMO_MODE")) {
+      this.logger.warn(
+        "⚠ Redis is disabled - running without cache/queue support"
+      );
       this.startupResults.push({
-        module: 'Redis',
+        module: "Redis",
         success: true,
         duration: Date.now() - startTime,
         metadata: { enabled: false },
@@ -192,14 +217,17 @@ export class BootstrapService implements OnApplicationBootstrap {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Redis = require('ioredis') as {
+      const Redis = require("ioredis") as {
         new (url: string): RedisClient;
         new (config: RedisConfig): RedisClient;
       };
-      const redisUrl = this.configService.get<string>('redis.url');
-      const redisHost = this.configService.get<string>('redis.host', 'localhost');
-      const redisPort = this.configService.get<number>('redis.port', 6379);
-      const redisPassword = this.configService.get<string>('redis.password');
+      const redisUrl = this.configService.get<string>("redis.url");
+      const redisHost = this.configService.get<string>(
+        "redis.host",
+        "localhost"
+      );
+      const redisPort = this.configService.get<number>("redis.port", 6379);
+      const redisPassword = this.configService.get<string>("redis.password");
 
       let redisClient: RedisClient;
 
@@ -217,18 +245,18 @@ export class BootstrapService implements OnApplicationBootstrap {
       await redisClient.connect();
       const pong: string = await redisClient.ping();
 
-      if (pong !== 'PONG') {
-        throw new Error('Redis ping failed');
+      if (pong !== "PONG") {
+        throw new Error("Redis ping failed");
       }
 
-      const redisInfo: string = await redisClient.info('server');
+      const redisInfo: string = await redisClient.info("server");
       const versionMatch = redisInfo.match(/redis_version:(\S+)/);
-      const version = versionMatch?.[1] || 'unknown';
+      const version = versionMatch?.[1] || "unknown";
 
       await redisClient.quit();
 
       this.startupResults.push({
-        module: 'Redis',
+        module: "Redis",
         success: true,
         duration: Date.now() - startTime,
         metadata: {
@@ -239,15 +267,18 @@ export class BootstrapService implements OnApplicationBootstrap {
         },
       });
 
-      this.logger.log('✓ Redis connection verified');
+      this.logger.log("✓ Redis connection verified");
       this.logger.log(`  Version: ${version}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      this.logger.warn('⚠ Redis connection failed - some features may be limited');
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      this.logger.warn(
+        "⚠ Redis connection failed - some features may be limited"
+      );
       this.logger.warn(`  Error: ${errorMessage}`);
 
       this.startupResults.push({
-        module: 'Redis',
+        module: "Redis",
         success: false,
         duration: Date.now() - startTime,
         error: errorMessage,
@@ -262,7 +293,7 @@ export class BootstrapService implements OnApplicationBootstrap {
    */
   private async runHealthChecks(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[4/6] Running health checks...');
+    this.logger.log("[4/6] Running health checks...");
 
     try {
       // Basic health checks
@@ -272,25 +303,26 @@ export class BootstrapService implements OnApplicationBootstrap {
         nodeVersion: this.checkNodeVersion(),
       };
 
-      const allHealthy = Object.values(checks).every(check => check.healthy);
+      const allHealthy = Object.values(checks).every((check) => check.healthy);
 
       this.startupResults.push({
-        module: 'HealthChecks',
+        module: "HealthChecks",
         success: allHealthy,
         duration: Date.now() - startTime,
         metadata: checks,
       });
 
       if (allHealthy) {
-        this.logger.log('✓ All health checks passed');
+        this.logger.log("✓ All health checks passed");
       } else {
-        this.logger.warn('⚠ Some health checks failed (non-critical)');
+        this.logger.warn("⚠ Some health checks failed (non-critical)");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      this.logger.warn('Health checks failed:', errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      this.logger.warn("Health checks failed:", errorMessage);
       this.startupResults.push({
-        module: 'HealthChecks',
+        module: "HealthChecks",
         success: false,
         duration: Date.now() - startTime,
         error: errorMessage,
@@ -302,21 +334,23 @@ export class BootstrapService implements OnApplicationBootstrap {
    * Initialize critical subsystems
    */
   private async initializeCriticalSubsystems(): Promise<void> {
-    this.logger.log('[5/6] Initializing critical subsystems...');
+    this.logger.log("[5/6] Initializing critical subsystems...");
 
     const criticalModules = Array.from(CRITICAL_MODULES);
     const results = await Promise.allSettled(
-      criticalModules.map(module => this.initializeModule(module))
+      criticalModules.map((module) => this.initializeModule(module))
     );
 
-    const failures = results.filter(r => r.status === 'rejected');
+    const failures = results.filter((r) => r.status === "rejected");
 
     if (failures.length > 0) {
-      this.logger.error(`${failures.length} critical module(s) failed to initialize`);
-      throw new Error('Critical subsystem initialization failed');
+      this.logger.error(
+        `${failures.length} critical module(s) failed to initialize`
+      );
+      throw new Error("Critical subsystem initialization failed");
     }
 
-    this.logger.log('✓ All critical subsystems initialized');
+    this.logger.log("✓ All critical subsystems initialized");
   }
 
   /**
@@ -331,20 +365,20 @@ export class BootstrapService implements OnApplicationBootstrap {
    * Log startup information
    */
   private logStartupInfo(): void {
-    this.logger.log('[6/6] Logging startup information...');
+    this.logger.log("[6/6] Logging startup information...");
 
-    const nodeEnv = this.configService.get<string>('nodeEnv');
-    const port = this.configService.get<number>('port');
-    const demoMode = this.configService.get<boolean>('DEMO_MODE');
-    const otelEnabled = process.env.OTEL_ENABLED === 'true';
+    const nodeEnv = this.configService.get<string>("nodeEnv");
+    const port = this.configService.get<number>("port");
+    const demoMode = this.configService.get<boolean>("DEMO_MODE");
+    const otelEnabled = process.env.OTEL_ENABLED === "true";
 
-    this.logger.log('✓ Application startup complete');
-    this.logger.log('');
-    this.logger.log('Application Information:');
+    this.logger.log("✓ Application startup complete");
+    this.logger.log("");
+    this.logger.log("Application Information:");
     this.logger.log(`  Environment: ${nodeEnv}`);
     this.logger.log(`  Port: ${port}`);
-    this.logger.log(`  Demo Mode: ${demoMode ? 'Yes' : 'No'}`);
-    this.logger.log(`  Telemetry: ${otelEnabled ? 'Enabled' : 'Disabled'}`);
+    this.logger.log(`  Demo Mode: ${demoMode ? "Yes" : "No"}`);
+    this.logger.log(`  Telemetry: ${otelEnabled ? "Enabled" : "Disabled"}`);
     this.logger.log(`  Node Version: ${process.version}`);
   }
 
@@ -353,22 +387,30 @@ export class BootstrapService implements OnApplicationBootstrap {
    */
   private printBootstrapSummary(): void {
     const totalDuration = Date.now() - this.startTime;
-    const successCount = this.startupResults.filter(r => r.success).length;
-    const failureCount = this.startupResults.filter(r => !r.success).length;
+    const successCount = this.startupResults.filter((r) => r.success).length;
+    const failureCount = this.startupResults.filter((r) => !r.success).length;
 
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('                  Bootstrap Summary');
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("                  Bootstrap Summary");
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
     this.logger.log(`Total Duration: ${totalDuration}ms`);
-    this.logger.log(`Successful: ${successCount}/${this.startupResults.length}`);
+    this.logger.log(
+      `Successful: ${successCount}/${this.startupResults.length}`
+    );
     if (failureCount > 0) {
       this.logger.log(`Failed: ${failureCount} (non-critical)`);
     }
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
 
     // Detailed results
-    this.startupResults.forEach(result => {
-      const status = result.success ? '✓' : '✗';
+    this.startupResults.forEach((result) => {
+      const status = result.success ? "✓" : "✗";
       const duration = `${result.duration}ms`.padStart(8);
       this.logger.log(`  ${status} ${result.module.padEnd(20)} ${duration}`);
       if (result.error) {
@@ -376,23 +418,29 @@ export class BootstrapService implements OnApplicationBootstrap {
       }
     });
 
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('           🚀 Application Ready to Accept Requests 🚀');
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("           🚀 Application Ready to Accept Requests 🚀");
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
   }
 
   /**
    * Get database information
    */
   private async getDatabaseInfo(): Promise<Record<string, unknown>> {
-    const database = this.configService.get<string>('database.name');
-    const poolSize = this.configService.get<number>('DB_POOL_MAX', 20);
+    const database = this.configService.get<string>("database.name");
+    const poolSize = this.configService.get<number>("DB_POOL_MAX", 20);
 
-    let version = 'unknown';
+    let version = "unknown";
     try {
-      const result = await this.dataSource.query('SELECT VERSION()') as Array<Record<string, unknown>>;
+      const result = (await this.dataSource.query("SELECT VERSION()")) as Array<
+        Record<string, unknown>
+      >;
       const firstRow = result[0];
-      version = firstRow ? String(firstRow.version) : 'unknown';
+      version = firstRow ? String(firstRow.version) : "unknown";
     } catch {
       // Ignore version query errors
     }
@@ -427,7 +475,7 @@ export class BootstrapService implements OnApplicationBootstrap {
     // Simplified disk check - in production, use proper disk space checking
     return {
       healthy: true,
-      message: 'Disk check not implemented',
+      message: "Disk check not implemented",
     };
   }
 
@@ -435,8 +483,8 @@ export class BootstrapService implements OnApplicationBootstrap {
    * Check Node.js version
    */
   private checkNodeVersion(): Record<string, unknown> {
-    const version = process.version || 'v0.0.0';
-    const versionString = version.slice(1).split('.')[0] || '0';
+    const version = process.version || "v0.0.0";
+    const versionString = version.slice(1).split(".")[0] || "0";
     const majorVersion = parseInt(versionString, 10);
 
     // Node.js 18+ is recommended
@@ -445,7 +493,7 @@ export class BootstrapService implements OnApplicationBootstrap {
     return {
       healthy,
       version,
-      recommendation: healthy ? null : 'Upgrade to Node.js 18+',
+      recommendation: healthy ? null : "Upgrade to Node.js 18+",
     };
   }
 

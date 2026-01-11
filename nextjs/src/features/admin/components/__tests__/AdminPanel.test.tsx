@@ -12,8 +12,8 @@
  * - Edge cases
  */
 
-import React, { Suspense } from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AdminPanel } from '../AdminPanel';
 
@@ -466,7 +466,7 @@ describe('AdminPanel Component', () => {
     });
 
     it('should handle invalid initialTab gracefully', () => {
-      // @ts-ignore - Testing invalid prop
+      // @ts-expect-error - Testing invalid prop
       render(<AdminPanel initialTab="invalid-tab" />);
 
       // Component should still render
@@ -512,7 +512,7 @@ describe('AdminPanel Component', () => {
     });
 
     it('should handle component remount', () => {
-      const { unmount, rerender } = render(<AdminPanel />);
+      const { unmount } = render(<AdminPanel />);
 
       unmount();
 

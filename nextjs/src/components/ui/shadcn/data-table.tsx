@@ -1,7 +1,7 @@
 /**
  * @component DataTable
  * @description Enterprise-grade data table component with advanced features
- * 
+ *
  * Features:
  * - Column sorting (single and multi-column)
  * - Column filtering with multiple filter types
@@ -15,7 +15,7 @@
  * - Accessibility compliant (ARIA labels, keyboard navigation)
  * - Mobile responsive design
  * - Export hooks for CSV/Excel/PDF
- * 
+ *
  * @example
  * ```tsx
  * // Define your data type
@@ -27,7 +27,7 @@
  *   filingDate: Date
  *   assignedTo: string
  * }
- * 
+ *
  * // Define columns
  * const columns: ColumnDef<Case>[] = [
  *   {
@@ -63,7 +63,7 @@
  *     },
  *   },
  * ]
- * 
+ *
  * // Use the component
  * <DataTable
  *   columns={columns}
@@ -135,120 +135,120 @@ export interface DataTableProps<TData, TValue> {
    * Column definitions for the table
    */
   columns: ColumnDef<TData, TValue>[]
-  
+
   /**
    * Data to display in the table
    */
   data: TData[]
-  
+
   /**
    * Placeholder text for the search input
    * @default "Search..."
    */
   searchPlaceholder?: string
-  
+
   /**
    * Column ID to use for global search
    * If not provided, search will be disabled
    */
   searchableColumn?: string
-  
+
   /**
    * Columns that can be filtered with faceted filters
    */
   filterableColumns?: DataTableFilterableColumn[]
-  
+
   /**
    * Callback when a row is clicked
    */
   onRowClick?: (row: TData) => void
-  
+
   /**
    * Callback when selected rows change
    */
   onRowSelectionChange?: (selectedRows: TData[]) => void
-  
+
   /**
    * Initial page size
    * @default 10
    */
   initialPageSize?: number
-  
+
   /**
    * Available page size options
    * @default [10, 20, 30, 40, 50, 100]
    */
   pageSizeOptions?: number[]
-  
+
   /**
    * Enable row selection
    * @default true
    */
   enableRowSelection?: boolean
-  
+
   /**
    * Enable multi-row selection
    * @default true
    */
   enableMultiRowSelection?: boolean
-  
+
   /**
    * Enable column resizing
    * @default false
    */
   enableColumnResizing?: boolean
-  
+
   /**
    * Custom toolbar content
    */
   toolbarContent?: React.ReactNode
-  
+
   /**
    * Custom empty state
    */
   emptyState?: React.ReactNode
-  
+
   /**
    * Loading state
    */
   isLoading?: boolean
-  
+
   /**
    * Additional table class names
    */
   className?: string
-  
+
   /**
    * Enable sticky header
    * @default false
    */
   enableStickyHeader?: boolean
-  
+
   /**
    * Maximum height for sticky header (requires enableStickyHeader)
    */
   maxHeight?: string
-  
+
   /**
    * Callback to get row ID (for better row selection tracking)
    */
   getRowId?: (row: TData, index: number) => string
-  
+
   /**
    * Callback to determine if a row is selectable
    */
   enableRowSelection?: boolean | ((row: TData) => boolean)
-  
+
   /**
    * Initial sorting state
    */
   initialSorting?: SortingState
-  
+
   /**
    * Initial column visibility
    */
   initialColumnVisibility?: VisibilityState
-  
+
   /**
    * Initial column filters
    */
@@ -360,9 +360,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                       {enableColumnResizing && header.column.getCanResize() && (
                         <div
                           onMouseDown={header.getResizeHandler()}

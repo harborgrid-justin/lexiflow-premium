@@ -292,7 +292,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     }
   };
 
-  const handleGenerateDocument = React.useCallback(async () => {
+  const _handleGenerateDocument = React.useCallback(async () => {
     if (!templateId || Object.keys(variableValues).length === 0) {
       addToast('Please select a template and fill variables', 'warning');
       return;
@@ -314,14 +314,28 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [templateId, variableValues, documentTitle, addToast, draftingApi]);
+  }, [templateId, variableValues, addToast]);
 
   // Automatically refresh preview when moving to preview tab
   useEffect(() => {
     if (step === 'preview') {
-      handleRefreshPreview();
+      const refreshPreview = async () => {
+        setLoading(true);
+        try {
+          const preview = await generatePreview();
+          setPreviewContent(preview);
+          addToast('Preview refreshed', 'success');
+        } catch (error: unknown) {
+          console.error('Failed to refresh preview:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Failed to refresh preview';
+          addToast(errorMessage, 'error');
+        } finally {
+          setLoading(false);
+        }
+      };
+      refreshPreview();
     }
-  }, [step, handleRefreshPreview]);
+  }, [step, generatePreview, addToast]);
 
   return (
     <div>

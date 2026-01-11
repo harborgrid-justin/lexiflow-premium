@@ -55,6 +55,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
     <TabbedPageLayout
       pageTitle="Admin Console"
       pageSubtitle="System settings, security audits, and data management."
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       tabConfig={ADMIN_TAB_CONFIG as any}
       activeTabId={activeTab}
       onTabChange={setActiveTab}

@@ -132,6 +132,7 @@ export const FirmProfile: React.FC = () => {
             theme.surface.highlight
           )}>
             {logoPreview ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={logoPreview} alt="Firm Logo" className="w-full h-full object-cover" />
             ) : (
               <Building2 className={cn("h-10 w-10", theme.text.tertiary)} />
@@ -302,6 +303,7 @@ export const FirmProfile: React.FC = () => {
               )}>
                 {logoPreview ? (
                   <div className="space-y-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={logoPreview} alt="Logo preview" className="max-h-32 mx-auto" />
                     {isEditing && (
                       <Button size="sm" variant="ghost" onClick={() => setLogoPreview(null)}>

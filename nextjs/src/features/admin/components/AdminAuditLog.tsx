@@ -16,11 +16,7 @@ import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 import { AuditLogControls } from './audit/AuditLogControls';
 
-interface AdminAuditLogProps {
-    // logs prop is removed; component will fetch its own data.
-}
-
-export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
+export const AdminAuditLog: React.FC = () => {
     const { theme } = useTheme();
     const { addToast } = useToast();
     const { openWindow, closeWindow } = useWindow();

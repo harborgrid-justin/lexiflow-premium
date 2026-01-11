@@ -90,7 +90,7 @@ export const SpendAnalyticsChart: React.FC = () => {
 
   useEffect(() => {
     loadSpendData();
-  }, [selectedYear]);
+  }, [selectedYear, loadSpendData]);
 
   const loadSpendData = async () => {
     setLoading(true);

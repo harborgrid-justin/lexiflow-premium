@@ -16,22 +16,15 @@ import type { ComplianceMetrics } from '@/types';
 import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/utils/cn';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
-import React, { useCallback, useEffect, useState, useTransition } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
-  const [isPending, startTransition] = useTransition();
   const [riskData, setRiskData] = useState<Array<{ name: string; value: number; color: string }>>([]);
   const [categoryData, setCategoryData] = useState<Array<{ name: string; value: number }>>([]);
   const [loading, setLoading] = useState(true);
-
-  const handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
-    startTransition(() => {
-      setSelectedSection(section);
-    });
-  }, []);
 
   const chartTheme = getChartTheme(mode);
   const riskColors = ChartColorService.getRiskColors(mode);
@@ -54,7 +47,7 @@ export const ThemeSettingsPage: React.FC = () => {
           { name: 'High Risk', value: metrics.high, color: riskColors.high }
         ];
 
-        const categoryDataFromAnalytics = counselProfiles.slice(0, 4).map((profile, idx) => ({
+        const categoryDataFromAnalytics = counselProfiles.slice(0, 4).map((profile) => ({
           name: profile.name.split(' ')[0],
           value: Math.round((profile.winRate || 0) * 10)
         }));

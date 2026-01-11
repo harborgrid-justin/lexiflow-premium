@@ -107,6 +107,7 @@ export const AnalyticsDashboard: React.FC = () => {
           {isExporting ? 'Exporting...' : 'Export Report'}
         </Button>
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       tabConfig={ANALYTICS_TAB_CONFIG as any}
       activeTabId={activeTab}
       onTabChange={setActiveTab}

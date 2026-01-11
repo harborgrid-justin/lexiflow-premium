@@ -279,7 +279,7 @@ const sidebarVariants = cva(
 )
 
 interface SidebarProps extends React.ComponentPropsWithoutRef<"div">,
-  VariantProps<typeof sidebarVariants> {}
+  VariantProps<typeof sidebarVariants> { }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
   ({ variant, side, collapsible = "offcanvas", className, children, ...props }, ref) => {
@@ -320,8 +320,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
               openMobile
                 ? "translate-x-0"
                 : side === "left"
-                ? "-translate-x-full"
-                : "translate-x-full",
+                  ? "-translate-x-full"
+                  : "translate-x-full",
               sidebarVariants({ variant, side }),
               className
             )}
@@ -728,7 +728,7 @@ export const SidebarMenuAction = React.forwardRef<
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
         className
       )}
       {...props}

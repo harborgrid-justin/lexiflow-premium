@@ -2,6 +2,7 @@ import { Public } from "@common/decorators/public.decorator";
 import { Roles } from "@common/decorators/roles.decorator";
 import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import { RolesGuard } from "@common/guards/roles.guard";
+import { RequestWithUser } from "@common/interfaces/request-with-user.interface";
 import {
   Body,
   Controller,
@@ -24,6 +25,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { Request } from "express";
 import { UserRole } from "@users/entities/user.entity";
 import { ComplianceService } from "./compliance.service";
 import {
@@ -305,13 +307,13 @@ export class ComplianceController {
   async deleteUserData(
     @Param("userId") userId: string,
     @Body() body: Partial<DataDeletionRequestDto>,
-    @Req() req: unknown
+    @Req() req: RequestWithUser
   ) {
     const request: DataDeletionRequestDto = {
       userId,
       reason: body.reason,
       softDelete: body.softDelete !== false,
-      requestedBy: (req as any).user?.id,
+      requestedBy: req.user?.id,
     };
     return this.gdprComplianceService.handleRightToBeForgotten(request);
   }
@@ -422,11 +424,11 @@ export class ComplianceController {
   @ApiResponse({ status: 403, description: "Forbidden" })
   async createRetentionPolicy(
     @Body() dto: CreateRetentionPolicyDto,
-    @Req() req: unknown
+    @Req() req: RequestWithUser
   ) {
     return this.dataRetentionService.createPolicy(
       dto,
-      (req as any).user?.id || "system"
+      req.user?.id || "system"
     );
   }
 
@@ -450,10 +452,10 @@ export class ComplianceController {
   @ApiResponse({ status: 400, description: "Invalid request data" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async placeLegalHold(@Body() dto: LegalHoldDto, @Req() req: unknown) {
+  async placeLegalHold(@Body() dto: LegalHoldDto, @Req() req: RequestWithUser) {
     return this.dataRetentionService.placeLegalHold(
       dto,
-      (req as any).user?.id || "system"
+      req.user?.id || "system"
     );
   }
 
@@ -464,10 +466,13 @@ export class ComplianceController {
   @ApiResponse({ status: 404, description: "Retention record not found" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async removeLegalHold(@Body() dto: RemoveLegalHoldDto, @Req() req: unknown) {
+  async removeLegalHold(
+    @Body() dto: RemoveLegalHoldDto,
+    @Req() req: RequestWithUser
+  ) {
     return this.dataRetentionService.removeLegalHold(
       dto,
-      (req as any).user?.id || "system"
+      req.user?.id || "system"
     );
   }
 
@@ -478,12 +483,10 @@ export class ComplianceController {
   @ApiResponse({ status: 400, description: "Invalid request data" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async grantConsent(@Body() dto: ConsentDto, @Req() req: unknown) {
-    return this.gdprComplianceService.grantConsent(
-      dto,
-      (req as any).ip,
-      (req as any).headers["user-agent"]
-    );
+  async grantConsent(@Body() dto: ConsentDto, @Req() req: Request) {
+    const clientIp = req.ip || req.socket?.remoteAddress || "unknown";
+    const userAgent = req.headers["user-agent"] || "unknown";
+    return this.gdprComplianceService.grantConsent(dto, clientIp, userAgent);
   }
 
   @Post("consent/revoke")

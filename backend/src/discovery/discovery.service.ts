@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LessThan, Not, Repository } from "typeorm";
+import { LessThan, Not, Repository, DeepPartial } from "typeorm";
 import { Custodian } from "./custodians/entities/custodian.entity";
 import {
   DiscoveryRequest,
@@ -148,7 +148,7 @@ export class DiscoveryService {
     };
   }
 
-  async findRequestById(id: string): Promise<unknown> {
+  async findRequestById(id: string): Promise<DiscoveryRequest | null> {
     const request = await this.discoveryRequestRepository.findOne({
       where: { id },
     });
@@ -158,16 +158,21 @@ export class DiscoveryService {
     return request;
   }
 
-  async createRequest(createDto: unknown): Promise<unknown> {
-    const request = this.discoveryRequestRepository.create(createDto as any);
+  async createRequest(
+    createDto: DeepPartial<DiscoveryRequest>
+  ): Promise<DiscoveryRequest> {
+    const request = this.discoveryRequestRepository.create(createDto);
     return this.discoveryRequestRepository.save(request);
   }
 
-  async updateRequest(id: string, updateDto: unknown): Promise<unknown> {
+  async updateRequest(
+    id: string,
+    updateDto: DeepPartial<DiscoveryRequest>
+  ): Promise<DiscoveryRequest> {
     const result = await this.discoveryRequestRepository
       .createQueryBuilder()
       .update(DiscoveryRequest)
-      .set(updateDto as any)
+      .set(updateDto)
       .where("id = :id", { id })
       .returning("*")
       .execute();
@@ -175,14 +180,15 @@ export class DiscoveryService {
     if (!result.affected) {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
-    return result.raw[0];
+    const rows = result.raw as DiscoveryRequest[];
+    return rows[0];
   }
 
   async deleteRequest(id: string): Promise<void> {
     await this.discoveryRequestRepository.delete(id);
   }
 
-  async getOverdueRequests(): Promise<any[]> {
+  async getOverdueRequests(): Promise<DiscoveryRequest[]> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return this.discoveryRequestRepository.find({
@@ -197,11 +203,11 @@ export class DiscoveryService {
     });
   }
 
-  async findAllHolds(): Promise<any[]> {
+  async findAllHolds(): Promise<LegalHold[]> {
     return this.legalHoldRepository.find();
   }
 
-  async findHoldsByCaseId(caseId: string): Promise<any[]> {
+  async findHoldsByCaseId(caseId: string): Promise<LegalHold[]> {
     return this.legalHoldRepository.find({ where: { caseId } });
   }
 
@@ -213,10 +219,8 @@ export class DiscoveryService {
     return hold;
   }
 
-  async createHold(createDto: unknown): Promise<LegalHold> {
-    const hold = this.legalHoldRepository.create(
-      createDto as any
-    ) as unknown as LegalHold;
+  async createHold(createDto: DeepPartial<LegalHold>): Promise<LegalHold> {
+    const hold = this.legalHoldRepository.create(createDto);
     return this.legalHoldRepository.save(hold);
   }
 
@@ -227,22 +231,22 @@ export class DiscoveryService {
     return this.legalHoldRepository.save(hold);
   }
 
-  async getActiveHolds(): Promise<any[]> {
+  async getActiveHolds(): Promise<LegalHold[]> {
     return this.legalHoldRepository.find({
       where: { status: LegalHoldStatus.ACTIVE },
     });
   }
 
-  async findCustodiansByHoldId(holdId: string): Promise<any[]> {
+  async findCustodiansByHoldId(holdId: string): Promise<Custodian[]> {
     return this.custodianRepository.find({ where: { legalHoldId: holdId } });
   }
 
-  async createCustodian(createDto: unknown): Promise<unknown> {
-    const custodian = this.custodianRepository.create(createDto as any);
+  async createCustodian(createDto: DeepPartial<Custodian>): Promise<Custodian> {
+    const custodian = this.custodianRepository.create(createDto);
     return this.custodianRepository.save(custodian);
   }
 
-  async acknowledgeCustodian(id: string): Promise<unknown> {
+  async acknowledgeCustodian(id: string): Promise<Custodian> {
     const custodian = await this.custodianRepository.findOne({ where: { id } });
     if (!custodian) {
       throw new NotFoundException(`Custodian with ID ${id} not found`);
@@ -251,7 +255,7 @@ export class DiscoveryService {
     return this.custodianRepository.save(custodian);
   }
 
-  async getUnacknowledgedCustodians(holdId: string): Promise<any[]> {
+  async getUnacknowledgedCustodians(holdId: string): Promise<Custodian[]> {
     return this.custodianRepository
       .createQueryBuilder("custodian")
       .where("custodian.legalHoldId = :holdId", { holdId })
@@ -267,15 +271,12 @@ export class DiscoveryService {
     const requests = await this.findRequestsByCaseId(caseId);
     const holds = await this.findHoldsByCaseId(caseId);
 
-    const requestArray = Array.isArray(requests)
-      ? requests
-      : requests.data || [];
+    const requestArray = requests.data || [];
     const totalRequests = requestArray.length;
     const completedRequests = requestArray.filter(
-      (r: unknown) => (r as any).status === DiscoveryRequestStatus.COMPLETED
+      (r) => r.status === DiscoveryRequestStatus.COMPLETED
     ).length;
-    const pendingRequests = requestArray.filter((r: unknown) => {
-      const req = r as any;
+    const pendingRequests = requestArray.filter((req) => {
       return (
         req.status !== DiscoveryRequestStatus.COMPLETED &&
         req.status !== DiscoveryRequestStatus.OBJECTED
@@ -293,8 +294,7 @@ export class DiscoveryService {
       totalRequests,
       pendingRequests,
       completedRequests,
-      overdueRequests: requestArray.filter((r: unknown) => {
-        const req = r as any;
+      overdueRequests: requestArray.filter((req) => {
         return (
           req.dueDate &&
           new Date(req.dueDate) < new Date() &&
@@ -307,24 +307,23 @@ export class DiscoveryService {
     };
   }
 
-  async getAllEvidence(query?: unknown): Promise<Evidence[]> {
-    const whereClause: unknown = {};
-    const q = query as {
-      caseId?: string;
-      type?: string;
-      admissibilityStatus?: string;
-    };
+  async getAllEvidence(query?: {
+    caseId?: string;
+    type?: string;
+    admissibilityStatus?: string;
+  }): Promise<Evidence[]> {
+    const whereClause: Record<string, unknown> = {};
 
-    if (q?.caseId) {
-      whereClause.caseId = q.caseId;
+    if (query?.caseId) {
+      whereClause.caseId = query.caseId;
     }
 
-    if (q?.type) {
-      whereClause.type = q.type;
+    if (query?.type) {
+      whereClause.type = query.type;
     }
 
-    if (q?.admissibilityStatus) {
-      whereClause.admissibilityStatus = q.admissibilityStatus;
+    if (query?.admissibilityStatus) {
+      whereClause.admissibilityStatus = query.admissibilityStatus;
     }
 
     return this.evidenceRepository.find({
@@ -333,9 +332,9 @@ export class DiscoveryService {
     });
   }
 
-  async createEvidence(createDto: unknown): Promise<Evidence> {
-    const evidence = this.evidenceRepository.create(createDto as any);
-    return this.evidenceRepository.save(evidence) as any;
+  async createEvidence(createDto: DeepPartial<Evidence>): Promise<Evidence> {
+    const evidence = this.evidenceRepository.create(createDto);
+    return this.evidenceRepository.save(evidence);
   }
 
   async getEvidenceByCaseId(caseId: string): Promise<Evidence[]> {

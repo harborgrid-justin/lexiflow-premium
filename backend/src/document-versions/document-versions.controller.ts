@@ -10,134 +10,145 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
   Query,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { DocumentVersionsService } from './document-versions.service';
-import { CreateVersionDto } from './dto/create-version.dto';
+} from "@nestjs/common";
+import { Response } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+  ApiBearerAuth,
+  ApiResponse,
+} from "@nestjs/swagger";
+import { DocumentVersionsService } from "./document-versions.service";
+import { CreateVersionDto } from "./dto/create-version.dto";
 
-@ApiTags('Document Versions')
-@ApiBearerAuth('JWT-auth')
-
-@Controller('documents/:documentId/versions')
+@ApiTags("Document Versions")
+@ApiBearerAuth("JWT-auth")
+@Controller("documents/:documentId/versions")
 export class DocumentVersionsController {
   constructor(
-    private readonly documentVersionsService: DocumentVersionsService,
+    private readonly documentVersionsService: DocumentVersionsService
   ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Create a new version of a document' })
-  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiOperation({ summary: "Create a new version of a document" })
+  @ApiConsumes("multipart/form-data")
   @ApiBody({
     schema: {
-      type: 'object',
+      type: "object",
       properties: {
-        changeDescription: { type: 'string' },
-        metadata: { type: 'object' },
-        caseId: { type: 'string' },
+        changeDescription: { type: "string" },
+        metadata: { type: "object" },
+        caseId: { type: "string" },
         file: {
-          type: 'string',
-          format: 'binary',
+          type: "string",
+          format: "binary",
         },
       },
-      required: ['file', 'caseId'],
+      required: ["file", "caseId"],
     },
   })
-  @ApiResponse({ status: 201, description: 'Version created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  @ApiResponse({ status: 201, description: "Version created successfully" })
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
   async createVersion(
-    @Param('documentId', ParseUUIDPipe) documentId: string,
-    @Body('caseId') caseId: string,
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Body("caseId") caseId: string,
     @Body() createVersionDto: CreateVersionDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File
   ) {
     return await this.documentVersionsService.createVersion(
       documentId,
       caseId,
       file,
-      createVersionDto,
+      createVersionDto
     );
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get version history of a document' })
-  @ApiResponse({ status: 200, description: 'Version history retrieved successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getVersionHistory(@Param('documentId', ParseUUIDPipe) documentId: string) {
+  @ApiOperation({ summary: "Get version history of a document" })
+  @ApiResponse({
+    status: 200,
+    description: "Version history retrieved successfully",
+  })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async getVersionHistory(
+    @Param("documentId", ParseUUIDPipe) documentId: string
+  ) {
     return await this.documentVersionsService.getVersionHistory(documentId);
   }
 
-  @Get(':version')
-  @ApiOperation({ summary: 'Get a specific version' })
-  @ApiResponse({ status: 200, description: 'Version found' })
-  @ApiResponse({ status: 404, description: 'Version not found' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get(":version")
+  @ApiOperation({ summary: "Get a specific version" })
+  @ApiResponse({ status: 200, description: "Version found" })
+  @ApiResponse({ status: 404, description: "Version not found" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
   async getVersion(
-    @Param('documentId', ParseUUIDPipe) documentId: string,
-    @Param('version', ParseIntPipe) version: number,
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Param("version", ParseIntPipe) version: number
   ) {
     return await this.documentVersionsService.getVersion(documentId, version);
   }
 
-  @Get(':version/download')
-  @ApiOperation({ summary: 'Download a specific version' })
-  @ApiResponse({ status: 200, description: 'Version downloaded successfully' })
-  @ApiResponse({ status: 404, description: 'Version not found' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get(":version/download")
+  @ApiOperation({ summary: "Download a specific version" })
+  @ApiResponse({ status: 200, description: "Version downloaded successfully" })
+  @ApiResponse({ status: 404, description: "Version not found" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
   async downloadVersion(
-    @Param('documentId', ParseUUIDPipe) documentId: string,
-    @Param('version', ParseIntPipe) version: number,
-    @Res() res: unknown,
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Param("version", ParseIntPipe) version: number,
+    @Res() res: Response
   ): Promise<void> {
     const { buffer, filename, mimeType } =
       await this.documentVersionsService.downloadVersion(documentId, version);
 
-    (res as any).setHeader('Content-Type', mimeType);
-    (res as any).setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    (res as any).setHeader('Content-Length', buffer.length.toString());
+    res.setHeader("Content-Type", mimeType);
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Length", buffer.length.toString());
 
-    (res as any).send(buffer);
+    res.send(buffer);
   }
 
-  @Get('compare')
-  @ApiOperation({ summary: 'Compare two versions' })
-  @ApiResponse({ status: 200, description: 'Comparison completed' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get("compare")
+  @ApiOperation({ summary: "Compare two versions" })
+  @ApiResponse({ status: 200, description: "Comparison completed" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
   async compareVersions(
-    @Param('documentId', ParseUUIDPipe) documentId: string,
-    @Query('v1', ParseIntPipe) version1: number,
-    @Query('v2', ParseIntPipe) version2: number,
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Query("v1", ParseIntPipe) version1: number,
+    @Query("v2", ParseIntPipe) version2: number
   ) {
     return await this.documentVersionsService.compareVersions(
       documentId,
       version1,
-      version2,
+      version2
     );
   }
 
-  @Post(':version/restore')
-  @ApiOperation({ summary: 'Restore a specific version' })
-  @ApiResponse({ status: 201, description: 'Version restored successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  @Post(":version/restore")
+  @ApiOperation({ summary: "Restore a specific version" })
+  @ApiResponse({ status: 201, description: "Version restored successfully" })
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
   async restoreVersion(
-    @Param('documentId', ParseUUIDPipe) documentId: string,
-    @Param('version', ParseIntPipe) version: number,
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Param("version", ParseIntPipe) version: number
   ) {
     return await this.documentVersionsService.restoreVersion(
       documentId,
-      version,
+      version
     );
   }
 }
-

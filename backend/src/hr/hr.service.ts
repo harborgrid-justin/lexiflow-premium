@@ -102,7 +102,7 @@ export class HRService {
 
             totalHours = Number(sum || 0);
           }
-        } catch {
+        } catch (error) {
           // Error ignoredd during time entry calculation
           this.logger.debug("Failed to calculate total hours", error);
         }

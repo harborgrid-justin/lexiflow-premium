@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Queue, Job } from 'bull';
+import { Injectable, Logger } from "@nestjs/common";
+import { Queue, Job } from "bull";
 
 /**
  * Job Priority Levels
@@ -18,7 +18,7 @@ export interface JobOptions {
   priority?: JobPriority;
   delay?: number; // milliseconds
   attempts?: number;
-  backoff?: number | { type: 'fixed' | 'exponential'; delay: number };
+  backoff?: number | { type: "fixed" | "exponential"; delay: number };
   timeout?: number;
   removeOnComplete?: boolean;
   removeOnFail?: boolean;
@@ -28,7 +28,7 @@ export interface JobOptions {
  * Queue Manager Service
  * Provides enterprise-grade background job processing with Bull
  * Supports priorities, retries, delays, and job scheduling
- * 
+ *
  * @example
  * await queueManager.addJob('document-ocr', {
  *   documentId: 'doc123',
@@ -71,10 +71,10 @@ export class QueueManagerService {
   /**
    * Add job to queue
    */
-  async addJob<T = any>(
+  async addJob<T = unknown>(
     queueName: string,
     data: T,
-    options: JobOptions = {},
+    options: JobOptions = {}
   ): Promise<Job<T>> {
     const queue = this.getOrCreateQueue(queueName);
 
@@ -82,7 +82,7 @@ export class QueueManagerService {
       priority: options.priority || JobPriority.NORMAL,
       delay: options.delay,
       attempts: options.attempts || 3,
-      backoff: options.backoff || { type: 'exponential', delay: 2000 },
+      backoff: options.backoff || { type: "exponential", delay: 2000 },
       timeout: options.timeout,
       removeOnComplete: options.removeOnComplete ?? true,
       removeOnFail: options.removeOnFail ?? false,
@@ -95,9 +95,9 @@ export class QueueManagerService {
   /**
    * Add bulk jobs
    */
-  async addBulkJobs<T = any>(
+  async addBulkJobs<T = unknown>(
     queueName: string,
-    jobs: Array<{ data: T; options?: JobOptions }>,
+    jobs: Array<{ data: T; options?: JobOptions }>
   ): Promise<Job<T>[]> {
     const queue = this.getOrCreateQueue(queueName);
 
@@ -107,7 +107,7 @@ export class QueueManagerService {
         priority: job.options?.priority || JobPriority.NORMAL,
         delay: job.options?.delay,
         attempts: job.options?.attempts || 3,
-        backoff: job.options?.backoff || { type: 'exponential', delay: 2000 },
+        backoff: job.options?.backoff || { type: "exponential", delay: 2000 },
       },
     }));
 
@@ -119,11 +119,11 @@ export class QueueManagerService {
   /**
    * Schedule recurring job (cron)
    */
-  async scheduleJob<T = any>(
+  async scheduleJob<T = unknown>(
     queueName: string,
     jobName: string,
     data: T,
-    cronExpression: string,
+    cronExpression: string
   ): Promise<Job<T>> {
     const queue = this.getOrCreateQueue(queueName);
 
@@ -134,7 +134,9 @@ export class QueueManagerService {
       jobId: jobName, // Prevents duplicates
     });
 
-    this.logger.log(`Scheduled job ${jobName} on queue ${queueName} (cron: ${cronExpression})`);
+    this.logger.log(
+      `Scheduled job ${jobName} on queue ${queueName} (cron: ${cronExpression})`
+    );
     return job;
   }
 
@@ -151,7 +153,7 @@ export class QueueManagerService {
    */
   async getJobStatus(
     queueName: string,
-    jobId: string,
+    jobId: string
   ): Promise<JobStatus | null> {
     const job = await this.getJob(queueName, jobId);
     if (!job) return null;
@@ -233,24 +235,30 @@ export class QueueManagerService {
   async cleanQueue(
     queueName: string,
     grace: number = 3600000, // 1 hour
-    status?: 'completed' | 'failed',
+    status?: "completed" | "failed"
   ): Promise<string[]> {
     const queue = this.getOrCreateQueue(queueName);
     const cleaned = await queue.clean(grace, status);
-    this.logger.log(`Cleaned ${cleaned.length} ${status} jobs from ${queueName}`);
-    return cleaned.map((job: unknown) => String((job as any).id || job));
+    this.logger.log(
+      `Cleaned ${cleaned.length} ${status} jobs from ${queueName}`
+    );
+    return cleaned.map((job: Job) => String(job.id || job));
   }
 
   private getOrCreateQueue(queueName: string): Queue {
     if (!this.queues.has(queueName)) {
       throw new Error(
         `Queue "${queueName}" is not configured. ` +
-        `Please register the queue in the module imports using BullModule.registerQueue({ name: '${queueName}' }) ` +
-        `or inject it with @InjectQueue('${queueName}') in the constructor.`
+          `Please register the queue in the module imports using BullModule.registerQueue({ name: '${queueName}' }) ` +
+          `or inject it with @InjectQueue('${queueName}') in the constructor.`
       );
     }
 
-    return this.queues.get(queueName)!;
+    const queue = this.queues.get(queueName);
+    if (!queue) {
+      throw new Error(`Queue "${queueName}" not found after validation`);
+    }
+    return queue;
   }
 
   /**
@@ -259,7 +267,9 @@ export class QueueManagerService {
    */
   registerQueue(queueName: string, queue: Queue): void {
     if (this.queues.has(queueName)) {
-      this.logger.warn(`Queue ${queueName} is already registered, replacing with new instance`);
+      this.logger.warn(
+        `Queue ${queueName} is already registered, replacing with new instance`
+      );
     }
     this.queues.set(queueName, queue);
     this.logger.log(`Registered queue: ${queueName}`);

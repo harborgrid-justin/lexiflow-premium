@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   ConflictCheckDto,
   RunConflictCheckDto,
@@ -8,7 +8,7 @@ import {
   ConflictCheckStatus,
   ConflictResult,
   ConflictCheckType,
-} from './dto/conflict-check.dto';
+} from "./dto/conflict-check.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -44,10 +44,10 @@ export class ConflictChecksService {
 
   // Mock database of existing clients/matters for conflict checking
   private existingClients = [
-    { id: '1', name: 'John Smith', cases: ['case1'] },
-    { id: '2', name: 'Jane Doe', cases: ['case2'] },
-    { id: '3', name: 'Acme Corporation', cases: ['case3', 'case4'] },
-    { id: '4', name: 'Smith Industries', cases: ['case5'] },
+    { id: "1", name: "John Smith", cases: ["case1"] },
+    { id: "2", name: "Jane Doe", cases: ["case2"] },
+    { id: "3", name: "Acme Corporation", cases: ["case3", "case4"] },
+    { id: "4", name: "Smith Industries", cases: ["case5"] },
   ];
 
   async runCheck(dto: RunConflictCheckDto): Promise<ConflictCheckDto> {
@@ -58,10 +58,13 @@ export class ConflictChecksService {
       requestedBy: dto.requestedBy,
       requestedByName: dto.requestedByName,
       checkType: dto.checkType,
-      targetName: dto.targetName ?? '',
+      targetName: dto.targetName ?? "",
       targetEntity: dto.targetEntity,
       conflicts,
-      status: conflicts.length > 0 ? ConflictCheckStatus.CONFLICT_FOUND : ConflictCheckStatus.CLEAR,
+      status:
+        conflicts.length > 0
+          ? ConflictCheckStatus.CONFLICT_FOUND
+          : ConflictCheckStatus.CLEAR,
       createdAt: new Date(),
       updatedAt: new Date(),
       organizationId: dto.organizationId,
@@ -87,7 +90,9 @@ export class ConflictChecksService {
       checks = checks.filter((check) => check.checkType === query.checkType);
     }
     if (query.requestedBy) {
-      checks = checks.filter((check) => check.requestedBy === query.requestedBy);
+      checks = checks.filter(
+        (check) => check.requestedBy === query.requestedBy
+      );
     }
     if (query.startDate) {
       checks = checks.filter((check) => check.createdAt >= query.startDate!);
@@ -122,7 +127,10 @@ export class ConflictChecksService {
     return check;
   }
 
-  async resolve(id: string, dto: ResolveConflictDto): Promise<ConflictCheckDto> {
+  async resolve(
+    id: string,
+    dto: ResolveConflictDto
+  ): Promise<ConflictCheckDto> {
     const check = await this.findOne(id);
 
     check.resolution = {
@@ -156,7 +164,9 @@ export class ConflictChecksService {
     return check;
   }
 
-  private async performConflictCheck(dto: RunConflictCheckDto): Promise<ConflictResult[]> {
+  private async performConflictCheck(
+    dto: RunConflictCheckDto
+  ): Promise<ConflictResult[]> {
     const conflicts: ConflictResult[] = [];
 
     // Perform different types of checks based on checkType
@@ -165,7 +175,10 @@ export class ConflictChecksService {
       case ConflictCheckType.CLIENT_VS_OPPOSING:
         // Name matching
         for (const client of this.existingClients) {
-          const matchScore = this.calculateNameMatch(dto.targetName ?? '', client.name);
+          const matchScore = this.calculateNameMatch(
+            dto.targetName ?? "",
+            client.name
+          );
 
           if (matchScore > 0.7) {
             conflicts.push({
@@ -174,7 +187,12 @@ export class ConflictChecksService {
               matchedEntityId: client.id,
               matchScore,
               details: `Potential conflict with existing client: ${client.name}`,
-              severity: matchScore > 0.95 ? 'critical' : matchScore > 0.85 ? 'high' : 'medium',
+              severity:
+                matchScore > 0.95
+                  ? "critical"
+                  : matchScore > 0.85
+                    ? "high"
+                    : "medium",
             });
           }
         }
@@ -190,7 +208,7 @@ export class ConflictChecksService {
               matchedEntityId: client.id,
               matchScore: 1.0,
               details: `Matter overlap detected with existing case`,
-              severity: 'high',
+              severity: "high",
             });
           }
         }
@@ -199,7 +217,10 @@ export class ConflictChecksService {
       case ConflictCheckType.PRIOR_REPRESENTATION:
         // Check for prior representation
         for (const client of this.existingClients) {
-          const matchScore = this.calculateNameMatch(dto.targetName ?? '', client.name);
+          const matchScore = this.calculateNameMatch(
+            dto.targetName ?? "",
+            client.name
+          );
 
           if (matchScore > 0.8 && client.cases.length > 0) {
             conflicts.push({
@@ -208,7 +229,7 @@ export class ConflictChecksService {
               matchedEntityId: client.id,
               matchScore,
               details: `Prior representation found: ${client.cases.length} previous case(s)`,
-              severity: 'medium',
+              severity: "medium",
             });
           }
         }
@@ -244,56 +265,59 @@ export class ConflictChecksService {
       .map(() => Array(str1.length + 1).fill(0));
 
     for (let i = 0; i <= str2.length; i++) {
-      // TODO: Remove non-null assertion with proper check
-      matrix[i]![0] = i;
+      const row = matrix[i];
+      if (row) {
+        row[0] = i;
+      }
     }
 
     for (let j = 0; j <= str1.length; j++) {
-      // TODO: Remove non-null assertion with proper check
-      matrix[0]![j] = j;
+      const row = matrix[0];
+      if (row) {
+        row[j] = j;
+      }
     }
 
     for (let i = 1; i <= str2.length; i++) {
       for (let j = 1; j <= str1.length; j++) {
-        if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
-      // TODO: Remove non-null assertion with proper check
-          matrix[i]![j] = matrix[i - 1]![j - 1]!;
-        } else {
-      // TODO: Remove non-null assertion with proper check
-          matrix[i]![j] = Math.min(
-      // TODO: Remove non-null assertion with proper check
-            matrix[i - 1]![j - 1]! + 1,
-      // TODO: Remove non-null assertion with proper check
-            matrix[i]![j - 1]! + 1,
-      // TODO: Remove non-null assertion with proper check
-            matrix[i - 1]![j]! + 1,
-          );
+        const currentRow = matrix[i];
+        const prevRow = matrix[i - 1];
+
+        if (currentRow && prevRow) {
+          if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+            currentRow[j] = prevRow[j - 1] ?? 0;
+          } else {
+            currentRow[j] = Math.min(
+              (prevRow[j - 1] ?? 0) + 1,
+              (currentRow[j - 1] ?? 0) + 1,
+              (prevRow[j] ?? 0) + 1
+            );
+          }
         }
       }
     }
-
-      // TODO: Remove non-null assertion with proper check
-    return matrix[str2.length]![str1.length]!;
+    const lastRow = matrix[str2.length];
+    return lastRow ? (lastRow[str1.length] ?? 0) : 0;
   }
 
   private soundex(str: string): string {
-    const code = str.toUpperCase().replace(/[^A-Z]/g, '');
-    if (!code) return '0000';
+    const code = str.toUpperCase().replace(/[^A-Z]/g, "");
+    if (!code) return "0000";
 
     const firstLetter = code[0];
     const soundexCode = code
       .slice(1)
-      .replace(/[BFPV]/g, '1')
-      .replace(/[CGJKQSXZ]/g, '2')
-      .replace(/[DT]/g, '3')
-      .replace(/[L]/g, '4')
-      .replace(/[MN]/g, '5')
-      .replace(/[R]/g, '6')
-      .replace(/[AEIOUHWY]/g, '0')
-      .replace(/(.)\1+/g, '$1')
-      .replace(/0/g, '');
+      .replace(/[BFPV]/g, "1")
+      .replace(/[CGJKQSXZ]/g, "2")
+      .replace(/[DT]/g, "3")
+      .replace(/[L]/g, "4")
+      .replace(/[MN]/g, "5")
+      .replace(/[R]/g, "6")
+      .replace(/[AEIOUHWY]/g, "0")
+      .replace(/(.)\1+/g, "$1")
+      .replace(/0/g, "");
 
-    return (firstLetter + soundexCode + '000').slice(0, 4);
+    return (firstLetter + soundexCode + "000").slice(0, 4);
   }
 
   private generateId(): string {

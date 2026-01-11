@@ -47,10 +47,7 @@ export class DocketService {
     private readonly docketRepository: Repository<DocketEntry>
   ) {}
 
-  async findAll(options?: {
-    page?: number;
-    limit?: number;
-  }): Promise<{
+  async findAll(options?: { page?: number; limit?: number }): Promise<{
     data: DocketEntry[];
     total: number;
     page: number;
@@ -135,7 +132,8 @@ export class DocketService {
       throw new NotFoundException(`Docket entry with ID ${id} not found`);
     }
 
-    return result.raw[0] as DocketEntry;
+    const rows = result.raw as DocketEntry[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {
@@ -177,9 +175,10 @@ export class DocketService {
       // const entries = await this.pacerService.getDocketSheet(...)
       // await this.saveDocketEntries(entries)
     } catch (error: unknown) {
-      this.logger.error(`PACER sync failed: ${(error as any).message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(`PACER sync failed: ${message}`);
       result.success = false;
-      result.errors = [(error as any).message];
+      result.errors = [message];
     }
 
     return result;

@@ -88,8 +88,8 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
         if (savedDraft) {
           // Use setTimeout to avoid synchronous state update in effect
           setTimeout(() => {
-              setDraftResponse(savedDraft);
-              notify.info("Draft restored from auto-save");
+            setDraftResponse(savedDraft);
+            notify.info("Draft restored from auto-save");
           }, 0);
         } else {
           handleGenerateResponse();

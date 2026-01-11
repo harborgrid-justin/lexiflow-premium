@@ -67,6 +67,7 @@ async function bootstrap(): Promise<INestApplication> {
         if (req.headers["x-no-compression"]) {
           return false;
         }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const compressionFilter = compression.filter as (
           req: Request,
           res: Response

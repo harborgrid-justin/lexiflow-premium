@@ -55,8 +55,8 @@ export const OutcomeSimulator: React.FC = () => {
   // Initial run
   useEffect(() => {
     if (results.length === 0) {
-        // Enqueue the state update
-        setTimeout(() => runSimulation(), 0);
+      // Enqueue the state update
+      setTimeout(() => runSimulation(), 0);
     }
   }, [results.length, runSimulation]);
 

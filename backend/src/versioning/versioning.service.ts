@@ -203,7 +203,7 @@ export class VersioningService {
       description: string;
     }>
   > {
-    const tags = await this.versionRepository
+    const tags = (await this.versionRepository
       .createQueryBuilder("version")
       .select("version.tag", "name")
       .addSelect("version.version", "version")
@@ -212,7 +212,13 @@ export class VersioningService {
       .addSelect("version.commitMessage", "description")
       .where("version.tag IS NOT NULL")
       .orderBy("version.createdAt", "DESC")
-      .getRawMany();
+      .getRawMany()) as Array<{
+      name: string;
+      version: string;
+      date: Date;
+      author: string;
+      description: string;
+    }>;
 
     return tags;
   }

@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
-import { ComplianceCheck } from './entities/compliance-check.entity';
-import { AuditLog } from './entities/audit-log.entity';
-import { ComplianceRule } from './entities/compliance-rule.entity';
+import { Injectable, NotFoundException, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, Between, DeepPartial } from "typeorm";
+import { ComplianceCheck } from "./entities/compliance-check.entity";
+import { AuditLog } from "./entities/audit-log.entity";
+import { ComplianceRule } from "./entities/compliance-rule.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -47,7 +47,7 @@ export class ComplianceService {
     @InjectRepository(AuditLog)
     private readonly auditLogRepository: Repository<AuditLog>,
     @InjectRepository(ComplianceRule)
-    private readonly complianceRuleRepository: Repository<ComplianceRule>,
+    private readonly complianceRuleRepository: Repository<ComplianceRule>
   ) {}
 
   async runComplianceCheck(caseId: string): Promise<ComplianceCheck[]> {
@@ -62,7 +62,7 @@ export class ComplianceService {
       const check = this.complianceCheckRepository.create({
         caseId,
         ruleId: rule.id,
-        status: 'passed',
+        status: "passed",
         checkedAt: new Date(),
         details: { ruleName: rule.name },
       });
@@ -73,13 +73,21 @@ export class ComplianceService {
     return checks;
   }
 
-  async getChecksByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: ComplianceCheck[]; total: number; page: number; limit: number }> {
+  async getChecksByCaseId(
+    caseId: string,
+    options?: { page?: number; limit?: number }
+  ): Promise<{
+    data: ComplianceCheck[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [checks, total] = await this.complianceCheckRepository.findAndCount({
       where: { caseId },
-      order: { checkedAt: 'DESC' },
+      order: { checkedAt: "DESC" },
       skip,
       take: limit,
     });
@@ -94,110 +102,130 @@ export class ComplianceService {
 
   async getFailedChecks(): Promise<ComplianceCheck[]> {
     return this.complianceCheckRepository.find({
-      where: { status: 'failed' },
-      order: { checkedAt: 'DESC' },
+      where: { status: "failed" },
+      order: { checkedAt: "DESC" },
     });
   }
 
   async getActiveRules(): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
       where: { isActive: true },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<ComplianceCheck[]> {
     return this.complianceCheckRepository.find();
   }
 
-  async findOne(id: string): Promise<unknown> {
+  async findOne(id: string): Promise<ComplianceCheck | null> {
     return this.complianceCheckRepository.findOne({ where: { id } });
   }
 
-  async create(createDto: unknown): Promise<unknown> {
-    const check = this.complianceCheckRepository.create(createDto as any);
+  async create(
+    createDto: DeepPartial<ComplianceCheck>
+  ): Promise<ComplianceCheck> {
+    const check = this.complianceCheckRepository.create(createDto);
     return this.complianceCheckRepository.save(check);
   }
 
-  async getComplianceScore(caseId: string): Promise<{ score: number; passed: number; failed: number; total: number }> {
+  async getComplianceScore(
+    caseId: string
+  ): Promise<{ score: number; passed: number; failed: number; total: number }> {
     const checks = await this.complianceCheckRepository.find({
       where: { caseId },
     });
 
-    const passed = checks.filter(c => c.status === 'passed').length;
-    const failed = checks.filter(c => c.status === 'failed').length;
+    const passed = checks.filter((c) => c.status === "passed").length;
+    const failed = checks.filter((c) => c.status === "failed").length;
     const total = checks.length;
     const score = total > 0 ? (passed / total) * 100 : 100;
 
     return { score, passed, failed, total };
   }
 
-  async createAuditLog(data: unknown): Promise<AuditLog> {
+  async createAuditLog(data: DeepPartial<AuditLog>): Promise<AuditLog> {
     const auditLog = this.auditLogRepository.create({
-      ...(data as any),
+      ...data,
       timestamp: new Date(),
     });
     const saved = await this.auditLogRepository.save(auditLog);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) {
-      throw new Error('Failed to save audit log');
+      throw new Error("Failed to save audit log");
     }
     return result;
   }
 
-  async getAllConflictChecks(): Promise<any[]> {
+  async getAllConflictChecks(): Promise<ComplianceCheck[]> {
     // Return all compliance checks that are related to conflicts
     return this.complianceCheckRepository.find({
-      order: { checkedAt: 'DESC' },
+      order: { checkedAt: "DESC" },
     });
   }
 
   async getAllAuditLogs(): Promise<AuditLog[]> {
     return this.auditLogRepository.find({
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
       take: 1000, // Limit to recent 1000 logs
     });
   }
 
-  async getAuditLogsByEntityId(entityType: string, entityId: string): Promise<AuditLog[]> {
+  async getAuditLogsByEntityId(
+    entityType: string,
+    entityId: string
+  ): Promise<AuditLog[]> {
     return this.auditLogRepository.find({
       where: { entityType, entityId },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
   async getAuditLogsByUserId(userId: string): Promise<AuditLog[]> {
     return this.auditLogRepository.find({
       where: { userId },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
-  async getAuditLogsByDateRange(startDate: Date, endDate: Date): Promise<AuditLog[]> {
+  async getAuditLogsByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): Promise<AuditLog[]> {
     return this.auditLogRepository.find({
       where: {
         timestamp: Between(startDate, endDate),
       },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
     });
   }
 
-  async searchAuditLogs(params: unknown): Promise<{ data: AuditLog[]; total: number }> {
-    const queryBuilder = this.auditLogRepository.createQueryBuilder('audit');
+  async searchAuditLogs(params: {
+    entityType?: string;
+    action?: string;
+    userId?: string;
+  }): Promise<{ data: AuditLog[]; total: number }> {
+    const queryBuilder = this.auditLogRepository.createQueryBuilder("audit");
 
-    if ((params as any).entityType) {
-      queryBuilder.andWhere('audit.entityType = :entityType', { entityType: (params as any).entityType });
+    if (params.entityType) {
+      queryBuilder.andWhere("audit.entityType = :entityType", {
+        entityType: params.entityType,
+      });
     }
 
-    if ((params as any).action) {
-      queryBuilder.andWhere('audit.action = :action', { action: (params as any).action });
+    if (params.action) {
+      queryBuilder.andWhere("audit.action = :action", {
+        action: params.action,
+      });
     }
 
-    if ((params as any).userId) {
-      queryBuilder.andWhere('audit.userId = :userId', { userId: (params as any).userId });
+    if (params.userId) {
+      queryBuilder.andWhere("audit.userId = :userId", {
+        userId: params.userId,
+      });
     }
 
-    queryBuilder.orderBy('audit.timestamp', 'DESC');
+    queryBuilder.orderBy("audit.timestamp", "DESC");
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
@@ -206,7 +234,7 @@ export class ComplianceService {
 
   async getAllRules(): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -218,10 +246,13 @@ export class ComplianceService {
     return rule;
   }
 
-  async updateRule(id: string, data: unknown): Promise<ComplianceRule> {
+  async updateRule(
+    id: string,
+    data: DeepPartial<ComplianceRule>
+  ): Promise<ComplianceRule> {
     const rule = await this.getRuleById(id);
-    Object.assign(rule, data);
-    const saved = await this.complianceRuleRepository.save(rule);
+    const updatedRule = this.complianceRuleRepository.merge(rule, data);
+    const saved = await this.complianceRuleRepository.save(updatedRule);
     return Array.isArray(saved) ? saved[0] : saved;
   }
 
@@ -232,12 +263,17 @@ export class ComplianceService {
 
   async getRulesByCategory(category: string): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
-      where: { category: category as any },
-      order: { createdAt: 'DESC' },
+      where: { category },
+      order: { createdAt: "DESC" },
     });
   }
 
-  async generateComplianceReport(caseId: string): Promise<unknown> {
+  async generateComplianceReport(caseId: string): Promise<{
+    caseId: string;
+    generatedAt: Date;
+    checks: ComplianceCheck[];
+    summary: { score: number; passed: number; failed: number; total: number };
+  }> {
     const checks = await this.getChecksByCaseId(caseId);
     const score = await this.getComplianceScore(caseId);
 

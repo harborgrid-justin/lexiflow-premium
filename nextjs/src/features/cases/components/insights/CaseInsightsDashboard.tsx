@@ -257,15 +257,15 @@ export const CaseInsightsDashboard: React.FC = () => {
                   />
                 )}
               {matters?.some(m => {
-                  const now = Date.now();
-                  return m.trialDate && new Date(m.trialDate) < new Date(now + 7 * 24 * 60 * 60 * 1000)
+                const now = Date.now();
+                return m.trialDate && new Date(m.trialDate) < new Date(now + 7 * 24 * 60 * 60 * 1000)
               }) && (
-                <RecommendationItem
-                  title="Urgent Trial Dates"
-                  description="Multiple trials approaching within 7 days"
-                  isDark={isDark}
-                />
-              )}
+                  <RecommendationItem
+                    title="Urgent Trial Dates"
+                    description="Multiple trials approaching within 7 days"
+                    isDark={isDark}
+                  />
+                )}
             </div>
           </Card>
         </div>

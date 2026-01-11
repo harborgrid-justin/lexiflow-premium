@@ -8,7 +8,7 @@ import {
   Param,
   Query,
   Request,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -16,9 +16,14 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiQuery,
- }from '@nestjs/swagger';
-import { MessagingService } from './messaging.service';
-import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
+} from "@nestjs/swagger";
+import { MessagingService } from "./messaging.service";
+import {
+  CreateConversationDto,
+  CreateMessageDto,
+  MessageQueryDto,
+} from "./dto";
+import { RequestWithUser } from "@common/interfaces/request-with-user.interface";
 
 /**
  * Messaging Controller
@@ -28,9 +33,8 @@ import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto'
  *
  * @class MessagingController
  */
-@ApiTags('Messaging')
-
-@Controller('messaging')
+@ApiTags("Messaging")
+@Controller("messaging")
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class MessagingController {
@@ -40,19 +44,19 @@ export class MessagingController {
    * GET /api/v1/conversations
    * List all conversations for the authenticated user
    */
-  @Get('conversations')
-  @ApiOperation({ summary: 'List all conversations for user' })
-  @ApiResponse({ status: 200, description: 'Returns paginated conversations' })
-  @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get("conversations")
+  @ApiOperation({ summary: "List all conversations for user" })
+  @ApiResponse({ status: 200, description: "Returns paginated conversations" })
+  @ApiQuery({ name: "page", required: false, type: Number })
+  @ApiQuery({ name: "limit", required: false, type: Number })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
   async getConversations(
-    @Request() req: unknown,
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Request() req: RequestWithUser,
+    @Query("page") page?: number,
+    @Query("limit") limit?: number
   ) {
-    const userId = (req as any).user?.id || 'temp-user-id'; // Will use actual auth
+    const userId = req.user?.id || "temp-user-id"; // Will use actual auth
     return this.messagingService.findAllConversations(userId, page, limit);
   }
 
@@ -60,15 +64,18 @@ export class MessagingController {
    * GET /api/v1/conversations/:id
    * Get a specific conversation
    */
-  @Get('conversations/:id')
-  @ApiOperation({ summary: 'Get conversation by ID' })
-  @ApiResponse({ status: 200, description: 'Returns conversation details' })
-  @ApiResponse({ status: 404, description: 'Conversation not found' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getConversation(@Param('id') id: string, @Request() req: unknown) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+  @Get("conversations/:id")
+  @ApiOperation({ summary: "Get conversation by ID" })
+  @ApiResponse({ status: 200, description: "Returns conversation details" })
+  @ApiResponse({ status: 404, description: "Conversation not found" })
+  @ApiParam({ name: "id", description: "Conversation ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async getConversation(
+    @Param("id") id: string,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.findConversationById(id, userId);
   }
 
@@ -76,15 +83,21 @@ export class MessagingController {
    * POST /api/v1/conversations
    * Create a new conversation
    */
-  @Post('conversations')
-  @ApiOperation({ summary: 'Create a new conversation' })
-  @ApiResponse({ status: 201, description: 'Conversation created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid input' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createConversation(@Body() createDto: CreateConversationDto, @Request() req: unknown) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+  @Post("conversations")
+  @ApiOperation({ summary: "Create a new conversation" })
+  @ApiResponse({
+    status: 201,
+    description: "Conversation created successfully",
+  })
+  @ApiResponse({ status: 400, description: "Invalid input" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
+  async createConversation(
+    @Body() createDto: CreateConversationDto,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.createConversation(createDto, userId);
   }
 
@@ -92,15 +105,18 @@ export class MessagingController {
    * DELETE /api/v1/conversations/:id
    * Delete a conversation
    */
-  @Delete('conversations/:id')
-  @ApiOperation({ summary: 'Delete a conversation' })
-  @ApiResponse({ status: 200, description: 'Conversation deleted' })
-  @ApiResponse({ status: 404, description: 'Conversation not found' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteConversation(@Param('id') id: string, @Request() req: unknown) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+  @Delete("conversations/:id")
+  @ApiOperation({ summary: "Delete a conversation" })
+  @ApiResponse({ status: 200, description: "Conversation deleted" })
+  @ApiResponse({ status: 404, description: "Conversation not found" })
+  @ApiParam({ name: "id", description: "Conversation ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async deleteConversation(
+    @Param("id") id: string,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.deleteConversation(id, userId);
   }
 
@@ -108,19 +124,19 @@ export class MessagingController {
    * GET /api/v1/conversations/:id/messages
    * Get messages for a conversation
    */
-  @Get('conversations/:id/messages')
-  @ApiOperation({ summary: 'Get messages for a conversation' })
-  @ApiResponse({ status: 200, description: 'Returns paginated messages' })
-  @ApiResponse({ status: 404, description: 'Conversation not found' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get("conversations/:id/messages")
+  @ApiOperation({ summary: "Get messages for a conversation" })
+  @ApiResponse({ status: 200, description: "Returns paginated messages" })
+  @ApiResponse({ status: 404, description: "Conversation not found" })
+  @ApiParam({ name: "id", description: "Conversation ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
   async getMessages(
-    @Param('id') conversationId: string,
+    @Param("id") conversationId: string,
     @Query() query: MessageQueryDto,
-    @Request() req: unknown,
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.findMessages(conversationId, userId, query);
   }
 
@@ -128,38 +144,45 @@ export class MessagingController {
    * POST /api/v1/conversations/:id/messages
    * Send a message in a conversation
    */
-  @Post('conversations/:id/messages')
-  @ApiOperation({ summary: 'Send a message in a conversation' })
-  @ApiResponse({ status: 201, description: 'Message sent successfully' })
-  @ApiResponse({ status: 404, description: 'Conversation not found' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  @Post("conversations/:id/messages")
+  @ApiOperation({ summary: "Send a message in a conversation" })
+  @ApiResponse({ status: 201, description: "Message sent successfully" })
+  @ApiResponse({ status: 404, description: "Conversation not found" })
+  @ApiParam({ name: "id", description: "Conversation ID" })
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
   async sendMessage(
-    @Param('id') conversationId: string,
+    @Param("id") conversationId: string,
     @Body() createDto: CreateMessageDto,
-    @Request() req: unknown,
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || 'temp-user-id';
-    return this.messagingService.createMessage(conversationId, createDto, userId);
+    const userId = req.user?.id || "temp-user-id";
+    return this.messagingService.createMessage(
+      conversationId,
+      createDto,
+      userId
+    );
   }
 
   /**
    * PUT /api/v1/messages/:id/read
    * Mark a message as read
    */
-  @Put('messages/:id/read')
-  @ApiOperation({ summary: 'Mark message as read' })
-  @ApiResponse({ status: 200, description: 'Message marked as read' })
-  @ApiResponse({ status: 404, description: 'Message not found' })
-  @ApiParam({ name: 'id', description: 'Message ID' })
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async markAsRead(@Param('id') messageId: string, @Request() req: unknown) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+  @Put("messages/:id/read")
+  @ApiOperation({ summary: "Mark message as read" })
+  @ApiResponse({ status: 200, description: "Message marked as read" })
+  @ApiResponse({ status: 404, description: "Message not found" })
+  @ApiParam({ name: "id", description: "Message ID" })
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async markAsRead(
+    @Param("id") messageId: string,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.markMessageAsRead(messageId, userId);
   }
 
@@ -167,16 +190,18 @@ export class MessagingController {
    * DELETE /api/v1/messages/:id
    * Delete a message
    */
-  @Delete('messages/:id')
-  @ApiOperation({ summary: 'Delete a message' })
-  @ApiResponse({ status: 200, description: 'Message deleted' })
-  @ApiResponse({ status: 404, description: 'Message not found' })
-  @ApiParam({ name: 'id', description: 'Message ID' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteMessage(@Param('id') messageId: string, @Request() req: unknown) {
-    const userId = (req as any).user?.id || 'temp-user-id';
+  @Delete("messages/:id")
+  @ApiOperation({ summary: "Delete a message" })
+  @ApiResponse({ status: 200, description: "Message deleted" })
+  @ApiResponse({ status: 404, description: "Message not found" })
+  @ApiParam({ name: "id", description: "Message ID" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async deleteMessage(
+    @Param("id") messageId: string,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.messagingService.deleteMessage(messageId, userId);
   }
 }
-

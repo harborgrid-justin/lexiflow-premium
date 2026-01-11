@@ -1,12 +1,12 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { Request } from 'express';
-import * as crypto from 'crypto';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { Request } from "express";
+import * as crypto from "crypto";
 import {
   FINGERPRINT_HASH_ALGORITHM,
   FINGERPRINT_SALT_LENGTH,
   FINGERPRINT_COMPONENTS,
   SESSION_FINGERPRINT_MISMATCH_THRESHOLD,
-} from '@security/constants/security.constants';
+} from "@security/constants/security.constants";
 
 export interface FingerprintData {
   fingerprint: string;
@@ -26,7 +26,7 @@ export interface SessionValidationResult {
   isValid: boolean;
   mismatchCount: number;
   changedComponents: string[];
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "low" | "medium" | "high" | "critical";
 }
 
 /**
@@ -73,7 +73,10 @@ export class RequestFingerprintService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout;
 
   constructor() {
-    this.cleanupInterval = setInterval(() => this.cleanupCache(), 60 * 60 * 1000);
+    this.cleanupInterval = setInterval(
+      () => this.cleanupCache(),
+      60 * 60 * 1000
+    );
   }
 
   onModuleDestroy() {
@@ -86,9 +89,9 @@ export class RequestFingerprintService implements OnModuleDestroy {
    */
   private extractComponents(req: Request): FingerprintComponents {
     return {
-      userAgent: req.headers['user-agent'] || 'unknown',
-      acceptLanguage: req.headers['accept-language'] || 'unknown',
-      acceptEncoding: req.headers['accept-encoding'] || 'unknown',
+      userAgent: req.headers["user-agent"] || "unknown",
+      acceptLanguage: req.headers["accept-language"] || "unknown",
+      acceptEncoding: req.headers["accept-encoding"] || "unknown",
       ip: this.extractClientIp(req),
       platform: this.extractPlatform(req),
     };
@@ -100,44 +103,45 @@ export class RequestFingerprintService implements OnModuleDestroy {
    */
   private extractClientIp(req: Request): string {
     // Check X-Forwarded-For header (proxy/load balancer)
-    const forwarded = req.headers['x-forwarded-for'];
+    const forwarded = req.headers["x-forwarded-for"];
     if (forwarded) {
       // Take the first IP if multiple are present
       const ips = Array.isArray(forwarded) ? forwarded[0] : forwarded;
       if (ips) {
-        return ips.split(',')[0]?.trim() || 'unknown';
+        return ips.split(",")[0]?.trim() || "unknown";
       }
     }
 
     // Check X-Real-IP header (nginx)
-    const realIp = req.headers['x-real-ip'];
+    const realIp = req.headers["x-real-ip"];
     if (realIp) {
-      return (Array.isArray(realIp) ? realIp[0] : realIp) || 'unknown';
+      return (Array.isArray(realIp) ? realIp[0] : realIp) || "unknown";
     }
 
     // Check CF-Connecting-IP (Cloudflare)
-    const cfIp = req.headers['cf-connecting-ip'];
+    const cfIp = req.headers["cf-connecting-ip"];
     if (cfIp) {
-      return (Array.isArray(cfIp) ? cfIp[0] : cfIp) || 'unknown';
+      return (Array.isArray(cfIp) ? cfIp[0] : cfIp) || "unknown";
     }
 
     // Fallback to connection remote address
-    return req.ip || req.socket.remoteAddress || 'unknown';
+    return req.ip || req.socket.remoteAddress || "unknown";
   }
 
   /**
    * Extract platform from user agent
    */
   private extractPlatform(req: Request): string {
-    const userAgent = (req.headers['user-agent'] || '').toLowerCase();
+    const userAgent = (req.headers["user-agent"] || "").toLowerCase();
 
-    if (userAgent.includes('windows')) return 'windows';
-    if (userAgent.includes('mac')) return 'macos';
-    if (userAgent.includes('linux')) return 'linux';
-    if (userAgent.includes('android')) return 'android';
-    if (userAgent.includes('iphone') || userAgent.includes('ipad')) return 'ios';
+    if (userAgent.includes("windows")) return "windows";
+    if (userAgent.includes("mac")) return "macos";
+    if (userAgent.includes("linux")) return "linux";
+    if (userAgent.includes("android")) return "android";
+    if (userAgent.includes("iphone") || userAgent.includes("ipad"))
+      return "ios";
 
-    return 'unknown';
+    return "unknown";
   }
 
   /**
@@ -152,18 +156,19 @@ export class RequestFingerprintService implements OnModuleDestroy {
       components.acceptLanguage,
       components.acceptEncoding,
       components.ip,
-      components.platform || '',
-    ].join('|');
+      components.platform || "",
+    ].join("|");
 
     // Add salt for additional security
-    const fingerprintSalt = salt || crypto.randomBytes(FINGERPRINT_SALT_LENGTH).toString('hex');
+    const fingerprintSalt =
+      salt || crypto.randomBytes(FINGERPRINT_SALT_LENGTH).toString("hex");
     const dataToHash = `${componentString}|${fingerprintSalt}`;
 
     // Generate hash
     const hash = crypto
       .createHash(FINGERPRINT_HASH_ALGORITHM)
       .update(dataToHash)
-      .digest('hex');
+      .digest("hex");
 
     const fingerprint = `${fingerprintSalt}:${hash}`;
 
@@ -185,7 +190,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
   verifyFingerprint(req: Request, storedFingerprint: string): boolean {
     try {
       // Extract salt from stored fingerprint
-      const [salt] = storedFingerprint.split(':');
+      const [salt] = storedFingerprint.split(":");
 
       // Generate fingerprint with the same salt
       const current = this.generateFingerprint(req, salt);
@@ -194,7 +199,10 @@ export class RequestFingerprintService implements OnModuleDestroy {
       return this.secureCompare(current.fingerprint, storedFingerprint);
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      this.logger.error(`Fingerprint verification failed: ${err.message}`, err.stack);
+      this.logger.error(
+        `Fingerprint verification failed: ${err.message}`,
+        err.stack
+      );
       return false;
     }
   }
@@ -211,7 +219,10 @@ export class RequestFingerprintService implements OnModuleDestroy {
 
     if (!storedData) {
       // If we don't have cached data, recreate it from stored fingerprint
-      return this.validateAgainstStoredFingerprint(currentData, storedFingerprint);
+      return this.validateAgainstStoredFingerprint(
+        currentData,
+        storedFingerprint
+      );
     }
 
     const changedComponents: string[] = [];
@@ -246,7 +257,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
     currentData: FingerprintData,
     storedFingerprint: string
   ): SessionValidationResult {
-    const [salt] = storedFingerprint.split(':');
+    const [salt] = storedFingerprint.split(":");
 
     // Recreate fingerprint with stored salt
     const componentString = [
@@ -254,14 +265,14 @@ export class RequestFingerprintService implements OnModuleDestroy {
       currentData.components.acceptLanguage,
       currentData.components.acceptEncoding,
       currentData.components.ip,
-      currentData.components.platform || '',
-    ].join('|');
+      currentData.components.platform || "",
+    ].join("|");
 
     const dataToHash = `${componentString}|${salt}`;
     const hash = crypto
       .createHash(FINGERPRINT_HASH_ALGORITHM)
       .update(dataToHash)
-      .digest('hex');
+      .digest("hex");
 
     const recreatedFingerprint = `${salt}:${hash}`;
     const isValid = this.secureCompare(recreatedFingerprint, storedFingerprint);
@@ -269,8 +280,8 @@ export class RequestFingerprintService implements OnModuleDestroy {
     return {
       isValid,
       mismatchCount: isValid ? 0 : 1,
-      changedComponents: isValid ? [] : ['fingerprint'],
-      riskLevel: isValid ? 'low' : 'critical',
+      changedComponents: isValid ? [] : ["fingerprint"],
+      riskLevel: isValid ? "low" : "critical",
     };
   }
 
@@ -280,30 +291,30 @@ export class RequestFingerprintService implements OnModuleDestroy {
   private calculateRiskLevel(
     changedComponents: string[],
     mismatchCount: number
-  ): 'low' | 'medium' | 'high' | 'critical' {
-    if (mismatchCount === 0) return 'low';
+  ): "low" | "medium" | "high" | "critical" {
+    if (mismatchCount === 0) return "low";
 
     // IP change is the most critical indicator of session hijacking
-    if (changedComponents.includes('ip')) {
-      return 'critical';
+    if (changedComponents.includes("ip")) {
+      return "critical";
     }
 
     // User agent change is highly suspicious
-    if (changedComponents.includes('userAgent')) {
-      return 'high';
+    if (changedComponents.includes("userAgent")) {
+      return "high";
     }
 
     // Multiple component changes
     if (mismatchCount >= 3) {
-      return 'high';
+      return "high";
     }
 
     // Single non-critical component change
     if (mismatchCount === 1) {
-      return 'low';
+      return "low";
     }
 
-    return 'medium';
+    return "medium";
   }
 
   /**
@@ -312,8 +323,11 @@ export class RequestFingerprintService implements OnModuleDestroy {
   detectSessionHijacking(req: Request, storedFingerprint: string): boolean {
     const validation = this.validateSessionConsistency(req, storedFingerprint);
 
-    if (validation.riskLevel === 'critical' || validation.riskLevel === 'high') {
-      this.logger.warn('Potential session hijacking detected', {
+    if (
+      validation.riskLevel === "critical" ||
+      validation.riskLevel === "high"
+    ) {
+      this.logger.warn("Potential session hijacking detected", {
         riskLevel: validation.riskLevel,
         changedComponents: validation.changedComponents,
         ip: this.extractClientIp(req),
@@ -329,7 +343,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
    * Generate device identifier (more stable than full fingerprint)
    */
   generateDeviceId(req: Request): string {
-    const userAgent = req.headers['user-agent'] || 'unknown';
+    const userAgent = req.headers["user-agent"] || "unknown";
     const platform = this.extractPlatform(req);
 
     // Create a hash of stable device characteristics
@@ -337,7 +351,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
     return crypto
       .createHash(FINGERPRINT_HASH_ALGORITHM)
       .update(deviceString)
-      .digest('hex');
+      .digest("hex");
   }
 
   /**
@@ -417,7 +431,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
       return { size: 0, oldestEntry: 0, newestEntry: 0 };
     }
 
-    const timestamps = entries.map(e => e.timestamp);
+    const timestamps = entries.map((e) => e.timestamp);
 
     return {
       size: this.fingerprintCache.size,
@@ -434,29 +448,29 @@ export class RequestFingerprintService implements OnModuleDestroy {
     version: string;
     mobile: boolean;
   } {
-    const userAgent = req.headers['user-agent'] || '';
+    const userAgent = req.headers["user-agent"] || "";
 
-    let browser = 'unknown';
-    let version = 'unknown';
+    let browser = "unknown";
+    let version = "unknown";
     let mobile = false;
 
     // Detect browser
-    if (userAgent.includes('Chrome')) {
-      browser = 'Chrome';
+    if (userAgent.includes("Chrome")) {
+      browser = "Chrome";
       const match = userAgent.match(/Chrome\/(\d+)/);
-      version = match?.[1] || 'unknown';
-    } else if (userAgent.includes('Firefox')) {
-      browser = 'Firefox';
+      version = match?.[1] || "unknown";
+    } else if (userAgent.includes("Firefox")) {
+      browser = "Firefox";
       const match = userAgent.match(/Firefox\/(\d+)/);
-      version = match?.[1] || 'unknown';
-    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
-      browser = 'Safari';
+      version = match?.[1] || "unknown";
+    } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+      browser = "Safari";
       const match = userAgent.match(/Version\/(\d+)/);
-      version = match?.[1] || 'unknown';
-    } else if (userAgent.includes('Edge')) {
-      browser = 'Edge';
-      const match = userAgent.match(/Edge/(\d+)/);
-      version = match?.[1] || 'unknown';
+      version = match?.[1] || "unknown";
+    } else if (userAgent.includes("Edge")) {
+      browser = "Edge";
+      const match = userAgent.match(/Edge\/(\d+)/);
+      version = match?.[1] || "unknown";
     }
 
     // Detect mobile
@@ -487,7 +501,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
     return crypto
       .createHash(FINGERPRINT_HASH_ALGORITHM)
       .update(JSON.stringify(signature))
-      .digest('hex');
+      .digest("hex");
   }
 
   /**
@@ -495,8 +509,8 @@ export class RequestFingerprintService implements OnModuleDestroy {
    */
   isIpChangedSignificantly(currentIp: string, storedIp: string): boolean {
     // For IPv4, compare first 3 octets (class C subnet)
-    const currentParts = currentIp.split('.');
-    const storedParts = storedIp.split('.');
+    const currentParts = currentIp.split(".");
+    const storedParts = storedIp.split(".");
 
     if (currentParts.length === 4 && storedParts.length === 4) {
       // Compare first 3 octets

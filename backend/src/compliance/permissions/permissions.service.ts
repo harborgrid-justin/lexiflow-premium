@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   PermissionDto,
   GrantPermissionDto,
@@ -11,7 +11,7 @@ import {
   PermissionAction,
   PermissionScope,
   PermissionCondition,
-} from './dto/permission.dto';
+} from "./dto/permission.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -75,9 +75,7 @@ export class PermissionsService {
     // Filter out expired permissions unless explicitly requested
     if (!query.includeExpired) {
       const now = new Date();
-      perms = perms.filter(
-        (perm) => !perm.expiresAt || perm.expiresAt > now,
-      );
+      perms = perms.filter((perm) => !perm.expiresAt || perm.expiresAt > now);
     }
 
     // Apply filters
@@ -91,7 +89,7 @@ export class PermissionsService {
       perms = perms.filter((perm) => perm.resource === query.resource);
     }
     if (query.action) {
-      perms = perms.filter((perm) => perm.actions.includes(query.action || '' as any));
+      perms = perms.filter((perm) => perm.actions.includes(query.action ?? ""));
     }
     if (query.scope) {
       perms = perms.filter((perm) => perm.scope === query.scope);
@@ -146,7 +144,7 @@ export class PermissionsService {
         }
 
         return true;
-      },
+      }
     );
 
     if (applicablePerms.length > 0) {
@@ -160,12 +158,12 @@ export class PermissionsService {
     return {
       allowed: false,
       matchedPermissions: [],
-      reason: 'No matching permissions found',
+      reason: "No matching permissions found",
     };
   }
 
   async getAccessMatrix(dto: AccessMatrixDto): Promise<AccessMatrixResult> {
-    const userId = dto.userId || 'current-user';
+    const userId = dto.userId || "current-user";
     const actions = Object.values(PermissionAction);
 
     const matrix: Record<string, Record<string, boolean>> = {};
@@ -191,25 +189,25 @@ export class PermissionsService {
 
   private evaluateConditions(
     conditions: PermissionCondition[],
-    context: Record<string, unknown>,
+    context: Record<string, unknown>
   ): boolean {
     return conditions.every((condition) => {
       const contextValue = context[condition.field];
 
       switch (condition.operator) {
-        case 'equals':
+        case "equals":
           return contextValue === condition.value;
-        case 'not_equals':
+        case "not_equals":
           return contextValue !== condition.value;
-        case 'in':
+        case "in":
           return Array.isArray(condition.value)
             ? condition.value.includes(contextValue)
             : false;
-        case 'not_in':
+        case "not_in":
           return Array.isArray(condition.value)
             ? !condition.value.includes(contextValue)
             : true;
-        case 'contains':
+        case "contains":
           return String(contextValue).includes(String(condition.value));
         default:
           return false;

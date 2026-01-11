@@ -67,7 +67,7 @@ export const HelpSection: React.FC = () => {
         <strong>Pro Tips:</strong>
         <ul className="mt-2 space-y-1 pl-4">
           <li>• Enter multiple citations separated by new lines</li>
-          <li>• Use "Add Sample Data" to see examples</li>
+          <li>• Use &ldquo;Add Sample Data&rdquo; to see examples</li>
           <li>• Export to HTML for formatted documents</li>
           <li>• Generate Table of Authorities for briefs</li>
         </ul>

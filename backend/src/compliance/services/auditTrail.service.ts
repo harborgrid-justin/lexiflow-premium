@@ -1,9 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual } from 'typeorm';
-import { AuditLog } from '@compliance/entities/audit-log.entity';
-import { createHmac } from 'crypto';
-import { AuditReportQueryDto } from '@compliance/dto/compliance.dto';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, LessThanOrEqual } from "typeorm";
+import { AuditLog } from "@compliance/entities/audit-log.entity";
+import { createHmac } from "crypto";
+import { AuditReportQueryDto } from "@compliance/dto/compliance.dto";
 
 export interface IntegrityCheckResult {
   valid: boolean;
@@ -54,19 +54,20 @@ export interface AuditSearchResult {
 @Injectable()
 export class AuditTrailService {
   private readonly logger = new Logger(AuditTrailService.name);
-  private readonly HMAC_SECRET = process.env.AUDIT_HMAC_SECRET || 'default-secret-change-in-production';
-  private readonly CHAIN_ALGORITHM = 'sha256';
+  private readonly HMAC_SECRET =
+    process.env.AUDIT_HMAC_SECRET || "default-secret-change-in-production";
+  private readonly CHAIN_ALGORITHM = "sha256";
 
   constructor(
     @InjectRepository(AuditLog)
-    private readonly auditLogRepository: Repository<AuditLog>,
+    private readonly auditLogRepository: Repository<AuditLog>
   ) {}
 
   async createAuditEntry(data: Partial<AuditLog>): Promise<AuditLog> {
     const previousEntry = await this.getLastAuditEntry();
     const previousHash = previousEntry
       ? this.calculateEntryHash(previousEntry)
-      : '0000000000000000000000000000000000000000000000000000000000000000';
+      : "0000000000000000000000000000000000000000000000000000000000000000";
 
     const entry = this.auditLogRepository.create({
       ...data,
@@ -75,8 +76,11 @@ export class AuditTrailService {
 
     const entryHash = this.calculateEntryHash(entry, previousHash);
 
+    const existingChanges =
+      (entry.changes as Record<string, unknown> | undefined) || {};
+
     const metadata = {
-      ...((entry.changes as any) || {}),
+      ...existingChanges,
       auditChain: {
         previousHash,
         currentHash: entryHash,
@@ -84,7 +88,7 @@ export class AuditTrailService {
       },
     };
 
-    entry.changes = metadata as any;
+    entry.changes = metadata;
 
     const saved = await this.auditLogRepository.save(entry);
 
@@ -95,12 +99,15 @@ export class AuditTrailService {
 
   async getLastAuditEntry(): Promise<AuditLog | null> {
     const entry = await this.auditLogRepository.findOne({
-      order: { timestamp: 'DESC', createdAt: 'DESC' },
+      order: { timestamp: "DESC", createdAt: "DESC" },
     });
     return entry || null;
   }
 
-  private calculateEntryHash(entry: Partial<AuditLog>, previousHash?: string): string {
+  private calculateEntryHash(
+    entry: Partial<AuditLog>,
+    previousHash?: string
+  ): string {
     const dataString = JSON.stringify({
       userId: entry.userId,
       action: entry.action,
@@ -112,32 +119,32 @@ export class AuditTrailService {
       endpoint: entry.endpoint,
       statusCode: entry.statusCode,
       result: entry.result,
-      previousHash: previousHash || '',
+      previousHash: previousHash || "",
     });
 
     const hash = createHmac(this.CHAIN_ALGORITHM, this.HMAC_SECRET)
       .update(dataString)
-      .digest('hex');
+      .digest("hex");
 
     return hash;
   }
 
   async verifyAuditTrailIntegrity(
     startDate?: Date,
-    endDate?: Date,
+    endDate?: Date
   ): Promise<IntegrityCheckResult> {
-    this.logger.log('Starting audit trail integrity verification');
+    this.logger.log("Starting audit trail integrity verification");
 
     const queryBuilder = this.auditLogRepository
-      .createQueryBuilder('audit')
-      .orderBy('audit.timestamp', 'ASC')
-      .addOrderBy('audit.createdAt', 'ASC');
+      .createQueryBuilder("audit")
+      .orderBy("audit.timestamp", "ASC")
+      .addOrderBy("audit.createdAt", "ASC");
 
     if (startDate) {
-      queryBuilder.andWhere('audit.timestamp >= :startDate', { startDate });
+      queryBuilder.andWhere("audit.timestamp >= :startDate", { startDate });
     }
     if (endDate) {
-      queryBuilder.andWhere('audit.timestamp <= :endDate', { endDate });
+      queryBuilder.andWhere("audit.timestamp <= :endDate", { endDate });
     }
 
     const entries = await queryBuilder.getMany();
@@ -157,11 +164,15 @@ export class AuditTrailService {
     const tamperedEntries: string[] = [];
     let brokenChains = 0;
     let lastVerifiedEntry: string | null = null;
-    let previousHash = '0000000000000000000000000000000000000000000000000000000000000000';
+    let previousHash =
+      "0000000000000000000000000000000000000000000000000000000000000000";
 
     for (const entry of entries) {
       const expectedHash = this.calculateEntryHash(entry, previousHash);
-      const storedChain = (entry.changes as any)?.auditChain;
+      const storedChanges = entry.changes as Record<string, unknown>;
+      const storedChain = storedChanges?.auditChain as
+        | { currentHash: string; previousHash: string }
+        | undefined;
       const storedHash = storedChain?.currentHash;
       const storedPrevHash = storedChain?.previousHash;
 
@@ -173,12 +184,16 @@ export class AuditTrailService {
       if (storedPrevHash !== previousHash) {
         brokenChains++;
         tamperedEntries.push(entry.id);
-        this.logger.error(`Chain broken at entry ${entry.id}: expected prev ${previousHash}, got ${storedPrevHash}`);
+        this.logger.error(
+          `Chain broken at entry ${entry.id}: expected prev ${previousHash}, got ${storedPrevHash}`
+        );
       }
 
       if (storedHash !== expectedHash) {
         tamperedEntries.push(entry.id);
-        this.logger.error(`Hash mismatch at entry ${entry.id}: expected ${expectedHash}, got ${storedHash}`);
+        this.logger.error(
+          `Hash mismatch at entry ${entry.id}: expected ${expectedHash}, got ${storedHash}`
+        );
       }
 
       previousHash = storedHash;
@@ -197,63 +212,65 @@ export class AuditTrailService {
 
     if (!result.valid) {
       this.logger.error(
-        `Audit trail integrity check FAILED: ${tamperedEntries.length} tampered entries, ${brokenChains} broken chains`,
+        `Audit trail integrity check FAILED: ${tamperedEntries.length} tampered entries, ${brokenChains} broken chains`
       );
 
       await this.createAuditEntry({
-        userId: 'system',
-        action: 'other',
-        entityType: 'audit_trail',
-        entityId: 'integrity_check',
-        description: 'Audit trail integrity check FAILED',
-        result: 'failure',
+        userId: "system",
+        action: "other",
+        entityType: "audit_trail",
+        entityId: "integrity_check",
+        description: "Audit trail integrity check FAILED",
+        result: "failure",
         details: JSON.stringify(result),
-      } as any);
+      });
     } else {
-      this.logger.log('Audit trail integrity check PASSED');
+      this.logger.log("Audit trail integrity check PASSED");
     }
 
     return result;
   }
 
-  async searchAuditLogs(query: AuditReportQueryDto): Promise<AuditSearchResult> {
+  async searchAuditLogs(
+    query: AuditReportQueryDto
+  ): Promise<AuditSearchResult> {
     const queryBuilder = this.auditLogRepository
-      .createQueryBuilder('audit')
-      .orderBy('audit.timestamp', 'DESC');
+      .createQueryBuilder("audit")
+      .orderBy("audit.timestamp", "DESC");
 
     if (query.startDate) {
-      queryBuilder.andWhere('audit.timestamp >= :startDate', {
+      queryBuilder.andWhere("audit.timestamp >= :startDate", {
         startDate: new Date(query.startDate),
       });
     }
 
     if (query.endDate) {
-      queryBuilder.andWhere('audit.timestamp <= :endDate', {
+      queryBuilder.andWhere("audit.timestamp <= :endDate", {
         endDate: new Date(query.endDate),
       });
     }
 
     if (query.userId) {
-      queryBuilder.andWhere('audit.userId = :userId', { userId: query.userId });
+      queryBuilder.andWhere("audit.userId = :userId", { userId: query.userId });
     }
 
     if (query.entityType) {
-      queryBuilder.andWhere('audit.entityType = :entityType', {
+      queryBuilder.andWhere("audit.entityType = :entityType", {
         entityType: query.entityType,
       });
     }
 
     if (query.action) {
-      queryBuilder.andWhere('audit.action = :action', { action: query.action });
+      queryBuilder.andWhere("audit.action = :action", { action: query.action });
     }
 
     if (query.onlyFailures) {
-      queryBuilder.andWhere('audit.result = :result', { result: 'failure' });
+      queryBuilder.andWhere("audit.result = :result", { result: "failure" });
     }
 
     if (query.securityEventsOnly) {
-      queryBuilder.andWhere('audit.action IN (:...actions)', {
-        actions: ['login', 'logout', 'delete', 'export', 'access'],
+      queryBuilder.andWhere("audit.action IN (:...actions)", {
+        actions: ["login", "logout", "delete", "export", "access"],
       });
     }
 
@@ -276,7 +293,7 @@ export class AuditTrailService {
     if (query.verifyIntegrity && data.length > 0) {
       const integrityCheck = await this.verifyAuditTrailIntegrity(
         query.startDate ? new Date(query.startDate) : undefined,
-        query.endDate ? new Date(query.endDate) : undefined,
+        query.endDate ? new Date(query.endDate) : undefined
       );
       result.integrityVerified = integrityCheck.valid;
     }
@@ -286,7 +303,7 @@ export class AuditTrailService {
 
   async exportAuditLogs(
     query: AuditReportQueryDto,
-    format: string = 'json',
+    format: string = "json"
   ): Promise<{ data: unknown; format: string; filename: string }> {
     const searchResult = await this.searchAuditLogs(query);
 
@@ -301,7 +318,7 @@ export class AuditTrailService {
         action: query.action,
       },
       integrityVerified: searchResult.integrityVerified,
-      auditLogs: searchResult.data.map(log => ({
+      auditLogs: searchResult.data.map((log) => ({
         id: log.id,
         timestamp: log.timestamp,
         userId: log.userId,
@@ -320,63 +337,66 @@ export class AuditTrailService {
       })),
     };
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename = `audit-logs-${timestamp}.${format}`;
 
-    if (format === 'csv') {
+    if (format === "csv") {
       const csv = this.convertToCSV(searchResult.data);
-      return { data: csv, format: 'csv', filename };
+      return { data: csv, format: "csv", filename };
     }
 
-    return { data: exportData, format: 'json', filename };
+    return { data: exportData, format: "json", filename };
   }
 
   private convertToCSV(logs: AuditLog[]): string {
     if (logs.length === 0) {
-      return 'No data';
+      return "No data";
     }
 
     const headers = [
-      'ID',
-      'Timestamp',
-      'User ID',
-      'User Name',
-      'Action',
-      'Entity Type',
-      'Entity ID',
-      'IP Address',
-      'Method',
-      'Endpoint',
-      'Status Code',
-      'Result',
-      'Description',
-      'Duration (ms)',
+      "ID",
+      "Timestamp",
+      "User ID",
+      "User Name",
+      "Action",
+      "Entity Type",
+      "Entity ID",
+      "IP Address",
+      "Method",
+      "Endpoint",
+      "Status Code",
+      "Result",
+      "Description",
+      "Duration (ms)",
     ];
 
-    const rows = logs.map(log => [
+    const rows = logs.map((log) => [
       log.id,
       log.timestamp.toISOString(),
-      log.userId || '',
-      log.userName || '',
+      log.userId || "",
+      log.userName || "",
       log.action,
       log.entityType,
-      log.entityId || '',
-      log.ipAddress || '',
-      log.method || '',
-      log.endpoint || '',
-      log.statusCode?.toString() || '',
+      log.entityId || "",
+      log.ipAddress || "",
+      log.method || "",
+      log.endpoint || "",
+      log.statusCode?.toString() || "",
       log.result,
-      (log.description || '').replace(/"/g, '""'),
-      log.duration?.toString() || '',
+      (log.description || "").replace(/"/g, '""'),
+      log.duration?.toString() || "",
     ]);
 
     return [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
-    ].join('\n');
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n");
   }
 
-  async getAuditStatistics(startDate?: Date, endDate?: Date): Promise<{
+  async getAuditStatistics(
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<{
     totalEntries: number;
     byAction: Record<string, number>;
     byEntityType: Record<string, number>;
@@ -385,13 +405,13 @@ export class AuditTrailService {
     averageDuration: number;
     failureRate: number;
   }> {
-    const queryBuilder = this.auditLogRepository.createQueryBuilder('audit');
+    const queryBuilder = this.auditLogRepository.createQueryBuilder("audit");
 
     if (startDate) {
-      queryBuilder.andWhere('audit.timestamp >= :startDate', { startDate });
+      queryBuilder.andWhere("audit.timestamp >= :startDate", { startDate });
     }
     if (endDate) {
-      queryBuilder.andWhere('audit.timestamp <= :endDate', { endDate });
+      queryBuilder.andWhere("audit.timestamp <= :endDate", { endDate });
     }
 
     const logs = await queryBuilder.getMany();
@@ -428,7 +448,7 @@ export class AuditTrailService {
         totalDuration += log.duration;
         durationCount++;
       }
-      if (log.result === 'failure') {
+      if (log.result === "failure") {
         failures++;
       }
     }
@@ -448,7 +468,9 @@ export class AuditTrailService {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
 
-    this.logger.log(`Archiving audit logs older than ${cutoffDate.toISOString()}`);
+    this.logger.log(
+      `Archiving audit logs older than ${cutoffDate.toISOString()}`
+    );
 
     const logsToArchive = await this.auditLogRepository.find({
       where: {

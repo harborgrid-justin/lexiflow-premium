@@ -1,13 +1,13 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { EthicalWallsService } from './ethical-walls.service';
+import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { Observable } from "rxjs";
+import { EthicalWallsService } from "./ethical-walls.service";
 
 @Injectable()
 export class EthicalWallGuard implements CanActivate {
   constructor(private readonly ethicalWallsService: EthicalWallsService) {}
 
   canActivate(
-    context: ExecutionContext,
+    context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     return this.validateRequest(request);
@@ -36,7 +36,7 @@ export class EthicalWallGuard implements CanActivate {
 
     if (checkResult.blocked) {
       throw new Error(
-        `Access denied: ${checkResult.message}. Ethical wall restrictions apply.`,
+        `Access denied: ${checkResult.message}. Ethical wall restrictions apply.`
       );
     }
 
@@ -52,10 +52,10 @@ export class EthicalWallGuard implements CanActivate {
 
     // Pattern matching for common entity routes
     const patterns = [
-      { regex: //cases/([^/]+)/, type: 'Case' },
-      { regex: //clients/([^/]+)/, type: 'Client' },
-      { regex: //documents/([^/]+)/, type: 'Document' },
-      { regex: //matters/([^/]+)/, type: 'Matter' },
+      { regex: /\/cases\/([^/]+)\//, type: "Case" },
+      { regex: /\/clients\/([^/]+)\//, type: "Client" },
+      { regex: /\/documents\/([^/]+)\//, type: "Document" },
+      { regex: /\/matters\/([^/]+)\//, type: "Matter" },
     ];
 
     for (const pattern of patterns) {
@@ -71,13 +71,19 @@ export class EthicalWallGuard implements CanActivate {
     // Check body for entity information
     if ((request as any).body) {
       if ((request as any).body.caseId) {
-        return { entityType: 'Case', entityId: (request as any).body.caseId };
+        return { entityType: "Case", entityId: (request as any).body.caseId };
       }
       if ((request as any).body.clientId) {
-        return { entityType: 'Client', entityId: (request as any).body.clientId };
+        return {
+          entityType: "Client",
+          entityId: (request as any).body.clientId,
+        };
       }
       if ((request as any).body.documentId) {
-        return { entityType: 'Document', entityId: (request as any).body.documentId };
+        return {
+          entityType: "Document",
+          entityId: (request as any).body.documentId,
+        };
       }
     }
 

@@ -44,7 +44,6 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
         </div>
     );
 };
-};
 
 export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onViewSource }) => {
     const { theme } = useTheme();

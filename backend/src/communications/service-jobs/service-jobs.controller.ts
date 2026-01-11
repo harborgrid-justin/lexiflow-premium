@@ -22,6 +22,7 @@ import {
   UpdateServiceJobDto,
 } from "./dto";
 import { ServiceJobsService } from "./service-jobs.service";
+import { RequestWithUser } from "@common/interfaces/request-with-user.interface";
 
 /**
  * Service Jobs Controller
@@ -49,9 +50,9 @@ export class ServiceJobsController {
   @ApiResponse({ status: 403, description: "Forbidden" })
   async getServiceJobs(
     @Query() query: ServiceJobQueryDto,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.findAll(query, userId);
   }
 
@@ -66,8 +67,11 @@ export class ServiceJobsController {
   @ApiParam({ name: "id", description: "Service job ID" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async getServiceJobById(@Param("id") id: string, @Request() req: unknown) {
-    const userId = (req as any).user?.id || "temp-user-id";
+  async getServiceJobById(
+    @Param("id") id: string,
+    @Request() req: RequestWithUser
+  ) {
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.findById(id, userId);
   }
 
@@ -84,9 +88,9 @@ export class ServiceJobsController {
   @ApiResponse({ status: 409, description: "Resource already exists" })
   async createServiceJob(
     @Body() createDto: CreateServiceJobDto,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.create(createDto, userId);
   }
 
@@ -105,9 +109,9 @@ export class ServiceJobsController {
   async updateServiceJob(
     @Param("id") id: string,
     @Body() updateDto: UpdateServiceJobDto,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.update(id, updateDto, userId);
   }
 
@@ -130,9 +134,9 @@ export class ServiceJobsController {
   async completeService(
     @Param("id") id: string,
     @Body() completeDto: CompleteServiceDto,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.completeService(id, completeDto, userId);
   }
 
@@ -155,9 +159,9 @@ export class ServiceJobsController {
   async assignProcessServer(
     @Param("id") id: string,
     @Body("processServerId") processServerId: string,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.assignProcessServer(
       id,
       processServerId,
@@ -181,9 +185,9 @@ export class ServiceJobsController {
   async cancelServiceJob(
     @Param("id") id: string,
     @Body("reason") reason: string,
-    @Request() req: unknown
+    @Request() req: RequestWithUser
   ) {
-    const userId = (req as any).user?.id || "temp-user-id";
+    const userId = req.user?.id || "temp-user-id";
     return this.serviceJobsService.cancel(id, reason, userId);
   }
 }

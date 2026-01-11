@@ -97,7 +97,12 @@ export class DocketController {
     @Param("caseId") caseId: string
   ): Promise<DocketEntry[]> {
     const result = await this.docketService.findAllByCaseId(caseId);
-    return Array.isArray(result) ? result : (result as any).data || [];
+    if (Array.isArray(result)) {
+      return result;
+    }
+    // Handle paginated result if necessary, checking for 'data' property in a safe way
+    const safeResult = result as { data?: DocketEntry[] };
+    return safeResult.data || [];
   }
 
   @Post("cases/:caseId/docket")

@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import * as MasterConfig from '@config/master.config';
-import { Repository, ObjectLiteral } from 'typeorm';
+import { Injectable, Logger } from "@nestjs/common";
+import * as MasterConfig from "@config/master.config";
+import { Repository, ObjectLiteral } from "typeorm";
 
 /**
  * Bulk Operation Result
@@ -23,7 +23,7 @@ export interface BulkOperationError {
  * Bulk Operations Service
  * Provides high-performance batch operations with transaction support
  * Optimized for processing thousands of records efficiently
- * 
+ *
  * @example
  * const result = await bulkOperationsService.bulkInsert(
  *   repository,
@@ -74,7 +74,7 @@ export class BulkOperationsService {
       batchSize?: number;
       useTransaction?: boolean;
       continueOnError?: boolean;
-    } = {},
+    } = {}
   ): Promise<BulkOperationResult<T>> {
     const batchSize = options.batchSize || this.DEFAULT_BATCH_SIZE;
     const result: BulkOperationResult<T> = {
@@ -93,11 +93,14 @@ export class BulkOperationsService {
       try {
         if (options.useTransaction) {
           await repository.manager.transaction(async (manager) => {
-            const inserted = await manager.save(repository.target, batch as any);
+            const inserted = await manager.save(
+              repository.target,
+              batch as Partial<T>[]
+            );
             result.success.push(...(inserted as T[]));
           });
         } else {
-          const inserted = await repository.save(batch as any);
+          const inserted = await repository.save(batch as Partial<T>[]);
           result.success.push(...(inserted as T[]));
         }
 
@@ -113,7 +116,9 @@ export class BulkOperationsService {
             });
           });
           result.failedCount += batch.length;
-          this.logger.warn(`Batch failed, continuing: ${(error as Error).message}`);
+          this.logger.warn(
+            `Batch failed, continuing: ${(error as Error).message}`
+          );
         } else {
           throw error;
         }
@@ -121,7 +126,7 @@ export class BulkOperationsService {
     }
 
     this.logger.log(
-      `Bulk insert completed: ${result.successCount} success, ${result.failedCount} failed`,
+      `Bulk insert completed: ${result.successCount} success, ${result.failedCount} failed`
     );
 
     // Clear batch arrays to free memory
@@ -139,7 +144,7 @@ export class BulkOperationsService {
     options: {
       batchSize?: number;
       useTransaction?: boolean;
-    } = {},
+    } = {}
   ): Promise<BulkOperationResult<T>> {
     const batchSize = options.batchSize || this.DEFAULT_BATCH_SIZE;
     const result: BulkOperationResult<T> = {
@@ -157,12 +162,16 @@ export class BulkOperationsService {
         if (options.useTransaction) {
           await repository.manager.transaction(async (manager) => {
             for (const { id, updates } of batch) {
-              await manager.update(repository.target, id, updates as any);
+              await manager.update(
+                repository.target,
+                id,
+                updates as Partial<T>
+              );
             }
           });
         } else {
           for (const { id, updates } of batch) {
-            await repository.update(id, updates as any);
+            await repository.update(id, updates as Partial<T>);
           }
         }
 
@@ -192,7 +201,7 @@ export class BulkOperationsService {
       batchSize?: number;
       useTransaction?: boolean;
       softDelete?: boolean;
-    } = {},
+    } = {}
   ): Promise<{ deletedCount: number; errors: string[] }> {
     const batchSize = options.batchSize || this.DEFAULT_BATCH_SIZE;
     let deletedCount = 0;
@@ -212,15 +221,17 @@ export class BulkOperationsService {
           });
         } else {
           if (options.softDelete) {
-            await repository.softDelete(batch as any);
+            await repository.softDelete(batch as Array<string | number>);
           } else {
-            await repository.delete(batch as any);
+            await repository.delete(batch as Array<string | number>);
           }
         }
 
         deletedCount += batch.length;
       } catch (error: unknown) {
-        errors.push(`Batch ${i}-${i + batch.length}: ${(error as Error).message}`);
+        errors.push(
+          `Batch ${i}-${i + batch.length}: ${(error as Error).message}`
+        );
       }
     }
 
@@ -237,7 +248,7 @@ export class BulkOperationsService {
     options: {
       batchSize?: number;
       updateColumns?: string[];
-    } = {},
+    } = {}
   ): Promise<BulkOperationResult<T>> {
     const batchSize = options.batchSize || this.DEFAULT_BATCH_SIZE;
     const result: BulkOperationResult<T> = {
@@ -256,10 +267,10 @@ export class BulkOperationsService {
           .createQueryBuilder()
           .insert()
           .into(repository.target)
-          .values(batch as any)
+          .values(batch as Partial<T>[])
           .orUpdate(
             options.updateColumns || Object.keys(batch[0] || {}),
-            conflictColumns,
+            conflictColumns
           )
           .execute();
 

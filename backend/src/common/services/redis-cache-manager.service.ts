@@ -1,6 +1,11 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { createClient, RedisClientType } from 'redis';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { createClient, RedisClientType } from "redis";
 
 /**
  * Cache Configuration
@@ -78,19 +83,22 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
    * Initialize Redis connection with retry logic
    */
   private async initializeRedis(): Promise<void> {
-    const redisEnabled = this.configService.get('REDIS_ENABLED', 'true') === 'true';
+    const redisEnabled =
+      this.configService.get("REDIS_ENABLED", "true") === "true";
 
     if (!redisEnabled) {
-      this.logger.warn('Redis disabled - using in-memory cache (NOT RECOMMENDED FOR PRODUCTION)');
+      this.logger.warn(
+        "Redis disabled - using in-memory cache (NOT RECOMMENDED FOR PRODUCTION)"
+      );
       return;
     }
 
     try {
-      const redisUrl = this.configService.get('redis.url');
-      const redisHost = this.configService.get('redis.host', 'localhost');
-      const redisPort = this.configService.get('redis.port', 6379);
-      const redisPassword = this.configService.get('redis.password');
-      const redisUsername = this.configService.get('redis.username', 'default');
+      const redisUrl = this.configService.get("redis.url");
+      const redisHost = this.configService.get("redis.host", "localhost");
+      const redisPort = this.configService.get("redis.port", 6379);
+      const redisPassword = this.configService.get("redis.password");
+      const redisUsername = this.configService.get("redis.username", "default");
 
       this.redisClient = redisUrl
         ? createClient({
@@ -98,52 +106,54 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
             socket: {
               reconnectStrategy: (retries) => {
                 if (retries > this.MAX_RECONNECT_ATTEMPTS) {
-                  this.logger.error('Max Redis reconnection attempts reached');
-                  return new Error('Max reconnection attempts exceeded');
+                  this.logger.error("Max Redis reconnection attempts reached");
+                  return new Error("Max reconnection attempts exceeded");
                 }
                 // Exponential backoff: 100ms, 200ms, 400ms, 800ms...
                 return Math.min(retries * 100, 3000);
               },
             },
           })
-        : createClient({
+        : (createClient({
             socket: {
               host: redisHost,
               port: redisPort,
               reconnectStrategy: (retries) => {
                 if (retries > this.MAX_RECONNECT_ATTEMPTS) {
-                  return new Error('Max reconnection attempts exceeded');
+                  return new Error("Max reconnection attempts exceeded");
                 }
                 return Math.min(retries * 100, 3000);
               },
             },
             username: redisUsername,
             password: redisPassword,
-          }) as RedisClientType;
+          }) as RedisClientType);
 
-      this.redisClient.on('error', (err) => {
+      this.redisClient.on("error", (err) => {
         this.logger.error(`Redis connection error: ${err.message}`);
         this.isRedisConnected = false;
       });
 
-      this.redisClient.on('connect', () => {
-        this.logger.log('Redis client connected successfully');
+      this.redisClient.on("connect", () => {
+        this.logger.log("Redis client connected successfully");
         this.isRedisConnected = true;
         this.reconnectAttempts = 0;
       });
 
-      this.redisClient.on('reconnecting', () => {
+      this.redisClient.on("reconnecting", () => {
         this.reconnectAttempts++;
-        this.logger.warn(`Redis reconnecting... Attempt ${this.reconnectAttempts}`);
+        this.logger.warn(
+          `Redis reconnecting... Attempt ${this.reconnectAttempts}`
+        );
       });
 
-      this.redisClient.on('ready', () => {
-        this.logger.log('Redis client ready for commands');
+      this.redisClient.on("ready", () => {
+        this.logger.log("Redis client ready for commands");
       });
 
       await this.redisClient.connect();
     } catch (error) {
-      this.logger.error('Failed to initialize Redis:', error);
+      this.logger.error("Failed to initialize Redis:", error);
       this.redisClient = null;
       this.isRedisConnected = false;
     }
@@ -158,8 +168,8 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     // Try Redis first
     if (this.useRedis()) {
       try {
-      // TODO: Remove non-null assertion with proper check
-        const data = await this.redisClient!.get(fullKey);
+        const redisClient = this.getRedisClient();
+        const data = await redisClient.get(fullKey);
         if (data) {
           this.logger.debug(`Redis cache HIT: ${fullKey}`);
           return JSON.parse(data) as T;
@@ -179,11 +189,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   /**
    * Set value in cache (Redis + memory backup)
    */
-  async set<T>(
-    key: string,
-    value: T,
-    config: CacheConfig = {},
-  ): Promise<void> {
+  async set<T>(key: string, value: T, config: CacheConfig = {}): Promise<void> {
     const fullKey = this.buildKey(key, config.namespace);
     const ttl = config.ttl || this.DEFAULT_TTL;
     const serialized = JSON.stringify(value);
@@ -191,8 +197,8 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     // Store in Redis
     if (this.useRedis()) {
       try {
-      // TODO: Remove non-null assertion with proper check
-        await this.redisClient!.setEx(fullKey, ttl, serialized);
+        const redisClient = this.getRedisClient();
+        await redisClient.setEx(fullKey, ttl, serialized);
         this.logger.debug(`Redis cache SET: ${fullKey} (TTL: ${ttl}s)`);
         return;
       } catch (error) {
@@ -213,8 +219,8 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     if (this.useRedis()) {
       try {
-      // TODO: Remove non-null assertion with proper check
-        await this.redisClient!.del(fullKey);
+        const redisClient = this.getRedisClient();
+        await redisClient.del(fullKey);
         this.logger.debug(`Redis cache DEL: ${fullKey}`);
         return;
       } catch (error) {
@@ -237,8 +243,8 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
         const keys: string[] = [];
 
         do {
-      // TODO: Remove non-null assertion with proper check
-          const result = await this.redisClient!.scan(cursor, {
+          const redisClient = this.getRedisClient();
+          const result = await redisClient.scan(cursor, {
             MATCH: pattern,
             COUNT: 100,
           });
@@ -247,12 +253,14 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
         } while (cursor !== 0);
 
         if (keys.length > 0) {
-      // TODO: Remove non-null assertion with proper check
-          await this.redisClient!.del(keys);
+          const redisClient = this.getRedisClient();
+          await redisClient.del(keys);
           count = keys.length;
         }
 
-        this.logger.log(`Invalidated ${count} Redis cache entries matching: ${pattern}`);
+        this.logger.log(
+          `Invalidated ${count} Redis cache entries matching: ${pattern}`
+        );
         return count;
       } catch (error) {
         this.logger.error(`Redis pattern invalidation error:`, error);
@@ -260,7 +268,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     }
 
     // Fallback: invalidate in memory
-    const regex = new RegExp(pattern.replace('*', '.*'));
+    const regex = new RegExp(pattern.replace("*", ".*"));
     for (const key of this.cache.keys()) {
       if (regex.test(key)) {
         this.cache.delete(key);
@@ -268,7 +276,9 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    this.logger.log(`Invalidated ${count} memory cache entries matching: ${pattern}`);
+    this.logger.log(
+      `Invalidated ${count} memory cache entries matching: ${pattern}`
+    );
     return count;
   }
 
@@ -280,15 +290,15 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
       await this.invalidatePattern(`${namespace}:*`);
     } else if (this.useRedis()) {
       try {
-      // TODO: Remove non-null assertion with proper check
-        await this.redisClient!.flushDb();
-        this.logger.log('Redis cache cleared');
+        const redisClient = this.getRedisClient();
+        await redisClient.flushDb();
+        this.logger.log("Redis cache cleared");
       } catch (error) {
-        this.logger.error('Redis FLUSHDB error:', error);
+        this.logger.error("Redis FLUSHDB error:", error);
       }
     } else {
       this.cache.clear();
-      this.logger.log('Memory cache cleared');
+      this.logger.log("Memory cache cleared");
     }
   }
 
@@ -298,7 +308,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   async getOrSet<T>(
     key: string,
     factory: () => Promise<T>,
-    config: CacheConfig = {},
+    config: CacheConfig = {}
   ): Promise<T> {
     const cached = await this.get<T>(key, config.namespace);
     if (cached !== undefined) {
@@ -316,7 +326,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   async wrap<T>(
     key: string,
     fn: () => Promise<T>,
-    config: CacheConfig = {},
+    config: CacheConfig = {}
   ): Promise<T> {
     return this.getOrSet(key, fn, config);
   }
@@ -327,19 +337,18 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   async getStats(): Promise<CacheStats> {
     if (this.useRedis()) {
       try {
-      // TODO: Remove non-null assertion with proper check
-        await this.redisClient!.info('stats');
-      // TODO: Remove non-null assertion with proper check
-        const dbSize = await this.redisClient!.dbSize();
+        const redisClient = this.getRedisClient();
+        await redisClient.info("stats");
+        const dbSize = await redisClient.dbSize();
 
         return {
-          type: 'redis',
+          type: "redis",
           connected: this.isRedisConnected,
           keys: dbSize,
           memoryUsage: 0, // Parse from info if needed
         };
       } catch (error) {
-        this.logger.error('Redis stats error:', error);
+        this.logger.error("Redis stats error:", error);
       }
     }
 
@@ -353,7 +362,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     }
 
     return {
-      type: 'memory',
+      type: "memory",
       connected: false,
       keys: this.cache.size,
       expiredCount,
@@ -371,13 +380,13 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     try {
       const start = Date.now();
-      // TODO: Remove non-null assertion with proper check
-      await this.redisClient!.ping();
+      const redisClient = this.getRedisClient();
+      await redisClient.ping();
       const latency = Date.now() - start;
 
       return { healthy: true, latency };
     } catch (error) {
-      this.logger.error('Redis health check failed:', error);
+      this.logger.error("Redis health check failed:", error);
       return { healthy: false };
     }
   }
@@ -388,8 +397,18 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     return this.isRedisConnected && this.redisClient !== null;
   }
 
+  /**
+   * Get Redis client ensuring it's available
+   */
+  private getRedisClient(): RedisClientType {
+    if (!this.redisClient) {
+      throw new Error("Redis client is not available");
+    }
+    return this.redisClient;
+  }
+
   private buildKey(key: string, namespace?: string): string {
-    const prefix = this.configService.get('REDIS_KEY_PREFIX', 'lexiflow:');
+    const prefix = this.configService.get("REDIS_KEY_PREFIX", "lexiflow:");
     return namespace ? `${prefix}${namespace}:${key}` : `${prefix}${key}`;
   }
 
@@ -454,9 +473,9 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     if (this.redisClient && this.isRedisConnected) {
       try {
         await this.redisClient.quit();
-        this.logger.log('Redis connection closed gracefully');
+        this.logger.log("Redis connection closed gracefully");
       } catch (error) {
-        this.logger.error('Error closing Redis connection:', error);
+        this.logger.error("Error closing Redis connection:", error);
       }
     }
   }
@@ -469,7 +488,7 @@ interface CacheEntry {
 }
 
 export interface CacheStats {
-  type: 'redis' | 'memory';
+  type: "redis" | "memory";
   connected: boolean;
   keys: number;
   expiredCount?: number;

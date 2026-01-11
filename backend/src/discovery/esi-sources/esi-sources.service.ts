@@ -145,7 +145,8 @@ export class ESISourcesService {
     if (!result.affected) {
       throw new NotFoundException(`ESI Source with ID ${id} not found`);
     }
-    return result.raw[0] as EsiSource;
+    const rows = result.raw as EsiSource[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

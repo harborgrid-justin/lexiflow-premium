@@ -104,9 +104,9 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
 
     // If we're updating, exclude the current entity
     const obj = args.object as Record<string, unknown>;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+     
     if (exceptId && obj[exceptId]) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+       
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 

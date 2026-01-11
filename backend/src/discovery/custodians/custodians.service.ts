@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Custodian } from './entities/custodian.entity';
-import { CreateCustodianDto } from './dto/create-custodian.dto';
-import { UpdateCustodianDto } from './dto/update-custodian.dto';
-import { QueryCustodianDto } from './dto/query-custodian.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { Custodian } from "./entities/custodian.entity";
+import { CreateCustodianDto } from "./dto/create-custodian.dto";
+import { UpdateCustodianDto } from "./dto/update-custodian.dto";
+import { QueryCustodianDto } from "./dto/query-custodian.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +42,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class CustodiansService {
   constructor(
     @InjectRepository(Custodian)
-    private readonly custodianRepository: Repository<Custodian>,
+    private readonly custodianRepository: Repository<Custodian>
   ) {}
 
   async create(createDto: CreateCustodianDto): Promise<Custodian> {
@@ -57,49 +60,49 @@ export class CustodiansService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'fullName',
-      sortOrder = 'ASC',
+      sortBy = "fullName",
+      sortOrder = "ASC",
     } = queryDto;
 
     const queryBuilder = this.custodianRepository
-      .createQueryBuilder('custodian')
-      .where('custodian.deletedAt IS NULL');
+      .createQueryBuilder("custodian")
+      .where("custodian.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('custodian.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("custodian.caseId = :caseId", { caseId });
     }
 
     if (status) {
-      queryBuilder.andWhere('custodian.status = :status', { status });
+      queryBuilder.andWhere("custodian.status = :status", { status });
     }
 
-    if (typeof isKeyPlayer === 'boolean') {
-      queryBuilder.andWhere('custodian.isKeyPlayer = :isKeyPlayer', {
+    if (typeof isKeyPlayer === "boolean") {
+      queryBuilder.andWhere("custodian.isKeyPlayer = :isKeyPlayer", {
         isKeyPlayer,
       });
     }
 
-    if (typeof isOnLegalHold === 'boolean') {
-      queryBuilder.andWhere('custodian.isOnLegalHold = :isOnLegalHold', {
+    if (typeof isOnLegalHold === "boolean") {
+      queryBuilder.andWhere("custodian.isOnLegalHold = :isOnLegalHold", {
         isOnLegalHold,
       });
     }
 
     if (assignedTo) {
-      queryBuilder.andWhere('custodian.assignedTo = :assignedTo', {
+      queryBuilder.andWhere("custodian.assignedTo = :assignedTo", {
         assignedTo,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(custodian.fullName ILIKE :search OR custodian.email ILIKE :search OR custodian.department ILIKE :search OR custodian.title ILIKE :search)',
-        { search: `%${search}%` },
+        "(custodian.fullName ILIKE :search OR custodian.email ILIKE :search OR custodian.department ILIKE :search OR custodian.title ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('custodian', sortBy);
+    const safeSortField = validateSortField("custodian", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`custodian.${safeSortField}`, safeSortOrder);
 
@@ -134,23 +137,24 @@ export class CustodiansService {
       .createQueryBuilder()
       .update(Custodian)
       .set({ ...updateDto, updatedAt: new Date() } as unknown as Custodian)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`Custodian with ID ${id} not found`);
     }
-    return result.raw[0] as Custodian;
+    const rows = result.raw as Custodian[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.custodianRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {

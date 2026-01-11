@@ -117,7 +117,8 @@ export class WitnessesService {
     if (!result.affected) {
       throw new NotFoundException(`Witness with ID ${id} not found`);
     }
-    return result.raw[0] as Witness;
+    const rows = result.raw as Witness[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

@@ -148,7 +148,8 @@ export class DiscoveryRequestsService {
     if (!result.affected) {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
-    return result.raw[0] as DiscoveryRequest;
+    const rows = result.raw as DiscoveryRequest[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

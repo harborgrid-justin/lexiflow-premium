@@ -139,7 +139,8 @@ export class ProductionsService {
     if (!result.affected) {
       throw new NotFoundException(`Production with ID ${id} not found`);
     }
-    return result.raw[0] as Production;
+    const rows = result.raw as Production[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

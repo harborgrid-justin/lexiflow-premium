@@ -116,7 +116,8 @@ export class EvidenceService {
     if (!result.affected) {
       throw new NotFoundException(`Evidence with ID ${id} not found`);
     }
-    return result.raw[0] as Evidence;
+    const rows = result.raw as Evidence[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

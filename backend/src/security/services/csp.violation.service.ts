@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 
 /**
  * CSP Violation Report (from browser)
@@ -26,7 +26,7 @@ export interface CspViolationReport {
   scriptSample?: string;
 
   // Disposition (enforce or report-only)
-  disposition: 'enforce' | 'report';
+  disposition: "enforce" | "report";
 
   // Status code
   statusCode: number;
@@ -48,8 +48,17 @@ export interface CspViolationEntry {
   sessionId?: string;
 
   // Analysis
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  category: 'script' | 'style' | 'image' | 'font' | 'frame' | 'connect' | 'media' | 'object' | 'other';
+  severity: "low" | "medium" | "high" | "critical";
+  category:
+    | "script"
+    | "style"
+    | "image"
+    | "font"
+    | "frame"
+    | "connect"
+    | "media"
+    | "object"
+    | "other";
   isAttack: boolean;
   isFalsePositive: boolean;
 }
@@ -120,26 +129,26 @@ export class CspViolationService {
   // Suspicious patterns that indicate attacks
   private readonly SUSPICIOUS_PATTERNS = [
     /javascript:/gi,
-    /data:text/html/gi,
+    /data:text\/html/gi,
     /<script/gi,
     /eval\(/gi,
     /alert\(/gi,
-    /document.cookie/gi,
+    /document\.cookie/gi,
     /window\.location/gi,
-    /.innerHTML/gi,
+    /\.innerHTML/gi,
   ];
 
   // Known legitimate sources (can be configured)
   private readonly LEGITIMATE_SOURCES = [
-    'self',
-    'cdn.jsdelivr.net',
-    'cdnjs.cloudflare.com',
-    'fonts.googleapis.com',
-    'fonts.gstatic.com',
+    "self",
+    "cdn.jsdelivr.net",
+    "cdnjs.cloudflare.com",
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
   ];
 
   constructor() {
-    this.logger.log('CSP Violation Service initialized');
+    this.logger.log("CSP Violation Service initialized");
   }
 
   /**
@@ -150,7 +159,7 @@ export class CspViolationService {
     userAgent: string,
     ipAddress: string,
     userId?: string,
-    sessionId?: string,
+    sessionId?: string
   ): Promise<void> {
     // Create violation entry
     const entry: CspViolationEntry = {
@@ -179,7 +188,11 @@ export class CspViolationService {
     this.logViolation(entry);
 
     // Send alert if suspicious
-    if (entry.isAttack || entry.severity === 'critical' || entry.severity === 'high') {
+    if (
+      entry.isAttack ||
+      entry.severity === "critical" ||
+      entry.severity === "high"
+    ) {
       await this.sendSecurityAlert(entry);
     }
   }
@@ -187,56 +200,60 @@ export class CspViolationService {
   /**
    * Calculate violation severity
    */
-  private calculateSeverity(report: CspViolationReport): CspViolationEntry['severity'] {
+  private calculateSeverity(
+    report: CspViolationReport
+  ): CspViolationEntry["severity"] {
     const directive = report.violatedDirective || report.effectiveDirective;
 
     // Critical: script-src violations (XSS risk)
-    if (directive.includes('script-src')) {
+    if (directive.includes("script-src")) {
       // Check if it's an inline script or eval
-      if (report.blockedUri === 'inline' || report.blockedUri === 'eval') {
-        return 'critical';
+      if (report.blockedUri === "inline" || report.blockedUri === "eval") {
+        return "critical";
       }
-      return 'high';
+      return "high";
     }
 
     // High: object-src, frame-src (clickjacking, plugin vulnerabilities)
-    if (directive.includes('object-src') || directive.includes('frame-src')) {
-      return 'high';
+    if (directive.includes("object-src") || directive.includes("frame-src")) {
+      return "high";
     }
 
     // Medium: style-src, connect-src (data exfiltration, CSS injection)
-    if (directive.includes('style-src') || directive.includes('connect-src')) {
-      return 'medium';
+    if (directive.includes("style-src") || directive.includes("connect-src")) {
+      return "medium";
     }
 
     // Low: img-src, font-src, media-src (usually less critical)
-    return 'low';
+    return "low";
   }
 
   /**
    * Categorize violation
    */
-  private categorizeViolation(report: CspViolationReport): CspViolationEntry['category'] {
+  private categorizeViolation(
+    report: CspViolationReport
+  ): CspViolationEntry["category"] {
     const directive = report.violatedDirective || report.effectiveDirective;
 
-    if (directive.includes('script')) return 'script';
-    if (directive.includes('style')) return 'style';
-    if (directive.includes('img')) return 'image';
-    if (directive.includes('font')) return 'font';
-    if (directive.includes('frame')) return 'frame';
-    if (directive.includes('connect')) return 'connect';
-    if (directive.includes('media')) return 'media';
-    if (directive.includes('object')) return 'object';
+    if (directive.includes("script")) return "script";
+    if (directive.includes("style")) return "style";
+    if (directive.includes("img")) return "image";
+    if (directive.includes("font")) return "font";
+    if (directive.includes("frame")) return "frame";
+    if (directive.includes("connect")) return "connect";
+    if (directive.includes("media")) return "media";
+    if (directive.includes("object")) return "object";
 
-    return 'other';
+    return "other";
   }
 
   /**
    * Detect if violation is likely an attack
    */
   private detectAttack(report: CspViolationReport): boolean {
-    const blockedUri = report.blockedUri || '';
-    const scriptSample = report.scriptSample || '';
+    const blockedUri = report.blockedUri || "";
+    const scriptSample = report.scriptSample || "";
 
     // 1. Check blocked URI for suspicious patterns
     for (const pattern of this.SUSPICIOUS_PATTERNS) {
@@ -246,13 +263,15 @@ export class CspViolationService {
     }
 
     // 2. Inline scripts/eval are often XSS attempts
-    if ((blockedUri === 'inline' || blockedUri === 'eval') &&
-        report.violatedDirective?.includes('script-src')) {
+    if (
+      (blockedUri === "inline" || blockedUri === "eval") &&
+      report.violatedDirective?.includes("script-src")
+    ) {
       return true;
     }
 
     // 3. Data URIs with HTML (XSS vector)
-    if (blockedUri.startsWith('data:text/html')) {
+    if (blockedUri.startsWith("data:text/html")) {
       return true;
     }
 
@@ -268,7 +287,7 @@ export class CspViolationService {
    * Detect if violation is likely a false positive
    */
   private detectFalsePositive(report: CspViolationReport): boolean {
-    const blockedUri = report.blockedUri || '';
+    const blockedUri = report.blockedUri || "";
 
     // 1. Check against legitimate sources
     for (const source of this.LEGITIMATE_SOURCES) {
@@ -278,14 +297,16 @@ export class CspViolationService {
     }
 
     // 2. Browser extensions (common false positives)
-    if (blockedUri.startsWith('chrome-extension://') ||
-        blockedUri.startsWith('moz-extension://') ||
-        blockedUri.startsWith('safari-extension://')) {
+    if (
+      blockedUri.startsWith("chrome-extension://") ||
+      blockedUri.startsWith("moz-extension://") ||
+      blockedUri.startsWith("safari-extension://")
+    ) {
       return true;
     }
 
     // 3. Empty or about:blank (often legitimate)
-    if (!blockedUri || blockedUri === 'about:blank') {
+    if (!blockedUri || blockedUri === "about:blank") {
       return true;
     }
 
@@ -306,7 +327,7 @@ export class CspViolationService {
       }
 
       // Check for suspicious TLDs
-      const suspiciousTlds = ['.tk', '.ml', '.ga', '.cf', '.gq', '.xyz'];
+      const suspiciousTlds = [".tk", ".ml", ".ga", ".cf", ".gq", ".xyz"];
       for (const tld of suspiciousTlds) {
         if (hostname.endsWith(tld)) {
           return true;
@@ -332,7 +353,7 @@ export class CspViolationService {
         isAttack: entry.isAttack,
         userId: entry.userId,
         ipAddress: entry.ipAddress,
-      },
+      }
     );
 
     // TODO: Integrate with security monitoring service
@@ -346,7 +367,7 @@ export class CspViolationService {
 
     if (entry.isAttack) {
       this.logger.error(`[ATTACK] ${message}`, { entry });
-    } else if (entry.severity === 'critical' || entry.severity === 'high') {
+    } else if (entry.severity === "critical" || entry.severity === "high") {
       this.logger.warn(message, { entry });
     } else if (!entry.isFalsePositive) {
       this.logger.log(message);
@@ -358,7 +379,7 @@ export class CspViolationService {
    */
   getStatistics(from: Date, to: Date): CspViolationStats {
     const filtered = this.violations.filter(
-      v => v.timestamp >= from && v.timestamp <= to,
+      (v) => v.timestamp >= from && v.timestamp <= to
     );
 
     const violationsByDirective: Record<string, number> = {};
@@ -366,10 +387,14 @@ export class CspViolationService {
     const uriCounts: Record<string, number> = {};
 
     for (const violation of filtered) {
-      const directive = violation.report.violatedDirective || violation.report.effectiveDirective;
-      violationsByDirective[directive] = (violationsByDirective[directive] || 0) + 1;
+      const directive =
+        violation.report.violatedDirective ||
+        violation.report.effectiveDirective;
+      violationsByDirective[directive] =
+        (violationsByDirective[directive] || 0) + 1;
 
-      violationsByCategory[violation.category] = (violationsByCategory[violation.category] || 0) + 1;
+      violationsByCategory[violation.category] =
+        (violationsByCategory[violation.category] || 0) + 1;
 
       const uri = violation.report.blockedUri;
       if (uri) {
@@ -387,7 +412,7 @@ export class CspViolationService {
       violationsByDirective,
       violationsByCategory,
       topBlockedUris,
-      suspiciousViolations: filtered.filter(v => v.isAttack).length,
+      suspiciousViolations: filtered.filter((v) => v.isAttack).length,
       timeRange: { from, to },
     };
   }
@@ -404,7 +429,9 @@ export class CspViolationService {
    */
   getSuspiciousViolations(limit: number = 50): CspViolationEntry[] {
     return this.violations
-      .filter(v => v.isAttack || v.severity === 'critical' || v.severity === 'high')
+      .filter(
+        (v) => v.isAttack || v.severity === "critical" || v.severity === "high"
+      )
       .slice(-limit);
   }
 
@@ -415,30 +442,32 @@ export class CspViolationService {
     const recommendations: string[] = [];
     const stats = this.getStatistics(
       new Date(Date.now() - 86400000), // Last 24 hours
-      new Date(),
+      new Date()
     );
 
     // Analyze violations and suggest policy changes
-    for (const [directive, count] of Object.entries(stats.violationsByDirective)) {
+    for (const [directive, count] of Object.entries(
+      stats.violationsByDirective
+    )) {
       if (count > 10) {
         recommendations.push(
-          `Consider reviewing ${directive}: ${count} violations in last 24 hours`,
+          `Consider reviewing ${directive}: ${count} violations in last 24 hours`
         );
       }
     }
 
     // Check for common false positives
-    const falsePositives = this.violations.filter(v => v.isFalsePositive);
+    const falsePositives = this.violations.filter((v) => v.isFalsePositive);
     if (falsePositives.length > 50) {
       recommendations.push(
-        'High number of false positives detected. Consider adding trusted sources to CSP policy.',
+        "High number of false positives detected. Consider adding trusted sources to CSP policy."
       );
     }
 
     // Check for attacks
     if (stats.suspiciousViolations > 5) {
       recommendations.push(
-        `${stats.suspiciousViolations} suspicious violations detected. Review security logs immediately.`,
+        `${stats.suspiciousViolations} suspicious violations detected. Review security logs immediately.`
       );
     }
 

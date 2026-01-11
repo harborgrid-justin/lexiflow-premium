@@ -34,7 +34,7 @@ export const Custodians: React.FC = () => {
   const notify = useNotify();
 
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
-  const { data: rawCustodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
+  const { data: rawCustodians = [] } = useQuery<Custodian[]>(
     queryKeys.discoveryExtended.custodians(),
     () => DataService.custodians.getAll()
   );
@@ -215,7 +215,7 @@ export const Custodians: React.FC = () => {
           {custodians.length === 0 && (
             <TableRow>
               <TableCell colSpan={6} className={cn("text-center py-8 italic", theme.text.tertiary)}>
-                No custodians found. Click "Add Custodian" to create one.
+                No custodians found. Click &ldquo;Add Custodian&rdquo; to create one.
               </TableCell>
             </TableRow>
           )}

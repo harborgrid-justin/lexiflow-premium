@@ -1,24 +1,24 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AuditLog } from '@compliance/entities/audit-log.entity';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { AuditLog } from "@compliance/entities/audit-log.entity";
 
 export enum DataSensitivityLevel {
-  PUBLIC = 'public',
-  INTERNAL = 'internal',
-  CONFIDENTIAL = 'confidential',
-  RESTRICTED = 'restricted',
-  HIGHLY_RESTRICTED = 'highly_restricted',
+  PUBLIC = "public",
+  INTERNAL = "internal",
+  CONFIDENTIAL = "confidential",
+  RESTRICTED = "restricted",
+  HIGHLY_RESTRICTED = "highly_restricted",
 }
 
 export enum DataCategory {
-  PII = 'pii',
-  PHI = 'phi',
-  FINANCIAL = 'financial',
-  LEGAL = 'legal',
-  BUSINESS = 'business',
-  TECHNICAL = 'technical',
-  METADATA = 'metadata',
+  PII = "pii",
+  PHI = "phi",
+  FINANCIAL = "financial",
+  LEGAL = "legal",
+  BUSINESS = "business",
+  TECHNICAL = "technical",
+  METADATA = "metadata",
 }
 
 export interface ClassificationResult {
@@ -82,67 +82,70 @@ export class DataClassificationService {
 
   private readonly piiPatterns: PIIPattern[] = [
     {
-      name: 'ssn',
+      name: "ssn",
       pattern: /\b\d{3}-\d{2}-\d{4}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'email',
+      name: "email",
       pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Z|a-z]{2,}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.CONFIDENTIAL,
     },
     {
-      name: 'phone',
-      pattern: /\b(?:\+?1[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b/,
+      name: "phone",
+      pattern:
+        /\b(?:\+?1[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.CONFIDENTIAL,
     },
     {
-      name: 'credit_card',
-      pattern: /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})\b/,
+      name: "credit_card",
+      pattern:
+        /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})\b/,
       category: DataCategory.FINANCIAL,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'date_of_birth',
-      pattern: /\b(?:0?[1-9]|1[0-2])[-/](?:0?[1-9]|[12][0-9]|3[01])[-/](?:19|20)\d{2}\b/,
+      name: "date_of_birth",
+      pattern:
+        /\b(?:0?[1-9]|1[0-2])[-/](?:0?[1-9]|[12][0-9]|3[01])[-/](?:19|20)\d{2}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.RESTRICTED,
     },
     {
-      name: 'passport',
+      name: "passport",
       pattern: /\b[A-Z]{1,2}[0-9]{6,9}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'drivers_license',
+      name: "drivers_license",
       pattern: /\b[A-Z]{1,2}[0-9]{5,8}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.RESTRICTED,
     },
     {
-      name: 'medical_record_number',
+      name: "medical_record_number",
       pattern: /\b(?:MRN|mrn)[:\s-]?[A-Z0-9]{6,12}\b/i,
       category: DataCategory.PHI,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'health_insurance',
+      name: "health_insurance",
       pattern: /\b[A-Z]{3}[0-9]{9,12}\b/,
       category: DataCategory.PHI,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'bank_account',
+      name: "bank_account",
       pattern: /\b[0-9]{8,17}\b/,
       category: DataCategory.FINANCIAL,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
     },
     {
-      name: 'routing_number',
+      name: "routing_number",
       pattern: /\b[0-9]{9}\b/,
       category: DataCategory.FINANCIAL,
       sensitivityLevel: DataSensitivityLevel.HIGHLY_RESTRICTED,
@@ -150,89 +153,112 @@ export class DataClassificationService {
   ];
 
   private readonly piiFieldNames = [
-    'ssn',
-    'socialSecurityNumber',
-    'social',
-    'taxId',
-    'ein',
-    'firstName',
-    'lastName',
-    'fullName',
-    'name',
-    'email',
-    'phone',
-    'phoneNumber',
-    'mobile',
-    'address',
-    'street',
-    'city',
-    'state',
-    'zip',
-    'zipCode',
-    'postalCode',
-    'dateOfBirth',
-    'dob',
-    'birthDate',
-    'passport',
-    'passportNumber',
-    'driversLicense',
-    'licenseNumber',
+    "ssn",
+    "socialSecurityNumber",
+    "social",
+    "taxId",
+    "ein",
+    "firstName",
+    "lastName",
+    "fullName",
+    "name",
+    "email",
+    "phone",
+    "phoneNumber",
+    "mobile",
+    "address",
+    "street",
+    "city",
+    "state",
+    "zip",
+    "zipCode",
+    "postalCode",
+    "dateOfBirth",
+    "dob",
+    "birthDate",
+    "passport",
+    "passportNumber",
+    "driversLicense",
+    "licenseNumber",
   ];
 
   private readonly phiFieldNames = [
-    'medicalRecordNumber',
-    'mrn',
-    'healthInsurance',
-    'insuranceNumber',
-    'diagnosis',
-    'medication',
-    'prescription',
-    'treatment',
-    'procedure',
-    'healthCondition',
-    'mentalHealth',
-    'disability',
-    'geneticInformation',
-    'biometric',
+    "medicalRecordNumber",
+    "mrn",
+    "healthInsurance",
+    "insuranceNumber",
+    "diagnosis",
+    "medication",
+    "prescription",
+    "treatment",
+    "procedure",
+    "healthCondition",
+    "mentalHealth",
+    "disability",
+    "geneticInformation",
+    "biometric",
   ];
 
   private readonly financialFieldNames = [
-    'creditCard',
-    'cardNumber',
-    'accountNumber',
-    'bankAccount',
-    'routingNumber',
-    'iban',
-    'swift',
-    'sortCode',
-    'pin',
-    'cvv',
-    'securityCode',
-    'salary',
-    'income',
-    'netWorth',
-    'balance',
+    "creditCard",
+    "cardNumber",
+    "accountNumber",
+    "bankAccount",
+    "routingNumber",
+    "iban",
+    "swift",
+    "sortCode",
+    "pin",
+    "cvv",
+    "securityCode",
+    "salary",
+    "income",
+    "netWorth",
+    "balance",
   ];
 
   constructor(
     @InjectRepository(AuditLog)
-    private readonly auditLogRepository: Repository<AuditLog>,
+    private readonly auditLogRepository: Repository<AuditLog>
   ) {}
 
-  async classifyData(entityType: string, entityId: string, data: Record<string, unknown>): Promise<ClassificationResult> {
+  async classifyData(
+    entityType: string,
+    entityId: string,
+    data: Record<string, unknown>
+  ): Promise<ClassificationResult> {
     this.logger.log(`Classifying data for ${entityType}:${entityId}`);
 
     const piiFields: string[] = [];
     const phiFields: string[] = [];
     const financialFields: string[] = [];
-    const detectedPatterns: Array<{ field: string; pattern: string; category: DataCategory }> = [];
+    const detectedPatterns: Array<{
+      field: string;
+      pattern: string;
+      category: DataCategory;
+    }> = [];
     const categories = new Set<DataCategory>();
 
-    this.analyzeObject(data, '', piiFields, phiFields, financialFields, detectedPatterns, categories);
+    this.analyzeObject(
+      data,
+      "",
+      piiFields,
+      phiFields,
+      financialFields,
+      detectedPatterns,
+      categories
+    );
 
-    const sensitivityLevel = this.determineSensitivityLevel(piiFields, phiFields, financialFields);
+    const sensitivityLevel = this.determineSensitivityLevel(
+      piiFields,
+      phiFields,
+      financialFields
+    );
     const categoriesArray = Array.from(categories);
-    const confidence = this.calculateConfidence(detectedPatterns.length, Object.keys(data).length);
+    const confidence = this.calculateConfidence(
+      detectedPatterns.length,
+      Object.keys(data).length
+    );
 
     const result: ClassificationResult = {
       entityType,
@@ -251,13 +277,13 @@ export class DataClassificationService {
     };
 
     await this.auditLogRepository.save({
-      userId: 'system',
-      action: 'read',
-      entityType: 'data_classification',
+      userId: "system",
+      action: "read",
+      entityType: "data_classification",
       entityId: `${entityType}:${entityId}`,
       timestamp: new Date(),
       description: `Data classification completed: ${sensitivityLevel}`,
-      result: 'success',
+      result: "success",
       details: JSON.stringify({
         sensitivityLevel,
         categories: categoriesArray,
@@ -276,29 +302,45 @@ export class DataClassificationService {
     piiFields: string[],
     phiFields: string[],
     financialFields: string[],
-    detectedPatterns: Array<{ field: string; pattern: string; category: DataCategory }>,
-    categories: Set<DataCategory>,
+    detectedPatterns: Array<{
+      field: string;
+      pattern: string;
+      category: DataCategory;
+    }>,
+    categories: Set<DataCategory>
   ): void {
     for (const [key, value] of Object.entries(obj)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
 
       const lowerKey = key.toLowerCase();
-      if (this.piiFieldNames.some(piiField => lowerKey.includes(piiField.toLowerCase()))) {
+      if (
+        this.piiFieldNames.some((piiField) =>
+          lowerKey.includes(piiField.toLowerCase())
+        )
+      ) {
         piiFields.push(fullKey);
         categories.add(DataCategory.PII);
       }
 
-      if (this.phiFieldNames.some(phiField => lowerKey.includes(phiField.toLowerCase()))) {
+      if (
+        this.phiFieldNames.some((phiField) =>
+          lowerKey.includes(phiField.toLowerCase())
+        )
+      ) {
         phiFields.push(fullKey);
         categories.add(DataCategory.PHI);
       }
 
-      if (this.financialFieldNames.some(finField => lowerKey.includes(finField.toLowerCase()))) {
+      if (
+        this.financialFieldNames.some((finField) =>
+          lowerKey.includes(finField.toLowerCase())
+        )
+      ) {
         financialFields.push(fullKey);
         categories.add(DataCategory.FINANCIAL);
       }
 
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         for (const pattern of this.piiPatterns) {
           if (pattern.pattern.test(value)) {
             detectedPatterns.push({
@@ -308,16 +350,29 @@ export class DataClassificationService {
             });
             categories.add(pattern.category);
 
-            if (pattern.category === DataCategory.PII && !piiFields.includes(fullKey)) {
+            if (
+              pattern.category === DataCategory.PII &&
+              !piiFields.includes(fullKey)
+            ) {
               piiFields.push(fullKey);
-            } else if (pattern.category === DataCategory.PHI && !phiFields.includes(fullKey)) {
+            } else if (
+              pattern.category === DataCategory.PHI &&
+              !phiFields.includes(fullKey)
+            ) {
               phiFields.push(fullKey);
-            } else if (pattern.category === DataCategory.FINANCIAL && !financialFields.includes(fullKey)) {
+            } else if (
+              pattern.category === DataCategory.FINANCIAL &&
+              !financialFields.includes(fullKey)
+            ) {
               financialFields.push(fullKey);
             }
           }
         }
-      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      } else if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
         this.analyzeObject(
           value as Record<string, unknown>,
           fullKey,
@@ -325,11 +380,11 @@ export class DataClassificationService {
           phiFields,
           financialFields,
           detectedPatterns,
-          categories,
+          categories
         );
       } else if (Array.isArray(value)) {
         value.forEach((item, index) => {
-          if (typeof item === 'object' && item !== null) {
+          if (typeof item === "object" && item !== null) {
             this.analyzeObject(
               item as Record<string, unknown>,
               `${fullKey}[${index}]`,
@@ -337,9 +392,9 @@ export class DataClassificationService {
               phiFields,
               financialFields,
               detectedPatterns,
-              categories,
+              categories
             );
-          } else if (typeof item === 'string') {
+          } else if (typeof item === "string") {
             for (const pattern of this.piiPatterns) {
               if (pattern.pattern.test(item)) {
                 detectedPatterns.push({
@@ -359,9 +414,16 @@ export class DataClassificationService {
   private determineSensitivityLevel(
     piiFields: string[],
     phiFields: string[],
-    financialFields: string[],
+    financialFields: string[]
   ): DataSensitivityLevel {
-    if (phiFields.length > 0 || financialFields.some(f => f.toLowerCase().includes('creditcard') || f.toLowerCase().includes('ssn'))) {
+    if (
+      phiFields.length > 0 ||
+      financialFields.some(
+        (f) =>
+          f.toLowerCase().includes("creditcard") ||
+          f.toLowerCase().includes("ssn")
+      )
+    ) {
       return DataSensitivityLevel.HIGHLY_RESTRICTED;
     }
 
@@ -376,7 +438,10 @@ export class DataClassificationService {
     return DataSensitivityLevel.INTERNAL;
   }
 
-  private calculateConfidence(patternsDetected: number, totalFields: number): number {
+  private calculateConfidence(
+    patternsDetected: number,
+    totalFields: number
+  ): number {
     if (totalFields === 0) return 0;
 
     const detectionRate = patternsDetected / totalFields;
@@ -386,17 +451,24 @@ export class DataClassificationService {
   private getRecommendedAccess(level: DataSensitivityLevel): string[] {
     switch (level) {
       case DataSensitivityLevel.HIGHLY_RESTRICTED:
-        return ['super_admin', 'admin', 'compliance_officer'];
+        return ["super_admin", "admin", "compliance_officer"];
       case DataSensitivityLevel.RESTRICTED:
-        return ['super_admin', 'admin', 'partner', 'compliance_officer'];
+        return ["super_admin", "admin", "partner", "compliance_officer"];
       case DataSensitivityLevel.CONFIDENTIAL:
-        return ['super_admin', 'admin', 'partner', 'attorney'];
+        return ["super_admin", "admin", "partner", "attorney"];
       case DataSensitivityLevel.INTERNAL:
-        return ['super_admin', 'admin', 'partner', 'attorney', 'paralegal', 'staff'];
+        return [
+          "super_admin",
+          "admin",
+          "partner",
+          "attorney",
+          "paralegal",
+          "staff",
+        ];
       case DataSensitivityLevel.PUBLIC:
-        return ['all'];
+        return ["all"];
       default:
-        return ['super_admin', 'admin'];
+        return ["super_admin", "admin"];
     }
   }
 
@@ -415,12 +487,15 @@ export class DataClassificationService {
     ].includes(level);
   }
 
-  async identifyPII(text: string): Promise<Array<{ type: string; value: string; position: number }>> {
-    const findings: Array<{ type: string; value: string; position: number }> = [];
+  async identifyPII(
+    text: string
+  ): Promise<Array<{ type: string; value: string; position: number }>> {
+    const findings: Array<{ type: string; value: string; position: number }> =
+      [];
 
     for (const pattern of this.piiPatterns) {
       if (pattern.category === DataCategory.PII) {
-        const matches = text.matchAll(new RegExp(pattern.pattern, 'g'));
+        const matches = text.matchAll(new RegExp(pattern.pattern, "g"));
         for (const match of matches) {
           if (match.index !== undefined) {
             findings.push({
@@ -436,12 +511,15 @@ export class DataClassificationService {
     return findings;
   }
 
-  async identifyPHI(text: string): Promise<Array<{ type: string; value: string; position: number }>> {
-    const findings: Array<{ type: string; value: string; position: number }> = [];
+  async identifyPHI(
+    text: string
+  ): Promise<Array<{ type: string; value: string; position: number }>> {
+    const findings: Array<{ type: string; value: string; position: number }> =
+      [];
 
     for (const pattern of this.piiPatterns) {
       if (pattern.category === DataCategory.PHI) {
-        const matches = text.matchAll(new RegExp(pattern.pattern, 'g'));
+        const matches = text.matchAll(new RegExp(pattern.pattern, "g"));
         for (const match of matches) {
           if (match.index !== undefined) {
             findings.push({
@@ -457,8 +535,11 @@ export class DataClassificationService {
     return findings;
   }
 
-  async maskSensitiveData(data: Record<string, unknown>, classification: ClassificationResult): Promise<Record<string, unknown>> {
-    const masked = JSON.parse(JSON.stringify(data));
+  async maskSensitiveData(
+    data: Record<string, unknown>,
+    classification: ClassificationResult
+  ): Promise<Record<string, unknown>> {
+    const masked = JSON.parse(JSON.stringify(data)) as Record<string, unknown>;
 
     const allSensitiveFields = [
       ...classification.piiFields,
@@ -467,7 +548,7 @@ export class DataClassificationService {
     ];
 
     for (const field of allSensitiveFields) {
-      this.maskField(masked, field.split('.'));
+      this.maskField(masked, field.split("."));
     }
 
     return masked;
@@ -486,17 +567,17 @@ export class DataClassificationService {
       const arr = obj[key];
       if (Array.isArray(arr) && arr[parseInt(index)]) {
         if (rest.length === 0) {
-          arr[parseInt(index)] = '***MASKED***';
+          arr[parseInt(index)] = "***MASKED***";
         } else {
           this.maskField(arr[parseInt(index)] as Record<string, unknown>, rest);
         }
       }
     } else if (rest.length === 0) {
       if (obj[current] !== undefined) {
-        obj[current] = '***MASKED***';
+        obj[current] = "***MASKED***";
       }
     } else {
-      if (typeof obj[current] === 'object' && obj[current] !== null) {
+      if (typeof obj[current] === "object" && obj[current] !== null) {
         this.maskField(obj[current] as Record<string, unknown>, rest);
       }
     }
@@ -511,33 +592,34 @@ export class DataClassificationService {
     const labels = {
       [DataSensitivityLevel.PUBLIC]: {
         level: DataSensitivityLevel.PUBLIC,
-        label: 'Public',
-        color: '#00FF00',
-        description: 'Information that can be freely shared',
+        label: "Public",
+        color: "#00FF00",
+        description: "Information that can be freely shared",
       },
       [DataSensitivityLevel.INTERNAL]: {
         level: DataSensitivityLevel.INTERNAL,
-        label: 'Internal',
-        color: '#0000FF',
-        description: 'Information for internal use only',
+        label: "Internal",
+        color: "#0000FF",
+        description: "Information for internal use only",
       },
       [DataSensitivityLevel.CONFIDENTIAL]: {
         level: DataSensitivityLevel.CONFIDENTIAL,
-        label: 'Confidential',
-        color: '#FFA500',
-        description: 'Sensitive information requiring protection',
+        label: "Confidential",
+        color: "#FFA500",
+        description: "Sensitive information requiring protection",
       },
       [DataSensitivityLevel.RESTRICTED]: {
         level: DataSensitivityLevel.RESTRICTED,
-        label: 'Restricted',
-        color: '#FF0000',
-        description: 'Highly sensitive information with restricted access',
+        label: "Restricted",
+        color: "#FF0000",
+        description: "Highly sensitive information with restricted access",
       },
       [DataSensitivityLevel.HIGHLY_RESTRICTED]: {
         level: DataSensitivityLevel.HIGHLY_RESTRICTED,
-        label: 'Highly Restricted',
-        color: '#8B0000',
-        description: 'Most sensitive information requiring highest level of protection',
+        label: "Highly Restricted",
+        color: "#8B0000",
+        description:
+          "Most sensitive information requiring highest level of protection",
       },
     };
 
@@ -546,14 +628,14 @@ export class DataClassificationService {
 
   async validateAccessPermission(
     userRoles: string[],
-    sensitivityLevel: DataSensitivityLevel,
+    sensitivityLevel: DataSensitivityLevel
   ): Promise<boolean> {
     const recommendedAccess = this.getRecommendedAccess(sensitivityLevel);
 
-    if (recommendedAccess.includes('all')) {
+    if (recommendedAccess.includes("all")) {
       return true;
     }
 
-    return userRoles.some(role => recommendedAccess.includes(role));
+    return userRoles.some((role) => recommendedAccess.includes(role));
   }
 }

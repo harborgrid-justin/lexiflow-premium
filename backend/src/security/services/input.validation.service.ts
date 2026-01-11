@@ -152,7 +152,7 @@ export class InputValidationService {
     /\$and/gi,
   ];
 
-  private readonly COMMAND_PATTERNS = [/[;&|`$()]/g, /..//g, /~//g];
+  private readonly COMMAND_PATTERNS = [/[;&|`$()]/g, /\.\.\//g, /~\//g];
 
   private readonly PATH_TRAVERSAL_PATTERNS = [
     /..[/\\]/g,

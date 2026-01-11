@@ -281,7 +281,8 @@ export class DocumentsService implements OnModuleDestroy {
     }
 
     this.logger.log(`Document updated: ${id}`);
-    return result.raw[0];
+    const rows = result.raw as Document[];
+    return rows[0];
   }
 
   /**
@@ -371,12 +372,12 @@ export class DocumentsService implements OnModuleDestroy {
     Array<{ id: string; label: string; count?: number }>
   > {
     // Get document counts by type/category
-    const typeCounts = await this.documentRepository
+    const typeCounts = (await this.documentRepository
       .createQueryBuilder("document")
       .select("document.type", "type")
       .addSelect("COUNT(*)", "count")
       .groupBy("document.type")
-      .getRawMany();
+      .getRawMany()) as Array<{ type: string; count: string }>;
 
     const folders = [
       {

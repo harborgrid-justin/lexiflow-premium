@@ -53,7 +53,7 @@ export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
         () => DataService.discovery.getProductions()
     );
 
-    const { mutate: downloadVolume, isLoading: _isDownloading } = useMutation(
+    const { mutate: downloadVolume } = useMutation(
         DataService.discovery.downloadProduction,
         {
             onSuccess: (url) => {

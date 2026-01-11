@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 
 /**
  * Retry Configuration
@@ -15,7 +15,7 @@ export interface RetryConfig {
  * Retry Service
  * Implements exponential backoff with jitter for transient failures
  * Prevents thundering herd problem in distributed systems
- * 
+ *
  * @example
  * const result = await retryService.execute(
  *   () => this.externalApi.call(),
@@ -59,7 +59,7 @@ export class RetryService {
    */
   async execute<T>(
     fn: () => Promise<T>,
-    config: Partial<RetryConfig> = {},
+    config: Partial<RetryConfig> = {}
   ): Promise<T> {
     const fullConfig = this.mergeWithDefaults(config);
     let lastError: Error;
@@ -71,8 +71,13 @@ export class RetryService {
         lastError = error as Error;
 
         // Check if error is retryable
-        if (fullConfig.retryableErrors && !this.isRetryableError(error, fullConfig)) {
-          this.logger.warn(`Non-retryable error encountered: ${lastError.message}`);
+        if (
+          fullConfig.retryableErrors &&
+          !this.isRetryableError(error, fullConfig)
+        ) {
+          this.logger.warn(
+            `Non-retryable error encountered: ${lastError.message}`
+          );
           throw error;
         }
 
@@ -80,7 +85,7 @@ export class RetryService {
         if (attempt === fullConfig.maxAttempts) {
           this.logger.error(
             `All ${fullConfig.maxAttempts} retry attempts exhausted`,
-            lastError.stack,
+            lastError.stack
           );
           break;
         }
@@ -89,14 +94,17 @@ export class RetryService {
         const delay = this.calculateDelay(attempt, fullConfig);
 
         this.logger.warn(
-          `Attempt ${attempt}/${fullConfig.maxAttempts} failed. Retrying in ${delay}ms. Error: ${lastError.message}`,
+          `Attempt ${attempt}/${fullConfig.maxAttempts} failed. Retrying in ${delay}ms. Error: ${lastError.message}`
         );
 
         await this.sleep(delay);
       }
     }
 
-    throw lastError!;
+    if (!lastError) {
+      throw new Error("Retry failed: No error captured");
+    }
+    throw lastError;
   }
 
   /**
@@ -105,7 +113,7 @@ export class RetryService {
   async executeWithPredicate<T>(
     fn: () => Promise<T>,
     shouldRetry: (error: Error, attempt: number) => boolean,
-    config: Partial<RetryConfig> = {},
+    config: Partial<RetryConfig> = {}
   ): Promise<T> {
     const fullConfig = this.mergeWithDefaults(config);
     let lastError: Error;
@@ -116,20 +124,26 @@ export class RetryService {
       } catch (error) {
         lastError = error as Error;
 
-        if (!shouldRetry(lastError, attempt) || attempt === fullConfig.maxAttempts) {
+        if (
+          !shouldRetry(lastError, attempt) ||
+          attempt === fullConfig.maxAttempts
+        ) {
           break;
         }
 
         const delay = this.calculateDelay(attempt, fullConfig);
         this.logger.warn(
-          `Retry attempt ${attempt}: ${lastError.message} (next in ${delay}ms)`,
+          `Retry attempt ${attempt}: ${lastError.message} (next in ${delay}ms)`
         );
 
         await this.sleep(delay);
       }
     }
 
-    throw lastError!;
+    if (!lastError) {
+      throw new Error("Retry with predicate failed: No error captured");
+    }
+    throw lastError;
   }
 
   private isRetryableError(error: unknown, config: RetryConfig): boolean {
@@ -138,7 +152,7 @@ export class RetryService {
     }
 
     return config.retryableErrors.some(
-      (ErrorClass) => error instanceof ErrorClass,
+      (ErrorClass) => error instanceof ErrorClass
     );
   }
 

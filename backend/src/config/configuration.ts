@@ -81,10 +81,10 @@ export default registerAs(
         enabled: process.env.DEFAULT_ADMIN_PROFILE_ENABLED !== "false",
         barNumber: process.env.DEFAULT_ADMIN_BAR_NUMBER || null,
         jurisdictions: process.env.DEFAULT_ADMIN_JURISDICTIONS
-          ? JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS)
+          ? (JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS) as string[])
           : ["Global"],
         practiceAreas: process.env.DEFAULT_ADMIN_PRACTICE_AREAS
-          ? JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS)
+          ? (JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS) as string[])
           : ["System Administration", "Platform Management"],
         bio:
           process.env.DEFAULT_ADMIN_BIO ||

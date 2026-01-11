@@ -96,7 +96,7 @@ export const ShepardizingTool: React.FC = () => {
                       {getTreatmentBadge(t.treatment)}
                     </div>
                     <blockquote className={cn("border-l-4 pl-4 text-sm italic", theme.border.default, theme.text.secondary)}>
-                      "{t.quote}"
+                      &ldquo;{t.quote}&rdquo;
                     </blockquote>
                   </div>
                 ))}

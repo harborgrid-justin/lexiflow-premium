@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   RlsPolicyDto,
   CreateRlsPolicyDto,
@@ -7,7 +7,7 @@ import {
   EvaluateRlsPolicyDto,
   RlsPolicyEvaluationResult,
   RlsOperation,
-} from './dto/rls-policy.dto';
+} from "./dto/rls-policy.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -66,20 +66,19 @@ export class RlsPoliciesService {
     // Apply filters
     if (query.table) {
       policies = policies.filter(
-      // TODO: Remove non-null assertion with proper check
-        (policy) => policy.table.toLowerCase() === query.table!.toLowerCase(),
+        (policy) => policy.table.toLowerCase() === query.table?.toLowerCase()
       );
     }
     if (query.operation) {
       policies = policies.filter(
         (policy) =>
           policy.operation === query.operation ||
-          policy.operation === RlsOperation.ALL,
+          policy.operation === RlsOperation.ALL
       );
     }
     if (query.role) {
       policies = policies.filter((policy) =>
-        policy.roles.includes(query.role || ''),
+        policy.roles.includes(query.role || "")
       );
     }
     if (query.enabled !== undefined) {
@@ -112,10 +111,7 @@ export class RlsPoliciesService {
     return policy;
   }
 
-  async update(
-    id: string,
-    dto: UpdateRlsPolicyDto,
-  ): Promise<RlsPolicyDto> {
+  async update(id: string, dto: UpdateRlsPolicyDto): Promise<RlsPolicyDto> {
     const policy = await this.findOne(id);
 
     const updatedPolicy: RlsPolicyDto = {
@@ -134,7 +130,7 @@ export class RlsPoliciesService {
   }
 
   async evaluate(
-    dto: EvaluateRlsPolicyDto,
+    dto: EvaluateRlsPolicyDto
   ): Promise<RlsPolicyEvaluationResult> {
     // Find applicable policies
     const applicablePolicies = Array.from(this.rlsPolicies.values())
@@ -157,7 +153,7 @@ export class RlsPoliciesService {
       return {
         allowed: false,
         appliedPolicies: [],
-        message: 'No matching RLS policies found. Access denied by default.',
+        message: "No matching RLS policies found. Access denied by default.",
       };
     }
 
@@ -166,9 +162,10 @@ export class RlsPoliciesService {
       .map((policy) => this.interpolateCondition(policy.condition, dto.context))
       .filter((cond) => cond);
 
-    const finalCondition = conditions.length > 0
-      ? conditions.map((c) => `(${c})`).join(' AND ')
-      : '';
+    const finalCondition =
+      conditions.length > 0
+        ? conditions.map((c) => `(${c})`).join(" AND ")
+        : "";
 
     return {
       allowed: true,
@@ -180,13 +177,13 @@ export class RlsPoliciesService {
 
   private interpolateCondition(
     condition: string,
-    context: Record<string, unknown>,
+    context: Record<string, unknown>
   ): string {
     let result = condition;
 
     // Replace placeholders like {{userId}} with actual values
     for (const [key, value] of Object.entries(context)) {
-      const placeholder = new RegExp(`{{${key}}}`, 'g');
+      const placeholder = new RegExp(`{{${key}}}`, "g");
       result = result.replace(placeholder, this.sanitizeValue(value));
     }
 
@@ -194,17 +191,17 @@ export class RlsPoliciesService {
   }
 
   private sanitizeValue(value: unknown): string {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       return `'${value.replace(/'/g, "''")}'`; // SQL escape single quotes
     }
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return value.toString();
     }
-    if (typeof value === 'boolean') {
+    if (typeof value === "boolean") {
       return value.toString();
     }
     if (value === null || value === undefined) {
-      return 'NULL';
+      return "NULL";
     }
     return `'${String(value)}'`;
   }

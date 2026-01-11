@@ -11,7 +11,7 @@
 // Core Database Settings
 export const DB_SYNCHRONIZE = false; // CRITICAL: Keep false to prevent data loss
 export const DB_MIGRATIONS_RUN = false;
-export const DB_LOGGING = process.env.NODE_ENV !== 'production';
+export const DB_LOGGING = process.env.NODE_ENV !== "production";
 export const DB_SSL = true;
 export const DB_SSL_REJECT_UNAUTHORIZED = true;
 
@@ -29,7 +29,7 @@ export const DB_EVICTION_RUN_INTERVAL = 10000; // 10 seconds
 // Cache Settings
 export const DB_CACHE_ENABLED = true;
 export const DB_CACHE_DURATION = 30000; // 30 seconds
-export const DB_CACHE_TYPE = 'redis';
+export const DB_CACHE_TYPE = "redis";
 
 // Transaction Settings
 export const DB_MAX_QUERY_EXECUTION_TIME = 60000; // 60 seconds
@@ -47,7 +47,7 @@ export const REDIS_ENABLE_OFFLINE_QUEUE = true;
 export const REDIS_CONNECT_TIMEOUT = 10000; // 10 seconds
 export const REDIS_COMMAND_TIMEOUT = 5000; // 5 seconds
 export const REDIS_KEEP_ALIVE = 30000; // 30 seconds
-export const REDIS_KEY_PREFIX = 'lexiflow:';
+export const REDIS_KEY_PREFIX = "lexiflow:";
 
 // Redis Cache TTL (in seconds)
 export const REDIS_SESSION_TTL = 86400; // 24 hours
@@ -58,9 +58,9 @@ export const REDIS_RATE_LIMIT_TTL = 60; // 1 minute
 // SERVER CONFIGURATION
 // =============================================================================
 export const PORT = 5000; // Updated to match configuration.ts default
-export const API_PREFIX = '/api/v1';
-export const API_VERSION = '1.0.0';
-export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const API_PREFIX = "/api/v1";
+export const API_VERSION = "1.0.0";
+export const NODE_ENV = process.env.NODE_ENV || "development";
 export const ENABLE_GRACEFUL_SHUTDOWN = true;
 export const SHUTDOWN_TIMEOUT_MS = 10000; // 10 seconds
 
@@ -70,7 +70,7 @@ export const HELMET_HSTS_INCLUDE_SUBDOMAINS = true;
 export const HELMET_HSTS_PRELOAD = true;
 
 // Request Settings
-export const REQUEST_BODY_LIMIT = '50mb';
+export const REQUEST_BODY_LIMIT = "50mb";
 export const REQUEST_PARAMETER_LIMIT = 10000;
 export const REQUEST_TIMEOUT_MS = 30000; // 30 seconds
 
@@ -81,7 +81,7 @@ export const REQUEST_TIMEOUT_MS = 30000; // 30 seconds
 // JWT Token Expiration (in seconds)
 export const JWT_EXPIRES_IN = 900; // 15 minutes
 export const JWT_REFRESH_EXPIRES_IN = 604800; // 7 days
-export const JWT_ALGORITHM = 'HS256';
+export const JWT_ALGORITHM = "HS256";
 
 // Token Storage TTL Configuration
 export const REFRESH_TOKEN_TTL_DAYS = 7;
@@ -113,20 +113,34 @@ export const MFA_BACKUP_CODES_COUNT = 10;
 // CORS CONFIGURATION
 // =============================================================================
 // Allow all origins in development, customize for production via environment variables
-export const CORS_ORIGIN = (_origin: string, callback: (err: Error | null, allow?: boolean) => void) => {
+export const CORS_ORIGIN = (
+  _origin: string,
+  callback: (err: Error | null, allow?: boolean) => void
+) => {
   // Allow all origins in development (for accessing from any IP)
   // In production, this should be overridden by the main configuration
   callback(null, true);
 };
-export const CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
-export const CORS_ALLOWED_HEADERS = [
-  'Content-Type',
-  'Authorization',
-  'X-Requested-With',
-  'X-API-Key',
-  'X-Correlation-ID',
+export const CORS_ALLOWED_METHODS = [
+  "GET",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "OPTIONS",
 ];
-export const CORS_EXPOSED_HEADERS = ['X-Total-Count', 'X-Page-Count', 'X-Correlation-ID'];
+export const CORS_ALLOWED_HEADERS = [
+  "Content-Type",
+  "Authorization",
+  "X-Requested-With",
+  "X-API-Key",
+  "X-Correlation-ID",
+];
+export const CORS_EXPOSED_HEADERS = [
+  "X-Total-Count",
+  "X-Page-Count",
+  "X-Correlation-ID",
+];
 export const CORS_CREDENTIALS = true;
 export const CORS_MAX_AGE = 86400; // 24 hours
 
@@ -188,31 +202,31 @@ export const WS_ENABLE_COMPRESSION = true;
 export const FILE_MAX_SIZE = 524288000; // 500MB
 export const FILE_MIN_DISK_SPACE = 1073741824; // 1GB
 export const FILE_ALLOWED_MIME_TYPES = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'application/vnd.ms-powerpoint',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'image/webp',
-  'text/plain',
-  'text/csv',
-  'application/zip',
-  'application/x-rar-compressed',
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "text/plain",
+  "text/csv",
+  "application/zip",
+  "application/x-rar-compressed",
 ];
 export const FILE_PROHIBITED_EXTENSIONS = [
-  '.exe',
-  '.bat',
-  '.cmd',
-  '.com',
-  '.scr',
-  '.vbs',
-  '.js',
-  '.jar',
+  ".exe",
+  ".bat",
+  ".cmd",
+  ".com",
+  ".scr",
+  ".vbs",
+  ".js",
+  ".jar",
 ];
 export const FILE_ENABLE_DEDUPLICATION = true;
 export const FILE_ENABLE_VERSIONING = true;
@@ -224,8 +238,8 @@ export const OCR_MAX_FILE_SIZE = 104857600; // 100MB
 export const OCR_TIMEOUT_MS = 300000; // 5 minutes
 export const OCR_CHUNK_SIZE = 10485760; // 10MB chunks
 export const OCR_MAX_CONCURRENT_JOBS = 5;
-export const OCR_SUPPORTED_LANGUAGES = ['eng', 'spa', 'fra', 'deu'];
-export const OCR_DEFAULT_LANGUAGE = 'eng';
+export const OCR_SUPPORTED_LANGUAGES = ["eng", "spa", "fra", "deu"];
+export const OCR_DEFAULT_LANGUAGE = "eng";
 export const OCR_DPI = 300;
 export const OCR_ENABLE_AUTO_ROTATE = true;
 export const OCR_ENABLE_DESKEW = true;
@@ -247,7 +261,7 @@ export const VERSION_ENABLE_COMPARISON = true;
 export const QUEUE_JOB_TIMEOUT_MS = 600000; // 10 minutes
 export const QUEUE_MAX_ATTEMPTS = 3;
 export const QUEUE_BACKOFF_DELAY_MS = 2000;
-export const QUEUE_BACKOFF_TYPE = 'exponential'; // 'fixed' | 'exponential'
+export const QUEUE_BACKOFF_TYPE = "exponential"; // 'fixed' | 'exponential'
 export const QUEUE_REMOVE_ON_COMPLETE = 100;
 export const QUEUE_REMOVE_ON_FAIL = 50;
 export const QUEUE_MAX_STALLED_COUNT = 3;
@@ -277,11 +291,12 @@ export const VALIDATION_STOP_AT_FIRST_ERROR = false;
 // =============================================================================
 // LOGGING CONFIGURATION
 // =============================================================================
-export const LOG_LEVEL = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+export const LOG_LEVEL =
+  process.env.NODE_ENV === "production" ? "info" : "debug";
 export const LOG_ENABLE_TIMESTAMPS = true;
 export const LOG_ENABLE_COLORS = true;
 export const LOG_MAX_FILES = 30;
-export const LOG_MAX_FILE_SIZE = '20m';
+export const LOG_MAX_FILE_SIZE = "20m";
 export const LOG_ENABLE_FILE_LOGGING = true;
 export const LOG_ENABLE_CONSOLE_LOGGING = true;
 export const LOG_ENABLE_ERROR_STACK_TRACES = true;
@@ -291,9 +306,9 @@ export const LOG_ENABLE_ERROR_STACK_TRACES = true;
 // =============================================================================
 export const METRICS_ENABLED = true;
 export const METRICS_PORT = 9090;
-export const METRICS_PATH = '/metrics';
+export const METRICS_PATH = "/metrics";
 export const HEALTH_CHECK_ENABLED = true;
-export const HEALTH_CHECK_PATH = '/health';
+export const HEALTH_CHECK_PATH = "/health";
 export const HEALTH_CHECK_TIMEOUT_MS = 5000;
 
 // =============================================================================
@@ -339,7 +354,7 @@ export const AUDIT_LOG_QUERY_PARAMS = true;
 // BACKUP CONFIGURATION
 // =============================================================================
 export const BACKUP_ENABLED = true;
-export const BACKUP_SCHEDULE_CRON = '0 2 * * *'; // 2 AM daily
+export const BACKUP_SCHEDULE_CRON = "0 2 * * *"; // 2 AM daily
 export const BACKUP_RETENTION_DAYS = 30;
 export const BACKUP_COMPRESSION_ENABLED = true;
 export const BACKUP_ENCRYPTION_ENABLED = true;
@@ -352,7 +367,7 @@ export const WEBHOOK_MAX_RETRIES = 3;
 export const WEBHOOK_RETRY_DELAYS = [60000, 300000, 900000]; // 1min, 5min, 15min
 export const WEBHOOK_TIMEOUT_MS = 10000; // 10 seconds
 export const WEBHOOK_BATCH_SIZE = 50;
-export const WEBHOOK_SIGNATURE_ALGORITHM = 'sha256';
+export const WEBHOOK_SIGNATURE_ALGORITHM = "sha256";
 export const WEBHOOK_VERIFY_SSL = true;
 
 // =============================================================================
@@ -423,8 +438,8 @@ export const CLEANUP_COMPLETED_JOBS_DAYS = 60;
 // =============================================================================
 // TOKEN BLACKLIST CONFIGURATION
 // =============================================================================
-export const TOKEN_BLACKLIST_PREFIX = 'blacklist:token:';
-export const TOKEN_USER_BLACKLIST_PREFIX = 'blacklist:user:';
+export const TOKEN_BLACKLIST_PREFIX = "blacklist:token:";
+export const TOKEN_USER_BLACKLIST_PREFIX = "blacklist:user:";
 export const TOKEN_BLACKLIST_TTL_DAYS = 7; // Match refresh token lifetime
 export const TOKEN_BLACKLIST_CLEANUP_INTERVAL_HOURS = 6;
 
@@ -438,11 +453,13 @@ export const CLIENT_PORTAL_SESSION_TIMEOUT_MINUTES = 30;
 // =============================================================================
 // REALTIME GATEWAY CONFIGURATION
 // =============================================================================
-export const REALTIME_NAMESPACE = '/events';
+export const REALTIME_NAMESPACE = "/events";
 export const REALTIME_MAX_HTTP_BUFFER_SIZE = 1e6; // 1MB
 export const REALTIME_PING_TIMEOUT_MS = 60000; // 60 seconds
 export const REALTIME_PING_INTERVAL_MS = 25000; // 25 seconds
-export const REALTIME_CORS_ORIGIN = process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' ? false : true);
+export const REALTIME_CORS_ORIGIN =
+  process.env.CORS_ORIGIN ||
+  (process.env.NODE_ENV === "production" ? false : true);
 
 // =============================================================================
 // TIMEOUT INTERCEPTOR CONFIGURATION
@@ -456,30 +473,43 @@ export const GRAPHQL_QUERY_TIMEOUT_MS = 60000; // 60 seconds
 // Controls the automatic creation of a default global admin user on startup
 // All settings can be overridden via environment variables
 
-export const DEFAULT_ADMIN_ENABLED = process.env.DEFAULT_ADMIN_ENABLED !== 'false';
-export const DEFAULT_ADMIN_EMAIL = process.env.DEFAULT_ADMIN_EMAIL || 'admin@lexiflow.com';
-export const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'Admin123!';
-export const DEFAULT_ADMIN_FIRST_NAME = process.env.DEFAULT_ADMIN_FIRST_NAME || 'Super';
-export const DEFAULT_ADMIN_LAST_NAME = process.env.DEFAULT_ADMIN_LAST_NAME || 'Admin';
-export const DEFAULT_ADMIN_TITLE = process.env.DEFAULT_ADMIN_TITLE || 'System Administrator';
-export const DEFAULT_ADMIN_DEPARTMENT = process.env.DEFAULT_ADMIN_DEPARTMENT || 'Administration';
+export const DEFAULT_ADMIN_ENABLED =
+  process.env.DEFAULT_ADMIN_ENABLED !== "false";
+export const DEFAULT_ADMIN_EMAIL =
+  process.env.DEFAULT_ADMIN_EMAIL || "admin@lexiflow.com";
+export const DEFAULT_ADMIN_PASSWORD =
+  process.env.DEFAULT_ADMIN_PASSWORD || "Admin123!";
+export const DEFAULT_ADMIN_FIRST_NAME =
+  process.env.DEFAULT_ADMIN_FIRST_NAME || "Super";
+export const DEFAULT_ADMIN_LAST_NAME =
+  process.env.DEFAULT_ADMIN_LAST_NAME || "Admin";
+export const DEFAULT_ADMIN_TITLE =
+  process.env.DEFAULT_ADMIN_TITLE || "System Administrator";
+export const DEFAULT_ADMIN_DEPARTMENT =
+  process.env.DEFAULT_ADMIN_DEPARTMENT || "Administration";
 
 // Default Admin Profile Settings (for linked UserProfile)
-export const DEFAULT_ADMIN_PROFILE_ENABLED = process.env.DEFAULT_ADMIN_PROFILE_ENABLED !== 'false';
-export const DEFAULT_ADMIN_BAR_NUMBER = process.env.DEFAULT_ADMIN_BAR_NUMBER || null;
-export const DEFAULT_ADMIN_JURISDICTIONS = process.env.DEFAULT_ADMIN_JURISDICTIONS
-  ? JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS)
-  : ['Global'];
-export const DEFAULT_ADMIN_PRACTICE_AREAS = process.env.DEFAULT_ADMIN_PRACTICE_AREAS
-  ? JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS)
-  : ['System Administration', 'Platform Management'];
-export const DEFAULT_ADMIN_BIO = process.env.DEFAULT_ADMIN_BIO ||
-  'Global system administrator with full platform access and management capabilities.';
+export const DEFAULT_ADMIN_PROFILE_ENABLED =
+  process.env.DEFAULT_ADMIN_PROFILE_ENABLED !== "false";
+export const DEFAULT_ADMIN_BAR_NUMBER =
+  process.env.DEFAULT_ADMIN_BAR_NUMBER || null;
+export const DEFAULT_ADMIN_JURISDICTIONS = process.env
+  .DEFAULT_ADMIN_JURISDICTIONS
+  ? (JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS) as string[])
+  : ["Global"];
+export const DEFAULT_ADMIN_PRACTICE_AREAS = process.env
+  .DEFAULT_ADMIN_PRACTICE_AREAS
+  ? (JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS) as string[])
+  : ["System Administration", "Platform Management"];
+export const DEFAULT_ADMIN_BIO =
+  process.env.DEFAULT_ADMIN_BIO ||
+  "Global system administrator with full platform access and management capabilities.";
 export const DEFAULT_ADMIN_YEARS_OF_EXPERIENCE = parseInt(
-  process.env.DEFAULT_ADMIN_YEARS_OF_EXPERIENCE || '0', 10
+  process.env.DEFAULT_ADMIN_YEARS_OF_EXPERIENCE || "0",
+  10
 );
 export const DEFAULT_ADMIN_DEFAULT_HOURLY_RATE = parseFloat(
-  process.env.DEFAULT_ADMIN_DEFAULT_HOURLY_RATE || '0'
+  process.env.DEFAULT_ADMIN_DEFAULT_HOURLY_RATE || "0"
 );
 
 // Consolidated Default Admin Configuration Object

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   ComplianceReportDto,
   ReportType,
@@ -10,11 +10,11 @@ import {
   ConflictsReportData,
   GenerateEthicalWallsReportDto,
   EthicalWallsReportData,
-} from './dto/compliance-report.dto';
-import { AuditLogsService } from '@compliance/audit-logs/audit-logs.service';
-import { ConflictChecksService } from '@compliance/conflict-checks/conflict-checks.service';
-import { EthicalWallsService } from '@compliance/ethical-walls/ethical-walls.service';
-import { PermissionsService } from '@compliance/permissions/permissions.service';
+} from "./dto/compliance-report.dto";
+import { AuditLogsService } from "@compliance/audit-logs/audit-logs.service";
+import { ConflictChecksService } from "@compliance/conflict-checks/conflict-checks.service";
+import { EthicalWallsService } from "@compliance/ethical-walls/ethical-walls.service";
+import { PermissionsService } from "@compliance/permissions/permissions.service";
 
 /**
  * ╔=================================================================================================================╗
@@ -50,13 +50,14 @@ export class ComplianceReportingService {
     private readonly auditLogsService: AuditLogsService,
     private readonly conflictChecksService: ConflictChecksService,
     private readonly ethicalWallsService: EthicalWallsService,
-    private readonly permissionsService: PermissionsService,
+    private readonly permissionsService: PermissionsService
   ) {}
 
   async generateAccessReport(
-    dto: GenerateAccessReportDto,
+    dto: GenerateAccessReportDto
   ): Promise<ComplianceReportDto> {
-    const startDate = dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const startDate =
+      dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const endDate = dto.endDate || new Date();
 
     // Get all permissions for the period
@@ -79,8 +80,10 @@ export class ComplianceReportingService {
 
     // Aggregate by user, resource, and action
     permissions.forEach((perm) => {
-      accessData.byUser[perm.userName] = (accessData.byUser[perm.userName] || 0) + 1;
-      accessData.byResource[perm.resource] = (accessData.byResource[perm.resource] || 0) + 1;
+      accessData.byUser[perm.userName] =
+        (accessData.byUser[perm.userName] || 0) + 1;
+      accessData.byResource[perm.resource] =
+        (accessData.byResource[perm.resource] || 0) + 1;
       perm.actions.forEach((action) => {
         accessData.byAction[action] = (accessData.byAction[action] || 0) + 1;
       });
@@ -95,8 +98,16 @@ export class ComplianceReportingService {
       summary: {
         totalRecords: accessData.totalAccessAttempts,
         metrics: {
-          successRate: (accessData.successfulAccesses / accessData.totalAccessAttempts * 100).toFixed(2) + '%',
-          denialRate: (accessData.deniedAccesses / accessData.totalAccessAttempts * 100).toFixed(2) + '%',
+          successRate:
+            (
+              (accessData.successfulAccesses / accessData.totalAccessAttempts) *
+              100
+            ).toFixed(2) + "%",
+          denialRate:
+            (
+              (accessData.deniedAccesses / accessData.totalAccessAttempts) *
+              100
+            ).toFixed(2) + "%",
           uniqueUsers: Object.keys(accessData.byUser).length,
           uniqueResources: Object.keys(accessData.byResource).length,
         },
@@ -111,15 +122,16 @@ export class ComplianceReportingService {
   }
 
   async generateActivityReport(
-    dto: GenerateActivityReportDto,
+    dto: GenerateActivityReportDto
   ): Promise<ComplianceReportDto> {
-    const startDate = dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const startDate =
+      dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const endDate = dto.endDate || new Date();
 
     const { data: auditLogs } = await this.auditLogsService.findAll({
       userId: dto.userId,
-      entityType: dto.entityType as any,
-      action: dto.action as any,
+      entityType: dto.entityType,
+      action: dto.action,
       startDate,
       endDate,
     });
@@ -135,11 +147,16 @@ export class ComplianceReportingService {
     };
 
     // Aggregate data
-    const userActivityMap = new Map<string, { name: string; count: number; lastActivity: Date }>();
+    const userActivityMap = new Map<
+      string,
+      { name: string; count: number; lastActivity: Date }
+    >();
 
     auditLogs.forEach((log) => {
-      activityData.byAction[log.action] = (activityData.byAction[log.action] || 0) + 1;
-      activityData.byEntityType[log.entityType] = (activityData.byEntityType[log.entityType] || 0) + 1;
+      activityData.byAction[log.action] =
+        (activityData.byAction[log.action] || 0) + 1;
+      activityData.byEntityType[log.entityType] =
+        (activityData.byEntityType[log.entityType] || 0) + 1;
 
       const userActivity = userActivityMap.get(log.userId) || {
         name: log.userName,
@@ -176,12 +193,14 @@ export class ComplianceReportingService {
           uniqueUsers: userActivityMap.size,
           uniqueActions: Object.keys(activityData.byAction).length,
           uniqueEntityTypes: Object.keys(activityData.byEntityType).length,
-          avgActivitiesPerUser: (activityData.totalActivities / userActivityMap.size).toFixed(2),
+          avgActivitiesPerUser: (
+            activityData.totalActivities / userActivityMap.size
+          ).toFixed(2),
         },
         highlights: [
           `Total activities: ${activityData.totalActivities}`,
           `Most common action: ${this.getTopKey(activityData.byAction)}`,
-          `Most active user: ${activityData.topUsers[0]?.userName || 'N/A'}`,
+          `Most active user: ${activityData.topUsers[0]?.userName || "N/A"}`,
         ],
       },
       organizationId: dto.organizationId,
@@ -189,29 +208,34 @@ export class ComplianceReportingService {
   }
 
   async generateConflictsReport(
-    dto: GenerateConflictsReportDto,
+    dto: GenerateConflictsReportDto
   ): Promise<ComplianceReportDto> {
-    const startDate = dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const startDate =
+      dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const endDate = dto.endDate || new Date();
 
     const { data: conflicts } = await this.conflictChecksService.findAll({
-      status: dto.status as any,
-      checkType: dto.checkType as any,
+      status: dto.status,
+      checkType: dto.checkType,
       startDate,
       endDate,
     });
 
     const conflictsData: ConflictsReportData = {
       totalChecks: conflicts.length,
-      conflictsFound: conflicts.filter((c) => c.status === 'CONFLICT_FOUND').length,
-      conflictsResolved: conflicts.filter((c) => c.status === 'RESOLVED').length,
-      conflictsWaived: conflicts.filter((c) => c.status === 'WAIVED').length,
+      conflictsFound: conflicts.filter((c) => c.status === "CONFLICT_FOUND")
+        .length,
+      conflictsResolved: conflicts.filter((c) => c.status === "RESOLVED")
+        .length,
+      conflictsWaived: conflicts.filter((c) => c.status === "WAIVED").length,
       byCheckType: {},
       byStatus: {},
       timeline: this.generateTimeline(startDate, endDate),
-      criticalConflicts: conflicts.filter((c) =>
-        c.conflicts.some((conflict) => conflict.severity === 'critical')
-      ).slice(0, 10),
+      criticalConflicts: conflicts
+        .filter((c) =>
+          c.conflicts.some((conflict) => conflict.severity === "critical")
+        )
+        .slice(0, 10),
     };
 
     // Aggregate data
@@ -231,8 +255,16 @@ export class ComplianceReportingService {
       summary: {
         totalRecords: conflictsData.totalChecks,
         metrics: {
-          conflictRate: (conflictsData.conflictsFound / conflictsData.totalChecks * 100).toFixed(2) + '%',
-          resolutionRate: (conflictsData.conflictsResolved / conflictsData.conflictsFound * 100).toFixed(2) + '%',
+          conflictRate:
+            (
+              (conflictsData.conflictsFound / conflictsData.totalChecks) *
+              100
+            ).toFixed(2) + "%",
+          resolutionRate:
+            (
+              (conflictsData.conflictsResolved / conflictsData.conflictsFound) *
+              100
+            ).toFixed(2) + "%",
           criticalConflicts: conflictsData.criticalConflicts.length,
         },
         highlights: [
@@ -246,20 +278,21 @@ export class ComplianceReportingService {
   }
 
   async generateEthicalWallsReport(
-    dto: GenerateEthicalWallsReportDto,
+    dto: GenerateEthicalWallsReportDto
   ): Promise<ComplianceReportDto> {
-    const startDate = dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const startDate =
+      dto.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const endDate = dto.endDate || new Date();
 
     const { data: walls } = await this.ethicalWallsService.findAll({
-      status: dto.status as any,
+      status: dto.status,
       userId: dto.userId,
     });
 
     const wallsData: EthicalWallsReportData = {
       totalWalls: walls.length,
-      activeWalls: walls.filter((w) => w.status === 'ACTIVE').length,
-      expiredWalls: walls.filter((w) => w.status === 'EXPIRED').length,
+      activeWalls: walls.filter((w) => w.status === "ACTIVE").length,
+      expiredWalls: walls.filter((w) => w.status === "EXPIRED").length,
       affectedUsers: 0,
       restrictedEntities: 0,
       byEntityType: {},
@@ -292,7 +325,9 @@ export class ComplianceReportingService {
           activeWalls: wallsData.activeWalls,
           affectedUsers: wallsData.affectedUsers,
           restrictedEntities: wallsData.restrictedEntities,
-          avgEntitiesPerWall: (wallsData.restrictedEntities / wallsData.totalWalls).toFixed(2),
+          avgEntitiesPerWall: (
+            wallsData.restrictedEntities / wallsData.totalWalls
+          ).toFixed(2),
         },
         highlights: [
           `Total ethical walls: ${wallsData.totalWalls}`,
@@ -312,7 +347,7 @@ export class ComplianceReportingService {
     for (let i = 0; i < Math.min(days, 30); i++) {
       const date = new Date(startDate.getTime() + i * dayInMs);
       timeline.push({
-        date: date.toISOString().split('T')[0],
+        date: date.toISOString().split("T")[0],
         count: Math.floor(Math.random() * 100),
         successful: Math.floor(Math.random() * 80),
         denied: Math.floor(Math.random() * 20),
@@ -324,10 +359,8 @@ export class ComplianceReportingService {
 
   private getTopKey(obj: Record<string, number>): string {
     const entries = Object.entries(obj);
-    if (entries.length === 0) return 'N/A';
+    if (entries.length === 0) return "N/A";
 
-    return entries.reduce((max, entry) =>
-      entry[1] > max[1] ? entry : max
-    )[0];
+    return entries.reduce((max, entry) => (entry[1] > max[1] ? entry : max))[0];
   }
 }

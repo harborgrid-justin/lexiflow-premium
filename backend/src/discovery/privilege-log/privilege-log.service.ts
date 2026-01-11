@@ -157,7 +157,8 @@ export class PrivilegeLogService {
         `Privilege log entry with ID ${id} not found`
       );
     }
-    return result.raw[0] as PrivilegeLogEntry;
+    const rows = result.raw as PrivilegeLogEntry[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

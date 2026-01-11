@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Repository, In, ObjectLiteral } from 'typeorm';
+import { Injectable, Logger } from "@nestjs/common";
+import { Repository, In, ObjectLiteral } from "typeorm";
 
 /**
  * Batch Loader Service
@@ -66,14 +66,16 @@ export class BatchLoaderService {
       batchSize?: number;
       relations?: string[];
       cache?: boolean;
-    } = {},
+    } = {}
   ): Promise<Map<unknown, T>> {
     if (ids.length === 0) {
       return new Map();
     }
 
     // Remove duplicates
-    const uniqueIds = [...new Set(ids.filter((id) => id != null))];
+    const uniqueIds = [
+      ...new Set(ids.filter((id) => id !== null && id !== undefined)),
+    ];
 
     if (uniqueIds.length === 0) {
       return new Map();
@@ -104,13 +106,12 @@ export class BatchLoaderService {
 
     // Create map for efficient lookup
     const entityMap = new Map<unknown, T>();
-    allEntities.forEach((entity: unknown) => {
-      const ent = entity as any;
-      entityMap.set(ent.id, entity as T);
+    allEntities.forEach((entity: T) => {
+      entityMap.set(entity.id, entity);
     });
 
     this.logger.debug(
-      `Batch loaded ${allEntities.length}/${uniqueIds.length} entities from ${repository.metadata.name}`,
+      `Batch loaded ${allEntities.length}/${uniqueIds.length} entities from ${repository.metadata.name}`
     );
 
     return entityMap;
@@ -127,7 +128,7 @@ export class BatchLoaderService {
       batchSize?: number;
       relations?: string[];
       cache?: boolean;
-    } = {},
+    } = {}
   ): Promise<Map<unknown, T[]>> {
     if (values.length === 0) {
       return new Map();
@@ -145,7 +146,7 @@ export class BatchLoaderService {
     for (let i = 0; i < uniqueValues.length; i += batchSize) {
       const batch = uniqueValues.slice(i, i + batchSize);
 
-      const queryBuilder = repository.createQueryBuilder('entity');
+      const queryBuilder = repository.createQueryBuilder("entity");
 
       queryBuilder.where(`entity.${fieldName} IN (:...values)`, {
         values: batch,
@@ -167,17 +168,19 @@ export class BatchLoaderService {
 
     // Group by field value
     const entityMap = new Map<unknown, T[]>();
-    allEntities.forEach((entity: unknown) => {
-      const ent = entity as any;
-      const key = ent[fieldName];
+    allEntities.forEach((entity: T) => {
+      const key = (entity as Record<string, unknown>)[fieldName];
       if (!entityMap.has(key)) {
         entityMap.set(key, []);
       }
-      entityMap.get(key)!.push(entity as T);
+      const existingEntities = entityMap.get(key);
+      if (existingEntities) {
+        existingEntities.push(entity);
+      }
     });
 
     this.logger.debug(
-      `Batch loaded ${allEntities.length} entities by ${fieldName} from ${repository.metadata.name}`,
+      `Batch loaded ${allEntities.length} entities by ${fieldName} from ${repository.metadata.name}`
     );
 
     return entityMap;
@@ -192,7 +195,7 @@ export class BatchLoaderService {
     options: {
       batchSize?: number;
       relations?: string[];
-    } = {},
+    } = {}
   ): Promise<T[]> {
     if (conditions.length === 0) {
       return [];
@@ -204,20 +207,20 @@ export class BatchLoaderService {
     for (let i = 0; i < conditions.length; i += batchSize) {
       const batch = conditions.slice(i, i + batchSize);
 
-      const queryBuilder = repository.createQueryBuilder('entity');
+      const queryBuilder = repository.createQueryBuilder("entity");
 
       // Build OR conditions
-      batch.forEach((condition, idx) => {
+      batch.forEach((condition: Record<string, unknown>, idx: number) => {
         const whereClause = Object.entries(condition)
           .map(([key, _value]) => `entity.${key} = :${key}_${idx}`)
-          .join(' AND ');
+          .join(" AND ");
 
         const parameters = Object.entries(condition).reduce(
           (acc, [key, value]) => {
             acc[`${key}_${idx}`] = value;
             return acc;
           },
-          {} as any,
+          {} as Record<string, unknown>
         );
 
         if (idx === 0) {
@@ -238,7 +241,7 @@ export class BatchLoaderService {
     }
 
     this.logger.debug(
-      `Batch loaded ${allEntities.length} entities with conditions from ${repository.metadata.name}`,
+      `Batch loaded ${allEntities.length} entities with conditions from ${repository.metadata.name}`
     );
 
     return allEntities;
@@ -250,7 +253,7 @@ export class BatchLoaderService {
   async loadCounts<T extends ObjectLiteral>(
     repository: Repository<T>,
     fieldName: string,
-    values: unknown[],
+    values: unknown[]
   ): Promise<Map<unknown, number>> {
     if (values.length === 0) {
       return new Map();
@@ -263,9 +266,9 @@ export class BatchLoaderService {
     }
 
     const results = await repository
-      .createQueryBuilder('entity')
-      .select(`entity.${fieldName}`, 'key')
-      .addSelect('COUNT(*)', 'count')
+      .createQueryBuilder("entity")
+      .select(`entity.${fieldName}`, "key")
+      .addSelect("COUNT(*)", "count")
       .where(`entity.${fieldName} IN (:...values)`, { values: uniqueValues })
       .groupBy(`entity.${fieldName}`)
       .getRawMany();

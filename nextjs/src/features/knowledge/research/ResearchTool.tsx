@@ -10,17 +10,12 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import React, { Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { queryKeys } from '@/utils/queryKeys';
-
-// Hooks & Context
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers';
@@ -35,12 +30,7 @@ import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/utils/cn';
 
 // Types
-import { Clause, JudgeProfile } from '@/types';
-
-const ClauseHistoryModalModule = lazy(async () => {
-  const mod = await import('../clauses/ClauseHistoryModal');
-  return { default: mod.ClauseHistoryModal };
-});
+import { Clause } from '@/types';
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
@@ -49,17 +39,6 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
 
   const clauseSelection = useSingleSelection<Clause>(null, (a, b) => a.id === b.id);
-  const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
-
-  // Load judges from IndexedDB via useQuery for accurate, cached data
-  const { data: judges = [] } = useQuery<JudgeProfile[]>(
-    queryKeys.adminExtended.judgeProfiles(),
-    () => DataService.analysis.getJudgeProfiles(),
-    { enabled: activeView.startsWith('analytics_') }
-  );
-
-  // Set initial judge selection when data loads - derived from data, not in effect
-  const effectiveJudgeId = selectedJudgeId || (judges.length > 0 ? judges[0].id : '');
 
   const renderContent = () => {
     // Delegation to ResearchToolContent
@@ -77,11 +56,6 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   if (caseId) {
     return (
       <>
-        {clauseSelection.selected && (
-          <Suspense fallback={null}>
-            <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
-          </Suspense>
-        )}
         <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
           {/* Embedded Navigation (Simplified) */}
           <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
@@ -115,11 +89,6 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
 
   return (
     <>
-      {clauseSelection.selected && (
-        <Suspense fallback={null}>
-          <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
-        </Suspense>
-      )}
       <TabbedPageLayout
         pageTitle="Research & Knowledge Center"
         pageSubtitle="Unified intelligence hub for legal authority, firm knowledge, and strategic analysis."

@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 /**
  * Index recommendation
@@ -9,7 +9,7 @@ export interface IndexRecommendation {
   tableName: string;
   columnNames: string[];
   reason: string;
-  estimatedImpact: 'high' | 'medium' | 'low';
+  estimatedImpact: "high" | "medium" | "low";
   createStatement: string;
 }
 
@@ -27,7 +27,7 @@ export interface IndexAnalysis {
   rowsFetched: number;
   isUnique: boolean;
   isPrimaryKey: boolean;
-  recommendation: 'keep' | 'consider_dropping' | 'optimize';
+  recommendation: "keep" | "consider_dropping" | "optimize";
   reason: string;
 }
 
@@ -100,7 +100,9 @@ export class IndexAnalyzerService {
   /**
    * Analyze all indexes and provide recommendations
    */
-  async analyzeIndexes(schemaName: string = 'public'): Promise<IndexAnalysis[]> {
+  async analyzeIndexes(
+    schemaName: string = "public"
+  ): Promise<IndexAnalysis[]> {
     try {
       const query = `
         SELECT
@@ -133,25 +135,27 @@ export class IndexAnalyzerService {
         ORDER BY i.tablename, i.indexname
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      const results = (await this.dataSource.query(query, [
+        schemaName,
+      ])) as Array<Record<string, unknown>>;
 
-      return results.map((row: Record<string, unknown>) => {
+      return results.map((row) => {
         const scans = parseInt(String(row.scans_count));
         const sizeBytes = parseInt(String(row.size_bytes));
         const isPrimary = Boolean(row.is_primary);
         const isUnique = Boolean(row.is_unique);
 
-        let recommendation: 'keep' | 'consider_dropping' | 'optimize' = 'keep';
-        let reason = 'Index is being used effectively';
+        let recommendation: "keep" | "consider_dropping" | "optimize" = "keep";
+        let reason = "Index is being used effectively";
 
         // Analyze unused indexes
         if (!isPrimary && scans === 0 && sizeBytes > 1024 * 1024) {
           // > 1MB
-          recommendation = 'consider_dropping';
+          recommendation = "consider_dropping";
           reason = `Index has never been scanned and uses ${this.formatBytes(sizeBytes)}`;
         } else if (!isPrimary && scans < 10 && sizeBytes > 10 * 1024 * 1024) {
           // > 10MB
-          recommendation = 'consider_dropping';
+          recommendation = "consider_dropping";
           reason = `Index is rarely used (${scans} scans) but uses ${this.formatBytes(sizeBytes)}`;
         }
 
@@ -159,7 +163,7 @@ export class IndexAnalyzerService {
         const rowsRead = parseInt(String(row.rows_read));
         const rowsFetched = parseInt(String(row.rows_fetched));
         if (rowsRead > 0 && rowsFetched / rowsRead < 0.1) {
-          recommendation = 'optimize';
+          recommendation = "optimize";
           reason = `Index read efficiency is low (${((rowsFetched / rowsRead) * 100).toFixed(1)}%)`;
         }
 
@@ -179,7 +183,7 @@ export class IndexAnalyzerService {
         };
       });
     } catch (error) {
-      this.logger.error('Failed to analyze indexes', error);
+      this.logger.error("Failed to analyze indexes", error);
       throw error;
     }
   }
@@ -188,8 +192,8 @@ export class IndexAnalyzerService {
    * Find missing indexes based on sequential scans
    */
   async findMissingIndexes(
-    schemaName: string = 'public',
-    seqScanThreshold: number = 1000,
+    schemaName: string = "public",
+    seqScanThreshold: number = 1000
   ): Promise<MissingIndexInfo[]> {
     try {
       const query = `
@@ -207,10 +211,10 @@ export class IndexAnalyzerService {
         ORDER BY seq_scan DESC
       `;
 
-      const results = await this.dataSource.query(query, [
+      const results = (await this.dataSource.query(query, [
         schemaName,
         seqScanThreshold,
-      ]);
+      ])) as Array<Record<string, unknown>>;
 
       const missingIndexes: MissingIndexInfo[] = [];
 
@@ -229,12 +233,12 @@ export class IndexAnalyzerService {
           LIMIT 5
         `;
 
-        const columns = await this.dataSource.query(columnsQuery, [
+        const columns = (await this.dataSource.query(columnsQuery, [
           schemaName,
           row.tablename,
-        ]);
+        ])) as Array<Record<string, unknown>>;
 
-        columns.forEach((col: Record<string, unknown>) => {
+        columns.forEach((col) => {
           missingIndexes.push({
             tableName: String(row.tablename),
             columnName: String(col.column_name),
@@ -247,7 +251,7 @@ export class IndexAnalyzerService {
 
       return missingIndexes;
     } catch (error) {
-      this.logger.error('Failed to find missing indexes', error);
+      this.logger.error("Failed to find missing indexes", error);
       throw error;
     }
   }
@@ -256,7 +260,7 @@ export class IndexAnalyzerService {
    * Find duplicate or redundant indexes
    */
   async findDuplicateIndexes(
-    schemaName: string = 'public',
+    schemaName: string = "public"
   ): Promise<DuplicateIndexInfo[]> {
     try {
       const query = `
@@ -275,14 +279,16 @@ export class IndexAnalyzerService {
 
       return results.map((row: Record<string, unknown>) => ({
         tableName: String(row.tablename),
-        indexes: (row.index_names as string[]).map((name: string, idx: number) => ({
-          indexName: name,
-          definition: (row.index_defs as string[])[idx],
-        })),
-        reason: 'Identical index definitions found',
+        indexes: (row.index_names as string[]).map(
+          (name: string, idx: number) => ({
+            indexName: name,
+            definition: (row.index_defs as string[])[idx],
+          })
+        ),
+        reason: "Identical index definitions found",
       }));
     } catch (error) {
-      this.logger.error('Failed to find duplicate indexes', error);
+      this.logger.error("Failed to find duplicate indexes", error);
       throw error;
     }
   }
@@ -291,7 +297,7 @@ export class IndexAnalyzerService {
    * Generate index recommendations
    */
   async generateRecommendations(
-    schemaName: string = 'public',
+    schemaName: string = "public"
   ): Promise<IndexRecommendation[]> {
     const recommendations: IndexRecommendation[] = [];
 
@@ -302,10 +308,10 @@ export class IndexAnalyzerService {
       missingIndexes.forEach((missing) => {
         const impact =
           missing.seqScans > 10000
-            ? 'high'
+            ? "high"
             : missing.seqScans > 1000
-              ? 'medium'
-              : 'low';
+              ? "medium"
+              : "low";
 
         recommendations.push({
           tableName: missing.tableName,
@@ -340,14 +346,16 @@ export class IndexAnalyzerService {
           )
       `;
 
-      const fkResults = await this.dataSource.query(fkQuery, [schemaName]);
+      const fkResults = (await this.dataSource.query(fkQuery, [
+        schemaName,
+      ])) as Array<Record<string, unknown>>;
 
-      fkResults.forEach((row: Record<string, unknown>) => {
+      fkResults.forEach((row) => {
         recommendations.push({
           tableName: String(row.table_name),
           columnNames: [String(row.column_name)],
           reason: `Foreign key column referencing ${row.foreign_table_name} lacks an index`,
-          estimatedImpact: 'high',
+          estimatedImpact: "high",
           createStatement: `CREATE INDEX idx_${row.table_name}_${row.column_name}_fk ON ${row.table_name}(${row.column_name});`,
         });
       });
@@ -365,19 +373,19 @@ export class IndexAnalyzerService {
         ORDER BY tablename, n_distinct DESC
       `;
 
-      const compositeResults = await this.dataSource.query(compositeQuery, [
+      const compositeResults = (await this.dataSource.query(compositeQuery, [
         schemaName,
-      ]);
+      ])) as Array<Record<string, unknown>>;
 
       // Group by table and recommend composite indexes
       const tableColumns = new Map<string, string[]>();
-      compositeResults.forEach((row: Record<string, unknown>) => {
+      compositeResults.forEach((row) => {
         const tableName = String(row.tablename);
         if (!tableColumns.has(tableName)) {
           tableColumns.set(tableName, []);
         }
-        const cols = tableColumns.get(tableName)!;
-        if (cols.length < 3) {
+        const cols = tableColumns.get(tableName);
+        if (cols && cols.length < 3) {
           // Max 3 columns per composite index
           cols.push(String(row.attname));
         }
@@ -388,9 +396,10 @@ export class IndexAnalyzerService {
           recommendations.push({
             tableName,
             columnNames: columns,
-            reason: 'Columns frequently queried together could benefit from a composite index',
-            estimatedImpact: 'medium',
-            createStatement: `CREATE INDEX idx_${tableName}_${columns.join('_')} ON ${tableName}(${columns.join(', ')});`,
+            reason:
+              "Columns frequently queried together could benefit from a composite index",
+            estimatedImpact: "medium",
+            createStatement: `CREATE INDEX idx_${tableName}_${columns.join("_")} ON ${tableName}(${columns.join(", ")});`,
           });
         }
       });
@@ -400,7 +409,7 @@ export class IndexAnalyzerService {
         return impactOrder[a.estimatedImpact] - impactOrder[b.estimatedImpact];
       });
     } catch (error) {
-      this.logger.error('Failed to generate recommendations', error);
+      this.logger.error("Failed to generate recommendations", error);
       throw error;
     }
   }
@@ -408,9 +417,7 @@ export class IndexAnalyzerService {
   /**
    * Get index fragmentation information
    */
-  async getIndexFragmentation(
-    schemaName: string = 'public',
-  ): Promise<
+  async getIndexFragmentation(schemaName: string = "public"): Promise<
     Array<{
       tableName: string;
       indexName: string;
@@ -433,9 +440,11 @@ export class IndexAnalyzerService {
         ORDER BY pg_relation_size(indexrelid) DESC
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      const results = (await this.dataSource.query(query, [
+        schemaName,
+      ])) as Array<Record<string, unknown>>;
 
-      return results.map((row: Record<string, unknown>) => {
+      return results.map((row) => {
         const sizeBytes = parseInt(String(row.size_bytes));
         const scans = parseInt(String(row.idx_scan));
 
@@ -443,7 +452,7 @@ export class IndexAnalyzerService {
         const bloatPercent =
           scans > 0 ? Math.min((sizeBytes / scans / 1000) * 100, 100) : 0;
 
-        let recommendation = 'No action needed';
+        let recommendation = "No action needed";
         if (bloatPercent > 50) {
           recommendation = `Consider REINDEXing. Index size: ${row.index_size}`;
         }
@@ -456,7 +465,7 @@ export class IndexAnalyzerService {
         };
       });
     } catch (error) {
-      this.logger.error('Failed to get index fragmentation', error);
+      this.logger.error("Failed to get index fragmentation", error);
       throw error;
     }
   }
@@ -467,34 +476,36 @@ export class IndexAnalyzerService {
   async suggestCoveringIndexes(
     tableName: string,
     queryColumns: string[],
-    whereColumns: string[],
+    whereColumns: string[]
   ): Promise<string> {
     // Covering index includes all columns needed by the query
-    const includeColumns = queryColumns.filter((c) => !whereColumns.includes(c));
+    const includeColumns = queryColumns.filter(
+      (c) => !whereColumns.includes(c)
+    );
 
-    return `CREATE INDEX idx_${tableName}_covering ON ${tableName}(${whereColumns.join(', ')}) INCLUDE (${includeColumns.join(', ')});`;
+    return `CREATE INDEX idx_${tableName}_covering ON ${tableName}(${whereColumns.join(", ")}) INCLUDE (${includeColumns.join(", ")});`;
   }
 
   /**
    * Extract index type from index definition
    */
   private extractIndexType(indexDef: string): string {
-    if (indexDef.includes('USING btree')) return 'btree';
-    if (indexDef.includes('USING hash')) return 'hash';
-    if (indexDef.includes('USING gin')) return 'gin';
-    if (indexDef.includes('USING gist')) return 'gist';
-    if (indexDef.includes('USING spgist')) return 'spgist';
-    if (indexDef.includes('USING brin')) return 'brin';
-    return 'btree'; // default
+    if (indexDef.includes("USING btree")) return "btree";
+    if (indexDef.includes("USING hash")) return "hash";
+    if (indexDef.includes("USING gin")) return "gin";
+    if (indexDef.includes("USING gist")) return "gist";
+    if (indexDef.includes("USING spgist")) return "spgist";
+    if (indexDef.includes("USING brin")) return "brin";
+    return "btree"; // default
   }
 
   /**
    * Format bytes to human-readable size
    */
   private formatBytes(bytes: number): string {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Bytes';
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "0 Bytes";
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
   }
 }

@@ -142,7 +142,8 @@ export class ExaminationsService {
     if (!result.affected) {
       throw new NotFoundException(`Examination with ID ${id} not found`);
     }
-    return result.raw[0] as Examination;
+    const rows = result.raw as Examination[];
+    return rows[0];
   }
 
   async remove(id: string): Promise<void> {

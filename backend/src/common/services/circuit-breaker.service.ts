@@ -1,12 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 
 /**
  * Circuit Breaker States
  */
 export enum CircuitState {
-  CLOSED = 'CLOSED', // Normal operation
-  OPEN = 'OPEN', // Failing, reject requests immediately
-  HALF_OPEN = 'HALF_OPEN', // Testing if service recovered
+  CLOSED = "CLOSED", // Normal operation
+  OPEN = "OPEN", // Failing, reject requests immediately
+  HALF_OPEN = "HALF_OPEN", // Testing if service recovered
 }
 
 /**
@@ -23,7 +23,7 @@ export interface CircuitBreakerConfig {
  * Circuit Breaker Service
  * Implements circuit breaker pattern for external service calls
  * Prevents cascading failures in distributed systems
- * 
+ *
  * @example
  * const result = await circuitBreaker.execute(
  *   'pacer-api',
@@ -70,7 +70,7 @@ export class CircuitBreakerService {
   async execute<T>(
     circuitName: string,
     fn: () => Promise<T>,
-    config: CircuitBreakerConfig = this.getDefaultConfig(),
+    config: CircuitBreakerConfig = this.getDefaultConfig()
   ): Promise<T> {
     const circuit = this.getOrCreateCircuit(circuitName, config);
 
@@ -82,7 +82,7 @@ export class CircuitBreakerService {
         circuit.successCount = 0;
       } else {
         const error = new Error(
-          `Circuit breaker ${circuitName} is OPEN. Service unavailable.`,
+          `Circuit breaker ${circuitName} is OPEN. Service unavailable.`
         );
         this.logger.warn(error.message);
         throw error;
@@ -94,8 +94,6 @@ export class CircuitBreakerService {
       this.onSuccess(circuit, config);
       return result;
     } catch (error) {
-      
-      
       this.onFailure(circuit, config, circuitName);
       throw error;
     }
@@ -139,7 +137,7 @@ export class CircuitBreakerService {
 
   private getOrCreateCircuit(
     name: string,
-    config: CircuitBreakerConfig,
+    config: CircuitBreakerConfig
   ): CircuitBreakerState {
     if (!this.circuits.has(name)) {
       this.circuits.set(name, {
@@ -150,19 +148,25 @@ export class CircuitBreakerService {
         config,
       });
     }
-    return this.circuits.get(name)!;
+    const circuit = this.circuits.get(name);
+    if (!circuit) {
+      throw new Error(`Failed to get circuit "${name}"`);
+    }
+    return circuit;
   }
 
   private onSuccess(
     circuit: CircuitBreakerState,
-    config: CircuitBreakerConfig,
+    config: CircuitBreakerConfig
   ): void {
     circuit.failureCount = 0;
 
     if (circuit.state === CircuitState.HALF_OPEN) {
       circuit.successCount++;
       if (circuit.successCount >= config.successThreshold) {
-        this.logger.log(`Circuit moving to CLOSED after ${circuit.successCount} successes`);
+        this.logger.log(
+          `Circuit moving to CLOSED after ${circuit.successCount} successes`
+        );
         circuit.state = CircuitState.CLOSED;
         circuit.successCount = 0;
       }
@@ -172,18 +176,20 @@ export class CircuitBreakerService {
   private onFailure(
     circuit: CircuitBreakerState,
     config: CircuitBreakerConfig,
-    name: string,
+    name: string
   ): void {
     circuit.failureCount++;
     circuit.lastFailureTime = Date.now();
 
     if (circuit.state === CircuitState.HALF_OPEN) {
-      this.logger.warn(`Circuit ${name} reopening after failure in HALF_OPEN state`);
+      this.logger.warn(
+        `Circuit ${name} reopening after failure in HALF_OPEN state`
+      );
       circuit.state = CircuitState.OPEN;
       circuit.successCount = 0;
     } else if (circuit.failureCount >= config.failureThreshold) {
       this.logger.error(
-        `Circuit ${name} opening after ${circuit.failureCount} failures`,
+        `Circuit ${name} opening after ${circuit.failureCount} failures`
       );
       circuit.state = CircuitState.OPEN;
     }

@@ -17,7 +17,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 export const AttorneyDashboard: React.FC = () => {
   const { theme } = useTheme();
 
-  const { data: roleDashboard, isLoading } = useQuery(
+  const { data: dashboardData, isLoading } = useQuery(
     ['dashboard', 'attorney'],
     () => dashboardMetricsService.getRoleDashboard('attorney')
   );

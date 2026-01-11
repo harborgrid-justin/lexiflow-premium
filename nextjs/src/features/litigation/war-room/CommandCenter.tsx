@@ -84,12 +84,12 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
             <Card className={cn("p-6", theme.surface.raised, "border-2", theme.primary.border)}>
                 <div className="flex justify-between items-center">
                     <div className="space-y-3 flex-1">
-                        <Skeleton className="bg-gray-200" className="h-6 w-48" />
-                        <Skeleton className="bg-gray-200" className="h-4 w-32" />
+                        <Skeleton className="h-6 w-48 bg-gray-200" />
+                        <Skeleton className="h-4 w-32 bg-gray-200" />
                     </div>
                     <div className="text-right space-y-3">
-                        <Skeleton className="bg-gray-200" className="h-8 w-24" />
-                        <Skeleton className="bg-gray-200" className="h-4 w-36" />
+                        <Skeleton className="h-8 w-24 bg-gray-200" />
+                        <Skeleton className="h-4 w-36 bg-gray-200" />
                     </div>
                 </div>
             </Card>
@@ -140,10 +140,10 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
                             <div key={`alert-skeleton-${i}`} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
                                 <Skeleton className="bg-gray-200 shrink-0 h-10 w-10 rounded-full" />
                                 <div className="flex-1 space-y-2">
-                                    <Skeleton className="bg-gray-200" className="h-4 w-3/4" />
-                                    <Skeleton className="bg-gray-200" className="h-3 w-full" />
-                                    <Skeleton className="bg-gray-200" className="h-3 w-5/6" />
-                                    <Skeleton className="bg-gray-200" className="h-6 w-24 mt-2" />
+                                    <Skeleton className="h-4 w-3/4 bg-gray-200" />
+                                    <Skeleton className="h-3 w-full bg-gray-200" />
+                                    <Skeleton className="h-3 w-5/6 bg-gray-200" />
+                                    <Skeleton className="h-6 w-24 mt-2 bg-gray-200" />
                                 </div>
                             </div>
                         ))}

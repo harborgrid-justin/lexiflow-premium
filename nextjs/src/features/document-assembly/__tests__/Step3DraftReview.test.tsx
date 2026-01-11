@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Step3DraftReview } from '../Step3DraftReview';
 
@@ -501,7 +501,6 @@ describe('Step3DraftReview Component', () => {
       });
 
       const textarea = screen.getByRole('textbox');
-      const scrollTopSpy = jest.spyOn(textarea, 'scrollTop', 'set');
 
       // Update with more content
       rerender(

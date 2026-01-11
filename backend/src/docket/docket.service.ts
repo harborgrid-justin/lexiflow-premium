@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { DocketEntry } from './entities/docket-entry.entity';
-import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
-import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
-import { PacerSyncDto, PacerSyncResultDto } from './dto/pacer-sync.dto';
+import { Injectable, NotFoundException, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { DocketEntry } from "./entities/docket-entry.entity";
+import { CreateDocketEntryDto } from "./dto/create-docket-entry.dto";
+import { UpdateDocketEntryDto } from "./dto/update-docket-entry.dto";
+import { PacerSyncDto, PacerSyncResultDto } from "./dto/pacer-sync.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -44,15 +44,23 @@ export class DocketService {
 
   constructor(
     @InjectRepository(DocketEntry)
-    private readonly docketRepository: Repository<DocketEntry>,
+    private readonly docketRepository: Repository<DocketEntry>
   ) {}
 
-  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number }> {
+  async findAll(options?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{
+    data: DocketEntry[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [entries, total] = await this.docketRepository.findAndCount({
-      order: { sequenceNumber: 'DESC' },
+      order: { sequenceNumber: "DESC" },
       skip,
       take: limit,
     });
@@ -65,13 +73,21 @@ export class DocketService {
     };
   }
 
-  async findAllByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number }> {
+  async findAllByCaseId(
+    caseId: string,
+    options?: { page?: number; limit?: number }
+  ): Promise<{
+    data: DocketEntry[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [entries, total] = await this.docketRepository.findAndCount({
       where: { caseId },
-      order: { sequenceNumber: 'DESC' },
+      order: { sequenceNumber: "DESC" },
       skip,
       take: limit,
     });
@@ -96,25 +112,30 @@ export class DocketService {
     return entry;
   }
 
-  async create(createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
+  async create(
+    createDocketEntryDto: CreateDocketEntryDto
+  ): Promise<DocketEntry> {
     const entry = this.docketRepository.create(createDocketEntryDto);
     return this.docketRepository.save(entry);
   }
 
-  async update(id: string, updateDocketEntryDto: UpdateDocketEntryDto): Promise<DocketEntry> {
+  async update(
+    id: string,
+    updateDocketEntryDto: UpdateDocketEntryDto
+  ): Promise<DocketEntry> {
     const result = await this.docketRepository
       .createQueryBuilder()
       .update(DocketEntry)
-      .set(updateDocketEntryDto as any)
-      .where('id = :id', { id })
-      .returning('*')
+      .set(updateDocketEntryDto as unknown as DocketEntry)
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
       throw new NotFoundException(`Docket entry with ID ${id} not found`);
     }
 
-    return result.raw[0];
+    return result.raw[0] as DocketEntry;
   }
 
   async remove(id: string): Promise<void> {
@@ -145,7 +166,7 @@ export class DocketService {
       this.logger.log(`PACER case number: ${pacerSyncDto.pacerCaseNumber}`);
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock successful sync
       result.entriesAdded = 2;
@@ -155,7 +176,6 @@ export class DocketService {
       // In a real implementation, we would fetch entries and save them to the database
       // const entries = await this.pacerService.getDocketSheet(...)
       // await this.saveDocketEntries(entries)
-
     } catch (error: unknown) {
       this.logger.error(`PACER sync failed: ${(error as any).message}`);
       result.success = false;
@@ -176,20 +196,20 @@ export class DocketService {
     page?: number;
     limit?: number;
   }): Promise<{ data: DocketEntry[]; total: number }> {
-    const qb = this.docketRepository.createQueryBuilder('docket');
+    const qb = this.docketRepository.createQueryBuilder("docket");
 
     if (query.caseId) {
-      qb.where('docket.caseId = :caseId', { caseId: query.caseId });
+      qb.where("docket.caseId = :caseId", { caseId: query.caseId });
     }
 
     if (query.query) {
       qb.andWhere(
-        '(docket.description ILIKE :query OR docket.entryText ILIKE :query)',
-        { query: `%${query.query}%` },
+        "(docket.description ILIKE :query OR docket.entryText ILIKE :query)",
+        { query: `%${query.query}%` }
       );
     }
 
-    qb.orderBy('docket.sequenceNumber', 'DESC');
+    qb.orderBy("docket.sequenceNumber", "DESC");
 
     if (query.page && query.limit) {
       qb.skip((query.page - 1) * query.limit);
@@ -207,12 +227,12 @@ export class DocketService {
   }> {
     const entries = await this.docketRepository.find({
       where: { caseId },
-      order: { sequenceNumber: 'DESC' },
+      order: { sequenceNumber: "DESC" },
     });
 
     const byCategory: Record<string, number> = {};
     entries.forEach((entry) => {
-      const category = entry.type || 'Uncategorized';
+      const category = entry.type || "Uncategorized";
       byCategory[category] = (byCategory[category] || 0) + 1;
     });
 

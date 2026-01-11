@@ -282,8 +282,11 @@ export class GracefulDegradationService {
 
     switch (config.fallbackStrategy) {
       case FallbackStrategy.CACHED_RESPONSE:
+        if (!config.cacheKey) {
+          throw new Error("Cache key is required for CACHED_RESPONSE strategy");
+        }
         return this.getCachedResponse<T>(
-          config.cacheKey!,
+          config.cacheKey,
           serviceName,
           error,
           timestamp
@@ -451,7 +454,11 @@ export class GracefulDegradationService {
       });
     }
 
-    return this.serviceHealth.get(serviceName)!;
+    const health = this.serviceHealth.get(serviceName);
+    if (!health) {
+      throw new Error(`Service ${serviceName} not found in health map`);
+    }
+    return health;
   }
 
   private startHealthMonitoring(): void {

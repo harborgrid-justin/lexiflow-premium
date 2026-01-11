@@ -43,11 +43,9 @@ import { DiscoveryRequest } from '@/types';
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
-const PrivilegeLog = lazy(() => import('./PrivilegeLog'));
-const PrivilegeLogEnhanced = lazy(() => import('./PrivilegeLogEnhanced'));
-const LegalHolds = lazy(() => import('./LegalHolds'));
-const LegalHoldsEnhanced = lazy(() => import('./LegalHoldsEnhanced'));
-const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));
+// Removed unused imports: PrivilegeLog, LegalHolds, DiscoveryDocumentViewer
+
+// Removed enhanced unused imports (PrivilegeLogEnhanced, LegalHoldsEnhanced)
 const DiscoveryResponse = lazy(() => import('./DiscoveryResponse'));
 const DiscoveryProduction = lazy(() => import('./DiscoveryProduction'));
 const DiscoveryProductions = lazy(() => import('./DiscoveryProductions'));

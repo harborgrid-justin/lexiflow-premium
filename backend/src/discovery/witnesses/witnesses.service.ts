@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Witness, WitnessType, WitnessStatus } from './entities/witness.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Witness, WitnessType, WitnessStatus } from "./entities/witness.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -35,7 +35,7 @@ import { Witness, WitnessType, WitnessStatus } from './entities/witness.entity';
 export class WitnessesService {
   constructor(
     @InjectRepository(Witness)
-    private readonly witnessRepository: Repository<Witness>,
+    private readonly witnessRepository: Repository<Witness>
   ) {}
 
   async create(witnessData: Partial<Witness>): Promise<Witness> {
@@ -43,9 +43,18 @@ export class WitnessesService {
     return this.witnessRepository.save(witness);
   }
 
-  async findAll(page = 1, limit = 50): Promise<{ items: Witness[]; total: number; page: number; limit: number; totalPages: number }> {
+  async findAll(
+    page = 1,
+    limit = 50
+  ): Promise<{
+    items: Witness[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
     const [items, total] = await this.witnessRepository.findAndCount({
-      order: { name: 'ASC' },
+      order: { name: "ASC" },
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -74,7 +83,7 @@ export class WitnessesService {
   async findByCase(caseId: string): Promise<Witness[]> {
     return this.witnessRepository.find({
       where: { caseId },
-      order: { name: 'ASC' },
+      order: { name: "ASC" },
       cache: {
         id: `witnesses_case_${caseId}`,
         milliseconds: 120000, // 2 minutes
@@ -85,14 +94,14 @@ export class WitnessesService {
   async findByType(witnessType: WitnessType): Promise<Witness[]> {
     return this.witnessRepository.find({
       where: { witnessType },
-      order: { name: 'ASC' },
+      order: { name: "ASC" },
     });
   }
 
   async findByStatus(status: WitnessStatus): Promise<Witness[]> {
     return this.witnessRepository.find({
       where: { status },
-      order: { name: 'ASC' },
+      order: { name: "ASC" },
     });
   }
 
@@ -100,22 +109,22 @@ export class WitnessesService {
     const result = await this.witnessRepository
       .createQueryBuilder()
       .update(Witness)
-      .set(updateData as any)
-      .where('id = :id', { id })
-      .returning('*')
+      .set(updateData as unknown as Witness)
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`Witness with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as Witness;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.witnessRepository
       .createQueryBuilder()
       .delete()
-      .where('id = :id', { id })
+      .where("id = :id", { id })
       .execute();
 
     if (!result.affected) {

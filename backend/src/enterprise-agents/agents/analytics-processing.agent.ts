@@ -9,27 +9,27 @@
  * @enterprise true
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BaseAgent, createAgentMetadata } from '../core/base-agent';
+import { Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { BaseAgent, createAgentMetadata } from "../core/base-agent";
 import {
   AgentType,
   AgentPriority,
   AgentTask,
   AgentEvent,
-} from '../interfaces/agent.interfaces';
+} from "../interfaces/agent.interfaces";
 
 /**
  * Analytics operation types
  */
 export enum AnalyticsOperationType {
-  METRIC_AGGREGATION = 'METRIC_AGGREGATION',
-  REPORT_GENERATION = 'REPORT_GENERATION',
-  TREND_ANALYSIS = 'TREND_ANALYSIS',
-  PERFORMANCE_TRACKING = 'PERFORMANCE_TRACKING',
-  USER_BEHAVIOR = 'USER_BEHAVIOR',
-  REVENUE_ANALYSIS = 'REVENUE_ANALYSIS',
-  CASE_ANALYTICS = 'CASE_ANALYTICS',
+  METRIC_AGGREGATION = "METRIC_AGGREGATION",
+  REPORT_GENERATION = "REPORT_GENERATION",
+  TREND_ANALYSIS = "TREND_ANALYSIS",
+  PERFORMANCE_TRACKING = "PERFORMANCE_TRACKING",
+  USER_BEHAVIOR = "USER_BEHAVIOR",
+  REVENUE_ANALYSIS = "REVENUE_ANALYSIS",
+  CASE_ANALYTICS = "CASE_ANALYTICS",
 }
 
 /**
@@ -61,7 +61,7 @@ export interface AnalyticsResult {
  */
 export interface TrendData {
   metric: string;
-  direction: 'up' | 'down' | 'stable';
+  direction: "up" | "down" | "stable";
   changePercent: number;
   period: string;
 }
@@ -73,53 +73,56 @@ export interface TrendData {
 @Injectable()
 export class AnalyticsProcessingAgent extends BaseAgent {
   private readonly analyticsLogger = new Logger(AnalyticsProcessingAgent.name);
-  private readonly metricCache: Map<string, { value: number; timestamp: Date }> = new Map();
+  private readonly metricCache: Map<
+    string,
+    { value: number; timestamp: Date }
+  > = new Map();
   private readonly aggregationBuffer: Map<string, number[]> = new Map();
 
   constructor(eventEmitter: EventEmitter2) {
     super(
       createAgentMetadata(
-        'AnalyticsProcessingAgent',
+        "AnalyticsProcessingAgent",
         AgentType.WORKER,
         [
-          'analytics.metric.aggregation',
-          'analytics.report.generation',
-          'analytics.trend.analysis',
-          'analytics.performance.tracking',
-          'analytics.user.behavior',
-          'analytics.revenue.analysis',
-          'analytics.case.analytics',
+          "analytics.metric.aggregation",
+          "analytics.report.generation",
+          "analytics.trend.analysis",
+          "analytics.performance.tracking",
+          "analytics.user.behavior",
+          "analytics.revenue.analysis",
+          "analytics.case.analytics",
         ],
         {
           priority: AgentPriority.NORMAL,
           maxConcurrentTasks: 8,
           heartbeatIntervalMs: 30000,
           healthCheckIntervalMs: 60000,
-        },
+        }
       ),
-      eventEmitter,
+      eventEmitter
     );
   }
 
   protected async onInitialize(): Promise<void> {
-    this.analyticsLogger.log('Initializing Analytics Processing Agent');
+    this.analyticsLogger.log("Initializing Analytics Processing Agent");
   }
 
   protected async onStart(): Promise<void> {
-    this.analyticsLogger.log('Analytics Processing Agent started');
+    this.analyticsLogger.log("Analytics Processing Agent started");
   }
 
   protected async onStop(): Promise<void> {
-    this.analyticsLogger.log('Analytics Processing Agent stopping');
+    this.analyticsLogger.log("Analytics Processing Agent stopping");
     this.flushAggregationBuffer();
   }
 
   protected async onPause(): Promise<void> {
-    this.analyticsLogger.log('Analytics Processing Agent paused');
+    this.analyticsLogger.log("Analytics Processing Agent paused");
   }
 
   protected async onResume(): Promise<void> {
-    this.analyticsLogger.log('Analytics Processing Agent resumed');
+    this.analyticsLogger.log("Analytics Processing Agent resumed");
   }
 
   protected async onEvent(event: AgentEvent): Promise<void> {
@@ -130,7 +133,7 @@ export class AnalyticsProcessingAgent extends BaseAgent {
   }
 
   protected async executeTask<TPayload, TResult>(
-    task: AgentTask<TPayload, TResult>,
+    task: AgentTask<TPayload, TResult>
   ): Promise<TResult> {
     const payload = task.payload as unknown as AnalyticsTaskPayload;
 
@@ -161,9 +164,12 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     }
   }
 
-  private async aggregateMetrics(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async aggregateMetrics(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
-    const requestedMetrics = payload.metrics ?? Array.from(this.aggregationBuffer.keys());
+    const requestedMetrics =
+      payload.metrics ?? Array.from(this.aggregationBuffer.keys());
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.METRIC_AGGREGATION,
       data: [],
@@ -208,16 +214,24 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async generateReport(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async generateReport(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
-    const dateRange = payload.dateRange ?? { start: new Date(0), end: new Date() };
-    const dimensions = payload.dimensions ?? ['cases', 'revenue', 'hours'];
+    const dateRange = payload.dateRange ?? {
+      start: new Date(0),
+      end: new Date(),
+    };
+    const dimensions = payload.dimensions ?? ["cases", "revenue", "hours"];
 
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.REPORT_GENERATION,
       data: [
         {
-          reportDateRange: { start: dateRange.start.toISOString(), end: dateRange.end.toISOString() },
+          reportDateRange: {
+            start: dateRange.start.toISOString(),
+            end: dateRange.end.toISOString(),
+          },
           dimensionsIncluded: dimensions,
         },
       ],
@@ -230,9 +244,9 @@ export class AnalyticsProcessingAgent extends BaseAgent {
       },
       trends: [],
       insights: [
-        'Case completion rate improved by 15% this quarter',
-        'Average case duration decreased by 2 days',
-        'Client satisfaction score at 4.8/5.0',
+        "Case completion rate improved by 15% this quarter",
+        "Average case duration decreased by 2 days",
+        "Client satisfaction score at 4.8/5.0",
       ],
       duration: 0,
     };
@@ -246,30 +260,67 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async analyzeTrends(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async analyzeTrends(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
-    const requestedMetrics = payload.metrics ?? ['caseVolume', 'avgResolutionTime', 'clientRetention', 'revenuePerCase'];
+    const requestedMetrics = payload.metrics ?? [
+      "caseVolume",
+      "avgResolutionTime",
+      "clientRetention",
+      "revenuePerCase",
+    ];
 
     // Build trends based on requested metrics
     const allTrends: TrendData[] = [
-      { metric: 'caseVolume', direction: 'up', changePercent: 12.5, period: 'monthly' },
-      { metric: 'avgResolutionTime', direction: 'down', changePercent: 8.3, period: 'monthly' },
-      { metric: 'clientRetention', direction: 'up', changePercent: 5.2, period: 'quarterly' },
-      { metric: 'revenuePerCase', direction: 'stable', changePercent: 1.1, period: 'monthly' },
+      {
+        metric: "caseVolume",
+        direction: "up",
+        changePercent: 12.5,
+        period: "monthly",
+      },
+      {
+        metric: "avgResolutionTime",
+        direction: "down",
+        changePercent: 8.3,
+        period: "monthly",
+      },
+      {
+        metric: "clientRetention",
+        direction: "up",
+        changePercent: 5.2,
+        period: "quarterly",
+      },
+      {
+        metric: "revenuePerCase",
+        direction: "stable",
+        changePercent: 1.1,
+        period: "monthly",
+      },
     ];
 
-    const filteredTrends = allTrends.filter(trend => requestedMetrics.includes(trend.metric));
+    const filteredTrends = allTrends.filter((trend) =>
+      requestedMetrics.includes(trend.metric)
+    );
 
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.TREND_ANALYSIS,
       data: payload.dateRange
-        ? [{ dateRange: { start: payload.dateRange.start.toISOString(), end: payload.dateRange.end.toISOString() } }]
+        ? [
+            {
+              dateRange: {
+                start: payload.dateRange.start.toISOString(),
+                end: payload.dateRange.end.toISOString(),
+              },
+            },
+          ]
         : [],
       summary: {
         metricsAnalyzed: filteredTrends.length,
-        upTrends: filteredTrends.filter(t => t.direction === 'up').length,
-        downTrends: filteredTrends.filter(t => t.direction === 'down').length,
-        stableTrends: filteredTrends.filter(t => t.direction === 'stable').length,
+        upTrends: filteredTrends.filter((t) => t.direction === "up").length,
+        downTrends: filteredTrends.filter((t) => t.direction === "down").length,
+        stableTrends: filteredTrends.filter((t) => t.direction === "stable")
+          .length,
       },
       trends: filteredTrends,
       insights: [],
@@ -280,9 +331,17 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async trackPerformance(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async trackPerformance(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
-    const requestedMetrics = payload.metrics ?? ['avgResponseTime', 'p95ResponseTime', 'p99ResponseTime', 'errorRate', 'throughput'];
+    const requestedMetrics = payload.metrics ?? [
+      "avgResponseTime",
+      "p95ResponseTime",
+      "p99ResponseTime",
+      "errorRate",
+      "throughput",
+    ];
 
     const allPerformanceMetrics: Record<string, number> = {
       avgResponseTime: 145,
@@ -295,16 +354,23 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     // Filter to only requested metrics
     const summary: Record<string, number> = {};
     for (const metric of requestedMetrics) {
-      if (metric in allPerformanceMetrics) {
-      // TODO: Remove non-null assertion with proper check
-        summary[metric] = allPerformanceMetrics[metric]!;
+      const value = allPerformanceMetrics[metric];
+      if (typeof value === "number") {
+        summary[metric] = value;
       }
     }
 
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.PERFORMANCE_TRACKING,
       data: payload.dateRange
-        ? [{ dateRange: { start: payload.dateRange.start.toISOString(), end: payload.dateRange.end.toISOString() } }]
+        ? [
+            {
+              dateRange: {
+                start: payload.dateRange.start.toISOString(),
+                end: payload.dateRange.end.toISOString(),
+              },
+            },
+          ]
         : [],
       summary,
       trends: [],
@@ -316,9 +382,15 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async analyzeUserBehavior(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async analyzeUserBehavior(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
-    const dimensions = payload.dimensions ?? ['sessions', 'engagement', 'retention'];
+    const dimensions = payload.dimensions ?? [
+      "sessions",
+      "engagement",
+      "retention",
+    ];
 
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.USER_BEHAVIOR,
@@ -349,7 +421,9 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async analyzeRevenue(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async analyzeRevenue(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
     const groupBy = payload.groupBy ?? [];
 
@@ -364,7 +438,10 @@ export class AnalyticsProcessingAgent extends BaseAgent {
 
     // Apply date range filter
     if (payload.dateRange) {
-      data.push({ periodStart: payload.dateRange.start.toISOString(), periodEnd: payload.dateRange.end.toISOString() });
+      data.push({
+        periodStart: payload.dateRange.start.toISOString(),
+        periodEnd: payload.dateRange.end.toISOString(),
+      });
     }
 
     const result: AnalyticsResult = {
@@ -387,10 +464,12 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     return result;
   }
 
-  private async analyzeCases(payload: AnalyticsTaskPayload): Promise<AnalyticsResult> {
+  private async analyzeCases(
+    payload: AnalyticsTaskPayload
+  ): Promise<AnalyticsResult> {
     const startTime = Date.now();
     const filters = payload.filters ?? {};
-    const dimensions = payload.dimensions ?? ['status', 'type', 'attorney'];
+    const dimensions = payload.dimensions ?? ["status", "type", "attorney"];
 
     const result: AnalyticsResult = {
       operationType: AnalyticsOperationType.CASE_ANALYTICS,

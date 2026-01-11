@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Examination } from './entities/examination.entity';
-import { CreateExaminationDto } from './dto/create-examination.dto';
-import { UpdateExaminationDto } from './dto/update-examination.dto';
-import { QueryExaminationDto } from './dto/query-examination.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { Examination } from "./entities/examination.entity";
+import { CreateExaminationDto } from "./dto/create-examination.dto";
+import { UpdateExaminationDto } from "./dto/update-examination.dto";
+import { QueryExaminationDto } from "./dto/query-examination.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +42,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class ExaminationsService {
   constructor(
     @InjectRepository(Examination)
-    private readonly examinationRepository: Repository<Examination>,
+    private readonly examinationRepository: Repository<Examination>
   ) {}
 
   async create(createDto: CreateExaminationDto): Promise<Examination> {
@@ -56,41 +59,44 @@ export class ExaminationsService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'scheduledDate',
-      sortOrder = 'DESC',
+      sortBy = "scheduledDate",
+      sortOrder = "DESC",
     } = queryDto;
 
     const queryBuilder = this.examinationRepository
-      .createQueryBuilder('examination')
-      .where('examination.deletedAt IS NULL');
+      .createQueryBuilder("examination")
+      .where("examination.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('examination.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("examination.caseId = :caseId", { caseId });
     }
 
     if (type) {
-      queryBuilder.andWhere('examination.type = :type', { type });
+      queryBuilder.andWhere("examination.type = :type", { type });
     }
 
     if (status) {
-      queryBuilder.andWhere('examination.status = :status', { status });
+      queryBuilder.andWhere("examination.status = :status", { status });
     }
 
     if (assignedAttorney) {
-      queryBuilder.andWhere('examination.assignedAttorney = :assignedAttorney', {
-        assignedAttorney,
-      });
+      queryBuilder.andWhere(
+        "examination.assignedAttorney = :assignedAttorney",
+        {
+          assignedAttorney,
+        }
+      );
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(examination.examinationTitle ILIKE :search OR examination.examinee ILIKE :search OR examination.examiner ILIKE :search)',
-        { search: `%${search}%` },
+        "(examination.examinationTitle ILIKE :search OR examination.examinee ILIKE :search OR examination.examiner ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('examination', sortBy);
+    const safeSortField = validateSortField("examination", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`examination.${safeSortField}`, safeSortOrder);
 
@@ -122,29 +128,29 @@ export class ExaminationsService {
 
   async update(
     id: string,
-    updateDto: UpdateExaminationDto,
+    updateDto: UpdateExaminationDto
   ): Promise<Examination> {
     const result = await this.examinationRepository
       .createQueryBuilder()
       .update(Examination)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set({ ...updateDto, updatedAt: new Date() } as unknown as Examination)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`Examination with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as Examination;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.examinationRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {

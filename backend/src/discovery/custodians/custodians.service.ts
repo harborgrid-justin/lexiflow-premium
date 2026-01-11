@@ -133,7 +133,7 @@ export class CustodiansService {
     const result = await this.custodianRepository
       .createQueryBuilder()
       .update(Custodian)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
+      .set({ ...updateDto, updatedAt: new Date() } as unknown as Custodian)
       .where('id = :id', { id })
       .andWhere('deletedAt IS NULL')
       .returning('*')
@@ -142,7 +142,7 @@ export class CustodiansService {
     if (!result.affected) {
       throw new NotFoundException(`Custodian with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as Custodian;
   }
 
   async remove(id: string): Promise<void> {

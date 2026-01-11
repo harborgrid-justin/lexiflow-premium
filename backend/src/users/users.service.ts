@@ -1,20 +1,20 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  OnModuleInit,
-  Logger,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import * as bcrypt from "bcrypt";
-import * as MasterConfig from "@config/master.config";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
 import { ROLE_PERMISSIONS } from "@common/constants/role-permissions.constant";
-import { User, UserRole, UserStatus } from "./entities/user.entity";
+import * as MasterConfig from "@config/master.config";
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnModuleInit,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as bcrypt from "bcrypt";
+import { Repository } from "typeorm";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserProfile } from "./entities/user-profile.entity";
+import { User, UserRole, UserStatus } from "./entities/user.entity";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -144,7 +144,8 @@ export class UsersService implements OnModuleInit {
             `(profile: ${config.profile.enabled ? "created" : "skipped"})`
         );
       }
-    } catch {\2// Silently fail if table doesn't exist yet (during initial schema creation)
+    } catch (error) {
+      // Silently fail if table doesn't exist yet (during initial schema creation)
       // The admin will be created on next restart or can be seeded manually
       if (process.env.NODE_ENV !== "production") {
         this.logger.warn(
@@ -232,10 +233,7 @@ export class UsersService implements OnModuleInit {
     return this.toAuthenticatedUser(savedUser);
   }
 
-  async findAll(options?: {
-    page?: number;
-    limit?: number;
-  }): Promise<{
+  async findAll(options?: { page?: number; limit?: number }): Promise<{
     data: AuthenticatedUser[];
     total: number;
     page: number;

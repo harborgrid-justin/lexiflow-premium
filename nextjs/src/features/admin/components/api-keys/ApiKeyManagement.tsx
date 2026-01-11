@@ -205,7 +205,7 @@ export const ApiKeyManagement: React.FC = () => {
             <div className="space-y-4">
               <div className={cn("p-4 rounded-lg bg-green-50 border border-green-200")}>
                 <p className="text-green-800 font-medium mb-2">API Key Created Successfully!</p>
-                <p className="text-green-700 text-sm mb-3">Make sure to copy your API key now. You won't be able to see it again!</p>
+                <p className="text-green-700 text-sm mb-3">Make sure to copy your API key now. You won&apos;t be able to see it again!</p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 p-2 bg-white rounded border text-sm font-mono">{newKeyValue}</code>
                   <Button variant="secondary" icon={Copy} onClick={() => copyToClipboard(newKeyValue)}>Copy</Button>

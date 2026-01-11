@@ -44,7 +44,7 @@ export const CaseListClosing: React.FC = () => {
       );
       setChecklist(result);
       notify.success("Closing index generated via AI.");
-    } catch (_e) {
+    } catch {
       notify.error("Failed to generate index.");
     } finally {
       setIsGenerating(false);

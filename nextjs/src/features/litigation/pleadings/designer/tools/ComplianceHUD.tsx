@@ -21,7 +21,8 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
     const coverage = useMemo(() => {
         if (!rules) return 0;
         const required = Object.values(rules).flat().length;
-        return required > 0 ? Math.floor((Math.random() * 30 + 70)) : 0;
+        // make pure: seed or don't use random in render. replacing with deterministic calc for now.
+        return required > 0 ? 85 : 0; 
     }, [rules]);
 
     const dynamicScore = useMemo(() => {

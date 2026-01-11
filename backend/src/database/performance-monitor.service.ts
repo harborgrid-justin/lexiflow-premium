@@ -222,7 +222,15 @@ export class DatabasePerformanceMonitor {
         WHERE datname = current_database()
       `;
 
-      const [result] = await this.dataSource.query(query);
+      interface PoolQueryResult {
+        total_connections: string;
+        active_connections: string;
+        idle_connections: string;
+        waiting_connections: string;
+      }
+
+      const [result] = await this.dataSource.query<PoolQueryResult>(query);
+      if (!result) {\n        throw new Error('Failed to retrieve pool stats');\n      }
 
       return {
         totalConnections: parseInt(result.total_connections),
@@ -253,9 +261,17 @@ export class DatabasePerformanceMonitor {
         ORDER BY pg_total_relation_size(schemaname || '.' || tablename) DESC
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      interface TableQueryResult {
+        table_name: string;
+        row_count: string;
+        total_size: string;
+        index_size: string;
+        table_size: string;
+      }
 
-      return results.map((row: Record<string, unknown>) => ({
+      const results = await this.dataSource.query<TableQueryResult>(query, [schemaName]);
+
+      return results.map((row) => ({
         tableName: String(row.table_name),
         rowCount: parseInt(String(row.row_count)),
         totalSize: String(row.total_size),
@@ -286,9 +302,18 @@ export class DatabasePerformanceMonitor {
         ORDER BY idx_scan DESC
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      interface IndexQueryResult {
+        schemaname: string;
+        tablename: string;
+        indexname: string;
+        idx_scan: string;
+        idx_tup_read: string;
+        idx_tup_fetch: string;
+      }
 
-      return results.map((row: Record<string, unknown>) => ({
+      const results = await this.dataSource.query<IndexQueryResult>(query, [schemaName]);
+
+      return results.map(row => ({
         schemaName: String(row.schemaname),
         tableName: String(row.tablename),
         indexName: String(row.indexname),
@@ -317,8 +342,12 @@ export class DatabasePerformanceMonitor {
         ORDER BY pg_relation_size(indexrelid) DESC
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
-      return results.map((row: Record<string, unknown>) => String(row.index_name));
+      interface UnusedIndexResult {
+        index_name: string;
+      }
+
+      const results = await this.dataSource.query<UnusedIndexResult>(query, [schemaName]);
+      return results.map((row) => String(row.index_name));
     } catch (error) {
       this.logger.error('Failed to find unused indexes', error);
       throw error;
@@ -469,7 +498,15 @@ export class DatabasePerformanceMonitor {
 
       const results = await this.dataSource.query(query, [schemaName]);
 
-      return results.map((row: Record<string, unknown>) => ({
+      interface BloatResult {
+        table_name: string;
+        bloat_ratio: string;
+        bloat_size: string;
+      }
+
+      const typedResults = results as BloatResult[];
+
+      return typedResults.map((row) => ({
         tableName: String(row.table_name),
         bloatPercent: parseFloat(String(row.bloat_ratio)),
         bloatSize: String(row.bloat_size),
@@ -506,9 +543,16 @@ export class DatabasePerformanceMonitor {
         ORDER BY duration DESC
       `;
 
-      const results = await this.dataSource.query(query);
+      interface LongRunningQueryResult {
+        pid: number;
+        duration: string;
+        query: string;
+        state: string;
+      }
 
-      return results.map((row: Record<string, unknown>) => ({
+      const results = await this.dataSource.query<LongRunningQueryResult>(query);
+
+      return results.map(row => ({
         pid: Number(row.pid),
         duration: String(row.duration),
         query: String(row.query),

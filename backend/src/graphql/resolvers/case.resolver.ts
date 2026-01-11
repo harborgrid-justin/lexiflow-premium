@@ -1,8 +1,19 @@
-import { Resolver, Query, Mutation, Args, ID, Subscription } from '@nestjs/graphql';
-import { UseGuards, Logger } from '@nestjs/common';
-import { PubSub } from 'graphql-subscriptions';
-// 
-import { CaseType, CaseConnection, CaseMetrics } from '@graphql/types/case.type';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ID,
+  Subscription,
+} from "@nestjs/graphql";
+import { UseGuards, Logger } from "@nestjs/common";
+import { PubSub } from "graphql-subscriptions";
+//
+import {
+  CaseType,
+  CaseConnection,
+  CaseMetrics,
+} from "@graphql/types/case.type";
 import {
   CreateCaseInput,
   UpdateCaseInput,
@@ -11,13 +22,13 @@ import {
   AddTeamMemberInput,
   CreateMotionInput,
   CreateDocketEntryInput,
-} from '@graphql/inputs/case.input';
-import { PaginationInput } from '@graphql/inputs/pagination.input';
-import { CurrentUser } from '@auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
-import { CasesService } from '@cases/cases.service';
-// 
-import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
+} from "@graphql/inputs/case.input";
+import { PaginationInput } from "@graphql/inputs/pagination.input";
+import { CurrentUser } from "@auth/decorators/current-user.decorator";
+import { GqlAuthGuard } from "@auth/guards/gql-auth.guard";
+import { CasesService } from "@cases/cases.service";
+//
+import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
 
 // TODO: For production horizontal scaling, replace with RedisPubSub:
 // import { RedisPubSub } from 'graphql-redis-subscriptions';
@@ -30,11 +41,11 @@ export class CaseResolver {
 
   constructor(private readonly caseService: CasesService) {}
 
-  @Query(() => CaseConnection, { name: 'cases' })
+  @Query(() => CaseConnection, { name: "cases" })
   @UseGuards(GqlAuthGuard)
   async getCases(
-    @Args('filter', { nullable: true }) filter?: CaseFilterInput,
-    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+    @Args("filter", { nullable: true }) filter?: CaseFilterInput,
+    @Args("pagination", { nullable: true }) pagination?: PaginationInput
   ): Promise<CaseConnection> {
     const result = await this.caseService.findAll({
       ...filter,
@@ -45,7 +56,7 @@ export class CaseResolver {
     } as unknown);
 
     return {
-      edges: result.data.map(caseItem => ({
+      edges: result.data.map((caseItem) => ({
         node: caseItem as unknown,
         cursor: caseItem.id,
       })),
@@ -59,13 +70,15 @@ export class CaseResolver {
     };
   }
 
-  @Query(() => CaseType, { name: 'case', nullable: true })
+  @Query(() => CaseType, { name: "case", nullable: true })
   @UseGuards(GqlAuthGuard)
-  async getCase(@Args('id', { type: () => ID }) id: string): Promise<CaseType | null> {
+  async getCase(
+    @Args("id", { type: () => ID }) id: string
+  ): Promise<CaseType | null> {
     try {
       const caseItem = await this.caseService.findOne(id);
       return caseItem as unknown;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -73,31 +86,31 @@ export class CaseResolver {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createCase(
-    @Args('input') input: CreateCaseInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateCaseInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(input as unknown);
-    pubSub.publish('caseCreated', { caseCreated: caseEntity });
+    pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async updateCase(
-    @Args('id', { type: () => ID }) id: string,
-    @Args('input') input: UpdateCaseInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @Args("input") input: UpdateCaseInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.update(id, input as unknown);
-    pubSub.publish('caseUpdated', { caseUpdated: caseEntity, id });
+    pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
     return caseEntity as unknown;
   }
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   async deleteCase(
-    @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<boolean> {
     await this.caseService.remove(id);
     return true;
@@ -106,8 +119,8 @@ export class CaseResolver {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async addParty(
-    @Args('input') input: AddPartyInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: AddPartyInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Parties are typically managed through case updates in the REST API
@@ -118,8 +131,8 @@ export class CaseResolver {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async addTeamMember(
-    @Args('input') input: AddTeamMemberInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: AddTeamMemberInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Team members are typically managed through case updates in the REST API
@@ -130,8 +143,8 @@ export class CaseResolver {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createMotion(
-    @Args('input') input: CreateMotionInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateMotionInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Motions are typically managed through case updates or a separate motions service
@@ -142,8 +155,8 @@ export class CaseResolver {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createDocketEntry(
-    @Args('input') input: CreateDocketEntryInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateDocketEntryInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Docket entries are typically managed through case updates or a separate docket service
@@ -151,7 +164,10 @@ export class CaseResolver {
     return caseEntity as unknown;
   }
 
-  @Query(() => CaseMetrics, { name: 'caseMetrics', description: 'Get aggregated case metrics using efficient database queries' })
+  @Query(() => CaseMetrics, {
+    name: "caseMetrics",
+    description: "Get aggregated case metrics using efficient database queries",
+  })
   @UseGuards(GqlAuthGuard)
   async getCaseMetrics(): Promise<CaseMetrics> {
     // PERFORMANCE: Use database aggregation instead of loading all records into memory
@@ -160,7 +176,7 @@ export class CaseResolver {
       const metrics = await this.caseService.getCaseMetrics();
       return metrics;
     } catch (error) {
-      this.logger.error('Failed to get case metrics', error);
+      this.logger.error("Failed to get case metrics", error);
       // Return empty metrics on error rather than crashing
       return {
         totalCases: 0,
@@ -174,12 +190,12 @@ export class CaseResolver {
   }
 
   @Subscription(() => CaseType, {
-    name: 'caseUpdated',
+    name: "caseUpdated",
     filter: (payload, variables) => {
       return payload.id === variables.id;
     },
   })
-  caseUpdated(@Args('id', { type: () => ID }) _id: string) {
-    return (pubSub as unknown).asyncIterator('caseUpdated');
+  caseUpdated(@Args("id", { type: () => ID }) _id: string) {
+    return (pubSub as unknown).asyncIterator("caseUpdated");
   }
 }

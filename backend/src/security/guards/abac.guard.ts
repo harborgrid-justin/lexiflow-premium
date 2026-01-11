@@ -1,8 +1,8 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Injectable,
   Logger,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
@@ -561,7 +561,7 @@ export class AbacGuard implements CanActivate {
    */
   private getResourceTypeFromPath(path: string): string {
     // Extract resource type from path (e.g., /api/cases/123 -> 'cases')
-    const match = path.match(//api/([^/]+)/);
+    const match = path.match(/\/api\/([^/]+)/);
     return match?.[1] ?? "unknown";
   }
 }

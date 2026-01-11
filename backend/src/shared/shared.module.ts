@@ -7,7 +7,7 @@
  * access shared services, guards, interceptors, pipes, and utilities.
  */
 
-import { Module, Global } from '@nestjs/common';
+import { Global, Module } from "@nestjs/common";
 
 /**
  * SharedModule - Global module for shared utilities and components
@@ -173,28 +173,28 @@ export class SharedModule {}
  */
 
 // Types
-export * from './types/enterprise.types';
+export * from "./types/enterprise.types";
 
 // Constants
-export * from './constants/enterprise.constants';
+export * from "./constants/enterprise.constants";
 
 // Utils
-export * from './utils/enterprise.utils';
+export * from "./utils/enterprise.utils";
 
 // Decorators
-export * from './decorators';
+export * from "./decorators";
 
 // Guards
-export * from './guards';
+export * from "./guards";
 
 // Interceptors
-export * from './interceptors';
+export * from "./interceptors";
 
 // Filters
-export * from './filters';
+export * from "./filters";
 
 // Pipes
-export * from './pipes';
+export * from "./pipes";
 
 /**
  * MIGRATION GUIDE
@@ -237,7 +237,7 @@ export * from './pipes';
  * /**
  *  * @deprecated Use generateUuid() instead
  *  * Will be removed in v2.0.0
- *  */
+ *  *\/
  * export const createUuid = generateUuid;
  * ```
  */

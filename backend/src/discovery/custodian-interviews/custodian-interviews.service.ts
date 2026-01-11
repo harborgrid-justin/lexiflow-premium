@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { CustodianInterview } from './entities/custodian-interview.entity';
-import { CreateCustodianInterviewDto } from './dto/create-custodian-interview.dto';
-import { UpdateCustodianInterviewDto } from './dto/update-custodian-interview.dto';
-import { QueryCustodianInterviewDto } from './dto/query-custodian-interview.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { IsNull, Repository } from "typeorm";
+import { CreateCustodianInterviewDto } from "./dto/create-custodian-interview.dto";
+import { QueryCustodianInterviewDto } from "./dto/query-custodian-interview.dto";
+import { UpdateCustodianInterviewDto } from "./dto/update-custodian-interview.dto";
+import { CustodianInterview } from "./entities/custodian-interview.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,10 +42,12 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class CustodianInterviewsService {
   constructor(
     @InjectRepository(CustodianInterview)
-    private readonly interviewRepository: Repository<CustodianInterview>,
+    private readonly interviewRepository: Repository<CustodianInterview>
   ) {}
 
-  async create(createDto: CreateCustodianInterviewDto): Promise<CustodianInterview> {
+  async create(
+    createDto: CreateCustodianInterviewDto
+  ): Promise<CustodianInterview> {
     const interview = this.interviewRepository.create(createDto);
     return await this.interviewRepository.save(interview);
   }
@@ -57,47 +62,47 @@ export class CustodianInterviewsService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'scheduledDate',
-      sortOrder = 'DESC',
+      sortBy = "scheduledDate",
+      sortOrder = "DESC",
     } = queryDto;
 
     const queryBuilder = this.interviewRepository
-      .createQueryBuilder('interview')
-      .where('interview.deletedAt IS NULL');
+      .createQueryBuilder("interview")
+      .where("interview.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('interview.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("interview.caseId = :caseId", { caseId });
     }
 
     if (custodianId) {
-      queryBuilder.andWhere('interview.custodianId = :custodianId', {
+      queryBuilder.andWhere("interview.custodianId = :custodianId", {
         custodianId,
       });
     }
 
     if (type) {
-      queryBuilder.andWhere('interview.type = :type', { type });
+      queryBuilder.andWhere("interview.type = :type", { type });
     }
 
     if (status) {
-      queryBuilder.andWhere('interview.status = :status', { status });
+      queryBuilder.andWhere("interview.status = :status", { status });
     }
 
     if (conductedBy) {
-      queryBuilder.andWhere('interview.conductedBy = :conductedBy', {
+      queryBuilder.andWhere("interview.conductedBy = :conductedBy", {
         conductedBy,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(interview.custodianName ILIKE :search OR interview.summary ILIKE :search OR interview.keyFindings ILIKE :search)',
-        { search: `%${search}%` },
+        "(interview.custodianName ILIKE :search OR interview.summary ILIKE :search OR interview.keyFindings ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('interview', sortBy);
+    const safeSortField = validateSortField("interview", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`interview.${safeSortField}`, safeSortOrder);
 
@@ -121,7 +126,9 @@ export class CustodianInterviewsService {
     });
 
     if (!interview) {
-      throw new NotFoundException(`Custodian interview with ID ${id} not found`);
+      throw new NotFoundException(
+        `Custodian interview with ID ${id} not found`
+      );
     }
 
     return interview;
@@ -129,41 +136,48 @@ export class CustodianInterviewsService {
 
   async update(
     id: string,
-    updateDto: UpdateCustodianInterviewDto,
+    updateDto: UpdateCustodianInterviewDto
   ): Promise<CustodianInterview> {
     const result = await this.interviewRepository
       .createQueryBuilder()
       .update(CustodianInterview)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as CustodianInterview)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
-      throw new NotFoundException(`Custodian interview with ID ${id} not found`);
+      throw new NotFoundException(
+        `Custodian interview with ID ${id} not found`
+      );
     }
 
-    return result.raw[0];
+    return result.raw[0] as CustodianInterview;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.interviewRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected || result.affected === 0) {
-      throw new NotFoundException(`Custodian interview with ID ${id} not found`);
+      throw new NotFoundException(
+        `Custodian interview with ID ${id} not found`
+      );
     }
   }
 
   async getByCustodian(custodianId: string): Promise<CustodianInterview[]> {
     return await this.interviewRepository.find({
       where: { custodianId, deletedAt: IsNull() },
-      order: { scheduledDate: 'DESC' },
+      order: { scheduledDate: "DESC" },
     });
   }
 
@@ -188,9 +202,9 @@ export class CustodianInterviewsService {
       stats.byStatus[interview.status] =
         (stats.byStatus[interview.status] || 0) + 1;
 
-      if (interview.status === 'COMPLETED') {
+      if (interview.status === "COMPLETED") {
         stats.completed++;
-      } else if (interview.status === 'SCHEDULED') {
+      } else if (interview.status === "SCHEDULED") {
         stats.scheduled++;
       }
 

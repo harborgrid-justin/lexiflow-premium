@@ -128,8 +128,9 @@ export const CaseInsightsDashboard: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {matters?.filter(m => m.status === CaseStatus.Active || m.status === CaseStatus.Open).slice(0, 5).map((matter) => {
+                const now = Date.now();
                 const hasHighValue = matter.value && matter.value > 100000;
-                const hasUpcomingTrial = matter.trialDate && new Date(matter.trialDate) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                const hasUpcomingTrial = matter.trialDate && new Date(matter.trialDate) < new Date(now + 30 * 24 * 60 * 60 * 1000);
                 const riskLevel = hasHighValue || hasUpcomingTrial ? 'high' : 'medium';
                 const riskScore = hasHighValue && hasUpcomingTrial ? 7.5 : hasHighValue || hasUpcomingTrial ? 5.0 : 2.5;
                 const reasons = [];
@@ -255,7 +256,10 @@ export const CaseInsightsDashboard: React.FC = () => {
                     isDark={isDark}
                   />
                 )}
-              {matters?.some(m => m.trialDate && new Date(m.trialDate) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) && (
+              {matters?.some(m => {
+                  const now = Date.now();
+                  return m.trialDate && new Date(m.trialDate) < new Date(now + 7 * 24 * 60 * 60 * 1000)
+              }) && (
                 <RecommendationItem
                   title="Urgent Trial Dates"
                   description="Multiple trials approaching within 7 days"

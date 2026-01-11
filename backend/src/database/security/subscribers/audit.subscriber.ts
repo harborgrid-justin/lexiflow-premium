@@ -116,10 +116,10 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
     if (dataSource && e) {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
         const metadata = dataSource.getMetadata((e as any).constructor);
         const primaryColumn = metadata.primaryColumns[0];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         return primaryColumn?.propertyName
           ? String((e as any)[primaryColumn.propertyName])
           : "unknown";

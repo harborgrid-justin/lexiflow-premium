@@ -9,53 +9,53 @@
  * @enterprise true
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BaseAgent, createAgentMetadata } from '../core/base-agent';
+import { Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { BaseAgent, createAgentMetadata } from "../core/base-agent";
 import {
   AgentType,
   AgentPriority,
   AgentTask,
   AgentEvent,
-} from '../interfaces/agent.interfaces';
+} from "../interfaces/agent.interfaces";
 
 /**
  * Audit operation types
  */
 export enum AuditOperationType {
-  LOG_ACTION = 'LOG_ACTION',
-  LOG_ACCESS = 'LOG_ACCESS',
-  LOG_CHANGE = 'LOG_CHANGE',
-  LOG_ERROR = 'LOG_ERROR',
-  QUERY_LOGS = 'QUERY_LOGS',
-  GENERATE_REPORT = 'GENERATE_REPORT',
-  ARCHIVE_LOGS = 'ARCHIVE_LOGS',
-  EXPORT_LOGS = 'EXPORT_LOGS',
+  LOG_ACTION = "LOG_ACTION",
+  LOG_ACCESS = "LOG_ACCESS",
+  LOG_CHANGE = "LOG_CHANGE",
+  LOG_ERROR = "LOG_ERROR",
+  QUERY_LOGS = "QUERY_LOGS",
+  GENERATE_REPORT = "GENERATE_REPORT",
+  ARCHIVE_LOGS = "ARCHIVE_LOGS",
+  EXPORT_LOGS = "EXPORT_LOGS",
 }
 
 /**
  * Audit event category
  */
 export enum AuditCategory {
-  AUTHENTICATION = 'AUTHENTICATION',
-  AUTHORIZATION = 'AUTHORIZATION',
-  DATA_ACCESS = 'DATA_ACCESS',
-  DATA_MODIFICATION = 'DATA_MODIFICATION',
-  SYSTEM_EVENT = 'SYSTEM_EVENT',
-  SECURITY_EVENT = 'SECURITY_EVENT',
-  COMPLIANCE_EVENT = 'COMPLIANCE_EVENT',
-  USER_ACTION = 'USER_ACTION',
+  AUTHENTICATION = "AUTHENTICATION",
+  AUTHORIZATION = "AUTHORIZATION",
+  DATA_ACCESS = "DATA_ACCESS",
+  DATA_MODIFICATION = "DATA_MODIFICATION",
+  SYSTEM_EVENT = "SYSTEM_EVENT",
+  SECURITY_EVENT = "SECURITY_EVENT",
+  COMPLIANCE_EVENT = "COMPLIANCE_EVENT",
+  USER_ACTION = "USER_ACTION",
 }
 
 /**
  * Audit severity
  */
 export enum AuditSeverity {
-  CRITICAL = 'CRITICAL',
-  HIGH = 'HIGH',
-  MEDIUM = 'MEDIUM',
-  LOW = 'LOW',
-  INFO = 'INFO',
+  CRITICAL = "CRITICAL",
+  HIGH = "HIGH",
+  MEDIUM = "MEDIUM",
+  LOW = "LOW",
+  INFO = "INFO",
 }
 
 /**
@@ -125,48 +125,48 @@ export class AuditLoggingAgent extends BaseAgent {
   constructor(eventEmitter: EventEmitter2) {
     super(
       createAgentMetadata(
-        'AuditLoggingAgent',
+        "AuditLoggingAgent",
         AgentType.WORKER,
         [
-          'audit.log.action',
-          'audit.log.access',
-          'audit.log.change',
-          'audit.log.error',
-          'audit.query',
-          'audit.report',
-          'audit.archive',
-          'audit.export',
+          "audit.log.action",
+          "audit.log.access",
+          "audit.log.change",
+          "audit.log.error",
+          "audit.query",
+          "audit.report",
+          "audit.archive",
+          "audit.export",
         ],
         {
           priority: AgentPriority.CRITICAL,
           maxConcurrentTasks: 100,
           heartbeatIntervalMs: 10000,
           healthCheckIntervalMs: 30000,
-        },
+        }
       ),
-      eventEmitter,
+      eventEmitter
     );
   }
 
   protected async onInitialize(): Promise<void> {
-    this.auditLogger.log('Initializing Audit Logging Agent');
+    this.auditLogger.log("Initializing Audit Logging Agent");
   }
 
   protected async onStart(): Promise<void> {
-    this.auditLogger.log('Audit Logging Agent started');
+    this.auditLogger.log("Audit Logging Agent started");
   }
 
   protected async onStop(): Promise<void> {
-    this.auditLogger.log('Audit Logging Agent stopping');
+    this.auditLogger.log("Audit Logging Agent stopping");
     await this.flushLogs();
   }
 
   protected async onPause(): Promise<void> {
-    this.auditLogger.log('Audit Logging Agent paused');
+    this.auditLogger.log("Audit Logging Agent paused");
   }
 
   protected async onResume(): Promise<void> {
-    this.auditLogger.log('Audit Logging Agent resumed');
+    this.auditLogger.log("Audit Logging Agent resumed");
   }
 
   protected async onEvent(event: AgentEvent): Promise<void> {
@@ -174,7 +174,7 @@ export class AuditLoggingAgent extends BaseAgent {
   }
 
   protected async executeTask<TPayload, TResult>(
-    task: AgentTask<TPayload, TResult>,
+    task: AgentTask<TPayload, TResult>
   ): Promise<TResult> {
     const payload = task.payload as unknown as AuditTaskPayload;
 
@@ -213,7 +213,7 @@ export class AuditLoggingAgent extends BaseAgent {
     const entry = this.createLogEntry(
       payload.category ?? AuditCategory.USER_ACTION,
       payload.severity ?? AuditSeverity.INFO,
-      payload,
+      payload
     );
 
     this.storeLog(entry);
@@ -231,7 +231,7 @@ export class AuditLoggingAgent extends BaseAgent {
     const entry = this.createLogEntry(
       AuditCategory.DATA_ACCESS,
       payload.severity ?? AuditSeverity.INFO,
-      payload,
+      payload
     );
 
     this.storeLog(entry);
@@ -249,7 +249,7 @@ export class AuditLoggingAgent extends BaseAgent {
     const entry = this.createLogEntry(
       AuditCategory.DATA_MODIFICATION,
       payload.severity ?? AuditSeverity.MEDIUM,
-      payload,
+      payload
     );
 
     entry.oldValue = payload.oldValue;
@@ -270,7 +270,7 @@ export class AuditLoggingAgent extends BaseAgent {
     const entry = this.createLogEntry(
       AuditCategory.SYSTEM_EVENT,
       payload.severity ?? AuditSeverity.HIGH,
-      payload,
+      payload
     );
 
     this.storeLog(entry);
@@ -288,28 +288,27 @@ export class AuditLoggingAgent extends BaseAgent {
     let results = [...this.auditLogs];
 
     if (payload.category) {
-      results = results.filter(log => log.category === payload.category);
+      results = results.filter((log) => log.category === payload.category);
     }
 
     if (payload.severity) {
-      results = results.filter(log => log.severity === payload.severity);
+      results = results.filter((log) => log.severity === payload.severity);
     }
 
     if (payload.userId) {
-      results = results.filter(log => log.userId === payload.userId);
+      results = results.filter((log) => log.userId === payload.userId);
     }
 
     if (payload.resourceType) {
-      results = results.filter(log => log.resourceType === payload.resourceType);
+      results = results.filter(
+        (log) => log.resourceType === payload.resourceType
+      );
     }
 
     if (payload.dateRange) {
+      const { start, end } = payload.dateRange;
       results = results.filter(
-        log =>
-      // TODO: Remove non-null assertion with proper check
-          log.timestamp >= payload.dateRange!.start &&
-      // TODO: Remove non-null assertion with proper check
-          log.timestamp <= payload.dateRange!.end,
+        (log) => log.timestamp >= start && log.timestamp <= end
       );
     }
 
@@ -322,7 +321,9 @@ export class AuditLoggingAgent extends BaseAgent {
     };
   }
 
-  private async generateReport(payload: AuditTaskPayload): Promise<AuditResult> {
+  private async generateReport(
+    payload: AuditTaskPayload
+  ): Promise<AuditResult> {
     const startTime = Date.now();
 
     const report = {
@@ -345,13 +346,17 @@ export class AuditLoggingAgent extends BaseAgent {
   private async archiveLogs(payload: AuditTaskPayload): Promise<AuditResult> {
     const startTime = Date.now();
     // Use date range from payload or default to 90 days ago
-    const cutoffDate = payload.dateRange?.start ?? new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    const cutoffDate =
+      payload.dateRange?.start ??
+      new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
 
-    const toArchive = this.auditLogs.filter(log => log.timestamp < cutoffDate);
+    const toArchive = this.auditLogs.filter(
+      (log) => log.timestamp < cutoffDate
+    );
 
     // Filter by category if specified
     const filteredLogs = payload.category
-      ? toArchive.filter(log => log.category === payload.category)
+      ? toArchive.filter((log) => log.category === payload.category)
       : toArchive;
 
     return {
@@ -370,21 +375,25 @@ export class AuditLoggingAgent extends BaseAgent {
     let logsToExport = [...this.auditLogs];
 
     if (payload.dateRange) {
+      const { start, end } = payload.dateRange;
       logsToExport = logsToExport.filter(
-      // TODO: Remove non-null assertion with proper check
-        log => log.timestamp >= payload.dateRange!.start && log.timestamp <= payload.dateRange!.end,
+        (log) => log.timestamp >= start && log.timestamp <= end
       );
     }
 
     if (payload.category) {
-      logsToExport = logsToExport.filter(log => log.category === payload.category);
+      logsToExport = logsToExport.filter(
+        (log) => log.category === payload.category
+      );
     }
 
     if (payload.severity) {
-      logsToExport = logsToExport.filter(log => log.severity === payload.severity);
+      logsToExport = logsToExport.filter(
+        (log) => log.severity === payload.severity
+      );
     }
 
-    const exportFormat = payload.metadata?.format ?? 'json';
+    const exportFormat = payload.metadata?.format ?? "json";
     const exportPath = `/exports/audit-${Date.now()}.${exportFormat}`;
 
     return {
@@ -400,14 +409,14 @@ export class AuditLoggingAgent extends BaseAgent {
   private createLogEntry(
     category: AuditCategory,
     severity: AuditSeverity,
-    payload: AuditTaskPayload,
+    payload: AuditTaskPayload
   ): AuditLogEntry {
     return {
       id: `audit-${++this.logSequence}-${Date.now()}`,
       timestamp: new Date(),
       category,
       severity,
-      action: payload.action ?? 'unknown',
+      action: payload.action ?? "unknown",
       resourceType: payload.resourceType,
       resourceId: payload.resourceId,
       userId: payload.userId,
@@ -432,8 +441,11 @@ export class AuditLoggingAgent extends BaseAgent {
       {
         operationType: AuditOperationType.LOG_ACTION,
         action: event.type,
-        metadata: { payload: event.payload, sourceAgentId: event.sourceAgentId },
-      },
+        metadata: {
+          payload: event.payload,
+          sourceAgentId: event.sourceAgentId,
+        },
+      }
     );
     this.storeLog(entry);
   }

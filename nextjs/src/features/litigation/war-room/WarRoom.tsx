@@ -157,8 +157,13 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
     [STORES.CASES, "all"],
-    async () => {      // eslint-disable-next-line @typescript-eslint/no-explicit-any      const cases = DataService.cases as any;
-      return cases.getAll();
+    async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cases = DataService.cases as any;
+      if (typeof cases.getAll === 'function') {
+        return cases.getAll();
+      }
+      return [];
     },
     { enabled: !caseId },
   );

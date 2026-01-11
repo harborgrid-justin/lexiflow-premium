@@ -1,27 +1,27 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
-import { DocumentType, DocumentConnection } from '@graphql/types/document.type';
+import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
+import { UseGuards } from "@nestjs/common";
+import { DocumentType, DocumentConnection } from "@graphql/types/document.type";
 import {
   UploadDocumentInput,
   UpdateDocumentInput,
   DocumentFilterInput,
   CreateDocumentVersionInput,
-} from '@graphql/inputs/document.input';
-import { PaginationInput } from '@graphql/inputs/pagination.input';
-import { CurrentUser } from '@auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
-import { DocumentsService } from '@documents/documents.service';
-import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
+} from "@graphql/inputs/document.input";
+import { PaginationInput } from "@graphql/inputs/pagination.input";
+import { CurrentUser } from "@auth/decorators/current-user.decorator";
+import { GqlAuthGuard } from "@auth/guards/gql-auth.guard";
+import { DocumentsService } from "@documents/documents.service";
+import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
 
 @Resolver(() => DocumentType)
 export class DocumentResolver {
   constructor(private documentService: DocumentsService) {}
 
-  @Query(() => DocumentConnection, { name: 'documents' })
+  @Query(() => DocumentConnection, { name: "documents" })
   @UseGuards(GqlAuthGuard)
   async getDocuments(
-    @Args('filter', { nullable: true }) filter?: DocumentFilterInput,
-    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+    @Args("filter", { nullable: true }) filter?: DocumentFilterInput,
+    @Args("pagination", { nullable: true }) pagination?: PaginationInput
   ): Promise<DocumentConnection> {
     const result = await this.documentService.findAll({
       ...filter,
@@ -32,7 +32,7 @@ export class DocumentResolver {
     } as unknown);
 
     return {
-      edges: result.data.map(doc => ({
+      edges: result.data.map((doc) => ({
         node: doc as unknown,
         cursor: doc.id,
       })),
@@ -46,13 +46,15 @@ export class DocumentResolver {
     };
   }
 
-  @Query(() => DocumentType, { name: 'document', nullable: true })
+  @Query(() => DocumentType, { name: "document", nullable: true })
   @UseGuards(GqlAuthGuard)
-  async getDocument(@Args('id', { type: () => ID }) id: string): Promise<DocumentType | null> {
+  async getDocument(
+    @Args("id", { type: () => ID }) id: string
+  ): Promise<DocumentType | null> {
     try {
       const document = await this.documentService.findOne(id);
       return document as unknown;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -60,31 +62,39 @@ export class DocumentResolver {
   @Mutation(() => DocumentType)
   @UseGuards(GqlAuthGuard)
   async uploadDocument(
-    @Args('input') input: UploadDocumentInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args("input") input: UploadDocumentInput,
+    @CurrentUser() user: AuthenticatedUser
   ): Promise<DocumentType> {
     // Note: File upload through GraphQL requires multipart form data
     // This creates document metadata only, actual file should be uploaded via REST API
-    const document = await this.documentService.create(input as unknown, undefined, user.id);
+    const document = await this.documentService.create(
+      input as unknown,
+      undefined,
+      user.id
+    );
     return document as unknown;
   }
 
   @Mutation(() => DocumentType)
   @UseGuards(GqlAuthGuard)
   async updateDocument(
-    @Args('id', { type: () => ID }) id: string,
-    @Args('input') input: UpdateDocumentInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @Args("input") input: UpdateDocumentInput,
+    @CurrentUser() user: AuthenticatedUser
   ): Promise<DocumentType> {
-    const document = await this.documentService.update(id, input as unknown, user.id);
+    const document = await this.documentService.update(
+      id,
+      input as unknown,
+      user.id
+    );
     return document as unknown;
   }
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   async deleteDocument(
-    @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<boolean> {
     await this.documentService.remove(id);
     return true;
@@ -93,8 +103,8 @@ export class DocumentResolver {
   @Mutation(() => DocumentType)
   @UseGuards(GqlAuthGuard)
   async createDocumentVersion(
-    @Args('input') input: CreateDocumentVersionInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateDocumentVersionInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<DocumentType> {
     // Note: Creating versions would require updating the document with new version info
     // This would need additional service methods for full implementation
@@ -105,8 +115,8 @@ export class DocumentResolver {
   @Mutation(() => String)
   @UseGuards(GqlAuthGuard)
   async generateDocumentDownloadUrl(
-    @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<string> {
     // Generate a temporary download URL
     // In production, this would generate a signed URL with expiration

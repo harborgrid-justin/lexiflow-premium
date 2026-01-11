@@ -11,8 +11,7 @@
  * - Edge cases and error handling
  */
 
-import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { DashboardMetrics } from '../DashboardMetrics';
 import type { QuickStat } from '@/lib/dal/dashboard';
 

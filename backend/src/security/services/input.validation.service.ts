@@ -115,7 +115,7 @@ export class InputValidationService {
 
   // Dangerous patterns
   private readonly XSS_PATTERNS = [
-    /<script[^>]*>.*?</script>/gi,
+    /<script[^>]*>.*?<\/script>/gi,
     /javascript:/gi,
     /on\w+\s*=/gi,
     /<iframe[^>]*>/gi,

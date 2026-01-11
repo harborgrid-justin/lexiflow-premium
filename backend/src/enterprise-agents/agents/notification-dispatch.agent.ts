@@ -9,49 +9,49 @@
  * @enterprise true
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BaseAgent, createAgentMetadata } from '../core/base-agent';
+import { Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { BaseAgent, createAgentMetadata } from "../core/base-agent";
 import {
   AgentType,
   AgentPriority,
   AgentTask,
   AgentEvent,
-} from '../interfaces/agent.interfaces';
+} from "../interfaces/agent.interfaces";
 
 /**
  * Notification channel types
  */
 export enum NotificationChannel {
-  EMAIL = 'EMAIL',
-  SMS = 'SMS',
-  PUSH = 'PUSH',
-  IN_APP = 'IN_APP',
-  WEBHOOK = 'WEBHOOK',
-  SLACK = 'SLACK',
-  TEAMS = 'TEAMS',
+  EMAIL = "EMAIL",
+  SMS = "SMS",
+  PUSH = "PUSH",
+  IN_APP = "IN_APP",
+  WEBHOOK = "WEBHOOK",
+  SLACK = "SLACK",
+  TEAMS = "TEAMS",
 }
 
 /**
  * Notification priority
  */
 export enum NotificationPriority {
-  CRITICAL = 'CRITICAL',
-  HIGH = 'HIGH',
-  NORMAL = 'NORMAL',
-  LOW = 'LOW',
+  CRITICAL = "CRITICAL",
+  HIGH = "HIGH",
+  NORMAL = "NORMAL",
+  LOW = "LOW",
 }
 
 /**
  * Notification operation types
  */
 export enum NotificationOperationType {
-  SEND_NOTIFICATION = 'SEND_NOTIFICATION',
-  SEND_BATCH = 'SEND_BATCH',
-  SCHEDULE_NOTIFICATION = 'SCHEDULE_NOTIFICATION',
-  CANCEL_NOTIFICATION = 'CANCEL_NOTIFICATION',
-  GET_STATUS = 'GET_STATUS',
-  RETRY_FAILED = 'RETRY_FAILED',
+  SEND_NOTIFICATION = "SEND_NOTIFICATION",
+  SEND_BATCH = "SEND_BATCH",
+  SCHEDULE_NOTIFICATION = "SCHEDULE_NOTIFICATION",
+  CANCEL_NOTIFICATION = "CANCEL_NOTIFICATION",
+  GET_STATUS = "GET_STATUS",
+  RETRY_FAILED = "RETRY_FAILED",
 }
 
 /**
@@ -75,7 +75,7 @@ export interface NotificationTaskPayload {
  */
 export interface NotificationRecipient {
   id: string;
-  type: 'user' | 'group' | 'external';
+  type: "user" | "group" | "external";
   address: string;
   name?: string;
   preferences?: Record<string, unknown>;
@@ -88,7 +88,7 @@ export interface NotificationResult {
   operationType: NotificationOperationType;
   notificationId: string;
   channel: NotificationChannel;
-  status: 'sent' | 'failed' | 'scheduled' | 'cancelled';
+  status: "sent" | "failed" | "scheduled" | "cancelled";
   deliveryResults: DeliveryResult[];
   duration: number;
   errors: string[];
@@ -99,7 +99,7 @@ export interface NotificationResult {
  */
 export interface DeliveryResult {
   recipientId: string;
-  status: 'delivered' | 'failed' | 'pending';
+  status: "delivered" | "failed" | "pending";
   deliveredAt?: Date;
   error?: string;
 }
@@ -111,31 +111,36 @@ export interface DeliveryResult {
 @Injectable()
 export class NotificationDispatchAgent extends BaseAgent {
   private readonly notifyLogger = new Logger(NotificationDispatchAgent.name);
-  private readonly pendingNotifications: Map<string, NotificationTaskPayload> = new Map();
-  private readonly scheduledNotifications: Map<string, NodeJS.Timeout> = new Map();
-  private readonly deliveryStats: Map<NotificationChannel, { sent: number; failed: number }> = new Map();
+  private readonly pendingNotifications: Map<string, NotificationTaskPayload> =
+    new Map();
+  private readonly scheduledNotifications: Map<string, NodeJS.Timeout> =
+    new Map();
+  private readonly deliveryStats: Map<
+    NotificationChannel,
+    { sent: number; failed: number }
+  > = new Map();
 
   constructor(eventEmitter: EventEmitter2) {
     super(
       createAgentMetadata(
-        'NotificationDispatchAgent',
+        "NotificationDispatchAgent",
         AgentType.WORKER,
         [
-          'notification.send',
-          'notification.batch',
-          'notification.schedule',
-          'notification.cancel',
-          'notification.status',
-          'notification.retry',
+          "notification.send",
+          "notification.batch",
+          "notification.schedule",
+          "notification.cancel",
+          "notification.status",
+          "notification.retry",
         ],
         {
           priority: AgentPriority.HIGH,
           maxConcurrentTasks: 20,
           heartbeatIntervalMs: 15000,
           healthCheckIntervalMs: 30000,
-        },
+        }
       ),
-      eventEmitter,
+      eventEmitter
     );
 
     for (const channel of Object.values(NotificationChannel)) {
@@ -144,24 +149,24 @@ export class NotificationDispatchAgent extends BaseAgent {
   }
 
   protected async onInitialize(): Promise<void> {
-    this.notifyLogger.log('Initializing Notification Dispatch Agent');
+    this.notifyLogger.log("Initializing Notification Dispatch Agent");
   }
 
   protected async onStart(): Promise<void> {
-    this.notifyLogger.log('Notification Dispatch Agent started');
+    this.notifyLogger.log("Notification Dispatch Agent started");
   }
 
   protected async onStop(): Promise<void> {
-    this.notifyLogger.log('Notification Dispatch Agent stopping');
+    this.notifyLogger.log("Notification Dispatch Agent stopping");
     this.cancelAllScheduled();
   }
 
   protected async onPause(): Promise<void> {
-    this.notifyLogger.log('Notification Dispatch Agent paused');
+    this.notifyLogger.log("Notification Dispatch Agent paused");
   }
 
   protected async onResume(): Promise<void> {
-    this.notifyLogger.log('Notification Dispatch Agent resumed');
+    this.notifyLogger.log("Notification Dispatch Agent resumed");
   }
 
   protected async onEvent(event: AgentEvent): Promise<void> {
@@ -169,7 +174,7 @@ export class NotificationDispatchAgent extends BaseAgent {
   }
 
   protected async executeTask<TPayload, TResult>(
-    task: AgentTask<TPayload, TResult>,
+    task: AgentTask<TPayload, TResult>
   ): Promise<TResult> {
     const payload = task.payload as unknown as NotificationTaskPayload;
 
@@ -197,7 +202,9 @@ export class NotificationDispatchAgent extends BaseAgent {
     }
   }
 
-  private async sendNotification(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async sendNotification(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     const startTime = Date.now();
     const notificationId = `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -208,14 +215,14 @@ export class NotificationDispatchAgent extends BaseAgent {
         await this.deliverToChannel(payload.channel, recipient, payload);
         deliveryResults.push({
           recipientId: recipient.id,
-          status: 'delivered',
+          status: "delivered",
           deliveredAt: new Date(),
         });
         this.updateStats(payload.channel, true);
       } catch (error) {
         deliveryResults.push({
           recipientId: recipient.id,
-          status: 'failed',
+          status: "failed",
           error: (error as Error).message,
         });
         this.updateStats(payload.channel, false);
@@ -226,18 +233,27 @@ export class NotificationDispatchAgent extends BaseAgent {
       operationType: NotificationOperationType.SEND_NOTIFICATION,
       notificationId,
       channel: payload.channel,
-      status: deliveryResults.every(r => r.status === 'delivered') ? 'sent' : 'failed',
+      status: deliveryResults.every((r) => r.status === "delivered")
+        ? "sent"
+        : "failed",
       deliveryResults,
       duration: Date.now() - startTime,
-      errors: deliveryResults.filter(r => r.error).map(r => r.error!),
+      errors: deliveryResults
+        .filter((r) => r.error)
+        .map((r) => r.error)
+        .filter((error): error is string => error !== undefined),
     };
   }
 
-  private async sendBatch(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async sendBatch(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     return this.sendNotification(payload);
   }
 
-  private async scheduleNotification(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async scheduleNotification(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     const startTime = Date.now();
     const notificationId = `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -257,16 +273,18 @@ export class NotificationDispatchAgent extends BaseAgent {
       operationType: NotificationOperationType.SCHEDULE_NOTIFICATION,
       notificationId,
       channel: payload.channel,
-      status: 'scheduled',
+      status: "scheduled",
       deliveryResults: [],
       duration: Date.now() - startTime,
       errors: [],
     };
   }
 
-  private async cancelNotification(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async cancelNotification(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     const startTime = Date.now();
-    const notificationId = payload.notificationId ?? '';
+    const notificationId = payload.notificationId ?? "";
 
     const timeout = this.scheduledNotifications.get(notificationId);
     if (timeout) {
@@ -279,62 +297,80 @@ export class NotificationDispatchAgent extends BaseAgent {
       operationType: NotificationOperationType.CANCEL_NOTIFICATION,
       notificationId,
       channel: payload.channel,
-      status: 'cancelled',
+      status: "cancelled",
       deliveryResults: [],
       duration: Date.now() - startTime,
       errors: [],
     };
   }
 
-  private async getNotificationStatus(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async getNotificationStatus(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     const startTime = Date.now();
-    const notificationId = payload.notificationId ?? '';
+    const notificationId = payload.notificationId ?? "";
     const pending = this.pendingNotifications.get(notificationId);
 
     return {
       operationType: NotificationOperationType.GET_STATUS,
       notificationId,
       channel: payload.channel,
-      status: pending ? 'scheduled' : 'sent',
+      status: pending ? "scheduled" : "sent",
       deliveryResults: [],
       duration: Date.now() - startTime,
       errors: [],
     };
   }
 
-  private async retryFailed(payload: NotificationTaskPayload): Promise<NotificationResult> {
+  private async retryFailed(
+    payload: NotificationTaskPayload
+  ): Promise<NotificationResult> {
     return this.sendNotification(payload);
   }
 
   private async deliverToChannel(
     channel: NotificationChannel,
     recipient: NotificationRecipient,
-    payload: NotificationTaskPayload,
+    payload: NotificationTaskPayload
   ): Promise<void> {
-    const subject = payload.subject ?? 'Notification';
-    const priority = payload.priority ?? 'normal';
+    const subject = payload.subject ?? "Notification";
+    const priority = payload.priority ?? "normal";
 
     switch (channel) {
       case NotificationChannel.EMAIL:
-        this.notifyLogger.debug(`Sending email to ${recipient.address} - Subject: ${subject} (Priority: ${priority})`);
+        this.notifyLogger.debug(
+          `Sending email to ${recipient.address} - Subject: ${subject} (Priority: ${priority})`
+        );
         break;
       case NotificationChannel.SMS:
-        this.notifyLogger.debug(`Sending SMS to ${recipient.address} - Priority: ${priority}`);
+        this.notifyLogger.debug(
+          `Sending SMS to ${recipient.address} - Priority: ${priority}`
+        );
         break;
       case NotificationChannel.PUSH:
-        this.notifyLogger.debug(`Sending push to ${recipient.id} - Subject: ${subject} (Priority: ${priority})`);
+        this.notifyLogger.debug(
+          `Sending push to ${recipient.id} - Subject: ${subject} (Priority: ${priority})`
+        );
         break;
       case NotificationChannel.IN_APP:
-        this.notifyLogger.debug(`Sending in-app notification to ${recipient.id} - Template: ${payload.template ?? 'default'}`);
+        this.notifyLogger.debug(
+          `Sending in-app notification to ${recipient.id} - Template: ${payload.template ?? "default"}`
+        );
         break;
       case NotificationChannel.WEBHOOK:
-        this.notifyLogger.debug(`Calling webhook: ${recipient.address} with template ${payload.template ?? 'default'}`);
+        this.notifyLogger.debug(
+          `Calling webhook: ${recipient.address} with template ${payload.template ?? "default"}`
+        );
         break;
       case NotificationChannel.SLACK:
-        this.notifyLogger.debug(`Sending Slack message to ${recipient.address} - Channel priority: ${priority}`);
+        this.notifyLogger.debug(
+          `Sending Slack message to ${recipient.address} - Channel priority: ${priority}`
+        );
         break;
       case NotificationChannel.TEAMS:
-        this.notifyLogger.debug(`Sending Teams message to ${recipient.address} - Priority: ${priority}`);
+        this.notifyLogger.debug(
+          `Sending Teams message to ${recipient.address} - Priority: ${priority}`
+        );
         break;
     }
   }
@@ -358,7 +394,10 @@ export class NotificationDispatchAgent extends BaseAgent {
     this.pendingNotifications.clear();
   }
 
-  public getDeliveryStats(): Map<NotificationChannel, { sent: number; failed: number }> {
+  public getDeliveryStats(): Map<
+    NotificationChannel,
+    { sent: number; failed: number }
+  > {
     return new Map(this.deliveryStats);
   }
 

@@ -82,7 +82,7 @@ export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ 
     async () => {
       // Try to fetch from backend, fallback to local templates
       try {
-        
+
         // const templates = await api.documents.getTemplates();
         // return templates;
         return DOCUMENT_TEMPLATES;
@@ -162,7 +162,7 @@ export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ 
         "border-blue-200 dark:border-blue-800"
       )}>
         <p className={cn("text-sm", theme.text.secondary)}>
-          <strong className={theme.text.primary}>Tip:</strong> After selecting a template, you'll configure specific details 
+          <strong className={theme.text.primary}>Tip:</strong> After selecting a template, you&apos;ll configure specific details
           and our AI will generate a customized draft based on your case information.
         </p>
       </div>

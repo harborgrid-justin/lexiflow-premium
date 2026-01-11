@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { PrivilegeLogEntry } from './entities/privilege-log-entry.entity';
-import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
-import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';
-import { QueryPrivilegeLogEntryDto } from './dto/query-privilege-log-entry.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { PrivilegeLogEntry } from "./entities/privilege-log-entry.entity";
+import { CreatePrivilegeLogEntryDto } from "./dto/create-privilege-log-entry.dto";
+import { UpdatePrivilegeLogEntryDto } from "./dto/update-privilege-log-entry.dto";
+import { QueryPrivilegeLogEntryDto } from "./dto/query-privilege-log-entry.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,10 +42,12 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class PrivilegeLogService {
   constructor(
     @InjectRepository(PrivilegeLogEntry)
-    private readonly privilegeLogRepository: Repository<PrivilegeLogEntry>,
+    private readonly privilegeLogRepository: Repository<PrivilegeLogEntry>
   ) {}
 
-  async create(createDto: CreatePrivilegeLogEntryDto): Promise<PrivilegeLogEntry> {
+  async create(
+    createDto: CreatePrivilegeLogEntryDto
+  ): Promise<PrivilegeLogEntry> {
     const entry = this.privilegeLogRepository.create(createDto);
     return await this.privilegeLogRepository.save(entry);
   }
@@ -57,49 +62,49 @@ export class PrivilegeLogService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'documentDate',
-      sortOrder = 'DESC',
+      sortBy = "documentDate",
+      sortOrder = "DESC",
     } = queryDto;
 
     const queryBuilder = this.privilegeLogRepository
-      .createQueryBuilder('privilegeLog')
-      .where('privilegeLog.deletedAt IS NULL');
+      .createQueryBuilder("privilegeLog")
+      .where("privilegeLog.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('privilegeLog.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("privilegeLog.caseId = :caseId", { caseId });
     }
 
     if (privilegeType) {
-      queryBuilder.andWhere('privilegeLog.privilegeType = :privilegeType', {
+      queryBuilder.andWhere("privilegeLog.privilegeType = :privilegeType", {
         privilegeType,
       });
     }
 
     if (status) {
-      queryBuilder.andWhere('privilegeLog.status = :status', { status });
+      queryBuilder.andWhere("privilegeLog.status = :status", { status });
     }
 
     if (custodianId) {
-      queryBuilder.andWhere('privilegeLog.custodianId = :custodianId', {
+      queryBuilder.andWhere("privilegeLog.custodianId = :custodianId", {
         custodianId,
       });
     }
 
     if (reviewedBy) {
-      queryBuilder.andWhere('privilegeLog.reviewedBy = :reviewedBy', {
+      queryBuilder.andWhere("privilegeLog.reviewedBy = :reviewedBy", {
         reviewedBy,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(privilegeLog.description ILIKE :search OR privilegeLog.author ILIKE :search OR privilegeLog.privilegeLogNumber ILIKE :search OR privilegeLog.batesNumber ILIKE :search)',
-        { search: `%${search}%` },
+        "(privilegeLog.description ILIKE :search OR privilegeLog.author ILIKE :search OR privilegeLog.privilegeLogNumber ILIKE :search OR privilegeLog.batesNumber ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('privilegeLog', sortBy);
+    const safeSortField = validateSortField("privilegeLog", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`privilegeLog.${safeSortField}`, safeSortOrder);
 
@@ -123,7 +128,9 @@ export class PrivilegeLogService {
     });
 
     if (!entry) {
-      throw new NotFoundException(`Privilege log entry with ID ${id} not found`);
+      throw new NotFoundException(
+        `Privilege log entry with ID ${id} not found`
+      );
     }
 
     return entry;
@@ -131,33 +138,40 @@ export class PrivilegeLogService {
 
   async update(
     id: string,
-    updateDto: UpdatePrivilegeLogEntryDto,
+    updateDto: UpdatePrivilegeLogEntryDto
   ): Promise<PrivilegeLogEntry> {
     const result = await this.privilegeLogRepository
       .createQueryBuilder()
       .update(PrivilegeLogEntry)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as PrivilegeLogEntry)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
-      throw new NotFoundException(`Privilege log entry with ID ${id} not found`);
+      throw new NotFoundException(
+        `Privilege log entry with ID ${id} not found`
+      );
     }
-    return result.raw[0];
+    return result.raw[0] as PrivilegeLogEntry;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.privilegeLogRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {
-      throw new NotFoundException(`Privilege log entry with ID ${id} not found`);
+      throw new NotFoundException(
+        `Privilege log entry with ID ${id} not found`
+      );
     }
   }
 
@@ -199,7 +213,7 @@ export class PrivilegeLogService {
   async exportLog(caseId: string): Promise<PrivilegeLogEntry[]> {
     return await this.privilegeLogRepository.find({
       where: { caseId, deletedAt: IsNull() },
-      order: { privilegeLogNumber: 'ASC' },
+      order: { privilegeLogNumber: "ASC" },
     });
   }
 }

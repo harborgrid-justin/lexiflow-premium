@@ -1,22 +1,22 @@
 #!/usr/bin/env ts-node
 /**
  * Standalone script to create drafting tables
- * 
+ *
  * Usage:
  *   npm run db:create-drafting
  *   or
  *   npx ts-node src/database/scripts/create-drafting-tables.ts
- * 
+ *
  * Environment Variables (from .env):
  *   - DATABASE_URL or individual DB_* variables
  */
 
-import { Client } from 'pg';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
+import * as dotenv from "dotenv";
+import * as path from "path";
+import { Client } from "pg";
 
 // Load environment variables
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
 const createTablesSql = `
 -- ============================================================================
@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS drafting_templates (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP WITH TIME ZONE,
-  
+
   CONSTRAINT chk_category CHECK (category IN (
-    'motion', 'complaint', 'answer', 'discovery', 'brief', 'memo', 
-    'order', 'notice', 'contract', 'letter', 'pleading', 'exhibit', 
+    'motion', 'complaint', 'answer', 'discovery', 'brief', 'memo',
+    'order', 'notice', 'contract', 'letter', 'pleading', 'exhibit',
     'affidavit', 'declaration', 'other', 'stipulation'
   )),
   CONSTRAINT chk_status CHECK (status IN ('draft', 'active', 'archived', 'deprecated'))
@@ -79,9 +79,9 @@ CREATE TABLE IF NOT EXISTS generated_documents (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP WITH TIME ZONE,
-  
+
   CONSTRAINT chk_status CHECK (status IN (
-    'draft', 'in_review', 'approved', 'rejected', 
+    'draft', 'in_review', 'approved', 'rejected',
     'finalized', 'archived', 'exported'
   ))
 );
@@ -119,94 +119,101 @@ COMMENT ON COLUMN generated_documents.included_clauses IS 'Array of clause IDs i
 `;
 
 async function main() {
-  console.log('🚀 Starting drafting tables creation script...\n');
-  console.log('📁 Environment:', process.env.NODE_ENV || 'development');
-  console.log('🗄️  Database Host:', process.env.DB_HOST || 'localhost');
-  console.log('📊 Database Name:', process.env.DB_DATABASE || process.env.DB_NAME || 'lexiflow');
-  console.log('');
+  console.log("🚀 Starting drafting tables creation script...\n");
+  console.log("📁 Environment:", process.env.NODE_ENV || "development");
+  console.log("🗄️  Database Host:", process.env.DB_HOST || "localhost");
+  console.log(
+    "📊 Database Name:",
+    process.env.DB_DATABASE || process.env.DB_NAME || "lexiflow"
+  );
+  console.log("");
 
   // Create PostgreSQL client
   const client = new Client({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    user: process.env.DB_USERNAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
-    database: process.env.DB_DATABASE || process.env.DB_NAME || 'lexiflow',
-    ssl: process.env.DB_SSL === 'true' ? {
-      rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
-    } : false,
+    host: process.env.DB_HOST || "localhost",
+    port: parseInt(process.env.DB_PORT || "5432"),
+    user: process.env.DB_USERNAME || "postgres",
+    password: process.env.DB_PASSWORD || "postgres",
+    database: process.env.DB_DATABASE || process.env.DB_NAME || "lexiflow",
+    ssl:
+      process.env.DB_SSL === "true"
+        ? {
+            rejectUnauthorized:
+              process.env.DB_SSL_REJECT_UNAUTHORIZED !== "false",
+          }
+        : false,
   });
 
   try {
     // Connect to database
-    console.log('🔌 Connecting to database...');
+    console.log("🔌 Connecting to database...");
     await client.connect();
-    console.log('✅ Database connection established\n');
+    console.log("✅ Database connection established\n");
 
     // Execute table creation SQL
-    console.log('📋 Creating drafting tables...');
+    console.log("📋 Creating drafting tables...");
     await client.query(createTablesSql);
-    console.log('✅ Tables created successfully!\n');
+    console.log("✅ Tables created successfully!\n");
 
     // Verify tables exist
-    console.log('🔍 Verifying tables...');
+    console.log("🔍 Verifying tables...");
     const verifyQuery = `
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public' 
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
         AND table_name IN ('drafting_templates', 'generated_documents')
       ORDER BY table_name;
     `;
     const result = await client.query(verifyQuery);
-    
+
     if (result.rows.length === 2) {
-      console.log('✅ Verification successful:');
-      result.rows.forEach(row => {
+      console.log("✅ Verification successful:");
+      result.rows.forEach((row) => {
         console.log(`   ✓ ${row.table_name}`);
       });
     } else {
-      console.warn('⚠️  Warning: Expected 2 tables, found', result.rows.length);
+      console.warn("⚠️  Warning: Expected 2 tables, found", result.rows.length);
     }
 
     // Show column counts
-    console.log('\n📊 Table Statistics:');
+    console.log("\n📊 Table Statistics:");
     const statsQuery = `
-      SELECT 
+      SELECT
         'drafting_templates' as table_name,
         COUNT(*) as column_count
       FROM information_schema.columns
       WHERE table_name = 'drafting_templates'
       UNION ALL
-      SELECT 
+      SELECT
         'generated_documents' as table_name,
         COUNT(*) as column_count
       FROM information_schema.columns
       WHERE table_name = 'generated_documents';
     `;
     const stats = await client.query(statsQuery);
-    stats.rows.forEach(row => {
+    stats.rows.forEach((row) => {
       console.log(`   ${row.table_name}: ${row.column_count} columns`);
     });
 
-    console.log('\n🎉 Drafting tables setup completed successfully!');
-    console.log('\n💡 Next steps:');
-    console.log('   1. Run: npm run seed:drafting');
-    console.log('   2. Tables include soft-delete support (deleted_at column)');
-    console.log('   3. Restart your backend server');
-    console.log('   4. Refresh your frontend');
+    console.log("\n🎉 Drafting tables setup completed successfully!");
+    console.log("\n💡 Next steps:");
+    console.log("   1. Run: npm run seed:drafting");
+    console.log("   2. Tables include soft-delete support (deleted_at column)");
+    console.log("   3. Restart your backend server");
+    console.log("   4. Refresh your frontend");
   } catch (error) {
-    console.error('\n❌ Script failed:', error);
+    console.error("\n❌ Script failed:", error);
     if (error instanceof Error) {
-      console.error('   Message:', error.message);
-      if ('code' in error) {
-        console.error('   Code:', (error as any).code);
+      console.error("   Message:", error.message);
+      if ("code" in error) {
+        console.error("   Code:", (error as { code: string }).code);
       }
     }
     process.exit(1);
   } finally {
     // Close connection
     await client.end();
-    console.log('🔌 Database connection closed');
+    console.log("🔌 Database connection closed");
   }
 }
 

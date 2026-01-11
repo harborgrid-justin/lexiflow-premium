@@ -136,7 +136,10 @@ export class DiscoveryRequestsService {
     const result = await this.discoveryRequestRepository
       .createQueryBuilder()
       .update(DiscoveryRequest)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as DiscoveryRequest)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -145,7 +148,7 @@ export class DiscoveryRequestsService {
     if (!result.affected) {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as DiscoveryRequest;
   }
 
   async remove(id: string): Promise<void> {

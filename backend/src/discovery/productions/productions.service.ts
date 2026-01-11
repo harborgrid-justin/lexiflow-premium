@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Production } from './entities/production.entity';
-import { CreateProductionDto } from './dto/create-production.dto';
-import { UpdateProductionDto } from './dto/update-production.dto';
-import { QueryProductionDto } from './dto/query-production.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { Production } from "./entities/production.entity";
+import { CreateProductionDto } from "./dto/create-production.dto";
+import { UpdateProductionDto } from "./dto/update-production.dto";
+import { QueryProductionDto } from "./dto/query-production.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +42,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class ProductionsService {
   constructor(
     @InjectRepository(Production)
-    private readonly productionRepository: Repository<Production>,
+    private readonly productionRepository: Repository<Production>
   ) {}
 
   async create(createDto: CreateProductionDto): Promise<Production> {
@@ -56,41 +59,41 @@ export class ProductionsService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'DESC',
+      sortBy = "createdAt",
+      sortOrder = "DESC",
     } = queryDto;
 
     const queryBuilder = this.productionRepository
-      .createQueryBuilder('production')
-      .where('production.deletedAt IS NULL');
+      .createQueryBuilder("production")
+      .where("production.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('production.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("production.caseId = :caseId", { caseId });
     }
 
     if (status) {
-      queryBuilder.andWhere('production.status = :status', { status });
+      queryBuilder.andWhere("production.status = :status", { status });
     }
 
     if (format) {
-      queryBuilder.andWhere('production.format = :format', { format });
+      queryBuilder.andWhere("production.format = :format", { format });
     }
 
     if (assignedTo) {
-      queryBuilder.andWhere('production.assignedTo = :assignedTo', {
+      queryBuilder.andWhere("production.assignedTo = :assignedTo", {
         assignedTo,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(production.productionName ILIKE :search OR production.productionNumber ILIKE :search OR production.description ILIKE :search)',
-        { search: `%${search}%` },
+        "(production.productionName ILIKE :search OR production.productionNumber ILIKE :search OR production.description ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('production', sortBy);
+    const safeSortField = validateSortField("production", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`production.${safeSortField}`, safeSortOrder);
 
@@ -122,29 +125,29 @@ export class ProductionsService {
 
   async update(
     id: string,
-    updateDto: UpdateProductionDto,
+    updateDto: UpdateProductionDto
   ): Promise<Production> {
     const result = await this.productionRepository
       .createQueryBuilder()
       .update(Production)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set({ ...updateDto, updatedAt: new Date() } as unknown as Production)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`Production with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as Production;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.productionRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {

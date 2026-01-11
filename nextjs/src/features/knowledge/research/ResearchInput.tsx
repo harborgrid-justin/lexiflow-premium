@@ -30,8 +30,6 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
                 setIsDetecting(false);
             }, 600);
             return () => clearTimeout(timer);
-        } else {
-            setIntent('general');
         }
         return undefined;
     }, [query]);

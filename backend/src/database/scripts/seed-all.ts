@@ -238,8 +238,8 @@ async function seedClients(queryRunner: QueryRunner): Promise<Map<string, string
   const clientIds = new Map<string, string>();
 
   for (let i = 0; i < DEMO_CLIENTS.length; i++) {
-      // TODO: Remove non-null assertion with proper check
-    const client = DEMO_CLIENTS[i]!;
+    const client = DEMO_CLIENTS[i];
+    if (!client) continue;
     const id = generateId();
     const clientNumber = `CLI-${String(i + 1).padStart(4, '0')}`;
     clientIds.set(client.name, id);
@@ -262,14 +262,16 @@ async function seedCases(queryRunner: QueryRunner, clientIds: Map<string, string
   const userArray = Array.from(userIds.entries());
 
   for (let i = 0; i < DEMO_CASES.length; i++) {
-      // TODO: Remove non-null assertion with proper check
-    const caseData = DEMO_CASES[i]!;
+    const caseData = DEMO_CASES[i];
+    if (!caseData) continue;
     const id = generateId();
     const caseNumber = `2024-${String(i + 1).padStart(5, '0')}`;
-      // TODO: Remove non-null assertion with proper check
-    const [, clientId] = clientArray[i % clientArray.length]!;
-      // TODO: Remove non-null assertion with proper check
-    const [, leadAttorneyId] = userArray.find(([email]) => email.includes('partner') || email.includes('senior')) || userArray[0]!;
+    const clientEntry = clientArray[i % clientArray.length];
+    if (!clientEntry) continue;
+    const [, clientId] = clientEntry;
+    const leadAttorneyEntry = userArray.find(([email]) => email.includes('partner') || email.includes('senior')) || userArray[0];
+    if (!leadAttorneyEntry) continue;
+    const [, leadAttorneyId] = leadAttorneyEntry;
     caseIds.set(caseNumber, id);
 
     const filingDate = randomDate(new Date('2024-01-01'), new Date());
@@ -353,8 +355,11 @@ async function seedInvoices(queryRunner: QueryRunner, clientIds: Map<string, str
   for (let i = 0; i < 20; i++) {
     const id = generateId();
     const invoiceNumber = `INV-2024-${String(i + 1).padStart(5, '0')}`;
-    const [clientName, clientId] = randomElement(clientArray)!;
-    const [, caseId] = randomElement(caseArray)!;
+    const clientEntry = randomElement(clientArray);
+    const caseEntry = randomElement(caseArray);
+    if (!clientEntry || !caseEntry) continue;
+    const [clientName, clientId] = clientEntry;
+    const [, caseId] = caseEntry;
     const subtotal = randomAmount(1000, 50000);
     const taxRate = 0.0875;
     const taxAmount = subtotal * taxRate;
@@ -589,17 +594,17 @@ async function main(): Promise<void> {
 
     console.log(`
   ${Colors.bright}Entity Counts:${Colors.reset}
-  ├─ Users:         ${counts[0][0].count}
-  ├─ Clients:       ${counts[1][0].count}
-  ├─ Cases:         ${counts[2][0].count}
-  ├─ Documents:     ${counts[3][0].count}
-  ├─ Time Entries:  ${counts[4][0].count}
-  ├─ Invoices:      ${counts[5][0].count}
-  ├─ Parties:       ${counts[6][0].count}
-  ├─ Motions:       ${counts[7][0].count}
-  ├─ Docket Entries:${counts[8][0].count}
-  ├─ Evidence:      ${counts[9][0].count}
-  └─ Case Phases:   ${counts[10][0].count}
+  ├─ Users:         ${counts[0]?.[0]?.count ?? 0}
+  ├─ Clients:       ${counts[1]?.[0]?.count ?? 0}
+  ├─ Cases:         ${counts[2]?.[0]?.count ?? 0}
+  ├─ Documents:     ${counts[3]?.[0]?.count ?? 0}
+  ├─ Time Entries:  ${counts[4]?.[0]?.count ?? 0}
+  ├─ Invoices:      ${counts[5]?.[0]?.count ?? 0}
+  ├─ Parties:       ${counts[6]?.[0]?.count ?? 0}
+  ├─ Motions:       ${counts[7]?.[0]?.count ?? 0}
+  ├─ Docket Entries:${counts[8]?.[0]?.count ?? 0}
+  ├─ Evidence:      ${counts[9]?.[0]?.count ?? 0}
+  └─ Case Phases:   ${counts[10]?.[0]?.count ?? 0}
     `);
 
     logSection('Seeding Complete');

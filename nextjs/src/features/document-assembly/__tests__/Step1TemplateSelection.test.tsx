@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Step1TemplateSelection } from '../Step1TemplateSelection';
 
@@ -42,11 +42,12 @@ jest.mock('@/utils/cn', () => ({
 }));
 
 // Mock query hooks
-let mockQueryData: any = null;
+type TemplateType = Record<string, unknown>;
+let mockQueryData: TemplateType[] | null = null;
 let mockIsLoading = false;
 
 jest.mock('@/hooks/useQueryHooks', () => ({
-  useQuery: (queryKey: any, queryFn: () => Promise<any>, options?: any) => {
+  useQuery: () => {
     return {
       data: mockQueryData,
       isLoading: mockIsLoading,
@@ -116,7 +117,7 @@ const setLoading = (loading: boolean) => {
   mockIsLoading = loading;
 };
 
-const setTemplates = (templates: any[] | null) => {
+const setTemplates = (templates: TemplateType[] | null) => {
   mockQueryData = templates;
 };
 

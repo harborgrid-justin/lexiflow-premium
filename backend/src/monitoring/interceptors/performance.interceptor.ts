@@ -1,19 +1,19 @@
+import { DistributedTracingService } from "@monitoring/services/distributed.tracing.service";
+import { MetricsCollectorService } from "@monitoring/services/metrics.collector.service";
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from "@nestjs/common";
-import { Observable } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
-import { Request, Response } from "express";
-import {
-  StructuredLoggerService,
   HttpRequest,
   HttpResponse,
+  StructuredLoggerService,
 } from "@monitoring/services/structured.logger.service";
-import { MetricsCollectorService } from "@monitoring/services/metrics.collector.service";
-import { DistributedTracingService } from "@monitoring/services/distributed.tracing.service";
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { Observable } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 
 interface RequestWithQuery extends Request {
   dbQuery?: (...args: unknown[]) => unknown;
@@ -261,9 +261,9 @@ export class PerformanceInterceptor implements NestInterceptor {
     const pathWithoutQuery = safePath.split("?")[0];
     return (pathWithoutQuery || "")
       .replace(
-        //[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+        /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
         "/:id"
       ) // UUID
-      .replace(//\d+/g, "/:id"); // Numeric IDs
+      .replace(/\/\d+/g, "/:id"); // Numeric IDs
   }
 }

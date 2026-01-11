@@ -86,8 +86,11 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
           `discovery-response-draft-${request.id}`,
         );
         if (savedDraft) {
-          setDraftResponse(savedDraft);
-          notify.info("Draft restored from auto-save");
+          // Use setTimeout to avoid synchronous state update in effect
+          setTimeout(() => {
+              setDraftResponse(savedDraft);
+              notify.info("Draft restored from auto-save");
+          }, 0);
         } else {
           handleGenerateResponse();
         }

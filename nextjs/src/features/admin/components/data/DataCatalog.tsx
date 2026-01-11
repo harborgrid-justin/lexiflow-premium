@@ -59,7 +59,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                 <div className="flex justify-between items-center mb-4">
                     <div>
                         <h3 className={cn("text-xl font-bold", theme.text.primary)}>Enterprise Data Catalog</h3>
-                        <p className={cn("text-sm", theme.text.secondary)}>Discover, understand, and govern your firm's data.</p>
+                        <p className={cn("text-sm", theme.text.secondary)}>Discover, understand, and govern your firm&apos;s data.</p>
                     </div>
                     <div className="flex gap-2 items-center">
                         {!isOrbital && (

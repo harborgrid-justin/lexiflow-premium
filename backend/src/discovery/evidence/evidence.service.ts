@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Evidence } from './entities/evidence.entity';
-import { CreateDiscoveryEvidenceDto } from './dto/create-evidence.dto';
-import { UpdateDiscoveryEvidenceDto } from './dto/update-evidence.dto';
-import { QueryEvidenceDto } from './dto/query-evidence.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Evidence } from "./entities/evidence.entity";
+import { CreateDiscoveryEvidenceDto } from "./dto/create-evidence.dto";
+import { UpdateDiscoveryEvidenceDto } from "./dto/update-evidence.dto";
+import { QueryEvidenceDto } from "./dto/query-evidence.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -38,7 +38,7 @@ import { QueryEvidenceDto } from './dto/query-evidence.dto';
 export class EvidenceService {
   constructor(
     @InjectRepository(Evidence)
-    private readonly evidenceRepository: Repository<Evidence>,
+    private readonly evidenceRepository: Repository<Evidence>
   ) {}
 
   async findAll(query?: QueryEvidenceDto): Promise<Evidence[]> {
@@ -63,19 +63,19 @@ export class EvidenceService {
     return this.evidenceRepository.find({
       where,
       select: [
-        'id',
-        'caseId',
-        'trackingUuid',
-        'type',
-        'description',
-        'admissibility',
-        'custodian',
-        'status',
+        "id",
+        "caseId",
+        "trackingUuid",
+        "type",
+        "description",
+        "admissibility",
+        "custodian",
+        "status",
         // 'acquiredDate', // Field not in Evidence entity
-        'createdAt',
-        'updatedAt',
+        "createdAt",
+        "updatedAt",
       ],
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -91,7 +91,9 @@ export class EvidenceService {
     return evidence;
   }
 
-  async create(createEvidenceDto: CreateDiscoveryEvidenceDto): Promise<Evidence> {
+  async create(
+    createEvidenceDto: CreateDiscoveryEvidenceDto
+  ): Promise<Evidence> {
     const evidence = this.evidenceRepository.create({
       ...createEvidenceDto,
       trackingUuid: createEvidenceDto.trackingUuid || crypto.randomUUID(),
@@ -99,19 +101,22 @@ export class EvidenceService {
     return this.evidenceRepository.save(evidence);
   }
 
-  async update(id: string, updateEvidenceDto: UpdateDiscoveryEvidenceDto): Promise<Evidence> {
+  async update(
+    id: string,
+    updateEvidenceDto: UpdateDiscoveryEvidenceDto
+  ): Promise<Evidence> {
     const result = await this.evidenceRepository
       .createQueryBuilder()
       .update(Evidence)
       .set(updateEvidenceDto)
-      .where('id = :id', { id })
-      .returning('*')
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`Evidence with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as Evidence;
   }
 
   async remove(id: string): Promise<void> {
@@ -121,7 +126,7 @@ export class EvidenceService {
 
   async addChainOfCustodyEvent(
     id: string,
-    event: { action: string; actor: string; notes?: string },
+    event: { action: string; actor: string; notes?: string }
   ): Promise<Evidence> {
     const evidence = await this.findOne(id);
     const newEvent = {

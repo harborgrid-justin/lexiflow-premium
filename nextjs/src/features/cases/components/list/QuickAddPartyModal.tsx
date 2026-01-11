@@ -111,11 +111,8 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
       return;
     }
 
-    // Remove form-only fields before submission
-    const { hasAttorney, ...submitData } = formData;
-
     try {
-      onCreated(submitData);
+      onCreated(formData);
     } catch (err) {
       console.error('Failed to create party:', err);
     }

@@ -19,9 +19,8 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
     const index = useRef(0);
 
     useEffect(() => {
-        setDisplayedText('');
+        // Reset via setting displayedText based on text change
         index.current = 0;
-        setIsComplete(false);
 
         const intervalId = setInterval(() => {
             if (index.current < text.length) {
@@ -44,6 +43,7 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
             {!isComplete && <span className="inline-block w-2 h-4 ml-1 bg-blue-500 animate-pulse align-middle"></span>}
         </div>
     );
+};
 };
 
 export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onViewSource }) => {

@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 export interface QueryComplexityLimits {
@@ -49,7 +49,7 @@ export class QuerySanitizationService {
 
   private readonly dangerousPatterns: RegExp[] = [
     /(\b(DROP|TRUNCATE|DELETE\s+FROM|ALTER|EXEC|EXECUTE|UNION|INSERT\s+INTO)\b)/gi,
-    /(--|\*/|/\*|;)/g,
+    /(--|\*/ | /\*|;)/g,
     /(\bxp_|\bsp_)/gi,
     /(\bSCRIPT\b|\bJAVASCRIPT\b)/gi,
     /(\bEVAL\b|\bEXEC\b)/gi,
@@ -330,7 +330,7 @@ export class QuerySanitizationService {
 
   escapeString(value: string): string {
     return value
-      .replace(/\/g, "\\\\")
+      .replace(/\\/g, "\\\\")
       .replace(/'/g, "''")
       .replace(/"/g, '\\"')
       .replace(/\n/g, "\\n")

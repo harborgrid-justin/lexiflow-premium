@@ -1,12 +1,12 @@
+import { Injectable } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
 import {
   registerDecorator,
+  ValidationArguments,
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
 } from "class-validator";
-import { Injectable } from "@nestjs/common";
-import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 
 /**
@@ -25,12 +25,13 @@ export class ExistsValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const [entityClass, property = "id"] = args.constraints;
+    const [entityClass, property = "id"] = args.constraints as [
+      Function | string | { name: string },
+      string,
+    ];
 
     if (!value) return false;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
     const entity = await repository.findOne({
       where: { [property]: value },
@@ -40,9 +41,10 @@ export class ExistsValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const [entityClass, property = "id"] = args.constraints;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const [entityClass, property = "id"] = args.constraints as [
+      { name: string },
+      string,
+    ];
     return `${entityClass.name} with ${property} '${args.value}' does not exist`;
   }
 }
@@ -86,12 +88,14 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const [entityClass, property, exceptId] = args.constraints;
+    const [entityClass, property, exceptId] = args.constraints as [
+      Function | string,
+      string,
+      string,
+    ];
 
     if (!value) return true; // Let @IsNotEmpty handle empty values
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
 
     const queryBuilder = repository
@@ -102,7 +106,7 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
     const obj = args.object as Record<string, unknown>;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (exceptId && obj[exceptId]) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 
@@ -111,7 +115,7 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [, property] = args.constraints;
+    const [, property] = args.constraints as [unknown, string];
     return `${property} '${args.value}' already exists`;
   }
 }
@@ -167,7 +171,6 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [entityClass, properties, exceptId] = args.constraints;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
     const queryBuilder = repository.createQueryBuilder("entity");
     const obj = args.object as Record<string, unknown>;
@@ -182,7 +185,7 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
     // Exclude current entity if updating
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (exceptId && obj[exceptId]) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 
@@ -191,7 +194,7 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [, properties] = args.constraints;
+    const [, properties] = args.constraints as [unknown, string[]];
     return `Combination of ${properties.join(", ")} already exists`;
   }
 }
@@ -212,8 +215,7 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
  * }
  */
 export function IsCompositeUnique(
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  entityClass: Function,
+  entityClass: new (...args: unknown[]) => unknown,
   properties: string[],
   exceptIdProperty?: string,
   validationOptions?: ValidationOptions
@@ -238,7 +240,10 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    const [entityClass, property = "id"] = args.constraints;
+    const [entityClass, property = "id"] = args.constraints as [
+      Function | string,
+      string,
+    ];
 
     if (!value) return true;
 
@@ -253,7 +258,10 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [entityClass, property = "id"] = args.constraints;
+    const [entityClass, property = "id"] = args.constraints as [
+      { name: string },
+      string,
+    ];
     return `${entityClass.name} with ${property} '${args.value}' is deleted or does not exist`;
   }
 }
@@ -290,7 +298,12 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    const [entityClass, relationProperty, min, max] = args.constraints;
+    const [entityClass, relationProperty, min, max] = args.constraints as [
+      Function | string,
+      string,
+      number,
+      number,
+    ];
 
     if (!value) return true;
 
@@ -302,7 +315,7 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
 
     if (!entity) return false;
 
-    const count = entity[relationProperty]?.length ?? 0;
+    const count = (entity as any)[relationProperty]?.length ?? 0;
 
     if (min !== undefined && count < min) return false;
     if (max !== undefined && count > max) return false;
@@ -311,7 +324,12 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [, relationProperty, min, max] = args.constraints;
+    const [, relationProperty, min, max] = args.constraints as [
+      unknown,
+      string,
+      number,
+      number,
+    ];
     if (min !== undefined && max !== undefined) {
       return `${relationProperty} count must be between ${min} and ${max}`;
     }
@@ -373,7 +391,7 @@ export class MatchesDbEnumValidator implements ValidatorConstraintInterface {
       const result = await this.dataSource.query(query);
       const enumValues = result[0]?.enum_values || [];
       return enumValues.includes(value);
-    } catch (error) {
+    } catch {
       // If enum type doesn't exist, validation passes (let TypeORM handle it)
       return true;
     }

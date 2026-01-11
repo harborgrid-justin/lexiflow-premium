@@ -1,7 +1,18 @@
-import { Resolver, Query, Mutation, Args, ID, Subscription } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
-import { PubSub } from 'graphql-subscriptions';
-import { CaseType, CaseConnection, CaseMetrics } from '@graphql/types/case.type';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ID,
+  Subscription,
+} from "@nestjs/graphql";
+import { UseGuards } from "@nestjs/common";
+import { PubSub } from "graphql-subscriptions";
+import {
+  CaseType,
+  CaseConnection,
+  CaseMetrics,
+} from "@graphql/types/case.type";
 import {
   CreateCaseInput,
   UpdateCaseInput,
@@ -10,16 +21,16 @@ import {
   AddTeamMemberInput,
   CreateMotionInput,
   CreateDocketEntryInput,
-} from '@graphql/inputs/case.input';
-import { PaginationInput } from '@graphql/inputs/pagination.input';
-import { CurrentUser } from '@auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
-import { CasesService } from '@cases/cases.service';
-import { CaseStatus } from '@cases/entities/case.entity';
-import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
-import { Cacheable } from '@common/decorators/cache.decorator';
+} from "@graphql/inputs/case.input";
+import { PaginationInput } from "@graphql/inputs/pagination.input";
+import { CurrentUser } from "@auth/decorators/current-user.decorator";
+import { GqlAuthGuard } from "@auth/guards/gql-auth.guard";
+import { CasesService } from "@cases/cases.service";
+import { CaseStatus } from "@cases/entities/case.entity";
+import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
+import { Cacheable } from "@common/decorators/cache.decorator";
 
 const pubSub = new PubSub();
 
@@ -35,15 +46,15 @@ const pubSub = new PubSub();
 export class CaseResolverOptimized {
   constructor(
     private caseService: CasesService,
-    @InjectDataSource() private dataSource: DataSource,
+    @InjectDataSource() private dataSource: DataSource
   ) {}
 
-  @Query(() => CaseConnection, { name: 'cases' })
+  @Query(() => CaseConnection, { name: "cases" })
   @UseGuards(GqlAuthGuard)
   @Cacheable({ ttl: 60 }) // Cache for 1 minute
   async getCases(
-    @Args('filter', { nullable: true }) filter?: CaseFilterInput,
-    @Args('pagination', { nullable: true }) pagination?: PaginationInput,
+    @Args("filter", { nullable: true }) filter?: CaseFilterInput,
+    @Args("pagination", { nullable: true }) pagination?: PaginationInput
   ): Promise<CaseConnection> {
     const result = await this.caseService.findAll({
       ...filter,
@@ -68,14 +79,16 @@ export class CaseResolverOptimized {
     };
   }
 
-  @Query(() => CaseType, { name: 'case', nullable: true })
+  @Query(() => CaseType, { name: "case", nullable: true })
   @UseGuards(GqlAuthGuard)
   @Cacheable({ ttl: 300 }) // Cache for 5 minutes
-  async getCase(@Args('id', { type: () => ID }) id: string): Promise<CaseType | null> {
+  async getCase(
+    @Args("id", { type: () => ID }) id: string
+  ): Promise<CaseType | null> {
     try {
       const caseItem = await this.caseService.findOne(id);
       return caseItem as unknown;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -83,31 +96,31 @@ export class CaseResolverOptimized {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createCase(
-    @Args('input') input: CreateCaseInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateCaseInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(input as unknown);
-    pubSub.publish('caseCreated', { caseCreated: caseEntity });
+    pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async updateCase(
-    @Args('id', { type: () => ID }) id: string,
-    @Args('input') input: UpdateCaseInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @Args("input") input: UpdateCaseInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.update(id, input as unknown);
-    pubSub.publish('caseUpdated', { caseUpdated: caseEntity, id });
+    pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
     return caseEntity as unknown;
   }
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   async deleteCase(
-    @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("id", { type: () => ID }) id: string,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<boolean> {
     await this.caseService.remove(id);
     return true;
@@ -116,8 +129,8 @@ export class CaseResolverOptimized {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async addParty(
-    @Args('input') input: AddPartyInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: AddPartyInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     return caseEntity as unknown;
@@ -126,8 +139,8 @@ export class CaseResolverOptimized {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async addTeamMember(
-    @Args('input') input: AddTeamMemberInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: AddTeamMemberInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     return caseEntity as unknown;
@@ -136,8 +149,8 @@ export class CaseResolverOptimized {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createMotion(
-    @Args('input') input: CreateMotionInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateMotionInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     return caseEntity as unknown;
@@ -146,8 +159,8 @@ export class CaseResolverOptimized {
   @Mutation(() => CaseType)
   @UseGuards(GqlAuthGuard)
   async createDocketEntry(
-    @Args('input') input: CreateDocketEntryInput,
-    @CurrentUser() _user: AuthenticatedUser,
+    @Args("input") input: CreateDocketEntryInput,
+    @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     return caseEntity as unknown;
@@ -158,7 +171,7 @@ export class CaseResolverOptimized {
    * Original implementation loaded all cases into memory - CRITICAL PERFORMANCE BUG
    * This uses efficient SQL aggregations with proper indexing
    */
-  @Query(() => CaseMetrics, { name: 'caseMetrics' })
+  @Query(() => CaseMetrics, { name: "caseMetrics" })
   @UseGuards(GqlAuthGuard)
   @Cacheable({ ttl: 300 }) // Cache for 5 minutes
   async getCaseMetrics(): Promise<CaseMetrics> {
@@ -214,13 +227,13 @@ export class CaseResolverOptimized {
   }
 
   @Subscription(() => CaseType, {
-    name: 'caseUpdated',
+    name: "caseUpdated",
     filter: (payload, variables) => {
       return payload.id === variables.id;
     },
   })
-  caseUpdated(@Args('_id', { type: () => ID }) _id: string) {
+  caseUpdated(@Args("_id", { type: () => ID }) _id: string) {
     // @ts-expect-error - PubSub asyncIterator exists at runtime
-    return pubSub.asyncIterator('caseUpdated');
+    return pubSub.asyncIterator("caseUpdated");
   }
 }

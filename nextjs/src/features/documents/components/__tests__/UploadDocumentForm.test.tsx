@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UploadDocumentForm } from '../UploadDocumentForm';
 
@@ -29,14 +29,17 @@ let mockActionState = {
 let mockFormAction = jest.fn();
 
 // Mock state for useFormStatus
-let mockPending = false;
+// Removed unused variable mockPending
+
+type ActionHandler = (prevState: unknown, formData: FormData) => Promise<{ success: boolean; message: string }>;
+type InitialState = { success: boolean; message: string };
 
 // Mock React hooks
 jest.mock('react', () => {
   const originalReact = jest.requireActual('react');
   return {
     ...originalReact,
-    useActionState: (action: Function, initialState: any) => {
+    useActionState: (_action: ActionHandler, _initialState: InitialState) => {
       return [mockActionState, mockFormAction];
     },
   };
@@ -64,12 +67,10 @@ jest.mock('@/components/ui/button', () => ({
     type,
     disabled,
     ...props
-  }: {
+  }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     children: React.ReactNode;
-    type?: string;
-    disabled?: boolean;
   }) => (
-    <button type={type as any} disabled={disabled} {...props}>
+    <button type={type} disabled={disabled} {...props}>
       {children}
     </button>
   ),
@@ -121,7 +122,7 @@ const createMockFile = (
 describe('UploadDocumentForm Component', () => {
   beforeEach(() => {
     resetMocks();
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => { });
   });
 
   afterEach(() => {
@@ -144,7 +145,7 @@ describe('UploadDocumentForm Component', () => {
 
       expect(
         screen.getByRole('textbox', { hidden: true }) ||
-          document.querySelector('input[type="file"]')
+        document.querySelector('input[type="file"]')
       ).toBeTruthy();
     });
 

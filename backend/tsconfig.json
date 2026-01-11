@@ -39,7 +39,6 @@
     "**/*.test.ts",
     "**/__tests__/**",
     "**/*.example.ts",
-    "src/database/migrations/**/*",
     "src/migrations/**/*",
     "src/telemetry.disabled/**/*"
   ]

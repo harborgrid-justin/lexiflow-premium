@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { ESISource } from './entities/esi-source.entity';
-import { CreateESISourceDto } from './dto/create-esi-source.dto';
-import { UpdateESISourceDto } from './dto/update-esi-source.dto';
-import { QueryESISourceDto } from './dto/query-esi-source.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, IsNull } from "typeorm";
+import { ESISource } from "./entities/esi-source.entity";
+import { CreateESISourceDto } from "./dto/create-esi-source.dto";
+import { UpdateESISourceDto } from "./dto/update-esi-source.dto";
+import { QueryESISourceDto } from "./dto/query-esi-source.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +42,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class ESISourcesService {
   constructor(
     @InjectRepository(ESISource)
-    private readonly esiSourceRepository: Repository<ESISource>,
+    private readonly esiSourceRepository: Repository<ESISource>
   ) {}
 
   async create(createDto: CreateESISourceDto): Promise<ESISource> {
@@ -57,49 +60,49 @@ export class ESISourcesService {
       search,
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'DESC',
+      sortBy = "createdAt",
+      sortOrder = "DESC",
     } = queryDto;
 
     const queryBuilder = this.esiSourceRepository
-      .createQueryBuilder('esiSource')
-      .where('esiSource.deletedAt IS NULL');
+      .createQueryBuilder("esiSource")
+      .where("esiSource.deletedAt IS NULL");
 
     if (caseId) {
-      queryBuilder.andWhere('esiSource.caseId = :caseId', { caseId });
+      queryBuilder.andWhere("esiSource.caseId = :caseId", { caseId });
     }
 
     if (sourceType) {
-      queryBuilder.andWhere('esiSource.sourceType = :sourceType', {
+      queryBuilder.andWhere("esiSource.sourceType = :sourceType", {
         sourceType,
       });
     }
 
     if (status) {
-      queryBuilder.andWhere('esiSource.status = :status', { status });
+      queryBuilder.andWhere("esiSource.status = :status", { status });
     }
 
     if (custodianId) {
-      queryBuilder.andWhere('esiSource.custodianId = :custodianId', {
+      queryBuilder.andWhere("esiSource.custodianId = :custodianId", {
         custodianId,
       });
     }
 
     if (assignedTo) {
-      queryBuilder.andWhere('esiSource.assignedTo = :assignedTo', {
+      queryBuilder.andWhere("esiSource.assignedTo = :assignedTo", {
         assignedTo,
       });
     }
 
     if (search) {
       queryBuilder.andWhere(
-        '(esiSource.sourceName ILIKE :search OR esiSource.description ILIKE :search OR esiSource.location ILIKE :search)',
-        { search: `%${search}%` },
+        "(esiSource.sourceName ILIKE :search OR esiSource.description ILIKE :search OR esiSource.location ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     // SQL injection protection
-    const safeSortField = validateSortField('esiSource', sortBy);
+    const safeSortField = validateSortField("esiSource", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`esiSource.${safeSortField}`, safeSortOrder);
 
@@ -133,24 +136,24 @@ export class ESISourcesService {
     const result = await this.esiSourceRepository
       .createQueryBuilder()
       .update(ESISource)
-      .set({ ...updateDto, updatedAt: new Date() } as any)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set({ ...updateDto, updatedAt: new Date() } as unknown as EsiSource)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected) {
       throw new NotFoundException(`ESI Source with ID ${id} not found`);
     }
-    return result.raw[0];
+    return result.raw[0] as EsiSource;
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.esiSourceRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected) {

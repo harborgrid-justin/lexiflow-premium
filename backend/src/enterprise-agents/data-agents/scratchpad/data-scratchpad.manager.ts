@@ -7,14 +7,17 @@
  * @version 1.0.0
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { DataScratchpadEntry } from '../interfaces/data-agent.interfaces';
+import { Injectable, Logger } from "@nestjs/common";
+import { DataScratchpadEntry } from "../interfaces/data-agent.interfaces";
 
 @Injectable()
 export class DataScratchpadManager {
   private readonly logger = new Logger(DataScratchpadManager.name);
   private readonly entries = new Map<string, DataScratchpadEntry>();
-  private readonly subscribers = new Map<string, Set<(entry: DataScratchpadEntry) => void>>();
+  private readonly subscribers = new Map<
+    string,
+    Set<(entry: DataScratchpadEntry) => void>
+  >();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor() {
@@ -47,7 +50,7 @@ export class DataScratchpadManager {
     key: string,
     value: unknown,
     agentId: string,
-    options?: { ttlMs?: number; tags?: string[] },
+    options?: { ttlMs?: number; tags?: string[] }
   ): void {
     const entry: DataScratchpadEntry = {
       key,
@@ -104,11 +107,17 @@ export class DataScratchpadManager {
     return this.entries.delete(key);
   }
 
-  subscribe(key: string, handler: (entry: DataScratchpadEntry) => void): () => void {
+  subscribe(
+    key: string,
+    handler: (entry: DataScratchpadEntry) => void
+  ): () => void {
     if (!this.subscribers.has(key)) {
       this.subscribers.set(key, new Set());
     }
-    this.subscribers.get(key)!.add(handler);
+    const handlers = this.subscribers.get(key);
+    if (handlers) {
+      handlers.add(handler);
+    }
 
     return () => {
       this.subscribers.get(key)?.delete(handler);
@@ -116,11 +125,15 @@ export class DataScratchpadManager {
   }
 
   getByAgent(agentId: string): DataScratchpadEntry[] {
-    return Array.from(this.entries.values()).filter(e => e.agentId === agentId);
+    return Array.from(this.entries.values()).filter(
+      (e) => e.agentId === agentId
+    );
   }
 
   getByTag(tag: string): DataScratchpadEntry[] {
-    return Array.from(this.entries.values()).filter(e => e.tags?.includes(tag));
+    return Array.from(this.entries.values()).filter((e) =>
+      e.tags?.includes(tag)
+    );
   }
 
   getAllKeys(): string[] {
@@ -129,7 +142,7 @@ export class DataScratchpadManager {
 
   clear(): void {
     this.entries.clear();
-    this.logger.log('Scratchpad cleared');
+    this.logger.log("Scratchpad cleared");
   }
 
   getStats(): { totalEntries: number; byAgent: Record<string, number> } {

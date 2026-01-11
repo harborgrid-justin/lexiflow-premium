@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, AlertCircle} from 'lucide-react';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import * as styles from '../DraftingDashboard.styles';
 import { GeneratedDocument } from '@api/domains/drafting.api';
@@ -20,7 +20,7 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
     return (
       <div className="p-8 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center">
         <CheckCircle className="h-8 w-8 text-emerald-500 mb-2 opacity-50" />
-        <p>You're all caught up! No pending approvals.</p>
+        <p>You&apos;re all caught up! No pending approvals.</p>
       </div>
     );
   }
@@ -28,8 +28,8 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
   return (
     <div className="divide-y divide-slate-100 dark:divide-slate-700">
       {approvalsList.map((doc) => (
-        <div 
-          key={doc.id} 
+        <div
+          key={doc.id}
           className={styles.getListItem(theme)}
           onClick={() => onReview(doc)}
         >
@@ -52,4 +52,3 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
     </div>
   );
 };
-

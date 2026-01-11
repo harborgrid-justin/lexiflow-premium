@@ -35,11 +35,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const [availableClauses, setAvailableClauses] = useState<ClauseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadClauses();
-  }, []);
-
-  const loadClauses = async () => {
+  const loadClauses = React.useCallback(async () => {
     try {
       const clauses = await api.clauses.getAll();
       setAvailableClauses(Array.isArray(clauses) ? clauses as unknown as ClauseItem[] : []);
@@ -47,7 +43,11 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       console.error('Failed to load clauses:', error);
       setAvailableClauses([]);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadClauses();
+  }, [loadClauses]);
 
   const handleAddVariable = () => {
     setVariables([
@@ -134,9 +134,10 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
         status: 'active' as const,
       };
 
+      type TemplateDTO = typeof dto;
       const saved = template
-        ? await draftingApi.updateTemplate(template.id, dto as any)
-        : await draftingApi.createTemplate(dto as any);
+        ? await draftingApi.updateTemplate(template.id, dto as TemplateDTO)
+        : await draftingApi.createTemplate(dto as TemplateDTO);
 
       addToast(`Template ${template ? 'updated' : 'created'} successfully`, 'success');
       onSave(saved);
@@ -363,7 +364,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <div className="flex items-center space-x-2">
                       <select
                         value={variable.type}
-                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as any })}
+                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as 'text' | 'date' | 'number' | 'select' })}
                         className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                       >
                         <option value="text">Text</option>

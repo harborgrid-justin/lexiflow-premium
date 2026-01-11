@@ -10,10 +10,10 @@
  * @enterprise true
  */
 
-import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { DataSource } from 'typeorm';
-import { BaseAgent, createAgentMetadata } from '../core/base-agent';
+import { Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { DataSource } from "typeorm";
+import { BaseAgent, createAgentMetadata } from "../core/base-agent";
 import {
   AgentType,
   AgentPriority,
@@ -21,18 +21,18 @@ import {
   AgentEvent,
   AgentEventType,
   TaskStatus,
-} from '../interfaces/agent.interfaces';
+} from "../interfaces/agent.interfaces";
 
 /**
  * Sync operation types
  */
 export enum SyncOperationType {
-  FULL_SYNC = 'FULL_SYNC',
-  INCREMENTAL_SYNC = 'INCREMENTAL_SYNC',
-  CONFLICT_RESOLUTION = 'CONFLICT_RESOLUTION',
-  SCHEMA_MIGRATION = 'SCHEMA_MIGRATION',
-  DATA_VALIDATION = 'DATA_VALIDATION',
-  CACHE_INVALIDATION = 'CACHE_INVALIDATION',
+  FULL_SYNC = "FULL_SYNC",
+  INCREMENTAL_SYNC = "INCREMENTAL_SYNC",
+  CONFLICT_RESOLUTION = "CONFLICT_RESOLUTION",
+  SCHEMA_MIGRATION = "SCHEMA_MIGRATION",
+  DATA_VALIDATION = "DATA_VALIDATION",
+  CACHE_INVALIDATION = "CACHE_INVALIDATION",
 }
 
 /**
@@ -87,27 +87,27 @@ export class CoreDataSyncAgent extends BaseAgent {
 
   constructor(
     eventEmitter: EventEmitter2,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {
     super(
       createAgentMetadata(
-        'CoreDataSyncAgent',
+        "CoreDataSyncAgent",
         AgentType.WORKER,
         [
-          'data.sync.full',
-          'data.sync.incremental',
-          'data.conflict.resolve',
-          'data.validation',
-          'cache.invalidation',
+          "data.sync.full",
+          "data.sync.incremental",
+          "data.conflict.resolve",
+          "data.validation",
+          "cache.invalidation",
         ],
         {
           priority: AgentPriority.HIGH,
           maxConcurrentTasks: 5,
           heartbeatIntervalMs: 15000,
           healthCheckIntervalMs: 30000,
-        },
+        }
       ),
-      eventEmitter,
+      eventEmitter
     );
   }
 
@@ -115,7 +115,7 @@ export class CoreDataSyncAgent extends BaseAgent {
    * Initialize agent
    */
   protected async onInitialize(): Promise<void> {
-    this.syncLogger.log('Initializing Core Data Sync Agent');
+    this.syncLogger.log("Initializing Core Data Sync Agent");
     await this.validateDatabaseConnection();
   }
 
@@ -123,7 +123,7 @@ export class CoreDataSyncAgent extends BaseAgent {
    * Start agent
    */
   protected async onStart(): Promise<void> {
-    this.syncLogger.log('Core Data Sync Agent started');
+    this.syncLogger.log("Core Data Sync Agent started");
     await this.schedulePeriodicSync();
   }
 
@@ -131,7 +131,7 @@ export class CoreDataSyncAgent extends BaseAgent {
    * Stop agent
    */
   protected async onStop(): Promise<void> {
-    this.syncLogger.log('Core Data Sync Agent stopping');
+    this.syncLogger.log("Core Data Sync Agent stopping");
     this.syncInProgress = false;
   }
 
@@ -139,14 +139,14 @@ export class CoreDataSyncAgent extends BaseAgent {
    * Pause agent
    */
   protected async onPause(): Promise<void> {
-    this.syncLogger.log('Core Data Sync Agent paused');
+    this.syncLogger.log("Core Data Sync Agent paused");
   }
 
   /**
    * Resume agent
    */
   protected async onResume(): Promise<void> {
-    this.syncLogger.log('Core Data Sync Agent resumed');
+    this.syncLogger.log("Core Data Sync Agent resumed");
   }
 
   /**
@@ -166,7 +166,7 @@ export class CoreDataSyncAgent extends BaseAgent {
    * Execute sync task
    */
   protected async executeTask<TPayload, TResult>(
-    task: AgentTask<TPayload, TResult>,
+    task: AgentTask<TPayload, TResult>
   ): Promise<TResult> {
     const payload = task.payload as unknown as SyncTaskPayload;
 
@@ -196,7 +196,7 @@ export class CoreDataSyncAgent extends BaseAgent {
    */
   private async performFullSync(payload: SyncTaskPayload): Promise<SyncResult> {
     if (this.syncInProgress) {
-      throw new Error('Sync already in progress');
+      throw new Error("Sync already in progress");
     }
 
     this.syncInProgress = true;
@@ -226,7 +226,9 @@ export class CoreDataSyncAgent extends BaseAgent {
           result.recordsProcessed += count;
           this.syncLogger.debug(`Synced ${count} records for ${metadata.name}`);
         } catch (error) {
-          result.errors.push(`Error syncing ${metadata.name}: ${(error as Error).message}`);
+          result.errors.push(
+            `Error syncing ${metadata.name}: ${(error as Error).message}`
+          );
         }
       }
 
@@ -247,9 +249,12 @@ export class CoreDataSyncAgent extends BaseAgent {
   /**
    * Perform incremental sync
    */
-  private async performIncrementalSync(payload: SyncTaskPayload): Promise<SyncResult> {
+  private async performIncrementalSync(
+    payload: SyncTaskPayload
+  ): Promise<SyncResult> {
     const startTime = Date.now();
-    const fromTimestamp = payload.fromTimestamp ?? this.lastSyncTimestamp ?? new Date(0);
+    const fromTimestamp =
+      payload.fromTimestamp ?? this.lastSyncTimestamp ?? new Date(0);
 
     const result: SyncResult = {
       operationType: SyncOperationType.INCREMENTAL_SYNC,
@@ -271,7 +276,7 @@ export class CoreDataSyncAgent extends BaseAgent {
         }
 
         const hasUpdatedAt = metadata.columns.some(
-          col => col.propertyName === 'updatedAt',
+          (col) => col.propertyName === "updatedAt"
         );
 
         if (hasUpdatedAt) {
@@ -279,13 +284,15 @@ export class CoreDataSyncAgent extends BaseAgent {
             const repository = this.dataSource.getRepository(metadata.target);
             const updatedRecords = await repository
               .createQueryBuilder()
-              .where('updatedAt > :fromTimestamp', { fromTimestamp })
+              .where("updatedAt > :fromTimestamp", { fromTimestamp })
               .getMany();
 
             result.recordsProcessed += updatedRecords.length;
             result.recordsUpdated += updatedRecords.length;
           } catch (error) {
-            result.errors.push(`Error syncing ${metadata.name}: ${(error as Error).message}`);
+            result.errors.push(
+              `Error syncing ${metadata.name}: ${(error as Error).message}`
+            );
           }
         }
       }
@@ -304,7 +311,9 @@ export class CoreDataSyncAgent extends BaseAgent {
   /**
    * Resolve data conflicts
    */
-  private async resolveConflicts(payload: SyncTaskPayload): Promise<SyncResult> {
+  private async resolveConflicts(
+    payload: SyncTaskPayload
+  ): Promise<SyncResult> {
     const startTime = Date.now();
     const result: SyncResult = {
       operationType: SyncOperationType.CONFLICT_RESOLUTION,
@@ -319,7 +328,10 @@ export class CoreDataSyncAgent extends BaseAgent {
 
     // Get conflicts to resolve, optionally filtered by entity type from payload
     const conflictsToResolve = payload.entityType
-      ? Array.from(this.conflicts.entries()).filter(([key]) => key.startsWith(payload.entityType!))
+      ? Array.from(this.conflicts.entries()).filter(([key]) => {
+          const entityType = payload.entityType;
+          return entityType ? key.startsWith(entityType) : false;
+        })
       : Array.from(this.conflicts.entries());
 
     result.recordsProcessed = conflictsToResolve.length;
@@ -333,7 +345,9 @@ export class CoreDataSyncAgent extends BaseAgent {
           this.conflicts.delete(key);
         }
       } catch (error) {
-        result.errors.push(`Conflict resolution failed for ${key}: ${(error as Error).message}`);
+        result.errors.push(
+          `Conflict resolution failed for ${key}: ${(error as Error).message}`
+        );
       }
     }
 
@@ -347,20 +361,20 @@ export class CoreDataSyncAgent extends BaseAgent {
   private async resolveConflict(conflict: ConflictEntry): Promise<boolean> {
     if (conflict.remoteVersion > conflict.localVersion) {
       this.syncLogger.debug(
-        `Resolving conflict for ${conflict.entityType}:${conflict.entityId} - using remote version`,
+        `Resolving conflict for ${conflict.entityType}:${conflict.entityId} - using remote version`
       );
       return true;
     }
 
     if (conflict.localVersion > conflict.remoteVersion) {
       this.syncLogger.debug(
-        `Resolving conflict for ${conflict.entityType}:${conflict.entityId} - using local version`,
+        `Resolving conflict for ${conflict.entityType}:${conflict.entityId} - using local version`
       );
       return true;
     }
 
     this.syncLogger.warn(
-      `Cannot auto-resolve conflict for ${conflict.entityType}:${conflict.entityId} - versions equal`,
+      `Cannot auto-resolve conflict for ${conflict.entityType}:${conflict.entityId} - versions equal`
     );
     return false;
   }
@@ -421,7 +435,9 @@ export class CoreDataSyncAgent extends BaseAgent {
 
     try {
       await this.emitEvent(AgentEventType.SCRATCHPAD_CLEAR, {
-        pattern: payload.entityType ? `cache:${payload.entityType}:*` : 'cache:*',
+        pattern: payload.entityType
+          ? `cache:${payload.entityType}:*`
+          : "cache:*",
       });
 
       result.duration = Date.now() - startTime;
@@ -441,7 +457,7 @@ export class CoreDataSyncAgent extends BaseAgent {
 
     const task: AgentTask<SyncTaskPayload, SyncResult> = {
       id: `sync-${Date.now()}`,
-      type: 'sync',
+      type: "sync",
       priority: AgentPriority.HIGH,
       payload,
       status: TaskStatus.PENDING,
@@ -460,16 +476,16 @@ export class CoreDataSyncAgent extends BaseAgent {
    */
   private async validateDatabaseConnection(): Promise<void> {
     if (!this.dataSource.isInitialized) {
-      throw new Error('Database connection not initialized');
+      throw new Error("Database connection not initialized");
     }
-    this.syncLogger.log('Database connection validated');
+    this.syncLogger.log("Database connection validated");
   }
 
   /**
    * Schedule periodic sync operations
    */
   private async schedulePeriodicSync(): Promise<void> {
-    this.syncLogger.log('Periodic sync scheduling initialized');
+    this.syncLogger.log("Periodic sync scheduling initialized");
   }
 
   /**

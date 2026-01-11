@@ -443,15 +443,15 @@ export class RequestFingerprintService implements OnModuleDestroy {
     // Detect browser
     if (userAgent.includes('Chrome')) {
       browser = 'Chrome';
-      const match = userAgent.match(/Chrome/(\d+)/);
+      const match = userAgent.match(/Chrome\/(\d+)/);
       version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Firefox')) {
       browser = 'Firefox';
-      const match = userAgent.match(/Firefox/(\d+)/);
+      const match = userAgent.match(/Firefox\/(\d+)/);
       version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
       browser = 'Safari';
-      const match = userAgent.match(/Version/(\d+)/);
+      const match = userAgent.match(/Version\/(\d+)/);
       version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Edge')) {
       browser = 'Edge';

@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor, within, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DraftingDashboard from '../DraftingDashboard';
 import type {
@@ -130,16 +130,18 @@ jest.mock('@/utils/cn', () => ({
 }));
 
 // Mock child components
+import type { GeneratedDocument as MockDocument } from '@api/domains/drafting.api';
+
 jest.mock('../components/ApprovalQueue', () => ({
   ApprovalQueue: ({
     approvals,
     onReview,
   }: {
-    approvals: any[];
-    onReview: (doc: any) => void;
+    approvals: MockDocument[];
+    onReview: (doc: MockDocument) => void;
   }) => (
     <div data-testid="approval-queue">
-      {approvals.map((a: any) => (
+      {approvals.map((a) => (
         <button key={a.id} onClick={() => onReview(a)} data-testid={`review-${a.id}`}>
           Review {a.title}
         </button>
@@ -149,7 +151,7 @@ jest.mock('../components/ApprovalQueue', () => ({
 }));
 
 jest.mock('../components/DraftingStats', () => ({
-  DraftingStats: ({ stats }: { stats: any }) => (
+  DraftingStats: ({ stats }: { stats: DraftingStats }) => (
     <div data-testid="drafting-stats">
       <span data-testid="drafts-count">{stats.drafts}</span>
       <span data-testid="templates-count">{stats.templates}</span>
@@ -162,11 +164,11 @@ jest.mock('../components/RecentDrafts', () => ({
     drafts,
     onSelect,
   }: {
-    drafts: any[];
-    onSelect: (draft: any) => void;
+    drafts: MockDocument[];
+    onSelect: (draft: MockDocument) => void;
   }) => (
     <div data-testid="recent-drafts">
-      {drafts.map((d: any) => (
+      {drafts.map((d) => (
         <button key={d.id} onClick={() => onSelect(d)} data-testid={`draft-${d.id}`}>
           {d.title}
         </button>
@@ -181,12 +183,12 @@ jest.mock('../components/TemplateGallery', () => ({
     onSelect,
     onEdit,
   }: {
-    templates: any[];
-    onSelect: (template: any) => void;
-    onEdit: (template: any) => void;
+    templates: DraftingTemplate[];
+    onSelect: (template: DraftingTemplate) => void;
+    onEdit: (template: DraftingTemplate) => void;
   }) => (
     <div data-testid="template-gallery">
-      {templates.map((t: any) => (
+      {templates.map((t) => (
         <div key={t.id}>
           <button onClick={() => onSelect(t)} data-testid={`select-template-${t.id}`}>
             Select {t.name}

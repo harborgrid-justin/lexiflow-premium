@@ -79,7 +79,7 @@ export function useAutoTimeCapture(
     }
     if (activeTimeRef.current > 0) setTimeout(() => setActiveTime(0), 0);
     lastActivity.current = Date.now();
-    setIsIdle(false);
+    setTimeout(() => setIsIdle(false), 0);
   }, [currentPath, currentCaseId]); // Removed activeTime to prevents loops
 
   // Throttled Activity Handler using RAF

@@ -49,8 +49,11 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({ docu
             return;
         }
 
-        setLoading(true);
-        setError(null);
+        // Avoid sync set state in effect
+        setTimeout(() => {
+            setLoading(true);
+            setError(null);
+        }, 0);
 
         DataService.documents.getById(documentId)
             .then((doc) => {

@@ -10,35 +10,40 @@
  * @enterprise true
  */
 
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { v4 as uuidv4 } from 'uuid';
-import { BaseAgent, createAgentMetadata } from '../core/base-agent';
 import {
-  IScratchpadManager,
-  AgentType,
-  AgentPriority,
-  AgentTask,
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { v4 as uuidv4 } from "uuid";
+import { BaseAgent, createAgentMetadata } from "../core/base-agent";
+import { AgentEventBus } from "../events/agent-event-bus";
+import {
   AgentEvent,
   AgentEventType,
+  AgentPriority,
+  AgentTask,
+  AgentType,
+  IScratchpadManager,
   ScratchpadEntry,
   ScratchpadStats,
-} from '../interfaces/agent.interfaces';
-import { AgentEventBus } from '../events/agent-event-bus';
+} from "../interfaces/agent.interfaces";
 
 /**
  * Scratchpad operation types
  */
 export enum ScratchpadOperationType {
-  WRITE = 'WRITE',
-  READ = 'READ',
-  DELETE = 'DELETE',
-  CLEAR = 'CLEAR',
-  GET_KEYS = 'GET_KEYS',
-  GET_ENTRIES = 'GET_ENTRIES',
-  GET_STATS = 'GET_STATS',
-  SUBSCRIBE = 'SUBSCRIBE',
-  UNSUBSCRIBE = 'UNSUBSCRIBE',
+  WRITE = "WRITE",
+  READ = "READ",
+  DELETE = "DELETE",
+  CLEAR = "CLEAR",
+  GET_KEYS = "GET_KEYS",
+  GET_ENTRIES = "GET_ENTRIES",
+  GET_STATS = "GET_STATS",
+  SUBSCRIBE = "SUBSCRIBE",
+  UNSUBSCRIBE = "UNSUBSCRIBE",
 }
 
 /**
@@ -92,7 +97,10 @@ interface SubscriptionEntry {
  * Manages shared state between agents
  */
 @Injectable()
-export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadManager, OnModuleInit, OnModuleDestroy {
+export class ScratchpadManagerAgent
+  extends BaseAgent
+  implements IScratchpadManager, OnModuleInit, OnModuleDestroy
+{
   private readonly scratchpadLogger = new Logger(ScratchpadManagerAgent.name);
   private readonly entries: Map<string, InternalEntry> = new Map();
   private readonly subscriptions: Map<string, SubscriptionEntry> = new Map();
@@ -109,31 +117,31 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
 
   constructor(
     eventEmitter: EventEmitter2,
-    private readonly eventBus: AgentEventBus,
+    private readonly eventBus: AgentEventBus
   ) {
     super(
       createAgentMetadata(
-        'ScratchpadManagerAgent',
+        "ScratchpadManagerAgent",
         AgentType.SCRATCHPAD,
         [
-          'scratchpad.write',
-          'scratchpad.read',
-          'scratchpad.delete',
-          'scratchpad.clear',
-          'scratchpad.keys',
-          'scratchpad.entries',
-          'scratchpad.stats',
-          'scratchpad.subscribe',
-          'scratchpad.unsubscribe',
+          "scratchpad.write",
+          "scratchpad.read",
+          "scratchpad.delete",
+          "scratchpad.clear",
+          "scratchpad.keys",
+          "scratchpad.entries",
+          "scratchpad.stats",
+          "scratchpad.subscribe",
+          "scratchpad.unsubscribe",
         ],
         {
           priority: AgentPriority.HIGH,
           maxConcurrentTasks: 200,
           heartbeatIntervalMs: 10000,
           healthCheckIntervalMs: 30000,
-        },
+        }
       ),
-      eventEmitter,
+      eventEmitter
     );
   }
 
@@ -154,48 +162,59 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   }
 
   protected async onInitialize(): Promise<void> {
-    this.scratchpadLogger.log('Initializing Scratchpad Manager Agent');
+    this.scratchpadLogger.log("Initializing Scratchpad Manager Agent");
   }
 
   protected async onStart(): Promise<void> {
-    this.scratchpadLogger.log('Scratchpad Manager Agent started');
+    this.scratchpadLogger.log("Scratchpad Manager Agent started");
     this.startCleanupCycle();
   }
 
   protected async onStop(): Promise<void> {
-    this.scratchpadLogger.log('Scratchpad Manager Agent stopping');
+    this.scratchpadLogger.log("Scratchpad Manager Agent stopping");
     this.stopCleanupCycle();
   }
 
   protected async onPause(): Promise<void> {
-    this.scratchpadLogger.log('Scratchpad Manager Agent paused');
+    this.scratchpadLogger.log("Scratchpad Manager Agent paused");
   }
 
   protected async onResume(): Promise<void> {
-    this.scratchpadLogger.log('Scratchpad Manager Agent resumed');
+    this.scratchpadLogger.log("Scratchpad Manager Agent resumed");
   }
 
   protected async onEvent(event: AgentEvent): Promise<void> {
     switch (event.type) {
-      case AgentEventType.SCRATCHPAD_WRITE:
-        const writePayload = event.payload as { key: string; value: unknown; ttlMs?: number };
-        await this.write(writePayload.key, writePayload.value, writePayload.ttlMs);
+      case AgentEventType.SCRATCHPAD_WRITE: {
+        const writePayload = event.payload as {
+          key: string;
+          value: unknown;
+          ttlMs?: number;
+        };
+        await this.write(
+          writePayload.key,
+          writePayload.value,
+          writePayload.ttlMs
+        );
         break;
+      }
 
-      case AgentEventType.SCRATCHPAD_READ:
+      case AgentEventType.SCRATCHPAD_READ: {
         const readPayload = event.payload as { key: string };
         await this.read(readPayload.key);
         break;
+      }
 
-      case AgentEventType.SCRATCHPAD_CLEAR:
+      case AgentEventType.SCRATCHPAD_CLEAR: {
         const clearPayload = event.payload as { pattern?: string };
         await this.clear(clearPayload.pattern);
         break;
+      }
     }
   }
 
   protected async executeTask<TPayload, TResult>(
-    task: AgentTask<TPayload, TResult>,
+    task: AgentTask<TPayload, TResult>
   ): Promise<TResult> {
     const payload = task.payload as unknown as ScratchpadTaskPayload;
 
@@ -229,11 +248,17 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   /**
    * Write a value to the scratchpad
    */
-  async write<T>(key: string, value: T, ttlMs?: number): Promise<ScratchpadEntry<T>> {
+  async write<T>(
+    key: string,
+    value: T,
+    ttlMs?: number
+  ): Promise<ScratchpadEntry<T>> {
     // Validate entry size
     const valueSize = JSON.stringify(value).length * 2;
     if (valueSize > this.maxEntrySizeBytes) {
-      throw new Error(`Entry size ${valueSize} bytes exceeds maximum allowed size of ${this.maxEntrySizeBytes} bytes`);
+      throw new Error(
+        `Entry size ${valueSize} bytes exceeds maximum allowed size of ${this.maxEntrySizeBytes} bytes`
+      );
     }
 
     if (this.entries.size >= this.maxEntries) {
@@ -245,7 +270,9 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
       value,
       agentId: this.metadata.id,
       timestamp: new Date(),
-      expiresAt: ttlMs ? new Date(Date.now() + ttlMs) : new Date(Date.now() + this.defaultTtlMs),
+      expiresAt: ttlMs
+        ? new Date(Date.now() + ttlMs)
+        : new Date(Date.now() + this.defaultTtlMs),
       version: (this.entries.get(key)?.version ?? 0) + 1,
       metadata: {},
       accessCount: 0,
@@ -255,7 +282,10 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     this.entries.set(key, entry);
     this.notifySubscribers(key, entry);
 
-    await this.emitEvent(AgentEventType.SCRATCHPAD_WRITE, { key, agentId: this.metadata.id });
+    await this.emitEvent(AgentEventType.SCRATCHPAD_WRITE, {
+      key,
+      agentId: this.metadata.id,
+    });
 
     return entry;
   }
@@ -297,13 +327,13 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
    * Clear entries matching a pattern
    */
   async clear(pattern?: string): Promise<number> {
-    if (!pattern || pattern === '*') {
+    if (!pattern || pattern === "*") {
       const count = this.entries.size;
       this.entries.clear();
       return count;
     }
 
-    const regex = new RegExp(pattern.replace(/\*/g, '.*'));
+    const regex = new RegExp(pattern.replace(/\*/g, ".*"));
     let count = 0;
 
     for (const key of this.entries.keys()) {
@@ -322,12 +352,12 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   async getKeys(pattern?: string): Promise<string[]> {
     const keys = Array.from(this.entries.keys());
 
-    if (!pattern || pattern === '*') {
+    if (!pattern || pattern === "*") {
       return keys;
     }
 
-    const regex = new RegExp(pattern.replace(/\*/g, '.*'));
-    return keys.filter(key => regex.test(key));
+    const regex = new RegExp(pattern.replace(/\*/g, ".*"));
+    return keys.filter((key) => regex.test(key));
   }
 
   /**
@@ -336,14 +366,17 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   async getEntries(pattern?: string): Promise<ScratchpadEntry[]> {
     const matchingKeys = await this.getKeys(pattern);
     return matchingKeys
-      .map(key => this.entries.get(key))
+      .map((key) => this.entries.get(key))
       .filter((entry): entry is InternalEntry => entry !== undefined);
   }
 
   /**
    * Subscribe to key changes
    */
-  subscribe(key: string, callback: (entry: ScratchpadEntry) => void): () => void {
+  subscribe(
+    key: string,
+    callback: (entry: ScratchpadEntry) => void
+  ): () => void {
     const subscriptionId = uuidv4();
 
     const subscription: SubscriptionEntry = {
@@ -386,18 +419,21 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
       missCount: this.missCount,
       hitRate: totalHits > 0 ? this.hitCount / totalHits : 0,
       expirationCount: this.expirationCount,
-      averageEntryAgeMs: this.entries.size > 0 ? totalAge / this.entries.size : 0,
+      averageEntryAgeMs:
+        this.entries.size > 0 ? totalAge / this.entries.size : 0,
     };
   }
 
-  private async handleWrite(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleWrite(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
 
     if (!payload.key) {
       return {
         operationType: ScratchpadOperationType.WRITE,
         duration: Date.now() - startTime,
-        errors: ['Key is required'],
+        errors: ["Key is required"],
       };
     }
 
@@ -412,14 +448,16 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     };
   }
 
-  private async handleRead(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleRead(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
 
     if (!payload.key) {
       return {
         operationType: ScratchpadOperationType.READ,
         duration: Date.now() - startTime,
-        errors: ['Key is required'],
+        errors: ["Key is required"],
       };
     }
 
@@ -434,14 +472,16 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     };
   }
 
-  private async handleDelete(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleDelete(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
 
     if (!payload.key) {
       return {
         operationType: ScratchpadOperationType.DELETE,
         duration: Date.now() - startTime,
-        errors: ['Key is required'],
+        errors: ["Key is required"],
       };
     }
 
@@ -456,7 +496,9 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     };
   }
 
-  private async handleClear(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleClear(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
     const clearedCount = await this.clear(payload.pattern);
 
@@ -468,7 +510,9 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     };
   }
 
-  private async handleGetKeys(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleGetKeys(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
     const keys = await this.getKeys(payload.pattern);
 
@@ -480,7 +524,9 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
     };
   }
 
-  private async handleGetEntries(payload: ScratchpadTaskPayload): Promise<ScratchpadResult> {
+  private async handleGetEntries(
+    payload: ScratchpadTaskPayload
+  ): Promise<ScratchpadResult> {
     const startTime = Date.now();
     const entries = await this.getEntries(payload.pattern);
 
@@ -514,7 +560,9 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
         try {
           subscription.callback(entry);
         } catch (error) {
-          this.scratchpadLogger.error(`Subscription callback error: ${(error as Error).message}`);
+          this.scratchpadLogger.error(
+            `Subscription callback error: ${(error as Error).message}`
+          );
         }
       }
     }
@@ -569,17 +617,29 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   }
 
   private subscribeToEvents(): void {
-    this.eventBus.subscribe(this.metadata.id, AgentEventType.SCRATCHPAD_WRITE, async event => {
-      await this.handleEvent(event);
-    });
+    this.eventBus.subscribe(
+      this.metadata.id,
+      AgentEventType.SCRATCHPAD_WRITE,
+      async (event) => {
+        await this.handleEvent(event);
+      }
+    );
 
-    this.eventBus.subscribe(this.metadata.id, AgentEventType.SCRATCHPAD_READ, async event => {
-      await this.handleEvent(event);
-    });
+    this.eventBus.subscribe(
+      this.metadata.id,
+      AgentEventType.SCRATCHPAD_READ,
+      async (event) => {
+        await this.handleEvent(event);
+      }
+    );
 
-    this.eventBus.subscribe(this.metadata.id, AgentEventType.SCRATCHPAD_CLEAR, async event => {
-      await this.handleEvent(event);
-    });
+    this.eventBus.subscribe(
+      this.metadata.id,
+      AgentEventType.SCRATCHPAD_CLEAR,
+      async (event) => {
+        await this.handleEvent(event);
+      }
+    );
   }
 
   public getEntryCount(): number {

@@ -1,8 +1,8 @@
+import { PerformanceMetric } from "@monitoring/entities/performance-metric.entity";
 import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { PerformanceMetric } from "@monitoring/entities/performance-metric.entity";
 import * as os from "os";
+import { Repository } from "typeorm";
 
 export interface MetricPoint {
   name: string;
@@ -400,10 +400,10 @@ export class MetricsCollectorService implements OnModuleDestroy {
     const pathWithoutQuery = safePath.split("?")[0];
     return (pathWithoutQuery || "")
       .replace(
-        //[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+        /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
         "/:id"
       ) // UUID
-      .replace(//\d+/g, "/:id"); // Numeric IDs
+      .replace(/\/\d+/g, "/:id"); // Numeric IDs
   }
 
   /**

@@ -103,7 +103,7 @@ export class HRService {
             totalHours = Number(sum || 0);
           }
         } catch {
-      // Error ignoredd during time entry calculation
+          // Error ignoredd during time entry calculation
           this.logger.debug("Failed to calculate total hours", error);
         }
 
@@ -394,13 +394,19 @@ export class HRService {
             const { sum } = await qb.getRawOne();
             billableHours = Number(sum || 0);
           }
-        } catch {
-      // Error ignoredd during billable hours calculation
-          this.logger.debug('Failed to calculate billable hours', error);
+        } catch (error) {
+          // Error ignored during billable hours calculation
+          this.logger.debug("Failed to calculate billable hours", error);
         }
+
+        let days = 0;
+        if (startDate && endDate) {
+          days =
+            (new Date(endDate).getTime() - new Date(startDate).getTime()) /
             (1000 * 3600 * 24);
-          capacity = Math.round(Math.max(1, days / 7) * 40);
         }
+        capacity = Math.round(Math.max(1, days / 7) * 40);
+
         const utilizationRate =
           capacity > 0 ? Math.round((billableHours / capacity) * 100) : 0;
 

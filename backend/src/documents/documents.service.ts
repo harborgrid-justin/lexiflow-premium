@@ -4,16 +4,19 @@ import {
   NotFoundException,
   BadRequestException,
   OnModuleDestroy,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like} from 'typeorm';
-import { Document } from './entities/document.entity';
-import { CreateDocumentDto } from './dto/create-document.dto';
-import { UpdateDocumentDto } from './dto/update-document.dto';
-import { DocumentFilterDto } from './dto/document-filter.dto';
-import { FileStorageService } from '@file-storage/file-storage.service';
-import { TransactionManagerService } from '@common/services/transaction-manager.service';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, Like } from "typeorm";
+import { Document } from "./entities/document.entity";
+import { CreateDocumentDto } from "./dto/create-document.dto";
+import { UpdateDocumentDto } from "./dto/update-document.dto";
+import { DocumentFilterDto } from "./dto/document-filter.dto";
+import { FileStorageService } from "@file-storage/file-storage.service";
+import { TransactionManagerService } from "@common/services/transaction-manager.service";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -75,7 +78,7 @@ export class DocumentsService implements OnModuleDestroy {
     @InjectRepository(Document)
     private documentRepository: Repository<Document>,
     private fileStorageService: FileStorageService,
-    private transactionManager: TransactionManagerService,
+    private transactionManager: TransactionManagerService
   ) {}
 
   /**
@@ -84,7 +87,7 @@ export class DocumentsService implements OnModuleDestroy {
   async create(
     createDocumentDto: CreateDocumentDto,
     file?: Express.Multer.File,
-    userId?: string,
+    userId?: string
   ): Promise<Document> {
     // Use transaction to ensure file storage and DB save are atomic
     return this.transactionManager.executeInTransaction(async (manager) => {
@@ -100,8 +103,8 @@ export class DocumentsService implements OnModuleDestroy {
           const fileResult = await this.fileStorageService.storeFile(
             file,
             createDocumentDto.caseId,
-            document.id || 'temp',
-            1,
+            document.id || "temp",
+            1
           );
 
           document.filename = fileResult.filename;
@@ -118,16 +121,19 @@ export class DocumentsService implements OnModuleDestroy {
 
         return savedDocument;
       } catch (error) {
-        this.logger.error('Failed to create document', error);
+        this.logger.error("Failed to create document", error);
         // Transaction will auto-rollback on error
         // Cleanup uploaded file if DB save fails
-        const fp = (document as any).filePath;
+        const fp = (document as { filePath?: string }).filePath;
         if (file && fp) {
           try {
             await this.fileStorageService.deleteFile(fp);
             this.logger.log(`Cleaned up uploaded file: ${fp}`);
           } catch (cleanupError) {
-            this.logger.warn('Failed to cleanup uploaded file during rollback', cleanupError);
+            this.logger.warn(
+              "Failed to cleanup uploaded file during rollback",
+              cleanupError
+            );
           }
         }
         throw error;
@@ -136,7 +142,7 @@ export class DocumentsService implements OnModuleDestroy {
   }
 
   onModuleDestroy(): void {
-    this.logger.log('DocumentsService cleanup - releasing resources');
+    this.logger.log("DocumentsService cleanup - releasing resources");
   }
 
   /**
@@ -160,58 +166,62 @@ export class DocumentsService implements OnModuleDestroy {
       endDate,
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'DESC',
+      sortBy = "createdAt",
+      sortOrder = "DESC",
     } = filterDto;
 
     const safeLimit = Math.min(limit, this.MAX_RESULTS);
     if (limit > this.MAX_RESULTS) {
-      this.logger.warn(`Limit ${limit} exceeds maximum ${this.MAX_RESULTS}, using ${this.MAX_RESULTS}`);
+      this.logger.warn(
+        `Limit ${limit} exceeds maximum ${this.MAX_RESULTS}, using ${this.MAX_RESULTS}`
+      );
     }
 
-    const query = this.documentRepository.createQueryBuilder('document');
+    const query = this.documentRepository.createQueryBuilder("document");
 
     // Apply filters
     if (caseId) {
-      query.andWhere('document.caseId = :caseId', { caseId });
+      query.andWhere("document.caseId = :caseId", { caseId });
     }
 
     if (type) {
-      query.andWhere('document.type = :type', { type });
+      query.andWhere("document.type = :type", { type });
     }
 
     if (status) {
-      query.andWhere('document.status = :status', { status });
+      query.andWhere("document.status = :status", { status });
     }
 
     if (search) {
       query.andWhere(
-        '(document.title ILIKE :search OR document.description ILIKE :search OR document.fullTextContent ILIKE :search)',
-        { search: `%${search}%` },
+        "(document.title ILIKE :search OR document.description ILIKE :search OR document.fullTextContent ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     if (author) {
-      query.andWhere('document.author ILIKE :author', { author: `%${author}%` });
+      query.andWhere("document.author ILIKE :author", {
+        author: `%${author}%`,
+      });
     }
 
     if (tag) {
-      query.andWhere(':tag = ANY(document.tags)', { tag });
+      query.andWhere(":tag = ANY(document.tags)", { tag });
     }
 
     if (startDate && endDate) {
-      query.andWhere('document.createdAt BETWEEN :startDate AND :endDate', {
+      query.andWhere("document.createdAt BETWEEN :startDate AND :endDate", {
         startDate,
         endDate,
       });
     } else if (startDate) {
-      query.andWhere('document.createdAt >= :startDate', { startDate });
+      query.andWhere("document.createdAt >= :startDate", { startDate });
     } else if (endDate) {
-      query.andWhere('document.createdAt <= :endDate', { endDate });
+      query.andWhere("document.createdAt <= :endDate", { endDate });
     }
 
     // Apply sorting - SQL injection protection
-    const safeSortField = validateSortField('document', sortBy);
+    const safeSortField = validateSortField("document", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
     query.orderBy(`document.${safeSortField}`, safeSortOrder);
 
@@ -250,20 +260,20 @@ export class DocumentsService implements OnModuleDestroy {
   async update(
     id: string,
     updateDocumentDto: UpdateDocumentDto,
-    userId?: string,
+    userId?: string
   ): Promise<Document> {
     const updateData = {
       ...updateDocumentDto,
       ...(userId ? { updatedBy: userId } : {}),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     const result = await this.documentRepository
       .createQueryBuilder()
       .update(Document)
       .set(updateData as any)
-      .where('id = :id', { id })
-      .returning('*')
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
@@ -304,7 +314,7 @@ export class DocumentsService implements OnModuleDestroy {
     const document = await this.findOne(id);
 
     if (!document.filePath) {
-      throw new BadRequestException('Document has no associated file');
+      throw new BadRequestException("Document has no associated file");
     }
 
     const buffer = await this.fileStorageService.getFile(document.filePath);
@@ -319,7 +329,10 @@ export class DocumentsService implements OnModuleDestroy {
   /**
    * Mark document as OCR processed
    */
-  async markOcrProcessed(id: string, fullTextContent: string): Promise<Document> {
+  async markOcrProcessed(
+    id: string,
+    fullTextContent: string
+  ): Promise<Document> {
     const document = await this.findOne(id);
 
     document.ocrProcessed = true;
@@ -335,7 +348,7 @@ export class DocumentsService implements OnModuleDestroy {
   async findByCaseId(caseId: string): Promise<Document[]> {
     return await this.documentRepository.find({
       where: { caseId },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -347,29 +360,55 @@ export class DocumentsService implements OnModuleDestroy {
       where: {
         fullTextContent: Like(`%${searchTerm}%`),
       },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
   /**
    * Get document folder structure
    */
-  async getFolders(): Promise<Array<{ id: string; label: string; count?: number }>> {
+  async getFolders(): Promise<
+    Array<{ id: string; label: string; count?: number }>
+  > {
     // Get document counts by type/category
     const typeCounts = await this.documentRepository
-      .createQueryBuilder('document')
-      .select('document.type', 'type')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('document.type')
+      .createQueryBuilder("document")
+      .select("document.type", "type")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("document.type")
       .getRawMany();
 
     const folders = [
-      { id: 'root', label: 'All Documents', count: await this.documentRepository.count() },
-      { id: 'case_docs', label: 'Case Files', count: typeCounts.find(t => t.type === 'case_file')?.count || 0 },
-      { id: 'discovery', label: 'Discovery Productions', count: typeCounts.find(t => t.type === 'discovery')?.count || 0 },
-      { id: 'pleadings', label: 'Pleadings', count: typeCounts.find(t => t.type === 'pleading')?.count || 0 },
-      { id: 'correspondence', label: 'Correspondence', count: typeCounts.find(t => t.type === 'correspondence')?.count || 0 },
-      { id: 'templates_folder', label: 'Templates', count: typeCounts.find(t => t.type === 'template')?.count || 0 },
+      {
+        id: "root",
+        label: "All Documents",
+        count: await this.documentRepository.count(),
+      },
+      {
+        id: "case_docs",
+        label: "Case Files",
+        count: typeCounts.find((t) => t.type === "case_file")?.count || 0,
+      },
+      {
+        id: "discovery",
+        label: "Discovery Productions",
+        count: typeCounts.find((t) => t.type === "discovery")?.count || 0,
+      },
+      {
+        id: "pleadings",
+        label: "Pleadings",
+        count: typeCounts.find((t) => t.type === "pleading")?.count || 0,
+      },
+      {
+        id: "correspondence",
+        label: "Correspondence",
+        count: typeCounts.find((t) => t.type === "correspondence")?.count || 0,
+      },
+      {
+        id: "templates_folder",
+        label: "Templates",
+        count: typeCounts.find((t) => t.type === "template")?.count || 0,
+      },
     ];
 
     return folders;
@@ -387,6 +426,6 @@ export class DocumentsService implements OnModuleDestroy {
     }
 
     // Otherwise return empty string (file-based documents need to be downloaded)
-    return { content: '' };
+    return { content: "" };
   }
 }

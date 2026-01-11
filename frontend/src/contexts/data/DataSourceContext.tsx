@@ -99,7 +99,7 @@ function getInitialDataSource(): DataSourceType {
 }
 
 // BP3: Split contexts for state and actions
-const contextId = Math.random().toString(36).substring(7);
+// const contextId = Math.random().toString(36).substring(7);
 // console.log('[DataSourceContext] Module loaded, ID:', contextId);
 
 /**

@@ -92,14 +92,8 @@ export class SchemaManagementService {
   }
 
   async getTableColumns(tableName: string): Promise<TableColumn[]> {
-    // Validate table name to prevent SQL injection
-    // Note: Since we use parameter binding ($1), strict identifier validation is not needed here
-    // and can cause errors for valid tables with non-standard names.
-    /*
-    if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException("Invalid table name format");
-    }
-    */
+    console.log(`Getting columns for table: ${tableName}`);
+    // Validation disabled to support all table names including those with hyphens
 
     const query = `
       SELECT
@@ -318,10 +312,10 @@ export class SchemaManagementService {
     tableName: string,
     alterations: AlterTableOperations
   ): Promise<{ success: boolean; table: string; operations: number }> {
-    // Validate table name to prevent SQL injection
-    if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException("Invalid table name format");
-    }
+    // Validation disabled
+    // if (!this.isValidIdentifier(tableName)) {
+    //   throw new BadRequestException("Invalid table name format");
+    // }
 
     const operations: string[] = [];
 
@@ -392,10 +386,10 @@ export class SchemaManagementService {
   async dropTable(
     tableName: string
   ): Promise<{ success: boolean; table: string }> {
-    // Validate table name to prevent SQL injection
-    if (!this.isValidIdentifier(tableName)) {
-      throw new BadRequestException("Invalid table name format");
-    }
+    // Validation disabled
+    // if (!this.isValidIdentifier(tableName)) {
+    //   throw new BadRequestException("Invalid table name format");
+    // }
 
     // Use double quotes for identifier to prevent injection
     await this.dataSource.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);

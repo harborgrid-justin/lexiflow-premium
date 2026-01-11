@@ -230,6 +230,7 @@ export class DocketApiService {
         isRestricted: entry.isRestricted,
         notes: entry.notes,
         attachments: entry.attachments,
+        appellateData: entry.appellateData,
       };
 
       // Remove undefined values

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { BookOpen, AlertCircle } from 'lucide-react';
+// import { BookOpen, AlertCircle } from 'lucide-react';
 
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
-import { Badge } from '@/shared/ui/atoms/Badge';
+// import { Badge } from '@/shared/ui/atoms/Badge';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 import { Citation } from '@/types';
@@ -34,6 +34,7 @@ export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, on
         notes,
         status: 'Draft', // Default status
         relevance: 'Medium', // Default relevance
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
     },
     {
@@ -89,7 +90,8 @@ export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, on
           <label className="block text-sm font-medium mb-1">Type</label>
           <select
             className="w-full p-2 border rounded-md"
-            value={type}
+            value={type as string}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onChange={(e) => setType(e.target.value as any)}
           >
             <option value="case_law">Case Law</option>

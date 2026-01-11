@@ -121,8 +121,11 @@ const INITIAL_DATA: IntakeData = {
 };
 
 const WIZARD_STEPS: WizardStep<IntakeData>[] = [
-  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema as unknown },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { id: 'client', title: 'Client & Conflicts', validationSchema: ClientSchema as any },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { id: 'matter', title: 'Matter Details', validationSchema: MatterSchema as any },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { id: 'risk', title: 'Risk & Compliance', validationSchema: RiskSchema as any },
   { id: 'financial', title: 'Financial Setup' },
   { id: 'team', title: 'Staffing' },

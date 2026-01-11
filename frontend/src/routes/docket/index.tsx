@@ -216,67 +216,69 @@ export default function DocketIndexRoute() {
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-900/50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Date</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Description</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Type</th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {Array.isArray(entries) && entries.length > 0 ? (
-                entries.map((entry) => (
-                  <tr key={entry.id}>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      {entry.dateFiled ? format(new Date(entry.dateFiled), 'MMM d, yyyy') : '-'}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      <Link to={`/docket/${entry.id}`} className="font-medium hover:text-blue-600 dark:hover:text-blue-400">
-                        {entry.title || entry.description}
-                      </Link>
-                      {entry.caseId && <div className="text-xs text-gray-500">Case: {entry.caseId}</div>}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                        {entry.type || 'Entry'}
-                      </span>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                      <Form method="post" className="inline-block">
-                        <input type="hidden" name="intent" value="delete" />
-                        <input type="hidden" name="id" value={entry.id} />
-                        <button
-                          type="submit"
-                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50"
-                          disabled={isSubmitting}
-                          onClick={(e) => {
-                            if (!confirm('Are you sure you want to delete this entry?')) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </Form>
+        <div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+          <div className="max-h-[600px] overflow-auto">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-900/50 sticky top-0 z-10">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Date</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Description</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Type</th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                {Array.isArray(entries) && entries.length > 0 ? (
+                  entries.map((entry) => (
+                    <tr key={entry.id}>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        {entry.dateFiled ? format(new Date(entry.dateFiled), 'MMM d, yyyy') : '-'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        <Link to={`/docket/${entry.id}`} className="font-medium hover:text-blue-600 dark:hover:text-blue-400">
+                          {entry.title || entry.description}
+                        </Link>
+                        {entry.caseId && <div className="text-xs text-gray-500">Case: {entry.caseId}</div>}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                          {entry.type || 'Entry'}
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                        <Form method="post" className="inline-block">
+                          <input type="hidden" name="intent" value="delete" />
+                          <input type="hidden" name="id" value={entry.id} />
+                          <button
+                            type="submit"
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50"
+                            disabled={isSubmitting}
+                            onClick={(e) => {
+                              if (!confirm('Are you sure you want to delete this entry?')) {
+                                e.preventDefault();
+                              }
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </Form>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                      No docket entries found.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                    No docket entries found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-gray-700 dark:bg-gray-800">
+            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-gray-700 dark:bg-gray-800 shrink-0 z-10">
               <div className="flex flex-1 justify-between sm:hidden">
                 <Link
                   to={`?page=${Math.max(1, page - 1)}${searchParams.toString().replace(/&?page=\d+/, '')}`}

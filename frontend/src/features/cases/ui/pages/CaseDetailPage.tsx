@@ -156,7 +156,7 @@ export const CaseDetail = ({
 
       case 'Timeline':
         return <CaseTimeline events={timelineEvents} onEventClick={(e) => {
-          if (e.type === 'docket' && e.id) {
+          if ((e.type as string) === 'docket' && e.id) {
             navigate(`/docket/${e.id}`);
           }
         }} />;
@@ -260,7 +260,8 @@ export const CaseDetail = ({
     billingEntries, analyzingId, generatingWorkflow, draftPrompt, draftResult,
     isDrafting, setParties, addProject, addTaskToProject, updateProjectTaskStatus,
     handleAnalyze, handleDraft, handleGenerateWorkflow, handleTimeEntryAdded,
-    handleDocumentCreated, onSelectCase, theme, setActiveTab, setDraftPrompt
+    handleDocumentCreated, onSelectCase, theme, setActiveTab, setDraftPrompt,
+    navigate
   ]);
 
   return (

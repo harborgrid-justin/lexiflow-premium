@@ -391,7 +391,11 @@ export function parseApiError(error: unknown): ApiErrorBase {
     case 409:
       return new ConflictError(message, detailsAny?.conflictType);
     case 422:
-      return new BusinessError(message, detailsAny?.errorCode, details);
+      return new BusinessError(
+        message,
+        detailsAny?.errorCode,
+        details as Record<string, unknown> | undefined
+      );
     case 429:
       return new RateLimitError(
         detailsAny?.retryAfter,
@@ -411,7 +415,11 @@ export function parseApiError(error: unknown): ApiErrorBase {
     case 504:
       return new ServerError(message, statusCode, detailsAny?.errorId);
     default:
-      return new ApiErrorBase(message, statusCode, details);
+      return new ApiErrorBase(
+        message,
+        statusCode,
+        details as Record<string, unknown> | undefined
+      );
   }
 }
 

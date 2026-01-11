@@ -77,7 +77,8 @@ export class EntityRepository extends Repository<LegalEntity> {
       status: entity.status || "Active",
       createdAt: entity.createdAt || new Date().toISOString(),
       updatedAt: entity.updatedAt || new Date().toISOString(),
-      userId: entity.userId || "system",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      userId: (entity.userId || "system") as any,
       metadata: (entity.metadata as Record<string, unknown>) || {},
     } as LegalEntity;
   }

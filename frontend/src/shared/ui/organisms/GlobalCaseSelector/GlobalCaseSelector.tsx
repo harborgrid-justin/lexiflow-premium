@@ -22,13 +22,14 @@ export const GlobalCaseSelector: React.FC = () => {
   return (
     <div className="w-[280px]">
       <AutocompleteSelect<Case>
+        queryKey={['global-case-search']}
         value={selectedCaseId}
         onChange={(val) => selectCase(val)}
         fetchFn={fetchCases}
         getLabel={(c) => c.title}
         getValue={(c) => c.id}
         placeholder="Select Active Case..."
-        renderOption={(option, isHighlighted, isSelected) => (
+        renderOption={(option, isHighlighted, _isSelected) => (
           <div className={`flex flex-col py-1 ${isHighlighted ? 'text-primary' : ''}`}>
             <div className="font-medium truncate">{option.title}</div>
             {option.caseNumber && (

@@ -43,7 +43,7 @@ export function getRiskColor(risk: string): string {
     Low: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
   };
   const color = (colors as Record<string, string>)[risk || "Medium"];
-  return color || colors.Medium;
+  return color || colors.Medium || "";
 }
 
 export function getRiskBarColor(score: number): string {

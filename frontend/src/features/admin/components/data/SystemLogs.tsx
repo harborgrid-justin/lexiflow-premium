@@ -13,7 +13,9 @@ export const SystemLogs: React.FC = () => {
   const { data: logs = [], isLoading } = useQuery<AuditLog[]>(
     ['admin', 'logs'],
     async () => {
-      const result = await adminApi.auditLogs.getAll({ limit: 50 });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = await adminApi.auditLogs.getAll({ limit: 50 } as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return Array.isArray(result) ? result : (result as any).data || [];
     },
     { refetchInterval: 10000 }
@@ -51,29 +53,33 @@ export const SystemLogs: React.FC = () => {
                   </td>
                 </tr>
               ) : (
-                logs.map((log: AuditLog, i: number) => (
-                  <tr key={log.id || i} className={cn("hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors")}>
-                    <td className="px-6 py-4 font-mono text-xs opacity-70">
-                      {new Date(log.timestamp).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={cn(
-                        "px-2 py-0.5 rounded text-xs font-bold uppercase",
-                        (log.level === 'error' || log.action?.includes('ERR')) ? theme.status.error.bg + ' ' + theme.status.error.text :
-                          (log.level === 'warn') ? theme.status.warning.bg + ' ' + theme.status.warning.text :
-                            theme.status.success.bg + ' ' + theme.status.success.text
-                      )}>
-                        {log.level || log.action || 'INFO'}
-                      </span>
-                    </td>
-                    <td className={cn("px-6 py-4", theme.text.primary)}>
-                      {log.message || log.details || JSON.stringify(log.changes || {})}
-                    </td>
-                    <td className={cn("px-6 py-4", theme.text.tertiary)}>
-                      {log.source || log.entityType || 'System'}
-                    </td>
-                  </tr>
-                ))
+                logs.map((logItem: AuditLog, i: number) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const log = logItem as any;
+                  return (
+                    <tr key={log.id || i} className={cn("hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors")}>
+                      <td className="px-6 py-4 font-mono text-xs opacity-70">
+                        {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={cn(
+                          "px-2 py-0.5 rounded text-xs font-bold uppercase",
+                          (log.level === 'error' || log.action?.includes('ERR')) ? theme.status.error.bg + ' ' + theme.status.error.text :
+                            (log.level === 'warn') ? theme.status.warning.bg + ' ' + theme.status.warning.text :
+                              theme.status.success.bg + ' ' + theme.status.success.text
+                        )}>
+                          {log.level || log.action || 'INFO'}
+                        </span>
+                      </td>
+                      <td className={cn("px-6 py-4", theme.text.primary)}>
+                        {log.message || log.details || JSON.stringify(log.changes || {})}
+                      </td>
+                      <td className={cn("px-6 py-4", theme.text.tertiary)}>
+                        {log.source || log.entityType || 'System'}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

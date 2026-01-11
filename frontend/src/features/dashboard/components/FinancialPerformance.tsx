@@ -21,6 +21,7 @@ export const FinancialPerformance: React.FC = () => {
                 <Card title="Revenue vs Target (YTD)">
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                             <AreaChart data={finData.revenue as any[]} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
@@ -63,6 +64,7 @@ export const FinancialPerformance: React.FC = () => {
                 <Card title="Expense Distribution">
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                             <BarChart data={finData.expenses as any[]} layout="vertical" margin={{ left: 20 }}>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={false}
                                     stroke={mode === 'dark' ? '#334155' : '#e2e8f0'} />

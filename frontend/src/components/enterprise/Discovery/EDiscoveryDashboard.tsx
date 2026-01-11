@@ -174,6 +174,7 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
 
         if (analyticsData && analyticsData.overview) {
           const overview = analyticsData.overview as Record<string, number>;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const team = analyticsData.team as Record<string, any>;
           setMetrics({
             totalDocuments: overview.totalDocuments || 0,

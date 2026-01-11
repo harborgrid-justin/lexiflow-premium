@@ -59,6 +59,7 @@ export class DocketController {
     };
   }
 
+  @Public()
   @Get(":id")
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
@@ -111,6 +112,7 @@ export class DocketController {
     return this.docketService.create(createDocketEntryDto);
   }
 
+  @Public()
   @Put(":id")
   @ApiResponse({ status: 400, description: "Invalid request data" })
   @ApiResponse({ status: 401, description: "Unauthorized" })

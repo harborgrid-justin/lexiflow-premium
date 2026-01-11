@@ -39,6 +39,7 @@ export class ProjectRepository extends Repository<Project> {
 
   override async add(item: Partial<Project>): Promise<Project> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (await this.projectsApi.create(item as any)) as unknown as Project;
     } catch (error) {
       console.error("[ProjectRepository] Error creating project:", error);
@@ -50,6 +51,7 @@ export class ProjectRepository extends Repository<Project> {
     try {
       return (await this.projectsApi.update(
         id,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         item as any
       )) as unknown as Project;
     } catch (error) {

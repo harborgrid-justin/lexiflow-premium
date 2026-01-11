@@ -25,7 +25,9 @@ const PROVIDERS = [
 const toDataConnection = (ds: DataSource): DataConnection => ({
   id: ds.id,
   name: ds.name,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type: (ds.metadata as any)?.providerName || ds.type,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   region: (ds.metadata as any)?.region || (ds.config as any)?.region || 'us-east-1',
   status: (ds.status as ConnectionStatus) || 'disconnected',
   lastSync: ds.config?.lastSync,
@@ -56,6 +58,7 @@ export const CloudDatabaseContent: React.FC = () => {
 
   // Concurrent-safe: Functional state updates in cache (Principle #5)
   const addConnectionMutation = useMutation(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (data: any) => {
       const payload: Partial<DataSource> = {
         name: data.name,
@@ -103,6 +106,7 @@ export const CloudDatabaseContent: React.FC = () => {
             ['admin', 'sources', 'connections'],
             (old) => old ? old.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c) : []
           );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           if (data && typeof data === 'object' && 'jobId' in (data as any)) {
             // Adapted notification message since sync return type changed
             notify.success(`Sync job started successfully`);

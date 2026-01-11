@@ -28,7 +28,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
+// import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
 import { Citation, Defense, EvidenceItem, LegalArgument } from '@/types';
@@ -55,7 +55,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [defenses, setDefenses] = useState(initialDefenses);
 
   // Fetch strategy data
-  const { data: strategyData, refetch } = useQuery(
+  const { data: strategyData } = useQuery(
     ['case-strategy', caseId],
     () => DataService.strategy.getCaseStrategy(caseId),
     { enabled: !!caseId }
@@ -63,9 +63,11 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
   useEffect(() => {
     if (strategyData) {
-      if (strategyData.arguments) setArgs(strategyData.arguments);
-      if (strategyData.defenses) setDefenses(strategyData.defenses);
-      if (strategyData.citations) setCitations(strategyData.citations);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = strategyData as any;
+      if (data.arguments) setArgs(data.arguments);
+      if (data.defenses) setDefenses(data.defenses);
+      if (data.citations) setCitations(data.citations);
     }
   }, [strategyData]);
 

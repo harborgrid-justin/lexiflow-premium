@@ -26,21 +26,30 @@ export function useBusinessDevelopment() {
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
   // Queries
-  const { data: leads = [] } = useQuery(["crm", "leads"], () =>
-    DataService.crm.getLeads()
+  const { data: leads = [] } = useQuery(
+    ["crm", "leads"],
+    () => DataService.crm.getLeads()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as { data: any[] };
-  const { data: pitches = [] } = useQuery(["crm", "pitches"], () =>
-    DataService.crm.getPitches()
+  const { data: pitches = [] } = useQuery(
+    ["crm", "pitches"],
+    () => DataService.crm.getPitches()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as { data: any[] };
-  const { data: rfps = [] } = useQuery(["crm", "rfps"], () =>
-    DataService.crm.getRFPs()
+  const { data: rfps = [] } = useQuery(
+    ["crm", "rfps"],
+    () => DataService.crm.getRFPs()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as { data: any[] };
-  const { data: winLossData = [] } = useQuery(["crm", "win-loss"], () =>
-    DataService.crm.getWinLossAnalysis()
+  const { data: winLossData = [] } = useQuery(
+    ["crm", "win-loss"],
+    () => DataService.crm.getWinLossAnalysis()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as { data: any[] };
   const { data: analyticsData = {} } = useQuery(
     ["crm", "business-metrics"],
     () => DataService.crm.getBusinessDevelopmentMetrics()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) as { data: any };
 
   // Calculated metrics

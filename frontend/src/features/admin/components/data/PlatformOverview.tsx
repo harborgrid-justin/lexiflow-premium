@@ -60,10 +60,10 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
     }, [historyMetrics]);
 
     // Helper to get component status
-    const getComponentStatus = (name: string) => {
+    /* const getComponentStatus = (name: string) => {
         const check = health?.checks?.find(c => c.name.toLowerCase().includes(name.toLowerCase()));
         return check?.status === 'pass' ? 'healthy' : check?.status === 'warn' ? 'warning' : 'unhealthy';
-    };
+    }; */
 
     return (
         <div className="flex-1 overflow-y-auto p-6 space-y-6">

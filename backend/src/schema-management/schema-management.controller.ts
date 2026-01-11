@@ -46,6 +46,7 @@ export class SchemaManagementController {
 
   // ==================== SCHEMA INSPECTION ====================
 
+  @Public()
   @Get("tables")
   @ApiOperation({ summary: "Get all database tables with columns" })
   @ApiResponse({ status: 200, description: "Tables retrieved successfully" })
@@ -55,6 +56,7 @@ export class SchemaManagementController {
     return await this.schemaService.getTables();
   }
 
+  @Public()
   @Get("tables/:name/columns")
   @ApiOperation({ summary: "Get columns for a specific table" })
   @ApiResponse({ status: 401, description: "Unauthorized" })

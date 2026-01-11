@@ -43,7 +43,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
     // Fetch connectors from backend API
     const { data: connectorsResponse = [], isLoading: isLoadingConnectors } = useQuery(
         ['connectors', 'all'],
-        () => (dataPlatformApi as { connectors?: { getAll?: () => Promise<unknown> } }).connectors?.getAll?.() || Promise.resolve([])
+        () => dataPlatformApi.connectors.getAll()
     );
 
     const connectors = Array.isArray(connectorsResponse) ? connectorsResponse : ((connectorsResponse as { data?: unknown[] })?.data || []);

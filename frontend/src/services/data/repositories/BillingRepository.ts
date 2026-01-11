@@ -8,7 +8,7 @@ import { TrustAccountsApiService } from "@/api/billing/trust-accounts-api";
 import { TimeEntriesApiService } from "@/api/billing/work-logs-api";
 // Fix missing import - assuming these types exist conceptually or need to be defined
 // In a real scenario, check api definitions. For now, using placeholders to satisfy TS.
-interface CreateInvoiceDto {
+export interface CreateInvoiceDto {
   caseId: string;
   invoiceNumber: string;
   date: string;
@@ -18,7 +18,7 @@ interface CreateInvoiceDto {
   discount: number;
   notes: string;
 }
-interface UpdateInvoiceDto {
+export interface UpdateInvoiceDto {
   status?: string;
   [key: string]: unknown;
 }
@@ -191,6 +191,7 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getInvoices(): Promise<Invoice[]> {
     try {
       const response = await this.invoicesApi.getAll();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return Array.isArray(response) ? response : (response as any).data || [];
     } catch (error) {
       console.error("[BillingRepository] Failed to get invoices", error);
@@ -232,9 +233,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         notes: `Invoice for ${clientName}`,
       };
 
-      const invoice = await this.invoicesApi.create(
-        invoiceData as unknown as CreateInvoiceDto
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const invoice = await this.invoicesApi.create(invoiceData as any);
 
       return invoice;
     } catch (error) {
@@ -245,10 +245,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
     try {
-      const updated = await this.invoicesApi.update(
-        id,
-        updates as unknown as UpdateInvoiceDto
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const updated = await this.invoicesApi.update(id, updates as any);
 
       if (updates.status) {
         await IntegrationEventPublisher.publish(
@@ -286,6 +284,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Actually TrustAccount likely has transactions?
       const account = await this.trustApi.getById(accountId);
       // If TrustAccount has transactions field?
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (
         (account as unknown as { transactions: TrustTransaction[] })
           .transactions || []
@@ -351,8 +350,9 @@ export class BillingRepository extends Repository<TimeEntry> {
   async getCollections(): Promise<any[]> {
     try {
       // Use invoices API to get overdue/pending invoices
-      const invoices = await this.invoicesApi.getAll({ status: "overdue" });
-      return invoices.map((inv) => ({
+      const invoices = await this.invoicesApi.getAll({ status: "Overdue" });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return invoices.map((inv: any) => ({
         id: inv.id,
         clientName: "Client Name", // Should resolve client
         invoiceNumber: inv.invoiceNumber,

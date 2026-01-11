@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import { CheckCircle, Clock, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
+import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from 'lucide-react';
 import React from 'react';
 
 // Internal Dependencies - Hooks & Context
@@ -36,9 +36,12 @@ export const CaseOverviewStats: React.FC<CaseOverviewStatsProps> = ({ caseId }) 
         { enabled: !!caseId }
     );
 
-    const argsCount = strategyData?.arguments?.length || 0;
-    const defsCount = strategyData?.defenses?.length || 0;
-    const citesCount = strategyData?.citations?.length || 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const argsCount = (strategyData as any)?.arguments?.length || 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const defsCount = (strategyData as any)?.defenses?.length || 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const citesCount = (strategyData as any)?.citations?.length || 0;
     const healthValue = `${argsCount} / ${defsCount} / ${citesCount}`;
 
     const handleDetail = (title: string) => {

@@ -11,7 +11,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import type { Client, Opportunity, ClientRelationship } from "@/types";
+import type { Client } from "@/types";
 import { cn } from '@/shared/lib/cn';
 import {
   ArrowUpRight,
@@ -44,7 +44,8 @@ export const EnterpriseCRM: React.FC = () => {
     DataService.crm.getOpportunities()
   );
 
-  const { data: relationships = [] } = useQuery(QUERY_KEYS.CRM.RELATIONSHIPS, () =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: relationships = [] } = useQuery<any[]>(QUERY_KEYS.CRM.RELATIONSHIPS, () =>
     DataService.crm.getRelationships()
   );
 

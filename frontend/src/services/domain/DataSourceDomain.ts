@@ -36,7 +36,7 @@ interface ConnectionStatus {
 export const DataSourceService = {
   getAll: async () => {
     try {
-      return await apiClient.get<DataSource[]>("/data-sources");
+      return await apiClient.get<DataSource[]>("/integrations/data-sources");
     } catch {
       console.warn(
         "[DataSourceService] Backend endpoint not available, returning empty array"
@@ -45,16 +45,19 @@ export const DataSourceService = {
     }
   },
   getById: async (id: string) => {
-    return apiClient.get<DataSource>(`/data-sources/${id}`);
+    return apiClient.get<DataSource>(`/integrations/data-sources/${id}`);
   },
   add: async (item: unknown) => {
-    return apiClient.post<DataSource>("/data-sources", item);
+    return apiClient.post<DataSource>("/integrations/data-sources", item);
   },
   update: async (id: string, updates: unknown) => {
-    return apiClient.patch<DataSource>(`/data-sources/${id}`, updates);
+    return apiClient.patch<DataSource>(
+      `/integrations/data-sources/${id}`,
+      updates
+    );
   },
   delete: async (id: string) => {
-    return apiClient.delete(`/data-sources/${id}`);
+    return apiClient.delete(`/integrations/data-sources/${id}`);
   },
 
   // Data source specific methods

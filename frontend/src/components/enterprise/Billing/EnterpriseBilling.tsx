@@ -30,12 +30,12 @@ interface BillingSummaryMetrics {
   overdueCount: number;
 }
 
-interface BillingDataItem {
+/* interface BillingDataItem {
   outstanding: number;
   collected: number;
   writeOffs: number;
   billed: number;
-}
+} */
 
 interface ARAgingBucket {
   label: string;
@@ -99,12 +99,15 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
       };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = billingData as any;
+
     return {
-      totalOutstanding: billingData.outstandingAR || 0,
-      totalReceivables: billingData.outstandingAR || 0,
-      collectedThisMonth: billingData.collectedRevenue || 0,
-      collectionRate: billingData.realization?.rate || 0,
-      writeOffsThisMonth: billingData.writeOffs || 0,
+      totalOutstanding: data.outstandingAR || 0,
+      totalReceivables: data.outstandingAR || 0,
+      collectedThisMonth: data.collectedRevenue || 0,
+      collectionRate: data.realization?.rate || 0,
+      writeOffsThisMonth: data.writeOffs || 0,
       averageDaysToPayment: 0,
       overdueAmount: 0,
       overdueCount: 0,
@@ -114,7 +117,7 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   const agingBuckets: ARAgingBucket[] = useMemo(() => {
     // API does not currently provide aging buckets in overview stats
     return [];
-  }, [billingData]);
+  }, []);
 
   const { data: collectionItemsData = [] } = useQuery<CollectionItem[]>(
     ['billing', 'collections'],

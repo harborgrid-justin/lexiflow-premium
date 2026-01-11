@@ -175,7 +175,8 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
               connection={conn}
               onSync={syncConnection}
               onDelete={deleteConnection}
-              onTest={testConnection}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              onTest={testConnection as any}
             />
           ))}
         </AnimatePresence>
@@ -277,7 +278,7 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
           placeholder="e.g. Production Warehouse"
         />
       </div>
@@ -290,7 +291,7 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.host}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, host: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, host: e.target.value })}
           placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
         />
       </div>

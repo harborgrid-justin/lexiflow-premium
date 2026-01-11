@@ -72,7 +72,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
 
       requestAnimationFrame(animate);
     } else {
-      setDisplayValue(normalizedValue);
+      setDisplayValue(typeof normalizedValue === 'bigint' ? Number(normalizedValue) : normalizedValue as string | number);
       prevValueRef.current = normalizedValue;
     }
   }, [normalizedValue, displayValue]);

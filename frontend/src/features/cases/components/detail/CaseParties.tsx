@@ -69,7 +69,9 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             } else {
                 console.warn('CaseParties: parties prop is not an array', parties);
                 // Attempt to handle if it's a paginated response object wrapper
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const safeParties = (parties as any)?.data && Array.isArray((parties as any).data)
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     ? (parties as any).data
                     : [];
 

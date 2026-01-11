@@ -145,4 +145,136 @@ export interface DocketEntry extends BaseEntity {
   }>;
   docLink?: string; // Alias for documentUrl
   syncMetadata?: { pacerId: string; lastPolled: string; checksum: string };
+  appellateData?: AppellateData;
+}
+
+export interface AppellateData {
+  caseSelection?: {
+    caseNumber?: string;
+    shortTitle?: string;
+    dateFiled?: string;
+    dateLastDocketEntry?: string;
+    origCaseNumber?: string;
+    origCaseLink?: string;
+    dateTerminated?: string;
+    party?: string;
+    attorney?: string;
+    natureOfSuit?: string;
+    type?: string;
+    status?: string;
+  };
+  caseQuery?: {
+    associatedCases?: Array<{
+      caseNumber: string;
+      shortTitle?: string;
+      dateStart?: string;
+      dateEnd?: string;
+      status?: string;
+      associatedType?: string;
+      // Full Docket Report fields
+      leadCaseNumber?: string;
+      memberCaseNumber?: string;
+    }>;
+    originatingCase?: {
+      caseNumber: string;
+      caseLink?: string;
+      leadCaseNumber?: string;
+      leadCaseNumberLink?: string;
+      dateFiled?: string;
+      dateExecution?: string;
+      dateJudgment?: string;
+      dateNOAFiled?: string;
+      judge?: string;
+      courtReporter?: string;
+    };
+    parties?: Array<{
+      name: string;
+      type?: string;
+      dateTerminated?: string;
+      // Full Docket Report fields
+      alias?: string;
+      partyText?: string;
+      prisonerNumber?: string;
+      attorneys?: Array<{
+        name: string;
+        type?: string; // partyType type
+        dateRepEnd?: string;
+        // Full attorney info from Full Docket Report
+        firstName?: string;
+        middleName?: string;
+        lastName?: string;
+        generation?: string;
+        suffix?: string;
+        title?: string;
+        address1?: string;
+        address2?: string;
+        address3?: string;
+        office?: string;
+        unit?: string;
+        room?: string;
+        businessPhone?: string;
+        personalPhone?: string;
+        city?: string;
+        state?: string;
+        zip?: string;
+        terminationDate?: string;
+        noticeInfo?: string;
+        fax?: string;
+        email?: string;
+      }>;
+    }>;
+  };
+  caseSummary?: {
+    stub?: {
+      caseNumber?: string;
+      shortTitle?: string;
+      natureOfSuit?: string;
+      dateFiled?: string;
+      dateTerminated?: string;
+      origCourt?: string;
+      caseType?: string;
+      subType?: string;
+      subSubType?: string;
+    };
+    originatingCourt?: {
+      district?: string;
+      division?: string;
+      caseNumber?: string;
+      caseNumberLink?: string;
+      leadCaseNumber?: string;
+      leadCaseNumberLink?: string;
+      dateFiled?: string;
+      dateJudgment?: string;
+      dateJudgmentEOD?: string;
+      dateNOAFiled?: string;
+      dateDecided?: string;
+      dateRecdCoa?: string;
+      dateSentence?: string;
+    };
+    originatingPerson?: {
+      role?: string;
+      firstName?: string;
+      middleName?: string;
+      lastName?: string;
+      generation?: string;
+      title?: string;
+    };
+  };
+  fullDocket?: {
+    priorCases?: Array<{
+      caseNumber: string;
+      dateFiled?: string;
+      dateDisposed?: string;
+      disposition?: string;
+    }>;
+    panel?: {
+      panelType?: string;
+      enbanc?: boolean;
+      panelists?: string;
+      dateHearing?: string;
+      dateComplete?: string;
+      dateDecision?: string;
+    };
+    caption?: string;
+  };
 }

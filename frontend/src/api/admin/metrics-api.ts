@@ -41,9 +41,9 @@ export class MetricsApiService {
   }
 
   async getHistory(
-    startDate: string,
-    endDate: string,
-    interval: "1m" | "5m" | "15m" | "1h" | "1d" = "5m"
+    _startDate: string,
+    _endDate: string,
+    _interval: "1m" | "5m" | "15m" | "1h" | "1d" = "5m"
   ): Promise<SystemMetrics[]> {
     // History endpoint not yet implemented in backend
     console.warn(

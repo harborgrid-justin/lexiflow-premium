@@ -10,13 +10,18 @@ import { ConversationRow } from './ConversationRow';
 import { MessengerChatWindow } from './MessengerChatWindow';
 
 // Wrapper for popped out chat window
-const PoppedOutChatWrapper = ({ conversation, onSendMessage, onAttachFile, formatTime }: { conversation: Conversation; onSendMessage: unknown; onAttachFile: unknown; formatTime: unknown }) => (
+const PoppedOutChatWrapper = ({ conversation, onSendMessage, onAttachFile, formatTime }: {
+  conversation: Conversation;
+  onSendMessage: (message: string) => void;
+  onAttachFile: (file: File) => void;
+  formatTime: (time: string | Date) => string;
+}) => (
   <div className="h-full flex flex-col bg-white">
     <MessengerChatWindow
       activeConversation={conversation}
-      onSendMessage={onSendMessage as any}
-      onAttachFile={onAttachFile as any}
-      formatTime={formatTime as any}
+      onSendMessage={onSendMessage}
+      onAttachFile={onAttachFile}
+      formatTime={formatTime}
       isPoppedOut={true}
     />
   </div>

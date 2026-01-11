@@ -31,7 +31,11 @@ export const useAdminData = (activeCategory: Category) => {
 
   // Generic Mutation Handler with real backend API calls
   const { mutate: saveItem } = useMutation(
-    async (payload: { category: Category; item: unknown; isNew: boolean }) => {
+    async (payload: {
+      category: Category;
+      item: Record<string, unknown>;
+      isNew: boolean;
+    }) => {
       const { category, item, isNew } = payload;
       const typedItem = item as any;
 
@@ -86,9 +90,11 @@ export const useAdminData = (activeCategory: Category) => {
         if (variables.isNew) {
           newData = [savedItem, ...currentData];
         } else {
-          newData = currentData.map((i: unknown) =>
-            (i as any).id === (savedItem as any).id ? savedItem : i
-          );
+          newData = currentData.map((i: unknown) => {
+            const item = i as Record<string, unknown>;
+            const saved = savedItem as Record<string, unknown>;
+            return item.id === saved.id ? savedItem : i;
+          });
         }
         queryClient.setQueryData(key, newData);
       },
@@ -139,7 +145,9 @@ export const useAdminData = (activeCategory: Category) => {
           queryClient.getQueryState<unknown[]>(key)?.data || [];
         queryClient.setQueryData(
           key,
-          currentData.filter((i: unknown) => (i as any).id !== id)
+          currentData.filter(
+            (i: unknown) => (i as Record<string, unknown>).id !== id
+          )
         );
       },
     }

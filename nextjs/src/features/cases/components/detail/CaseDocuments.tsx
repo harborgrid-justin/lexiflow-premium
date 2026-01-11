@@ -97,13 +97,13 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         });
 
         // INTEGRATION POINT: Trigger orchestrator
-        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, {document: savedDoc});
+        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
 
         if (logAsEvidence) {
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
             id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID() as any,
+            trackingUuid: crypto.randomUUID() as string,
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',
@@ -206,5 +206,3 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     </div>
   );
 };
-
-

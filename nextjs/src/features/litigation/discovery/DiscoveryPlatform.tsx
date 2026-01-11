@@ -86,14 +86,14 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
     [STORES.REQUESTS, caseId || 'all'],
     async () => {
-      const discovery = DataService.discovery as any;
+      const discovery = DataService.discovery as unknown as { getRequests: (caseId?: string) => Promise<DiscoveryRequest[]> };
       return discovery.getRequests(caseId);
     }
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
     async () => {
-      const discovery = DataService.discovery as any;
+      const discovery = DataService.discovery as unknown as { syncDeadlines: () => Promise<unknown> };
       return discovery.syncDeadlines();
     },
     {
@@ -146,7 +146,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   });
 
   const handleSaveResponse = async (reqId: string) => {
-    const discovery = DataService.discovery as any;
+    const discovery = DataService.discovery as unknown as { updateRequestStatus: (reqId: string, status: string) => Promise<unknown> };
     await discovery.updateRequestStatus(reqId, 'Responded');
     queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
     alert(`Response saved for ${reqId}. Status updated to Responded.`);

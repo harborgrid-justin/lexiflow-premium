@@ -150,11 +150,10 @@ export class ComplianceService {
       timestamp: new Date(),
     });
     const saved = await this.auditLogRepository.save(auditLog);
-    const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) {
+    if (!saved) {
       throw new Error("Failed to save audit log");
     }
-    return result;
+    return saved as AuditLog;
   }
 
   async getAllConflictChecks(): Promise<ComplianceCheck[]> {
@@ -253,7 +252,7 @@ export class ComplianceService {
     const rule = await this.getRuleById(id);
     const updatedRule = this.complianceRuleRepository.merge(rule, data);
     const saved = await this.complianceRuleRepository.save(updatedRule);
-    return Array.isArray(saved) ? saved[0] : saved;
+    return saved as ComplianceRule;
   }
 
   async deleteRule(id: string): Promise<void> {

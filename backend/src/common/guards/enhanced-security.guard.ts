@@ -202,7 +202,7 @@ export class IpWhitelistGuard implements CanActivate {
 
     // Wildcard support
     if (allowedIp.includes("*")) {
-      const pattern = allowedIp.replace(/./g, "\.").replace(/\*/g, ".*");
+      const pattern = allowedIp.replace(/\./g, "\\.").replace(/\*/g, ".*");
       return new RegExp(`^${pattern}$`).test(clientIp);
     }
 

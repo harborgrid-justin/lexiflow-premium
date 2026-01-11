@@ -4,12 +4,12 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
-} from '@nestjs/common';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Reflector } from '@nestjs/core';
-import { CACHE_KEY, CacheOptions } from '@common/decorators/cache.decorator';
-import { CacheManagerService } from '@common/services/cache-manager.service';
+} from "@nestjs/common";
+import { Observable, of } from "rxjs";
+import { tap } from "rxjs/operators";
+import { Reflector } from "@nestjs/core";
+import { CACHE_KEY, CacheOptions } from "@common/decorators/cache.decorator";
+import { CacheManagerService } from "@common/services/cache-manager.service";
 
 @Injectable()
 export class CacheInterceptor implements NestInterceptor {
@@ -17,16 +17,16 @@ export class CacheInterceptor implements NestInterceptor {
 
   constructor(
     private readonly reflector: Reflector,
-    private readonly cacheManager: CacheManagerService,
+    private readonly cacheManager: CacheManagerService
   ) {}
 
   async intercept(
     context: ExecutionContext,
-    next: CallHandler,
+    next: CallHandler
   ): Promise<Observable<unknown>> {
     const cacheOptions = this.reflector.get<CacheOptions>(
       CACHE_KEY,
-      context.getHandler(),
+      context.getHandler()
     );
 
     if (!cacheOptions) {
@@ -50,12 +50,14 @@ export class CacheInterceptor implements NestInterceptor {
 
       return next.handle().pipe(
         tap(async (data) => {
-          await this.cacheManager.set(cacheKey, data, { ttl: cacheOptions.ttl } as any);
+          await this.cacheManager.set(cacheKey, data, {
+            ttl: cacheOptions.ttl,
+          });
           this.logger.debug(`Cached data for key: ${cacheKey}`);
-        }),
+        })
       );
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       const stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Cache error: ${message}`, stack);
       return next.handle();

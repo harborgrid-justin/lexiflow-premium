@@ -143,7 +143,7 @@ export function useAppContext(): UseAppControllerReturn {
         email: authUser.email,
         firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
         lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
-        role: authUser.role as any,
+        role: authUser.role as User["role"],
         avatarUrl: authUser.avatarUrl,
         permissions: authUser.permissions || [],
         createdAt: new Date().toISOString(),

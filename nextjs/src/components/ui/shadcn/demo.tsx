@@ -9,11 +9,10 @@
 
 import * as React from "react";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, Search, User, Settings, Home, FileText } from "lucide-react";
+import { Calendar as CalendarIcon, Search, User, Settings, Home } from "lucide-react";
 
 // Command
 import {
-  Command,
   CommandDialog,
   CommandInput,
   CommandList,
@@ -150,7 +149,6 @@ export function CommandDemo() {
 export function CalendarDemo() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [dateRange, setDateRange] = React.useState<{ from: Date | undefined; to?: Date | undefined }>();
-  const [multipleDates, setMultipleDates] = React.useState<Date[] | undefined>([]);
 
   return (
     <div className="space-y-8">

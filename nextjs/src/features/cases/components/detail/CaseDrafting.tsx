@@ -51,17 +51,17 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
   const [loading, setLoading] = useState(false);
 
   // Store draft result separately to avoid cascading renders
-  const lastProcessedDraftRef = useRef('');
+  const [lastProcessedDraft, setLastProcessedDraft] = useState('');
 
   // Process draft result when it changes
   const processedContent = useMemo(() => {
-    if (draftResult && draftResult !== lastProcessedDraftRef.current) {
+    if (draftResult && draftResult !== lastProcessedDraft) {
       const formatted = draftResult.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>');
-      lastProcessedDraftRef.current = draftResult;
+      setLastProcessedDraft(draftResult);
       return `<p>${formatted}</p>`;
     }
     return '';
-  }, [draftResult]);
+  }, [draftResult, lastProcessedDraft]);
 
   useEffect(() => {
     if (processedContent) {

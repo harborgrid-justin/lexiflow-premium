@@ -330,10 +330,14 @@ export class SMSDeliveryService {
       if (result.status === "fulfilled") {
         return result.value;
       } else {
+        const errorMessage =
+          result.reason instanceof Error
+            ? result.reason.message
+            : String(result.reason);
         return {
           phone: "unknown",
           success: false,
-          error: result.reason?.message || "Unknown error",
+          error: errorMessage,
         };
       }
     });

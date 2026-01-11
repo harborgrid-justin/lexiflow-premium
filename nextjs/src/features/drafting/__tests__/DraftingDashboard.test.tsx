@@ -208,7 +208,7 @@ jest.mock('../components/TemplateEditor', () => ({
     onSave,
     onCancel,
   }: {
-    template?: any;
+    template?: unknown;
     onSave: () => void;
     onCancel: () => void;
   }) => (

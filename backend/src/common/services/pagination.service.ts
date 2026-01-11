@@ -1,28 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import * as MasterConfig from '@config/master.config';
-import { FindManyOptions, Repository, SelectQueryBuilder } from 'typeorm';
-import { validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable } from "@nestjs/common";
+import * as MasterConfig from "@config/master.config";
+import { FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
+import { validateSortOrder } from "@common/utils/query-validation.util";
 
 /**
  * Pagination Types
  */
 export enum PaginationType {
-  OFFSET = 'offset',
-  CURSOR = 'cursor',
+  OFFSET = "offset",
+  CURSOR = "cursor",
 }
 
 export interface OffsetPaginationDto {
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
 export interface CursorPaginationDto {
   cursor?: string;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
 export interface PaginatedResult<T> {
@@ -45,20 +45,20 @@ export interface PaginationMeta {
  * Pagination Service
  * Provides enterprise-grade pagination with offset and cursor support
  * Optimized for performance with large datasets
- * 
+ *
  * @example Offset Pagination
  * const result = await paginationService.paginateOffset(
  *   repository,
  *   { page: 1, limit: 10 }
  * );
- * 
+ *
  * @example Cursor Pagination
  * const result = await paginationService.paginateCursor(
  *   queryBuilder,
  *   { cursor: 'abc123', limit: 10 }
  * );
  */
-import { ObjectLiteral } from 'typeorm';
+import { ObjectLiteral } from "typeorm";
 
 /**
  * ╔=================================================================================================================╗
@@ -100,7 +100,7 @@ export class PaginationService {
   async paginateOffset<T extends ObjectLiteral>(
     repository: Repository<T>,
     dto: OffsetPaginationDto,
-    options?: FindManyOptions<T>,
+    options?: FindManyOptions<T>
   ): Promise<PaginatedResult<T>> {
     const page = Math.max(1, dto.page || 1);
     const limit = this.validateLimit(dto.limit);
@@ -111,7 +111,7 @@ export class PaginationService {
       skip,
       take: limit,
       order: dto.sortBy
-        ? { [dto.sortBy]: dto.sortOrder || 'ASC' }
+        ? { [dto.sortBy]: dto.sortOrder || "ASC" }
         : options?.order,
     } as FindManyOptions<T>);
 
@@ -138,7 +138,7 @@ export class PaginationService {
   async paginateCursor<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
     dto: CursorPaginationDto,
-    cursorField: string = 'id',
+    cursorField: string = "id"
   ): Promise<PaginatedResult<T>> {
     const limit = this.validateLimit(dto.limit);
     // SQL injection protection - validate sort order
@@ -150,7 +150,7 @@ export class PaginationService {
     // Apply cursor condition if provided
     if (dto.cursor) {
       const decodedCursor = this.decodeCursor(dto.cursor);
-      const operator = sortOrder === 'ASC' ? '>' : '<';
+      const operator = sortOrder === "ASC" ? ">" : "<";
       queryBuilder.andWhere(`${cursorField} ${operator} :cursor`, {
         cursor: decodedCursor,
       });
@@ -168,11 +168,13 @@ export class PaginationService {
     }
 
     const nextCursor = hasNextPage
-      ? this.encodeCursor((data[data.length - 1] as any)[cursorField])
+      ? this.encodeCursor(
+          (data[data.length - 1] as Record<string, unknown>)[cursorField]
+        )
       : undefined;
 
     const previousCursor = dto.cursor
-      ? this.encodeCursor((data[0] as any)[cursorField])
+      ? this.encodeCursor((data[0] as Record<string, unknown>)[cursorField])
       : undefined;
 
     // Note: Total count is expensive with cursor pagination
@@ -195,10 +197,7 @@ export class PaginationService {
   /**
    * Paginate array in memory (for non-DB data)
    */
-  paginateArray<T>(
-    items: T[],
-    dto: OffsetPaginationDto,
-  ): PaginatedResult<T> {
+  paginateArray<T>(items: T[], dto: OffsetPaginationDto): PaginatedResult<T> {
     const page = Math.max(1, dto.page || 1);
     const limit = this.validateLimit(dto.limit);
     const skip = (page - 1) * limit;
@@ -226,10 +225,10 @@ export class PaginationService {
   }
 
   private encodeCursor(value: unknown): string {
-    return Buffer.from(String(value)).toString('base64');
+    return Buffer.from(String(value)).toString("base64");
   }
 
   private decodeCursor(cursor: string): string {
-    return Buffer.from(cursor, 'base64').toString('utf-8');
+    return Buffer.from(cursor, "base64").toString("utf-8");
   }
 }

@@ -37,15 +37,17 @@ interface AdminDatabaseControlProps {
 export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ initialTab }) => {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
-  const [activeView, setActiveView] = useState<PlatformView>('overview');
+  const [activeView, setActiveView] = useState<PlatformView>(initialTab || 'overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Sync initialTab prop to state for deep linking
+  /*
   useEffect(() => {
     if (initialTab) {
       setActiveView(initialTab);
     }
   }, [initialTab]);
+  */
 
   const renderContent = () => {
     // Dynamic routing helper to strip prefixes

@@ -1,9 +1,23 @@
-import { Injectable, Logger, NotFoundException, ForbiddenException, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  ForbiddenException,
+  OnModuleDestroy,
+} from "@nestjs/common";
 import {
   CreateNotificationDto,
   NotificationPreferencesDto,
   NotificationQueryDto,
-} from './dto';
+} from "./dto";
+
+export interface StoredNotification extends CreateNotificationDto {
+  id: string;
+  read: boolean;
+  readAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 /**
  * Notifications Service
@@ -47,31 +61,34 @@ import {
 @Injectable()
 export class NotificationsService implements OnModuleDestroy {
   private readonly logger = new Logger(NotificationsService.name);
-  private notifications: Map<string, unknown> = new Map();
-   
+  private notifications: Map<string, StoredNotification> = new Map();
+
   private preferences: Map<string, NotificationPreferencesDto> = new Map();
-  
+
   // Memory optimization
   private readonly MAX_NOTIFICATIONS = 10000;
   private readonly CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour
   private cleanupTimer: NodeJS.Timeout;
 
   constructor() {
-    this.logger.log('NotificationsService initialized with in-memory storage');
-    this.cleanupTimer = setInterval(() => this.cleanup(), this.CLEANUP_INTERVAL);
+    this.logger.log("NotificationsService initialized with in-memory storage");
+    this.cleanupTimer = setInterval(
+      () => this.cleanup(),
+      this.CLEANUP_INTERVAL
+    );
   }
 
   onModuleDestroy() {
     clearInterval(this.cleanupTimer);
     this.notifications.clear();
     this.preferences.clear();
-    this.logger.log('NotificationsService destroyed, memory cleared');
+    this.logger.log("NotificationsService destroyed, memory cleared");
   }
 
   private cleanup() {
     const now = Date.now();
     const TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
-    
+
     let removedCount = 0;
 
     // Remove old notifications
@@ -81,14 +98,19 @@ export class NotificationsService implements OnModuleDestroy {
         removedCount++;
       }
     }
-    
+
     // Enforce max size if still too large
     if (this.notifications.size > this.MAX_NOTIFICATIONS) {
       // Sort by date and remove oldest
-      const sorted = Array.from(this.notifications.entries())
-        .sort(([, a], [, b]) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-            
-      const toRemove = sorted.slice(0, this.notifications.size - this.MAX_NOTIFICATIONS);
+      const sorted = Array.from(this.notifications.entries()).sort(
+        ([, a], [, b]) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      const toRemove = sorted.slice(
+        0,
+        this.notifications.size - this.MAX_NOTIFICATIONS
+      );
       toRemove.forEach(([id]) => this.notifications.delete(id));
       removedCount += toRemove.length;
     }
@@ -103,20 +125,22 @@ export class NotificationsService implements OnModuleDestroy {
    */
   async findAll(userId: string, query: NotificationQueryDto) {
     const { page = 1, limit = 20, unreadOnly, type } = query;
-    
-    let userNotifications = Array.from(this.notifications.values())
-      .filter(n => n.userId === userId);
+
+    let userNotifications = Array.from(this.notifications.values()).filter(
+      (n) => n.userId === userId
+    );
 
     if (unreadOnly) {
-      userNotifications = userNotifications.filter(n => !n.read);
+      userNotifications = userNotifications.filter((n) => !n.read);
     }
 
     if (type) {
-      userNotifications = userNotifications.filter(n => n.type === type);
+      userNotifications = userNotifications.filter((n) => n.type === type);
     }
 
-    userNotifications.sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    userNotifications.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
     const total = userNotifications.length;
@@ -125,7 +149,9 @@ export class NotificationsService implements OnModuleDestroy {
     const endIndex = startIndex + limit;
     const data = userNotifications.slice(startIndex, endIndex);
 
-    this.logger.debug(`Retrieved ${data.length} notifications for user ${userId} (page ${page}/${totalPages})`);
+    this.logger.debug(
+      `Retrieved ${data.length} notifications for user ${userId} (page ${page}/${totalPages})`
+    );
 
     return {
       data,
@@ -142,10 +168,10 @@ export class NotificationsService implements OnModuleDestroy {
    * Get unread notification count
    */
   async getUnreadCount(userId: string): Promise<number> {
-    const count = Array.from(this.notifications.values())
-      .filter(n => n.userId === userId && !n.read)
-      .length;
-    
+    const count = Array.from(this.notifications.values()).filter(
+      (n) => n.userId === userId && !n.read
+    ).length;
+
     this.logger.debug(`User ${userId} has ${count} unread notifications`);
     return count;
   }
@@ -154,14 +180,17 @@ export class NotificationsService implements OnModuleDestroy {
    * Create a new notification
    */
   async create(createDto: CreateNotificationDto) {
-    const userPreferences = this.preferences.get(createDto.userId) || this.getDefaultPreferences();
-    
+    const userPreferences =
+      this.preferences.get(createDto.userId) || this.getDefaultPreferences();
+
     if (!this.shouldSendNotification(createDto.type, userPreferences)) {
-      this.logger.debug(`Notification skipped due to user preferences: ${createDto.type}`);
+      this.logger.debug(
+        `Notification skipped due to user preferences: ${createDto.type}`
+      );
       return null;
     }
 
-    const notification = {
+    const notification: StoredNotification = {
       id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       ...createDto,
       read: false,
@@ -169,14 +198,16 @@ export class NotificationsService implements OnModuleDestroy {
       updatedAt: new Date(),
     };
 
-    this.notifications.set((notification as any).id, notification);
-    
+    this.notifications.set(notification.id, notification);
+
     // Quick check to avoid growing too large between cleanups
     if (this.notifications.size > this.MAX_NOTIFICATIONS + 100) {
       this.cleanup();
     }
-    
-    this.logger.log(`Notification created: ${(notification as any).id} for user ${createDto.userId}`);
+
+    this.logger.log(
+      `Notification created: ${notification.id} for user ${createDto.userId}`
+    );
 
     if (userPreferences.pushEnabled) {
       await this.sendPushNotification(notification);
@@ -193,13 +224,15 @@ export class NotificationsService implements OnModuleDestroy {
    */
   async markAsRead(notificationId: string, userId: string) {
     const notification = this.notifications.get(notificationId);
-    
+
     if (!notification) {
       throw new NotFoundException(`Notification ${notificationId} not found`);
     }
 
     if (notification.userId !== userId) {
-      throw new ForbiddenException('You do not have permission to modify this notification');
+      throw new ForbiddenException(
+        "You do not have permission to modify this notification"
+      );
     }
 
     notification.read = true;
@@ -207,7 +240,9 @@ export class NotificationsService implements OnModuleDestroy {
     notification.updatedAt = new Date();
     this.notifications.set(notificationId, notification);
 
-    this.logger.log(`Notification ${notificationId} marked as read by user ${userId}`);
+    this.logger.log(
+      `Notification ${notificationId} marked as read by user ${userId}`
+    );
 
     return {
       id: notificationId,
@@ -232,7 +267,9 @@ export class NotificationsService implements OnModuleDestroy {
       }
     }
 
-    this.logger.log(`Marked ${updated} notifications as read for user ${userId}`);
+    this.logger.log(
+      `Marked ${updated} notifications as read for user ${userId}`
+    );
 
     return {
       updated,
@@ -245,19 +282,21 @@ export class NotificationsService implements OnModuleDestroy {
    */
   async delete(notificationId: string, userId: string) {
     const notification = this.notifications.get(notificationId);
-    
+
     if (!notification) {
       throw new NotFoundException(`Notification ${notificationId} not found`);
     }
 
     if (notification.userId !== userId) {
-      throw new ForbiddenException('You do not have permission to delete this notification');
+      throw new ForbiddenException(
+        "You do not have permission to delete this notification"
+      );
     }
 
     this.notifications.delete(notificationId);
     this.logger.log(`Notification ${notificationId} deleted by user ${userId}`);
 
-    return { 
+    return {
       deleted: true,
       id: notificationId,
     };
@@ -268,7 +307,7 @@ export class NotificationsService implements OnModuleDestroy {
    */
   async getPreferences(userId: string): Promise<NotificationPreferencesDto> {
     let userPrefs = this.preferences.get(userId);
-    
+
     if (!userPrefs) {
       userPrefs = this.getDefaultPreferences();
       this.preferences.set(userId, userPrefs);
@@ -281,7 +320,10 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Update notification preferences
    */
-  async updatePreferences(userId: string, preferencesDto: NotificationPreferencesDto) {
+  async updatePreferences(
+    userId: string,
+    preferencesDto: NotificationPreferencesDto
+  ) {
     const updatedPrefs = {
       ...preferencesDto,
       updatedAt: new Date(),
@@ -300,7 +342,10 @@ export class NotificationsService implements OnModuleDestroy {
    * Send bulk notifications
    * Used for system-wide alerts or team notifications
    */
-  async sendBulk(userIds: string[], createDto: Omit<CreateNotificationDto, 'userId'>) {
+  async sendBulk(
+    userIds: string[],
+    createDto: Omit<CreateNotificationDto, "userId">
+  ) {
     const createdNotifications = [];
 
     for (const userId of userIds) {
@@ -313,7 +358,9 @@ export class NotificationsService implements OnModuleDestroy {
       }
     }
 
-    this.logger.log(`Bulk notification sent to ${createdNotifications.length}/${userIds.length} users`);
+    this.logger.log(
+      `Bulk notification sent to ${createdNotifications.length}/${userIds.length} users`
+    );
 
     return {
       sent: createdNotifications.length,
@@ -342,14 +389,17 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Check if notification should be sent based on user preferences
    */
-  private shouldSendNotification(type: string, preferences: NotificationPreferencesDto): boolean {
+  private shouldSendNotification(
+    type: string,
+    preferences: NotificationPreferencesDto
+  ): boolean {
     const typeMap: Record<string, keyof NotificationPreferencesDto> = {
-      case_update: 'caseUpdates',
-      document_upload: 'documentUploads',
-      deadline_reminder: 'deadlineReminders',
-      task_assignment: 'taskAssignments',
-      message: 'messages',
-      invoice: 'invoices',
+      case_update: "caseUpdates",
+      document_upload: "documentUploads",
+      deadline_reminder: "deadlineReminders",
+      task_assignment: "taskAssignments",
+      message: "messages",
+      invoice: "invoices",
     };
 
     const prefKey = typeMap[type];
@@ -359,14 +409,18 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Send push notification (placeholder for actual implementation)
    */
-  private async sendPushNotification(notification: unknown): Promise<void> {
-    this.logger.debug(`Push notification would be sent: ${(notification as any).id}`);
+  private async sendPushNotification(
+    notification: StoredNotification
+  ): Promise<void> {
+    this.logger.debug(`Push notification would be sent: ${notification.id}`);
   }
 
   /**
    * Send email notification (placeholder for actual implementation)
    */
-  private async sendEmailNotification(notification: unknown): Promise<void> {
-    this.logger.debug(`Email notification would be sent: ${(notification as any).id}`);
+  private async sendEmailNotification(
+    notification: StoredNotification
+  ): Promise<void> {
+    this.logger.debug(`Email notification would be sent: ${notification.id}`);
   }
 }

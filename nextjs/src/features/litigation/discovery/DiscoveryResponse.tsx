@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowLeft, Clock, Save, Wand2 } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -63,7 +63,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
     );
     setDraftResponse(draft);
     setIsDrafting(false);
-  }, [request]);
+  }, [request, setDraftResponse, setIsDrafting]);
 
   // Auto-save with 2s debounce
   const { isSaving } = useAutoSave({
@@ -253,7 +253,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
               <Wand2 className="h-3 w-3 mr-2" /> AI Insight
             </h4>
             <p className={cn("text-xs", theme.status.info.text)}>
-              This request matches patterns often deemed "overly broad" in this
+              This request matches patterns often deemed &ldquo;overly broad&rdquo; in this
               jurisdiction. Consider objecting to the timeframe scope.
             </p>
           </div>

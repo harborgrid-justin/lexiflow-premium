@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+import React, { useState, useMemo, useCallback, Suspense } from 'react';
 import { Search, Plus } from 'lucide-react';
 
 // ============================================================================
@@ -100,7 +100,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
     const newEntity: LegalEntity = {
       id: `ent-${Date.now()}` as EntityId,
       name,
-      type: type as any,
+      type: type as LegalEntity['type'],
       roles: ['Prospect'],
       status: 'Active',
       riskScore: 0,

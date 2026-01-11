@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
 /**
  * Metric Types
  */
 export enum MetricType {
-  COUNTER = 'counter',
-  GAUGE = 'gauge',
-  HISTOGRAM = 'histogram',
-  SUMMARY = 'summary',
+  COUNTER = "counter",
+  GAUGE = "gauge",
+  HISTOGRAM = "histogram",
+  SUMMARY = "summary",
 }
 
 /**
@@ -25,7 +25,7 @@ export interface Metric {
  * Metrics Service
  * Collects and exposes Prometheus-compatible metrics
  * Tracks API performance, business metrics, and system health
- * 
+ *
  * @example
  * metricsService.incrementCounter('api.requests.total', { method: 'GET', endpoint: '/cases' });
  * metricsService.recordHistogram('api.response.time', 150, { endpoint: '/cases' });
@@ -68,7 +68,11 @@ export class MetricsService {
   /**
    * Increment counter metric
    */
-  incrementCounter(name: string, labels?: Record<string, string>, value: number = 1): void {
+  incrementCounter(
+    name: string,
+    labels?: Record<string, string>,
+    value: number = 1
+  ): void {
     const key = this.buildKey(name, labels);
     const current = this.counters.get(key) || 0;
     this.counters.set(key, current + value);
@@ -101,7 +105,11 @@ export class MetricsService {
   /**
    * Record histogram value (for distributions)
    */
-  recordHistogram(name: string, value: number, labels?: Record<string, string>): void {
+  recordHistogram(
+    name: string,
+    value: number,
+    labels?: Record<string, string>
+  ): void {
     this.recordMetric({
       name,
       type: MetricType.HISTOGRAM,
@@ -114,7 +122,11 @@ export class MetricsService {
   /**
    * Record summary value
    */
-  recordSummary(name: string, value: number, labels?: Record<string, string>): void {
+  recordSummary(
+    name: string,
+    value: number,
+    labels?: Record<string, string>
+  ): void {
     this.recordMetric({
       name,
       type: MetricType.SUMMARY,
@@ -128,7 +140,7 @@ export class MetricsService {
    * Get all metrics in Prometheus format
    */
   getPrometheusMetrics(): string {
-    let output = '';
+    let output = "";
 
     // Counters
     for (const [key, value] of this.counters.entries()) {
@@ -156,11 +168,11 @@ export class MetricsService {
     };
 
     for (const [key, value] of this.counters.entries()) {
-      (result as any).counters[key] = value;
+      (result as { counters: Record<string, number> }).counters[key] = value;
     }
 
     for (const [key, value] of this.gauges.entries()) {
-      (result as any).gauges[key] = value;
+      (result as { gauges: Record<string, number> }).gauges[key] = value;
     }
 
     return result;
@@ -217,7 +229,7 @@ export class MetricsService {
     const labelStr = Object.entries(labels)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([k, v]) => `${k}="${v}"`)
-      .join(',');
+      .join(",");
 
     return `${name}{${labelStr}}`;
   }
@@ -230,10 +242,10 @@ export class MetricsService {
     if (!labelStr || !name) return [name ?? key, undefined];
 
     const labels: Record<string, string> = {};
-    for (const pair of labelStr.split(',')) {
-      const [k, v] = pair.split('=');
+    for (const pair of labelStr.split(",")) {
+      const [k, v] = pair.split("=");
       if (k && v) {
-        labels[k] = v.replace(/"/g, '');
+        labels[k] = v.replace(/"/g, "");
       }
     }
 
@@ -242,12 +254,12 @@ export class MetricsService {
 
   private formatLabels(labels?: Record<string, string>): string {
     if (!labels || Object.keys(labels).length === 0) {
-      return '';
+      return "";
     }
 
     const formatted = Object.entries(labels)
       .map(([k, v]) => `${k}="${v}"`)
-      .join(',');
+      .join(",");
 
     return `{${formatted}}`;
   }

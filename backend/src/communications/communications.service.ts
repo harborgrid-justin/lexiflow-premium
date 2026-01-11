@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Communication } from './entities/communication.entity';
-import { Template } from './entities/template.entity';
+import { Injectable, NotFoundException, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Communication } from "./entities/communication.entity";
+import { Template } from "./entities/template.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,23 +39,32 @@ import { Template } from './entities/template.entity';
 @Injectable()
 export class CommunicationsService {
   private readonly logger = new Logger(CommunicationsService.name);
-  
+
   constructor(
     @InjectRepository(Communication)
     private readonly communicationRepository: Repository<Communication>,
     @InjectRepository(Template)
-    private readonly templateRepository: Repository<Template>,
+    private readonly templateRepository: Repository<Template>
   ) {}
 
-  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: Communication[]; total: number; page: number; limit: number }> {
+  async findAll(options?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{
+    data: Communication[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
-    const [communications, total] = await this.communicationRepository.findAndCount({
-      order: { createdAt: 'DESC' },
-      skip,
-      take: limit,
-    });
+    const [communications, total] =
+      await this.communicationRepository.findAndCount({
+        order: { createdAt: "DESC" },
+        skip,
+        take: limit,
+      });
 
     return {
       data: communications,
@@ -65,16 +74,25 @@ export class CommunicationsService {
     };
   }
 
-  async findByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: Communication[]; total: number; page: number; limit: number }> {
+  async findByCaseId(
+    caseId: string,
+    options?: { page?: number; limit?: number }
+  ): Promise<{
+    data: Communication[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
-    const [communications, total] = await this.communicationRepository.findAndCount({
-      where: { caseId },
-      order: { createdAt: 'DESC' },
-      skip,
-      take: limit,
-    });
+    const [communications, total] =
+      await this.communicationRepository.findAndCount({
+        where: { caseId },
+        order: { createdAt: "DESC" },
+        skip,
+        take: limit,
+      });
 
     return {
       data: communications,
@@ -86,7 +104,9 @@ export class CommunicationsService {
 
   async findById(id: string): Promise<Communication> {
     this.logger.debug(`Fetching communication by id: ${id}`);
-    const communication = await this.communicationRepository.findOne({ where: { id } });
+    const communication = await this.communicationRepository.findOne({
+      where: { id },
+    });
     if (!communication) {
       this.logger.warn(`Communication with ID ${id} not found`);
       throw new NotFoundException(`Communication with ID ${id} not found`);
@@ -95,12 +115,16 @@ export class CommunicationsService {
   }
 
   async create(data: unknown): Promise<Communication> {
-    this.logger.log(`Creating new communication for case: ${(data as any).caseId}`);
-    const communication = this.communicationRepository.create(data as any);
+    this.logger.log(
+      `Creating new communication for case: ${(data as { caseId?: string }).caseId}`
+    );
+    const communication = this.communicationRepository.create(
+      data as Partial<Communication>
+    );
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) {
-      throw new Error('Failed to save communication');
+      throw new Error("Failed to save communication");
     }
     this.logger.log(`Communication created successfully with ID: ${result.id}`);
     return result;
@@ -108,15 +132,15 @@ export class CommunicationsService {
 
   async send(id: string): Promise<Communication> {
     const communication = await this.findById(id);
-    if (communication.status === 'sent') {
-      throw new Error('Communication has already been sent');
+    if (communication.status === "sent") {
+      throw new Error("Communication has already been sent");
     }
-    communication.status = 'sent';
+    communication.status = "sent";
     communication.sentAt = new Date();
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) {
-      throw new Error('Failed to save communication');
+      throw new Error("Failed to save communication");
     }
     return Array.isArray(saved) ? saved[0] : saved;
   }
@@ -129,21 +153,21 @@ export class CommunicationsService {
   async getByType(type: string): Promise<Communication[]> {
     return this.communicationRepository.find({
       where: { type },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
   async getSentCommunications(caseId: string): Promise<Communication[]> {
     return this.communicationRepository.find({
-      where: { caseId, status: 'sent' },
-      order: { sentAt: 'DESC' },
+      where: { caseId, status: "sent" },
+      order: { sentAt: "DESC" },
     });
   }
 
   async getDraftCommunications(caseId: string): Promise<Communication[]> {
     return this.communicationRepository.find({
-      where: { caseId, status: 'draft' },
-      order: { createdAt: 'DESC' },
+      where: { caseId, status: "draft" },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -154,12 +178,12 @@ export class CommunicationsService {
     const byStatus: unknown = {};
     let sent = 0;
     let draft = 0;
-    
+
     all.forEach((c: Communication) => {
       byType[c.type] = (byType[c.type] || 0) + 1;
       byStatus[c.status] = (byStatus[c.status] || 0) + 1;
-      if (c.status === 'sent') sent++;
-      if (c.status === 'draft') draft++;
+      if (c.status === "sent") sent++;
+      if (c.status === "draft") draft++;
     });
 
     return {
@@ -173,7 +197,7 @@ export class CommunicationsService {
 
   async getAllTemplates(): Promise<Template[]> {
     return this.templateRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -189,7 +213,7 @@ export class CommunicationsService {
     const template = this.templateRepository.create(data as any);
     const saved = await this.templateRepository.save(template);
     const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) throw new Error('Failed to save template');
+    if (!result) throw new Error("Failed to save template");
     return result;
   }
 
@@ -198,7 +222,7 @@ export class CommunicationsService {
     Object.assign(template, data);
     const saved = await this.templateRepository.save(template);
     const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) throw new Error('Failed to update template');
+    if (!result) throw new Error("Failed to update template");
     return result;
   }
 
@@ -210,28 +234,34 @@ export class CommunicationsService {
   async getActiveTemplates(): Promise<Template[]> {
     return this.templateRepository.find({
       where: { isActive: true },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
   async getTemplatesByType(type: string): Promise<Template[]> {
     return this.templateRepository.find({
       where: { type },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
-  async renderTemplate(templateId: string, variables: unknown): Promise<{ subject: string; body: string }> {
+  async renderTemplate(
+    templateId: string,
+    variables: unknown
+  ): Promise<{ subject: string; body: string }> {
     const template = await this.getTemplateById(templateId);
-    
+
     let subject = template.subject;
     let body = template.body;
 
     // Replace variables in template
-    Object.keys(variables as any).forEach(key => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
-      subject = subject.replace(regex, (variables as any)[key]);
-      body = body.replace(regex, (variables as any)[key]);
+    Object.keys(variables as Record<string, string>).forEach((key) => {
+      const regex = new RegExp(`{{${key}}}`, "g");
+      subject = subject.replace(
+        regex,
+        (variables as Record<string, string>)[key]
+      );
+      body = body.replace(regex, (variables as Record<string, string>)[key]);
     });
 
     return { subject, body };
@@ -240,7 +270,7 @@ export class CommunicationsService {
   async createFromTemplate(params: unknown): Promise<Communication> {
     const { templateId, caseId, variables, ...otherData } = params as any;
     const rendered = await this.renderTemplate(templateId, variables);
-    
+
     const communication = this.communicationRepository.create({
       caseId,
       subject: rendered.subject,
@@ -250,49 +280,52 @@ export class CommunicationsService {
 
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) throw new Error('Failed to create communication');
+    if (!result) throw new Error("Failed to create communication");
     return result;
   }
 
   async scheduleMessage(id: string, scheduledAt: Date): Promise<Communication> {
     this.logger.debug(`Scheduling communication ${id} for ${scheduledAt}`);
     const communication = await this.findById(id);
-    
-    if (communication.status === 'sent') {
-      throw new Error('Cannot schedule a communication that has already been sent');
+
+    if (communication.status === "sent") {
+      throw new Error(
+        "Cannot schedule a communication that has already been sent"
+      );
     }
 
-    communication.status = 'scheduled';
+    communication.status = "scheduled";
     communication.sentAt = scheduledAt;
-    
+
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) throw new Error('Failed to schedule communication');
-    
+    if (!result) throw new Error("Failed to schedule communication");
+
     this.logger.log(`Communication ${id} scheduled for ${scheduledAt}`);
     return result;
   }
 
   async getScheduledMessages(): Promise<Communication[]> {
-    this.logger.debug('Fetching scheduled communications');
+    this.logger.debug("Fetching scheduled communications");
     return this.communicationRepository.find({
-      where: { status: 'scheduled' },
-      order: { sentAt: 'ASC' },
+      where: { status: "scheduled" },
+      order: { sentAt: "ASC" },
     });
   }
 
   async getDeliveryStatus(id: string): Promise<unknown> {
     this.logger.debug(`Fetching delivery status for communication ${id}`);
     const communication = await this.findById(id);
-    
+
     return {
       communicationId: communication.id,
       status: communication.status,
       sentAt: communication.sentAt,
       deliveryAttempts: 1,
       lastAttempt: communication.sentAt || communication.updatedAt,
-      successful: communication.status === 'sent',
-      errorMessage: communication.status === 'failed' ? 'Delivery failed' : null,
+      successful: communication.status === "sent",
+      errorMessage:
+        communication.status === "failed" ? "Delivery failed" : null,
     };
   }
 }

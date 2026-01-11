@@ -68,7 +68,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
     );
 
     const handleCreateTask = async (task: WorkflowTask) => {
-        const tasks = (await DataService.tasks) as any;
+        const tasks = (await DataService.tasks) as { add: (task: WorkflowTask) => Promise<unknown> };
         await tasks.add(task);
         notify.success('Follow-up task created.');
     };
@@ -96,7 +96,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             const documents = await DataService.documents;
             await documents.add(doc);
             notify.success('Correspondence saved to Case Documents.');
-        } catch {
+        } catch (_error) {
             notify.error('Failed to save document.');
         }
     };
@@ -123,7 +123,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             const docket = await DataService.docket;
             await docket.add(entry);
             notify.success('Service Proof linked to Docket.');
-        } catch {
+        } catch (_error) {
             notify.error('Failed to create docket entry.');
         }
     };
@@ -157,7 +157,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             tags: ['Proof of Service', 'Return Receipt']
         };
 
-        const evidence = (await DataService.evidence) as any;
+        const evidence = (await DataService.evidence) as { add: (proof: unknown) => Promise<unknown> };
         await evidence.add(proof);
         notify.success('Return Receipt added to Evidence Vault.');
     };
@@ -214,7 +214,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                             <div>
                                 <h4 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Content Preview</h4>
                                 <div className={cn("p-4 rounded border text-sm italic leading-relaxed", theme.surface.default, theme.border.default, theme.text.secondary)}>
-                                    "{commItem.preview}..."
+                                    &ldquo;{commItem.preview}...&rdquo;
                                 </div>
                             </div>
 

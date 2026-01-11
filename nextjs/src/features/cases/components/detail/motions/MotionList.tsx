@@ -86,7 +86,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 </TableCell>
                 <TableCell>{motion.type}</TableCell>
                 <TableCell>
-                  <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
+                  <Badge variant={getStatusColor(motion.status) as 'default' | 'success' | 'warning' | 'destructive'}>{motion.status}</Badge>
                 </TableCell>
                 <TableCell>
                   {motion.hearingDate ? (

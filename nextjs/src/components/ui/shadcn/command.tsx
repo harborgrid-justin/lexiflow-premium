@@ -42,7 +42,7 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-interface CommandDialogProps extends DialogProps {}
+type CommandDialogProps = DialogProps
 
 /**
  * CommandDialog - A dialog wrapper for the command palette

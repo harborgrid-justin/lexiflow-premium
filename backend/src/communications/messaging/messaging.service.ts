@@ -1,6 +1,10 @@
-import { Injectable} from '@nestjs/common';
-import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
-import { validatePagination } from '@common/utils/query-validation.util';
+import { Injectable } from "@nestjs/common";
+import {
+  CreateConversationDto,
+  CreateMessageDto,
+  MessageQueryDto,
+} from "./dto";
+import { validatePagination } from "@common/utils/query-validation.util";
 
 /**
  * Messaging Service
@@ -44,16 +48,21 @@ import { validatePagination } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class MessagingService {
-  constructor(
-    // Note: Entity repositories will be injected once entities are created by Agent 1
-    // @InjectRepository(Conversation) private conversationRepo: Repository<Conversation>,
-    // @InjectRepository(Message) private messageRepo: Repository<Message>,
-  ) {}
+  constructor() // Note: Entity repositories will be injected once entities are created by Agent 1
+  // @InjectRepository(Conversation) private conversationRepo: Repository<Conversation>,
+  // @InjectRepository(Message) private messageRepo: Repository<Message>,
+  {
+    /* Dependencies will be injected */
+  }
 
   /**
    * Get all conversations for a user
    */
-  async findAllConversations(_userId: string, pageParam?: number, limitParam?: number) {
+  async findAllConversations(
+    _userId: string,
+    pageParam?: number,
+    limitParam?: number
+  ) {
     const { page, limit } = validatePagination(pageParam, limitParam, 50);
     // Implementation will use actual entity repositories
     return {
@@ -75,8 +84,8 @@ export class MessagingService {
     // Implementation will query conversation repository
     return {
       id: conversationId,
-      title: 'Sample Conversation',
-      type: 'direct',
+      title: "Sample Conversation",
+      type: "direct",
       participants: [],
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -86,11 +95,14 @@ export class MessagingService {
   /**
    * Create a new conversation
    */
-  async createConversation(createDto: CreateConversationDto, creatorId: string) {
+  async createConversation(
+    createDto: CreateConversationDto,
+    creatorId: string
+  ) {
     // Create conversation with participants
     // Implementation will use actual entity
     return {
-      id: 'conv-' + Date.now(),
+      id: "conv-" + Date.now(),
       ...createDto,
       creatorId,
       createdAt: new Date(),
@@ -109,7 +121,11 @@ export class MessagingService {
   /**
    * Get messages for a conversation
    */
-  async findMessages(_conversationId: string, _userId: string, query: MessageQueryDto) {
+  async findMessages(
+    _conversationId: string,
+    _userId: string,
+    query: MessageQueryDto
+  ) {
     // Verify user has access to conversation
     // Fetch messages with pagination
     const { page = 1, limit = 50 } = query;
@@ -131,13 +147,13 @@ export class MessagingService {
   async createMessage(
     conversationId: string,
     createDto: CreateMessageDto,
-    senderId: string,
+    senderId: string
   ) {
     // Verify user is participant in conversation
     // Create and save message
     // Trigger WebSocket event for real-time delivery
     return {
-      id: 'msg-' + Date.now(),
+      id: "msg-" + Date.now(),
       conversationId,
       ...createDto,
       senderId,

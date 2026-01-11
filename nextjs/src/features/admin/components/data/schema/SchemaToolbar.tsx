@@ -32,3 +32,4 @@ export const SchemaToolbar = React.memo<SchemaToolbarProps>(({ activeTab, setAct
     </div>
   );
 });
+SchemaToolbar.displayName = 'SchemaToolbar';

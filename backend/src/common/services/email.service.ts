@@ -1,7 +1,7 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import * as nodemailer from "nodemailer";
+import { Transporter } from "nodemailer";
 
 export interface EmailOptions {
   to: string | string[];
@@ -54,60 +54,60 @@ export class EmailService implements OnModuleInit {
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
-    const emailEnabled = this.configService.get('EMAIL_ENABLED', 'false');
+    const emailEnabled = this.configService.get("EMAIL_ENABLED", "false");
 
-    if (emailEnabled === 'true') {
+    if (emailEnabled === "true") {
       this.transporter = nodemailer.createTransport({
-        host: this.configService.get('SMTP_HOST'),
-        port: this.configService.get('SMTP_PORT', 587),
-        secure: this.configService.get('SMTP_SECURE', false),
+        host: this.configService.get("SMTP_HOST"),
+        port: this.configService.get("SMTP_PORT", 587),
+        secure: this.configService.get("SMTP_SECURE", false),
         auth: {
-          user: this.configService.get('SMTP_USER'),
-          pass: this.configService.get('SMTP_PASS'),
+          user: this.configService.get("SMTP_USER"),
+          pass: this.configService.get("SMTP_PASS"),
         },
       });
 
-      this.logger.log('Email service initialized');
+      this.logger.log("Email service initialized");
     } else {
-      this.logger.warn('Email service is disabled');
+      this.logger.warn("Email service is disabled");
     }
   }
 
   async sendEmail(options: EmailOptions): Promise<void> {
     if (!this.transporter) {
-      this.logger.warn('Email not sent - service is disabled');
+      this.logger.warn("Email not sent - service is disabled");
       return;
     }
 
     try {
       const from =
         options.from ||
-        this.configService.get('SMTP_FROM', 'noreply@lexiflow.com');
+        this.configService.get("SMTP_FROM", "noreply@lexiflow.com");
 
       const mailOptions = {
         from,
-        to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
+        to: Array.isArray(options.to) ? options.to.join(", ") : options.to,
         subject: options.subject,
         html: options.html,
         text: options.text,
         cc: options.cc
           ? Array.isArray(options.cc)
-            ? options.cc.join(', ')
+            ? options.cc.join(", ")
             : options.cc
           : undefined,
         bcc: options.bcc
           ? Array.isArray(options.bcc)
-            ? options.bcc.join(', ')
+            ? options.bcc.join(", ")
             : options.bcc
           : undefined,
-        attachments: options.attachments as any,
+        attachments: options.attachments as unknown[],
       };
 
-      await this.transporter.sendMail(mailOptions as any);
+      await this.transporter.sendMail(mailOptions);
 
       this.logger.log(`Email sent to: ${mailOptions.to}`);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       const stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Failed to send email: ${message}`, stack);
       throw error;
@@ -117,7 +117,7 @@ export class EmailService implements OnModuleInit {
   async sendWelcomeEmail(to: string, userName: string): Promise<void> {
     await this.sendEmail({
       to,
-      subject: 'Welcome to LexiFlow',
+      subject: "Welcome to LexiFlow",
       html: `
         <h1>Welcome to LexiFlow, ${userName}!</h1>
         <p>Your account has been successfully created.</p>
@@ -126,15 +126,12 @@ export class EmailService implements OnModuleInit {
     });
   }
 
-  async sendPasswordResetEmail(
-    to: string,
-    resetToken: string,
-  ): Promise<void> {
-    const resetUrl = `${this.configService.get('FRONTEND_URL')}/reset-password?token=${resetToken}`;
+  async sendPasswordResetEmail(to: string, resetToken: string): Promise<void> {
+    const resetUrl = `${this.configService.get("FRONTEND_URL")}/reset-password?token=${resetToken}`;
 
     await this.sendEmail({
       to,
-      subject: 'Password Reset Request',
+      subject: "Password Reset Request",
       html: `
         <h1>Password Reset Request</h1>
         <p>You have requested to reset your password.</p>
@@ -149,7 +146,7 @@ export class EmailService implements OnModuleInit {
   async sendInvoiceEmail(
     to: string,
     invoiceId: string,
-    amount: number,
+    amount: number
   ): Promise<void> {
     await this.sendEmail({
       to,
@@ -165,7 +162,7 @@ export class EmailService implements OnModuleInit {
   async sendTaskAssignmentEmail(
     to: string,
     taskTitle: string,
-    dueDate: Date,
+    dueDate: Date
   ): Promise<void> {
     await this.sendEmail({
       to,

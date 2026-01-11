@@ -1,7 +1,5 @@
 import { tokens } from "@theme/tokens";
 
-type Theme = typeof tokens.colors.light;
-
 export const getDashboardContainer = () => `
   flex flex-col h-full w-full bg-slate-50 dark:bg-slate-900 overflow-hidden
 `;

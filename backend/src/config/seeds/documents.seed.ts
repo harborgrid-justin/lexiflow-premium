@@ -2,13 +2,16 @@ import { DataSource } from "typeorm";
 import * as fs from "fs";
 import * as path from "path";
 import * as PathsConfig from "@config/paths.config";
+import { Document } from "../../documents/entities/document.entity";
+import { Case } from "../../cases/entities/case.entity";
+import { User } from "../../users/entities/user.entity";
 
 export async function seedDocuments(dataSource: DataSource): Promise<void> {
   console.log("Seeding documents...");
 
-  const documentRepository = dataSource.getRepository("Document");
-  const caseRepository = dataSource.getRepository("Case");
-  const userRepository = dataSource.getRepository("User");
+  const documentRepository = dataSource.getRepository(Document);
+  const caseRepository = dataSource.getRepository(Case);
+  const userRepository = dataSource.getRepository(User);
 
   // Load documents from JSON file
   const documentsPath = path.join(PathsConfig.TEST_DATA_DIR, "documents.json");

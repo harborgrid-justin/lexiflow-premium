@@ -203,7 +203,7 @@ export const AssetManager: React.FC = () => {
                                 title="Select asset type"
                                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                 value={newAsset.type}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value as any })}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, type: e.target.value as 'Hardware' | 'Software' | 'Mobile' })}
                             >
                                 <option value="Hardware">Hardware</option>
                                 <option value="Software">Software</option>

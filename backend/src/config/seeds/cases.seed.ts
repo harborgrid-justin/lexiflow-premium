@@ -2,13 +2,16 @@ import { DataSource } from "typeorm";
 import * as fs from "fs";
 import * as path from "path";
 import * as PathsConfig from "@config/paths.config";
+import { Case } from "../../cases/entities/case.entity";
+import { User } from "../../users/entities/user.entity";
+import { Client } from "../../clients/entities/client.entity";
 
 export async function seedCases(dataSource: DataSource): Promise<void> {
   console.log("Seeding cases...");
 
-  const caseRepository = dataSource.getRepository("Case");
-  const userRepository = dataSource.getRepository("User");
-  const clientRepository = dataSource.getRepository("Client");
+  const caseRepository = dataSource.getRepository(Case);
+  const userRepository = dataSource.getRepository(User);
+  const clientRepository = dataSource.getRepository(Client);
 
   // Load cases from JSON file
   const casesPath = path.join(PathsConfig.TEST_DATA_DIR, "cases.json");

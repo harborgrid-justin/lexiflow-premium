@@ -1,15 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { DataSource, EntityManager, QueryRunner } from 'typeorm';
+import { Injectable, Logger } from "@nestjs/common";
+import { DataSource, EntityManager, QueryRunner } from "typeorm";
 
 /**
  * Transaction Options
  */
 export interface TransactionOptions {
-  isolationLevel?: 
-    | 'READ UNCOMMITTED'
-    | 'READ COMMITTED'
-    | 'REPEATABLE READ'
-    | 'SERIALIZABLE';
+  isolationLevel?:
+    | "READ UNCOMMITTED"
+    | "READ COMMITTED"
+    | "REPEATABLE READ"
+    | "SERIALIZABLE";
   timeout?: number; // milliseconds
 }
 
@@ -17,7 +17,7 @@ export interface TransactionOptions {
  * Transaction Manager Service
  * Provides enterprise-grade transaction management with automatic rollback
  * Supports nested transactions and savepoints
- * 
+ *
  * @example
  * await transactionManager.executeInTransaction(async (manager) => {
  *   await manager.save(entity1);
@@ -65,7 +65,7 @@ export class TransactionManagerService {
    */
   async executeInTransaction<T>(
     operation: (manager: EntityManager) => Promise<T>,
-    options?: TransactionOptions,
+    options?: TransactionOptions
   ): Promise<T> {
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -86,7 +86,7 @@ export class TransactionManagerService {
 
       return result;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       const stack = error instanceof Error ? error.stack : undefined;
       // Rollback on error
       await queryRunner.rollbackTransaction();
@@ -94,7 +94,7 @@ export class TransactionManagerService {
       const duration = Date.now() - startTime;
       this.logger.error(
         `Transaction rolled back after ${duration}ms: ${message}`,
-        stack,
+        stack
       );
 
       throw error;
@@ -110,7 +110,7 @@ export class TransactionManagerService {
   async executeWithSavepoint<T>(
     queryRunner: QueryRunner,
     operation: (manager: EntityManager) => Promise<T>,
-    savepointName: string = 'sp1',
+    savepointName: string = "sp1"
   ): Promise<T> {
     await queryRunner.query(`SAVEPOINT ${savepointName}`);
 
@@ -119,8 +119,6 @@ export class TransactionManagerService {
       await queryRunner.query(`RELEASE SAVEPOINT ${savepointName}`);
       return result;
     } catch (error) {
-      
-      
       await queryRunner.query(`ROLLBACK TO SAVEPOINT ${savepointName}`);
       throw error;
     }
@@ -133,7 +131,7 @@ export class TransactionManagerService {
   async bulkExecuteInTransaction<T, R>(
     items: T[],
     batchSize: number,
-    operation: (batch: T[], manager: EntityManager) => Promise<R[]>,
+    operation: (batch: T[], manager: EntityManager) => Promise<R[]>
   ): Promise<R[]> {
     const results: R[] = [];
 
@@ -147,7 +145,7 @@ export class TransactionManagerService {
       results.push(...batchResults);
 
       this.logger.log(
-        `Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(items.length / batchSize)}`,
+        `Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(items.length / batchSize)}`
       );
     }
 
@@ -159,20 +157,20 @@ export class TransactionManagerService {
    */
   async executeWithDeadlockRetry<T>(
     operation: (manager: EntityManager) => Promise<T>,
-    maxRetries: number = 3,
+    maxRetries: number = 3
   ): Promise<T> {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         return await this.executeInTransaction(operation);
       } catch (error: unknown) {
         const isDeadlock =
-          (error as any).code === '40P01' || // PostgreSQL deadlock
-          (error as any).code === '40001'; // Serialization failure
+          (error as { code?: string }).code === "40P01" || // PostgreSQL deadlock
+          (error as { code?: string }).code === "40001"; // Serialization failure
 
         if (isDeadlock && attempt < maxRetries) {
           const delay = Math.pow(2, attempt) * 100; // Exponential backoff
           this.logger.warn(
-            `Deadlock detected, retrying (${attempt}/${maxRetries}) in ${delay}ms`,
+            `Deadlock detected, retrying (${attempt}/${maxRetries}) in ${delay}ms`
           );
           await this.sleep(delay);
         } else {
@@ -181,7 +179,7 @@ export class TransactionManagerService {
       }
     }
 
-    throw new Error('Transaction failed after maximum retries');
+    throw new Error("Transaction failed after maximum retries");
   }
 
   private sleep(ms: number): Promise<void> {

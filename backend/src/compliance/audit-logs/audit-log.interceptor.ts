@@ -4,17 +4,27 @@ import {
   ExecutionContext,
   CallHandler,
 } from "@nestjs/common";
+import { Request } from "express";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { AuditLogsService } from "./audit-logs.service";
 import { AuditAction, AuditEntityType } from "./dto/audit-log.dto";
+
+interface AuditUser {
+  id: string;
+  name?: string;
+  email?: string;
+  organizationId?: string;
+}
 
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
   constructor(private readonly auditLogsService: AuditLogsService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest();
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user?: AuditUser }>();
     const method = request.method;
     const url = request.url;
     const user = request.user || { id: "system", name: "System" };
@@ -25,6 +35,9 @@ export class AuditLogInterceptor implements NestInterceptor {
         const auditInfo = this.extractAuditInfo(method, url, response, user);
 
         if (auditInfo) {
+          const responseObj = context.switchToHttp().getResponse() as {
+            statusCode: number;
+          };
           await this.auditLogsService.create({
             userId: user.id,
             userName: user.name || user.email || user.id,
@@ -36,9 +49,9 @@ export class AuditLogInterceptor implements NestInterceptor {
             metadata: {
               method,
               url,
-              statusCode: context.switchToHttp().getResponse().statusCode,
+              statusCode: responseObj.statusCode,
             },
-            ipAddress: request.ip,
+            ipAddress: request.ip || "unknown",
             userAgent: request.headers["user-agent"],
             organizationId: user.organizationId || "default",
           });
@@ -79,7 +92,23 @@ export class AuditLogInterceptor implements NestInterceptor {
     if (!match) return null;
 
     const entityTypeStr = match[1];
-    const entityId = match[2] || (response as any)?.id || "unknown";
+
+    let responseId: string | undefined;
+    let responseName: string | undefined;
+    let responseChanges: Record<string, unknown> | undefined;
+
+    if (response && typeof response === "object" && response !== null) {
+      const resp = response as Record<string, unknown>;
+      if (typeof resp.id === "string") responseId = resp.id;
+      if (typeof resp.name === "string") responseName = resp.name;
+      else if (typeof resp.title === "string") responseName = resp.title;
+
+      if (method !== "GET") {
+        responseChanges = resp;
+      }
+    }
+
+    const entityId = match[2] || responseId || "unknown";
 
     // Map URL paths to entity types
     const entityTypeMap: Record<string, AuditEntityType> = {
@@ -101,8 +130,8 @@ export class AuditLogInterceptor implements NestInterceptor {
       action,
       entityType,
       entityId,
-      entityName: (response as any)?.name || (response as any)?.title,
-      changes: method !== "GET" ? (response as any) : undefined,
+      entityName: responseName,
+      changes: responseChanges,
     };
   }
 }

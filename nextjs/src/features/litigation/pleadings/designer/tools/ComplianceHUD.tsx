@@ -16,9 +16,9 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
     const issues = useMemo(() => [
         { id: 2, type: 'warning', msg: 'Heading capitalization inconsistent', blockId: 'b2' },
         { id: 3, type: 'info', msg: 'Exhibit A referenced but not attached', blockId: 'b3' }
-    ], [sections]);
+    ], []);
 
-    const coverage = useMemo(() => {
+    const _coverage = useMemo(() => {
         if (!rules) return 0;
         const required = Object.values(rules).flat().length;
         // make pure: seed or don't use random in render. replacing with deterministic calc for now.

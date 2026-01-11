@@ -1,10 +1,10 @@
-import { Injectable} from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   CreateCorrespondenceDto,
   UpdateCorrespondenceDto,
   CorrespondenceQueryDto,
   CorrespondenceStatus,
-} from './dto';
+} from "./dto";
 
 /**
  * Correspondence Service
@@ -48,10 +48,11 @@ import {
 
 @Injectable()
 export class CorrespondenceService {
-  constructor(
-    // Note: Entity repositories will be injected once entities are created by Agent 1
-    // @InjectRepository(CommunicationItem) private correspondenceRepo: Repository<CommunicationItem>,
-  ) {}
+  constructor() // Note: Entity repositories will be injected once entities are created by Agent 1
+  // @InjectRepository(CommunicationItem) private correspondenceRepo: Repository<CommunicationItem>,
+  {
+    /* Dependencies will be injected */
+  }
 
   /**
    * Get all correspondence with filters
@@ -78,10 +79,10 @@ export class CorrespondenceService {
     // Verify user has permission to view
     return {
       id,
-      type: 'letter',
-      subject: 'Sample Correspondence',
-      body: 'Correspondence content...',
-      status: 'draft',
+      type: "letter",
+      subject: "Sample Correspondence",
+      body: "Correspondence content...",
+      status: "draft",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -94,7 +95,7 @@ export class CorrespondenceService {
     // Create correspondence record
     // If has attachments, link them
     return {
-      id: 'corr-' + Date.now(),
+      id: "corr-" + Date.now(),
       ...createDto,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -104,7 +105,11 @@ export class CorrespondenceService {
   /**
    * Update correspondence
    */
-  async update(id: string, updateDto: UpdateCorrespondenceDto, _userId: string) {
+  async update(
+    id: string,
+    updateDto: UpdateCorrespondenceDto,
+    _userId: string
+  ) {
     // Verify user has permission
     // Cannot update if already sent
     return {
@@ -155,7 +160,11 @@ export class CorrespondenceService {
   /**
    * Track delivery status
    */
-  async updateDeliveryStatus(id: string, status: CorrespondenceStatus, metadata?: unknown) {
+  async updateDeliveryStatus(
+    id: string,
+    status: CorrespondenceStatus,
+    metadata?: unknown
+  ) {
     // Update delivery status
     // Can be called by email/postal service webhooks
     return {

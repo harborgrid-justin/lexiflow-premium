@@ -54,11 +54,11 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'filings' | 'orders'>(filterType);
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, _startTransition] = useTransition();
   const liveModeToggle = useToggle();
 
   // Defer search term for better typing responsiveness
-  const deferredSearchTerm = useDeferredValue(searchTerm);
+  const _deferredSearchTerm = useDeferredValue(searchTerm);
 
   const addModal = useModalState();
   const deleteModal = useModalState();

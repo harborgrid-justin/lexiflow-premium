@@ -251,9 +251,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     userId?: string
   ): Promise<T> {
     this.logger.debug(`Upserting entity`);
-    const entityData = {
+    const entityData: DeepPartial<T> = {
       ...data,
-      ...(userId && { createdBy: userId, updatedBy: userId }),
+      ...(userId &&
+        ({ createdBy: userId, updatedBy: userId } as DeepPartial<T>)),
     };
 
     await this.repository.upsert(
@@ -297,7 +298,9 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     this.logger.debug(`Soft deleting entity with ID: ${id}`);
 
     if (userId) {
-      await this.repository.update(id, { updatedBy: userId } as any);
+      await this.repository.update(id, {
+        updatedBy: userId,
+      } as QueryDeepPartialEntity<T>);
     }
 
     const result = await this.repository.softDelete(id);
@@ -314,7 +317,9 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     this.logger.debug(`Bulk soft deleting entities`);
 
     if (userId) {
-      await this.repository.update(where, { updatedBy: userId } as any);
+      await this.repository.update(where, {
+        updatedBy: userId,
+      } as unknown as QueryDeepPartialEntity<T>);
     }
 
     const result = await this.repository.softDelete(where);

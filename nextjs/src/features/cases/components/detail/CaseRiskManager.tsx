@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { ShieldAlert, Plus, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -32,77 +32,79 @@ import { cn } from '@/utils/cn';
 import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';
 
 interface CaseRiskManagerProps {
-  caseData: Case;
+    caseData: Case;
 }
 
 export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) => {
-  const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
+    const { theme } = useTheme();
+    const { openWindow, closeWindow } = useWindow();
 
-  // Enterprise Data Access
-  const { data: risks = [], isLoading } = useQuery<Risk[]>(
-      ['risks', caseData.id],
-      () => DataService.risks.getByCaseId(caseData.id)
-  );
+    // Enterprise Data Access
+    const { data: risks = [], isLoading } = useQuery<Risk[]>(
+        ['risks', caseData.id],
+        () => DataService.risks.getByCaseId(caseData.id)
+    );
 
-  const { mutate: addRisk } = useMutation(
-      DataService.risks.add,
-      { invalidateKeys: [['risks', caseData.id]] }
-  );
+    const { mutate: addRisk } = useMutation(
+        DataService.risks.add,
+        { invalidateKeys: [['risks', caseData.id]] }
+    );
 
-  const { mutate: updateRisk } = useMutation(
-      (updated: Risk) => DataService.risks.update(updated.id, updated),
-      {
-          invalidateKeys: [['risks', caseData.id]],
-          onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
-      }
-  );
+    const { mutate: updateRisk } = useMutation(
+        (updated: Risk) => DataService.risks.update(updated.id, updated),
+        {
+            invalidateKeys: [['risks', caseData.id]],
+            onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
+        }
+    );
 
-  const { mutate: deleteRisk } = useMutation(
-      DataService.risks.delete,
-      {
-          invalidateKeys: [['risks', caseData.id]],
-          onSuccess: (_, id) => closeWindow(`risk-detail-${id}`)
-      }
-  );
+    const { mutate: deleteRisk } = useMutation(
+        DataService.risks.delete,
+        {
+            invalidateKeys: [['risks', caseData.id]],
+            onSuccess: (_, id) => closeWindow(`risk-detail-${id}`)
+        }
+    );
 
-  const handleAddRisk = () => {
-    const newRisk: Risk = {
-      id: `risk-${Date.now()}`,
-      caseId: caseData.id,
-      title: 'New Risk',
-      description: '',
-      category: 'Legal',
-      probability: RiskProbability.MEDIUM,
-      impact: RiskImpact.MEDIUM,
-      status: RiskStatusEnum.IDENTIFIED,
-      dateIdentified: new Date().toISOString().split('T')[0],
-      lastUpdated: new Date().toISOString().split('T')[0]
-    };
-    addRisk(newRisk);
-    handleOpenDetail(newRisk);
-  };
+    const handleAddRisk = useCallback(() => {
+        const timestamp = new Date().getTime();
+        const newRisk: Risk = {
+            id: `risk-${timestamp}`,
+            caseId: caseData.id,
+            title: 'New Risk',
+            description: '',
+            category: 'Legal',
+            probability: RiskProbability.MEDIUM,
+            impact: RiskImpact.MEDIUM,
+            status: RiskStatusEnum.IDENTIFIED,
+            dateIdentified: new Date().toISOString().split('T')[0],
+            lastUpdated: new Date().toISOString().split('T')[0]
+        };
+        setRisks([...risks, newRisk]);
+        handleOpenDetail(newRisk);
+    }, [caseData.id, risks, handleOpenDetail]);
+};
 
-  const handleOpenDetail = (risk: Risk) => {
-      const winId = `risk-detail-${risk.id}`;
-      openWindow(
-          winId,
-          `Risk: ${risk.title}`,
-          <RiskDetail
-              risk={risk}
-              onUpdate={updateRisk}
-              onDelete={deleteRisk}
-              onClose={() => closeWindow(winId)}
-          />
-      );
-  };
+const handleOpenDetail = (risk: Risk) => {
+    const winId = `risk-detail-${risk.id}`;
+    openWindow(
+        winId,
+        `Risk: ${risk.title}`,
+        <RiskDetail
+            risk={risk}
+            onUpdate={updateRisk}
+            onDelete={deleteRisk}
+            onClose={() => closeWindow(winId)}
+        />
+    );
+};
 
-  const highRisks = risks.filter(r => r.probability === 'High' || r.impact === 'High').length;
-  const exposure = risks.length * 150000; // Mock calculation
+const highRisks = risks.filter(r => r.probability === 'High' || r.impact === 'High').length;
+const exposure = risks.length * 150000; // Mock calculation
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>;
+if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)} /></div>;
 
-  return (
+return (
     <div className="flex flex-col h-full space-y-6">
         {/* Header Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
@@ -122,7 +124,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
             />
             <MetricCard
                 label="Est. Financial Impact"
-                value={`$${(exposure/1000).toFixed(0)}k`}
+                value={`$${(exposure / 1000).toFixed(0)}k`}
                 icon={TrendingUp}
                 className="border-l-4 border-l-amber-500"
             />
@@ -138,7 +140,5 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
             </div>
         </div>
     </div>
-  );
+);
 };
-
-

@@ -7,7 +7,7 @@
  */
 
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { useTheme } from '@/providers';
 import { useWindow } from '@/providers';
@@ -24,8 +24,8 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onAppl
     const { openWindow } = useWindow();
     const [activeTab, setActiveTab] = useState('workflow');
 
-    const handleLaunchResearch = (query: string) => {
-        const now = Date.now();
+    const handleLaunchResearch = useCallback((query: string) => {
+        const now = new Date().getTime();
         const winId = `research-${now}`;
         openWindow(
             winId,
@@ -34,7 +34,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onAppl
                 <ResearchTool initialTab="active" />
             </div>
         );
-    };
+    }, [openWindow]);
 
     const handlePreviewWarRoom = () => {
         const winId = `warroom-preview-${playbook.id}`;

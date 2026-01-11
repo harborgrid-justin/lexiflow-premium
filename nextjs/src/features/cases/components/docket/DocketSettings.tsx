@@ -80,7 +80,7 @@ export const DocketSettings: React.FC = () => {
                     <div className="flex items-center justify-between pt-4 border-t">
                         <div>
                             <p className={cn("font-medium text-sm", theme.text.primary)}>Download Free Looks</p>
-                            <p className={cn("text-xs", theme.text.secondary)}>Auto-download documents when "One Free Look" is available.</p>
+                            <p className={cn("text-xs", theme.text.secondary)}>Auto-download documents when &quot;One Free Look&quot; is available.</p>
                         </div>
                         <button
                             onClick={() => setSyncEnabled(!syncEnabled)}

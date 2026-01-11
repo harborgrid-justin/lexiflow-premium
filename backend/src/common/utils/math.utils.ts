@@ -105,8 +105,11 @@ export function weightedAverage(values: number[], weights: number[]): number {
   let weightSum = 0;
 
   for (let i = 0; i < values.length; i++) {
-    const val = values[i] ?? 0;
-    const weight = weights[i] ?? 0;
+    const val = values[i];
+    const weight = weights[i];
+    if (val === undefined || weight === undefined) {
+      throw new Error(`Missing value or weight at index ${i}`);
+    }
     sum += val * weight;
     weightSum += weight;
   }

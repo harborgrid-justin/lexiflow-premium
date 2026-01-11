@@ -22,11 +22,7 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
         DataService.quality.getStandardizationRules
     );
 
-    const [rules, setRules] = useState<CleansingRule[]>([]);
-
-    useEffect(() => {
-        if (fetchedRules.length > 0) setRules(fetchedRules);
-    }, [fetchedRules]);
+    const rules = useMemo(() => fetchedRules.length > 0 ? fetchedRules : [], [fetchedRules]);
 
     const { mutate: runJob } = useMutation(
         DataService.quality.runCleansingJob,

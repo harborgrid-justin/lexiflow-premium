@@ -47,7 +47,7 @@ export const CaseInsightsDashboard: React.FC = () => {
   );
 
   // Analytics data placeholder - method doesn't exist in API
-  const analyticsData = { budgetAccuracy: 85 };
+  const analyticsData = useMemo(() => ({ budgetAccuracy: 85 }), []);
 
   // Calculate success probability from historical data
   const successMetrics = useMemo(() => {
@@ -128,7 +128,6 @@ export const CaseInsightsDashboard: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {matters?.filter(m => m.status === CaseStatus.Active || m.status === CaseStatus.Open).slice(0, 5).map((matter) => {
-                const now = Date.now();
                 const hasHighValue = matter.value && matter.value > 100000;
                 const hasUpcomingTrial = matter.trialDate && new Date(matter.trialDate) < new Date(now + 30 * 24 * 60 * 60 * 1000);
                 const riskLevel = hasHighValue || hasUpcomingTrial ? 'high' : 'medium';
@@ -257,7 +256,6 @@ export const CaseInsightsDashboard: React.FC = () => {
                   />
                 )}
               {matters?.some(m => {
-                const now = Date.now();
                 return m.trialDate && new Date(m.trialDate) < new Date(now + 7 * 24 * 60 * 60 * 1000)
               }) && (
                   <RecommendationItem

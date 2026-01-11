@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { RefreshCw, Save } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AccessMatrix } from './security/AccessMatrix';
 import { RLSPolicyManager } from './security/RLSPolicyManager';
 
@@ -15,12 +15,9 @@ interface SecurityMatrixProps {
  */
 export const SecurityMatrix = React.memo<SecurityMatrixProps>(function SecurityMatrix({ initialTab = 'matrix' }) {
     const { theme } = useTheme();
-    const [activeView, setActiveView] = useState<'matrix' | 'policies'>('matrix');
-
-    useEffect(() => {
-        if (initialTab === 'policies') setActiveView('policies');
-        else setActiveView('matrix');
-    }, [initialTab]);
+    const [activeView, setActiveView] = useState<'matrix' | 'policies'>(
+        initialTab === 'policies' ? 'policies' : 'matrix'
+    );
 
     return (
         <div className="flex flex-col h-full">

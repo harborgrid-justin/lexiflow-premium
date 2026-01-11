@@ -58,17 +58,9 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
     return sampleStreams;
   });
 
-  const [liveStreams, setLiveStreams] = useState<DataStream[]>([]);
-  const [activeConnections, setActiveConnections] = useState(0);
-  const [totalThroughput, setTotalThroughput] = useState('0/sec');
-
-  useEffect(() => {
-    if (streams && streams.length > 0) {
-      setLiveStreams(streams);
-      setActiveConnections(45 + Math.floor(Math.random() * 10));
-      setTotalThroughput('1.55k/sec');
-    }
-  }, [streams]);
+  const liveStreams = useMemo(() => streams && streams.length > 0 ? streams : [], [streams]);
+  const [activeConnections] = useState(() => 45 + Math.floor(Math.random() * 10));
+  const totalThroughput = useMemo(() => streams && streams.length > 0 ? '1.55k/sec' : '0/sec', [streams]);
 
   useEffect(() => {
     // Simulate real-time updates only if we have streams

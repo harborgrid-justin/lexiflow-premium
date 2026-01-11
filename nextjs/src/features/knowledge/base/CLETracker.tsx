@@ -487,7 +487,7 @@ export const CLETracker: React.FC = () => {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 {/* Courses View */ }

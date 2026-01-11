@@ -78,7 +78,6 @@ export function DocumentPreviewPanel({
 
         // Ensure consistent reset during transitions
         if (!document) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
             if (previewUrl) setPreviewUrl(null);
             return;
         }

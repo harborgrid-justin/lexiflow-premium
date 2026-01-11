@@ -1,15 +1,18 @@
+import { RateLimitService } from "@api-security/services/rate.limit.service";
 import {
-  Injectable,
+  RATE_LIMIT_KEY,
+  RateLimitOptions,
+} from "@common/decorators/rate-limit.decorator";
+import {
   CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Request, Response } from 'express';
-import { RateLimitService } from '@api-security/services/rate.limit.service';
-import { RATE_LIMIT_KEY, RateLimitOptions } from '@common/decorators/rate-limit.decorator';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Request, Response } from "express";
 
 interface RequestWithUser extends Request {
   user?: {
@@ -49,7 +52,7 @@ export class RateLimitGuard implements CanActivate {
 
   constructor(
     private readonly rateLimitService: RateLimitService,
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -59,7 +62,7 @@ export class RateLimitGuard implements CanActivate {
     // Get custom rate limit options from decorator
     const customLimit = this.reflector.get<RateLimitOptions>(
       RATE_LIMIT_KEY,
-      context.getHandler(),
+      context.getHandler()
     );
 
     // Check if rate limiting should be applied
@@ -76,7 +79,7 @@ export class RateLimitGuard implements CanActivate {
         throw error;
       }
 
-      this.logger.error('Rate limit check failed:', error);
+      this.logger.error("Rate limit check failed:", error);
       // Fail open - allow request if rate limiting system has errors
       return true;
     }
@@ -88,16 +91,16 @@ export class RateLimitGuard implements CanActivate {
   private async applyRateLimits(
     request: RequestWithUser,
     response: Response,
-    customLimit?: RateLimitOptions,
+    customLimit?: RateLimitOptions
   ): Promise<void> {
-    const userId = request.user?.id || 'anonymous';
-    const userRole = request.user?.role || 'guest';
+    const userId = request.user?.id || "anonymous";
+    const userRole = request.user?.role || "guest";
     const ip = this.getClientIp(request);
     const endpoint = `${request.method}:${request.path}`;
 
     // 1. Check IP-based rate limit (first line of defense)
     const ipResult = await this.rateLimitService.checkIpLimit(ip);
-    this.setRateLimitHeaders(response, ipResult, 'ip');
+    this.setRateLimitHeaders(response, ipResult, "ip");
 
     if (!ipResult.allowed) {
       this.logger.warn(`IP rate limit exceeded for ${ip}`);
@@ -108,30 +111,34 @@ export class RateLimitGuard implements CanActivate {
     if (customLimit) {
       const endpointResult = await this.rateLimitService.checkRateLimit(
         `${endpoint}:${userId}`,
-        'endpoint',
+        "endpoint",
         {
           limit: customLimit.points,
           windowMs: customLimit.duration * 1000,
-        },
+        }
       );
 
-      this.setRateLimitHeaders(response, endpointResult, 'endpoint');
+      this.setRateLimitHeaders(response, endpointResult, "endpoint");
 
       if (!endpointResult.allowed) {
-        this.logger.warn(`Endpoint rate limit exceeded for ${endpoint} by user ${userId}`);
+        this.logger.warn(
+          `Endpoint rate limit exceeded for ${endpoint} by user ${userId}`
+        );
         this.throwRateLimitError(endpointResult);
       }
     } else {
       // Use default endpoint limits
       const endpointResult = await this.rateLimitService.checkEndpointLimit(
         endpoint,
-        userId,
+        userId
       );
 
-      this.setRateLimitHeaders(response, endpointResult, 'endpoint');
+      this.setRateLimitHeaders(response, endpointResult, "endpoint");
 
       if (!endpointResult.allowed) {
-        this.logger.warn(`Endpoint rate limit exceeded for ${endpoint} by user ${userId}`);
+        this.logger.warn(
+          `Endpoint rate limit exceeded for ${endpoint} by user ${userId}`
+        );
         this.throwRateLimitError(endpointResult);
       }
     }
@@ -140,20 +147,22 @@ export class RateLimitGuard implements CanActivate {
     if (request.user) {
       const roleResult = await this.rateLimitService.checkRoleBased(
         userId,
-        userRole as any,
+        userRole as "admin" | "user" | "guest"
       );
 
-      this.setRateLimitHeaders(response, roleResult, 'role');
+      this.setRateLimitHeaders(response, roleResult, "role");
 
       if (!roleResult.allowed) {
-        this.logger.warn(`Role rate limit exceeded for user ${userId} with role ${userRole}`);
+        this.logger.warn(
+          `Role rate limit exceeded for user ${userId} with role ${userRole}`
+        );
         this.throwRateLimitError(roleResult);
       }
 
       // 4. Check burst protection
       const burstResult = await this.rateLimitService.checkBurst(
         userId,
-        userRole as any,
+        userRole as "admin" | "user" | "guest"
       );
 
       if (!burstResult.allowed) {
@@ -169,12 +178,22 @@ export class RateLimitGuard implements CanActivate {
   private setRateLimitHeaders(
     response: Response,
     result: unknown,
-    type: string,
+    type: string
   ): void {
-    const rateLimitResult = result as { limit: number; remaining: number; resetAt: Date };
+    const rateLimitResult = result as {
+      limit: number;
+      remaining: number;
+      resetAt: Date;
+    };
     response.setHeader(`X-RateLimit-Limit-${type}`, rateLimitResult.limit);
-    response.setHeader(`X-RateLimit-Remaining-${type}`, Math.max(0, rateLimitResult.remaining));
-    response.setHeader(`X-RateLimit-Reset-${type}`, rateLimitResult.resetAt.toISOString());
+    response.setHeader(
+      `X-RateLimit-Remaining-${type}`,
+      Math.max(0, rateLimitResult.remaining)
+    );
+    response.setHeader(
+      `X-RateLimit-Reset-${type}`,
+      rateLimitResult.resetAt.toISOString()
+    );
   }
 
   /**
@@ -187,15 +206,15 @@ export class RateLimitGuard implements CanActivate {
     throw new HttpException(
       {
         statusCode: HttpStatus.TOO_MANY_REQUESTS,
-        message: 'Rate limit exceeded. Please try again later.',
-        error: 'Too Many Requests',
+        message: "Rate limit exceeded. Please try again later.",
+        error: "Too Many Requests",
         retryAfter,
         resetAt: rateLimitResult.resetAt,
       },
       HttpStatus.TOO_MANY_REQUESTS,
       {
-        cause: new Error('Rate limit exceeded'),
-      },
+        cause: new Error("Rate limit exceeded"),
+      }
     );
   }
 
@@ -204,9 +223,9 @@ export class RateLimitGuard implements CanActivate {
    */
   private getClientIp(request: RequestWithUser): string {
     // Check various headers for IP (in order of trust)
-    const cfConnectingIp = request.headers['cf-connecting-ip'] as string;
-    const xRealIp = request.headers['x-real-ip'] as string;
-    const xForwardedFor = request.headers['x-forwarded-for'] as string;
+    const cfConnectingIp = request.headers["cf-connecting-ip"] as string;
+    const xRealIp = request.headers["x-real-ip"] as string;
+    const xForwardedFor = request.headers["x-forwarded-for"] as string;
 
     if (cfConnectingIp) {
       return cfConnectingIp;
@@ -218,10 +237,10 @@ export class RateLimitGuard implements CanActivate {
 
     if (xForwardedFor) {
       // X-Forwarded-For can contain multiple IPs, take the first one
-      return xForwardedFor.split(',')[0]?.trim() || 'unknown';
+      return xForwardedFor.split(",")[0]?.trim() || "unknown";
     }
 
-    return request.ip || request.socket?.remoteAddress || 'unknown';
+    return request.ip || request.socket?.remoteAddress || "unknown";
   }
 
   /**
@@ -229,13 +248,13 @@ export class RateLimitGuard implements CanActivate {
    */
   private shouldSkipRateLimiting(request: RequestWithUser): boolean {
     // Skip rate limiting for health checks
-    const healthCheckPaths = ['/health', '/api/health', '/ping'];
+    const healthCheckPaths = ["/health", "/api/health", "/ping"];
     if (healthCheckPaths.includes(request.path)) {
       return true;
     }
 
     // Skip for internal service calls (if identified by special header)
-    const isInternalCall = request.headers['x-internal-service'] === 'true';
+    const isInternalCall = request.headers["x-internal-service"] === "true";
     if (isInternalCall) {
       return true;
     }

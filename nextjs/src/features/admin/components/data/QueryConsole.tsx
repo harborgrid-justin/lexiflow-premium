@@ -46,11 +46,11 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
         return schema;
     }, [schemaTables]);
 
-    useEffect(() => {
-        if (initialTab === 'history') setActiveSidebarTab('history');
-        else if (initialTab === 'saved') setActiveSidebarTab('saved');
-        else setActiveSidebarTab('schema');
-    }, [initialTab]);
+    const [activeSidebarTab, setActiveSidebarTab] = useState<'schema' | 'history' | 'saved'>(() => {
+        if (initialTab === 'history') return 'history';
+        if (initialTab === 'saved') return 'saved';
+        return 'schema';
+    });
 
     const handleRun = async () => {
         try {

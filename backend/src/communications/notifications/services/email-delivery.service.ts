@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { EmailPayload, EmailServiceConfig, DeliveryAttempt } from '../types';
+import { Injectable, Logger } from "@nestjs/common";
+import { DeliveryAttempt, EmailPayload, EmailServiceConfig } from "../types";
 
 /**
  * Email Delivery Service
@@ -54,22 +54,25 @@ export class EmailDeliveryService {
   constructor() {
     // Default configuration - in production, load from environment/config service
     this.config = {
-      provider: 'smtp',
-      fromAddress: process.env.EMAIL_FROM_ADDRESS || 'notifications@lexiflow.com',
-      fromName: process.env.EMAIL_FROM_NAME || 'LexiFlow',
+      provider: "smtp",
+      fromAddress:
+        process.env.EMAIL_FROM_ADDRESS || "notifications@lexiflow.com",
+      fromName: process.env.EMAIL_FROM_NAME || "LexiFlow",
       maxRetries: 3,
       retryDelayMs: 1000,
       retryBackoffMultiplier: 2,
       timeout: 30000,
       // Provider-specific configs
       smtpHost: process.env.SMTP_HOST,
-      smtpPort: parseInt(process.env.SMTP_PORT || '587', 10),
+      smtpPort: parseInt(process.env.SMTP_PORT || "587", 10),
       smtpUser: process.env.SMTP_USER,
       smtpPassword: process.env.SMTP_PASSWORD,
       apiKey: process.env.SENDGRID_API_KEY || process.env.AWS_SES_API_KEY,
     };
 
-    this.logger.log(`EmailDeliveryService initialized with provider: ${this.config.provider}`);
+    this.logger.log(
+      `EmailDeliveryService initialized with provider: ${this.config.provider}`
+    );
   }
 
   /**
@@ -87,7 +90,7 @@ export class EmailDeliveryService {
     for (let attempt = 1; attempt <= this.config.maxRetries; attempt++) {
       try {
         this.logger.debug(
-          `Email delivery attempt ${attempt}/${this.config.maxRetries} to ${payload.to}`,
+          `Email delivery attempt ${attempt}/${this.config.maxRetries} to ${payload.to}`
         );
 
         const messageId = await this.deliverEmail(payload);
@@ -100,7 +103,9 @@ export class EmailDeliveryService {
         };
         attempts.push(attemptRecord);
 
-        this.logger.log(`Email delivered successfully to ${payload.to} (messageId: ${messageId})`);
+        this.logger.log(
+          `Email delivered successfully to ${payload.to} (messageId: ${messageId})`
+        );
 
         return {
           success: true,
@@ -108,7 +113,8 @@ export class EmailDeliveryService {
           attempts,
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
         lastError = errorMessage;
 
         const attemptRecord: DeliveryAttempt = {
@@ -120,7 +126,7 @@ export class EmailDeliveryService {
         attempts.push(attemptRecord);
 
         this.logger.warn(
-          `Email delivery attempt ${attempt} failed: ${errorMessage}`,
+          `Email delivery attempt ${attempt} failed: ${errorMessage}`
         );
 
         // Wait before retry (with exponential backoff)
@@ -132,7 +138,7 @@ export class EmailDeliveryService {
     }
 
     this.logger.error(
-      `Email delivery failed after ${this.config.maxRetries} attempts to ${payload.to}: ${lastError}`,
+      `Email delivery failed after ${this.config.maxRetries} attempts to ${payload.to}: ${lastError}`
     );
 
     return {
@@ -147,11 +153,11 @@ export class EmailDeliveryService {
    */
   private async deliverEmail(payload: EmailPayload): Promise<string> {
     switch (this.config.provider) {
-      case 'sendgrid':
+      case "sendgrid":
         return await this.sendViaSendGrid(payload);
-      case 'ses':
+      case "ses":
         return await this.sendViaSES(payload);
-      case 'smtp':
+      case "smtp":
         return await this.sendViaSMTP(payload);
       default:
         throw new Error(`Unsupported email provider: ${this.config.provider}`);
@@ -177,7 +183,9 @@ export class EmailDeliveryService {
     // const [response] = await sgMail.send(msg);
     // return response.headers['x-message-id'];
 
-    this.logger.debug(`[SendGrid Mock] Sending email to ${payload.to}: ${payload.subject}`);
+    this.logger.debug(
+      `[SendGrid Mock] Sending email to ${payload.to}: ${payload.subject}`
+    );
     return `sendgrid-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   }
 
@@ -206,7 +214,9 @@ export class EmailDeliveryService {
     // const response = await client.send(command);
     // return response.MessageId!;
 
-    this.logger.debug(`[AWS SES Mock] Sending email to ${payload.to}: ${payload.subject}`);
+    this.logger.debug(
+      `[AWS SES Mock] Sending email to ${payload.to}: ${payload.subject}`
+    );
     return `ses-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   }
 
@@ -238,7 +248,9 @@ export class EmailDeliveryService {
     //
     // return info.messageId;
 
-    this.logger.debug(`[SMTP Mock] Sending email to ${payload.to}: ${payload.subject}`);
+    this.logger.debug(
+      `[SMTP Mock] Sending email to ${payload.to}: ${payload.subject}`
+    );
     return `smtp-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   }
 
@@ -246,14 +258,17 @@ export class EmailDeliveryService {
    * Calculate retry delay with exponential backoff
    */
   private calculateRetryDelay(attemptNumber: number): number {
-    return this.config.retryDelayMs * Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1);
+    return (
+      this.config.retryDelayMs *
+      Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1)
+    );
   }
 
   /**
    * Sleep utility for retry delays
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -261,14 +276,18 @@ export class EmailDeliveryService {
    */
   updateConfig(config: Partial<EmailServiceConfig>): void {
     this.config = { ...this.config, ...config };
-    this.logger.log('Email service configuration updated');
+    this.logger.log("Email service configuration updated");
   }
 
   /**
    * Get current configuration (sensitive data redacted)
    */
-  getConfig(): Omit<EmailServiceConfig, 'apiKey' | 'smtpPassword'> {
-    const { apiKey, smtpPassword, ...safeConfig } = this.config;
+  getConfig(): Omit<EmailServiceConfig, "apiKey" | "smtpPassword"> {
+    const {
+      apiKey: _apiKey,
+      smtpPassword: _smtpPassword,
+      ...safeConfig
+    } = this.config;
     return safeConfig;
   }
 
@@ -283,16 +302,18 @@ export class EmailDeliveryService {
   /**
    * Send bulk emails
    */
-  async sendBulk(payloads: EmailPayload[]): Promise<Array<{
-    email: string;
-    success: boolean;
-    messageId?: string;
-    error?: string;
-  }>> {
+  async sendBulk(payloads: EmailPayload[]): Promise<
+    Array<{
+      email: string;
+      success: boolean;
+      messageId?: string;
+      error?: string;
+    }>
+  > {
     this.logger.log(`Sending bulk emails: ${payloads.length} recipients`);
 
     const results = await Promise.allSettled(
-      payloads.map(async payload => {
+      payloads.map(async (payload) => {
         const result = await this.send(payload);
         return {
           email: payload.to,
@@ -300,17 +321,17 @@ export class EmailDeliveryService {
           messageId: result.messageId,
           error: result.error,
         };
-      }),
+      })
     );
 
-    return results.map(result => {
-      if (result.status === 'fulfilled') {
+    return results.map((result) => {
+      if (result.status === "fulfilled") {
         return result.value;
       } else {
         return {
-          email: 'unknown',
+          email: "unknown",
           success: false,
-          error: result.reason?.message || 'Unknown error',
+          error: result.reason?.message || "Unknown error",
         };
       }
     });

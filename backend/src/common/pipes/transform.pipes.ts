@@ -1,8 +1,8 @@
 import {
-  PipeTransform,
-  Injectable,
   ArgumentMetadata,
   BadRequestException,
+  Injectable,
+  PipeTransform,
 } from "@nestjs/common";
 import { isUUID } from "class-validator";
 
@@ -318,7 +318,7 @@ export class ParseJsonPipe implements PipeTransform<string, unknown> {
 
     try {
       return JSON.parse(value);
-    } catch (error) {
+    } catch (_error) {
       throw new BadRequestException(
         this.options.errorMessage ||
           `Invalid ${metadata.data || "json"}: Must be a valid JSON string`

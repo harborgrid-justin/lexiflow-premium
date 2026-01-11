@@ -7,9 +7,7 @@ import type { LocalStorageItem } from './types';
 
 export const LocalStorageView: React.FC = () => {
   const { theme } = useTheme();
-  const [files, setFiles] = useState<LocalStorageItem[]>([]);
-
-  useEffect(() => {
+  const [files, setFiles] = useState<LocalStorageItem[]>(() => {
     const items = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -19,8 +17,8 @@ export const LocalStorageView: React.FC = () => {
         items.push({ name: key, size: size, modified: 'Unknown' });
       }
     }
-    setFiles(items);
-  }, []);
+    return items;
+  });
 
   const clearCache = () => {
     if (confirm('Are you sure you want to clear all local storage? This will reset your preferences.')) {
@@ -37,13 +35,13 @@ export const LocalStorageView: React.FC = () => {
   return (
     <div className="space-y-6">
       <DataSourceSelector />
-      
+
       <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex justify-between items-center mb-6">
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
             <HardDrive className="h-5 w-5 text-gray-500" /> Local File Storage
           </h3>
-          <button 
+          <button
             onClick={clearCache}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors"
           >
@@ -72,7 +70,7 @@ export const LocalStorageView: React.FC = () => {
                     <td className={cn("px-6 py-4 font-medium", theme.text.primary)}>{file.name}</td>
                     <td className={cn("px-6 py-4 font-mono text-xs", theme.text.secondary)}>{file.size}</td>
                     <td className="px-6 py-4 text-right">
-                      <button 
+                      <button
                         type="button"
                         onClick={() => deleteItem(file.name)}
                         className="p-2 rounded-lg hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors"

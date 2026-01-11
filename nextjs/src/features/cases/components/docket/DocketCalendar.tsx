@@ -1,15 +1,15 @@
 /**
  * DocketCalendar.tsx
- * 
+ *
  * Calendar view of docket deadlines with month navigation and daily
  * deadline indicators.
- * 
+ *
  * @module components/docket/DocketCalendar
  * @category Case Management - Docket
  */
 
 // External Dependencies
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
@@ -21,10 +21,10 @@ import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 
 import {
-    getPaddingDays,
-    getDaysArray,
-    getAllDeadlines,
-    getDeadlinesForDay
+  getPaddingDays,
+  getDaysArray,
+  getAllDeadlines,
+  getDeadlinesForDay
 } from './docketCalendar.utils';
 
 // Types & Interfaces
@@ -36,8 +36,8 @@ export const DocketCalendar: React.FC = () => {
 
   // Enterprise Data Access: Shared cache with DocketSheet
   const { data: entriesData } = useQuery<DocketEntry[]>(
-      ['docket', 'all'],
-      DataService.docket.getAll
+    ['docket', 'all'],
+    DataService.docket.getAll
   );
 
   // Ensure entries is always an array with stable reference
@@ -50,15 +50,22 @@ export const DocketCalendar: React.FC = () => {
   // Extract all deadlines from docket entries (memoized)
   const allDeadlines = useMemo(() => getAllDeadlines(entries), [entries]);
 
+  // Use useRef for cache to avoid mutation warnings
+  const cacheRef = useRef<Map<string, unknown[]>>(new Map());
+
+  // Clear cache when dependencies change
+  useEffect(() => {
+    cacheRef.current.clear();
+  }, [currentDate, allDeadlines]);
+
   // Memoize deadline lookup function
   const getDeadlines = useMemo(() => {
-    const cache = new Map<string, unknown[]>();
     return (day: number) => {
       const key = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`;
-      if (!cache.has(key)) {
-        cache.set(key, getDeadlinesForDay(day, currentDate, allDeadlines));
+      if (!cacheRef.current.has(key)) {
+        cacheRef.current.set(key, getDeadlinesForDay(day, currentDate, allDeadlines));
       }
-      return cache.get(key)!;
+      return cacheRef.current.get(key)!;
     };
   }, [currentDate, allDeadlines]);
 
@@ -92,7 +99,7 @@ export const DocketCalendar: React.FC = () => {
             {day}
           </div>
         ))}
-        
+
         {paddingDays.map(i => (
           <div key={`pad-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
@@ -100,7 +107,7 @@ export const DocketCalendar: React.FC = () => {
         {daysArray.map(day => {
           const deadlines = getDeadlines(day);
           const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
-          
+
           return (
             <div key={day} className={cn("p-2 min-h-[120px] flex flex-col transition-colors group relative", theme.surface.default, `hover:${theme.surface.highlight}`, isToday && cn(theme.primary.light, "bg-opacity-50"))}>
               <div className="flex justify-between items-start mb-2">
@@ -112,7 +119,7 @@ export const DocketCalendar: React.FC = () => {
                 </span>
                 {deadlines.length > 0 && <span className={cn("text-[10px] font-bold", theme.text.tertiary)}>{deadlines.length} events</span>}
               </div>
-              
+
               <div className="space-y-1">
                 {deadlines.map((dl, idx) => {
                   const deadline = dl as { title: string; caseId: string; status: string };
@@ -128,8 +135,8 @@ export const DocketCalendar: React.FC = () => {
                       title={`${deadline.title} - ${deadline.caseId}`}
                     >
                       <div className="flex items-center gap-1 font-bold">
-                          {deadline.status === 'Satisfied' ? <CheckCircle2 className="h-3 w-3"/> : <AlertCircle className="h-3 w-3"/>}
-                          {deadline.title}
+                        {deadline.status === 'Satisfied' ? <CheckCircle2 className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
+                        {deadline.title}
                       </div>
                       <div className="opacity-75 font-mono mt-0.5 truncate">{deadline.caseId}</div>
                     </div>
@@ -143,5 +150,3 @@ export const DocketCalendar: React.FC = () => {
     </div>
   );
 };
-
-

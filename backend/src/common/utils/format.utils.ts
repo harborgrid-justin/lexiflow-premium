@@ -49,7 +49,10 @@ export function parseSize(sizeString: string): number {
   }
 
   const unitValue = units[unit as keyof typeof units];
-  return Math.floor(value * (unitValue ?? 0));
+  if (unitValue === undefined) {
+    throw new Error(`Unit value not found for: ${unit}`);
+  }
+  return Math.floor(value * unitValue);
 }
 
 /**

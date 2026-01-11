@@ -170,13 +170,13 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const notify = useNotify();
   const isEditMode = Boolean(id);
 
-  const navigate = (path: string) => {
+  const navigate = useCallback((path: string) => {
     if (onBack) {
       onBack();
     } else {
       window.location.hash = `#/${path}`;
     }
-  };
+  }, [onBack]);
 
   // ========================================
   // STATE MANAGEMENT
@@ -1466,7 +1466,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
 
                 {formData.relatedCases.length === 0 ? (
                   <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                    No related cases. Click "Add Related Case" to link a case.
+                    No related cases. Click &quot;Add Related Case&quot; to link a case.
                   </div>
                 ) : (
                   <div className="space-y-4">

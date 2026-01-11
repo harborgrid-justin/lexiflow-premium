@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Case } from '@/lib/dal/cases'; // Assuming type is exported
-import { BriefcaseIcon, CalendarIcon, ChevronRightIcon } from 'lucide-react';
+import { BriefcaseIcon, CalendarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface CaseListProps {

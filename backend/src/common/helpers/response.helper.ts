@@ -102,7 +102,7 @@ export class ResponseHelper {
    * Generate a correlation ID
    */
   private static generateCorrelationId(): string {
-    return require("crypto").randomUUID();
+    return crypto.randomUUID();
   }
 
   /**
@@ -425,6 +425,6 @@ export class MetadataHelper {
    * Generate correlation ID
    */
   private static generateCorrelationId(): string {
-    return require("crypto").randomUUID();
+    return crypto.randomUUID();
   }
 }

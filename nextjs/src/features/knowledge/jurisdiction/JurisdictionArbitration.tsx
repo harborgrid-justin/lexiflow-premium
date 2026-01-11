@@ -26,7 +26,7 @@ export const JurisdictionArbitration: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <Card className="lg:col-span-2" title="ADR Providers">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {providers.map((prov: unknown, i: number) => (
+          {providers.map((prov: unknown) => (
             <div key={`provider-${(prov as { name: string }).name}`} className={cn("p-4 border rounded-lg transition-colors cursor-pointer group", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
 
               <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{(prov as { name: string }).name}</h4>

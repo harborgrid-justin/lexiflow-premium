@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { Repository, In, ObjectLiteral } from "typeorm";
+import { In, ObjectLiteral, Repository } from "typeorm";
 
 /**
  * Batch Loader Service
@@ -134,7 +134,9 @@ export class BatchLoaderService {
       return new Map();
     }
 
-    const uniqueValues = [...new Set(values.filter((v) => v != null))];
+    const uniqueValues = [
+      ...new Set(values.filter((v) => v !== null && v !== undefined)),
+    ];
 
     if (uniqueValues.length === 0) {
       return new Map();
@@ -259,7 +261,9 @@ export class BatchLoaderService {
       return new Map();
     }
 
-    const uniqueValues = [...new Set(values.filter((v) => v != null))];
+    const uniqueValues = [
+      ...new Set(values.filter((v) => v !== null && v !== undefined)),
+    ];
 
     if (uniqueValues.length === 0) {
       return new Map();

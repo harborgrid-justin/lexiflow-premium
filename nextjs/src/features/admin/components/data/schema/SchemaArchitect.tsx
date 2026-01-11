@@ -32,11 +32,9 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     }
   };
 
-  const [activeTab, setActiveTab] = useState<'visual' | 'code' | 'history' | 'snapshots'>(mapInitialTabToState(initialTab));
-
-  useEffect(() => {
-    setActiveTab(mapInitialTabToState(initialTab));
-  }, [initialTab]);
+  const [activeTab, setActiveTab] = useState<'visual' | 'code' | 'history' | 'snapshots'>(
+    mapInitialTabToState(initialTab)
+  );
 
   // Use real backend API for schema tables
   const { data: fetchedTables = [], isLoading } = useQuery(
@@ -66,8 +64,9 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           })) : []
         };
       });
-      setTables(mappedTables);
+      return mappedTables;
     }
+    return initialTables;
   }, [fetchedTables]);
 
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);

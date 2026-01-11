@@ -100,6 +100,7 @@ export const WebhookManagement: React.FC = () => {
         message: result.message || (result.success ? 'Webhook responded successfully' : 'Webhook failed'),
       });
     } catch (error) {
+      console.error('Webhook test failed:', error);
       setTestResult({
         success: false,
         message: 'Failed to test webhook',

@@ -79,12 +79,7 @@ const PARENT_TABS = [
 
 export const DocketManager: React.FC<DocketManagerProps> = ({ initialTab }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<DocketView>('all');
-
-  // Holographic Routing Effect
-  useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
-  }, [initialTab]);
+  const [activeTab, setActiveTab] = useState<DocketView>(initialTab || 'all');
 
   const activeParentTab = useMemo(() =>
     PARENT_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || PARENT_TABS[0],

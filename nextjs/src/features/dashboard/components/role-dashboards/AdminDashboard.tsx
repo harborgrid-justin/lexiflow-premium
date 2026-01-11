@@ -17,7 +17,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 export const AdminDashboard: React.FC = () => {
   const { theme } = useTheme();
 
-  const { data: dashboardData, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     ['dashboard', 'admin'],
     () => dashboardMetricsService.getRoleDashboard('admin')
   );

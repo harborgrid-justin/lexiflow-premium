@@ -39,7 +39,9 @@ export class CitationsService {
   ) {}
 
   async create(createDto: unknown) {
-    const citation = this.citationRepository.create(createDto as any);
+    const citation = this.citationRepository.create(
+      createDto as DeepPartial<Citation>
+    );
     return await this.citationRepository.save(citation);
   }
 

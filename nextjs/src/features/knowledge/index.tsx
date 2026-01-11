@@ -166,7 +166,7 @@ export const OperatingLedger: React.FC<LedgerProps> = ({ className }) => {
 };
 
 export const TrustLedger: React.FC<LedgerProps> = ({ className }) => {
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<{
@@ -289,7 +289,7 @@ export const TrustLedger: React.FC<LedgerProps> = ({ className }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`text-sm font-medium ${txn.type === 'Deposit' ? 'text-green-600' :
-                          txn.type === 'Withdrawal' ? 'text-red-600' : 'text-blue-600'
+                        txn.type === 'Withdrawal' ? 'text-red-600' : 'text-blue-600'
                         }`}>
                         {txn.type}
                       </span>

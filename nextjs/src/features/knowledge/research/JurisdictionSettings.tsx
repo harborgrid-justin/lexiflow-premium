@@ -41,7 +41,7 @@ export const JurisdictionSettings: React.FC = () => {
             <div className={cn("p-4 rounded-lg border flex items-center justify-between", theme.surface.highlight, theme.border.default)}>
                 <div className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span className={cn("text-sm font-medium", theme.text.primary)}>Shepard's / KeyCite Integration Active</span>
+                    <span className={cn("text-sm font-medium", theme.text.primary)}>Shepard&apos;s / KeyCite Integration Active</span>
                 </div>
                 <button className={cn("text-xs underline", theme.primary.text)}>Manage API Key</button>
             </div>

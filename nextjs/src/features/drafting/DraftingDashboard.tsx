@@ -46,11 +46,12 @@ const DraftingDashboard: React.FC = () => {
       setApprovals(approvalsData);
       setStats(statsData);
     } catch (error) {
+      console.error(error);
       addToast({ type: 'error', message: 'Failed to load drafting data' });
     } finally {
       setLoading(false);
     }
-  }, [addToast, draftingApi]);
+  }, [addToast]);
 
   useEffect(() => {
     if (!editorView) {

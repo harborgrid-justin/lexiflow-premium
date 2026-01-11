@@ -84,11 +84,11 @@ export const AssetManager: React.FC = () => {
     const handleAddAsset = () => {
         if (!newAsset.name) return;
         const asset: FirmAsset = {
-            id: `AST-${Date.now()}`,
+            id: `AST-${new Date().getTime()}`,
             name: newAsset.name,
-            type: (newAsset.type as any) || 'Hardware',
+            type: (newAsset.type as string) || 'Hardware',
             assignedTo: newAsset.assignedTo || 'Unassigned',
-            status: (newAsset.status as any) || 'Active',
+            status: (newAsset.status as string) || 'Active',
             purchaseDate: newAsset.purchaseDate || getTodayString(),
             value: Number(newAsset.value) || 0,
             serialNumber: newAsset.serialNumber

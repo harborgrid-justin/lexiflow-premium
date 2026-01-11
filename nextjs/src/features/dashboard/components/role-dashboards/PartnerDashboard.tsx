@@ -28,7 +28,7 @@ import {
 export const PartnerDashboard: React.FC = () => {
   const { theme } = useTheme();
 
-  const { data: dashboardData, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     ['dashboard', 'partner'],
     () => dashboardMetricsService.getRoleDashboard('partner')
   );

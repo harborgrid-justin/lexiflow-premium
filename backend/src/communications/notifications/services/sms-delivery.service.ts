@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { SMSPayload, SMSServiceConfig, DeliveryAttempt } from '../types';
+import { Injectable, Logger } from "@nestjs/common";
+import { DeliveryAttempt, SMSPayload, SMSServiceConfig } from "../types";
 
 /**
  * SMS Delivery Service
@@ -54,8 +54,8 @@ export class SMSDeliveryService {
   constructor() {
     // Default configuration - in production, load from environment/config service
     this.config = {
-      provider: 'twilio',
-      fromNumber: process.env.SMS_FROM_NUMBER || '+1234567890',
+      provider: "twilio",
+      fromNumber: process.env.SMS_FROM_NUMBER || "+1234567890",
       maxRetries: 3,
       retryDelayMs: 1000,
       retryBackoffMultiplier: 2,
@@ -63,10 +63,12 @@ export class SMSDeliveryService {
       // Provider-specific configs
       accountSid: process.env.TWILIO_ACCOUNT_SID,
       authToken: process.env.TWILIO_AUTH_TOKEN,
-      awsRegion: process.env.AWS_REGION || 'us-east-1',
+      awsRegion: process.env.AWS_REGION || "us-east-1",
     };
 
-    this.logger.log(`SMSDeliveryService initialized with provider: ${this.config.provider}`);
+    this.logger.log(
+      `SMSDeliveryService initialized with provider: ${this.config.provider}`
+    );
   }
 
   /**
@@ -90,7 +92,7 @@ export class SMSDeliveryService {
     // Validate message length
     if (payload.body.length > this.MAX_SMS_LENGTH) {
       this.logger.warn(
-        `SMS message exceeds ${this.MAX_SMS_LENGTH} characters, will be split or truncated`,
+        `SMS message exceeds ${this.MAX_SMS_LENGTH} characters, will be split or truncated`
       );
     }
 
@@ -100,7 +102,7 @@ export class SMSDeliveryService {
     for (let attempt = 1; attempt <= this.config.maxRetries; attempt++) {
       try {
         this.logger.debug(
-          `SMS delivery attempt ${attempt}/${this.config.maxRetries} to ${payload.to}`,
+          `SMS delivery attempt ${attempt}/${this.config.maxRetries} to ${payload.to}`
         );
 
         const messageId = await this.deliverSMS(payload);
@@ -113,7 +115,9 @@ export class SMSDeliveryService {
         };
         attempts.push(attemptRecord);
 
-        this.logger.log(`SMS delivered successfully to ${payload.to} (messageId: ${messageId})`);
+        this.logger.log(
+          `SMS delivered successfully to ${payload.to} (messageId: ${messageId})`
+        );
 
         return {
           success: true,
@@ -121,7 +125,8 @@ export class SMSDeliveryService {
           attempts,
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
         lastError = errorMessage;
 
         const attemptRecord: DeliveryAttempt = {
@@ -133,7 +138,7 @@ export class SMSDeliveryService {
         attempts.push(attemptRecord);
 
         this.logger.warn(
-          `SMS delivery attempt ${attempt} failed: ${errorMessage}`,
+          `SMS delivery attempt ${attempt} failed: ${errorMessage}`
         );
 
         // Wait before retry (with exponential backoff)
@@ -145,7 +150,7 @@ export class SMSDeliveryService {
     }
 
     this.logger.error(
-      `SMS delivery failed after ${this.config.maxRetries} attempts to ${payload.to}: ${lastError}`,
+      `SMS delivery failed after ${this.config.maxRetries} attempts to ${payload.to}: ${lastError}`
     );
 
     return {
@@ -160,9 +165,9 @@ export class SMSDeliveryService {
    */
   private async deliverSMS(payload: SMSPayload): Promise<string> {
     switch (this.config.provider) {
-      case 'twilio':
+      case "twilio":
         return await this.sendViaTwilio(payload);
-      case 'sns':
+      case "sns":
         return await this.sendViaSNS(payload);
       default:
         throw new Error(`Unsupported SMS provider: ${this.config.provider}`);
@@ -186,7 +191,9 @@ export class SMSDeliveryService {
     //
     // return message.sid;
 
-    this.logger.debug(`[Twilio Mock] Sending SMS to ${payload.to}: ${payload.body}`);
+    this.logger.debug(
+      `[Twilio Mock] Sending SMS to ${payload.to}: ${payload.body}`
+    );
     return `twilio-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   }
 
@@ -213,7 +220,9 @@ export class SMSDeliveryService {
     // const response = await client.send(command);
     // return response.MessageId!;
 
-    this.logger.debug(`[AWS SNS Mock] Sending SMS to ${payload.to}: ${payload.body}`);
+    this.logger.debug(
+      `[AWS SNS Mock] Sending SMS to ${payload.to}: ${payload.body}`
+    );
     return `sns-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   }
 
@@ -221,14 +230,17 @@ export class SMSDeliveryService {
    * Calculate retry delay with exponential backoff
    */
   private calculateRetryDelay(attemptNumber: number): number {
-    return this.config.retryDelayMs * Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1);
+    return (
+      this.config.retryDelayMs *
+      Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1)
+    );
   }
 
   /**
    * Sleep utility for retry delays
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -244,12 +256,12 @@ export class SMSDeliveryService {
   /**
    * Format phone number to E.164
    */
-  formatPhoneNumber(phone: string, countryCode: string = '1'): string {
+  formatPhoneNumber(phone: string, countryCode: string = "1"): string {
     // Remove all non-numeric characters
-    const cleaned = phone.replace(/\D/g, '');
+    const cleaned = phone.replace(/\D/g, "");
 
     // Add country code if not present
-    if (!phone.startsWith('+')) {
+    if (!phone.startsWith("+")) {
       return `+${countryCode}${cleaned}`;
     }
 
@@ -259,11 +271,14 @@ export class SMSDeliveryService {
   /**
    * Truncate message to SMS length
    */
-  truncateMessage(message: string, maxLength: number = this.MAX_SMS_LENGTH): string {
+  truncateMessage(
+    message: string,
+    maxLength: number = this.MAX_SMS_LENGTH
+  ): string {
     if (message.length <= maxLength) {
       return message;
     }
-    return message.substring(0, maxLength - 3) + '...';
+    return message.substring(0, maxLength - 3) + "...";
   }
 
   /**
@@ -271,30 +286,36 @@ export class SMSDeliveryService {
    */
   updateConfig(config: Partial<SMSServiceConfig>): void {
     this.config = { ...this.config, ...config };
-    this.logger.log('SMS service configuration updated');
+    this.logger.log("SMS service configuration updated");
   }
 
   /**
    * Get current configuration (sensitive data redacted)
    */
-  getConfig(): Omit<SMSServiceConfig, 'authToken' | 'accountSid'> {
-    const { authToken, accountSid, ...safeConfig } = this.config;
+  getConfig(): Omit<SMSServiceConfig, "authToken" | "accountSid"> {
+    const {
+      authToken: _authToken,
+      accountSid: _accountSid,
+      ...safeConfig
+    } = this.config;
     return safeConfig;
   }
 
   /**
    * Send bulk SMS
    */
-  async sendBulk(payloads: SMSPayload[]): Promise<Array<{
-    phone: string;
-    success: boolean;
-    messageId?: string;
-    error?: string;
-  }>> {
+  async sendBulk(payloads: SMSPayload[]): Promise<
+    Array<{
+      phone: string;
+      success: boolean;
+      messageId?: string;
+      error?: string;
+    }>
+  > {
     this.logger.log(`Sending bulk SMS: ${payloads.length} recipients`);
 
     const results = await Promise.allSettled(
-      payloads.map(async payload => {
+      payloads.map(async (payload) => {
         const result = await this.send(payload);
         return {
           phone: payload.to,
@@ -302,17 +323,17 @@ export class SMSDeliveryService {
           messageId: result.messageId,
           error: result.error,
         };
-      }),
+      })
     );
 
-    return results.map(result => {
-      if (result.status === 'fulfilled') {
+    return results.map((result) => {
+      if (result.status === "fulfilled") {
         return result.value;
       } else {
         return {
-          phone: 'unknown',
+          phone: "unknown",
           success: false,
-          error: result.reason?.message || 'Unknown error',
+          error: result.reason?.message || "Unknown error",
         };
       }
     });
@@ -322,14 +343,14 @@ export class SMSDeliveryService {
    * Check SMS delivery status (for providers that support it)
    */
   async checkStatus(messageId: string): Promise<{
-    status: 'pending' | 'sent' | 'delivered' | 'failed';
+    status: "pending" | "sent" | "delivered" | "failed";
     error?: string;
   }> {
     // In production, query provider API for message status
     this.logger.debug(`Checking SMS status for messageId: ${messageId}`);
 
     return {
-      status: 'delivered',
+      status: "delivered",
     };
   }
 }

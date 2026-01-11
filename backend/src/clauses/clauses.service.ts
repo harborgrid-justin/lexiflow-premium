@@ -1,13 +1,9 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
-import { Clause, ClauseCategory } from './entities/clause.entity';
-import { CreateClauseDto } from './dto/create-clause.dto';
-import { UpdateClauseDto } from './dto/update-clause.dto';
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
+import { CreateClauseDto } from "./dto/create-clause.dto";
+import { UpdateClauseDto } from "./dto/update-clause.dto";
+import { Clause, ClauseCategory } from "./entities/clause.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -43,7 +39,7 @@ export class ClausesService {
 
   constructor(
     @InjectRepository(Clause)
-    private clauseRepository: Repository<Clause>,
+    private clauseRepository: Repository<Clause>
   ) {}
 
   /**
@@ -51,7 +47,7 @@ export class ClausesService {
    */
   async create(
     createClauseDto: CreateClauseDto,
-    userId?: string,
+    userId?: string
   ): Promise<Clause> {
     try {
       const clause = this.clauseRepository.create({
@@ -64,7 +60,7 @@ export class ClausesService {
 
       return savedClause;
     } catch (error) {
-      this.logger.error('Failed to create clause', error);
+      this.logger.error("Failed to create clause", error);
       throw error;
     }
   }
@@ -76,31 +72,31 @@ export class ClausesService {
     category?: ClauseCategory,
     search?: string,
     tag?: string,
-    isActive?: boolean,
+    isActive?: boolean
   ): Promise<Clause[]> {
-    const query = this.clauseRepository.createQueryBuilder('clause');
+    const query = this.clauseRepository.createQueryBuilder("clause");
 
     if (category) {
-      query.andWhere('clause.category = :category', { category });
+      query.andWhere("clause.category = :category", { category });
     }
 
     if (search) {
       query.andWhere(
-        '(clause.title ILIKE :search OR clause.content ILIKE :search OR clause.description ILIKE :search)',
-        { search: `%${search}%` },
+        "(clause.title ILIKE :search OR clause.content ILIKE :search OR clause.description ILIKE :search)",
+        { search: `%${search}%` }
       );
     }
 
     if (tag) {
-      query.andWhere(':tag = ANY(clause.tags)', { tag });
+      query.andWhere(":tag = ANY(clause.tags)", { tag });
     }
 
     if (isActive !== undefined) {
-      query.andWhere('clause.isActive = :isActive', { isActive });
+      query.andWhere("clause.isActive = :isActive", { isActive });
     }
 
-    query.orderBy('clause.usageCount', 'DESC');
-    query.addOrderBy('clause.createdAt', 'DESC');
+    query.orderBy("clause.usageCount", "DESC");
+    query.addOrderBy("clause.createdAt", "DESC");
 
     return await query.getMany();
   }
@@ -124,7 +120,7 @@ export class ClausesService {
   async update(
     id: string,
     updateClauseDto: UpdateClauseDto,
-    userId?: string,
+    userId?: string
   ): Promise<Clause> {
     const clause = await this.findOne(id);
 
@@ -169,7 +165,7 @@ export class ClausesService {
   async getMostUsed(limit: number = 10): Promise<Clause[]> {
     return await this.clauseRepository.find({
       where: { isActive: true },
-      order: { usageCount: 'DESC' },
+      order: { usageCount: "DESC" },
       take: limit,
     });
   }
@@ -183,7 +179,7 @@ export class ClausesService {
         content: Like(`%${searchTerm}%`),
         isActive: true,
       },
-      order: { usageCount: 'DESC' },
+      order: { usageCount: "DESC" },
     });
   }
 
@@ -193,7 +189,7 @@ export class ClausesService {
   async findByCategory(category: ClauseCategory): Promise<Clause[]> {
     return await this.clauseRepository.find({
       where: { category, isActive: true },
-      order: { usageCount: 'DESC', createdAt: 'DESC' },
+      order: { usageCount: "DESC", createdAt: "DESC" },
     });
   }
 
@@ -222,16 +218,23 @@ export class ClausesService {
   }
 
   async findByTag(tag: string): Promise<Clause[]> {
-    const query = this.clauseRepository.createQueryBuilder('clause');
-    query.where(':tag = ANY(clause.tags)', { tag });
-    query.andWhere('clause.isActive = :isActive', { isActive: true });
+    const query = this.clauseRepository.createQueryBuilder("clause");
+    query.where(":tag = ANY(clause.tags)", { tag });
+    query.andWhere("clause.isActive = :isActive", { isActive: true });
     return await query.getMany();
   }
 
-  async search(params: { query: string; page: number; limit: number }): Promise<{ data: Clause[]; total: number }> {
-    const query = this.clauseRepository.createQueryBuilder('clause');
-    query.where('(clause.title ILIKE :search OR clause.content ILIKE :search)', { search: `%${params.query}%` });
-    query.orderBy('clause.usageCount', 'DESC');
+  async search(params: {
+    query: string;
+    page: number;
+    limit: number;
+  }): Promise<{ data: Clause[]; total: number }> {
+    const query = this.clauseRepository.createQueryBuilder("clause");
+    query.where(
+      "(clause.title ILIKE :search OR clause.content ILIKE :search)",
+      { search: `%${params.query}%` }
+    );
+    query.orderBy("clause.usageCount", "DESC");
     query.skip((params.page - 1) * params.limit);
     query.take(params.limit);
     const [data, total] = await query.getManyAndCount();
@@ -239,10 +242,10 @@ export class ClausesService {
   }
 
   async getCategories(): Promise<string[]> {
-    const query = this.clauseRepository.createQueryBuilder('clause');
-    query.select('clause.category', 'category');
+    const query = this.clauseRepository.createQueryBuilder("clause");
+    query.select("clause.category", "category");
     query.distinct(true);
-    const results = await query.getRawMany();
-    return results.map(r => r.category);
+    const results = (await query.getRawMany()) as Array<{ category: string }>;
+    return results.map((r) => r.category);
   }
 }

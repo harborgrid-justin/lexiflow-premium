@@ -44,7 +44,7 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
 
   // Ensure clientsToRender is always an array
   const source = Array.isArray(propClients) ? propClients : fetchedClients;
-  const clientsToRender = useMemo(() => Array.isArray(source) ? source : [], [source]);
+  const clientsToRender = Array.isArray(source) ? source : [];
 
   const filteredClients = useMemo(() => {
     return clientsToRender.filter(c =>

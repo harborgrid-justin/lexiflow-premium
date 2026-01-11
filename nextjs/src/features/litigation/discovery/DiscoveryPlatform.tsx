@@ -43,15 +43,13 @@ import { DiscoveryRequest } from '@/types';
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
-// Removed unused imports: PrivilegeLog, LegalHolds, DiscoveryDocumentViewer
-
-// Removed enhanced unused imports (PrivilegeLogEnhanced, LegalHoldsEnhanced)
+const PrivilegeLogEnhanced = lazy(() => import('./PrivilegeLogEnhanced'));
+const LegalHoldsEnhanced = lazy(() => import('./LegalHoldsEnhanced'));
+const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));
 const DiscoveryResponse = lazy(() => import('./DiscoveryResponse'));
-const DiscoveryProduction = lazy(() => import('./DiscoveryProduction'));
 const DiscoveryProductions = lazy(() => import('./DiscoveryProductions'));
 const ProductionWizard = lazy(() => import('./ProductionWizard'));
 const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
-const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
 const ESISourcesList = lazy(() => import('./ESISourcesList'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 const Examinations = lazy(() => import('./Examinations'));
@@ -123,15 +121,15 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
 
-  const handleNavigate = (targetView: DiscoveryView, id?: string) => {
+  const handleNavigate = useCallback((targetView: DiscoveryView, id?: string) => {
     if (id) setContextId(id);
     setActiveTab(targetView);
-  };
+  }, [setActiveTab]);
 
-  const handleBackToDashboard = () => {
+  const handleBackToDashboard = useCallback(() => {
     setActiveTab('dashboard');
     setContextId(null);
-  };
+  }, [setActiveTab]);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({

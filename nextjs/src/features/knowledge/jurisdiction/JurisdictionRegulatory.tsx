@@ -25,7 +25,7 @@ export const JurisdictionRegulatory: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card title="Administrative Bodies">
         <div className="space-y-4">
-          {bodies.map((body: unknown, i: number) => (
+          {bodies.map((body: unknown) => (
             <div key={`body-${(body as { ref: string }).ref}`} className={cn("flex items-start p-4 border rounded-lg", theme.surface.highlight, theme.border.default)}>
               <Scale className={cn("h-6 w-6 mr-3 mt-1", (body as { iconColor: string }).iconColor)} />
               <div>

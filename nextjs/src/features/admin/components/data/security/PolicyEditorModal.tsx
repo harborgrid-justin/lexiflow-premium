@@ -27,28 +27,25 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
         status: 'Active'
     });
 
-    const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set());
+    const [formData, setFormData] = useState<PolicyFormData>(() => {
+        if (initialPolicy) return initialPolicy;
+        return {
+            name: '',
+            table: 'cases',
+            cmd: 'SELECT',
+            roles: [],
+            using: '',
+            withCheck: '',
+            status: 'Active'
+        };
+    });
+    const [selectedRoles, setSelectedRoles] = useState<Set<string>>(() => {
+        if (initialPolicy) return new Set(initialPolicy.roles);
+        return new Set(['All']);
+    });
 
     const availableRoles = ['Administrator', 'Partner', 'Associate', 'Paralegal', 'Client', 'All'];
     const tables = ['cases', 'documents', 'users', 'billing', 'audit_logs', 'clients', 'evidence'];
-
-    useEffect(() => {
-        if (initialPolicy) {
-            setFormData(initialPolicy);
-            setSelectedRoles(new Set(initialPolicy.roles));
-        } else {
-            setFormData({
-                name: '',
-                table: 'cases',
-                cmd: 'SELECT',
-                roles: [],
-                using: '',
-                withCheck: '',
-                status: 'Active'
-            });
-            setSelectedRoles(new Set(['All']));
-        }
-    }, [initialPolicy, isOpen]);
 
     const toggleRole = (role: string) => {
         const newSet = new Set(selectedRoles);

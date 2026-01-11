@@ -78,28 +78,20 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
     enabled: !!request
   });
 
-  useEffect(() => {
-    // Restore draft from localStorage on mount
+  // Restore draft from localStorage on mount
+  const [draftResponse, setDraftResponse] = useState<string>(() => {
     if (request) {
       try {
-        const savedDraft = localStorage.getItem(
-          `discovery-response-draft-${request.id}`,
-        );
+        const savedDraft = localStorage.getItem(`discovery-response-draft-${request.id}`);
         if (savedDraft) {
-          // Use setTimeout to avoid synchronous state update in effect
-          setTimeout(() => {
-            setDraftResponse(savedDraft);
-            notify.info("Draft restored from auto-save");
-          }, 0);
-        } else {
-          handleGenerateResponse();
+          return savedDraft;
         }
       } catch (err: unknown) {
         console.error("Failed to restore draft:", err);
-        handleGenerateResponse();
       }
     }
-  }, [handleGenerateResponse, notify, request]);
+    return '';
+  });
 
   // Keyboard shortcuts
   useKeyboardShortcuts({

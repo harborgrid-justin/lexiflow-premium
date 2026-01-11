@@ -4,7 +4,7 @@
  * @description Hierarchical navigation sidebar for data platform views with expandable menu sections,
  * active view highlighting, and cluster health monitoring. Manages schema, pipeline, cost, quality,
  * lineage, governance, and catalog navigation.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.surface.default/highlight - Sidebar background and header sections
  * - theme.text.primary/secondary/tertiary - Menu labels and descriptions
@@ -56,13 +56,15 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
 
   const menu: MenuItem[] = useMemo(() => DATA_PLATFORM_MENU, []);
 
-  // Auto-expand parent if child is active
-  useEffect(() => {
+  // Auto-expand parent if child is active - use initial state calculation
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
     const parent = menu.find(item => item.children?.some(c => c.id === activeView));
-    if (parent && !expanded[parent.id]) {
-      setExpanded(prev => ({ ...prev, [parent.id]: true }));
+    if (parent) {
+      initial[parent.id] = true;
     }
-  }, [activeView, menu, expanded]);
+    return initial;
+  });
 
   const toggleExpand = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -73,7 +75,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
       <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surface.highlight)}>
         <h3 className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>Data Platform</h3>
         <p className={cn("text-xs mt-1 font-mono flex items-center gap-1", theme.text.tertiary)}>
-          <Server className="h-3 w-3"/> v2.5 Enterprise
+          <Server className="h-3 w-3" /> v2.5 Enterprise
         </p>
       </div>
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
@@ -103,7 +105,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                 </div>
                 {hasChildren && (
                   <div className={theme.text.tertiary}>
-                    {isExpanded ? <ChevronDown className="h-3 w-3"/> : <ChevronRight className="h-3 w-3"/>}
+                    {isExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
                   </div>
                 )}
               </button>
@@ -121,7 +123,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                           : cn(theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)
                       )}
                     >
-                      <sub.icon className={cn("h-3 w-3 mr-2", activeView === sub.id ? "opacity-100" : "opacity-70")}/>
+                      <sub.icon className={cn("h-3 w-3 mr-2", activeView === sub.id ? "opacity-100" : "opacity-70")} />
                       {sub.label}
                     </button>
                   ))}
@@ -133,15 +135,15 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
       </nav>
       <div className={cn("p-4 border-t shrink-0", theme.border.default, theme.surface.highlight)}>
         <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            <span className={cn("text-xs font-mono", theme.text.secondary)}>Cluster Healthy</span>
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          <span className={cn("text-xs font-mono", theme.text.secondary)}>Cluster Healthy</span>
         </div>
         <div className={cn("w-full rounded-full h-1.5", theme.border.default, "bg-slate-200 dark:bg-slate-700")}>
-            <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: '42%' }}></div>
+          <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: '42%' }}></div>
         </div>
         <div className={cn("flex justify-between text-[9px] mt-1", theme.text.tertiary)}>
-            <span>CPU: 42%</span>
-            <span>MEM: 12GB</span>
+          <span>CPU: 42%</span>
+          <span>MEM: 12GB</span>
         </div>
       </div>
     </div>

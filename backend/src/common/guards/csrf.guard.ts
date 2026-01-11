@@ -1,15 +1,15 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Request, Response } from 'express';
-import * as crypto from 'crypto';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import * as crypto from "crypto";
+import { Request, Response } from "express";
 
-export const SKIP_CSRF_KEY = 'skipCsrf';
+export const SKIP_CSRF_KEY = "skipCsrf";
 
 /**
  * Enterprise CSRF Protection Guard
@@ -28,8 +28,8 @@ export const SKIP_CSRF_KEY = 'skipCsrf';
 @Injectable()
 export class CsrfGuard implements CanActivate {
   private readonly logger = new Logger(CsrfGuard.name);
-  private readonly TOKEN_HEADER = 'x-csrf-token';
-  private readonly TOKEN_COOKIE = 'csrf-token';
+  private readonly TOKEN_HEADER = "x-csrf-token";
+  private readonly TOKEN_COOKIE = "csrf-token";
   private readonly TOKEN_LENGTH = 32;
 
   constructor(private readonly reflector: Reflector) {}
@@ -50,7 +50,7 @@ export class CsrfGuard implements CanActivate {
     const method = request.method.toUpperCase();
 
     // Only validate CSRF for state-changing methods
-    if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+    if (!["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
       // For GET/HEAD/OPTIONS, ensure a CSRF token is set in cookie
       this.ensureTokenCookie(request, response);
       return true;
@@ -64,36 +64,45 @@ export class CsrfGuard implements CanActivate {
 
     // Both tokens must be present
     if (!headerToken) {
-      this.logger.warn(`CSRF token missing from header for ${method} ${request.path}`);
-      throw new ForbiddenException('CSRF token missing from request header');
+      this.logger.warn(
+        `CSRF token missing from header for ${method} ${request.path}`
+      );
+      throw new ForbiddenException("CSRF token missing from request header");
     }
 
     if (!cookieToken) {
       this.logger.warn(`CSRF cookie missing for ${method} ${request.path}`);
-      throw new ForbiddenException('CSRF token cookie missing');
+      throw new ForbiddenException("CSRF token cookie missing");
     }
 
     // Validate token format
-    if (!this.isValidTokenFormat(headerToken) || !this.isValidTokenFormat(cookieToken)) {
-      this.logger.warn(`Invalid CSRF token format for ${method} ${request.path}`);
-      throw new ForbiddenException('Invalid CSRF token format');
+    if (
+      !this.isValidTokenFormat(headerToken) ||
+      !this.isValidTokenFormat(cookieToken)
+    ) {
+      this.logger.warn(
+        `Invalid CSRF token format for ${method} ${request.path}`
+      );
+      throw new ForbiddenException("Invalid CSRF token format");
     }
 
     // Timing-safe comparison to prevent timing attacks
     try {
       const isValid = crypto.timingSafeEqual(
-        Buffer.from(headerToken, 'utf8'),
-        Buffer.from(cookieToken, 'utf8'),
+        Buffer.from(headerToken, "utf8"),
+        Buffer.from(cookieToken, "utf8")
       );
 
       if (!isValid) {
         this.logger.warn(`CSRF token mismatch for ${method} ${request.path}`);
-        throw new ForbiddenException('Invalid CSRF token');
+        throw new ForbiddenException("Invalid CSRF token");
       }
-    } catch (error) {
+    } catch {
       // Buffer length mismatch or other crypto error
-      this.logger.warn(`CSRF token validation failed for ${method} ${request.path}`);
-      throw new ForbiddenException('Invalid CSRF token');
+      this.logger.warn(
+        `CSRF token validation failed for ${method} ${request.path}`
+      );
+      throw new ForbiddenException("Invalid CSRF token");
     }
 
     // Rotate token after successful validation (optional, enhances security)
@@ -121,10 +130,10 @@ export class CsrfGuard implements CanActivate {
 
     response.cookie(this.TOKEN_COOKIE, token, {
       httpOnly: false, // Must be readable by JavaScript
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      path: '/',
+      path: "/",
     });
 
     return token;
@@ -141,14 +150,14 @@ export class CsrfGuard implements CanActivate {
    * Generate a cryptographically secure random token
    */
   private generateToken(): string {
-    return crypto.randomBytes(this.TOKEN_LENGTH).toString('base64url');
+    return crypto.randomBytes(this.TOKEN_LENGTH).toString("base64url");
   }
 
   /**
    * Validate token format (base64url, correct length)
    */
   private isValidTokenFormat(token: string): boolean {
-    if (!token || typeof token !== 'string') {
+    if (!token || typeof token !== "string") {
       return false;
     }
 

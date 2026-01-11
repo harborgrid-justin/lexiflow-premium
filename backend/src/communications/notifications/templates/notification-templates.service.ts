@@ -397,7 +397,7 @@ export class NotificationTemplatesService {
         template.variables.forEach((variable) => {
           const contextKey = this.variableToContextKey(variable);
           const value = context[contextKey] || "";
-          if (renderedSubject) {
+          if (renderedSubject !== undefined) {
             renderedSubject = renderedSubject.replace(
               new RegExp(variable, "g"),
               value

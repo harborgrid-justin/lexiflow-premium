@@ -72,9 +72,6 @@ const COLORS = [
   '#f97316', // orange
 ];
 
-const CHART_TYPES = ['category', 'vendor', 'trend'] as const;
-type ChartType = typeof CHART_TYPES[number];
-
 // ═══════════════════════════════════════════════════════════════════════════
 //                           COMPONENT IMPLEMENTATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -267,8 +264,8 @@ export const SpendAnalyticsChart: React.FC = () => {
         <button
           onClick={() => setChartType('category')}
           className={`px-4 py-2 font-medium transition-colors ${chartType === 'category'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-slate-600 hover:text-slate-900'
+            ? 'text-blue-600 border-b-2 border-blue-600'
+            : 'text-slate-600 hover:text-slate-900'
             }`}
         >
           By Category
@@ -276,8 +273,8 @@ export const SpendAnalyticsChart: React.FC = () => {
         <button
           onClick={() => setChartType('vendor')}
           className={`px-4 py-2 font-medium transition-colors ${chartType === 'vendor'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-slate-600 hover:text-slate-900'
+            ? 'text-blue-600 border-b-2 border-blue-600'
+            : 'text-slate-600 hover:text-slate-900'
             }`}
         >
           By Vendor
@@ -285,8 +282,8 @@ export const SpendAnalyticsChart: React.FC = () => {
         <button
           onClick={() => setChartType('trend')}
           className={`px-4 py-2 font-medium transition-colors ${chartType === 'trend'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-slate-600 hover:text-slate-900'
+            ? 'text-blue-600 border-b-2 border-blue-600'
+            : 'text-slate-600 hover:text-slate-900'
             }`}
         >
           Trends

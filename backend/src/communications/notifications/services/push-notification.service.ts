@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PushPayload, PushServiceConfig, DeliveryAttempt } from '../types';
+import { Injectable, Logger } from "@nestjs/common";
+import { DeliveryAttempt, PushPayload, PushServiceConfig } from "../types";
 
 /**
  * Push Notification Service
@@ -55,7 +55,7 @@ export class PushNotificationService {
   constructor() {
     // Default configuration - in production, load from environment/config service
     this.config = {
-      provider: 'fcm',
+      provider: "fcm",
       maxRetries: 3,
       retryDelayMs: 1000,
       retryBackoffMultiplier: 2,
@@ -67,10 +67,12 @@ export class PushNotificationService {
       apnsKeyPath: process.env.APNS_KEY_PATH,
       apnsTeamId: process.env.APNS_TEAM_ID,
       apnsKeyId: process.env.APNS_KEY_ID,
-      apnsBundleId: process.env.APNS_BUNDLE_ID || 'com.lexiflow.app',
+      apnsBundleId: process.env.APNS_BUNDLE_ID || "com.lexiflow.app",
     };
 
-    this.logger.log(`PushNotificationService initialized with provider: ${this.config.provider}`);
+    this.logger.log(
+      `PushNotificationService initialized with provider: ${this.config.provider}`
+    );
   }
 
   /**
@@ -89,7 +91,7 @@ export class PushNotificationService {
     if (validTokens.length === 0) {
       return {
         success: false,
-        error: 'No valid device tokens',
+        error: "No valid device tokens",
         attempts: [],
         failedTokens: payload.deviceTokens,
       };
@@ -101,7 +103,7 @@ export class PushNotificationService {
     for (let attempt = 1; attempt <= this.config.maxRetries; attempt++) {
       try {
         this.logger.debug(
-          `Push notification delivery attempt ${attempt}/${this.config.maxRetries} to ${validTokens.length} devices`,
+          `Push notification delivery attempt ${attempt}/${this.config.maxRetries} to ${validTokens.length} devices`
         );
 
         const result = await this.deliverPushNotification({
@@ -118,12 +120,12 @@ export class PushNotificationService {
         attempts.push(attemptRecord);
 
         this.logger.log(
-          `Push notification delivered successfully to ${validTokens.length} devices (messageId: ${result.messageId})`,
+          `Push notification delivered successfully to ${validTokens.length} devices (messageId: ${result.messageId})`
         );
 
         // Mark failed tokens as invalid
         if (result.failedTokens && result.failedTokens.length > 0) {
-          result.failedTokens.forEach(token => this.invalidTokens.add(token));
+          result.failedTokens.forEach((token) => this.invalidTokens.add(token));
         }
 
         return {
@@ -133,7 +135,8 @@ export class PushNotificationService {
           failedTokens: result.failedTokens,
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
         lastError = errorMessage;
 
         const attemptRecord: DeliveryAttempt = {
@@ -145,7 +148,7 @@ export class PushNotificationService {
         attempts.push(attemptRecord);
 
         this.logger.warn(
-          `Push notification delivery attempt ${attempt} failed: ${errorMessage}`,
+          `Push notification delivery attempt ${attempt} failed: ${errorMessage}`
         );
 
         // Wait before retry (with exponential backoff)
@@ -157,7 +160,7 @@ export class PushNotificationService {
     }
 
     this.logger.error(
-      `Push notification delivery failed after ${this.config.maxRetries} attempts: ${lastError}`,
+      `Push notification delivery failed after ${this.config.maxRetries} attempts: ${lastError}`
     );
 
     return {
@@ -175,9 +178,9 @@ export class PushNotificationService {
     failedTokens?: string[];
   }> {
     switch (this.config.provider) {
-      case 'fcm':
+      case "fcm":
         return await this.sendViaFCM(payload);
-      case 'apns':
+      case "apns":
         return await this.sendViaAPNs(payload);
       default:
         throw new Error(`Unsupported push provider: ${this.config.provider}`);
@@ -232,7 +235,7 @@ export class PushNotificationService {
     // };
 
     this.logger.debug(
-      `[FCM Mock] Sending push notification to ${payload.deviceTokens.length} devices: ${payload.title}`,
+      `[FCM Mock] Sending push notification to ${payload.deviceTokens.length} devices: ${payload.title}`
     );
 
     return {
@@ -287,7 +290,7 @@ export class PushNotificationService {
     // };
 
     this.logger.debug(
-      `[APNs Mock] Sending push notification to ${payload.deviceTokens.length} devices: ${payload.title}`,
+      `[APNs Mock] Sending push notification to ${payload.deviceTokens.length} devices: ${payload.title}`
     );
 
     return {
@@ -300,12 +303,14 @@ export class PushNotificationService {
    * Filter out invalid device tokens
    */
   private filterValidTokens(tokens: string[]): string[] {
-    return tokens.filter(token => {
+    return tokens.filter((token) => {
       if (!token || token.trim().length === 0) {
         return false;
       }
       if (this.invalidTokens.has(token)) {
-        this.logger.debug(`Skipping invalid token: ${token.substring(0, 10)}...`);
+        this.logger.debug(
+          `Skipping invalid token: ${token.substring(0, 10)}...`
+        );
         return false;
       }
       return true;
@@ -316,14 +321,17 @@ export class PushNotificationService {
    * Calculate retry delay with exponential backoff
    */
   private calculateRetryDelay(attemptNumber: number): number {
-    return this.config.retryDelayMs * Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1);
+    return (
+      this.config.retryDelayMs *
+      Math.pow(this.config.retryBackoffMultiplier, attemptNumber - 1)
+    );
   }
 
   /**
    * Sleep utility for retry delays
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -332,7 +340,9 @@ export class PushNotificationService {
   registerToken(token: string): void {
     if (this.invalidTokens.has(token)) {
       this.invalidTokens.delete(token);
-      this.logger.log(`Device token re-registered: ${token.substring(0, 10)}...`);
+      this.logger.log(
+        `Device token re-registered: ${token.substring(0, 10)}...`
+      );
     }
   }
 
@@ -365,14 +375,22 @@ export class PushNotificationService {
    */
   updateConfig(config: Partial<PushServiceConfig>): void {
     this.config = { ...this.config, ...config };
-    this.logger.log('Push notification service configuration updated');
+    this.logger.log("Push notification service configuration updated");
   }
 
   /**
    * Get current configuration (sensitive data redacted)
    */
-  getConfig(): Omit<PushServiceConfig, 'fcmServerKey' | 'apnsKeyPath' | 'apnsCertPath'> {
-    const { fcmServerKey, apnsKeyPath, apnsCertPath, ...safeConfig } = this.config;
+  getConfig(): Omit<
+    PushServiceConfig,
+    "fcmServerKey" | "apnsKeyPath" | "apnsCertPath"
+  > {
+    const {
+      fcmServerKey: _fcmServerKey,
+      apnsKeyPath: _apnsKeyPath,
+      apnsCertPath: _apnsCertPath,
+      ...safeConfig
+    } = this.config;
     return safeConfig;
   }
 
@@ -381,10 +399,12 @@ export class PushNotificationService {
    */
   async sendToTopic(
     topic: string,
-    notification: { title: string; body: string; data?: Record<string, string> },
+    notification: { title: string; body: string; data?: Record<string, string> }
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     // In production, use firebase-admin sendToTopic
-    this.logger.debug(`[FCM Mock] Sending to topic ${topic}: ${notification.title}`);
+    this.logger.debug(
+      `[FCM Mock] Sending to topic ${topic}: ${notification.title}`
+    );
 
     return {
       success: true,
@@ -397,7 +417,7 @@ export class PushNotificationService {
    */
   async subscribeToTopic(
     tokens: string[],
-    topic: string,
+    topic: string
   ): Promise<{ success: boolean; error?: string }> {
     // In production, use firebase-admin subscribeToTopic
     this.logger.debug(`Subscribing ${tokens.length} tokens to topic: ${topic}`);
@@ -410,10 +430,12 @@ export class PushNotificationService {
    */
   async unsubscribeFromTopic(
     tokens: string[],
-    topic: string,
+    topic: string
   ): Promise<{ success: boolean; error?: string }> {
     // In production, use firebase-admin unsubscribeFromTopic
-    this.logger.debug(`Unsubscribing ${tokens.length} tokens from topic: ${topic}`);
+    this.logger.debug(
+      `Unsubscribing ${tokens.length} tokens from topic: ${topic}`
+    );
 
     return { success: true };
   }

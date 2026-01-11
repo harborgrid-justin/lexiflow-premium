@@ -3,8 +3,8 @@
  * System-level disk space operations
  */
 
-import * as os from 'os';
-import { statfs } from 'fs/promises';
+import { statfs } from "fs/promises";
+import * as os from "os";
 
 /**
  * Disk space statistics
@@ -38,7 +38,7 @@ export async function getDiskSpace(dirPath: string): Promise<DiskStats> {
       used,
       usedPercentage,
     };
-  } catch (error) {
+  } catch (_error) {
     // Fallback: use os.freemem() for approximate values
     const total = os.totalmem();
     const free = os.freemem();
@@ -65,7 +65,7 @@ export async function getDiskSpace(dirPath: string): Promise<DiskStats> {
 export async function hasSufficientDiskSpace(
   dirPath: string,
   requiredBytes: number,
-  minFreeBytes?: number,
+  minFreeBytes?: number
 ): Promise<boolean> {
   const stats = await getDiskSpace(dirPath);
   const spaceAfterWrite = stats.available - requiredBytes;
@@ -82,7 +82,9 @@ export async function hasSufficientDiskSpace(
  * @param dirPath - Directory path to check
  * @returns Available space as percentage (0-100)
  */
-export async function getAvailableSpacePercentage(dirPath: string): Promise<number> {
+export async function getAvailableSpacePercentage(
+  dirPath: string
+): Promise<number> {
   const stats = await getDiskSpace(dirPath);
   if (stats.total === 0) return 0;
   return (stats.available / stats.total) * 100;
@@ -94,7 +96,10 @@ export async function getAvailableSpacePercentage(dirPath: string): Promise<numb
  * @param thresholdPercentage - Threshold percentage (default: 10)
  * @returns True if available space is below threshold
  */
-export async function isLowDiskSpace(dirPath: string, thresholdPercentage: number = 10): Promise<boolean> {
+export async function isLowDiskSpace(
+  dirPath: string,
+  thresholdPercentage: number = 10
+): Promise<boolean> {
   const availablePercentage = await getAvailableSpacePercentage(dirPath);
   return availablePercentage < thresholdPercentage;
 }
@@ -106,15 +111,19 @@ export async function isLowDiskSpace(dirPath: string, thresholdPercentage: numbe
  * @param minFreeBytes - Minimum free bytes that must remain
  * @throws Error if insufficient space
  */
-export async function validateDiskSpace(dirPath: string, requiredBytes: number, minFreeBytes: number): Promise<void> {
+export async function validateDiskSpace(
+  dirPath: string,
+  requiredBytes: number,
+  minFreeBytes: number
+): Promise<void> {
   const stats = await getDiskSpace(dirPath);
   const spaceAfterWrite = stats.available - requiredBytes;
 
   if (spaceAfterWrite < minFreeBytes) {
-    const { formatBytes } = await import('./format.utils');
+    const { formatBytes } = await import("./format.utils");
     throw new Error(
       `Insufficient disk space. Available: ${formatBytes(stats.available)}, ` +
-        `Required: ${formatBytes(requiredBytes + minFreeBytes)}`,
+        `Required: ${formatBytes(requiredBytes + minFreeBytes)}`
     );
   }
 }

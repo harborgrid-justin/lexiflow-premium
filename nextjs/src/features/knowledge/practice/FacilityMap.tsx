@@ -171,13 +171,8 @@ export const FacilityMap: React.FC = () => {
   //                         FACILITY MANAGEMENT
   // ═════════════════════════════════════════════════════════════════════════
 
-  const handleAddFacility = async (facility: Omit<Facility, 'id'>) => {
-    try {
-      const newFacility = await api.facilities.create(facility);
-      setFacilities([...facilities, newFacility]);
-    } catch (error) {
-      console.error('[FacilityMap] Failed to add facility:', error);
-    }
+  const handleMarkerClick = (facility: Facility) => {
+    // some implementation
   };
 
   const handleDeleteFacility = async (facilityId: string) => {
@@ -223,8 +218,8 @@ export const FacilityMap: React.FC = () => {
           <button
             onClick={() => setFilterType('All')}
             className={`px-4 py-2 rounded-lg transition-colors ${filterType === 'All'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              ? 'bg-blue-600 text-white'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
           >
             All ({facilities.length})
@@ -234,8 +229,8 @@ export const FacilityMap: React.FC = () => {
               key={type}
               onClick={() => setFilterType(type)}
               className={`px-4 py-2 rounded-lg transition-colors ${filterType === type
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-blue-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
             >
               {type} ({facilities.filter((f) => f.type === type).length})
@@ -330,8 +325,8 @@ export const FacilityMap: React.FC = () => {
             <div
               key={facility.id}
               className={`flex items-center justify-between p-4 rounded-lg border transition-colors cursor-pointer ${selectedFacility?.id === facility.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-slate-200 hover:border-slate-300'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-slate-200 hover:border-slate-300'
                 }`}
               onClick={() => handleFocusFacility(facility)}
             >

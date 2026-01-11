@@ -33,7 +33,7 @@ jest.mock('react', () => {
   const originalReact = jest.requireActual('react');
   return {
     ...originalReact,
-    useActionState: (action: Function, initialState: any) => {
+    useActionState: () => {
       return [mockActionState, mockFormAction, mockIsPending];
     },
   };

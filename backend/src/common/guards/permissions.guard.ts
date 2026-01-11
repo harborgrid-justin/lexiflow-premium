@@ -68,8 +68,9 @@ export class PermissionsGuard implements CanActivate {
     );
 
     if (!hasAllPermissions) {
+      const userRecord = user as unknown as Record<string, unknown>;
       console.log("PermissionsGuard failed:", {
-        userRole: (user as unknown as Record<string, unknown>).role,
+        userRole: userRecord.role,
         userPermissions: user.permissions,
         requiredPermissions,
       });

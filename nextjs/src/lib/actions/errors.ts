@@ -68,6 +68,7 @@ export interface ActionContext {
   readonly isAuthenticated: boolean;
   readonly userAgent: string | null;
   readonly ip: string | null;
+  readonly permissions: string[];
 }
 
 /**

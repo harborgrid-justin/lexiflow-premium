@@ -110,6 +110,12 @@ export function useSessionTimeout(
     enabled = true,
   } = config;
 
+  // Refs for callbacks to prevent effect re-runs
+  const callbacksRef = useRef({ onSessionExpire, onWarning });
+  useEffect(() => {
+    callbacksRef.current = { onSessionExpire, onWarning };
+  }, [onSessionExpire, onWarning]);
+
   // State
   const [isWarningActive, setIsWarningActive] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
@@ -133,10 +139,10 @@ export function useSessionTimeout(
   }, []);
 
   // Computed time until warning
-  const [now, setNow] = useState(0); // Initialized with 0, updated in effect
+  const [startEpoch, setStartEpoch] = useState(0); // Renamed for clarity
 
   useEffect(() => {
-    setNow(Date.now());
+    setStartEpoch(Date.now());
   }, []);
 
   const timeUntilWarning = useMemo(() => {
@@ -144,11 +150,11 @@ export function useSessionTimeout(
     if (!expiresAt) return sessionDuration - warningThreshold;
     // We use the stored state or ref for stability, or recalculate in effect
     // But since useMemo runs during render, we should rely on 'now' state
-    const currentTime = now; // Only use state, do not call Date.now()
+    const currentTime = startEpoch; // Only use state, do not call Date.now()
     if (currentTime === 0) return sessionDuration; // Default to full duration if not initialized
 
     return expiresAt.getTime() - currentTime;
-  }, [expiresAt, sessionDuration, warningThreshold, now]);
+  }, [expiresAt, sessionDuration, warningThreshold, startEpoch]);
 
   // Clear all timers
   const clearAllTimers = useCallback(() => {
@@ -204,8 +210,8 @@ export function useSessionTimeout(
       window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
     }
 
-    onSessionExpire?.();
-  }, [clearAllTimers, onSessionExpire]);
+    callbacksRef.current.onSessionExpire?.();
+  }, [clearAllTimers]);
 
   // Handle warning trigger
   const handleWarning = useCallback(() => {
@@ -222,8 +228,8 @@ export function useSessionTimeout(
       );
     }
 
-    onWarning?.(warningThreshold);
-  }, [warningThreshold, startCountdown, onWarning]);
+    callbacksRef.current.onWarning?.(warningThreshold);
+  }, [warningThreshold, startCountdown]);
 
   // Start session with new timers
   const startSession = useCallback(() => {

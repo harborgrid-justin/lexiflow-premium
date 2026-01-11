@@ -3,7 +3,8 @@
  * Main enterprise billing dashboard with AR aging, collection tracking, and write-off management
  */
 
-import { useQuery } from '@/hooks/backend';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import {
   AlertTriangle,
   CheckCircle,
@@ -80,12 +81,12 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
   const [showFilters, setShowFilters] = useState(false);
 
   const { data: billingData, isLoading: _isLoading } = useQuery(
-    ['billing', 'overview'],
-    () => Promise.resolve([]) // TODO: Connect to DataService.billing
+    ['billing', 'analytics'],
+    () => DataService.billing.getOverviewStats()
   );
 
   const metrics: BillingSummaryMetrics = useMemo(() => {
-    if (!billingData || billingData.length === 0) {
+    if (!billingData) {
       return {
         totalOutstanding: 0,
         totalReceivables: 0,
@@ -98,55 +99,26 @@ export const EnterpriseBilling: React.FC<EnterpriseBillingProps> = ({
       };
     }
 
-    const total = (billingData as BillingDataItem[]).reduce(
-      (acc, curr: BillingDataItem) => ({
-        totalOutstanding: acc.totalOutstanding + curr.outstanding,
-        collected: acc.collected + curr.collected,
-        writeOffs: acc.writeOffs + curr.writeOffs,
-        billed: acc.billed + curr.billed,
-      }),
-      { totalOutstanding: 0, collected: 0, writeOffs: 0, billed: 0 }
-    );
-
     return {
-      totalOutstanding: total.totalOutstanding,
-      totalReceivables: total.totalOutstanding,
-      collectedThisMonth: total.collected, // Approximation
-      collectionRate: total.billed ? (total.collected / total.billed) * 100 : 0,
-      writeOffsThisMonth: total.writeOffs,
-      averageDaysToPayment: 0, // Not available
-      overdueAmount: 0, // Not available
-      overdueCount: 0, // Not available
+      totalOutstanding: billingData.outstandingAR || 0,
+      totalReceivables: billingData.outstandingAR || 0,
+      collectedThisMonth: billingData.collectedRevenue || 0,
+      collectionRate: billingData.realization?.rate || 0,
+      writeOffsThisMonth: billingData.writeOffs || 0,
+      averageDaysToPayment: 0,
+      overdueAmount: 0,
+      overdueCount: 0,
     };
   }, [billingData]);
 
   const agingBuckets: ARAgingBucket[] = useMemo(() => {
-    if (!billingData || !Array.isArray(billingData)) {
-      return [];
-    }
-    const overviewWithBuckets = billingData.find((item: { agingBuckets?: unknown }) => item.agingBuckets);
-    if (!overviewWithBuckets || !(overviewWithBuckets as { agingBuckets?: unknown[] }).agingBuckets) {
-      return [];
-    }
-    return (overviewWithBuckets as { agingBuckets: { label: string; amount: number; count: number; total: number }[] }).agingBuckets.map((bucket: { label: string; amount: number; count: number; total: number }) => ({
-      label: bucket.label,
-      daysRange: bucket.label,
-      amount: bucket.amount,
-      count: bucket.count,
-      percentage: bucket.total > 0 ? (bucket.amount / bucket.total) * 100 : 0,
-    }));
+    // API does not currently provide aging buckets in overview stats
+    return [];
   }, [billingData]);
 
   const { data: collectionItemsData = [] } = useQuery<CollectionItem[]>(
     ['billing', 'collections'],
-    async () => {
-      try {
-        // return await dashboardMetricsService.getCollectionItems();
-        return Promise.resolve([]);
-      } catch {
-        return [];
-      }
-    }
+    async () => DataService.billing.getCollections()
   );
   const collectionItems: CollectionItem[] = collectionItemsData;
 

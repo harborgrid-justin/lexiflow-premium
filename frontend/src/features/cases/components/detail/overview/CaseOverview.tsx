@@ -75,7 +75,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
         onTransfer={handleTransferToAppeal}
       />
 
-      <CaseOverviewStats />
+      <CaseOverviewStats caseId={caseData.id} />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-1 md:col-span-2 space-y-6">

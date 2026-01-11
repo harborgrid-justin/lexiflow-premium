@@ -115,13 +115,12 @@ export function useAppContext(): UseAppControllerReturn {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 
   // App Initialization State
   const [isAppLoading, setIsAppLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [appStatusMessage, setAppStatusMessage] = useState(
     "Initializing Secure Data Layer..."
   );
@@ -231,11 +230,11 @@ export function useAppContext(): UseAppControllerReturn {
         }
       };
       loadCase();
-    } else if (selectedCase) {
+    } else {
       // Only clear if currently set to avoid redundant updates
       setSelectedCase(null);
     }
-  }, [selectedCaseId, setSelectedCaseId, addToast, selectedCase]);
+  }, [selectedCaseId, setSelectedCaseId, addToast]);
 
   // ==========================================================================
   // CALLBACK HANDLERS
@@ -337,7 +336,7 @@ export function useAppContext(): UseAppControllerReturn {
     globalSearch,
     updateSearch: () => {}, // Not implemented in current version
     isAppLoading,
-    isAuthenticated,
+    isAuthenticated: authIsAuthenticated,
     appStatusMessage,
     initialTab,
   };

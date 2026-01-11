@@ -2,12 +2,18 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Lead } from "./entities/lead.entity";
+import { Opportunity } from "./entities/opportunity.entity";
+import { ClientRelationship } from "./entities/client-relationship.entity";
 
 @Injectable()
 export class CrmService {
   constructor(
     @InjectRepository(Lead)
-    private leadsRepository: Repository<Lead>
+    private leadsRepository: Repository<Lead>,
+    @InjectRepository(Opportunity)
+    private opportunitiesRepository: Repository<Opportunity>,
+    @InjectRepository(ClientRelationship)
+    private relationshipsRepository: Repository<ClientRelationship>
   ) {}
 
   async createLead(data: Partial<Lead>): Promise<Lead> {
@@ -21,6 +27,32 @@ export class CrmService {
 
   async getLead(id: string): Promise<Lead | null> {
     return this.leadsRepository.findOneBy({ id });
+  }
+
+  // Opportunities
+  async getOpportunities(): Promise<Opportunity[]> {
+    return this.opportunitiesRepository.find({
+      order: { expectedCloseDate: "ASC" },
+    });
+  }
+
+  async createOpportunity(data: Partial<Opportunity>): Promise<Opportunity> {
+    const opp = this.opportunitiesRepository.create(data);
+    return this.opportunitiesRepository.save(opp);
+  }
+
+  // Relationships
+  async getRelationships(): Promise<ClientRelationship[]> {
+    return this.relationshipsRepository.find({
+      order: { strength: "DESC" },
+    });
+  }
+
+  async createRelationship(
+    data: Partial<ClientRelationship>
+  ): Promise<ClientRelationship> {
+    const rel = this.relationshipsRepository.create(data);
+    return this.relationshipsRepository.save(rel);
   }
 
   // Business Development Metrics

@@ -1,5 +1,7 @@
 import { analyticsApi, api } from "@/api";
 import { TransactionService } from "@/services/domain/TransactionDomain";
+import { BillingRepository } from "../repositories/BillingRepository";
+import { RepositoryRegistry } from "../repositories/RepositoryRegistry";
 
 export const FinancialDescriptors: PropertyDescriptorMap = {
   transactions: {
@@ -7,7 +9,8 @@ export const FinancialDescriptors: PropertyDescriptorMap = {
     enumerable: true,
   },
   billing: {
-    get: () => api.billing,
+    get: () =>
+      RepositoryRegistry.getOrCreate("billing", () => new BillingRepository()),
     enumerable: true,
   },
   timeEntries: {

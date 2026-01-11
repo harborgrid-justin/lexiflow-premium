@@ -56,15 +56,29 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     useEffect(() => {
         Scheduler.defer(() => {
             if (groupBy === 'none') {
-                setGrouped({ 'All Parties': parties });
+                setGrouped({ 'All Parties': Array.isArray(parties) ? parties : [] });
                 return;
             }
             const groups: Record<string, Party[]> = {};
-            parties.forEach(p => {
-                const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
-                if (!groups[key]) groups[key] = [];
-                groups[key].push(p);
-            });
+            if (Array.isArray(parties)) {
+                parties.forEach(p => {
+                    const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(p);
+                });
+            } else {
+                console.warn('CaseParties: parties prop is not an array', parties);
+                // Attempt to handle if it's a paginated response object wrapper
+                const safeParties = (parties as any)?.data && Array.isArray((parties as any).data)
+                    ? (parties as any).data
+                    : [];
+
+                safeParties.forEach((p: Party) => {
+                    const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(p);
+                });
+            }
             setGrouped(groups);
         });
     }, [parties, groupBy]);

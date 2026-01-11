@@ -5,6 +5,7 @@ import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as Stat
 import { useTheme } from '@providers/ThemeContext';
 import { useToast } from '@providers/ToastContext';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { ApprovalQueue } from './components/ApprovalQueue';
 import { DocumentGenerator } from './components/DocumentGenerator';
@@ -17,6 +18,7 @@ type View = 'overview' | 'recent' | 'templates' | 'approvals';
 type EditorView = 'template-editor' | 'document-generator' | null;
 
 const DraftingDashboard: React.FC = () => {
+  const router = useRouter();
   const { theme } = useTheme();
   const { addToast } = useToast();
 
@@ -69,8 +71,8 @@ const DraftingDashboard: React.FC = () => {
   };
 
   const handleSelectDraft = (draft: GeneratedDocument) => {
-    addToast(`Opening draft: ${draft.title}`, 'info');
-    // TODO: Navigate to document editor
+    // Navigate to document editor
+    router.push(`/documents/${draft.id}`);
   };
 
   const handleSelectTemplate = (template: DraftingTemplate) => {
@@ -84,8 +86,8 @@ const DraftingDashboard: React.FC = () => {
   };
 
   const handleReview = (doc: GeneratedDocument) => {
-    addToast(`Reviewing: ${doc.title}`, 'info');
-    // TODO: Navigate to review interface
+    // Navigate to review interface
+    router.push(`/documents/${doc.id}/review`);
   };
 
   const handleTemplateSaved = () => {

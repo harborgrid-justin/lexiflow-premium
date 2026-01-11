@@ -71,6 +71,7 @@ import { WorkflowModule } from "./workflow/workflow.module";
 import { AiDataopsModule } from "./ai-dataops/ai-dataops.module";
 import { AiOpsModule } from "./ai-ops/ai-ops.module";
 import { BackupsModule } from "./backups/backups.module";
+import { DataCatalogModule } from "./data-catalog/data-catalog.module";
 import { PipelinesModule } from "./pipelines/pipelines.module";
 import { QueryWorkbenchModule } from "./query-workbench/query-workbench.module";
 import { SchemaManagementModule } from "./schema-management/schema-management.module";
@@ -86,6 +87,8 @@ import { AdminModule } from "./admin/admin.module";
 
 /* ------------------------------------------------------------------ */
 /* Canonical Application Module List                                   */
+import { StrategiesModule } from "./strategies/strategies.module";
+
 /* ------------------------------------------------------------------ */
 
 export const APP_IMPORTS = [
@@ -94,6 +97,7 @@ export const APP_IMPORTS = [
   UsersModule,
 
   // Case Management
+  StrategiesModule,
   CasesModule,
   PartiesModule,
   CaseTeamsModule,
@@ -157,6 +161,7 @@ export const APP_IMPORTS = [
   LegalEntitiesModule,
 
   // Data Platform
+  DataCatalogModule,
   SchemaManagementModule,
   QueryWorkbenchModule,
   PipelinesModule,

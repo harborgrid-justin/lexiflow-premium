@@ -92,14 +92,9 @@ export const DataCatalogService = {
     nodes: LineageNode[];
     links: LineageLink[];
   }> => {
-    try {
-      return await apiClient.get<{
-        nodes: LineageNode[];
-        links: LineageLink[];
-      }>("/data-catalog/lineage");
-    } catch (e) {
-      console.warn("Failed to fetch lineage graph", e);
-      return { nodes: [], links: [] };
-    }
+    return apiClient.get<{
+      nodes: LineageNode[];
+      links: LineageLink[];
+    }>("/data-catalog/lineage");
   },
 };

@@ -116,4 +116,37 @@ export interface CRMAnalytics {
 // EXPORTS
 // ============================================================================
 
+export interface Opportunity extends BaseEntity {
+  id: EntityId;
+  clientId: string;
+  title: string;
+  value: number;
+  stage:
+    | "Lead"
+    | "Qualified"
+    | "Proposal"
+    | "Negotiation"
+    | "Closed Won"
+    | "Closed Lost";
+  probability: number;
+  expectedCloseDate: string;
+  assignedTo: string;
+  practiceArea: string;
+}
+
+export interface ClientRelationship extends BaseEntity {
+  id: EntityId;
+  clientId: string;
+  relatedClientId: string;
+  relatedClientName: string;
+  relationshipType:
+    | "Parent"
+    | "Subsidiary"
+    | "Partner"
+    | "Competitor"
+    | "Vendor";
+  strength: number;
+  notes?: string;
+}
+
 export type { CRMLead as Lead };

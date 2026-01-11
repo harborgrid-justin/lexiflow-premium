@@ -78,6 +78,7 @@ export async function getActionContext(): Promise<ActionContext> {
   // Extract user info from JWT (simplified - in production use proper JWT validation)
   let userId: string | null = null;
   let organizationId: string | null = null;
+  let permissions: string[] = [];
 
   if (token) {
     try {
@@ -89,6 +90,9 @@ export async function getActionContext(): Promise<ActionContext> {
         );
         userId = decoded.sub ?? decoded.userId ?? null;
         organizationId = decoded.orgId ?? decoded.organizationId ?? null;
+        permissions = Array.isArray(decoded.permissions)
+          ? decoded.permissions
+          : [];
       }
     } catch {
       // Token parsing failed - user is not authenticated
@@ -100,6 +104,7 @@ export async function getActionContext(): Promise<ActionContext> {
     organizationId,
     sessionId,
     isAuthenticated: !!userId,
+    permissions,
     userAgent: headersList.get("user-agent"),
     ip: headersList.get("x-forwarded-for") ?? headersList.get("x-real-ip"),
   };
@@ -129,17 +134,17 @@ export async function requireAuth(
  */
 export async function checkPermissions(
   context: ActionContext,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   requiredPermissions: string[]
 ): Promise<boolean> {
   if (!context.isAuthenticated || !context.userId) {
     return false;
   }
 
-  // In production, this would query the permissions service
-  // For now, we'll allow all authenticated users
-  // TODO: Implement proper RBAC check against backend
-  return true;
+  // Validate permissions from JWT context
+  if (requiredPermissions.length === 0) return true;
+
+  // Check if user has ALL required permissions
+  return requiredPermissions.every((p) => context.permissions.includes(p));
 }
 
 // ============================================================================

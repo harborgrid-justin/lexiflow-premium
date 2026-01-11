@@ -7,6 +7,15 @@ import { isBrowser } from "@rendering/utils";
 
 // Lazy getters to avoid accessing import.meta.env before Vite initialization
 export const getApiBaseUrl = () => {
+  // SSR Support: Node.js fetch requires absolute URL
+  if (!isBrowser()) {
+    return (
+      import.meta.env.VITE_API_URL ||
+      import.meta.env.VITE_API_BASE_URL ||
+      "http://127.0.0.1:3001"
+    );
+  }
+
   // In development, use relative path to leverage Vite proxy (fixes CORS in Codespaces)
   // Also check for github.dev hostname to ensure we use proxy in Codespaces even if mode is somehow different
   if (

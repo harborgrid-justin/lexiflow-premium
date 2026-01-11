@@ -33,6 +33,7 @@ import { cn } from '@/shared/lib/cn';
 // ============================================================================
 import { Citation } from '@/types';
 import { CitationManagerProps } from './types';
+import { CitationFormModal } from './CitationFormModal';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
@@ -53,6 +54,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
   const [isPending, startTransition] = useTransition();
   const [activeView, _setActiveView] = useSessionStorage<string>('citation_active_tab', 'library');
   const citationSelection = useSelection<Citation>();
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
   const setActiveView = (tab: string) => {
     startTransition(() => {
@@ -76,7 +78,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
       pageTitle="Citation Manager"
       pageSubtitle="Manage legal citations and analyze briefs with Bluebook formatting."
       pageActions={
-        <Button icon={Plus} size="sm">
+        <Button icon={Plus} size="sm" onClick={() => setIsAddModalOpen(true)}>
           Add Citation
         </Button>
       }
@@ -89,6 +91,12 @@ export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
           {renderContent()}
         </div>
       </Suspense>
+
+      <CitationFormModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        caseId={caseId}
+      />
     </TabbedPageLayout>
   );
 };

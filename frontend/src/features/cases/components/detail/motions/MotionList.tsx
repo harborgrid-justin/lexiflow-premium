@@ -120,7 +120,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             ))}
             {motions.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className={cn("text-center py-8 italic", theme.text.tertiary)}>No active motions.</TableCell>
+                <TableCell colSpan={7} className={cn("text-center py-8 italic", theme.text.tertiary)}>No motions found.</TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -168,7 +168,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
           </div>
         ))}
         {safeMotions.length === 0 && (
-          <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No active motions.</div>
+          <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No motions found.</div>
         )}
       </div>
     </>

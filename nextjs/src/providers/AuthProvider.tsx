@@ -48,16 +48,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const storedUser = localStorage.getItem(AUTH_USER_KEY);
 
         if (storedToken && storedUser) {
-          // Validate token with backend (placeholder for actual API call)
-          // const isValid = await validateToken(storedToken);
-          const isValid = true; // TODO: Implement actual token validation
+          // Optimistically set user to avoid flicker
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
 
-          if (isValid) {
-            setUser(JSON.parse(storedUser));
-          } else {
-            // Token invalid, clear storage
+            // Validate token with backend
+            const authApi = new AuthApiService();
+            const freshUser = await authApi.getCurrentUser();
+
+            // Convert to AuthUser format
+            const authUser: AuthUser = {
+              id: freshUser.id,
+              email: freshUser.email,
+              name: freshUser.firstName ? `${freshUser.firstName} ${freshUser.lastName}`.trim() : freshUser.email.split('@')[0],
+              role: (freshUser.role || 'attorney') as AuthUser['role'],
+              avatarUrl: freshUser.avatarUrl,
+              permissions: freshUser.permissions || [],
+            };
+
+            setUser(authUser); // Update with fresh data
+            localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
+          } catch (validationError) {
+            console.warn('[AuthProvider] Session validation failed:', validationError);
+            // Token invalid or refresh failed, clear storage
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(AUTH_USER_KEY);
+            setUser(null);
           }
         }
       } catch (err) {

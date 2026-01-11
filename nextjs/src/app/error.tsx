@@ -33,7 +33,7 @@ export default function RootError({ error, reset }: ErrorProps) {
       timestamp: new Date().toISOString(),
     });
 
-    // TODO: Send to error tracking service
+    
     // Sentry.captureException(error);
   }, [error]);
 

@@ -157,10 +157,10 @@ class ApiClient {
    * @private
    */
   private logInitialization(): void {
-    console.log("[ApiClient] Initialized", {
+    /* console.log("[ApiClient] Initialized", {
       baseURL: this.baseURL,
       authEnabled: !!this.getAuthToken(),
-    });
+    }); */
   }
 
   /**

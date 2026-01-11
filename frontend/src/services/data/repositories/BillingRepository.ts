@@ -1,4 +1,7 @@
-import { BillingAnalyticsApiService } from "@/api/billing/billing-analytics-api";
+import {
+  BillingAnalytics,
+  BillingAnalyticsApiService,
+} from "@/api/billing/billing-analytics-api";
 import { InvoicesApiService } from "@/api/billing/invoices-api";
 import { RateTablesApiService } from "@/api/billing/rate-tables-api";
 import { TrustAccountsApiService } from "@/api/billing/trust-accounts-api";
@@ -315,22 +318,54 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
   }
 
-  async getOverviewStats() {
+  async getOverviewStats(): Promise<BillingAnalytics> {
     try {
-      // Use analyticsApi if possible
-      const stats = await this.analyticsApi.getOverview(
-        new Date().toISOString(), // start
-        new Date().toISOString() // end
+      const end = new Date();
+      const start = new Date();
+      start.setDate(1); // Start of current month
+      return await this.analyticsApi.getOverview(
+        start.toISOString(),
+        end.toISOString()
       );
-      // Mapping return type
+    } catch (error) {
+      console.error("[BillingRepository] Failed to get overview stats", error);
+      // Return empty state for production readiness
       return {
-        realization: stats.realization.rate,
-        totalBilled: stats.totalRevenue,
-        month: "Current",
+        period: {
+          start: new Date().toISOString(),
+          end: new Date().toISOString(),
+        },
+        totalRevenue: 0,
+        collectedRevenue: 0,
+        outstandingAR: 0,
+        writeOffs: 0,
+        realization: { rate: 0, billed: 0, collected: 0 },
+        byAttorney: [],
+        byClient: [],
+        byPracticeArea: [],
+        trend: [],
       };
-    } catch {
-      // Fallback mock
-      return { realization: 92.4, totalBilled: 482000, month: "March 2024" };
+    }
+  }
+
+  async getCollections(): Promise<any[]> {
+    try {
+      // Use invoices API to get overdue/pending invoices
+      const invoices = await this.invoicesApi.getAll({ status: "overdue" });
+      return invoices.map((inv) => ({
+        id: inv.id,
+        clientName: "Client Name", // Should resolve client
+        invoiceNumber: inv.invoiceNumber,
+        amount: inv.total,
+        daysOverdue: Math.floor(
+          (new Date().getTime() - new Date(inv.dueDate).getTime()) /
+            (1000 * 60 * 60 * 24)
+        ),
+        status: inv.status,
+      }));
+    } catch (error) {
+      console.error("[BillingRepository] Failed to get collections", error);
+      return [];
     }
   }
 
@@ -342,33 +377,32 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async getFinancialPerformance(): Promise<FinancialPerformanceData> {
     try {
-      // Use analytics API
-      // await this.analyticsApi.getForecast(12);
-      // Returning mock structure as API return type differs
-      await delay(200);
+      const data = await this.analyticsApi.getForecast(12);
+      // Return real data or empty state if API not ready
+      if (data && typeof data === "object") {
+        return data as FinancialPerformanceData;
+      }
       return {
         period: "YTD",
-        profit: 1540000,
-        realizationRate: 0.92,
-        collectionRate: 0.88,
-        revenue: [
-          { month: "Jan", actual: 420000, target: 400000 },
-          { month: "Feb", actual: 450000, target: 410000 },
-          { month: "Mar", actual: 380000, target: 420000 },
-          { month: "Apr", actual: 490000, target: 430000 },
-          { month: "May", actual: 510000, target: 440000 },
-          { month: "Jun", actual: 550000, target: 450000 },
-        ],
-        expenses: [
-          { category: "Payroll", value: 250000 },
-          { category: "Rent", value: 45000 },
-          { category: "Software", value: 15000 },
-          { category: "Marketing", value: 25000 },
-          { category: "Travel", value: 12000 },
-        ],
+        profit: 0,
+        realizationRate: 0,
+        collectionRate: 0,
+        revenue: [],
+        expenses: [],
       };
     } catch (error) {
-      throw error;
+      console.error(
+        "[BillingRepository] Failed to get financial performance",
+        error
+      );
+      return {
+        period: "YTD",
+        profit: 0,
+        realizationRate: 0,
+        collectionRate: 0,
+        revenue: [],
+        expenses: [],
+      };
     }
   }
   async sync() {

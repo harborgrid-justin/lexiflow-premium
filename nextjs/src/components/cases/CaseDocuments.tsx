@@ -26,7 +26,9 @@ export function CaseDocuments({ caseId }: CaseDocumentsProps) {
       try {
         // Fetch documents for this case
         const response = await fetch(`/api/cases/${caseId}/documents`);
-        const data = await response.json();
+        if (!response.ok) throw new Error('Failed to fetch documents');
+
+        const data = (await response.json()) as { data: Document[] };
         setDocuments(data.data || []);
       } catch (error) {
         console.error('Failed to fetch documents:', error);
@@ -64,17 +66,26 @@ export function CaseDocuments({ caseId }: CaseDocumentsProps) {
       </CardHeader>
       <CardContent>
         {documents.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground">
-            No documents uploaded yet.
+          <div className="flex flex-col items-center justify-center py-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-700">
+            <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-full mb-3">
+              <FileText className="h-6 w-6 text-slate-400" />
+            </div>
+            <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">No documents</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-sm">
+              This case has no documents yet. Upload a new document to get started.
+            </p>
+            <Button variant="outline" onClick={() => alert("Upload feature to be implemented")}>
+              Upload Document
+            </Button>
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-12"></TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead className="text-right">Size</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

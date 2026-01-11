@@ -7,43 +7,43 @@
  * - DTOs: backend/src/parties/dto/create-party.dto.ts, update-party.dto.ts
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Party, PartyFilters } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { Party, PartyFilters } from "@/types";
 
 // Backend PartyType enum values
 export type PartyTypeBackend =
-  | 'Plaintiff'
-  | 'Defendant'
-  | 'Petitioner'
-  | 'Respondent'
-  | 'Appellant'
-  | 'Appellee'
-  | 'Third Party'
-  | 'Witness'
-  | 'Expert Witness'
-  | 'Other'
-  | 'individual'
-  | 'corporation'
-  | 'government'
-  | 'organization';
+  | "Plaintiff"
+  | "Defendant"
+  | "Petitioner"
+  | "Respondent"
+  | "Appellant"
+  | "Appellee"
+  | "Third Party"
+  | "Witness"
+  | "Expert Witness"
+  | "Other"
+  | "individual"
+  | "corporation"
+  | "government"
+  | "organization";
 
 // Backend PartyRole enum values
 export type PartyRoleBackend =
-  | 'Primary'
-  | 'Co-Party'
-  | 'Interested Party'
-  | 'Guardian'
-  | 'Representative'
-  | 'plaintiff'
-  | 'defendant'
-  | 'petitioner'
-  | 'respondent'
-  | 'appellant'
-  | 'appellee'
-  | 'third_party'
-  | 'intervenor'
-  | 'witness'
-  | 'expert';
+  | "Primary"
+  | "Co-Party"
+  | "Interested Party"
+  | "Guardian"
+  | "Representative"
+  | "plaintiff"
+  | "defendant"
+  | "petitioner"
+  | "respondent"
+  | "appellant"
+  | "appellee"
+  | "third_party"
+  | "intervenor"
+  | "witness"
+  | "expert";
 
 // DTO for creating a party (matches backend CreatePartyDto)
 export interface CreatePartyDto {
@@ -71,16 +71,31 @@ export interface CreatePartyDto {
 export interface UpdatePartyDto extends Partial<CreatePartyDto> {}
 
 export class PartiesApiService {
-  private readonly baseUrl = '/parties';
+  private readonly baseUrl = "/parties";
 
   async getAll(filters?: PartyFilters): Promise<Party[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.type) params.append('type', filters.type);
-    if (filters?.role) params.append('role', filters.role);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.type) params.append("type", filters.type);
+    if (filters?.role) params.append("role", filters.role);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Party[]>(url);
+
+    const response = await apiClient.get<any>(url);
+
+    // Support both direct array and paginated/nested data response
+    if (Array.isArray(response)) {
+      return response;
+    }
+    if (
+      response &&
+      typeof response === "object" &&
+      "data" in response &&
+      Array.isArray(response.data)
+    ) {
+      return response.data;
+    }
+    return [];
   }
 
   async getById(id: string): Promise<Party> {
@@ -88,13 +103,28 @@ export class PartiesApiService {
   }
 
   async getByCaseId(caseId: string): Promise<Party[]> {
-    return this.getAll({ caseId });
+    // Use the dedicated filtering endpoint if available, but for now rely on getAll for consistency
+    // or better yet, use the dedicated endpoint if the backend supports it:
+    const response = await apiClient.get<any>(`${this.baseUrl}/case/${caseId}`);
+
+    if (Array.isArray(response)) {
+      return response;
+    }
+    if (
+      response &&
+      typeof response === "object" &&
+      "data" in response &&
+      Array.isArray(response.data)
+    ) {
+      return response.data;
+    }
+    return [];
   }
 
   async create(data: CreatePartyDto): Promise<Party> {
     // Ensure required fields are present
     if (!data.caseId || !data.name || !data.type) {
-      throw new Error('caseId, name, and type are required fields');
+      throw new Error("caseId, name, and type are required fields");
     }
     return apiClient.post<Party>(this.baseUrl, data);
   }
@@ -119,7 +149,7 @@ export class PartiesApiService {
     }
 
     const searchParams = new URLSearchParams();
-    searchParams.append('q', params.query);
+    searchParams.append("q", params.query);
     const url = `${this.baseUrl}/search?${searchParams.toString()}`;
     return apiClient.get<Party[]>(url);
   }

@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan, Not} from 'typeorm';
-import { DiscoveryRequest, DiscoveryRequestStatus } from './discovery-requests/entities/discovery-request.entity';
-import { LegalHold, LegalHoldStatus } from './legal-holds/entities/legal-hold.entity';
-import { Custodian } from './custodians/entities/custodian.entity';
-import { Evidence } from './evidence/entities/evidence.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, LessThan, Not } from "typeorm";
+import {
+  DiscoveryRequest,
+  DiscoveryRequestStatus,
+} from "./discovery-requests/entities/discovery-request.entity";
+import {
+  LegalHold,
+  LegalHoldStatus,
+} from "./legal-holds/entities/legal-hold.entity";
+import { Custodian } from "./custodians/entities/custodian.entity";
+import { Evidence } from "./evidence/entities/evidence.entity";
 
 export interface PaginationOptions {
   page?: number;
@@ -89,10 +95,12 @@ export class DiscoveryService {
     @InjectRepository(Custodian)
     private readonly custodianRepository: Repository<Custodian>,
     @InjectRepository(Evidence)
-    private readonly evidenceRepository: Repository<Evidence>,
+    private readonly evidenceRepository: Repository<Evidence>
   ) {}
 
-  async findAllRequests(options?: PaginationOptions): Promise<PaginatedResult<any>> {
+  async findAllRequests(
+    options?: PaginationOptions
+  ): Promise<PaginatedResult<any>> {
     const page = options?.page || 1;
     const limit = options?.limit || 50;
     const skip = (page - 1) * limit;
@@ -100,7 +108,7 @@ export class DiscoveryService {
     const [data, total] = await this.discoveryRequestRepository.findAndCount({
       take: limit,
       skip,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
 
     return {
@@ -114,7 +122,7 @@ export class DiscoveryService {
 
   async findRequestsByCaseId(
     caseId: string,
-    options?: PaginationOptions,
+    options?: PaginationOptions
   ): Promise<PaginatedResult<any>> {
     const page = options?.page || 1;
     const limit = options?.limit || 50;
@@ -124,7 +132,7 @@ export class DiscoveryService {
       where: { caseId },
       take: limit,
       skip,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
       cache: {
         id: `case_${caseId}_requests`,
         milliseconds: 60000, // 1 minute
@@ -141,7 +149,9 @@ export class DiscoveryService {
   }
 
   async findRequestById(id: string): Promise<unknown> {
-    const request = await this.discoveryRequestRepository.findOne({ where: { id } });
+    const request = await this.discoveryRequestRepository.findOne({
+      where: { id },
+    });
     if (!request) {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
@@ -158,8 +168,8 @@ export class DiscoveryService {
       .createQueryBuilder()
       .update(DiscoveryRequest)
       .set(updateDto as any)
-      .where('id = :id', { id })
-      .returning('*')
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected) {
@@ -181,7 +191,7 @@ export class DiscoveryService {
         status: Not(DiscoveryRequestStatus.COMPLETED),
       },
       cache: {
-        id: 'overdue_requests',
+        id: "overdue_requests",
         milliseconds: 300000, // 5 minutes
       },
     });
@@ -209,7 +219,7 @@ export class DiscoveryService {
   }
 
   async releaseHold(id: string): Promise<unknown> {
-    const hold = await this.findHoldById(id) as any;
+    const hold = (await this.findHoldById(id)) as unknown;
     hold.status = LegalHoldStatus.RELEASED;
     hold.releaseDate = new Date();
     await this.legalHoldRepository.save(hold);
@@ -242,9 +252,9 @@ export class DiscoveryService {
 
   async getUnacknowledgedCustodians(holdId: string): Promise<any[]> {
     return this.custodianRepository
-      .createQueryBuilder('custodian')
-      .where('custodian.legalHoldId = :holdId', { holdId })
-      .andWhere('custodian.acknowledgedAt IS NULL')
+      .createQueryBuilder("custodian")
+      .where("custodian.legalHoldId = :holdId", { holdId })
+      .andWhere("custodian.acknowledgedAt IS NULL")
       .getMany();
   }
 
@@ -256,16 +266,27 @@ export class DiscoveryService {
     const requests = await this.findRequestsByCaseId(caseId);
     const holds = await this.findHoldsByCaseId(caseId);
 
-    const requestArray = Array.isArray(requests) ? requests : requests.data || [];
+    const requestArray = Array.isArray(requests)
+      ? requests
+      : requests.data || [];
     const totalRequests = requestArray.length;
-    const completedRequests = requestArray.filter((r: unknown) => (r as any).status === DiscoveryRequestStatus.COMPLETED).length;
+    const completedRequests = requestArray.filter(
+      (r: unknown) => (r as any).status === DiscoveryRequestStatus.COMPLETED
+    ).length;
     const pendingRequests = requestArray.filter((r: unknown) => {
       const req = r as any;
-      return req.status !== DiscoveryRequestStatus.COMPLETED &&
-        req.status !== DiscoveryRequestStatus.OBJECTED;
+      return (
+        req.status !== DiscoveryRequestStatus.COMPLETED &&
+        req.status !== DiscoveryRequestStatus.OBJECTED
+      );
     }).length;
-    const activeHolds = holds.filter(h => h.status === LegalHoldStatus.ACTIVE).length;
-    const totalCustodians = holds.reduce((sum, hold) => sum + (hold.totalCustodians || 0), 0);
+    const activeHolds = holds.filter(
+      (h) => h.status === LegalHoldStatus.ACTIVE
+    ).length;
+    const totalCustodians = holds.reduce(
+      (sum, hold) => sum + (hold.totalCustodians || 0),
+      0
+    );
 
     return {
       totalRequests,
@@ -273,8 +294,11 @@ export class DiscoveryService {
       completedRequests,
       overdueRequests: requestArray.filter((r: unknown) => {
         const req = r as any;
-        return req.dueDate && new Date(req.dueDate) < new Date() &&
-          req.status !== DiscoveryRequestStatus.COMPLETED;
+        return (
+          req.dueDate &&
+          new Date(req.dueDate) < new Date() &&
+          req.status !== DiscoveryRequestStatus.COMPLETED
+        );
       }).length,
       activeHolds,
       totalHolds: holds.length,
@@ -284,7 +308,11 @@ export class DiscoveryService {
 
   async getAllEvidence(query?: unknown): Promise<Evidence[]> {
     const whereClause: any = {};
-    const q = query as { caseId?: string; type?: string; admissibilityStatus?: string };
+    const q = query as {
+      caseId?: string;
+      type?: string;
+      admissibilityStatus?: string;
+    };
 
     if (q?.caseId) {
       whereClause.caseId = q.caseId;
@@ -300,7 +328,7 @@ export class DiscoveryService {
 
     return this.evidenceRepository.find({
       where: whereClause,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -312,7 +340,7 @@ export class DiscoveryService {
   async getEvidenceByCaseId(caseId: string): Promise<Evidence[]> {
     return this.evidenceRepository.find({
       where: { caseId },
-      order: { title: 'ASC' },
+      order: { title: "ASC" },
     });
   }
 
@@ -326,5 +354,29 @@ export class DiscoveryService {
     }
 
     return evidence;
+  }
+
+  async getFunnelStats() {
+    // Return sample data for now, or aggregate from DB
+    return [
+      { name: "Identification", value: 1250, label: "Files Identified" },
+      { name: "Preservation", value: 980, label: "Preserved" },
+      { name: "Collection", value: 750, label: "Collected" },
+      { name: "Processing", value: 680, label: "Processed" },
+      { name: "Review", value: 420, label: "To Review" },
+      { name: "Production", value: 150, label: "Produced" },
+    ];
+  }
+
+  async getCustodianStats() {
+    // Return sample data for now, or aggregate from DB
+    return [
+      { name: "Executive", value: 45 },
+      { name: "Finance", value: 32 },
+      { name: "Sales", value: 28 },
+      { name: "IT", value: 15 },
+      { name: "Legal", value: 12 },
+      { name: "HR", value: 8 },
+    ];
   }
 }

@@ -166,22 +166,3 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
         </div>
     );
 });
-                            <span className={cn("text-sm", theme.text.secondary)}>Search Cluster (Elastic)</span>
-                            <span className={cn("px-2 py-0.5 rounded text-xs font-bold", theme.status.success.bg, theme.status.success.text)}>Healthy</span>
-                        </div >
-                        <div className="flex justify-between items-center">
-                            <span className={cn("text-sm", theme.text.secondary)}>Redis Cache</span>
-                            <span className={cn("px-2 py-0.5 rounded text-xs font-bold", theme.status.warning.bg, theme.status.warning.text)}>Warn (High Mem)</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className={cn("text-sm", theme.text.secondary)}>Vector Store (Pinecone)</span>
-                            <span className={cn("px-2 py-0.5 rounded text-xs font-bold", theme.status.success.bg, theme.status.success.text)}>Healthy</span>
-                        </div>
-                    </div >
-                </Card >
-            </div >
-        </div >
-    );
-});
-
-export default PlatformOverview;

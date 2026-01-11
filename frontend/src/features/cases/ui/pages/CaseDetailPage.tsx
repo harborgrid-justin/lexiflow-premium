@@ -13,6 +13,7 @@
 // ============================================================================
 import { Plus } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - COMPONENTS
@@ -90,6 +91,7 @@ export const CaseDetail = ({
   initialParties
 }: CaseDetailProps) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showTimelineOverlay, setShowTimelineOverlay] = useState(false);
 
@@ -153,7 +155,11 @@ export const CaseDetail = ({
         return <CaseParties parties={parties} onUpdate={setParties} />;
 
       case 'Timeline':
-        return <CaseTimeline events={timelineEvents} onEventClick={(e) => console.log('Event clicked:', e)} />;
+        return <CaseTimeline events={timelineEvents} onEventClick={(e) => {
+          if (e.type === 'docket' && e.id) {
+            navigate(`/docket/${e.id}`);
+          }
+        }} />;
 
       case 'Research':
         return <CaseStrategy caseId={caseData.id} evidence={[]} />;

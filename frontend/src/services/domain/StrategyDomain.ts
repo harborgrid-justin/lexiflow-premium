@@ -16,6 +16,7 @@
  */
 
 import { apiClient } from "@/services/infrastructure/apiClient";
+import { Citation, Defense, LegalArgument } from "@/types";
 
 interface Strategy {
   id: string;
@@ -68,12 +69,24 @@ export const StrategyService = {
     });
   },
 
-  delete: async (id: string) => {
-    await apiClient.delete(`/strategies/${id}`);
+  delete: async (id: string, type?: string) => {
+    let url = `/strategies/${id}`;
+    if (type) {
+      url += `?type=${encodeURIComponent(type)}`;
+    }
+    await apiClient.delete(url);
     return;
   },
 
   // Strategy specific methods
+  getCaseStrategy: async (caseId: string) => {
+    return apiClient.get<{
+      arguments: LegalArgument[];
+      defenses: Defense[];
+      citations: Citation[];
+    }>("/strategies", { caseId });
+  },
+
   getStrategies: async (caseId?: string): Promise<Strategy[]> => {
     const params = caseId ? { caseId } : {};
     return apiClient.get<Strategy[]>("/strategies", params);

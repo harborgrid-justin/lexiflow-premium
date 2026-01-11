@@ -32,7 +32,7 @@ export interface DashboardData {
     userId: string;
   }>;
   quickStats: QuickStat[];
-  // Add other sections as needed
+  revenueData: ChartData[];
 }
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
@@ -41,35 +41,19 @@ export const getDashboardData = async (): Promise<DashboardData> => {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
 
-  // For development (if no backend running or no token), return mock data
+  // For development (if no backend running or no token), return EMPTY data (No Mocks allowed)
   if (!token) {
-    console.warn("No auth token found, returning mock dashboard data");
+    console.warn("No auth token found, returning empty dashboard data");
     return {
       summary: {
-        totalCases: 124,
-        activeCases: 42,
-        pendingTasks: 18,
-        upcomingDeadlines: 5,
+        totalCases: 0,
+        activeCases: 0,
+        pendingTasks: 0,
+        upcomingDeadlines: 0,
       },
-      recentActivity: [
-        {
-          id: "1",
-          description: "New document uploaded to Case #23-001",
-          timestamp: new Date().toISOString(),
-          userId: "u1",
-        },
-        {
-          id: "2",
-          description: "Docket update for Johnson v. Smith",
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-          userId: "system",
-        },
-      ],
-      quickStats: [
-        { label: "Revenue", value: "$124,000", change: 12, trend: "up" },
-        { label: "Billable Hours", value: "342", change: 5, trend: "up" },
-        { label: "New Cases", value: "8", change: -2, trend: "down" },
-      ],
+      recentActivity: [],
+      quickStats: [],
+      revenueData: [],
     };
   }
 
@@ -105,6 +89,7 @@ export const getDashboardData = async (): Promise<DashboardData> => {
       },
       recentActivity: [],
       quickStats: [],
+      revenueData: [],
     };
   }
 };

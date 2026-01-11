@@ -1,10 +1,9 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Maximize2, Menu, X } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/shared/lib/cn';
-import { DataPlatformSidebar } from './DataPlatformSidebar';
 import { useWindow } from '@/providers';
-import { Loader2 } from 'lucide-react';
+import { cn } from '@/shared/lib/cn';
+import { Loader2, Maximize2, Menu, X } from 'lucide-react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { DataPlatformSidebar } from './DataPlatformSidebar';
 import { PlatformView } from './types';
 
 // Lazy Load All Sub-Modules
@@ -29,6 +28,9 @@ const EventBusManager = lazy(() => import('./EventBusManager').then(m => ({ defa
 const VersionControl = lazy(() => import('./VersionControl').then(m => ({ default: m.VersionControl })));
 const Configuration = lazy(() => import('./Configuration').then(m => ({ default: m.Configuration })));
 const DatabaseManagement = lazy(() => import('./DatabaseManagement').then(m => ({ default: m.DatabaseManagement })));
+const SystemHealthDisplay = lazy(() => import('./SystemHealthDisplay').then(m => ({ default: m.SystemHealthDisplay })));
+const SystemLogs = lazy(() => import('./SystemLogs').then(m => ({ default: m.SystemLogs })));
+
 
 interface AdminDatabaseControlProps {
   initialTab?: string;
@@ -64,6 +66,8 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     if (activeView.startsWith('realtime')) return <RealtimeStreams initialTab={getSubTab('realtime')} />;
     if (activeView.startsWith('versions')) return <VersionControl initialTab={getSubTab('versions')} />;
     if (activeView.startsWith('config')) return <Configuration initialTab={getSubTab('config')} />;
+    if (activeView === 'monitoring-logs') return <SystemLogs />;
+    if (activeView.startsWith('monitoring')) return <SystemHealthDisplay />;
 
     // Direct Matches
     switch (activeView) {
@@ -90,47 +94,47 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
 
   return (
     <div className={cn("flex h-full rounded-lg border overflow-hidden relative", theme.border.default, theme.background)}>
-      
+
       {/* Mobile Sidebar Overlay */}
       <div className={cn(
-          "absolute inset-0 z-20 backdrop-blur-sm transition-opacity md:hidden",
-          theme.backdrop,
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        "absolute inset-0 z-20 backdrop-blur-sm transition-opacity md:hidden",
+        theme.backdrop,
+        isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       )} onClick={() => setIsMobileMenuOpen(false)} />
 
       {/* Sidebar Container */}
       <div className={cn(
-          "absolute inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:relative md:translate-x-0 border-r shadow-xl md:shadow-none",
-          theme.surface.default, 
-          theme.border.default,
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        "absolute inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:relative md:translate-x-0 border-r shadow-xl md:shadow-none",
+        theme.surface.default,
+        theme.border.default,
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-          <div className="absolute top-2 right-2 md:hidden">
-              <button onClick={() => setIsMobileMenuOpen(false)} className={cn("p-1 rounded-full", theme.text.secondary)}>
-                  <X className="h-5 w-5" />
-              </button>
-          </div>
-          <DataPlatformSidebar activeView={activeView} onChange={(v) => { setActiveView(v); setIsMobileMenuOpen(false); }} />
+        <div className="absolute top-2 right-2 md:hidden">
+          <button onClick={() => setIsMobileMenuOpen(false)} className={cn("p-1 rounded-full", theme.text.secondary)}>
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <DataPlatformSidebar activeView={activeView} onChange={(v) => { setActiveView(v); setIsMobileMenuOpen(false); }} />
       </div>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Mobile Header Toggle */}
         <div className={cn("md:hidden p-4 border-b flex justify-between items-center", theme.background, theme.border.default)}>
-            <button onClick={() => setIsMobileMenuOpen(true)} className={cn("p-2 rounded-md", theme.surface.highlight)}>
-                <Menu className={cn("h-5 w-5", theme.text.primary)} />
-            </button>
-            <span className={cn("font-bold text-sm", theme.text.primary)}>Data Platform</span>
-            <div className="w-9"></div> {/* Spacer */}
+          <button onClick={() => setIsMobileMenuOpen(true)} className={cn("p-2 rounded-md", theme.surface.highlight)}>
+            <Menu className={cn("h-5 w-5", theme.text.primary)} />
+          </button>
+          <span className={cn("font-bold text-sm", theme.text.primary)}>Data Platform</span>
+          <div className="w-9"></div> {/* Spacer */}
         </div>
 
         <div className="absolute top-4 right-4 z-10 hidden md:block">
-            <button onClick={handleUndock} className={cn("p-2 backdrop-blur border rounded-lg shadow-sm transition-all", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary}`)} title="Open in Window">
-                <Maximize2 className="h-4 w-4"/>
-            </button>
+          <button onClick={handleUndock} className={cn("p-2 backdrop-blur border rounded-lg shadow-sm transition-all", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary}`)} title="Open in Window">
+            <Maximize2 className="h-4 w-4" />
+          </button>
         </div>
-        
-        <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>}>
-            {renderContent()}
+
+        <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)} /></div>}>
+          {renderContent()}
         </Suspense>
       </div>
     </div>

@@ -9,7 +9,6 @@ import { Suspense } from 'react';
 import { getCases } from '@/lib/actions/cases';
 import { CacheTags, CacheProfiles } from '@/lib/cache';
 import { CaseFilters } from '@/components/cases/CaseFilters';
-import { CaseList } from '@/components/cases/CaseList';
 import type { Case } from '@/types/case';
 
 export const metadata: Metadata = {
@@ -159,42 +158,56 @@ function CaseCard({ caseData }: { caseData: Case }) {
     >
       <div className="flex justify-between items-start">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 truncate">
-            {caseData.title}
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 truncate flex items-center gap-2">
+            {caseData.title || <span className="h-6 w-48 bg-slate-100 dark:bg-slate-700 rounded" />}
           </h3>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            {caseData.caseNumber && `#${caseData.caseNumber} - `}
-            {caseData.client}
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1">
+            {caseData.caseNumber ? `#${caseData.caseNumber} - ` : <span className="h-4 w-16 bg-slate-100 dark:bg-slate-700 rounded" />}
+            {caseData.client || <span className="h-4 w-32 bg-slate-100 dark:bg-slate-700 rounded" />}
           </p>
-          {caseData.description && (
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
-              {caseData.description}
-            </p>
-          )}
+
+          <div className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-2 min-h-5">
+            {caseData.description || (
+              <div className="h-4 w-full bg-slate-50 dark:bg-slate-800/50 rounded" />
+            )}
+          </div>
+
           <div className="mt-3 flex flex-wrap gap-2">
-            {caseData.practiceArea && (
+            {caseData.practiceArea ? (
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200">
                 {caseData.practiceArea}
               </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-50 text-slate-400 dark:bg-slate-800 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-700">
+                No Practice Area
+              </span>
             )}
-            {caseData.jurisdiction && (
+
+            {caseData.jurisdiction ? (
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200">
                 {caseData.jurisdiction}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-50 text-slate-400 dark:bg-slate-800 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-700">
+                No Jurisdiction
               </span>
             )}
           </div>
         </div>
         <div className="ml-4 flex flex-col items-end gap-2">
           <span
-            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-              statusColors[caseData.status] || statusColors.Open
-            }`}
+            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${statusColors[caseData.status] || statusColors.Open
+              }`}
           >
-            {caseData.status}
+            {caseData.status || "Unknown"}
           </span>
-          {caseData.filingDate && (
+          {caseData.filingDate ? (
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Filed: {new Date(caseData.filingDate).toLocaleDateString()}
+            </span>
+          ) : (
+            <span className="text-xs text-slate-300 dark:text-slate-600">
+              No filing date
             </span>
           )}
         </div>

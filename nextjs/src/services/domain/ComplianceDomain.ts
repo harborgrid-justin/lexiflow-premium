@@ -721,14 +721,10 @@ export const ComplianceService = {
     ValidationService.validateId(lawyerId, "Lawyer ID");
 
     try {
-      // TODO: In production, GET /api/compliance/lawyers/:lawyerId/conflicts
-      // This should query:
-      // - Previous firm's client list
-      // - Adverse parties from previous employment
-      // - Ethical screen (ethical wall) status
-      // - Consent waivers obtained
+      // Integration Point: Fetch lateral hire conflicts from backend
+      // Requires: GET /api/compliance/lawyers/:lawyerId/conflicts
+      // Current behavior: Returns empty list until HR/onboarding module integration is complete
 
-      // For now, return empty array (requires HR/onboarding integration)
       return [];
     } catch (err) {
       console.error(

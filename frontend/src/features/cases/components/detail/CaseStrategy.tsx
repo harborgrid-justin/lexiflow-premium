@@ -9,29 +9,29 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
-import { Target, Shield, Plus, Scale } from 'lucide-react';
+import { Plus, Scale, Shield, Target } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
+import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { Citation, LegalArgument, Defense, EvidenceItem } from '@/types';
+import { Citation, Defense, EvidenceItem, LegalArgument } from '@/types';
 
 interface CaseStrategyProps {
   caseId: string;
@@ -54,19 +54,35 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [args, setArgs] = useState(initialArgs);
   const [defenses, setDefenses] = useState(initialDefenses);
 
+  // Fetch strategy data
+  const { data: strategyData, refetch } = useQuery(
+    ['case-strategy', caseId],
+    () => DataService.strategy.getCaseStrategy(caseId),
+    { enabled: !!caseId }
+  );
+
+  useEffect(() => {
+    if (strategyData) {
+      if (strategyData.arguments) setArgs(strategyData.arguments);
+      if (strategyData.defenses) setDefenses(strategyData.defenses);
+      if (strategyData.citations) setCitations(strategyData.citations);
+    }
+  }, [strategyData]);
+
   const strategyModal = useModalState();
   const [modalType, setModalType] = useState<'Citation' | 'Argument' | 'Defense'>('Citation');
   const [newItem, setNewItem] = useState<Partial<Citation | LegalArgument | Defense>>({});
   const [editingItem, setEditingItem] = useState<Citation | LegalArgument | Defense | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<{type: string; id: string} | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ type: string; id: string } | null>(null);
 
   // Mutation for saving strategy items
   const { mutate: saveStrategyItem, isLoading: isSaving } = useMutation(
     async ({ type, item }: { type: string; item: Citation | LegalArgument | Defense }) => {
       const itemWithMeta = {
         ...item,
-        type,
+        strategyType: type,
+        defenseType: type === 'Defense' ? (item as Defense).type : undefined,
         caseId,
         userId: 'current-user',
         createdAt: item.createdAt || new Date().toISOString(),
@@ -82,7 +98,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     {
       onSuccess: (_data, variables) => {
         success(`${variables.type} ${editingItem ? 'updated' : 'saved'} successfully`);
-        queryClient.invalidate(queryKeys.caseStrategy.detail(caseId));
+        queryClient.invalidate(['case-strategy', caseId]);
       },
       onError: (error: Error) => {
         notifyError(`Failed to save: ${error.message}`);
@@ -99,7 +115,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     {
       onSuccess: (data) => {
         success(`${data.type} deleted successfully`);
-        queryClient.invalidate(queryKeys.caseStrategy.detail(caseId));
+        queryClient.invalidate(['case-strategy', caseId]);
 
         // Update local state
         if (data.type === 'Citation') {
@@ -222,59 +238,59 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <StrategySection
-            title="Arguments"
-            items={args}
-            type="Argument"
-            icon={Target}
-            colorClass={theme.text.link}
-            evidence={evidence}
-            citations={citations}
-            onEdit={(item) => handleEdit('Argument', item)}
-            onDelete={(id) => handleDelete('Argument', id)}
+          title="Arguments"
+          items={args}
+          type="Argument"
+          icon={Target}
+          colorClass={theme.text.link}
+          evidence={evidence}
+          citations={citations}
+          onEdit={(item) => handleEdit('Argument', item)}
+          onDelete={(id) => handleDelete('Argument', id)}
         />
         <StrategySection
-            title="Defenses"
-            items={defenses}
-            type="Defense"
-            icon={Shield}
-            colorClass={theme.status.warning.text}
-            onEdit={(item) => handleEdit('Defense', item)}
-            onDelete={(id) => handleDelete('Defense', id)}
+          title="Defenses"
+          items={defenses}
+          type="Defense"
+          icon={Shield}
+          colorClass={theme.status.warning.text}
+          onEdit={(item) => handleEdit('Defense', item)}
+          onDelete={(id) => handleDelete('Defense', id)}
         />
         <StrategySection
-            title="Authority"
-            items={citations}
-            type="Citation"
-            icon={Scale}
-            colorClass={theme.action.primary.text}
-            onEdit={(item) => handleEdit('Citation', item)}
-            onDelete={(id) => handleDelete('Citation', id)}
+          title="Authority"
+          items={citations}
+          type="Citation"
+          icon={Scale}
+          colorClass={theme.action.primary.text}
+          onEdit={(item) => handleEdit('Citation', item)}
+          onDelete={(id) => handleDelete('Citation', id)}
         />
       </div>
 
       <Modal isOpen={strategyModal.isOpen} onClose={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
         <div className="p-6 space-y-4">
-            <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
+          <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({ ...newItem, title: e.target.value, citation: e.target.value })} />
 
-            {modalType === 'Defense' && (
-                <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewItem({...newItem, type: e.target.value})} aria-label="Defense Type">
-                        <option value="Affirmative">Affirmative</option>
-                        <option value="Procedural">Procedural</option>
-                        <option value="Factual">Factual</option>
-                    </select>
-                </div>
-            )}
-
-            <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewItem({...newItem, description: e.target.value})} />
-
-            <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
-                <Button variant="ghost" onClick={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
-                <Button variant="primary" onClick={handleSave} disabled={isSaving}>
-                  {isSaving ? 'Saving...' : `${editingItem ? 'Update' : 'Save'} ${modalType}`}
-                </Button>
+          {modalType === 'Defense' && (
+            <div>
+              <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewItem({ ...newItem, type: e.target.value })} aria-label="Defense Type">
+                <option value="Affirmative">Affirmative</option>
+                <option value="Procedural">Procedural</option>
+                <option value="Factual">Factual</option>
+              </select>
             </div>
+          )}
+
+          <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewItem({ ...newItem, description: e.target.value })} />
+
+          <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
+            <Button variant="ghost" onClick={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
+            <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? 'Saving...' : `${editingItem ? 'Update' : 'Save'} ${modalType}`}
+            </Button>
+          </div>
         </div>
       </Modal>
 
@@ -295,4 +311,3 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     </div>
   );
 };
-

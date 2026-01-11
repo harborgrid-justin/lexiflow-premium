@@ -47,6 +47,34 @@ export class DiscoveryController {
     return;
   }
 
+  @Get("analytics/funnel")
+  @Roles(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.PARTNER,
+    UserRole.ATTORNEY,
+    UserRole.PARALEGAL
+  )
+  @ApiOperation({ summary: "Get discovery funnel statistics" })
+  @ApiResponse({ status: 200, description: "Funnel statistics" })
+  async getFunnelStats() {
+    return this.discoveryService.getFunnelStats();
+  }
+
+  @Get("analytics/custodians")
+  @Roles(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.PARTNER,
+    UserRole.ATTORNEY,
+    UserRole.PARALEGAL
+  )
+  @ApiOperation({ summary: "Get custodian statistics" })
+  @ApiResponse({ status: 200, description: "Custodian statistics" })
+  async getCustodianStats() {
+    return this.discoveryService.getCustodianStats();
+  }
+
   @Public()
   @Get("evidence")
   @Roles(

@@ -734,25 +734,50 @@ class ConflictCheckServiceClass {
    * Evaluates if rule conditions are met
    */
   private evaluateRuleConditions(
-    _rule: ConflictRule,
-    _request: ConflictCheckRequest,
-    _matches: ConflictMatch[]
+    rule: ConflictRule,
+    request: ConflictCheckRequest,
+    matches: ConflictMatch[]
   ): boolean {
-    // TODO: Implement rule evaluation logic
-    void _rule;
-    void _request;
-    void _matches;
-    return false;
+    if (!rule.enabled) return false;
+
+    // Check if any match satisfies rule conditions
+    return matches.some((match) => {
+      // Check Entity Type
+      const typeMatch =
+        rule.conditions.entityTypes.length === 0 ||
+        rule.conditions.entityTypes.includes(match.type);
+
+      // Check Relationship
+      const relMatch =
+        rule.conditions.relationshipTypes.length === 0 ||
+        rule.conditions.relationshipTypes.includes(match.relationshipType);
+
+      // Check Practice Area
+      const areaMatch =
+        !rule.conditions.practiceAreas ||
+        rule.conditions.practiceAreas.length === 0 ||
+        (request.practiceArea &&
+          rule.conditions.practiceAreas.includes(request.practiceArea));
+
+      return typeMatch && relMatch && areaMatch;
+    });
   }
 
   /**
    * Checks if attorney conflict is relevant to case
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private isRelevantToCase(_conflict: any, _caseItem: any): boolean {
-    // TODO: Implement relevance check
-    void _conflict;
-    void _caseItem;
+  private isRelevantToCase(
+    conflict: ConflictMatch,
+    caseItem: { id: string }
+  ): boolean {
+    // Check if the conflict involves the case ID directly
+    if (
+      conflict.matchedEntity.id === caseItem.id ||
+      conflict.conflictingEntity.id === caseItem.id
+    ) {
+      return true;
+    }
+    // Default to true check for safety in compliance
     return true;
   }
 

@@ -17,6 +17,8 @@ import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { CrmService } from "./crm.service";
 import { CreateLeadDto } from "./dto/create-lead.dto";
 import { Lead } from "./entities/lead.entity";
+import { CreateOpportunityDto } from "./dto/create-opportunity.dto";
+import { CreateRelationshipDto } from "./dto/create-relationship.dto";
 
 @ApiTags("CRM")
 @ApiBearerAuth("JWT-auth")
@@ -52,6 +54,45 @@ export class CrmController {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
     return lead;
+  }
+
+  @Get("opportunities")
+  @ApiOperation({ summary: "Get all opportunities" })
+  @ApiResponse({ status: 200, description: "Returns all opportunities." })
+  async getOpportunities() {
+    return this.crmService.getOpportunities();
+  }
+
+  @Post("opportunities")
+  @ApiOperation({ summary: "Create an opportunity" })
+  @ApiResponse({
+    status: 201,
+    description: "The opportunity has been successfully created.",
+  })
+  async createOpportunity(@Body() createOpportunityDto: CreateOpportunityDto) {
+    return this.crmService.createOpportunity(createOpportunityDto);
+  }
+
+  @Get("relationships")
+  @ApiOperation({ summary: "Get all client relationships" })
+  @ApiResponse({
+    status: 200,
+    description: "Returns all client relationships.",
+  })
+  async getRelationships() {
+    return this.crmService.getRelationships();
+  }
+
+  @Post("relationships")
+  @ApiOperation({ summary: "Create a client relationship" })
+  @ApiResponse({
+    status: 201,
+    description: "The relationship has been successfully created.",
+  })
+  async createRelationship(
+    @Body() createRelationshipDto: CreateRelationshipDto
+  ) {
+    return this.crmService.createRelationship(createRelationshipDto);
   }
 
   @Get("business-development")

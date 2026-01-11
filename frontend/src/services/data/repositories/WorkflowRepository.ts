@@ -19,7 +19,7 @@ class WorkflowRepositoryClass {
   constructor() {
     this.workflowApi = new WorkflowApiService();
     this.tasksApi = new TasksApiService();
-    console.log("[WorkflowRepository] Initialized with Backend API");
+    // console.log("[WorkflowRepository] Initialized with Backend API");
   }
 
   getProcesses = async () => {

@@ -3,7 +3,7 @@
  * System metrics and health monitoring
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface SystemMetrics {
   timestamp: string;
@@ -34,14 +34,23 @@ export interface SystemMetrics {
 }
 
 export class MetricsApiService {
-  private readonly baseUrl = '/metrics';
+  private readonly baseUrl = "/metrics";
 
   async getCurrent(): Promise<SystemMetrics> {
-    return apiClient.get<SystemMetrics>(`${this.baseUrl}/current`);
+    return apiClient.get<SystemMetrics>(`${this.baseUrl}/system`);
   }
 
-  async getHistory(startDate: string, endDate: string, interval: '1m' | '5m' | '15m' | '1h' | '1d' = '5m'): Promise<SystemMetrics[]> {
-    return apiClient.get<SystemMetrics[]>(`${this.baseUrl}/history?start=${startDate}&end=${endDate}&interval=${interval}`);
+  async getHistory(
+    startDate: string,
+    endDate: string,
+    interval: "1m" | "5m" | "15m" | "1h" | "1d" = "5m"
+  ): Promise<SystemMetrics[]> {
+    // History endpoint not yet implemented in backend
+    console.warn(
+      "Metrics history not implemented in backend - returning empty set"
+    );
+    return [];
+    // return apiClient.get<SystemMetrics[]>(`${this.baseUrl}/history?start=${startDate}&end=${endDate}&interval=${interval}`);
   }
 
   async getAlerts(): Promise<unknown[]> {

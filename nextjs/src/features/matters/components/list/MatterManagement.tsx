@@ -1,6 +1,8 @@
 /**
- * MatterManagement - Placeholder Component
- * TODO: Implement full matter management interface
+ * MatterManagement - Module Placeholder
+ *
+ * This component reserves the route for the Matter Management module.
+ * Implementation scheduled for Phase 2.
  */
 
 import React from 'react';

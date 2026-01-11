@@ -19,8 +19,8 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useChartTheme } from '@/features/core/components/ChartHelpers/ChartHelpers';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useChartTheme } from '@/features/core/components/ChartHelpers/ChartHelpers';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
@@ -61,27 +61,34 @@ interface DashboardAnalyticsProps {
 export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProjects, chartData }) => {
     const { theme } = useTheme();
     const chartTheme = useChartTheme();
-    const [isMounted, setIsMounted] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Delay chart rendering to ensure container has dimensions
+    // Monitor container dimensions to prevent Recharts crash with 0/negative size
     useEffect(() => {
-        if (containerRef.current) {
-            const observer = new ResizeObserver((entries) => {
-                if (!entries[0]) return;
-                const { width, height } = entries[0].contentRect;
-                if (width > 0 && height > 0) {
-                    setIsMounted(true);
-                    observer.disconnect();
-                }
-            });
-            observer.observe(containerRef.current);
-            return () => observer.disconnect();
-        }
+        if (!containerRef.current) return;
 
-        // Fallback if ref not available or observer fails
-        const timer = setTimeout(() => setIsMounted(true), 500);
-        return () => clearTimeout(timer);
+        const updateDimensions = () => {
+            if (containerRef.current) {
+                const { clientWidth, clientHeight } = containerRef.current;
+                // Only set dimensions if valid positive numbers
+                if (clientWidth > 0 && clientHeight > 0) {
+                    setDimensions({ width: clientWidth, height: clientHeight });
+                }
+            }
+        };
+
+        const observer = new ResizeObserver(updateDimensions);
+        observer.observe(containerRef.current);
+
+        // Initial check and fallback
+        updateDimensions();
+        const timer = setTimeout(updateDimensions, 500);
+
+        return () => {
+            observer.disconnect();
+            clearTimeout(timer);
+        };
     }, []);
 
     const CHART_COLORS = [
@@ -100,26 +107,28 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
         <div className="xl:col-span-2 space-y-6">
             <Card title="Case Phase Distribution & Volume" subtitle="Active matters by litigation stage" className="h-[28rem]">
                 <div ref={containerRef} className="h-full w-full min-h-[20rem] relative overflow-hidden">
-                    {isMounted && safeChartData.length > 0 ? (
-                        <ResponsiveContainer width="99%" height="100%" minWidth={0} minHeight={0} debounce={50}>
-                            <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
-                                <Tooltip
-                                    cursor={{ fill: theme.surface.highlight }}
-                                    contentStyle={chartTheme.tooltipStyle}
-                                />
-                                <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
-                                    {safeChartData.map((entry, index) => (
-                                        <Cell key={`analytics-cell-${entry.name || index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
+                    {dimensions.width > 0 && dimensions.height > 0 && safeChartData.length > 0 ? (
+                        <div style={{ width: '100%', height: '100%' }}>
+                            <ResponsiveContainer width="100%" height="100%" debounce={50} minWidth={0}>
+                                <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
+                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} dy={10} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
+                                    <Tooltip
+                                        cursor={{ fill: theme.surface.highlight }}
+                                        contentStyle={chartTheme.tooltipStyle}
+                                    />
+                                    <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
+                                        {safeChartData.map((entry, index) => (
+                                            <Cell key={`analytics-cell-${entry.name || index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     ) : (
                         <div className={cn("flex items-center justify-center h-full", theme.text.secondary)}>
-                            {isMounted ? 'No data available' : 'Loading chart...'}
+                            {dimensions.width > 0 ? 'No data available' : 'Loading chart...'}
                         </div>
                     )}
                 </div>

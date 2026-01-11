@@ -108,7 +108,10 @@ async function bootstrap(): Promise<INestApplication> {
 
   setupSwagger(app);
 
-  const port = configService.get<number>("port") ?? 3001;
+  const port =
+    configService.get<number>("PORT") ??
+    configService.get<number>("port") ??
+    3001;
   const host = "0.0.0.0";
 
   /* ================================================================ */

@@ -27,6 +27,7 @@ import { UserAvatar } from '@/shared/ui/molecules/UserAvatar';
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 import { ConnectivityHUD } from '../ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '../NeuralCommandBar/NeuralCommandBar';
+import { GlobalCaseSelector } from '../GlobalCaseSelector/GlobalCaseSelector';
 
 // Services & Data
 import { IntentResult } from '@/services/features/research/geminiService';
@@ -90,6 +91,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           onSearchResultClick={onSearchResultClick}
           onNeuralCommand={onNeuralCommand}
         />
+
+        {/* Global Case Selector */}
+        <div className="hidden lg:block ml-2">
+          <GlobalCaseSelector />
+        </div>
 
         {/* Connection Status - Shows IndexedDB vs PostgreSQL */}
         <ConnectionStatus className="hidden lg:flex" />

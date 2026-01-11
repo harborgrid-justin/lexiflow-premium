@@ -138,7 +138,7 @@ export class TasksApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[TasksApiService] Initialized with Backend API (PostgreSQL)");
+    // console.log("[TasksApiService] Initialized with Backend API (PostgreSQL)");
   }
 
   /**
@@ -146,7 +146,7 @@ export class TasksApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === "") {
+    if (!id || typeof id !== "string" || id.trim() === "") {
       throw new Error(`[TasksApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -338,7 +338,11 @@ export class TasksApiService {
     actualHours?: number
   ): Promise<WorkflowTask> {
     this.validateId(id, "updateProgress");
-    if (typeof completionPercentage !== 'number' || completionPercentage < 0 || completionPercentage > 100) {
+    if (
+      typeof completionPercentage !== "number" ||
+      completionPercentage < 0 ||
+      completionPercentage > 100
+    ) {
       throw new Error(
         "[TasksApiService.updateProgress] completionPercentage must be between 0 and 100"
       );
@@ -543,7 +547,7 @@ export class TasksApiService {
    */
   async addComment(taskId: string, content: string): Promise<TaskComment> {
     this.validateId(taskId, "addComment");
-    if (!content || typeof content !== 'string' || content.trim() === "") {
+    if (!content || typeof content !== "string" || content.trim() === "") {
       throw new Error("[TasksApiService.addComment] content is required");
     }
     try {

@@ -3,13 +3,21 @@
  * External data source integrations
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 export interface DataSource {
   id: string;
   name: string;
-  type: 'pacer' | 'westlaw' | 'lexisnexis' | 'bloomberg_law' | 'courtlink' | 'database' | 'api' | 'custom';
-  status: 'active' | 'inactive' | 'error';
+  type:
+    | "pacer"
+    | "westlaw"
+    | "lexisnexis"
+    | "bloomberg_law"
+    | "courtlink"
+    | "database"
+    | "api"
+    | "custom";
+  status: "active" | "inactive" | "error";
   config: {
     url?: string;
     credentials?: Record<string, unknown>;
@@ -23,12 +31,15 @@ export interface DataSource {
 }
 
 export class DataSourcesApiService {
-  private readonly baseUrl = '/data-sources';
+  private readonly baseUrl = "/integrations/data-sources";
 
-  async getAll(filters?: { type?: DataSource['type']; status?: DataSource['status'] }): Promise<DataSource[]> {
+  async getAll(filters?: {
+    type?: DataSource["type"];
+    status?: DataSource["status"];
+  }): Promise<DataSource[]> {
     const params = new URLSearchParams();
-    if (filters?.type) params.append('type', filters.type);
-    if (filters?.status) params.append('status', filters.status);
+    if (filters?.type) params.append("type", filters.type);
+    if (filters?.status) params.append("status", filters.status);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     return apiClient.get<DataSource[]>(url);

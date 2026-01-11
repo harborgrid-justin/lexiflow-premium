@@ -30,11 +30,10 @@ const LedgerBase: React.FC<LedgerProps> = ({ className, type, accountId }) => {
             setLoading(true);
             try {
                 // Real API Integration
-                const data = await DataService.financials.getTransactions(accountId);
+                const data = await DataService.billing.getTrustTransactions(accountId);
 
                 if (Array.isArray(data)) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    setTransactions(data.map((t: any) => ({
+                    setTransactions(data.map((t) => ({
                         id: t.id,
                         desc: t.description,
                         amount: t.amount,
@@ -43,8 +42,7 @@ const LedgerBase: React.FC<LedgerProps> = ({ className, type, accountId }) => {
                     })));
 
                     // Calculate running balance
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const total = data.reduce((acc: number, curr: any) => acc + (curr.amount || 0), 0);
+                    const total = data.reduce((acc: number, curr) => acc + (curr.amount || 0), 0);
                     setBalance(total);
                 }
             } catch (err) {
@@ -67,7 +65,7 @@ const LedgerBase: React.FC<LedgerProps> = ({ className, type, accountId }) => {
                     <div>
                         <h3 className="font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
                         <p className="text-xs text-slate-500">
-                             {accountId ? `Account # ....${accountId.slice(-4)}` : 'Select Account'}
+                            {accountId ? `Account # ....${accountId.slice(-4)}` : 'Select Account'}
                         </p>
                     </div>
                 </div>

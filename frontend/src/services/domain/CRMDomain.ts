@@ -103,6 +103,7 @@ import { ClientsApiService } from "@/api/communications/clients-api";
 import { CasesApiService } from "@/api/litigation/cases-api";
 import { ConcurrencyError, OperationError } from "@/services/core/errors";
 import { apiClient } from "@/services/infrastructure/apiClient";
+import { Opportunity, ClientRelationship } from "@/types/crm";
 
 // In-memory state for fallback mode (simulating database constraints)
 const conversionMap = new Map<string, { clientId: string; caseId: string }>();
@@ -182,6 +183,14 @@ export const CRMService = {
         sources: [],
       };
     }
+  },
+
+  getOpportunities: async (): Promise<Opportunity[]> => {
+    return apiClient.get<Opportunity[]>("/crm/opportunities");
+  },
+
+  getRelationships: async (): Promise<ClientRelationship[]> => {
+    return apiClient.get<ClientRelationship[]>("/crm/relationships");
   },
 
   updateLead: async (id: string, updates: { stage: string }): Promise<Lead> => {

@@ -19,6 +19,8 @@ interface ClientDirectoryProps {
   onOpenPortal: (client: Client) => void;
 }
 
+const EMPTY_CLIENTS: Client[] = [];
+
 export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDirectoryProps) {
   const { theme } = useTheme();
   const notify = useNotify();
@@ -26,7 +28,7 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Enterprise Data Access
-  const { data: fetchedClients = [] } = useClients();
+  const { data: fetchedClients = EMPTY_CLIENTS } = useClients();
 
   const { mutate: generateToken } = useMutation(
     DataService.clients.generatePortalToken,

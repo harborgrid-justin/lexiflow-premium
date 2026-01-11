@@ -2,37 +2,28 @@
   "name": "lexiflow-backend",
   "version": "0.5.2",
   "description": "LexiFlow Enterprise Backend - Document Management System",
-
   "main": "dist/main.js",
-
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" nest build",
-
     "start": "nest start",
     "start:dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096 --expose-gc\" nest start --watch",
     "start:debug": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096 --expose-gc --inspect\" nest start --watch",
-
     "start:prod": "node --max-old-space-size=2048 --max-semi-space-size=16 --expose-gc --optimize-for-size dist/main.js",
     "start:prod:memory": "node --max-old-space-size=2048 --max-semi-space-size=16 --expose-gc --optimize-for-size --gc-interval=100 --max-old-generation-size-mb=1536 dist/main.js",
-
     "memory:snapshot": "node --expose-gc --heap-prof dist/main.js",
     "memory:analysis": "node --trace-gc --trace-gc-verbose dist/main.js",
-
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
     "lint:check": "eslint \"{src,apps,libs}/**/*.ts\"",
     "typecheck": "tsc --noEmit",
-
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-
     "validate": "npm run typecheck && npm run lint:check && npm run test",
     "validate:full": "npm run typecheck && npm run lint:check && npm run test:cov && npm run test:e2e"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -135,6 +126,7 @@
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
     "cross-env": "^10.1.0",
+    "dotenv": "^16.4.7",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

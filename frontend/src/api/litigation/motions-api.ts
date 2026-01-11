@@ -3,17 +3,17 @@
  * Manages legal motions in cases
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Motion, MotionFilters } from '@/types';
+import { apiClient } from "@/services/infrastructure/apiClient";
+import type { Motion, MotionFilters } from "@/types";
 
 export class MotionsApiService {
-  private readonly baseUrl = '/motions';
+  private readonly baseUrl = "/motions";
 
   async getAll(filters?: MotionFilters): Promise<Motion[]> {
     const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.type) params.append('type', filters.type);
-    if (filters?.status) params.append('status', filters.status);
+    if (filters?.caseId) params.append("caseId", filters.caseId);
+    if (filters?.type) params.append("type", filters.type);
+    if (filters?.status) params.append("status", filters.status);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     return apiClient.get<Motion[]>(url);
@@ -25,8 +25,21 @@ export class MotionsApiService {
 
   async getByCaseId(caseId: string): Promise<Motion[]> {
     // Use the correct backend endpoint: /motions/case/:caseId
-    const result = await apiClient.get<Motion[]>(`${this.baseUrl}/case/${caseId}`);
-    // Ensure we always return an array
+    const result = await apiClient.get<Motion[] | { data: Motion[] }>(
+      `${this.baseUrl}/case/${caseId}`
+    );
+
+    // Handle paginated response format from backend
+    if (
+      result &&
+      typeof result === "object" &&
+      "data" in result &&
+      Array.isArray((result as { data: Motion[] }).data)
+    ) {
+      return (result as { data: Motion[] }).data;
+    }
+
+    // Handle direct array response (legacy/fallback)
     return Array.isArray(result) ? result : [];
   }
 
@@ -52,7 +65,7 @@ export class MotionsApiService {
     };
 
     // Remove undefined values
-    Object.keys(createDto).forEach(key => {
+    Object.keys(createDto).forEach((key) => {
       if (createDto[key] === undefined) {
         delete createDto[key];
       }

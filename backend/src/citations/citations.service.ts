@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Citation } from './entities/citation.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Citation } from "./entities/citation.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -35,7 +35,7 @@ import { Citation } from './entities/citation.entity';
 export class CitationsService {
   constructor(
     @InjectRepository(Citation)
-    private readonly citationRepository: Repository<Citation>,
+    private readonly citationRepository: Repository<Citation>
   ) {}
 
   async create(createDto: unknown) {
@@ -44,9 +44,16 @@ export class CitationsService {
   }
 
   async findAll(filters: unknown) {
-    const { page = 1, limit = 50 } = filters as { page?: number; limit?: number };
+    const {
+      page = 1,
+      limit = 50,
+      caseId,
+    } = filters as { page?: number; limit?: number; caseId?: string };
+    const where = caseId ? { caseId } : {};
+
     const [data, total] = await this.citationRepository.findAndCount({
-      order: { createdAt: 'DESC' },
+      where,
+      order: { createdAt: "DESC" },
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -72,7 +79,7 @@ export class CitationsService {
 
   async checkShepards(id: string) {
     await this.findOne(id);
-    return { status: 'Valid', history: [], treatment: 'Good Law' };
+    return { status: "Valid", history: [], treatment: "Good Law" };
   }
 
   async verifyAll() {

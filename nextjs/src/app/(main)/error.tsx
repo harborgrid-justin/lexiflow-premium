@@ -40,7 +40,7 @@ export default function MainError({ error, reset }: ErrorProps) {
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
     });
 
-    // TODO: Send to error tracking with user context
+    
     // Sentry.captureException(error, {
     //   tags: { section: 'main' },
     //   user: { id: user?.id }

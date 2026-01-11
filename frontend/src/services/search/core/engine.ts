@@ -3,10 +3,10 @@
  * @module services/search/core/engine
  */
 
-import { SearchWorker } from '../searchWorker';
-import type { GlobalSearchResult } from './types';
-import { validateQuery } from './validation';
-import { hydrateSearchIndex } from './hydration';
+import { SearchWorker } from "../searchWorker";
+import type { GlobalSearchResult } from "./types";
+import { validateQuery } from "./validation";
+import { hydrateSearchIndex } from "./hydration";
 
 /** GlobalSearchEngine - Manages Web Worker singleton for off-thread search indexing */
 export class GlobalSearchEngine {
@@ -14,18 +14,22 @@ export class GlobalSearchEngine {
   private requestId = 0;
   private isHydrated = false;
   private hydrationPromise: Promise<void> | null = null;
-  private pendingRequests = new Map<number, (results: GlobalSearchResult[]) => void>();
+  private pendingRequests = new Map<
+    number,
+    (results: GlobalSearchResult[]) => void
+  >();
 
   constructor() {
-    if (typeof Worker !== 'undefined') {
+    if (typeof Worker !== "undefined") {
       const worker = SearchWorker.create();
       if (worker) {
         this.worker = worker;
         this.worker.onmessage = this.handleWorkerMessage.bind(this);
-        console.log('[GlobalSearchEngine] Worker initialized');
+        console.log("[GlobalSearchEngine] Worker initialized");
       }
     } else {
-      console.warn('[GlobalSearchEngine] Worker API not available (SSR mode)');
+      // Worker API not available (often happens in dev/test/SSR)
+      // console.warn('[GlobalSearchEngine] Worker API not available (SSR mode)');
     }
   }
 
@@ -38,7 +42,7 @@ export class GlobalSearchEngine {
         this.pendingRequests.delete(requestId);
       }
     } catch (error) {
-      console.error('[GlobalSearchEngine.handleWorkerMessage] Error:', error);
+      console.error("[GlobalSearchEngine.handleWorkerMessage] Error:", error);
     }
   }
 
@@ -51,13 +55,20 @@ export class GlobalSearchEngine {
       const searchItems = await hydrateSearchIndex();
 
       if (!this.worker) {
-        console.warn('[GlobalSearchEngine] Worker not available, skipping indexing');
+        console.warn(
+          "[GlobalSearchEngine] Worker not available, skipping indexing"
+        );
         this.isHydrated = true;
         return;
       }
 
-      this.worker.postMessage({ type: 'UPDATE', payload: { items: searchItems, fields: ['title', 'subtitle', 'type'] } });
-      console.log(`[GlobalSearchEngine] Hydration complete: ${searchItems.length} items in ${(performance.now() - startTime).toFixed(2)}ms`);
+      this.worker.postMessage({
+        type: "UPDATE",
+        payload: { items: searchItems, fields: ["title", "subtitle", "type"] },
+      });
+      console.log(
+        `[GlobalSearchEngine] Hydration complete: ${searchItems.length} items in ${(performance.now() - startTime).toFixed(2)}ms`
+      );
       this.isHydrated = true;
     })();
 
@@ -65,14 +76,17 @@ export class GlobalSearchEngine {
   }
 
   async search(query: string): Promise<GlobalSearchResult[]> {
-    validateQuery(query, 'search');
+    validateQuery(query, "search");
     if (!this.worker) return [];
 
     await this.hydrate();
     return new Promise<GlobalSearchResult[]>((resolve) => {
       const reqId = ++this.requestId;
       this.pendingRequests.set(reqId, resolve);
-      this.worker!.postMessage({ type: 'SEARCH', payload: { query, requestId: reqId } });
+      this.worker!.postMessage({
+        type: "SEARCH",
+        payload: { query, requestId: reqId },
+      });
     });
   }
 

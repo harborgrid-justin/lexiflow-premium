@@ -29,8 +29,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ className, c
         const timelineData = await DataService.cases.getTimeline(caseId);
         if (Array.isArray(timelineData)) {
           // Adapt API response to UI model
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setPhases(timelineData.map((t: any) => ({
+          setPhases(timelineData.map((t) => ({
             id: t.id,
             title: t.title || t.type,
             startDate: t.date?.toString() || new Date().toISOString(),

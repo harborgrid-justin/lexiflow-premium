@@ -11,7 +11,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import type { Client } from '@/types';
+import type { Client, Opportunity, ClientRelationship } from "@/types";
 import { cn } from '@/shared/lib/cn';
 import {
   ArrowUpRight,
@@ -30,33 +30,6 @@ import {
 import React, { useState } from 'react';
 
 // ============================================================================
-// TYPES
-// ============================================================================
-
-interface ClientRelationship {
-  id: string;
-  clientId: string;
-  relatedClientId: string;
-  relatedClientName: string;
-  relationshipType: 'Parent' | 'Subsidiary' | 'Partner' | 'Competitor' | 'Vendor';
-  strength: number; // 1-10
-  notes?: string;
-}
-
-interface Opportunity {
-  id: string;
-  clientId: string;
-  title: string;
-  value: number;
-  stage: 'Lead' | 'Qualified' | 'Proposal' | 'Negotiation' | 'Closed Won' | 'Closed Lost';
-  probability: number; // 0-100
-  expectedCloseDate: string;
-  assignedTo: string;
-  practiceArea: string;
-  lastActivity: string;
-}
-
-// ============================================================================
 // COMPONENT
 // ============================================================================
 
@@ -68,46 +41,11 @@ export const EnterpriseCRM: React.FC = () => {
   // Data queries
   const { data: clients = [] } = useQuery(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
   const { data: opportunities = [] } = useQuery(QUERY_KEYS.CRM.OPPORTUNITIES, () =>
-    Promise.resolve([
-      {
-        id: '1',
-        clientId: '1',
-        title: 'M&A Advisory Services',
-        value: 500000,
-        stage: 'Proposal' as const,
-        probability: 75,
-        expectedCloseDate: '2026-03-15',
-        assignedTo: 'John Smith',
-        practiceArea: 'Corporate',
-        lastActivity: '2026-01-02'
-      },
-      {
-        id: '2',
-        clientId: '2',
-        title: 'IP Litigation Support',
-        value: 350000,
-        stage: 'Negotiation' as const,
-        probability: 60,
-        expectedCloseDate: '2026-02-28',
-        assignedTo: 'Sarah Johnson',
-        practiceArea: 'Litigation',
-        lastActivity: '2026-01-01'
-      }
-    ] as Opportunity[])
+    DataService.crm.getOpportunities()
   );
 
   const { data: relationships = [] } = useQuery(QUERY_KEYS.CRM.RELATIONSHIPS, () =>
-    Promise.resolve([
-      {
-        id: '1',
-        clientId: '1',
-        relatedClientId: '2',
-        relatedClientName: 'Tech Subsidiary Inc.',
-        relationshipType: 'Subsidiary' as const,
-        strength: 8,
-        notes: 'Wholly-owned subsidiary'
-      }
-    ] as ClientRelationship[])
+    DataService.crm.getRelationships()
   );
 
   // Ensure data is array

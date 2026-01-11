@@ -19,6 +19,7 @@
  */
 
 import React from 'react';
+import { CaseProvider } from './case/CaseContext';
 import { DataSourceProvider } from './data/DataSourceContext';
 import { SyncProvider } from './sync/SyncContext';
 import { ThemeProvider } from './theme/ThemeContext';
@@ -93,11 +94,13 @@ export function AppProviders({ children }: AppProvidersProps) {
     <ThemeProvider>
       <ToastProvider maxVisible={5} maxQueue={50}>
         <DataSourceProvider>
-          <SyncProviderWithToast>
-            <WindowProviderWithTheme>
-              {children}
-            </WindowProviderWithTheme>
-          </SyncProviderWithToast>
+          <CaseProvider>
+            <SyncProviderWithToast>
+              <WindowProviderWithTheme>
+                {children}
+              </WindowProviderWithTheme>
+            </SyncProviderWithToast>
+          </CaseProvider>
         </DataSourceProvider>
       </ToastProvider>
     </ThemeProvider>

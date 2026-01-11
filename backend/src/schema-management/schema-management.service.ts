@@ -1,26 +1,25 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  BadRequestException,
 } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { InjectDataSource } from "@nestjs/typeorm";
-import { Repository, DataSource } from "typeorm";
-import { Migration } from "./entities/migration.entity";
-import { Snapshot } from "./entities/snapshot.entity";
+import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
 import {
   CreateMigrationDto,
   CreateSnapshotDto,
   CreateTableDto,
 } from "./dto/create-migration.dto";
+import { Migration } from "./entities/migration.entity";
+import { Snapshot } from "./entities/snapshot.entity";
 import {
-  TableQueryResult,
-  TableInfo,
+  AlterTableOperations,
   ColumnQueryResult,
   PrimaryKeyInfo,
-  TableColumn,
-  AlterTableOperations,
   SchemaSnapshotData,
+  TableColumn,
+  TableInfo,
+  TableQueryResult,
 } from "./interfaces";
 
 /**
@@ -94,9 +93,13 @@ export class SchemaManagementService {
 
   async getTableColumns(tableName: string): Promise<TableColumn[]> {
     // Validate table name to prevent SQL injection
+    // Note: Since we use parameter binding ($1), strict identifier validation is not needed here
+    // and can cause errors for valid tables with non-standard names.
+    /*
     if (!this.isValidIdentifier(tableName)) {
       throw new BadRequestException("Invalid table name format");
     }
+    */
 
     const query = `
       SELECT

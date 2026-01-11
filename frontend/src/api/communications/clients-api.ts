@@ -82,9 +82,9 @@ export class ClientsApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log(
+    /* console.log(
       "[ClientsApiService] Initialized with Backend API (PostgreSQL)"
-    );
+    ); */
   }
 
   /**

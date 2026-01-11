@@ -100,7 +100,7 @@ function getInitialDataSource(): DataSourceType {
 
 // BP3: Split contexts for state and actions
 const contextId = Math.random().toString(36).substring(7);
-console.log('[DataSourceContext] Module loaded, ID:', contextId);
+// console.log('[DataSourceContext] Module loaded, ID:', contextId);
 
 /**
  * DataSourceProvider
@@ -130,7 +130,7 @@ export const DataSourceProvider = ({
   repositories: mockRepositories,
   config: overrideConfig,
 }: DataSourceProviderProps) => {
-  console.log('[DataSourceProvider] Rendering, Module ID:', contextId);
+  // console.log('[DataSourceProvider] Rendering, Module ID:', contextId);
   // Pattern 12: SSR-safe initialization
   // Pattern 12: SSR-safe initialization
   const [currentSource, setCurrentSource] = useState<DataSourceType>(

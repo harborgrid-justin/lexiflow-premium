@@ -68,7 +68,13 @@ export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData>
   void templateId; // Explicitly mark as intentionally unused for now
 
   // Fetch cases for selection
-  const cases = await DataService.cases.getAll();
+  let cases: Case[] = [];
+  try {
+    cases = await DataService.cases.getAll();
+  } catch (error) {
+    console.error('Failed to load cases for strategy builder:', error);
+    // Continue with empty cases array rather than crashing the page
+  }
 
   // Default strategy templates
   const templates: StrategyTemplate[] = [

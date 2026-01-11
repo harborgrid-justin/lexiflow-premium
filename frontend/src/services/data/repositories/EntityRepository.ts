@@ -63,21 +63,22 @@ export class EntityRepository extends Repository<LegalEntity> {
   }
 
   private mapToFrontend(entity: LegalEntityApi): LegalEntity {
-    const entityAny = entity as unknown as {
-      roles?: string[];
-      riskScore?: number;
-      tags?: string[];
-      [key: string]: unknown;
-    };
+    // Explicitly cast to an intermediate type that matches our spread assumptions
+    const entityAny = entity as unknown as Record<string, unknown>;
+
     return {
       ...entityAny,
       id: entity.id,
       name: (entityAny.name as string) || "Unknown Entity",
       type: this.mapEntityType(entity.entityType || "other"),
-      roles: entityAny.roles || [],
-      riskScore: entityAny.riskScore || 0,
-      tags: entityAny.tags || [],
+      roles: (entityAny.roles as string[]) || [],
+      riskScore: (entityAny.riskScore as number) || 0,
+      tags: (entityAny.tags as string[]) || [],
       status: entity.status || "Active",
+      createdAt: entity.createdAt || new Date().toISOString(),
+      updatedAt: entity.updatedAt || new Date().toISOString(),
+      userId: entity.userId || "system",
+      metadata: (entity.metadata as Record<string, unknown>) || {},
     } as LegalEntity;
   }
 

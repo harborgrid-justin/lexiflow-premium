@@ -62,11 +62,11 @@ export class CaseResolverOptimized {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as unknown);
+    } as unknown as CaseFilterDto);
 
     return {
       edges: result.data.map((caseItem) => ({
-        node: caseItem as unknown,
+        node: caseItem as unknown as CaseType,
         cursor: caseItem.id,
       })),
       pageInfo: {
@@ -87,7 +87,7 @@ export class CaseResolverOptimized {
   ): Promise<CaseType | null> {
     try {
       const caseItem = await this.caseService.findOne(id);
-      return caseItem as unknown;
+      return caseItem as unknown as CaseType;
     } catch {
       return null;
     }
@@ -99,9 +99,11 @@ export class CaseResolverOptimized {
     @Args("input") input: CreateCaseInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.create(input as unknown);
+    const caseEntity = await this.caseService.create(
+      input as unknown as CreateCaseDto
+    );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -111,9 +113,12 @@ export class CaseResolverOptimized {
     @Args("input") input: UpdateCaseInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.update(id, input as unknown);
+    const caseEntity = await this.caseService.update(
+      id,
+      input as unknown as UpdateCaseDto
+    );
     pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => Boolean)
@@ -133,7 +138,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -143,7 +148,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -153,7 +158,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -163,7 +168,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   /**
@@ -216,12 +221,12 @@ export class CaseResolverOptimized {
       closedCases: parseInt(metrics.closed_cases) || 0,
       pendingCases: parseInt(metrics.pending_cases) || 0,
       byType: typeDistribution.map((row: unknown) => ({
-        type: (row as unknown).type,
-        count: parseInt((row as unknown).count),
+        type: (row as any).type,
+        count: parseInt((row as any).count),
       })),
       byStatus: statusDistribution.map((row: unknown) => ({
-        status: (row as unknown).status,
-        count: parseInt((row as unknown).count),
+        status: (row as any).status,
+        count: parseInt((row as any).count),
       })),
     };
   }

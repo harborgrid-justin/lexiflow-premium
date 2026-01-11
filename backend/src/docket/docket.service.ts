@@ -112,7 +112,9 @@ export class DocketService {
   async create(
     createDocketEntryDto: CreateDocketEntryDto
   ): Promise<DocketEntry> {
-    const entry = this.docketRepository.create(createDocketEntryDto);
+    const entry = this.docketRepository.create(
+      createDocketEntryDto as unknown as DeepPartial<DocketEntry>
+    );
     return this.docketRepository.save(entry);
   }
 
@@ -123,7 +125,9 @@ export class DocketService {
     const result = await this.docketRepository
       .createQueryBuilder()
       .update(DocketEntry)
-      .set(updateDocketEntryDto as unknown as DocketEntry)
+      .set(
+        updateDocketEntryDto as unknown as QueryDeepPartialEntity<DocketEntry>
+      )
       .where("id = :id", { id })
       .returning("*")
       .execute();
@@ -133,7 +137,7 @@ export class DocketService {
     }
 
     const rows = result.raw as DocketEntry[];
-    return rows[0];
+    return rows[0] as DocketEntry;
   }
 
   async remove(id: string): Promise<void> {

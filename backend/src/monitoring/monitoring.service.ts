@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThan } from 'typeorm';
-import { PerformanceMetric } from './entities/performance-metric.entity';
-import { SystemAlert, AlertSeverity } from './entities/system-alert.entity';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, MoreThan, DeepPartial } from "typeorm";
+import { PerformanceMetric } from "./entities/performance-metric.entity";
+import { SystemAlert, AlertSeverity } from "./entities/system-alert.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -38,7 +38,7 @@ export class MonitoringService {
     @InjectRepository(PerformanceMetric)
     private readonly metricRepository: Repository<PerformanceMetric>,
     @InjectRepository(SystemAlert)
-    private readonly alertRepository: Repository<SystemAlert>,
+    private readonly alertRepository: Repository<SystemAlert>
   ) {}
 
   async recordMetric(data: {
@@ -50,7 +50,7 @@ export class MonitoringService {
     const metric = this.metricRepository.create({
       ...data,
       timestamp: new Date(),
-    });
+    } as unknown as DeepPartial<PerformanceMetric>);
 
     return await this.metricRepository.save(metric);
   }
@@ -63,21 +63,24 @@ export class MonitoringService {
   }) {
     const { metricName, startTime, endTime, limit = 1000 } = filters;
 
-    const queryBuilder = this.metricRepository.createQueryBuilder('metric');
+    const queryBuilder = this.metricRepository.createQueryBuilder("metric");
 
     if (metricName) {
-      queryBuilder.where('metric.metricName = :metricName', { metricName });
+      queryBuilder.where("metric.metricName = :metricName", { metricName });
     }
 
     if (startTime && endTime) {
-      queryBuilder.andWhere('metric.timestamp BETWEEN :startTime AND :endTime', {
-        startTime,
-        endTime,
-      });
+      queryBuilder.andWhere(
+        "metric.timestamp BETWEEN :startTime AND :endTime",
+        {
+          startTime,
+          endTime,
+        }
+      );
     }
 
     const data = await queryBuilder
-      .orderBy('metric.timestamp', 'DESC')
+      .orderBy("metric.timestamp", "DESC")
       .limit(limit)
       .getMany();
 
@@ -91,36 +94,42 @@ export class MonitoringService {
 
     const cpuMetrics = await this.metricRepository.find({
       where: {
-        metricName: 'cpu_usage',
+        metricName: "cpu_usage",
         timestamp: MoreThan(fiveMinutesAgo),
       },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
       take: 5,
     });
 
     const memoryMetrics = await this.metricRepository.find({
       where: {
-        metricName: 'memory_usage',
+        metricName: "memory_usage",
         timestamp: MoreThan(fiveMinutesAgo),
       },
-      order: { timestamp: 'DESC' },
+      order: { timestamp: "DESC" },
       take: 5,
     });
 
-    const avgCpu = cpuMetrics.length > 0
-      ? cpuMetrics.reduce((sum, m) => sum + m.value, 0) / cpuMetrics.length
-      : 0;
+    const avgCpu =
+      cpuMetrics.length > 0
+        ? cpuMetrics.reduce((sum, m) => sum + m.value, 0) / cpuMetrics.length
+        : 0;
 
-    const avgMemory = memoryMetrics.length > 0
-      ? memoryMetrics.reduce((sum, m) => sum + m.value, 0) / memoryMetrics.length
-      : 0;
+    const avgMemory =
+      memoryMetrics.length > 0
+        ? memoryMetrics.reduce((sum, m) => sum + m.value, 0) /
+          memoryMetrics.length
+        : 0;
 
     const activeAlerts = await this.alertRepository.count({
       where: { resolved: false },
     });
 
     return {
-      status: activeAlerts === 0 && avgCpu < 80 && avgMemory < 80 ? 'healthy' : 'degraded',
+      status:
+        activeAlerts === 0 && avgCpu < 80 && avgMemory < 80
+          ? "healthy"
+          : "degraded",
       cpuUsage: Math.round(avgCpu),
       memoryUsage: Math.round(avgMemory),
       activeAlerts,
@@ -136,16 +145,16 @@ export class MonitoringService {
   }) {
     const { severity, resolved = false, page = 1, limit = 50 } = filters || {};
 
-    const queryBuilder = this.alertRepository.createQueryBuilder('alert');
+    const queryBuilder = this.alertRepository.createQueryBuilder("alert");
 
-    queryBuilder.where('alert.resolved = :resolved', { resolved });
+    queryBuilder.where("alert.resolved = :resolved", { resolved });
 
     if (severity) {
-      queryBuilder.andWhere('alert.severity = :severity', { severity });
+      queryBuilder.andWhere("alert.severity = :severity", { severity });
     }
 
     const [data, total] = await queryBuilder
-      .orderBy('alert.createdAt', 'DESC')
+      .orderBy("alert.createdAt", "DESC")
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
@@ -169,7 +178,10 @@ export class MonitoringService {
     return await this.alertRepository.save(alert);
   }
 
-  async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert | null> {
+  async acknowledgeAlert(
+    id: string,
+    userId: string
+  ): Promise<SystemAlert | null> {
     const alert = await this.alertRepository.findOne({ where: { id } });
 
     if (alert) {

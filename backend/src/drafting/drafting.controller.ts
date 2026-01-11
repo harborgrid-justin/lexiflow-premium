@@ -211,7 +211,7 @@ export class DraftingController {
     const userId = req.user?.id || "00000000-0000-0000-0000-000000000001";
     return this.draftingService.getAllGeneratedDocuments(
       userId,
-      status as "draft" | "final" | "archived" | undefined,
+      status as GeneratedDocumentStatus,
       caseId
     );
   }

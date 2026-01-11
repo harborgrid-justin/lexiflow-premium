@@ -281,7 +281,7 @@ export class DocumentsService implements OnModuleDestroy {
 
     this.logger.log(`Document updated: ${id}`);
     const rows = result.raw as Document[];
-    return rows[0];
+    return rows[0] as Document;
   }
 
   /**
@@ -387,27 +387,37 @@ export class DocumentsService implements OnModuleDestroy {
       {
         id: "case_docs",
         label: "Case Files",
-        count: typeCounts.find((t) => t.type === "case_file")?.count || 0,
+        count: parseInt(
+          typeCounts.find((t) => t.type === "case_file")?.count || "0"
+        ),
       },
       {
         id: "discovery",
         label: "Discovery Productions",
-        count: typeCounts.find((t) => t.type === "discovery")?.count || 0,
+        count: parseInt(
+          typeCounts.find((t) => t.type === "discovery")?.count || "0"
+        ),
       },
       {
         id: "pleadings",
         label: "Pleadings",
-        count: typeCounts.find((t) => t.type === "pleading")?.count || 0,
+        count: parseInt(
+          typeCounts.find((t) => t.type === "pleading")?.count || "0"
+        ),
       },
       {
         id: "correspondence",
         label: "Correspondence",
-        count: typeCounts.find((t) => t.type === "correspondence")?.count || 0,
+        count: parseInt(
+          typeCounts.find((t) => t.type === "correspondence")?.count || "0"
+        ),
       },
       {
         id: "templates_folder",
         label: "Templates",
-        count: typeCounts.find((t) => t.type === "template")?.count || 0,
+        count: parseInt(
+          typeCounts.find((t) => t.type === "template")?.count || "0"
+        ),
       },
     ];
 

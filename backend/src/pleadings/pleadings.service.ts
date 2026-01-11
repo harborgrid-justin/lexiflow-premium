@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import {
   Pleading,
   PleadingStatus,
@@ -151,7 +152,7 @@ export class PleadingsService {
     const result = await this.pleadingRepository
       .createQueryBuilder()
       .update(Pleading)
-      .set(updateData)
+      .set(updateData as unknown as QueryDeepPartialEntity<Pleading>)
       .where("id = :id", { id })
       .returning("*")
       .execute();

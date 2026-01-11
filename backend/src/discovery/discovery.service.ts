@@ -76,7 +76,9 @@ export interface PaginatedResult<T> {
 export class DiscoveryService {
   async findAll(): Promise<DiscoveryRequest[]> {
     const result = await this.findAllRequests();
-    return Array.isArray(result) ? result : result.data || [];
+    return (
+      Array.isArray(result) ? result : result.data || []
+    ) as DiscoveryRequest[];
   }
 
   findOne(id: string): Promise<unknown> {
@@ -84,7 +86,7 @@ export class DiscoveryService {
   }
 
   create(createDto: unknown): Promise<unknown> {
-    return this.createRequest(createDto);
+    return this.createRequest(createDto as DeepPartial<DiscoveryRequest>);
   }
 
   constructor(
@@ -172,7 +174,7 @@ export class DiscoveryService {
     const result = await this.discoveryRequestRepository
       .createQueryBuilder()
       .update(DiscoveryRequest)
-      .set(updateDto)
+      .set(updateDto as unknown as QueryDeepPartialEntity<DiscoveryRequest>)
       .where("id = :id", { id })
       .returning("*")
       .execute();
@@ -181,7 +183,7 @@ export class DiscoveryService {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
     const rows = result.raw as DiscoveryRequest[];
-    return rows[0];
+    return rows[0] as DiscoveryRequest;
   }
 
   async deleteRequest(id: string): Promise<void> {
@@ -271,7 +273,7 @@ export class DiscoveryService {
     const requests = await this.findRequestsByCaseId(caseId);
     const holds = await this.findHoldsByCaseId(caseId);
 
-    const requestArray = requests.data || [];
+    const requestArray = (requests.data || []) as DiscoveryRequest[];
     const totalRequests = requestArray.length;
     const completedRequests = requestArray.filter(
       (r) => r.status === DiscoveryRequestStatus.COMPLETED

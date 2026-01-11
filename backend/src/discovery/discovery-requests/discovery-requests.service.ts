@@ -139,7 +139,7 @@ export class DiscoveryRequestsService {
       .set({
         ...updateDto,
         updatedAt: new Date(),
-      } as unknown as DiscoveryRequest)
+      } as unknown as QueryDeepPartialEntity<DiscoveryRequest>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -149,7 +149,7 @@ export class DiscoveryRequestsService {
       throw new NotFoundException(`Discovery request with ID ${id} not found`);
     }
     const rows = result.raw as DiscoveryRequest[];
-    return rows[0];
+    return rows[0] as DiscoveryRequest;
   }
 
   async remove(id: string): Promise<void> {

@@ -403,7 +403,8 @@ export class NotificationsService implements OnModuleDestroy {
     };
 
     const prefKey = typeMap[type];
-    return prefKey ? preferences[prefKey] === true : true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return prefKey ? (preferences as any)[prefKey] === true : true;
   }
 
   /**

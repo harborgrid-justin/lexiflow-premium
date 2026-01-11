@@ -61,7 +61,7 @@ export class EvidenceService {
     }
 
     return this.evidenceRepository.find({
-      where,
+      where: where as FindOptionsWhere<Evidence>,
       select: [
         "id",
         "caseId",
@@ -117,7 +117,7 @@ export class EvidenceService {
       throw new NotFoundException(`Evidence with ID ${id} not found`);
     }
     const rows = result.raw as Evidence[];
-    return rows[0];
+    return rows[0] as Evidence;
   }
 
   async remove(id: string): Promise<void> {

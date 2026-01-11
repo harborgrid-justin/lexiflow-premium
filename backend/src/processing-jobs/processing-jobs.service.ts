@@ -5,7 +5,7 @@ import {
   Optional,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, LessThan } from "typeorm";
+import { Repository, LessThan, DeepPartial } from "typeorm";
 import { InjectQueue } from "@nestjs/bull";
 import { Queue } from "bull";
 import { ProcessingJob } from "./entities/processing-job.entity";
@@ -80,7 +80,7 @@ export class ProcessingJobsService {
         parameters,
         createdBy: userId,
         status: JobStatus.PENDING,
-      });
+      } as unknown as DeepPartial<ProcessingJob>);
 
       const savedJob = await this.jobRepository.save(job);
 

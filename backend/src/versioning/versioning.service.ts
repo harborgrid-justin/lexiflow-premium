@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, DeepPartial } from "typeorm";
 import { DataVersion } from "./entities/data-version.entity";
 
 /**
@@ -57,7 +57,7 @@ export class VersioningService {
       ...data,
       version: (latestVersion?.version || 0) + 1,
       createdBy: data.userId || "system",
-    });
+    } as unknown as DeepPartial<DataVersion>);
 
     return await this.versionRepository.save(version);
   }

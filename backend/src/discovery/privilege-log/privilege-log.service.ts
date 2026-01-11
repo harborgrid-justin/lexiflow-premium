@@ -146,7 +146,7 @@ export class PrivilegeLogService {
       .set({
         ...updateDto,
         updatedAt: new Date(),
-      } as unknown as PrivilegeLogEntry)
+      } as unknown as QueryDeepPartialEntity<PrivilegeLogEntry>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -158,7 +158,7 @@ export class PrivilegeLogService {
       );
     }
     const rows = result.raw as PrivilegeLogEntry[];
-    return rows[0];
+    return rows[0] as PrivilegeLogEntry;
   }
 
   async remove(id: string): Promise<void> {

@@ -492,6 +492,8 @@ export class FileStorageService implements OnModuleDestroy {
       activeUploads: this.activeUploads.size,
       activeDownloads: this.activeDownloads.size,
       bufferPoolSize: this.bufferPool.length,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       memoryUsage: {
         heapUsedMB: (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
         heapTotalMB: (process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2),

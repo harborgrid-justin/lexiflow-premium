@@ -38,9 +38,9 @@ export class BillingResolver {
     if (filter?.caseId) {
       return this.billingService.findTimeEntriesByCaseId(
         filter.caseId
-      ) as unknown;
+      ) as unknown as TimeEntryType[];
     }
-    return this.billingService.findAllTimeEntries() as unknown;
+    return this.billingService.findAllTimeEntries() as unknown as TimeEntryType[];
   }
 
   @Query(() => TimeEntryType, { name: "timeEntry", nullable: true })
@@ -50,7 +50,7 @@ export class BillingResolver {
   ): Promise<TimeEntryType | null> {
     try {
       const timeEntry = await this.timeEntriesService.findOne(id);
-      return timeEntry as unknown;
+      return timeEntry as unknown as TimeEntryType;
     } catch {
       return null;
     }
@@ -67,7 +67,7 @@ export class BillingResolver {
       userId: user?.id || "system",
     };
     const timeEntry = await this.billingService.createTimeEntry(timeEntryData);
-    return timeEntry as unknown;
+    return timeEntry as unknown as TimeEntryType;
   }
 
   @Mutation(() => TimeEntryType)
@@ -78,7 +78,7 @@ export class BillingResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<TimeEntryType> {
     const timeEntry = await this.billingService.updateTimeEntry(id, input);
-    return timeEntry as unknown;
+    return timeEntry as unknown as TimeEntryType;
   }
 
   @Mutation(() => Boolean)
@@ -97,7 +97,7 @@ export class BillingResolver {
     @Args("_filter", { nullable: true }) _filter?: InvoiceFilterInput
   ): Promise<InvoiceType[]> {
     // For now return all - can add filter support later
-    return this.billingService.findAllInvoices() as unknown;
+    return this.billingService.findAllInvoices() as unknown as InvoiceType[];
   }
 
   @Query(() => InvoiceType, { name: "invoice", nullable: true })
@@ -107,7 +107,7 @@ export class BillingResolver {
   ): Promise<InvoiceType | null> {
     try {
       const invoice = await this.billingService.findInvoiceById(id);
-      return invoice as unknown;
+      return invoice as unknown as InvoiceType;
     } catch {
       return null;
     }
@@ -124,7 +124,7 @@ export class BillingResolver {
       createdBy: user?.id || "system",
     };
     const invoice = await this.billingService.createInvoice(invoiceData);
-    return invoice as unknown;
+    return invoice as unknown as InvoiceType;
   }
 
   @Mutation(() => InvoiceType)
@@ -134,7 +134,7 @@ export class BillingResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.sendInvoice(id);
-    return invoice as unknown;
+    return invoice as unknown as InvoiceType;
   }
 
   @Mutation(() => InvoiceType)
@@ -145,14 +145,14 @@ export class BillingResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.markInvoicePaid(id);
-    return invoice as unknown;
+    return invoice as unknown as InvoiceType;
   }
 
   @Query(() => [RateTableType], { name: "rateTables" })
   @UseGuards(GqlAuthGuard)
   async getRateTables(): Promise<RateTableType[]> {
     const rateTables = await this.rateTablesService.findAll();
-    return rateTables as unknown;
+    return rateTables as unknown as RateTableType[];
   }
 
   @Query(() => [FeeAgreementType], { name: "feeAgreements" })
@@ -164,9 +164,9 @@ export class BillingResolver {
     // Filter by caseId if provided
     if (caseId) {
       return agreements.filter(
-        (a: unknown) => (a as unknown).caseId === caseId
-      ) as unknown;
+        (a: unknown) => (a as any).caseId === caseId
+      ) as unknown as FeeAgreementType[];
     }
-    return agreements as unknown;
+    return agreements as unknown as FeeAgreementType[];
   }
 }

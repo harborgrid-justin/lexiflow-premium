@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
-import { DataSource, Repository } from "typeorm";
+import { DataSource, Repository, DeepPartial } from "typeorm";
 import {
   CreateMigrationDto,
   CreateSnapshotDto,
@@ -242,7 +242,7 @@ export class SchemaManagementService {
       schema: schemaData as unknown as Record<string, unknown>,
       sizeBytes: JSON.stringify(schemaData).length,
       createdBy: userId,
-    });
+    } as unknown as DeepPartial<Snapshot>);
 
     return await this.snapshotRepository.save(snapshot);
   }

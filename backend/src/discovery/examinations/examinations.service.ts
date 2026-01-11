@@ -133,7 +133,10 @@ export class ExaminationsService {
     const result = await this.examinationRepository
       .createQueryBuilder()
       .update(Examination)
-      .set({ ...updateDto, updatedAt: new Date() } as unknown as Examination)
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as QueryDeepPartialEntity<Examination>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -143,7 +146,7 @@ export class ExaminationsService {
       throw new NotFoundException(`Examination with ID ${id} not found`);
     }
     const rows = result.raw as Examination[];
-    return rows[0];
+    return rows[0] as Examination;
   }
 
   async remove(id: string): Promise<void> {

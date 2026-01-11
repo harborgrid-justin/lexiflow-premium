@@ -130,7 +130,10 @@ export class ProductionsService {
     const result = await this.productionRepository
       .createQueryBuilder()
       .update(Production)
-      .set({ ...updateDto, updatedAt: new Date() } as unknown as Production)
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as QueryDeepPartialEntity<Production>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -140,7 +143,7 @@ export class ProductionsService {
       throw new NotFoundException(`Production with ID ${id} not found`);
     }
     const rows = result.raw as Production[];
-    return rows[0];
+    return rows[0] as Production;
   }
 
   async remove(id: string): Promise<void> {

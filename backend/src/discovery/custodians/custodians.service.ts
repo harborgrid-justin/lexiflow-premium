@@ -136,7 +136,10 @@ export class CustodiansService {
     const result = await this.custodianRepository
       .createQueryBuilder()
       .update(Custodian)
-      .set({ ...updateDto, updatedAt: new Date() } as unknown as Custodian)
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as QueryDeepPartialEntity<Custodian>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -146,7 +149,7 @@ export class CustodiansService {
       throw new NotFoundException(`Custodian with ID ${id} not found`);
     }
     const rows = result.raw as Custodian[];
-    return rows[0];
+    return rows[0] as Custodian;
   }
 
   async remove(id: string): Promise<void> {

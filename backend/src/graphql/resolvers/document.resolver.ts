@@ -29,11 +29,11 @@ export class DocumentResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as unknown);
+    } as unknown as DocumentFilterDto);
 
     return {
       edges: result.data.map((doc) => ({
-        node: doc as unknown,
+        node: doc as unknown as DocumentType,
         cursor: doc.id,
       })),
       pageInfo: {
@@ -53,7 +53,7 @@ export class DocumentResolver {
   ): Promise<DocumentType | null> {
     try {
       const document = await this.documentService.findOne(id);
-      return document as unknown;
+      return document as unknown as DocumentType;
     } catch {
       return null;
     }
@@ -68,11 +68,11 @@ export class DocumentResolver {
     // Note: File upload through GraphQL requires multipart form data
     // This creates document metadata only, actual file should be uploaded via REST API
     const document = await this.documentService.create(
-      input as unknown,
+      input as unknown as CreateDocumentDto,
       undefined,
       user.id
     );
-    return document as unknown;
+    return document as unknown as DocumentType;
   }
 
   @Mutation(() => DocumentType)
@@ -84,10 +84,10 @@ export class DocumentResolver {
   ): Promise<DocumentType> {
     const document = await this.documentService.update(
       id,
-      input as unknown,
+      input as unknown as Partial<Document>,
       user.id
     );
-    return document as unknown;
+    return document as unknown as DocumentType;
   }
 
   @Mutation(() => Boolean)
@@ -109,7 +109,7 @@ export class DocumentResolver {
     // Note: Creating versions would require updating the document with new version info
     // This would need additional service methods for full implementation
     const document = await this.documentService.findOne(input.documentId);
-    return document as unknown;
+    return document as unknown as DocumentType;
   }
 
   @Mutation(() => String)

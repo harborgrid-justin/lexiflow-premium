@@ -109,7 +109,7 @@ export class WitnessesService {
     const result = await this.witnessRepository
       .createQueryBuilder()
       .update(Witness)
-      .set(updateData as unknown as Witness)
+      .set(updateData as unknown as QueryDeepPartialEntity<Witness>)
       .where("id = :id", { id })
       .returning("*")
       .execute();
@@ -118,7 +118,7 @@ export class WitnessesService {
       throw new NotFoundException(`Witness with ID ${id} not found`);
     }
     const rows = result.raw as Witness[];
-    return rows[0];
+    return rows[0] as Witness;
   }
 
   async remove(id: string): Promise<void> {

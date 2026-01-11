@@ -157,7 +157,7 @@ export class CustodianInterviewsService {
     }
 
     const rows = result.raw as CustodianInterview[];
-    return rows[0];
+    return rows[0] as CustodianInterview;
   }
 
   async remove(id: string): Promise<void> {

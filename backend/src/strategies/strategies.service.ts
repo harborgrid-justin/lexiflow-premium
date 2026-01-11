@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { DeepPartial } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { CitationsService } from "../citations/citations.service";
 import { CreateStrategyItemDto } from "./dto/create-strategy-item.dto";
 import { Defense } from "./entities/defense.entity";
@@ -33,20 +35,22 @@ export class StrategiesService {
     } else if (strategyType === "Argument") {
       const arg = this.argumentsRepository.create({
         caseId,
-        title: data.title,
-        description: data.description,
-        strength: data.strength || 0,
-        status: data.status || "Draft",
-      });
+        title: data.title as string,
+        description: data.description as string,
+        strength: (data.strength as number) || 0,
+        status: (data.status as string) || "Draft",
+      } as unknown as DeepPartial<LegalArgument>);
       return this.argumentsRepository.save(arg);
     } else if (strategyType === "Defense") {
       const defense = this.defensesRepository.create({
         caseId,
-        title: data.title,
-        description: data.description,
-        category: data.defenseType || data.category || "Affirmative", // Map type/defenseType
-        status: data.status || "Draft",
-      });
+        title: data.title as string,
+        description: data.description as string,
+        category: (data.defenseType ||
+          data.category ||
+          "Affirmative") as string, // Map type/defenseType
+        status: (data.status as string) || "Draft",
+      } as unknown as DeepPartial<Defense>);
       return this.defensesRepository.save(defense);
     }
     throw new Error(`Unknown strategy type: ${strategyType}`);
@@ -88,14 +92,14 @@ export class StrategiesService {
         strength: data.strength,
         status: data.status,
         // related ids if needed
-      });
+      } as unknown as QueryDeepPartialEntity<LegalArgument>);
     } else if (strategyType === "Defense") {
       return this.defensesRepository.update(id, {
         title: data.title,
         description: data.description,
         category: data.defenseType || data.category,
         status: data.status,
-      });
+      } as unknown as QueryDeepPartialEntity<Defense>);
     }
     throw new Error(`Unknown strategy type for update: ${strategyType}`);
   }

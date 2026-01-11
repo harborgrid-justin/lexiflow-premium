@@ -53,11 +53,11 @@ export class CaseResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as unknown);
+    } as unknown as CaseFilterDto);
 
     return {
       edges: result.data.map((caseItem) => ({
-        node: caseItem as unknown,
+        node: caseItem as unknown as CaseType,
         cursor: caseItem.id,
       })),
       pageInfo: {
@@ -77,7 +77,7 @@ export class CaseResolver {
   ): Promise<CaseType | null> {
     try {
       const caseItem = await this.caseService.findOne(id);
-      return caseItem as unknown;
+      return caseItem as unknown as CaseType;
     } catch {
       return null;
     }
@@ -89,9 +89,11 @@ export class CaseResolver {
     @Args("input") input: CreateCaseInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.create(input as unknown);
+    const caseEntity = await this.caseService.create(
+      input as unknown as CreateCaseDto
+    );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -101,9 +103,12 @@ export class CaseResolver {
     @Args("input") input: UpdateCaseInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.update(id, input as unknown);
+    const caseEntity = await this.caseService.update(
+      id,
+      input as unknown as UpdateCaseDto
+    );
     pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => Boolean)
@@ -125,7 +130,7 @@ export class CaseResolver {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Parties are typically managed through case updates in the REST API
     // This mutation would need additional service methods for full implementation
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -137,7 +142,7 @@ export class CaseResolver {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Team members are typically managed through case updates in the REST API
     // This mutation would need additional service methods for full implementation
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -149,7 +154,7 @@ export class CaseResolver {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Motions are typically managed through case updates or a separate motions service
     // This mutation would need additional service methods for full implementation
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Mutation(() => CaseType)
@@ -161,7 +166,7 @@ export class CaseResolver {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Docket entries are typically managed through case updates or a separate docket service
     // This mutation would need additional service methods for full implementation
-    return caseEntity as unknown;
+    return caseEntity as unknown as CaseType;
   }
 
   @Query(() => CaseMetrics, {
@@ -196,6 +201,7 @@ export class CaseResolver {
     },
   })
   caseUpdated(@Args("id", { type: () => ID }) _id: string) {
-    return (pubSub as unknown).asyncIterator("caseUpdated");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (pubSub as any).asyncIterator("caseUpdated");
   }
 }

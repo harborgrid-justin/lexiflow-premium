@@ -71,6 +71,7 @@ import { WorkflowModule } from "./workflow/workflow.module";
 import { AiDataopsModule } from "./ai-dataops/ai-dataops.module";
 import { AiOpsModule } from "./ai-ops/ai-ops.module";
 import { BackupsModule } from "./backups/backups.module";
+import { ConnectorsModule } from "./connectors/connectors.module";
 import { DataCatalogModule } from "./data-catalog/data-catalog.module";
 import { PipelinesModule } from "./pipelines/pipelines.module";
 import { QueryWorkbenchModule } from "./query-workbench/query-workbench.module";
@@ -164,6 +165,7 @@ export const APP_IMPORTS = [
   DataCatalogModule,
   SchemaManagementModule,
   QueryWorkbenchModule,
+  ConnectorsModule,
   PipelinesModule,
   SyncModule,
   BackupsModule,

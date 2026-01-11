@@ -35,43 +35,15 @@ export class ConnectorsApiService {
    * Get all connectors
    */
   async getAll(): Promise<Connector[]> {
-    // Return mocked data with the user's specific PostgreSQL connection
-    return [
-      {
-        id: "conn_neon_pg_01",
-        name: "Neon PostgreSQL Primary",
-        type: "Database",
-        provider: "PostgreSQL",
-        connectionString:
-          "postgresql://neondb_owner:npg_u71zdejvgHOR@ep-morning-violet-ahjfqnv2-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-        status: "Healthy",
-        lastSync: new Date().toISOString(),
-        color: "text-blue-500",
-        configuration: {
-          ssl: true,
-          pooler: true,
-        },
-      },
-      {
-        id: "conn_local_mongo",
-        name: "Local MongoDB",
-        type: "Database",
-        provider: "MongoDB",
-        status: "Inactive",
-        color: "text-green-500",
-      },
-    ];
-
-    // TODO: Uncomment when backend endpoint is ready
-    /*
     try {
-      const response = await apiClient.get<PaginatedResponse<Connector>>('/connectors');
+      const response = await apiClient.get<PaginatedResponse<Connector>>(
+        "/connectors"
+      );
       return response.data || [];
     } catch (error) {
-      console.error('[ConnectorsApi] Error fetching connectors:', error);
+      console.error("[ConnectorsApi] Error fetching connectors:", error);
       return [];
     }
-    */
   }
 
   /**

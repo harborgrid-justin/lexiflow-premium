@@ -10,6 +10,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/shared/lib/cn';
 import type {
   AIWorkflowSuggestion,
   ApprovalChain,
@@ -22,7 +23,6 @@ import type {
   WorkflowSnapshot,
   WorkflowVersion,
 } from '@/types/workflow-advanced-types';
-import { cn } from '@/shared/lib/cn';
 import {
   Boxes,
   Clock,
@@ -30,7 +30,6 @@ import {
   GitCompare,
   Layers,
   LineChart,
-  Settings,
   Sparkles,
   Undo2,
   UserCheck,
@@ -38,19 +37,19 @@ import {
 } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  AISuggestionsPanel,
+  AnalyticsPanel,
+  ApprovalChainsPanel,
+  ConditionalBranchingPanel,
+  ExternalTriggersPanel,
+  ParallelExecutionPanel,
+  RollbackPanel,
+  SLAMonitoringPanel,
+  VersionControlPanel,
+  VisualDesignerPanel,
   WorkflowDesignerHeader,
   WorkflowFeatureStats,
   WorkflowFeatureTabs,
-  VisualDesignerPanel,
-  ConditionalBranchingPanel,
-  ParallelExecutionPanel,
-  VersionControlPanel,
-  SLAMonitoringPanel,
-  ApprovalChainsPanel,
-  RollbackPanel,
-  AnalyticsPanel,
-  AISuggestionsPanel,
-  ExternalTriggersPanel,
   type FeatureTab,
 } from './components';
 

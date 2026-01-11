@@ -147,7 +147,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
             `Evidence Preview: ${item.title}`,
             <div className={cn("h-full", theme.background)}>
                 <DocumentPreviewPanel
-                    document={{ id: item.id } as unknown as any} onViewHistory={() => { }}
+                    document={{ id: item.id } as any} onViewHistory={() => { }}
 
                 />
             </div>

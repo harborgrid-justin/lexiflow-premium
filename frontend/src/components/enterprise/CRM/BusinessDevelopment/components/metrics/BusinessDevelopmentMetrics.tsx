@@ -5,10 +5,13 @@
  */
 
 import { Lead } from '../../types';
-import { BusinessDevelopmentMetrics } from '../../types';
 
-interface BusinessDevelopmentMetricsProps {
-  leads: Lead[];
+export interface BusinessDevelopmentMetrics {
+  pipelineValue: number;
+  winRate: number;
+  avgSalesCycle: number;
+  activeLeads: number;
+  wonValue: number;
 }
 
 export const useBusinessDevelopmentMetrics = (
@@ -34,6 +37,6 @@ export const useBusinessDevelopmentMetrics = (
     activeLeads,
     pipelineValue,
     wonValue,
-    winRate
+    winRate: parseFloat(winRate)
   };
 };

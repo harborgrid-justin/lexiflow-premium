@@ -108,22 +108,22 @@ export function ClientAnalyticsView() {
       <div>
         {activeTab === 'profitability' && (
           <ProfitabilityTab
-            profitabilityData={profitabilityData}
-            segmentData={segmentData}
-            revenueTrendData={revenueTrendData}
+            profitabilityData={profitabilityData as any}
+            segmentData={segmentData as any}
+            revenueTrendData={revenueTrendData as any}
             theme={theme}
-            chartTheme={chartTheme as unknown as any}
+            chartTheme={chartTheme as any}
             chartColors={chartColors}
           />
         )}
-        {activeTab === 'ltv' && <LTVTab ltvData={ltvData} theme={theme} />}
-        {activeTab === 'risk' && <RiskTab riskData={riskData} theme={theme} />}
+        {activeTab === 'ltv' && <LTVTab ltvData={ltvData as any} theme={theme} />}
+        {activeTab === 'risk' && <RiskTab riskData={riskData as any} theme={theme} />}
         {activeTab === 'satisfaction' && (
           <SatisfactionTab
-            satisfactionData={satisfactionData}
+            satisfactionData={satisfactionData as any}
             theme={theme}
             chartColors={chartColors}
-            chartTheme={chartTheme as unknown as any}
+            chartTheme={chartTheme as any}
           />
         )}
       </div>

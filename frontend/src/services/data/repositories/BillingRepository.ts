@@ -284,7 +284,6 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Actually TrustAccount likely has transactions?
       const account = await this.trustApi.getById(accountId);
       // If TrustAccount has transactions field?
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (
         (account as unknown as { transactions: TrustTransaction[] })
           .transactions || []
@@ -347,18 +346,17 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
   }
 
-  async getCollections(): Promise<any[]> {
+  async getCollections(): Promise<Record<string, unknown>[]> {
     try {
       // Use invoices API to get overdue/pending invoices
       const invoices = await this.invoicesApi.getAll({ status: "Overdue" });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return invoices.map((inv: any) => ({
+      return invoices.map((inv: Record<string, unknown>) => ({
         id: inv.id,
         clientName: "Client Name", // Should resolve client
         invoiceNumber: inv.invoiceNumber,
         amount: inv.total,
         daysOverdue: Math.floor(
-          (new Date().getTime() - new Date(inv.dueDate).getTime()) /
+          (new Date().getTime() - new Date(inv.dueDate as any).getTime()) /
             (1000 * 60 * 60 * 24)
         ),
         status: inv.status,

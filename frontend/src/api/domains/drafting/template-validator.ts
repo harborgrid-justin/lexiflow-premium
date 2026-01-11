@@ -5,11 +5,12 @@
 
 import type {
   CreateTemplateDto,
+  TemplateVariable,
   UpdateTemplateDto,
 } from "./types";
 import type {
-  ValidationError,
   TemplateValidationResult,
+  ValidationError,
 } from "./validation-types";
 
 /**
@@ -140,10 +141,12 @@ function validateVariables(
 }
 
 function validateVariableValidation(
-  v: any,
+  v: TemplateVariable,
   index: number,
   errors: ValidationError[]
 ): void {
+  if (!v.validation) return;
+
   if (v.validation.pattern) {
     try {
       new RegExp(v.validation.pattern);
@@ -156,10 +159,7 @@ function validateVariableValidation(
     }
   }
 
-  if (
-    v.validation.minLength !== undefined &&
-    v.validation.minLength < 0
-  ) {
+  if (v.validation.minLength !== undefined && v.validation.minLength < 0) {
     errors.push({
       field: `variables[${index}].validation.minLength`,
       message: "Min length cannot be negative",
@@ -224,9 +224,7 @@ function checkVariableUsage(
       varName.startsWith("case.") ||
       varName.startsWith("party.");
     if (!isDefined) {
-      warnings.push(
-        `Variable "${varName}" is used in content but not defined`
-      );
+      warnings.push(`Variable "${varName}" is used in content but not defined`);
     }
   });
 }

@@ -214,7 +214,9 @@ export class DiscoveryService {
   }
 
   async createHold(createDto: unknown): Promise<LegalHold> {
-    const hold = this.legalHoldRepository.create(createDto as any);
+    const hold = this.legalHoldRepository.create(
+      createDto as any
+    ) as unknown as LegalHold;
     return this.legalHoldRepository.save(hold);
   }
 

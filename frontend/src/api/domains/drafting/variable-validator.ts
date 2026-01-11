@@ -3,7 +3,7 @@
  * Validates variable values against template definitions
  */
 
-import type { DraftingTemplate } from "./types";
+import type { DraftingTemplate, TemplateVariable } from "./types";
 import type { VariableValidationResult } from "./validation-types";
 
 /**
@@ -89,7 +89,7 @@ export function validateVariables(
 }
 
 function validateText(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>
@@ -125,7 +125,7 @@ function validateText(
 }
 
 function validateDate(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>
@@ -139,7 +139,7 @@ function validateDate(
 }
 
 function validateNumber(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>
@@ -169,7 +169,7 @@ function validateNumber(
 }
 
 function validateSelect(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>
@@ -184,7 +184,7 @@ function validateSelect(
 }
 
 function validateMultiSelect(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>
@@ -206,7 +206,7 @@ function validateMultiSelect(
 }
 
 function validateBoolean(
-  variable: any,
+  variable: TemplateVariable,
   value: unknown,
   fieldErrors: string[],
   processedValues: Record<string, unknown>

@@ -16,19 +16,19 @@
  * 5. Controlled components ensure React owns state (single source of truth)
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
-import type { CreateTrustAccountDto, TrustAccountStatus, TrustAccountType } from '@/types/trust-accounts';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import type { CreateTrustAccountDto, TrustAccountStatus } from '@/types/trust-accounts';
 import { TrustAccountType as AccountType } from '@/types/trust-accounts';
 import { Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
-import { StepIndicator, type Step } from './components/StepIndicator';
 import { AccountInfoStep } from './components/AccountInfoStep';
 import { BankDetailsStep } from './components/BankDetailsStep';
 import { ComplianceStep } from './components/ComplianceStep';
-import { SignatoriesStep } from './components/SignatoriesStep';
-import { ReviewStep } from './components/ReviewStep';
 import { FormNavigation } from './components/FormNavigation';
+import { ReviewStep } from './components/ReviewStep';
+import { SignatoriesStep } from './components/SignatoriesStep';
+import { StepIndicator, type Step } from './components/StepIndicator';
 
 /**
  * Form Steps Enum
@@ -210,7 +210,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
   ], []);
 
   const renderStepContent = useCallback(() => {
-    const commonProps = { formData, getFieldError, updateField, handleFieldBlur };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const commonProps: any = { formData, getFieldError, updateField, handleFieldBlur };
 
     switch (currentStep) {
       case FormStep.ACCOUNT_INFO:

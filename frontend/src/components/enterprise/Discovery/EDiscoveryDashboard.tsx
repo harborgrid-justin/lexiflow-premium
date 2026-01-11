@@ -122,17 +122,16 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
     const fetchData = async () => {
       setLoading(true);
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const [custodiansData, collectionsData, analyticsData] = await Promise.all([
           DataService.custodians.getAll({ caseId }),
           DataService.esiSources.getAll({ caseId }),
           analyticsApi.discoveryAnalytics.getReviewMetrics(caseId)
-        ]) as [Custodian[], any[], Record<string, unknown>];
+        ]) as [Custodian[], Record<string, unknown>[], Record<string, unknown>];
 
         setCustodians(custodiansData.map((c: Custodian) => {
           let status: Custodian['status'] = 'active';
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const s = ((c as unknown as Record<string, any>).status || 'active').toLowerCase();
+          const s = ((c as unknown as Record<string, unknown>).status as string || 'active').toLowerCase();
           if (s === 'on hold') status = 'hold';
           else if (s === 'released') status = 'released';
           else if (s === 'interviewed') status = 'interviewed';
@@ -153,23 +152,25 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
         }));
 
         setCollections(collectionsData.map(c => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const item = c as any;
           let status: Collection['status'] = 'pending';
-          if (['pending', 'in_progress', 'completed', 'failed'].includes(c.status)) {
-            status = c.status as Collection['status'];
+          if (['pending', 'in_progress', 'completed', 'failed'].includes(item.status)) {
+            status = item.status as Collection['status'];
           }
 
           return {
-            id: c.id,
-            name: c.collectionName,
-            custodian: c.custodians.join(', '),
+            id: item.id as string,
+            name: item.collectionName,
+            custodian: (item.custodians as string[]).join(', '),
             sourceType: 'email',
             status,
-            totalItems: c.totalItems || 0,
-            collectedItems: c.collectedItems || 0,
-            startDate: new Date(c.createdAt),
-            completedDate: c.completedAt ? new Date(c.completedAt) : undefined,
-            size: c.actualSize ? parseFloat(c.actualSize) : 0
-          };
+            totalItems: item.totalItems || 0,
+            collectedItems: item.collectedItems || 0,
+            startDate: new Date(item.createdAt as string),
+            completedDate: item.completedAt ? new Date(item.completedAt as string) : undefined,
+            size: item.actualSize ? parseFloat(item.actualSize as string) : 0
+          } as Collection;
         }));
 
         if (analyticsData && analyticsData.overview) {

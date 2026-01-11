@@ -3,8 +3,8 @@
  * Navigation buttons for multi-step form
  */
 
-import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import React from 'react';
 
@@ -21,8 +21,6 @@ interface FormNavigationProps {
 }
 
 export const FormNavigation: React.FC<FormNavigationProps> = ({
-  currentStep,
-  totalSteps,
   isFirstStep,
   isLastStep,
   isSubmitting,

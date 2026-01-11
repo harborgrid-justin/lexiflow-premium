@@ -67,7 +67,7 @@ export function Step1TemplateSelection({ onSelectTemplate }: Step1TemplateSelect
               )}
             >
               <div className="flex items-center mb-2">
-                {t.icon && React.createElement(t.icon as any, { className: cn("h-5 w-5 mr-2", theme.primary.text) })}
+                {t.icon && React.createElement(t.icon as React.ElementType, { className: cn("h-5 w-5 mr-2", theme.primary.text) })}
                 <span className={cn("font-medium", theme.text.primary)}>{t.name}</span>
               </div>
               <p className={cn("text-sm", theme.text.secondary)}>{t.description}</p>

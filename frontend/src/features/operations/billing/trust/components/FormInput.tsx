@@ -3,8 +3,8 @@
  * Reusable form input with validation and error display
  */
 
-import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/shared/lib/cn';
 import { AlertCircle } from 'lucide-react';
 import React from 'react';
 
@@ -23,7 +23,6 @@ interface FormInputProps {
 
 export const FormInput: React.FC<FormInputProps> = ({
   label,
-  field,
   type = 'text',
   required = false,
   placeholder,

@@ -4,12 +4,12 @@
  * @description Conversion trend and source distribution charts
  */
 
-import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { ConversionTrend, LeadsBySource } from '../../types';
+import type { ConversionTrend, LeadsBySource } from '@/types/crm';
+import { getChartTheme } from '@/utils/chartConfig';
+import React from 'react';
 import {
   CartesianGrid,
   Cell,

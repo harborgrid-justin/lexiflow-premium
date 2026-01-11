@@ -56,7 +56,7 @@ export class QueryClient {
    * @private
    */
   private logInitialization(): void {
-    console.log("[QueryClient] Initialized with in-memory cache");
+    // console.log("[QueryClient] Initialized with in-memory cache");
   }
 
   /**

@@ -27,31 +27,6 @@
 import type { DiscoveryProcess } from "@/api/discovery/discovery-api";
 import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
-import type {
-  Custodian,
-  CustodianInterview,
-  Deposition,
-  DiscoveryRequest,
-  ESISource,
-  Examination,
-  LegalHold,
-  PrivilegeLogEntry,
-  ProductionSet,
-  ReviewBatch,
-  SanctionMotion,
-  StipulationRequest,
-  Transcript,
-  Vendor,
-} from "@/types";
-import type {
-  DataCollection,
-  DiscoveryTimelineEvent,
-  DocumentCoding,
-  LegalHoldEnhanced,
-  PrivilegeLogEntryEnhanced,
-  ProcessingJob,
-  ReviewDocument,
-} from "@/types/discovery-enhanced";
 
 // Import all service modules
 import {
@@ -151,9 +126,8 @@ export class DiscoveryRepository {
 
   getESISources = esiSourceService.getESISources.bind(esiSourceService);
   addESISource = esiSourceService.addESISource.bind(esiSourceService);
-  updateESISourceStatus = esiSourceService.updateESISourceStatus.bind(
-    esiSourceService
-  );
+  updateESISourceStatus =
+    esiSourceService.updateESISourceStatus.bind(esiSourceService);
 
   // =============================================================================
   // PRODUCTIONS - Delegated to ProductionService
@@ -161,9 +135,8 @@ export class DiscoveryRepository {
 
   getProductions = productionService.getProductions.bind(productionService);
   createProduction = productionService.createProduction.bind(productionService);
-  downloadProduction = productionService.downloadProduction.bind(
-    productionService
-  );
+  downloadProduction =
+    productionService.downloadProduction.bind(productionService);
 
   // =============================================================================
   // CUSTODIAN INTERVIEWS - Delegated to InterviewService
@@ -188,28 +161,21 @@ export class DiscoveryRepository {
   // REVIEW & PROCESSING - Delegated to ReviewBatchService & ProcessingJobService
   // =============================================================================
 
-  getReviewBatches = reviewBatchService.getReviewBatches.bind(
-    reviewBatchService
-  );
-  createReviewBatch = reviewBatchService.createReviewBatch.bind(
-    reviewBatchService
-  );
+  getReviewBatches =
+    reviewBatchService.getReviewBatches.bind(reviewBatchService);
+  createReviewBatch =
+    reviewBatchService.createReviewBatch.bind(reviewBatchService);
 
-  getProcessingJobs = processingJobService.getProcessingJobs.bind(
-    processingJobService
-  );
-  getProcessingJob = processingJobService.getProcessingJob.bind(
-    processingJobService
-  );
-  createProcessingJob = processingJobService.createProcessingJob.bind(
-    processingJobService
-  );
-  updateProcessingJob = processingJobService.updateProcessingJob.bind(
-    processingJobService
-  );
-  deleteProcessingJob = processingJobService.deleteProcessingJob.bind(
-    processingJobService
-  );
+  getProcessingJobs =
+    processingJobService.getProcessingJobs.bind(processingJobService);
+  getProcessingJob =
+    processingJobService.getProcessingJob.bind(processingJobService);
+  createProcessingJob =
+    processingJobService.createProcessingJob.bind(processingJobService);
+  updateProcessingJob =
+    processingJobService.updateProcessingJob.bind(processingJobService);
+  deleteProcessingJob =
+    processingJobService.deleteProcessingJob.bind(processingJobService);
 
   // =============================================================================
   // DOCUMENT REVIEW - Delegated to DocumentReviewService
@@ -275,9 +241,10 @@ export class DiscoveryRepository {
   getPrivilegeLog = legalHoldPrivilegeService.getPrivilegeLog.bind(
     legalHoldPrivilegeService
   );
-  getPrivilegeLogEnhanced = legalHoldPrivilegeService.getPrivilegeLogEnhanced.bind(
-    legalHoldPrivilegeService
-  );
+  getPrivilegeLogEnhanced =
+    legalHoldPrivilegeService.getPrivilegeLogEnhanced.bind(
+      legalHoldPrivilegeService
+    );
 
   // =============================================================================
   // UTILITY OPERATIONS - Delegated to TimelineService & CollectionService

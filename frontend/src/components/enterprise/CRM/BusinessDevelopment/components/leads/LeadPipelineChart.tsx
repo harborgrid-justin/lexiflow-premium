@@ -4,12 +4,12 @@
  * @description Pipeline visualization chart by status
  */
 
-import React from 'react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { LeadsByStatus } from '../../types';
+import type { LeadsByStatus } from '@/types/crm';
+import { getChartTheme } from '@/utils/chartConfig';
+import React from 'react';
 import {
   Bar,
   BarChart,

@@ -17,8 +17,8 @@
  * @template TCreateData - The data shape for creating new entities
  */
 
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { EntityAutocompleteConfig, useEntityAutocomplete } from '@/hooks/useEntityAutocomplete';
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { AlertCircle, Check, Loader, Plus, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -92,7 +92,7 @@ export interface CreateComponentProps<TCreateData> {
 /**
  * Generic autocomplete select component with type-safe entity management
  */
-export const AutocompleteSelect = React.memo(<
+const AutocompleteSelectInner = <
   TEntity extends { id: string },
   TValue extends string = string,
   TCreateData = Partial<TEntity>
@@ -442,11 +442,11 @@ export const AutocompleteSelect = React.memo(<
       )}
     </div>
   );
-});
+};
+
+export const AutocompleteSelect = React.memo(AutocompleteSelectInner) as typeof AutocompleteSelectInner;
 
 // Set display name for debugging
-if (typeof AutocompleteSelect === 'object' && AutocompleteSelect !== null) {
-  (AutocompleteSelect as { displayName?: string }).displayName = 'AutocompleteSelect';
-}
+(AutocompleteSelect as React.NamedExoticComponent).displayName = 'AutocompleteSelect';
 
 export default AutocompleteSelect;

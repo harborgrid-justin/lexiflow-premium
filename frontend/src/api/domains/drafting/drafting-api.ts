@@ -4,13 +4,19 @@
  */
 
 import { ApiClient } from "@/services/infrastructure/apiClient";
+import * as ClauseValidator from "./clause-validator";
 import * as DashboardApi from "./dashboard-api";
-import * as TemplateCrud from "./template-crud";
 import * as DocumentGeneration from "./document-generation";
 import * as DocumentWorkflow from "./document-workflow";
+import * as TemplateCrud from "./template-crud";
 import * as TemplateValidator from "./template-validator";
+import {
+  CreateTemplateDto,
+  GenerateDocumentDto,
+  UpdateGeneratedDocumentDto,
+  UpdateTemplateDto,
+} from "./types";
 import * as VariableValidator from "./variable-validator";
-import * as ClauseValidator from "./clause-validator";
 
 export class DraftingApiService {
   private static instance: DraftingApiService;
@@ -37,13 +43,13 @@ export class DraftingApiService {
   public getStats = () => DashboardApi.getStats(this.client);
 
   // Template CRUD methods
-  public createTemplate = (dto: any) =>
+  public createTemplate = (dto: CreateTemplateDto) =>
     TemplateCrud.createTemplate(this.client, dto);
-  public getAllTemplates = (filters?: any) =>
+  public getAllTemplates = (filters?: Record<string, unknown>) =>
     TemplateCrud.getAllTemplates(this.client, filters);
   public getTemplateById = (id: string) =>
     TemplateCrud.getTemplateById(this.client, id);
-  public updateTemplate = (id: string, dto: any) =>
+  public updateTemplate = (id: string, dto: UpdateTemplateDto) =>
     TemplateCrud.updateTemplate(this.client, id, dto);
   public deleteTemplate = (id: string) =>
     TemplateCrud.deleteTemplate(this.client, id);
@@ -53,14 +59,16 @@ export class DraftingApiService {
     TemplateCrud.duplicateTemplate(this.client, id);
 
   // Document generation methods
-  public generateDocument = (dto: any) =>
+  public generateDocument = (dto: GenerateDocumentDto) =>
     DocumentGeneration.generateDocument(this.client, dto);
-  public getAllGeneratedDocuments = (filters?: any) =>
+  public getAllGeneratedDocuments = (filters?: Record<string, unknown>) =>
     DocumentGeneration.getAllGeneratedDocuments(this.client, filters);
   public getGeneratedDocumentById = (id: string) =>
     DocumentGeneration.getGeneratedDocumentById(this.client, id);
-  public updateGeneratedDocument = (id: string, dto: any) =>
-    DocumentGeneration.updateGeneratedDocument(this.client, id, dto);
+  public updateGeneratedDocument = (
+    id: string,
+    dto: UpdateGeneratedDocumentDto
+  ) => DocumentGeneration.updateGeneratedDocument(this.client, id, dto);
   public deleteGeneratedDocument = (id: string) =>
     DocumentGeneration.deleteGeneratedDocument(this.client, id);
 

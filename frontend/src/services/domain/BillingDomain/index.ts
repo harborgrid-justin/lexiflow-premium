@@ -31,12 +31,12 @@ export { ComplianceError, OperationError } from "./types";
 export { BILLING_QUERY_KEYS } from "./queryKeys";
 
 // Import base repository and operations
+import * as analyticsOps from "./analyticsOperations";
+import * as invoiceOps from "./invoiceOperations";
+import * as rateOps from "./rateOperations";
 import { BillingRepositoryBase } from "./repository";
 import * as timeEntryOps from "./timeEntryOperations";
-import * as rateOps from "./rateOperations";
-import * as invoiceOps from "./invoiceOperations";
 import * as trustOps from "./trustOperations";
-import * as analyticsOps from "./analyticsOperations";
 import * as utilityOps from "./utilityOperations";
 
 import type {
@@ -64,7 +64,7 @@ export class BillingRepository extends BillingRepositoryBase {
   // =============================================================================
 
   override async getAll(): Promise<TimeEntry[]> {
-    return timeEntryOps.getAllTimeEntries(this.billingApi);
+    return timeEntryOps.getAllTimeEntries(this.billingApi as any);
   }
 
   override async getById(id: string): Promise<TimeEntry | undefined> {

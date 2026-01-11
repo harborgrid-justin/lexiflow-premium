@@ -25,10 +25,7 @@ export function loadFromEnv(): Partial<Config> {
     env: (import.meta.env.MODE ||
       process.env.NODE_ENV ||
       "development") as Config["env"],
-    apiUrl:
-      import.meta.env.VITE_API_URL ||
-      process.env.API_URL ||
-      "http://localhost:3000",
+    apiUrl: import.meta.env.VITE_API_URL || process.env.API_URL || "",
     features: {
       analytics: import.meta.env.VITE_FEATURE_ANALYTICS === "true",
       remoteConfig: import.meta.env.VITE_FEATURE_REMOTE_CONFIG === "true",

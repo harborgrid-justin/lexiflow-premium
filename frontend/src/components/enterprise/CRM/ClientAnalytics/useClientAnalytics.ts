@@ -36,7 +36,7 @@ export function useClientAnalytics() {
   );
 
   // Extract from combined analytics object
-  const anyData = analyticsData as Record<string, any[]>;
+  const anyData = analyticsData as Record<string, unknown[]>;
   const profitabilityData = anyData.profitability || [];
   const ltvData = anyData.ltv || [];
   const riskData = anyData.risk || [];
@@ -46,11 +46,11 @@ export function useClientAnalytics() {
 
   // Calculated metrics
   const metrics = {
-    totalProfit: calculateTotalProfit(profitabilityData),
-    avgProfitMargin: calculateAvgProfitMargin(profitabilityData),
-    totalLTV: calculateTotalLTV(ltvData),
-    avgNPS: calculateAvgNPS(satisfactionData),
-    highRiskClients: countHighRiskClients(riskData),
+    totalProfit: calculateTotalProfit(profitabilityData as any),
+    avgProfitMargin: calculateAvgProfitMargin(profitabilityData as any),
+    totalLTV: calculateTotalLTV(ltvData as any),
+    avgNPS: calculateAvgNPS(satisfactionData as any),
+    highRiskClients: countHighRiskClients(riskData as any),
   };
 
   return {

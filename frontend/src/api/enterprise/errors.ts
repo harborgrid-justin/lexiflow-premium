@@ -374,46 +374,62 @@ export function parseApiError(error: unknown): ApiErrorBase {
   const details: unknown =
     (err as { details?: unknown }).details || (err as { data?: unknown }).data;
 
-  const detailsAny = details as Record<string, any>;
+  const detailsObj = details as {
+    fieldErrors?: Record<string, string[]>;
+    requiredPermission?: string;
+    resourceType?: string;
+    resourceId?: string;
+    conflictType?: string;
+    errorCode?: string;
+    retryAfter?: number;
+    limit?: number;
+    remaining?: number;
+    resetAt?: string | number | Date;
+    timeout?: number;
+    estimatedRecoveryTime?: string;
+    errorId?: string;
+  };
 
   switch (statusCode) {
     case 400:
-      return new ValidationError(message, detailsAny?.fieldErrors || {});
+      return new ValidationError(message, detailsObj?.fieldErrors || {});
     case 401:
       return new AuthError(message);
     case 403:
-      return new AuthorizationError(message, detailsAny?.requiredPermission);
+      return new AuthorizationError(message, detailsObj?.requiredPermission);
     case 404:
       return new NotFoundError(
-        detailsAny?.resourceType,
-        detailsAny?.resourceId
+        detailsObj?.resourceType,
+        detailsObj?.resourceId
       );
     case 409:
-      return new ConflictError(message, detailsAny?.conflictType);
+      return new ConflictError(message, detailsObj?.conflictType);
     case 422:
       return new BusinessError(
         message,
-        detailsAny?.errorCode,
+        detailsObj?.errorCode,
         details as Record<string, unknown> | undefined
       );
     case 429:
       return new RateLimitError(
-        detailsAny?.retryAfter,
-        detailsAny?.limit,
-        detailsAny?.remaining,
-        detailsAny?.resetAt ? new Date(detailsAny.resetAt) : undefined
+        detailsObj?.retryAfter,
+        detailsObj?.limit,
+        detailsObj?.remaining,
+        detailsObj?.resetAt ? new Date(detailsObj.resetAt) : undefined
       );
     case 408:
-      return new TimeoutError(detailsAny?.timeout);
+      return new TimeoutError(detailsObj?.timeout);
     case 503:
       return new ServiceUnavailableError(
         message,
-        detailsAny?.estimatedRecoveryTime
+        typeof detailsObj?.estimatedRecoveryTime === "number"
+          ? detailsObj.estimatedRecoveryTime
+          : undefined
       );
     case 500:
     case 502:
     case 504:
-      return new ServerError(message, statusCode, detailsAny?.errorId);
+      return new ServerError(message, statusCode, detailsObj?.errorId);
     default:
       return new ApiErrorBase(
         message,

@@ -81,19 +81,19 @@ export class PartiesApiService {
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
 
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
 
     // Support both direct array and paginated/nested data response
     if (Array.isArray(response)) {
-      return response;
+      return response as Party[];
     }
     if (
       response &&
       typeof response === "object" &&
       "data" in response &&
-      Array.isArray(response.data)
+      Array.isArray((response as { data: unknown[] }).data)
     ) {
-      return response.data;
+      return (response as { data: Party[] }).data;
     }
     return [];
   }
@@ -105,18 +105,20 @@ export class PartiesApiService {
   async getByCaseId(caseId: string): Promise<Party[]> {
     // Use the dedicated filtering endpoint if available, but for now rely on getAll for consistency
     // or better yet, use the dedicated endpoint if the backend supports it:
-    const response = await apiClient.get<any>(`${this.baseUrl}/case/${caseId}`);
+    const response = await apiClient.get<unknown>(
+      `${this.baseUrl}/case/${caseId}`
+    );
 
     if (Array.isArray(response)) {
-      return response;
+      return response as Party[];
     }
     if (
       response &&
       typeof response === "object" &&
       "data" in response &&
-      Array.isArray(response.data)
+      Array.isArray((response as { data: unknown[] }).data)
     ) {
-      return response.data;
+      return (response as { data: Party[] }).data;
     }
     return [];
   }

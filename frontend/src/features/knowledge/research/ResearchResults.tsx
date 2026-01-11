@@ -78,11 +78,11 @@ export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onVie
                 </div>
             </Card>
 
-            {session.sources.length > 0 && (
+            {session?.sources?.length > 0 && (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
                     <h4 className={cn("text-xs font-bold uppercase tracking-wider mb-3 ml-1", theme.text.secondary)}>Authorities Cited</h4>
                     <div className="grid grid-cols-1 gap-3">
-                        {session.sources.map((source, idx) => (
+                        {session?.sources?.map((source, idx) => (
                             <ResearchResultCard
                                 key={idx}
                                 source={source}

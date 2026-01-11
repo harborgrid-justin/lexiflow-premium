@@ -4,14 +4,16 @@
  */
 
 import {
-    LegalEntitiesApiService,
-    LegalEntityApi,
+  LegalEntitiesApiService,
+  LegalEntityApi,
 } from "@/api/domains/legal-entities.api";
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
 import { IntegrationEventPublisher } from "@/services/data/integration/IntegrationEventPublisher";
 import { LegalEntity } from "@/types";
+import { EntityRole } from "@/types/enums";
 import { SystemEventType } from "@/types/integration-types";
+import { EntityId, MetadataRecord } from "@/types/primitives";
 
 export const ENTITY_QUERY_KEYS = {
   all: () => ["entities"] as const,
@@ -68,18 +70,17 @@ export class EntityRepository extends Repository<LegalEntity> {
 
     return {
       ...entityAny,
-      id: entity.id,
+      id: entity.id as EntityId,
       name: (entityAny.name as string) || "Unknown Entity",
       type: this.mapEntityType(entity.entityType || "other"),
-      roles: (entityAny.roles as string[]) || [],
+      roles: (entityAny.roles as unknown as EntityRole[]) || [],
       riskScore: (entityAny.riskScore as number) || 0,
       tags: (entityAny.tags as string[]) || [],
-      status: entity.status || "Active",
+      status: (entity.status as any) || "Active",
       createdAt: entity.createdAt || new Date().toISOString(),
       updatedAt: entity.updatedAt || new Date().toISOString(),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      userId: (entity.userId || "system") as any,
-      metadata: (entity.metadata as Record<string, unknown>) || {},
+      // Mapped to available fields
+      metadata: (entity.metadata as unknown as MetadataRecord) || {},
     };
   }
 

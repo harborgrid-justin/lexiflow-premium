@@ -3,10 +3,10 @@
  * @description SLA monitoring dashboard with escalation policies
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/shared/lib/cn';
-import { AlertTriangle, CheckCircle2, Clock, Settings } from 'lucide-react';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import React from 'react';
 
 export const SLAMonitoringPanel: React.FC = () => {

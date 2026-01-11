@@ -84,9 +84,21 @@ export interface CRMLead extends BaseEntity {
   value?: string; // Formatted currency string for display
 }
 
-// ============================================================================
-// CRM ANALYTICS
-// ============================================================================
+// Add these exports at the end of types/crm.ts or appropriate place
+export interface ConversionTrend {
+  month: string;
+  rate: number;
+}
+
+export interface LeadsBySource {
+  source: string;
+  value: number;
+}
+
+export interface LeadsByStatus {
+  status: string;
+  value: number;
+}
 
 export interface CRMAnalytics {
   growth: Array<{

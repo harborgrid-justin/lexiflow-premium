@@ -10,11 +10,11 @@ export class CreateStrategyItemDto {
   @IsString()
   @IsNotEmpty()
   @IsIn(["Argument", "Defense", "Citation"])
-  type: "Argument" | "Defense" | "Citation";
+  type!: "Argument" | "Defense" | "Citation";
 
   @IsString()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @IsOptional()

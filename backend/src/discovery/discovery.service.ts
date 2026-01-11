@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, LessThan, Not } from "typeorm";
+import { LessThan, Not, Repository } from "typeorm";
+import { Custodian } from "./custodians/entities/custodian.entity";
 import {
   DiscoveryRequest,
   DiscoveryRequestStatus,
 } from "./discovery-requests/entities/discovery-request.entity";
+import { Evidence } from "./evidence/entities/evidence.entity";
 import {
   LegalHold,
   LegalHoldStatus,
 } from "./legal-holds/entities/legal-hold.entity";
-import { Custodian } from "./custodians/entities/custodian.entity";
-import { Evidence } from "./evidence/entities/evidence.entity";
 
 export interface PaginationOptions {
   page?: number;
@@ -205,7 +205,7 @@ export class DiscoveryService {
     return this.legalHoldRepository.find({ where: { caseId } });
   }
 
-  async findHoldById(id: string): Promise<unknown> {
+  async findHoldById(id: string): Promise<LegalHold> {
     const hold = await this.legalHoldRepository.findOne({ where: { id } });
     if (!hold) {
       throw new NotFoundException(`Legal hold with ID ${id} not found`);
@@ -213,17 +213,16 @@ export class DiscoveryService {
     return hold;
   }
 
-  async createHold(createDto: unknown): Promise<unknown> {
+  async createHold(createDto: unknown): Promise<LegalHold> {
     const hold = this.legalHoldRepository.create(createDto as any);
     return this.legalHoldRepository.save(hold);
   }
 
-  async releaseHold(id: string): Promise<unknown> {
-    const hold = (await this.findHoldById(id)) as unknown;
+  async releaseHold(id: string): Promise<LegalHold> {
+    const hold = await this.findHoldById(id);
     hold.status = LegalHoldStatus.RELEASED;
     hold.releaseDate = new Date();
-    await this.legalHoldRepository.save(hold);
-    return hold;
+    return this.legalHoldRepository.save(hold);
   }
 
   async getActiveHolds(): Promise<any[]> {

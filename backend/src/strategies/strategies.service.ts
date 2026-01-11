@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CitationsService } from "../../citations/citations.service";
+import { CitationsService } from "../citations/citations.service";
 import { CreateStrategyItemDto } from "./dto/create-strategy-item.dto";
 import { Defense } from "./entities/defense.entity";
 import { LegalArgument } from "./entities/legal-argument.entity";
@@ -79,31 +79,23 @@ export class StrategiesService {
     const { strategyType, ...data } = updateDto;
 
     if (strategyType === "Citation") {
-        return this.citationsService.update(id, data);
+      return this.citationsService.update(id, data);
     } else if (strategyType === "Argument") {
-        return this.argumentsRepository.update(id, {
-            title: data.title,
-            description: data.description,
-            strength: data.strength,
-            status: data.status,
-            // related ids if needed
-        });
+      return this.argumentsRepository.update(id, {
+        title: data.title,
+        description: data.description,
+        strength: data.strength,
+        status: data.status,
+        // related ids if needed
+      });
     } else if (strategyType === "Defense") {
-        return this.defensesRepository.update(id, {
-            title: data.title,
-            description: data.description,
-            category: data.defenseType || data.category,
-            status: data.status
-        });
+      return this.defensesRepository.update(id, {
+        title: data.title,
+        description: data.description,
+        category: data.defenseType || data.category,
+        status: data.status,
+      });
     }
     throw new Error(`Unknown strategy type for update: ${strategyType}`);
-  }
-}    if (strategyType === "Argument") {
-      return this.argumentsRepository.update(id, data);
-    } else if (strategyType === "Defense") {
-      return this.defensesRepository.update(id, data);
-    } else if (strategyType === "Citation") {
-      // CitationsService update
-    }
   }
 }

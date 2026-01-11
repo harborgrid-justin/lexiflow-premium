@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CitationsModule } from "../../citations/citations.module";
+import { CitationsModule } from "../citations/citations.module";
 import { Defense } from "./entities/defense.entity";
 import { LegalArgument } from "./entities/legal-argument.entity";
 import { StrategiesController } from "./strategies.controller";

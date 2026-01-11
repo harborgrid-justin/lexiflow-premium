@@ -1,48 +1,58 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 export enum ConnectorType {
-  DATABASE = 'Database',
-  WAREHOUSE = 'Warehouse',
-  SAAS = 'SaaS',
-  STORAGE = 'Storage',
+  DATABASE = "Database",
+  WAREHOUSE = "Warehouse",
+  SAAS = "SaaS",
+  STORAGE = "Storage",
 }
 
 export enum ConnectorStatus {
-  HEALTHY = 'Healthy',
-  SYNCING = 'Syncing',
-  ERROR = 'Error',
-  INACTIVE = 'Inactive',
+  HEALTHY = "Healthy",
+  SYNCING = "Syncing",
+  ERROR = "Error",
+  INACTIVE = "Inactive",
 }
 
-@Entity('connectors')
+@Entity("connectors")
 export class Connector {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
-  @Column({ type: 'enum', enum: ConnectorType })
-  type: ConnectorType;
+  @Column({ type: "enum", enum: ConnectorType })
+  type!: ConnectorType;
 
   @Column()
-  provider: string;
+  provider!: string;
 
-  @Column({ name: 'connection_string', nullable: true })
-  connectionString: string;
+  @Column({ name: "connection_string", nullable: true })
+  connectionString!: string;
 
-  @Column({ type: 'enum', enum: ConnectorStatus, default: ConnectorStatus.INACTIVE })
-  status: ConnectorStatus;
+  @Column({
+    type: "enum",
+    enum: ConnectorStatus,
+    default: ConnectorStatus.INACTIVE,
+  })
+  status!: ConnectorStatus;
 
-  @Column({ type: 'timestamp', nullable: true, name: 'last_sync' })
-  lastSync: Date;
+  @Column({ type: "timestamp", nullable: true, name: "last_sync" })
+  lastSync!: Date;
 
-  @Column({ type: 'jsonb', nullable: true })
-  configuration: Record<string, unknown>;
+  @Column({ type: "jsonb", nullable: true })
+  configuration!: Record<string, unknown>;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt!: Date;
 }

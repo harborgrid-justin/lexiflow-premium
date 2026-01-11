@@ -1,11 +1,6 @@
-import { Controller, Get, Patch, Body, Param, UseGuards } from "@nestjs/common";
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-} from "@nestjs/swagger";
 import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
+import { Body, Controller, Get, Param, Patch, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { DataCatalogService } from "./data-catalog.service";
 import { UpdateDictionaryItemDto } from "./dto/update-dictionary-item.dto";
 

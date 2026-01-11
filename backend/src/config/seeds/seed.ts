@@ -10,6 +10,7 @@ import { seedMotions } from './motions.seed';
 import { seedDocketEntries } from './docket-entries.seed';
 import { seedInvoices } from './invoices.seed';
 import { seedEvidenceItems } from './evidence-items.seed';
+import { seedConnectors } from './connectors.seed';
 
 async function bootstrap() {
   console.log('===========================================');
@@ -20,7 +21,7 @@ async function bootstrap() {
   // (prevents TypeORM from trying to drop non-existent indexes)
   const originalEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = 'production';
-  
+
   const dataSource = AppDataSource;
 
   try {
@@ -41,6 +42,7 @@ async function bootstrap() {
     await seedDocketEntries(dataSource);
     await seedInvoices(dataSource);
     await seedEvidenceItems(dataSource);
+    await seedConnectors(dataSource);
 
     console.log('\n===========================================');
     console.log('✓ Database seeding completed successfully!');
@@ -58,6 +60,7 @@ async function bootstrap() {
     const docketEntryCount = await dataSource.getRepository('DocketEntry').count();
     const invoiceCount = await dataSource.getRepository('Invoice').count();
     const evidenceItemCount = await dataSource.getRepository('EvidenceItem').count();
+    const connectorCount = await dataSource.getRepository('Connector').count();
 
     console.log('Summary:');
     console.log(`  Users:        ${userCount}`);
@@ -71,6 +74,7 @@ async function bootstrap() {
     console.log(`  Docket Entries: ${docketEntryCount}`);
     console.log(`  Invoices:     ${invoiceCount}`);
     console.log(`  Evidence Items: ${evidenceItemCount}`);
+    console.log(`  Connectors:   ${connectorCount}`);
     console.log('');
 
   } catch (error) {
@@ -79,7 +83,7 @@ async function bootstrap() {
   } finally {
     // Restore original NODE_ENV
     process.env.NODE_ENV = originalEnv;
-    
+
     // Close connection
     if (dataSource.isInitialized) {
       await dataSource.destroy();

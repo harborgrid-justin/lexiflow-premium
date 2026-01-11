@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { SchemaManagementService } from "../schema-management/schema-management.service";
 import { UpdateDictionaryItemDto } from "./dto/update-dictionary-item.dto";
 
@@ -136,9 +136,9 @@ export class DataCatalogService {
       const links = [];
       if (nodes.length > 0) {
         // Connect first few tables to ETL
-        links.push({ source: nodes[0].id, target: "job_daily_etl" });
+        links.push({ source: nodes[0]!.id, target: "job_daily_etl" });
         if (nodes.length > 1)
-          links.push({ source: nodes[1].id, target: "job_daily_etl" });
+          links.push({ source: nodes[1]!.id, target: "job_daily_etl" });
 
         // Connect ETL to Report
         links.push({ source: "job_daily_etl", target: "report_executive" });

@@ -4,8 +4,8 @@
  */
 
 import {
-  LegalEntitiesApiService,
-  LegalEntityApi,
+    LegalEntitiesApiService,
+    LegalEntityApi,
 } from "@/api/domains/legal-entities.api";
 import { Repository } from "@/services/core/Repository";
 import { ValidationError } from "@/services/core/errors";
@@ -80,7 +80,7 @@ export class EntityRepository extends Repository<LegalEntity> {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       userId: (entity.userId || "system") as any,
       metadata: (entity.metadata as Record<string, unknown>) || {},
-    } as LegalEntity;
+    };
   }
 
   override async getById(id: string): Promise<LegalEntity | undefined> {

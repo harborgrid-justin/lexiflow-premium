@@ -1,17 +1,23 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsObject } from 'class-validator';
-import { ConnectorType, ConnectorStatus } from '../entities/connector.entity';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+} from "class-validator";
+import { ConnectorStatus, ConnectorType } from "../entities/connector.entity";
 
 export class CreateConnectorDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsEnum(ConnectorType)
-  type: ConnectorType;
+  type!: ConnectorType;
 
   @IsString()
   @IsNotEmpty()
-  provider: string;
+  provider!: string;
 
   @IsString()
   @IsOptional()

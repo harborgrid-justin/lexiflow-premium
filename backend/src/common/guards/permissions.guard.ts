@@ -62,6 +62,7 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const hasAllPermissions = requiredPermissions.every((permission) =>
+      // TODO: Remove non-null assertion with proper check
       user.permissions!.includes(permission),
     );
 

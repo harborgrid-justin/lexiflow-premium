@@ -42,8 +42,8 @@ export class OutcomePredictionsService {
   private readonly MODEL_VERSION = 'v1.0.0';
 
   constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<any>,
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<unknown>,
     // Inject repositories when entities are available
   ) {}
 

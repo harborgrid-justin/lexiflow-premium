@@ -118,7 +118,7 @@ export class SanitizationMiddleware implements NestMiddleware {
     str = str.replace(/\0/g, '');
 
     // Remove script tags and javascript: protocol
-    str = str.replace(/<script[^>]*>.*?<\/script>/gi, '');
+    str = str.replace(/<script[^>]*>.*?</script>/gi, '');
     str = str.replace(/javascript:/gi, '');
 
     // Remove event handlers

@@ -80,7 +80,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
   private acquireTimes: number[] = [];
   private queryTimes: number[] = [];
-  private activeConnections: Map<any, ConnectionInfo> = new Map();
+  private activeConnections: Map<unknown, ConnectionInfo> = new Map();
 
   private readonly healthCheckIntervalMs: number;
   private readonly metricsIntervalMs: number;

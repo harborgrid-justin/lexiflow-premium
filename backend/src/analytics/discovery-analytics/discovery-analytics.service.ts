@@ -41,8 +41,8 @@ import {
 export class DiscoveryAnalyticsService {
   private readonly logger = new Logger(DiscoveryAnalyticsService.name);
 
-  // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<any>,
-  // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
+  // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<unknown>,
+  // @InjectRepository(LegalDocument) private documentRepository: Repository<unknown>,
   // Inject repositories when entities are available
 
   /**

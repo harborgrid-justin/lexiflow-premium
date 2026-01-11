@@ -22,7 +22,7 @@ export class LoggingInterceptor implements NestInterceptor {
     // This allows the interceptor to work even if monitoring module is not imported
   }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest<Request>();
     const response = context.switchToHttp().getResponse<Response>();
     const { method, url, body, headers } = request;

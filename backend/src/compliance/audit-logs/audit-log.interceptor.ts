@@ -13,7 +13,7 @@ import { AuditAction, AuditEntityType } from './dto/audit-log.dto';
 export class AuditLogInterceptor implements NestInterceptor {
   constructor(private readonly auditLogsService: AuditLogsService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
     const method = request.method;
     const url = request.url;
@@ -73,7 +73,7 @@ export class AuditLogInterceptor implements NestInterceptor {
 
     // Extract entity type and ID from URL
     // Pattern: /api/v1/{entityType}/{entityId}
-    const urlPattern = /\/api\/v1\/([^\/]+)(?:\/([^\/\?]+))?/;
+    const urlPattern = //api/v1/([^/]+)(?:/([^/\?]+))?/;
     const match = url.match(urlPattern);
 
     if (!match) return null;

@@ -276,7 +276,7 @@ export class CorsSecurityService {
     const hostname = url.hostname;
 
     // 1. Check for IP addresses (usually suspicious)
-    const ipPattern = /^(\d{1,3}\\.){3}\d{1,3}$/;
+    const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
     if (ipPattern.test(hostname)) {
       // Allow localhost IPs in development
       if (this.isDevelopmentMode() && (hostname.startsWith('127.') || hostname.startsWith('192.168.') || hostname === 'localhost')) {

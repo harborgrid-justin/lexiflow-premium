@@ -163,7 +163,7 @@ export class EmailDeliveryService {
    */
   private async sendViaSendGrid(payload: EmailPayload): Promise<string> {
     // In production, use @sendgrid/mail
-    // const sgMail = require('@sendgrid/mail');
+    // import sgMail from \'@sendgrid/mail\';
     // sgMail.setApiKey(this.config.apiKey);
     //
     // const msg = {
@@ -215,7 +215,7 @@ export class EmailDeliveryService {
    */
   private async sendViaSMTP(payload: EmailPayload): Promise<string> {
     // In production, use nodemailer
-    // const nodemailer = require('nodemailer');
+    // import nodemailer from \'nodemailer\';
     //
     // const transporter = nodemailer.createTransport({
     //   host: this.config.smtpHost,
@@ -276,7 +276,7 @@ export class EmailDeliveryService {
    * Validate email address format
    */
   validateEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     return emailRegex.test(email);
   }
 

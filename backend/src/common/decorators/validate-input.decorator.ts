@@ -32,7 +32,7 @@ export interface InputValidationOptions {
  * @example
  * @ValidateInput({
  *   fields: {
- *     email: { pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, required: true },
+ *     email: { pattern: /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/, required: true },
  *     password: { minLength: 8, maxLength: 128, required: true }
  *   },
  *   strictMode: true

@@ -409,13 +409,13 @@ export class DraftingService {
     }
 
     // Replace case data placeholders: {{case.field}}
-    content = content.replace(/\{\{case\.(\w+)\}\}/g, (match, field) => {
+    content = content.replace(/\{\{case.(\w+)\}\}/g, (match, field) => {
       const caseData = variables['case'] as Record<string, unknown>;
       return caseData?.[field]?.toString() || match;
     });
 
     // Replace party placeholders: {{party.plaintiff}}, {{party.defendant}}
-    content = content.replace(/\{\{party\.(\w+)\}\}/g, (match, role) => {
+    content = content.replace(/\{\{party.(\w+)\}\}/g, (match, role) => {
       const parties = variables['parties'] as Record<string, unknown>;
       return parties?.[role]?.toString() || match;
     });

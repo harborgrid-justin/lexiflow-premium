@@ -149,13 +149,14 @@ export class BootstrapService implements OnApplicationBootstrap {
         module: 'Database',
         success: true,
         duration: Date.now() - startTime,
-        metadata: dbInfo as any,
+        metadata: dbInfo,
       });
 
+      const dbInfoRecord = dbInfo as Record<string, unknown>;
       this.logger.log('✓ Database connection verified');
-      this.logger.log(`  Database: ${(dbInfo as any).database}`);
-      this.logger.log(`  Version: ${(dbInfo as any).version}`);
-      this.logger.log(`  Connection pool: ${(dbInfo as any).poolSize} connections`);
+      this.logger.log(`  Database: ${String(dbInfoRecord.database || 'unknown')}`);
+      this.logger.log(`  Version: ${String(dbInfoRecord.version || 'unknown')}`);
+      this.logger.log(`  Connection pool: ${String(dbInfoRecord.poolSize || 0)} connections`);
     } catch (error) {
       this.startupResults.push({
         module: 'Database',
@@ -190,13 +191,17 @@ export class BootstrapService implements OnApplicationBootstrap {
     }
 
     try {
-      const Redis = require('ioredis');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const Redis = require('ioredis') as {
+        new (url: string): RedisClient;
+        new (config: RedisConfig): RedisClient;
+      };
       const redisUrl = this.configService.get<string>('redis.url');
       const redisHost = this.configService.get<string>('redis.host', 'localhost');
       const redisPort = this.configService.get<number>('redis.port', 6379);
       const redisPassword = this.configService.get<string>('redis.password');
 
-      let redisClient;
+      let redisClient: RedisClient;
 
       if (redisUrl) {
         redisClient = new Redis(redisUrl);
@@ -210,15 +215,15 @@ export class BootstrapService implements OnApplicationBootstrap {
       }
 
       await redisClient.connect();
-      const pong = await redisClient.ping();
+      const pong: string = await redisClient.ping();
 
       if (pong !== 'PONG') {
         throw new Error('Redis ping failed');
       }
 
-      const redisInfo = await redisClient.info('server');
+      const redisInfo: string = await redisClient.info('server');
       const versionMatch = redisInfo.match(/redis_version:(\S+)/);
-      const version = versionMatch ? versionMatch[1] : 'unknown';
+      const version = versionMatch?.[1] || 'unknown';
 
       await redisClient.quit();
 
@@ -379,15 +384,16 @@ export class BootstrapService implements OnApplicationBootstrap {
   /**
    * Get database information
    */
-  private async getDatabaseInfo(): Promise<unknown> {
+  private async getDatabaseInfo(): Promise<Record<string, unknown>> {
     const database = this.configService.get<string>('database.name');
     const poolSize = this.configService.get<number>('DB_POOL_MAX', 20);
 
     let version = 'unknown';
     try {
-      const result = await this.dataSource.query('SELECT VERSION()');
-      version = result[0]?.version || 'unknown';
-    } catch (error) {
+      const result = await this.dataSource.query('SELECT VERSION()') as Array<Record<string, unknown>>;
+      const firstRow = result[0];
+      version = firstRow ? String(firstRow.version) : 'unknown';
+    } catch {
       // Ignore version query errors
     }
 
@@ -397,7 +403,7 @@ export class BootstrapService implements OnApplicationBootstrap {
   /**
    * Check memory usage
    */
-  private checkMemory(): any {
+  private checkMemory(): Record<string, unknown> {
     const usage = process.memoryUsage();
     const heapUsedMB = Math.round(usage.heapUsed / 1024 / 1024);
     const heapTotalMB = Math.round(usage.heapTotal / 1024 / 1024);
@@ -428,7 +434,7 @@ export class BootstrapService implements OnApplicationBootstrap {
   /**
    * Check Node.js version
    */
-  private checkNodeVersion(): any {
+  private checkNodeVersion(): Record<string, unknown> {
     const version = process.version || 'v0.0.0';
     const versionString = version.slice(1).split('.')[0] || '0';
     const majorVersion = parseInt(versionString, 10);

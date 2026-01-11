@@ -133,8 +133,8 @@ export class AuditService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(AuditEntry) private auditRepository: Repository<any>,
-    // @InjectRepository(ComplianceEvent) private complianceRepository: Repository<any>,
+    // @InjectRepository(AuditEntry) private auditRepository: Repository<unknown>,
+    // @InjectRepository(ComplianceEvent) private complianceRepository: Repository<unknown>,
     private eventEmitter: EventEmitter2,
   ) {
     this.initializeCircularBuffer();

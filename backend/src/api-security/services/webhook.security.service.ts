@@ -232,6 +232,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
   private calculateRetryDelay(attempt: number): number {
     // Use configured delays if available
     if (MasterConfig.WEBHOOK_RETRY_DELAYS && MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1] !== undefined) {
+      // TODO: Remove non-null assertion with proper check
       return MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1]!;
     }
 

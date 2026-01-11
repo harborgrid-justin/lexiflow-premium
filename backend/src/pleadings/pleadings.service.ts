@@ -162,7 +162,12 @@ export class PleadingsService {
 
     this.logger.log(`Pleading updated: ${id}`);
     const rawResult = result.raw as Pleading[];
-    return rawResult[0]!;
+    if (rawResult.length === 0) {
+      throw new NotFoundException(
+        `Pleading with ID ${id} not found after update`
+      );
+    }
+    return rawResult[0];
   }
 
   /**

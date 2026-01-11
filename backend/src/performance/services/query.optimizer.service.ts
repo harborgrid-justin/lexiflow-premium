@@ -416,7 +416,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
   private suggestIndexes(sql: string): string[] {
     const suggestions: string[] = [];
-    const whereMatch = sql.match(/WHERE\s+(\w+)\.(\w+)/i);
+    const whereMatch = sql.match(/WHERE\s+(\w+).(\w+)/i);
 
     if (whereMatch) {
       const [, table, column] = whereMatch;
@@ -425,10 +425,10 @@ export class QueryOptimizerService implements OnModuleDestroy {
       );
     }
 
-    const joinMatch = sql.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+\.(\w+)/gi);
+    const joinMatch = sql.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+.(\w+)/gi);
     if (joinMatch) {
       for (const match of joinMatch) {
-        const parts = match.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+\.(\w+)/i);
+        const parts = match.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+.(\w+)/i);
         if (parts) {
           const [, table, column] = parts;
           suggestions.push(

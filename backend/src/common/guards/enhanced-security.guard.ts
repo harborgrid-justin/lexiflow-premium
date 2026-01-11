@@ -202,7 +202,7 @@ export class IpWhitelistGuard implements CanActivate {
 
     // Wildcard support
     if (allowedIp.includes('*')) {
-      const pattern = allowedIp.replace(/\./g, '\\.').replace(/\*/g, '.*');
+      const pattern = allowedIp.replace(/./g, '\.').replace(/\*/g, '.*');
       return new RegExp(`^${pattern}$`).test(clientIp);
     }
 
@@ -362,7 +362,7 @@ export class RequestSignatureGuard implements CanActivate {
     // TODO: Implement actual signature validation
     // This would use crypto.createHmac with a shared secret
      
-    const crypto = require('crypto');
+    import crypto from \'crypto\';
 
     // Get secret from environment or database
     const secret = process.env.WEBHOOK_SECRET || 'default-secret';

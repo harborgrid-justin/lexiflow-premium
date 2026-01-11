@@ -48,7 +48,7 @@ export class CalendarService {
     const { page = 1, limit = 50, startDate, endDate, eventType, caseId } = query as { page?: number; limit?: number; startDate?: string; endDate?: string; eventType?: string; caseId?: string };
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const where: unknown = {};
     if (eventType) where.eventType = eventType;
     if (caseId) where.caseId = caseId;
     if (startDate && endDate) {

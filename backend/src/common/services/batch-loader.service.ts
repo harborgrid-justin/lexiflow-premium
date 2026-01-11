@@ -61,13 +61,13 @@ export class BatchLoaderService {
    */
   async loadMany<T extends ObjectLiteral>(
     repository: Repository<T>,
-    ids: any[],
+    ids: unknown[],
     options: {
       batchSize?: number;
       relations?: string[];
       cache?: boolean;
     } = {},
-  ): Promise<Map<any, T>> {
+  ): Promise<Map<unknown, T>> {
     if (ids.length === 0) {
       return new Map();
     }
@@ -86,7 +86,7 @@ export class BatchLoaderService {
     for (let i = 0; i < uniqueIds.length; i += batchSize) {
       const batch = uniqueIds.slice(i, i + batchSize);
 
-      const findOptions: any = {
+      const findOptions: unknown = {
         where: { id: In(batch) },
       };
 
@@ -103,7 +103,7 @@ export class BatchLoaderService {
     }
 
     // Create map for efficient lookup
-    const entityMap = new Map<any, T>();
+    const entityMap = new Map<unknown, T>();
     allEntities.forEach((entity: unknown) => {
       const ent = entity as any;
       entityMap.set(ent.id, entity as T);
@@ -122,13 +122,13 @@ export class BatchLoaderService {
   async loadManyByField<T extends ObjectLiteral>(
     repository: Repository<T>,
     fieldName: string,
-    values: any[],
+    values: unknown[],
     options: {
       batchSize?: number;
       relations?: string[];
       cache?: boolean;
     } = {},
-  ): Promise<Map<any, T[]>> {
+  ): Promise<Map<unknown, T[]>> {
     if (values.length === 0) {
       return new Map();
     }
@@ -166,7 +166,7 @@ export class BatchLoaderService {
     }
 
     // Group by field value
-    const entityMap = new Map<any, T[]>();
+    const entityMap = new Map<unknown, T[]>();
     allEntities.forEach((entity: unknown) => {
       const ent = entity as any;
       const key = ent[fieldName];
@@ -188,7 +188,7 @@ export class BatchLoaderService {
    */
   async loadManyWithConditions<T extends ObjectLiteral>(
     repository: Repository<T>,
-    conditions: any[],
+    conditions: unknown[],
     options: {
       batchSize?: number;
       relations?: string[];
@@ -250,8 +250,8 @@ export class BatchLoaderService {
   async loadCounts<T extends ObjectLiteral>(
     repository: Repository<T>,
     fieldName: string,
-    values: any[],
-  ): Promise<Map<any, number>> {
+    values: unknown[],
+  ): Promise<Map<unknown, number>> {
     if (values.length === 0) {
       return new Map();
     }
@@ -270,9 +270,9 @@ export class BatchLoaderService {
       .groupBy(`entity.${fieldName}`)
       .getRawMany();
 
-    const countMap = new Map<any, number>();
+    const countMap = new Map<unknown, number>();
     results.forEach((row: unknown) => {
-      const r = row as { key: any; count: string };
+      const r = row as { key: unknown; count: string };
       countMap.set(r.key, parseInt(r.count));
     });
 

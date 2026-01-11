@@ -100,7 +100,7 @@ export class DiscoveryService {
 
   async findAllRequests(
     options?: PaginationOptions
-  ): Promise<PaginatedResult<any>> {
+  ): Promise<PaginatedResult<unknown>> {
     const page = options?.page || 1;
     const limit = options?.limit || 50;
     const skip = (page - 1) * limit;
@@ -123,7 +123,7 @@ export class DiscoveryService {
   async findRequestsByCaseId(
     caseId: string,
     options?: PaginationOptions
-  ): Promise<PaginatedResult<any>> {
+  ): Promise<PaginatedResult<unknown>> {
     const page = options?.page || 1;
     const limit = options?.limit || 50;
     const skip = (page - 1) * limit;
@@ -308,7 +308,7 @@ export class DiscoveryService {
   }
 
   async getAllEvidence(query?: unknown): Promise<Evidence[]> {
-    const whereClause: any = {};
+    const whereClause: unknown = {};
     const q = query as {
       caseId?: string;
       type?: string;

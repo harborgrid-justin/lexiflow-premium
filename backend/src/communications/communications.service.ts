@@ -150,8 +150,8 @@ export class CommunicationsService {
   async getCommunicationStats(caseId: string): Promise<unknown> {
     const result = await this.findByCaseId(caseId);
     const all = result.data;
-    const byType: any = {};
-    const byStatus: any = {};
+    const byType: unknown = {};
+    const byStatus: unknown = {};
     let sent = 0;
     let draft = 0;
     

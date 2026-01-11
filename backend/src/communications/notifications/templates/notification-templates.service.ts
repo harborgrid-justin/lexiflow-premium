@@ -381,6 +381,7 @@ export class NotificationTemplatesService {
         template.variables.forEach(variable => {
           const contextKey = this.variableToContextKey(variable);
           const value = context[contextKey] || '';
+      // TODO: Remove non-null assertion with proper check
           renderedSubject = renderedSubject!.replace(new RegExp(variable, 'g'), value);
         });
       }
@@ -392,6 +393,7 @@ export class NotificationTemplatesService {
         template.variables.forEach(variable => {
           const contextKey = this.variableToContextKey(variable);
           const value = context[contextKey] || '';
+      // TODO: Remove non-null assertion with proper check
           renderedActionUrl = renderedActionUrl!.replace(new RegExp(variable, 'g'), value);
         });
       }

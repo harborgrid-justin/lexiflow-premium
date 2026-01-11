@@ -237,7 +237,7 @@ export * from './pipes';
  * /**
  *  * @deprecated Use generateUuid() instead
  *  * Will be removed in v2.0.0
- *  *\/
+ *  */
  * export const createUuid = generateUuid;
  * ```
  */

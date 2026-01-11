@@ -150,9 +150,9 @@ export class NotificationsService implements OnModuleDestroy {
   private isProcessing = false;
 
   constructor(
-    // @InjectRepository(Notification) private notificationRepository: Repository<any>,
-    // @InjectRepository(UserPreference) private preferenceRepository: Repository<any>,
-    // @InjectRepository(NotificationTemplate) private templateRepository: Repository<any>,
+    // @InjectRepository(Notification) private notificationRepository: Repository<unknown>,
+    // @InjectRepository(UserPreference) private preferenceRepository: Repository<unknown>,
+    // @InjectRepository(NotificationTemplate) private templateRepository: Repository<unknown>,
     private eventEmitter: EventEmitter2
   ) {
     this.initializeQueues();

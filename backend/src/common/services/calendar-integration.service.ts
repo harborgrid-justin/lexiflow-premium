@@ -357,7 +357,7 @@ export class CalendarIntegrationService {
     try {
       const client = this.createOutlookClient(accessToken);
 
-      const outlookUpdates: any = {};
+      const outlookUpdates: unknown = {};
 
       if (updates.summary) outlookUpdates.subject = updates.summary;
       if (updates.description) {

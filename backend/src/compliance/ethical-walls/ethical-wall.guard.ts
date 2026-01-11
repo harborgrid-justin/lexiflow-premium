@@ -52,10 +52,10 @@ export class EthicalWallGuard implements CanActivate {
 
     // Pattern matching for common entity routes
     const patterns = [
-      { regex: /\/cases\/([^\/]+)/, type: 'Case' },
-      { regex: /\/clients\/([^\/]+)/, type: 'Client' },
-      { regex: /\/documents\/([^\/]+)/, type: 'Document' },
-      { regex: /\/matters\/([^\/]+)/, type: 'Matter' },
+      { regex: //cases/([^/]+)/, type: 'Case' },
+      { regex: //clients/([^/]+)/, type: 'Client' },
+      { regex: //documents/([^/]+)/, type: 'Document' },
+      { regex: //matters/([^/]+)/, type: 'Matter' },
     ];
 
     for (const pattern of patterns) {

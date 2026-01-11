@@ -459,7 +459,7 @@ export class LazyLoadingService {
   ): { field: string; value: unknown } | null {
     try {
       const json = Buffer.from(encoded, "base64").toString("utf-8");
-      return JSON.parse(json);
+      return JSON.parse(json) as { field: string; value: unknown };
     } catch {
       this.logger.warn(`Invalid cursor: ${encoded}`);
       return null;

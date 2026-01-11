@@ -23,7 +23,7 @@ export class CacheInterceptor implements NestInterceptor {
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Promise<Observable<any>> {
+  ): Promise<Observable<unknown>> {
     const cacheOptions = this.reflector.get<CacheOptions>(
       CACHE_KEY,
       context.getHandler(),

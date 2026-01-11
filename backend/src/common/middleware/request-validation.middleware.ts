@@ -173,11 +173,11 @@ export class RequestValidationMiddleware implements NestMiddleware {
 
     // Check for common path traversal patterns
     const pathTraversalPatterns = [
-      /\.\.\//g,      // ../
-      /\.\.\\/g,      // ..\
+      /..//g,      // ../
+      /..\/g,      // ..\
       /%2e%2e%2f/gi,  // URL encoded ../
       /%2e%2e%5c/gi,  // URL encoded ..\
-      /\.\./g,        // ..
+      /../g,        // ..
     ];
 
     for (const pattern of pathTraversalPatterns) {
@@ -191,7 +191,7 @@ export class RequestValidationMiddleware implements NestMiddleware {
     if (path.startsWith('/etc/') ||
         path.startsWith('/var/') ||
         path.startsWith('/root/') ||
-        /^[a-zA-Z]:\\/i.test(path)) {
+        /^[a-zA-Z]:\/i.test(path)) {
       this.logger.warn(`Absolute path attempt detected: ${path}`);
       throw new BadRequestException('Invalid path');
     }

@@ -117,7 +117,7 @@ export class BluebookService {
    */
   parseCitation(rawCitation: string): ParsedCitation {
     // Case citation pattern
-    const casePattern = /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+([\w\s.]+)\s+(\d+)(?:,\s*(\d+))?\s*\((.*?)(\d{4})\)/i;
+    const casePattern = /^(.+?)\s+v.\s+(.+?),\s*(\d+)\s+([\w\s.]+)\s+(\d+)(?:,\s*(\d+))?\s*\((.*?)(\d{4})\)/i;
     const caseMatch = rawCitation.match(casePattern);
     
     if (caseMatch) {
@@ -136,7 +136,7 @@ export class BluebookService {
     }
 
     // Statute citation pattern
-    const statutePattern = /^(\d+)\s+(U\.S\.C\.|U\.S\.C\.A\.)\s+§\s*([\d\w-]+)\s*(?:\((\d{4})\))?/i;
+    const statutePattern = /^(\d+)\s+(U.S.C.|U.S.C.A.)\s+§\s*([\d\w-]+)\s*(?:\((\d{4})\))?/i;
     const statuteMatch = rawCitation.match(statutePattern);
     
     if (statuteMatch) {
@@ -151,7 +151,7 @@ export class BluebookService {
     }
 
     // Constitution pattern
-    const constitutionPattern = /^(U\.S\.|United States)\s+Const\.?\s+(amend\.|art\.)\s+([IVX\d]+)/i;
+    const constitutionPattern = /^(U.S.|United States)\s+Const\.?\s+(amend.|art.)\s+([IVX\d]+)/i;
     const constitutionMatch = rawCitation.match(constitutionPattern);
     
     if (constitutionMatch) {
@@ -165,7 +165,7 @@ export class BluebookService {
     }
 
     // Regulation pattern
-    const regulationPattern = /^(\d+)\s+C\.F\.R\.\s+§\s*([\d.]+)\s*(?:\((\d{4})\))?/i;
+    const regulationPattern = /^(\d+)\s+C.F.R.\s+§\s*([\d.]+)\s*(?:\((\d{4})\))?/i;
     const regulationMatch = rawCitation.match(regulationPattern);
     
     if (regulationMatch) {

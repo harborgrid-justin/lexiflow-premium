@@ -40,8 +40,8 @@ import {
 export class CaseAnalyticsService {
   private readonly logger = new Logger(CaseAnalyticsService.name);
 
-  // @InjectRepository(Case) private caseRepository: Repository<any>,
-  // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<any>,
+  // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+  // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<unknown>,
   // Inject repositories when entities are available
 
   /**

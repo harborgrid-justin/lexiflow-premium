@@ -7,19 +7,19 @@ import {
   SoftRemoveEvent,
   RecoverEvent,
   DataSource,
-} from 'typeorm';
-import { Logger } from '@nestjs/common';
+} from "typeorm";
+import { Logger } from "@nestjs/common";
 
 export interface AuditLogEntry {
   entityName: string;
   entityId: string;
-  action: 'INSERT' | 'UPDATE' | 'DELETE' | 'SOFT_DELETE' | 'RECOVER';
+  action: "INSERT" | "UPDATE" | "DELETE" | "SOFT_DELETE" | "RECOVER";
   userId?: string;
   userName?: string;
   timestamp: Date;
   beforeValues?: Record<string, unknown>;
   afterValues?: Record<string, unknown>;
-  changes?: Record<string, { old: unknown; new: any }>;
+  changes?: Record<string, { old: unknown; new: unknown }>;
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;
@@ -34,24 +34,29 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   private flushTimer?: NodeJS.Timeout;
   private dataSource?: DataSource;
 
-  private readonly excludedEntities = ['AuditLog', 'Session', 'LoginAttempt', 'RefreshToken'];
+  private readonly excludedEntities = [
+    "AuditLog",
+    "Session",
+    "LoginAttempt",
+    "RefreshToken",
+  ];
 
   private readonly sensitiveFields = [
-    'password',
-    'passwordHash',
-    'salt',
-    'token',
-    'accessToken',
-    'refreshToken',
-    'secret',
-    'apiKey',
-    'privateKey',
-    'encryptedData',
+    "password",
+    "passwordHash",
+    "salt",
+    "token",
+    "accessToken",
+    "refreshToken",
+    "secret",
+    "apiKey",
+    "privateKey",
+    "encryptedData",
   ];
 
   constructor() {
     this.startFlushTimer();
-    this.logger.log('Audit subscriber initialized');
+    this.logger.log("Audit subscriber initialized");
   }
 
   private startFlushTimer(): void {
@@ -60,9 +65,21 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     }, AuditSubscriber.flushInterval);
   }
 
-  private getUserContext(): { userId?: string; userName?: string; ipAddress?: string; userAgent?: string } {
+  private getUserContext(): {
+    userId?: string;
+    userName?: string;
+    ipAddress?: string;
+    userAgent?: string;
+  } {
     try {
-      const context = (global as any).requestContext;
+      const globalWithContext = global as unknown as {
+        requestContext: {
+          user?: { id: string; email?: string; username?: string };
+          ip?: string;
+          userAgent?: string;
+        };
+      };
+      const context = globalWithContext.requestContext;
       return {
         userId: context?.user?.id,
         userName: context?.user?.email || context?.user?.username,
@@ -78,12 +95,14 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return !this.excludedEntities.includes(entityName);
   }
 
-  private maskSensitiveData(data: Record<string, unknown>): Record<string, unknown> {
+  private maskSensitiveData(
+    data: Record<string, unknown>
+  ): Record<string, unknown> {
     const masked: Record<string, unknown> = { ...data };
 
     for (const field of this.sensitiveFields) {
       if (masked[field] !== undefined) {
-        masked[field] = '[REDACTED]';
+        masked[field] = "[REDACTED]";
       }
     }
 
@@ -91,30 +110,38 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   }
 
   private extractEntityId(entity: unknown, dataSource?: DataSource): string {
-    if ((entity as any).id) return (entity as any).id;
-    if ((entity as any).uuid) return (entity as any).uuid;
+    const e = entity as Record<string, unknown>;
+    if (e?.id && typeof e.id === "string") return e.id;
+    if (e?.uuid && typeof e.uuid === "string") return e.uuid;
 
-    if (dataSource) {
+    if (dataSource && e) {
       try {
-        const metadata = dataSource.getMetadata((entity as any).constructor);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        const metadata = dataSource.getMetadata((e as any).constructor);
         const primaryColumn = metadata.primaryColumns[0];
-        return primaryColumn?.propertyName ? (entity as any)[primaryColumn.propertyName] : 'unknown';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return primaryColumn?.propertyName
+          ? String((e as any)[primaryColumn.propertyName])
+          : "unknown";
       } catch {
-        return 'unknown';
+        return "unknown";
       }
     }
-    return 'unknown';
+    return "unknown";
   }
 
-  private calculateChanges(before: Record<string, unknown>, after: Record<string, unknown>): Record<string, { old: unknown; new: any }> {
-    const changes: Record<string, { old: unknown; new: any }> = {};
+  private calculateChanges(
+    before: Record<string, unknown>,
+    after: Record<string, unknown>
+  ): Record<string, { old: unknown; new: unknown }> {
+    const changes: Record<string, { old: unknown; new: unknown }> = {};
 
     const allKeys = new Set([...Object.keys(before), ...Object.keys(after)]);
 
     for (const key of allKeys) {
       if (before[key] !== after[key]) {
         if (this.sensitiveFields.includes(key)) {
-          changes[key] = { old: '[REDACTED]', new: '[REDACTED]' };
+          changes[key] = { old: "[REDACTED]", new: "[REDACTED]" };
         } else {
           changes[key] = {
             old: this.serializeValue(before[key]),
@@ -127,15 +154,15 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return changes;
   }
 
-  private serializeValue(value: unknown): any {
+  private serializeValue(value: unknown): unknown {
     if (value === undefined) return null;
     if (value === null) return null;
     if (value instanceof Date) return value.toISOString();
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       try {
         return JSON.parse(JSON.stringify(value));
       } catch {
-        return '[Complex Object]';
+        return "[Complex Object]";
       }
     }
     return value;
@@ -144,9 +171,9 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   private createAuditLog(
     entityName: string,
     entityId: string,
-    action: AuditLogEntry['action'],
+    action: AuditLogEntry["action"],
     beforeValues?: Record<string, unknown>,
-    afterValues?: Record<string, unknown>,
+    afterValues?: Record<string, unknown>
   ): void {
     const context = this.getUserContext();
 
@@ -177,7 +204,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     }
   }
 
-  async afterInsert(event: InsertEvent<any>): Promise<void> {
+  async afterInsert(event: InsertEvent<unknown>): Promise<void> {
     try {
       const entityName = event.metadata.name;
 
@@ -193,15 +220,21 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       const entityId = this.extractEntityId(event.entity, event.connection);
       const afterValues = { ...event.entity };
 
-      this.createAuditLog(entityName, entityId, 'INSERT', undefined, afterValues);
+      this.createAuditLog(
+        entityName,
+        entityId,
+        "INSERT",
+        undefined,
+        afterValues
+      );
 
       this.logger.debug(`Audit: INSERT on ${entityName}`, { entityId });
     } catch (error) {
-      this.logger.error('Error in afterInsert audit', error);
+      this.logger.error("Error in afterInsert audit", error);
     }
   }
 
-  async afterUpdate(event: UpdateEvent<any>): Promise<void> {
+  async afterUpdate(event: UpdateEvent<unknown>): Promise<void> {
     try {
       const entityName = event.metadata.name;
 
@@ -218,18 +251,27 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
 
-      this.createAuditLog(entityName, entityId, 'UPDATE', beforeValues, afterValues);
+      this.createAuditLog(
+        entityName,
+        entityId,
+        "UPDATE",
+        beforeValues,
+        afterValues
+      );
 
       const changes = this.calculateChanges(beforeValues, afterValues);
       const changeCount = Object.keys(changes).length;
 
-      this.logger.debug(`Audit: UPDATE on ${entityName}`, { entityId, changeCount });
+      this.logger.debug(`Audit: UPDATE on ${entityName}`, {
+        entityId,
+        changeCount,
+      });
     } catch (error) {
-      this.logger.error('Error in afterUpdate audit', error);
+      this.logger.error("Error in afterUpdate audit", error);
     }
   }
 
-  async afterRemove(event: RemoveEvent<any>): Promise<void> {
+  async afterRemove(event: RemoveEvent<unknown>): Promise<void> {
     try {
       const entityName = event.metadata.name;
 
@@ -241,18 +283,27 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         this.dataSource = event.connection;
       }
 
-      const entityId = this.extractEntityId(event.entity || event.databaseEntity, event.connection);
+      const entityId = this.extractEntityId(
+        event.entity || event.databaseEntity,
+        event.connection
+      );
       const beforeValues = event.databaseEntity || event.entity || {};
 
-      this.createAuditLog(entityName, entityId, 'DELETE', beforeValues, undefined);
+      this.createAuditLog(
+        entityName,
+        entityId,
+        "DELETE",
+        beforeValues,
+        undefined
+      );
 
       this.logger.debug(`Audit: DELETE on ${entityName}`, { entityId });
     } catch (error) {
-      this.logger.error('Error in afterRemove audit', error);
+      this.logger.error("Error in afterRemove audit", error);
     }
   }
 
-  async afterSoftRemove(event: SoftRemoveEvent<any>): Promise<void> {
+  async afterSoftRemove(event: SoftRemoveEvent<unknown>): Promise<void> {
     try {
       const entityName = event.metadata.name;
 
@@ -268,15 +319,21 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
 
-      this.createAuditLog(entityName, entityId, 'SOFT_DELETE', beforeValues, afterValues);
+      this.createAuditLog(
+        entityName,
+        entityId,
+        "SOFT_DELETE",
+        beforeValues,
+        afterValues
+      );
 
       this.logger.debug(`Audit: SOFT_DELETE on ${entityName}`, { entityId });
     } catch (error) {
-      this.logger.error('Error in afterSoftRemove audit', error);
+      this.logger.error("Error in afterSoftRemove audit", error);
     }
   }
 
-  async afterRecover(event: RecoverEvent<any>): Promise<void> {
+  async afterRecover(event: RecoverEvent<unknown>): Promise<void> {
     try {
       const entityName = event.metadata.name;
 
@@ -292,11 +349,17 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
 
-      this.createAuditLog(entityName, entityId, 'RECOVER', beforeValues, afterValues);
+      this.createAuditLog(
+        entityName,
+        entityId,
+        "RECOVER",
+        beforeValues,
+        afterValues
+      );
 
       this.logger.debug(`Audit: RECOVER on ${entityName}`, { entityId });
     } catch (error) {
-      this.logger.error('Error in afterRecover audit', error);
+      this.logger.error("Error in afterRecover audit", error);
     }
   }
 
@@ -315,9 +378,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         await this.persistAuditLog(log);
       }
 
-      this.logger.debug(`Successfully flushed ${logsToFlush.length} audit logs`);
+      this.logger.debug(
+        `Successfully flushed ${logsToFlush.length} audit logs`
+      );
     } catch (error) {
-      this.logger.error('Failed to flush audit logs', error);
+      this.logger.error("Failed to flush audit logs", error);
       AuditSubscriber.auditLogs.unshift(...logsToFlush);
     }
   }
@@ -325,22 +390,22 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   private async persistAuditLog(log: AuditLogEntry): Promise<void> {
     try {
       if (!this.dataSource) {
-        this.logger.debug('Audit log entry (dataSource not available)', log);
+        this.logger.debug("Audit log entry (dataSource not available)", log);
         return;
       }
 
-      const auditLogRepository = this.dataSource.getRepository('AuditLog');
+      const auditLogRepository = this.dataSource.getRepository("AuditLog");
 
       if (auditLogRepository) {
         // Map action to lowercase to match database enum values
         const actionMap: Record<string, string> = {
-          'INSERT': 'create',
-          'UPDATE': 'update',
-          'DELETE': 'delete',
-          'SOFT_DELETE': 'archive',
-          'RECOVER': 'restore',
+          INSERT: "create",
+          UPDATE: "update",
+          DELETE: "delete",
+          SOFT_DELETE: "archive",
+          RECOVER: "restore",
         };
-        
+
         await auditLogRepository.save({
           entityType: log.entityName,
           entityId: log.entityId,
@@ -355,10 +420,13 @@ export class AuditSubscriber implements EntitySubscriberInterface {
           userAgent: log.userAgent,
         });
       } else {
-        this.logger.debug('Audit log entry (repository not found)', log);
+        this.logger.debug("Audit log entry (repository not found)", log);
       }
     } catch (error) {
-      this.logger.warn('Could not persist audit log, logging to console', { log, error: (error as Error).message });
+      this.logger.warn("Could not persist audit log, logging to console", {
+        log,
+        error: (error as Error).message,
+      });
     }
   }
 
@@ -374,27 +442,29 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     let logs = [...AuditSubscriber.auditLogs];
 
     if (options?.entityName) {
-      logs = logs.filter(log => log.entityName === options.entityName);
+      logs = logs.filter((log) => log.entityName === options.entityName);
     }
 
     if (options?.entityId) {
-      logs = logs.filter(log => log.entityId === options.entityId);
+      logs = logs.filter((log) => log.entityId === options.entityId);
     }
 
     if (options?.userId) {
-      logs = logs.filter(log => log.userId === options.userId);
+      logs = logs.filter((log) => log.userId === options.userId);
     }
 
     if (options?.action) {
-      logs = logs.filter(log => log.action === options.action);
+      logs = logs.filter((log) => log.action === options.action);
     }
 
     if (options?.startDate) {
-      logs = logs.filter(log => log.timestamp >= options.startDate!);
+      const startDate = options.startDate;
+      logs = logs.filter((log) => log.timestamp >= startDate);
     }
 
     if (options?.endDate) {
-      logs = logs.filter(log => log.timestamp <= options.endDate!);
+      const endDate = options.endDate;
+      logs = logs.filter((log) => log.timestamp <= endDate);
     }
 
     logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
@@ -408,7 +478,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
   clearAuditLogs(): void {
     AuditSubscriber.auditLogs = [];
-    this.logger.log('Audit logs cleared');
+    this.logger.log("Audit logs cleared");
   }
 
   destroy(): void {

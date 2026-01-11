@@ -89,7 +89,7 @@ export class DataClassificationService {
     },
     {
       name: 'email',
-      pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
+      pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Z|a-z]{2,}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.CONFIDENTIAL,
     },
@@ -107,7 +107,7 @@ export class DataClassificationService {
     },
     {
       name: 'date_of_birth',
-      pattern: /\b(?:0?[1-9]|1[0-2])[-\/](?:0?[1-9]|[12][0-9]|3[01])[-\/](?:19|20)\d{2}\b/,
+      pattern: /\b(?:0?[1-9]|1[0-2])[-/](?:0?[1-9]|[12][0-9]|3[01])[-/](?:19|20)\d{2}\b/,
       category: DataCategory.PII,
       sensitivityLevel: DataSensitivityLevel.RESTRICTED,
     },

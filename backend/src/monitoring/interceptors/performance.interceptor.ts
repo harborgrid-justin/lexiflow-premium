@@ -3,13 +3,17 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { Request, Response } from 'express';
-import { StructuredLoggerService, HttpRequest, HttpResponse } from '@monitoring/services/structured.logger.service';
-import { MetricsCollectorService } from '@monitoring/services/metrics.collector.service';
-import { DistributedTracingService } from '@monitoring/services/distributed.tracing.service';
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { tap, catchError } from "rxjs/operators";
+import { Request, Response } from "express";
+import {
+  StructuredLoggerService,
+  HttpRequest,
+  HttpResponse,
+} from "@monitoring/services/structured.logger.service";
+import { MetricsCollectorService } from "@monitoring/services/metrics.collector.service";
+import { DistributedTracingService } from "@monitoring/services/distributed.tracing.service";
 
 interface RequestWithQuery extends Request {
   dbQuery?: (...args: unknown[]) => unknown;
@@ -28,7 +32,7 @@ export class PerformanceInterceptor implements NestInterceptor {
   constructor(
     private readonly logger: StructuredLoggerService,
     private readonly metricsCollector: MetricsCollectorService,
-    private readonly tracingService: DistributedTracingService,
+    private readonly tracingService: DistributedTracingService
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
@@ -56,9 +60,9 @@ export class PerformanceInterceptor implements NestInterceptor {
     const correlationId = extendedRequest.correlationId;
     const userId = extendedRequest.user?.id;
 
-    const userAgent = Array.isArray(request.headers['user-agent'])
-      ? request.headers['user-agent'][0]
-      : request.headers['user-agent'];
+    const userAgent = Array.isArray(request.headers["user-agent"])
+      ? request.headers["user-agent"][0]
+      : request.headers["user-agent"];
 
     // Set logging context
     this.logger.setContext({
@@ -90,9 +94,9 @@ export class PerformanceInterceptor implements NestInterceptor {
     const requestWithQuery = request as RequestWithQuery;
     const originalQuery = requestWithQuery.dbQuery;
     if (originalQuery) {
-      requestWithQuery.dbQuery = (...args: unknown[]) => {
+      requestWithQuery.dbQuery = (...args: unknown[]): unknown => {
         dbQueryCount++;
-        return originalQuery(...args);
+        return originalQuery(...args) as unknown;
       };
     }
 
@@ -110,29 +114,42 @@ export class PerformanceInterceptor implements NestInterceptor {
         };
 
         // Record metrics
-        this.metricsCollector.recordRequest(method, path, response.statusCode, duration);
+        this.metricsCollector.recordRequest(
+          method,
+          path,
+          response.statusCode,
+          duration
+        );
 
         // Record performance metrics
-        this.metricsCollector.recordHistogram('request.duration.ms', duration, {
+        this.metricsCollector.recordHistogram("request.duration.ms", duration, {
           method,
           path: this.normalizePath(path),
         });
 
-        this.metricsCollector.recordHistogram('request.memory.delta.bytes', memoryDelta, {
-          method,
-          path: this.normalizePath(path),
-        });
-
-        if (dbQueryCount > 0) {
-          this.metricsCollector.recordHistogram('request.db.queries.count', dbQueryCount, {
+        this.metricsCollector.recordHistogram(
+          "request.memory.delta.bytes",
+          memoryDelta,
+          {
             method,
             path: this.normalizePath(path),
-          });
+          }
+        );
+
+        if (dbQueryCount > 0) {
+          this.metricsCollector.recordHistogram(
+            "request.db.queries.count",
+            dbQueryCount,
+            {
+              method,
+              path: this.normalizePath(path),
+            }
+          );
         }
 
         // Log slow requests
         if (duration > this.verySlowRequestThresholdMs) {
-          this.logger.warn('Very slow request detected', {
+          this.logger.warn("Very slow request detected", {
             method,
             url,
             duration,
@@ -143,12 +160,16 @@ export class PerformanceInterceptor implements NestInterceptor {
             userId,
           });
 
-          this.metricsCollector.incrementCounter('requests.very_slow.total', 1, {
-            method,
-            path: this.normalizePath(path),
-          });
+          this.metricsCollector.incrementCounter(
+            "requests.very_slow.total",
+            1,
+            {
+              method,
+              path: this.normalizePath(path),
+            }
+          );
         } else if (duration > this.slowRequestThresholdMs) {
-          this.logger.warn('Slow request detected', {
+          this.logger.warn("Slow request detected", {
             method,
             url,
             duration,
@@ -159,7 +180,7 @@ export class PerformanceInterceptor implements NestInterceptor {
             userId,
           });
 
-          this.metricsCollector.incrementCounter('requests.slow.total', 1, {
+          this.metricsCollector.incrementCounter("requests.slow.total", 1, {
             method,
             path: this.normalizePath(path),
           });
@@ -170,10 +191,11 @@ export class PerformanceInterceptor implements NestInterceptor {
 
         // Add tracing attributes
         span.setAttributes({
-          'request.duration_ms': duration,
-          'request.memory_delta_bytes': memoryDelta,
-          'request.db_query_count': dbQueryCount,
-          'http.response.body.size': Number(response.get('content-length')) || 0,
+          "request.duration_ms": duration,
+          "request.memory_delta_bytes": memoryDelta,
+          "request.db_query_count": dbQueryCount,
+          "http.response.body.size":
+            Number(response.get("content-length")) || 0,
         });
 
         // End tracing span
@@ -190,11 +212,11 @@ export class PerformanceInterceptor implements NestInterceptor {
         const statusCode = error.status || error.statusCode || 500;
         this.metricsCollector.recordRequest(method, path, statusCode, duration);
 
-        this.metricsCollector.incrementCounter('requests.errors.total', 1, {
+        this.metricsCollector.incrementCounter("requests.errors.total", 1, {
           method,
           path: this.normalizePath(path),
           status: statusCode.toString(),
-          errorType: error.name || 'Error',
+          errorType: error.name || "Error",
         });
 
         // Log error
@@ -217,9 +239,9 @@ export class PerformanceInterceptor implements NestInterceptor {
 
         // Record exception in trace
         this.tracingService.recordException(error, {
-          'request.duration_ms': duration,
-          'request.memory_delta_bytes': memoryDelta,
-          'request.db_query_count': dbQueryCount,
+          "request.duration_ms": duration,
+          "request.memory_delta_bytes": memoryDelta,
+          "request.db_query_count": dbQueryCount,
         });
 
         // End tracing span with error
@@ -227,7 +249,7 @@ export class PerformanceInterceptor implements NestInterceptor {
         this.tracingService.endHttpRequestSpan(span, errorResponse, error);
 
         throw error;
-      }),
+      })
     );
   }
 
@@ -235,10 +257,13 @@ export class PerformanceInterceptor implements NestInterceptor {
    * Normalize URL path for metrics (remove IDs and query params)
    */
   private normalizePath(path: string): string {
-    const safePath = path || '';
-    const pathWithoutQuery = safePath.split('?')[0];
-    return (pathWithoutQuery || '')
-      .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id') // UUID
-      .replace(/\/\d+/g, '/:id'); // Numeric IDs
+    const safePath = path || "";
+    const pathWithoutQuery = safePath.split("?")[0];
+    return (pathWithoutQuery || "")
+      .replace(
+        //[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+        "/:id"
+      ) // UUID
+      .replace(//\d+/g, "/:id"); // Numeric IDs
   }
 }

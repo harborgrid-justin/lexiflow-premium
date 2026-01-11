@@ -406,7 +406,9 @@ export class ConfigurationValidatorService implements OnModuleInit {
       );
     } finally {
       if (redisClient) {
-        await redisClient.quit().catch(() => {});
+        await redisClient.quit().catch(() => {
+          // Ignore quit errors
+        });
       }
     }
   }

@@ -192,7 +192,7 @@ export class PushNotificationService {
     failedTokens?: string[];
   }> {
     // In production, use firebase-admin
-    // const admin = require('firebase-admin');
+    // import admin from \'firebase-admin\';
     //
     // const message = {
     //   notification: {
@@ -249,7 +249,7 @@ export class PushNotificationService {
     failedTokens?: string[];
   }> {
     // In production, use node-apn or @parse/node-apn
-    // const apn = require('node-apn');
+    // import apn from \'node-apn\';
     //
     // const provider = new apn.Provider({
     //   token: {

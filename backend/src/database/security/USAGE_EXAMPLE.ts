@@ -283,7 +283,7 @@ export class DatabaseSecurityHealthService {
 export class QuerySecurityService {
   constructor(private readonly sanitizer: QuerySanitizationService) {}
 
-  validateAndExecuteQuery(query: string, params?: any[]): void {
+  validateAndExecuteQuery(query: string, params?: unknown[]): void {
     this.sanitizer.blockDangerousOperations(query);
 
     const result = this.sanitizer.validateQuery(query, params);
@@ -304,7 +304,7 @@ export class QuerySecurityService {
     tableName: string;
     columns: string[];
     whereClause: Record<string, unknown>;
-  }): any {
+  }): unknown {
     return {
       tableName: this.sanitizer.sanitizeTableName(input.tableName),
       columns: input.columns.map(c => this.sanitizer.sanitizeColumnName(c)),

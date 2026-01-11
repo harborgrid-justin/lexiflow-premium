@@ -19,7 +19,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
 
   // Patterns that might indicate injection attacks
   private readonly suspiciousPatterns = [
-    /<script[^>]*>.*?<\/script>/gi, // Script tags
+    /<script[^>]*>.*?</script>/gi, // Script tags
     /javascript:/gi, // JavaScript protocol
     /on\w+\s*=/gi, // Event handlers (onclick, onload, etc.)
     /<iframe[^>]*>/gi, // Iframes

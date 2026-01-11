@@ -133,7 +133,12 @@ export class DistributedTracingService implements OnModuleInit {
       spanProcessors: [spanProcessor],
     });
 
-    await this.sdk.start();
+    try {
+      await this.sdk.start();
+    } catch (error) {
+      this.logger.error("Failed to start OpenTelemetry SDK", error);
+      throw error;
+    }
 
     // Graceful shutdown
     process.on("SIGTERM", async () => {

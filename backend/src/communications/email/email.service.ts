@@ -66,7 +66,7 @@ export class EmailService {
     from?: string;
     cc?: string[];
     bcc?: string[];
-    attachments?: any[];
+    attachments?: unknown[];
   }): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
       // Memory optimization: Check attachment size before processing
@@ -114,7 +114,7 @@ export class EmailService {
     from?: string;
     cc?: string[];
     bcc?: string[];
-    attachments?: any[];
+    attachments?: unknown[];
   }): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
       this.logger.log(`Sending template email '${options.template}' to ${options.to}`);
@@ -268,7 +268,7 @@ export class EmailService {
     recipients: Array<{ email: string; context: Record<string, unknown> }>,
     template: string,
     subject: string,
-  ): Promise<{ sent: number; failed: number; errors: any[] }> {
+  ): Promise<{ sent: number; failed: number; errors: unknown[] }> {
     const results = {
       sent: 0,
       failed: 0,
@@ -322,10 +322,10 @@ export class EmailService {
   /**
    * Validate email address
    */
-  // @ts-ignore - Reserved for future use
+  // @ts-expect-error - Reserved for future use
    
   private _isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     return emailRegex.test(email);
   }
 }

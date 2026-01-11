@@ -400,10 +400,10 @@ export class MetricsCollectorService implements OnModuleDestroy {
     const pathWithoutQuery = safePath.split("?")[0];
     return (pathWithoutQuery || "")
       .replace(
-        /\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+        //[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
         "/:id"
       ) // UUID
-      .replace(/\/\d+/g, "/:id"); // Numeric IDs
+      .replace(//\d+/g, "/:id"); // Numeric IDs
   }
 
   /**

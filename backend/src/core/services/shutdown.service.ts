@@ -246,13 +246,17 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async closeRedisConnection(): Promise<void> {
     try {
-      const Redis = require('ioredis');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const Redis = require('ioredis') as {
+        new (url: string): RedisClient;
+        new (config: RedisConfig): RedisClient;
+      };
       const redisUrl = this.configService.get<string>('redis.url');
       const redisHost = this.configService.get<string>('redis.host', 'localhost');
       const redisPort = this.configService.get<number>('redis.port', 6379);
       const redisPassword = this.configService.get<string>('redis.password');
 
-      let redisClient;
+      let redisClient: RedisClient;
 
       if (redisUrl) {
         redisClient = new Redis(redisUrl);
@@ -266,7 +270,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
 
       await redisClient.quit();
       this.logger.log('  ✓ Redis connection closed');
-    } catch (error) {
+    } catch {
       // Redis connection may already be closed, which is fine
       this.logger.debug('Redis connection close failed (may already be closed)');
     }

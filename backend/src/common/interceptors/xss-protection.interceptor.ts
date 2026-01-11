@@ -29,9 +29,9 @@ export class XssProtectionInterceptor implements NestInterceptor {
 
   // XSS patterns to detect
   private readonly XSS_PATTERNS = [
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-    /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
+    /<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>/gi,
+    /<iframe\b[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi,
+    /<object\b[^<]*(?:(?!</object>)<[^<]*)*</object>/gi,
     /<embed\b[^>]*>/gi,
     /javascript:/gi,
     /on\w+\s*=/gi,
@@ -40,7 +40,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
     /expression\s*\(/gi,
   ];
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const response = context.switchToHttp().getResponse();
 
     // Set XSS protection header
@@ -131,7 +131,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;')
-      .replace(/\//g, '&#x2F;');
+      .replace(///g, '&#x2F;');
 
     // Remove NULL bytes
     sanitized = sanitized.replace(/\0/g, '');
@@ -160,7 +160,7 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
     'title',
   ];
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const response = context.switchToHttp().getResponse();
     response.setHeader('X-XSS-Protection', '1; mode=block');
 
@@ -216,11 +216,11 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
 
     // Remove dangerous tags and attributes
     let sanitized = html
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+      .replace(/<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>/gi, '')
+      .replace(/<iframe\b[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi, '')
       .replace(/on\w+\s*=/gi, '')
       .replace(/javascript:/gi, '')
-      .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+      .replace(/<object\b[^<]*(?:(?!</object>)<[^<]*)*</object>/gi, '')
       .replace(/<embed\b[^>]*>/gi, '');
 
     // Remove NULL bytes

@@ -4,10 +4,10 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
   ValidationArguments,
-} from 'class-validator';
-import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+} from "class-validator";
+import { Injectable } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
 
 /**
  * Custom Database Validators
@@ -19,16 +19,18 @@ import { DataSource } from 'typeorm';
 /**
  * Validator to check if a value exists in the database
  */
-@ValidatorConstraint({ name: 'Exists', async: true })
+@ValidatorConstraint({ name: "Exists", async: true })
 @Injectable()
 export class ExistsValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    const [entityClass, property = 'id'] = args.constraints;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const [entityClass, property = "id"] = args.constraints;
 
     if (!value) return false;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
     const entity = await repository.findOne({
       where: { [property]: value },
@@ -38,7 +40,9 @@ export class ExistsValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [entityClass, property = 'id'] = args.constraints;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const [entityClass, property = "id"] = args.constraints;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return `${entityClass.name} with ${property} '${args.value}' does not exist`;
   }
 }
@@ -57,9 +61,10 @@ export class ExistsValidator implements ValidatorConstraintInterface {
  * }
  */
 export function Exists(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   entityClass: Function,
-  property: string = 'id',
-  validationOptions?: ValidationOptions,
+  property: string = "id",
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -75,25 +80,29 @@ export function Exists(
 /**
  * Validator to check if a value is unique in the database
  */
-@ValidatorConstraint({ name: 'IsUnique', async: true })
+@ValidatorConstraint({ name: "IsUnique", async: true })
 @Injectable()
 export class IsUniqueValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [entityClass, property, exceptId] = args.constraints;
 
     if (!value) return true; // Let @IsNotEmpty handle empty values
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
 
     const queryBuilder = repository
-      .createQueryBuilder('entity')
+      .createQueryBuilder("entity")
       .where(`entity.${property} = :value`, { value });
 
     // If we're updating, exclude the current entity
     const obj = args.object as Record<string, unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (exceptId && obj[exceptId]) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 
@@ -129,10 +138,11 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
  * }
  */
 export function IsUnique(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   entityClass: Function,
   property: string,
   exceptIdProperty?: string,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -148,26 +158,31 @@ export function IsUnique(
 /**
  * Validator for composite uniqueness
  */
-@ValidatorConstraint({ name: 'IsCompositeUnique', async: true })
+@ValidatorConstraint({ name: "IsCompositeUnique", async: true })
 @Injectable()
 export class IsCompositeUniqueValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(_value: unknown, args: ValidationArguments): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [entityClass, properties, exceptId] = args.constraints;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const repository = this.dataSource.getRepository(entityClass);
-    const queryBuilder = repository.createQueryBuilder('entity');
+    const queryBuilder = repository.createQueryBuilder("entity");
     const obj = args.object as Record<string, unknown>;
 
     // Build WHERE clause for all properties
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     properties.forEach((prop: string) => {
       const propValue = obj[prop];
       queryBuilder.andWhere(`entity.${prop} = :${prop}`, { [prop]: propValue });
     });
 
     // Exclude current entity if updating
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (exceptId && obj[exceptId]) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 
@@ -177,7 +192,7 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
 
   defaultMessage(args: ValidationArguments): string {
     const [, properties] = args.constraints;
-    return `Combination of ${properties.join(', ')} already exists`;
+    return `Combination of ${properties.join(", ")} already exists`;
   }
 }
 
@@ -197,10 +212,11 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
  * }
  */
 export function IsCompositeUnique(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   entityClass: Function,
   properties: string[],
   exceptIdProperty?: string,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -216,28 +232,28 @@ export function IsCompositeUnique(
 /**
  * Validator to check if referenced entity is not soft deleted
  */
-@ValidatorConstraint({ name: 'NotDeleted', async: true })
+@ValidatorConstraint({ name: "NotDeleted", async: true })
 @Injectable()
 export class NotDeletedValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    const [entityClass, property = 'id'] = args.constraints;
+    const [entityClass, property = "id"] = args.constraints;
 
     if (!value) return true;
 
     const repository = this.dataSource.getRepository(entityClass);
     const entity = await repository
-      .createQueryBuilder('entity')
+      .createQueryBuilder("entity")
       .where(`entity.${property} = :value`, { value })
-      .andWhere('entity.deleted_at IS NULL')
+      .andWhere("entity.deleted_at IS NULL")
       .getOne();
 
     return !!entity;
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [entityClass, property = 'id'] = args.constraints;
+    const [entityClass, property = "id"] = args.constraints;
     return `${entityClass.name} with ${property} '${args.value}' is deleted or does not exist`;
   }
 }
@@ -251,8 +267,8 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
  */
 export function NotDeleted(
   entityClass: Function,
-  property: string = 'id',
-  validationOptions?: ValidationOptions,
+  property: string = "id",
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -268,7 +284,7 @@ export function NotDeleted(
 /**
  * Validator to check if count of related entities is within limits
  */
-@ValidatorConstraint({ name: 'RelationCount', async: true })
+@ValidatorConstraint({ name: "RelationCount", async: true })
 @Injectable()
 export class RelationCountValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
@@ -323,7 +339,7 @@ export function RelationCount(
   relationProperty: string,
   min?: number,
   max?: number,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -339,7 +355,7 @@ export function RelationCount(
 /**
  * Validator to check if a value matches a database enum
  */
-@ValidatorConstraint({ name: 'MatchesDbEnum', async: true })
+@ValidatorConstraint({ name: "MatchesDbEnum", async: true })
 @Injectable()
 export class MatchesDbEnumValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
@@ -378,7 +394,7 @@ export class MatchesDbEnumValidator implements ValidatorConstraintInterface {
 export function MatchesDbEnum(
   tableName: string,
   columnName: string,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({

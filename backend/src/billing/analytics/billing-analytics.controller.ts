@@ -21,7 +21,7 @@ export class BillingAnalyticsController {
   @ApiResponse({ status: 200, description: "Billing metrics summary" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @ApiResponse({ status: 403, description: "Forbidden" })
-  async getMetrics(@Query() filterDto: AnalyticsFilterDto): Promise<any> {
+  async getMetrics(@Query() filterDto: AnalyticsFilterDto): Promise<unknown> {
     // Aggregate key metrics for dashboard
     const [wipStats, realization, operatingSummary, arAging] =
       await Promise.all([

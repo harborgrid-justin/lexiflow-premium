@@ -417,7 +417,7 @@ export class MetadataHelper {
    * Extract API version from URL
    */
   private static extractVersion(url: string): string {
-    const match = url.match(/\/api\/v(\d+)\//);
+    const match = url.match(//api/v(\d+)//);
     return match ? `v${match[1]}` : 'v1';
   }
 

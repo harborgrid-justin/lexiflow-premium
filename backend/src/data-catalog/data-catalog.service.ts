@@ -136,16 +136,23 @@ export class DataCatalogService {
       const links = [];
       if (nodes.length > 0) {
         // Connect first few tables to ETL
-        links.push({ source: nodes[0]!.id, target: "job_daily_etl" });
-        if (nodes.length > 1)
-          links.push({ source: nodes[1]!.id, target: "job_daily_etl" });
+        const firstNode = nodes[0];
+        if (firstNode) {
+          links.push({ source: firstNode.id, target: "job_daily_etl" });
+        }
+        if (nodes.length > 1) {
+          const secondNode = nodes[1];
+          if (secondNode) {
+            links.push({ source: secondNode.id, target: "job_daily_etl" });
+          }
+        }
 
         // Connect ETL to Report
         links.push({ source: "job_daily_etl", target: "report_executive" });
       }
 
       return { nodes, links };
-    } catch (e) {
+    } catch {
       // Fallback
       return {
         nodes: [

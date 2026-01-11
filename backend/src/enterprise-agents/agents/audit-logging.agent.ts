@@ -306,7 +306,9 @@ export class AuditLoggingAgent extends BaseAgent {
     if (payload.dateRange) {
       results = results.filter(
         log =>
+      // TODO: Remove non-null assertion with proper check
           log.timestamp >= payload.dateRange!.start &&
+      // TODO: Remove non-null assertion with proper check
           log.timestamp <= payload.dateRange!.end,
       );
     }
@@ -369,6 +371,7 @@ export class AuditLoggingAgent extends BaseAgent {
 
     if (payload.dateRange) {
       logsToExport = logsToExport.filter(
+      // TODO: Remove non-null assertion with proper check
         log => log.timestamp >= payload.dateRange!.start && log.timestamp <= payload.dateRange!.end,
       );
     }

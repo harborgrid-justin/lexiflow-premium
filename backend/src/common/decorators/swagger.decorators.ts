@@ -109,7 +109,7 @@ export const ApiPaginationQuery = () => {
 /**
  * Create operation decorator (POST)
  */
-export const ApiCreateOperation = (summary: string, type: Function) => {
+export const ApiCreateOperation = (summary: string, type: (...args: unknown[]) => unknown) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -125,7 +125,7 @@ export const ApiCreateOperation = (summary: string, type: Function) => {
 /**
  * Read/List operation decorator (GET)
  */
-export const ApiReadOperation = (summary: string, type: any, isPaginated = false) => {
+export const ApiReadOperation = (summary: string, type: unknown, isPaginated = false) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -142,7 +142,7 @@ export const ApiReadOperation = (summary: string, type: any, isPaginated = false
 /**
  * Update operation decorator (PUT/PATCH)
  */
-export const ApiUpdateOperation = (summary: string, type: Function) => {
+export const ApiUpdateOperation = (summary: string, type: (...args: unknown[]) => unknown) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -220,7 +220,7 @@ export const ApiFileUploadOperation = (summary: string, fieldName = 'file') => {
 /**
  * Search operation decorator
  */
-export const ApiSearchOperation = (summary: string, type: Function) => {
+export const ApiSearchOperation = (summary: string, type: (...args: unknown[]) => unknown) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),

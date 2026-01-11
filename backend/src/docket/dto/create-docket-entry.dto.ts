@@ -174,5 +174,5 @@ export class CreateDocketEntryDto {
 
   @ApiPropertyOptional({ description: "Appellate CM/ECF Data" })
   @IsOptional()
-  appellateData?: any;
+  appellateData?: unknown;
 }

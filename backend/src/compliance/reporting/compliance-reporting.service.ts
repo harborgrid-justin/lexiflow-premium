@@ -304,7 +304,7 @@ export class ComplianceReportingService {
     };
   }
 
-  private generateTimeline(startDate: Date, endDate: Date): any[] {
+  private generateTimeline(startDate: Date, endDate: Date): unknown[] {
     const timeline = [];
     const dayInMs = 24 * 60 * 60 * 1000;
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / dayInMs);

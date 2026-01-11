@@ -541,7 +541,7 @@ export class AdvancedQueryBuilder<T extends ObjectLiteral> {
    * Generate unique parameter name
    */
   private getParamName(field: string): string {
-    return `${field.replace(/\./g, '_')}_${this.paramCounter++}`;
+    return `${field.replace(/./g, '_')}_${this.paramCounter++}`;
   }
 
   /**

@@ -216,9 +216,9 @@ export class JudgeStatsService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(Judge) private judgeRepository: Repository<any>,
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(Ruling) private rulingRepository: Repository<any>,
+    // @InjectRepository(Judge) private judgeRepository: Repository<unknown>,
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(Ruling) private rulingRepository: Repository<unknown>,
   ) {
     this.startMemoryManagement();
   }

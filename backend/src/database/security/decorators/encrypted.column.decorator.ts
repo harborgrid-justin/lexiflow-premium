@@ -19,7 +19,7 @@ export function getEncryptionService(): ColumnEncryptionService {
 export interface EncryptedColumnOptions extends Omit<ColumnOptions, 'type'> {
   nullable?: boolean;
   length?: number;
-  type?: any;
+  type?: unknown;
 }
 
 const encryptionTransformer: ValueTransformer = {
@@ -53,7 +53,7 @@ const encryptionTransformer: ValueTransformer = {
 };
 
 export function EncryptedColumn(options?: EncryptedColumnOptions): PropertyDecorator {
-  const columnOptions: any = {
+  const columnOptions: unknown = {
     type: 'text' as any,
     nullable: options?.nullable !== false,
     transformer: encryptionTransformer,

@@ -108,7 +108,7 @@ export class CasesService implements OnModuleDestroy {
    * Evicts 10% of oldest entries when cache exceeds limits
    */
 
-  private enforceCacheLRU(cache: Map<any, any>, maxSize: number): void {
+  private enforceCacheLRU(cache: Map<unknown, unknown>, maxSize: number): void {
     if (cache.size > maxSize) {
       const entriesToRemove = Math.ceil(maxSize * 0.1); // Remove 10% of entries
       const keysToDelete = Array.from(cache.keys()).slice(0, entriesToRemove);

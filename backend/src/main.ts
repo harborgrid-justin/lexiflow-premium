@@ -67,7 +67,11 @@ async function bootstrap(): Promise<INestApplication> {
         if (req.headers["x-no-compression"]) {
           return false;
         }
-        return compression.filter(req, res) as boolean;
+        const compressionFilter = compression.filter as (
+          req: Request,
+          res: Response
+        ) => boolean;
+        return compressionFilter(req, res);
       },
     })
   );

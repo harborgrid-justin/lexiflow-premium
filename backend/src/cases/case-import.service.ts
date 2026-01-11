@@ -292,7 +292,7 @@ export class CaseImportService {
       
       // Try simple number format if labeled
       if (!data.caseNumber) {
-        const simpleMatch = text.match(/(?:No\.|Number)\s+(\d+)/i);
+        const simpleMatch = text.match(/(?:No.|Number)\s+(\d+)/i);
         if (simpleMatch && simpleMatch[1]) data.caseNumber = simpleMatch[1];
       }
     }

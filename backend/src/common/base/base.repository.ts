@@ -24,7 +24,7 @@ export interface AdvancedFilterOptions<T> {
     start?: Date;
     end?: Date;
   };
-  filters?: Partial<Record<keyof T, any>>;
+  filters?: Partial<Record<keyof T, unknown>>;
   sort?: {
     field: keyof T;
     order: 'ASC' | 'DESC';

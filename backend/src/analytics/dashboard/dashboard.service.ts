@@ -50,8 +50,8 @@ import {
 export class DashboardService {
   private readonly logger = new Logger(DashboardService.name);
 
-  // @InjectRepository(Case) private caseRepository: Repository<any>,
-  // @InjectRepository(Task) private taskRepository: Repository<any>,
+  // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+  // @InjectRepository(Task) private taskRepository: Repository<unknown>,
   // Inject repositories when entities are available
 
   /**

@@ -354,8 +354,8 @@ export class AuditLogService implements OnModuleDestroy {
         break;
       }
 
-      const oldObj = oldData as Record<string, any>;
-      const newObj = newData as Record<string, any>;
+      const oldObj = oldData as Record<string, unknown>;
+      const newObj = newData as Record<string, unknown>;
       if (oldObj?.[key] !== newObj?.[key]) {
         changes[key] = {
           old: oldObj?.[key],

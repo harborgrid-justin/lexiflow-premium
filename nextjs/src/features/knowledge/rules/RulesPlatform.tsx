@@ -43,11 +43,7 @@ interface RulesPlatformProps {
 
 export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<RulesView>('dashboard');
-
-  useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
-  }, [initialTab]);
+  const [activeTab, setActiveTab] = useState<RulesView>(initialTab || 'dashboard');
 
   const activeParentTab = useMemo(() =>
     RULES_PLATFORM_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || RULES_PLATFORM_TABS[0],

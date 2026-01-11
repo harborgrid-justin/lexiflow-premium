@@ -66,6 +66,7 @@ export class RlsPoliciesService {
     // Apply filters
     if (query.table) {
       policies = policies.filter(
+      // TODO: Remove non-null assertion with proper check
         (policy) => policy.table.toLowerCase() === query.table!.toLowerCase(),
       );
     }

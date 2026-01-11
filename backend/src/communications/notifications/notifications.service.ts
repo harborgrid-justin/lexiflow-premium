@@ -47,7 +47,7 @@ import {
 @Injectable()
 export class NotificationsService implements OnModuleDestroy {
   private readonly logger = new Logger(NotificationsService.name);
-  private notifications: Map<string, any> = new Map();
+  private notifications: Map<string, unknown> = new Map();
    
   private preferences: Map<string, NotificationPreferencesDto> = new Map();
   

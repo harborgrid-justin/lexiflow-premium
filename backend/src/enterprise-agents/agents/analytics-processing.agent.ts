@@ -296,6 +296,7 @@ export class AnalyticsProcessingAgent extends BaseAgent {
     const summary: Record<string, number> = {};
     for (const metric of requestedMetrics) {
       if (metric in allPerformanceMetrics) {
+      // TODO: Remove non-null assertion with proper check
         summary[metric] = allPerformanceMetrics[metric]!;
       }
     }

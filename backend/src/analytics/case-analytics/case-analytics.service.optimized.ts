@@ -214,9 +214,9 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<any>,
-    // @InjectRepository(Motion) private motionRepository: Repository<any>,
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<unknown>,
+    // @InjectRepository(Motion) private motionRepository: Repository<unknown>,
   ) {
     this.startMemoryManagement();
   }

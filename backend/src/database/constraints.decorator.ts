@@ -228,7 +228,7 @@ export function JsonNotEmpty(columnName: string): ClassDecorator {
  * @param columnName - The name of the column
  */
 export function CaseInsensitiveUnique(columnName: string): ClassDecorator {
-  return function (target: Function) {
+  return function (target: { new (...args: unknown[]): unknown }) {
     // This creates a unique index on LOWER(column)
     Reflect.defineMetadata(
       'typeorm:indices',
@@ -284,7 +284,7 @@ export function PartialUnique(
   columnName: string,
   whereClause: string,
 ): ClassDecorator {
-  return function (target: Function) {
+  return function (target: { new (...args: unknown[]): unknown }) {
     Reflect.defineMetadata(
       'typeorm:indices',
       [

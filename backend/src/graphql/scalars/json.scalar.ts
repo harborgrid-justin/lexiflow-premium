@@ -1,5 +1,5 @@
-import { Scalar, CustomScalar } from '@nestjs/graphql';
-import { Kind, ValueNode, ObjectValueNode, ObjectFieldNode } from 'graphql';
+import { Scalar, CustomScalar } from "@nestjs/graphql";
+import { Kind, ValueNode, ObjectValueNode, ObjectFieldNode } from "graphql";
 
 // JSON-compatible value types
 export type JSONValue =
@@ -14,11 +14,13 @@ export interface JSONObject {
   [key: string]: JSONValue;
 }
 
-export interface JSONArray extends Array<JSONValue> {}
+export interface JSONArray extends Array<JSONValue> {
+  length: number;
+}
 
-@Scalar('JSON')
+@Scalar("JSON")
 export class JSONScalar implements CustomScalar<JSONValue, JSONValue> {
-  description = 'JSON custom scalar type';
+  description = "JSON custom scalar type";
 
   parseValue(value: unknown): JSONValue {
     return value as JSONValue;

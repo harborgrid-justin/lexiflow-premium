@@ -54,7 +54,7 @@ export class BulkImportResponseDto {
 
   @ApiPropertyOptional({ description: 'Error details for failed events', type: 'array' })
   @IsOptional()
-  errors?: Array<{ index: number; error: string; event: any }>;
+  errors?: Array<{ index: number; error: string; event: unknown }>;
 
   @ApiProperty({ description: 'Import job ID' })
   @IsString()

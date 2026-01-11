@@ -49,33 +49,33 @@ export class RequestValidationService {
   // SQL injection patterns
   private readonly sqlInjectionPatterns = [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|DECLARE)\b)/gi,
-    /(;|--|\/\*|\*\/|xp_|sp_)/gi,
-    /('|('')|;|--|\/\*|\*\/)/gi,
+    /(;|--|/\*|\*/|xp_|sp_)/gi,
+    /('|('')|;|--|/\*|\*/)/gi,
     /(\bOR\b.*=.*|1=1|'=')/gi,
   ];
 
   // XSS patterns
   private readonly xssPatterns = [
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+    /<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>/gi,
+    /<iframe\b[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi,
     /on\w+\s*=\s*["']?[^"']*["']?/gi,
     /javascript:/gi,
-    /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
-    /<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi,
-    /<applet\b[^<]*(?:(?!<\/applet>)<[^<]*)*<\/applet>/gi,
+    /<object\b[^<]*(?:(?!</object>)<[^<]*)*</object>/gi,
+    /<embed\b[^<]*(?:(?!</embed>)<[^<]*)*</embed>/gi,
+    /<applet\b[^<]*(?:(?!</applet>)<[^<]*)*</applet>/gi,
     /<link\b[^>]*>/gi,
     /<meta\b[^>]*>/gi,
     /<img\b[^>]*\s+src\s*=\s*["']?javascript:/gi,
-    /<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi,
+    /<svg\b[^<]*(?:(?!</svg>)<[^<]*)*</svg>/gi,
   ];
 
   // Path traversal patterns
   private readonly pathTraversalPatterns = [
-    /\.\.[/\\]/g,
-    /\.\.[/\\]/g,
+    /..[/\\]/g,
+    /..[/\\]/g,
     /%2e%2e[/\\]/gi,
-    /\.\.%2f/gi,
-    /\.\.%5c/gi,
+    /..%2f/gi,
+    /..%5c/gi,
   ];
 
   // Command injection patterns
@@ -266,7 +266,7 @@ export class RequestValidationService {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;')
-      .replace(/\//g, '&#x2F;');
+      .replace(///g, '&#x2F;');
   }
 
   validateBusinessRules(data: unknown, rules: BusinessRule[]): ValidationResult {

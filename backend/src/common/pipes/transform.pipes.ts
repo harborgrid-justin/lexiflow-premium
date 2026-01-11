@@ -388,7 +388,7 @@ export class DefaultValuePipe implements PipeTransform {
 export class SanitizeStringPipe implements PipeTransform<string, string> {
 
   private readonly dangerousPatterns = [
-    /<script[^>]*>.*?<\/script>/gi,
+    /<script[^>]*>.*?</script>/gi,
     /javascript:/gi,
     /on\w+\s*=/gi,
   ];

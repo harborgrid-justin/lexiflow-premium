@@ -12,7 +12,7 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
 
   // Load time entries from JSON file
   const timeEntriesPath = path.join(PathsConfig.TEST_DATA_DIR, 'time-entries.json');
-  const timeEntriesData = JSON.parse(fs.readFileSync(timeEntriesPath, 'utf-8'));
+  const timeEntriesData = JSON.parse(fs.readFileSync(timeEntriesPath, 'utf-8')) as Array<Record<string, unknown>>;
 
   // Check if time entries already exist
   const existingTimeEntries = await timeEntryRepository.count();
@@ -40,30 +40,34 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
   // Insert time entries
   for (const timeEntryData of timeEntriesData) {
     try {
-      const caseId = caseMap.get(timeEntryData.caseNumber);
-      const userId = userMap.get(timeEntryData.userEmail);
+      const caseId = caseMap.get(String(timeEntryData.caseNumber));
+      const userId = userMap.get(String(timeEntryData.userEmail));
 
       if (!caseId) {
-        console.warn(`Case ${timeEntryData.caseNumber} not found for time entry`);
+        console.warn(`Case ${String(timeEntryData.caseNumber)} not found for time entry`);
         continue;
       }
 
       if (!userId) {
-        console.warn(`User ${timeEntryData.userEmail} not found for time entry`);
+        console.warn(`User ${String(timeEntryData.userEmail)} not found for time entry`);
         continue;
       }
 
+      const hours = Number(timeEntryData.hours) || 0;
+      const billableRate = Number(timeEntryData.billableRate) || 0;
+      const entryDate = String(timeEntryData.date);
+
       const timeEntry = timeEntryRepository.create({
-        description: timeEntryData.description,
-        duration: timeEntryData.hours,
-        rate: timeEntryData.billableRate,
-        total: timeEntryData.hours * timeEntryData.billableRate,
-        date: new Date(timeEntryData.date).toISOString().split('T')[0],
-        billable: timeEntryData.isBillable,
-        activity: timeEntryData.taskType,
+        description: String(timeEntryData.description || ''),
+        duration: hours,
+        rate: billableRate,
+        total: hours * billableRate,
+        date: new Date(entryDate).toISOString().split('T')[0],
+        billable: Boolean(timeEntryData.isBillable),
+        activity: String(timeEntryData.taskType || ''),
         caseId,
         userId,
-        createdAt: new Date(timeEntryData.date),
+        createdAt: new Date(entryDate),
         updatedAt: new Date(),
       });
       await timeEntryRepository.save(timeEntry);
@@ -73,5 +77,6 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
     }
   }
 
-  console.log(`✓ Seeded ${timeEntriesData.length} time entries`);
+  const timeEntryCount = Array.isArray(timeEntriesData) ? timeEntriesData.length : 0;
+  console.log(`✓ Seeded ${timeEntryCount} time entries`);
 }

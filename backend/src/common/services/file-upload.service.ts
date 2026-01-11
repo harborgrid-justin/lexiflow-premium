@@ -406,7 +406,7 @@ export class FileUploadService { private readonly logger = new Logger(FileUpload
 
       // For now, create a basic thumbnail by copying the file
       // In production environment, integrate with sharp library for actual resizing:
-      // const sharp = require('sharp');
+      // import sharp from \'sharp\';
       // await sharp(buffer)
       //   .resize(200, 200, { fit: 'inside' })
       //   .jpeg({ quality: 80 })

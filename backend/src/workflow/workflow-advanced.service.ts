@@ -292,7 +292,7 @@ export class WorkflowAdvancedService {
     context: Record<string, unknown>
   ): boolean {
     // Handle simple field access: context.field.subfield
-    const fieldAccessMatch = expression.match(/^context\\.([a-zA-Z0-9_.]+)$/);
+    const fieldAccessMatch = expression.match(/^context\.([a-zA-Z0-9_.]+)$/);
     if (fieldAccessMatch) {
       const value = this._resolveFieldValue(fieldAccessMatch[1] || "", context);
       return Boolean(value);
@@ -300,7 +300,7 @@ export class WorkflowAdvancedService {
 
     // Handle comparisons: context.field == 'value'
     const comparisonMatch = expression.match(
-      /^context\.([a-zA-Z0-9_.]+)\s*(===|==|!==|!=|>|<|>=|<=)\s*(.+)$/
+      /^context.([a-zA-Z0-9_.]+)\s*(===|==|!==|!=|>|<|>=|<=)\s*(.+)$/
     );
     if (comparisonMatch) {
       const field = comparisonMatch[1] || "";
@@ -336,7 +336,7 @@ export class WorkflowAdvancedService {
     }
 
     // Numbers
-    if (/^-?\d+(\.\d+)?$/.test(valueStr)) {
+    if (/^-?\d+(.\d+)?$/.test(valueStr)) {
       return Number(valueStr);
     }
 

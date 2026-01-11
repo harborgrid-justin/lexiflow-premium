@@ -1,23 +1,23 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import * as PathsConfig from '@config/paths.config';
-import { DateTimeScalar } from './scalars/date.scalar';
-import { JSONScalar } from './scalars/json.scalar';
-import { MoneyScalar } from './scalars/money.scalar';
-import { CaseResolver } from './resolvers/case.resolver';
-import { DocumentResolver } from './resolvers/document.resolver';
-import { UserResolver } from './resolvers/user.resolver';
-import { BillingResolver } from './resolvers/billing.resolver';
-import { DiscoveryResolver } from './resolvers/discovery.resolver';
-import { DataLoaderModule } from './dataloaders/dataloader.module';
-import { BillingModule } from '@billing/billing.module';
-import { CasesModule } from '@cases/cases.module';
-import { DocumentsModule } from '@documents/documents.module';
-import { UsersModule } from '@users/users.module';
-import { AuthModule } from '@auth/auth.module';
-import { DiscoveryModule } from '@discovery/discovery.module';
+import { Module } from "@nestjs/common";
+import { GraphQLModule as NestGraphQLModule } from "@nestjs/graphql";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import * as PathsConfig from "@config/paths.config";
+import { DateTimeScalar } from "./scalars/date.scalar";
+import { JSONScalar } from "./scalars/json.scalar";
+import { MoneyScalar } from "./scalars/money.scalar";
+import { CaseResolver } from "./resolvers/case.resolver";
+import { DocumentResolver } from "./resolvers/document.resolver";
+import { UserResolver } from "./resolvers/user.resolver";
+import { BillingResolver } from "./resolvers/billing.resolver";
+import { DiscoveryResolver } from "./resolvers/discovery.resolver";
+import { DataLoaderModule } from "./dataloaders/dataloader.module";
+import { BillingModule } from "@billing/billing.module";
+import { CasesModule } from "@cases/cases.module";
+import { DocumentsModule } from "@documents/documents.module";
+import { UsersModule } from "@users/users.module";
+import { AuthModule } from "@auth/auth.module";
+import { DiscoveryModule } from "@discovery/discovery.module";
 
 /**
  * GraphQL Module
@@ -40,15 +40,15 @@ import { DiscoveryModule } from '@discovery/discovery.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault() as unknown],
 
       // Enable introspection and playground in development
-      introspection: process.env.NODE_ENV !== 'production',
+      introspection: process.env.NODE_ENV !== "production",
 
       // Context for GraphQL requests
-      context: ({ req, res }: { req: unknown; res: any }) => ({ req, res }),
+      context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
 
       // Subscriptions configuration
       subscriptions: {
-        'graphql-ws': true,
-        'subscriptions-transport-ws': true,
+        "graphql-ws": true,
+        "subscriptions-transport-ws": true,
       },
 
       // Query complexity and depth limiting
@@ -58,7 +58,7 @@ import { DiscoveryModule } from '@discovery/discovery.module';
 
       // Format errors for security (hide internal details in production)
       formatError: (error) => {
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === "production") {
           // Don't expose internal error details in production
           return {
             message: error.message,

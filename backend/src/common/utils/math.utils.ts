@@ -97,7 +97,9 @@ export function weightedAverage(values: number[], weights: number[]): number {
   let weightSum = 0;
 
   for (let i = 0; i < values.length; i++) {
+      // TODO: Remove non-null assertion with proper check
     sum += values[i]! * weights[i]!;
+      // TODO: Remove non-null assertion with proper check
     weightSum += weights[i]!;
   }
 

@@ -1,10 +1,18 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Conversation } from './entities/conversation.entity';
-import { Message } from './entities/message.entity';
-import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
-import { GetContactsDto } from './dto/get-contacts.dto';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Conversation } from "./entities/conversation.entity";
+import { Message } from "./entities/message.entity";
+import {
+  MessengerConversationDto,
+  MessengerMessageDto,
+  UpdateConversationDto,
+} from "./dto/messenger.dto";
+import { GetContactsDto } from "./dto/get-contacts.dto";
 
 export interface PaginationQuery {
   page?: number;
@@ -60,18 +68,25 @@ export class MessengerService {
     @InjectRepository(Conversation)
     private readonly conversationRepository: Repository<Conversation>,
     @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
+    private readonly messageRepository: Repository<Message>
   ) {}
 
-  async createConversation(createDto: MessengerConversationDto): Promise<Conversation> {
+  async createConversation(
+    createDto: MessengerConversationDto
+  ): Promise<Conversation> {
     if (createDto.participants.length < 2) {
-      throw new BadRequestException('Conversation must have at least 2 participants');
+      throw new BadRequestException(
+        "Conversation must have at least 2 participants"
+      );
     }
     const conversation = this.conversationRepository.create(createDto);
     return await this.conversationRepository.save(conversation);
   }
 
-  async getContacts(userId: string, query: GetContactsDto): Promise<ContactsResult> {
+  async getContacts(
+    userId: string,
+    query: GetContactsDto
+  ): Promise<ContactsResult> {
     // Mock implementation for now - in production this would query a users/contacts table
     // Return empty result set for now
     // TODO: Implement actual contact fetching from users table
@@ -84,29 +99,40 @@ export class MessengerService {
     return { data: [], total: 0 };
   }
 
-  async findAllConversations(userId: string, query: PaginationQuery): Promise<{ data: Conversation[]; total: number }> {
+  async findAllConversations(
+    userId: string,
+    query: PaginationQuery
+  ): Promise<{ data: Conversation[]; total: number }> {
     const { page = 1, limit = 50 } = query;
     const skip = (page - 1) * limit;
 
     // Use jsonb_array_elements_text for JSONB array matching
     const [data, total] = await this.conversationRepository
-      .createQueryBuilder('conversation')
-      .where("conversation.participants::jsonb @> :userId::jsonb", { userId: JSON.stringify([userId]) })
+      .createQueryBuilder("conversation")
+      .where("conversation.participants::jsonb @> :userId::jsonb", {
+        userId: JSON.stringify([userId]),
+      })
       .skip(skip)
       .take(limit)
-      .orderBy('conversation.lastMessageAt', 'DESC')
+      .orderBy("conversation.lastMessageAt", "DESC")
       .getManyAndCount();
 
     return { data, total };
   }
 
   async findOneConversation(id: string): Promise<Conversation> {
-    const conversation = await this.conversationRepository.findOne({ where: { id } });
-    if (!conversation) throw new NotFoundException(`Conversation ${id} not found`);
+    const conversation = await this.conversationRepository.findOne({
+      where: { id },
+    });
+    if (!conversation)
+      throw new NotFoundException(`Conversation ${id} not found`);
     return conversation;
   }
 
-  async updateConversation(id: string, updateDto: UpdateConversationDto): Promise<Conversation> {
+  async updateConversation(
+    id: string,
+    updateDto: UpdateConversationDto
+  ): Promise<Conversation> {
     await this.findOneConversation(id);
     await this.conversationRepository.update(id, updateDto);
     return await this.findOneConversation(id);
@@ -118,18 +144,21 @@ export class MessengerService {
     await this.conversationRepository.remove(conversation);
   }
 
-  async sendMessage(createDto: MessengerMessageDto, senderId: string): Promise<Message> {
+  async sendMessage(
+    createDto: MessengerMessageDto,
+    senderId: string
+  ): Promise<Message> {
     await this.findOneConversation(createDto.conversationId);
     const message = this.messageRepository.create({
       conversationId: createDto.conversationId,
       content: createDto.content,
       senderId,
       sentAt: new Date(),
-      messageType: 'text',
+      messageType: "text",
       readBy: [],
       readCount: 0,
       replyToId: createDto.replyTo,
-      attachments: createDto.attachments?.map(url => ({ url })) || [],
+      attachments: createDto.attachments?.map((url) => ({ url })) || [],
     });
     const savedMessage = await this.messageRepository.save(message);
 
@@ -139,13 +168,16 @@ export class MessengerService {
       lastMessageText: createDto.content,
       lastMessageBy: senderId,
       lastMessageId: savedMessage.id,
-      messageCount: () => 'messageCount + 1',
+      messageCount: () => "messageCount + 1",
     });
 
     return savedMessage;
   }
 
-  async getMessages(conversationId: string, query: PaginationQuery): Promise<{ data: Message[]; total: number }> {
+  async getMessages(
+    conversationId: string,
+    query: PaginationQuery
+  ): Promise<{ data: Message[]; total: number }> {
     const { page = 1, limit = 50 } = query;
     const skip = (page - 1) * limit;
 
@@ -153,14 +185,16 @@ export class MessengerService {
       where: { conversationId, isDeleted: false },
       skip,
       take: limit,
-      order: { sentAt: 'DESC' }
+      order: { sentAt: "DESC" },
     });
 
     return { data, total };
   }
 
   async markAsRead(messageId: string, userId: string): Promise<Message> {
-    const message = await this.messageRepository.findOne({ where: { id: messageId } });
+    const message = await this.messageRepository.findOne({
+      where: { id: messageId },
+    });
     if (!message) throw new NotFoundException(`Message ${messageId} not found`);
 
     // Add user to readBy array if not already present
@@ -179,23 +213,23 @@ export class MessengerService {
 
   async getUnreadCount(userId: string): Promise<number> {
     const conversations = await this.conversationRepository
-      .createQueryBuilder('conversation')
-      .where(':userId = ANY(conversation.participants)', { userId })
+      .createQueryBuilder("conversation")
+      .where(":userId = ANY(conversation.participants)", { userId })
       .getMany();
 
-    const conversationIds = conversations.map(c => c.id);
+    const conversationIds = conversations.map((c) => c.id);
     if (conversationIds.length === 0) return 0;
 
     // Count messages where the user is not in the readBy array
     const messages = await this.messageRepository
-      .createQueryBuilder('message')
-      .where('message.conversationId IN (:...ids)', { ids: conversationIds })
-      .andWhere('message.senderId != :userId', { userId })
-      .andWhere('message.isDeleted = :isDeleted', { isDeleted: false })
+      .createQueryBuilder("message")
+      .where("message.conversationId IN (:...ids)", { ids: conversationIds })
+      .andWhere("message.senderId != :userId", { userId })
+      .andWhere("message.isDeleted = :isDeleted", { isDeleted: false })
       .getMany();
 
-    return messages.filter(msg => {
-      const readBy = (msg.readBy || []) as any[];
+    return messages.filter((msg) => {
+      const readBy = (msg.readBy || []) as unknown as ReadByEntry[];
       return !readBy.some((r: ReadByEntry) => r.userId === userId);
     }).length;
   }

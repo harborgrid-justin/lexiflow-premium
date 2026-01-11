@@ -32,7 +32,7 @@ export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy 
     }
   }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const rateLimitOptions = this.reflector.get<RateLimitOptions>(
       RATE_LIMIT_KEY,
       context.getHandler(),

@@ -120,12 +120,12 @@ export class CspViolationService {
   // Suspicious patterns that indicate attacks
   private readonly SUSPICIOUS_PATTERNS = [
     /javascript:/gi,
-    /data:text\/html/gi,
+    /data:text/html/gi,
     /<script/gi,
     /eval\(/gi,
     /alert\(/gi,
-    /document\.cookie/gi,
-    /window\\.location/gi,
+    /document.cookie/gi,
+    /window\.location/gi,
     /.innerHTML/gi,
   ];
 
@@ -301,7 +301,7 @@ export class CspViolationService {
       const hostname = url.hostname;
 
       // Check for IP addresses
-      if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\\.\d{1,3}$/.test(hostname)) {
+      if (/^\d{1,3}.\d{1,3}.\d{1,3}\.\d{1,3}$/.test(hostname)) {
         return true;
       }
 

@@ -182,7 +182,7 @@ export class TimeEntriesService {
     // Fetch existing entry to compute totals if rate/duration changed
     const timeEntry = await this.findOne(id);
 
-    let updateData: any = { ...updateTimeEntryDto };
+    let updateData: unknown = { ...updateTimeEntryDto };
 
     // Recalculate totals if duration or rate changed
     if (updateTimeEntryDto.duration !== undefined || updateTimeEntryDto.rate !== undefined) {

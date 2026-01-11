@@ -513,7 +513,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private generateCorrelationId(): string {
     // Use crypto for unpredictable, globally unique correlation IDs
-    const crypto = require('crypto');
+    import crypto from \'crypto\';
     return crypto.randomUUID();
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Logger, BadRequestException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 export interface QueryComplexityLimits {
   maxJoins: number;
@@ -49,7 +49,7 @@ export class QuerySanitizationService {
 
   private readonly dangerousPatterns: RegExp[] = [
     /(\b(DROP|TRUNCATE|DELETE\s+FROM|ALTER|EXEC|EXECUTE|UNION|INSERT\s+INTO)\b)/gi,
-    /(--|\*\/|\/\*|;)/g,
+    /(--|\*/|/\*|;)/g,
     /(\bxp_|\bsp_)/gi,
     /(\bSCRIPT\b|\bJAVASCRIPT\b)/gi,
     /(\bEVAL\b|\bEXEC\b)/gi,
@@ -69,24 +69,27 @@ export class QuerySanitizationService {
 
   constructor(private readonly configService: ConfigService) {
     this.complexityLimits = {
-      maxJoins: this.configService.get<number>('QUERY_MAX_JOINS') || 10,
-      maxWhereConditions: this.configService.get<number>('QUERY_MAX_WHERE') || 20,
-      maxOrderByFields: this.configService.get<number>('QUERY_MAX_ORDER_BY') || 5,
-      maxDepth: this.configService.get<number>('QUERY_MAX_DEPTH') || 5,
-      maxParameterLength: this.configService.get<number>('QUERY_MAX_PARAM_LENGTH') || 10000,
+      maxJoins: this.configService.get<number>("QUERY_MAX_JOINS") || 10,
+      maxWhereConditions:
+        this.configService.get<number>("QUERY_MAX_WHERE") || 20,
+      maxOrderByFields:
+        this.configService.get<number>("QUERY_MAX_ORDER_BY") || 5,
+      maxDepth: this.configService.get<number>("QUERY_MAX_DEPTH") || 5,
+      maxParameterLength:
+        this.configService.get<number>("QUERY_MAX_PARAM_LENGTH") || 10000,
     };
   }
 
-  validateQuery(query: string, parameters?: any[]): SanitizationResult {
+  validateQuery(query: string, parameters?: unknown[]): SanitizationResult {
     const violations: string[] = [];
 
-    if (!query || typeof query !== 'string') {
-      violations.push('Invalid query format');
+    if (!query || typeof query !== "string") {
+      violations.push("Invalid query format");
       return { isSafe: false, violations };
     }
 
     if (query.length > 50000) {
-      violations.push('Query exceeds maximum length');
+      violations.push("Query exceeds maximum length");
     }
 
     for (const pattern of this.dangerousPatterns) {
@@ -121,7 +124,9 @@ export class QuerySanitizationService {
 
     const joinCount = (query.match(/\bJOIN\b/gi) || []).length;
     if (joinCount > this.complexityLimits.maxJoins) {
-      violations.push(`Too many JOINs: ${joinCount} (max: ${this.complexityLimits.maxJoins})`);
+      violations.push(
+        `Too many JOINs: ${joinCount} (max: ${this.complexityLimits.maxJoins})`
+      );
     }
 
     const whereConditions = (query.match(/\bAND\b|\bOR\b/gi) || []).length + 1;
@@ -133,7 +138,7 @@ export class QuerySanitizationService {
 
     const orderByFields = query.match(/\bORDER\s+BY\b([^;]+)/gi);
     if (orderByFields && orderByFields.length > 0) {
-      const fieldCount = orderByFields[0].split(',').length;
+      const fieldCount = orderByFields[0].split(",").length;
       if (fieldCount > this.complexityLimits.maxOrderByFields) {
         violations.push(
           `Too many ORDER BY fields: ${fieldCount} (max: ${this.complexityLimits.maxOrderByFields})`
@@ -156,10 +161,10 @@ export class QuerySanitizationService {
     let maxDepth = 0;
 
     for (const char of query) {
-      if (char === '(') {
+      if (char === "(") {
         depth++;
         maxDepth = Math.max(maxDepth, depth);
-      } else if (char === ')') {
+      } else if (char === ")") {
         depth--;
       }
     }
@@ -167,7 +172,7 @@ export class QuerySanitizationService {
     return maxDepth;
   }
 
-  private validateParameters(parameters: any[]): string[] {
+  private validateParameters(parameters: unknown[]): string[] {
     const violations: string[] = [];
 
     for (let i = 0; i < parameters.length; i++) {
@@ -177,7 +182,7 @@ export class QuerySanitizationService {
         continue;
       }
 
-      if (typeof param === 'string') {
+      if (typeof param === "string") {
         if (param.length > this.complexityLimits.maxParameterLength) {
           violations.push(
             `Parameter ${i} exceeds maximum length: ${param.length} (max: ${this.complexityLimits.maxParameterLength})`
@@ -190,7 +195,7 @@ export class QuerySanitizationService {
             break;
           }
         }
-      } else if (typeof param === 'object') {
+      } else if (typeof param === "object") {
         const jsonString = JSON.stringify(param);
         if (jsonString.length > this.complexityLimits.maxParameterLength) {
           violations.push(`Parameter ${i} object exceeds maximum size`);
@@ -207,19 +212,19 @@ export class QuerySanitizationService {
     if (hasRawValues) {
       const result = this.validateQuery(query);
       if (!result.isSafe) {
-        this.logger.error('Non-parameterized query detected with violations', {
+        this.logger.error("Non-parameterized query detected with violations", {
           violations: result.violations,
         });
-        throw new BadRequestException('Query must use parameterized values');
+        throw new BadRequestException("Query must use parameterized values");
       }
     }
   }
 
   sanitizeIdentifier(identifier: string): string {
-    const sanitized = identifier.replace(/[^\w_]/g, '');
+    const sanitized = identifier.replace(/[^\w_]/g, "");
 
     if (sanitized !== identifier) {
-      this.logger.warn('Identifier sanitized', {
+      this.logger.warn("Identifier sanitized", {
         original: identifier,
         sanitized,
       });
@@ -229,12 +234,20 @@ export class QuerySanitizationService {
   }
 
   sanitizeTableName(tableName: string): string {
-    const sanitized = tableName.replace(/[^\w_]/g, '');
+    const sanitized = tableName.replace(/[^\w_]/g, "");
 
-    const systemTables = ['pg_', 'information_schema', 'sys', 'mysql', 'performance_schema'];
+    const systemTables = [
+      "pg_",
+      "information_schema",
+      "sys",
+      "mysql",
+      "performance_schema",
+    ];
     for (const prefix of systemTables) {
       if (sanitized.toLowerCase().startsWith(prefix)) {
-        throw new BadRequestException(`Access to system table '${sanitized}' is not allowed`);
+        throw new BadRequestException(
+          `Access to system table '${sanitized}' is not allowed`
+        );
       }
     }
 
@@ -257,10 +270,12 @@ export class QuerySanitizationService {
     for (const [key, value] of Object.entries(whereClause)) {
       this.sanitizeIdentifier(key);
 
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const result = this.validateQuery(value);
         if (!result.isSafe) {
-          throw new BadRequestException(`Invalid value in WHERE clause for key '${key}'`);
+          throw new BadRequestException(
+            `Invalid value in WHERE clause for key '${key}'`
+          );
         }
       }
     }
@@ -270,24 +285,34 @@ export class QuerySanitizationService {
     const result = this.validateQuery(query);
 
     if (!result.isSafe) {
-      this.logger.error('Dangerous query blocked', {
+      this.logger.error("Dangerous query blocked", {
         violations: result.violations,
         query: query.substring(0, 200),
       });
 
-      throw new BadRequestException('Query contains dangerous operations or patterns');
+      throw new BadRequestException(
+        "Query contains dangerous operations or patterns"
+      );
     }
   }
 
-  logSuspiciousQuery(query: string, parameters?: any[], metadata?: Record<string, unknown>): void {
-    this.logger.warn('Suspicious query detected', {
+  logSuspiciousQuery(
+    query: string,
+    parameters?: unknown[],
+    metadata?: Record<string, unknown>
+  ): void {
+    this.logger.warn("Suspicious query detected", {
       query: query.substring(0, 500),
       parameterCount: parameters?.length || 0,
       ...metadata,
     });
   }
 
-  createSafeLimit(limit: number, defaultLimit: number = 100, maxLimit: number = 1000): number {
+  createSafeLimit(
+    limit: number,
+    defaultLimit: number = 100,
+    maxLimit: number = 1000
+  ): number {
     if (!limit || limit < 1) {
       return defaultLimit;
     }
@@ -305,12 +330,12 @@ export class QuerySanitizationService {
 
   escapeString(value: string): string {
     return value
-      .replace(/\\/g, '\\\\')
+      .replace(/\/g, "\\\\")
       .replace(/'/g, "''")
       .replace(/"/g, '\\"')
-      .replace(/\n/g, '\\n')
-      .replace(/\r/g, '\\r')
-      .replace(/\x00/g, '\\0')
-      .replace(/\x1a/g, '\\Z');
+      .replace(/\n/g, "\\n")
+      .replace(/\r/g, "\\r")
+      .replace(/\u0000/g, "\\0")
+      .replace(/\u001a/g, "\\Z");
   }
 }

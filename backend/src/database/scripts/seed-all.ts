@@ -238,6 +238,7 @@ async function seedClients(queryRunner: QueryRunner): Promise<Map<string, string
   const clientIds = new Map<string, string>();
 
   for (let i = 0; i < DEMO_CLIENTS.length; i++) {
+      // TODO: Remove non-null assertion with proper check
     const client = DEMO_CLIENTS[i]!;
     const id = generateId();
     const clientNumber = `CLI-${String(i + 1).padStart(4, '0')}`;
@@ -261,10 +262,13 @@ async function seedCases(queryRunner: QueryRunner, clientIds: Map<string, string
   const userArray = Array.from(userIds.entries());
 
   for (let i = 0; i < DEMO_CASES.length; i++) {
+      // TODO: Remove non-null assertion with proper check
     const caseData = DEMO_CASES[i]!;
     const id = generateId();
     const caseNumber = `2024-${String(i + 1).padStart(5, '0')}`;
+      // TODO: Remove non-null assertion with proper check
     const [, clientId] = clientArray[i % clientArray.length]!;
+      // TODO: Remove non-null assertion with proper check
     const [, leadAttorneyId] = userArray.find(([email]) => email.includes('partner') || email.includes('senior')) || userArray[0]!;
     caseIds.set(caseNumber, id);
 

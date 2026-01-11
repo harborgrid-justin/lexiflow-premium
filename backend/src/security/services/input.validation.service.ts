@@ -115,7 +115,7 @@ export class InputValidationService {
 
   // Dangerous patterns
   private readonly XSS_PATTERNS = [
-    /<script[^>]*>.*?<\/script>/gi,
+    /<script[^>]*>.*?</script>/gi,
     /javascript:/gi,
     /on\w+\s*=/gi,
     /<iframe[^>]*>/gi,
@@ -152,26 +152,26 @@ export class InputValidationService {
     /\$and/gi,
   ];
 
-  private readonly COMMAND_PATTERNS = [/[;&|`$()]/g, /\.\.\//g, /~\//g];
+  private readonly COMMAND_PATTERNS = [/[;&|`$()]/g, /..//g, /~//g];
 
   private readonly PATH_TRAVERSAL_PATTERNS = [
-    /\.\.[/\\]/g,
+    /..[/\\]/g,
     /%2e%2e[/\\]/gi,
-    /\.\.[%/\\]/g,
+    /..[%/\\]/g,
   ];
 
   private readonly LDAP_PATTERNS = [/[*()\\|&]/g];
 
   private readonly SSRF_PATTERNS = [
-    /^file:\/\//gi,
-    /^gopher:\/\//gi,
-    /^dict:\/\//gi,
+    /^file:///gi,
+    /^gopher:///gi,
+    /^dict:///gi,
     /localhost/gi,
-    /127\.0\.0\.1/g,
-    /0\.0\.0\.0/g,
+    /127.0.0.1/g,
+    /0.0.0.0/g,
     /::1/g,
-    /169\.254\./g, // AWS metadata
-    /metadata\.google\.internal/gi,
+    /169.254./g, // AWS metadata
+    /metadata.google.internal/gi,
   ];
 
   /**

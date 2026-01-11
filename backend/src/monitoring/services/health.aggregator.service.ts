@@ -215,7 +215,7 @@ export class HealthAggregatorService {
     if (result.status === "fulfilled") {
       return result.value;
     } else {
-      const error = result.reason;
+      const error = result.reason as Error | string;
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       this.logger.error(`Health check failed: ${name}`, errorMessage);

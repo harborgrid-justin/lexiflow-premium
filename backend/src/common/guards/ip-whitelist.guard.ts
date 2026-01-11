@@ -216,6 +216,7 @@ export class IpWhitelistGuard implements CanActivate {
 
       let num = 0;
       for (let i = 0; i < 4; i++) {
+      // TODO: Remove non-null assertion with proper check
         const part = parseInt(parts[i]!, 10);
         if (isNaN(part) || part < 0 || part > 255) {
           return null;

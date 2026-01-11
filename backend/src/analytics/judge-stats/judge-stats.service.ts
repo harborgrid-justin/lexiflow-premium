@@ -43,9 +43,9 @@ export class JudgeStatsService {
   private readonly logger = new Logger(JudgeStatsService.name);
 
   constructor(
-    // @InjectRepository(Judge) private judgeRepository: Repository<any>,
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(Motion) private motionRepository: Repository<any>,
+    // @InjectRepository(Judge) private judgeRepository: Repository<unknown>,
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(Motion) private motionRepository: Repository<unknown>,
     // Inject repositories when entities are available
   ) {}
 

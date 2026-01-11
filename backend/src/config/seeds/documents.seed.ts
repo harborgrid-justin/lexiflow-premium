@@ -12,7 +12,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
 
   // Load documents from JSON file
   const documentsPath = path.join(PathsConfig.TEST_DATA_DIR, 'documents.json');
-  const documentsData = JSON.parse(fs.readFileSync(documentsPath, 'utf-8'));
+  const documentsData = JSON.parse(fs.readFileSync(documentsPath, 'utf-8')) as Array<Record<string, unknown>>;
 
   // Check if documents already exist
   const existingDocuments = await documentRepository.count();
@@ -37,7 +37,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
   // Insert documents
   for (const documentData of documentsData) {
     try {
-      const caseId = caseMap.get(documentData.caseNumber);
+      const caseId = caseMap.get(String(documentData.caseNumber));
       const uploadedBy = users[Math.floor(Math.random() * users.length)];
 
       // Convert uppercase enum string from JSON to title-case to match the entity enum
@@ -46,7 +46,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
           /\w\S*/g,
           (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
         );
-      const documentType = toTitleCase(documentData.documentType) as any;
+      const documentType = toTitleCase(String(documentData.documentType || 'Document'));
 
       const document = documentRepository.create({
         ...documentData,
@@ -60,9 +60,10 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
       await documentRepository.save(document);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`Error seeding document ${documentData.title}:`, message);
+      console.error(`Error seeding document ${String(documentData.title || 'unknown')}:`, message);
     }
   }
 
-  console.log(`✓ Seeded ${documentsData.length} documents`);
+  const documentCount = Array.isArray(documentsData) ? documentsData.length : 0;
+  console.log(`✓ Seeded ${documentCount} documents`);
 }

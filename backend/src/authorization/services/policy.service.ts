@@ -413,7 +413,7 @@ export class PolicyService {
     }
   }
 
-  private getAttributeValue(condition: PolicyCondition, context: PolicyEvaluationContext): any {
+  private getAttributeValue(condition: PolicyCondition, context: PolicyEvaluationContext): unknown {
     switch (condition.type) {
       case ConditionType.USER_ATTRIBUTE:
         return this.getNestedValue(context.user, condition.attribute);
@@ -437,11 +437,11 @@ export class PolicyService {
     }
   }
 
-  private getNestedValue(obj: unknown, path: string): any {
+  private getNestedValue(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => (current as any)?.[key], obj);
   }
 
-  private getTimeAttribute(attribute: string, timestamp: Date): any {
+  private getTimeAttribute(attribute: string, timestamp: Date): unknown {
     switch (attribute) {
       case 'hour':
         return timestamp.getHours();
@@ -458,7 +458,7 @@ export class PolicyService {
     }
   }
 
-  private getLocationAttribute(attribute: string, environment: unknown): any {
+  private getLocationAttribute(attribute: string, environment: unknown): unknown {
     const env = environment as { country?: string; region?: string; location?: string; ipAddress?: string };
     switch (attribute) {
       case 'country':
@@ -474,7 +474,7 @@ export class PolicyService {
     }
   }
 
-  private resolveValue(value: unknown, context: PolicyEvaluationContext): any {
+  private resolveValue(value: unknown, context: PolicyEvaluationContext): unknown {
     if (typeof value === 'string' && value.startsWith('{{') && value.endsWith('}}')) {
       const path = value.slice(2, -2).trim();
       return this.getNestedValue(context, path);

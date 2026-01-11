@@ -82,7 +82,7 @@ export class DataMaskingService {
     this.reversibleKey = crypto.scryptSync(key, 'masking-salt', 32);
   }
 
-  maskData(data: unknown, rules?: MaskingRule[]): any {
+  maskData(data: unknown, rules?: MaskingRule[]): unknown {
     if (data === null || data === undefined) {
       return data;
     }
@@ -268,7 +268,7 @@ export class DataMaskingService {
     return masked + lastFour;
   }
 
-  maskForLogging(data: unknown): any {
+  maskForLogging(data: unknown): unknown {
     const loggingRules: MaskingRule[] = [
       { field: 'password', strategy: 'full' },
       { field: 'token', strategy: 'full' },
@@ -282,7 +282,7 @@ export class DataMaskingService {
     return this.maskData(data, loggingRules);
   }
 
-  maskForExport(data: unknown, exportType: 'public' | 'internal' | 'restricted' = 'public'): any {
+  maskForExport(data: unknown, exportType: 'public' | 'internal' | 'restricted' = 'public'): unknown {
     let rules: MaskingRule[];
 
     switch (exportType) {

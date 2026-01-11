@@ -199,7 +199,7 @@ export const SQL_INJECTION_PATTERNS = [
   /(\s|^)(UNION|SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)(\s|$)/gi,
   /--/g,
   /;(\s)*(DROP|DELETE|TRUNCATE)/gi,
-  /\/\*.*\*\//g,
+  //\*.*\*//g,
   /xp_/gi,
   /sp_/gi,
 ] as const;
@@ -208,11 +208,11 @@ export const SQL_INJECTION_PATTERNS = [
  * Path Traversal Prevention
  */
 export const PATH_TRAVERSAL_PATTERNS = [
-  /\.\.\//g,
-  /\.\.\\/g,
+  /..//g,
+  /..\/g,
   /%2e%2e%2f/gi,
   /%2e%2e%5c/gi,
-  /\.\./g,
+  /../g,
 ] as const;
 
 /**

@@ -174,7 +174,7 @@ export class SMSDeliveryService {
    */
   private async sendViaTwilio(payload: SMSPayload): Promise<string> {
     // In production, use twilio SDK
-    // const twilio = require('twilio');
+    // import twilio from \'twilio\';
     //
     // const client = twilio(this.config.accountSid, this.config.authToken);
     //

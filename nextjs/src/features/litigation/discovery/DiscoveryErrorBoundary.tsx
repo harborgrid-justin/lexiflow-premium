@@ -3,9 +3,9 @@
  * @description Error boundary for graceful degradation in discovery center
  * Catches React errors and provides fallback UI with recovery options
  */
-import React, {Component, ErrorInfo, ReactNode} from 'react';
-import {AlertTriangle, RefreshCw, Home} from 'lucide-react';
-import {Button} from '@/components/ui/atoms/Button';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button';
 
 interface Props {
     children: ReactNode;
@@ -26,11 +26,14 @@ interface ErrorFallbackProps {
 }
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-                                                         error,
-                                                         errorInfo,
-                                                         onReset,
-                                                         onReturnHome
-                                                     }) => {
+    error,
+    errorInfo,
+    onReset,
+    onReturnHome
+}) => {
+    // Generate error ID on mount to avoid Date.now() in render
+    const [errorId] = useState(() => Date.now().toString(36));
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4">
             <div
@@ -38,7 +41,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                 {/* Error Header */}
                 <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-full">
-                        <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400"/>
+                        <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
@@ -66,8 +69,8 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                                 Component Stack
                             </summary>
                             <pre className="mt-2 text-xs text-slate-600 dark:text-slate-400 overflow-auto max-h-40">
-                {errorInfo.componentStack}
-              </pre>
+                                {errorInfo.componentStack}
+                            </pre>
                         </details>
                     )}
                 </div>
@@ -109,8 +112,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
                 {/* Footer Note */}
                 <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-6">
-                    {/* Error ID generation with Date.now() OK here - error boundary render, not normal component render */}
-                    Error ID: {Date.now().toString(36)} • This error has been logged for investigation
+                    Error ID: {errorId} • This error has been logged for investigation
                 </p>
             </div>
         </div>

@@ -10,7 +10,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
 
   // Load users from JSON file
   const usersPath = path.join(PathsConfig.TEST_DATA_DIR, 'users.json');
-  const usersData = JSON.parse(fs.readFileSync(usersPath, 'utf-8'));
+  const usersData = JSON.parse(fs.readFileSync(usersPath, 'utf-8')) as Array<Record<string, unknown>>;
 
   // Check if users already exist
   const existingUsers = await userRepository.count();
@@ -31,18 +31,20 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
         GUEST: 'user',
       };
 
+      const userRole = String(userData.role || 'GUEST');
       const user = userRepository.create({
         ...userData,
-        role: roleMapping[userData.role] || 'user',
+        role: roleMapping[userRole] || 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       });
       await userRepository.save(user);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`Error seeding user ${userData.email}:`, message);
+      console.error(`Error seeding user ${String(userData.email || 'unknown')}:`, message);
     }
   }
 
-  console.log(`✓ Seeded ${usersData.length} users`);
+  const userCount = Array.isArray(usersData) ? usersData.length : 0;
+  console.log(`✓ Seeded ${userCount} users`);
 }

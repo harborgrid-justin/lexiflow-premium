@@ -45,8 +45,8 @@ export class OutcomePredictionsService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<any>,
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<unknown>,
     // Inject repositories when entities are available
   ) {
     this.startMemoryManagement();

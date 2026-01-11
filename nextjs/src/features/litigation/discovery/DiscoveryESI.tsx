@@ -123,8 +123,8 @@ export const DiscoveryESI: React.FC = () => {
   const { openWindow } = useWindow();
   const collectionQueueRef = React.useRef<CollectionQueue | null>(null);
 
-  // Initialize collection queue
-  if (!collectionQueueRef.current) {
+  // Initialize collection queue - use == null pattern for React ref initialization
+  if (collectionQueueRef.current == null) {
     collectionQueueRef.current = new CollectionQueue(3 as const, (_, status) => {
       updateStatus({ status });
     });

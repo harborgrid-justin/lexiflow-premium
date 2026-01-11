@@ -156,11 +156,11 @@ export function PublicEndpoint(options?: {
   ];
 
   if (audit) {
-    decorators.push(UseInterceptors(AuditLogInterceptor) as any);
+    decorators.push(UseInterceptors(AuditLogInterceptor));
   }
 
   if (performanceTrack) {
-    decorators.push(UseInterceptors(PerformanceInterceptor) as any);
+    decorators.push(UseInterceptors(PerformanceInterceptor));
   }
 
   return applyDecorators(...decorators);
@@ -184,7 +184,7 @@ export function AdminOnly() {
  * Ensures all actions are logged in the audit trail
  */
 export function AuditedEndpoint(action?: string) {
-  const metadata: any = { enabled: true };
+  const metadata: Record<string, unknown> = { enabled: true };
   if (action) {
     metadata.action = action;
   }
@@ -200,7 +200,7 @@ export function AuditedEndpoint(action?: string) {
  * Tracks performance metrics for the endpoint
  */
 export function PerformanceTracked(threshold?: number) {
-  const metadata: any = { enabled: true };
+  const metadata: Record<string, unknown> = { enabled: true };
   if (threshold) {
     metadata.threshold = threshold;
   }

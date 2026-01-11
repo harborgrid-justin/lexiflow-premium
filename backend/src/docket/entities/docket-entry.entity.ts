@@ -174,9 +174,9 @@ export class DocketEntry extends BaseEntity {
 
   @Column({ name: "appellate_data", type: "jsonb", nullable: true })
   appellateData?: {
-    caseSelection?: Record<string, any>;
-    caseQuery?: Record<string, any>;
-    caseSummary?: Record<string, any>;
-    fullDocket?: Record<string, any>;
+    caseSelection?: Record<string, unknown>;
+    caseQuery?: Record<string, unknown>;
+    caseSummary?: Record<string, unknown>;
+    fullDocket?: Record<string, unknown>;
   };
 }

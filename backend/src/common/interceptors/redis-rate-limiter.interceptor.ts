@@ -102,7 +102,7 @@ export class RedisRateLimiterInterceptor
     }
   }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const rateLimitOptions = this.reflector.get<RateLimitOptions>(
       RATE_LIMIT_KEY,
       context.getHandler(),
@@ -187,6 +187,7 @@ export class RedisRateLimiterInterceptor
 
     try {
       // Use Redis sorted set for sliding window
+      // TODO: Remove non-null assertion with proper check
       const multi = this.redisClient!.multi();
 
       // Remove old entries

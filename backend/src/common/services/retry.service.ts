@@ -8,7 +8,7 @@ export interface RetryConfig {
   initialDelay: number; // milliseconds
   maxDelay: number; // milliseconds
   backoffMultiplier: number;
-  retryableErrors?: Array<new (...args: any[]) => Error>;
+  retryableErrors?: Array<new (...args: unknown[]) => Error>;
 }
 
 /**

@@ -108,8 +108,8 @@ export class FileStorageService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(FileMetadata) private fileRepository: Repository<any>,
-    // @InjectRepository(FileVersion) private versionRepository: Repository<any>,
+    // @InjectRepository(FileMetadata) private fileRepository: Repository<unknown>,
+    // @InjectRepository(FileVersion) private versionRepository: Repository<unknown>,
     private eventEmitter: EventEmitter2
   ) {
     this.initializeBufferPool();

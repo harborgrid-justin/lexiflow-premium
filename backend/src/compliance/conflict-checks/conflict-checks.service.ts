@@ -244,27 +244,35 @@ export class ConflictChecksService {
       .map(() => Array(str1.length + 1).fill(0));
 
     for (let i = 0; i <= str2.length; i++) {
+      // TODO: Remove non-null assertion with proper check
       matrix[i]![0] = i;
     }
 
     for (let j = 0; j <= str1.length; j++) {
+      // TODO: Remove non-null assertion with proper check
       matrix[0]![j] = j;
     }
 
     for (let i = 1; i <= str2.length; i++) {
       for (let j = 1; j <= str1.length; j++) {
         if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+      // TODO: Remove non-null assertion with proper check
           matrix[i]![j] = matrix[i - 1]![j - 1]!;
         } else {
+      // TODO: Remove non-null assertion with proper check
           matrix[i]![j] = Math.min(
+      // TODO: Remove non-null assertion with proper check
             matrix[i - 1]![j - 1]! + 1,
+      // TODO: Remove non-null assertion with proper check
             matrix[i]![j - 1]! + 1,
+      // TODO: Remove non-null assertion with proper check
             matrix[i - 1]![j]! + 1,
           );
         }
       }
     }
 
+      // TODO: Remove non-null assertion with proper check
     return matrix[str2.length]![str1.length]!;
   }
 

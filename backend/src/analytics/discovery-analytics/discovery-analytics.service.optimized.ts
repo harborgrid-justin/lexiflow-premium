@@ -46,8 +46,8 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<any>,
-    // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
+    // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<unknown>,
+    // @InjectRepository(LegalDocument) private documentRepository: Repository<unknown>,
     // Inject repositories when entities are available
   ) {
     this.startMemoryManagement();

@@ -158,6 +158,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     // Try Redis first
     if (this.useRedis()) {
       try {
+      // TODO: Remove non-null assertion with proper check
         const data = await this.redisClient!.get(fullKey);
         if (data) {
           this.logger.debug(`Redis cache HIT: ${fullKey}`);
@@ -190,6 +191,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
     // Store in Redis
     if (this.useRedis()) {
       try {
+      // TODO: Remove non-null assertion with proper check
         await this.redisClient!.setEx(fullKey, ttl, serialized);
         this.logger.debug(`Redis cache SET: ${fullKey} (TTL: ${ttl}s)`);
         return;
@@ -211,6 +213,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     if (this.useRedis()) {
       try {
+      // TODO: Remove non-null assertion with proper check
         await this.redisClient!.del(fullKey);
         this.logger.debug(`Redis cache DEL: ${fullKey}`);
         return;
@@ -234,6 +237,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
         const keys: string[] = [];
 
         do {
+      // TODO: Remove non-null assertion with proper check
           const result = await this.redisClient!.scan(cursor, {
             MATCH: pattern,
             COUNT: 100,
@@ -243,6 +247,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
         } while (cursor !== 0);
 
         if (keys.length > 0) {
+      // TODO: Remove non-null assertion with proper check
           await this.redisClient!.del(keys);
           count = keys.length;
         }
@@ -275,6 +280,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
       await this.invalidatePattern(`${namespace}:*`);
     } else if (this.useRedis()) {
       try {
+      // TODO: Remove non-null assertion with proper check
         await this.redisClient!.flushDb();
         this.logger.log('Redis cache cleared');
       } catch (error) {
@@ -321,7 +327,9 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   async getStats(): Promise<CacheStats> {
     if (this.useRedis()) {
       try {
+      // TODO: Remove non-null assertion with proper check
         await this.redisClient!.info('stats');
+      // TODO: Remove non-null assertion with proper check
         const dbSize = await this.redisClient!.dbSize();
 
         return {
@@ -363,6 +371,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     try {
       const start = Date.now();
+      // TODO: Remove non-null assertion with proper check
       await this.redisClient!.ping();
       const latency = Date.now() - start;
 

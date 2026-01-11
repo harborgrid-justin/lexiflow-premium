@@ -479,7 +479,9 @@ export class BatchProcessorService implements OnModuleDestroy {
             );
           } else {
             result.failed++;
-            const reason = (chunkResult as PromiseRejectedResult).reason;
+            const reason = (chunkResult as PromiseRejectedResult).reason as
+              | Error
+              | string;
             result.errors.push({
               index: chunkIndex * chunkSize + i,
               item: chunk[i],

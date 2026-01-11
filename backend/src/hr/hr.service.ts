@@ -102,7 +102,9 @@ export class HRService {
 
             totalHours = Number(sum || 0);
           }
-        } catch {\2// ignore
+        } catch {
+      // Error ignoredd during time entry calculation
+          this.logger.debug("Failed to calculate total hours", error);
         }
 
         let targetMonthly = employee.targetBillableHours || 160;
@@ -393,13 +395,9 @@ export class HRService {
             billableHours = Number(sum || 0);
           }
         } catch {
-      // Error ignored
-    }
-
-        let capacity = 160;
-        if (startDate && endDate) {
-          const days =
-            (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+      // Error ignoredd during billable hours calculation
+          this.logger.debug('Failed to calculate billable hours', error);
+        }
             (1000 * 3600 * 24);
           capacity = Math.round(Math.max(1, days / 7) * 40);
         }

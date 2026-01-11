@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   HealthIndicator,
   HealthIndicatorResult,
   HealthCheckError,
-} from '@nestjs/terminus';
+} from "@nestjs/terminus";
 
 /* ------------------------------------------------------------------ */
 /* Telemetry Health Indicator                                          */
@@ -27,12 +27,12 @@ import {
 export class TelemetryHealthIndicator extends HealthIndicator {
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     try {
-      const enabled = process.env.OTEL_ENABLED === 'true';
+      const enabled = process.env.OTEL_ENABLED === "true";
 
       if (!enabled) {
         return this.getStatus(key, true, {
           enabled: false,
-          status: 'disabled',
+          status: "disabled",
         });
       }
 
@@ -40,19 +40,19 @@ export class TelemetryHealthIndicator extends HealthIndicator {
 
       if (!initialized) {
         throw new HealthCheckError(
-          'Telemetry enabled but not initialized',
+          "Telemetry enabled but not initialized",
           this.getStatus(key, false, {
             enabled: true,
             initialized: false,
-            status: 'error',
-          }),
+            status: "error",
+          })
         );
       }
 
       return this.getStatus(key, true, {
         enabled: true,
         initialized: true,
-        status: 'healthy',
+        status: "healthy",
       });
     } catch (error) {
       if (error instanceof HealthCheckError) {
@@ -60,13 +60,13 @@ export class TelemetryHealthIndicator extends HealthIndicator {
       }
 
       const message =
-        error instanceof Error ? error.message : 'Unknown telemetry error';
+        error instanceof Error ? error.message : "Unknown telemetry error";
 
       throw new HealthCheckError(
-        'Telemetry health check failed',
+        "Telemetry health check failed",
         this.getStatus(key, false, {
           error: message,
-        }),
+        })
       );
     }
   }
@@ -87,8 +87,8 @@ export class TelemetryHealthIndicator extends HealthIndicator {
      */
 
     return Boolean(
-      (global as unknown).__OTEL_INITIALIZED__ === true ||
-      process.env.OTEL_INITIALIZED === 'true',
+      (global as Record<string, unknown>).__OTEL_INITIALIZED__ === true ||
+      process.env.OTEL_INITIALIZED === "true"
     );
   }
 }

@@ -1,7 +1,11 @@
-import { Injectable, LoggerService as NestLoggerService, Scope } from '@nestjs/common';
-import * as winston from 'winston';
-import DailyRotateFile = require('winston-daily-rotate-file');
-import { AsyncLocalStorage } from 'async_hooks';
+import {
+  Injectable,
+  LoggerService as NestLoggerService,
+  Scope,
+} from "@nestjs/common";
+import * as winston from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
+import { AsyncLocalStorage } from "async_hooks";
 
 export interface LogContext {
   correlationId?: string;
@@ -46,10 +50,23 @@ export interface HttpResponse {
 export type QueryParam = string | number | boolean | Date | null | undefined;
 
 export interface LogMetadata {
-  [key: string]: string | number | boolean | undefined | LogMetadata | LogMetadata[];
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | undefined
+    | LogMetadata
+    | LogMetadata[];
 }
 
-export type RedactableData = string | number | boolean | null | undefined | RedactableData[] | { [key: string]: RedactableData };
+export type RedactableData =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | RedactableData[]
+  | { [key: string]: RedactableData };
 
 /**
  * Structured Logger Service
@@ -61,20 +78,20 @@ export class StructuredLoggerService implements NestLoggerService {
   private logger: winston.Logger;
   private contextStorage: AsyncLocalStorage<LogContext>;
   private readonly piiFields = [
-    'password',
-    'currentPassword',
-    'newPassword',
-    'confirmPassword',
-    'token',
-    'accessToken',
-    'refreshToken',
-    'secret',
-    'apiKey',
-    'ssn',
-    'socialSecurityNumber',
-    'creditCard',
-    'cvv',
-    'pin',
+    "password",
+    "currentPassword",
+    "newPassword",
+    "confirmPassword",
+    "token",
+    "accessToken",
+    "refreshToken",
+    "secret",
+    "apiKey",
+    "ssn",
+    "socialSecurityNumber",
+    "creditCard",
+    "cvv",
+    "pin",
   ];
 
   constructor() {
@@ -83,11 +100,11 @@ export class StructuredLoggerService implements NestLoggerService {
   }
 
   private createLogger(): winston.Logger {
-    const isProduction = process.env.NODE_ENV === 'production';
-    const logLevel = process.env.LOG_LEVEL || (isProduction ? 'info' : 'debug');
+    const isProduction = process.env.NODE_ENV === "production";
+    const logLevel = process.env.LOG_LEVEL || (isProduction ? "info" : "debug");
 
     const formats = [
-      winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+      winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }),
       winston.format.errors({ stack: true }),
       winston.format.metadata(),
     ];
@@ -105,7 +122,11 @@ export class StructuredLoggerService implements NestLoggerService {
             log += ` [${context}]`;
           }
           log += `: ${message}`;
-          if (Object.keys(meta).length > 0 && meta.metadata && Object.keys(meta.metadata).length > 0) {
+          if (
+            Object.keys(meta).length > 0 &&
+            meta.metadata &&
+            Object.keys(meta.metadata).length > 0
+          ) {
             log += ` ${JSON.stringify(meta.metadata)}`;
           }
           return log;
@@ -124,15 +145,15 @@ export class StructuredLoggerService implements NestLoggerService {
     );
 
     // File transports with rotation
-    if (isProduction || process.env.ENABLE_FILE_LOGGING === 'true') {
+    if (isProduction || process.env.ENABLE_FILE_LOGGING === "true") {
       // Error logs
       transports.push(
         new DailyRotateFile({
-          filename: 'logs/error-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          level: 'error',
-          maxFiles: '30d',
-          maxSize: '20m',
+          filename: "logs/error-%DATE%.log",
+          datePattern: "YYYY-MM-DD",
+          level: "error",
+          maxFiles: "30d",
+          maxSize: "20m",
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.json()
@@ -143,10 +164,10 @@ export class StructuredLoggerService implements NestLoggerService {
       // Combined logs
       transports.push(
         new DailyRotateFile({
-          filename: 'logs/combined-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          maxFiles: '30d',
-          maxSize: '20m',
+          filename: "logs/combined-%DATE%.log",
+          datePattern: "YYYY-MM-DD",
+          maxFiles: "30d",
+          maxSize: "20m",
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.json()
@@ -157,11 +178,11 @@ export class StructuredLoggerService implements NestLoggerService {
       // Audit logs (info and above)
       transports.push(
         new DailyRotateFile({
-          filename: 'logs/audit-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          level: 'info',
-          maxFiles: '2555d', // 7 years for compliance
-          maxSize: '20m',
+          filename: "logs/audit-%DATE%.log",
+          datePattern: "YYYY-MM-DD",
+          level: "info",
+          maxFiles: "2555d", // 7 years for compliance
+          maxSize: "20m",
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.json()
@@ -174,10 +195,10 @@ export class StructuredLoggerService implements NestLoggerService {
       level: logLevel,
       transports,
       exceptionHandlers: [
-        new winston.transports.File({ filename: 'logs/exceptions.log' }),
+        new winston.transports.File({ filename: "logs/exceptions.log" }),
       ],
       rejectionHandlers: [
-        new winston.transports.File({ filename: 'logs/rejections.log' }),
+        new winston.transports.File({ filename: "logs/rejections.log" }),
       ],
     });
   }
@@ -190,7 +211,11 @@ export class StructuredLoggerService implements NestLoggerService {
       return data;
     }
 
-    if (typeof data === 'string' || typeof data === 'number' || typeof data === 'boolean') {
+    if (
+      typeof data === "string" ||
+      typeof data === "number" ||
+      typeof data === "boolean"
+    ) {
       return data;
     }
 
@@ -198,13 +223,15 @@ export class StructuredLoggerService implements NestLoggerService {
       return data.map((item) => this.redactPII(item));
     }
 
-    if (typeof data === 'object') {
+    if (typeof data === "object") {
       const redacted: Record<string, RedactableData> = {};
       for (const [key, value] of Object.entries(data)) {
         const lowerKey = key.toLowerCase();
-        if (this.piiFields.some((field) => lowerKey.includes(field.toLowerCase()))) {
-          redacted[key] = '***REDACTED***';
-        } else if (typeof value === 'object' && value !== null) {
+        if (
+          this.piiFields.some((field) => lowerKey.includes(field.toLowerCase()))
+        ) {
+          redacted[key] = "***REDACTED***";
+        } else if (typeof value === "object" && value !== null) {
           redacted[key] = this.redactPII(value);
         } else {
           redacted[key] = value;
@@ -241,11 +268,14 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Build log metadata with context enrichment
    */
-  private buildMetadata(context?: string | LogContext, additionalMeta?: LogMetadata): LogMetadata {
+  private buildMetadata(
+    context?: string | LogContext,
+    additionalMeta?: LogMetadata
+  ): LogMetadata {
     const currentContext = this.getContext();
     let contextData: LogContext = {};
 
-    if (typeof context === 'string') {
+    if (typeof context === "string") {
       contextData.context = context;
     } else if (context) {
       contextData = context;
@@ -256,8 +286,8 @@ export class StructuredLoggerService implements NestLoggerService {
       ...contextData,
       ...additionalMeta,
       timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development',
-      service: 'lexiflow-backend',
+      environment: process.env.NODE_ENV || "development",
+      service: "lexiflow-backend",
     };
 
     return this.redactPII(metadata) as LogMetadata;
@@ -315,9 +345,9 @@ export class StructuredLoggerService implements NestLoggerService {
    * Log HTTP request
    */
   logRequest(req: HttpRequest): void {
-    const userAgent = Array.isArray(req.headers?.['user-agent'])
-      ? req.headers['user-agent'][0]
-      : req.headers?.['user-agent'];
+    const userAgent = Array.isArray(req.headers?.["user-agent"])
+      ? req.headers["user-agent"][0]
+      : req.headers?.["user-agent"];
 
     const metadata = this.buildMetadata({
       method: req.method,
@@ -345,7 +375,8 @@ export class StructuredLoggerService implements NestLoggerService {
       userId: req.user?.id,
     });
 
-    const level = res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'info';
+    const level =
+      res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info";
     this.logger.log(
       level,
       `Request completed: ${req.method} ${req.url} - ${res.statusCode} - ${duration}ms`,

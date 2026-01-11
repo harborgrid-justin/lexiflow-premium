@@ -1,19 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { SystemAlert, AlertSeverity } from '@monitoring/entities/system-alert.entity';
-import { StructuredLoggerService, LogMetadata } from './structured.logger.service';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import {
+  SystemAlert,
+  AlertSeverity,
+} from "@monitoring/entities/system-alert.entity";
+import {
+  StructuredLoggerService,
+  LogMetadata,
+} from "./structured.logger.service";
 import {
   MetricsCollectorService,
   MetricsSnapshot,
   RequestStatistics,
-  DatabaseStatistics
-} from './metrics.collector.service';
-import axios from 'axios';
+  DatabaseStatistics,
+} from "./metrics.collector.service";
+import axios from "axios";
 
 export interface AlertThreshold {
   metric: string;
-  operator: 'gt' | 'lt' | 'gte' | 'lte' | 'eq';
+  operator: "gt" | "lt" | "gte" | "lte" | "eq";
   value: number;
   severity: AlertSeverity;
   windowMinutes?: number;
@@ -34,7 +40,7 @@ export interface EmailConfig {
 export type AlertChannelConfig = WebhookConfig | SlackConfig | EmailConfig;
 
 export interface AlertChannel {
-  type: 'email' | 'webhook' | 'slack';
+  type: "email" | "webhook" | "slack";
   enabled: boolean;
   config: AlertChannelConfig;
 }
@@ -104,7 +110,7 @@ export class AlertingService {
     @InjectRepository(SystemAlert)
     private readonly alertRepository: Repository<SystemAlert>,
     private readonly logger: StructuredLoggerService,
-    private readonly metricsCollector: MetricsCollectorService,
+    private readonly metricsCollector: MetricsCollectorService
   ) {
     this.initializeDefaultRules();
     this.startMonitoring();
@@ -116,12 +122,12 @@ export class AlertingService {
   private initializeDefaultRules(): void {
     // High error rate alert
     this.addRule({
-      id: 'high-error-rate',
-      name: 'High Error Rate',
-      description: 'Alert when error rate exceeds threshold',
+      id: "high-error-rate",
+      name: "High Error Rate",
+      description: "Alert when error rate exceeds threshold",
       threshold: {
-        metric: 'error.rate',
-        operator: 'gt',
+        metric: "error.rate",
+        operator: "gt",
         value: 0.05, // 5% error rate
         severity: AlertSeverity.ERROR,
         windowMinutes: 5,
@@ -130,10 +136,10 @@ export class AlertingService {
       cooldownMinutes: 15,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -141,12 +147,12 @@ export class AlertingService {
 
     // Response time degradation
     this.addRule({
-      id: 'slow-response-time',
-      name: 'Slow Response Time',
-      description: 'Alert when average response time exceeds threshold',
+      id: "slow-response-time",
+      name: "Slow Response Time",
+      description: "Alert when average response time exceeds threshold",
       threshold: {
-        metric: 'response.time.p95',
-        operator: 'gt',
+        metric: "response.time.p95",
+        operator: "gt",
         value: 2000, // 2 seconds
         severity: AlertSeverity.WARNING,
         windowMinutes: 5,
@@ -155,10 +161,10 @@ export class AlertingService {
       cooldownMinutes: 15,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -166,12 +172,12 @@ export class AlertingService {
 
     // Failed authentication patterns
     this.addRule({
-      id: 'failed-auth-spike',
-      name: 'Failed Authentication Spike',
-      description: 'Alert when failed authentication attempts spike',
+      id: "failed-auth-spike",
+      name: "Failed Authentication Spike",
+      description: "Alert when failed authentication attempts spike",
       threshold: {
-        metric: 'auth.failures',
-        operator: 'gt',
+        metric: "auth.failures",
+        operator: "gt",
         value: 10,
         severity: AlertSeverity.ERROR,
         windowMinutes: 5,
@@ -180,10 +186,10 @@ export class AlertingService {
       cooldownMinutes: 10,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -191,12 +197,12 @@ export class AlertingService {
 
     // Database connection issues
     this.addRule({
-      id: 'database-errors',
-      name: 'Database Connection Errors',
-      description: 'Alert on database connection failures',
+      id: "database-errors",
+      name: "Database Connection Errors",
+      description: "Alert on database connection failures",
       threshold: {
-        metric: 'database.error.rate',
-        operator: 'gt',
+        metric: "database.error.rate",
+        operator: "gt",
         value: 0.01, // 1% error rate
         severity: AlertSeverity.CRITICAL,
         windowMinutes: 5,
@@ -205,10 +211,10 @@ export class AlertingService {
       cooldownMinutes: 5,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -216,12 +222,12 @@ export class AlertingService {
 
     // High CPU usage
     this.addRule({
-      id: 'high-cpu-usage',
-      name: 'High CPU Usage',
-      description: 'Alert when CPU usage is consistently high',
+      id: "high-cpu-usage",
+      name: "High CPU Usage",
+      description: "Alert when CPU usage is consistently high",
       threshold: {
-        metric: 'system.cpu.usage.percent',
-        operator: 'gt',
+        metric: "system.cpu.usage.percent",
+        operator: "gt",
         value: 80,
         severity: AlertSeverity.WARNING,
         windowMinutes: 10,
@@ -230,10 +236,10 @@ export class AlertingService {
       cooldownMinutes: 30,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -241,12 +247,12 @@ export class AlertingService {
 
     // High memory usage
     this.addRule({
-      id: 'high-memory-usage',
-      name: 'High Memory Usage',
-      description: 'Alert when memory usage is consistently high',
+      id: "high-memory-usage",
+      name: "High Memory Usage",
+      description: "Alert when memory usage is consistently high",
       threshold: {
-        metric: 'system.memory.usage.percent',
-        operator: 'gt',
+        metric: "system.memory.usage.percent",
+        operator: "gt",
         value: 85,
         severity: AlertSeverity.ERROR,
         windowMinutes: 10,
@@ -255,10 +261,10 @@ export class AlertingService {
       cooldownMinutes: 30,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -266,12 +272,12 @@ export class AlertingService {
 
     // Slow database queries
     this.addRule({
-      id: 'slow-database-queries',
-      name: 'Slow Database Queries',
-      description: 'Alert when database queries are slow',
+      id: "slow-database-queries",
+      name: "Slow Database Queries",
+      description: "Alert when database queries are slow",
       threshold: {
-        metric: 'database.query.duration.p95',
-        operator: 'gt',
+        metric: "database.query.duration.p95",
+        operator: "gt",
         value: 1000, // 1 second
         severity: AlertSeverity.WARNING,
         windowMinutes: 5,
@@ -280,10 +286,10 @@ export class AlertingService {
       cooldownMinutes: 20,
       channels: [
         {
-          type: 'webhook',
+          type: "webhook",
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL || '',
+            url: process.env.ALERT_WEBHOOK_URL || "",
           },
         },
       ],
@@ -314,7 +320,9 @@ export class AlertingService {
     const rule = this.alertRules.get(ruleId);
     if (rule) {
       rule.enabled = enabled;
-      this.logger.log(`Alert rule ${enabled ? 'enabled' : 'disabled'}: ${ruleId}`);
+      this.logger.log(
+        `Alert rule ${enabled ? "enabled" : "disabled"}: ${ruleId}`
+      );
     }
   }
 
@@ -334,7 +342,7 @@ export class AlertingService {
       this.checkAlertRules();
     }, 60000);
 
-    this.logger.log('Alert monitoring started');
+    this.logger.log("Alert monitoring started");
   }
 
   /**
@@ -344,7 +352,7 @@ export class AlertingService {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
-      this.logger.log('Alert monitoring stopped');
+      this.logger.log("Alert monitoring stopped");
     }
   }
 
@@ -372,7 +380,12 @@ export class AlertingService {
       }
 
       // Evaluate threshold
-      const metricValue = this.getMetricValue(rule.threshold.metric, snapshot, requestStats, dbStats);
+      const metricValue = this.getMetricValue(
+        rule.threshold.metric,
+        snapshot,
+        requestStats,
+        dbStats
+      );
       if (metricValue === null) {
         continue;
       }
@@ -391,7 +404,7 @@ export class AlertingService {
     metricName: string,
     snapshot: MetricsSnapshot,
     requestStats: Record<string, RequestStatistics>,
-    dbStats: DatabaseStatistics,
+    dbStats: DatabaseStatistics
   ): number | null {
     // System metrics
     if (snapshot.gauges[metricName] !== undefined) {
@@ -399,23 +412,29 @@ export class AlertingService {
     }
 
     // Request metrics
-    if (metricName === 'error.rate') {
-      const totalRequests = Object.values(requestStats).reduce((sum, stat) => sum + stat.count, 0);
-      const totalErrors = Object.values(requestStats).reduce((sum, stat) => sum + stat.errors, 0);
+    if (metricName === "error.rate") {
+      const totalRequests = Object.values(requestStats).reduce(
+        (sum, stat) => sum + stat.count,
+        0
+      );
+      const totalErrors = Object.values(requestStats).reduce(
+        (sum, stat) => sum + stat.errors,
+        0
+      );
       return totalRequests > 0 ? totalErrors / totalRequests : 0;
     }
 
-    if (metricName === 'response.time.p95') {
+    if (metricName === "response.time.p95") {
       const p95Values = Object.values(requestStats).map((stat) => stat.p95);
       return p95Values.length > 0 ? Math.max(...p95Values) : 0;
     }
 
     // Database metrics
-    if (metricName === 'database.error.rate') {
+    if (metricName === "database.error.rate") {
       return dbStats.errorRate;
     }
 
-    if (metricName === 'database.query.duration.p95') {
+    if (metricName === "database.query.duration.p95") {
       return dbStats.p95;
     }
 
@@ -432,15 +451,15 @@ export class AlertingService {
    */
   private evaluateThreshold(value: number, threshold: AlertThreshold): boolean {
     switch (threshold.operator) {
-      case 'gt':
+      case "gt":
         return value > threshold.value;
-      case 'lt':
+      case "lt":
         return value < threshold.value;
-      case 'gte':
+      case "gte":
         return value >= threshold.value;
-      case 'lte':
+      case "lte":
         return value <= threshold.value;
-      case 'eq':
+      case "eq":
         return value === threshold.value;
       default:
         return false;
@@ -450,12 +469,15 @@ export class AlertingService {
   /**
    * Trigger an alert
    */
-  private async triggerAlert(rule: AlertRule, currentValue: number): Promise<void> {
+  private async triggerAlert(
+    rule: AlertRule,
+    currentValue: number
+  ): Promise<void> {
     const alert = await this.createAlert({
       title: rule.name,
       message: `${rule.description}. Current value: ${currentValue}, Threshold: ${rule.threshold.value}`,
       severity: rule.threshold.severity,
-      source: 'alerting-service',
+      source: "alerting-service",
       metadata: {
         ruleId: rule.id,
         metric: rule.threshold.metric,
@@ -504,16 +526,19 @@ export class AlertingService {
   /**
    * Send alert to configured channel
    */
-  private async sendAlertToChannel(alert: SystemAlert, channel: AlertChannel): Promise<void> {
+  private async sendAlertToChannel(
+    alert: SystemAlert,
+    channel: AlertChannel
+  ): Promise<void> {
     try {
       switch (channel.type) {
-        case 'webhook':
+        case "webhook":
           await this.sendWebhookAlert(alert, channel.config as WebhookConfig);
           break;
-        case 'slack':
+        case "slack":
           await this.sendSlackAlert(alert, channel.config as SlackConfig);
           break;
-        case 'email':
+        case "email":
           await this.sendEmailAlert(alert, channel.config as EmailConfig);
           break;
       }
@@ -524,14 +549,18 @@ export class AlertingService {
         {
           alertId: alert.id,
           channel: channel.type,
-        });
+        }
+      );
     }
   }
 
   /**
    * Send alert via webhook
    */
-  private async sendWebhookAlert(alert: SystemAlert, config: WebhookConfig): Promise<void> {
+  private async sendWebhookAlert(
+    alert: SystemAlert,
+    config: WebhookConfig
+  ): Promise<void> {
     if (!config.url) {
       return;
     }
@@ -541,23 +570,27 @@ export class AlertingService {
       message: alert.message,
       severity: alert.severity,
       timestamp: alert.createdAt,
-      metadata: (alert as any).metadata,
+      metadata: (alert as SystemAlert & { metadata?: Record<string, unknown> })
+        .metadata,
     };
 
     await axios.post(config.url, payload, {
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    this.logger.log('Alert sent via webhook', { alertId: alert.id });
+    this.logger.log("Alert sent via webhook", { alertId: alert.id });
   }
 
   /**
    * Send alert to Slack
    */
-  private async sendSlackAlert(alert: SystemAlert, config: SlackConfig): Promise<void> {
+  private async sendSlackAlert(
+    alert: SystemAlert,
+    config: SlackConfig
+  ): Promise<void> {
     if (!config.webhookUrl) {
       return;
     }
@@ -571,22 +604,22 @@ export class AlertingService {
           text: alert.message,
           fields: [
             {
-              title: 'Severity',
+              title: "Severity",
               value: alert.severity,
               short: true,
             },
             {
-              title: 'Source',
+              title: "Source",
               value: alert.source,
               short: true,
             },
             {
-              title: 'Timestamp',
+              title: "Timestamp",
               value: alert.createdAt.toISOString(),
               short: false,
             },
           ],
-          footer: 'LexiFlow Monitoring',
+          footer: "LexiFlow Monitoring",
           ts: Math.floor(alert.createdAt.getTime() / 1000),
         },
       ],
@@ -595,22 +628,25 @@ export class AlertingService {
     await axios.post(config.webhookUrl, payload, {
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    this.logger.log('Alert sent to Slack', { alertId: alert.id });
+    this.logger.log("Alert sent to Slack", { alertId: alert.id });
   }
 
   /**
    * Send alert via email
    */
-  private async sendEmailAlert(alert: SystemAlert, config: EmailConfig): Promise<void> {
+  private async sendEmailAlert(
+    alert: SystemAlert,
+    config: EmailConfig
+  ): Promise<void> {
     // Email integration would be implemented here
     // For now, just log that we would send an email
-    this.logger.log('Email alert would be sent', {
+    this.logger.log("Email alert would be sent", {
       alertId: alert.id,
-      recipients: config.recipients as any,
+      recipients: config.recipients as string[],
     });
   }
 
@@ -620,23 +656,28 @@ export class AlertingService {
   private getSeverityColor(severity: AlertSeverity): string {
     switch (severity) {
       case AlertSeverity.CRITICAL:
-        return '#ff0000';
+        return "#ff0000";
       case AlertSeverity.ERROR:
-        return '#ff6600';
+        return "#ff6600";
       case AlertSeverity.WARNING:
-        return '#ffcc00';
+        return "#ffcc00";
       case AlertSeverity.INFO:
-        return '#00ccff';
+        return "#00ccff";
       default:
-        return '#cccccc';
+        return "#cccccc";
     }
   }
 
   /**
    * Acknowledge an alert
    */
-  async acknowledgeAlert(alertId: string, userId: string): Promise<SystemAlert | null> {
-    const alert = await this.alertRepository.findOne({ where: { id: alertId } });
+  async acknowledgeAlert(
+    alertId: string,
+    userId: string
+  ): Promise<SystemAlert | null> {
+    const alert = await this.alertRepository.findOne({
+      where: { id: alertId },
+    });
 
     if (alert && !alert.acknowledged) {
       alert.acknowledged = true;
@@ -644,7 +685,7 @@ export class AlertingService {
       alert.acknowledgedAt = new Date();
       await this.alertRepository.save(alert);
 
-      this.logger.log('Alert acknowledged', {
+      this.logger.log("Alert acknowledged", {
         alertId,
         userId,
       });
@@ -659,14 +700,16 @@ export class AlertingService {
    * Resolve an alert
    */
   async resolveAlert(alertId: string): Promise<SystemAlert | null> {
-    const alert = await this.alertRepository.findOne({ where: { id: alertId } });
+    const alert = await this.alertRepository.findOne({
+      where: { id: alertId },
+    });
 
     if (alert && !alert.resolved) {
       alert.resolved = true;
       alert.resolvedAt = new Date();
       await this.alertRepository.save(alert);
 
-      this.logger.log('Alert resolved', { alertId });
+      this.logger.log("Alert resolved", { alertId });
 
       return alert;
     }
@@ -680,7 +723,7 @@ export class AlertingService {
   async getActiveAlerts(): Promise<SystemAlert[]> {
     return await this.alertRepository.find({
       where: { resolved: false },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -689,8 +732,12 @@ export class AlertingService {
    */
   async getAlertStats(): Promise<AlertStatistics> {
     const totalAlerts = await this.alertRepository.count();
-    const activeAlerts = await this.alertRepository.count({ where: { resolved: false } });
-    const acknowledgedAlerts = await this.alertRepository.count({ where: { acknowledged: true } });
+    const activeAlerts = await this.alertRepository.count({
+      where: { resolved: false },
+    });
+    const acknowledgedAlerts = await this.alertRepository.count({
+      where: { acknowledged: true },
+    });
 
     const criticalAlerts = await this.alertRepository.count({
       where: { severity: AlertSeverity.CRITICAL, resolved: false },
@@ -708,7 +755,8 @@ export class AlertingService {
       high: highAlerts,
       rules: {
         total: this.alertRules.size,
-        enabled: Array.from(this.alertRules.values()).filter((r) => r.enabled).length,
+        enabled: Array.from(this.alertRules.values()).filter((r) => r.enabled)
+          .length,
       },
     };
   }

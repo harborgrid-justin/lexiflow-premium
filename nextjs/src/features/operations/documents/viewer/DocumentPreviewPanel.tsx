@@ -78,7 +78,7 @@ export function DocumentPreviewPanel({
 
         // Ensure consistent reset during transitions
         if (!document) {
-            setPreviewUrl(null);
+            if (previewUrl) setPreviewUrl(null);
             return;
         }
 

@@ -51,7 +51,7 @@ interface WitnessPrepProps {
 // COMPONENT
 // ============================================================================
 
-export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, onClearSelection }: WitnessPrepProps) {
+export function WitnessPrep({ warRoomData, initialWitnessId, onClearSelection }: WitnessPrepProps) {
     // ============================================================================
     // HOOKS & CONTEXT
     // ============================================================================
@@ -60,6 +60,7 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
     // ============================================================================
     // STATE MANAGEMENT
     // ============================================================================
+    // Derive selected witness from initialWitnessId prop
     const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(initialWitnessId || null);
     const [outline, setOutline] = useState('1. Introduction\n2. Background\n3. Key Events\n   - ...');
     const linkModal = useModalState();
@@ -78,13 +79,6 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
             linkedExhibits: []
         }));
     }, [warRoomData]);
-
-    // ============================================================================
-    // EFFECTS
-    // ============================================================================
-    useEffect(() => {
-        if (initialWitnessId) setSelectedWitnessId(initialWitnessId);
-    }, [initialWitnessId]);
 
     const activeWitness = witnesses.find((w) => w.id === selectedWitnessId);
 
@@ -163,7 +157,6 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
                                     <span className="font-bold">{w.prep}%</span>
                                 </div>
                                 <div className={cn("w-full h-1.5 rounded-full", theme.surface.highlight)}>
-                                    {/* eslint-disable-next-line @lexiflow/no-inline-styles -- Dynamic width requires inline style */}
                                     <div className={cn("h-1.5 rounded-full transition-all bg-blue-500")} style={{ width: `${w.prep}%` }}></div>
                                 </div>
                             </div>

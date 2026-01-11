@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Party } from './entities/party.entity';
-import { CreatePartyDto } from './dto/create-party.dto';
-import { UpdatePartyDto } from './dto/update-party.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Party } from "./entities/party.entity";
+import { CreatePartyDto } from "./dto/create-party.dto";
+import { UpdatePartyDto } from "./dto/update-party.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -37,15 +37,18 @@ import { UpdatePartyDto } from './dto/update-party.dto';
 export class PartiesService {
   constructor(
     @InjectRepository(Party)
-    private readonly partyRepository: Repository<Party>,
+    private readonly partyRepository: Repository<Party>
   ) {}
 
-  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
+  async findAll(options?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [parties, total] = await this.partyRepository.findAndCount({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
       skip,
       take: limit,
     });
@@ -58,13 +61,16 @@ export class PartiesService {
     };
   }
 
-  async findAllByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
+  async findAllByCaseId(
+    caseId: string,
+    options?: { page?: number; limit?: number }
+  ): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [parties, total] = await this.partyRepository.findAndCount({
       where: { caseId },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
       skip,
       take: limit,
     });
@@ -98,9 +104,14 @@ export class PartiesService {
     await this.findOne(id);
     const updateData: Partial<Party> = { ...updatePartyDto };
     if (updatePartyDto.metadata) {
-      updateData.metadata = JSON.stringify(updatePartyDto.metadata) as unknown as Record<string, unknown>;
+      updateData.metadata = JSON.stringify(
+        updatePartyDto.metadata
+      ) as unknown as Record<string, unknown>;
     }
-    await this.partyRepository.update(id, updateData as any);
+    await this.partyRepository.update(
+      id,
+      updateData as Record<string, unknown>
+    );
     return this.findOne(id);
   }
 

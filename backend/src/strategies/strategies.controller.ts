@@ -29,8 +29,9 @@ export class StrategiesController {
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() updateDto: any) {
-    const type = updateDto.type || updateDto.strategyType;
+  update(@Param("id") id: string, @Body() updateDto: Record<string, unknown>) {
+    const type =
+      (updateDto.type as string) || (updateDto.strategyType as string);
     return this.strategiesService.update(id, {
       ...updateDto,
       strategyType: type,

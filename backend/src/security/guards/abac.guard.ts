@@ -1,6 +1,12 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException, Logger } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Logger,
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Request } from "express";
 
 /**
  * ABAC Policy
@@ -14,23 +20,50 @@ export interface AbacPolicy {
 /**
  * Allowed attribute values for ABAC conditions
  */
-export type AbacAttributeValue = string | number | boolean | string[] | number[] | Date | null | undefined;
+export type AbacAttributeValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | Date
+  | null
+  | undefined;
 
 /**
  * ABAC Condition
  */
 export interface AbacCondition {
   attribute: string;
-  operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'contains' | 'startsWith' | 'endsWith';
+  operator:
+    | "eq"
+    | "ne"
+    | "gt"
+    | "lt"
+    | "gte"
+    | "lte"
+    | "in"
+    | "nin"
+    | "contains"
+    | "startsWith"
+    | "endsWith";
   value: AbacAttributeValue;
-  source: 'user' | 'resource' | 'environment' | 'request';
+  source: "user" | "resource" | "environment" | "request";
 }
 
 /**
  * Custom attributes for user, resource, etc.
  */
 export interface AbacAttributes {
-  [key: string]: string | number | boolean | string[] | number[] | Date | null | undefined;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | string[]
+    | number[]
+    | Date
+    | null
+    | undefined;
 }
 
 /**
@@ -56,7 +89,7 @@ export interface AbacContext {
     timestamp: Date;
     ipAddress: string;
     location?: string;
-    timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+    timeOfDay: "morning" | "afternoon" | "evening" | "night";
     dayOfWeek: string;
     isBusinessHours: boolean;
   };
@@ -70,7 +103,7 @@ export interface AbacContext {
 /**
  * ABAC Metadata Key
  */
-export const ABAC_POLICY_KEY = 'abac:policy';
+export const ABAC_POLICY_KEY = "abac:policy";
 
 /**
  * ABAC Policy Decorator
@@ -79,7 +112,7 @@ export const AbacPolicy = (policy: AbacPolicy | AbacPolicy[]) => {
   return (
     target: object,
     _propertyKey?: string | symbol,
-    descriptor?: TypedPropertyDescriptor<(...args: unknown[]) => unknown>,
+    descriptor?: TypedPropertyDescriptor<(...args: unknown[]) => unknown>
   ): TypedPropertyDescriptor<(...args: unknown[]) => unknown> | void => {
     const policies = Array.isArray(policy) ? policy : [policy];
     if (descriptor && descriptor.value) {
@@ -139,7 +172,7 @@ export class AbacGuard implements CanActivate {
     // Get ABAC policies from metadata
     const policies = this.reflector.get<AbacPolicy[]>(
       ABAC_POLICY_KEY,
-      context.getHandler(),
+      context.getHandler()
     );
 
     if (!policies || policies.length === 0) {
@@ -151,7 +184,7 @@ export class AbacGuard implements CanActivate {
 
     // Check if user is authenticated
     if (!request.user) {
-      throw new ForbiddenException('Authentication required');
+      throw new ForbiddenException("Authentication required");
     }
 
     // Build ABAC context
@@ -164,11 +197,11 @@ export class AbacGuard implements CanActivate {
       if (!allowed) {
         this.logger.warn(
           `ABAC policy denied: ${policy.resource}:${policy.action} for user ${request.user.id}`,
-          { policy, context: abacContext },
+          { policy, context: abacContext }
         );
 
         throw new ForbiddenException({
-          message: 'Access denied by policy',
+          message: "Access denied by policy",
           resource: policy.resource,
           action: policy.action,
         });
@@ -177,7 +210,7 @@ export class AbacGuard implements CanActivate {
 
     if (policies[0]) {
       this.logger.debug(
-        `ABAC policy allowed: ${policies[0].resource}:${policies[0].action} for user ${request.user.id}`,
+        `ABAC policy allowed: ${policies[0].resource}:${policies[0].action} for user ${request.user.id}`
       );
     }
 
@@ -188,7 +221,12 @@ export class AbacGuard implements CanActivate {
    * Build ABAC context from request
    */
   private async buildContext(request: RequestWithUser): Promise<AbacContext> {
-    const user = request.user!;
+    const user = request.user;
+
+    if (!user) {
+      throw new Error("User not found in request");
+    }
+
     const now = new Date();
 
     return {
@@ -205,13 +243,16 @@ export class AbacGuard implements CanActivate {
         timestamp: now,
         ipAddress: this.getClientIp(request),
         timeOfDay: this.getTimeOfDay(now),
-        dayOfWeek: now.toLocaleDateString('en-US', { weekday: 'long' }),
+        dayOfWeek: now.toLocaleDateString("en-US", { weekday: "long" }),
         isBusinessHours: this.isBusinessHours(now),
       },
       request: {
         method: request.method,
         path: request.path,
-        headers: request.headers as unknown as Record<string, string | string[] | undefined>,
+        headers: request.headers as unknown as Record<
+          string,
+          string | string[] | undefined
+        >,
       },
     };
   }
@@ -219,7 +260,9 @@ export class AbacGuard implements CanActivate {
   /**
    * Get resource context (if applicable)
    */
-  private async getResourceContext(request: RequestWithUser): Promise<AbacContext['resource'] | undefined> {
+  private async getResourceContext(
+    request: RequestWithUser
+  ): Promise<AbacContext["resource"] | undefined> {
     // Extract resource ID from params
     const resourceId = request.params?.id || request.params?.resourceId;
     if (!resourceId) {
@@ -238,10 +281,16 @@ export class AbacGuard implements CanActivate {
   /**
    * Evaluate ABAC policy
    */
-  private async evaluatePolicy(policy: AbacPolicy, context: AbacContext): Promise<boolean> {
+  private async evaluatePolicy(
+    policy: AbacPolicy,
+    context: AbacContext
+  ): Promise<boolean> {
     // 1. Check base permission (resource:action)
     const basePermission = `${policy.resource.toLowerCase()}:${policy.action.toLowerCase()}`;
-    if (!context.user.permissions.includes(basePermission) && !context.user.permissions.includes('*')) {
+    if (
+      !context.user.permissions.includes(basePermission) &&
+      !context.user.permissions.includes("*")
+    ) {
       return false;
     }
 
@@ -264,15 +313,26 @@ export class AbacGuard implements CanActivate {
   /**
    * Evaluate individual condition
    */
-  private async evaluateCondition(condition: AbacCondition, context: AbacContext): Promise<boolean> {
+  private async evaluateCondition(
+    condition: AbacCondition,
+    context: AbacContext
+  ): Promise<boolean> {
     // Get actual value based on source
-    const actualValue = this.getAttributeValue(condition.attribute, condition.source, context);
+    const actualValue = this.getAttributeValue(
+      condition.attribute,
+      condition.source,
+      context
+    );
 
     // Get expected value (resolve references like 'user.organizationId')
     const expectedValue = this.resolveValue(condition.value, context);
 
     // Evaluate condition based on operator
-    return this.evaluateOperator(actualValue, condition.operator, expectedValue);
+    return this.evaluateOperator(
+      actualValue,
+      condition.operator,
+      expectedValue
+    );
   }
 
   /**
@@ -280,17 +340,19 @@ export class AbacGuard implements CanActivate {
    */
   private getAttributeValue(
     attribute: string,
-    source: AbacCondition['source'],
-    context: AbacContext,
+    source: AbacCondition["source"],
+    context: AbacContext
   ): AbacAttributeValue {
     switch (source) {
-      case 'user':
+      case "user":
         return this.getNestedValue(context.user, attribute);
-      case 'resource':
-        return context.resource ? this.getNestedValue(context.resource, attribute) : undefined;
-      case 'environment':
+      case "resource":
+        return context.resource
+          ? this.getNestedValue(context.resource, attribute)
+          : undefined;
+      case "environment":
         return this.getNestedValue(context.environment, attribute);
-      case 'request':
+      case "request":
         return this.getNestedValue(context.request, attribute);
       default:
         return undefined;
@@ -302,10 +364,10 @@ export class AbacGuard implements CanActivate {
    */
   private getNestedValue(
     obj: Record<string, unknown>,
-    path: string,
+    path: string
   ): AbacAttributeValue {
-    const value = path.split('.').reduce<unknown>((current, key) => {
-      if (current && typeof current === 'object' && key in current) {
+    const value = path.split(".").reduce<unknown>((current, key) => {
+      if (current && typeof current === "object" && key in current) {
         return (current as Record<string, unknown>)[key];
       }
       return undefined;
@@ -313,13 +375,14 @@ export class AbacGuard implements CanActivate {
 
     // Ensure returned value matches AbacAttributeValue type
     if (
-      typeof value === 'string' ||
-      typeof value === 'number' ||
-      typeof value === 'boolean' ||
+      typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "boolean" ||
       value === null ||
       value === undefined ||
       value instanceof Date ||
-      (Array.isArray(value) && value.every(v => typeof v === 'string' || typeof v === 'number'))
+      (Array.isArray(value) &&
+        value.every((v) => typeof v === "string" || typeof v === "number"))
     ) {
       return value as AbacAttributeValue;
     }
@@ -330,20 +393,32 @@ export class AbacGuard implements CanActivate {
   /**
    * Resolve value references
    */
-  private resolveValue(value: AbacAttributeValue, context: AbacContext): AbacAttributeValue {
-    if (typeof value !== 'string') {
+  private resolveValue(
+    value: AbacAttributeValue,
+    context: AbacContext
+  ): AbacAttributeValue {
+    if (typeof value !== "string") {
       return value;
     }
 
     // Check if value is a reference (e.g., 'user.organizationId')
-    if (value.startsWith('user.')) {
-      return this.getNestedValue(context.user as unknown as Record<string, unknown>, value.substring(5));
-    } else if (value.startsWith('resource.')) {
+    if (value.startsWith("user.")) {
+      return this.getNestedValue(
+        context.user as unknown as Record<string, unknown>,
+        value.substring(5)
+      );
+    } else if (value.startsWith("resource.")) {
       return context.resource
-        ? this.getNestedValue(context.resource as unknown as Record<string, unknown>, value.substring(9))
+        ? this.getNestedValue(
+            context.resource as unknown as Record<string, unknown>,
+            value.substring(9)
+          )
         : undefined;
-    } else if (value.startsWith('environment.')) {
-      return this.getNestedValue(context.environment as unknown as Record<string, unknown>, value.substring(12));
+    } else if (value.startsWith("environment.")) {
+      return this.getNestedValue(
+        context.environment as unknown as Record<string, unknown>,
+        value.substring(12)
+      );
     }
 
     return value;
@@ -354,65 +429,88 @@ export class AbacGuard implements CanActivate {
    */
   private evaluateOperator(
     actualValue: AbacAttributeValue,
-    operator: AbacCondition['operator'],
-    expectedValue: AbacAttributeValue,
+    operator: AbacCondition["operator"],
+    expectedValue: AbacAttributeValue
   ): boolean {
     // Handle null/undefined values
     if (actualValue === null || actualValue === undefined) {
-      return operator === 'eq' ? expectedValue === null || expectedValue === undefined : false;
+      return operator === "eq"
+        ? expectedValue === null || expectedValue === undefined
+        : false;
     }
 
     if (expectedValue === null || expectedValue === undefined) {
-      return operator === 'ne';
+      return operator === "ne";
     }
 
     switch (operator) {
-      case 'eq':
+      case "eq":
         return actualValue === expectedValue;
-      case 'ne':
+      case "ne":
         return actualValue !== expectedValue;
-      case 'gt':
-        if (typeof actualValue === 'number' && typeof expectedValue === 'number') {
+      case "gt":
+        if (
+          typeof actualValue === "number" &&
+          typeof expectedValue === "number"
+        ) {
           return actualValue > expectedValue;
         }
         return false;
-      case 'lt':
-        if (typeof actualValue === 'number' && typeof expectedValue === 'number') {
+      case "lt":
+        if (
+          typeof actualValue === "number" &&
+          typeof expectedValue === "number"
+        ) {
           return actualValue < expectedValue;
         }
         return false;
-      case 'gte':
-        if (typeof actualValue === 'number' && typeof expectedValue === 'number') {
+      case "gte":
+        if (
+          typeof actualValue === "number" &&
+          typeof expectedValue === "number"
+        ) {
           return actualValue >= expectedValue;
         }
         return false;
-      case 'lte':
-        if (typeof actualValue === 'number' && typeof expectedValue === 'number') {
+      case "lte":
+        if (
+          typeof actualValue === "number" &&
+          typeof expectedValue === "number"
+        ) {
           return actualValue <= expectedValue;
         }
         return false;
-      case 'in':
+      case "in":
         if (Array.isArray(expectedValue)) {
-          return expectedValue.some(v => v === actualValue);
+          return expectedValue.some((v) => v === actualValue);
         }
         return false;
-      case 'nin':
+      case "nin":
         if (Array.isArray(expectedValue)) {
-          return !expectedValue.some(v => v === actualValue);
+          return !expectedValue.some((v) => v === actualValue);
         }
         return false;
-      case 'contains':
-        if (typeof actualValue === 'string' && typeof expectedValue === 'string') {
+      case "contains":
+        if (
+          typeof actualValue === "string" &&
+          typeof expectedValue === "string"
+        ) {
           return actualValue.includes(expectedValue);
         }
         return false;
-      case 'startsWith':
-        if (typeof actualValue === 'string' && typeof expectedValue === 'string') {
+      case "startsWith":
+        if (
+          typeof actualValue === "string" &&
+          typeof expectedValue === "string"
+        ) {
           return actualValue.startsWith(expectedValue);
         }
         return false;
-      case 'endsWith':
-        if (typeof actualValue === 'string' && typeof expectedValue === 'string') {
+      case "endsWith":
+        if (
+          typeof actualValue === "string" &&
+          typeof expectedValue === "string"
+        ) {
           return actualValue.endsWith(expectedValue);
         }
         return false;
@@ -426,23 +524,25 @@ export class AbacGuard implements CanActivate {
    */
   private getClientIp(request: RequestWithUser): string {
     return (
-      (request.headers['cf-connecting-ip'] as string) ||
-      (request.headers['x-real-ip'] as string) ||
-      (request.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+      (request.headers["cf-connecting-ip"] as string) ||
+      (request.headers["x-real-ip"] as string) ||
+      (request.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
       request.ip ||
-      'unknown'
+      "unknown"
     );
   }
 
   /**
    * Get time of day
    */
-  private getTimeOfDay(date: Date): 'morning' | 'afternoon' | 'evening' | 'night' {
+  private getTimeOfDay(
+    date: Date
+  ): "morning" | "afternoon" | "evening" | "night" {
     const hour = date.getHours();
-    if (hour >= 5 && hour < 12) return 'morning';
-    if (hour >= 12 && hour < 17) return 'afternoon';
-    if (hour >= 17 && hour < 21) return 'evening';
-    return 'night';
+    if (hour >= 5 && hour < 12) return "morning";
+    if (hour >= 12 && hour < 17) return "afternoon";
+    if (hour >= 17 && hour < 21) return "evening";
+    return "night";
   }
 
   /**
@@ -462,7 +562,7 @@ export class AbacGuard implements CanActivate {
   private getResourceTypeFromPath(path: string): string {
     // Extract resource type from path (e.g., /api/cases/123 -> 'cases')
     const match = path.match(/\/api\/([^/]+)/);
-    return match?.[1] ?? 'unknown';
+    return match?.[1] ?? "unknown";
   }
 }
 

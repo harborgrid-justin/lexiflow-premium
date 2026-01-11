@@ -1,12 +1,16 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import * as MasterConfig from '@config/master.config';
-import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '@common/utils/math.utils';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import * as MasterConfig from "@config/master.config";
+import {
+  calculateOffset,
+  calculateTotalPages,
+  calculateExecutionTime,
+} from "@common/utils/math.utils";
 import {
   SearchQueryDto,
   SearchEntityType,
   SearchSuggestionsDto,
   ReindexDto,
-} from './dto/search-query.dto';
+} from "./dto/search-query.dto";
 import {
   SearchResultDto,
   SearchResultItem,
@@ -15,11 +19,11 @@ import {
   SearchSuggestionItem,
   ReindexResultDto,
   SearchFacets,
-} from './dto/search-result.dto';
+} from "./dto/search-result.dto";
 
 /**
  * Search Service with Memory Optimizations
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - LRU cache with 5K entry limit
  * - 15-minute TTL for cached results
@@ -65,35 +69,37 @@ export class SearchService implements OnModuleDestroy {
   private readonly CACHE_TTL_MS = 900000; // 15 minutes
 
   // Add search result cache tracking with TTL
-  private searchCache: Map<string, { data: SearchResultDto; timestamp: number }> = new Map();
+  private searchCache: Map<
+    string,
+    { data: SearchResultDto; timestamp: number }
+  > = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
-  constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
-    // @InjectRepository(Client) private clientRepository: Repository<any>,
-    // These will be injected when entities are available
-  ) {
+  constructor() // @InjectRepository(Case) private caseRepository: Repository<any>,
+  // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
+  // @InjectRepository(Client) private clientRepository: Repository<any>,
+  // These will be injected when entities are available
+  {
     this.startCacheCleanup();
   }
 
   onModuleDestroy() {
-    this.logger.log('Cleaning up search service...');
-    
+    this.logger.log("Cleaning up search service...");
+
     // Clear cleanup interval
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = null;
     }
-    
+
     // Clear search caches
     if (this.searchCache) {
       const cacheSize = this.searchCache.size;
       this.searchCache.clear();
       this.logger.log(`Cleared ${cacheSize} cached search results`);
     }
-    
-    this.logger.log('Search service cleanup complete');
+
+    this.logger.log("Search service cleanup complete");
   }
 
   /**
@@ -111,14 +117,14 @@ export class SearchService implements OnModuleDestroy {
   private cleanupExpiredCache(): void {
     const now = Date.now();
     let removedCount = 0;
-    
+
     for (const [key, entry] of this.searchCache.entries()) {
       if (now - entry.timestamp > this.CACHE_TTL_MS) {
         this.searchCache.delete(key);
         removedCount++;
       }
     }
-    
+
     if (removedCount > 0) {
       this.logger.log(`Cleaned up ${removedCount} expired cache entries`);
     }
@@ -130,19 +136,19 @@ export class SearchService implements OnModuleDestroy {
   private async getOrCache<T>(key: string, fn: () => Promise<T>): Promise<T> {
     const cached = this.searchCache.get(key);
     const now = Date.now();
-    
+
     // Return cached if valid
     if (cached && now - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data as T;
     }
-    
+
     // Execute and cache
     const data = await fn();
-    this.searchCache.set(key, { data: data as any, timestamp: now });
-    
+    this.searchCache.set(key, { data: data as T, timestamp: now });
+
     // Enforce LRU limit
     this.enforceCacheLRU();
-    
+
     return data;
   }
 
@@ -159,7 +165,9 @@ export class SearchService implements OnModuleDestroy {
           this.searchCache.delete(key);
         }
       }
-      this.logger.warn(`LRU eviction: removed ${toRemove} cache entries (size: ${this.searchCache.size})`);
+      this.logger.warn(
+        `LRU eviction: removed ${toRemove} cache entries (size: ${this.searchCache.size})`
+      );
     }
   }
 
@@ -168,14 +176,16 @@ export class SearchService implements OnModuleDestroy {
    */
   async search(query: SearchQueryDto): Promise<SearchResultDto> {
     const cacheKey = `search:${JSON.stringify(query)}`;
-    
+
     return this.getOrCache(cacheKey, async () => {
       const startTime = Date.now();
       const { page = 1, limit = 20, entityType } = query;
 
       const safeLimit = Math.min(limit, this.MAX_PAGE_SIZE);
       if (limit > this.MAX_PAGE_SIZE) {
-        this.logger.warn(`Limit ${limit} exceeds maximum ${this.MAX_PAGE_SIZE}, using ${this.MAX_PAGE_SIZE}`);
+        this.logger.warn(
+          `Limit ${limit} exceeds maximum ${this.MAX_PAGE_SIZE}, using ${this.MAX_PAGE_SIZE}`
+        );
       }
 
       const safeQuery = { ...query, limit: safeLimit };
@@ -229,7 +239,8 @@ export class SearchService implements OnModuleDestroy {
           facets: await this.generateFacets(results),
         };
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error';
+        const message =
+          error instanceof Error ? error.message : "Unknown error";
         const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error(`Search error: ${message}`, stack);
         throw error;
@@ -240,7 +251,9 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Search cases with full-text search
    */
-  async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+  async searchCases(
+    query: SearchQueryDto
+  ): Promise<{ results: SearchResultItem[]; total: number }> {
     const { query: searchQuery, status } = query;
 
     // Mock implementation - replace with actual TypeORM query when entities are available
@@ -310,21 +323,21 @@ export class SearchService implements OnModuleDestroy {
     // Mock data for now
     const results: SearchResultItem[] = [
       {
-        id: '1',
+        id: "1",
         entityType: SearchEntityType.CASE,
         title: `Case matching "${searchQuery}"`,
-        description: 'Civil litigation case involving contract disputes',
+        description: "Civil litigation case involving contract disputes",
         score: 0.95,
         highlights: [
           {
-            field: 'title',
+            field: "title",
             snippet: `<mark>${searchQuery}</mark> in title`,
           },
         ],
         metadata: {
-          caseNumber: 'CV-2024-001',
-          status: status || 'active',
-          practiceArea: 'Civil Litigation',
+          caseNumber: "CV-2024-001",
+          status: status || "active",
+          practiceArea: "Civil Litigation",
         },
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -337,25 +350,32 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Search documents with full-text search
    */
-  async searchDocuments(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery, page: _page = 1, limit: _limit = 20, fuzzy: _fuzzy } = _query;
+  async searchDocuments(
+    _query: SearchQueryDto
+  ): Promise<{ results: SearchResultItem[]; total: number }> {
+    const {
+      query: searchQuery,
+      page: _page = 1,
+      limit: _limit = 20,
+      fuzzy: _fuzzy,
+    } = _query;
 
     // Mock implementation - replace with actual query
     const results: SearchResultItem[] = [
       {
-        id: '1',
+        id: "1",
         entityType: SearchEntityType.DOCUMENT,
         title: `Document: ${searchQuery}`,
-        description: 'Legal document with relevant content',
+        description: "Legal document with relevant content",
         score: 0.88,
         highlights: [
           {
-            field: 'content',
+            field: "content",
             snippet: `...text containing <mark>${searchQuery}</mark>...`,
           },
         ],
         metadata: {
-          documentType: 'Contract',
+          documentType: "Contract",
           fileSize: 1024000,
         },
         createdAt: new Date(),
@@ -369,26 +389,28 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Search clients
    */
-  async searchClients(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+  async searchClients(
+    _query: SearchQueryDto
+  ): Promise<{ results: SearchResultItem[]; total: number }> {
     const { query: searchQuery, page: _page = 1, limit: _limit = 20 } = _query;
 
     // Mock implementation
     const results: SearchResultItem[] = [
       {
-        id: '1',
+        id: "1",
         entityType: SearchEntityType.CLIENT,
         title: `Client: ${searchQuery}`,
-        description: 'Corporate client',
+        description: "Corporate client",
         score: 0.92,
         highlights: [
           {
-            field: 'name',
+            field: "name",
             snippet: `<mark>${searchQuery}</mark>`,
           },
         ],
         metadata: {
-          clientType: 'corporate',
-          since: '2020-01-01',
+          clientType: "corporate",
+          since: "2020-01-01",
         },
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -401,11 +423,19 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Search across all entity types
    */
-  async searchAll(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+  async searchAll(
+    query: SearchQueryDto
+  ): Promise<{ results: SearchResultItem[]; total: number }> {
     const [caseResults, docResults, clientResults] = await Promise.all([
       this.searchCases({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
-      this.searchDocuments({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
-      this.searchClients({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
+      this.searchDocuments({
+        ...query,
+        limit: MasterConfig.SEARCH_PREVIEW_LIMIT,
+      }),
+      this.searchClients({
+        ...query,
+        limit: MasterConfig.SEARCH_PREVIEW_LIMIT,
+      }),
     ]);
 
     const allResults = [
@@ -424,7 +454,9 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Get search suggestions/autocomplete
    */
-  async getSuggestions(dto: SearchSuggestionsDto): Promise<SearchSuggestionsResultDto> {
+  async getSuggestions(
+    dto: SearchSuggestionsDto
+  ): Promise<SearchSuggestionsResultDto> {
     const { query, limit: _limit = 10, entityType: _entityType } = dto;
 
     // Mock implementation - would use PostgreSQL trigram similarity
@@ -439,15 +471,15 @@ export class SearchService implements OnModuleDestroy {
     const suggestions: SearchSuggestionItem[] = [
       {
         text: `${query} contract`,
-        type: 'query',
+        type: "query",
         score: 0.9,
-        context: 'Popular search',
+        context: "Popular search",
       },
       {
         text: `${query} litigation`,
-        type: 'query',
+        type: "query",
         score: 0.85,
-        context: 'Recent search',
+        context: "Recent search",
       },
     ];
 
@@ -464,7 +496,7 @@ export class SearchService implements OnModuleDestroy {
     const startTime = Date.now();
     const { entityType, force: _force } = dto;
 
-    this.logger.log(`Starting reindex for ${entityType || 'all'} entities`);
+    this.logger.log(`Starting reindex for ${entityType || "all"} entities`);
 
     // Mock implementation - would rebuild search indexes
     /*
@@ -483,16 +515,18 @@ export class SearchService implements OnModuleDestroy {
     return {
       success: true,
       recordsIndexed: 1000,
-      entityTypes: entityType ? [entityType] : ['all'],
+      entityTypes: entityType ? [entityType] : ["all"],
       duration,
-      message: 'Search index rebuilt successfully',
+      message: "Search index rebuilt successfully",
     };
   }
 
   /**
    * Generate facets for filtering
    */
-  private async generateFacets(results: SearchResultItem[]): Promise<SearchFacets> {
+  private async generateFacets(
+    results: SearchResultItem[]
+  ): Promise<SearchFacets> {
     const facets = {
       entityTypes: {} as Record<string, number>,
       practiceAreas: {} as Record<string, number>,
@@ -501,16 +535,23 @@ export class SearchService implements OnModuleDestroy {
 
     results.forEach((result) => {
       // Count by entity type
-      facets.entityTypes[result.entityType] = (facets.entityTypes[result.entityType] || 0) + 1;
+      facets.entityTypes[result.entityType] =
+        (facets.entityTypes[result.entityType] || 0) + 1;
 
       // Count by practice area (if available)
-      if (result.metadata?.practiceArea && typeof result.metadata.practiceArea === 'string') {
+      if (
+        result.metadata?.practiceArea &&
+        typeof result.metadata.practiceArea === "string"
+      ) {
         const area = result.metadata.practiceArea;
         facets.practiceAreas[area] = (facets.practiceAreas[area] || 0) + 1;
       }
 
       // Count by status (if available)
-      if (result.metadata?.status && typeof result.metadata.status === 'string') {
+      if (
+        result.metadata?.status &&
+        typeof result.metadata.status === "string"
+      ) {
         const statusKey = result.metadata.status;
         facets.statuses[statusKey] = (facets.statuses[statusKey] || 0) + 1;
       }
@@ -536,7 +577,7 @@ export class SearchService implements OnModuleDestroy {
     return {
       id: caseEntity.id,
       entityType: SearchEntityType.CASE,
-      title: (caseEntity.title || caseEntity.caseNumber) ?? '',
+      title: (caseEntity.title || caseEntity.caseNumber) ?? "",
       description: caseEntity.description,
       score: caseEntity.score || 0,
       highlights: this.generateHighlights(caseEntity),
@@ -553,30 +594,30 @@ export class SearchService implements OnModuleDestroy {
   /**
    * Generate highlights for matched text
    */
-  private generateHighlights(entity: { 
-    title?: string; 
-    description?: string; 
+  private generateHighlights(entity: {
+    title?: string;
+    description?: string;
     caseNumber?: string;
   }): SearchHighlight[] {
     const highlights: SearchHighlight[] = [];
 
     if (entity.title) {
       highlights.push({
-        field: 'title',
+        field: "title",
         snippet: this.truncateSnippet(entity.title, 150),
       });
     }
 
     if (entity.description) {
       highlights.push({
-        field: 'description',
+        field: "description",
         snippet: this.truncateSnippet(entity.description, 200),
       });
     }
 
     if (entity.caseNumber) {
       highlights.push({
-        field: 'caseNumber',
+        field: "caseNumber",
         snippet: entity.caseNumber,
       });
     }
@@ -588,22 +629,28 @@ export class SearchService implements OnModuleDestroy {
     if (text.length <= maxLength) {
       return text;
     }
-    return text.substring(0, maxLength).trim() + '...';
+    return text.substring(0, maxLength).trim() + "...";
   }
 
-  async getRecentSearches(userId: string): Promise<Array<{
-    id: string;
-    query: string;
-    entityType?: SearchEntityType;
-    timestamp: Date;
-  }>> {
+  async getRecentSearches(userId: string): Promise<
+    Array<{
+      id: string;
+      query: string;
+      entityType?: SearchEntityType;
+      timestamp: Date;
+    }>
+  > {
     // This would query a search_history table
     // For now, return empty array since table doesn't exist yet
     this.logger.debug(`Fetching recent searches for user ${userId}`);
     return [];
   }
 
-  async saveSearch(userId: string, query: string, entityType?: SearchEntityType): Promise<{
+  async saveSearch(
+    userId: string,
+    query: string,
+    entityType?: SearchEntityType
+  ): Promise<{
     id: string;
     userId: string;
     query: string;
@@ -613,7 +660,7 @@ export class SearchService implements OnModuleDestroy {
     // This would insert into search_history table
     // For now, return mock object since table doesn't exist yet
     this.logger.debug(`Saving search for user ${userId}: "${query}"`);
-    
+
     return {
       id: `search_${Date.now()}`,
       userId,
@@ -636,18 +683,18 @@ export class SearchService implements OnModuleDestroy {
     popularSearches: Array<{ query: string; count: number }>;
     indexedByType: Record<string, number>;
   }> {
-    this.logger.log('Fetching search statistics');
+    this.logger.log("Fetching search statistics");
 
     return {
       totalIndexed: 15420,
       totalSearches: 1893,
       avgSearchTime: 0.245,
       popularSearches: [
-        { query: 'contract disputes', count: 127 },
-        { query: 'discovery motion', count: 89 },
-        { query: 'summary judgment', count: 76 },
-        { query: 'deposition transcripts', count: 64 },
-        { query: 'settlement agreement', count: 52 },
+        { query: "contract disputes", count: 127 },
+        { query: "discovery motion", count: 89 },
+        { query: "summary judgment", count: 76 },
+        { query: "deposition transcripts", count: 64 },
+        { query: "settlement agreement", count: 52 },
       ],
       indexedByType: {
         cases: 2340,

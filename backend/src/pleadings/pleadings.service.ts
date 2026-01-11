@@ -1,16 +1,16 @@
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Pleading, PleadingStatus, PleadingType } from './entities/pleading.entity';
-import { PleadingTemplate } from './entities/pleading-template.entity';
-import { CreatePleadingDto } from './dto/create-pleading.dto';
-import { UpdatePleadingDto } from './dto/update-pleading.dto';
-import { FilePleadingDto } from './dto/file-pleading.dto';
-import { CreateFromTemplateDto } from './dto/create-from-template.dto';
+  Pleading,
+  PleadingStatus,
+  PleadingType,
+} from "./entities/pleading.entity";
+import { PleadingTemplate } from "./entities/pleading-template.entity";
+import { CreatePleadingDto } from "./dto/create-pleading.dto";
+import { UpdatePleadingDto } from "./dto/update-pleading.dto";
+import { FilePleadingDto } from "./dto/file-pleading.dto";
+import { CreateFromTemplateDto } from "./dto/create-from-template.dto";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -62,7 +62,7 @@ export class PleadingsService {
     @InjectRepository(Pleading)
     private pleadingRepository: Repository<Pleading>,
     @InjectRepository(PleadingTemplate)
-    private templateRepository: Repository<PleadingTemplate>,
+    private templateRepository: Repository<PleadingTemplate>
   ) {}
 
   /**
@@ -70,7 +70,7 @@ export class PleadingsService {
    */
   async create(
     createPleadingDto: CreatePleadingDto,
-    userId?: string,
+    userId?: string
   ): Promise<Pleading> {
     try {
       const pleading = this.pleadingRepository.create({
@@ -83,7 +83,7 @@ export class PleadingsService {
 
       return savedPleading;
     } catch (error) {
-      this.logger.error('Failed to create pleading', error);
+      this.logger.error("Failed to create pleading", error);
       throw error;
     }
   }
@@ -91,23 +91,23 @@ export class PleadingsService {
   async findAll(
     caseId?: string,
     status?: PleadingStatus,
-    options?: { page?: number; limit?: number },
+    options?: { page?: number; limit?: number }
   ): Promise<{ data: Pleading[]; total: number; page: number; limit: number }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
-    const query = this.pleadingRepository.createQueryBuilder('pleading');
+    const query = this.pleadingRepository.createQueryBuilder("pleading");
 
     if (caseId) {
-      query.andWhere('pleading.caseId = :caseId', { caseId });
+      query.andWhere("pleading.caseId = :caseId", { caseId });
     }
 
     if (status) {
-      query.andWhere('pleading.status = :status', { status });
+      query.andWhere("pleading.status = :status", { status });
     }
 
-    query.orderBy('pleading.filedDate', 'DESC');
-    query.addOrderBy('pleading.createdAt', 'DESC');
+    query.orderBy("pleading.filedDate", "DESC");
+    query.addOrderBy("pleading.createdAt", "DESC");
     query.skip(skip);
     query.take(limit);
 
@@ -140,20 +140,20 @@ export class PleadingsService {
   async update(
     id: string,
     updatePleadingDto: UpdatePleadingDto,
-    userId?: string,
+    userId?: string
   ): Promise<Pleading> {
     const updateData = {
       ...updatePleadingDto,
       ...(userId ? { updatedBy: userId } : {}),
-      updatedAt: new Date()
-    } as any;
+      updatedAt: new Date(),
+    } as Record<string, unknown>;
 
     const result = await this.pleadingRepository
       .createQueryBuilder()
       .update(Pleading)
       .set(updateData)
-      .where('id = :id', { id })
-      .returning('*')
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
@@ -181,7 +181,7 @@ export class PleadingsService {
   async file(
     id: string,
     filePleadingDto: FilePleadingDto,
-    userId?: string,
+    userId?: string
   ): Promise<Pleading> {
     const pleading = await this.findOne(id);
 
@@ -209,7 +209,7 @@ export class PleadingsService {
   async findByCaseId(caseId: string): Promise<Pleading[]> {
     return await this.pleadingRepository.find({
       where: { caseId },
-      order: { filedDate: 'DESC', createdAt: 'DESC' },
+      order: { filedDate: "DESC", createdAt: "DESC" },
     });
   }
 
@@ -222,10 +222,10 @@ export class PleadingsService {
     futureDate.setDate(today.getDate() + daysAhead);
 
     return await this.pleadingRepository
-      .createQueryBuilder('pleading')
-      .where('pleading.hearingDate >= :today', { today })
-      .andWhere('pleading.hearingDate <= :futureDate', { futureDate })
-      .orderBy('pleading.hearingDate', 'ASC')
+      .createQueryBuilder("pleading")
+      .where("pleading.hearingDate >= :today", { today })
+      .andWhere("pleading.hearingDate <= :futureDate", { futureDate })
+      .orderBy("pleading.hearingDate", "ASC")
       .getMany();
   }
 
@@ -235,7 +235,7 @@ export class PleadingsService {
   async findByStatus(status: PleadingStatus): Promise<Pleading[]> {
     return await this.pleadingRepository.find({
       where: { status },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -255,7 +255,7 @@ export class PleadingsService {
 
     return await this.pleadingRepository.find({
       where,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -265,10 +265,10 @@ export class PleadingsService {
   async getOverduePleadings(): Promise<Pleading[]> {
     const today = new Date();
     return await this.pleadingRepository
-      .createQueryBuilder('pleading')
-      .where('pleading.dueDate < :today', { today })
-      .andWhere('pleading.status != :filed', { filed: PleadingStatus.FILED })
-      .orderBy('pleading.dueDate', 'ASC')
+      .createQueryBuilder("pleading")
+      .where("pleading.dueDate < :today", { today })
+      .andWhere("pleading.status != :filed", { filed: PleadingStatus.FILED })
+      .orderBy("pleading.dueDate", "ASC")
       .getMany();
   }
 
@@ -278,7 +278,7 @@ export class PleadingsService {
   async attachDocument(id: string, documentId: string): Promise<Pleading> {
     const pleading = await this.findOne(id);
     if (documentId) {
-          pleading.documentId = documentId;
+      pleading.documentId = documentId;
     }
     return await this.pleadingRepository.save(pleading);
   }
@@ -301,11 +301,11 @@ export class PleadingsService {
     futureDate.setDate(today.getDate() + days);
 
     return await this.pleadingRepository
-      .createQueryBuilder('pleading')
-      .where('pleading.dueDate >= :today', { today })
-      .andWhere('pleading.dueDate <= :futureDate', { futureDate })
-      .andWhere('pleading.status != :filed', { filed: PleadingStatus.FILED })
-      .orderBy('pleading.dueDate', 'ASC')
+      .createQueryBuilder("pleading")
+      .where("pleading.dueDate >= :today", { today })
+      .andWhere("pleading.dueDate <= :futureDate", { futureDate })
+      .andWhere("pleading.status != :filed", { filed: PleadingStatus.FILED })
+      .orderBy("pleading.dueDate", "ASC")
       .getMany();
   }
 
@@ -318,28 +318,28 @@ export class PleadingsService {
     type?: string;
     status?: PleadingStatus;
   }): Promise<Pleading[]> {
-    const qb = this.pleadingRepository.createQueryBuilder('pleading');
+    const qb = this.pleadingRepository.createQueryBuilder("pleading");
 
     if (query.caseId) {
-      qb.andWhere('pleading.caseId = :caseId', { caseId: query.caseId });
+      qb.andWhere("pleading.caseId = :caseId", { caseId: query.caseId });
     }
 
     if (query.query) {
       qb.andWhere(
-        '(pleading.title ILIKE :search OR pleading.content ILIKE :search)',
-        { search: `%${query.query}%` },
+        "(pleading.title ILIKE :search OR pleading.content ILIKE :search)",
+        { search: `%${query.query}%` }
       );
     }
 
     if (query.type) {
-      qb.andWhere('pleading.type = :type', { type: query.type });
+      qb.andWhere("pleading.type = :type", { type: query.type });
     }
 
     if (query.status) {
-      qb.andWhere('pleading.status = :status', { status: query.status });
+      qb.andWhere("pleading.status = :status", { status: query.status });
     }
 
-    return await qb.orderBy('pleading.createdAt', 'DESC').getMany();
+    return await qb.orderBy("pleading.createdAt", "DESC").getMany();
   }
 
   /**
@@ -348,7 +348,7 @@ export class PleadingsService {
   async getTemplates(): Promise<PleadingTemplate[]> {
     return await this.templateRepository.find({
       where: { isActive: true },
-      order: { name: 'ASC' },
+      order: { name: "ASC" },
     });
   }
 
@@ -356,7 +356,7 @@ export class PleadingsService {
    * Create pleading from template
    */
   async createFromTemplate(
-    createFromTemplateDto: CreateFromTemplateDto,
+    createFromTemplateDto: CreateFromTemplateDto
   ): Promise<Pleading> {
     const template = await this.templateRepository.findOne({
       where: { id: createFromTemplateDto.templateId },
@@ -364,7 +364,7 @@ export class PleadingsService {
 
     if (!template) {
       throw new NotFoundException(
-        `Template with ID ${createFromTemplateDto.templateId} not found`,
+        `Template with ID ${createFromTemplateDto.templateId} not found`
       );
     }
 
@@ -378,7 +378,9 @@ export class PleadingsService {
       title: createFromTemplateDto.title,
       status: PleadingStatus.DRAFT,
       description: template.description || `Created from ${template.name}`,
-      type: (template.category.toLowerCase() as PleadingType) || PleadingType.MOTION,
+      type:
+        (template.category.toLowerCase() as PleadingType) ||
+        PleadingType.MOTION,
       customFields: {
         templateId: template.id,
         sections: template.defaultSections,
@@ -390,7 +392,7 @@ export class PleadingsService {
 
     const savedPleading = await this.pleadingRepository.save(pleading);
     this.logger.log(
-      `Pleading created from template ${template.id}: ${savedPleading.id}`,
+      `Pleading created from template ${template.id}: ${savedPleading.id}`
     );
 
     return savedPleading;

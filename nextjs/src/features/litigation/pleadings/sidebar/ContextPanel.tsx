@@ -34,8 +34,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: caseData, isLoading: caseLoading } = useQuery(
     ['cases', caseId],
     async () => {
-      const cases = DataService.cases as any;
-      return cases.getById(caseId);
+      return DataService.cases.getById(caseId);
     }
   );
 
@@ -43,8 +42,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: evidence = [], isLoading: evidenceLoading } = useQuery<unknown[]>(
     ['evidence', caseId],
     async () => {
-      const evidenceService = DataService.evidence as any;
-      return evidenceService.getByCaseId(caseId);
+      return DataService.evidence.getByCaseId(caseId);
     }
   );
 
@@ -52,8 +50,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const { data: docketEntries = [], isLoading: docketLoading } = useQuery<DocketEntry[]>(
     ['docket', caseId],
     async () => {
-      const docketService = DataService.docket as any;
-      return docketService.getByCaseId(caseId);
+      return DataService.docket.getByCaseId(caseId);
     }
   );
 

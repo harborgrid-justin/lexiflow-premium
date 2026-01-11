@@ -25,7 +25,8 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onAppl
     const [activeTab, setActiveTab] = useState('workflow');
 
     const handleLaunchResearch = (query: string) => {
-        const winId = `research-${Date.now()}`;
+        const timestamp = Date.now();
+        const winId = `research-${timestamp}`;
         openWindow(
             winId,
             `Research: ${query}`,

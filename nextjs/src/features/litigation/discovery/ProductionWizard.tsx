@@ -13,7 +13,6 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
-import type { ProductionSet } from '@/types/discovery-enhanced';
 
 interface ProductionWizardProps {
   onComplete: () => void;
@@ -75,7 +74,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
     onComplete();
   };
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -106,8 +105,8 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
                       isCompleted
                         ? "bg-green-600 text-white"
                         : isActive
-                        ? "bg-blue-600 text-white"
-                        : cn(theme.surface.highlight, theme.text.tertiary, theme.border.default, "border")
+                          ? "bg-blue-600 text-white"
+                          : cn(theme.surface.highlight, theme.text.tertiary, theme.border.default, "border")
                     )}
                   >
                     {isCompleted ? <Check className="h-5 w-5" /> : <StepIcon className="h-5 w-5" />}
@@ -404,7 +403,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
                 <div>
                   <div className="font-bold text-blue-900 text-sm">Ready to Create</div>
                   <div className="text-xs text-blue-700 mt-1">
-                    Click "Create Production" to finalize this production set. Documents will be queued for processing.
+                    Click &quot;Create Production&quot; to finalize this production set. Documents will be queued for processing.
                   </div>
                 </div>
               </div>

@@ -48,7 +48,7 @@ interface ServiceTrackerProps {
 export const ServiceTracker = React.memo<ServiceTrackerProps>(({ jobs, onSelect, selectedId }) => {
     const { theme } = useTheme();
 
-    const getMethodIcon = useCallback((method: string, _mailType?: string) => {
+    const getMethodIcon = useCallback((method: string) => {
         if (method === 'Mail') return <Truck className="h-4 w-4 text-purple-600" />;
         return <User className="h-4 w-4 text-blue-600" />;
     }, []);

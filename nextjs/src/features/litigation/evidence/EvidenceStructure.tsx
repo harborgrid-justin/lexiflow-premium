@@ -54,7 +54,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
                   Hash: {c.hash}
                 </div>
                 <div className={cn("mt-2 text-xs italic line-clamp-2 pl-2 border-l-2", theme.text.secondary, theme.border.default)}>
-                  "{c.contentPreview}"
+                  &quot;{c.contentPreview}&quot;
                 </div>
               </div>
             )) : (

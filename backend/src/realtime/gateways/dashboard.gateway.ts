@@ -6,12 +6,12 @@ import {
   OnGatewayDisconnect,
   ConnectedSocket,
   MessageBody,
-} from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { Logger, Injectable, UseGuards } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as MasterConfig from '@config/master.config';
-import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+} from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { Logger, Injectable, UseGuards } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as MasterConfig from "@config/master.config";
+import { WsRateLimitGuard } from "@common/guards/ws-rate-limit.guard";
 
 /**
  * Dashboard Analytics Data Types
@@ -28,7 +28,12 @@ export interface DashboardMetrics {
 
 export interface ActivityFeedItem {
   id: string;
-  type: 'case_update' | 'document_filed' | 'task_completed' | 'deadline_approaching' | 'message';
+  type:
+    | "case_update"
+    | "document_filed"
+    | "task_completed"
+    | "deadline_approaching"
+    | "message";
   title: string;
   description: string;
   userId?: string;
@@ -36,7 +41,7 @@ export interface ActivityFeedItem {
   caseId?: string;
   caseName?: string;
   timestamp: string;
-  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  priority?: "low" | "medium" | "high" | "urgent";
 }
 
 export interface CaseStats {
@@ -80,13 +85,15 @@ export interface CaseStats {
     origin: MasterConfig.REALTIME_CORS_ORIGIN,
     credentials: true,
   },
-  namespace: '/dashboard',
+  namespace: "/dashboard",
   maxHttpBufferSize: MasterConfig.REALTIME_MAX_HTTP_BUFFER_SIZE,
   pingTimeout: MasterConfig.REALTIME_PING_TIMEOUT_MS,
   pingInterval: MasterConfig.REALTIME_PING_INTERVAL_MS,
-  transports: ['websocket', 'polling'],
+  transports: ["websocket", "polling"],
 })
-export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class DashboardGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server!: Server;
 
@@ -113,11 +120,16 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
         return;
       }
 
-      const payload = await this.jwtService.verifyAsync<{ sub?: string; userId?: string }>(token);
+      const payload = await this.jwtService.verifyAsync<{
+        sub?: string;
+        userId?: string;
+      }>(token);
       const userId = payload.sub || payload.userId;
 
       if (!userId) {
-        this.logger.warn(`Client ${client.id} connection rejected: Invalid token`);
+        this.logger.warn(
+          `Client ${client.id} connection rejected: Invalid token`
+        );
         client.disconnect();
         return;
       }
@@ -127,7 +139,10 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
         this.userConnections.set(userId, new Set());
         this.subscriptions.set(userId, new Set());
       }
-      this.userConnections.get(userId)!.add(client.id);
+      const userConns = this.userConnections.get(userId);
+      if (userConns) {
+        userConns.add(client.id);
+      }
       this.socketToUser.set(client.id, userId);
 
       // Join user's dashboard room
@@ -135,26 +150,28 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
 
       this.logger.log(
         `Dashboard client connected: ${client.id} (User: ${userId}, Total connections: ${
-          this.userConnections.get(userId)!.size
-        })`,
+          userConns?.size ?? 0
+        })`
       );
 
       // Send cached metrics if available
       const cachedMetrics = this.cachedMetrics.get(userId);
       if (cachedMetrics) {
-        client.emit('dashboard:metrics', cachedMetrics);
+        client.emit("dashboard:metrics", cachedMetrics);
       }
 
       // Send connection acknowledgment
-      client.emit('connected', {
+      client.emit("connected", {
         userId,
         socketId: client.id,
-        namespace: 'dashboard',
+        namespace: "dashboard",
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Authentication failed for client ${client.id}: ${message}`);
+      const message = error instanceof Error ? error.message : "Unknown error";
+      this.logger.error(
+        `Authentication failed for client ${client.id}: ${message}`
+      );
       client.disconnect();
     }
   }
@@ -175,13 +192,15 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
           this.logger.log(`User ${userId} fully disconnected from dashboard`);
         } else {
           this.logger.log(
-            `Dashboard client ${client.id} disconnected (User: ${userId}, Remaining: ${connections.size})`,
+            `Dashboard client ${client.id} disconnected (User: ${userId}, Remaining: ${connections.size})`
           );
         }
       }
       this.socketToUser.delete(client.id);
     } else {
-      this.logger.log(`Dashboard client ${client.id} disconnected (no user mapping)`);
+      this.logger.log(
+        `Dashboard client ${client.id} disconnected (no user mapping)`
+      );
     }
   }
 
@@ -189,14 +208,14 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Subscribe to specific dashboard updates
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('dashboard:subscribe')
+  @SubscribeMessage("dashboard:subscribe")
   handleSubscribe(
     @MessageBody() data: { types: string[] },
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: Socket
   ) {
     const userId = this.socketToUser.get(client.id);
     if (!userId || !data.types || !Array.isArray(data.types)) {
-      return { success: false, error: 'Invalid request' };
+      return { success: false, error: "Invalid request" };
     }
 
     // Add subscriptions
@@ -205,7 +224,7 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
       data.types.forEach((type) => userSubs.add(type));
     }
 
-    this.logger.log(`User ${userId} subscribed to: ${data.types.join(', ')}`);
+    this.logger.log(`User ${userId} subscribed to: ${data.types.join(", ")}`);
     return { success: true, subscriptions: Array.from(userSubs || []) };
   }
 
@@ -213,14 +232,14 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Unsubscribe from dashboard updates
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('dashboard:unsubscribe')
+  @SubscribeMessage("dashboard:unsubscribe")
   handleUnsubscribe(
     @MessageBody() data: { types: string[] },
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: Socket
   ) {
     const userId = this.socketToUser.get(client.id);
     if (!userId || !data.types || !Array.isArray(data.types)) {
-      return { success: false, error: 'Invalid request' };
+      return { success: false, error: "Invalid request" };
     }
 
     // Remove subscriptions
@@ -229,7 +248,9 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
       data.types.forEach((type) => userSubs.delete(type));
     }
 
-    this.logger.log(`User ${userId} unsubscribed from: ${data.types.join(', ')}`);
+    this.logger.log(
+      `User ${userId} unsubscribed from: ${data.types.join(", ")}`
+    );
     return { success: true, subscriptions: Array.from(userSubs || []) };
   }
 
@@ -237,17 +258,17 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Request dashboard refresh
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('dashboard:request-refresh')
+  @SubscribeMessage("dashboard:request-refresh")
   handleRequestRefresh(@ConnectedSocket() client: Socket) {
     const userId = this.socketToUser.get(client.id);
     if (!userId) {
-      return { success: false, error: 'User not found' };
+      return { success: false, error: "User not found" };
     }
 
     // Send cached metrics
     const cachedMetrics = this.cachedMetrics.get(userId);
     if (cachedMetrics) {
-      client.emit('dashboard:metrics', cachedMetrics);
+      client.emit("dashboard:metrics", cachedMetrics);
     }
 
     this.logger.log(`Dashboard refresh requested by user ${userId}`);
@@ -262,7 +283,7 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
     this.cachedMetrics.set(userId, metrics);
 
     // Broadcast to all user's connected devices
-    this.server.to(`dashboard:${userId}`).emit('dashboard:metrics', metrics);
+    this.server.to(`dashboard:${userId}`).emit("dashboard:metrics", metrics);
 
     this.logger.debug(`Dashboard metrics updated for user ${userId}`);
   }
@@ -280,7 +301,7 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Send activity feed item to user
    */
   sendActivity(userId: string, activity: ActivityFeedItem) {
-    this.server.to(`dashboard:${userId}`).emit('dashboard:activity', {
+    this.server.to(`dashboard:${userId}`).emit("dashboard:activity", {
       ...activity,
       timestamp: activity.timestamp || new Date().toISOString(),
     });
@@ -301,12 +322,14 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Update case statistics for user
    */
   updateCaseStats(userId: string, caseStats: CaseStats) {
-    this.server.to(`dashboard:${userId}`).emit('dashboard:case-stats', {
+    this.server.to(`dashboard:${userId}`).emit("dashboard:case-stats", {
       ...caseStats,
       timestamp: caseStats.timestamp || new Date().toISOString(),
     });
 
-    this.logger.debug(`Case stats updated for user ${userId}: Case ${caseStats.caseId}`);
+    this.logger.debug(
+      `Case stats updated for user ${userId}: Case ${caseStats.caseId}`
+    );
   }
 
   /**
@@ -329,14 +352,16 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
       action: string;
       details: string;
       timestamp: string;
-    },
+    }
   ) {
-    this.server.to(`team:${teamId}`).emit('dashboard:team-activity', {
+    this.server.to(`team:${teamId}`).emit("dashboard:team-activity", {
       ...activity,
       timestamp: activity.timestamp || new Date().toISOString(),
     });
 
-    this.logger.debug(`Team activity sent to team ${teamId}: ${activity.action}`);
+    this.logger.debug(
+      `Team activity sent to team ${teamId}: ${activity.action}`
+    );
   }
 
   /**
@@ -345,20 +370,22 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
   sendAlert(
     userId: string,
     alert: {
-      type: 'deadline' | 'task' | 'system' | 'security';
-      severity: 'info' | 'warning' | 'error' | 'critical';
+      type: "deadline" | "task" | "system" | "security";
+      severity: "info" | "warning" | "error" | "critical";
       title: string;
       message: string;
       actionRequired?: boolean;
       actionUrl?: string;
-    },
+    }
   ) {
-    this.server.to(`dashboard:${userId}`).emit('dashboard:alert', {
+    this.server.to(`dashboard:${userId}`).emit("dashboard:alert", {
       ...alert,
       timestamp: new Date().toISOString(),
     });
 
-    this.logger.warn(`Alert sent to user ${userId}: [${alert.severity}] ${alert.title}`);
+    this.logger.warn(
+      `Alert sent to user ${userId}: [${alert.severity}] ${alert.title}`
+    );
   }
 
   /**
@@ -367,7 +394,7 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
   getStats() {
     const totalConnections = Array.from(this.userConnections.values()).reduce(
       (sum, sockets) => sum + sockets.size,
-      0,
+      0
     );
 
     return {
@@ -375,13 +402,15 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
       totalConnections,
       totalSubscriptions: Array.from(this.subscriptions.values()).reduce(
         (sum, subs) => sum + subs.size,
-        0,
+        0
       ),
-      userDetails: Array.from(this.userConnections.entries()).map(([userId, sockets]) => ({
-        userId,
-        connectionCount: sockets.size,
-        subscriptions: Array.from(this.subscriptions.get(userId) || []),
-      })),
+      userDetails: Array.from(this.userConnections.entries()).map(
+        ([userId, sockets]) => ({
+          userId,
+          connectionCount: sockets.size,
+          subscriptions: Array.from(this.subscriptions.get(userId) || []),
+        })
+      ),
     };
   }
 
@@ -396,7 +425,7 @@ export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnec
 
     // Try Authorization header
     const authHeader = client.handshake.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+    if (authHeader && authHeader.startsWith("Bearer ")) {
       return authHeader.substring(7);
     }
 

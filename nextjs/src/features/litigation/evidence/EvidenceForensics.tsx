@@ -103,8 +103,12 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
       );
 
       // Date.now() OK here - inside useEffect, not during render phase
-      if (cached?.data && (cached.data as any).expiresAt > Date.now()) {
-        setVerifyData((cached.data as any).data);
+      interface CachedVerification {
+        data: { timestamp: string; verified: boolean; blockHeight?: string };
+        expiresAt: number;
+      }
+      if (cached?.data && (cached.data as CachedVerification).expiresAt > Date.now()) {
+        setVerifyData((cached.data as CachedVerification).data);
         setVerificationStatus('verified');
       }
     };
@@ -139,7 +143,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
           expiresAt: Date.now() + 86400000 // 24 hour TTL
         }
       );
-    } catch (e) {
+    } catch {
       setVerificationStatus('failed');
     } finally {
       verificationRef.current = false;
@@ -180,7 +184,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
             {verificationStatus === 'idle' && (
               <>
                 <ShieldCheck className={cn("h-16 w-16 mb-4", theme.text.tertiary)} />
-                <p className={cn("text-sm mb-4 text-center", theme.text.secondary)}>Verify this file's integrity against the public ledger.</p>
+                <p className={cn("text-sm mb-4 text-center", theme.text.secondary)}>Verify this file&apos;s integrity against the public ledger.</p>
                 <Button onClick={handleVerify} icon={Link}>Verify Integrity</Button>
               </>
             )}

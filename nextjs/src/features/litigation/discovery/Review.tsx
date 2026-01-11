@@ -92,7 +92,7 @@ export const Review: React.FC = () => {
   });
   const [notes, setNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleSearchChange = useCallback((value: string) => {
     startTransition(() => {
@@ -124,7 +124,7 @@ export const Review: React.FC = () => {
     // In production, this would call API to save coding
   };
 
-  const handleCodingChange = (field: keyof DocumentCoding, value: any) => {
+  const handleCodingChange = (field: keyof DocumentCoding, value: string | number | boolean) => {
     setCurrentCoding(prev => ({ ...prev, [field]: value }));
   };
 

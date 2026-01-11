@@ -4,12 +4,12 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Request, Response } from 'express';
-import * as crypto from 'crypto';
-import * as MasterConfig from '@config/master.config';
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { Request, Response } from "express";
+import * as crypto from "crypto";
+import * as MasterConfig from "@config/master.config";
 
 /**
  * Cache Control Configuration
@@ -57,20 +57,20 @@ export class CacheControlInterceptor implements NestInterceptor {
   private readonly defaultMaxAge = MasterConfig.CACHE_CONTROL_MAX_AGE || 3600;
   private readonly enableEtag = Boolean(MasterConfig.ENABLE_ETAG);
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
 
     // Skip caching for non-GET requests
-    if (request.method !== 'GET' && request.method !== 'HEAD') {
+    if (request.method !== "GET" && request.method !== "HEAD") {
       return next.handle();
     }
 
     return next.handle().pipe(
       tap((data) => {
         this.applyCacheHeaders(request, response, data);
-      }),
+      })
     );
   }
 
@@ -80,10 +80,10 @@ export class CacheControlInterceptor implements NestInterceptor {
   private applyCacheHeaders(
     request: Request,
     response: Response,
-    data: unknown,
+    data: unknown
   ): void {
     // Don't cache if already set or if error response
-    if (response.getHeader('Cache-Control') || response.statusCode >= 400) {
+    if (response.getHeader("Cache-Control") || response.statusCode >= 400) {
       return;
     }
 
@@ -92,7 +92,7 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Set Cache-Control header
     const cacheControl = this.buildCacheControl(config);
-    response.setHeader('Cache-Control', cacheControl);
+    response.setHeader("Cache-Control", cacheControl);
 
     // Set Vary header for content negotiation
     this.setVaryHeader(response);
@@ -100,7 +100,7 @@ export class CacheControlInterceptor implements NestInterceptor {
     // Generate and set ETag
     if (this.enableEtag && data) {
       const etag = this.generateETag(data);
-      response.setHeader('ETag', etag);
+      response.setHeader("ETag", etag);
 
       // Check for conditional request
       if (this.checkConditionalRequest(request, etag)) {
@@ -112,7 +112,7 @@ export class CacheControlInterceptor implements NestInterceptor {
     // Set Last-Modified header
     const lastModified = this.getLastModified(data);
     if (lastModified) {
-      response.setHeader('Last-Modified', lastModified.toUTCString());
+      response.setHeader("Last-Modified", lastModified.toUTCString());
 
       // Check If-Modified-Since
       if (this.checkIfModifiedSince(request, lastModified)) {
@@ -122,7 +122,7 @@ export class CacheControlInterceptor implements NestInterceptor {
     }
 
     this.logger.debug(
-      `Cache headers set for ${request.method} ${request.path}: ${cacheControl}`,
+      `Cache headers set for ${request.method} ${request.path}: ${cacheControl}`
     );
   }
 
@@ -134,22 +134,22 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Visibility
     if (config.public) {
-      directives.push('public');
+      directives.push("public");
     } else if (config.private) {
-      directives.push('private');
+      directives.push("private");
     } else {
       // Default to public for GET requests
-      directives.push('public');
+      directives.push("public");
     }
 
     // No cache directives
     if (config.noCache) {
-      directives.push('no-cache');
+      directives.push("no-cache");
     }
 
     if (config.noStore) {
-      directives.push('no-store');
-      return directives.join(', ');
+      directives.push("no-store");
+      return directives.join(", ");
     }
 
     // Max-Age
@@ -165,16 +165,16 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Revalidation
     if (config.mustRevalidate) {
-      directives.push('must-revalidate');
+      directives.push("must-revalidate");
     }
 
     if (config.proxyRevalidate) {
-      directives.push('proxy-revalidate');
+      directives.push("proxy-revalidate");
     }
 
     // Immutable (never changes)
     if (config.immutable) {
-      directives.push('immutable');
+      directives.push("immutable");
     }
 
     // Stale responses
@@ -186,41 +186,38 @@ export class CacheControlInterceptor implements NestInterceptor {
       directives.push(`stale-if-error=${config.staleIfError}`);
     }
 
-    return directives.join(', ');
+    return directives.join(", ");
   }
 
   /**
    * Generate ETag from response data
    */
   private generateETag(data: unknown): string {
-    const hash = crypto.createHash('md5');
-    const content = typeof data === 'string' ? data : JSON.stringify(data);
+    const hash = crypto.createHash("md5");
+    const content = typeof data === "string" ? data : JSON.stringify(data);
     hash.update(content);
-    return `"${hash.digest('hex')}"`;
+    return `"${hash.digest("hex")}"`;
   }
 
   /**
    * Check conditional request (If-None-Match)
    */
   private checkConditionalRequest(request: Request, etag: string): boolean {
-    const ifNoneMatch = request.headers['if-none-match'];
+    const ifNoneMatch = request.headers["if-none-match"];
     if (!ifNoneMatch) {
       return false;
     }
 
     // Handle multiple ETags
-    const etags = ifNoneMatch.split(',').map(tag => tag.trim());
-    return etags.includes(etag) || etags.includes('*');
+    const etags = ifNoneMatch.split(",").map((tag) => tag.trim());
+    return etags.includes(etag) || etags.includes("*");
   }
 
   /**
    * Check If-Modified-Since header
    */
-  private checkIfModifiedSince(
-    request: Request,
-    lastModified: Date,
-  ): boolean {
-    const ifModifiedSince = request.headers['if-modified-since'];
+  private checkIfModifiedSince(request: Request, lastModified: Date): boolean {
+    const ifModifiedSince = request.headers["if-modified-since"];
     if (!ifModifiedSince) {
       return false;
     }
@@ -228,7 +225,7 @@ export class CacheControlInterceptor implements NestInterceptor {
     try {
       const ifModifiedSinceDate = new Date(ifModifiedSince);
       return lastModified.getTime() <= ifModifiedSinceDate.getTime();
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -237,16 +234,16 @@ export class CacheControlInterceptor implements NestInterceptor {
    * Set Vary header for proper cache key generation
    */
   private setVaryHeader(response: Response): void {
-    const existingVary = response.getHeader('Vary') as string;
+    const existingVary = response.getHeader("Vary") as string;
     const varyHeaders = new Set<string>(
-      existingVary ? existingVary.split(',').map(h => h.trim()) : [],
+      existingVary ? existingVary.split(",").map((h) => h.trim()) : []
     );
 
     // Add standard headers that affect response
-    varyHeaders.add('Accept-Encoding');
-    varyHeaders.add('Authorization');
+    varyHeaders.add("Accept-Encoding");
+    varyHeaders.add("Authorization");
 
-    response.setHeader('Vary', Array.from(varyHeaders).join(', '));
+    response.setHeader("Vary", Array.from(varyHeaders).join(", "));
   }
 
   /**
@@ -269,7 +266,7 @@ export class CacheControlInterceptor implements NestInterceptor {
     }
 
     // API responses - short cache with revalidation
-    if (request.path.startsWith('/api/')) {
+    if (request.path.startsWith("/api/")) {
       return {
         public: false,
         private: true,
@@ -287,21 +284,21 @@ export class CacheControlInterceptor implements NestInterceptor {
    */
   private isStaticAsset(path: string): boolean {
     const staticExtensions = [
-      '.js',
-      '.css',
-      '.jpg',
-      '.jpeg',
-      '.png',
-      '.gif',
-      '.svg',
-      '.webp',
-      '.woff',
-      '.woff2',
-      '.ttf',
-      '.eot',
+      ".js",
+      ".css",
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".svg",
+      ".webp",
+      ".woff",
+      ".woff2",
+      ".ttf",
+      ".eot",
     ];
 
-    return staticExtensions.some(ext => path.endsWith(ext));
+    return staticExtensions.some((ext) => path.endsWith(ext));
   }
 
   /**
@@ -313,13 +310,17 @@ export class CacheControlInterceptor implements NestInterceptor {
     }
 
     // Check common date fields
-    const dateFields = ['updatedAt', 'modifiedAt', 'lastModified', 'updated'];
+    const dateFields = ["updatedAt", "modifiedAt", "lastModified", "updated"];
     const dataRecord = data as Record<string, unknown>;
 
     for (const field of dateFields) {
       if (dataRecord[field]) {
         const value = dataRecord[field];
-        if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
+        if (
+          typeof value === "string" ||
+          typeof value === "number" ||
+          value instanceof Date
+        ) {
           const date = new Date(value);
           if (!isNaN(date.getTime())) {
             return date;
@@ -329,9 +330,9 @@ export class CacheControlInterceptor implements NestInterceptor {
     }
 
     // Check nested objects
-    if (typeof data === 'object' && !Array.isArray(data)) {
+    if (typeof data === "object" && !Array.isArray(data)) {
       for (const key in dataRecord) {
-        if (typeof dataRecord[key] === 'object') {
+        if (typeof dataRecord[key] === "object") {
           const nested = this.getLastModified(dataRecord[key]);
           if (nested) {
             return nested;

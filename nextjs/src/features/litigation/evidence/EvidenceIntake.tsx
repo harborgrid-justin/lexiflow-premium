@@ -79,11 +79,11 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
         setType(parsed.type || 'Document');
         setGeneratedData(parsed.generatedData || {});
         notify.info('Draft restored from previous session');
-      } catch (e) {
-        console.error('Failed to restore draft', e);
+      } catch {
+        console.error('Failed to restore draft');
       }
     }
-  }, []);
+  }, [notify]);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

@@ -40,7 +40,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({ docu
         let mounted = true;
 
         if (!documentId) {
-            setDocument(null);
+            if (document) setDocument(null);
             return;
         }
 

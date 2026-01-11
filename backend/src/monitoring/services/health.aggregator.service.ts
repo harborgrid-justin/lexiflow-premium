@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
-import { StructuredLoggerService } from './structured.logger.service';
-import * as os from 'os';
+import { Injectable } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
+import { StructuredLoggerService } from "./structured.logger.service";
+import * as os from "os";
 
 export interface HealthStatus {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   timestamp: string;
   uptime: number;
   checks: {
@@ -80,7 +80,7 @@ export type HealthCheckDetails =
   | ExternalServicesDetails;
 
 export interface HealthCheck {
-  status: 'up' | 'down' | 'degraded';
+  status: "up" | "down" | "degraded";
   responseTime?: number;
   message?: string;
   details?: HealthCheckDetails;
@@ -139,7 +139,7 @@ export class HealthAggregatorService {
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
-    private readonly logger: StructuredLoggerService,
+    private readonly logger: StructuredLoggerService
   ) {}
 
   /**
@@ -147,7 +147,10 @@ export class HealthAggregatorService {
    */
   async getHealth(): Promise<HealthStatus> {
     // Return cached result if still valid
-    if (this.healthCache && Date.now() - this.lastHealthCheck.getTime() < this.cacheTtlMs) {
+    if (
+      this.healthCache &&
+      Date.now() - this.lastHealthCheck.getTime() < this.cacheTtlMs
+    ) {
       return this.healthCache;
     }
 
@@ -179,41 +182,46 @@ export class HealthAggregatorService {
   /**
    * Perform all health checks
    */
-  private async performHealthChecks(): Promise<HealthStatus['checks']> {
-    const [database, redis, memory, cpu, disk, queue, externalServices] = await Promise.allSettled([
-      this.checkDatabase(),
-      this.checkRedis(),
-      this.checkMemory(),
-      this.checkCpu(),
-      this.checkDisk(),
-      this.checkQueue(),
-      this.checkExternalServices(),
-    ]);
+  private async performHealthChecks(): Promise<HealthStatus["checks"]> {
+    const [database, redis, memory, cpu, disk, queue, externalServices] =
+      await Promise.allSettled([
+        this.checkDatabase(),
+        this.checkRedis(),
+        this.checkMemory(),
+        this.checkCpu(),
+        this.checkDisk(),
+        this.checkQueue(),
+        this.checkExternalServices(),
+      ]);
 
     return {
-      database: this.unwrapResult(database, 'database'),
-      redis: this.unwrapResult(redis, 'redis'),
-      memory: this.unwrapResult(memory, 'memory'),
-      cpu: this.unwrapResult(cpu, 'cpu'),
-      disk: this.unwrapResult(disk, 'disk'),
-      queue: this.unwrapResult(queue, 'queue'),
-      externalServices: this.unwrapResult(externalServices, 'externalServices'),
+      database: this.unwrapResult(database, "database"),
+      redis: this.unwrapResult(redis, "redis"),
+      memory: this.unwrapResult(memory, "memory"),
+      cpu: this.unwrapResult(cpu, "cpu"),
+      disk: this.unwrapResult(disk, "disk"),
+      queue: this.unwrapResult(queue, "queue"),
+      externalServices: this.unwrapResult(externalServices, "externalServices"),
     };
   }
 
   /**
    * Unwrap promise result
    */
-  private unwrapResult(result: PromiseSettledResult<HealthCheck>, name: string): HealthCheck {
-    if (result.status === 'fulfilled') {
+  private unwrapResult(
+    result: PromiseSettledResult<HealthCheck>,
+    name: string
+  ): HealthCheck {
+    if (result.status === "fulfilled") {
       return result.value;
     } else {
       const error = result.reason;
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       this.logger.error(`Health check failed: ${name}`, errorMessage);
       return {
-        status: 'down',
-        message: errorMessage || 'Health check failed',
+        status: "down",
+        message: errorMessage || "Health check failed",
         lastChecked: new Date().toISOString(),
       };
     }
@@ -227,7 +235,7 @@ export class HealthAggregatorService {
 
     try {
       // Execute simple query
-      await this.dataSource.query('SELECT 1');
+      await this.dataSource.query("SELECT 1");
       const responseTime = Date.now() - startTime;
 
       // Check connection pool with safe type checking
@@ -252,16 +260,20 @@ export class HealthAggregatorService {
       };
 
       return {
-        status: responseTime < 1000 ? 'up' : 'degraded',
+        status: responseTime < 1000 ? "up" : "degraded",
         responseTime,
-        message: responseTime < 1000 ? 'Database is healthy' : 'Database response is slow',
+        message:
+          responseTime < 1000
+            ? "Database is healthy"
+            : "Database response is slow",
         details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       return {
-        status: 'down',
+        status: "down",
         message: `Database connection failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
@@ -277,12 +289,12 @@ export class HealthAggregatorService {
     try {
       // Would check Redis connection if client is available
       // For now, return healthy if Redis is configured
-      const redisEnabled = process.env.REDIS_ENABLED === 'true';
+      const redisEnabled = process.env.REDIS_ENABLED === "true";
 
       if (!redisEnabled) {
         return {
-          status: 'up',
-          message: 'Redis is disabled',
+          status: "up",
+          message: "Redis is disabled",
           lastChecked: new Date().toISOString(),
         };
       }
@@ -294,16 +306,17 @@ export class HealthAggregatorService {
       };
 
       return {
-        status: 'up',
+        status: "up",
         responseTime,
-        message: 'Redis is healthy',
+        message: "Redis is healthy",
         details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       return {
-        status: 'down',
+        status: "down",
         message: `Redis connection failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
@@ -320,17 +333,18 @@ export class HealthAggregatorService {
     const usagePercent = (usedMemory / totalMemory) * 100;
 
     const processMemory = process.memoryUsage();
-    const heapUsagePercent = (processMemory.heapUsed / processMemory.heapTotal) * 100;
+    const heapUsagePercent =
+      (processMemory.heapUsed / processMemory.heapTotal) * 100;
 
-    let status: 'up' | 'degraded' | 'down' = 'up';
-    let message = 'Memory usage is healthy';
+    let status: "up" | "degraded" | "down" = "up";
+    let message = "Memory usage is healthy";
 
     if (usagePercent > 90 || heapUsagePercent > 90) {
-      status = 'down';
-      message = 'Critical memory usage';
+      status = "down";
+      message = "Critical memory usage";
     } else if (usagePercent > 80 || heapUsagePercent > 80) {
-      status = 'degraded';
-      message = 'High memory usage';
+      status = "degraded";
+      message = "High memory usage";
     }
 
     const details: MemoryDetails = {
@@ -367,28 +381,28 @@ export class HealthAggregatorService {
 
     cpus.forEach((cpu) => {
       for (const type in cpu.times) {
-        totalTick += (cpu.times as any)[type];
+        totalTick += (cpu.times as Record<string, number>)[type] || 0;
       }
       totalIdle += cpu.times.idle;
     });
 
     const cpuUsage = 100 - (100 * totalIdle) / totalTick;
 
-    let status: 'up' | 'degraded' | 'down' = 'up';
-    let message = 'CPU usage is healthy';
+    let status: "up" | "degraded" | "down" = "up";
+    let message = "CPU usage is healthy";
 
     if (cpuUsage > 90) {
-      status = 'down';
-      message = 'Critical CPU usage';
+      status = "down";
+      message = "Critical CPU usage";
     } else if (cpuUsage > 75) {
-      status = 'degraded';
-      message = 'High CPU usage';
+      status = "degraded";
+      message = "High CPU usage";
     }
 
     const details: CpuDetails = {
       usage: Math.round(cpuUsage * 100) / 100,
       cores: cpus.length,
-      model: cpus[0]?.model || 'unknown',
+      model: cpus[0]?.model || "unknown",
       loadAverage: os.loadavg(),
     };
 
@@ -413,15 +427,15 @@ export class HealthAggregatorService {
       };
 
       return {
-        status: 'up',
-        message: 'Disk space is healthy',
+        status: "up",
+        message: "Disk space is healthy",
         details,
         lastChecked: new Date().toISOString(),
       };
     } catch {
       return {
-        status: 'degraded',
-        message: 'Unable to check disk space',
+        status: "degraded",
+        message: "Unable to check disk space",
         lastChecked: new Date().toISOString(),
       };
     }
@@ -440,15 +454,16 @@ export class HealthAggregatorService {
       };
 
       return {
-        status: 'up',
-        message: 'Queue is healthy',
+        status: "up",
+        message: "Queue is healthy",
         details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       return {
-        status: 'down',
+        status: "down",
         message: `Queue health check failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
@@ -467,8 +482,8 @@ export class HealthAggregatorService {
     };
 
     return {
-      status: 'up',
-      message: 'External services are healthy',
+      status: "up",
+      message: "External services are healthy",
       details,
       lastChecked: new Date().toISOString(),
     };
@@ -477,25 +492,27 @@ export class HealthAggregatorService {
   /**
    * Determine overall status from individual checks
    */
-  private determineOverallStatus(checks: HealthStatus['checks']): 'healthy' | 'degraded' | 'unhealthy' {
+  private determineOverallStatus(
+    checks: HealthStatus["checks"]
+  ): "healthy" | "degraded" | "unhealthy" {
     const statuses = Object.values(checks).map((check) => check.status);
 
     // If any critical service is down, system is unhealthy
-    const criticalServices = ['database'];
+    const criticalServices = ["database"];
     const criticalDown = criticalServices.some(
-      (service) => checks[service as keyof typeof checks]?.status === 'down'
+      (service) => checks[service as keyof typeof checks]?.status === "down"
     );
 
-    if (criticalDown || statuses.includes('down')) {
-      return 'unhealthy';
+    if (criticalDown || statuses.includes("down")) {
+      return "unhealthy";
     }
 
     // If any service is degraded, system is degraded
-    if (statuses.includes('degraded')) {
-      return 'degraded';
+    if (statuses.includes("degraded")) {
+      return "degraded";
     }
 
-    return 'healthy';
+    return "healthy";
   }
 
   /**
@@ -506,8 +523,7 @@ export class HealthAggregatorService {
 
     // System is ready if database is up and overall status is not unhealthy
     const ready =
-      health.checks.database.status !== 'down' &&
-      health.status !== 'unhealthy';
+      health.checks.database.status !== "down" && health.status !== "unhealthy";
 
     return {
       ready,

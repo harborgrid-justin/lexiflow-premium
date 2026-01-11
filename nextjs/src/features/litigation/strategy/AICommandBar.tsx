@@ -54,7 +54,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
             } else {
                 notify.error('AI failed to generate a valid graph.');
             }
-        } catch (e) {
+        } catch {
             notify.error('An error occurred during generation.');
         } finally {
             setIsLoading(false);

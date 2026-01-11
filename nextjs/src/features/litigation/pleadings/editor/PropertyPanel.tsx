@@ -27,10 +27,10 @@ export const PropertyPanel: React.FC<PropertyPanelProps> = ({ section, onUpdate 
             <div>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Formatting</label>
                 <div className="flex gap-2 mb-4">
-                    {['left', 'center', 'right', 'justify'].map((align) => (
+                    {(['left', 'center', 'right', 'justify'] as const).map((align) => (
                         <button
                             key={align}
-                            onClick={() => onUpdate({ meta: { ...section.meta, alignment: align as any } })}
+                            onClick={() => onUpdate({ meta: { ...section.meta, alignment: align } })}
                             className={cn(
                                 "p-2 rounded border transition-colors",
                                 section.meta?.alignment === align ? "bg-blue-100 border-blue-300 text-blue-600" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"

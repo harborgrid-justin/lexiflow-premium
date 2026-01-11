@@ -1,7 +1,7 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, SelectQueryBuilder, ObjectLiteral } from 'typeorm';
-import { CacheStrategyService } from './cache.strategy.service';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource, SelectQueryBuilder, ObjectLiteral } from "typeorm";
+import { CacheStrategyService } from "./cache.strategy.service";
 
 /**
  * Query Analysis Result
@@ -21,9 +21,9 @@ export interface QueryAnalysis {
  * Query Warning
  */
 export interface QueryWarning {
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
-  type: 'performance' | 'n+1' | 'missing-index' | 'full-scan' | 'large-result';
+  type: "performance" | "n+1" | "missing-index" | "full-scan" | "large-result";
 }
 
 /**
@@ -109,30 +109,30 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly cacheStrategy: CacheStrategyService,
+    private readonly cacheStrategy: CacheStrategyService
   ) {
     this.initializeQueryLogging();
   }
 
   onModuleDestroy() {
-    this.logger.log('Cleaning up query optimizer...');
-    
+    this.logger.log("Cleaning up query optimizer...");
+
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = null;
     }
-    
+
     this.queryMetrics.clear();
     this.slowQueries.length = 0;
-    
-    this.logger.log('Query optimizer cleanup complete');
+
+    this.logger.log("Query optimizer cleanup complete");
   }
 
   /**
    * Analyze query for performance issues
    */
   async analyzeQuery<T extends ObjectLiteral>(
-    queryBuilder: SelectQueryBuilder<T>,
+    queryBuilder: SelectQueryBuilder<T>
   ): Promise<QueryAnalysis> {
     const [sql, parameters] = queryBuilder.getQueryAndParameters();
     const warnings: QueryWarning[] = [];
@@ -140,44 +140,44 @@ export class QueryOptimizerService implements OnModuleDestroy {
     const suggestedIndexes: string[] = [];
 
     // Check for SELECT *
-    if (sql.toLowerCase().includes('select *')) {
+    if (sql.toLowerCase().includes("select *")) {
       warnings.push({
-        severity: 'medium',
-        message: 'SELECT * detected - specify only required columns',
-        type: 'performance',
+        severity: "medium",
+        message: "SELECT * detected - specify only required columns",
+        type: "performance",
       });
-      recommendations.push('Use .select() to specify only required columns');
+      recommendations.push("Use .select() to specify only required columns");
     }
 
     // Check for missing WHERE clause
-    if (!sql.toLowerCase().includes(' where ')) {
+    if (!sql.toLowerCase().includes(" where ")) {
       warnings.push({
-        severity: 'high',
-        message: 'Query without WHERE clause - full table scan',
-        type: 'full-scan',
+        severity: "high",
+        message: "Query without WHERE clause - full table scan",
+        type: "full-scan",
       });
-      recommendations.push('Add WHERE clause to filter results');
+      recommendations.push("Add WHERE clause to filter results");
     }
 
     // Check for missing LIMIT
-    if (!sql.toLowerCase().includes(' limit ')) {
+    if (!sql.toLowerCase().includes(" limit ")) {
       warnings.push({
-        severity: 'medium',
-        message: 'Query without LIMIT - potentially large result set',
-        type: 'large-result',
+        severity: "medium",
+        message: "Query without LIMIT - potentially large result set",
+        type: "large-result",
       });
-      recommendations.push('Add .take() or .limit() to control result size');
+      recommendations.push("Add .take() or .limit() to control result size");
     }
 
     // Detect potential N+1 queries
     const hasNPlusOne = await this.detectNPlusOne(queryBuilder);
     if (hasNPlusOne) {
       warnings.push({
-        severity: 'critical',
-        message: 'N+1 query pattern detected',
-        type: 'n+1',
+        severity: "critical",
+        message: "N+1 query pattern detected",
+        type: "n+1",
       });
-      recommendations.push('Use leftJoinAndSelect() for eager loading');
+      recommendations.push("Use leftJoinAndSelect() for eager loading");
     }
 
     // Get query execution plan (PostgreSQL specific)
@@ -207,14 +207,16 @@ export class QueryOptimizerService implements OnModuleDestroy {
    */
   async optimizeQuery<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    options: QueryOptimizationOptions = {},
+    options: QueryOptimizationOptions = {}
   ): Promise<T[]> {
     const analysis = await this.analyzeQuery(queryBuilder);
 
     // Log warnings
     for (const warning of analysis.warnings) {
-      if (warning.severity === 'critical' || warning.severity === 'high') {
-        this.logger.warn(`Query Warning [${warning.severity}]: ${warning.message}`);
+      if (warning.severity === "critical" || warning.severity === "high") {
+        this.logger.warn(
+          `Query Warning [${warning.severity}]: ${warning.message}`
+        );
       }
     }
 
@@ -229,7 +231,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
     // Execute with caching if enabled
     if (options.enableCaching && analysis.shouldCache) {
-      const cacheKey = this.cacheStrategy.generateKey('query', {
+      const cacheKey = this.cacheStrategy.generateKey("query", {
         sql: analysis.sql,
         params: analysis.parameters,
       });
@@ -244,9 +246,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
         },
         {
           ttl: options.cacheTtl || 300,
-          namespace: 'query-cache',
-          tags: ['queries'],
-        },
+          namespace: "query-cache",
+          tags: ["queries"],
+        }
       );
     }
 
@@ -262,7 +264,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
    * Detect N+1 query patterns with LRU eviction
    */
   async detectNPlusOne<T extends ObjectLiteral>(
-    queryBuilder: SelectQueryBuilder<T>,
+    queryBuilder: SelectQueryBuilder<T>
   ): Promise<boolean> {
     const [sql] = queryBuilder.getQueryAndParameters();
     const queryHash = this.hashQuery(sql);
@@ -275,7 +277,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
       // If same query executed multiple times in short period, likely N+1
       if (metric.count > 10 && Date.now() - metric.firstExecuted < 1000) {
-        this.logger.warn(`Potential N+1 query detected: ${sql.substring(0, 100)}...`);
+        this.logger.warn(
+          `Potential N+1 query detected: ${sql.substring(0, 100)}...`
+        );
         return true;
       }
     } else {
@@ -286,7 +290,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
         lastExecuted: Date.now(),
         totalDuration: 0,
       });
-      
+
       // Enforce LRU limit
       this.enforceLRULimit();
     }
@@ -307,7 +311,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
           this.queryMetrics.delete(key);
         }
       }
-      this.logger.warn(`LRU eviction: removed ${toRemove} query metrics (size: ${this.queryMetrics.size})`);
+      this.logger.warn(
+        `LRU eviction: removed ${toRemove} query metrics (size: ${this.queryMetrics.size})`
+      );
     }
   }
 
@@ -316,14 +322,16 @@ export class QueryOptimizerService implements OnModuleDestroy {
    */
   applyEagerLoading<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    relations: string[],
+    relations: string[]
   ): SelectQueryBuilder<T> {
     for (const relation of relations) {
       const alias = queryBuilder.alias;
       queryBuilder.leftJoinAndSelect(`${alias}.${relation}`, relation);
     }
 
-    this.logger.debug(`Applied eager loading for relations: ${relations.join(', ')}`);
+    this.logger.debug(
+      `Applied eager loading for relations: ${relations.join(", ")}`
+    );
     return queryBuilder;
   }
 
@@ -362,7 +370,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
     this.queryMetrics.clear();
     this.slowQueries.length = 0;
     this.queryExecutionCount = 0;
-    this.logger.log('Query metrics cleared');
+    this.logger.log("Query metrics cleared");
   }
 
   /**
@@ -378,19 +386,29 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
   private async estimateQueryCost(
     sql: string,
-    parameters: unknown[],
+    parameters: unknown[]
   ): Promise<number> {
     try {
       // Use EXPLAIN for PostgreSQL
       const explainSql = `EXPLAIN (FORMAT JSON) ${sql}`;
-      const result = await this.dataSource.query(explainSql, parameters);
+      const result = (await this.dataSource.query(
+        explainSql,
+        parameters
+      )) as Array<Record<string, unknown>>;
 
-      if (result && result[0] && result[0]['QUERY PLAN']) {
-        const plan = result[0]['QUERY PLAN'][0];
-        return plan['Plan']?.['Total Cost'] || 0;
+      if (result && result[0] && result[0]["QUERY PLAN"]) {
+        const plan = (result[0]["QUERY PLAN"] as unknown[])[0] as Record<
+          string,
+          unknown
+        >;
+        return (
+          ((plan["Plan"] as Record<string, unknown>)?.[
+            "Total Cost"
+          ] as number) || 0
+        );
       }
     } catch (error) {
-      this.logger.debug('Could not estimate query cost:', error);
+      this.logger.debug("Could not estimate query cost:", error);
     }
 
     return 0;
@@ -402,7 +420,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
     if (whereMatch) {
       const [, table, column] = whereMatch;
-      suggestions.push(`CREATE INDEX idx_${table}_${column} ON ${table}(${column})`);
+      suggestions.push(
+        `CREATE INDEX idx_${table}_${column} ON ${table}(${column})`
+      );
     }
 
     const joinMatch = sql.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+\.(\w+)/gi);
@@ -411,7 +431,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
         const parts = match.match(/JOIN\s+(\w+)\s+\w+\s+ON\s+\w+\.(\w+)/i);
         if (parts) {
           const [, table, column] = parts;
-          suggestions.push(`CREATE INDEX idx_${table}_${column} ON ${table}(${column})`);
+          suggestions.push(
+            `CREATE INDEX idx_${table}_${column} ON ${table}(${column})`
+          );
         }
       }
     }
@@ -421,7 +443,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
   private shouldCacheQuery(sql: string, warnings: QueryWarning[]): boolean {
     // Don't cache if query has critical warnings
-    const hasCriticalWarnings = warnings.some(w => w.severity === 'critical');
+    const hasCriticalWarnings = warnings.some((w) => w.severity === "critical");
     if (hasCriticalWarnings) {
       return false;
     }
@@ -455,7 +477,9 @@ export class QueryOptimizerService implements OnModuleDestroy {
         this.slowQueries.shift();
       }
 
-      this.logger.warn(`Slow query detected (${duration}ms): ${sql.substring(0, 100)}...`);
+      this.logger.warn(
+        `Slow query detected (${duration}ms): ${sql.substring(0, 100)}...`
+      );
     }
 
     // Update metrics
@@ -467,26 +491,28 @@ export class QueryOptimizerService implements OnModuleDestroy {
   }
 
   private hashQuery(sql: string): string {
-    return sql.replace(/\s+/g, ' ').trim().toLowerCase();
+    return sql.replace(/\s+/g, " ").trim().toLowerCase();
   }
 
   private initializeQueryLogging(): void {
-    if (process.env.NODE_ENV === 'development') {
-      this.logger.log('Query optimizer initialized with performance monitoring');
+    if (process.env.NODE_ENV === "development") {
+      this.logger.log(
+        "Query optimizer initialized with performance monitoring"
+      );
     }
 
     // Clean up old metrics every hour (sliding window)
     this.cleanupInterval = setInterval(() => {
       const oneHourAgo = Date.now() - 3600000;
       let removedCount = 0;
-      
+
       for (const [hash, metric] of this.queryMetrics.entries()) {
         if (metric.lastExecuted < oneHourAgo) {
           this.queryMetrics.delete(hash);
           removedCount++;
         }
       }
-      
+
       if (removedCount > 0) {
         this.logger.log(`Cleaned up ${removedCount} stale query metrics`);
       }

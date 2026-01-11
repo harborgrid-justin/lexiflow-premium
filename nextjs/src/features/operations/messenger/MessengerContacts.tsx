@@ -30,10 +30,10 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
     <div className="w-full flex flex-col h-full">
       <div className={cn("p-4 border-b", theme.border.default)}>
         <SearchToolbar
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search directory..."
-            className="border-none shadow-none p-0"
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search directory..."
+          className="border-none shadow-none p-0"
         />
       </div>
       <div className="overflow-auto flex-1">
@@ -49,7 +49,7 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
             {contacts.map(c => (
               <TableRow key={c.id}>
                 <TableCell className={cn("font-medium flex items-center gap-3", theme.text.primary)}>
-                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as any}/> {c.name}
+                  <UserAvatar name={c.name} size="sm" indicatorStatus={c.status as 'online' | 'offline' | 'busy' | 'away'} /> {c.name}
                 </TableCell>
                 <TableCell>{c.role}</TableCell>
                 <TableCell>{c.department}</TableCell>

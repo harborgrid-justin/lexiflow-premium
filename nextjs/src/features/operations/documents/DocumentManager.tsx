@@ -73,7 +73,7 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
           <Button variant="outline" icon={LayoutTemplate} onClick={() => setActiveTab('templates')}>New Draft</Button>
         </div>
       }
-      tabConfig={DOCUMENT_MANAGER_TAB_CONFIG as any}
+      tabConfig={DOCUMENT_MANAGER_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

@@ -17,7 +17,8 @@ export class StrategiesService {
   ) {}
 
   async create(createDto: CreateStrategyItemDto) {
-    const { strategyType, caseId, ...data } = createDto as any; // Using strategyType from frontend
+    const { strategyType, caseId, ...data } =
+      createDto as CreateStrategyItemDto & Record<string, unknown>; // Using strategyType from frontend
 
     if (strategyType === "Citation") {
       // Delegate to CitationsService
@@ -61,7 +62,7 @@ export class StrategiesService {
     return {
       arguments: args,
       defenses: defenses,
-      citations: (citationsResult as any).data || [],
+      citations: (citationsResult as { data?: unknown[] }).data || [],
     };
   }
 
@@ -75,7 +76,7 @@ export class StrategiesService {
     }
   }
 
-  async update(id: string, updateDto: any) {
+  async update(id: string, updateDto: Record<string, unknown>) {
     const { strategyType, ...data } = updateDto;
 
     if (strategyType === "Citation") {

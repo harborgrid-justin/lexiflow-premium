@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Download, Plus, Search, Filter, Eye, Edit, FileText } from 'lucide-react';
+import { Download, Plus, Search, Eye, Edit, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';

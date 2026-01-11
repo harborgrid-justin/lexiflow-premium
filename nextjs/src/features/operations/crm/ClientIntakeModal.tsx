@@ -47,7 +47,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
 
         if (!mounted) return;
 
-        const parties = (allCases as any[]).flatMap(c => c.parties || []);
+        const parties = (allCases as Array<{ parties?: Array<{ name: string; role: string }> }>).flatMap(c => c.parties || []);
 
         const q = debouncedName.toLowerCase();
         const found: string[] = [];

@@ -1,7 +1,12 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
-import * as MasterConfig from '@config/master.config';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource } from "typeorm";
+import * as MasterConfig from "@config/master.config";
 
 /**
  * Connection Pool Metrics
@@ -34,7 +39,7 @@ export interface PoolConfiguration {
  * Connection Lifecycle Event
  */
 export interface ConnectionEvent {
-  type: 'acquired' | 'released' | 'created' | 'destroyed' | 'timeout' | 'error';
+  type: "acquired" | "released" | "created" | "destroyed" | "timeout" | "error";
   timestamp: number;
   duration?: number;
   error?: string;
@@ -93,7 +98,9 @@ export interface ConnectionEvent {
  */
 
 @Injectable()
-export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDestroy {
+export class ConnectionPoolOptimizerService
+  implements OnModuleInit, OnModuleDestroy
+{
   private readonly logger = new Logger(ConnectionPoolOptimizerService.name);
   private readonly connectionEvents: ConnectionEvent[] = [];
   private readonly queryTimes: number[] = [];
@@ -125,8 +132,8 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
   }
 
   async onModuleDestroy() {
-    this.logger.log('Cleaning up connection pool optimizer...');
-    
+    this.logger.log("Cleaning up connection pool optimizer...");
+
     // Clear all intervals
     if (this.optimizationInterval) {
       clearInterval(this.optimizationInterval);
@@ -136,20 +143,20 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
       clearInterval(this.metricsInterval);
       this.metricsInterval = null;
     }
-    
+
     // Clear tracking arrays to free memory
     this.connectionEvents.length = 0;
     this.queryTimes.length = 0;
     this.acquireTimes.length = 0;
-    
-    this.logger.log('Connection pool optimizer cleanup complete');
+
+    this.logger.log("Connection pool optimizer cleanup complete");
   }
 
   /**
    * Initialize pool optimizer
    */
   private async initialize(): Promise<void> {
-    this.logger.log('Initializing connection pool optimizer...');
+    this.logger.log("Initializing connection pool optimizer...");
 
     // Start metrics collection
     this.startMetricsCollection();
@@ -160,7 +167,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     // Log initial configuration
     this.logger.log(
       `Pool configuration - Min: ${this.currentConfig.min}, ` +
-      `Max: ${this.currentConfig.max}, Idle timeout: ${this.currentConfig.idleTimeout}ms`,
+        `Max: ${this.currentConfig.max}, Idle timeout: ${this.currentConfig.idleTimeout}ms`
     );
   }
 
@@ -178,7 +185,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
 
     // Try to get actual pool stats from driver (PostgreSQL specific)
     try {
-      if (driver.options.type === 'postgres') {
+      if (driver.options.type === "postgres") {
         interface PostgresPool {
           totalCount: number;
           idleCount: number;
@@ -194,15 +201,17 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
           };
         }
       }
-    } catch (error) {
-      this.logger.debug('Could not retrieve pool stats from driver');
+    } catch {
+      this.logger.debug("Could not retrieve pool stats from driver");
     }
 
-    const utilization = poolStats.total > 0
-      ? (poolStats.active / poolStats.total) * 100
-      : 0;
+    const utilization =
+      poolStats.total > 0 ? (poolStats.active / poolStats.total) * 100 : 0;
 
-    const recommendedSize = this.calculateOptimalPoolSize(utilization, poolStats.active);
+    const recommendedSize = this.calculateOptimalPoolSize(
+      utilization,
+      poolStats.active
+    );
 
     return {
       totalConnections: poolStats.total,
@@ -225,34 +234,44 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
 
     this.logger.debug(
       `Current pool utilization: ${metrics.poolUtilization.toFixed(1)}% ` +
-      `(${metrics.activeConnections}/${metrics.totalConnections})`,
+        `(${metrics.activeConnections}/${metrics.totalConnections})`
     );
 
     // Scale up if utilization is high
-    if (metrics.poolUtilization > 80 && metrics.totalConnections < this.currentConfig.max) {
+    if (
+      metrics.poolUtilization > 80 &&
+      metrics.totalConnections < this.currentConfig.max
+    ) {
       const newSize = Math.min(
         metrics.totalConnections + 5,
-        this.currentConfig.max,
+        this.currentConfig.max
       );
-      this.logger.log(`Scaling up pool: ${metrics.totalConnections} → ${newSize}`);
+      this.logger.log(
+        `Scaling up pool: ${metrics.totalConnections} → ${newSize}`
+      );
       // Note: TypeORM doesn't support dynamic pool resizing
       // This would require connection pool library access
     }
 
     // Scale down if utilization is low
-    if (metrics.poolUtilization < 20 && metrics.totalConnections > this.currentConfig.min) {
+    if (
+      metrics.poolUtilization < 20 &&
+      metrics.totalConnections > this.currentConfig.min
+    ) {
       const newSize = Math.max(
         metrics.totalConnections - 5,
-        this.currentConfig.min,
+        this.currentConfig.min
       );
-      this.logger.log(`Scaling down pool: ${metrics.totalConnections} → ${newSize}`);
+      this.logger.log(
+        `Scaling down pool: ${metrics.totalConnections} → ${newSize}`
+      );
     }
 
     // Warn about waiting clients
     if (metrics.waitingClients > 0) {
       this.logger.warn(
         `${metrics.waitingClients} clients waiting for connections. ` +
-        `Consider increasing pool size (current max: ${this.currentConfig.max})`,
+          `Consider increasing pool size (current max: ${this.currentConfig.max})`
       );
     }
 
@@ -260,7 +279,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     if (metrics.averageAcquireTime > 100) {
       this.logger.warn(
         `High average connection acquire time: ${metrics.averageAcquireTime.toFixed(0)}ms. ` +
-        `This may indicate pool exhaustion.`,
+          `This may indicate pool exhaustion.`
       );
     }
   }
@@ -275,7 +294,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
 
     // Check for connections held too long
     for (const event of this.connectionEvents) {
-      if (event.type === 'acquired' && now - event.timestamp > LEAK_THRESHOLD) {
+      if (event.type === "acquired" && now - event.timestamp > LEAK_THRESHOLD) {
         leaks.push({
           acquiredAt: event.timestamp,
           duration: now - event.timestamp,
@@ -308,15 +327,19 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     const warnings: string[] = [];
 
     if (metrics.poolUtilization > 90) {
-      warnings.push('Pool utilization critically high (>90%)');
+      warnings.push("Pool utilization critically high (>90%)");
     }
 
     if (metrics.waitingClients > 0) {
-      warnings.push(`${metrics.waitingClients} clients waiting for connections`);
+      warnings.push(
+        `${metrics.waitingClients} clients waiting for connections`
+      );
     }
 
     if (metrics.averageAcquireTime > 200) {
-      warnings.push(`High connection acquire time: ${metrics.averageAcquireTime.toFixed(0)}ms`);
+      warnings.push(
+        `High connection acquire time: ${metrics.averageAcquireTime.toFixed(0)}ms`
+      );
     }
 
     if (leaks.length > 0) {
@@ -356,13 +379,16 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     }
 
     this.connectionEvents.push({
-      type: 'acquired',
+      type: "acquired",
       timestamp: Date.now(),
       duration,
     });
 
     this.activeConnections++;
-    this.peakConnections = Math.max(this.peakConnections, this.activeConnections);
+    this.peakConnections = Math.max(
+      this.peakConnections,
+      this.activeConnections
+    );
   }
 
   /**
@@ -370,7 +396,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
    */
   recordConnectionRelease(): void {
     this.connectionEvents.push({
-      type: 'released',
+      type: "released",
       timestamp: Date.now(),
     });
 
@@ -411,11 +437,11 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     this.metricsInterval = setInterval(async () => {
       const metrics = await this.getMetrics();
 
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === "development") {
         this.logger.debug(
           `Pool: ${metrics.activeConnections}/${metrics.totalConnections} active, ` +
-          `${metrics.poolUtilization.toFixed(1)}% utilization, ` +
-          `${metrics.totalQueries} queries`,
+            `${metrics.poolUtilization.toFixed(1)}% utilization, ` +
+            `${metrics.totalQueries} queries`
         );
       }
     }, 60000); // Every minute
@@ -428,7 +454,10 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
     }, 300000); // Every 5 minutes
   }
 
-  private calculateOptimalPoolSize(utilization: number, active: number): number {
+  private calculateOptimalPoolSize(
+    utilization: number,
+    active: number
+  ): number {
     // Target 60-70% utilization
     if (utilization > 80) {
       return Math.ceil(active / 0.7);
@@ -449,37 +478,37 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
 
   private generateRecommendations(
     metrics: PoolMetrics,
-    health: PoolHealthStatus,
+    health: PoolHealthStatus
   ): string[] {
     const recommendations: string[] = [];
 
     if (metrics.poolUtilization > 80) {
       recommendations.push(
-        `Increase max pool size from ${this.currentConfig.max} to ${metrics.recommendedPoolSize}`,
+        `Increase max pool size from ${this.currentConfig.max} to ${metrics.recommendedPoolSize}`
       );
     }
 
     if (metrics.averageAcquireTime > 100) {
       recommendations.push(
-        'High connection acquire time. Consider increasing pool size or optimizing queries.',
+        "High connection acquire time. Consider increasing pool size or optimizing queries."
       );
     }
 
     if (metrics.averageQueryTime > 1000) {
       recommendations.push(
-        'High average query time. Review slow queries and add indexes.',
+        "High average query time. Review slow queries and add indexes."
       );
     }
 
     if (health.leaks.length > 0) {
       recommendations.push(
-        'Connection leaks detected. Review code for proper connection release.',
+        "Connection leaks detected. Review code for proper connection release."
       );
     }
 
     if (metrics.poolUtilization < 20) {
       recommendations.push(
-        `Pool underutilized. Consider reducing min size from ${this.currentConfig.min}`,
+        `Pool underutilized. Consider reducing min size from ${this.currentConfig.min}`
       );
     }
 

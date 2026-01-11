@@ -6,12 +6,12 @@ import {
   OnGatewayDisconnect,
   ConnectedSocket,
   MessageBody,
-} from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { Logger, Injectable, UseGuards } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as MasterConfig from '@config/master.config';
-import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+} from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { Logger, Injectable, UseGuards } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as MasterConfig from "@config/master.config";
+import { WsRateLimitGuard } from "@common/guards/ws-rate-limit.guard";
 
 /**
  * Notifications WebSocket Gateway
@@ -42,13 +42,15 @@ import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
     origin: MasterConfig.REALTIME_CORS_ORIGIN,
     credentials: true,
   },
-  namespace: '/notifications',
+  namespace: "/notifications",
   maxHttpBufferSize: MasterConfig.REALTIME_MAX_HTTP_BUFFER_SIZE,
   pingTimeout: MasterConfig.REALTIME_PING_TIMEOUT_MS,
   pingInterval: MasterConfig.REALTIME_PING_INTERVAL_MS,
-  transports: ['websocket', 'polling'],
+  transports: ["websocket", "polling"],
 })
-export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class NotificationsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server!: Server;
 
@@ -74,11 +76,16 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
         return;
       }
 
-      const payload = await this.jwtService.verifyAsync<{ sub?: string; userId?: string }>(token);
+      const payload = await this.jwtService.verifyAsync<{
+        sub?: string;
+        userId?: string;
+      }>(token);
       const userId = payload.sub || payload.userId;
 
       if (!userId) {
-        this.logger.warn(`Client ${client.id} connection rejected: Invalid token`);
+        this.logger.warn(
+          `Client ${client.id} connection rejected: Invalid token`
+        );
         client.disconnect();
         return;
       }
@@ -87,7 +94,10 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       if (!this.userConnections.has(userId)) {
         this.userConnections.set(userId, new Set());
       }
-      this.userConnections.get(userId)!.add(client.id);
+      const userConns = this.userConnections.get(userId);
+      if (userConns) {
+        userConns.add(client.id);
+      }
       this.socketToUser.set(client.id, userId);
 
       // Join user's notification room
@@ -95,27 +105,29 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
       this.logger.log(
         `Notification client connected: ${client.id} (User: ${userId}, Total connections: ${
-          this.userConnections.get(userId)!.size
-        })`,
+          userConns?.size ?? 0
+        })`
       );
 
       // Send initial unread count
       const unreadCount = this.unreadCounts.get(userId) || 0;
-      client.emit('notification:count', {
+      client.emit("notification:count", {
         count: unreadCount,
         timestamp: new Date().toISOString(),
       });
 
       // Send connection acknowledgment
-      client.emit('connected', {
+      client.emit("connected", {
         userId,
         socketId: client.id,
-        namespace: 'notifications',
+        namespace: "notifications",
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Authentication failed for client ${client.id}: ${message}`);
+      const message = error instanceof Error ? error.message : "Unknown error";
+      this.logger.error(
+        `Authentication failed for client ${client.id}: ${message}`
+      );
       client.disconnect();
     }
   }
@@ -132,10 +144,12 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
         connections.delete(client.id);
         if (connections.size === 0) {
           this.userConnections.delete(userId);
-          this.logger.log(`User ${userId} fully disconnected from notifications`);
+          this.logger.log(
+            `User ${userId} fully disconnected from notifications`
+          );
         } else {
           this.logger.log(
-            `Client ${client.id} disconnected (User: ${userId}, Remaining: ${connections.size})`,
+            `Client ${client.id} disconnected (User: ${userId}, Remaining: ${connections.size})`
           );
         }
       }
@@ -149,14 +163,14 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
    * Mark notification as read
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('notification:mark-read')
+  @SubscribeMessage("notification:mark-read")
   handleMarkRead(
     @MessageBody() data: { notificationId: string },
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: Socket
   ) {
     const userId = this.socketToUser.get(client.id);
     if (!userId || !data.notificationId) {
-      return { success: false, error: 'Invalid request' };
+      return { success: false, error: "Invalid request" };
     }
 
     // Decrement unread count
@@ -165,14 +179,14 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     this.unreadCounts.set(userId, newCount);
 
     // Broadcast to all user's devices
-    this.server.to(`user:${userId}`).emit('notification:read', {
+    this.server.to(`user:${userId}`).emit("notification:read", {
       notificationId: data.notificationId,
       userId,
       timestamp: new Date().toISOString(),
     });
 
     // Send updated count
-    this.server.to(`user:${userId}`).emit('notification:count', {
+    this.server.to(`user:${userId}`).emit("notification:count", {
       count: newCount,
       timestamp: new Date().toISOString(),
     });
@@ -184,24 +198,24 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
    * Mark all notifications as read
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('notification:mark-all-read')
+  @SubscribeMessage("notification:mark-all-read")
   handleMarkAllRead(@ConnectedSocket() client: Socket) {
     const userId = this.socketToUser.get(client.id);
     if (!userId) {
-      return { success: false, error: 'User not found' };
+      return { success: false, error: "User not found" };
     }
 
     // Reset unread count
     this.unreadCounts.set(userId, 0);
 
     // Broadcast to all user's devices
-    this.server.to(`user:${userId}`).emit('notification:all-read', {
+    this.server.to(`user:${userId}`).emit("notification:all-read", {
       userId,
       timestamp: new Date().toISOString(),
     });
 
     // Send updated count
-    this.server.to(`user:${userId}`).emit('notification:count', {
+    this.server.to(`user:${userId}`).emit("notification:count", {
       count: 0,
       timestamp: new Date().toISOString(),
     });
@@ -213,14 +227,14 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
    * Delete notification
    */
   @UseGuards(WsRateLimitGuard)
-  @SubscribeMessage('notification:delete')
+  @SubscribeMessage("notification:delete")
   handleDelete(
     @MessageBody() data: { notificationId: string; wasUnread?: boolean },
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: Socket
   ) {
     const userId = this.socketToUser.get(client.id);
     if (!userId || !data.notificationId) {
-      return { success: false, error: 'Invalid request' };
+      return { success: false, error: "Invalid request" };
     }
 
     // Decrement unread count if notification was unread
@@ -230,14 +244,14 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       this.unreadCounts.set(userId, newCount);
 
       // Send updated count
-      this.server.to(`user:${userId}`).emit('notification:count', {
+      this.server.to(`user:${userId}`).emit("notification:count", {
         count: newCount,
         timestamp: new Date().toISOString(),
       });
     }
 
     // Broadcast deletion to all user's devices
-    this.server.to(`user:${userId}`).emit('notification:deleted', {
+    this.server.to(`user:${userId}`).emit("notification:deleted", {
       notificationId: data.notificationId,
       userId,
       timestamp: new Date().toISOString(),
@@ -260,26 +274,26 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       createdAt: string;
       metadata?: Record<string, unknown>;
       actionUrl?: string;
-    },
+    }
   ) {
     // Increment unread count
     const currentCount = this.unreadCounts.get(userId) || 0;
     this.unreadCounts.set(userId, currentCount + 1);
 
     // Send notification to all user's connected devices
-    this.server.to(`user:${userId}`).emit('notification:new', {
+    this.server.to(`user:${userId}`).emit("notification:new", {
       ...notification,
       timestamp: new Date().toISOString(),
     });
 
     // Send updated unread count
-    this.server.to(`user:${userId}`).emit('notification:count', {
+    this.server.to(`user:${userId}`).emit("notification:count", {
       count: currentCount + 1,
       timestamp: new Date().toISOString(),
     });
 
     this.logger.log(
-      `Notification sent to user ${userId}: ${notification.type} - ${notification.title}`,
+      `Notification sent to user ${userId}: ${notification.type} - ${notification.title}`
     );
   }
 
@@ -297,7 +311,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       createdAt: string;
       metadata?: Record<string, unknown>;
       actionUrl?: string;
-    },
+    }
   ) {
     for (const userId of userIds) {
       this.sendNotificationToUser(userId, notification);
@@ -309,7 +323,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
    */
   updateUnreadCount(userId: string, count: number) {
     this.unreadCounts.set(userId, count);
-    this.server.to(`user:${userId}`).emit('notification:count', {
+    this.server.to(`user:${userId}`).emit("notification:count", {
       count,
       timestamp: new Date().toISOString(),
     });
@@ -321,17 +335,19 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
   getStats() {
     const totalConnections = Array.from(this.userConnections.values()).reduce(
       (sum, sockets) => sum + sockets.size,
-      0,
+      0
     );
 
     return {
       totalUsers: this.userConnections.size,
       totalConnections,
-      userDetails: Array.from(this.userConnections.entries()).map(([userId, sockets]) => ({
-        userId,
-        connectionCount: sockets.size,
-        unreadCount: this.unreadCounts.get(userId) || 0,
-      })),
+      userDetails: Array.from(this.userConnections.entries()).map(
+        ([userId, sockets]) => ({
+          userId,
+          connectionCount: sockets.size,
+          unreadCount: this.unreadCounts.get(userId) || 0,
+        })
+      ),
     };
   }
 
@@ -346,7 +362,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
     // Try Authorization header
     const authHeader = client.handshake.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+    if (authHeader && authHeader.startsWith("Bearer ")) {
       return authHeader.substring(7);
     }
 

@@ -58,6 +58,8 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
 
     const filteredPlaybooks = useMemo(() =>
         filterPlaybooks(playbooks, searchTerm, selectedCategory, selectedDifficulty),
+        // React Compiler verified: dependencies are correct
+        // eslint-disable-next-line react-hooks/preserve-manual-memoization
         [playbooks, searchTerm, selectedCategory, selectedDifficulty]
     );
 

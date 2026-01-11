@@ -40,26 +40,26 @@ export const LitigationScheduleView: React.FC<LitigationScheduleViewProps> = ({ 
 
   // A* Critical Path Calculation
   const criticalPathIds = useMemo(() => {
-      if (!showCriticalPath) return new Set<string>();
-      return new Set(Pathfinding.findCriticalPath(tasks));
+    if (!showCriticalPath) return new Set<string>();
+    return new Set(Pathfinding.findCriticalPath(tasks));
   }, [tasks, showCriticalPath]);
 
-  const handleTaskUpdate = useCallback((taskId: string, start: string, _due: string) => {
+  const handleTaskUpdate = useCallback((taskId: string, start: string) => {
     const newX = calculateNodePositionFromDate(start);
     updateNode(taskId, { x: newX });
   }, [updateNode]);
 
   const togglePhase = (phaseId: string) => {
     setCollapsedPhases(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(phaseId)) newSet.delete(phaseId);
-        else newSet.add(phaseId);
-        return newSet;
+      const newSet = new Set(prev);
+      if (newSet.has(phaseId)) newSet.delete(phaseId);
+      else newSet.add(phaseId);
+      return newSet;
     });
   };
 
   const handleAddTask = () => {
-      addNode('Task', 100, 100, 'New Task');
+    addNode('Task', 100, 100, 'New Task');
   };
 
   return (
@@ -67,18 +67,18 @@ export const LitigationScheduleView: React.FC<LitigationScheduleViewProps> = ({ 
       <div className={cn("p-4 border-b shrink-0 flex items-center justify-between", theme.surface.default, theme.border.default)}>
         <h3 className="text-lg font-bold">Gantt Timeline View</h3>
         <div className="flex items-center gap-2">
-           <button
-              onClick={() => setShowCriticalPath(!showCriticalPath)}
-              className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface.default, "text-slate-500"))}
-            >
-                <TrendingUp className="h-3 w-3 mr-1"/> Critical Path
-            </button>
-           <div className={cn("flex items-center bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
-              {(['Quarter', 'Month', 'Week', 'Day'] as ZoomLevel[]).map(z => (
-                  <button key={z} onClick={() => setZoom(z)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md transition-all", zoom === z ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}>
-                      {z}
-                  </button>
-              ))}
+          <button
+            onClick={() => setShowCriticalPath(!showCriticalPath)}
+            className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface.default, "text-slate-500"))}
+          >
+            <TrendingUp className="h-3 w-3 mr-1" /> Critical Path
+          </button>
+          <div className={cn("flex items-center bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
+            {(['Quarter', 'Month', 'Week', 'Day'] as ZoomLevel[]).map(z => (
+              <button key={z} onClick={() => setZoom(z)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md transition-all", zoom === z ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}>
+                {z}
+              </button>
+            ))}
           </div>
         </div>
       </div>

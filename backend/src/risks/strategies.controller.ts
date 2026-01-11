@@ -53,7 +53,7 @@ export class StrategiesController {
 
   @Post()
   @ApiOperation({ summary: "Create new strategy" })
-  async create(@Body() strategy: any) {
+  async create(@Body() strategy: Record<string, unknown>) {
     return {
       id: Math.random().toString(36).substring(7),
       ...strategy,
@@ -63,7 +63,10 @@ export class StrategiesController {
 
   @Patch(":id")
   @ApiOperation({ summary: "Update strategy" })
-  async update(@Param("id") id: string, @Body() updates: any) {
+  async update(
+    @Param("id") id: string,
+    @Body() updates: Record<string, unknown>
+  ) {
     return {
       id,
       ...updates,

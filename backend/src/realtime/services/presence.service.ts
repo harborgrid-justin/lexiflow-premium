@@ -1,14 +1,14 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { Interval } from '@nestjs/schedule';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { Interval } from "@nestjs/schedule";
 
 /**
  * User Presence Status
  */
 export enum PresenceStatus {
-  ONLINE = 'online',
-  AWAY = 'away',
-  BUSY = 'busy',
-  OFFLINE = 'offline',
+  ONLINE = "online",
+  AWAY = "away",
+  BUSY = "busy",
+  OFFLINE = "offline",
 }
 
 /**
@@ -105,14 +105,14 @@ export class PresenceService implements OnModuleDestroy {
   private presenceUpdateCallbacks: Array<(update: PresenceUpdate) => void> = [];
 
   onModuleDestroy() {
-    this.logger.log('Cleaning up presence service...');
+    this.logger.log("Cleaning up presence service...");
     this.userPresence.clear();
     this.userLastActivity.clear();
     this.userConnections.clear();
     this.userActivities.clear();
     this.customStatuses.clear();
     this.presenceUpdateCallbacks = [];
-    this.logger.log('Presence service cleaned up');
+    this.logger.log("Presence service cleaned up");
   }
 
   /**
@@ -130,7 +130,10 @@ export class PresenceService implements OnModuleDestroy {
     if (!this.userConnections.has(userId)) {
       this.userConnections.set(userId, new Set());
     }
-    this.userConnections.get(userId)!.add(socketId);
+    const userConns = this.userConnections.get(userId);
+    if (userConns) {
+      userConns.add(socketId);
+    }
 
     // Update presence
     const existingPresence = this.userPresence.get(userId);
@@ -140,7 +143,7 @@ export class PresenceService implements OnModuleDestroy {
       userId,
       status: PresenceStatus.ONLINE,
       lastSeen: now,
-      activeConnections: this.userConnections.get(userId)!.size,
+      activeConnections: userConns?.size ?? 0,
       currentActivity: existingPresence?.currentActivity,
       customStatus: this.customStatuses.get(userId),
     };
@@ -149,7 +152,7 @@ export class PresenceService implements OnModuleDestroy {
     this.userLastActivity.set(userId, now);
 
     this.logger.log(
-      `User ${userId} connected (${presence.activeConnections} connection${presence.activeConnections > 1 ? 's' : ''})`,
+      `User ${userId} connected (${presence.activeConnections} connection${presence.activeConnections > 1 ? "s" : ""})`
     );
 
     // Emit presence update
@@ -189,8 +192,13 @@ export class PresenceService implements OnModuleDestroy {
           this.userPresence.set(userId, existingPresence);
         }
 
-        this.logger.log(`User ${userId} disconnected (${remainingConnections} remaining)`);
-        this.emitPresenceUpdate(this.userPresence.get(userId)!);
+        this.logger.log(
+          `User ${userId} disconnected (${remainingConnections} remaining)`
+        );
+        const currentPresence = this.userPresence.get(userId);
+        if (currentPresence) {
+          this.emitPresenceUpdate(currentPresence);
+        }
       }
     }
   }
@@ -316,7 +324,7 @@ export class PresenceService implements OnModuleDestroy {
    */
   getOnlineUsers(): UserPresence[] {
     return Array.from(this.userPresence.values()).filter(
-      (p) => p.status !== PresenceStatus.OFFLINE,
+      (p) => p.status !== PresenceStatus.OFFLINE
     );
   }
 
@@ -337,7 +345,7 @@ export class PresenceService implements OnModuleDestroy {
 
     const totalConnections = Array.from(this.userConnections.values()).reduce(
       (sum, connections) => sum + connections.size,
-      0,
+      0
     );
 
     return {
@@ -353,7 +361,7 @@ export class PresenceService implements OnModuleDestroy {
    * Periodic cleanup of stale presence data and auto-away detection
    */
   @Interval(60000) // Run every minute
-  // @ts-ignore - Method is used by @Interval decorator
+  // @ts-expect-error - Method is used by @Interval decorator
   private performCleanup() {
     const now = Date.now();
     let awayCount = 0;
@@ -392,12 +400,17 @@ export class PresenceService implements OnModuleDestroy {
 
     // Enforce max presence history to prevent memory leaks
     if (this.userPresence.size > this.MAX_PRESENCE_HISTORY) {
-      const entriesToRemove = this.userPresence.size - this.MAX_PRESENCE_HISTORY;
+      const entriesToRemove =
+        this.userPresence.size - this.MAX_PRESENCE_HISTORY;
       const sortedByLastSeen = Array.from(this.userPresence.entries())
         .filter(([_, p]) => p.status === PresenceStatus.OFFLINE)
         .sort((a, b) => a[1].lastSeen.getTime() - b[1].lastSeen.getTime());
 
-      for (let i = 0; i < Math.min(entriesToRemove, sortedByLastSeen.length); i++) {
+      for (
+        let i = 0;
+        i < Math.min(entriesToRemove, sortedByLastSeen.length);
+        i++
+      ) {
         const entry = sortedByLastSeen[i];
         if (!entry) continue;
         const [userId] = entry;
@@ -411,7 +424,7 @@ export class PresenceService implements OnModuleDestroy {
 
     if (awayCount > 0 || cleanedCount > 0) {
       this.logger.debug(
-        `Presence cleanup: ${awayCount} users marked away, ${cleanedCount} stale entries removed`,
+        `Presence cleanup: ${awayCount} users marked away, ${cleanedCount} stale entries removed`
       );
     }
   }
@@ -434,7 +447,7 @@ export class PresenceService implements OnModuleDestroy {
       try {
         callback(update);
       } catch (error) {
-        this.logger.error('Error in presence update callback:', error);
+        this.logger.error("Error in presence update callback:", error);
       }
     }
   }

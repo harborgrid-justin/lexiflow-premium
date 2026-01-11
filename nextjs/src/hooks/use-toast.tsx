@@ -67,13 +67,13 @@ function toast({ title, description, action, duration, ...props }: ToastProps) {
         {title && <div className="font-semibold">{title}</div>}
         <div className="text-sm opacity-90">{description}</div>
       </div>
-    ) as any;
+    );
   }
 
   // Show toast with Sonner
   return sonnerToast(message, {
     duration,
-    action: action as any,
+    action,
     ...props,
   });
 }

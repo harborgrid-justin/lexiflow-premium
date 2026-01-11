@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from "@nestjs/common";
 
 /**
  * Validated value types (what we accept after validation)
@@ -20,7 +20,7 @@ export interface ValidationResult {
   isValid: boolean;
   sanitizedValue?: ValidatedValue;
   violations: ValidationViolation[];
-  riskLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "none" | "low" | "medium" | "high" | "critical";
 }
 
 /**
@@ -38,17 +38,17 @@ export interface ValidationViolation {
  * Violation Types
  */
 export enum ViolationType {
-  XSS = 'XSS_ATTEMPT',
-  SQL_INJECTION = 'SQL_INJECTION',
-  NOSQL_INJECTION = 'NOSQL_INJECTION',
-  COMMAND_INJECTION = 'COMMAND_INJECTION',
-  PATH_TRAVERSAL = 'PATH_TRAVERSAL',
-  LDAP_INJECTION = 'LDAP_INJECTION',
-  XML_INJECTION = 'XML_INJECTION',
-  SSRF = 'SSRF_ATTEMPT',
-  PROTOTYPE_POLLUTION = 'PROTOTYPE_POLLUTION',
-  INVALID_FORMAT = 'INVALID_FORMAT',
-  EXCESSIVE_LENGTH = 'EXCESSIVE_LENGTH',
+  XSS = "XSS_ATTEMPT",
+  SQL_INJECTION = "SQL_INJECTION",
+  NOSQL_INJECTION = "NOSQL_INJECTION",
+  COMMAND_INJECTION = "COMMAND_INJECTION",
+  PATH_TRAVERSAL = "PATH_TRAVERSAL",
+  LDAP_INJECTION = "LDAP_INJECTION",
+  XML_INJECTION = "XML_INJECTION",
+  SSRF = "SSRF_ATTEMPT",
+  PROTOTYPE_POLLUTION = "PROTOTYPE_POLLUTION",
+  INVALID_FORMAT = "INVALID_FORMAT",
+  EXCESSIVE_LENGTH = "EXCESSIVE_LENGTH",
 }
 
 /**
@@ -152,21 +152,15 @@ export class InputValidationService {
     /\$and/gi,
   ];
 
-  private readonly COMMAND_PATTERNS = [
-    /[;&|`$()]/g,
-    /\.\.\//g,
-    /~\//g,
-  ];
+  private readonly COMMAND_PATTERNS = [/[;&|`$()]/g, /\.\.\//g, /~\//g];
 
   private readonly PATH_TRAVERSAL_PATTERNS = [
-    /\.\.[\/\\]/g,
-    /%2e%2e[\/\\]/gi,
-    /\.\.[%\/\\]/g,
+    /\.\.[/\\]/g,
+    /%2e%2e[/\\]/gi,
+    /\.\.[%/\\]/g,
   ];
 
-  private readonly LDAP_PATTERNS = [
-    /[*()\\|&]/g,
-  ];
+  private readonly LDAP_PATTERNS = [/[*()\\|&]/g];
 
   private readonly SSRF_PATTERNS = [
     /^file:\/\//gi,
@@ -184,14 +178,18 @@ export class InputValidationService {
    * Validate and sanitize input
    * Main entry point for comprehensive validation
    */
-  validateInput(value: unknown, fieldName: string = 'input', options?: ValidationOptions): ValidationResult {
+  validateInput(
+    value: unknown,
+    fieldName: string = "input",
+    options?: ValidationOptions
+  ): ValidationResult {
     const violations: ValidationViolation[] = [];
-    let riskLevel: ValidationResult['riskLevel'] = 'none';
+    let riskLevel: ValidationResult["riskLevel"] = "none";
     let sanitizedValue: ValidatedValue = value as ValidatedValue;
 
     try {
       // 1. Type validation
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         const stringResult = this.validateString(value, fieldName, options);
         violations.push(...stringResult.violations);
         sanitizedValue = stringResult.sanitizedValue ?? value;
@@ -199,17 +197,23 @@ export class InputValidationService {
       } else if (Array.isArray(value)) {
         const arrayResult = this.validateArray(value, fieldName, options);
         violations.push(...arrayResult.violations);
-        sanitizedValue = arrayResult.sanitizedValue ?? value as ValidatedValue;
+        sanitizedValue =
+          arrayResult.sanitizedValue ?? (value as ValidatedValue);
         riskLevel = this.maxRiskLevel(riskLevel, arrayResult.riskLevel);
-      } else if (typeof value === 'object' && value !== null) {
-        const objectResult = this.validateObject(value as Record<string, unknown>, fieldName, options);
+      } else if (typeof value === "object" && value !== null) {
+        const objectResult = this.validateObject(
+          value as Record<string, unknown>,
+          fieldName,
+          options
+        );
         violations.push(...objectResult.violations);
-        sanitizedValue = objectResult.sanitizedValue ?? value as ValidatedValue;
+        sanitizedValue =
+          objectResult.sanitizedValue ?? (value as ValidatedValue);
         riskLevel = this.maxRiskLevel(riskLevel, objectResult.riskLevel);
       }
 
       return {
-        isValid: violations.length === 0 || riskLevel === 'low',
+        isValid: violations.length === 0 || riskLevel === "low",
         sanitizedValue,
         violations,
         riskLevel,
@@ -219,13 +223,15 @@ export class InputValidationService {
       return {
         isValid: false,
         sanitizedValue: undefined,
-        violations: [{
-          field: fieldName,
-          type: ViolationType.INVALID_FORMAT,
-          description: 'Validation processing error',
-          originalValue: String(value),
-        }],
-        riskLevel: 'high',
+        violations: [
+          {
+            field: fieldName,
+            type: ViolationType.INVALID_FORMAT,
+            description: "Validation processing error",
+            originalValue: String(value),
+          },
+        ],
+        riskLevel: "high",
       };
     }
   }
@@ -233,9 +239,13 @@ export class InputValidationService {
   /**
    * Validate string input
    */
-  private validateString(value: string, fieldName: string, options?: ValidationOptions): ValidationResult {
+  private validateString(
+    value: string,
+    fieldName: string,
+    options?: ValidationOptions
+  ): ValidationResult {
     const violations: ValidationViolation[] = [];
-    let riskLevel: ValidationResult['riskLevel'] = 'none';
+    let riskLevel: ValidationResult["riskLevel"] = "none";
     let sanitized = value;
 
     // 1. Length validation
@@ -249,22 +259,22 @@ export class InputValidationService {
         sanitizedValue: value.substring(0, maxLength),
       });
       sanitized = sanitized.substring(0, maxLength);
-      riskLevel = 'low';
+      riskLevel = "low";
     }
 
     // 2. Unicode normalization (prevent homograph attacks)
-    sanitized = sanitized.normalize('NFKC');
+    sanitized = sanitized.normalize("NFKC");
 
     // 3. Null byte removal
-    if (sanitized.includes('\0')) {
+    if (sanitized.includes("\0")) {
       violations.push({
         field: fieldName,
         type: ViolationType.INVALID_FORMAT,
-        description: 'Null bytes detected and removed',
+        description: "Null bytes detected and removed",
         originalValue: value,
       });
-      sanitized = sanitized.replace(/\0/g, '');
-      riskLevel = this.maxRiskLevel(riskLevel, 'medium');
+      sanitized = sanitized.replace(/\0/g, "");
+      riskLevel = this.maxRiskLevel(riskLevel, "medium");
     }
 
     // 4. XSS detection
@@ -272,28 +282,28 @@ export class InputValidationService {
     if (xssViolation) {
       violations.push(xssViolation);
       sanitized = this.sanitizeXSS(sanitized);
-      riskLevel = this.maxRiskLevel(riskLevel, 'high');
+      riskLevel = this.maxRiskLevel(riskLevel, "high");
     }
 
     // 5. SQL injection detection
     const sqlViolation = this.detectSQLInjection(sanitized, fieldName);
     if (sqlViolation) {
       violations.push(sqlViolation);
-      riskLevel = this.maxRiskLevel(riskLevel, 'critical');
+      riskLevel = this.maxRiskLevel(riskLevel, "critical");
     }
 
     // 6. NoSQL injection detection
     const nosqlViolation = this.detectNoSQLInjection(sanitized, fieldName);
     if (nosqlViolation) {
       violations.push(nosqlViolation);
-      riskLevel = this.maxRiskLevel(riskLevel, 'critical');
+      riskLevel = this.maxRiskLevel(riskLevel, "critical");
     }
 
     // 7. Command injection detection
     const cmdViolation = this.detectCommandInjection(sanitized, fieldName);
     if (cmdViolation) {
       violations.push(cmdViolation);
-      riskLevel = this.maxRiskLevel(riskLevel, 'critical');
+      riskLevel = this.maxRiskLevel(riskLevel, "critical");
     }
 
     // 8. Path traversal detection
@@ -301,9 +311,9 @@ export class InputValidationService {
     if (pathViolation) {
       violations.push(pathViolation);
       if (this.PATH_TRAVERSAL_PATTERNS[0]) {
-        sanitized = sanitized.replace(this.PATH_TRAVERSAL_PATTERNS[0], '');
+        sanitized = sanitized.replace(this.PATH_TRAVERSAL_PATTERNS[0], "");
       }
-      riskLevel = this.maxRiskLevel(riskLevel, 'high');
+      riskLevel = this.maxRiskLevel(riskLevel, "high");
     }
 
     // 9. LDAP injection detection
@@ -311,18 +321,18 @@ export class InputValidationService {
     if (ldapViolation) {
       violations.push(ldapViolation);
       sanitized = this.sanitizeLDAP(sanitized);
-      riskLevel = this.maxRiskLevel(riskLevel, 'high');
+      riskLevel = this.maxRiskLevel(riskLevel, "high");
     }
 
     // 10. SSRF detection
     const ssrfViolation = this.detectSSRF(sanitized, fieldName);
     if (ssrfViolation) {
       violations.push(ssrfViolation);
-      riskLevel = this.maxRiskLevel(riskLevel, 'critical');
+      riskLevel = this.maxRiskLevel(riskLevel, "critical");
     }
 
     return {
-      isValid: riskLevel === 'none' || riskLevel === 'low',
+      isValid: riskLevel === "none" || riskLevel === "low",
       sanitizedValue: sanitized,
       violations,
       riskLevel,
@@ -332,9 +342,13 @@ export class InputValidationService {
   /**
    * Validate array input
    */
-  private validateArray(value: unknown[], fieldName: string, options?: ValidationOptions): ValidationResult {
+  private validateArray(
+    value: unknown[],
+    fieldName: string,
+    options?: ValidationOptions
+  ): ValidationResult {
     const violations: ValidationViolation[] = [];
-    let riskLevel: ValidationResult['riskLevel'] = 'none';
+    let riskLevel: ValidationResult["riskLevel"] = "none";
 
     // 1. Length validation
     if (value.length > this.MAX_ARRAY_LENGTH) {
@@ -344,19 +358,23 @@ export class InputValidationService {
         description: `Array length ${value.length} exceeds maximum ${this.MAX_ARRAY_LENGTH}`,
         originalValue: value.length,
       });
-      riskLevel = 'low';
+      riskLevel = "low";
     }
 
     // 2. Validate each item
     const sanitizedArray = value.map((item, index) => {
-      const itemResult = this.validateInput(item, `${fieldName}[${index}]`, options);
+      const itemResult = this.validateInput(
+        item,
+        `${fieldName}[${index}]`,
+        options
+      );
       violations.push(...itemResult.violations);
       riskLevel = this.maxRiskLevel(riskLevel, itemResult.riskLevel);
       return itemResult.sanitizedValue;
     });
 
     return {
-      isValid: riskLevel === 'none' || riskLevel === 'low',
+      isValid: riskLevel === "none" || riskLevel === "low",
       sanitizedValue: sanitizedArray,
       violations,
       riskLevel,
@@ -366,9 +384,14 @@ export class InputValidationService {
   /**
    * Validate object input
    */
-  private validateObject(value: Record<string, unknown>, fieldName: string, options?: ValidationOptions, depth: number = 0): ValidationResult {
+  private validateObject(
+    value: Record<string, unknown>,
+    fieldName: string,
+    options?: ValidationOptions,
+    depth: number = 0
+  ): ValidationResult {
     const violations: ValidationViolation[] = [];
-    let riskLevel: ValidationResult['riskLevel'] = 'none';
+    let riskLevel: ValidationResult["riskLevel"] = "none";
 
     // 1. Depth validation (prevent DoS)
     if (depth > this.MAX_OBJECT_DEPTH) {
@@ -382,7 +405,7 @@ export class InputValidationService {
         isValid: false,
         sanitizedValue: undefined,
         violations,
-        riskLevel: 'high',
+        riskLevel: "high",
       };
     }
 
@@ -390,7 +413,7 @@ export class InputValidationService {
     const prototypePollution = this.detectPrototypePollution(value, fieldName);
     if (prototypePollution) {
       violations.push(prototypePollution);
-      riskLevel = this.maxRiskLevel(riskLevel, 'critical');
+      riskLevel = this.maxRiskLevel(riskLevel, "critical");
     }
 
     // 3. Validate each property
@@ -404,15 +427,20 @@ export class InputValidationService {
       const sanitizedKey = (keyResult.sanitizedValue ?? key) as string;
 
       // Validate value
-      const valueResult = this.validateInput(val, `${fieldName}.${key}`, options);
+      const valueResult = this.validateInput(
+        val,
+        `${fieldName}.${key}`,
+        options
+      );
       violations.push(...valueResult.violations);
       riskLevel = this.maxRiskLevel(riskLevel, valueResult.riskLevel);
 
-      sanitizedObject[sanitizedKey] = valueResult.sanitizedValue ?? (val as ValidatedValue);
+      sanitizedObject[sanitizedKey] =
+        valueResult.sanitizedValue ?? (val as ValidatedValue);
     }
 
     return {
-      isValid: riskLevel === 'none' || riskLevel === 'low',
+      isValid: riskLevel === "none" || riskLevel === "low",
       sanitizedValue: sanitizedObject,
       violations,
       riskLevel,
@@ -422,13 +450,16 @@ export class InputValidationService {
   /**
    * Detect XSS patterns
    */
-  private detectXSS(value: string, fieldName: string): ValidationViolation | null {
+  private detectXSS(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.XSS_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.XSS,
-          description: 'Potential XSS attack detected',
+          description: "Potential XSS attack detected",
           originalValue: value,
         };
       }
@@ -442,7 +473,7 @@ export class InputValidationService {
   private sanitizeXSS(value: string): string {
     let sanitized = value;
     for (const pattern of this.XSS_PATTERNS) {
-      sanitized = sanitized.replace(pattern, '');
+      sanitized = sanitized.replace(pattern, "");
     }
     return sanitized;
   }
@@ -450,13 +481,16 @@ export class InputValidationService {
   /**
    * Detect SQL injection
    */
-  private detectSQLInjection(value: string, fieldName: string): ValidationViolation | null {
+  private detectSQLInjection(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.SQL_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.SQL_INJECTION,
-          description: 'Potential SQL injection detected',
+          description: "Potential SQL injection detected",
           originalValue: value,
         };
       }
@@ -467,13 +501,16 @@ export class InputValidationService {
   /**
    * Detect NoSQL injection
    */
-  private detectNoSQLInjection(value: string, fieldName: string): ValidationViolation | null {
+  private detectNoSQLInjection(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.NOSQL_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.NOSQL_INJECTION,
-          description: 'Potential NoSQL injection detected',
+          description: "Potential NoSQL injection detected",
           originalValue: value,
         };
       }
@@ -484,13 +521,16 @@ export class InputValidationService {
   /**
    * Detect command injection
    */
-  private detectCommandInjection(value: string, fieldName: string): ValidationViolation | null {
+  private detectCommandInjection(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.COMMAND_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.COMMAND_INJECTION,
-          description: 'Potential command injection detected',
+          description: "Potential command injection detected",
           originalValue: value,
         };
       }
@@ -501,13 +541,16 @@ export class InputValidationService {
   /**
    * Detect path traversal
    */
-  private detectPathTraversal(value: string, fieldName: string): ValidationViolation | null {
+  private detectPathTraversal(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.PATH_TRAVERSAL_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.PATH_TRAVERSAL,
-          description: 'Potential path traversal detected',
+          description: "Potential path traversal detected",
           originalValue: value,
         };
       }
@@ -518,13 +561,16 @@ export class InputValidationService {
   /**
    * Detect LDAP injection
    */
-  private detectLDAPInjection(value: string, fieldName: string): ValidationViolation | null {
+  private detectLDAPInjection(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.LDAP_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.LDAP_INJECTION,
-          description: 'Potential LDAP injection detected',
+          description: "Potential LDAP injection detected",
           originalValue: value,
         };
       }
@@ -536,19 +582,22 @@ export class InputValidationService {
    * Sanitize LDAP input
    */
   private sanitizeLDAP(value: string): string {
-    return value.replace(/[*()\\|&]/g, '\\$&');
+    return value.replace(/[*()\\|&]/g, "\\$&");
   }
 
   /**
    * Detect SSRF
    */
-  private detectSSRF(value: string, fieldName: string): ValidationViolation | null {
+  private detectSSRF(
+    value: string,
+    fieldName: string
+  ): ValidationViolation | null {
     for (const pattern of this.SSRF_PATTERNS) {
       if (pattern.test(value)) {
         return {
           field: fieldName,
           type: ViolationType.SSRF,
-          description: 'Potential SSRF attack detected',
+          description: "Potential SSRF attack detected",
           originalValue: value,
         };
       }
@@ -559,8 +608,11 @@ export class InputValidationService {
   /**
    * Detect prototype pollution
    */
-  private detectPrototypePollution(value: Record<string, unknown>, fieldName: string): ValidationViolation | null {
-    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+  private detectPrototypePollution(
+    value: Record<string, unknown>,
+    fieldName: string
+  ): ValidationViolation | null {
+    const dangerousKeys = ["__proto__", "constructor", "prototype"];
 
     for (const key of Object.keys(value)) {
       if (dangerousKeys.includes(key)) {
@@ -579,26 +631,43 @@ export class InputValidationService {
    * Get maximum risk level
    */
   private maxRiskLevel(
-    current: ValidationResult['riskLevel'],
-    newLevel: ValidationResult['riskLevel'],
-  ): ValidationResult['riskLevel'] {
-    const levels: Array<ValidationResult['riskLevel']> = ['none', 'low', 'medium', 'high', 'critical'];
+    current: ValidationResult["riskLevel"],
+    newLevel: ValidationResult["riskLevel"]
+  ): ValidationResult["riskLevel"] {
+    const levels: Array<ValidationResult["riskLevel"]> = [
+      "none",
+      "low",
+      "medium",
+      "high",
+      "critical",
+    ];
     const currentIndex = levels.indexOf(current);
     const newIndex = levels.indexOf(newLevel);
     const maxIndex = Math.max(currentIndex, newIndex);
-    return levels[maxIndex] ?? 'none';
+    return levels[maxIndex] ?? "none";
   }
 
   /**
    * Validate and sanitize with strict mode (throws on violations)
    */
-  validateStrict(value: unknown, fieldName: string = 'input', options?: ValidationOptions): ValidatedValue {
+  validateStrict(
+    value: unknown,
+    fieldName: string = "input",
+    options?: ValidationOptions
+  ): ValidatedValue {
     const result = this.validateInput(value, fieldName, options);
 
-    if (!result.isValid || result.riskLevel === 'high' || result.riskLevel === 'critical') {
-      this.logger.warn(`Strict validation failed for ${fieldName}:`, result.violations);
+    if (
+      !result.isValid ||
+      result.riskLevel === "high" ||
+      result.riskLevel === "critical"
+    ) {
+      this.logger.warn(
+        `Strict validation failed for ${fieldName}:`,
+        result.violations
+      );
       throw new BadRequestException({
-        message: 'Input validation failed',
+        message: "Input validation failed",
         violations: result.violations,
         field: fieldName,
       });

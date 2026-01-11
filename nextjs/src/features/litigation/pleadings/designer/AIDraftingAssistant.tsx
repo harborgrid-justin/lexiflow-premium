@@ -117,7 +117,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
                 <div className={cn("p-3 rounded bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex gap-2 items-start mt-6")}>
                     <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                     <p className="text-xs text-blue-800 dark:text-blue-300">
-                        <strong>Tip:</strong> You can reference specific exhibit IDs (e.g., "Exhibit A") in your prompt and the AI will contextually link them.
+                        <strong>Tip:</strong> You can reference specific exhibit IDs (e.g., &quot;Exhibit A&quot;) in your prompt and the AI will contextually link them.
                     </p>
                 </div>
             </div>

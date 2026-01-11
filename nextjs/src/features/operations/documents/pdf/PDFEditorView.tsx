@@ -71,7 +71,7 @@ export function PDFEditorView() {
             setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [documentSelection.selected, register]); // Removed previewUrl to avoid loop check
+    }, [documentSelection.selected, register, previewUrl]);
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {

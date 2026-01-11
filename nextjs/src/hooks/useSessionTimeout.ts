@@ -142,7 +142,9 @@ export function useSessionTimeout(
   const [startEpoch, setStartEpoch] = useState(0); // Renamed for clarity
 
   useEffect(() => {
-    setStartEpoch(Date.now());
+    // defer updates to avoid synchronous setState warning
+    const t = setTimeout(() => setStartEpoch(Date.now()), 0);
+    return () => clearTimeout(t);
   }, []);
 
   const timeUntilWarning = useMemo(() => {

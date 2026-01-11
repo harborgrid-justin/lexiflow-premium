@@ -177,12 +177,12 @@ export class SchemaManagementController {
   @Get("info")
   @ApiOperation({ summary: "Get database info" })
   async getDbInfo() {
-    return await this.schemaService.getDbInfo();
+    return await this.schemaService.getDbInfo() as Record<string, unknown>;
   }
 
   @Post("reset")
   @ApiOperation({ summary: "Reset database" })
   async resetDatabase() {
-    return await this.schemaService.resetDatabase();
+    return await this.schemaService.resetDatabase() as Record<string, unknown>;
   }
 }

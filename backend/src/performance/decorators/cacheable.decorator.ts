@@ -1,11 +1,11 @@
-import { SetMetadata } from '@nestjs/common';
+import { SetMetadata } from "@nestjs/common";
 
 /**
  * Cache Metadata Keys
  */
-export const CACHEABLE_KEY = 'performance:cacheable';
-export const CACHE_EVICT_KEY = 'performance:cache-evict';
-export const CACHE_PUT_KEY = 'performance:cache-put';
+export const CACHEABLE_KEY = "performance:cacheable";
+export const CACHE_EVICT_KEY = "performance:cache-evict";
+export const CACHE_PUT_KEY = "performance:cache-put";
 
 /**
  * Cacheable Options
@@ -33,7 +33,7 @@ export interface CacheableOptions {
    * Cache tier: memory, redis, or both
    * @default 'both'
    */
-  tier?: 'memory' | 'redis' | 'both';
+  tier?: "memory" | "redis" | "both";
 
   /**
    * Tags for cache invalidation
@@ -115,7 +115,7 @@ export interface CachePutOptions {
   /**
    * Cache tier
    */
-  tier?: 'memory' | 'redis' | 'both';
+  tier?: "memory" | "redis" | "both";
 
   /**
    * Tags for cache invalidation
@@ -160,18 +160,23 @@ export interface CachePutOptions {
  * async getPremiumUsers() { ... }
  */
 export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
-  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor
+  ) => {
     const originalMethod = descriptor.value;
 
     // Store metadata for interceptor
     SetMetadata(CACHEABLE_KEY, options)(target, propertyKey, descriptor);
 
     // Override method to handle caching logic
-    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
-      const instance = this;
-
+    descriptor.value = async function (
+      this: CacheableInstance,
+      ...args: unknown[]
+    ) {
       // Check if cache strategy service is available
-      const cacheStrategy = instance.cacheStrategy || instance.cacheStrategyService;
+      const cacheStrategy = this.cacheStrategy || this.cacheStrategyService;
 
       if (!cacheStrategy) {
         // Fallback to original method if no cache service
@@ -185,7 +190,7 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
       return await cacheStrategy.get(
         cacheKey,
         async () => {
-          const result = await originalMethod.apply(this, args);
+          const result = (await originalMethod.apply(this, args)) as unknown;
 
           // Check condition
           if (options.condition && !options.condition(result)) {
@@ -197,9 +202,9 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
         {
           ttl: options.ttl || 300,
           namespace: options.namespace,
-          tier: options.tier || 'both',
+          tier: options.tier || "both",
           tags: options.tags || [],
-        },
+        }
       );
     };
 
@@ -242,17 +247,23 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
  * async deleteUser(userId: string) { ... }
  */
 export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
-  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor
+  ) => {
     const originalMethod = descriptor.value;
 
     SetMetadata(CACHE_EVICT_KEY, options)(target, propertyKey, descriptor);
 
-    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
-      const instance = this;
-      const cacheStrategy = instance.cacheStrategy || instance.cacheStrategyService;
+    descriptor.value = async function (
+      this: CacheableInstance,
+      ...args: unknown[]
+    ) {
+      const cacheStrategy = this.cacheStrategy || this.cacheStrategyService;
 
       if (!cacheStrategy) {
-        return await originalMethod.apply(this, args);
+        return (await originalMethod.apply(this, args)) as unknown;
       }
 
       // Evict before invocation if specified
@@ -261,7 +272,7 @@ export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
       }
 
       // Execute original method
-      const result = await originalMethod.apply(this, args);
+      const result = (await originalMethod.apply(this, args)) as unknown;
 
       // Evict after invocation (default)
       if (!options.beforeInvocation) {
@@ -305,27 +316,37 @@ export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
  * async createUser(userData: CreateUserDto) { ... }
  */
 export function CachePut(options: CachePutOptions = {}): MethodDecorator {
-  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor
+  ) => {
     const originalMethod = descriptor.value;
 
     SetMetadata(CACHE_PUT_KEY, options)(target, propertyKey, descriptor);
 
-    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
-      const instance = this;
-      const cacheStrategy = instance.cacheStrategy || instance.cacheStrategyService;
+    descriptor.value = async function (
+      this: CacheableInstance,
+      ...args: unknown[]
+    ) {
+      const cacheStrategy = this.cacheStrategy || this.cacheStrategyService;
 
       // Execute original method
-      const result = await originalMethod.apply(this, args);
+      const result = (await originalMethod.apply(this, args)) as unknown;
 
       // Update cache if service available and condition met
       if (cacheStrategy) {
         if (!options.condition || options.condition(result)) {
-          const cacheKey = generateCacheKey(options, args, propertyKey as string);
+          const cacheKey = generateCacheKey(
+            options,
+            args,
+            propertyKey as string
+          );
 
           await cacheStrategy.set(cacheKey, result, {
             ttl: options.ttl || 300,
             namespace: options.namespace,
-            tier: options.tier || 'both',
+            tier: options.tier || "both",
             tags: options.tags || [],
           });
         }
@@ -343,23 +364,23 @@ export function CachePut(options: CachePutOptions = {}): MethodDecorator {
 function generateCacheKey(
   options: CacheableOptions | CachePutOptions,
   args: unknown[],
-  methodName: string,
+  methodName: string
 ): string {
   // Use keyGenerator if provided
-  if ('keyGenerator' in options && options.keyGenerator) {
+  if ("keyGenerator" in options && options.keyGenerator) {
     return options.keyGenerator(...args);
   }
 
   // Use key if provided (string or function)
   if (options.key) {
-    if (typeof options.key === 'function') {
+    if (typeof options.key === "function") {
       return options.key(...args);
     }
     return options.key;
   }
 
   // Generate default key from method name and arguments
-  const argsKey = args.length > 0 ? `:${JSON.stringify(args)}` : '';
+  const argsKey = args.length > 0 ? `:${JSON.stringify(args)}` : "";
   return `${methodName}${argsKey}`;
 }
 
@@ -370,9 +391,9 @@ interface CacheStrategy {
     config?: {
       ttl?: number;
       namespace?: string;
-      tier?: 'memory' | 'redis' | 'both';
+      tier?: "memory" | "redis" | "both";
       tags?: string[];
-    },
+    }
   ): Promise<T>;
   set<T>(
     key: string,
@@ -380,9 +401,9 @@ interface CacheStrategy {
     config?: {
       ttl?: number;
       namespace?: string;
-      tier?: 'memory' | 'redis' | 'both';
+      tier?: "memory" | "redis" | "both";
       tags?: string[];
-    },
+    }
   ): Promise<void>;
   delete(key: string, namespace?: string): Promise<void>;
   clearNamespace(namespace: string): Promise<void>;
@@ -397,7 +418,7 @@ interface CacheableInstance {
 async function evictCache(
   cacheStrategy: CacheStrategy,
   options: CacheEvictOptions,
-  args: unknown[],
+  args: unknown[]
 ): Promise<void> {
   // Evict all entries in namespace
   if (options.allEntries && options.namespace) {
@@ -415,7 +436,7 @@ async function evictCache(
   if (options.key) {
     let keys: string[];
 
-    if (typeof options.key === 'function') {
+    if (typeof options.key === "function") {
       const result = options.key(...args);
       keys = Array.isArray(result) ? result : [result];
     } else if (Array.isArray(options.key)) {

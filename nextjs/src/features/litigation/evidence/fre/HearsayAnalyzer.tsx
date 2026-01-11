@@ -39,7 +39,7 @@ export const HearsayAnalyzer: React.FC = () => {
     return (
         <div className="space-y-6">
             <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface.default, theme.border.default)}>
-                <FileText className={cn("h-5 w-5", theme.text.secondary)}/>
+                <FileText className={cn("h-5 w-5", theme.text.secondary)} />
                 <select title="Select document to analyze" className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
                     <option value="">Select Document to Analyze...</option>
                     {evidence.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
@@ -50,7 +50,7 @@ export const HearsayAnalyzer: React.FC = () => {
             <Card title="Hearsay Statements Identified">
                 {statements.map(stmt => (
                     <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.default)}>
-                        <p className={cn("italic text-sm", theme.text.primary)}>"{stmt.text}"</p>
+                        <p className={cn("italic text-sm", theme.text.primary)}>&quot;{stmt.text}&quot;</p>
                         <div className="flex justify-between items-center mt-2">
                             <select title="Select hearsay exception" className={cn("text-xs p-1 border rounded", theme.surface.highlight, theme.border.default)}>
                                 <option>{stmt.exception}</option>
@@ -61,7 +61,7 @@ export const HearsayAnalyzer: React.FC = () => {
                                 "flex items-center text-xs font-bold",
                                 stmt.status === 'Analyzed' ? theme.status.success.text : theme.status.error.text
                             )}>
-                                {stmt.status === 'Analyzed' ? <CheckCircle className="h-3 w-3 mr-1"/> : <AlertTriangle className="h-3 w-3 mr-1"/>}
+                                {stmt.status === 'Analyzed' ? <CheckCircle className="h-3 w-3 mr-1" /> : <AlertTriangle className="h-3 w-3 mr-1" />}
                                 {stmt.status}
                             </span>
                         </div>

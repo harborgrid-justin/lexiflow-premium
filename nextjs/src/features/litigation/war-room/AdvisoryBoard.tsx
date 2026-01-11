@@ -82,6 +82,17 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
     setFilterStatus(status);
   }, []);
 
+  // Apply filters
+  const applyFilters = useCallback(() => {
+    console.log('Applying filters:', { filterRole, filterSpecialty, filterStatus });
+    // Future: Apply actual filtering logic
+  }, [filterRole, filterSpecialty, filterStatus]);
+
+  // Trigger filter application when any filter changes
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
+
   // ============================================================================
   // DATA FETCHING
   // ============================================================================

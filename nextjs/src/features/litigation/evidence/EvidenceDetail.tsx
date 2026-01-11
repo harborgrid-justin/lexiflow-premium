@@ -77,7 +77,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
     async () => {
       // 1. Create Exhibit
       const exhibit: TrialExhibit = {
-        id: `ex-${Date.now()}` as any,
+        id: `ex-${Date.now()}`,
         caseId: selectedItem.caseId,
         exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
         title: selectedItem.title,

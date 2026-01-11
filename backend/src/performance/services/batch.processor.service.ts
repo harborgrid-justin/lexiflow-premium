@@ -1,9 +1,9 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Repository, ObjectLiteral } from 'typeorm';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import * as MasterConfig from '@config/master.config';
-import { Readable } from 'stream';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { InjectDataSource } from "@nestjs/typeorm";
+import { DataSource, Repository, ObjectLiteral } from "typeorm";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import * as MasterConfig from "@config/master.config";
+import { Readable } from "stream";
 
 /**
  * Batch Processing Configuration
@@ -62,7 +62,7 @@ export interface BatchError {
  * Batch Insert Options
  */
 export interface BatchInsertOptions<T> extends BatchConfig {
-  conflictAction?: 'ignore' | 'update' | 'fail';
+  conflictAction?: "ignore" | "update" | "fail";
   conflictColumns?: (keyof T)[];
   updateColumns?: (keyof T)[];
 }
@@ -127,11 +127,12 @@ export interface BatchUpdateOptions extends BatchConfig {
 @Injectable()
 export class BatchProcessorService implements OnModuleDestroy {
   private readonly logger = new Logger(BatchProcessorService.name);
-  private readonly DEFAULT_CHUNK_SIZE = MasterConfig.BULK_OPERATION_BATCH_SIZE || 1000;
+  private readonly DEFAULT_CHUNK_SIZE =
+    MasterConfig.BULK_OPERATION_BATCH_SIZE || 1000;
   private readonly DEFAULT_CONCURRENCY = 5;
   private readonly DEFAULT_RETRY_ATTEMPTS = 3;
   private readonly DEFAULT_RETRY_DELAY = 1000;
-  
+
   // Memory management
   private readonly MEMORY_THRESHOLD_MB = 512; // Pause if heap used > 512MB
   // Memory check interval for monitoring
@@ -140,20 +141,22 @@ export class BatchProcessorService implements OnModuleDestroy {
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly eventEmitter: EventEmitter2
   ) {
     void this.dataSource;
   }
 
   onModuleDestroy() {
     // Pause functionality removed
-    this.logger.log('BatchProcessorService destroyed, pausing operations');
+    this.logger.log("BatchProcessorService destroyed, pausing operations");
   }
 
   private checkMemoryPressure(): boolean {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     if (used > this.MEMORY_THRESHOLD_MB) {
-      this.logger.warn(`High memory usage detected: ${used.toFixed(2)}MB. Pausing batch processing...`);
+      this.logger.warn(
+        `High memory usage detected: ${used.toFixed(2)}MB. Pausing batch processing...`
+      );
       return true;
     }
     return false;
@@ -184,7 +187,7 @@ export class BatchProcessorService implements OnModuleDestroy {
 
     for await (const item of stream) {
       result.total++;
-      
+
       // Check memory pressure
       while (this.checkMemoryPressure()) {
         await this.sleep(1000);
@@ -197,7 +200,8 @@ export class BatchProcessorService implements OnModuleDestroy {
           result.successful++;
         } catch (error) {
           result.failed++;
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
           result.errors.push({
             index: result.processed,
             item,
@@ -207,8 +211,9 @@ export class BatchProcessorService implements OnModuleDestroy {
           });
         } finally {
           result.processed++;
-          const p = undefined as any;
-          if (p) executing.delete(p);
+          const currentPromise: Promise<void> =
+            undefined as unknown as Promise<void>;
+          if (currentPromise) executing.delete(currentPromise);
         }
       })();
 
@@ -233,14 +238,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   async batchInsert<T extends ObjectLiteral>(
     repository: Repository<T>,
     items: Partial<T>[],
-    options: BatchInsertOptions<T> = {},
+    options: BatchInsertOptions<T> = {}
   ): Promise<BatchResult<T>> {
     const startTime = Date.now();
     const chunkSize = options.chunkSize || this.DEFAULT_CHUNK_SIZE;
     const chunks = this.createChunks(items, chunkSize);
 
     this.logger.log(
-      `Starting batch insert: ${items.length} items in ${chunks.length} chunks`,
+      `Starting batch insert: ${items.length} items in ${chunks.length} chunks`
     );
 
     const result: BatchResult<T> = {
@@ -265,13 +270,20 @@ export class BatchProcessorService implements OnModuleDestroy {
           result.processed += chunk.length;
 
           // Report progress
-          this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
+          this.reportProgress(
+            result,
+            chunks.length,
+            chunkIndex + 1,
+            startTime,
+            options
+          );
         } catch (error) {
-          const err = error instanceof Error ? error : new Error('Unknown error');
+          const err =
+            error instanceof Error ? error : new Error("Unknown error");
           this.handleChunkError(result, chunk, chunkIndex, err, options);
         }
       },
-      options.concurrency || this.DEFAULT_CONCURRENCY,
+      options.concurrency || this.DEFAULT_CONCURRENCY
     );
 
     // Calculate final metrics
@@ -280,7 +292,7 @@ export class BatchProcessorService implements OnModuleDestroy {
 
     this.logger.log(
       `Batch insert completed: ${result.successful}/${result.total} successful ` +
-      `in ${result.duration}ms (${result.throughput.toFixed(0)} items/sec)`,
+        `in ${result.duration}ms (${result.throughput.toFixed(0)} items/sec)`
     );
 
     return result;
@@ -292,14 +304,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   async batchUpdate<T extends ObjectLiteral>(
     repository: Repository<T>,
     updates: Array<{ id: string | number; data: Partial<T> }>,
-    options: BatchUpdateOptions = {},
+    options: BatchUpdateOptions = {}
   ): Promise<BatchResult> {
     const startTime = Date.now();
     const chunkSize = options.chunkSize || this.DEFAULT_CHUNK_SIZE;
     const chunks = this.createChunks(updates, chunkSize);
 
     this.logger.log(
-      `Starting batch update: ${updates.length} items in ${chunks.length} chunks`,
+      `Starting batch update: ${updates.length} items in ${chunks.length} chunks`
     );
 
     const result: BatchResult = {
@@ -321,12 +333,24 @@ export class BatchProcessorService implements OnModuleDestroy {
           result.successful += chunk.length;
           result.processed += chunk.length;
 
-          this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
+          this.reportProgress(
+            result,
+            chunks.length,
+            chunkIndex + 1,
+            startTime,
+            options
+          );
         } catch (error) {
-          this.handleChunkError(result, chunk, chunkIndex, error as Error, options);
+          this.handleChunkError(
+            result,
+            chunk,
+            chunkIndex,
+            error as Error,
+            options
+          );
         }
       },
-      options.concurrency || this.DEFAULT_CONCURRENCY,
+      options.concurrency || this.DEFAULT_CONCURRENCY
     );
 
     result.duration = Date.now() - startTime;
@@ -334,7 +358,7 @@ export class BatchProcessorService implements OnModuleDestroy {
 
     this.logger.log(
       `Batch update completed: ${result.successful}/${result.total} successful ` +
-      `in ${result.duration}ms`,
+        `in ${result.duration}ms`
     );
 
     return result;
@@ -346,14 +370,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   async batchDelete<T extends ObjectLiteral>(
     repository: Repository<T>,
     ids: Array<string | number>,
-    options: BatchConfig = {},
+    options: BatchConfig = {}
   ): Promise<BatchResult> {
     const startTime = Date.now();
     const chunkSize = options.chunkSize || this.DEFAULT_CHUNK_SIZE;
     const chunks = this.createChunks(ids, chunkSize);
 
     this.logger.log(
-      `Starting batch delete: ${ids.length} items in ${chunks.length} chunks`,
+      `Starting batch delete: ${ids.length} items in ${chunks.length} chunks`
     );
 
     const result: BatchResult = {
@@ -375,20 +399,27 @@ export class BatchProcessorService implements OnModuleDestroy {
           result.successful += chunk.length;
           result.processed += chunk.length;
 
-          this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
+          this.reportProgress(
+            result,
+            chunks.length,
+            chunkIndex + 1,
+            startTime,
+            options
+          );
         } catch (error) {
-          const err = error instanceof Error ? error : new Error('Unknown error');
+          const err =
+            error instanceof Error ? error : new Error("Unknown error");
           this.handleChunkError(result, chunk, chunkIndex, err, options);
         }
       },
-      options.concurrency || this.DEFAULT_CONCURRENCY,
+      options.concurrency || this.DEFAULT_CONCURRENCY
     );
 
     result.duration = Date.now() - startTime;
     result.throughput = result.processed / (result.duration / 1000);
 
     this.logger.log(
-      `Batch delete completed: ${result.successful}/${result.total} successful`,
+      `Batch delete completed: ${result.successful}/${result.total} successful`
     );
 
     return result;
@@ -400,14 +431,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   async processBatch<T, R>(
     items: T[],
     processor: (item: T, index: number) => Promise<R>,
-    options: BatchConfig = {},
+    options: BatchConfig = {}
   ): Promise<BatchResult<R>> {
     const startTime = Date.now();
     const chunkSize = options.chunkSize || this.DEFAULT_CHUNK_SIZE;
     const chunks = this.createChunks(items, chunkSize);
 
     this.logger.log(
-      `Starting batch processing: ${items.length} items in ${chunks.length} chunks`,
+      `Starting batch processing: ${items.length} items in ${chunks.length} chunks`
     );
 
     const result: BatchResult<R> = {
@@ -430,36 +461,44 @@ export class BatchProcessorService implements OnModuleDestroy {
             return this.processWithRetry(
               () => processor(item, globalIndex),
               options.retryAttempts || this.DEFAULT_RETRY_ATTEMPTS,
-              options.retryDelay || this.DEFAULT_RETRY_DELAY,
+              options.retryDelay || this.DEFAULT_RETRY_DELAY
             );
-          }),
+          })
         );
 
         for (let i = 0; i < chunkResults.length; i++) {
           const chunkResult = chunkResults[i];
           if (!chunkResult) continue;
-          
+
           result.processed++;
 
-          if (chunkResult.status === 'fulfilled') {
+          if (chunkResult.status === "fulfilled") {
             result.successful++;
-            result.results.push((chunkResult as PromiseFulfilledResult<any>).value);
+            result.results.push(
+              (chunkResult as PromiseFulfilledResult<T>).value
+            );
           } else {
             result.failed++;
             const reason = (chunkResult as PromiseRejectedResult).reason;
             result.errors.push({
               index: chunkIndex * chunkSize + i,
               item: chunk[i],
-              error: reason instanceof Error ? reason.message : 'Unknown error',
+              error: reason instanceof Error ? reason.message : "Unknown error",
               attempts: options.retryAttempts || this.DEFAULT_RETRY_ATTEMPTS,
               timestamp: Date.now(),
             });
           }
         }
 
-        this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
+        this.reportProgress(
+          result,
+          chunks.length,
+          chunkIndex + 1,
+          startTime,
+          options
+        );
       },
-      options.concurrency || this.DEFAULT_CONCURRENCY,
+      options.concurrency || this.DEFAULT_CONCURRENCY
     );
 
     result.duration = Date.now() - startTime;
@@ -467,7 +506,7 @@ export class BatchProcessorService implements OnModuleDestroy {
 
     this.logger.log(
       `Batch processing completed: ${result.successful}/${result.total} successful ` +
-      `in ${result.duration}ms (${result.throughput.toFixed(0)} items/sec)`,
+        `in ${result.duration}ms (${result.throughput.toFixed(0)} items/sec)`
     );
 
     return result;
@@ -478,11 +517,15 @@ export class BatchProcessorService implements OnModuleDestroy {
   private async insertChunk<T extends ObjectLiteral>(
     repository: Repository<T>,
     chunk: Partial<T>[],
-    options: BatchInsertOptions<T>,
+    options: BatchInsertOptions<T>
   ): Promise<T[]> {
     if (options.useTransaction) {
       return await repository.manager.transaction(async (manager) => {
-        return await this.executeInsert(manager.getRepository(repository.target), chunk, options);
+        return await this.executeInsert(
+          manager.getRepository(repository.target),
+          chunk,
+          options
+        );
       });
     }
 
@@ -492,21 +535,24 @@ export class BatchProcessorService implements OnModuleDestroy {
   private async executeInsert<T extends ObjectLiteral>(
     repository: Repository<T>,
     chunk: Partial<T>[],
-    options: BatchInsertOptions<T>,
+    options: BatchInsertOptions<T>
   ): Promise<T[]> {
-    if (options.conflictAction === 'ignore' || options.conflictAction === 'update') {
+    if (
+      options.conflictAction === "ignore" ||
+      options.conflictAction === "update"
+    ) {
       const queryBuilder = repository
         .createQueryBuilder()
         .insert()
         .into(repository.target)
         .values(chunk);
 
-      if (options.conflictAction === 'update' && options.conflictColumns) {
+      if (options.conflictAction === "update" && options.conflictColumns) {
         queryBuilder.orUpdate(
-          options.updateColumns as string[] || Object.keys(chunk[0] || {}),
-          options.conflictColumns as string[],
+          (options.updateColumns as string[]) || Object.keys(chunk[0] || {}),
+          options.conflictColumns as string[]
         );
-      } else if (options.conflictAction === 'ignore') {
+      } else if (options.conflictAction === "ignore") {
         queryBuilder.orIgnore();
       }
 
@@ -514,13 +560,13 @@ export class BatchProcessorService implements OnModuleDestroy {
       return chunk as T[];
     }
 
-    return (await repository.save(chunk as any)) as T[];
+    return (await repository.save(chunk)) as T[];
   }
 
   private async updateChunk<T extends ObjectLiteral>(
     repository: Repository<T>,
     chunk: Array<{ id: string | number; data: Partial<T> }>,
-    options: BatchUpdateOptions,
+    options: BatchUpdateOptions
   ): Promise<void> {
     if (options.useTransaction) {
       await repository.manager.transaction(async (manager) => {
@@ -538,14 +584,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   private async deleteChunk<T extends ObjectLiteral>(
     repository: Repository<T>,
     chunk: Array<string | number>,
-    options: BatchConfig,
+    options: BatchConfig
   ): Promise<void> {
     if (options.useTransaction) {
       await repository.manager.transaction(async (manager) => {
-        await manager.delete(repository.target, chunk as any);
+        await manager.delete(repository.target, chunk as (string | number)[]);
       });
     } else {
-      await repository.delete(chunk as any);
+      await repository.delete(chunk as (string | number)[]);
     }
   }
 
@@ -560,7 +606,7 @@ export class BatchProcessorService implements OnModuleDestroy {
   private async processChunksWithConcurrency<T>(
     chunks: T[][],
     processor: (chunk: T[], index: number) => Promise<void>,
-    concurrency: number,
+    concurrency: number
   ): Promise<void> {
     const executing = new Set<Promise<void>>();
 
@@ -571,10 +617,10 @@ export class BatchProcessorService implements OnModuleDestroy {
         if (global.gc) global.gc();
       }
 
-      const p = processor(chunks[i]!, i).then(() => {
+      const p = processor(chunks[i] ?? [], i).then(() => {
         executing.delete(p);
       });
-      
+
       executing.add(p);
 
       if (executing.size >= concurrency) {
@@ -588,9 +634,9 @@ export class BatchProcessorService implements OnModuleDestroy {
   private async processWithRetry<T>(
     fn: () => Promise<T>,
     attempts: number,
-    delay: number,
+    delay: number
   ): Promise<T> {
-    let lastError: Error = new Error('No attempts made');
+    let lastError: Error = new Error("No attempts made");
 
     for (let i = 0; i < attempts; i++) {
       try {
@@ -611,7 +657,7 @@ export class BatchProcessorService implements OnModuleDestroy {
     totalChunks: number,
     currentChunk: number,
     startTime: number,
-    options: BatchConfig,
+    options: BatchConfig
   ): void {
     const elapsed = Date.now() - startTime;
     const percentage = (result.processed / result.total) * 100;
@@ -635,11 +681,11 @@ export class BatchProcessorService implements OnModuleDestroy {
     }
 
     // Emit progress event
-    this.eventEmitter.emit('batch.progress', progress);
+    this.eventEmitter.emit("batch.progress", progress);
 
     this.logger.debug(
       `Progress: ${percentage.toFixed(1)}% (${result.processed}/${result.total}) - ` +
-      `ETA: ${(estimatedRemaining / 1000).toFixed(0)}s`,
+        `ETA: ${(estimatedRemaining / 1000).toFixed(0)}s`
     );
   }
 
@@ -648,11 +694,11 @@ export class BatchProcessorService implements OnModuleDestroy {
     chunk: unknown[],
     chunkIndex: number,
     error: Error,
-    options: BatchConfig,
+    options: BatchConfig
   ): void {
     this.logger.error(
       `Chunk ${chunkIndex} failed: ${error.message}`,
-      error.stack,
+      error.stack
     );
 
     if (options.continueOnError) {
@@ -661,7 +707,8 @@ export class BatchProcessorService implements OnModuleDestroy {
 
       for (let i = 0; i < chunk.length; i++) {
         result.errors.push({
-          index: chunkIndex * (options.chunkSize || this.DEFAULT_CHUNK_SIZE) + i,
+          index:
+            chunkIndex * (options.chunkSize || this.DEFAULT_CHUNK_SIZE) + i,
           item: chunk[i],
           error: error.message,
           attempts: 1,

@@ -110,7 +110,7 @@ export const MessengerChatWindow = ({
     try {
       const suggestion = await GeminiService.generateReply(lastMsg.text, activeConversation.role);
       setInputText(suggestion);
-    } catch (e) {
+    } catch {
       notify.error("Failed to generate reply.");
     } finally {
       setIsThinking(false);

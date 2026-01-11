@@ -56,7 +56,7 @@ export class ResearchService {
   }
 
   async validateCitation(citation: string) {
-    const isValid = /^\d+\s+[\w\.]+\s+\d+/.test(citation);
+    const isValid = /^\d+\s+[\w.]+\s+\d+/.test(citation);
     return {
       valid: isValid,
       citation: citation,

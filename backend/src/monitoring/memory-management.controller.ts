@@ -1,15 +1,28 @@
 /**
  * Memory Management Controller
  * Production endpoints for memory monitoring and management
- * 
+ *
  * @module monitoring/memory-management.controller
  */
 
-import { Controller, Get, Post, UseGuards, HttpCode, Query, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
-import { Roles } from '@common/decorators/roles.decorator';
-import { RolesGuard } from '@common/guards/roles.guard';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  HttpCode,
+  Query,
+  Body,
+} from "@nestjs/common";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
+import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
+import { Roles } from "@common/decorators/roles.decorator";
+import { RolesGuard } from "@common/guards/roles.guard";
 import {
   getMemoryStats,
   checkMemoryThresholds,
@@ -17,9 +30,9 @@ import {
   MemoryStats,
   MemoryThresholds,
   DEFAULT_MEMORY_THRESHOLDS,
-} from '@common/utils/memory-management.utils';
-import { MemoryLeakDetectorService } from '@common/services/memory-leak-detector.service';
-import * as v8 from 'v8';
+} from "@common/utils/memory-management.utils";
+import { MemoryLeakDetectorService } from "@common/services/memory-leak-detector.service";
+import * as v8 from "v8";
 
 export interface MemoryLeak {
   id: string;
@@ -51,19 +64,17 @@ export interface LeakDetectorConfig {
   autoGcOnLeak?: boolean;
 }
 
-@ApiTags('Memory Management')
-@Controller('api/monitoring/memory')
+@ApiTags("Memory Management")
+@Controller("api/monitoring/memory")
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth()
 export class MemoryManagementController {
-  constructor(
-    private readonly leakDetector: MemoryLeakDetectorService,
-  ) {}
-  
-  @Get('stats')
-  @Roles('admin', 'developer')
-  @ApiOperation({ summary: 'Get current memory statistics' })
-  @ApiResponse({ status: 200, description: 'Memory statistics retrieved' })
+  constructor(private readonly leakDetector: MemoryLeakDetectorService) {}
+
+  @Get("stats")
+  @Roles("admin", "developer")
+  @ApiOperation({ summary: "Get current memory statistics" })
+  @ApiResponse({ status: 200, description: "Memory statistics retrieved" })
   getStats(): {
     stats: MemoryStats;
     timestamp: number;
@@ -75,15 +86,15 @@ export class MemoryManagementController {
       uptime: process.uptime(),
     };
   }
-  
-  @Get('health')
-  @ApiOperation({ summary: 'Check memory health status' })
-  @ApiResponse({ status: 200, description: 'Memory health status' })
+
+  @Get("health")
+  @ApiOperation({ summary: "Check memory health status" })
+  @ApiResponse({ status: 200, description: "Memory health status" })
   checkHealth(
-    @Query('warningPercent') warningPercent?: number,
-    @Query('criticalPercent') criticalPercent?: number,
+    @Query("warningPercent") warningPercent?: number,
+    @Query("criticalPercent") criticalPercent?: number
   ): {
-    status: 'ok' | 'warning' | 'critical';
+    status: "ok" | "warning" | "critical";
     stats: MemoryStats;
     thresholds: MemoryThresholds;
     recommendations: string[];
@@ -93,21 +104,23 @@ export class MemoryManagementController {
       ...(warningPercent && { warningPercent: Number(warningPercent) }),
       ...(criticalPercent && { criticalPercent: Number(criticalPercent) }),
     };
-    
+
     const { status, stats } = checkMemoryThresholds(thresholds);
     const recommendations: string[] = [];
-    
-    if (status === 'critical') {
-      recommendations.push('Immediate action required: Memory usage critical');
-      recommendations.push('Consider restarting service or scaling horizontally');
-      recommendations.push('Trigger garbage collection');
-      recommendations.push('Review recent memory leak reports');
-    } else if (status === 'warning') {
-      recommendations.push('Monitor closely: Memory usage elevated');
-      recommendations.push('Review cache sizes and data retention policies');
-      recommendations.push('Consider optimizing queries or batch sizes');
+
+    if (status === "critical") {
+      recommendations.push("Immediate action required: Memory usage critical");
+      recommendations.push(
+        "Consider restarting service or scaling horizontally"
+      );
+      recommendations.push("Trigger garbage collection");
+      recommendations.push("Review recent memory leak reports");
+    } else if (status === "warning") {
+      recommendations.push("Monitor closely: Memory usage elevated");
+      recommendations.push("Review cache sizes and data retention policies");
+      recommendations.push("Consider optimizing queries or batch sizes");
     }
-    
+
     return {
       status,
       stats,
@@ -115,11 +128,11 @@ export class MemoryManagementController {
       recommendations,
     };
   }
-  
-  @Get('heap-statistics')
-  @Roles('admin', 'developer')
-  @ApiOperation({ summary: 'Get V8 heap statistics' })
-  @ApiResponse({ status: 200, description: 'Heap statistics retrieved' })
+
+  @Get("heap-statistics")
+  @Roles("admin", "developer")
+  @ApiOperation({ summary: "Get V8 heap statistics" })
+  @ApiResponse({ status: 200, description: "Heap statistics retrieved" })
   getHeapStatistics(): {
     heapStatistics: v8.HeapInfo;
     heapSpaces: v8.HeapSpaceInfo[];
@@ -131,13 +144,15 @@ export class MemoryManagementController {
       heapCodeStatistics: v8.getHeapCodeStatistics(),
     };
   }
-  
-  @Post('gc')
-  @Roles('admin')
+
+  @Post("gc")
+  @Roles("admin")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Force garbage collection (requires --expose-gc flag)' })
-  @ApiResponse({ status: 200, description: 'Garbage collection triggered' })
-  @ApiResponse({ status: 503, description: 'GC not available' })
+  @ApiOperation({
+    summary: "Force garbage collection (requires --expose-gc flag)",
+  })
+  @ApiResponse({ status: 200, description: "Garbage collection triggered" })
+  @ApiResponse({ status: 503, description: "GC not available" })
   forceGC(): {
     success: boolean;
     message: string;
@@ -147,32 +162,33 @@ export class MemoryManagementController {
   } {
     const beforeStats = getMemoryStats();
     const success = forceGarbageCollection();
-    
+
     if (!success) {
       return {
         success: false,
-        message: 'Garbage collection not available. Start Node with --expose-gc flag.',
+        message:
+          "Garbage collection not available. Start Node with --expose-gc flag.",
       };
     }
-    
+
     // Wait a bit for GC to complete
     const afterStats = getMemoryStats();
     const freedMB = beforeStats.heapUsedMB - afterStats.heapUsedMB;
-    
+
     return {
       success: true,
-      message: 'Garbage collection completed',
+      message: "Garbage collection completed",
       beforeStats,
       afterStats,
       freedMB,
     };
   }
-  
-  @Get('leaks')
-  @Roles('admin', 'developer')
-  @ApiOperation({ summary: 'Get detected memory leaks' })
-  @ApiResponse({ status: 200, description: 'Memory leak report' })
-  getLeaks(@Query('limit') limit?: number): {
+
+  @Get("leaks")
+  @Roles("admin", "developer")
+  @ApiOperation({ summary: "Get detected memory leaks" })
+  @ApiResponse({ status: 200, description: "Memory leak report" })
+  getLeaks(@Query("limit") limit?: number): {
     recentLeaks: MemoryLeak[];
     statistics: MemoryLeakStatistics;
     snapshots: number;
@@ -180,17 +196,17 @@ export class MemoryManagementController {
     const leakLimit = limit ? Number(limit) : 10;
 
     return {
-      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as any,
-      statistics: this.leakDetector.getStatistics() as any,
+      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as MemoryLeak[],
+      statistics: this.leakDetector.getStatistics() as MemoryLeakStatistics,
       snapshots: this.leakDetector.getSnapshots().length,
     };
   }
-  
-  @Post('leaks/check')
-  @Roles('admin', 'developer')
+
+  @Post("leaks/check")
+  @Roles("admin", "developer")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Trigger manual leak detection check' })
-  @ApiResponse({ status: 200, description: 'Leak check completed' })
+  @ApiOperation({ summary: "Trigger manual leak detection check" })
+  @ApiResponse({ status: 200, description: "Leak check completed" })
   async checkLeaks(): Promise<{
     leaksDetected: number;
     leaks: MemoryLeak[];
@@ -200,16 +216,16 @@ export class MemoryManagementController {
 
     return {
       leaksDetected: leaks.length,
-      leaks: leaks as any,
+      leaks: leaks as MemoryLeak[],
       timestamp: Date.now(),
     };
   }
 
-  @Post('leaks/snapshot')
-  @Roles('admin', 'developer')
+  @Post("leaks/snapshot")
+  @Roles("admin", "developer")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Take memory snapshot' })
-  @ApiResponse({ status: 200, description: 'Snapshot taken' })
+  @ApiOperation({ summary: "Take memory snapshot" })
+  @ApiResponse({ status: 200, description: "Snapshot taken" })
   takeSnapshot(): {
     snapshot: MemorySnapshot;
     message: string;
@@ -217,36 +233,34 @@ export class MemoryManagementController {
     const snapshot = this.leakDetector.takeSnapshot();
 
     return {
-      snapshot: snapshot as any,
-      message: 'Memory snapshot taken',
+      snapshot: snapshot as MemorySnapshot,
+      message: "Memory snapshot taken",
     };
   }
-  
-  @Post('leaks/clear-history')
-  @Roles('admin')
+
+  @Post("leaks/clear-history")
+  @Roles("admin")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Clear leak detection history' })
-  @ApiResponse({ status: 200, description: 'History cleared' })
+  @ApiOperation({ summary: "Clear leak detection history" })
+  @ApiResponse({ status: 200, description: "History cleared" })
   clearLeakHistory(): {
     success: boolean;
     message: string;
   } {
     this.leakDetector.clearHistory();
-    
+
     return {
       success: true,
-      message: 'Leak detection history cleared',
+      message: "Leak detection history cleared",
     };
   }
-  
-  @Post('leaks/configure')
-  @Roles('admin')
+
+  @Post("leaks/configure")
+  @Roles("admin")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Configure leak detector' })
-  @ApiResponse({ status: 200, description: 'Configuration updated' })
-  configureLeakDetector(
-    @Body() config: LeakDetectorConfig,
-  ): {
+  @ApiOperation({ summary: "Configure leak detector" })
+  @ApiResponse({ status: 200, description: "Configuration updated" })
+  configureLeakDetector(@Body() config: LeakDetectorConfig): {
     success: boolean;
     message: string;
     config: LeakDetectorConfig;
@@ -255,15 +269,15 @@ export class MemoryManagementController {
 
     return {
       success: true,
-      message: 'Leak detector configuration updated',
+      message: "Leak detector configuration updated",
       config,
     };
   }
-  
-  @Get('process-info')
-  @Roles('admin', 'developer')
-  @ApiOperation({ summary: 'Get process information' })
-  @ApiResponse({ status: 200, description: 'Process info retrieved' })
+
+  @Get("process-info")
+  @Roles("admin", "developer")
+  @ApiOperation({ summary: "Get process information" })
+  @ApiResponse({ status: 200, description: "Process info retrieved" })
   getProcessInfo(): {
     pid: number;
     uptime: number;

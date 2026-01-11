@@ -92,17 +92,19 @@ export const FormsSigningView = () => {
             // If documents stay same, we only run once.
             // However, to satisfy strict linter:
             const docToSelect = firstTemplate || documents[0];
-            if (docToSelect.id !== selectedDocument?.id) {
+            if (docToSelect && docToSelect.id !== selectedDocument?.id) {
                 setSelectedDocument(docToSelect);
             }
         }
-    }, [documents, selectedDocument]);
+    }, [documents, selectedDocument, setSelectedDocument, firstTemplate]);
 
     useEffect(() => {
+        let activeUrl: string | null = null;
         if (selectedDocument) {
             const loadUrl = async () => {
                 if (selectedDocument.tags.includes('Local')) {
                     const url = await DocumentService.getDocumentUrl(selectedDocument.id);
+                    activeUrl = url;
                     setPreviewUrl(url);
                 } else {
                     setPreviewUrl(null);
@@ -110,12 +112,12 @@ export const FormsSigningView = () => {
             };
             loadUrl();
         }
-        return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
-    }, [selectedDocument, previewUrl]);
+        return () => { if (activeUrl) URL.revokeObjectURL(activeUrl); };
+    }, [selectedDocument, setPreviewUrl]);
 
     const filteredDocuments = useMemo(() => {
         return documents.filter(doc => {
-            const matchesSearch = doc.title.toLowerCase().includes(deferredSearchTerm.toLowerCase());
+            const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase());
             let matchesList = false;
             if (activeList === 'Templates') matchesList = doc.tags.includes('Template');
             else if (activeList === 'Draft') matchesList = doc.status === 'Draft' && doc.tags.includes('Form');
@@ -124,7 +126,7 @@ export const FormsSigningView = () => {
 
             return matchesSearch && matchesList;
         });
-    }, [documents, deferredSearchTerm, activeList]);
+    }, [documents, searchTerm, activeList]);
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
@@ -138,7 +140,7 @@ export const FormsSigningView = () => {
             const updatedDoc: LegalDocument = {
                 ...selectedDocument,
                 formFields: (selectedDocument.formFields || []).map((f) =>
-                    (f as { name: string; type: string; value: unknown }).name === activeField.id
+                    (f as any).name === activeField.id
                         ? { ...f, value: "Signed by User" }
                         : f
                 )
@@ -166,10 +168,10 @@ export const FormsSigningView = () => {
 
     const handleSend = async () => {
         if (selectedDocument) {
-            const updatedDoc = { ...selectedDocument, status: 'Sent' as any };
+            const updatedDoc = { ...selectedDocument, status: 'Sent' };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            setSelectedDocument(updatedDoc as any);
+            setSelectedDocument(updatedDoc);
             sendModal.close();
             notify.success(`'${selectedDocument.title}' sent for signature.`);
         }

@@ -1,16 +1,21 @@
-import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan } from 'typeorm';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { ProcessingJob } from './entities/processing-job.entity';
-import { JobType, JobStatus, JobStatusDto } from './dto/job-status.dto';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  Optional,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, LessThan } from "typeorm";
+import { InjectQueue } from "@nestjs/bull";
+import { Queue } from "bull";
+import { ProcessingJob } from "./entities/processing-job.entity";
+import { JobType, JobStatus, JobStatusDto } from "./dto/job-status.dto";
 import {
   JobQueueData,
   ProcessingResult,
   JobStatistics,
   JobStatusStatistic,
-} from './interfaces/processing-job.interfaces';
+} from "./interfaces/processing-job.interfaces";
 
 /**
  * ╔=================================================================================================================╗
@@ -48,11 +53,13 @@ export class ProcessingJobsService {
     @InjectRepository(ProcessingJob)
     private jobRepository: Repository<ProcessingJob>,
     @Optional()
-    @InjectQueue('document-processing')
-    private documentQueue?: Queue,
+    @InjectQueue("document-processing")
+    private documentQueue?: Queue
   ) {
     if (!this.documentQueue) {
-      this.logger.warn('Document processing queue not available - Redis is disabled');
+      this.logger.warn(
+        "Document processing queue not available - Redis is disabled"
+      );
     }
   }
 
@@ -63,7 +70,7 @@ export class ProcessingJobsService {
     type: JobType,
     documentId: string,
     parameters?: Record<string, unknown>,
-    userId?: string,
+    userId?: string
   ): Promise<ProcessingJob> {
     try {
       // Create job record
@@ -86,14 +93,16 @@ export class ProcessingJobsService {
         };
         await this.documentQueue.add(type, queueData);
       } else {
-        this.logger.warn(`Queue unavailable - job ${savedJob.id} created but not queued`);
+        this.logger.warn(
+          `Queue unavailable - job ${savedJob.id} created but not queued`
+        );
       }
 
       this.logger.log(`Job created: ${savedJob.id} (${type})`);
 
       return savedJob;
     } catch (error) {
-      this.logger.error('Failed to create job', error);
+      this.logger.error("Failed to create job", error);
       throw error;
     }
   }
@@ -139,7 +148,7 @@ export class ProcessingJobsService {
     status: JobStatus,
     progress?: number,
     result?: Record<string, unknown>,
-    error?: string,
+    error?: string
   ): Promise<ProcessingJob> {
     const job = await this.findOne(id);
 
@@ -174,23 +183,23 @@ export class ProcessingJobsService {
   async findAll(
     documentId?: string,
     type?: JobType,
-    status?: JobStatus,
+    status?: JobStatus
   ): Promise<ProcessingJob[]> {
-    const query = this.jobRepository.createQueryBuilder('job');
+    const query = this.jobRepository.createQueryBuilder("job");
 
     if (documentId) {
-      query.andWhere('job.documentId = :documentId', { documentId });
+      query.andWhere("job.documentId = :documentId", { documentId });
     }
 
     if (type) {
-      query.andWhere('job.type = :type', { type });
+      query.andWhere("job.type = :type", { type });
     }
 
     if (status) {
-      query.andWhere('job.status = :status', { status });
+      query.andWhere("job.status = :status", { status });
     }
 
-    query.orderBy('job.createdAt', 'DESC');
+    query.orderBy("job.createdAt", "DESC");
 
     return await query.getMany();
   }
@@ -206,7 +215,7 @@ export class ProcessingJobsService {
       job.status === JobStatus.FAILED ||
       job.status === JobStatus.CANCELLED
     ) {
-      throw new Error('Cannot cancel job in current status');
+      throw new Error("Cannot cancel job in current status");
     }
 
     job.status = JobStatus.CANCELLED;
@@ -224,7 +233,7 @@ export class ProcessingJobsService {
   async findByDocumentId(documentId: string): Promise<ProcessingJob[]> {
     return await this.jobRepository.find({
       where: { documentId },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
   }
 
@@ -250,26 +259,29 @@ export class ProcessingJobsService {
    * Get job statistics
    */
   async getStatistics(): Promise<JobStatistics> {
-    const [total, pending, processing, completed, failed, cancelled] = await Promise.all([
-      this.jobRepository.count(),
-      this.jobRepository.count({ where: { status: JobStatus.PENDING } }),
-      this.jobRepository.count({ where: { status: JobStatus.PROCESSING } }),
-      this.jobRepository.count({ where: { status: JobStatus.COMPLETED } }),
-      this.jobRepository.count({ where: { status: JobStatus.FAILED } }),
-      this.jobRepository.count({ where: { status: JobStatus.CANCELLED } }),
-    ]);
+    const [total, pending, processing, completed, failed, cancelled] =
+      await Promise.all([
+        this.jobRepository.count(),
+        this.jobRepository.count({ where: { status: JobStatus.PENDING } }),
+        this.jobRepository.count({ where: { status: JobStatus.PROCESSING } }),
+        this.jobRepository.count({ where: { status: JobStatus.COMPLETED } }),
+        this.jobRepository.count({ where: { status: JobStatus.FAILED } }),
+        this.jobRepository.count({ where: { status: JobStatus.CANCELLED } }),
+      ]);
 
     const rawByStatus = await this.jobRepository
-      .createQueryBuilder('job')
-      .select('job.status', 'status')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('job.status')
+      .createQueryBuilder("job")
+      .select("job.status", "status")
+      .addSelect("COUNT(*)", "count")
+      .groupBy("job.status")
       .getRawMany();
 
-    const byStatus: JobStatusStatistic[] = rawByStatus.map((item: { status: string; count: string }) => ({
-      status: item.status as JobStatus,
-      count: parseInt(item.count, 10),
-    }));
+    const byStatus: JobStatusStatistic[] = rawByStatus.map(
+      (item: { status: string; count: string }) => ({
+        status: item.status as JobStatus,
+        count: parseInt(item.count, 10),
+      })
+    );
 
     return {
       total,
@@ -300,33 +312,44 @@ export class ProcessingJobsService {
 
   async updateProgress(id: string, progress: number): Promise<ProcessingJob> {
     if (progress < 0 || progress > 100) {
-      throw new Error('Progress must be between 0 and 100');
+      throw new Error("Progress must be between 0 and 100");
     }
     const job = await this.findOne(id);
     job.progress = progress;
     return this.jobRepository.save(job);
   }
 
-  async setResult(id: string, result: ProcessingResult): Promise<ProcessingJob> {
-    await this.jobRepository.update(id, { result: result as any, status: JobStatus.COMPLETED, completedAt: new Date() });
+  async setResult(
+    id: string,
+    result: ProcessingResult
+  ): Promise<ProcessingJob> {
+    await this.jobRepository.update(id, {
+      result: result as ProcessingResult,
+      status: JobStatus.COMPLETED,
+      completedAt: new Date(),
+    });
     return this.findOne(id);
   }
 
   async setError(id: string, errorMessage: string): Promise<ProcessingJob> {
-    await this.jobRepository.update(id, { error: errorMessage, status: JobStatus.FAILED, completedAt: new Date() });
+    await this.jobRepository.update(id, {
+      error: errorMessage,
+      status: JobStatus.FAILED,
+      completedAt: new Date(),
+    });
     return this.findOne(id);
   }
 
   async retryJob(id: string): Promise<ProcessingJob> {
     const job = await this.findOne(id);
     if (job.status !== JobStatus.FAILED && job.status !== JobStatus.CANCELLED) {
-      throw new Error('Can only retry failed or cancelled jobs');
+      throw new Error("Can only retry failed or cancelled jobs");
     }
-    await this.jobRepository.update(id, { 
-      status: JobStatus.PENDING, 
-      error: undefined, 
-      startedAt: undefined, 
-      completedAt: undefined 
+    await this.jobRepository.update(id, {
+      status: JobStatus.PENDING,
+      error: undefined,
+      startedAt: undefined,
+      completedAt: undefined,
     });
     return this.findOne(id);
   }
@@ -338,7 +361,7 @@ export class ProcessingJobsService {
   async cleanupOldJobs(daysOld: number): Promise<number> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-    
+
     // Find old completed/failed jobs
     const jobsToDelete = await this.jobRepository.find({
       where: [
@@ -351,7 +374,9 @@ export class ProcessingJobsService {
       return 0;
     }
 
-    const result = await this.jobRepository.delete(jobsToDelete.map(job => job.id));
+    const result = await this.jobRepository.delete(
+      jobsToDelete.map((job) => job.id)
+    );
     return result.affected || 0;
   }
 }

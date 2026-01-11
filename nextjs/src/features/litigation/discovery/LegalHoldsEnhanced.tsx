@@ -14,7 +14,7 @@ import { useTheme } from '@/providers';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/utils/cn';
-import type { LegalHoldEnhanced, LegalHoldNotification } from '@/types/discovery-enhanced';
+import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 
 export const LegalHoldsEnhanced: React.FC = () => {
   const { theme } = useTheme();
@@ -112,7 +112,7 @@ export const LegalHoldsEnhanced: React.FC = () => {
     detailsModal.open();
   };
 
-  const handleSendReminder = (holdId: string) => {
+  const handleSendReminder = () => {
     notify.success('Reminder sent to pending custodians');
   };
 

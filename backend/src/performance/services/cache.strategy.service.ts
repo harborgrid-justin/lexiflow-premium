@@ -1,7 +1,12 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
-import * as crypto from 'crypto';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { RedisCacheManagerService } from "@common/services/redis-cache-manager.service";
+import * as crypto from "crypto";
 
 /**
  * Cache Strategy Configuration
@@ -11,7 +16,7 @@ export interface CacheStrategyConfig {
   namespace?: string;
   tags?: string[];
   compression?: boolean;
-  tier?: 'memory' | 'redis' | 'both';
+  tier?: "memory" | "redis" | "both";
 }
 
 /**
@@ -101,34 +106,34 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private readonly redisCache: RedisCacheManagerService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
     void this.configService;
   }
 
   async onModuleInit() {
     this.startCleanupInterval();
-    this.logger.log('Multi-tier cache strategy initialized');
+    this.logger.log("Multi-tier cache strategy initialized");
   }
 
   async onModuleDestroy() {
-    this.logger.log('Cleaning up cache strategy service...');
-    
+    this.logger.log("Cleaning up cache strategy service...");
+
     // Clear warming interval
     if (this.warmingInterval) {
       clearInterval(this.warmingInterval);
       this.warmingInterval = null;
     }
-    
+
     // Clear all cache maps to free memory
     this.memoryCache.clear();
     this.metadata.clear();
     this.tagIndex.clear();
-    
+
     // Reset memory tracking
     this.currentMemorySize = 0;
-    
-    this.logger.log('Cache strategy cleanup complete');
+
+    this.logger.log("Cache strategy cleanup complete");
   }
 
   /**
@@ -137,14 +142,14 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
   async get<T>(
     key: string,
     fetcher: () => Promise<T>,
-    config: CacheStrategyConfig = {},
+    config: CacheStrategyConfig = {}
   ): Promise<T> {
-    const tier = config.tier || 'both';
+    const tier = config.tier || "both";
     const ttl = config.ttl || this.DEFAULT_TTL;
     const namespace = config.namespace;
 
     // Try L1 (memory) first if tier allows
-    if (tier === 'memory' || tier === 'both') {
+    if (tier === "memory" || tier === "both") {
       const memoryValue = this.getFromMemory<T>(key);
       if (memoryValue !== undefined) {
         this.recordHit(key);
@@ -154,11 +159,11 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     }
 
     // Try L2 (Redis) if tier allows
-    if (tier === 'redis' || tier === 'both') {
+    if (tier === "redis" || tier === "both") {
       const redisValue = await this.redisCache.get<T>(key, namespace);
       if (redisValue !== undefined) {
         // Populate L1 cache for faster subsequent access
-        if (tier === 'both') {
+        if (tier === "both") {
           this.setInMemory(key, redisValue, ttl, config.tags || []);
         }
         this.recordHit(key);
@@ -183,19 +188,19 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
   async set<T>(
     key: string,
     value: T,
-    config: CacheStrategyConfig = {},
+    config: CacheStrategyConfig = {}
   ): Promise<void> {
-    const tier = config.tier || 'both';
+    const tier = config.tier || "both";
     const ttl = config.ttl || this.DEFAULT_TTL;
     const tags = config.tags || [];
 
     // Store in L1 (memory)
-    if (tier === 'memory' || tier === 'both') {
+    if (tier === "memory" || tier === "both") {
       this.setInMemory(key, value, ttl, tags);
     }
 
     // Store in L2 (Redis)
-    if (tier === 'redis' || tier === 'both') {
+    if (tier === "redis" || tier === "both") {
       await this.redisCache.set(key, value, {
         ttl,
         namespace: config.namespace,
@@ -235,7 +240,7 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     for (const tag of tags) {
       const tagKeys = this.tagIndex.get(tag);
       if (tagKeys) {
-        tagKeys.forEach(key => keysToInvalidate.add(key));
+        tagKeys.forEach((key) => keysToInvalidate.add(key));
       }
     }
 
@@ -251,7 +256,9 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
       count += redisCount;
     }
 
-    this.logger.log(`Invalidated ${count} cache entries with tags: ${tags.join(', ')}`);
+    this.logger.log(
+      `Invalidated ${count} cache entries with tags: ${tags.join(", ")}`
+    );
     return count;
   }
 
@@ -275,7 +282,9 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     // Clear from Redis
     await this.redisCache.clear(namespace);
 
-    this.logger.log(`Cleared namespace: ${namespace} (${keysToDelete.length} entries)`);
+    this.logger.log(
+      `Cleared namespace: ${namespace} (${keysToDelete.length} entries)`
+    );
   }
 
   /**
@@ -285,7 +294,7 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     setInterval(() => {
       const now = Date.now();
       let evicted = 0;
-      
+
       // Remove expired entries
       for (const [key, entry] of this.memoryCache.entries()) {
         if (entry.expiresAt && entry.expiresAt < now) {
@@ -296,13 +305,17 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
           evicted++;
         }
       }
-      
+
       // Enforce memory limits - evict oldest entries if over limit
       if (this.memoryCache.size > this.MAX_MEMORY_ENTRIES) {
-        const sortedEntries = Array.from(this.metadata.entries())
-          .sort((a, b) => a[1].createdAt - b[1].createdAt);
-        
-        const toRemove = sortedEntries.slice(0, sortedEntries.length - this.MAX_MEMORY_ENTRIES);
+        const sortedEntries = Array.from(this.metadata.entries()).sort(
+          (a, b) => a[1].createdAt - b[1].createdAt
+        );
+
+        const toRemove = sortedEntries.slice(
+          0,
+          sortedEntries.length - this.MAX_MEMORY_ENTRIES
+        );
         for (const [key] of toRemove) {
           const entry = this.memoryCache.get(key);
           if (entry) {
@@ -313,16 +326,20 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
           evicted++;
         }
       }
-      
+
       // Check memory size limit
       if (this.currentMemorySize > this.MAX_MEMORY_SIZE) {
-        const sortedBySize = Array.from(this.memoryCache.entries())
-          .sort((a, b) => (b[1].size || 0) - (a[1].size || 0));
-        
+        const sortedBySize = Array.from(this.memoryCache.entries()).sort(
+          (a, b) => (b[1].size || 0) - (a[1].size || 0)
+        );
+
         // Remove largest entries until under limit
         let freedMemory = 0;
         for (const [key, entry] of sortedBySize) {
-          if (this.currentMemorySize - freedMemory <= this.MAX_MEMORY_SIZE * 0.9) {
+          if (
+            this.currentMemorySize - freedMemory <=
+            this.MAX_MEMORY_SIZE * 0.9
+          ) {
             break;
           }
           const size = entry.size || 0;
@@ -333,9 +350,11 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
         }
         this.currentMemorySize -= freedMemory;
       }
-      
+
       if (evicted > 0) {
-        this.logger.debug(`Cache cleanup: evicted ${evicted} entries, memory: ${(this.currentMemorySize / 1024 / 1024).toFixed(2)}MB`);
+        this.logger.debug(
+          `Cache cleanup: evicted ${evicted} entries, memory: ${(this.currentMemorySize / 1024 / 1024).toFixed(2)}MB`
+        );
       }
     }, 60000); // Run every minute
   }
@@ -346,13 +365,16 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
   generateKey(prefix: string, params: Record<string, unknown>): string {
     const sortedParams = Object.keys(params)
       .sort()
-      .reduce((acc, key) => {
-        acc[key] = params[key];
-        return acc;
-      }, {} as Record<string, unknown>);
+      .reduce(
+        (acc, key) => {
+          acc[key] = params[key];
+          return acc;
+        },
+        {} as Record<string, unknown>
+      );
 
     const paramsString = JSON.stringify(sortedParams);
-    const hash = crypto.createHash('md5').update(paramsString).digest('hex');
+    const hash = crypto.createHash("md5").update(paramsString).digest("hex");
 
     return `${prefix}:${hash}`;
   }
@@ -365,7 +387,7 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
       return;
     }
 
-    this.logger.log('Starting cache warming...');
+    this.logger.log("Starting cache warming...");
 
     for (const item of config.keys) {
       try {
@@ -383,11 +405,13 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     }
 
     this.warmingInterval = setInterval(async () => {
-      this.logger.debug('Running scheduled cache warming...');
+      this.logger.debug("Running scheduled cache warming...");
       await this.warmCache(config);
     }, config.interval);
 
-    this.logger.log(`Cache warming completed. Next run in ${config.interval}ms`);
+    this.logger.log(
+      `Cache warming completed. Next run in ${config.interval}ms`
+    );
   }
 
   /**
@@ -455,7 +479,7 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     key: string,
     value: T,
     ttl: number,
-    tags: string[],
+    tags: string[]
   ): void {
     // Check memory limits
     if (this.memoryCache.size >= this.MAX_MEMORY_ENTRIES) {
@@ -463,11 +487,13 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     }
 
     const serialized = JSON.stringify(value);
-    const size = Buffer.byteLength(serialized, 'utf8');
+    const size = Buffer.byteLength(serialized, "utf8");
 
     // Skip if entry too large
     if (size > this.MAX_ENTRY_SIZE) {
-      this.logger.warn(`Entry too large for memory cache: ${key} (${size} bytes)`);
+      this.logger.warn(
+        `Entry too large for memory cache: ${key} (${size} bytes)`
+      );
       return;
     }
 
@@ -495,7 +521,10 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
       if (!this.tagIndex.has(tag)) {
         this.tagIndex.set(tag, new Set());
       }
-      this.tagIndex.get(tag)!.add(key);
+      const tagSet = this.tagIndex.get(tag);
+      if (tagSet) {
+        tagSet.add(key);
+      }
     }
   }
 
@@ -548,7 +577,6 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
       tags: this.tagIndex.size,
     };
   }
-
 }
 
 // Remove duplicate onModuleDestroy - already defined earlier

@@ -1,13 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Request, Response } from 'express';
-import * as zlib from 'zlib';
-import * as MasterConfig from '@config/master.config';
+import { Injectable, Logger } from "@nestjs/common";
+import { Request, Response } from "express";
+import * as zlib from "zlib";
+import * as MasterConfig from "@config/master.config";
 
 /**
  * Compression Configuration
  */
 export interface CompressionConfig {
-  algorithm?: 'gzip' | 'brotli' | 'deflate' | 'auto';
+  algorithm?: "gzip" | "brotli" | "deflate" | "auto";
   level?: number;
   threshold?: number;
   contentTypes?: string[];
@@ -88,51 +88,52 @@ export class CompressionService {
 
   // Compression settings
   private readonly DEFAULT_LEVEL = MasterConfig.COMPRESSION_LEVEL || 6;
-  private readonly DEFAULT_THRESHOLD = MasterConfig.COMPRESSION_THRESHOLD || 1024; // 1KB
+  private readonly DEFAULT_THRESHOLD =
+    MasterConfig.COMPRESSION_THRESHOLD || 1024; // 1KB
 
   // Content types that should be compressed
   private readonly COMPRESSIBLE_TYPES = [
-    'text/html',
-    'text/css',
-    'text/plain',
-    'text/xml',
-    'text/javascript',
-    'application/json',
-    'application/javascript',
-    'application/xml',
-    'application/rss+xml',
-    'application/atom+xml',
-    'application/x-javascript',
-    'application/x-font-ttf',
-    'application/x-font-opentype',
-    'application/vnd.ms-fontobject',
-    'font/ttf',
-    'font/opentype',
-    'font/otf',
-    'font/eot',
-    'image/svg+xml',
+    "text/html",
+    "text/css",
+    "text/plain",
+    "text/xml",
+    "text/javascript",
+    "application/json",
+    "application/javascript",
+    "application/xml",
+    "application/rss+xml",
+    "application/atom+xml",
+    "application/x-javascript",
+    "application/x-font-ttf",
+    "application/x-font-opentype",
+    "application/vnd.ms-fontobject",
+    "font/ttf",
+    "font/opentype",
+    "font/otf",
+    "font/eot",
+    "image/svg+xml",
   ];
 
   // Content types that are already compressed
   private readonly PRECOMPRESSED_TYPES = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'image/avif',
-    'video/mp4',
-    'video/webm',
-    'video/ogg',
-    'audio/mp3',
-    'audio/mpeg',
-    'audio/ogg',
-    'application/zip',
-    'application/gzip',
-    'application/x-gzip',
-    'application/x-rar-compressed',
-    'application/x-7z-compressed',
-    'application/pdf',
-    'application/octet-stream',
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/avif",
+    "video/mp4",
+    "video/webm",
+    "video/ogg",
+    "audio/mp3",
+    "audio/mpeg",
+    "audio/ogg",
+    "application/zip",
+    "application/gzip",
+    "application/x-gzip",
+    "application/x-rar-compressed",
+    "application/x-7z-compressed",
+    "application/pdf",
+    "application/octet-stream",
   ];
 
   /**
@@ -140,9 +141,9 @@ export class CompressionService {
    */
   async compress(
     data: Buffer | string,
-    config: CompressionConfig = {},
+    config: CompressionConfig = {}
   ): Promise<Buffer> {
-    const algorithm = config.algorithm || 'gzip';
+    const algorithm = config.algorithm || "gzip";
     const level = config.level || this.DEFAULT_LEVEL;
     const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
 
@@ -152,7 +153,7 @@ export class CompressionService {
     }
 
     try {
-      const compressAlg = algorithm === 'auto' ? 'gzip' : algorithm;
+      const compressAlg = algorithm === "auto" ? "gzip" : algorithm;
       const compressed = await this.compressBuffer(buffer, compressAlg, level);
 
       // Update statistics
@@ -160,12 +161,13 @@ export class CompressionService {
 
       this.logger.debug(
         `Compressed ${buffer.length} bytes to ${compressed.length} bytes using ${compressAlg} ` +
-        `(${((1 - compressed.length / buffer.length) * 100).toFixed(1)}% reduction)`
+          `(${((1 - compressed.length / buffer.length) * 100).toFixed(1)}% reduction)`
       );
 
       return compressed;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       this.logger.error(`Compression failed: ${errorMessage}`);
       return buffer;
     }
@@ -176,27 +178,34 @@ export class CompressionService {
    */
   async decompress(
     data: Buffer,
-    algorithm: 'gzip' | 'brotli' | 'deflate' = 'gzip',
+    algorithm: "gzip" | "brotli" | "deflate" = "gzip"
   ): Promise<Buffer> {
     try {
       switch (algorithm) {
-        case 'gzip':
+        case "gzip":
           return await new Promise<Buffer>((resolve, reject) => {
-            zlib.gunzip(data, (err, result) => err ? reject(err) : resolve(result));
+            zlib.gunzip(data, (err, result) =>
+              err ? reject(err) : resolve(result)
+            );
           });
-        case 'brotli':
+        case "brotli":
           return await new Promise<Buffer>((resolve, reject) => {
-            zlib.brotliDecompress(data, (err, result) => err ? reject(err) : resolve(result));
+            zlib.brotliDecompress(data, (err, result) =>
+              err ? reject(err) : resolve(result)
+            );
           });
-        case 'deflate':
+        case "deflate":
           return await new Promise<Buffer>((resolve, reject) => {
-            zlib.inflate(data, (err, result) => err ? reject(err) : resolve(result));
+            zlib.inflate(data, (err, result) =>
+              err ? reject(err) : resolve(result)
+            );
           });
         default:
           throw new Error(`Unsupported algorithm: ${algorithm}`);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       this.logger.error(`Decompression failed: ${errorMessage}`);
       throw error;
     }
@@ -210,48 +219,54 @@ export class CompressionService {
       return false;
     }
 
-    const typeParts = contentType.toLowerCase().split(';');
-    const normalizedType = (typeParts[0] || '').trim();
+    const typeParts = contentType.toLowerCase().split(";");
+    const normalizedType = (typeParts[0] || "").trim();
 
     // Check exclusions first
     if (config.excludeContentTypes) {
-      if (config.excludeContentTypes.some(type => normalizedType.includes(type))) {
+      if (
+        config.excludeContentTypes.some((type) => normalizedType.includes(type))
+      ) {
         return false;
       }
     }
 
     // Check if already compressed
-    if (this.PRECOMPRESSED_TYPES.some(type => normalizedType.includes(type))) {
+    if (
+      this.PRECOMPRESSED_TYPES.some((type) => normalizedType.includes(type))
+    ) {
       return false;
     }
 
     // Check if in compressible list
     if (config.contentTypes) {
-      return config.contentTypes.some(type => normalizedType.includes(type));
+      return config.contentTypes.some((type) => normalizedType.includes(type));
     }
 
-    return this.COMPRESSIBLE_TYPES.some(type => normalizedType.includes(type));
+    return this.COMPRESSIBLE_TYPES.some((type) =>
+      normalizedType.includes(type)
+    );
   }
 
   /**
    * Determine best compression algorithm based on client support
    */
-  getBestAlgorithm(req: Request): 'gzip' | 'brotli' | 'deflate' | null {
-    const acceptEncoding = req.headers['accept-encoding']?.toLowerCase() || '';
+  getBestAlgorithm(req: Request): "gzip" | "brotli" | "deflate" | null {
+    const acceptEncoding = req.headers["accept-encoding"]?.toLowerCase() || "";
 
     // Brotli provides best compression but requires client support
-    if (acceptEncoding.includes('br')) {
-      return 'brotli';
+    if (acceptEncoding.includes("br")) {
+      return "brotli";
     }
 
     // Gzip is widely supported
-    if (acceptEncoding.includes('gzip')) {
-      return 'gzip';
+    if (acceptEncoding.includes("gzip")) {
+      return "gzip";
     }
 
     // Deflate as fallback
-    if (acceptEncoding.includes('deflate')) {
-      return 'deflate';
+    if (acceptEncoding.includes("deflate")) {
+      return "deflate";
     }
 
     return null;
@@ -264,9 +279,9 @@ export class CompressionService {
     req: Request,
     res: Response,
     data: unknown,
-    config: CompressionConfig = {},
+    config: CompressionConfig = {}
   ): Promise<void> {
-    const contentType = res.getHeader('Content-Type') as string;
+    const contentType = res.getHeader("Content-Type") as string;
 
     // Check if compression should be applied
     if (!this.shouldCompress(contentType, config)) {
@@ -275,9 +290,10 @@ export class CompressionService {
     }
 
     // Get best algorithm
-    const algorithm = config.algorithm === 'auto'
-      ? this.getBestAlgorithm(req)
-      : config.algorithm || this.getBestAlgorithm(req);
+    const algorithm =
+      config.algorithm === "auto"
+        ? this.getBestAlgorithm(req)
+        : config.algorithm || this.getBestAlgorithm(req);
 
     if (!algorithm) {
       res.send(data);
@@ -285,7 +301,9 @@ export class CompressionService {
     }
 
     try {
-      const buffer = Buffer.isBuffer(data) ? data : Buffer.from(JSON.stringify(data));
+      const buffer = Buffer.isBuffer(data)
+        ? data
+        : Buffer.from(JSON.stringify(data));
 
       // Don't compress small responses
       if (buffer.length < (config.threshold || this.DEFAULT_THRESHOLD)) {
@@ -296,20 +314,21 @@ export class CompressionService {
       const compressed = await this.compressBuffer(
         buffer,
         algorithm,
-        config.level || this.DEFAULT_LEVEL,
+        config.level || this.DEFAULT_LEVEL
       );
 
       // Update stats
       this.updateStats(buffer.length, compressed.length);
 
       // Set compression headers
-      res.setHeader('Content-Encoding', algorithm);
-      res.setHeader('Content-Length', compressed.length);
-      res.setHeader('Vary', 'Accept-Encoding');
+      res.setHeader("Content-Encoding", algorithm);
+      res.setHeader("Content-Length", compressed.length);
+      res.setHeader("Vary", "Accept-Encoding");
 
       res.send(compressed);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       this.logger.error(`Response compression failed: ${errorMessage}`);
       res.send(data);
     }
@@ -334,7 +353,7 @@ export class CompressionService {
       compressionRatio: 0,
       averageSavings: 0,
     };
-    this.logger.log('Compression statistics reset');
+    this.logger.log("Compression statistics reset");
   }
 
   /**
@@ -344,17 +363,21 @@ export class CompressionService {
     const type = contentType.toLowerCase();
 
     // JSON/XML - Use higher compression (more repetitive data)
-    if (type.includes('json') || type.includes('xml')) {
+    if (type.includes("json") || type.includes("xml")) {
       return 7;
     }
 
     // HTML/CSS/JS - Use medium compression
-    if (type.includes('html') || type.includes('css') || type.includes('javascript')) {
+    if (
+      type.includes("html") ||
+      type.includes("css") ||
+      type.includes("javascript")
+    ) {
       return 6;
     }
 
     // Plain text - Use medium compression
-    if (type.includes('text')) {
+    if (type.includes("text")) {
       return 5;
     }
 
@@ -366,27 +389,33 @@ export class CompressionService {
 
   private async compressBuffer(
     buffer: Buffer,
-    algorithm: 'gzip' | 'brotli' | 'deflate',
-    level: number,
+    algorithm: "gzip" | "brotli" | "deflate",
+    level: number
   ): Promise<Buffer> {
     switch (algorithm) {
-      case 'gzip':
+      case "gzip":
         return await this.promisify(zlib.gzip)(buffer, {
           level,
           memLevel: 8,
         });
 
-      case 'brotli':
+      case "brotli":
         return await new Promise<Buffer>((resolve, reject) => {
-          zlib.brotliCompress(buffer, {
-            params: {
-              [zlib.constants.BROTLI_PARAM_QUALITY]: level,
-              [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-            },
-          } as any, (err: Error | null, result: Buffer) => err ? reject(err) : resolve(result));
+          zlib.brotliCompress(
+            buffer,
+            {
+              params: {
+                [zlib.constants.BROTLI_PARAM_QUALITY]: level,
+                [zlib.constants.BROTLI_PARAM_MODE]:
+                  zlib.constants.BROTLI_MODE_TEXT,
+              },
+            } as zlib.BrotliOptions,
+            (err: Error | null, result: Buffer) =>
+              err ? reject(err) : resolve(result)
+          );
         });
 
-      case 'deflate':
+      case "deflate":
         return await this.promisify(zlib.deflate)(buffer, {
           level,
         });
@@ -397,7 +426,7 @@ export class CompressionService {
   }
 
   private promisify<T extends unknown[]>(
-    fn: (...args: [...T, (error: Error | null, result: Buffer) => void]) => void,
+    fn: (...args: [...T, (error: Error | null, result: Buffer) => void]) => void
   ) {
     return (...args: T): Promise<Buffer> => {
       return new Promise((resolve, reject) => {

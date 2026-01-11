@@ -232,9 +232,9 @@ export function useAppContext(): UseAppControllerReturn {
       loadCase();
     } else {
       // Only clear if currently set to avoid redundant updates
-      setSelectedCase(null);
+      if (selectedCase) setSelectedCase(null);
     }
-  }, [selectedCaseId, setSelectedCaseId, addToast]);
+  }, [selectedCaseId, setSelectedCaseId, addToast, selectedCase]);
 
   // ==========================================================================
   // CALLBACK HANDLERS

@@ -50,9 +50,9 @@ export const OutcomeSimulator: React.FC = () => {
   };
 
   // Initial run
-  useMemo(() => {
+  useEffect(() => {
     if (results.length === 0) runSimulation();
-  }, []);
+  }, [results.length, runSimulation]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">

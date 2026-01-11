@@ -20,6 +20,7 @@ import {
   FileText,
   Gavel,
   Layers,
+  Loader2,
   Mic2,
   Monitor,
   Shield,

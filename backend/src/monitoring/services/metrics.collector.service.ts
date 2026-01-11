@@ -1,8 +1,8 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { PerformanceMetric } from '@monitoring/entities/performance-metric.entity';
-import * as os from 'os';
+import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { PerformanceMetric } from "@monitoring/entities/performance-metric.entity";
+import * as os from "os";
 
 export interface MetricPoint {
   name: string;
@@ -71,7 +71,7 @@ export interface MetricToSave {
  * Metrics Collector Service
  * Collects and aggregates application metrics for monitoring and observability
  * Provides Prometheus-compatible metrics export
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - LRU eviction with 10K entry limits per Map
  * - Periodic flush to database (5 minutes)
@@ -109,13 +109,13 @@ export interface MetricToSave {
 @Injectable()
 export class MetricsCollectorService implements OnModuleDestroy {
   private readonly logger = new Logger(MetricsCollectorService.name);
-  
+
   // Memory limits
   private readonly MAX_METRICS_PER_MAP = 10000;
   private readonly MAX_HISTOGRAM_VALUES = 1000;
   private readonly MAX_REQUEST_DURATIONS = 1000;
   private readonly FLUSH_INTERVAL_MS = 300000; // 5 minutes
-  
+
   // Metrics map removed - using aggregated metrics only
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -142,7 +142,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
   constructor(
     @InjectRepository(PerformanceMetric)
-    private readonly metricRepository: Repository<PerformanceMetric>,
+    private readonly metricRepository: Repository<PerformanceMetric>
   ) {
     // Start periodic system metrics collection
     this.startSystemMetricsCollection();
@@ -151,8 +151,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
   }
 
   onModuleDestroy() {
-    this.logger.log('Cleaning up metrics collector...');
-    
+    this.logger.log("Cleaning up metrics collector...");
+
     // Clear intervals
     if (this.systemMetricsInterval) {
       clearInterval(this.systemMetricsInterval);
@@ -162,7 +162,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
       clearInterval(this.flushInterval);
       this.flushInterval = null;
     }
-    
+
     // Clear all Maps and arrays
     this.counters.clear();
     this.gauges.clear();
@@ -171,8 +171,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
     this.requestDurations.clear();
     this.errorCounts.clear();
     this.queryDurations.length = 0;
-    
-    this.logger.log('Metrics collector cleanup complete');
+
+    this.logger.log("Metrics collector cleanup complete");
   }
 
   /**
@@ -191,9 +191,9 @@ export class MetricsCollectorService implements OnModuleDestroy {
     this.flushInterval = setInterval(async () => {
       try {
         await this.persistMetrics();
-        this.logger.log('Metrics flushed to database');
+        this.logger.log("Metrics flushed to database");
       } catch (error) {
-        this.logger.error('Failed to flush metrics', error);
+        this.logger.error("Failed to flush metrics", error);
       }
     }, this.FLUSH_INTERVAL_MS);
   }
@@ -208,13 +208,13 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     cpus.forEach((cpu) => {
       for (const type in cpu.times) {
-        totalTick += (cpu.times as any)[type];
+        totalTick += (cpu.times as Record<string, number>)[type] || 0;
       }
       totalIdle += cpu.times.idle;
     });
 
     const cpuUsage = 100 - (100 * totalIdle) / totalTick;
-    this.recordGauge('system.cpu.usage.percent', cpuUsage);
+    this.recordGauge("system.cpu.usage.percent", cpuUsage);
 
     // Memory metrics
     const totalMemory = os.totalmem();
@@ -222,31 +222,38 @@ export class MetricsCollectorService implements OnModuleDestroy {
     const usedMemory = totalMemory - freeMemory;
     const memoryUsagePercent = (usedMemory / totalMemory) * 100;
 
-    this.recordGauge('system.memory.total.bytes', totalMemory);
-    this.recordGauge('system.memory.free.bytes', freeMemory);
-    this.recordGauge('system.memory.used.bytes', usedMemory);
-    this.recordGauge('system.memory.usage.percent', memoryUsagePercent);
+    this.recordGauge("system.memory.total.bytes", totalMemory);
+    this.recordGauge("system.memory.free.bytes", freeMemory);
+    this.recordGauge("system.memory.used.bytes", usedMemory);
+    this.recordGauge("system.memory.usage.percent", memoryUsagePercent);
 
     // Process metrics
     const processMemory = process.memoryUsage();
-    this.recordGauge('process.memory.heap.used.bytes', processMemory.heapUsed);
-    this.recordGauge('process.memory.heap.total.bytes', processMemory.heapTotal);
-    this.recordGauge('process.memory.rss.bytes', processMemory.rss);
-    this.recordGauge('process.memory.external.bytes', processMemory.external);
+    this.recordGauge("process.memory.heap.used.bytes", processMemory.heapUsed);
+    this.recordGauge(
+      "process.memory.heap.total.bytes",
+      processMemory.heapTotal
+    );
+    this.recordGauge("process.memory.rss.bytes", processMemory.rss);
+    this.recordGauge("process.memory.external.bytes", processMemory.external);
 
     // Uptime
-    this.recordGauge('system.uptime.seconds', os.uptime());
-    this.recordGauge('process.uptime.seconds', process.uptime());
+    this.recordGauge("system.uptime.seconds", os.uptime());
+    this.recordGauge("process.uptime.seconds", process.uptime());
   }
 
   /**
    * Increment a counter metric with LRU eviction
    */
-  incrementCounter(name: string, value: number = 1, labels?: Record<string, string>): void {
+  incrementCounter(
+    name: string,
+    value: number = 1,
+    labels?: Record<string, string>
+  ): void {
     const key = this.buildMetricKey(name, labels);
     const current = this.counters.get(key) || 0;
     this.counters.set(key, current + value);
-    
+
     // LRU eviction if size exceeds limit
     this.enforceLRULimit(this.counters, this.MAX_METRICS_PER_MAP);
   }
@@ -254,10 +261,14 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Record a gauge metric (point-in-time value) with LRU eviction
    */
-  recordGauge(name: string, value: number, labels?: Record<string, string>): void {
+  recordGauge(
+    name: string,
+    value: number,
+    labels?: Record<string, string>
+  ): void {
     const key = this.buildMetricKey(name, labels);
     this.gauges.set(key, value);
-    
+
     // LRU eviction if size exceeds limit
     this.enforceLRULimit(this.gauges, this.MAX_METRICS_PER_MAP);
   }
@@ -265,7 +276,11 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Record a histogram metric (distribution of values) with size limits
    */
-  recordHistogram(name: string, value: number, labels?: Record<string, string>): void {
+  recordHistogram(
+    name: string,
+    value: number,
+    labels?: Record<string, string>
+  ): void {
     const key = this.buildMetricKey(name, labels);
     const values = this.histograms.get(key) || [];
     values.push(value);
@@ -275,7 +290,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
     if (values.length > this.MAX_HISTOGRAM_VALUES) {
       values.shift();
     }
-    
+
     // LRU eviction if too many histograms
     this.enforceLRULimit(this.histograms, this.MAX_METRICS_PER_MAP);
   }
@@ -293,14 +308,19 @@ export class MetricsCollectorService implements OnModuleDestroy {
           map.delete(key);
         }
       }
-      this.logger.warn(`LRU eviction: removed ${keysToDelete} entries from Map (size: ${map.size})`);
+      this.logger.warn(
+        `LRU eviction: removed ${keysToDelete} entries from Map (size: ${map.size})`
+      );
     }
   }
 
   /**
    * Build metric key from name and labels
    */
-  private buildMetricKey(name: string, labels?: Record<string, string>): string {
+  private buildMetricKey(
+    name: string,
+    labels?: Record<string, string>
+  ): string {
     if (!labels || Object.keys(labels).length === 0) {
       return name;
     }
@@ -308,7 +328,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
     const labelString = Object.entries(labels)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, value]) => `${key}="${value}"`)
-      .join(',');
+      .join(",");
 
     return `${name}{${labelString}}`;
   }
@@ -316,11 +336,16 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Record HTTP request metrics with bounded storage
    */
-  recordRequest(method: string, path: string, statusCode: number, duration: number): void {
+  recordRequest(
+    method: string,
+    path: string,
+    statusCode: number,
+    duration: number
+  ): void {
     const endpoint = `${method} ${this.normalizePath(path)}`;
 
     // Increment request counter
-    const requestKey = this.buildMetricKey('http.requests.total', {
+    const requestKey = this.buildMetricKey("http.requests.total", {
       method,
       path: this.normalizePath(path),
       status: statusCode.toString(),
@@ -328,7 +353,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
     this.incrementCounter(requestKey);
 
     // Record duration histogram
-    const durationKey = this.buildMetricKey('http.request.duration.ms', {
+    const durationKey = this.buildMetricKey("http.request.duration.ms", {
       method,
       path: this.normalizePath(path),
     });
@@ -336,7 +361,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     // Track errors
     if (statusCode >= 400) {
-      const errorKey = this.buildMetricKey('http.requests.errors.total', {
+      const errorKey = this.buildMetricKey("http.requests.errors.total", {
         method,
         path: this.normalizePath(path),
         status: statusCode.toString(),
@@ -351,12 +376,12 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     const durations = this.requestDurations.get(endpoint) || [];
     durations.push(duration);
-    
+
     // Keep only last N durations per endpoint
     if (durations.length > this.MAX_REQUEST_DURATIONS) {
       durations.shift();
     }
-    
+
     this.requestDurations.set(endpoint, durations);
     this.enforceLRULimit(this.requestDurations, this.MAX_METRICS_PER_MAP);
 
@@ -371,11 +396,14 @@ export class MetricsCollectorService implements OnModuleDestroy {
    * Normalize URL path for metrics (remove IDs and query params)
    */
   private normalizePath(path: string): string {
-    const safePath = path || '';
-    const pathWithoutQuery = safePath.split('?')[0];
-    return (pathWithoutQuery || '')
-      .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id') // UUID
-      .replace(/\/\d+/g, '/:id'); // Numeric IDs
+    const safePath = path || "";
+    const pathWithoutQuery = safePath.split("?")[0];
+    return (pathWithoutQuery || "")
+      .replace(
+        /\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+        "/:id"
+      ) // UUID
+      .replace(/\/\d+/g, "/:id"); // Numeric IDs
   }
 
   /**
@@ -394,16 +422,16 @@ export class MetricsCollectorService implements OnModuleDestroy {
       this.queryErrors++;
     }
 
-    this.recordHistogram('database.query.duration.ms', duration);
-    this.incrementCounter('database.queries.total');
+    this.recordHistogram("database.query.duration.ms", duration);
+    this.incrementCounter("database.queries.total");
 
     if (!success) {
-      this.incrementCounter('database.queries.errors.total');
+      this.incrementCounter("database.queries.errors.total");
     }
 
     // Alert on slow queries
     if (duration > 1000) {
-      this.incrementCounter('database.queries.slow.total');
+      this.incrementCounter("database.queries.slow.total");
     }
   }
 
@@ -413,16 +441,16 @@ export class MetricsCollectorService implements OnModuleDestroy {
   recordCacheAccess(hit: boolean): void {
     if (hit) {
       this.cacheHits++;
-      this.incrementCounter('cache.hits.total');
+      this.incrementCounter("cache.hits.total");
     } else {
       this.cacheMisses++;
-      this.incrementCounter('cache.misses.total');
+      this.incrementCounter("cache.misses.total");
     }
 
     const total = this.cacheHits + this.cacheMisses;
     if (total > 0) {
       const hitRatio = this.cacheHits / total;
-      this.recordGauge('cache.hit.ratio', hitRatio);
+      this.recordGauge("cache.hit.ratio", hitRatio);
     }
   }
 
@@ -455,8 +483,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
       stats[key] = {
         count: values.length,
         sum,
-        min: sorted[0]!,
-        max: sorted[sorted.length - 1]!,
+        min: sorted[0] ?? 0,
+        max: sorted[sorted.length - 1] ?? 0,
         avg: sum / values.length,
         p50: this.percentile(sorted, 0.5),
         p95: this.percentile(sorted, 0.95),
@@ -473,7 +501,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
   private percentile(sortedValues: number[], p: number): number {
     if (sortedValues.length === 0) return 0;
     const index = Math.ceil(sortedValues.length * p) - 1;
-    return sortedValues[Math.max(0, index)]!;
+    return sortedValues[Math.max(0, index)] ?? 0;
   }
 
   /**
@@ -484,21 +512,21 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     // Counters
     this.counters.forEach((value, key) => {
-      lines.push(`# TYPE ${key.split('{')[0]} counter`);
+      lines.push(`# TYPE ${key.split("{")[0]} counter`);
       lines.push(`${key} ${value}`);
     });
 
     // Gauges
     this.gauges.forEach((value, key) => {
-      lines.push(`# TYPE ${key.split('{')[0]} gauge`);
+      lines.push(`# TYPE ${key.split("{")[0]} gauge`);
       lines.push(`${key} ${value}`);
     });
 
     // Histograms
     const histogramStats = this.getHistogramStats();
     Object.entries(histogramStats).forEach(([key, stats]) => {
-      const baseName = key.split('{')[0];
-      const labels = key.includes('{') ? key.substring(key.indexOf('{')) : '';
+      const baseName = key.split("{")[0];
+      const labels = key.includes("{") ? key.substring(key.indexOf("{")) : "";
 
       lines.push(`# TYPE ${baseName} histogram`);
       lines.push(`${baseName}_count${labels} ${stats.count}`);
@@ -511,7 +539,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
       lines.push(`${baseName}_p99${labels} ${stats.p99}`);
     });
 
-    return lines.join('\n') + '\n';
+    return lines.join("\n") + "\n";
   }
 
   /**
@@ -553,7 +581,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
       totalQueries: this.queryCount,
       totalErrors: this.queryErrors,
       errorRate: this.queryCount > 0 ? this.queryErrors / this.queryCount : 0,
-      avgDuration: this.queryDurations.length > 0 ? sum / this.queryDurations.length : 0,
+      avgDuration:
+        this.queryDurations.length > 0 ? sum / this.queryDurations.length : 0,
       minDuration: sorted[0] || 0,
       maxDuration: sorted[sorted.length - 1] || 0,
       p50: this.percentile(sorted, 0.5),
@@ -606,7 +635,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
       metricsToSave.push({
         metricName: name,
         value,
-        unit: 'count',
+        unit: "count",
         timestamp,
       });
     }
@@ -616,7 +645,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
       metricsToSave.push({
         metricName: name,
         value,
-        unit: 'gauge',
+        unit: "gauge",
         timestamp,
       });
     }

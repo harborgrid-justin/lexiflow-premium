@@ -1,11 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Repository, SelectQueryBuilder, ObjectLiteral } from 'typeorm';
-import * as MasterConfig from '@config/master.config';
+import { Injectable, Logger } from "@nestjs/common";
+import { Repository, SelectQueryBuilder, ObjectLiteral } from "typeorm";
+import * as MasterConfig from "@config/master.config";
 
 /**
  * Pagination Type
  */
-export type PaginationType = 'offset' | 'cursor' | 'keyset';
+export type PaginationType = "offset" | "cursor" | "keyset";
 
 /**
  * Offset-based Pagination Options
@@ -14,7 +14,7 @@ export interface OffsetPaginationOptions {
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
 /**
@@ -24,7 +24,7 @@ export interface CursorPaginationOptions {
   cursor?: string;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
 /**
@@ -35,7 +35,7 @@ export interface KeysetPaginationOptions {
   lastValue?: unknown;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
 /**
@@ -147,7 +147,7 @@ export class LazyLoadingService {
    */
   async offsetPaginate<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    options: OffsetPaginationOptions = {},
+    options: OffsetPaginationOptions = {}
   ): Promise<PaginatedResult<T>> {
     const page = Math.max(1, options.page || 1);
     const limit = Math.min(options.limit || this.DEFAULT_LIMIT, this.MAX_LIMIT);
@@ -157,7 +157,7 @@ export class LazyLoadingService {
     if (options.sortBy) {
       queryBuilder.orderBy(
         `${queryBuilder.alias}.${options.sortBy}`,
-        options.sortOrder || 'ASC',
+        options.sortOrder || "ASC"
       );
     }
 
@@ -188,21 +188,21 @@ export class LazyLoadingService {
    */
   async cursorPaginate<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    options: CursorPaginationOptions = {},
+    options: CursorPaginationOptions = {}
   ): Promise<PaginatedResult<T>> {
     const limit = Math.min(options.limit || this.DEFAULT_LIMIT, this.MAX_LIMIT);
-    const sortBy = options.sortBy || 'id';
-    const sortOrder = options.sortOrder || 'ASC';
+    const sortBy = options.sortBy || "id";
+    const sortOrder = options.sortOrder || "ASC";
 
     // Decode cursor
     const cursor = options.cursor ? this.decodeCursor(options.cursor) : null;
 
     // Apply cursor filter
     if (cursor) {
-      const operator = sortOrder === 'ASC' ? '>' : '<';
+      const operator = sortOrder === "ASC" ? ">" : "<";
       queryBuilder.andWhere(
         `${queryBuilder.alias}.${sortBy} ${operator} :cursorValue`,
-        { cursorValue: cursor.value },
+        { cursorValue: cursor.value }
       );
     }
 
@@ -219,9 +219,10 @@ export class LazyLoadingService {
 
     // Generate cursors
     const lastItem = data[data.length - 1];
-    const nextCursor = hasNextPage && data.length > 0 && lastItem
-      ? this.encodeCursor({ field: sortBy, value: lastItem[sortBy] })
-      : undefined;
+    const nextCursor =
+      hasNextPage && data.length > 0 && lastItem
+        ? this.encodeCursor({ field: sortBy, value: lastItem[sortBy] })
+        : undefined;
 
     const previousCursor = cursor
       ? this.encodeCursor({ field: sortBy, value: data[0]?.[sortBy] })
@@ -245,24 +246,24 @@ export class LazyLoadingService {
    */
   async keysetPaginate<T extends ObjectLiteral>(
     repository: Repository<T>,
-    options: KeysetPaginationOptions = {},
+    options: KeysetPaginationOptions = {}
   ): Promise<PaginatedResult<T>> {
     const limit = Math.min(options.limit || this.DEFAULT_LIMIT, this.MAX_LIMIT);
-    const sortBy = options.sortBy || 'id';
-    const sortOrder = options.sortOrder || 'ASC';
+    const sortBy = options.sortBy || "id";
+    const sortOrder = options.sortOrder || "ASC";
 
-    const queryBuilder = repository.createQueryBuilder('entity');
+    const queryBuilder = repository.createQueryBuilder("entity");
 
     // Apply keyset filter
     if (options.lastId !== undefined) {
-      const operator = sortOrder === 'ASC' ? '>' : '<';
+      const operator = sortOrder === "ASC" ? ">" : "<";
 
       if (options.lastValue !== undefined) {
         // Compound keyset (more efficient)
         queryBuilder.where(
           `(entity.${sortBy} ${operator} :lastValue) OR ` +
-          `(entity.${sortBy} = :lastValue AND entity.id ${operator} :lastId)`,
-          { lastValue: options.lastValue, lastId: options.lastId },
+            `(entity.${sortBy} = :lastValue AND entity.id ${operator} :lastId)`,
+          { lastValue: options.lastValue, lastId: options.lastId }
         );
       } else {
         queryBuilder.where(`entity.id ${operator} :lastId`, {
@@ -273,8 +274,8 @@ export class LazyLoadingService {
 
     // Apply sorting
     queryBuilder.orderBy(`entity.${sortBy}`, sortOrder);
-    if (sortBy !== 'id') {
-      queryBuilder.addOrderBy('entity.id', sortOrder);
+    if (sortBy !== "id") {
+      queryBuilder.addOrderBy("entity.id", sortOrder);
     }
 
     // Fetch limit + 1
@@ -301,7 +302,7 @@ export class LazyLoadingService {
   async lazyLoadRelation<T extends Record<string, unknown>, R>(
     entity: T,
     relation: string,
-    loader: DeferredLoader<R>,
+    loader: DeferredLoader<R>
   ): Promise<R> {
     // Check if already loaded
     if (entity[relation] !== undefined && entity[relation] !== null) {
@@ -312,7 +313,7 @@ export class LazyLoadingService {
     const result = await loader();
 
     // Cache the result on entity (safe with Record constraint)
-    (entity as any)[relation] = result;
+    (entity as Record<string, unknown>)[relation] = result;
 
     return result;
   }
@@ -324,7 +325,7 @@ export class LazyLoadingService {
     entities: T[],
     loader: (ids: K[]) => Promise<R[]>,
     idExtractor: (entity: T) => K,
-    resultMapper: (entity: T, results: R[]) => R,
+    resultMapper: (entity: T, results: R[]) => R
   ): Promise<Map<K, R>> {
     const ids = entities.map(idExtractor);
     const results = await loader(ids);
@@ -345,16 +346,13 @@ export class LazyLoadingService {
    */
   async *streamResults<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    batchSize: number = 1000,
+    batchSize: number = 1000
   ): AsyncGenerator<T[], void, unknown> {
     let offset = 0;
     let hasMore = true;
 
     while (hasMore) {
-      const batch = await queryBuilder
-        .skip(offset)
-        .take(batchSize)
-        .getMany();
+      const batch = await queryBuilder.skip(offset).take(batchSize).getMany();
 
       if (batch.length === 0) {
         hasMore = false;
@@ -374,36 +372,36 @@ export class LazyLoadingService {
   async prefetchRelations<T extends ObjectLiteral>(
     repository: Repository<T>,
     entities: T[],
-    relations: string[],
+    relations: string[]
   ): Promise<T[]> {
     if (entities.length === 0) {
       return entities;
     }
 
-    const ids = entities.map(entity => entity['id']).filter(Boolean);
+    const ids = entities
+      .map((entity) => (entity as Record<string, unknown>)["id"])
+      .filter(Boolean);
 
     if (ids.length === 0) {
       return entities;
     }
 
     // Build query with all relations
-    let queryBuilder = repository
-      .createQueryBuilder('entity')
-      .whereInIds(ids);
+    let queryBuilder = repository.createQueryBuilder("entity").whereInIds(ids);
 
     for (const relation of relations) {
       queryBuilder = queryBuilder.leftJoinAndSelect(
         `entity.${relation}`,
-        relation,
+        relation
       );
     }
 
     const loaded = await queryBuilder.getMany();
 
     // Map loaded entities back to original array
-    const loadedMap = new Map(loaded.map(e => [e['id'], e]));
+    const loadedMap = new Map(loaded.map((e) => [e["id"], e]));
 
-    return entities.map(entity => loadedMap.get(entity['id']) || entity);
+    return entities.map((entity) => loadedMap.get(entity["id"]) || entity);
   }
 
   /**
@@ -435,15 +433,15 @@ export class LazyLoadingService {
    */
   optimizePaginationQuery<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    type: PaginationType = 'cursor',
+    type: PaginationType = "cursor"
   ): SelectQueryBuilder<T> {
     // Remove unnecessary JOINs for count queries
     const cloned = queryBuilder.clone();
 
     // Add index hints for better performance (PostgreSQL)
-    if (type === 'cursor' || type === 'keyset') {
+    if (type === "cursor" || type === "keyset") {
       // Cursor and keyset pagination benefit from indexes on sort columns
-      this.logger.debug('Using optimized cursor/keyset pagination');
+      this.logger.debug("Using optimized cursor/keyset pagination");
     }
 
     return cloned;
@@ -453,14 +451,16 @@ export class LazyLoadingService {
 
   private encodeCursor(cursor: { field: string; value: unknown }): string {
     const json = JSON.stringify(cursor);
-    return Buffer.from(json).toString('base64');
+    return Buffer.from(json).toString("base64");
   }
 
-  private decodeCursor(encoded: string): { field: string; value: unknown } | null {
+  private decodeCursor(
+    encoded: string
+  ): { field: string; value: unknown } | null {
     try {
-      const json = Buffer.from(encoded, 'base64').toString('utf-8');
+      const json = Buffer.from(encoded, "base64").toString("utf-8");
       return JSON.parse(json);
-    } catch (error) {
+    } catch {
       this.logger.warn(`Invalid cursor: ${encoded}`);
       return null;
     }

@@ -1,11 +1,24 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { trace, context, SpanStatusCode, Span, Tracer } from '@opentelemetry/api';
-// 
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import { StructuredLoggerService, HttpRequest, HttpResponse } from './structured.logger.service';
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import {
+  trace,
+  context,
+  SpanStatusCode,
+  Span,
+  Tracer,
+} from "@opentelemetry/api";
+//
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import {
+  StructuredLoggerService,
+  HttpRequest,
+  HttpResponse,
+} from "./structured.logger.service";
 
 export interface TraceContext {
   traceId: string;
@@ -16,7 +29,7 @@ export interface TraceContext {
 export interface SpanOptions {
   name: string;
   attributes?: Record<string, string | number | boolean>;
-  kind?: 'server' | 'client' | 'producer' | 'consumer' | 'internal';
+  kind?: "server" | "client" | "producer" | "consumer" | "internal";
 }
 
 /**
@@ -56,8 +69,8 @@ export interface SpanOptions {
 export class DistributedTracingService implements OnModuleInit {
   private tracer: Tracer;
   private sdk: NodeSDK | null = null;
-  private readonly serviceName = 'lexiflow-backend';
-  private readonly serviceVersion = process.env.npm_package_version || '1.0.0';
+  private readonly serviceName = "lexiflow-backend";
+  private readonly serviceVersion = process.env.npm_package_version || "1.0.0";
 
   constructor(private readonly logger: StructuredLoggerService) {
     this.tracer = trace.getTracer(this.serviceName, this.serviceVersion);
@@ -67,17 +80,18 @@ export class DistributedTracingService implements OnModuleInit {
    * Initialize OpenTelemetry SDK on module initialization
    */
   async onModuleInit(): Promise<void> {
-    if (process.env.OTEL_ENABLED !== 'true') {
-      this.logger.log('OpenTelemetry disabled, skipping initialization');
+    if (process.env.OTEL_ENABLED !== "true") {
+      this.logger.log("OpenTelemetry disabled, skipping initialization");
       return;
     }
 
     try {
       await this.initializeTracing();
-      this.logger.log('OpenTelemetry initialized successfully');
+      this.logger.log("OpenTelemetry initialized successfully");
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      this.logger.error('Failed to initialize OpenTelemetry', errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      this.logger.error("Failed to initialize OpenTelemetry", errorMessage);
     }
   }
 
@@ -89,16 +103,18 @@ export class DistributedTracingService implements OnModuleInit {
       attributes: {
         [ATTR_SERVICE_NAME]: this.serviceName,
         [ATTR_SERVICE_VERSION]: this.serviceVersion,
-        environment: process.env.NODE_ENV || 'development',
-        deployment: process.env.DEPLOYMENT_ID || 'local',
-      }
+        environment: process.env.NODE_ENV || "development",
+        deployment: process.env.DEPLOYMENT_ID || "local",
+      },
     };
 
     // Configure OTLP exporter
     const otlpExporter = new OTLPTraceExporter({
-      url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://localhost:4318/v1/traces',
+      url:
+        process.env.OTEL_EXPORTER_OTLP_ENDPOINT ||
+        "http://localhost:4318/v1/traces",
       headers: {
-        'Authorization': process.env.OTEL_EXPORTER_OTLP_HEADERS || '',
+        Authorization: process.env.OTEL_EXPORTER_OTLP_HEADERS || "",
       },
       timeoutMillis: 10000,
     });
@@ -113,20 +129,21 @@ export class DistributedTracingService implements OnModuleInit {
 
     // Initialize SDK
     this.sdk = new NodeSDK({
-      resource: resource as any,
+      resource: resource as Resource,
       spanProcessors: [spanProcessor],
     });
 
     await this.sdk.start();
 
     // Graceful shutdown
-    process.on('SIGTERM', async () => {
+    process.on("SIGTERM", async () => {
       try {
         await this.sdk?.shutdown();
-        this.logger.log('OpenTelemetry shut down successfully');
+        this.logger.log("OpenTelemetry shut down successfully");
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        this.logger.error('Error shutting down OpenTelemetry', errorMessage);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        this.logger.error("Error shutting down OpenTelemetry", errorMessage);
       }
     });
   }
@@ -137,7 +154,7 @@ export class DistributedTracingService implements OnModuleInit {
   startSpan(name: string, options?: Partial<SpanOptions>): Span {
     const span = this.tracer.startSpan(name, {
       attributes: {
-        'service.name': this.serviceName,
+        "service.name": this.serviceName,
         ...options?.attributes,
       },
     });
@@ -151,13 +168,13 @@ export class DistributedTracingService implements OnModuleInit {
   startActiveSpan<T>(
     name: string,
     callback: (span: Span) => Promise<T> | T,
-    options?: Partial<SpanOptions>,
+    options?: Partial<SpanOptions>
   ): Promise<T> | T {
     return this.tracer.startActiveSpan(
       name,
       {
         attributes: {
-          'service.name': this.serviceName,
+          "service.name": this.serviceName,
           ...options?.attributes,
         },
       },
@@ -167,7 +184,8 @@ export class DistributedTracingService implements OnModuleInit {
           span.setStatus({ code: SpanStatusCode.OK });
           return result;
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           span.setStatus({
             code: SpanStatusCode.ERROR,
             message: errorMessage,
@@ -179,7 +197,7 @@ export class DistributedTracingService implements OnModuleInit {
         } finally {
           span.end();
         }
-      },
+      }
     );
   }
 
@@ -187,25 +205,29 @@ export class DistributedTracingService implements OnModuleInit {
    * Create a span for HTTP request
    */
   startHttpRequestSpan(req: HttpRequest): Span {
-    const userAgent = Array.isArray(req.headers?.['user-agent'])
-      ? req.headers['user-agent'][0]
-      : req.headers?.['user-agent'];
+    const userAgent = Array.isArray(req.headers?.["user-agent"])
+      ? req.headers["user-agent"][0]
+      : req.headers?.["user-agent"];
 
-    const traceParent = Array.isArray(req.headers?.['traceparent'])
-      ? req.headers['traceparent'][0]
-      : req.headers?.['traceparent'];
+    const traceParent = Array.isArray(req.headers?.["traceparent"])
+      ? req.headers["traceparent"][0]
+      : req.headers?.["traceparent"];
 
-    const span = this.startSpan(`HTTP ${req.method} ${req.route?.path || req.url}`, {
-      attributes: {
-        'http.method': req.method,
-        'http.url': req.url,
-        'http.route': req.route?.path || req.url,
-        'http.target': req.url,
-        'http.user_agent': userAgent || 'unknown',
-        'http.client_ip': req.ip || req.connection?.remoteAddress || 'unknown',
-        'net.peer.ip': req.ip || req.connection?.remoteAddress || 'unknown',
-      },
-    });
+    const span = this.startSpan(
+      `HTTP ${req.method} ${req.route?.path || req.url}`,
+      {
+        attributes: {
+          "http.method": req.method,
+          "http.url": req.url,
+          "http.route": req.route?.path || req.url,
+          "http.target": req.url,
+          "http.user_agent": userAgent || "unknown",
+          "http.client_ip":
+            req.ip || req.connection?.remoteAddress || "unknown",
+          "net.peer.ip": req.ip || req.connection?.remoteAddress || "unknown",
+        },
+      }
+    );
 
     // Extract trace context from headers if present
     if (traceParent) {
@@ -220,8 +242,8 @@ export class DistributedTracingService implements OnModuleInit {
    */
   endHttpRequestSpan(span: Span, res: HttpResponse, error?: Error): void {
     span.setAttributes({
-      'http.status_code': res.statusCode,
-      'http.status_text': res.statusMessage || '',
+      "http.status_code": res.statusCode,
+      "http.status_text": res.statusMessage || "",
     });
 
     if (error) {
@@ -234,7 +256,7 @@ export class DistributedTracingService implements OnModuleInit {
       if (res.statusCode >= 500) {
         span.setStatus({ code: SpanStatusCode.ERROR });
       } else if (res.statusCode >= 400) {
-        span.setStatus({ code: SpanStatusCode.ERROR, message: 'Client error' });
+        span.setStatus({ code: SpanStatusCode.ERROR, message: "Client error" });
       } else {
         span.setStatus({ code: SpanStatusCode.OK });
       }
@@ -249,10 +271,10 @@ export class DistributedTracingService implements OnModuleInit {
   startDatabaseSpan(operation: string, table: string, query?: string): Span {
     const span = this.startSpan(`DB ${operation} ${table}`, {
       attributes: {
-        'db.system': 'postgresql',
-        'db.operation': operation,
-        'db.sql.table': table,
-        ...(query ? { 'db.statement': query.substring(0, 500) } : {}),
+        "db.system": "postgresql",
+        "db.operation": operation,
+        "db.sql.table": table,
+        ...(query ? { "db.statement": query.substring(0, 500) } : {}),
       },
     });
 
@@ -265,9 +287,9 @@ export class DistributedTracingService implements OnModuleInit {
   startExternalHttpSpan(method: string, url: string): Span {
     const span = this.startSpan(`HTTP ${method} ${url}`, {
       attributes: {
-        'http.method': method,
-        'http.url': url,
-        'span.kind': 'client',
+        "http.method": method,
+        "http.url": url,
+        "span.kind": "client",
       },
     });
 
@@ -277,12 +299,12 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Create a span for queue/message processing
    */
-  startQueueSpan(queueName: string, operation: 'send' | 'receive'): Span {
+  startQueueSpan(queueName: string, operation: "send" | "receive"): Span {
     const span = this.startSpan(`QUEUE ${operation} ${queueName}`, {
       attributes: {
-        'messaging.system': 'redis',
-        'messaging.destination': queueName,
-        'messaging.operation': operation,
+        "messaging.system": "redis",
+        "messaging.destination": queueName,
+        "messaging.operation": operation,
       },
     });
 
@@ -292,12 +314,12 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Create a span for cache operation
    */
-  startCacheSpan(operation: 'get' | 'set' | 'delete', key: string): Span {
+  startCacheSpan(operation: "get" | "set" | "delete", key: string): Span {
     const span = this.startSpan(`CACHE ${operation} ${key}`, {
       attributes: {
-        'cache.operation': operation,
-        'cache.key': key,
-        'cache.system': 'redis',
+        "cache.operation": operation,
+        "cache.key": key,
+        "cache.system": "redis",
       },
     });
 
@@ -307,7 +329,10 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Add event to current span
    */
-  addEvent(name: string, attributes?: Record<string, string | number | boolean>): void {
+  addEvent(
+    name: string,
+    attributes?: Record<string, string | number | boolean>
+  ): void {
     const activeSpan = trace.getActiveSpan();
     if (activeSpan) {
       activeSpan.addEvent(name, attributes);
@@ -327,10 +352,16 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Record exception on current span
    */
-  recordException(error: Error, attributes?: Record<string, string | number | boolean>): void {
+  recordException(
+    error: Error,
+    attributes?: Record<string, string | number | boolean>
+  ): void {
     const activeSpan = trace.getActiveSpan();
     if (activeSpan) {
-      activeSpan.recordException(error, attributes as any);
+      activeSpan.recordException(
+        error,
+        attributes as Record<string, string | number | boolean>
+      );
       activeSpan.setStatus({
         code: SpanStatusCode.ERROR,
         message: error.message,
@@ -360,17 +391,17 @@ export class DistributedTracingService implements OnModuleInit {
    */
   private injectTraceContext(span: Span, traceParent: string): void {
     try {
-      const parts = traceParent.split('-');
+      const parts = traceParent.split("-");
       if (parts.length === 4) {
         span.setAttributes({
-          'trace.parent.version': parts[0],
-          'trace.parent.trace_id': parts[1],
-          'trace.parent.span_id': parts[2],
-          'trace.parent.flags': parts[3],
+          "trace.parent.version": parts[0],
+          "trace.parent.trace_id": parts[1],
+          "trace.parent.span_id": parts[2],
+          "trace.parent.flags": parts[3],
         });
       }
     } catch {
-      this.logger.warn('Failed to inject trace context', { traceParent });
+      this.logger.warn("Failed to inject trace context", { traceParent });
     }
   }
 
@@ -383,7 +414,7 @@ export class DistributedTracingService implements OnModuleInit {
       return null;
     }
 
-    return `00-${traceContext.traceId}-${traceContext.spanId}-${traceContext.traceFlags.toString(16).padStart(2, '0')}`;
+    return `00-${traceContext.traceId}-${traceContext.spanId}-${traceContext.traceFlags.toString(16).padStart(2, "0")}`;
   }
 
   /**
@@ -396,7 +427,10 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Create a child span from current context
    */
-  createChildSpan(name: string, attributes?: Record<string, string | number | boolean>): Span {
+  createChildSpan(
+    name: string,
+    attributes?: Record<string, string | number | boolean>
+  ): Span {
     return this.startSpan(name, { attributes });
   }
 
@@ -406,7 +440,7 @@ export class DistributedTracingService implements OnModuleInit {
   async traced<T>(
     name: string,
     fn: () => Promise<T>,
-    attributes?: Record<string, string | number | boolean>,
+    attributes?: Record<string, string | number | boolean>
   ): Promise<T> {
     return this.startActiveSpan(name, async (span) => {
       if (attributes) {
@@ -427,7 +461,7 @@ export class DistributedTracingService implements OnModuleInit {
    * Check if tracing is enabled
    */
   isEnabled(): boolean {
-    return process.env.OTEL_ENABLED === 'true';
+    return process.env.OTEL_ENABLED === "true";
   }
 
   /**
@@ -436,7 +470,7 @@ export class DistributedTracingService implements OnModuleInit {
   async shutdown(): Promise<void> {
     if (this.sdk) {
       await this.sdk.shutdown();
-      this.logger.log('OpenTelemetry SDK shut down');
+      this.logger.log("OpenTelemetry SDK shut down");
     }
   }
 
@@ -446,7 +480,7 @@ export class DistributedTracingService implements OnModuleInit {
   async flush(): Promise<void> {
     if (this.sdk) {
       await this.sdk.shutdown();
-      this.logger.log('Flushed pending traces');
+      this.logger.log("Flushed pending traces");
     }
   }
 }

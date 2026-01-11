@@ -396,25 +396,27 @@ export class SchemaManagementService {
     return { success: true, table: tableName };
   }
 
-  async getDbInfo(): Promise<any> {
-    const dbNameResult = await this.dataSource.query(
+  async getDbInfo(): Promise<Record<string, unknown>> {
+    const dbNameResult = (await this.dataSource.query(
       "SELECT current_database()"
-    );
+    )) as Array<{ current_database: string }>;
     const dbName = dbNameResult[0].current_database;
 
-    const versionResult = await this.dataSource.query("SELECT version()");
+    const versionResult = (await this.dataSource.query(
+      "SELECT version()"
+    )) as Array<{ version: string }>;
     const version = versionResult[0].version;
 
-    const tablesResult = await this.dataSource.query(`
+    const tablesResult = (await this.dataSource.query(`
       SELECT count(*) as count
       FROM information_schema.tables
       WHERE table_schema = 'public'
-    `);
+    `)) as Array<{ count: string }>;
     const tableCount = parseInt(tablesResult[0].count, 10);
 
-    const sizeResult = await this.dataSource.query(`
+    const sizeResult = (await this.dataSource.query(`
       SELECT pg_size_pretty(pg_database_size(current_database())) as size
-    `);
+    `)) as Array<{ size: string }>;
     const size = sizeResult[0].size;
 
     return {
@@ -427,7 +429,7 @@ export class SchemaManagementService {
     };
   }
 
-  async resetDatabase(): Promise<any> {
+  async resetDatabase(): Promise<Record<string, unknown>> {
     if (process.env.NODE_ENV === "production") {
       throw new BadRequestException(
         "Cannot reset database in production environment"

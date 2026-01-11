@@ -74,10 +74,6 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
         { invalidateKeys: [['exhibits', caseId || 'all']] }
     );
 
-    useEffect(() => {
-        if (initialTab) setActiveTab(initialTab);
-    }, [initialTab]);
-
     const handleAddExhibit = async () => {
         const newExhibit: TrialExhibit = {
             id: `ex-${Date.now()}`,

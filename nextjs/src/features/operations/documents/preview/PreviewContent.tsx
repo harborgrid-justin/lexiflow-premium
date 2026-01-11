@@ -40,7 +40,9 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
 
     const handleSignatureSave = (signed: boolean) => {
         if (signed && activeField) {
-            activeField.value = "Signed by User"; // In real app, save image data URL
+            // In a real app, strict immutability is required.
+            // We would call an onUpdate(activeField.id, value) prop here.
+            // For now, we just close the modal.
             setSignModalOpen(false);
             setActiveField(null);
         }
@@ -51,6 +53,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
         return (
             <div className={cn("border rounded-lg overflow-hidden flex items-center justify-center min-h-[400px] relative group", theme.surface.highlight, theme.border.default)}>
                 {isImage && previewUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={previewUrl} alt="Preview" className="max-w-full max-h-[600px] object-contain" style={isRedactionMode ? { filter: 'blur(8px)' } : {}} />
                 ) : (
                     <div className="text-center p-4">

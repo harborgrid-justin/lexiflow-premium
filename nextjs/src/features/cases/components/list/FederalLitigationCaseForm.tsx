@@ -378,9 +378,8 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               type="text"
               value={state.title}
               onChange={(e) => updateField('title', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                state.errors.title ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
-              } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${state.errors.title ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
               placeholder="Saadein-Morales v. Westridge Swim & Racquet Club"
             />
             {state.errors.title && (
@@ -399,9 +398,8 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               type="text"
               value={state.caseNumber}
               onChange={(e) => updateField('caseNumber', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                state.errors.caseNumber ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
-              } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${state.errors.caseNumber ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
               placeholder="1:24-cv-01442-LMB-IDD"
             />
             {state.errors.caseNumber && (
@@ -700,7 +698,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           }}
           getValue={(party) => (party as unknown as { id: string }).id}
           queryKey={['parties']}
-          renderOption={(party, isHighlighted, _isSelected) => {
+          renderOption={(party, isHighlighted) => {
             const p = party as unknown as { name: string; type: string; role: string; isProSe?: boolean; attorneyName?: string };
             return (
               <div className={`px-4 py-2 ${isHighlighted ? 'bg-blue-50' : ''}`}>

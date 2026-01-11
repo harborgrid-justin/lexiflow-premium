@@ -14,9 +14,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 type WorkflowTab = 'tasks' | 'dependencies' | 'approvals' | 'history';
 
-interface KPIDashboardProps {
-  // No props needed
-}
+type KPIDashboardProps = Record<string, never>;
 
 interface WorkflowContentProps {
   activeTab: WorkflowTab;

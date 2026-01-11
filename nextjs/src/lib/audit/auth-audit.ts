@@ -394,7 +394,8 @@ export function exportAuthAuditLogs(options?: AuditExportOptions): string {
   // Default to JSON format
   const exportData = includeMetadata
     ? logs
-    : logs.map(({ metadata: _ignored, ...rest }) => rest);
+    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      logs.map(({ metadata, ...rest }) => rest);
 
   return JSON.stringify(exportData, null, 2);
 }

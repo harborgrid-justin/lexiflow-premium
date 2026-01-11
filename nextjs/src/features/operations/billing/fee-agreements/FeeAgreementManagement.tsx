@@ -58,7 +58,7 @@ export const FeeAgreementManagement: React.FC = () => {
       createModal.close();
       setFormData({});
       notify.success('Fee agreement created successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to create fee agreement');
     }
   };
@@ -72,7 +72,7 @@ export const FeeAgreementManagement: React.FC = () => {
       setSelectedAgreement(null);
       setFormData({});
       notify.success('Fee agreement updated successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to update fee agreement');
     }
   };
@@ -85,7 +85,7 @@ export const FeeAgreementManagement: React.FC = () => {
       deleteModal.close();
       setSelectedAgreement(null);
       notify.success('Fee agreement deleted successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to delete fee agreement');
     }
   };
@@ -95,7 +95,7 @@ export const FeeAgreementManagement: React.FC = () => {
       await DataService.feeAgreements.update(agreement.id, { status: newStatus });
       await refetch();
       notify.success(`Agreement status updated to ${newStatus}`);
-    } catch (error) {
+    } catch {
       notify.error('Failed to update agreement status');
     }
   };
@@ -141,11 +141,11 @@ export const FeeAgreementManagement: React.FC = () => {
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <FileText className="h-5 w-5 mr-2 text-indigo-500"/> Fee Agreement Management
+            <FileText className="h-5 w-5 mr-2 text-indigo-500" /> Fee Agreement Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage client fee agreements and engagement terms.</p>
         </div>
-          <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); createModal.open(); }}>
+        <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); createModal.open(); }}>
           Create Agreement
         </Button>
       </div>
@@ -193,7 +193,7 @@ export const FeeAgreementManagement: React.FC = () => {
                     </Button>
                   )}
                   <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(agreement)}>Edit</Button>
-                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedAgreement(agreement); deleteModal.open(); }}>Delete</Button>
+                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedAgreement(agreement); deleteModal.open(); }}>Delete</Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -208,7 +208,7 @@ export const FeeAgreementManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Fee Agreement' : 'Edit Fee Agreement'}
       >
         <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-          <Input label="Client Name" value={formData.clientName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, clientName: e.target.value})} placeholder="Enter client name" />
+          <Input label="Client Name" value={formData.clientName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, clientName: e.target.value })} placeholder="Enter client name" />
 
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Fee Type</label>
@@ -216,7 +216,7 @@ export const FeeAgreementManagement: React.FC = () => {
               title="Select fee type"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.type || ''}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, type: e.target.value as FeeAgreement['type'] })}
             >
               <option value="">Select fee type...</option>
               <option value="Hourly">Hourly</option>
@@ -228,21 +228,21 @@ export const FeeAgreementManagement: React.FC = () => {
           </div>
 
           {formData.type === 'Hourly' && (
-            <Input label="Hourly Rate ($)" type="number" value={formData.hourlyRate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, hourlyRate: parseFloat(e.target.value)})} />
+            <Input label="Hourly Rate ($)" type="number" value={formData.hourlyRate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, hourlyRate: parseFloat(e.target.value) })} />
           )}
           {formData.type === 'Contingency' && (
-            <Input label="Contingency Percentage (%)" type="number" value={formData.contingencyPercent || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, contingencyPercent: parseFloat(e.target.value)})} />
+            <Input label="Contingency Percentage (%)" type="number" value={formData.contingencyPercent || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, contingencyPercent: parseFloat(e.target.value) })} />
           )}
           {formData.type === 'Flat Fee' && (
-            <Input label="Flat Fee Amount ($)" type="number" value={formData.flatFeeAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, flatFeeAmount: parseFloat(e.target.value)})} />
+            <Input label="Flat Fee Amount ($)" type="number" value={formData.flatFeeAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, flatFeeAmount: parseFloat(e.target.value) })} />
           )}
           {formData.type === 'Retainer' && (
-            <Input label="Monthly Retainer ($)" type="number" value={formData.retainerAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, retainerAmount: parseFloat(e.target.value)})} />
+            <Input label="Monthly Retainer ($)" type="number" value={formData.retainerAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, retainerAmount: parseFloat(e.target.value) })} />
           )}
 
-          <Input label="Effective Date" type="date" value={formData.effectiveDate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, effectiveDate: e.target.value})} />
+          <Input label="Effective Date" type="date" value={formData.effectiveDate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, effectiveDate: e.target.value })} />
 
-          <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, terms: e.target.value})} rows={4} placeholder="Enter agreement terms..." />
+          <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, terms: e.target.value })} rows={4} placeholder="Enter agreement terms..." />
 
           {editModal.isOpen && (
             <div>
@@ -251,7 +251,7 @@ export const FeeAgreementManagement: React.FC = () => {
                 title="Select agreement status"
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, status: e.target.value as FeeAgreement['status'] })}
               >
                 <option value="Draft">Draft</option>
                 <option value="Pending Signature">Pending Signature</option>

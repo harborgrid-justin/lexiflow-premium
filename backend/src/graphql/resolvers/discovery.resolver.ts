@@ -30,7 +30,7 @@ export class DiscoveryResolver {
     @Args('caseId', { type: () => ID }) caseId: string,
   ): Promise<DiscoveryRequestType[]> {
     const requests = await this.discoveryService.findRequestsByCaseId(caseId);
-    return (requests as any).data || requests;
+    return (requests as unknown).data || requests;
   }
 
   @Query(() => DiscoveryRequestType, { name: 'discoveryRequest', nullable: true })
@@ -40,7 +40,7 @@ export class DiscoveryResolver {
   ): Promise<DiscoveryRequestType | null> {
     try {
       const request = await this.discoveryService.findRequestById(id);
-      return request as any;
+      return request as unknown;
     } catch (error) {
       return null;
     }
@@ -52,8 +52,8 @@ export class DiscoveryResolver {
     @Args('input') input: CreateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.createRequest(input as any);
-    return request as any;
+    const request = await this.discoveryService.createRequest(input as unknown);
+    return request as unknown;
   }
 
   @Mutation(() => DiscoveryRequestType)
@@ -63,8 +63,8 @@ export class DiscoveryResolver {
     @Args('input') input: UpdateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.updateRequest(id, input as any);
-    return request as any;
+    const request = await this.discoveryService.updateRequest(id, input as unknown);
+    return request as unknown;
   }
 
   @Query(() => [DepositionType], { name: 'depositions' })
@@ -79,7 +79,7 @@ export class DiscoveryResolver {
   async getDeposition(@Args('id', { type: () => ID }) id: string): Promise<DepositionType | null> {
     try {
       const deposition = await this.depositionsService.findOne(id);
-      return deposition as any;
+      return deposition as unknown;
     } catch (error) {
       return null;
     }
@@ -91,8 +91,8 @@ export class DiscoveryResolver {
     @Args('input') input: CreateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.create(input as any);
-    return deposition as any;
+    const deposition = await this.depositionsService.create(input as unknown);
+    return deposition as unknown;
   }
 
   @Mutation(() => DepositionType)
@@ -102,8 +102,8 @@ export class DiscoveryResolver {
     @Args('input') input: UpdateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.update(id, input as any);
-    return deposition as any;
+    const deposition = await this.depositionsService.update(id, input as unknown);
+    return deposition as unknown;
   }
 
   @Query(() => [LegalHoldType], { name: 'legalHolds' })
@@ -119,8 +119,8 @@ export class DiscoveryResolver {
     @Args('input') input: CreateLegalHoldInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
-    const hold = await this.discoveryService.createHold(input as any);
-    return hold as any;
+    const hold = await this.discoveryService.createHold(input as unknown);
+    return hold as unknown;
   }
 
   @Mutation(() => LegalHoldType)
@@ -130,7 +130,7 @@ export class DiscoveryResolver {
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
     const hold = await this.discoveryService.releaseHold(id);
-    return hold as any;
+    return hold as unknown;
   }
 
   @Query(() => [PrivilegeLogEntryType], { name: 'privilegeLog' })
@@ -146,7 +146,7 @@ export class DiscoveryResolver {
     @Args('input') input: CreatePrivilegeLogEntryInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<PrivilegeLogEntryType> {
-    const entry = await this.privilegeLogService.create(input as any);
-    return entry as any;
+    const entry = await this.privilegeLogService.create(input as unknown);
+    return entry as unknown;
   }
 }

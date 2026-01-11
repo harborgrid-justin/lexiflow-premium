@@ -45,10 +45,10 @@ export interface WarRoomDataResponse {
     evidenceReady: number;
     pendingMotions: number;
   };
-  evidenceWall: any[];
-  witnessPrep: any[];
-  trialBinder: any[];
-  opposition: any[];
+  evidenceWall: Array<Record<string, unknown>>;
+  witnessPrep: Array<Record<string, unknown>>;
+  trialBinder: Array<Record<string, unknown>>;
+  opposition: Array<Record<string, unknown>>;
 }
 
 /**
@@ -96,9 +96,7 @@ export class WarRoomService {
     return await this.advisorRepository.save(advisor);
   }
 
-  async findAllAdvisors(
-    query: AdvisorQueryFilters
-  ): Promise<{
+  async findAllAdvisors(query: AdvisorQueryFilters): Promise<{
     data: Advisor[];
     total: number;
     page: number;
@@ -145,9 +143,7 @@ export class WarRoomService {
     return await this.expertRepository.save(expert);
   }
 
-  async findAllExperts(
-    query: ExpertQueryFilters
-  ): Promise<{
+  async findAllExperts(query: ExpertQueryFilters): Promise<{
     data: Expert[];
     total: number;
     page: number;

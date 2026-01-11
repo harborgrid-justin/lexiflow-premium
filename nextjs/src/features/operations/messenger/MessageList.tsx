@@ -47,7 +47,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation.messages]);
 
-  const handleFileDownload = async (attachment: any) => {
+  const handleFileDownload = async (attachment: { id?: string; name: string }) => {
     try {
       const endpoint = `/api/messenger/attachments/${attachment.id || attachment.name}`;
       const result = await FileDownloadService.downloadFromBackend(

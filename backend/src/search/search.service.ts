@@ -75,9 +75,9 @@ export class SearchService implements OnModuleDestroy {
   > = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
-  constructor() // @InjectRepository(Case) private caseRepository: Repository<any>,
-  // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
-  // @InjectRepository(Client) private clientRepository: Repository<any>,
+  constructor() // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+  // @InjectRepository(LegalDocument) private documentRepository: Repository<unknown>,
+  // @InjectRepository(Client) private clientRepository: Repository<unknown>,
   // These will be injected when entities are available
   {
     this.startCacheCleanup();

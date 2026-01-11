@@ -8,7 +8,7 @@
  */
 
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // Internal Components
@@ -36,18 +36,21 @@ export const OutcomeSimulator: React.FC = () => {
   const [results, setResults] = useState<unknown[]>([]);
   const [metrics, setMetrics] = useState({ ev: 0, p25: 0, p75: 0 });
 
-  const runSimulation = () => {
+  const runSimulation = useCallback(() => {
     setIsCalculating(true);
 
     // Offload heavy calculation to scheduler to unblock UI
     Scheduler.scheduleTask(() => {
       return SimulationEngine.runSettlementSimulation({ low, high, liabilityProb, iterations });
     }).then(simulationResults => {
-      setResults(simulationResults.results);
-      setMetrics({ ev: simulationResults.ev, p25: simulationResults.p25, p75: simulationResults.p75 });
-      setIsCalculating(false);
+      // Simulate async delay for realism
+      setTimeout(() => {
+        setResults(simulationResults.results);
+        setMetrics({ ev: simulationResults.ev, p25: simulationResults.p25, p75: simulationResults.p75 });
+        setIsCalculating(false);
+      }, 0);
     });
-  };
+  }, [low, high, liabilityProb, iterations]);
 
   // Initial run
   useEffect(() => {

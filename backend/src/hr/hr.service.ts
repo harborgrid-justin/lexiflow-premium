@@ -102,8 +102,7 @@ export class HRService {
 
             totalHours = Number(sum || 0);
           }
-        } catch (e) {
-          // ignore
+        } catch {\2// ignore
         }
 
         let targetMonthly = employee.targetBillableHours || 160;
@@ -393,7 +392,9 @@ export class HRService {
             const { sum } = await qb.getRawOne();
             billableHours = Number(sum || 0);
           }
-        } catch (e) {}
+        } catch {
+      // Error ignored
+    }
 
         let capacity = 160;
         if (startDate && endDate) {

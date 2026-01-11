@@ -294,7 +294,6 @@ class AuthenticationService {
 
     try {
       const updatedUser = await api.users.update(this.currentUser.id, updates);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const enrichedUser: User = {
         ...updatedUser,
         permissions:

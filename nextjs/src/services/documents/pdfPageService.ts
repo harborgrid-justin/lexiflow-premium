@@ -254,13 +254,13 @@ class PDFPageServiceClass {
       if (pageNumber < 1 || pageNumber > pdfDoc.numPages) {
         throw new Error(`Invalid page number: ${pageNumber}`);
       }
-      {
-        str: string;
-      }
+
       const page = await pdfDoc.getPage(pageNumber);
       const textContent = await page.getTextContent();
 
-      return textContent.items.map((item: any) => item.str).join(" ");
+      return textContent.items
+        .map((item: { str: string }) => item.str)
+        .join(" ");
     } catch (error) {
       console.error("Failed to extract page text:", error);
       throw error;

@@ -577,7 +577,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                     No conditional branches configured
                   </p>
                   <p className={cn("text-sm mt-1", theme.text.secondary)}>
-                    Add a node and click "Add Conditional Branch" in the designer
+                    Add a node and click &ldquo;Add Conditional Branch&rdquo; in the designer
                   </p>
                 </div>
               </div>
@@ -840,8 +840,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                       key={bottleneck.id}
                       className={cn("p-4 rounded-lg border-l-4", theme.surface.default, theme.border.default,
                         bottleneck.severity === 'critical' ? "border-l-red-500" :
-                        bottleneck.severity === 'high' ? "border-l-amber-500" :
-                        bottleneck.severity === 'medium' ? "border-l-blue-500" : "border-l-slate-300"
+                          bottleneck.severity === 'high' ? "border-l-amber-500" :
+                            bottleneck.severity === 'medium' ? "border-l-blue-500" : "border-l-slate-300"
                       )}
                     >
                       <div className="flex items-start justify-between">
@@ -854,7 +854,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                             <span className={cn(
                               "px-2 py-0.5 text-xs rounded-full font-medium",
                               bottleneck.severity === 'critical' ? "bg-red-100 text-red-700" :
-                              bottleneck.severity === 'high' ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
+                                bottleneck.severity === 'high' ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
                             )}>
                               {bottleneck.severity}
                             </span>

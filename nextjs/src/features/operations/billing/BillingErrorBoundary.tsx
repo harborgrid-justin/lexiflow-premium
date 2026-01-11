@@ -112,7 +112,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
               <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 dark:text-blue-400">•</span>
-                  <span>Click "Try Again" to reload the billing module</span>
+                  <span>Click &quot;Try Again&quot; to reload the billing module</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 dark:text-blue-400">•</span>

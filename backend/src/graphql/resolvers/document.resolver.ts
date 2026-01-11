@@ -29,11 +29,11 @@ export class DocumentResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as any);
+    } as unknown);
 
     return {
       edges: result.data.map(doc => ({
-        node: doc as any,
+        node: doc as unknown,
         cursor: doc.id,
       })),
       pageInfo: {
@@ -51,7 +51,7 @@ export class DocumentResolver {
   async getDocument(@Args('id', { type: () => ID }) id: string): Promise<DocumentType | null> {
     try {
       const document = await this.documentService.findOne(id);
-      return document as any;
+      return document as unknown;
     } catch (error) {
       return null;
     }
@@ -65,8 +65,8 @@ export class DocumentResolver {
   ): Promise<DocumentType> {
     // Note: File upload through GraphQL requires multipart form data
     // This creates document metadata only, actual file should be uploaded via REST API
-    const document = await this.documentService.create(input as any, undefined, user.id);
-    return document as any;
+    const document = await this.documentService.create(input as unknown, undefined, user.id);
+    return document as unknown;
   }
 
   @Mutation(() => DocumentType)
@@ -76,8 +76,8 @@ export class DocumentResolver {
     @Args('input') input: UpdateDocumentInput,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<DocumentType> {
-    const document = await this.documentService.update(id, input as any, user.id);
-    return document as any;
+    const document = await this.documentService.update(id, input as unknown, user.id);
+    return document as unknown;
   }
 
   @Mutation(() => Boolean)
@@ -99,7 +99,7 @@ export class DocumentResolver {
     // Note: Creating versions would require updating the document with new version info
     // This would need additional service methods for full implementation
     const document = await this.documentService.findOne(input.documentId);
-    return document as any;
+    return document as unknown;
   }
 
   @Mutation(() => String)

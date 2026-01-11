@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { getTodayString } from '@/utils/dateUtils';
 import { FileText } from 'lucide-react';
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 interface TransactionFormProps {
@@ -118,7 +119,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onEr
           )}
           {receiptPreview && (
             <div className="mt-2 border rounded p-2">
-              <img src={receiptPreview} alt="Receipt preview" className="max-h-32 object-contain" />
+              <Image src={receiptPreview} alt="Receipt preview" width={128} height={128} className="max-h-32 object-contain" />
             </div>
           )}
         </div>

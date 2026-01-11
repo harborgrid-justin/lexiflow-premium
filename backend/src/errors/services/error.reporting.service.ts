@@ -1,5 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ErrorCategory, ErrorSeverity } from '@errors/constants/error.codes.constant';
+import { Injectable, Logger } from "@nestjs/common";
+import {
+  ErrorCategory,
+  ErrorSeverity,
+} from "@errors/constants/error.codes.constant";
 
 /**
  * Error Report
@@ -112,7 +115,7 @@ export class ErrorReportingService {
       userContext?: UserContext;
       requestContext?: RequestContext;
       additionalContext?: Record<string, unknown>;
-    },
+    }
   ): Promise<void> {
     const report = this.createErrorReport(error, context);
 
@@ -142,7 +145,7 @@ export class ErrorReportingService {
     const windowStart = now - timeWindowMinutes * 60 * 1000;
 
     const recentErrors = this.errorBuffer.filter(
-      (report) => new Date(report.timestamp).getTime() >= windowStart,
+      (report) => new Date(report.timestamp).getTime() >= windowStart
     );
 
     const errorsByCategory = new Map<ErrorCategory, number>();
@@ -153,19 +156,19 @@ export class ErrorReportingService {
       // Count by category
       errorsByCategory.set(
         report.category,
-        (errorsByCategory.get(report.category) || 0) + 1,
+        (errorsByCategory.get(report.category) || 0) + 1
       );
 
       // Count by severity
       errorsBySeverity.set(
         report.severity,
-        (errorsBySeverity.get(report.severity) || 0) + 1,
+        (errorsBySeverity.get(report.severity) || 0) + 1
       );
 
       // Count by error code
       errorsByCode.set(
         report.errorCode,
-        (errorsByCode.get(report.errorCode) || 0) + 1,
+        (errorsByCode.get(report.errorCode) || 0) + 1
       );
     });
 
@@ -190,7 +193,7 @@ export class ErrorReportingService {
    */
   getErrorTrend(errorCode: string, hours: number = 24): number[] {
     const now = Date.now();
-    const hourlyBuckets: number[] = new Array(hours).fill(0);
+    const hourlyBuckets: number[] = new Array<number>(hours).fill(0);
 
     this.errorBuffer
       .filter((report) => report.errorCode === errorCode)
@@ -212,7 +215,7 @@ export class ErrorReportingService {
    */
   isAnomalousErrorRate(
     errorCode: string,
-    thresholdMultiplier: number = 3,
+    thresholdMultiplier: number = 3
   ): boolean {
     const recentRate = this.getErrorRate(errorCode, 5); // Last 5 minutes
     const baselineRate = this.getErrorRate(errorCode, 60); // Last hour
@@ -226,7 +229,7 @@ export class ErrorReportingService {
   clearBuffer(): void {
     this.errorBuffer = [];
     this.errorStats.clear();
-    this.logger.log('Error buffer cleared');
+    this.logger.log("Error buffer cleared");
   }
 
   /**
@@ -245,12 +248,12 @@ export class ErrorReportingService {
       userContext?: UserContext;
       requestContext?: RequestContext;
       additionalContext?: Record<string, unknown>;
-    },
+    }
   ): ErrorReport {
     return {
       id: this.generateErrorId(),
       timestamp: new Date().toISOString(),
-      errorCode: context?.errorCode || 'UNKNOWN',
+      errorCode: context?.errorCode || "UNKNOWN",
       message: error.message,
       category: context?.category || ErrorCategory.SYSTEM,
       severity: context?.severity || this.inferSeverity(error),
@@ -258,7 +261,7 @@ export class ErrorReportingService {
       context: context?.additionalContext,
       userContext: context?.userContext,
       requestContext: this.sanitizeRequestContext(context?.requestContext),
-      environment: process.env.NODE_ENV || 'development',
+      environment: process.env.NODE_ENV || "development",
     };
   }
 
@@ -290,25 +293,25 @@ export class ErrorReportingService {
       case ErrorSeverity.CRITICAL:
         this.logger.error(
           `CRITICAL ERROR: ${report.message}`,
-          JSON.stringify(logContext),
+          JSON.stringify(logContext)
         );
         break;
       case ErrorSeverity.HIGH:
         this.logger.error(
           `HIGH SEVERITY: ${report.message}`,
-          JSON.stringify(logContext),
+          JSON.stringify(logContext)
         );
         break;
       case ErrorSeverity.MEDIUM:
         this.logger.warn(
           `MEDIUM SEVERITY: ${report.message}`,
-          JSON.stringify(logContext),
+          JSON.stringify(logContext)
         );
         break;
       case ErrorSeverity.LOW:
         this.logger.log(
           `LOW SEVERITY: ${report.message}`,
-          JSON.stringify(logContext),
+          JSON.stringify(logContext)
         );
         break;
     }
@@ -317,7 +320,7 @@ export class ErrorReportingService {
     if (
       (report.severity === ErrorSeverity.HIGH ||
         report.severity === ErrorSeverity.CRITICAL) &&
-      process.env.NODE_ENV !== 'production'
+      process.env.NODE_ENV !== "production"
     ) {
       this.logger.debug(report.stackTrace);
     }
@@ -341,7 +344,9 @@ export class ErrorReportingService {
       }
     } catch (error) {
       // Don't let monitoring failures affect application
-      this.logger.warn(`Failed to send error to monitoring: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(
+        `Failed to send error to monitoring: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -371,7 +376,7 @@ export class ErrorReportingService {
         timestamp: report.timestamp,
         userContext: report.userContext,
         requestContext: report.requestContext,
-      }),
+      })
     );
 
     // Integration points for alerting
@@ -386,13 +391,13 @@ export class ErrorReportingService {
 
     // Remove sensitive information from stack traces
     return stack
-      .split('\n')
-      .filter((line) => !line.includes('node_modules'))
-      .join('\n');
+      .split("\n")
+      .filter((line) => !line.includes("node_modules"))
+      .join("\n");
   }
 
   private sanitizeRequestContext(
-    context?: RequestContext,
+    context?: RequestContext
   ): RequestContext | undefined {
     if (!context) return undefined;
 
@@ -416,20 +421,20 @@ export class ErrorReportingService {
   }
 
   private sanitizeHeaders(
-    headers: Record<string, string>,
+    headers: Record<string, string>
   ): Record<string, string> {
     const sensitiveHeaders = [
-      'authorization',
-      'cookie',
-      'x-api-key',
-      'x-auth-token',
+      "authorization",
+      "cookie",
+      "x-api-key",
+      "x-auth-token",
     ];
 
     const sanitized: Record<string, string> = {};
 
     Object.keys(headers).forEach((key) => {
       if (sensitiveHeaders.includes(key.toLowerCase())) {
-        sanitized[key] = '[REDACTED]';
+        sanitized[key] = "[REDACTED]";
       } else {
         const value = headers[key];
         if (value) sanitized[key] = value;
@@ -439,25 +444,25 @@ export class ErrorReportingService {
     return sanitized;
   }
 
-  private sanitizeBody(body: unknown): any {
-    if (typeof body !== 'object') return body;
+  private sanitizeBody(body: unknown): unknown {
+    if (typeof body !== "object" || body === null) return body;
 
     const sensitiveFields = [
-      'password',
-      'token',
-      'secret',
-      'apiKey',
-      'accessToken',
-      'refreshToken',
-      'ssn',
-      'creditCard',
+      "password",
+      "token",
+      "secret",
+      "apiKey",
+      "accessToken",
+      "refreshToken",
+      "ssn",
+      "creditCard",
     ];
 
     const sanitized: Record<string, unknown> = { ...body };
 
     sensitiveFields.forEach((field) => {
       if (field in sanitized) {
-        sanitized[field] = '[REDACTED]';
+        sanitized[field] = "[REDACTED]";
       }
     });
 
@@ -469,25 +474,25 @@ export class ErrorReportingService {
     const errorMessage = error.message.toLowerCase();
 
     if (
-      errorName.includes('critical') ||
-      errorMessage.includes('critical') ||
-      errorMessage.includes('fatal')
+      errorName.includes("critical") ||
+      errorMessage.includes("critical") ||
+      errorMessage.includes("fatal")
     ) {
       return ErrorSeverity.CRITICAL;
     }
 
     if (
-      errorName.includes('timeout') ||
-      errorName.includes('unavailable') ||
-      errorMessage.includes('database')
+      errorName.includes("timeout") ||
+      errorName.includes("unavailable") ||
+      errorMessage.includes("database")
     ) {
       return ErrorSeverity.HIGH;
     }
 
     if (
-      errorName.includes('validation') ||
-      errorMessage.includes('invalid') ||
-      errorMessage.includes('not found')
+      errorName.includes("validation") ||
+      errorMessage.includes("invalid") ||
+      errorMessage.includes("not found")
     ) {
       return ErrorSeverity.LOW;
     }
@@ -502,7 +507,7 @@ export class ErrorReportingService {
     const count = this.errorBuffer.filter(
       (report) =>
         report.errorCode === errorCode &&
-        new Date(report.timestamp).getTime() >= windowStart,
+        new Date(report.timestamp).getTime() >= windowStart
     ).length;
 
     return count / minutes; // Errors per minute
@@ -523,7 +528,7 @@ export class ErrorReportingService {
 
     const initialLength = this.errorBuffer.length;
     this.errorBuffer = this.errorBuffer.filter(
-      (report) => new Date(report.timestamp).getTime() > cutoff,
+      (report) => new Date(report.timestamp).getTime() > cutoff
     );
 
     const flushed = initialLength - this.errorBuffer.length;

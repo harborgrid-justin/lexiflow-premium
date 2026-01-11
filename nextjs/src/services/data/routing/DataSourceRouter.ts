@@ -1,25 +1,27 @@
 /**
  * DataSourceRouter
- * 
+ *
  * Responsibility: Routes data operations to the appropriate source (Backend API or IndexedDB)
  * Pattern: Strategy pattern for data source selection
- * 
+ *
  * This module encapsulates the logic for determining whether to use the backend API
  * or fall back to local IndexedDB storage. It provides a clean abstraction layer
  * that allows the rest of the application to remain agnostic to the data source.
  */
 
-import { isBackendApiEnabled, api } from '@/api';
+import { isBackendApiEnabled, api } from "@/api";
 
 /**
  * Generic data source interface that both backend and IndexedDB implement
  */
-export interface DataSource<T = any> {
+export interface DataSource<T = unknown> {
   getAll: (...args: unknown[]) => Promise<T[]>;
-  get?: (id: string) => Promise<T | undefined>;
+  get?: (id: string, ...args: unknown[]) => Promise<T | undefined>;
   add?: (item: T) => Promise<T>;
   update?: (id: string, updates: Partial<T>) => Promise<T>;
-  delete?: (id: string) => Promise<void> | Promise<{ success: boolean; id: string }>;
+  delete?: (
+    id: string
+  ) => Promise<void> | Promise<{ success: boolean; id: string }>;
   [key: string]: unknown; // Allow additional methods
 }
 
@@ -36,7 +38,7 @@ export class DataSourceRouter {
 
   /**
    * Routes to backend or fallback based on availability
-   * 
+   *
    * @param backendSource - The backend API service
    * @param fallbackSource - The local/IndexedDB source
    * @returns The appropriate data source
@@ -53,7 +55,7 @@ export class DataSourceRouter {
 
   /**
    * Routes with getter pattern (for lazy evaluation)
-   * 
+   *
    * @param getBackendSource - Lazy getter for backend source
    * @param getFallbackSource - Lazy getter for fallback source
    * @returns The appropriate data source
@@ -78,7 +80,7 @@ export class DataSourceRouter {
    */
   static createPropertyDescriptor(
     apiPath: string | null,
-    fallbackFactory: () => any
+    fallbackFactory: () => unknown
   ): PropertyDescriptor {
     return {
       get: () => {
@@ -90,13 +92,13 @@ export class DataSourceRouter {
         return fallbackFactory();
       },
       enumerable: true,
-      configurable: true
+      configurable: true,
     };
   }
 
   /**
    * Helper for creating route maps for batch registration
-   * 
+   *
    * Example:
    * ```ts
    * const routes = DataSourceRouter.createRouteMap({
@@ -105,17 +107,16 @@ export class DataSourceRouter {
    * });
    * ```
    */
-  static createRouteMap<TMap extends Record<string, unknown>>(
-    config: {
-      [K in keyof TMap]: {
-        api: string | null;
-        fallback: () => DataSource<TMap[K]>;
-      };
-    }
-  ): Record<keyof TMap, PropertyDescriptor> {
+  static createRouteMap<TMap extends Record<string, unknown>>(config: {
+    [K in keyof TMap]: {
+      api: string | null;
+      fallback: () => DataSource<TMap[K]>;
+    };
+  }): Record<keyof TMap, PropertyDescriptor> {
     const descriptors: unknown = {};
     for (const [key, { api: apiPath, fallback }] of Object.entries(config)) {
-      (descriptors as Record<string, unknown>)[key] = this.createPropertyDescriptor(apiPath, fallback);
+      (descriptors as Record<string, unknown>)[key] =
+        this.createPropertyDescriptor(apiPath, fallback);
     }
     return descriptors as Record<keyof TMap, PropertyDescriptor>;
   }

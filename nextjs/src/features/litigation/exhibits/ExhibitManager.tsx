@@ -22,7 +22,7 @@ import {
     Search,
     Users
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -54,7 +54,7 @@ interface ExhibitManagerProps {
 
 export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, caseId }) => {
     const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState<'list' | 'sticker' | 'stats'>('list');
+    const [activeTab, setActiveTab] = useState<'list' | 'sticker' | 'stats'>(initialTab || 'list');
     const [filterParty, setFilterParty] = useState<string>('All');
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const filtersToggle = useToggle();

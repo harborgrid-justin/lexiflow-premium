@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { RetryService } from '@common/services/retry.service';
-import { ErrorCodes } from '@errors/constants/error.codes.constant';
+import { Injectable, Logger } from "@nestjs/common";
+import { RetryService } from "@common/services/retry.service";
+import { ErrorCodes } from "@errors/constants/error.codes.constant";
 
 /**
  * Failed Operation
@@ -24,11 +24,11 @@ export interface FailedOperation {
  * Operation Status
  */
 export enum OperationStatus {
-  PENDING = 'PENDING',
-  RETRYING = 'RETRYING',
-  FAILED = 'FAILED',
-  RECOVERED = 'RECOVERED',
-  DEAD_LETTER = 'DEAD_LETTER',
+  PENDING = "PENDING",
+  RETRYING = "RETRYING",
+  FAILED = "FAILED",
+  RECOVERED = "RECOVERED",
+  DEAD_LETTER = "DEAD_LETTER",
 }
 
 /**
@@ -116,7 +116,7 @@ export class ErrorRecoveryService {
     operationType: string,
     operation: () => Promise<T>,
     strategy: Partial<RecoveryStrategy> = {},
-    context?: Record<string, unknown>,
+    context?: Record<string, unknown>
   ): Promise<T> {
     const fullStrategy = this.buildStrategy(strategy);
 
@@ -131,13 +131,14 @@ export class ErrorRecoveryService {
 
       return result;
     } catch (error) {
-      const errorCode = (error as any).errorCode || 'UNKNOWN';
+      const errorCode =
+        (error as Error & { errorCode?: string }).errorCode || "UNKNOWN";
 
       // Check if error is retryable
       if (!this.isRetryableError(errorCode, fullStrategy)) {
         this.logger.error(
           `Non-retryable error in ${operationType}: ${errorCode}`,
-          error instanceof Error ? error.stack : undefined,
+          error instanceof Error ? error.stack : undefined
         );
         throw error;
       }
@@ -149,11 +150,11 @@ export class ErrorRecoveryService {
         error as Error,
         errorCode,
         fullStrategy,
-        context,
+        context
       );
 
       this.logger.warn(
-        `Operation ${operationType} failed, queued for recovery: ${failedOp.id}`,
+        `Operation ${operationType} failed, queued for recovery: ${failedOp.id}`
       );
 
       throw error;
@@ -169,7 +170,7 @@ export class ErrorRecoveryService {
     error: Error,
     errorCode: string,
     strategy: RecoveryStrategy,
-    context?: Record<string, unknown>,
+    context?: Record<string, unknown>
   ): FailedOperation {
     const id = this.generateOperationId();
     const now = new Date().toISOString();
@@ -184,7 +185,11 @@ export class ErrorRecoveryService {
       maxAttempts: strategy.maxAttempts,
       firstAttempt: now,
       lastAttempt: now,
-      nextRetry: this.calculateNextRetry(1, strategy.initialDelay, strategy.backoffMultiplier),
+      nextRetry: this.calculateNextRetry(
+        1,
+        strategy.initialDelay,
+        strategy.backoffMultiplier
+      ),
       status: OperationStatus.PENDING,
       context,
     };
@@ -192,7 +197,7 @@ export class ErrorRecoveryService {
     this.failedOperations.set(id, failedOp);
 
     this.logger.log(
-      `Queued failed operation: ${id} (${operationType}) - Next retry: ${failedOp.nextRetry}`,
+      `Queued failed operation: ${id} (${operationType}) - Next retry: ${failedOp.nextRetry}`
     );
 
     return failedOp;
@@ -203,7 +208,7 @@ export class ErrorRecoveryService {
    */
   async retryOperation<T>(
     operationId: string,
-    operation: () => Promise<T>,
+    operation: () => Promise<T>
   ): Promise<RecoveryResult<T>> {
     const failedOp = this.failedOperations.get(operationId);
 
@@ -228,7 +233,7 @@ export class ErrorRecoveryService {
       failedOp.status = OperationStatus.RECOVERED;
 
       this.logger.log(
-        `Operation recovered successfully: ${operationId} after ${failedOp.attemptCount} attempts`,
+        `Operation recovered successfully: ${operationId} after ${failedOp.attemptCount} attempts`
       );
 
       this.recoveryInProgress.delete(operationId);
@@ -240,7 +245,8 @@ export class ErrorRecoveryService {
         recoveredAfterAttempts: failedOp.attemptCount,
       };
     } catch (error) {
-      const errorCode = (error as any).errorCode || 'UNKNOWN';
+      const errorCode =
+        (error as Error & { errorCode?: string }).errorCode || "UNKNOWN";
       failedOp.error = error as Error;
       failedOp.errorCode = errorCode;
 
@@ -252,7 +258,7 @@ export class ErrorRecoveryService {
         failedOp.nextRetry = this.calculateNextRetry(
           failedOp.attemptCount,
           2000,
-          2,
+          2
         );
         failedOp.status = OperationStatus.FAILED;
       }
@@ -285,7 +291,7 @@ export class ErrorRecoveryService {
    */
   getFailedOperationsByType(operationType: string): FailedOperation[] {
     return Array.from(this.failedOperations.values()).filter(
-      (op) => op.operationType === operationType,
+      (op) => op.operationType === operationType
     );
   }
 
@@ -307,17 +313,17 @@ export class ErrorRecoveryService {
     items.forEach((item) => {
       byOperationType.set(
         item.operationType,
-        (byOperationType.get(item.operationType) || 0) + 1,
+        (byOperationType.get(item.operationType) || 0) + 1
       );
       byErrorCode.set(
         item.errorCode,
-        (byErrorCode.get(item.errorCode) || 0) + 1,
+        (byErrorCode.get(item.errorCode) || 0) + 1
       );
     });
 
     const sorted = items.sort(
       (a, b) =>
-        new Date(a.firstAttempt).getTime() - new Date(b.firstAttempt).getTime(),
+        new Date(a.firstAttempt).getTime() - new Date(b.firstAttempt).getTime()
     );
 
     return {
@@ -339,7 +345,7 @@ export class ErrorRecoveryService {
 
     this.logger.error(
       `Operation moved to dead letter queue: ${operation.id} (${operation.operationType}) ` +
-      `after ${operation.attemptCount} attempts. Error: ${operation.errorCode}`,
+        `after ${operation.attemptCount} attempts. Error: ${operation.errorCode}`
     );
 
     // Send notification if configured
@@ -351,7 +357,7 @@ export class ErrorRecoveryService {
    */
   async reprocessDeadLetter<T>(
     operationId: string,
-    operation: () => Promise<T>,
+    operation: () => Promise<T>
   ): Promise<RecoveryResult<T>> {
     const deadOp = this.deadLetterQueue.get(operationId);
 
@@ -390,7 +396,7 @@ export class ErrorRecoveryService {
     });
 
     this.logger.log(
-      `Cleared ${cleared} items older than ${olderThan.toISOString()} from dead letter queue`,
+      `Cleared ${cleared} items older than ${olderThan.toISOString()} from dead letter queue`
     );
 
     return cleared;
@@ -408,8 +414,12 @@ export class ErrorRecoveryService {
     const operations = this.getAllFailedOperations();
 
     return {
-      pendingOperations: operations.filter((op) => op.status === OperationStatus.PENDING).length,
-      retryingOperations: operations.filter((op) => op.status === OperationStatus.RETRYING).length,
+      pendingOperations: operations.filter(
+        (op) => op.status === OperationStatus.PENDING
+      ).length,
+      retryingOperations: operations.filter(
+        (op) => op.status === OperationStatus.RETRYING
+      ).length,
       deadLetterItems: this.deadLetterQueue.size,
       totalFailedOperations: this.failedOperations.size,
     };
@@ -421,7 +431,8 @@ export class ErrorRecoveryService {
       initialDelay: partial.initialDelay ?? 1000,
       maxDelay: partial.maxDelay ?? 30000,
       backoffMultiplier: partial.backoffMultiplier ?? 2,
-      retryableErrorCodes: partial.retryableErrorCodes ?? this.getDefaultRetryableErrors(),
+      retryableErrorCodes:
+        partial.retryableErrorCodes ?? this.getDefaultRetryableErrors(),
       notifyOnFailure: partial.notifyOnFailure ?? true,
       moveToDeadLetter: partial.moveToDeadLetter ?? true,
     };
@@ -432,7 +443,10 @@ export class ErrorRecoveryService {
     return ErrorCodes.getRetryableErrors().map((def) => def.code);
   }
 
-  private isRetryableError(errorCode: string, strategy: RecoveryStrategy): boolean {
+  private isRetryableError(
+    errorCode: string,
+    strategy: RecoveryStrategy
+  ): boolean {
     if (strategy.retryableErrorCodes.length === 0) {
       return true; // Retry all if not specified
     }
@@ -443,7 +457,7 @@ export class ErrorRecoveryService {
   private calculateNextRetry(
     attemptCount: number,
     initialDelay: number,
-    backoffMultiplier: number,
+    backoffMultiplier: number
   ): string {
     const delay = initialDelay * Math.pow(backoffMultiplier, attemptCount - 1);
     const nextRetry = new Date(Date.now() + delay);
@@ -468,7 +482,7 @@ export class ErrorRecoveryService {
         errorCode: operation.errorCode,
         attempts: operation.attemptCount,
         context: operation.context,
-      },
+      }
     );
   }
 
@@ -488,12 +502,12 @@ export class ErrorRecoveryService {
         op.status === OperationStatus.PENDING &&
         op.nextRetry &&
         new Date(op.nextRetry) <= now &&
-        !this.recoveryInProgress.has(op.id),
+        !this.recoveryInProgress.has(op.id)
     );
 
     if (readyForRetry.length > 0) {
       this.logger.log(
-        `Recovery worker: Processing ${readyForRetry.length} operations ready for retry`,
+        `Recovery worker: Processing ${readyForRetry.length} operations ready for retry`
       );
     }
 

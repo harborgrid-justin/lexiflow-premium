@@ -544,7 +544,7 @@ export const CRMService = {
               roles: ["Client"],
               riskScore: 0,
               tags: [],
-            } as any,
+            },
           }
         );
       } catch (err) {

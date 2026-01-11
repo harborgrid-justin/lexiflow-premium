@@ -229,9 +229,8 @@ export class BillingRepository extends Repository<TimeEntry> {
           amount: e.total,
           hours: e.hours,
           rate: e.rate,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         })),
-      } as any);
+      });
       return invoice;
     }
 

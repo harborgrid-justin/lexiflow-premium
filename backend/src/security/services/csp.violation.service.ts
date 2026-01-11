@@ -125,7 +125,7 @@ export class CspViolationService {
     /eval\(/gi,
     /alert\(/gi,
     /document\.cookie/gi,
-    /window\.location/gi,
+    /window\\.location/gi,
     /.innerHTML/gi,
   ];
 
@@ -301,7 +301,7 @@ export class CspViolationService {
       const hostname = url.hostname;
 
       // Check for IP addresses
-      if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname)) {
+      if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\\.\d{1,3}$/.test(hostname)) {
         return true;
       }
 

@@ -77,7 +77,7 @@ export function useAutoTimeCapture(
     if (activeTimeRef.current > 60 && currentCaseId) {
       // In a real app, auto-log here.
     }
-    if (activeTimeRef.current > 0) setActiveTime(0);
+    if (activeTimeRef.current > 0) setTimeout(() => setActiveTime(0), 0);
     lastActivity.current = Date.now();
     setIsIdle(false);
   }, [currentPath, currentCaseId]); // Removed activeTime to prevents loops

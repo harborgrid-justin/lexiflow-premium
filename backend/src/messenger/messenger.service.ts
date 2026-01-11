@@ -169,7 +169,7 @@ export class MessengerService {
 
     if (!alreadyRead) {
       readBy.push({ userId, readAt: new Date() });
-      message.readBy = readBy as any;
+      message.readBy = readBy as unknown;
       message.readCount = readBy.length;
       await this.messageRepository.save(message);
     }

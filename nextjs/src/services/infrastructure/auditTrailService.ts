@@ -76,8 +76,8 @@ export interface AuditLogEntry {
   resource: AuditResource;
   resourceId?: string;
   resourceName?: string;
-  changes?: Record<string, { from: any; to: any }>;
-  metadata?: Record<string, any>;
+  changes?: Record<string, { from: unknown; to: unknown }>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   sessionId?: string;
@@ -150,8 +150,8 @@ class AuditTrailServiceClass {
     resourceName?: string;
     userId: string;
     userName?: string;
-    changes?: Record<string, { from: any; to: any }>;
-    metadata?: Record<string, any>;
+    changes?: Record<string, { from: unknown; to: unknown }>;
+    metadata?: Record<string, unknown>;
     success?: boolean;
     errorMessage?: string;
     duration?: number;
@@ -210,7 +210,7 @@ class AuditTrailServiceClass {
     resource: AuditResource,
     resourceId: string,
     userId: string,
-    changes?: Record<string, { from: any; to: any }>
+    changes?: Record<string, { from: unknown; to: unknown }>
   ): Promise<string> {
     return await this.logOperation({
       action,
@@ -248,7 +248,7 @@ class AuditTrailServiceClass {
     resource: AuditResource,
     resourceId: string,
     userId: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ): Promise<string> {
     return await this.logOperation({
       action,
@@ -556,10 +556,12 @@ class AuditTrailServiceClass {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        this.logs = parsed.map((log: any) => ({
-          ...log,
-          timestamp: new Date(log.timestamp),
-        }));
+        this.logs = parsed.map(
+          (log: { timestamp: string; [key: string]: unknown }) => ({
+            ...log,
+            timestamp: new Date(log.timestamp),
+          })
+        );
       }
     } catch (error) {
       console.error("Failed to load audit logs:", error);

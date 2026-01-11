@@ -37,9 +37,9 @@ import { cn } from '@/utils/cn';
 // Types
 import { Clause, JudgeProfile } from '@/types';
 
-const ClauseHistoryModal = lazy(async () => {
-  const module = await import('../clauses/ClauseHistoryModal');
-  return { default: module.ClauseHistoryModal };
+const ClauseHistoryModalModule = lazy(async () => {
+  const mod = await import('../clauses/ClauseHistoryModal');
+  return { default: mod.ClauseHistoryModal };
 });
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
@@ -58,12 +58,8 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
     { enabled: activeView.startsWith('analytics_') }
   );
 
-  // Set initial judge selection when data loads
-  useEffect(() => {
-    if (judges.length > 0 && !selectedJudgeId) {
-      setSelectedJudgeId(judges[0].id);
-    }
-  }, [judges, selectedJudgeId]);
+  // Set initial judge selection when data loads - derived from data, not in effect
+  const effectiveJudgeId = selectedJudgeId || (judges.length > 0 ? judges[0].id : '');
 
   const renderContent = () => {
     // Delegation to ResearchToolContent

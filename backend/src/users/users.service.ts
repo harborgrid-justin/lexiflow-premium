@@ -4,17 +4,17 @@ import {
   ConflictException,
   OnModuleInit,
   Logger,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import * as MasterConfig from '@config/master.config';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
-import { ROLE_PERMISSIONS } from '@common/constants/role-permissions.constant';
-import { User, UserRole, UserStatus } from './entities/user.entity';
-import { UserProfile } from './entities/user-profile.entity';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import * as bcrypt from "bcrypt";
+import * as MasterConfig from "@config/master.config";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { AuthenticatedUser } from "@auth/interfaces/authenticated-user.interface";
+import { ROLE_PERMISSIONS } from "@common/constants/role-permissions.constant";
+import { User, UserRole, UserStatus } from "./entities/user.entity";
+import { UserProfile } from "./entities/user-profile.entity";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -64,12 +64,15 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserProfile)
-    private readonly userProfileRepository: Repository<UserProfile>,
+    private readonly userProfileRepository: Repository<UserProfile>
   ) {}
 
   async onModuleInit() {
     // Create default admin user only if enabled and not in test environment
-    if (process.env.NODE_ENV !== 'test' && MasterConfig.DEFAULT_ADMIN_CONFIG.enabled) {
+    if (
+      process.env.NODE_ENV !== "test" &&
+      MasterConfig.DEFAULT_ADMIN_CONFIG.enabled
+    ) {
       await this.createDefaultAdmin();
     }
   }
@@ -89,7 +92,7 @@ export class UsersService implements OnModuleInit {
     const config = MasterConfig.DEFAULT_ADMIN_CONFIG;
 
     if (!config.enabled) {
-      this.logger.debug('Default admin creation is disabled via configuration');
+      this.logger.debug("Default admin creation is disabled via configuration");
       return;
     }
 
@@ -135,19 +138,18 @@ export class UsersService implements OnModuleInit {
       }
 
       // Log success in non-production environments
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== "production") {
         this.logger.log(
           `Default global admin created: ${config.user.email} ` +
-          `(profile: ${config.profile.enabled ? 'created' : 'skipped'})`
+            `(profile: ${config.profile.enabled ? "created" : "skipped"})`
         );
       }
-    } catch (error) {
-      // Silently fail if table doesn't exist yet (during initial schema creation)
+    } catch {\2// Silently fail if table doesn't exist yet (during initial schema creation)
       // The admin will be created on next restart or can be seeded manually
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== "production") {
         this.logger.warn(
-          'Skipping default admin creation - database schema not ready yet',
-          error instanceof Error ? error.message : 'Unknown error'
+          "Skipping default admin creation - database schema not ready yet",
+          error instanceof Error ? error.message : "Unknown error"
         );
       }
     }
@@ -162,15 +164,19 @@ export class UsersService implements OnModuleInit {
 
     const profile = this.userProfileRepository.create({
       userId,
-      barNumber: profileConfig.barNumber ?? '',
+      barNumber: profileConfig.barNumber ?? "",
       jurisdictions: profileConfig.jurisdictions ?? [],
       practiceAreas: profileConfig.practiceAreas ?? [],
-      bio: profileConfig.bio ?? '',
+      bio: profileConfig.bio ?? "",
       yearsOfExperience: profileConfig.yearsOfExperience ?? 0,
       defaultHourlyRate: profileConfig.defaultHourlyRate ?? 0,
-      skills: ['System Administration', 'User Management', 'Platform Configuration'],
-      specializations: 'Global Platform Administration',
-    } as Partial<UserProfile>);
+      skills: [
+        "System Administration",
+        "User Management",
+        "Platform Configuration",
+      ],
+      specializations: "Global Platform Administration",
+    } as Partial<UserProfile> & { userId: string });
 
     const saved = await this.userProfileRepository.save(profile);
     return saved as UserProfile;
@@ -187,7 +193,7 @@ export class UsersService implements OnModuleInit {
 
     if (!existingProfile) {
       await this.createAdminProfile(userId);
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV !== "production") {
         this.logger.log(`Created missing profile for existing admin user`);
       }
     }
@@ -200,10 +206,13 @@ export class UsersService implements OnModuleInit {
     });
 
     if (existingUser) {
-      throw new ConflictException('User with this email already exists');
+      throw new ConflictException("User with this email already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, MasterConfig.BCRYPT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      MasterConfig.BCRYPT_ROUNDS
+    );
 
     const user = this.userRepository.create({
       email: createUserDto.email,
@@ -211,7 +220,10 @@ export class UsersService implements OnModuleInit {
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       role: this.mapToUserRole(createUserDto.role) || UserRole.STAFF,
-      status: (createUserDto.isActive ?? true) ? UserStatus.ACTIVE : UserStatus.INACTIVE,
+      status:
+        (createUserDto.isActive ?? true)
+          ? UserStatus.ACTIVE
+          : UserStatus.INACTIVE,
       twoFactorEnabled: createUserDto.mfaEnabled ?? false,
       emailVerified: false,
     });
@@ -220,14 +232,22 @@ export class UsersService implements OnModuleInit {
     return this.toAuthenticatedUser(savedUser);
   }
 
-  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: AuthenticatedUser[]; total: number; page: number; limit: number }> {
+  async findAll(options?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{
+    data: AuthenticatedUser[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { page = 1, limit = 50 } = options || {};
     const skip = (page - 1) * limit;
 
     const [users, total] = await this.userRepository.findAndCount({
       skip,
       take: limit,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
     });
 
     return {
@@ -255,10 +275,21 @@ export class UsersService implements OnModuleInit {
    * Find user by email with password hash (for authentication only)
    * WARNING: Should only be used internally by AuthService
    */
-  async findByEmailWithPassword(email: string): Promise<(AuthenticatedUser & { passwordHash: string }) | null> {
+  async findByEmailWithPassword(
+    email: string
+  ): Promise<(AuthenticatedUser & { passwordHash: string }) | null> {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'email', 'firstName', 'lastName', 'role', 'status', 'passwordHash', 'emailVerified']
+      select: [
+        "id",
+        "email",
+        "firstName",
+        "lastName",
+        "role",
+        "status",
+        "passwordHash",
+        "emailVerified",
+      ],
     });
     if (!user) {
       return null;
@@ -272,7 +303,7 @@ export class UsersService implements OnModuleInit {
 
   async update(
     id: string,
-    updateUserDto: UpdateUserDto,
+    updateUserDto: UpdateUserDto
   ): Promise<AuthenticatedUser> {
     // Check if email is being changed and if it already exists
     if (updateUserDto.email) {
@@ -280,7 +311,7 @@ export class UsersService implements OnModuleInit {
         where: { email: updateUserDto.email },
       });
       if (existingUser && existingUser.id !== id) {
-        throw new ConflictException('User with this email already exists');
+        throw new ConflictException("User with this email already exists");
       }
     }
 
@@ -296,9 +327,12 @@ export class UsersService implements OnModuleInit {
     if (updateUserDto.email) updateData.email = updateUserDto.email;
     if (updateUserDto.firstName) updateData.firstName = updateUserDto.firstName;
     if (updateUserDto.lastName) updateData.lastName = updateUserDto.lastName;
-    if (updateUserDto.role) updateData.role = this.mapToUserRole(updateUserDto.role);
+    if (updateUserDto.role)
+      updateData.role = this.mapToUserRole(updateUserDto.role);
     if (updateUserDto.isActive !== undefined) {
-      updateData.status = updateUserDto.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
+      updateData.status = updateUserDto.isActive
+        ? UserStatus.ACTIVE
+        : UserStatus.INACTIVE;
     }
     if (updateUserDto.mfaEnabled !== undefined) {
       updateData.twoFactorEnabled = updateUserDto.mfaEnabled;
@@ -308,17 +342,17 @@ export class UsersService implements OnModuleInit {
       .createQueryBuilder()
       .update(User)
       .set(updateData)
-      .where('id = :id', { id })
-      .returning('*')
+      .where("id = :id", { id })
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     const rawResult = result.raw as User[];
     if (!rawResult[0]) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     return this.toAuthenticatedUser(rawResult[0]);
@@ -327,7 +361,7 @@ export class UsersService implements OnModuleInit {
   async remove(id: string): Promise<void> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     await this.userRepository.remove(user);
@@ -336,19 +370,25 @@ export class UsersService implements OnModuleInit {
   async updatePassword(id: string, newPassword: string): Promise<void> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, MasterConfig.BCRYPT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
+      MasterConfig.BCRYPT_ROUNDS
+    );
     user.passwordHash = hashedPassword;
 
     await this.userRepository.save(user);
   }
 
-  async setMfaEnabled(id: string, enabled: boolean): Promise<AuthenticatedUser> {
+  async setMfaEnabled(
+    id: string,
+    enabled: boolean
+  ): Promise<AuthenticatedUser> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     user.twoFactorEnabled = enabled;
@@ -360,7 +400,7 @@ export class UsersService implements OnModuleInit {
   async setTotpSecret(id: string, totpSecret: string): Promise<void> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     user.totpSecret = totpSecret;
@@ -370,7 +410,7 @@ export class UsersService implements OnModuleInit {
   async getTotpSecret(id: string): Promise<string | null> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     return user.totpSecret || null;
@@ -379,7 +419,7 @@ export class UsersService implements OnModuleInit {
   async setActive(id: string, isActive: boolean): Promise<AuthenticatedUser> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     user.status = isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
@@ -418,13 +458,13 @@ export class UsersService implements OnModuleInit {
 
     const roleStr = String(role);
     const roleMapping: Record<string, UserRole> = {
-      'SUPER_ADMIN': UserRole.SUPER_ADMIN,
-      'ADMINISTRATOR': UserRole.ADMIN,
-      'PARTNER': UserRole.PARTNER,
-      'ASSOCIATE': UserRole.ASSOCIATE,
-      'PARALEGAL': UserRole.PARALEGAL,
-      'LEGAL_SECRETARY': UserRole.LEGAL_ASSISTANT,
-      'CLIENT_USER': UserRole.CLIENT,
+      SUPER_ADMIN: UserRole.SUPER_ADMIN,
+      ADMINISTRATOR: UserRole.ADMIN,
+      PARTNER: UserRole.PARTNER,
+      ASSOCIATE: UserRole.ASSOCIATE,
+      PARALEGAL: UserRole.PARALEGAL,
+      LEGAL_SECRETARY: UserRole.LEGAL_ASSISTANT,
+      CLIENT_USER: UserRole.CLIENT,
     };
     return roleMapping[roleStr] || UserRole.STAFF;
   }

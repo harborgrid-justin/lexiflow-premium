@@ -74,11 +74,11 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
     setFilterRole(role);
   }, []);
 
-  const handleSpecialtyFilterChange = useCallback((specialty: string) => {
+  const _handleSpecialtyFilterChange = useCallback((specialty: string) => {
     setFilterSpecialty(specialty);
   }, []);
 
-  const handleStatusFilterChange = useCallback((status: string) => {
+  const _handleStatusFilterChange = useCallback((status: string) => {
     setFilterStatus(status);
   }, []);
 

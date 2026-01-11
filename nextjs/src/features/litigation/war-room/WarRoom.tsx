@@ -157,8 +157,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
     [STORES.CASES, "all"],
-    async () => {
-      const cases = DataService.cases as any;
+    async () => {      // eslint-disable-next-line @typescript-eslint/no-explicit-any      const cases = DataService.cases as any;
       return cases.getAll();
     },
     { enabled: !caseId },
@@ -178,6 +177,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   } = useQuery(
     [STORES.CASES, currentCaseId, "warRoom"],
     async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const warRoomService = DataService.warRoom as any;
       return warRoomService.getData(currentCaseId);
     },
@@ -222,13 +222,13 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // EFFECTS
   // ============================================================================
   useEffect(() => {
-    if (caseId) setCurrentCaseId(caseId);
+    if (caseId) setTimeout(() => setCurrentCaseId(caseId), 0);
   }, [caseId]);
 
   useEffect(() => {
     if (!caseId && allCases.length > 0) {
       if (!currentCaseId || !allCases.find((c) => c.id === currentCaseId)) {
-        setCurrentCaseId(allCases[0].id);
+        setTimeout(() => setCurrentCaseId(allCases[0].id), 0);
       }
     }
   }, [allCases, currentCaseId, caseId]);
@@ -239,7 +239,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   }, [allCases, currentCaseId]);
 
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    if (initialTab) setTimeout(() => setActiveTab(initialTab), 0);
   }, [initialTab]);
 
   // LAYOUT-STABLE: Always render something to prevent layout shift

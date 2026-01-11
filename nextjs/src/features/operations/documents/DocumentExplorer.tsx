@@ -6,7 +6,7 @@ import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument, UserRole } from '@/types';
 import { cn } from '@/utils/cn';
-import { useDeferredValue, useState } from 'react';
+import { useState } from 'react';
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentToolbar } from './DocumentToolbar';

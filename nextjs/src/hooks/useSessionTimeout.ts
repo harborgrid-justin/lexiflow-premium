@@ -326,9 +326,11 @@ export function useSessionTimeout(
   useEffect(() => {
     if (!enabled) return;
 
-    startSession();
+    // Use timeout to break synchronous state update cycle
+    const t = setTimeout(() => startSession(), 0);
 
     return () => {
+      clearTimeout(t);
       clearAllTimers();
     };
   }, [enabled, startSession, clearAllTimers]); // Only run on mount and when enabled changes

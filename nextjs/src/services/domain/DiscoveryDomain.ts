@@ -33,7 +33,7 @@ export const DiscoveryService = {
         inCustody,
         pending,
       };
-    } catch (e) {
+    } catch {
       return { total: 0, inCustody: 0, pending: 0 };
     }
   },

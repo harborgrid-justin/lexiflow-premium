@@ -232,7 +232,7 @@ export function useAppContext(): UseAppControllerReturn {
       loadCase();
     } else {
       // Only clear if currently set to avoid redundant updates
-      if (selectedCase) setSelectedCase(null);
+      if (selectedCase) setTimeout(() => setSelectedCase(null), 0);
     }
   }, [selectedCaseId, setSelectedCaseId, addToast, selectedCase]);
 

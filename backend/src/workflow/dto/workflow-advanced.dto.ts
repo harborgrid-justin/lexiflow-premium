@@ -237,7 +237,7 @@ export class CreateWorkflowVersionDto {
 
   @ApiProperty()
   @IsString()
-  @Matches(/^\d+\.\d+\.\d+$/, { message: 'Version must follow semantic versioning (e.g., 1.0.0)' })
+  @Matches(/^\d+\.\d+\\.\d+$/, { message: 'Version must follow semantic versioning (e.g., 1.0.0)' })
   version!: string;
 
   @ApiProperty()

@@ -27,6 +27,7 @@ import { useTheme } from '@/providers';
 // Components
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Skeleton } from '@/components/ui/atoms/Skeleton/Skeleton';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -79,16 +80,16 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            {/* Trial Status - Skeleton Loader */}
+            {/* Trial Status - Skeleton className="bg-gray-200" Loader */}
             <Card className={cn("p-6", theme.surface.raised, "border-2", theme.primary.border)}>
                 <div className="flex justify-between items-center">
                     <div className="space-y-3 flex-1">
-                        <Skeleton className="h-6 w-48" />
-                        <Skeleton className="h-4 w-32" />
+                        <Skeleton className="bg-gray-200" className="h-6 w-48" />
+                        <Skeleton className="bg-gray-200" className="h-4 w-32" />
                     </div>
                     <div className="text-right space-y-3">
-                        <Skeleton className="h-8 w-24" />
-                        <Skeleton className="h-4 w-36" />
+                        <Skeleton className="bg-gray-200" className="h-8 w-24" />
+                        <Skeleton className="bg-gray-200" className="h-4 w-36" />
                     </div>
                 </div>
             </Card>
@@ -134,15 +135,15 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
                 </Card>
                 <Card title={<div className="flex items-center gap-2"><AlertCircle className="h-5 w-5" /> Critical Alerts</div>}>
                     <div className="space-y-3">
-                        {/* Skeleton loaders for alerts */}
+                        {/* Skeleton className="bg-gray-200" loaders for alerts */}
                         {[...Array(2)].map((_, i) => (
                             <div key={`alert-skeleton-${i}`} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
-                                <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
+                                <Skeleton className="bg-gray-200 shrink-0 h-10 w-10 rounded-full" />
                                 <div className="flex-1 space-y-2">
-                                    <Skeleton className="h-4 w-3/4" />
-                                    <Skeleton className="h-3 w-full" />
-                                    <Skeleton className="h-3 w-5/6" />
-                                    <Skeleton className="h-6 w-24 mt-2" />
+                                    <Skeleton className="bg-gray-200" className="h-4 w-3/4" />
+                                    <Skeleton className="bg-gray-200" className="h-3 w-full" />
+                                    <Skeleton className="bg-gray-200" className="h-3 w-5/6" />
+                                    <Skeleton className="bg-gray-200" className="h-6 w-24 mt-2" />
                                 </div>
                             </div>
                         ))}

@@ -45,7 +45,7 @@ export class VersioningController {
   @ApiResponse({ status: 403, description: "Forbidden" })
   @ApiResponse({ status: 409, description: "Resource already exists" })
   async createVersion(@Body() body: Record<string, unknown>): Promise<unknown> {
-    return await this.versioningService.createVersion(body as any);
+    return await this.versioningService.createVersion(body);
   }
 
   @Get("history/:entityType/:entityId")
@@ -123,14 +123,14 @@ export class VersioningController {
 
   @Get("history")
   @ApiOperation({ summary: "Get global version history" })
-  async getGlobalHistory() {
-    return await this.versioningService.getGlobalHistory();
+  async getGlobalHistory(): Promise<unknown[]> {
+    return (await this.versioningService.getGlobalHistory()) as unknown[];
   }
 
   @Get("branches")
   @ApiOperation({ summary: "Get all branches" })
-  async getBranches() {
-    return await this.versioningService.getBranches();
+  async getBranches(): Promise<unknown[]> {
+    return (await this.versioningService.getBranches()) as unknown[];
   }
 
   @Get("tags")

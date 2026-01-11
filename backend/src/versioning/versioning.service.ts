@@ -103,7 +103,10 @@ export class VersioningService {
     return version;
   }
 
-  async getEntityBranches(entityType: string, entityId: string): Promise<string[]> {
+  async getEntityBranches(
+    entityType: string,
+    entityId: string
+  ): Promise<string[]> {
     const result = await this.versionRepository
       .createQueryBuilder("version")
       .select("DISTINCT version.branch", "branch")
@@ -167,15 +170,21 @@ export class VersioningService {
     });
   }
 
-  async getBranches(): Promise<any[]> {
-    const branches = await this.versionRepository
+  async getBranches(): Promise<
+    Array<{ name: string; lastCommit: Date; author: string; status: string }>
+  > {
+    const branches = (await this.versionRepository
       .createQueryBuilder("version")
       .select("version.branch", "name")
       .addSelect("MAX(version.createdAt)", "lastCommit")
       .addSelect("MAX(version.createdBy)", "author") // Simplified: author of last commit
       .where("version.branch IS NOT NULL")
       .groupBy("version.branch")
-      .getRawMany();
+      .getRawMany()) as Array<{
+      name: string;
+      lastCommit: Date;
+      author: string;
+    }>;
 
     return branches.map((b) => ({
       name: b.name,
@@ -185,7 +194,15 @@ export class VersioningService {
     }));
   }
 
-  async getTags(): Promise<any[]> {
+  async getTags(): Promise<
+    Array<{
+      name: string;
+      version: string;
+      date: Date;
+      author: string;
+      description: string;
+    }>
+  > {
     const tags = await this.versionRepository
       .createQueryBuilder("version")
       .select("version.tag", "name")

@@ -508,10 +508,12 @@ class RedactionServiceClass {
       if (stored) {
         const parsed = JSON.parse(stored);
         // Convert timestamp strings back to Date objects
-        this.auditLog = parsed.map((entry: any) => ({
-          ...entry,
-          timestamp: new Date(entry.timestamp),
-        }));
+        this.auditLog = parsed.map(
+          (entry: { timestamp: string; [key: string]: unknown }) => ({
+            ...entry,
+            timestamp: new Date(entry.timestamp),
+          })
+        );
       }
     } catch (error) {
       console.error("Failed to load redaction audit log:", error);

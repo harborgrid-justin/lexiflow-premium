@@ -137,7 +137,7 @@ const BillingWIPComponent: React.FC = () => {
             // Validate all entries before invoicing
             const validationErrors: string[] = [];
             selectedEntries.forEach((entry, index) => {
-                const result = validateTimeEntrySafe(entry as any);
+                const result = validateTimeEntrySafe(entry);
                 if (!result.valid) {
                     validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
                 }

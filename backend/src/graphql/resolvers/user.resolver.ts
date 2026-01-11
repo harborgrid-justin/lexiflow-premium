@@ -72,7 +72,7 @@ export class UserResolver {
       password: input.password,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: (input as any).role,
+      role: (input as unknown).role,
     };
     const result = await this.authService.register(registerDto);
     return {
@@ -91,12 +91,12 @@ export class UserResolver {
   ): Promise<UserType> {
     // Verify user has permission to update (simplified for now)
     const updateDto = {
-      email: (input as any).email,
+      email: (input as unknown).email,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: (input as any).role,
-      isActive: (input as any).isActive,
-      mfaEnabled: (input as any).mfaEnabled,
+      role: (input as unknown).role,
+      isActive: (input as unknown).isActive,
+      mfaEnabled: (input as unknown).mfaEnabled,
     };
     const updatedUser = await this.userService.update(id, updateDto);
     return updatedUser as unknown as UserType;

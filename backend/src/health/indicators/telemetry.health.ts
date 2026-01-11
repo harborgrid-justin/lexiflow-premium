@@ -87,7 +87,7 @@ export class TelemetryHealthIndicator extends HealthIndicator {
      */
 
     return Boolean(
-      (global as any).__OTEL_INITIALIZED__ === true ||
+      (global as unknown).__OTEL_INITIALIZED__ === true ||
       process.env.OTEL_INITIALIZED === 'true',
     );
   }

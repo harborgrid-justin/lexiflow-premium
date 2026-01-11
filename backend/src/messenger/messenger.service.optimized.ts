@@ -107,8 +107,8 @@ export class MessengerService implements OnModuleDestroy {
   private processingQueue = false;
 
   constructor(
-    // @InjectRepository(Message) private messageRepository: Repository<any>,
-    // @InjectRepository(Conversation) private conversationRepository: Repository<any>,
+    // @InjectRepository(Message) private messageRepository: Repository<unknown>,
+    // @InjectRepository(Conversation) private conversationRepository: Repository<unknown>,
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.startMemoryManagement();

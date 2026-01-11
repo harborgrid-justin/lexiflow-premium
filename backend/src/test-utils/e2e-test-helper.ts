@@ -1,5 +1,5 @@
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
+import { INestApplication } from "@nestjs/common";
+import request from "supertest";
 
 interface AuthResponse {
   body: {
@@ -15,12 +15,12 @@ export class E2ETestHelper {
    */
   static async getAuthToken(
     app: INestApplication,
-    email: string = 'admin@lexiflow.com',
-    password: string = 'Admin123!',
+    email: string = "admin@lexiflow.com",
+    password: string = "Admin123!"
   ): Promise<string> {
     const server = app.getHttpServer();
     const response = (await request(server)
-      .post('/auth/login')
+      .post("/auth/login")
       .send({ email, password })
       .expect(200)) as unknown as AuthResponse;
 
@@ -33,12 +33,10 @@ export class E2ETestHelper {
   static async authenticatedGet(
     app: INestApplication,
     path: string,
-    token: string,
+    token: string
   ): Promise<unknown> {
     const server = app.getHttpServer();
-    return request(server)
-      .get(path)
-      .set('Authorization', `Bearer ${token}`);
+    return request(server).get(path).set("Authorization", `Bearer ${token}`);
   }
 
   /**
@@ -48,12 +46,12 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-    body: unknown,
+    body: unknown
   ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .post(path)
-      .set('Authorization', `Bearer ${token}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(body);
   }
 
@@ -64,12 +62,12 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-    body: unknown,
+    body: unknown
   ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .put(path)
-      .set('Authorization', `Bearer ${token}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(body);
   }
 
@@ -79,28 +77,31 @@ export class E2ETestHelper {
   static async authenticatedDelete(
     app: INestApplication,
     path: string,
-    token: string,
+    token: string
   ): Promise<unknown> {
     const server = app.getHttpServer();
-    return request(server)
-      .delete(path)
-      .set('Authorization', `Bearer ${token}`);
+    return request(server).delete(path).set("Authorization", `Bearer ${token}`);
   }
 
   /**
    * Assert standard response format
    */
-  static assertStandardResponse(response: unknown, expectedSuccess: boolean = true): void {
-    expect((response as any).body).toHaveProperty('success', expectedSuccess);
-    expect((response as any).body).toHaveProperty('message');
-    expect((response as any).body).toHaveProperty('timestamp');
+  static assertStandardResponse(
+    response: {
+      body: { success: boolean; message: string; timestamp: string };
+    },
+    expectedSuccess: boolean = true
+  ): void {
+    expect(response.body).toHaveProperty("success", expectedSuccess);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body).toHaveProperty("timestamp");
   }
 
   /**
    * Assert paginated response format
    */
-  static assertPaginatedResponse(response: unknown): void {
-    const responseBody = (response as any).body as unknown as {
+  static assertPaginatedResponse(response: {
+    body: {
       data: {
         data: unknown[];
         total: number;
@@ -109,29 +110,37 @@ export class E2ETestHelper {
         totalPages: number;
       };
     };
-    expect(responseBody.data).toHaveProperty('data');
-    expect(responseBody.data).toHaveProperty('total');
-    expect(responseBody.data).toHaveProperty('page');
-    expect(responseBody.data).toHaveProperty('limit');
-    expect(responseBody.data).toHaveProperty('totalPages');
+  }): void {
+    const responseBody = response.body;
+    expect(responseBody.data).toHaveProperty("data");
+    expect(responseBody.data).toHaveProperty("total");
+    expect(responseBody.data).toHaveProperty("page");
+    expect(responseBody.data).toHaveProperty("limit");
+    expect(responseBody.data).toHaveProperty("totalPages");
     expect(Array.isArray(responseBody.data.data)).toBe(true);
   }
 
   /**
    * Assert validation error response
    */
-  static assertValidationError(response: unknown, expectedErrors: number): void {
-    const responseBody = (response as any).body as unknown as {
-      success: boolean;
-      error: {
-        errors: unknown[];
+  static assertValidationError(
+    response: {
+      status: number;
+      body: {
+        success: boolean;
+        error: {
+          errors: unknown[];
+        };
       };
-    };
-    expect((response as any).status).toBe(400);
-    expect(responseBody).toHaveProperty('success', false);
-    expect(responseBody.error).toHaveProperty('errors');
+    },
+    expectedErrors: number
+  ): void {
+    const responseBody = response.body;
+    expect(response.status).toBe(400);
+    expect(responseBody).toHaveProperty("success", false);
+    expect(responseBody.error).toHaveProperty("errors");
     expect(responseBody.error.errors.length).toBeGreaterThanOrEqual(
-      expectedErrors,
+      expectedErrors
     );
   }
 
@@ -140,7 +149,7 @@ export class E2ETestHelper {
    */
   static assertUnauthorized(response: Response): void {
     expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty("success", false);
   }
 
   /**
@@ -148,6 +157,6 @@ export class E2ETestHelper {
    */
   static assertNotFound(response: Response): void {
     expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty("success", false);
   }
 }

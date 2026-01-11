@@ -56,9 +56,6 @@ const ListButton = ({ id, label, count, activeList, setActiveList }: ListButtonP
 export const FormsSigningView = () => {
     const { theme, notify, selectedDocument, setSelectedDocument, previewUrl, setPreviewUrl, activeList, setActiveList, searchTerm, setSearchTerm } = useFormsSigningViewState();
 
-    // Defer search for better input responsiveness
-    const deferredSearchTerm = useDeferredValue(searchTerm);
-
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading, error, refetch } = useQuery(
         queryKeys.documents.all(),
@@ -96,7 +93,7 @@ export const FormsSigningView = () => {
                 setSelectedDocument(docToSelect);
             }
         }
-    }, [documents, selectedDocument, setSelectedDocument, firstTemplate]);
+    }, [documents, selectedDocument, setSelectedDocument]);
 
     useEffect(() => {
         let activeUrl: string | null = null;
@@ -140,7 +137,7 @@ export const FormsSigningView = () => {
             const updatedDoc: LegalDocument = {
                 ...selectedDocument,
                 formFields: (selectedDocument.formFields || []).map((f) =>
-                    (f as any).name === activeField.id
+                    (f as { name: string; type: string; value: unknown }).name === activeField.id
                         ? { ...f, value: "Signed by User" }
                         : f
                 )

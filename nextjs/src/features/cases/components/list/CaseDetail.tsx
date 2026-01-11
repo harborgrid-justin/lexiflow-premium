@@ -16,7 +16,6 @@ import {
   DollarSign,
   Edit,
   FileText,
-  Loader2,
   Scale,
   Trash2,
   Users
@@ -70,16 +69,19 @@ export const CaseDetail: React.FC = () => {
     }
   );
 
+  // Navigate effect - must be at top level
+  useEffect(() => {
+    if (!isValidMatterId || error || (!loading && !matter)) {
+      if (!isValidMatterId && matterId) {
+        console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
+      }
+      navigate(PATHS.MATTERS);
+    }
+  }, [isValidMatterId, error, loading, matter, matterId]);
+
   // PREDICTABLE ERROR STATE: Render structured error view instead of null
   // Prevents hydration mismatch and provides user feedback
   if (!isValidMatterId || error || (!loading && !matter)) {
-    if (!isValidMatterId && matterId) {
-      console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
-    }
-    // Navigate in effect, not during render
-    useEffect(() => {
-      navigate(PATHS.MATTERS);
-    }, [navigate]);
 
     return (
       <div className="flex items-center justify-center h-full p-8">
@@ -246,8 +248,8 @@ export const CaseDetail: React.FC = () => {
                 <span>{matter.practiceArea?.replace(/_/g, ' ') || '-'}</span>
               </div>
               <div className={`flex items-center gap-2 font-medium ${matter.priority === MatterPriority.URGENT ? 'text-rose-600 dark:text-rose-400' :
-                  matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
-                    'text-blue-600 dark:text-blue-400'
+                matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
+                  'text-blue-600 dark:text-blue-400'
                 }`}>
                 <span>{matter.priority} Priority</span>
               </div>

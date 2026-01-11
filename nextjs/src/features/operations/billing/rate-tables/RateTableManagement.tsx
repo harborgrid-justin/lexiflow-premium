@@ -62,7 +62,7 @@ const RateTableManagementComponent: React.FC = () => {
       createModal.close();
       setFormData({ rates: [] });
       notify.success('Rate table created successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to create rate table');
     }
   };
@@ -90,7 +90,7 @@ const RateTableManagementComponent: React.FC = () => {
       deleteModal.close();
       tableSelection.deselect();
       notify.success('Rate table deleted successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to delete rate table');
     }
   };
@@ -246,7 +246,7 @@ const RateTableManagementComponent: React.FC = () => {
               ))}
               {(formData.rates || []).length === 0 && (
                 <p className={cn("text-sm text-center py-4 italic", theme.text.tertiary)}>
-                  No role-specific rates configured. Click "Add Role" to add one.
+                  No role-specific rates configured. Click &quot;Add Role&quot; to add one.
                 </p>
               )}
             </div>

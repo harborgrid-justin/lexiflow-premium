@@ -1323,7 +1323,14 @@ export class BillingRepository extends Repository<TimeEntry> {
       }
 
       const invoices = await db.getAll<Invoice>(STORES.INVOICES);
-      const expenses = await db.getAll<any>(STORES.EXPENSES);
+      const expenses = await db.getAll<{
+        id: string;
+        date: string;
+        createdAt: string;
+        description: string;
+        category: string;
+        amount: number;
+      }>(STORES.EXPENSES);
 
       const transactions: BillingTransaction[] = [
         ...invoices.map((inv) => ({
@@ -1376,7 +1383,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       }
 
       const invoices = await db.getAll<Invoice>(STORES.INVOICES);
-      const expenses = await db.getAll<any>(STORES.EXPENSES);
+      const expenses = await db.getAll<{ amount: number }>(STORES.EXPENSES);
 
       const totalRevenue = invoices.reduce(
         (sum, inv) => sum + (inv.totalAmount || 0),

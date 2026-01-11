@@ -19,8 +19,6 @@ import {
 import {
   BarChart,
   Bar,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -72,10 +70,9 @@ const CHART_COLORS = {
 
 export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps> = ({
   onSelectCase,
-  userRole = 'attorney',
 }) => {
   const { theme } = useTheme();
-  const [dateRange, setDateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
+  const [dateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
   // Fetch dashboard data
   const { data: kpis, isLoading: kpisLoading } = useQuery(

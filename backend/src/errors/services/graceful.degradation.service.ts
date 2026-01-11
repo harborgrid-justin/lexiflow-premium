@@ -1,25 +1,28 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { CircuitBreakerService, CircuitState } from '@common/services/circuit-breaker.service';
+import { Injectable, Logger } from "@nestjs/common";
+import {
+  CircuitBreakerService,
+  CircuitState,
+} from "@common/services/circuit-breaker.service";
 
 /**
  * Service Health Status
  */
 export enum ServiceHealth {
-  HEALTHY = 'HEALTHY',
-  DEGRADED = 'DEGRADED',
-  UNHEALTHY = 'UNHEALTHY',
-  UNKNOWN = 'UNKNOWN',
+  HEALTHY = "HEALTHY",
+  DEGRADED = "DEGRADED",
+  UNHEALTHY = "UNHEALTHY",
+  UNKNOWN = "UNKNOWN",
 }
 
 /**
  * Fallback Strategy
  */
 export enum FallbackStrategy {
-  CACHED_RESPONSE = 'CACHED_RESPONSE',
-  DEFAULT_RESPONSE = 'DEFAULT_RESPONSE',
-  PARTIAL_RESPONSE = 'PARTIAL_RESPONSE',
-  EMPTY_RESPONSE = 'EMPTY_RESPONSE',
-  THROW_ERROR = 'THROW_ERROR',
+  CACHED_RESPONSE = "CACHED_RESPONSE",
+  DEFAULT_RESPONSE = "DEFAULT_RESPONSE",
+  PARTIAL_RESPONSE = "PARTIAL_RESPONSE",
+  EMPTY_RESPONSE = "EMPTY_RESPONSE",
+  THROW_ERROR = "THROW_ERROR",
 }
 
 /**
@@ -96,7 +99,8 @@ export interface DegradationConfig {
 export class GracefulDegradationService {
   private readonly logger = new Logger(GracefulDegradationService.name);
   private serviceHealth: Map<string, ServiceHealthMetrics> = new Map();
-  private responseCache: Map<string, { data: unknown; timestamp: number }> = new Map();
+  private responseCache: Map<string, { data: unknown; timestamp: number }> =
+    new Map();
   private readonly cacheTTL = 300000; // 5 minutes
 
   constructor(private readonly circuitBreaker: CircuitBreakerService) {
@@ -109,7 +113,7 @@ export class GracefulDegradationService {
   async executeWithDegradation<T>(
     serviceName: string,
     fn: () => Promise<T>,
-    config: DegradationConfig,
+    config: DegradationConfig
   ): Promise<FallbackResponse<T>> {
     const startTime = Date.now();
 
@@ -128,7 +132,7 @@ export class GracefulDegradationService {
           data: result,
           isFallback: false,
           strategy: FallbackStrategy.THROW_ERROR,
-          reason: 'Success',
+          reason: "Success",
           timestamp: new Date().toISOString(),
         };
       } else {
@@ -143,7 +147,7 @@ export class GracefulDegradationService {
           data: result,
           isFallback: false,
           strategy: FallbackStrategy.THROW_ERROR,
-          reason: 'Success',
+          reason: "Success",
           timestamp: new Date().toISOString(),
         };
       }
@@ -155,12 +159,12 @@ export class GracefulDegradationService {
         const fallbackResponse = await this.applyFallback<T>(
           serviceName,
           config,
-          error as Error,
+          error as Error
         );
 
         this.logger.warn(
           `Service ${serviceName} failed, using fallback: ${config.fallbackStrategy}`,
-          { error: error instanceof Error ? error.message : String(error) },
+          { error: error instanceof Error ? error.message : String(error) }
         );
 
         return fallbackResponse;
@@ -265,14 +269,14 @@ export class GracefulDegradationService {
       this.logger.debug(`Cache cleared for key: ${cacheKey}`);
     } else {
       this.responseCache.clear();
-      this.logger.debug('All cache cleared');
+      this.logger.debug("All cache cleared");
     }
   }
 
   private async applyFallback<T>(
     serviceName: string,
     config: DegradationConfig,
-    error: Error,
+    error: Error
   ): Promise<FallbackResponse<T>> {
     const timestamp = new Date().toISOString();
 
@@ -282,7 +286,7 @@ export class GracefulDegradationService {
           config.cacheKey!,
           serviceName,
           error,
-          timestamp,
+          timestamp
         );
 
       case FallbackStrategy.DEFAULT_RESPONSE:
@@ -322,13 +326,13 @@ export class GracefulDegradationService {
     cacheKey: string,
     serviceName: string,
     error: Error,
-    timestamp: string,
+    timestamp: string
   ): FallbackResponse<T> {
     const cached = this.responseCache.get(cacheKey);
 
     if (cached && Date.now() - cached.timestamp < this.cacheTTL) {
       this.logger.log(
-        `Returning cached response for ${serviceName} (age: ${Date.now() - cached.timestamp}ms)`,
+        `Returning cached response for ${serviceName} (age: ${Date.now() - cached.timestamp}ms)`
       );
 
       return {
@@ -365,8 +369,10 @@ export class GracefulDegradationService {
 
     // Limit cache size
     if (this.responseCache.size > 1000) {
-      const firstKey = this.responseCache.keys().next().value;
-      if (firstKey) this.responseCache.delete(firstKey);
+      const firstKey = this.responseCache.keys().next().value as
+        | string
+        | undefined;
+      if (firstKey !== undefined) this.responseCache.delete(firstKey);
     }
   }
 
@@ -408,7 +414,8 @@ export class GracefulDegradationService {
 
     // Calculate success rate
     const totalRequests = metrics.uptime + metrics.errorCount;
-    metrics.successRate = totalRequests > 0 ? (metrics.uptime / totalRequests) * 100 : 0;
+    metrics.successRate =
+      totalRequests > 0 ? (metrics.uptime / totalRequests) * 100 : 0;
 
     // Update health status
     if (metrics.successRate >= 95) {
@@ -426,7 +433,7 @@ export class GracefulDegradationService {
     this.serviceHealth.set(serviceName, metrics);
 
     this.logger.warn(
-      `Service ${serviceName} failure recorded. Success rate: ${metrics.successRate.toFixed(2)}%`,
+      `Service ${serviceName} failure recorded. Success rate: ${metrics.successRate.toFixed(2)}%`
     );
   }
 
@@ -460,15 +467,15 @@ export class GracefulDegradationService {
     if (systemHealth.overallStatus === ServiceHealth.UNHEALTHY) {
       this.logger.error(
         `System health check: UNHEALTHY - ${systemHealth.unhealthyServices.length} unhealthy services`,
-        { unhealthyServices: systemHealth.unhealthyServices },
+        { unhealthyServices: systemHealth.unhealthyServices }
       );
     } else if (systemHealth.overallStatus === ServiceHealth.DEGRADED) {
       this.logger.warn(
         `System health check: DEGRADED - ${systemHealth.degradedServices.length} degraded services`,
-        { degradedServices: systemHealth.degradedServices },
+        { degradedServices: systemHealth.degradedServices }
       );
     } else {
-      this.logger.debug('System health check: HEALTHY');
+      this.logger.debug("System health check: HEALTHY");
     }
 
     // Auto-recovery: Reset error counts for services that haven't failed recently
@@ -480,7 +487,7 @@ export class GracefulDegradationService {
       // If no activity for 5 minutes, reset metrics
       if (timeSinceLastCheck > 300000) {
         this.logger.debug(
-          `Auto-resetting metrics for inactive service: ${serviceName}`,
+          `Auto-resetting metrics for inactive service: ${serviceName}`
         );
         this.serviceHealth.delete(serviceName);
       }

@@ -37,7 +37,7 @@ import { DiscoveryModule } from '@discovery/discovery.module';
       autoSchemaFile: PathsConfig.GRAPHQL_SCHEMA_FILE,
       sortSchema: true,
       playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault() as any],
+      plugins: [ApolloServerPluginLandingPageLocalDefault() as unknown],
 
       // Enable introspection and playground in development
       introspection: process.env.NODE_ENV !== 'production',

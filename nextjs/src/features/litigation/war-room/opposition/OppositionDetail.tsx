@@ -228,7 +228,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
                     </div>
                     {entity.notes && (
                         <p className={cn("text-sm leading-relaxed italic px-1", theme.text.secondary)}>
-                            "{entity.notes}"
+                            &quot;{entity.notes}&quot;
                         </p>
                     )}
                 </section>
@@ -284,6 +284,6 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
                     View Full Profile
                 </Button>
             </div>
-        </div>
+        </div >
     );
 };

@@ -114,11 +114,11 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
       pageActions={
         <div className="flex gap-3 items-center">
           <PeriodSelector selected={period} onChange={setPeriod} />
-          <ExportMenu onExport={exportReport as any} />
+          <ExportMenu onExport={exportReport} />
           <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={BILLING_TAB_CONFIG as any}
+      tabConfig={BILLING_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

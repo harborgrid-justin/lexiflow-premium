@@ -112,7 +112,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
     }
 
     // Remove form-only fields before submission
-    const { hasAttorney: _hasAttorney, ...submitData } = formData;
+    const { hasAttorney, ...submitData } = formData;
 
     try {
       onCreated(submitData);
@@ -172,8 +172,8 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   type="button"
                   onClick={() => updateField('type', value)}
                   className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${formData.type === value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                    : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                 >
                   <Icon className="w-4 h-4 mr-2" />
@@ -195,8 +195,8 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   type="button"
                   onClick={() => updateField('role', value)}
                   className={`px-4 py-2 border rounded-lg transition-colors ${formData.role === value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                    : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                 >
                   {label}

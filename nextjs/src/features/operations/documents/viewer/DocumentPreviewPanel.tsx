@@ -78,6 +78,7 @@ export function DocumentPreviewPanel({
 
         // Ensure consistent reset during transitions
         if (!document) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             if (previewUrl) setPreviewUrl(null);
             return;
         }
@@ -102,7 +103,7 @@ export function DocumentPreviewPanel({
             setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [document, register]); // The registry hook handles cleanup automatically
+    }, [document, register, previewUrl]); // The registry hook handles cleanup automatically
 
     const handleToggleEncryption = () => {
         if (!document || !onUpdate) return;

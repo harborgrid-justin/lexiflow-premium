@@ -14,20 +14,23 @@ interface ResearchResultsProps {
 // Simple Typewriter Effect Component
 const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
     const [displayedText, setDisplayedText] = useState('');
+    const [isComplete, setIsComplete] = useState(false);
     const { theme } = useTheme();
     const index = useRef(0);
 
     useEffect(() => {
         setDisplayedText('');
         index.current = 0;
+        setIsComplete(false);
 
         const intervalId = setInterval(() => {
             if (index.current < text.length) {
                 // Add chunks for faster "streaming" feel
                 const chunk = text.slice(index.current, index.current + 3);
-                setDisplayedText((prev: unknown) => prev + chunk);
+                setDisplayedText((prev: string) => prev + chunk);
                 index.current += 3;
             } else {
+                setIsComplete(true);
                 clearInterval(intervalId);
             }
         }, 15); // Speed of typing
@@ -38,7 +41,7 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
     return (
         <div className={cn("prose prose-sm max-w-none leading-relaxed whitespace-pre-line font-serif", theme.text.primary)}>
             {displayedText}
-            {index.current < text.length && <span className="inline-block w-2 h-4 ml-1 bg-blue-500 animate-pulse align-middle"></span>}
+            {!isComplete && <span className="inline-block w-2 h-4 ml-1 bg-blue-500 animate-pulse align-middle"></span>}
         </div>
     );
 };

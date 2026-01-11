@@ -73,12 +73,15 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
     if (draft) {
       try {
         const parsed = JSON.parse(draft);
-        setTitle(parsed.title || '');
-        setCustodian(parsed.custodian || '');
-        setDescription(parsed.description || '');
-        setType(parsed.type || 'Document');
-        setGeneratedData(parsed.generatedData || {});
-        notify.info('Draft restored from previous session');
+        // Defer state updates to avoid synchronous setState warning
+        setTimeout(() => {
+          setTitle(parsed.title || '');
+          setCustodian(parsed.custodian || '');
+          setDescription(parsed.description || '');
+          setType(parsed.type || 'Document');
+          setGeneratedData(parsed.generatedData || {});
+          notify.info('Draft restored from previous session');
+        }, 0);
       } catch {
         console.error('Failed to restore draft');
       }

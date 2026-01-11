@@ -51,11 +51,11 @@ export class CaseResolverOptimized {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as any);
+    } as unknown);
 
     return {
       edges: result.data.map((caseItem) => ({
-        node: caseItem as any,
+        node: caseItem as unknown,
         cursor: caseItem.id,
       })),
       pageInfo: {
@@ -74,7 +74,7 @@ export class CaseResolverOptimized {
   async getCase(@Args('id', { type: () => ID }) id: string): Promise<CaseType | null> {
     try {
       const caseItem = await this.caseService.findOne(id);
-      return caseItem as any;
+      return caseItem as unknown;
     } catch (error) {
       return null;
     }
@@ -86,9 +86,9 @@ export class CaseResolverOptimized {
     @Args('input') input: CreateCaseInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.create(input as any);
+    const caseEntity = await this.caseService.create(input as unknown);
     pubSub.publish('caseCreated', { caseCreated: caseEntity });
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
@@ -98,9 +98,9 @@ export class CaseResolverOptimized {
     @Args('input') input: UpdateCaseInput,
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
-    const caseEntity = await this.caseService.update(id, input as any);
+    const caseEntity = await this.caseService.update(id, input as unknown);
     pubSub.publish('caseUpdated', { caseUpdated: caseEntity, id });
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   @Mutation(() => Boolean)
@@ -120,7 +120,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
@@ -130,7 +130,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
@@ -140,7 +140,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   @Mutation(() => CaseType)
@@ -150,7 +150,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
-    return caseEntity as any;
+    return caseEntity as unknown;
   }
 
   /**
@@ -203,12 +203,12 @@ export class CaseResolverOptimized {
       closedCases: parseInt(metrics.closed_cases) || 0,
       pendingCases: parseInt(metrics.pending_cases) || 0,
       byType: typeDistribution.map((row: unknown) => ({
-        type: (row as any).type,
-        count: parseInt((row as any).count),
+        type: (row as unknown).type,
+        count: parseInt((row as unknown).count),
       })),
       byStatus: statusDistribution.map((row: unknown) => ({
-        status: (row as any).status,
-        count: parseInt((row as any).count),
+        status: (row as unknown).status,
+        count: parseInt((row as unknown).count),
       })),
     };
   }
@@ -220,7 +220,7 @@ export class CaseResolverOptimized {
     },
   })
   caseUpdated(@Args('_id', { type: () => ID }) _id: string) {
-    // @ts-ignore - PubSub asyncIterator exists at runtime
+    // @ts-expect-error - PubSub asyncIterator exists at runtime
     return pubSub.asyncIterator('caseUpdated');
   }
 }

@@ -4,13 +4,13 @@ import {
   NotFoundException,
   BadRequestException,
   OnModuleDestroy,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as path from 'path';
-import * as PathsConfig from '@config/paths.config';
-import * as MasterConfig from '@config/master.config';
-import { mkdir, writeFile, readFile, unlink, readdir } from 'fs/promises';
-import { FileUploadResult } from './interfaces/storage-file.interface';
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import * as path from "path";
+import * as PathsConfig from "@config/paths.config";
+import * as MasterConfig from "@config/master.config";
+import { mkdir, writeFile, readFile, unlink, readdir } from "fs/promises";
+import { FileUploadResult } from "./interfaces/storage-file.interface";
 import {
   calculateChecksum,
   verifyChecksum,
@@ -19,9 +19,9 @@ import {
   getFileMetadata,
   sanitizeFilename,
   isAllowedMimeType,
-} from '@common/utils/file.utils';
-import { formatBytes } from '@common/utils/format.utils';
-import { validateDiskSpace } from '@common/utils/disk.utils';
+} from "@common/utils/file.utils";
+import { formatBytes } from "@common/utils/format.utils";
+import { validateDiskSpace } from "@common/utils/disk.utils";
 
 /**
  * ╔=================================================================================================================╗
@@ -68,16 +68,22 @@ export class FileStorageService implements OnModuleDestroy {
   constructor(private configService: ConfigService) {
     this.uploadDir = PathsConfig.UPLOAD_DIR;
     this.maxFileSize =
-      this.configService.get<number>('resourceLimits.fileStorage.maxFileSize') || MasterConfig.FILE_MAX_SIZE;
+      this.configService.get<number>(
+        "resourceLimits.fileStorage.maxFileSize"
+      ) || MasterConfig.FILE_MAX_SIZE;
     this.minDiskSpace =
-      this.configService.get<number>('resourceLimits.fileStorage.minDiskSpace') || MasterConfig.FILE_MIN_DISK_SPACE;
+      this.configService.get<number>(
+        "resourceLimits.fileStorage.minDiskSpace"
+      ) || MasterConfig.FILE_MIN_DISK_SPACE;
     this.allowedMimeTypes =
-      this.configService.get<string[]>('resourceLimits.fileStorage.allowedMimeTypes') || [];
+      this.configService.get<string[]>(
+        "resourceLimits.fileStorage.allowedMimeTypes"
+      ) || [];
 
     this.ensureUploadDirectory();
 
     this.logger.log(
-      `File storage limits: maxFileSize=${formatBytes(this.maxFileSize)}, minDiskSpace=${formatBytes(this.minDiskSpace)}`,
+      `File storage limits: maxFileSize=${formatBytes(this.maxFileSize)}, minDiskSpace=${formatBytes(this.minDiskSpace)}`
     );
   }
 
@@ -86,7 +92,7 @@ export class FileStorageService implements OnModuleDestroy {
       await mkdir(this.uploadDir, { recursive: true });
       this.logger.log(`Upload directory ensured at: ${this.uploadDir}`);
     } catch (error) {
-      this.logger.error('Failed to create upload directory', error);
+      this.logger.error("Failed to create upload directory", error);
     }
   }
 
@@ -102,70 +108,75 @@ export class FileStorageService implements OnModuleDestroy {
     file: Express.Multer.File,
     caseId: string,
     documentId: string,
-    version: number,
+    version: number
   ): Promise<FileUploadResult> {
     const operation = (async () => {
       try {
         // Validate file size
         if (file.size > this.maxFileSize) {
           throw new BadRequestException(
-            `File size ${formatBytes(file.size)} exceeds maximum allowed size of ${formatBytes(this.maxFileSize)}`,
+            `File size ${formatBytes(file.size)} exceeds maximum allowed size of ${formatBytes(this.maxFileSize)}`
           );
         }
 
-      // Validate MIME type if allowlist is configured
-      if (!isAllowedMimeType(file.mimetype, this.allowedMimeTypes)) {
-        throw new BadRequestException(
-          `File type ${file.mimetype} is not allowed. Allowed types: ${this.allowedMimeTypes.join(', ')}`,
+        // Validate MIME type if allowlist is configured
+        if (!isAllowedMimeType(file.mimetype, this.allowedMimeTypes)) {
+          throw new BadRequestException(
+            `File type ${file.mimetype} is not allowed. Allowed types: ${this.allowedMimeTypes.join(", ")}`
+          );
+        }
+
+        // Check available disk space
+        await validateDiskSpace(this.uploadDir, file.size, this.minDiskSpace);
+
+        // Create directory structure
+        const dirPath = path.join(
+          this.uploadDir,
+          caseId,
+          documentId,
+          version.toString()
         );
+        await mkdir(dirPath, { recursive: true });
+
+        // Generate safe filename
+        const filename = sanitizeFilename(file.originalname);
+        const filePath = path.join(dirPath, filename);
+
+        // Write file
+        const writeOp = writeFile(filePath, file.buffer);
+        this.pendingOperations.add(writeOp);
+        await writeOp;
+        this.pendingOperations.delete(writeOp);
+
+        // Calculate checksum
+        const checksum = calculateChecksum(file.buffer);
+
+        // Get file stats
+        const fileSize = await getFileSize(filePath);
+
+        this.logger.log(`File stored: ${filePath} (${formatBytes(fileSize)})`);
+
+        return {
+          filename,
+          path: filePath,
+          size: fileSize,
+          mimetype: file.mimetype,
+          checksum,
+          uploadedAt: new Date(),
+        };
+      } catch (error) {
+        this.logger.error("Failed to store file", error);
+        throw error;
       }
+    })();
 
-      // Check available disk space
-      await validateDiskSpace(this.uploadDir, file.size, this.minDiskSpace);
-
-      // Create directory structure
-      const dirPath = path.join(this.uploadDir, caseId, documentId, version.toString());
-      await mkdir(dirPath, { recursive: true });
-
-      // Generate safe filename
-      const filename = sanitizeFilename(file.originalname);
-      const filePath = path.join(dirPath, filename);
-
-      // Write file
-      const writeOp = writeFile(filePath, file.buffer);
-      this.pendingOperations.add(writeOp);
-      await writeOp;
-      this.pendingOperations.delete(writeOp);
-
-      // Calculate checksum
-      const checksum = calculateChecksum(file.buffer);
-
-      // Get file stats
-      const fileSize = await getFileSize(filePath);
-
-      this.logger.log(`File stored: ${filePath} (${formatBytes(fileSize)})`);
-
-      return {
-        filename,
-        path: filePath,
-        size: fileSize,
-        mimetype: file.mimetype,
-        checksum,
-        uploadedAt: new Date(),
-      };
-    } catch (error) {
-      this.logger.error('Failed to store file', error);
-      throw error;
+    this.pendingOperations.add(operation);
+    try {
+      return await operation;
+    } finally {
+      this.pendingOperations.delete(operation);
     }
-  })();
-
-  this.pendingOperations.add(operation);
-  try {
-    return await operation;
-  } finally {
-    this.pendingOperations.delete(operation);
   }
-}
 
   /**
    * Retrieve a file as a buffer
@@ -211,7 +222,7 @@ export class FileStorageService implements OnModuleDestroy {
       }
     } catch (error: unknown) {
       // Ignore ENOENT errors (file already deleted)
-      if ((error as any).code === 'ENOENT') {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
         return;
       }
       this.logger.error(`Failed to delete file: ${filePath}`, error);
@@ -222,14 +233,17 @@ export class FileStorageService implements OnModuleDestroy {
   /**
    * Verify file checksum
    */
-  async verifyChecksum(filePath: string, expectedChecksum: string): Promise<boolean> {
+  async verifyChecksum(
+    filePath: string,
+    expectedChecksum: string
+  ): Promise<boolean> {
     try {
       const absolutePath = path.isAbsolute(filePath)
         ? filePath
         : path.join(this.uploadDir, filePath);
       return await verifyChecksum(absolutePath, expectedChecksum);
     } catch (error) {
-      this.logger.error('Failed to verify checksum', error);
+      this.logger.error("Failed to verify checksum", error);
       return false;
     }
   }
@@ -311,18 +325,21 @@ export class FileStorageService implements OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
-    this.logger.log('FileStorageService cleanup - waiting for pending operations');
+    this.logger.log(
+      "FileStorageService cleanup - waiting for pending operations"
+    );
     if (this.pendingOperations.size > 0) {
-      this.logger.log(`Waiting for ${this.pendingOperations.size} pending file operations...`);
+      this.logger.log(
+        `Waiting for ${this.pendingOperations.size} pending file operations...`
+      );
       await Promise.allSettled(Array.from(this.pendingOperations));
       this.pendingOperations.clear();
     }
-    this.logger.log('FileStorageService cleanup complete');
+    this.logger.log("FileStorageService cleanup complete");
   }
 
   async cleanupOrphans(_validDocIds: string[]): Promise<{ removed: number }> {
     // Stub implementation
     return { removed: 0 };
   }
-
 }

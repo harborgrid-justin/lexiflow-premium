@@ -205,7 +205,7 @@ export class SecurityHeadersService {
     let sanitized = filename.replace(/[/\\]/g, '_').replace(/\0/g, '');
 
     // Remove leading dots
-    sanitized = sanitized.replace(/^\.+/, '');
+    sanitized = sanitized.replace(/^\\.+/, '');
 
     // Limit length
     if (sanitized.length > 255) {

@@ -68,10 +68,11 @@ export function PDFEditorView() {
             };
             loadUrl();
         } else if (previewUrl) {
-            setPreviewUrl(null);
+            if (isMounted) setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [documentSelection.selected, register, previewUrl]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [documentSelection.selected, register]); // Removed previewUrl to avoid loop check
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {

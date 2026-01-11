@@ -6,19 +6,19 @@ import {
   Logger,
   RequestTimeoutException,
   Inject,
-} from '@nestjs/common';
-import { Observable, throwError, TimeoutError, of } from 'rxjs';
-import { catchError, timeout, map } from 'rxjs/operators';
-import { Request } from 'express';
+} from "@nestjs/common";
+import { Observable, throwError, TimeoutError, of } from "rxjs";
+import { catchError, timeout, map } from "rxjs/operators";
+import { Request } from "express";
 
 /**
  * Timeout Recovery Strategy
  */
 export enum TimeoutRecoveryStrategy {
-  THROW_ERROR = 'THROW_ERROR',
-  PARTIAL_RESPONSE = 'PARTIAL_RESPONSE',
-  CACHED_RESPONSE = 'CACHED_RESPONSE',
-  EMPTY_RESPONSE = 'EMPTY_RESPONSE',
+  THROW_ERROR = "THROW_ERROR",
+  PARTIAL_RESPONSE = "PARTIAL_RESPONSE",
+  CACHED_RESPONSE = "CACHED_RESPONSE",
+  EMPTY_RESPONSE = "EMPTY_RESPONSE",
 }
 
 /**
@@ -35,7 +35,7 @@ export interface TimeoutMetadata {
 /**
  * Partial Response
  */
-export interface PartialResponse<T = any> {
+export interface PartialResponse<T = unknown> {
   success: boolean;
   data: T | null;
   isPartial: boolean;
@@ -52,8 +52,8 @@ export interface PartialResponse<T = any> {
 /**
  * Injection tokens for TimeoutRecoveryInterceptor
  */
-export const TIMEOUT_MS_TOKEN = 'TIMEOUT_MS_TOKEN';
-export const RECOVERY_STRATEGY_TOKEN = 'RECOVERY_STRATEGY_TOKEN';
+export const TIMEOUT_MS_TOKEN = "TIMEOUT_MS_TOKEN";
+export const RECOVERY_STRATEGY_TOKEN = "RECOVERY_STRATEGY_TOKEN";
 
 /**
  * Timeout Recovery Interceptor
@@ -63,15 +63,19 @@ export const RECOVERY_STRATEGY_TOKEN = 'RECOVERY_STRATEGY_TOKEN';
 @Injectable()
 export class TimeoutRecoveryInterceptor implements NestInterceptor {
   private readonly logger = new Logger(TimeoutRecoveryInterceptor.name);
-  private readonly responseCache: Map<string, { data: unknown; timestamp: number }> = new Map();
+  private readonly responseCache: Map<
+    string,
+    { data: unknown; timestamp: number }
+  > = new Map();
   private readonly cacheTTL = 300000; // 5 minutes
 
   constructor(
     @Inject(TIMEOUT_MS_TOKEN) private readonly timeoutMs: number = 30000,
-    @Inject(RECOVERY_STRATEGY_TOKEN) private readonly recoveryStrategy: TimeoutRecoveryStrategy = TimeoutRecoveryStrategy.THROW_ERROR,
+    @Inject(RECOVERY_STRATEGY_TOKEN)
+    private readonly recoveryStrategy: TimeoutRecoveryStrategy = TimeoutRecoveryStrategy.THROW_ERROR
   ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest<Request>();
     const metadata = this.buildTimeoutMetadata(request);
 
@@ -90,7 +94,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
         if (err instanceof TimeoutError) {
           this.logger.warn(
             `Request timeout after ${this.timeoutMs}ms: ${metadata.method} ${metadata.url}`,
-            { correlationId: metadata.correlationId },
+            { correlationId: metadata.correlationId }
           );
 
           return this.handleTimeout(metadata, request);
@@ -98,7 +102,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
 
         // Re-throw non-timeout errors
         return throwError(() => err);
-      }),
+      })
     );
   }
 
@@ -107,8 +111,8 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
    */
   private handleTimeout(
     metadata: TimeoutMetadata,
-    request: Request,
-  ): Observable<any> {
+    request: Request
+  ): Observable<unknown> {
     switch (this.recoveryStrategy) {
       case TimeoutRecoveryStrategy.PARTIAL_RESPONSE:
         return this.createPartialResponse(metadata, request);
@@ -130,8 +134,8 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
    */
   private createPartialResponse(
     metadata: TimeoutMetadata,
-    request: Request,
-  ): Observable<PartialResponse> {
+    request: Request
+  ): Observable<PartialResponse<unknown>> {
     const partialData = this.extractPartialData(request);
 
     const response: PartialResponse = {
@@ -150,7 +154,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
 
     this.logger.log(
       `Returning partial response for timed out request: ${metadata.url}`,
-      { correlationId: metadata.correlationId },
+      { correlationId: metadata.correlationId }
     );
 
     return of(response);
@@ -159,7 +163,9 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
   /**
    * Try to get cached response
    */
-  private getCachedResponse(metadata: TimeoutMetadata): Observable<PartialResponse> {
+  private getCachedResponse(
+    metadata: TimeoutMetadata
+  ): Observable<PartialResponse> {
     const cached = this.responseCache.get(metadata.url);
 
     if (cached && Date.now() - cached.timestamp < this.cacheTTL) {
@@ -168,7 +174,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
         {
           cacheAge: Date.now() - cached.timestamp,
           correlationId: metadata.correlationId,
-        },
+        }
       );
 
       const response: PartialResponse = {
@@ -191,7 +197,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
     // No cache available, return empty response
     this.logger.warn(
       `No cache available for timed out request: ${metadata.url}`,
-      { correlationId: metadata.correlationId },
+      { correlationId: metadata.correlationId }
     );
 
     return this.createEmptyResponse(metadata);
@@ -200,7 +206,9 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
   /**
    * Create an empty response
    */
-  private createEmptyResponse(metadata: TimeoutMetadata): Observable<PartialResponse> {
+  private createEmptyResponse(
+    metadata: TimeoutMetadata
+  ): Observable<PartialResponse> {
     const response: PartialResponse = {
       success: false,
       data: null,
@@ -217,7 +225,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
 
     this.logger.warn(
       `Returning empty response for timed out request: ${metadata.url}`,
-      { correlationId: metadata.correlationId },
+      { correlationId: metadata.correlationId }
     );
 
     return of(response);
@@ -248,10 +256,12 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
    * Build timeout metadata from request
    */
   private buildTimeoutMetadata(request: Request): TimeoutMetadata {
+    const correlationId = (request as Request & { correlationId?: string })
+      .correlationId;
     return {
       url: request.url,
       method: request.method,
-      correlationId: (request as any).correlationId,
+      correlationId,
       timeoutMs: this.timeoutMs,
       timestamp: new Date().toISOString(),
     };
@@ -262,9 +272,10 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
    * In a real implementation, this would check for any partial data
    * that might have been accumulated during processing
    */
-  private extractPartialData(request: Request): any {
+  private extractPartialData(request: Request): unknown {
     // Check if there's any partial data attached to the request context
-    const partialData = (request as any).partialData;
+    const partialData = (request as Request & { partialData?: unknown })
+      .partialData;
 
     if (partialData) {
       return partialData;
@@ -279,7 +290,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
    */
   private cacheResponse(url: string, data: unknown): void {
     // Only cache GET requests
-    if (!url.toLowerCase().includes('get')) {
+    if (!url.toLowerCase().includes("get")) {
       return;
     }
 
@@ -335,7 +346,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
  */
 export function createTimeoutRecoveryInterceptor(
   timeoutMs: number,
-  strategy?: TimeoutRecoveryStrategy,
+  strategy?: TimeoutRecoveryStrategy
 ): TimeoutRecoveryInterceptor {
   return new TimeoutRecoveryInterceptor(timeoutMs, strategy);
 }

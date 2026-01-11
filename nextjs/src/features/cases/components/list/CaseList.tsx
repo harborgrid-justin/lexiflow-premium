@@ -29,6 +29,9 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
 import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
+
+// Sub-components
+import { CaseListContent } from './CaseListContent';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

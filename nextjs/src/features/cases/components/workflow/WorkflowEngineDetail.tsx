@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2} from 'lucide-react';
+import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Badge } from '@/components/ui/atoms/Badge';
@@ -47,11 +47,11 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   const [status, setStatus] = useState('Active');
 
   const handleRebalance = () => {
-      // Simulation
-      notify.info("Running resource optimization algorithm...");
-      setTimeout(() => {
-          notify.success("Resources rebalanced. Bottleneck resolved.");
-      }, 1500);
+    // Simulation
+    notify.info("Running resource optimization algorithm...");
+    setTimeout(() => {
+      notify.success("Resources rebalanced. Bottleneck resolved.");
+    }, 1500);
   };
 
   if (isLoading) {
@@ -89,9 +89,9 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
               <Badge variant={status === 'Active' ? 'success' : 'warning'}>{status}</Badge>
             </div>
             <div className={cn("flex items-center gap-3 mt-1 text-xs", theme.text.secondary)}>
-                <span className={cn("font-mono px-1.5 py-0.5 rounded", theme.surface.highlight)}>ID: {id}</span>
-                <span>•</span>
-                <span>Engine v2.5</span>
+              <span className={cn("font-mono px-1.5 py-0.5 rounded", theme.surface.highlight)}>ID: {id}</span>
+              <span>•</span>
+              <span>Engine v2.5</span>
             </div>
           </div>
         </div>
@@ -107,10 +107,10 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 shrink-0">
-        <MetricCard label="Current Stage" value="In Progress" icon={GitBranch} className="border-l-4 border-l-blue-500"/>
-        <MetricCard label="Next Deadline" value={engineData.nextDeadline} icon={Clock} className="border-l-4 border-l-amber-500" trend="Critical Path"/>
-        <MetricCard label="Tasks Complete" value={`${engineData.tasksCompleted} / ${engineData.tasksTotal}`} icon={CheckCircle} className="border-l-4 border-l-green-500" trend={`${engineData.progress}%`}/>
-        <MetricCard label="Automation Rate" value={engineData.automationRate} icon={Settings} className="border-l-4 border-l-purple-500" trendUp={true} trend="+5%"/>
+        <MetricCard label="Current Stage" value="In Progress" icon={GitBranch} className="border-l-4 border-l-blue-500" />
+        <MetricCard label="Next Deadline" value={engineData.nextDeadline} icon={Clock} className="border-l-4 border-l-amber-500" trend="Critical Path" />
+        <MetricCard label="Tasks Complete" value={`${engineData.tasksCompleted} / ${engineData.tasksTotal}`} icon={CheckCircle} className="border-l-4 border-l-green-500" trend={`${engineData.progress}%`} />
+        <MetricCard label="Automation Rate" value={engineData.automationRate} icon={Settings} className="border-l-4 border-l-purple-500" trendUp={true} trend="+5%" />
       </div>
 
       {/* Main Content Area */}
@@ -129,17 +129,17 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           {activeTab === 'visualizer' && (
             <div className="space-y-6">
               <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
-                 <h3 className={cn("font-bold mb-4", theme.text.primary)}>Dependency Graph</h3>
-                 <TaskDependencyManager />
+                <h3 className={cn("font-bold mb-4", theme.text.primary)}>Dependency Graph</h3>
+                <TaskDependencyManager />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <SLAMonitor />
                 <Card title="Bottleneck Analysis">
                   <div className={cn("p-4 text-sm", theme.text.secondary)}>
                     <div className={cn("flex items-center gap-2 mb-2 font-bold p-2 rounded border", theme.status.warning.text, theme.status.warning.bg, theme.status.warning.border)}>
-                      <AlertTriangle className="h-4 w-4"/> Potential Bottleneck Detected
+                      <AlertTriangle className="h-4 w-4" /> Potential Bottleneck Detected
                     </div>
-                    <p className="leading-relaxed">Stage <strong>"Document Review"</strong> is taking <span className="text-red-600 font-bold">40% longer</span> than average. Consider reallocating resources from "Intake Team".</p>
+                    <p className="leading-relaxed">Stage <strong>&ldquo;Document Review&rdquo;</strong> is taking <span className="text-red-600 font-bold">40% longer</span> than average. Consider reallocating resources from &ldquo;Intake Team&rdquo;.</p>
                     <Button size="sm" variant="outline" className="mt-4 w-full" onClick={handleRebalance}>Auto-Rebalance Resources</Button>
                   </div>
                 </Card>

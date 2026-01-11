@@ -21,9 +21,11 @@ export function LineageGraph({ initialTab = 'graph' }: LineageGraphProps): JSX.E
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState(initialTab);
 
-    useEffect(() => {
-        if (initialTab !== '') { setActiveTab(initialTab); }
-    }, [initialTab]);
+    const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+    if (initialTab !== '' && initialTab !== prevInitialTab) {
+        setPrevInitialTab(initialTab);
+        setActiveTab(initialTab);
+    }
 
     const { data: graphData, isLoading } = useQuery<{ nodes: LineageNode[], links: LineageLink[] }>(
         ['lineage', 'graph'],

@@ -27,12 +27,11 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
     const [activeTab, setActiveTab] = useState(initialTab);
     const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
 
-    // Sync initialTab prop to state
-    useEffect(() => {
-        if (initialTab) {
-            setActiveTab(initialTab);
-        }
-    }, [initialTab]);
+    const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+    if (initialTab && initialTab !== prevInitialTab) {
+        setPrevInitialTab(initialTab);
+        setActiveTab(initialTab);
+    }
 
     // Integrated Data Query
     const { data: domains = [], isLoading } = useQuery<DataDomain[]>(

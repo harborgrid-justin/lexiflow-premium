@@ -78,7 +78,7 @@ jest.mock('@/components/layouts', () => ({
   }: {
     pageTitle: string;
     pageSubtitle: string;
-    tabConfig: any[];
+    tabConfig: { id: string; label: string }[];
     activeTabId: string;
     onTabChange: (id: string) => void;
     children: React.ReactNode;
@@ -89,7 +89,7 @@ jest.mock('@/components/layouts', () => ({
         <p data-testid="page-subtitle">{pageSubtitle}</p>
       </header>
       <nav data-testid="tab-navigation" role="tablist">
-        {tabConfig.map((tab: any) => (
+        {tabConfig.map((tab: { id: string; label: string }) => (
           <button
             key={tab.id}
             role="tab"
@@ -294,7 +294,6 @@ describe('AdminPanel Component', () => {
 
   describe('Transition Handling', () => {
     it('should apply pending opacity during transition', async () => {
-      const user = userEvent.setup();
       render(<AdminPanel />);
 
       // Note: In actual component, isPending would be true during transition

@@ -23,7 +23,9 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
     const [activeTab, setActiveTab] = useState<'monitor' | 'visual' | 'connectors'>('monitor');
     const [selectedJob, setSelectedJob] = useState<Pipeline | null>(null);
 
-    useEffect(() => {
+    const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+    if (initialTab !== prevInitialTab) {
+        setPrevInitialTab(initialTab);
         if (initialTab === 'connectors') {
             setActiveTab('connectors');
         } else if (initialTab === 'visual') {
@@ -31,7 +33,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
         } else {
             setActiveTab('monitor');
         }
-    }, [initialTab]);
+    }
 
     // Real Backend Integration - Fetch pipelines from backend API
     const { data: pipelinesResponse, isLoading: isLoadingPipelines, refetch } = useQuery(

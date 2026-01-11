@@ -238,7 +238,7 @@ export class GdprComplianceService {
       user.phone = "";
       user.avatarUrl = "";
       user.preferences = {};
-      user.status = "inactive" as "active" | "inactive";
+      user.status = UserStatus.INACTIVE;
       await this.userRepository.save(user);
       recordsAnonymized = 1;
       deletedCategories.push("personal_info");
@@ -424,10 +424,7 @@ export class GdprComplianceService {
     const consent = await this.consentRepository.findOne({
       where: {
         userId,
-        consentType: consentType as
-          | "data_processing"
-          | "marketing"
-          | "analytics",
+        consentType: this.mapConsentTypeString(consentType),
         status: ConsentStatus.GRANTED,
       },
       order: { grantedAt: "DESC" },

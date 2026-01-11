@@ -1,5 +1,5 @@
 {
-  "name": "Node.js & TypeScript Power User",
+  "name": "React & TypeScript Power User",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
@@ -23,7 +23,7 @@
       "username": "node"
     },
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "none",
+      "version": "lts",
       "pnpm": "latest",
       "yarn": "latest"
     }
@@ -31,6 +31,7 @@
   "customizations": {
     "vscode": {
       "settings": {
+        // Editor UX & Formatting
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -38,32 +39,38 @@
         "editor.insertSpaces": true,
         "editor.bracketPairColorization.enabled": true,
         "editor.guides.bracketPairs": "active",
-        "editor.linkedEditing": true,
         "editor.stickyScroll.enabled": true,
         "editor.inlineSuggest.enabled": true,
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit",
-          "source.organizeImports": "explicit"
-        },
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
-        "files.trimFinalNewlines": true,
-        "terminal.integrated.defaultProfile.linux": "zsh",
-        "terminal.integrated.fontFamily": "MesloLGS NF",
+
+        // TypeScript & JavaScript
         "typescript.updateImportsOnFileMove.enabled": "always",
         "typescript.suggest.autoImports": true,
         "typescript.preferences.importModuleSpecifier": "relative",
         "javascript.updateImportsOnFileMove.enabled": "always",
-        "npm.enableRunFromFolder": true,
+
+        // ESLint & Organizing Imports
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "always",
+          "source.organizeImports": "always"
+        },
         "eslint.validate": [
           "javascript",
           "javascriptreact",
           "typescript",
           "typescriptreact"
         ],
+
+        // Files & Git
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
         "git.autofetch": true,
         "git.enableSmartCommit": true,
-        "git.confirmSync": false
+        "git.confirmSync": false,
+
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.fontFamily": "MesloLGS NF"
       },
       "extensions": [
         "dbaeumer.vscode-eslint",
@@ -86,35 +93,29 @@
       ]
     }
   },
-  "postCreateCommand": "npm install && npm install -g typescript tsx ts-node @types/node npm-check-updates",
+  "postCreateCommand": "pnpm install && pnpm dlx typesync && pnpm global add typescript tsx ts-node npm-check-updates",
   "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+
   "remoteUser": "node",
   "containerUser": "node",
   "updateRemoteUserUID": true,
-  "forwardPorts": [3000, 4200, 5173, 8080],
+
+  // Expose common frontend and backend ports
+  "forwardPorts": [3000, 5173, 6006, 8080],
   "portsAttributes": {
-    "3000": {
-      "label": "Application",
-      "onAutoForward": "notify"
-    },
-    "4200": {
-      "label": "Angular",
-      "onAutoForward": "silent"
-    },
-    "5173": {
-      "label": "Vite",
-      "onAutoForward": "silent"
-    },
-    "8080": {
-      "label": "API Server",
-      "onAutoForward": "silent"
-    }
+    "3000": { "label": "React / CRA", "onAutoForward": "notify" },
+    "5173": { "label": "Vite Dev Server", "onAutoForward": "silent" },
+    "6006": { "label": "Storybook", "onAutoForward": "silent" },
+    "8080": { "label": "Backend/API", "onAutoForward": "silent" }
   },
+
+  // Performance optimization: mount node_modules in named volume
   "mounts": [
     "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
   ],
-  "runArgs": [
-    "--init",
-    "--privileged"
-  ]
+
+  "runArgs": ["--init", "--privileged"],
+
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
 }

@@ -49,7 +49,7 @@ export class QuerySanitizationService {
 
   private readonly dangerousPatterns: RegExp[] = [
     /(\b(DROP|TRUNCATE|DELETE\s+FROM|ALTER|EXEC|EXECUTE|UNION|INSERT\s+INTO)\b)/gi,
-    /(--|\*/ | /\*|;)/g,
+    /(-{2}|\/\*|\*\/|;)/g,
     /(\bxp_|\bsp_)/gi,
     /(\bSCRIPT\b|\bJAVASCRIPT\b)/gi,
     /(\bEVAL\b|\bEXEC\b)/gi,

@@ -369,7 +369,6 @@ export const hasValidAriaAttributes = (element: HTMLElement): boolean => {
   const role = element.getAttribute('role');
   const ariaLabel = element.getAttribute('aria-label');
   const ariaLabelledBy = element.getAttribute('aria-labelledby');
-  const ariaDescribedBy = element.getAttribute('aria-describedby');
 
   // Interactive elements should have accessible names
   const interactiveRoles = ['button', 'link', 'textbox', 'checkbox', 'radio', 'tab'];

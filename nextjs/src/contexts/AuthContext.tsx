@@ -223,7 +223,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
         if (storedUser) {
-          const parsedUser = JSON.parse(storedUser) as AuthUser;
           const parsedOrg = storedOrg ? JSON.parse(storedOrg) as Organization : null;
 
           // Validate session with backend
@@ -270,7 +269,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const response = await authApi.login(email, password);
 
         // Check if MFA is required
-        if ((response.user as any).mfaRequired && !mfaCode) {
+        if ((response.user as { mfaRequired?: boolean }).mfaRequired && !mfaCode) {
           console.log('[AuthContext] MFA required');
           setMfaRequired(true);
           setIsLoading(false);

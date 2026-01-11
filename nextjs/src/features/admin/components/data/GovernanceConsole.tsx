@@ -58,9 +58,11 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
         DataService.admin.getGovernancePolicies
     );
 
-    useEffect(() => {
-        if (initialTab) setActiveTab(initialTab);
-    }, [initialTab]);
+    const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+    if (initialTab && initialTab !== prevInitialTab) {
+        setPrevInitialTab(initialTab);
+        setActiveTab(initialTab);
+    }
 
     useEffect(() => {
         return () => {

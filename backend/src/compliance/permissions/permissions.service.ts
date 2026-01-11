@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import {
-  PermissionDto,
-  GrantPermissionDto,
-  RevokePermissionDto,
-  QueryPermissionsDto,
-  CheckAccessDto,
   AccessCheckResult,
   AccessMatrixDto,
   AccessMatrixResult,
+  CheckAccessDto,
+  GrantPermissionDto,
   PermissionAction,
-  PermissionScope,
   PermissionCondition,
+  PermissionDto,
+  PermissionScope,
+  QueryPermissionsDto,
+  RevokePermissionDto,
 } from "./dto/permission.dto";
 
 /**
@@ -89,7 +89,9 @@ export class PermissionsService {
       perms = perms.filter((perm) => perm.resource === query.resource);
     }
     if (query.action) {
-      perms = perms.filter((perm) => perm.actions.includes(query.action ?? ""));
+      perms = perms.filter((perm) =>
+        perm.actions.includes(query.action as PermissionAction)
+      );
     }
     if (query.scope) {
       perms = perms.filter((perm) => perm.scope === query.scope);

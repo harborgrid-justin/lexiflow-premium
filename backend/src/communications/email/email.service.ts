@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 
 /**
  * Email Service
@@ -71,16 +71,21 @@ export class EmailService {
     try {
       // Memory optimization: Check attachment size before processing
       if (options.attachments && options.attachments.length > 0) {
-        const totalSize = options.attachments.reduce((acc, att) => {
-          // Handle Buffer, string, or stream
-          if (att.content) {
-            return acc + (att.content.length || 0);
-          }
-          return acc;
-        }, 0);
+        const totalSize = options.attachments.reduce(
+          (acc: number, att: { content?: Buffer | string }) => {
+            // Handle Buffer, string, or stream
+            if (att.content) {
+              return acc + (att.content.length || 0);
+            }
+            return acc;
+          },
+          0
+        );
 
         if (totalSize > this.MAX_ATTACHMENT_SIZE) {
-          throw new Error(`Total attachment size (${(totalSize / 1024 / 1024).toFixed(2)}MB) exceeds limit of 25MB`);
+          throw new Error(
+            `Total attachment size (${(totalSize / 1024 / 1024).toFixed(2)}MB) exceeds limit of 25MB`
+          );
         }
       }
 
@@ -91,10 +96,10 @@ export class EmailService {
 
       return {
         success: true,
-        messageId: 'msg-' + Date.now(),
+        messageId: "msg-" + Date.now(),
       };
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       this.logger.error(`Failed to send email: ${message}`);
       return {
         success: false,
@@ -117,7 +122,9 @@ export class EmailService {
     attachments?: unknown[];
   }): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
-      this.logger.log(`Sending template email '${options.template}' to ${options.to}`);
+      this.logger.log(
+        `Sending template email '${options.template}' to ${options.to}`
+      );
 
       // Load and render template with context
       const html = await this.renderTemplate(options.template, options.context);
@@ -127,7 +134,7 @@ export class EmailService {
         html,
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
+      const message = error instanceof Error ? error.message : "Unknown error";
       this.logger.error(`Failed to send template email: ${message}`);
       return {
         success: false,
@@ -142,11 +149,11 @@ export class EmailService {
   async sendCaseUpdateEmail(
     recipientEmail: string,
     caseNumber: string,
-    updateMessage: string,
+    updateMessage: string
   ) {
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'case-update',
+      template: "case-update",
       context: {
         caseNumber,
         updateMessage,
@@ -163,11 +170,11 @@ export class EmailService {
     recipientEmail: string,
     deadlineTitle: string,
     deadlineDate: Date,
-    caseNumber: string,
+    caseNumber: string
   ) {
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'deadline-reminder',
+      template: "deadline-reminder",
       context: {
         deadlineTitle,
         deadlineDate: deadlineDate.toISOString(),
@@ -185,21 +192,21 @@ export class EmailService {
     invoiceNumber: string,
     amount: number,
     dueDate: Date,
-    pdfAttachment?: Buffer,
+    pdfAttachment?: Buffer
   ) {
     const attachments = pdfAttachment
       ? [
           {
             filename: `invoice-${invoiceNumber}.pdf`,
             content: pdfAttachment,
-            contentType: 'application/pdf',
+            contentType: "application/pdf",
           },
         ]
       : [];
 
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'invoice',
+      template: "invoice",
       context: {
         invoiceNumber,
         amount,
@@ -216,27 +223,31 @@ export class EmailService {
   async sendWelcomeEmail(recipientEmail: string, userName: string) {
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'welcome',
+      template: "welcome",
       context: {
         userName,
       },
-      subject: 'Welcome to LexiFlow',
+      subject: "Welcome to LexiFlow",
     });
   }
 
   /**
    * Send password reset email
    */
-  async sendPasswordResetEmail(recipientEmail: string, resetToken: string, resetUrl: string) {
+  async sendPasswordResetEmail(
+    recipientEmail: string,
+    resetToken: string,
+    resetUrl: string
+  ) {
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'password-reset',
+      template: "password-reset",
       context: {
         resetUrl,
         resetToken,
-        expiresIn: '1 hour',
+        expiresIn: "1 hour",
       },
-      subject: 'Password Reset Request',
+      subject: "Password Reset Request",
     });
   }
 
@@ -247,11 +258,11 @@ export class EmailService {
     recipientEmail: string,
     documentName: string,
     sharedBy: string,
-    documentUrl: string,
+    documentUrl: string
   ) {
     return this.sendTemplateEmail({
       to: recipientEmail,
-      template: 'document-shared',
+      template: "document-shared",
       context: {
         documentName,
         sharedBy,
@@ -267,7 +278,7 @@ export class EmailService {
   async sendBulkEmails(
     recipients: Array<{ email: string; context: Record<string, unknown> }>,
     template: string,
-    subject: string,
+    subject: string
   ): Promise<{ sent: number; failed: number; errors: unknown[] }> {
     const results = {
       sent: 0,
@@ -303,7 +314,7 @@ export class EmailService {
    */
   private async renderTemplate(
     templateName: string,
-    context: Record<string, unknown>,
+    context: Record<string, unknown>
   ): Promise<string> {
     // Load template file
     // Render with context using template engine
@@ -323,7 +334,7 @@ export class EmailService {
    * Validate email address
    */
   // @ts-expect-error - Reserved for future use
-   
+
   private _isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     return emailRegex.test(email);

@@ -51,9 +51,11 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
     const [isRuleBuilderOpen, setIsRuleBuilderOpen] = useState(false);
     const [editingRule, setEditingRule] = useState<QualityRule | undefined>(undefined);
 
-    useEffect(() => {
-        if (initialTab !== '') { setActiveTab(initialTab); }
-    }, [initialTab]);
+    const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+    if (initialTab !== '' && initialTab !== prevInitialTab) {
+        setPrevInitialTab(initialTab);
+        setActiveTab(initialTab);
+    }
 
     // Clean up interval on unmount
     useEffect(() => {
@@ -75,9 +77,13 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
 
     const [anomalies, setAnomalies] = useState<DataAnomaly[]>([]);
 
-    useEffect(() => {
-        if (fetchedAnomalies.length > 0) { setAnomalies(fetchedAnomalies); }
-    }, [fetchedAnomalies]);
+    const [prevFetchedAnomalies, setPrevFetchedAnomalies] = useState(fetchedAnomalies);
+    if (fetchedAnomalies !== prevFetchedAnomalies) {
+        setPrevFetchedAnomalies(fetchedAnomalies);
+        if (fetchedAnomalies.length > 0) {
+            setAnomalies(fetchedAnomalies);
+        }
+    }
 
     const [rules, setRules] = useState<QualityRule[]>([
         {

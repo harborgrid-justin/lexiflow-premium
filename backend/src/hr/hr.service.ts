@@ -406,6 +406,7 @@ export class HRService {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         let capacity = 0;
+        let days = 0;
         if (startDate && endDate) {
           days =
             (new Date(endDate).getTime() - new Date(startDate).getTime()) /

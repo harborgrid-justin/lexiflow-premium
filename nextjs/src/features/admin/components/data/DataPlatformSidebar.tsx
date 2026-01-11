@@ -34,12 +34,14 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
   const menu: MenuItem[] = useMemo(() => DATA_PLATFORM_MENU, []);
 
   // Auto-expand parent if child is active
-  useEffect(() => {
+  const [prevActiveView, setPrevActiveView] = useState(activeView);
+  if (activeView !== prevActiveView) {
+    setPrevActiveView(activeView);
     const parent = menu.find(item => item.children?.some(c => c.id === activeView));
     if (parent && !expanded[parent.id]) {
       setExpanded(prev => ({ ...prev, [parent.id]: true }));
     }
-  }, [activeView, menu, expanded]);
+  }
 
   const toggleExpand = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));

@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Between, DeepPartial } from "typeorm";
-import { ComplianceCheck } from "./entities/compliance-check.entity";
+import { Between, DeepPartial, Repository } from "typeorm";
 import { AuditLog } from "./entities/audit-log.entity";
+import { ComplianceCheck } from "./entities/compliance-check.entity";
 import { ComplianceRule } from "./entities/compliance-rule.entity";
 
 /**
@@ -262,7 +262,7 @@ export class ComplianceService {
 
   async getRulesByCategory(category: string): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
-      where: { category },
+      where: { category: category as ComplianceCategory },
       order: { createdAt: "DESC" },
     });
   }
@@ -273,13 +273,15 @@ export class ComplianceService {
     checks: ComplianceCheck[];
     summary: { score: number; passed: number; failed: number; total: number };
   }> {
-    const checks = await this.getChecksByCaseId(caseId);
+    const checksResult = await this.getChecksByCaseId(caseId);
     const score = await this.getComplianceScore(caseId);
 
     return {
       caseId,
       generatedAt: new Date(),
-      checks,
+      checks: Array.isArray(checksResult)
+        ? checksResult
+        : (checksResult as any).data,
       summary: score,
     };
   }

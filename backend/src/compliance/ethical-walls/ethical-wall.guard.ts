@@ -65,7 +65,7 @@ export class EthicalWallGuard implements CanActivate {
 
     for (const pattern of patterns) {
       const match = url.match(pattern.regex);
-      if (match) {
+      if (match && match[1]) {
         return {
           entityType: pattern.type,
           entityId: match[1],

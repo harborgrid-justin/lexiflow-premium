@@ -43,11 +43,13 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
     retentionDays: '90',
   });
 
-  useEffect(() => {
-    if (backendConfig) {
-      setConfig(backendConfig);
-    }
-  }, [backendConfig]);
+  const [prevBackendConfig, setPrevBackendConfig] = useState(backendConfig);
+
+  // Sync state with backend config when it arrives
+  if (backendConfig && backendConfig !== prevBackendConfig) {
+    setPrevBackendConfig(backendConfig);
+    setConfig(backendConfig);
+  }
 
   const handleSave = async () => {
     try {

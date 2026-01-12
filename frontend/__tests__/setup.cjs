@@ -11,6 +11,98 @@ const { TextEncoder, TextDecoder } = require("util");
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
+// Polyfill Web Streams API for MSW
+try {
+  const {
+    ReadableStream,
+    WritableStream,
+    TransformStream,
+  } = require("web-streams-polyfill/ponyfill");
+  global.ReadableStream = global.ReadableStream || ReadableStream;
+  global.WritableStream = global.WritableStream || WritableStream;
+  global.TransformStream = global.TransformStream || TransformStream;
+} catch (e) {
+  // Fallback if web-streams-polyfill is not installed
+  console.warn("web-streams-polyfill not found, using minimal polyfill");
+}
+
+// Polyfill fetch API for MSW in jsdom
+if (typeof global.Response === "undefined") {
+  global.Response = class Response {
+    constructor(body, init = {}) {
+      this.body = body;
+      this.status = init.status || 200;
+      this.statusText = init.statusText || "";
+      this.headers = new Map(Object.entries(init.headers || {}));
+      this.ok = this.status >= 200 && this.status < 300;
+    }
+
+    async json() {
+      return typeof this.body === "string" ? JSON.parse(this.body) : this.body;
+    }
+
+    async text() {
+      return typeof this.body === "string"
+        ? this.body
+        : JSON.stringify(this.body);
+    }
+  };
+}
+
+if (typeof global.Request === "undefined") {
+  global.Request = class Request {
+    constructor(input, init = {}) {
+      this.url = typeof input === "string" ? input : input.url;
+      this.method = init.method || "GET";
+      this.headers = new Map(Object.entries(init.headers || {}));
+      this.body = init.body;
+    }
+
+    async json() {
+      return typeof this.body === "string" ? JSON.parse(this.body) : this.body;
+    }
+  };
+}
+
+if (typeof global.Headers === "undefined") {
+  global.Headers = Map;
+}
+
+// Polyfill BroadcastChannel for MSW
+if (typeof global.BroadcastChannel === "undefined") {
+  global.BroadcastChannel = class BroadcastChannel {
+    constructor(name) {
+      this.name = name;
+      this._listeners = [];
+    }
+
+    postMessage(message) {
+      this._listeners.forEach((listener) => {
+        listener({ data: message, target: this });
+      });
+    }
+
+    addEventListener(type, listener) {
+      if (type === "message") {
+        this._listeners.push(listener);
+      }
+    }
+
+    removeEventListener(type, listener) {
+      if (type === "message") {
+        const index = this._listeners.indexOf(listener);
+        if (index > -1) {
+          this._listeners.splice(index, 1);
+        }
+      }
+    }
+
+    close() {
+      this._listeners = [];
+    }
+  };
+}
+
 // Set environment variables for tests (import.meta.env is transformed to process.env)
 process.env.VITE_ENV = "test";
 process.env.MODE = "test";

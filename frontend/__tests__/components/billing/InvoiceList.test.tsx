@@ -7,6 +7,7 @@ import { InvoiceList } from '@/components/billing/InvoiceList';
 import type { Invoice } from '@/types/financial';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router';
 
 // Mock the Form component from react-router
 jest.mock('react-router', () => ({

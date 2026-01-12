@@ -4,15 +4,64 @@
  * @description Comprehensive Jest unit tests for AnalyticsWidgets component
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { AnalyticsWidgets, AnalyticsWidgetsProps } from '@/components/enterprise/AnalyticsWidgets';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen, within } from '@testing-library/react';
+import React from 'react';
 
 // ============================================================================
 // MOCKS
 // ============================================================================
+
+// Mock analytics service
+jest.mock('@/api/intelligence/enterprise-analytics.service', () => ({
+  analyticsService: {
+    getCaseTrends: jest.fn().mockResolvedValue([
+      { month: 'Jan', opened: 15, closed: 12, winRate: 85 },
+      { month: 'Feb', opened: 18, closed: 14, winRate: 87 },
+      { month: 'Mar', opened: 20, closed: 16, winRate: 86 },
+      { month: 'Apr', opened: 17, closed: 15, winRate: 88 },
+      { month: 'May', opened: 19, closed: 17, winRate: 89 },
+      { month: 'Jun', opened: 22, closed: 18, winRate: 90 },
+      { month: 'Jul', opened: 21, closed: 19, winRate: 89 },
+      { month: 'Aug', opened: 23, closed: 20, winRate: 91 },
+      { month: 'Sep', opened: 20, closed: 18, winRate: 88 },
+      { month: 'Oct', opened: 24, closed: 21, winRate: 90 },
+      { month: 'Nov', opened: 22, closed: 20, winRate: 89 },
+      { month: 'Dec', opened: 25, closed: 22, winRate: 92 },
+    ]),
+    getBillingTrends: jest.fn().mockResolvedValue([
+      { month: 'Jan', billed: 125000, collected: 115000 },
+      { month: 'Feb', billed: 135000, collected: 125000 },
+      { month: 'Mar', billed: 145000, collected: 135000 },
+      { month: 'Apr', billed: 140000, collected: 130000 },
+      { month: 'May', billed: 150000, collected: 140000 },
+      { month: 'Jun', billed: 160000, collected: 150000 },
+    ]),
+    getAttorneyUtilization: jest.fn().mockResolvedValue([
+      { name: 'John Doe', billable: 160, nonBillable: 20, admin: 10 },
+      { name: 'Jane Smith', billable: 150, nonBillable: 25, admin: 15 },
+      { name: 'Bob Johnson', billable: 140, nonBillable: 30, admin: 20 },
+    ]),
+    getClientAcquisition: jest.fn().mockResolvedValue([
+      { month: 'Jan', newClients: 5, lostClients: 2, totalActive: 50, retentionRate: 96, ltv: 25000 },
+      { month: 'Feb', newClients: 7, lostClients: 1, totalActive: 56, retentionRate: 98, ltv: 26000 },
+      { month: 'Mar', newClients: 6, lostClients: 3, totalActive: 59, retentionRate: 95, ltv: 24500 },
+    ]),
+    getARAgingData: jest.fn().mockResolvedValue([
+      { name: 'Current', value: 45000 },
+      { name: '1-30 days', value: 25000 },
+      { name: '31-60 days', value: 15000 },
+      { name: '60+ days', value: 5000 },
+    ]),
+    getPracticeAreaPerformance: jest.fn().mockResolvedValue([
+      { area: 'Corporate', caseLoad: 85, winRate: 90, billable: 88, utilization: 92 },
+      { area: 'Litigation', caseLoad: 75, winRate: 85, billable: 82, utilization: 87 },
+      { area: 'Real Estate', caseLoad: 65, winRate: 88, billable: 80, utilization: 85 },
+    ]),
+  },
+}));
 
 // Mock Recharts components
 jest.mock('recharts', () => {
@@ -69,7 +118,7 @@ jest.mock('recharts', () => {
 });
 
 // Mock ChartCard component
-jest.mock('@/components/dashboard/widgets/ChartCard', () => ({
+jest.mock('@/features/dashboard/widgets/ChartCard', () => ({
   ChartCard: ({ title, subtitle, icon, isLoading, onRefresh, height, children }: any) => (
     <div data-testid={`chart-card-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
       <h3 data-testid="chart-title">{title}</h3>

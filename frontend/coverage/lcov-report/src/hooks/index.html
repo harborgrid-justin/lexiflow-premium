@@ -1,0 +1,1541 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/hooks</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> src/hooks</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">4.3% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>265/6162</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">3.59% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>101/2808</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">2.32% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>38/1636</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">4.18% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>235/5614</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <div class="pad1">
+<table class="coverage-summary">
+<thead>
+<tr>
+   <th data-col="file" data-fmt="html" data-html="true" class="file">File</th>
+   <th data-col="pic" data-type="number" data-fmt="html" data-html="true" class="pic"></th>
+   <th data-col="statements" data-type="number" data-fmt="pct" class="pct">Statements</th>
+   <th data-col="statements_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="branches" data-type="number" data-fmt="pct" class="pct">Branches</th>
+   <th data-col="branches_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="functions" data-type="number" data-fmt="pct" class="pct">Functions</th>
+   <th data-col="functions_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="lines" data-type="number" data-fmt="pct" class="pct">Lines</th>
+   <th data-col="lines_raw" data-type="number" data-fmt="html" class="abs"></th>
+</tr>
+</thead>
+<tbody><tr>
+	<td class="file low" data-value="api.ts"><a href="api.ts.html">api.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="backend.ts"><a href="backend.ts.html">backend.ts</a></td>
+	<td data-value="100" class="pic high">
+	<div class="chart"><div class="cover-fill cover-full" style="width: 100%"></div><div class="cover-empty" style="width: 0%"></div></div>
+	</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="14" class="abs high">14/14</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="12.5" class="pct low">12.5%</td>
+	<td data-value="8" class="abs low">1/8</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">6/6</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="core.ts"><a href="core.ts.html">core.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="43" class="abs low">0/43</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="domain.ts"><a href="domain.ts.html">domain.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="53" class="abs low">0/53</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="26" class="abs low">0/26</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="index.ts"><a href="index.ts.html">index.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="190" class="abs low">0/190</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="111" class="abs low">0/111</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="138" class="abs low">0/138</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="performance.ts"><a href="performance.ts.html">performance.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="22" class="abs low">0/22</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="12" class="abs low">0/12</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="ui.ts"><a href="ui.ts.html">ui.ts</a></td>
+	<td data-value="100" class="pic high">
+	<div class="chart"><div class="cover-fill cover-full" style="width: 100%"></div><div class="cover-empty" style="width: 0%"></div></div>
+	</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="28" class="abs high">28/28</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="7.14" class="pct low">7.14%</td>
+	<td data-value="14" class="abs low">1/14</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="14" class="abs high">14/14</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useAdaptiveLoading.ts"><a href="useAdaptiveLoading.ts.html">useAdaptiveLoading.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="120" class="abs low">0/120</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="56" class="abs low">0/56</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">0/18</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="113" class="abs low">0/113</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useApiMutation.ts"><a href="useApiMutation.ts.html">useApiMutation.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="56" class="abs low">0/56</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="53" class="abs low">0/53</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useApiQuery.ts"><a href="useApiQuery.ts.html">useApiQuery.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="89" class="abs low">0/89</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="54" class="abs low">0/54</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="82" class="abs low">0/82</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useAppContext.ts"><a href="useAppContext.ts.html">useAppContext.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="110" class="abs low">0/110</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="39" class="abs low">0/39</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="107" class="abs low">0/107</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useArrayState.ts"><a href="useArrayState.ts.html">useArrayState.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="19" class="abs low">0/19</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">0/3</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useAuth.ts"><a href="useAuth.ts.html">useAuth.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">0/3</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useAutoSave.ts"><a href="useAutoSave.ts.html">useAutoSave.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="46" class="abs low">0/46</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">0/18</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="45" class="abs low">0/45</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useAutoTimeCapture.ts"><a href="useAutoTimeCapture.ts.html">useAutoTimeCapture.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="47" class="abs low">0/47</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="42" class="abs low">0/42</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useBackendDiscovery.ts"><a href="useBackendDiscovery.ts.html">useBackendDiscovery.ts</a></td>
+	<td data-value="25" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 25%"></div><div class="cover-empty" style="width: 75%"></div></div>
+	</td>
+	<td data-value="25" class="pct low">25%</td>
+	<td data-value="12" class="abs low">3/12</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="25" class="pct low">25%</td>
+	<td data-value="12" class="abs low">3/12</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useBackendHealth.ts"><a href="useBackendHealth.ts.html">useBackendHealth.ts</a></td>
+	<td data-value="4.28" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 4%"></div><div class="cover-empty" style="width: 96%"></div></div>
+	</td>
+	<td data-value="4.28" class="pct low">4.28%</td>
+	<td data-value="70" class="abs low">3/70</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="35" class="abs low">0/35</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	<td data-value="4.28" class="pct low">4.28%</td>
+	<td data-value="70" class="abs low">3/70</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useBlobRegistry.ts"><a href="useBlobRegistry.ts.html">useBlobRegistry.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">0/18</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">0/2</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="6" class="abs low">0/6</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">0/18</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useBreadcrumbs.ts"><a href="useBreadcrumbs.ts.html">useBreadcrumbs.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="29" class="abs low">0/29</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCalendarView.ts"><a href="useCalendarView.ts.html">useCalendarView.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="30" class="abs low">0/30</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="28" class="abs low">0/28</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCanvasDrag.ts"><a href="useCanvasDrag.ts.html">useCanvasDrag.ts</a></td>
+	<td data-value="4.16" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 4%"></div><div class="cover-empty" style="width: 96%"></div></div>
+	</td>
+	<td data-value="4.16" class="pct low">4.16%</td>
+	<td data-value="48" class="abs low">2/48</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="32" class="abs low">0/32</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="4.34" class="pct low">4.34%</td>
+	<td data-value="46" class="abs low">2/46</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCaseDetail.ts"><a href="useCaseDetail.ts.html">useCaseDetail.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="125" class="abs low">0/125</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="72" class="abs low">0/72</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="26" class="abs low">0/26</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="120" class="abs low">0/120</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCaseList.ts"><a href="useCaseList.ts.html">useCaseList.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="89" class="abs low">0/89</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="50" class="abs low">0/50</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="86" class="abs low">0/86</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCaseOverview.ts"><a href="useCaseOverview.ts.html">useCaseOverview.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="48" class="abs low">0/48</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="45" class="abs low">0/45</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="useClickOutside.ts"><a href="useClickOutside.ts.html">useClickOutside.ts</a></td>
+	<td data-value="100" class="pic high">
+	<div class="chart"><div class="cover-fill cover-full" style="width: 100%"></div><div class="cover-empty" style="width: 0%"></div></div>
+	</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="15" class="abs high">15/15</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">4/4</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">5/5</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="15" class="abs high">15/15</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCodeSplitting.ts"><a href="useCodeSplitting.ts.html">useCodeSplitting.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="95" class="abs low">0/95</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="31" class="abs low">0/31</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="30" class="abs low">0/30</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="84" class="abs low">0/84</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useCommandHistory.ts"><a href="useCommandHistory.ts.html">useCommandHistory.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="21" class="abs low">0/21</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useContextActions.ts"><a href="useContextActions.ts.html">useContextActions.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="137" class="abs low">0/137</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="79" class="abs low">0/79</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="25" class="abs low">0/25</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="128" class="abs low">0/128</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDataServiceCleanup.ts"><a href="useDataServiceCleanup.ts.html">useDataServiceCleanup.ts</a></td>
+	<td data-value="15.62" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 15%"></div><div class="cover-empty" style="width: 85%"></div></div>
+	</td>
+	<td data-value="15.62" class="pct low">15.62%</td>
+	<td data-value="32" class="abs low">5/32</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="28" class="abs low">0/28</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="16.66" class="pct low">16.66%</td>
+	<td data-value="30" class="abs low">5/30</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDebounce.ts"><a href="useDebounce.ts.html">useDebounce.ts</a></td>
+	<td data-value="13.04" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 13%"></div><div class="cover-empty" style="width: 87%"></div></div>
+	</td>
+	<td data-value="13.04" class="pct low">13.04%</td>
+	<td data-value="23" class="abs low">3/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="13.04" class="pct low">13.04%</td>
+	<td data-value="23" class="abs low">3/23</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDiscoveryPlatform.ts"><a href="useDiscoveryPlatform.ts.html">useDiscoveryPlatform.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="39" class="abs low">0/39</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="37" class="abs low">0/37</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDocumentDragDrop.ts"><a href="useDocumentDragDrop.ts.html">useDocumentDragDrop.ts</a></td>
+	<td data-value="15" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 15%"></div><div class="cover-empty" style="width: 85%"></div></div>
+	</td>
+	<td data-value="15" class="pct low">15%</td>
+	<td data-value="40" class="abs low">6/40</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="15.78" class="pct low">15.78%</td>
+	<td data-value="38" class="abs low">6/38</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDocumentManager.ts"><a href="useDocumentManager.ts.html">useDocumentManager.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">0/3</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">0/2</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDomainData.ts"><a href="useDomainData.ts.html">useDomainData.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="51" class="abs low">0/51</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">0/2</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="32" class="abs low">0/32</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="51" class="abs low">0/51</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useDragToReorder.ts"><a href="useDragToReorder.ts.html">useDragToReorder.ts</a></td>
+	<td data-value="2.38" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 2%"></div><div class="cover-empty" style="width: 98%"></div></div>
+	</td>
+	<td data-value="2.38" class="pct low">2.38%</td>
+	<td data-value="126" class="abs low">3/126</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="64" class="abs low">0/64</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="2.63" class="pct low">2.63%</td>
+	<td data-value="114" class="abs low">3/114</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useElasticScroll.ts"><a href="useElasticScroll.ts.html">useElasticScroll.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="123" class="abs low">0/123</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="61" class="abs low">0/61</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="115" class="abs low">0/115</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEnhancedAutoSave.ts"><a href="useEnhancedAutoSave.ts.html">useEnhancedAutoSave.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="130" class="abs low">0/130</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="84" class="abs low">0/84</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="126" class="abs low">0/126</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEnhancedFormValidation.ts"><a href="useEnhancedFormValidation.ts.html">useEnhancedFormValidation.ts</a></td>
+	<td data-value="1.51" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 1%"></div><div class="cover-empty" style="width: 99%"></div></div>
+	</td>
+	<td data-value="1.51" class="pct low">1.51%</td>
+	<td data-value="198" class="abs low">3/198</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="125" class="abs low">0/125</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="55" class="abs low">0/55</td>
+	<td data-value="1.7" class="pct low">1.7%</td>
+	<td data-value="176" class="abs low">3/176</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEnhancedWizard.ts"><a href="useEnhancedWizard.ts.html">useEnhancedWizard.ts</a></td>
+	<td data-value="1.14" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 1%"></div><div class="cover-empty" style="width: 99%"></div></div>
+	</td>
+	<td data-value="1.14" class="pct low">1.14%</td>
+	<td data-value="175" class="abs low">2/175</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="135" class="abs low">0/135</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="32" class="abs low">0/32</td>
+	<td data-value="1.25" class="pct low">1.25%</td>
+	<td data-value="159" class="abs low">2/159</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEnterpriseData.ts"><a href="useEnterpriseData.ts.html">useEnterpriseData.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="121" class="abs low">0/121</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="78" class="abs low">0/78</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="121" class="abs low">0/121</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEntityAutocomplete.ts"><a href="useEntityAutocomplete.ts.html">useEntityAutocomplete.ts</a></td>
+	<td data-value="5.47" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 5%"></div><div class="cover-empty" style="width: 95%"></div></div>
+	</td>
+	<td data-value="5.47" class="pct low">5.47%</td>
+	<td data-value="73" class="abs low">4/73</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="5.55" class="pct low">5.55%</td>
+	<td data-value="72" class="abs low">4/72</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useEvidenceManager.ts"><a href="useEvidenceManager.ts.html">useEvidenceManager.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useFilterAndSearch.ts"><a href="useFilterAndSearch.ts.html">useFilterAndSearch.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="29" class="abs low">0/29</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useFormId.ts"><a href="useFormId.ts.html">useFormId.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useFormValidation.ts"><a href="useFormValidation.ts.html">useFormValidation.ts</a></td>
+	<td data-value="2.51" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 2%"></div><div class="cover-empty" style="width: 98%"></div></div>
+	</td>
+	<td data-value="2.51" class="pct low">2.51%</td>
+	<td data-value="159" class="abs low">4/159</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="100" class="abs low">0/100</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="55" class="abs low">0/55</td>
+	<td data-value="2.89" class="pct low">2.89%</td>
+	<td data-value="138" class="abs low">4/138</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useGlobalQueryStatus.ts"><a href="useGlobalQueryStatus.ts.html">useGlobalQueryStatus.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useHistory.ts"><a href="useHistory.ts.html">useHistory.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="46" class="abs low">0/46</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="13" class="abs low">0/13</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="13" class="abs low">0/13</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="44" class="abs low">0/44</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useHoverIntent.ts"><a href="useHoverIntent.ts.html">useHoverIntent.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="21" class="abs low">0/21</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">0/3</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useImageOptimization.ts"><a href="useImageOptimization.ts.html">useImageOptimization.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="149" class="abs low">0/149</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="72" class="abs low">0/72</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="33" class="abs low">0/33</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="144" class="abs low">0/144</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="useIntersectionObserver.ts"><a href="useIntersectionObserver.ts.html">useIntersectionObserver.ts</a></td>
+	<td data-value="94.11" class="pic high">
+	<div class="chart"><div class="cover-fill" style="width: 94%"></div><div class="cover-empty" style="width: 6%"></div></div>
+	</td>
+	<td data-value="94.11" class="pct high">94.11%</td>
+	<td data-value="17" class="abs high">16/17</td>
+	<td data-value="90.9" class="pct high">90.9%</td>
+	<td data-value="11" class="abs high">10/11</td>
+	<td data-value="75" class="pct medium">75%</td>
+	<td data-value="4" class="abs medium">3/4</td>
+	<td data-value="93.33" class="pct high">93.33%</td>
+	<td data-value="15" class="abs high">14/15</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useInterval.ts"><a href="useInterval.ts.html">useInterval.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="19" class="abs low">0/19</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="19" class="abs low">0/19</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useKeyboardNav.ts"><a href="useKeyboardNav.ts.html">useKeyboardNav.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useKeyboardNavigation.ts"><a href="useKeyboardNavigation.ts.html">useKeyboardNavigation.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="90" class="abs low">0/90</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="70" class="abs low">0/70</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="88" class="abs low">0/88</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useKeyboardShortcuts.ts"><a href="useKeyboardShortcuts.ts.html">useKeyboardShortcuts.ts</a></td>
+	<td data-value="48.27" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 48%"></div><div class="cover-empty" style="width: 52%"></div></div>
+	</td>
+	<td data-value="48.27" class="pct low">48.27%</td>
+	<td data-value="87" class="abs low">42/87</td>
+	<td data-value="55.23" class="pct medium">55.23%</td>
+	<td data-value="105" class="abs medium">58/105</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">6/6</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="84" class="abs medium">42/84</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useListNavigation.ts"><a href="useListNavigation.ts.html">useListNavigation.ts</a></td>
+	<td data-value="3.1" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 3%"></div><div class="cover-empty" style="width: 97%"></div></div>
+	</td>
+	<td data-value="3.1" class="pct low">3.1%</td>
+	<td data-value="129" class="abs low">4/129</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="121" class="abs low">0/121</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">0/18</td>
+	<td data-value="3.33" class="pct low">3.33%</td>
+	<td data-value="120" class="abs low">4/120</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useLitigationBuilder.ts"><a href="useLitigationBuilder.ts.html">useLitigationBuilder.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="113" class="abs low">0/113</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="40" class="abs low">0/40</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="37" class="abs low">0/37</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="100" class="abs low">0/100</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useLiveDocketFeed.ts"><a href="useLiveDocketFeed.ts.html">useLiveDocketFeed.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="84" class="abs low">0/84</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="34" class="abs low">0/34</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="83" class="abs low">0/83</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useMemoized.ts"><a href="useMemoized.ts.html">useMemoized.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="136" class="abs low">0/136</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="81" class="abs low">0/81</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="125" class="abs low">0/125</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="useModal.ts"><a href="useModal.ts.html">useModal.ts</a></td>
+	<td data-value="87.5" class="pic high">
+	<div class="chart"><div class="cover-fill" style="width: 87%"></div><div class="cover-empty" style="width: 13%"></div></div>
+	</td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="16" class="abs high">14/16</td>
+	<td data-value="57.14" class="pct medium">57.14%</td>
+	<td data-value="7" class="abs medium">4/7</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">4/4</td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="16" class="abs high">14/16</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useModalState.ts"><a href="useModalState.ts.html">useModalState.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="11" class="abs low">0/11</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useMultiSelection.ts"><a href="useMultiSelection.ts.html">useMultiSelection.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="46" class="abs low">0/46</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="37" class="abs low">0/37</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useNexusGraph.ts"><a href="useNexusGraph.ts.html">useNexusGraph.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="66" class="abs low">0/66</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="24" class="abs low">0/24</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="62" class="abs low">0/62</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useNotificationWebSocket.ts"><a href="useNotificationWebSocket.ts.html">useNotificationWebSocket.ts</a></td>
+	<td data-value="4.23" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 4%"></div><div class="cover-empty" style="width: 96%"></div></div>
+	</td>
+	<td data-value="4.23" class="pct low">4.23%</td>
+	<td data-value="118" class="abs low">5/118</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="40" class="abs low">0/40</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="24" class="abs low">0/24</td>
+	<td data-value="3.41" class="pct low">3.41%</td>
+	<td data-value="117" class="abs low">4/117</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useNotifications.ts"><a href="useNotifications.ts.html">useNotifications.ts</a></td>
+	<td data-value="7.69" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 7%"></div><div class="cover-empty" style="width: 93%"></div></div>
+	</td>
+	<td data-value="7.69" class="pct low">7.69%</td>
+	<td data-value="117" class="abs low">9/117</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="50" class="abs low">0/50</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="39" class="abs low">0/39</td>
+	<td data-value="8" class="pct low">8%</td>
+	<td data-value="100" class="abs low">8/100</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useNotify.ts"><a href="useNotify.ts.html">useNotify.ts</a></td>
+	<td data-value="18.75" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 18%"></div><div class="cover-empty" style="width: 82%"></div></div>
+	</td>
+	<td data-value="18.75" class="pct low">18.75%</td>
+	<td data-value="16" class="abs low">3/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="18.75" class="pct low">18.75%</td>
+	<td data-value="16" class="abs low">3/16</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useOptimizedFilter.ts"><a href="useOptimizedFilter.ts.html">useOptimizedFilter.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="usePerformanceTracking.ts"><a href="usePerformanceTracking.ts.html">usePerformanceTracking.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="24" class="abs low">0/24</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="usePermissions.ts"><a href="usePermissions.ts.html">usePermissions.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="usePresence.ts"><a href="usePresence.ts.html">usePresence.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">0/0</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="6" class="abs low">0/6</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useProgress.ts"><a href="useProgress.ts.html">useProgress.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="118" class="abs low">0/118</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="58" class="abs low">0/58</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="30" class="abs low">0/30</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="111" class="abs low">0/111</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="useQueryHooks.ts"><a href="useQueryHooks.ts.html">useQueryHooks.ts</a></td>
+	<td data-value="50" class="pic medium">
+	<div class="chart"><div class="cover-fill" style="width: 50%"></div><div class="cover-empty" style="width: 50%"></div></div>
+	</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="50" class="abs medium">25/50</td>
+	<td data-value="55.55" class="pct medium">55.55%</td>
+	<td data-value="18" class="abs medium">10/18</td>
+	<td data-value="53.84" class="pct medium">53.84%</td>
+	<td data-value="13" class="abs medium">7/13</td>
+	<td data-value="51.16" class="pct medium">51.16%</td>
+	<td data-value="43" class="abs medium">22/43</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useReadAnalytics.ts"><a href="useReadAnalytics.ts.html">useReadAnalytics.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="43" class="abs low">0/43</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="40" class="abs low">0/40</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useRealTimeData.ts"><a href="useRealTimeData.ts.html">useRealTimeData.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="193" class="abs low">0/193</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="91" class="abs low">0/91</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="52" class="abs low">0/52</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="172" class="abs low">0/172</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="useResizeObserver.ts"><a href="useResizeObserver.ts.html">useResizeObserver.ts</a></td>
+	<td data-value="80" class="pic high">
+	<div class="chart"><div class="cover-fill" style="width: 80%"></div><div class="cover-empty" style="width: 20%"></div></div>
+	</td>
+	<td data-value="80" class="pct high">80%</td>
+	<td data-value="15" class="abs high">12/15</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">2/4</td>
+	<td data-value="75" class="pct medium">75%</td>
+	<td data-value="4" class="abs medium">3/4</td>
+	<td data-value="78.57" class="pct medium">78.57%</td>
+	<td data-value="14" class="abs medium">11/14</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useRuleSearchAndSelection.ts"><a href="useRuleSearchAndSelection.ts.html">useRuleSearchAndSelection.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="56" class="abs low">0/56</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="28" class="abs low">0/28</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="54" class="abs low">0/54</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSLAMonitoring.ts"><a href="useSLAMonitoring.ts.html">useSLAMonitoring.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="50" class="abs low">0/50</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="19" class="abs low">0/19</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">0/10</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="49" class="abs low">0/49</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useScheduleController.ts"><a href="useScheduleController.ts.html">useScheduleController.ts</a></td>
+	<td data-value="2.7" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 2%"></div><div class="cover-empty" style="width: 98%"></div></div>
+	</td>
+	<td data-value="2.7" class="pct low">2.7%</td>
+	<td data-value="74" class="abs low">2/74</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="44" class="abs low">0/44</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="2.89" class="pct low">2.89%</td>
+	<td data-value="69" class="abs low">2/69</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="useScrollLock.ts"><a href="useScrollLock.ts.html">useScrollLock.ts</a></td>
+	<td data-value="91.66" class="pic high">
+	<div class="chart"><div class="cover-fill" style="width: 91%"></div><div class="cover-empty" style="width: 9%"></div></div>
+	</td>
+	<td data-value="91.66" class="pct high">91.66%</td>
+	<td data-value="24" class="abs high">22/24</td>
+	<td data-value="70.58" class="pct medium">70.58%</td>
+	<td data-value="17" class="abs medium">12/17</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="7" class="abs high">7/7</td>
+	<td data-value="91.66" class="pct high">91.66%</td>
+	<td data-value="24" class="abs high">22/24</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSecureMessenger.ts"><a href="useSecureMessenger.ts.html">useSecureMessenger.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="95" class="abs low">0/95</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="56" class="abs low">0/56</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="32" class="abs low">0/32</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="91" class="abs low">0/91</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSelection.ts"><a href="useSelection.ts.html">useSelection.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="49" class="abs low">0/49</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="34" class="abs low">0/34</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="45" class="abs low">0/45</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSelectionState.ts"><a href="useSelectionState.ts.html">useSelectionState.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="44" class="abs low">0/44</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="20" class="abs low">0/20</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="21" class="abs low">0/21</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="35" class="abs low">0/35</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSessionStorage.ts"><a href="useSessionStorage.ts.html">useSessionStorage.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="28" class="abs low">0/28</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">0/14</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSettlementSimulation.ts"><a href="useSettlementSimulation.ts.html">useSettlementSimulation.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="25" class="abs low">0/25</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSort.ts"><a href="useSort.ts.html">useSort.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="21" class="abs low">0/21</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="15" class="abs low">0/15</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">0/4</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="21" class="abs low">0/21</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useStrategyCanvas.ts"><a href="useStrategyCanvas.ts.html">useStrategyCanvas.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="192" class="abs low">0/192</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="73" class="abs low">0/73</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="70" class="abs low">0/70</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="159" class="abs low">0/159</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useSync.ts"><a href="useSync.ts.html">useSync.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="7" class="abs low">0/7</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">0/2</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="6" class="abs low">0/6</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useTimeTracker.ts"><a href="useTimeTracker.ts.html">useTimeTracker.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="100" class="abs low">0/100</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="45" class="abs low">0/45</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">0/16</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="99" class="abs low">0/99</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="useToggle.ts"><a href="useToggle.ts.html">useToggle.ts</a></td>
+	<td data-value="63.63" class="pic medium">
+	<div class="chart"><div class="cover-fill" style="width: 63%"></div><div class="cover-empty" style="width: 37%"></div></div>
+	</td>
+	<td data-value="63.63" class="pct medium">63.63%</td>
+	<td data-value="11" class="abs medium">7/11</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">1/1</td>
+	<td data-value="20" class="pct low">20%</td>
+	<td data-value="5" class="abs low">1/5</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="7" class="abs high">7/7</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useTrustAccounts.ts"><a href="useTrustAccounts.ts.html">useTrustAccounts.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="157" class="abs low">0/157</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="59" class="abs low">0/59</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="61" class="abs low">0/61</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="151" class="abs low">0/151</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useViewportTransform.ts"><a href="useViewportTransform.ts.html">useViewportTransform.ts</a></td>
+	<td data-value="30.43" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 30%"></div><div class="cover-empty" style="width: 70%"></div></div>
+	</td>
+	<td data-value="30.43" class="pct low">30.43%</td>
+	<td data-value="23" class="abs low">7/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">0/1</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">0/8</td>
+	<td data-value="33.33" class="pct low">33.33%</td>
+	<td data-value="21" class="abs low">7/21</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useVirtualList.ts"><a href="useVirtualList.ts.html">useVirtualList.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="129" class="abs low">0/129</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="52" class="abs low">0/52</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="22" class="abs low">0/22</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="118" class="abs low">0/118</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useVirtualizedDocket.ts"><a href="useVirtualizedDocket.ts.html">useVirtualizedDocket.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="90" class="abs low">0/90</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="34" class="abs low">0/34</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="17" class="abs low">0/17</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="82" class="abs low">0/82</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useWebSocket.ts"><a href="useWebSocket.ts.html">useWebSocket.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="129" class="abs low">0/129</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="56" class="abs low">0/56</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="128" class="abs low">0/128</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useWizard.ts"><a href="useWizard.ts.html">useWizard.ts</a></td>
+	<td data-value="15.38" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 15%"></div><div class="cover-empty" style="width: 85%"></div></div>
+	</td>
+	<td data-value="15.38" class="pct low">15.38%</td>
+	<td data-value="13" class="abs low">2/13</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">0/5</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="6" class="abs low">0/6</td>
+	<td data-value="25" class="pct low">25%</td>
+	<td data-value="8" class="abs low">2/8</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useWorkerSearch.ts"><a href="useWorkerSearch.ts.html">useWorkerSearch.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="59" class="abs low">0/59</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="23" class="abs low">0/23</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="9" class="abs low">0/9</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="54" class="abs low">0/54</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="useWorkflowBuilder.ts"><a href="useWorkflowBuilder.ts.html">useWorkflowBuilder.ts</a></td>
+	<td data-value="0" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 0%"></div><div class="cover-empty" style="width: 100%"></div></div>
+	</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="67" class="abs low">0/67</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="31" class="abs low">0/31</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">0/27</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="54" class="abs low">0/54</td>
+	</tr>
+
+</tbody>
+</table>
+</div>
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-01-12T15:43:08.012Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

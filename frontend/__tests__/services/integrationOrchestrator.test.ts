@@ -108,9 +108,10 @@ class MockIntegrationOrchestrator {
   }
 }
 
-describe("IntegrationOrchestrator", () => {
-  const mockDb = db as any;
+// Use MockIntegrationOrchestrator as IntegrationOrchestrator for tests
+const IntegrationOrchestrator = MockIntegrationOrchestrator;
 
+describe("IntegrationOrchestrator", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

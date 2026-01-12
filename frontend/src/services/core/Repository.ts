@@ -1,4 +1,5 @@
 import { REPOSITORY_CACHE_MAX_SIZE } from "@/config/database/cache.config";
+import { REPOSITORY_MAX_LISTENERS } from '@/config/features/services.config';
 import { queryClient } from "@/services/infrastructure/queryClient";
 import { BaseEntity, UserId } from "@/types";
 import { errorHandler } from "@/utils/errorHandler";
@@ -6,8 +7,6 @@ import { LRUCache } from "@/utils/LRUCache";
 import { MicroORM } from "./microORM";
 
 type Listener<T> = (item: T) => void;
-
-const MAX_LISTENERS_PER_REPO = 1000; // Safety limit to prevent runaway listener accumulation
 
 export abstract class Repository<T extends BaseEntity> {
   private cache: LRUCache<T>;

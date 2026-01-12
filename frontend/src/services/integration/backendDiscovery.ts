@@ -5,6 +5,7 @@
  */
 
 import { getApiBaseUrl } from "@/config/network/api.config";
+import { BACKEND_DISCOVERY_CHECK_INTERVAL_MS } from '@/config/features/services.config';
 
 export interface BackendStatus {
   available: boolean;
@@ -16,6 +17,7 @@ export interface BackendStatus {
 }
 
 type BackendStatusCallback = (status: BackendStatus) => void;
+import { TIMEOUTS } from "@/config/ports.config";
 
 class BackendDiscoveryService {
   private status: BackendStatus = {
@@ -26,14 +28,14 @@ class BackendDiscoveryService {
 
   private checkInterval: NodeJS.Timeout | null = null;
   private listeners: Set<BackendStatusCallback> = new Set();
-  private readonly CHECK_INTERVAL_MS = 60000; // Check every 60 seconds (optimized for performance)
+  private readonly CHECK_INTERVAL_MS = BACKEND_DISCOVERY_CHECK_INTERVAL_MS;
 
   // Dynamic getter for health endpoint
   private getHealthEndpoint(): string {
     return `${getApiBaseUrl()}/api/health`;
   }
 
-  private readonly TIMEOUT_MS = 3000; // 3 second timeout (faster failure detection)
+  private readonly TIMEOUT_MS = TIMEOUTS.BACKEND_DISCOVERY; // Use centralized timeout
   private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 
   /**

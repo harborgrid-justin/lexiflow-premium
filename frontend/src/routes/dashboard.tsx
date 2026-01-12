@@ -9,6 +9,7 @@
 
 import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
+import { useTheme } from '@/features/theme';
 import { Suspense } from 'react';
 import { useNavigate } from 'react-router';
 import { createMeta } from './_shared/meta-utils';
@@ -46,6 +47,7 @@ interface DashboardRouteProps {
 
 export default function DashboardRoute({ loaderData: _loaderData }: DashboardRouteProps) {
   const { currentUser } = useAppController();
+  const { theme } = useTheme();
   const navigate = useNavigate();
 
   const handleSelectCase = (caseId: string) => {
@@ -59,7 +61,7 @@ export default function DashboardRoute({ loaderData: _loaderData }: DashboardRou
         role="status"
         aria-label="Loading dashboard"
       >
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: theme.accent.primary + '33', borderTopColor: theme.accent.primary }} />
       </div>
     );
   }
@@ -87,19 +89,22 @@ export default function DashboardRoute({ loaderData: _loaderData }: DashboardRou
 // ============================================================================
 
 export function ErrorBoundary({ error }: { error: unknown }) {
+  const { theme } = useTheme();
+  
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
-      <div className="max-w-md rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-800 dark:bg-red-900/20">
-        <h2 className="mb-2 text-xl font-semibold text-red-900 dark:text-red-100">
+      <div className={`max-w-md rounded-lg border p-6 text-center ${theme.border.default}`} style={{ backgroundColor: theme.status.error + '10' }}>
+        <h2 className={`mb-2 text-xl font-semibold ${theme.text.primary}`}>
           Dashboard Error
         </h2>
-        <p className="mb-4 text-red-700 dark:text-red-300">
+        <p className={`mb-4 ${theme.text.secondary}`}>
           {error instanceof Error ? error.message : 'Failed to load dashboard'}
         </p>
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          className={`rounded-md px-4 py-2 text-white ${theme.interactive.hover}`}
+          style={{ backgroundColor: theme.status.error }}
         >
           Reload Dashboard
         </button>

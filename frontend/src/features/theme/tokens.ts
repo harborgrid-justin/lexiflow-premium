@@ -1,3 +1,15 @@
+import {
+  ANIMATION_DURATION_MS,
+  ANIMATION_EASING,
+  SIDEBAR_WIDTH,
+  SIDEBAR_COLLAPSED_WIDTH,
+  TOPBAR_HEIGHT,
+  MODAL_MAX_WIDTH,
+  FOOTER_HEIGHT,
+  TABLE_ROW_HEIGHT,
+  TABLE_HEADER_HEIGHT
+} from "../../config/features/ui.config";
+
 export type ThemeDensity = "compact" | "normal" | "comfortable";
 export type FontMode = "sans" | "serif";
 export type ThemeMode = "light" | "dark";
@@ -118,6 +130,15 @@ export interface DesignTokens {
     sidebar: string;
     modal: string;
     overlay: string;
+  };
+  layout: {
+    sidebarWidth: number;
+    sidebarCollapsedWidth: number;
+    topBarHeight: number;
+    modalMaxWidth: number;
+    footerHeight: number;
+    tableRowHeight: number;
+    tableHeaderHeight: number;
   };
 }
 
@@ -242,9 +263,9 @@ export const DEFAULT_TOKENS: DesignTokens = {
     },
   },
   transitions: {
-    fast: "150ms cubic-bezier(0.4, 0, 0.2, 1)",
-    normal: "300ms cubic-bezier(0.4, 0, 0.2, 1)",
-    slow: "500ms cubic-bezier(0.4, 0, 0.2, 1)",
+    fast: `${Math.round(ANIMATION_DURATION_MS * 0.75)}ms ${ANIMATION_EASING}`,
+    normal: `${ANIMATION_DURATION_MS}ms ${ANIMATION_EASING}`,
+    slow: `${Math.round(ANIMATION_DURATION_MS * 2.5)}ms ${ANIMATION_EASING}`,
   },
   zIndex: {
     base: "0",
@@ -252,6 +273,15 @@ export const DEFAULT_TOKENS: DesignTokens = {
     sidebar: "50",
     modal: "100",
     overlay: "90",
+  },
+  layout: {
+    sidebarWidth: SIDEBAR_WIDTH,
+    sidebarCollapsedWidth: SIDEBAR_COLLAPSED_WIDTH,
+    topBarHeight: TOPBAR_HEIGHT,
+    modalMaxWidth: MODAL_MAX_WIDTH,
+    footerHeight: FOOTER_HEIGHT,
+    tableRowHeight: TABLE_ROW_HEIGHT,
+    tableHeaderHeight: TABLE_HEADER_HEIGHT,
   },
 };
 

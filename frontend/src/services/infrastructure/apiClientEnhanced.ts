@@ -31,6 +31,13 @@ import {
   ExternalServiceError,
   NetworkError,
 } from "@/services/core/errors";
+import { 
+  API_CLIENT_MAX_RETRIES,
+  API_CLIENT_INITIAL_RETRY_DELAY_MS,
+  API_CLIENT_MAX_RETRY_DELAY_MS,
+  API_CLIENT_BACKOFF_MULTIPLIER,
+  API_CLIENT_RETRYABLE_STATUS_CODES
+} from '@/config/features/services.config';
 import { apiClient } from "./apiClient";
 
 /**
@@ -81,13 +88,11 @@ export type ErrorInterceptor = (
  * Enhanced API Client Class
  */
 class ApiClientEnhanced {
-  private readonly DEFAULT_MAX_RETRIES = 3;
-  private readonly DEFAULT_INITIAL_DELAY_MS = 1000;
-  private readonly DEFAULT_MAX_DELAY_MS = 30000;
-  private readonly DEFAULT_BACKOFF_MULTIPLIER = 2;
-  private readonly DEFAULT_RETRYABLE_STATUS_CODES = [
-    408, 429, 500, 502, 503, 504,
-  ];
+  private readonly DEFAULT_MAX_RETRIES = API_CLIENT_MAX_RETRIES;
+  private readonly DEFAULT_INITIAL_DELAY_MS = API_CLIENT_INITIAL_RETRY_DELAY_MS;
+  private readonly DEFAULT_MAX_DELAY_MS = API_CLIENT_MAX_RETRY_DELAY_MS;
+  private readonly DEFAULT_BACKOFF_MULTIPLIER = API_CLIENT_BACKOFF_MULTIPLIER;
+  private readonly DEFAULT_RETRYABLE_STATUS_CODES = API_CLIENT_RETRYABLE_STATUS_CODES;
 
   private inflightRequests = new Map<string, Promise<unknown>>();
   private requestInterceptors: RequestInterceptor[] = [];

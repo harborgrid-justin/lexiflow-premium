@@ -438,8 +438,8 @@ export function useImageFormat(sources: {
  */
 export function useBlurhashPlaceholder(
   hash: string | undefined,
-  width: number = 32,
-  height: number = 32,
+  width: number = IMAGE_OPTIMIZATION_DEFAULT_WIDTH,
+  height: number = IMAGE_OPTIMIZATION_DEFAULT_HEIGHT,
 ): string | null {
   const [dataUrl, setDataUrl] = useState<string | null>(null);
 

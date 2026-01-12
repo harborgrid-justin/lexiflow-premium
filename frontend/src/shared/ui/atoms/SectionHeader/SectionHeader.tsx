@@ -5,7 +5,6 @@
  */
 
 import React, { useId } from 'react';
-import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 export interface SectionHeaderProps {
@@ -22,17 +21,17 @@ export const SectionHeader = React.memo<SectionHeaderProps>(({
   subtitle, 
   action 
 }) => {
-  const { theme } = useTheme();
+  // Use Tailwind classes directly for theming
   const headingId = useId();
   
   return (
     <div className="flex justify-between items-center mb-4">
       <div>
-        <h3 id={headingId} className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>
+        <h3 id={headingId} className={cn("font-bold text-sm uppercase tracking-wide text-text", title && "mb-0")}>
           {title}
         </h3>
         {subtitle && (
-          <p aria-describedby={headingId} className={cn("text-xs mt-0.5", theme.text.secondary)}>
+          <p aria-describedby={headingId} className={cn("text-xs mt-0.5 text-text-muted")}>
             {subtitle}
           </p>
         )}

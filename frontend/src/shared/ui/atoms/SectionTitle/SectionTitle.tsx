@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 export interface SectionTitleProps {
@@ -17,10 +16,9 @@ export interface SectionTitleProps {
  * SectionTitle - React 18 optimized with React.memo
  */
 export const SectionTitle = React.memo<SectionTitleProps>(({ children, className }) => {
-  const { theme } = useTheme();
-  
+  // Use Tailwind classes directly for theming instead of JS object values which are hex codes
   return (
-    <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary, className)}>
+    <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3 text-text-muted", className)}>
       {children}
     </h4>
   );

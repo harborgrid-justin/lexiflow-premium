@@ -14,8 +14,10 @@ import {
   createMockUsers,
   createSuccessResponse,
 } from "./mockFactories";
+import { URLS, PORTS } from "../../src/config/ports.config";
 
-const API_BASE = process.env.VITE_API_URL || "http://localhost:3001";
+// Use centralized API URL configuration (BACKEND_ALT for tests)
+const API_BASE = process.env.VITE_API_URL || `http://localhost:${PORTS.BACKEND_ALT}`;
 
 // Cases handlers
 const casesHandlers = [

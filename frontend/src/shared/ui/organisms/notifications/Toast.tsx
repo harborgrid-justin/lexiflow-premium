@@ -19,6 +19,7 @@
 import React from 'react';
 import toast, { Toaster, Toast as ToastType } from 'react-hot-toast';
 import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react';
+import { TIMEOUTS } from '@/config/ports.config';
 
 /**
  * Toast notification props
@@ -41,9 +42,9 @@ export interface ToastNotificationProps {
  */
 const TOAST_CONFIG = {
   duration: {
-    low: 3000,
-    normal: 4000,
-    high: 6000,
+    low: TIMEOUTS.NOTIFICATION_SUCCESS,
+    normal: TIMEOUTS.NOTIFICATION_DEFAULT,
+    high: TIMEOUTS.NOTIFICATION_ERROR,
     urgent: 0, // Persistent
   },
   position: 'top-right' as const,

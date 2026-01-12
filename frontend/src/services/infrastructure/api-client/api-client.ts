@@ -9,6 +9,7 @@ import { buildBaseURL } from "./config";
 import * as FileUpload from "./file-upload";
 import * as HealthCheck from "./health-check";
 import * as HttpMethods from "./http-methods";
+import { API_CLIENT_DEFAULT_TIMEOUT_MS } from '@/config/features/services.config';
 
 /**
  * ApiClient Class
@@ -20,7 +21,7 @@ export class ApiClient {
   private requestInterceptors: Array<(config: any) => any> = [];
   private responseInterceptors: Array<(response: any) => any> = [];
   private _retryAttempts: number = 0;
-  private _timeout: number = 30000;
+  private _timeout: number = API_CLIENT_DEFAULT_TIMEOUT_MS;
 
   private get baseURL(): string {
     return this._baseURL || buildBaseURL();

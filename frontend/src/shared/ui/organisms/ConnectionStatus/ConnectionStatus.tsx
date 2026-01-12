@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
 import { apiClient } from '@/services/infrastructure/apiClient';
+import { TIMEOUTS } from '@/config/ports.config';
 import { useDataSource } from '@/providers';
 import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
 import { SystemHealthDisplay } from '../SystemHealthDisplay/SystemHealthDisplay';
@@ -23,7 +24,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
 
     // Exponential backoff: 5s, 10s, 20s, 40s, then 60s max
     const getBackoffDelay = (count: number) => {
-      const baseDelay = 5000;
+      const baseDelay = TIMEOUTS.HEALTH_CHECK;
       const maxDelay = 60000;
       return Math.min(baseDelay * Math.pow(2, count), maxDelay);
     };

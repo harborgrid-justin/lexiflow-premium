@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { UsersApiService } from '@/api/auth/users-api';
 import { AuthApiService } from '@/api/auth/auth-api';
 import type { User, UpdateUserDto } from '@/types';
+import { USER_AUTH_PROFILE_TABS } from '@/config/tabs.config';
 
 const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100),
@@ -225,11 +226,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
-  const tabs = [
-    { id: 'profile' as const, label: 'Profile', icon: 'user' },
-    { id: 'security' as const, label: 'Security', icon: 'lock' },
-    { id: 'preferences' as const, label: 'Preferences', icon: 'settings' },
-  ];
+  const tabs = USER_AUTH_PROFILE_TABS;
 
   return (
     <div className={`w-full ${className}`}>

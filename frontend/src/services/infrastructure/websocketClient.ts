@@ -29,6 +29,7 @@
 
 import io, { Socket } from 'socket.io-client';
 import { getWsUrl, WEBSOCKET_CONFIG } from '@/config/network/websocket.config';
+import { TIMEOUTS } from '@/config/ports.config';
 import { apiClient } from './apiClient';
 
 /**
@@ -425,7 +426,7 @@ class WebSocketClient {
     return new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error(`Join room timeout: ${room}`));
-      }, 5000);
+      }, TIMEOUTS.WS_CONNECTION);
 
       this.socket!.emit('join-room', room, (response: { success: boolean; error?: string }) => {
         clearTimeout(timeout);
@@ -463,7 +464,7 @@ class WebSocketClient {
     return new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error(`Leave room timeout: ${room}`));
-      }, 5000);
+      }, TIMEOUTS.WS_CONNECTION);
 
       this.socket!.emit('leave-room', room, (response: { success: boolean; error?: string }) => {
         clearTimeout(timeout);

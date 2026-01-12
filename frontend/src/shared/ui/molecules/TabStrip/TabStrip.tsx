@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 export interface TabStripProps {
@@ -17,10 +16,10 @@ export interface TabStripProps {
  * TabStrip - React 18 optimized with React.memo
  */
 export const TabStrip = React.memo<TabStripProps>(({ children, className }) => {
-  const { theme } = useTheme();
+  // Use Tailwind classes directly
   
   return (
-    <div className={cn("px-6 pt-6 border-b shrink-0", theme.border.default, className)}>
+    <div className={cn("px-6 pt-6 border-b border-border shrink-0", className)}>
       {children}
     </div>
   );

@@ -8,6 +8,7 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { Advisor, Case, Expert, WarRoom } from '@/types';
+import { useTheme } from '@/features/theme';
 import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -118,7 +119,7 @@ export default function WarRoomDetailRoute() {
       <div className="mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+          className={`inline-flex items-center gap-2 text-sm ${theme.text.secondary} ${theme.interactive.hover}`}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -127,14 +128,14 @@ export default function WarRoomDetailRoute() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      <h1 className={`text-2xl font-bold ${theme.text.primary} mb-4`}>
         War Room: {item.title}
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Advisors Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Advisors</h2>
+        <div className={`${theme.surface.default} rounded-lg shadow p-6`}>
+          <h2 className={`text-lg font-semibold mb-4 ${theme.text.primary}`}>Advisors</h2>
           {advisors && advisors.length > 0 ? (
             <ul className="space-y-3">
               {advisors.map((advisor) => (

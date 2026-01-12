@@ -389,7 +389,7 @@ export class DataSourceConfigBuilder {
  */
 export function createConfigFromEnv(): DataSourceConfig {
   const env = (import.meta.env.MODE || 'development') as DataSourceEnvironmentConfig['environment'];
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || URLS.api(HOSTS.LOCAL);
   const apiVersion = (import.meta.env.VITE_API_VERSION || 'v2') as 'v1' | 'v2' | 'v3';
   
   return new DataSourceConfigBuilder(env)
@@ -404,7 +404,7 @@ export function createConfigFromEnv(): DataSourceConfig {
  */
 export function createTestConfig(overrides?: Partial<DataSourceConfig>): DataSourceConfig {
   const baseConfig = new DataSourceConfigBuilder('test')
-    .withApiBaseUrl('http://localhost:3000/api')
+    .withApiBaseUrl(URLS.api(HOSTS.LOCAL))
     .withFeature('enableRetries', false)
     .withFeature('enableMetrics', false)
     .withFeature('enableTracing', false)

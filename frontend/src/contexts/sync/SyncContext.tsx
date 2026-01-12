@@ -1,5 +1,6 @@
 import { DataService } from '@/services/data/dataService';
 import { SyncEngine } from '@/services/data/syncEngine';
+import { SYNC_MAX_RETRIES, SYNC_BASE_DELAY_MS } from '@/config/features/contexts.config';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   SyncActionsValue,
@@ -67,10 +68,6 @@ export function useSync() {
 
 // Export types
 export type { SyncStatus };
-
-
-const MAX_RETRIES = 3;
-const BASE_DELAY = 1000;
 
 // Type for mutation handler functions
 type MutationHandler = (payload: unknown) => Promise<unknown>;
@@ -196,7 +193,7 @@ export const SyncProvider = ({
       const newRetryCount = mutation.retryCount + 1;
       const errorMsg = err instanceof Error ? err.message : 'Unknown error';
 
-      if (newRetryCount >= MAX_RETRIES) {
+      if (newRetryCount >= SYNC_MAX_RETRIES) {
         // Permanent Failure
         SyncEngine.update(mutation.id, {
           status: 'failed',
@@ -217,7 +214,7 @@ export const SyncProvider = ({
           retryCount: newRetryCount
         });
 
-        const delay = Math.pow(2, newRetryCount) * BASE_DELAY;
+        const delay = Math.pow(2, newRetryCount) * SYNC_BASE_DELAY_MS;
         console.log(`[Sync] Retrying in ${delay}ms...`);
 
         isProcessingRef.current = false;

@@ -2,6 +2,7 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
+import { DISCOVERY_TAB_CONFIG } from '@/config/tabs.config';
 import { ClipboardList, Database, FileText, Lock, MessageCircle, Mic2, Package, Scale, Shield, Users } from 'lucide-react';
 import React from 'react';
 
@@ -12,37 +13,7 @@ interface DiscoveryNavigationProps {
   onParentTabChange: (parentId: string) => void;
 }
 
-const PARENT_TABS = [
-  {
-    id: 'dashboard_parent', label: 'Dashboard', icon: Scale,
-    subTabs: [{ id: 'dashboard', label: 'Overview', icon: Scale }]
-  },
-  {
-    id: 'collection', label: 'Collection', icon: Database,
-    subTabs: [
-      { id: 'esi', label: 'ESI Map', icon: Database },
-      { id: 'custodians', label: 'Custodians', icon: Users },
-      { id: 'interviews', label: 'Interviews', icon: ClipboardList },
-      { id: 'holds', label: 'Legal Holds', icon: Lock },
-    ]
-  },
-  {
-    id: 'review', label: 'Review & Production', icon: FileText,
-    subTabs: [
-      { id: 'requests', label: 'Requests', icon: MessageCircle },
-      { id: 'productions', label: 'Productions', icon: Package },
-      { id: 'privilege', label: 'Privilege Log', icon: Shield },
-    ]
-  },
-  {
-    id: 'proceedings', label: 'Proceedings', icon: Mic2,
-    subTabs: [
-      { id: 'depositions', label: 'Depositions', icon: Mic2 },
-      { id: 'examinations', label: 'Examinations', icon: Scale },
-      { id: 'plan', label: 'Discovery Plan', icon: Users },
-    ]
-  }
-];
+const PARENT_TABS = DISCOVERY_TAB_CONFIG;
 
 export const DiscoveryNavigation: React.FC<DiscoveryNavigationProps> = ({
   activeTab, setActiveTab, activeParentTabId, onParentTabChange

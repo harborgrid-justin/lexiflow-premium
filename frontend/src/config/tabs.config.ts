@@ -674,4 +674,135 @@ export const RULES_PLATFORM_TABS: TabConfigItem[] = [
   },
 ];
 
+// =============================================================================
+// USER PROFILE MODULE TABS
+// =============================================================================
+
+export const USER_PROFILE_TAB_CONFIG: TabConfigItem[] = [
+  {
+    id: "general",
+    label: "General",
+    icon: Users,
+    subTabs: [
+      { id: "overview", label: "Overview", icon: Users },
+      { id: "preferences", label: "Preferences", icon: Settings },
+    ],
+  },
+  {
+    id: "security",
+    label: "Security & Access",
+    icon: ShieldCheck,
+    subTabs: [
+      { id: "access", label: "Access Matrix", icon: Settings },
+      { id: "security", label: "Security & Sessions", icon: ShieldCheck },
+      { id: "audit", label: "Audit Log", icon: Activity },
+    ],
+  },
+];
+
+// =============================================================================
+// LITIGATION STRATEGY MODULE TABS
+// =============================================================================
+
+export const LITIGATION_STRATEGY_TAB_CONFIG: TabConfigItem[] = [
+  {
+    id: "design",
+    label: "Strategy Design",
+    icon: GitMerge,
+    subTabs: [
+      { id: "canvas", label: "Visual Map", icon: GitMerge },
+      { id: "timeline", label: "Gantt View", icon: Clock },
+      { id: "templates", label: "Playbooks", icon: FileText },
+    ],
+  },
+  {
+    id: "analysis",
+    label: "Analysis",
+    icon: Sparkles,
+    subTabs: [{ id: "simulate", label: "Outcome Simulator", icon: Sparkles }],
+  },
+];
+
+// =============================================================================
+// WAR ROOM MODULE TABS
+// =============================================================================
+
+export const WAR_ROOM_TAB_CONFIG: TabConfigItem[] = [
+  {
+    id: "case_materials",
+    label: "Case Materials",
+    icon: Briefcase,
+    subTabs: [
+      { id: "pleadings", label: "Pleadings", icon: FileText },
+      { id: "evidence", label: "Evidence", icon: Box },
+      { id: "discovery", label: "Discovery", icon: Search },
+      { id: "exhibits", label: "Exhibits", icon: Folder },
+    ],
+  },
+  {
+    id: "strategy",
+    label: "Strategy",
+    icon: Gavel,
+    subTabs: [
+      { id: "timeline", label: "Case Timeline", icon: Clock },
+      { id: "issues", label: "Legal Issues", icon: Scale },
+      { id: "arguments", label: "Arguments", icon: FileText },
+    ],
+  },
+  {
+    id: "witnesses",
+    label: "Witnesses",
+    icon: Users,
+    subTabs: [{ id: "witnesses", label: "Witness Prep", icon: Users }],
+  },
+];
+
+// =============================================================================
+// DISCOVERY MODULE TABS
+// =============================================================================
+
+export const DISCOVERY_TAB_CONFIG: TabConfigItem[] = [
+  {
+    id: "overview",
+    label: "Overview",
+    icon: Scale,
+    subTabs: [{ id: "dashboard", label: "Overview", icon: Scale }],
+  },
+  {
+    id: "requests",
+    label: "Requests",
+    icon: FileText,
+    subTabs: [
+      { id: "interrogatories", label: "Interrogatories", icon: FileText },
+      { id: "rfps", label: "RFPs", icon: FileText },
+      { id: "rfas", label: "RFAs", icon: FileText },
+    ],
+  },
+  {
+    id: "responses",
+    label: "Responses",
+    icon: FileSignature,
+    subTabs: [
+      { id: "objections", label: "Objections", icon: ShieldAlert },
+      { id: "drafting", label: "Drafting", icon: FileSignature },
+    ],
+  },
+  {
+    id: "depositions",
+    label: "Depositions",
+    icon: Users,
+    subTabs: [{ id: "schedule", label: "Schedule", icon: Clock }],
+  },
+];
+
+// =============================================================================
+// USER AUTH PROFILE TABS (Simple version for auth component)
+// =============================================================================
+
+export const USER_AUTH_PROFILE_TABS = [
+  { id: 'profile', label: 'Profile', icon: Users },
+  { id: 'security', label: 'Security', icon: Lock },
+  { id: 'preferences', label: 'Preferences', icon: Settings },
+];
+
 

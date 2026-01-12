@@ -25,6 +25,7 @@ import { useInterval } from '@/shared/hooks/useInterval';
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
+import { TIMEOUTS } from '@/config/ports.config';
 
 // Components
 import { FileAttachment } from '@/shared/ui/molecules/FileAttachment/FileAttachment';
@@ -82,7 +83,7 @@ export const MessengerChatWindow = ({
     if (!isTyping && Math.random() > 0.92) {
       setIsTyping(true);
       // Concurrent-safe: Store timeout ID for cleanup if needed
-      setTimeout(() => setIsTyping(false), 2000 + Math.random() * 3000);
+      setTimeout(() => setIsTyping(false), 2000 + Math.random() * TIMEOUTS.TYPING_INDICATOR);
     }
   }, 1000);
 

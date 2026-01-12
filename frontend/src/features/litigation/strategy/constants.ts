@@ -15,22 +15,8 @@ import {
 // Re-export canvas constants for backward compatibility
 export * from './canvasConstants';
 
-export const LITIGATION_TABS = [
-  {
-    id: 'design', label: 'Strategy Design', icon: GitMerge,
-    subTabs: [
-      { id: 'canvas', label: 'Visual Map', icon: GitMerge },
-      { id: 'timeline', label: 'Gantt View', icon: Milestone },
-      { id: 'templates', label: 'Playbooks', icon: FileText },
-    ]
-  },
-  {
-    id: 'analysis', label: 'Analysis', icon: Play,
-    subTabs: [
-      { id: 'simulate', label: 'Outcome Simulator', icon: Play },
-    ]
-  }
-];
+// Re-export centralized tab config
+export { LITIGATION_STRATEGY_TAB_CONFIG as LITIGATION_TABS } from '@/config/tabs.config';
 
 export const PALETTE_SECTIONS = [
   {

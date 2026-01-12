@@ -1,5 +1,6 @@
 import { ErrorBoundary } from "@/shared/ui/organisms/ErrorBoundary";
 import { cn } from '@/shared/lib/cn';
+import { WINDOW_MAX_INSTANCES, WINDOW_BASE_Z_INDEX, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT } from '@/config/features/contexts.config';
 import { Maximize2, Minus, X } from 'lucide-react';
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -33,9 +34,6 @@ export type { WindowInstance } from './WindowContext.types';
 const WindowStateContext = createContext<WindowStateValue | undefined>(undefined);
 const WindowActionsContext = createContext<WindowActionsValue | undefined>(undefined);
 
-// Maximum number of windows to prevent memory leaks
-const MAX_WINDOWS = 20;
-
 // BP4: Export only custom hooks, not raw contexts
 export function useWindowState(): WindowStateValue {
   const context = useContext(WindowStateContext);
@@ -63,10 +61,6 @@ export function useWindow() {
   };
 }
 
-
-// Base Z-Index for Windows (below Modals and Toasts)
-const BASE_WINDOW_Z = 1000;
-
 /**
  * WindowProvider
  *
@@ -84,7 +78,7 @@ const BASE_WINDOW_Z = 1000;
 export const WindowProvider = ({
   children,
   initialOrbitalMode,
-  maxWindows = MAX_WINDOWS,
+  maxWindows = WINDOW_MAX_INSTANCES,
   theme: themeProp
 }: WindowProviderProps) => {
   // Use theme from props or fallback to basic classes
@@ -96,7 +90,7 @@ export const WindowProvider = ({
     interactive: { hover: 'hover:bg-slate-200 dark:hover:bg-slate-600' }
   };
   const [windows, setWindows] = useState<WindowInstance[]>([]);
-  const [maxZIndex, setMaxZIndex] = useState(BASE_WINDOW_Z);
+  const [maxZIndex, setMaxZIndex] = useState(WINDOW_BASE_Z_INDEX);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   // Settings State

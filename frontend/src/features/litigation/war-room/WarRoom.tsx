@@ -55,6 +55,7 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
+import { WAR_ROOM_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
 import type { Case, WarRoomData } from "@/types";
@@ -103,33 +104,7 @@ interface WarRoomProps {
 // ============================================================================
 // MODULE CONSTANTS
 // ============================================================================
-const PARENT_TABS = [
-  {
-    id: "strategy",
-    label: "Strategy",
-    icon: Target,
-    subTabs: [
-      { id: "command", label: "Command Center", icon: Monitor },
-      { id: "advisory", label: "Advisory Board", icon: Briefcase },
-      { id: "opposition", label: "Opposition Intel", icon: Swords },
-    ],
-  },
-  {
-    id: "presentation",
-    label: "Presentation",
-    icon: Layers,
-    subTabs: [
-      { id: "evidence", label: "Evidence Wall", icon: FileText },
-      { id: "binder", label: "Trial Notebook", icon: Gavel },
-    ],
-  },
-  {
-    id: "witnesses",
-    label: "Witnesses",
-    icon: Users,
-    subTabs: [{ id: "witnesses", label: "Witness Prep", icon: Mic2 }],
-  },
-];
+const PARENT_TABS = WAR_ROOM_TAB_CONFIG;
 
 // ============================================================================
 // COMPONENT

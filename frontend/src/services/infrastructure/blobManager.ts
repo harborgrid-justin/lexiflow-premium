@@ -1,3 +1,5 @@
+import { BLOB_MANAGER_TEMP_TTL_MS } from '@/config/features/services.config';
+
 /**
  * @module services/blobManager
  * @category Services - Memory Management
@@ -175,7 +177,7 @@ class BlobManagerService {
    * Create a temporary blob URL that auto-revokes after specified time
    * Useful for immediate downloads
    */
-  createTemporary(blob: Blob | File, ttlMs: number = 5000): string {
+  createTemporary(blob: Blob | File, ttlMs: number = BLOB_MANAGER_TEMP_TTL_MS): string {
     const url = this.create(blob, "temporary");
 
     setTimeout(() => {

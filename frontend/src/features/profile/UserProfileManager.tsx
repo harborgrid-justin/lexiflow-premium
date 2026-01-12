@@ -30,33 +30,13 @@ import { SecurityPane } from './SecurityPane';
 
 // Services & Data
 import { DataService } from '@/services/data/dataService';
+import { USER_PROFILE_TAB_CONFIG } from '@/config/tabs.config';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Types
 import { ExtendedUserProfile } from '@/types';
-
-// ========================================
-// CONSTANTS
-// ========================================
-const PROFILE_TABS = [
-  {
-    id: 'general', label: 'General', icon: UserCircle,
-    subTabs: [
-      { id: 'overview', label: 'Overview', icon: UserCircle },
-      { id: 'preferences', label: 'Preferences', icon: Sliders },
-    ]
-  },
-  {
-    id: 'security', label: 'Security & Access', icon: Shield,
-    subTabs: [
-      { id: 'access', label: 'Access Matrix', icon: Settings },
-      { id: 'security', label: 'Security & Sessions', icon: Shield },
-      { id: 'audit', label: 'Audit Log', icon: Activity },
-    ]
-  }
-];
 
 // ========================================
 // COMPONENT
@@ -94,7 +74,7 @@ export const UserProfileManager = () => {
     <TabbedPageLayout
       pageTitle="User Profile"
       pageSubtitle="Manage identity, granular permissions, and workspace preferences."
-      tabConfig={PROFILE_TABS}
+      tabConfig={USER_PROFILE_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

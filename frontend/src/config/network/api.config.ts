@@ -4,6 +4,7 @@
 // Backend API connection and request settings
 
 import { isBrowser } from "@rendering/utils";
+import { URLS, HOSTS, PORTS } from "../ports.config";
 
 // Lazy getters to avoid accessing import.meta.env before Vite initialization
 export const getApiBaseUrl = () => {
@@ -12,7 +13,7 @@ export const getApiBaseUrl = () => {
     return (
       import.meta.env.VITE_API_URL ||
       import.meta.env.VITE_API_BASE_URL ||
-      "http://127.0.0.1:3001"
+      URLS.backend(HOSTS.LOCAL_IPV4).replace(`:${PORTS.BACKEND}`, `:${PORTS.BACKEND_ALT}`) // Alt port for SSR
     );
   }
 
@@ -32,7 +33,9 @@ export const getApiPrefix = () => import.meta.env.VITE_API_PREFIX || "/api";
 export const API_PREFIX = import.meta.env.VITE_API_PREFIX || "/api";
 
 // Note: Don't access import.meta.env at module load
-export const API_TIMEOUT_MS = 30000; // 30 seconds
+// Import centralized timeout configuration
+import { TIMEOUTS } from '../ports.config';
+export const API_TIMEOUT_MS = TIMEOUTS.API_REQUEST;
 export const API_RETRY_ATTEMPTS = 3;
 export const API_RETRY_DELAY_MS = 1000;
 

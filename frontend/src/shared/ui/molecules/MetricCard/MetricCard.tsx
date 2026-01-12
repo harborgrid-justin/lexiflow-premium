@@ -4,7 +4,6 @@
  * @description Animated metric card with sparkline support, trend indicators, and live status
  */
 
-import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -103,7 +102,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
         <polyline
           points={sparklinePath}
           fill="none"
-          stroke={trendUp ? '#10b981' : '#f43f5e'}
+          stroke={trendUp ? 'var(--color-success)' : 'var(--color-error)'}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -114,8 +113,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
 
   return (
     <div className={cn(
-      theme.surface.default,
-      theme.border.default,
+      "bg-surface border-border",
       "rounded-xl border p-5 shadow-sm transition-all hover:shadow-md flex flex-col justify-between h-full relative overflow-hidden",
       className
     )}>
@@ -127,16 +125,16 @@ export const MetricCard = React.memo<MetricCardProps>(({
       )}
       <div className="flex justify-between items-start mb-2">
         <div>
-          <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5", theme.text.secondary)}>
+          <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5 text-text-muted")}>
             {label}
           </p>
-          <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>
+          <div className={cn("text-2xl font-bold tracking-tight text-text")}>
             {typeof displayValue === 'number' ? displayValue.toLocaleString() : (displayValue || '0')}
           </div>
         </div>
         {Icon && (
-          <div className={cn("p-2.5 rounded-lg bg-opacity-10", theme.surface.highlight)}>
-            <Icon className={cn("h-5 w-5", theme.text.secondary)} />
+          <div className={cn("p-2.5 rounded-lg bg-opacity-10 bg-primary-light")}>
+            <Icon className={cn("h-5 w-5 text-text-muted")} />
           </div>
         )}
       </div>
@@ -149,7 +147,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
         trend && (
           <div className={cn(
             "mt-4 text-xs font-medium flex items-center",
-            trendUp ? "text-emerald-600" : "text-rose-600"
+            trendUp ? "text-success" : "text-error"
           )}>
             {trendUp ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
             {trend}

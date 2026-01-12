@@ -50,12 +50,12 @@ const createPhysicsWorker = (): Worker | null => {
     const NODE_STRIDE = ${NODE_STRIDE};
 
     // Inlined simplified physics for worker context
-    const REPULSION = 1000;
-    const SPRING_LENGTH = 180;
-    const SPRING_STRENGTH = 0.05;
-    const DAMPING = 0.85;
-    const CENTER_PULL = 0.02;
-    const ALPHA_DECAY = 0.01;
+    const REPULSION = ${NEXUS_GRAPH_REPULSION};
+    const SPRING_LENGTH = ${NEXUS_GRAPH_SPRING_LENGTH};
+    const SPRING_STRENGTH = ${NEXUS_GRAPH_SPRING_STRENGTH};
+    const DAMPING = ${NEXUS_GRAPH_DAMPING};
+    const CENTER_PULL = ${NEXUS_GRAPH_CENTER_PULL};
+    const ALPHA_DECAY = ${NEXUS_GRAPH_ALPHA_DECAY};
 
     self.onmessage = function(e) {
       const { buffer, links, count, width, height, alpha } = e.data;

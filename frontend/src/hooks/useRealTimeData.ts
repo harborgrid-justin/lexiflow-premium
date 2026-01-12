@@ -1,3 +1,4 @@
+import { TIMEOUTS } from '@/config/ports.config';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useWebSocket } from './useWebSocket';
 
@@ -427,7 +428,7 @@ export function useTypingIndicator(conversationId: string) {
             newSet.delete(data.userId);
             return newSet;
           });
-        }, 5000);
+        }, TIMEOUTS.TYPING_INDICATOR_EXPIRY);
       }
     };
 
@@ -474,7 +475,7 @@ export function useTypingIndicator(conversationId: string) {
     // Auto-stop after 3 seconds
     typingTimeoutRef.current = setTimeout(() => {
       stopTyping();
-    }, 3000);
+    }, TIMEOUTS.TYPING_INDICATOR);
   }, [socket, isConnected, conversationId, emit, stopTyping]);
 
 

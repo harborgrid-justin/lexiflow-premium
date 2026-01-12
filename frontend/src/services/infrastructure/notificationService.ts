@@ -16,6 +16,7 @@
  */
 
 import { defaultStorage } from "./adapters/StorageAdapter";
+import { TIMEOUTS } from '@/config/ports.config';
 
 class ValidationError extends Error {
   constructor(message: string) {
@@ -677,8 +678,8 @@ export const NotificationService = new NotificationServiceClass();
 // CONVENIENCE FUNCTIONS
 // ============================================================================
 
-const NOTIFICATION_SUCCESS_DISMISS_MS = 3000; // 3 seconds for success notifications
-const NOTIFICATION_AUTO_DISMISS_MS = 5000; // 5 seconds for auto-dismiss notifications
+const NOTIFICATION_SUCCESS_DISMISS_MS = TIMEOUTS.NOTIFICATION_SUCCESS; // 3 seconds for success notifications
+const NOTIFICATION_AUTO_DISMISS_MS = TIMEOUTS.NOTIFICATION_ERROR; // 5 seconds for auto-dismiss notifications
 
 /**
  * Convenience functions for common notification patterns

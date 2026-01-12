@@ -11,6 +11,7 @@
  * @module routes/_shared/RouteErrorBoundary
  */
 
+import { useTheme } from '@/features/theme';
 import { Link, isRouteErrorResponse } from 'react-router';
 import type { RouteErrorBoundaryProps } from './types';
 
@@ -54,24 +55,26 @@ export function NotFoundError({
   backTo = '/',
   backLabel = 'Go Home',
 }: NotFoundErrorProps) {
+  const { theme } = useTheme();
   // Ensure backTo is always a valid path string
   const safePath = backTo && typeof backTo === 'string' && backTo.trim() !== '' ? backTo : '/';
 
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
       <div className="text-center">
-        <h1 className="mb-4 text-6xl font-bold text-gray-300 dark:text-gray-700">
+        <h1 className={`mb-4 text-6xl font-bold ${theme.text.tertiary}`}>
           404
         </h1>
-        <h2 className="mb-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        <h2 className={`mb-2 text-2xl font-semibold ${theme.text.primary}`}>
           {title}
         </h2>
-        <p className="mb-6 max-w-md text-gray-600 dark:text-gray-400">
+        <p className={`mb-6 max-w-md ${theme.text.secondary}`}>
           {message}
         </p>
         <Link
           to={safePath}
-          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+          style={{ backgroundColor: theme.accent.primary }}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

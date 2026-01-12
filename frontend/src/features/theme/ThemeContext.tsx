@@ -1,6 +1,8 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { ThemeObject } from './ThemeContext.types';
-import { DEFAULT_TOKENS, DesignTokens, ThemeDensity } from './tokens';
+import { DEFAULT_TOKENS, DesignTokens, ThemeDensity, getTokens } from './tokens';
+import { UI_CONFIG } from '../../config/features/ui.config';
+import { FEATURES_CONFIG } from '../../config/features/features.config';
 
 export type { ThemeObject } from './ThemeContext.types';
 
@@ -13,6 +15,8 @@ interface ThemeContextType {
   toggleDark: () => void;
   updateToken: (category: keyof DesignTokens | 'root', key: string, value: string, subKey?: string) => void;
   resetTokens: () => void;
+  ui: typeof UI_CONFIG;
+  features: typeof FEATURES_CONFIG;
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
@@ -101,13 +105,15 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     isDark,
     toggleDark,
     updateToken,
-    resetTokens
+    resetTokens,
+    ui: UI_CONFIG,
+    features: FEATURES_CONFIG
   }), [tokens, density, isDark]);
 
   useEffect(() => {
     const root = document.documentElement;
     const currentSpacing = tokens.spacing[density];
-    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode } = tokens;
+    const { colors, shadows, borderRadius, typography, transitions, zIndex, fontMode, layout } = tokens;
 
     // Inject Colors
     Object.entries(colors).forEach(([key, val]) => {
@@ -149,6 +155,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     Object.entries(zIndex).forEach(([key, val]) => {
       root.style.setProperty(`--z-${key}`, val as string);
     });
+
+    // Inject Layout
+    if (layout) {
+      Object.entries(layout).forEach(([key, val]) => {
+        root.style.setProperty(`--layout-${key}`, `${val}px`);
+      });
+    }
 
   }, [tokens, density]);
 

@@ -121,9 +121,7 @@ import type {
   WSMessage,
   WSMessageType,
 } from "./collaboration/types";
-
-// Memory Management: Max pending edits before eviction
-const MAX_PENDING_EDITS = 1000;
+import { COLLABORATION_MAX_PENDING_EDITS } from '@/config/features/services.config';
 
 // Import types from separate file
 export * from "./collaboration/types";

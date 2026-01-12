@@ -82,7 +82,7 @@ export function useDataServiceCleanup(
  * }
  * ```
  */
-export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
+export function useDataServiceMemoryStats(refreshInterval: number = DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS) {
   const [stats, setStats] = React.useState(() => ({
     repositoryCount: 0,
     totalListeners: 0,

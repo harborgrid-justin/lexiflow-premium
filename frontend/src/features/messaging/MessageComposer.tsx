@@ -5,6 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import type { Message } from '@/api/communications/messaging-api';
+import { TIMEOUTS } from '@/config/ports.config';
 
 export interface MessageComposerProps {
   onSend: (content: string, attachments?: File[]) => void;
@@ -61,7 +62,7 @@ export function MessageComposer({
         setIsTyping(false);
         onTyping?.(false);
       }
-    }, 3000);
+    }, TIMEOUTS.TYPING_INDICATOR);
 
     return () => {
       if (typingTimeoutRef.current) {

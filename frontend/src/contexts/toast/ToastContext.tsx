@@ -1,4 +1,5 @@
 import { NOTIFICATION_AUTO_DISMISS_MS, NOTIFICATION_ERROR_DISMISS_MS } from '@/config/features/ui.config';
+import { TOAST_MAX_VISIBLE, TOAST_MAX_QUEUE } from '@/config/features/contexts.config';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -70,8 +71,8 @@ const PRIORITY_MAP: PriorityMap = {
 
 export const ToastProvider = ({
   children,
-  maxVisible = 3,
-  maxQueue = 50
+  maxVisible = TOAST_MAX_VISIBLE,
+  maxQueue = TOAST_MAX_QUEUE
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastsRef = useRef<Toast[]>([]);

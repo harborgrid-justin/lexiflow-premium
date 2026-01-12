@@ -139,7 +139,7 @@ export function useLazyComponentWithState<T = Record<string, unknown>>(
     retryDelay?: number;
   } = {}
 ): LazyComponentState<T> {
-  const { autoLoad = false, retryOnError = false, retryDelay = 1000 } = options;
+  const { autoLoad = false, retryOnError = false, retryDelay = CODE_SPLIT_RETRY_DELAY_MS } = options;
 
   const [Component, setComponent] = useState<ComponentType<T> | null>(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -30,6 +30,7 @@
  */
 
 import { DependencyList, useCallback, useRef } from "react";
+import { MEMOIZATION_MAX_CACHE_SIZE, MEMOIZATION_WARN_THRESHOLD_MS } from '@/config/features/hooks.config';
 
 /**
  * Configuration options for memoization
@@ -47,7 +48,7 @@ export interface MemoizationConfig {
 
   /**
    * Threshold in milliseconds to warn about slow computations
-   * @default 10
+   * @default MEMOIZATION_WARN_THRESHOLD_MS (10ms from config)
    */
   warnThreshold?: number;
 
@@ -325,7 +326,7 @@ export function useConstant<T>(factory: () => T): T {
  */
 export function useMemoCache<TInput, TOutput>(
   factory: (input: TInput) => TOutput,
-  maxSize: number = 100
+  maxSize: number = MEMOIZATION_MAX_CACHE_SIZE
 ): (input: TInput) => TOutput {
   const cacheRef = useRef<Map<TInput, TOutput>>(new Map());
 

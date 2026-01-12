@@ -149,7 +149,7 @@ export const useNotificationWebSocket = (
     providedUrl ||
     (typeof window !== "undefined"
       ? window.location.origin
-      : "http://localhost:3000");
+      : URLS.backend(HOSTS.LOCAL));
 
   const [connectionState, setConnectionState] =
     useState<ConnectionState>("disconnected");

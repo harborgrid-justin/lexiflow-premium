@@ -6,6 +6,7 @@
  */
 
 import { toast } from 'react-hot-toast';
+import { TIMEOUTS } from '@/config/ports.config';
 
 // ============================================================================
 // TYPES
@@ -30,7 +31,7 @@ export interface NotificationOptions {
  */
 export const notifySuccess = (message: string, options?: NotificationOptions): void => {
   toast.success(message, {
-    duration: options?.duration || 3000,
+    duration: options?.duration || TIMEOUTS.NOTIFICATION_SUCCESS,
     position: options?.position || 'top-right',
     icon: options?.icon
   });
@@ -41,7 +42,7 @@ export const notifySuccess = (message: string, options?: NotificationOptions): v
  */
 export const notifyError = (message: string, options?: NotificationOptions): void => {
   toast.error(message, {
-    duration: options?.duration || 4000,
+    duration: options?.duration || TIMEOUTS.NOTIFICATION_ERROR,
     position: options?.position || 'top-right',
     icon: options?.icon
   });
@@ -52,7 +53,7 @@ export const notifyError = (message: string, options?: NotificationOptions): voi
  */
 export const notifyInfo = (message: string, options?: NotificationOptions): void => {
   toast(message, {
-    duration: options?.duration || 3000,
+    duration: options?.duration || TIMEOUTS.NOTIFICATION_SUCCESS,
     position: options?.position || 'top-right',
     icon: options?.icon || 'ℹ️'
   });

@@ -4,10 +4,11 @@
 // Authentication, session management, encryption, and security policies
 
 import { getAppEnv } from '../app.config';
+import { TIMEOUTS } from '../ports.config';
 
-// Session Management
-export const SESSION_TIMEOUT_MS = 3600000; // 1 hour
-export const SESSION_WARNING_MS = 300000; // 5 minutes before timeout
+// Session Management (using centralized timeouts)
+export const SESSION_TIMEOUT_MS = TIMEOUTS.SESSION_TIMEOUT;
+export const SESSION_WARNING_MS = TIMEOUTS.SESSION_WARNING;
 export const SESSION_STORAGE_KEY = 'lexiflow-session';
 
 // Authentication

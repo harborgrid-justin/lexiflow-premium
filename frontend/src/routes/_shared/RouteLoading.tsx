@@ -13,6 +13,7 @@
  * @module routes/_shared/RouteLoading
  */
 
+import { useTheme } from '@/features/theme';
 import { memo } from 'react';
 import type { RouteLoadingProps, SkeletonProps } from './types';
 
@@ -29,10 +30,11 @@ const SkeletonBase = memo(function SkeletonBase({
   className = '',
   animate = true,
 }: SkeletonBaseProps) {
+  const { theme } = useTheme();
   return (
     <div
-      className={`rounded bg-gray-200 dark:bg-gray-700 ${animate ? 'animate-pulse' : ''
-        } ${className}`}
+      className={`rounded ${animate ? 'animate-pulse' : ''} ${className}`}
+      style={{ backgroundColor: theme.surface.muted }}
       aria-hidden="true"
     />
   );
@@ -51,6 +53,7 @@ const Spinner = memo(function Spinner({
   size = 'md',
   className = '',
 }: SpinnerProps) {
+  const { theme } = useTheme();
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
@@ -59,7 +62,8 @@ const Spinner = memo(function Spinner({
 
   return (
     <svg
-      className={`animate-spin text-blue-600 dark:text-blue-400 ${sizeClasses[size]} ${className}`}
+      className={`animate-spin ${sizeClasses[size]} ${className}`}
+      style={{ color: theme.accent.primary }}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

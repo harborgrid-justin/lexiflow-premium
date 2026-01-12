@@ -54,10 +54,10 @@ export interface UseWizardReturn {
  * Manages multi-step wizard navigation.
  * 
  * @param totalSteps - Total number of steps in wizard
- * @param initialStep - Initial step number (default: 1)
+ * @param initialStep - Initial step number (default: WIZARD_DEFAULT_INITIAL_STEP from config)
  * @returns Object with current step, navigation methods, and boundary flags
  */
-export function useWizard(totalSteps: number, initialStep: number = 1): UseWizardReturn {
+export function useWizard(totalSteps: number, initialStep: number = WIZARD_DEFAULT_INITIAL_STEP): UseWizardReturn {
   const [currentStep, setCurrentStep] = useState(initialStep);
 
   const next = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));

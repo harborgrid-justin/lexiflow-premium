@@ -9,6 +9,7 @@ import { reactRouter } from "@react-router/dev/vite";
 import path from "node:path";
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths"; // 1. Add this to fix alias resolution
+import { PORTS, HOSTS, URLS } from "./src/config/ports.config";
 
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -19,7 +20,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
     // 1. Server & Preview: Consolidation
     server: {
-      port: 3400,
+      port: PORTS.FRONTEND,
       host: true,
       strictPort: true,
       hmr: process.env.CODESPACES
@@ -30,7 +31,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         : undefined,
       proxy: {
         "/api": {
-          target: env.VITE_API_BASE_URL || "http://0.0.0.0:3000",
+          target: env.VITE_API_BASE_URL || URLS.backend(HOSTS.ANY),
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path,
@@ -46,7 +47,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           },
         },
         "/socket.io": {
-          target: env.VITE_API_BASE_URL || "http://0.0.0.0:3000",
+          target: env.VITE_API_BASE_URL || URLS.backend(HOSTS.ANY),
           changeOrigin: true,
           secure: false,
           ws: true,

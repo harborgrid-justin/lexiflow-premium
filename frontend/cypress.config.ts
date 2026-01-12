@@ -6,11 +6,12 @@
  */
 
 import { defineConfig } from 'cypress';
+import { PORTS, URLS } from './src/config/ports.config';
 
 export default defineConfig({
   e2e: {
     // Base URL for the application under test
-    baseUrl: 'http://localhost:3400',
+    baseUrl: URLS.frontend(),
 
     // Viewport settings
     viewportWidth: 1280,
@@ -80,7 +81,7 @@ export default defineConfig({
   // Environment variables
   env: {
     ENVIRONMENT: 'development',
-    API_BASE_URL: 'http://localhost:5000/api',
+    API_BASE_URL: URLS.api(),
   },
 
   // File server options

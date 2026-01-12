@@ -128,19 +128,7 @@ export interface UseTimeTrackerReturn {
 }
 
 // ============================================================================
-// CONSTANTS
-// ============================================================================
 
-/** Minimum billable time in seconds (1 minute) */
-const MIN_BILLABLE_SECONDS = 60;
-
-/** Default hourly rate in dollars */
-const DEFAULT_RATE = 450;
-
-/** Timer interval in milliseconds (1 second) */
-const TIMER_INTERVAL_MS = 1000;
-
-// ============================================================================
 // HOOK IMPLEMENTATION
 // ============================================================================
 
@@ -160,7 +148,7 @@ export function useTimeTracker(
   const {
     caseId = "General",
     userId = "current-user",
-    rate = DEFAULT_RATE,
+    rate = TIME_TRACKER_DEFAULT_RATE,
   } = options;
 
   const notify = useNotify();
@@ -225,7 +213,7 @@ export function useTimeTracker(
   useEffect(() => {
     if (!validateRate(rate)) {
       notify.warning(
-        `Invalid rate: ${rate}. Using default rate: ${DEFAULT_RATE}`
+        `Invalid rate: ${rate}. Using default rate: ${TIME_TRACKER_DEFAULT_RATE}`
       );
     }
     if (!validateCaseId(caseId)) {
@@ -385,14 +373,14 @@ export function useTimeTracker(
   const stop = useCallback(async () => {
     try {
       // Validate minimum billable time
-      if (seconds < MIN_BILLABLE_SECONDS) {
+      if (seconds < TIME_TRACKER_MIN_BILLABLE_SECONDS) {
         setSeconds(0);
         setIsActive(false);
         notify.info(
-          `Time entry ignored (less than ${MIN_BILLABLE_SECONDS / 60} minute).`
+          `Time entry ignored (less than ${TIME_TRACKER_MIN_BILLABLE_SECONDS / 60} minute).`
         );
         console.log(
-          `[useTimeTracker] Entry ignored: ${seconds}s < ${MIN_BILLABLE_SECONDS}s`
+          `[useTimeTracker] Entry ignored: ${seconds}s < ${TIME_TRACKER_MIN_BILLABLE_SECONDS}s`
         );
         return;
       }

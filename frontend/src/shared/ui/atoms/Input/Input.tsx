@@ -35,7 +35,7 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
  * Uses useId for SSR-safe, unique IDs
  */
 export const Input = ({ label, error, className = '', ...props }: InputProps) => {
-  const { theme, mode } = useTheme();
+  const { mode } = useTheme();
   // React 18: useId generates stable, unique IDs for accessibility
   const inputId = useId();
   const errorId = useId();
@@ -43,7 +43,7 @@ export const Input = ({ label, error, className = '', ...props }: InputProps) =>
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className={labelStyles(theme)}>
+        <label htmlFor={inputId} className={labelStyles}>
           {label}
         </label>
       )}
@@ -52,14 +52,14 @@ export const Input = ({ label, error, className = '', ...props }: InputProps) =>
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={error ? errorId : undefined}
         className={cn(
-          getInputStyles(theme, !!error, mode),
+          getInputStyles(!!error),
           className
         )}
         style={mode === 'dark' ? { colorScheme: 'dark' } : {}}
         {...props}
       />
       {error && (
-        <p id={errorId} role="alert" className={errorStyles(theme)}>
+        <p id={errorId} role="alert" className={errorStyles}>
           {error}
         </p>
       )}

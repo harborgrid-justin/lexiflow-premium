@@ -4,6 +4,7 @@
 // Real-time communication settings for WebSocket connections
 
 import { isBrowser } from "@rendering/utils";
+import { TIMEOUTS } from '../ports.config';
 
 export const WS_ENABLED = false; // Set to true when backend WebSocket is ready
 export const getWsUrl = () => {
@@ -23,7 +24,7 @@ export const WS_RECONNECT_ATTEMPTS = 5;
 export const WS_RECONNECT_DELAY_MS = 1000;
 export const WS_RECONNECT_BACKOFF_MULTIPLIER = 1.5;
 export const WS_PING_INTERVAL_MS = 25000;
-export const WS_PING_TIMEOUT_MS = 5000;
+export const WS_PING_TIMEOUT_MS = TIMEOUTS.WS_CONNECTION;
 export const WS_MAX_MESSAGE_SIZE = 1048576; // 1MB
 
 // Export as object

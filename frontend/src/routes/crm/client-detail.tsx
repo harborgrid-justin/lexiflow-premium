@@ -8,6 +8,7 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { Client } from '@/types';
+import { useTheme } from '@/features/theme';
 import { redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
@@ -99,7 +100,7 @@ export default function ClientDetailRoute() {
       <div className="mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+          className={`inline-flex items-center gap-2 text-sm ${theme.text.secondary} ${theme.interactive.hover}`}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -109,7 +110,7 @@ export default function ClientDetailRoute() {
       </div>
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className={`text-2xl font-bold ${theme.text.primary}`}>
           {item.name}
         </h1>
         <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
@@ -117,16 +118,16 @@ export default function ClientDetailRoute() {
         </span>
       </div>
 
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg dark:bg-gray-800">
+      <div className={`${theme.surface.default} shadow overflow-hidden sm:rounded-lg`}>
         <div className="px-4 py-5 sm:px-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+          <h3 className={`text-lg leading-6 font-medium ${theme.text.primary}`}>
             Client Information
           </h3>
-          <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
-            Personal details and application.
+          <p className={`mt-1 max-w-2xl text-sm ${theme.text.secondary}`}>
+            Personal details and contact information.
           </p>
         </div>
-        <div className="border-t border-gray-200 dark:border-gray-700">
+        <div className={`border-t ${theme.border.default}`}>
           <dl>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 dark:bg-gray-800/50">
               <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">

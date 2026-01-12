@@ -8,12 +8,24 @@
  * Import specific constants directly from source files:
  * - import { FORM_AUTO_SAVE_DELAY_MS } from '@/config/features/forms.config';
  * - import { APP_NAME } from '@/config/app.config';
+ * - import { WINDOW_MAX_INSTANCES } from '@/config/features/contexts.config';
  */
 
 // Core configuration objects - safe named exports
 export { CONFIG } from './master.config';
 export { PATHS, type AppPath } from './paths.config';
 export { NAVIGATION_ITEMS, type NavItemConfig } from './nav.config';
+
+// Port and URL configuration
+export { 
+  PORTS, 
+  URLS, 
+  HOSTS, 
+  TIMEOUTS,
+  getBackendUrl, 
+  getApiUrl, 
+  getWebSocketUrl 
+} from './ports.config';
 
 // Tab configurations - Constants
 export {
@@ -30,7 +42,13 @@ export {
   EVIDENCE_PARENT_TABS,
   KNOWLEDGE_BASE_TABS,
   PLEADING_BUILDER_TAB_CONFIG,
-  RESEARCH_TAB_CONFIG
+  RESEARCH_TAB_CONFIG,
+  RULES_PLATFORM_TABS,
+  USER_PROFILE_TAB_CONFIG,
+  LITIGATION_STRATEGY_TAB_CONFIG,
+  WAR_ROOM_TAB_CONFIG,
+  DISCOVERY_TAB_CONFIG,
+  USER_AUTH_PROFILE_TABS
 } from './tabs.config';
 
 // Tab configurations - Types

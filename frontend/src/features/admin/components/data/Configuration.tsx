@@ -1,6 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Card } from '@/shared/ui/molecules/Card/Card';
+import { TIMEOUTS } from '@/config/ports.config';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
@@ -56,7 +57,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
       console.log('Saving configuration:', config);
       // await fetch('/api/admin/config', { method: 'POST', body: JSON.stringify(config) });
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      setTimeout(() => setSaveSuccess(false), TIMEOUTS.NOTIFICATION_SUCCESS);
     } catch (error) {
       console.error('Failed to save configuration:', error);
     }

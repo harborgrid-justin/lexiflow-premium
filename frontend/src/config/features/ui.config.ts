@@ -3,6 +3,8 @@
 // =============================================================================
 // User interface layout, animations, and visual preferences
 
+import { TIMEOUTS } from '../ports.config';
+
 // Animation & Transitions
 export const ANIMATION_DURATION_MS = 200;
 export const ANIMATION_EASING = 'ease-in-out';
@@ -34,9 +36,9 @@ export const TABLE_VIRTUAL_THRESHOLD = 100; // Use virtual scrolling if > 100 ro
 
 // Notifications
 export const NOTIFICATION_MAX_DISPLAY = 5;
-export const NOTIFICATION_AUTO_DISMISS_MS = 5000;
-export const NOTIFICATION_SUCCESS_DISMISS_MS = 3000;
-export const NOTIFICATION_ERROR_DISMISS_MS = 10000;
+export const NOTIFICATION_AUTO_DISMISS_MS = TIMEOUTS.NOTIFICATION_DEFAULT;
+export const NOTIFICATION_SUCCESS_DISMISS_MS = TIMEOUTS.NOTIFICATION_SUCCESS;
+export const NOTIFICATION_ERROR_DISMISS_MS = TIMEOUTS.NOTIFICATION_ERROR;
 export const NOTIFICATION_POSITION: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' = 'top-right';
 export const NOTIFICATION_ENABLE_SOUND = false;
 export const NOTIFICATION_MAX_STACK = 3;

@@ -177,16 +177,12 @@ export const KPICard: React.FC<KPICardProps> = ({
 
   const colors = colorClasses[color];
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = change.trend === 'up' ? 'text-emerald-600 dark:text-emerald-400' :
-    change.trend === 'down' ? 'text-red-600 dark:text-red-400' :
-      'text-gray-500 dark:text-gray-400';
-
+  
   return (
     <div
       className={cn(
         'relative overflow-hidden rounded-xl border p-6 transition-all duration-200',
-        theme.surface.default,
-        theme.border.default,
+        "bg-surface border-border", // Fixed: Use Tailwind classes instead of theme hex values
         colors.border,
         onClick && 'cursor-pointer hover:shadow-lg hover:scale-[1.02]',
         !onClick && 'hover:shadow-md',
@@ -206,11 +202,11 @@ export const KPICard: React.FC<KPICardProps> = ({
       {/* Header with icon */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <p className={cn('text-xs font-semibold uppercase tracking-wider mb-1', theme.text.secondary)}>
+          <p className={cn('text-xs font-semibold uppercase tracking-wider mb-1 text-text-muted')}>
             {label}
           </p>
           {subtitle && (
-            <p className={cn('text-xs', theme.text.tertiary)}>
+            <p className={cn('text-xs text-text-muted')}>
               {subtitle}
             </p>
           )}
@@ -223,7 +219,7 @@ export const KPICard: React.FC<KPICardProps> = ({
       </div>
 
       {/* Value */}
-      <div className={cn('text-3xl font-bold mb-3', theme.text.primary)}>
+      <div className={cn('text-3xl font-bold mb-3 text-text')}>
         {typeof value === 'number' ? formatValue(displayValue, format, currency) : value}
       </div>
 
@@ -236,7 +232,7 @@ export const KPICard: React.FC<KPICardProps> = ({
               {change.trend === 'neutral' ? '0.0' : Math.abs(change.percentage).toFixed(1)}%
             </span>
           </div>
-          <span className={cn('text-xs', theme.text.tertiary)}>
+          <span className={cn('text-xs text-text-muted')}>
             vs previous period
           </span>
         </div>
@@ -246,8 +242,8 @@ export const KPICard: React.FC<KPICardProps> = ({
       {target && progressPercent !== undefined && (
         <div className="mt-3">
           <div className="flex items-center justify-between text-xs mb-1">
-            <span className={theme.text.tertiary}>Progress to goal</span>
-            <span className={cn('font-medium', theme.text.secondary)}>
+            <span className="text-text-muted">Progress to goal</span>
+            <span className={cn('font-medium text-text-muted')}>
               {progressPercent.toFixed(0)}%
             </span>
           </div>

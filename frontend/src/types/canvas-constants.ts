@@ -7,6 +7,8 @@
  * @module types/canvas-constants
  */
 
+import { TIMEOUTS } from '@/config/ports.config';
+
 /**
  * Canvas Layout Constants
  */
@@ -43,7 +45,7 @@ export const CANVAS_CONSTANTS = {
   MINIMAP_NODE_MIN_SIZE: 4,     // Minimum node size in minimap
   
   // Auto-Save
-  AUTOSAVE_DEBOUNCE_MS: 3000,   // 3 seconds debounce
+  AUTOSAVE_DEBOUNCE_MS: TIMEOUTS.AUTOSAVE_DEBOUNCE,   // 3 seconds debounce
   
   // Undo/Redo
   MAX_HISTORY_SIZE: 50,         // Maximum undo/redo operations

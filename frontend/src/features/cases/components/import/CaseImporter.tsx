@@ -15,6 +15,7 @@
 import { api } from '@/api';
 import { PartyTypeBackend } from '@/api/litigation/parties-api';
 import { AI_CONFIG } from '@/config/features/ai.config';
+import { TIMEOUTS } from '@/config/ports.config';
 import { useTheme } from '@/features/theme';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
@@ -72,7 +73,7 @@ export const CaseImporter: React.FC = () => {
     setAiProviderState(provider);
     setError(null);
     setSuccessMessage(`Switched to ${provider.toUpperCase()} API`);
-    setTimeout(() => setSuccessMessage(null), 3000);
+    setTimeout(() => setSuccessMessage(null), TIMEOUTS.NOTIFICATION_SUCCESS);
   };
 
   // Handle parse button click

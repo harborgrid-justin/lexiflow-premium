@@ -15,6 +15,7 @@
 
 import { PermissionsApiService } from '@/api/auth/access-rights-api';
 import type { Permission } from '@/types';
+import { TIMEOUTS } from '@/config/ports.config';
 import React, { useState } from 'react';
 
 export interface RoleManagerProps {
@@ -89,7 +90,7 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
       setEditMode(false);
       onPermissionsUpdated?.(response.permissions);
 
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setTimeout(() => setSuccessMessage(''), TIMEOUTS.NOTIFICATION_SUCCESS);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to update permissions';
       setError(message);

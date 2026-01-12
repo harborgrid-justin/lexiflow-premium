@@ -6,6 +6,11 @@
 
 import { socketService } from "@/services/infrastructure/socketService";
 import type { Socket } from "socket.io-client";
+import { URLS } from "@/config/ports.config";
+
+// Centralized test URLs
+const TEST_BACKEND_URL = URLS.backend();
+const TEST_WS_URL = URLS.websocket();
 
 // Mock socket.io-client
 const mockSocket = {
@@ -50,7 +55,7 @@ describe("SocketService", () => {
     it("should connect to Socket.IO server", async () => {
       mockSocket.connected = true;
 
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       expect(mockSocket.once).toHaveBeenCalledWith(
         "connect",
@@ -63,13 +68,13 @@ describe("SocketService", () => {
       mockSocket.connected = true;
 
       // First connection
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       // Clear mocks to test second call
       jest.clearAllMocks();
 
       // Second connection attempt
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       // Should not create new socket
       expect(mockSocket.once).not.toHaveBeenCalled();
@@ -77,7 +82,7 @@ describe("SocketService", () => {
 
     it("should disconnect from server", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.disconnect();
 
@@ -90,7 +95,7 @@ describe("SocketService", () => {
       mockSocket.once = jest.fn(); // Don't trigger connect event
 
       const connectPromise = socketService.connect({
-        url: "http://localhost:3000",
+        url: "TEST_BACKEND_URL",
       });
 
       jest.advanceTimersByTime(11000); // More than 10s timeout
@@ -106,7 +111,7 @@ describe("SocketService", () => {
       const onNewMessage = jest.fn();
 
       await socketService.connect(
-        { url: "http://localhost:3000" },
+        { url: "TEST_BACKEND_URL" },
         { onNewMessage }
       );
 
@@ -120,7 +125,7 @@ describe("SocketService", () => {
       const onPresenceUpdate = jest.fn();
 
       await socketService.connect(
-        { url: "http://localhost:3000" },
+        { url: "TEST_BACKEND_URL" },
         { onPresenceUpdate }
       );
 
@@ -134,7 +139,7 @@ describe("SocketService", () => {
       const onNewNotification = jest.fn();
 
       await socketService.connect(
-        { url: "http://localhost:3000" },
+        { url: "TEST_BACKEND_URL" },
         { onNewNotification }
       );
 
@@ -148,7 +153,7 @@ describe("SocketService", () => {
   describe("Message Emission", () => {
     it("should emit messages when connected", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.emitMessage("test-event", { data: "test" });
 
@@ -159,7 +164,7 @@ describe("SocketService", () => {
 
     it("should emit typing indicators", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       const indicator = {
         userId: "user-1",
@@ -174,7 +179,7 @@ describe("SocketService", () => {
 
     it("should mark messages as read", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.markMessageRead("message-1", "user-1");
 
@@ -194,9 +199,9 @@ it("should preserve subscriptions across reconnections", async () => {
   const handler = jest.fn();
   socketService.on("event", handler);
 
-  await socketService.connect("ws://localhost:3000");
+  await socketService.connect("TEST_WS_URL");
   socketService.disconnect();
-  await socketService.connect("ws://localhost:3000");
+  await socketService.connect("TEST_WS_URL");
 
   const ws = (socketService as any).socket;
   ws.onmessage?.(
@@ -212,7 +217,7 @@ it("should support wildcards for event matching", async () => {
   const handler = jest.fn();
   socketService.on("*", handler);
 
-  await socketService.connect("ws://localhost:3000");
+  await socketService.connect("TEST_WS_URL");
 
   describe("Connection State and Cleanup", () => {
     it("should track connection state correctly", async () => {
@@ -220,14 +225,14 @@ it("should support wildcards for event matching", async () => {
       expect(socketService.isConnected()).toBe(false);
 
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       expect(socketService.isConnected()).toBe(true);
     });
 
     it("should clean up resources on disconnect", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.disconnect();
 
@@ -239,7 +244,7 @@ it("should support wildcards for event matching", async () => {
   describe("Presence Management", () => {
     it("should update user presence", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       const presence = {
         userId: "user-1",
@@ -254,7 +259,7 @@ it("should support wildcards for event matching", async () => {
 
     it("should join conversation rooms", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.joinConversation("conv-1");
 
@@ -265,7 +270,7 @@ it("should support wildcards for event matching", async () => {
 
     it("should leave conversation rooms", async () => {
       mockSocket.connected = true;
-      await socketService.connect({ url: "http://localhost:3000" });
+      await socketService.connect({ url: "TEST_BACKEND_URL" });
 
       socketService.leaveConversation("conv-1");
 

@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
-import type { Redis as RedisType, RedisOptions } from "ioredis";
+import type { Redis as RedisType } from "ioredis";
 import Redis from "ioredis";
 import { ModuleShutdownResult } from "../interfaces/module.config.interface";
 

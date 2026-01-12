@@ -527,8 +527,9 @@ export class PolicyService {
           };
         }
         break;
+      }
 
-      case PolicyEvaluationMode.FIRST_APPLICABLE:
+      case PolicyEvaluationMode.FIRST_APPLICABLE: {
         const firstPolicy = policies[0];
         if (!firstPolicy) {
           return {
@@ -544,6 +545,7 @@ export class PolicyService {
           requiresMfa: firstPolicy.metadata?.requiresMfa as boolean,
           requiresApproval: firstPolicy.metadata?.requiresApproval as boolean,
         };
+      }
     }
 
     const hasAllowPolicy = policies.some(p => p.effect === PolicyEffect.ALLOW);

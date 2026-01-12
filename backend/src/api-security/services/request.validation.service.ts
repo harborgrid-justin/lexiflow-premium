@@ -1,5 +1,5 @@
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
-import * as Joi from 'joi';
+import { Injectable, BadRequestException, Logger } from "@nestjs/common";
+import * as Joi from "joi";
 
 export interface ValidationResult {
   valid: boolean;
@@ -92,8 +92,8 @@ export class RequestValidationService {
     });
 
     if (error) {
-      const errors = error.details.map(detail => detail.message);
-      this.logger.warn(`Schema validation failed: ${errors.join(', ')}`);
+      const errors = error.details.map((detail) => detail.message);
+      this.logger.warn(`Schema validation failed: ${errors.join(", ")}`);
 
       return {
         valid: false,
@@ -107,7 +107,10 @@ export class RequestValidationService {
     };
   }
 
-  validateDeep(data: unknown, options?: DeepValidationOptions): ValidationResult {
+  validateDeep(
+    data: unknown,
+    options?: DeepValidationOptions
+  ): ValidationResult {
     const opts: Required<DeepValidationOptions> = {
       maxDepth: options?.maxDepth || 10,
       maxArrayLength: options?.maxArrayLength || 1000,
@@ -117,7 +120,11 @@ export class RequestValidationService {
 
     const errors: string[] = [];
 
-    const validate = (obj: unknown, path: string = '', depth: number = 0): unknown => {
+    const validate = (
+      obj: unknown,
+      path: string = "",
+      depth: number = 0
+    ): unknown => {
       if (depth > opts.maxDepth) {
         errors.push(`Maximum depth exceeded at ${path}`);
         return obj;
@@ -127,16 +134,20 @@ export class RequestValidationService {
         return obj;
       }
 
-      if (typeof obj === 'string') {
+      if (typeof obj === "string") {
         if (obj.length > opts.maxStringLength) {
-          errors.push(`String too long at ${path} (max: ${opts.maxStringLength})`);
+          errors.push(
+            `String too long at ${path} (max: ${opts.maxStringLength})`
+          );
         }
         return this.sanitizeString(obj);
       }
 
       if (Array.isArray(obj)) {
         if (obj.length > opts.maxArrayLength) {
-          errors.push(`Array too long at ${path} (max: ${opts.maxArrayLength})`);
+          errors.push(
+            `Array too long at ${path} (max: ${opts.maxArrayLength})`
+          );
           return obj.slice(0, opts.maxArrayLength);
         }
 
@@ -145,7 +156,7 @@ export class RequestValidationService {
         );
       }
 
-      if (typeof obj === 'object') {
+      if (typeof obj === "object") {
         const sanitized: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(obj)) {
@@ -169,22 +180,24 @@ export class RequestValidationService {
         sanitized,
       };
     } catch (error) {
-      this.logger.error('Deep validation error', error);
+      this.logger.error("Deep validation error", error);
       return {
         valid: false,
-        errors: ['Validation failed due to internal error'],
+        errors: ["Validation failed due to internal error"],
       };
     }
   }
 
   detectSqlInjection(input: string): boolean {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return false;
     }
 
     for (const pattern of this.sqlInjectionPatterns) {
       if (pattern.test(input)) {
-        this.logger.warn(`SQL injection attempt detected: ${input.substring(0, 100)}`);
+        this.logger.warn(
+          `SQL injection attempt detected: ${input.substring(0, 100)}`
+        );
         return true;
       }
     }
@@ -193,7 +206,7 @@ export class RequestValidationService {
   }
 
   detectXss(input: string): boolean {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return false;
     }
 
@@ -208,7 +221,7 @@ export class RequestValidationService {
   }
 
   detectPathTraversal(input: string): boolean {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return false;
     }
 
@@ -223,13 +236,15 @@ export class RequestValidationService {
   }
 
   detectCommandInjection(input: string): boolean {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return false;
     }
 
     for (const pattern of this.commandInjectionPatterns) {
       if (pattern.test(input)) {
-        this.logger.warn(`Command injection attempt detected: ${input.substring(0, 100)}`);
+        this.logger.warn(
+          `Command injection attempt detected: ${input.substring(0, 100)}`
+        );
         return true;
       }
     }
@@ -238,38 +253,41 @@ export class RequestValidationService {
   }
 
   sanitizeString(input: string): string {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return input;
     }
 
     // Remove null bytes
-    let sanitized = input.replace(/\0/g, '');
+    let sanitized = input.replace(/\0/g, "");
 
     // Remove control characters except newline, tab, and carriage return
     // eslint-disable-next-line no-control-regex
-    sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
 
     // Normalize unicode
-    sanitized = sanitized.normalize('NFC');
+    sanitized = sanitized.normalize("NFC");
 
     return sanitized;
   }
 
   sanitizeHtml(input: string): string {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       return input;
     }
 
     return input
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .replace(///g, '&#x2F;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
   }
 
-  validateBusinessRules(data: unknown, rules: BusinessRule[]): ValidationResult {
+  validateBusinessRules(
+    data: unknown,
+    rules: BusinessRule[]
+  ): ValidationResult {
     const errors: string[] = [];
 
     for (const rule of rules) {
@@ -296,27 +314,27 @@ export class RequestValidationService {
     const deepResult = this.validateDeep(data, options);
 
     if (!deepResult.valid) {
-      throw new BadRequestException(deepResult.errors?.join(', '));
+      throw new BadRequestException(deepResult.errors?.join(", "));
     }
 
     // Check for security threats in all string values
     const checkSecurity = (obj: unknown): void => {
-      if (typeof obj === 'string') {
+      if (typeof obj === "string") {
         if (this.detectSqlInjection(obj)) {
-          throw new BadRequestException('SQL injection attempt detected');
+          throw new BadRequestException("SQL injection attempt detected");
         }
         if (this.detectXss(obj)) {
-          throw new BadRequestException('XSS attempt detected');
+          throw new BadRequestException("XSS attempt detected");
         }
         if (this.detectPathTraversal(obj)) {
-          throw new BadRequestException('Path traversal attempt detected');
+          throw new BadRequestException("Path traversal attempt detected");
         }
         if (this.detectCommandInjection(obj)) {
-          throw new BadRequestException('Command injection attempt detected');
+          throw new BadRequestException("Command injection attempt detected");
         }
       } else if (Array.isArray(obj)) {
         obj.forEach(checkSecurity);
-      } else if (obj && typeof obj === 'object') {
+      } else if (obj && typeof obj === "object") {
         Object.values(obj).forEach(checkSecurity);
       }
     };
@@ -333,41 +351,68 @@ export class RequestValidationService {
       let fieldSchema: Joi.Schema;
 
       switch (config.type) {
-        case 'string':
+        case "string":
           fieldSchema = Joi.string();
-          if (config.min) fieldSchema = (fieldSchema as Joi.StringSchema).min(config.min as number);
-          if (config.max) fieldSchema = (fieldSchema as Joi.StringSchema).max(config.max as number);
-          if (config.pattern) fieldSchema = (fieldSchema as Joi.StringSchema).pattern(config.pattern);
-          if (config.email) fieldSchema = (fieldSchema as Joi.StringSchema).email();
+          if (config.min)
+            fieldSchema = (fieldSchema as Joi.StringSchema).min(
+              config.min as number
+            );
+          if (config.max)
+            fieldSchema = (fieldSchema as Joi.StringSchema).max(
+              config.max as number
+            );
+          if (config.pattern)
+            fieldSchema = (fieldSchema as Joi.StringSchema).pattern(
+              config.pattern
+            );
+          if (config.email)
+            fieldSchema = (fieldSchema as Joi.StringSchema).email();
           if (config.uri) fieldSchema = (fieldSchema as Joi.StringSchema).uri();
           break;
 
-        case 'number':
+        case "number":
           fieldSchema = Joi.number();
-          if (config.min !== undefined) fieldSchema = (fieldSchema as Joi.NumberSchema).min(config.min as number);
-          if (config.max !== undefined) fieldSchema = (fieldSchema as Joi.NumberSchema).max(config.max as number);
-          if (config.integer) fieldSchema = (fieldSchema as Joi.NumberSchema).integer();
-          if (config.positive) fieldSchema = (fieldSchema as Joi.NumberSchema).positive();
+          if (config.min !== undefined)
+            fieldSchema = (fieldSchema as Joi.NumberSchema).min(
+              config.min as number
+            );
+          if (config.max !== undefined)
+            fieldSchema = (fieldSchema as Joi.NumberSchema).max(
+              config.max as number
+            );
+          if (config.integer)
+            fieldSchema = (fieldSchema as Joi.NumberSchema).integer();
+          if (config.positive)
+            fieldSchema = (fieldSchema as Joi.NumberSchema).positive();
           break;
 
-        case 'boolean':
+        case "boolean":
           fieldSchema = Joi.boolean();
           break;
 
-        case 'date':
+        case "date":
           fieldSchema = Joi.date();
-          if (config.min) fieldSchema = (fieldSchema as Joi.DateSchema).min(config.min);
-          if (config.max) fieldSchema = (fieldSchema as Joi.DateSchema).max(config.max);
+          if (config.min)
+            fieldSchema = (fieldSchema as Joi.DateSchema).min(config.min);
+          if (config.max)
+            fieldSchema = (fieldSchema as Joi.DateSchema).max(config.max);
           break;
 
-        case 'array':
+        case "array":
           fieldSchema = Joi.array();
-          if (config.items) fieldSchema = (fieldSchema as Joi.ArraySchema).items(config.items);
-          if (config.min) fieldSchema = (fieldSchema as Joi.ArraySchema).min(config.min as number);
-          if (config.max) fieldSchema = (fieldSchema as Joi.ArraySchema).max(config.max as number);
+          if (config.items)
+            fieldSchema = (fieldSchema as Joi.ArraySchema).items(config.items);
+          if (config.min)
+            fieldSchema = (fieldSchema as Joi.ArraySchema).min(
+              config.min as number
+            );
+          if (config.max)
+            fieldSchema = (fieldSchema as Joi.ArraySchema).max(
+              config.max as number
+            );
           break;
 
-        case 'object':
+        case "object":
           fieldSchema = Joi.object(config.properties || {});
           break;
 
@@ -402,7 +447,7 @@ export interface SchemaDefinition {
 }
 
 export interface FieldConfig {
-  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
+  type: "string" | "number" | "boolean" | "date" | "array" | "object";
   required?: boolean;
   min?: number | Date;
   max?: number | Date;

@@ -404,7 +404,7 @@ export class CalendarIntegrationService {
     try {
       const client = this.createOutlookClient(accessToken);
 
-      const outlookUpdates: unknown = {};
+      const outlookUpdates: any = {};
 
       if (updates.summary) outlookUpdates.subject = updates.summary;
       if (updates.description) {

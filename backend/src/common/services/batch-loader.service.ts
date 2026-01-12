@@ -88,7 +88,7 @@ export class BatchLoaderService {
     for (let i = 0; i < uniqueIds.length; i += batchSize) {
       const batch = uniqueIds.slice(i, i + batchSize);
 
-      const findOptions: unknown = {
+      const findOptions: any = {
         where: { id: In(batch) },
       };
 

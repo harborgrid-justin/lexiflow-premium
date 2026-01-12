@@ -31,23 +31,15 @@ import {
   MemoryThresholds,
   DEFAULT_MEMORY_THRESHOLDS,
 } from "@common/utils/memory-management.utils";
-import { MemoryLeakDetectorService } from "@common/services/memory-leak-detector.service";
+import {
+  MemoryLeakDetectorService,
+  MemoryLeak,
+  HeapSnapshot as MemorySnapshot,
+} from "@common/services/memory-leak-detector.service";
 import * as v8 from "v8";
 
-export interface MemoryLeak {
-  id: string;
-  timestamp: Date;
-  heapGrowthMB: number;
-  heapUsedMB: number;
-  heapTotalMB: number;
-  details?: string;
-}
-
-export interface MemoryLeakStatistics {
-  totalLeaksDetected: number;
-  lastCheckTime: Date;
-  averageHeapGrowth: number;
-}
+// Local interfaces removed in favor of service types
+export type MemoryLeakStatistics = any;
 
 export interface MemorySnapshot {
   timestamp: Date;

@@ -3,6 +3,7 @@ import {
   ErrorCodes,
   ErrorSeverity,
 } from "@errors/constants/error.codes.constant";
+import crypto from "crypto";
 import { BusinessException } from "@errors/exceptions/business.exceptions";
 import {
   ArgumentsHost,
@@ -540,7 +541,6 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private generateCorrelationId(): string {
     // Use crypto for unpredictable, globally unique correlation IDs
-    import crypto from "crypto";
     return crypto.randomUUID();
   }
 }

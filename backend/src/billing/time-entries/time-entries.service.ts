@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, IsNull } from 'typeorm';
-import { TimeEntry, TimeEntryStatus } from './entities/time-entry.entity';
-import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
-import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
-import { TimeEntryFilterDto } from './dto/time-entry-filter.dto';
-import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, In, IsNull } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { TimeEntry, TimeEntryStatus } from "./entities/time-entry.entity";
+import { CreateTimeEntryDto } from "./dto/create-time-entry.dto";
+import { UpdateTimeEntryDto } from "./dto/update-time-entry.dto";
+import { TimeEntryFilterDto } from "./dto/time-entry-filter.dto";
+import {
+  validateSortField,
+  validateSortOrder,
+} from "@common/utils/query-validation.util";
 
 /**
  * ╔=================================================================================================================╗
@@ -39,7 +43,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class TimeEntriesService {
   constructor(
     @InjectRepository(TimeEntry)
-    private readonly timeEntryRepository: Repository<TimeEntry>,
+    private readonly timeEntryRepository: Repository<TimeEntry>
   ) {}
 
   async create(createTimeEntryDto: CreateTimeEntryDto): Promise<TimeEntry> {
@@ -53,7 +57,10 @@ export class TimeEntriesService {
       total,
       discountedTotal,
       status: createTimeEntryDto.status || TimeEntryStatus.DRAFT,
-      billable: createTimeEntryDto.billable !== undefined ? createTimeEntryDto.billable : true,
+      billable:
+        createTimeEntryDto.billable !== undefined
+          ? createTimeEntryDto.billable
+          : true,
     });
 
     return await this.timeEntryRepository.save(timeEntry);
@@ -62,7 +69,9 @@ export class TimeEntriesService {
   async bulkCreate(entries: CreateTimeEntryDto[]): Promise<TimeEntry[]> {
     const timeEntries = entries.map((dto) => {
       const total = dto.duration * dto.rate;
-      const discountedTotal = dto.discount ? total * (1 - dto.discount / 100) : total;
+      const discountedTotal = dto.discount
+        ? total * (1 - dto.discount / 100)
+        : total;
 
       return this.timeEntryRepository.create({
         ...dto,
@@ -76,7 +85,9 @@ export class TimeEntriesService {
     return await this.timeEntryRepository.save(timeEntries);
   }
 
-  async findAll(filterDto: TimeEntryFilterDto): Promise<{ data: TimeEntry[]; total: number }> {
+  async findAll(
+    filterDto: TimeEntryFilterDto
+  ): Promise<{ data: TimeEntry[]; total: number }> {
     const {
       caseId,
       userId,
@@ -89,57 +100,57 @@ export class TimeEntriesService {
       phaseCode,
       page = 1,
       limit = 50,
-      sortBy = 'date',
-      sortOrder = 'DESC',
+      sortBy = "date",
+      sortOrder = "DESC",
     } = filterDto;
 
-    const query = this.timeEntryRepository.createQueryBuilder('timeEntry');
+    const query = this.timeEntryRepository.createQueryBuilder("timeEntry");
 
     if (caseId) {
-      query.andWhere('timeEntry.caseId = :caseId', { caseId });
+      query.andWhere("timeEntry.caseId = :caseId", { caseId });
     }
 
     if (userId) {
-      query.andWhere('timeEntry.userId = :userId', { userId });
+      query.andWhere("timeEntry.userId = :userId", { userId });
     }
 
     if (invoiceId) {
-      query.andWhere('timeEntry.invoiceId = :invoiceId', { invoiceId });
+      query.andWhere("timeEntry.invoiceId = :invoiceId", { invoiceId });
     }
 
     if (status) {
-      query.andWhere('timeEntry.status = :status', { status });
+      query.andWhere("timeEntry.status = :status", { status });
     }
 
     if (billable !== undefined) {
-      query.andWhere('timeEntry.billable = :billable', { billable });
+      query.andWhere("timeEntry.billable = :billable", { billable });
     }
 
     if (startDate && endDate) {
-      query.andWhere('timeEntry.date BETWEEN :startDate AND :endDate', {
+      query.andWhere("timeEntry.date BETWEEN :startDate AND :endDate", {
         startDate,
         endDate,
       });
     } else if (startDate) {
-      query.andWhere('timeEntry.date >= :startDate', { startDate });
+      query.andWhere("timeEntry.date >= :startDate", { startDate });
     } else if (endDate) {
-      query.andWhere('timeEntry.date <= :endDate', { endDate });
+      query.andWhere("timeEntry.date <= :endDate", { endDate });
     }
 
     if (activity) {
-      query.andWhere('timeEntry.activity = :activity', { activity });
+      query.andWhere("timeEntry.activity = :activity", { activity });
     }
 
     if (phaseCode) {
-      query.andWhere('timeEntry.phaseCode = :phaseCode', { phaseCode });
+      query.andWhere("timeEntry.phaseCode = :phaseCode", { phaseCode });
     }
 
-    query.andWhere('timeEntry.deletedAt IS NULL');
+    query.andWhere("timeEntry.deletedAt IS NULL");
 
     const total = await query.getCount();
 
     // SQL injection protection
-    const safeSortField = validateSortField('timeEntry', sortBy);
+    const safeSortField = validateSortField("timeEntry", sortBy);
     const safeSortOrder = validateSortOrder(sortOrder);
 
     query
@@ -167,41 +178,47 @@ export class TimeEntriesService {
   async findByCase(caseId: string): Promise<TimeEntry[]> {
     return await this.timeEntryRepository.find({
       where: { caseId, deletedAt: IsNull() },
-      order: { date: 'DESC' },
+      order: { date: "DESC" },
     });
   }
 
   async findByUser(userId: string): Promise<TimeEntry[]> {
     return await this.timeEntryRepository.find({
       where: { userId, deletedAt: IsNull() },
-      order: { date: 'DESC' },
+      order: { date: "DESC" },
     });
   }
 
-  async update(id: string, updateTimeEntryDto: UpdateTimeEntryDto): Promise<TimeEntry> {
+  async update(
+    id: string,
+    updateTimeEntryDto: UpdateTimeEntryDto
+  ): Promise<TimeEntry> {
     // Fetch existing entry to compute totals if rate/duration changed
     const timeEntry = await this.findOne(id);
 
     let updateData: unknown = { ...updateTimeEntryDto };
 
     // Recalculate totals if duration or rate changed
-    if (updateTimeEntryDto.duration !== undefined || updateTimeEntryDto.rate !== undefined) {
+    if (
+      updateTimeEntryDto.duration !== undefined ||
+      updateTimeEntryDto.rate !== undefined
+    ) {
       const duration = updateTimeEntryDto.duration ?? timeEntry.duration;
       const rate = updateTimeEntryDto.rate ?? timeEntry.rate;
       const total = duration * rate;
       const discount = updateTimeEntryDto.discount ?? timeEntry.discount;
       const discountedTotal = discount ? total * (1 - discount / 100) : total;
 
-      updateData = { ...updateData, total, discountedTotal };
+      updateData = { ...(updateData as any), total, discountedTotal };
     }
 
     const result = await this.timeEntryRepository
       .createQueryBuilder()
       .update(TimeEntry)
-      .set(updateData)
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
-      .returning('*')
+      .set(updateData as QueryDeepPartialEntity<TimeEntry>)
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
+      .returning("*")
       .execute();
 
     if (!result.affected || result.affected === 0) {
@@ -215,8 +232,8 @@ export class TimeEntriesService {
     const result = await this.timeEntryRepository
       .createQueryBuilder()
       .softDelete()
-      .where('id = :id', { id })
-      .andWhere('deletedAt IS NULL')
+      .where("id = :id", { id })
+      .andWhere("deletedAt IS NULL")
       .execute();
 
     if (!result.affected || result.affected === 0) {
@@ -232,7 +249,11 @@ export class TimeEntriesService {
     return await this.timeEntryRepository.save(timeEntry);
   }
 
-  async bill(id: string, invoiceId: string, billedBy: string): Promise<TimeEntry> {
+  async bill(
+    id: string,
+    invoiceId: string,
+    billedBy: string
+  ): Promise<TimeEntry> {
     const timeEntry = await this.findOne(id);
     timeEntry.status = TimeEntryStatus.BILLED;
     timeEntry.invoiceId = invoiceId; // Link time entry to invoice
@@ -249,22 +270,27 @@ export class TimeEntriesService {
         billable: true,
         deletedAt: IsNull(),
       },
-      order: { date: 'ASC' },
+      order: { date: "ASC" },
     });
   }
 
   async getTotalsByCase(
     caseId: string,
     startDate?: string,
-    endDate?: string,
-  ): Promise<{ total: number; billable: number; billed: number; unbilled: number }> {
+    endDate?: string
+  ): Promise<{
+    total: number;
+    billable: number;
+    billed: number;
+    unbilled: number;
+  }> {
     const query = this.timeEntryRepository
-      .createQueryBuilder('timeEntry')
-      .where('timeEntry.caseId = :caseId', { caseId })
-      .andWhere('timeEntry.deletedAt IS NULL');
+      .createQueryBuilder("timeEntry")
+      .where("timeEntry.caseId = :caseId", { caseId })
+      .andWhere("timeEntry.deletedAt IS NULL");
 
     if (startDate && endDate) {
-      query.andWhere('timeEntry.date BETWEEN :startDate AND :endDate', {
+      query.andWhere("timeEntry.date BETWEEN :startDate AND :endDate", {
         startDate,
         endDate,
       });
@@ -272,21 +298,36 @@ export class TimeEntriesService {
 
     const entries = await query.getMany();
 
-    const total = entries.reduce((sum, entry) => sum + Number(entry.discountedTotal || entry.total), 0);
+    const total = entries.reduce(
+      (sum, entry) => sum + Number(entry.discountedTotal || entry.total),
+      0
+    );
     const billable = entries
       .filter((e) => e.billable)
-      .reduce((sum, entry) => sum + Number(entry.discountedTotal || entry.total), 0);
+      .reduce(
+        (sum, entry) => sum + Number(entry.discountedTotal || entry.total),
+        0
+      );
     const billed = entries
       .filter((e) => e.status === TimeEntryStatus.BILLED)
-      .reduce((sum, entry) => sum + Number(entry.discountedTotal || entry.total), 0);
+      .reduce(
+        (sum, entry) => sum + Number(entry.discountedTotal || entry.total),
+        0
+      );
     const unbilled = entries
       .filter((e) => e.billable && e.status !== TimeEntryStatus.BILLED)
-      .reduce((sum, entry) => sum + Number(entry.discountedTotal || entry.total), 0);
+      .reduce(
+        (sum, entry) => sum + Number(entry.discountedTotal || entry.total),
+        0
+      );
 
     return { total, billable, billed, unbilled };
   }
 
-  async approveBulk(ids: string[], approvedBy: string): Promise<{ success: boolean; approved: number }> {
+  async approveBulk(
+    ids: string[],
+    approvedBy: string
+  ): Promise<{ success: boolean; approved: number }> {
     const entries = await this.timeEntryRepository.find({
       where: { id: In(ids), deletedAt: IsNull() },
     });
@@ -302,8 +343,8 @@ export class TimeEntriesService {
           status: TimeEntryStatus.APPROVED,
           approvedBy,
           approvedAt: new Date(),
-        }),
-      ),
+        })
+      )
     );
 
     return { success: true, approved: updated.length };
@@ -312,7 +353,7 @@ export class TimeEntriesService {
   async billBulk(
     ids: string[],
     invoiceId: string,
-    billedBy: string,
+    billedBy: string
   ): Promise<{ success: boolean; billed: number }> {
     const entries = await this.timeEntryRepository.find({
       where: { id: In(ids), deletedAt: IsNull() },
@@ -330,14 +371,16 @@ export class TimeEntriesService {
           invoiceId,
           billedBy,
           billedAt: new Date(),
-        }),
-      ),
+        })
+      )
     );
 
     return { success: true, billed: updated.length };
   }
 
-  async deleteBulk(ids: string[]): Promise<{ success: boolean; deleted: number }> {
+  async deleteBulk(
+    ids: string[]
+  ): Promise<{ success: boolean; deleted: number }> {
     const entries = await this.timeEntryRepository.find({
       where: { id: In(ids), deletedAt: IsNull() },
     });
@@ -351,8 +394,8 @@ export class TimeEntriesService {
         this.timeEntryRepository.save({
           ...entry,
           deletedAt: new Date(),
-        }),
-      ),
+        })
+      )
     );
 
     return { success: true, deleted: updated.length };

@@ -254,7 +254,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     const entityData: DeepPartial<T> = {
       ...data,
       ...(userId &&
-        ({ createdBy: userId, updatedBy: userId } as DeepPartial<T>)),
+        ({
+          createdBy: userId,
+          updatedBy: userId,
+        } as unknown as DeepPartial<T>)),
     };
 
     await this.repository.upsert(
@@ -300,7 +303,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     if (userId) {
       await this.repository.update(id, {
         updatedBy: userId,
-      } as QueryDeepPartialEntity<T>);
+      } as unknown as QueryDeepPartialEntity<T>);
     }
 
     const result = await this.repository.softDelete(id);

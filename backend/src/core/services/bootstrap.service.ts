@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnApplicationBootstrap } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
-import type { Redis as RedisType, RedisOptions } from "ioredis";
+import type { Redis as RedisType } from "ioredis";
 import Redis from "ioredis";
 import { ConfigurationValidatorService } from "./configuration.validator.service";
 import { CRITICAL_MODULES } from "../constants/module.order.constant";
@@ -227,6 +227,7 @@ export class BootstrapService implements OnApplicationBootstrap {
       const redisPort = this.configService.get<number>("redis.port", 6379);
       const redisPassword = this.configService.get<string>("redis.password");
 
+      const redisUrl = this.configService.get<string>("redis.url");
       let redisClient: RedisType;
 
       if (redisUrl) {

@@ -62,7 +62,7 @@ export class RetryService {
     config: Partial<RetryConfig> = {}
   ): Promise<T> {
     const fullConfig = this.mergeWithDefaults(config);
-    let lastError: Error;
+    let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= fullConfig.maxAttempts; attempt++) {
       try {
@@ -116,7 +116,7 @@ export class RetryService {
     config: Partial<RetryConfig> = {}
   ): Promise<T> {
     const fullConfig = this.mergeWithDefaults(config);
-    let lastError: Error;
+    let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= fullConfig.maxAttempts; attempt++) {
       try {

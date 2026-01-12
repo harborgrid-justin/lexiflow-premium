@@ -262,7 +262,7 @@ export class ComplianceService {
 
   async getRulesByCategory(category: string): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
-      where: { category: category as ComplianceCategory },
+      where: { category: category as any },
       order: { createdAt: "DESC" },
     });
   }

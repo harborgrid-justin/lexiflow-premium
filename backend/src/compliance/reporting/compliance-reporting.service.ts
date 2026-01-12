@@ -360,7 +360,7 @@ export class ComplianceReportingService {
     for (let i = 0; i < Math.min(days, 30); i++) {
       const date = new Date(startDate.getTime() + i * dayInMs);
       timeline.push({
-        date: date.toISOString().split("T")[0],
+        date: date.toISOString().split("T")[0] || "",
         count: Math.floor(Math.random() * 100),
         successful: Math.floor(Math.random() * 80),
         denied: Math.floor(Math.random() * 20),

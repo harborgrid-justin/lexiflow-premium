@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, IsNull } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { ESISource } from "./entities/esi-source.entity";
 import { CreateESISourceDto } from "./dto/create-esi-source.dto";
 import { UpdateESISourceDto } from "./dto/update-esi-source.dto";
@@ -136,7 +137,10 @@ export class ESISourcesService {
     const result = await this.esiSourceRepository
       .createQueryBuilder()
       .update(ESISource)
-      .set({ ...updateDto, updatedAt: new Date() } as unknown as ESISource)
+      .set({
+        ...updateDto,
+        updatedAt: new Date(),
+      } as unknown as QueryDeepPartialEntity<ESISource>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")
@@ -146,7 +150,7 @@ export class ESISourcesService {
       throw new NotFoundException(`ESI Source with ID ${id} not found`);
     }
     const rows = result.raw as ESISource[];
-    return rows[0];
+    return rows[0] as ESISource;
   }
 
   async remove(id: string): Promise<void> {

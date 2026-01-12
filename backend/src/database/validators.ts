@@ -32,7 +32,7 @@ export class ExistsValidator implements ValidatorConstraintInterface {
 
     if (!value) return false;
 
-    const repository = this.dataSource.getRepository(entityClass);
+    const repository = this.dataSource.getRepository(entityClass as any);
     const entity = await repository.findOne({
       where: { [property]: value },
     });

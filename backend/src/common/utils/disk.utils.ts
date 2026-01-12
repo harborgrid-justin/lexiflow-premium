@@ -38,6 +38,7 @@ export async function getDiskSpace(dirPath: string): Promise<DiskStats> {
       used,
       usedPercentage,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_error) {
     // Fallback: use os.freemem() for approximate values
     const total = os.totalmem();

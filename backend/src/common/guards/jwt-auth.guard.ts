@@ -1,7 +1,11 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
+import {
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { Reflector } from "@nestjs/core";
+import { IS_PUBLIC_KEY } from "@common/decorators/public.decorator";
 
 /**
  * Enterprise JWT Authentication Guard
@@ -23,7 +27,7 @@ import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
  * publicRoute() {}
  */
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class JwtAuthGuard extends AuthGuard("jwt") {
   constructor(private reflector: Reflector) {
     super();
   }
@@ -42,7 +46,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: unknown, user: unknown, _info: unknown) {
+  handleRequest<TUser = any>(
+    err: any,
+    user: any,
+    _info: any,
+    _context: any,
+    _status?: any
+  ): TUser {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException();

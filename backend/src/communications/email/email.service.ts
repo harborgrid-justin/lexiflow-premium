@@ -71,7 +71,7 @@ export class EmailService {
     try {
       // Memory optimization: Check attachment size before processing
       if (options.attachments && options.attachments.length > 0) {
-        const totalSize = options.attachments.reduce(
+        const totalSize = (options.attachments as any[]).reduce(
           (acc: number, att: { content?: Buffer | string }) => {
             // Handle Buffer, string, or stream
             if (att.content) {

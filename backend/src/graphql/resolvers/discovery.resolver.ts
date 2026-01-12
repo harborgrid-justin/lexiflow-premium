@@ -61,9 +61,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.createRequest(
-      input as unknown as DeepPartial<DiscoveryRequest>
-    );
+    const request = await this.discoveryService.createRequest(input as any);
     return request as unknown as DiscoveryRequestType;
   }
 
@@ -74,10 +72,7 @@ export class DiscoveryResolver {
     @Args("input") input: UpdateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.updateRequest(
-      id,
-      input as unknown as DeepPartial<DiscoveryRequest>
-    );
+    const request = await this.discoveryService.updateRequest(id, input as any);
     return request as unknown as DiscoveryRequestType;
   }
 
@@ -109,9 +104,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.create(
-      input as unknown as CreateDepositionDto
-    );
+    const deposition = await this.depositionsService.create(input as any);
     return deposition as unknown as DepositionType;
   }
 
@@ -122,10 +115,7 @@ export class DiscoveryResolver {
     @Args("input") input: UpdateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.update(
-      id,
-      input as unknown as UpdateDepositionDto
-    );
+    const deposition = await this.depositionsService.update(id, input as any);
     return deposition as unknown as DepositionType;
   }
 
@@ -144,9 +134,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateLegalHoldInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<LegalHoldType> {
-    const hold = await this.discoveryService.createHold(
-      input as unknown as DeepPartial<LegalHold>
-    );
+    const hold = await this.discoveryService.createHold(input as any);
     return hold as unknown as LegalHoldType;
   }
 
@@ -175,9 +163,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreatePrivilegeLogEntryInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<PrivilegeLogEntryType> {
-    const entry = await this.privilegeLogService.create(
-      input as unknown as CreatePrivilegeLogEntryDto
-    );
+    const entry = await this.privilegeLogService.create(input as any);
     return entry as unknown as PrivilegeLogEntryType;
   }
 }

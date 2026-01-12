@@ -95,12 +95,14 @@ export class BulkOperationsService {
           await repository.manager.transaction(async (manager) => {
             const inserted = await manager.save(
               repository.target,
-              batch as Partial<T>[]
+              batch as unknown as DeepPartial<T>[]
             );
             result.success.push(...(inserted as T[]));
           });
         } else {
-          const inserted = await repository.save(batch as Partial<T>[]);
+          const inserted = await repository.save(
+            batch as unknown as DeepPartial<T>[]
+          );
           result.success.push(...(inserted as T[]));
         }
 

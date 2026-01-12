@@ -100,7 +100,7 @@ export class EmailService implements OnModuleInit {
             ? options.bcc.join(", ")
             : options.bcc
           : undefined,
-        attachments: options.attachments as unknown[],
+        attachments: options.attachments as any[],
       };
 
       await this.transporter.sendMail(mailOptions);

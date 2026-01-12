@@ -279,7 +279,7 @@ export class NotificationsService implements OnModuleDestroy {
     // Add to priority queue (circular buffer)
     this.notificationQueue[this.queueWriteIndex] = {
       priority,
-      notification: queueEntry as typeof queueEntry & { status: string },
+      notification: queueEntry as any,
     };
     this.queueWriteIndex = (this.queueWriteIndex + 1) % this.MAX_QUEUE_SIZE;
 

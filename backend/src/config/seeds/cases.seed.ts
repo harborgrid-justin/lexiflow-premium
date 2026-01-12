@@ -61,7 +61,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
         clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
-      });
+      } as any);
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

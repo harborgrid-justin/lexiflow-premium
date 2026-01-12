@@ -47,10 +47,7 @@ export class CommunicationsService {
     private readonly templateRepository: Repository<Template>
   ) {}
 
-  async findAll(options?: {
-    page?: number;
-    limit?: number;
-  }): Promise<{
+  async findAll(options?: { page?: number; limit?: number }): Promise<{
     data: Communication[];
     total: number;
     page: number;
@@ -174,8 +171,8 @@ export class CommunicationsService {
   async getCommunicationStats(caseId: string): Promise<unknown> {
     const result = await this.findByCaseId(caseId);
     const all = result.data;
-    const byType: unknown = {};
-    const byStatus: unknown = {};
+    const byType: any = {};
+    const byStatus: any = {};
     let sent = 0;
     let draft = 0;
 
@@ -257,11 +254,9 @@ export class CommunicationsService {
     // Replace variables in template
     Object.keys(variables as Record<string, string>).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
-      subject = subject.replace(
-        regex,
-        (variables as Record<string, string>)[key]
-      );
-      body = body.replace(regex, (variables as Record<string, string>)[key]);
+      const value = (variables as Record<string, string>)[key] || "";
+      subject = subject.replace(regex, value);
+      body = body.replace(regex, value);
     });
 
     return { subject, body };

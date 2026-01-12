@@ -400,24 +400,24 @@ export class SchemaManagementService {
     const dbNameResult = (await this.dataSource.query(
       "SELECT current_database()"
     )) as Array<{ current_database: string }>;
-    const dbName = dbNameResult[0].current_database;
+    const dbName = dbNameResult[0]?.current_database || "unknown";
 
     const versionResult = (await this.dataSource.query(
       "SELECT version()"
     )) as Array<{ version: string }>;
-    const version = versionResult[0].version;
+    const version = versionResult[0]?.version || "unknown";
 
     const tablesResult = (await this.dataSource.query(`
       SELECT count(*) as count
       FROM information_schema.tables
       WHERE table_schema = 'public'
     `)) as Array<{ count: string }>;
-    const tableCount = parseInt(tablesResult[0].count, 10);
+    const tableCount = parseInt(tablesResult[0]?.count || "0", 10);
 
     const sizeResult = (await this.dataSource.query(`
       SELECT pg_size_pretty(pg_database_size(current_database())) as size
     `)) as Array<{ size: string }>;
-    const size = sizeResult[0].size;
+    const size = sizeResult[0]?.size || "0 B";
 
     return {
       name: dbName,

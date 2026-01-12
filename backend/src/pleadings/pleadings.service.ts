@@ -168,7 +168,7 @@ export class PleadingsService {
         `Pleading with ID ${id} not found after update`
       );
     }
-    return rawResult[0];
+    return rawResult[0] as Pleading;
   }
 
   /**

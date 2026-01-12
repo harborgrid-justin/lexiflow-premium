@@ -147,7 +147,7 @@ export class RateLimitGuard implements CanActivate {
     if (request.user) {
       const roleResult = await this.rateLimitService.checkRoleBased(
         userId,
-        userRole as "admin" | "user" | "guest"
+        userRole as any
       );
 
       this.setRateLimitHeaders(response, roleResult, "role");
@@ -162,7 +162,7 @@ export class RateLimitGuard implements CanActivate {
       // 4. Check burst protection
       const burstResult = await this.rateLimitService.checkBurst(
         userId,
-        userRole as "admin" | "user" | "guest"
+        userRole as any
       );
 
       if (!burstResult.allowed) {

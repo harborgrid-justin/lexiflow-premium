@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
 import { InjectDataSource } from "@nestjs/typeorm";
-import { DataSource, Repository, ObjectLiteral } from "typeorm";
+import { DataSource, Repository, ObjectLiteral, DeepPartial } from "typeorm";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import * as MasterConfig from "@config/master.config";
 import { Readable } from "stream";
@@ -475,7 +475,7 @@ export class BatchProcessorService implements OnModuleDestroy {
           if (chunkResult.status === "fulfilled") {
             result.successful++;
             result.results.push(
-              (chunkResult as PromiseFulfilledResult<T>).value
+              (chunkResult as PromiseFulfilledResult<R>).value
             );
           } else {
             result.failed++;
@@ -562,7 +562,9 @@ export class BatchProcessorService implements OnModuleDestroy {
       return chunk as T[];
     }
 
-    return (await repository.save(chunk)) as T[];
+    return (await repository.save(
+      chunk as unknown as DeepPartial<T>[]
+    )) as unknown as T[];
   }
 
   private async updateChunk<T extends ObjectLiteral>(
@@ -589,11 +591,12 @@ export class BatchProcessorService implements OnModuleDestroy {
     options: BatchConfig
   ): Promise<void> {
     if (options.useTransaction) {
+      // @ts-ignore - Transaction manager delete types are limited
       await repository.manager.transaction(async (manager) => {
-        await manager.delete(repository.target, chunk as (string | number)[]);
+        await manager.delete(repository.target, chunk as any);
       });
     } else {
-      await repository.delete(chunk as (string | number)[]);
+      await repository.delete(chunk as any);
     }
   }
 

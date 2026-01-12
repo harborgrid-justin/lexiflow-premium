@@ -145,7 +145,7 @@ export class CustodianInterviewsService {
       .set({
         ...updateDto,
         updatedAt: new Date(),
-      } as unknown as CustodianInterview)
+      } as unknown as QueryDeepPartialEntity<CustodianInterview>)
       .where("id = :id", { id })
       .andWhere("deletedAt IS NULL")
       .returning("*")

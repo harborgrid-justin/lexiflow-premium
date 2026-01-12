@@ -129,14 +129,17 @@ export class DistributedTracingService implements OnModuleInit {
 
     // Initialize SDK
     this.sdk = new NodeSDK({
-      resource: resource as Resource,
+      resource: resource as any,
       spanProcessors: [spanProcessor],
     });
 
     try {
       await this.sdk.start();
     } catch (error) {
-      this.logger.error("Failed to start OpenTelemetry SDK", error);
+      this.logger.error(
+        "Failed to start OpenTelemetry SDK",
+        error instanceof Error ? error.stack : String(error)
+      );
       throw error;
     }
 

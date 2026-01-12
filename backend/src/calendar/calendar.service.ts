@@ -1,8 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
-import { CalendarEvent } from './entities/calendar-event.entity';
-import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, Between } from "typeorm";
+import { CalendarEvent } from "./entities/calendar-event.entity";
+import {
+  CreateCalendarEventDto,
+  UpdateCalendarEventDto,
+} from "./dto/calendar.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -36,7 +39,7 @@ import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.d
 export class CalendarService {
   constructor(
     @InjectRepository(CalendarEvent)
-    private readonly calendarEventRepository: Repository<CalendarEvent>,
+    private readonly calendarEventRepository: Repository<CalendarEvent>
   ) {}
 
   async create(createDto: CreateCalendarEventDto): Promise<CalendarEvent> {
@@ -44,11 +47,27 @@ export class CalendarService {
     return await this.calendarEventRepository.save(event);
   }
 
-  async findAll(query: unknown): Promise<{ data: CalendarEvent[]; total: number }> {
-    const { page = 1, limit = 50, startDate, endDate, eventType, caseId } = query as { page?: number; limit?: number; startDate?: string; endDate?: string; eventType?: string; caseId?: string };
+  async findAll(
+    query: unknown
+  ): Promise<{ data: CalendarEvent[]; total: number }> {
+    const {
+      page = 1,
+      limit = 50,
+      startDate,
+      endDate,
+      eventType,
+      caseId,
+    } = query as {
+      page?: number;
+      limit?: number;
+      startDate?: string;
+      endDate?: string;
+      eventType?: string;
+      caseId?: string;
+    };
     const skip = (page - 1) * limit;
 
-    const where: unknown = {};
+    const where: any = {};
     if (eventType) where.eventType = eventType;
     if (caseId) where.caseId = caseId;
     if (startDate && endDate) {
@@ -59,7 +78,7 @@ export class CalendarService {
       where,
       skip,
       take: limit,
-      order: { startDate: 'ASC' }
+      order: { startDate: "ASC" },
     });
 
     return { data, total };
@@ -71,7 +90,10 @@ export class CalendarService {
     return event;
   }
 
-  async update(id: string, updateDto: UpdateCalendarEventDto): Promise<CalendarEvent> {
+  async update(
+    id: string,
+    updateDto: UpdateCalendarEventDto
+  ): Promise<CalendarEvent> {
     await this.findOne(id);
     await this.calendarEventRepository.update(id, updateDto);
     return await this.findOne(id);
@@ -90,9 +112,9 @@ export class CalendarService {
     return await this.calendarEventRepository.find({
       where: {
         startDate: Between(now, future),
-        completed: false
+        completed: false,
       },
-      order: { startDate: 'ASC' }
+      order: { startDate: "ASC" },
     });
   }
 

@@ -220,7 +220,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       }
 
       const entityId = this.extractEntityId(event.entity, event.connection);
-      const afterValues = { ...event.entity };
+      const afterValues = { ...(event.entity as Record<string, unknown>) };
 
       this.createAuditLog(
         entityName,
@@ -250,8 +250,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
       const entityId = this.extractEntityId(event.entity, event.connection);
 
-      const beforeValues = event.databaseEntity || {};
-      const afterValues = { ...event.entity };
+      const beforeValues = (event.databaseEntity || {}) as Record<
+        string,
+        unknown
+      >;
+      const afterValues = { ...(event.entity as Record<string, unknown>) };
 
       this.createAuditLog(
         entityName,
@@ -289,7 +292,9 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         event.entity || event.databaseEntity,
         event.connection
       );
-      const beforeValues = event.databaseEntity || event.entity || {};
+      const beforeValues = (event.databaseEntity ||
+        event.entity ||
+        {}) as Record<string, unknown>;
 
       this.createAuditLog(
         entityName,
@@ -318,8 +323,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       }
 
       const entityId = this.extractEntityId(event.entity, event.connection);
-      const beforeValues = event.databaseEntity || {};
-      const afterValues = { ...event.entity };
+      const beforeValues = (event.databaseEntity || {}) as Record<
+        string,
+        unknown
+      >;
+      const afterValues = { ...(event.entity as Record<string, unknown>) };
 
       this.createAuditLog(
         entityName,
@@ -348,8 +356,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       }
 
       const entityId = this.extractEntityId(event.entity, event.connection);
-      const beforeValues = event.databaseEntity || {};
-      const afterValues = { ...event.entity };
+      const beforeValues = (event.databaseEntity || {}) as Record<
+        string,
+        unknown
+      >;
+      const afterValues = { ...(event.entity as Record<string, unknown>) };
 
       this.createAuditLog(
         entityName,

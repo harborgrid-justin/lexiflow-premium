@@ -8,6 +8,7 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
+import crypto from "crypto";
 
 /**
  * User information attached to request
@@ -372,8 +373,6 @@ export class RequestSignatureGuard implements CanActivate {
   ): boolean {
     // TODO: Implement actual signature validation
     // This would use crypto.createHmac with a shared secret
-
-    import crypto from "crypto";
 
     // Get secret from environment or database
     const secret = process.env.WEBHOOK_SECRET || "default-secret";

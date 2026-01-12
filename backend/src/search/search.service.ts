@@ -75,11 +75,11 @@ export class SearchService implements OnModuleDestroy {
   > = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
-  constructor() // @InjectRepository(Case) private caseRepository: Repository<unknown>,
-  // @InjectRepository(LegalDocument) private documentRepository: Repository<unknown>,
-  // @InjectRepository(Client) private clientRepository: Repository<unknown>,
-  // These will be injected when entities are available
-  {
+  constructor() {
+    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+    // @InjectRepository(LegalDocument) private documentRepository: Repository<unknown>,
+    // @InjectRepository(Client) private clientRepository: Repository<unknown>,
+    // These will be injected when entities are available
     this.startCacheCleanup();
   }
 
@@ -144,7 +144,7 @@ export class SearchService implements OnModuleDestroy {
 
     // Execute and cache
     const data = await fn();
-    this.searchCache.set(key, { data: data as T, timestamp: now });
+    this.searchCache.set(key, { data: data as any, timestamp: now });
 
     // Enforce LRU limit
     this.enforceCacheLRU();

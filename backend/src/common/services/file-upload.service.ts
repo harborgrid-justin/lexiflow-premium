@@ -214,6 +214,7 @@ export class FileUploadService {
         );
         try {
           await fs.unlink(thumbnailPath);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (_error) {
           this.logger.warn(`Failed to delete thumbnail: ${info.thumbnail}`);
         }
@@ -350,6 +351,7 @@ export class FileUploadService {
               uploadedAt: stats.birthtime,
             };
           }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (_error) {
           // Skip files that can't be read
           continue;

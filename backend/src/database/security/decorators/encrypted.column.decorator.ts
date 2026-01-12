@@ -62,7 +62,7 @@ export function EncryptedColumn(
     ...options,
   };
 
-  return Column(columnOptions);
+  return Column(columnOptions as ColumnOptions);
 }
 
 export interface SensitiveFieldOptions {

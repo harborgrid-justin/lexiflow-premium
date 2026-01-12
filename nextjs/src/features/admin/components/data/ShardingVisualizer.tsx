@@ -51,7 +51,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         ctx.stroke();
 
         const { ring: ringMap, sortedKeys } = ring.getRingState();
-        const maxHash = 2**31 -1;
+        const maxHash = 2 ** 31 - 1;
 
         // Draw nodes
         sortedKeys.forEach(hash => {
@@ -71,7 +71,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         });
 
         // Draw key
-        if(key && mappedNode) {
+        if (key && mappedNode) {
             const keyHash = (ring as unknown as { hash: (k: string) => number }).hash(key);
             const angle = (keyHash / maxHash) * 2 * Math.PI;
             const x = center.x + radius * Math.cos(angle);
@@ -120,14 +120,14 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
                             <input value={key} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface.input, theme.border.default, theme.text.primary)} />
                         </div>
                         <div className="flex items-center justify-center gap-4 text-center">
-                            <Database className={cn("h-8 w-8", theme.text.primary)}/>
-                            <ArrowRight className={cn("h-6 w-6", theme.text.tertiary)}/>
+                            <Database className={cn("h-8 w-8", theme.text.primary)} />
+                            <ArrowRight className={cn("h-6 w-6", theme.text.tertiary)} />
                             <div className={cn("p-3 rounded-lg border", theme.primary.light, theme.primary.border)}>
-                                <Server className={cn("h-8 w-8", theme.primary.text)}/>
+                                <Server className={cn("h-8 w-8", theme.primary.text)} />
                             </div>
                         </div>
                         <div className={cn("text-center p-4 rounded border", theme.surface.highlight, theme.border.default)}>
-                            <p className={cn("text-xs", theme.text.secondary)}>Key '{key}' maps to</p>
+                            <p className={cn("text-xs", theme.text.secondary)}>Key &apos;{key}&apos; maps to</p>
                             <p className={cn("font-bold", theme.primary.text)}>{mappedNode}</p>
                         </div>
                     </div>

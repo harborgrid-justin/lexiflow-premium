@@ -1,3 +1,4 @@
+import Link from 'next/link';
 "use client"
 
 /**
@@ -168,7 +169,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/" className="font-semibold">
+              <Link href="/" className="font-semibold">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Briefcase className="size-4" />
                 </div>
@@ -178,7 +179,7 @@ export function AppSidebar() {
                     Enterprise Legal OS
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -230,7 +231,7 @@ export function AppSidebar() {
                                     onClick={() => setActiveItem(subItem.id)}
                                   >
                                     <span>{subItem.label}</span>
-                                  </a>
+                                  </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             ))}
@@ -251,7 +252,7 @@ export function AppSidebar() {
                       <a href={item.href} onClick={() => setActiveItem(item.id)}>
                         <Icon />
                         <span>{item.label}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                     {item.badge && (
                       <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
@@ -292,7 +293,7 @@ export function AppSidebar() {
                           >
                             <Icon />
                             <span>{item.label}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                         {item.badge && (
                           <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
@@ -331,7 +332,7 @@ export function AppSidebar() {
                       <a href={item.href} onClick={() => setActiveItem(item.id)}>
                         <Icon />
                         <span>{item.label}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )
@@ -349,7 +350,7 @@ export function AppSidebar() {
               <a href="/settings">
                 <Settings />
                 <span>Settings</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -357,7 +358,7 @@ export function AppSidebar() {
               <a href="/profile">
                 <User />
                 <span>Profile</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>

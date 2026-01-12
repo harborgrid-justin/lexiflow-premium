@@ -25,3 +25,4 @@ export const TabStrip = React.memo<TabStripProps>(({ children, className }) => {
     </div>
   );
 });
+TabStrip.displayName = 'TabStrip';

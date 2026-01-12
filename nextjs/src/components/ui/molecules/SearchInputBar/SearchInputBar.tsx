@@ -35,3 +35,4 @@ export const SearchInputBar = React.memo<SearchInputBarProps>(({ className, ...p
     </div>
   );
 });
+SearchInputBar.displayName = 'SearchInputBar';

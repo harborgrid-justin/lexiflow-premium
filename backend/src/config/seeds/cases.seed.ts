@@ -1,10 +1,10 @@
-import { DataSource } from "typeorm";
+import * as PathsConfig from "@config/paths.config";
 import * as fs from "fs";
 import * as path from "path";
-import * as PathsConfig from "@config/paths.config";
+import { DataSource } from "typeorm";
 import { Case } from "../../cases/entities/case.entity";
-import { User } from "../../users/entities/user.entity";
 import { Client } from "../../clients/entities/client.entity";
+import { User } from "../../users/entities/user.entity";
 
 export async function seedCases(dataSource: DataSource): Promise<void> {
   console.log("Seeding cases...");
@@ -32,7 +32,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
 
   // Get all users and clients for random assignment
   const users = await userRepository.find({
-    where: { role: "senior_associate" },
+    where: { role: "senior_associate" as any },
   });
   const clients = await clientRepository.find();
 
@@ -48,7 +48,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       const attorney = users[Math.floor(Math.random() * users.length)];
       const client = clients[Math.floor(Math.random() * clients.length)];
 
-      const statusMapping: Record<string, string> = {
+      const statusMapping: Record<string, any> = {
         OPEN: "Open",
         IN_PROGRESS: "Active",
         CLOSED: "Closed",
@@ -56,7 +56,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
 
       const caseEntity = caseRepository.create({
         ...caseData,
-        status: statusMapping[caseData.status] || "Open",
+        status: (statusMapping[caseData.status] || "Open") as any,
         assignedAttorneyId: attorney?.id,
         clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),

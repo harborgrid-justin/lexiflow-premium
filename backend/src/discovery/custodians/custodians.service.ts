@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, IsNull } from "typeorm";
+import { Repository, IsNull, DeepPartial } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Custodian } from "./entities/custodian.entity";
 import { CreateCustodianDto } from "./dto/create-custodian.dto";
 import { UpdateCustodianDto } from "./dto/update-custodian.dto";

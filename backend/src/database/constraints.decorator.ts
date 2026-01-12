@@ -1,4 +1,4 @@
-import { Check, Unique } from 'typeorm';
+import { Check, Unique } from "typeorm";
 
 /**
  * Database Constraint Decorators
@@ -47,7 +47,7 @@ export function NonNegativeNumber(columnName: string): ClassDecorator {
 export function NumberRange(
   columnName: string,
   min: number,
-  max: number,
+  max: number
 ): ClassDecorator {
   return Check(`"${columnName}" BETWEEN ${min} AND ${max}`);
 }
@@ -83,11 +83,11 @@ export function NonEmptyString(columnName: string): ClassDecorator {
 export function StringLength(
   columnName: string,
   min: number,
-  max?: number,
+  max?: number
 ): ClassDecorator {
   if (max !== undefined) {
     return Check(
-      `LENGTH("${columnName}") >= ${min} AND LENGTH("${columnName}") <= ${max}`,
+      `LENGTH("${columnName}") >= ${min} AND LENGTH("${columnName}") <= ${max}`
     );
   }
   return Check(`LENGTH("${columnName}") >= ${min}`);
@@ -102,7 +102,7 @@ export function StringLength(
  */
 export function DateAfter(
   columnName: string,
-  afterColumn: string,
+  afterColumn: string
 ): ClassDecorator {
   return Check(`"${columnName}" > "${afterColumn}"`);
 }
@@ -116,7 +116,7 @@ export function DateAfter(
  */
 export function DateBefore(
   columnName: string,
-  beforeColumn: string,
+  beforeColumn: string
 ): ClassDecorator {
   return Check(`"${columnName}" < "${beforeColumn}"`);
 }
@@ -150,11 +150,11 @@ export function PastDate(columnName: string): ClassDecorator {
  */
 export function EnumValues(
   columnName: string,
-  values: (string | number)[],
+  values: (string | number)[]
 ): ClassDecorator {
   const valuesList = values
-    .map((v) => (typeof v === 'string' ? `'${v}'` : v))
-    .join(', ');
+    .map((v) => (typeof v === "string" ? `'${v}'` : v))
+    .join(", ");
   return Check(`"${columnName}" IN (${valuesList})`);
 }
 
@@ -167,7 +167,7 @@ export function EnumValues(
 export function MutuallyExclusive(...columns: string[]): ClassDecorator {
   const conditions = columns
     .map((col) => `("${col}" IS NOT NULL)::int`)
-    .join(' + ');
+    .join(" + ");
   return Check(`(${conditions}) <= 1`);
 }
 
@@ -178,7 +178,7 @@ export function MutuallyExclusive(...columns: string[]): ClassDecorator {
  * @param columns - Array of column names
  */
 export function AtLeastOneRequired(...columns: string[]): ClassDecorator {
-  const conditions = columns.map((col) => `"${col}" IS NOT NULL`).join(' OR ');
+  const conditions = columns.map((col) => `"${col}" IS NOT NULL`).join(" OR ");
   return Check(`(${conditions})`);
 }
 
@@ -193,11 +193,11 @@ export function AtLeastOneRequired(...columns: string[]): ClassDecorator {
 export function ConditionalRequired(
   columnA: string,
   valueA: string | number | boolean,
-  columnB: string,
+  columnB: string
 ): ClassDecorator {
-  const value = typeof valueA === 'string' ? `'${valueA}'` : valueA;
+  const value = typeof valueA === "string" ? `'${valueA}'` : valueA;
   return Check(
-    `("${columnA}" != ${value}) OR ("${columnA}" = ${value} AND "${columnB}" IS NOT NULL)`,
+    `("${columnA}" != ${value}) OR ("${columnA}" = ${value} AND "${columnB}" IS NOT NULL)`
   );
 }
 
@@ -218,7 +218,9 @@ export function Percentage(columnName: string): ClassDecorator {
  * @param columnName - The name of the JSONB column
  */
 export function JsonNotEmpty(columnName: string): ClassDecorator {
-  return Check(`jsonb_array_length("${columnName}") > 0 OR jsonb_typeof("${columnName}") = 'object'`);
+  return Check(
+    `jsonb_array_length("${columnName}") > 0 OR jsonb_typeof("${columnName}") = 'object'`
+  );
 }
 
 /**
@@ -228,12 +230,12 @@ export function JsonNotEmpty(columnName: string): ClassDecorator {
  * @param columnName - The name of the column
  */
 export function CaseInsensitiveUnique(columnName: string): ClassDecorator {
-  return function (target: { new (...args: unknown[]): unknown }) {
+  return function (target: Function) {
     // This creates a unique index on LOWER(column)
     Reflect.defineMetadata(
-      'typeorm:indices',
+      "typeorm:indices",
       [
-        ...(Reflect.getMetadata('typeorm:indices', target) || []),
+        ...(Reflect.getMetadata("typeorm:indices", target) || []),
         {
           name: `IDX_${columnName}_lower_unique`,
           columns: [columnName],
@@ -250,7 +252,7 @@ export function CaseInsensitiveUnique(columnName: string): ClassDecorator {
           expression: `LOWER("${columnName}")`,
         },
       ],
-      target,
+      target
     );
   };
 }
@@ -282,13 +284,13 @@ export function CompositeUnique(
  */
 export function PartialUnique(
   columnName: string,
-  whereClause: string,
+  whereClause: string
 ): ClassDecorator {
-  return function (target: { new (...args: unknown[]): unknown }) {
+  return function (target: Function) {
     Reflect.defineMetadata(
-      'typeorm:indices',
+      "typeorm:indices",
       [
-        ...(Reflect.getMetadata('typeorm:indices', target) || []),
+        ...(Reflect.getMetadata("typeorm:indices", target) || []),
         {
           name: `IDX_${columnName}_partial_unique`,
           columns: [columnName],
@@ -303,7 +305,7 @@ export function PartialUnique(
           expireAfterSeconds: undefined,
         },
       ],
-      target,
+      target
     );
   };
 }
@@ -315,7 +317,9 @@ export function PartialUnique(
  * @param columnName - The name of the currency column
  */
 export function CurrencyAmount(columnName: string): ClassDecorator {
-  return Check(`"${columnName}" >= 0 AND ROUND("${columnName}"::numeric, 2) = "${columnName}"`);
+  return Check(
+    `"${columnName}" >= 0 AND ROUND("${columnName}"::numeric, 2) = "${columnName}"`
+  );
 }
 
 /**
@@ -325,7 +329,9 @@ export function CurrencyAmount(columnName: string): ClassDecorator {
  * @param columnName - The name of the phone number column
  */
 export function PhoneNumberFormat(columnName: string): ClassDecorator {
-  return Check(`LENGTH(REGEXP_REPLACE("${columnName}", '[^0-9]', '', 'g')) >= 10`);
+  return Check(
+    `LENGTH(REGEXP_REPLACE("${columnName}", '[^0-9]', '', 'g')) >= 10`
+  );
 }
 
 /**
@@ -335,7 +341,9 @@ export function PhoneNumberFormat(columnName: string): ClassDecorator {
  * @param columnName - The name of the URL column
  */
 export function UrlFormat(columnName: string): ClassDecorator {
-  return Check(`"${columnName}" LIKE 'http://%' OR "${columnName}" LIKE 'https://%'`);
+  return Check(
+    `"${columnName}" LIKE 'http://%' OR "${columnName}" LIKE 'https://%'`
+  );
 }
 
 /**
@@ -356,6 +364,6 @@ export function Alphanumeric(columnName: string): ClassDecorator {
  */
 export function IpAddressFormat(columnName: string): ClassDecorator {
   return Check(
-    `"${columnName}" ~ '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'`,
+    `"${columnName}" ~ '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'`
   );
 }

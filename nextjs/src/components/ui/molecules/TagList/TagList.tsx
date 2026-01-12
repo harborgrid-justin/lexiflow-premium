@@ -52,3 +52,4 @@ export const TagList = React.memo<TagListProps>(({
     </div>
   );
 });
+TagList.displayName = 'TagList';

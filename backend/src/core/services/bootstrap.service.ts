@@ -1,9 +1,13 @@
 import { Injectable, Logger, OnApplicationBootstrap } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
+import type { Redis as RedisType, RedisOptions } from "ioredis";
+import Redis from "ioredis";
 import { ConfigurationValidatorService } from "./configuration.validator.service";
 import { CRITICAL_MODULES } from "../constants/module.order.constant";
 import { ModuleStartupResult } from "../interfaces/module.config.interface";
+
+// Redis interfaces handled by ioredis types
 
 /**
  * Bootstrap Service
@@ -216,12 +220,6 @@ export class BootstrapService implements OnApplicationBootstrap {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Redis = require("ioredis") as {
-        new (url: string): RedisClient;
-        new (config: RedisConfig): RedisClient;
-      };
-      const redisUrl = this.configService.get<string>("redis.url");
       const redisHost = this.configService.get<string>(
         "redis.host",
         "localhost"
@@ -229,7 +227,7 @@ export class BootstrapService implements OnApplicationBootstrap {
       const redisPort = this.configService.get<number>("redis.port", 6379);
       const redisPassword = this.configService.get<string>("redis.password");
 
-      let redisClient: RedisClient;
+      let redisClient: RedisType;
 
       if (redisUrl) {
         redisClient = new Redis(redisUrl);
@@ -303,7 +301,9 @@ export class BootstrapService implements OnApplicationBootstrap {
         nodeVersion: this.checkNodeVersion(),
       };
 
-      const allHealthy = Object.values(checks).every((check) => check.healthy);
+      const allHealthy = Object.values(checks).every(
+        (check) => (check as any).healthy
+      );
 
       this.startupResults.push({
         module: "HealthChecks",

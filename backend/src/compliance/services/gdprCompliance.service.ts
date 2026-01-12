@@ -5,7 +5,11 @@ import {
   RevokeConsentDto,
 } from "@compliance/dto/compliance.dto";
 import { AuditLog } from "@compliance/entities/audit-log.entity";
-import { Consent, ConsentStatus } from "@compliance/entities/consent.entity";
+import {
+  Consent,
+  ConsentStatus,
+  ConsentType,
+} from "@compliance/entities/consent.entity";
 import {
   BadRequestException,
   Injectable,
@@ -13,7 +17,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "@users/entities/user.entity";
+import { User, UserStatus } from "@users/entities/user.entity";
 import { In, Repository } from "typeorm";
 
 export interface DataExportResult {
@@ -414,6 +418,22 @@ export class GdprComplianceService {
       },
       order: { grantedAt: "DESC" },
     });
+  }
+
+  private mapConsentTypeString(consentType: string): ConsentType {
+    const typeMap: Record<string, ConsentType> = {
+      marketing: ConsentType.MARKETING,
+      data_processing: ConsentType.DATA_PROCESSING,
+      third_party_sharing: ConsentType.THIRD_PARTY_SHARING,
+      analytics: ConsentType.ANALYTICS,
+      cookies: ConsentType.COOKIES,
+      terms_of_service: ConsentType.TERMS_OF_SERVICE,
+      privacy_policy: ConsentType.PRIVACY_POLICY,
+      biometric_data: ConsentType.BIOMETRIC_DATA,
+      sensitive_data: ConsentType.SENSITIVE_DATA,
+      automated_decision_making: ConsentType.AUTOMATED_DECISION_MAKING,
+    };
+    return typeMap[consentType] || ConsentType.DATA_PROCESSING;
   }
 
   async checkConsentValidity(

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, DeepPartial } from "typeorm";
 import { Citation } from "./entities/citation.entity";
 
 /**

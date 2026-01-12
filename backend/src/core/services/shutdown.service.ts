@@ -1,7 +1,14 @@
-import { Injectable, Logger, OnApplicationShutdown, BeforeApplicationShutdown } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
-import { ModuleShutdownResult } from '../interfaces/module.config.interface';
+import {
+  Injectable,
+  Logger,
+  OnApplicationShutdown,
+  BeforeApplicationShutdown,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { DataSource } from "typeorm";
+import type { Redis as RedisType, RedisOptions } from "ioredis";
+import Redis from "ioredis";
+import { ModuleShutdownResult } from "../interfaces/module.config.interface";
 
 /**
  * Shutdown Service
@@ -37,7 +44,9 @@ import { ModuleShutdownResult } from '../interfaces/module.config.interface';
  */
 
 @Injectable()
-export class ShutdownService implements BeforeApplicationShutdown, OnApplicationShutdown {
+export class ShutdownService
+  implements BeforeApplicationShutdown, OnApplicationShutdown
+{
   private readonly logger = new Logger(ShutdownService.name);
   private readonly shutdownResults: ModuleShutdownResult[] = [];
   private isShuttingDown = false;
@@ -45,7 +54,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   /**
@@ -53,18 +62,24 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   async beforeApplicationShutdown(signal?: string) {
     if (this.isShuttingDown) {
-      this.logger.warn('Shutdown already in progress, ignoring duplicate signal');
+      this.logger.warn(
+        "Shutdown already in progress, ignoring duplicate signal"
+      );
       return;
     }
 
     this.isShuttingDown = true;
 
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('      Graceful Shutdown Initiated');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("      Graceful Shutdown Initiated");
     if (signal) {
       this.logger.log(`      Signal: ${signal}`);
     }
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
 
     // Set a timeout for the entire shutdown process
     this.setShutdownTimeout();
@@ -76,7 +91,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
   async onApplicationShutdown() {
     if (!this.isShuttingDown) {
       this.isShuttingDown = true;
-      this.logger.log('Shutdown initiated without beforeApplicationShutdown');
+      this.logger.log("Shutdown initiated without beforeApplicationShutdown");
     }
 
     try {
@@ -84,7 +99,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       this.printShutdownSummary();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.stack : String(error);
-      this.logger.error('Shutdown sequence encountered errors:', errorMessage);
+      this.logger.error("Shutdown sequence encountered errors:", errorMessage);
     } finally {
       if (this.shutdownTimeout) {
         clearTimeout(this.shutdownTimeout);
@@ -96,10 +111,10 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    * Run the complete shutdown sequence
    */
   private async runShutdownSequence(): Promise<void> {
-    this.logger.log('Starting shutdown sequence...');
+    this.logger.log("Starting shutdown sequence...");
 
     // Step 1: Stop accepting new requests (handled by NestJS)
-    this.logger.log('[1/6] Stopped accepting new requests');
+    this.logger.log("[1/6] Stopped accepting new requests");
 
     // Step 2: Complete in-flight requests
     await this.completeInflightRequests();
@@ -116,7 +131,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
     // Step 6: Cleanup resources
     await this.cleanupResources();
 
-    this.logger.log('Shutdown sequence completed');
+    this.logger.log("Shutdown sequence completed");
   }
 
   /**
@@ -124,7 +139,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async completeInflightRequests(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[2/6] Waiting for in-flight requests to complete...');
+    this.logger.log("[2/6] Waiting for in-flight requests to complete...");
 
     try {
       // Give active requests time to complete
@@ -132,21 +147,24 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       await this.delay(waitTime);
 
       this.shutdownResults.push({
-        module: 'InFlightRequests',
+        module: "InFlightRequests",
         success: true,
         duration: Date.now() - startTime,
-        resourcesCleaned: ['Active HTTP requests'],
+        resourcesCleaned: ["Active HTTP requests"],
       });
 
-      this.logger.log('✓ In-flight requests completed');
+      this.logger.log("✓ In-flight requests completed");
     } catch (error) {
       this.shutdownResults.push({
-        module: 'InFlightRequests',
+        module: "InFlightRequests",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to complete in-flight requests:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Failed to complete in-flight requests:",
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -155,19 +173,22 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async drainQueues(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[3/6] Draining queues...');
+    this.logger.log("[3/6] Draining queues...");
 
     try {
-      const redisEnabled = this.configService.get<boolean>('REDIS_ENABLED', true);
-      const demoMode = this.configService.get<boolean>('DEMO_MODE');
+      const redisEnabled = this.configService.get<boolean>(
+        "REDIS_ENABLED",
+        true
+      );
+      const demoMode = this.configService.get<boolean>("DEMO_MODE");
 
       if (!redisEnabled || demoMode) {
-        this.logger.log('  Queue draining skipped (Redis disabled)');
+        this.logger.log("  Queue draining skipped (Redis disabled)");
         this.shutdownResults.push({
-          module: 'Queues',
+          module: "Queues",
           success: true,
           duration: Date.now() - startTime,
-          resourcesCleaned: ['N/A - Redis disabled'],
+          resourcesCleaned: ["N/A - Redis disabled"],
         });
         return;
       }
@@ -181,21 +202,24 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       await this.delay(2000);
 
       this.shutdownResults.push({
-        module: 'Queues',
+        module: "Queues",
         success: true,
         duration: Date.now() - startTime,
-        resourcesCleaned: ['Queue connections', 'Pending jobs'],
+        resourcesCleaned: ["Queue connections", "Pending jobs"],
       });
 
-      this.logger.log('✓ Queues drained');
+      this.logger.log("✓ Queues drained");
     } catch (error) {
       this.shutdownResults.push({
-        module: 'Queues',
+        module: "Queues",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to drain queues:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Failed to drain queues:",
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -204,40 +228,49 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async closeExternalConnections(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[4/6] Closing external connections...');
+    this.logger.log("[4/6] Closing external connections...");
 
     const closed: string[] = [];
 
     try {
       // Close Redis connection if enabled
-      const redisEnabled = this.configService.get<boolean>('REDIS_ENABLED', true);
-      const demoMode = this.configService.get<boolean>('DEMO_MODE');
+      const redisEnabled = this.configService.get<boolean>(
+        "REDIS_ENABLED",
+        true
+      );
+      const demoMode = this.configService.get<boolean>("DEMO_MODE");
 
       if (redisEnabled && !demoMode) {
         try {
           await this.closeRedisConnection();
-          closed.push('Redis');
+          closed.push("Redis");
         } catch (error) {
-          this.logger.error('Failed to close Redis connection:', error instanceof Error ? error.message : String(error));
+          this.logger.error(
+            "Failed to close Redis connection:",
+            error instanceof Error ? error.message : String(error)
+          );
         }
       }
 
       this.shutdownResults.push({
-        module: 'ExternalConnections',
+        module: "ExternalConnections",
         success: true,
         duration: Date.now() - startTime,
-        resourcesCleaned: closed.length > 0 ? closed : ['None'],
+        resourcesCleaned: closed.length > 0 ? closed : ["None"],
       });
 
-      this.logger.log('✓ External connections closed');
+      this.logger.log("✓ External connections closed");
     } catch (error) {
       this.shutdownResults.push({
-        module: 'ExternalConnections',
+        module: "ExternalConnections",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to close external connections:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Failed to close external connections:",
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -246,17 +279,15 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async closeRedisConnection(): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Redis = require('ioredis') as {
-        new (url: string): RedisClient;
-        new (config: RedisConfig): RedisClient;
-      };
-      const redisUrl = this.configService.get<string>('redis.url');
-      const redisHost = this.configService.get<string>('redis.host', 'localhost');
-      const redisPort = this.configService.get<number>('redis.port', 6379);
-      const redisPassword = this.configService.get<string>('redis.password');
+      const redisUrl = this.configService.get<string>("redis.url");
+      const redisHost = this.configService.get<string>(
+        "redis.host",
+        "localhost"
+      );
+      const redisPort = this.configService.get<number>("redis.port", 6379);
+      const redisPassword = this.configService.get<string>("redis.password");
 
-      let redisClient: RedisClient;
+      let redisClient: RedisType;
 
       if (redisUrl) {
         redisClient = new Redis(redisUrl);
@@ -269,10 +300,12 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       }
 
       await redisClient.quit();
-      this.logger.log('  ✓ Redis connection closed');
+      this.logger.log("  ✓ Redis connection closed");
     } catch {
       // Redis connection may already be closed, which is fine
-      this.logger.debug('Redis connection close failed (may already be closed)');
+      this.logger.debug(
+        "Redis connection close failed (may already be closed)"
+      );
     }
   }
 
@@ -281,37 +314,40 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async closeDatabaseConnection(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[5/6] Closing database connection...');
+    this.logger.log("[5/6] Closing database connection...");
 
     try {
       if (this.dataSource.isInitialized) {
         await this.dataSource.destroy();
 
         this.shutdownResults.push({
-          module: 'Database',
+          module: "Database",
           success: true,
           duration: Date.now() - startTime,
-          resourcesCleaned: ['Database connection pool'],
+          resourcesCleaned: ["Database connection pool"],
         });
 
-        this.logger.log('✓ Database connection closed');
+        this.logger.log("✓ Database connection closed");
       } else {
-        this.logger.log('  Database already closed');
+        this.logger.log("  Database already closed");
         this.shutdownResults.push({
-          module: 'Database',
+          module: "Database",
           success: true,
           duration: Date.now() - startTime,
-          resourcesCleaned: ['Already closed'],
+          resourcesCleaned: ["Already closed"],
         });
       }
     } catch (error) {
       this.shutdownResults.push({
-        module: 'Database',
+        module: "Database",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to close database connection:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Failed to close database connection:",
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -320,7 +356,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    */
   private async cleanupResources(): Promise<void> {
     const startTime = Date.now();
-    this.logger.log('[6/6] Cleaning up resources...');
+    this.logger.log("[6/6] Cleaning up resources...");
 
     try {
       const cleaned: string[] = [];
@@ -329,27 +365,30 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       // (In production, track these and clear them explicitly)
 
       // Flush logs
-      cleaned.push('Log buffers');
+      cleaned.push("Log buffers");
 
       // Clear any caches
-      cleaned.push('Memory caches');
+      cleaned.push("Memory caches");
 
       this.shutdownResults.push({
-        module: 'Resources',
+        module: "Resources",
         success: true,
         duration: Date.now() - startTime,
         resourcesCleaned: cleaned,
       });
 
-      this.logger.log('✓ Resources cleaned up');
+      this.logger.log("✓ Resources cleaned up");
     } catch (error) {
       this.shutdownResults.push({
-        module: 'Resources',
+        module: "Resources",
         success: false,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to cleanup resources:', error instanceof Error ? error.message : String(error));
+      this.logger.error(
+        "Failed to cleanup resources:",
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
 
@@ -360,10 +399,14 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
     const timeout = 30000; // 30 seconds total shutdown timeout
 
     this.shutdownTimeout = setTimeout(() => {
-      this.logger.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      this.logger.error('  SHUTDOWN TIMEOUT EXCEEDED');
-      this.logger.error('  Forcing shutdown after 30 seconds');
-      this.logger.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      this.logger.error(
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      );
+      this.logger.error("  SHUTDOWN TIMEOUT EXCEEDED");
+      this.logger.error("  Forcing shutdown after 30 seconds");
+      this.logger.error(
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      );
       process.exit(1);
     }, timeout);
   }
@@ -372,26 +415,34 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
    * Print shutdown summary
    */
   private printShutdownSummary(): void {
-    const successCount = this.shutdownResults.filter(r => r.success).length;
-    const failureCount = this.shutdownResults.filter(r => !r.success).length;
+    const successCount = this.shutdownResults.filter((r) => r.success).length;
+    const failureCount = this.shutdownResults.filter((r) => !r.success).length;
 
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('                  Shutdown Summary');
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log(`Successful: ${successCount}/${this.shutdownResults.length}`);
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("                  Shutdown Summary");
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log(
+      `Successful: ${successCount}/${this.shutdownResults.length}`
+    );
     if (failureCount > 0) {
       this.logger.log(`Failed: ${failureCount}`);
     }
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
 
     // Detailed results
-    this.shutdownResults.forEach(result => {
-      const status = result.success ? '✓' : '✗';
+    this.shutdownResults.forEach((result) => {
+      const status = result.success ? "✓" : "✗";
       const duration = `${result.duration}ms`.padStart(8);
       this.logger.log(`  ${status} ${result.module.padEnd(20)} ${duration}`);
 
       if (result.resourcesCleaned && result.resourcesCleaned.length > 0) {
-        this.logger.log(`    Cleaned: ${result.resourcesCleaned.join(', ')}`);
+        this.logger.log(`    Cleaned: ${result.resourcesCleaned.join(", ")}`);
       }
 
       if (result.error) {
@@ -399,16 +450,20 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       }
     });
 
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('           Application Shutdown Complete');
-    this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
+    this.logger.log("           Application Shutdown Complete");
+    this.logger.log(
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    );
   }
 
   /**
    * Delay helper
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**

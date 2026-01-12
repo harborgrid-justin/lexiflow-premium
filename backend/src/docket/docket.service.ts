@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, DeepPartial, FindOptionsWhere } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { DocketEntry } from "./entities/docket-entry.entity";
 import { CreateDocketEntryDto } from "./dto/create-docket-entry.dto";
 import { UpdateDocketEntryDto } from "./dto/update-docket-entry.dto";

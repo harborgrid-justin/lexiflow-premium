@@ -82,3 +82,4 @@ export const Stepper = React.memo<StepperProps>(({ steps, currentStep, onStepCli
     </div>
   );
 });
+Stepper.displayName = 'Stepper';

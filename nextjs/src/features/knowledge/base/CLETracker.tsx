@@ -487,57 +487,55 @@ export const CLETracker: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-}
 
 {/* Courses View */ }
-{
-  view === 'courses' && (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {courses
-        .filter((course) => course.jurisdiction.includes(selectedJurisdiction))
-        .map((course) => (
-          <div
-            key={course.id}
-            className="bg-white rounded-lg shadow border border-slate-200 p-6 hover:shadow-lg transition-shadow"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="font-semibold text-slate-900">{course.title}</h3>
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
-                {course.credits} credits
-              </span>
-            </div>
-            <p className="text-sm text-slate-600 mb-3">{course.provider}</p>
-            <p className="text-sm text-slate-700 mb-4 line-clamp-2">{course.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
-                {course.category}
-              </span>
-              <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
-                {course.format}
-              </span>
-              {course.date && (
-                <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
-                  {course.date}
+  {
+    view === 'courses' && (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {courses
+          .filter((course) => course.jurisdiction.includes(selectedJurisdiction))
+          .map((course) => (
+            <div
+              key={course.id}
+              className="bg-white rounded-lg shadow border border-slate-200 p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="font-semibold text-slate-900">{course.title}</h3>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                  {course.credits} credits
                 </span>
-              )}
+              </div>
+              <p className="text-sm text-slate-600 mb-3">{course.provider}</p>
+              <p className="text-sm text-slate-700 mb-4 line-clamp-2">{course.description}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
+                  {course.category}
+                </span>
+                <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
+                  {course.format}
+                </span>
+                {course.date && (
+                  <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
+                    {course.date}
+                  </span>
+                )}
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-slate-900">
+                  ${course.cost}
+                </span>
+                <button
+                  onClick={() => handleEnrollCourse(course.id)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                >
+                  Enroll
+                </button>
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold text-slate-900">
-                ${course.cost}
-              </span>
-              <button
-                onClick={() => handleEnrollCourse(course.id)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
-              >
-                Enroll
-              </button>
-            </div>
-          </div>
-        ))}
-    </div>
+          ))}
+      </div>
     </div >
   );
-};
+  };
 
-export default CLETracker;
+  export default CLETracker;

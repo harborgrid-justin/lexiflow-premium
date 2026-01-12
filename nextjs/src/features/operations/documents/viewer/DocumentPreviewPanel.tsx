@@ -98,7 +98,7 @@ export function DocumentPreviewPanel({
             };
             loadBlob();
         } else {
-            setPreviewUrl(null);
+            setTimeout(() => setPreviewUrl(null), 0);
         }
         return () => { isMounted = false; };
     }, [document, register, previewUrl]); // The registry hook handles cleanup automatically

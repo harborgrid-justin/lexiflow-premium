@@ -4,7 +4,8 @@ import {
 } from "@common/utils/query-validation.util";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { IsNull, Repository } from "typeorm";
+import { IsNull, Repository, DeepPartial } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { CreateCustodianInterviewDto } from "./dto/create-custodian-interview.dto";
 import { QueryCustodianInterviewDto } from "./dto/query-custodian-interview.dto";
 import { UpdateCustodianInterviewDto } from "./dto/update-custodian-interview.dto";

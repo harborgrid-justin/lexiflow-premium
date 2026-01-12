@@ -94,7 +94,7 @@ export const RLSPolicyManager: React.FC = () => {
                                     </div>
                                     <div>
                                         <h4 className={cn("font-bold text-sm", theme.text.primary)}>{p.name}</h4>
-                                        <p className={cn("text-xs font-mono mt-0.5", theme.text.tertiary)}>ON table "{p.table}"</p>
+                                        <p className={cn("text-xs font-mono mt-0.5", theme.text.tertiary)}>ON table &quot;{p.table}&quot;</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">

@@ -85,3 +85,4 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
     </div>
   );
 });
+TimelineItem.displayName = 'TimelineItem';

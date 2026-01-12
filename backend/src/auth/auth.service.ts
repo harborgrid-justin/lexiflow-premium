@@ -582,11 +582,11 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessPayload as Record<string, unknown>, {
         secret: jwtSecret,
-        expiresIn: accessExpiresIn as string | number, // TypeScript workaround - jsonwebtoken accepts string durations
+        expiresIn: accessExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
       }),
       this.jwtService.signAsync(refreshPayload as Record<string, unknown>, {
         secret: refreshSecret,
-        expiresIn: refreshExpiresIn as string | number, // TypeScript workaround - jsonwebtoken accepts string durations
+        expiresIn: refreshExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
       }),
     ]);
 

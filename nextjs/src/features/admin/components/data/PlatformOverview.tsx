@@ -29,9 +29,13 @@ export const PlatformOverview = React.memo(function PlatformOverview() {
 
     // Hydrate with random simulation data after mount
     useEffect(() => {
-        setData(Array.from({ length: 40 }, (_, i) => ({
-            time: i, value: Math.floor(Math.random() * 500) + 200
-        })));
+        // Use timeout to prevent synchronous setState within effect warning
+        const t = setTimeout(() => {
+            setData(Array.from({ length: 40 }, (_, i) => ({
+                time: i, value: Math.floor(Math.random() * 500) + 200
+            })));
+        }, 0);
+        return () => clearTimeout(t);
     }, []);
 
     // Update chart every second to simulate live monitoring

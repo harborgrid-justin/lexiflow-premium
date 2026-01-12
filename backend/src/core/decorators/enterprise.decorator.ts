@@ -148,14 +148,16 @@ export function PublicEndpoint(options?: {
   const audit = options?.audit !== false;
   const performanceTrack = options?.performanceTrack !== false;
 
-  const decorators = [SetMetadata(PUBLIC_KEY, true)];
+  const decorators: Array<
+    ClassDecorator | MethodDecorator | PropertyDecorator
+  > = [SetMetadata(PUBLIC_KEY, true)];
 
   if (audit) {
-    decorators.push(UseInterceptors(AuditLogInterceptor));
+    decorators.push(UseInterceptors(AuditLogInterceptor) as any);
   }
 
   if (performanceTrack) {
-    decorators.push(UseInterceptors(PerformanceInterceptor));
+    decorators.push(UseInterceptors(PerformanceInterceptor) as any);
   }
 
   return applyDecorators(...decorators);

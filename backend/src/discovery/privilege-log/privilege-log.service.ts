@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, IsNull } from "typeorm";
+import { Repository, IsNull, DeepPartial } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { PrivilegeLogEntry } from "./entities/privilege-log-entry.entity";
 import { CreatePrivilegeLogEntryDto } from "./dto/create-privilege-log-entry.dto";
 import { UpdatePrivilegeLogEntryDto } from "./dto/update-privilege-log-entry.dto";

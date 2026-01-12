@@ -95,3 +95,4 @@ export const TagInput = React.memo<TagInputProps>(({ tags, onAdd, onRemove, sugg
     </div>
   );
 });
+TagInput.displayName = 'TagInput';

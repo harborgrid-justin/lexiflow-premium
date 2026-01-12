@@ -1,20 +1,20 @@
-import { Injectable } from "@nestjs/common";
-import {
-  ComplianceReportDto,
-  ReportType,
-  GenerateAccessReportDto,
-  AccessReportData,
-  GenerateActivityReportDto,
-  ActivityReportData,
-  GenerateConflictsReportDto,
-  ConflictsReportData,
-  GenerateEthicalWallsReportDto,
-  EthicalWallsReportData,
-} from "./dto/compliance-report.dto";
 import { AuditLogsService } from "@compliance/audit-logs/audit-logs.service";
 import { ConflictChecksService } from "@compliance/conflict-checks/conflict-checks.service";
 import { EthicalWallsService } from "@compliance/ethical-walls/ethical-walls.service";
 import { PermissionsService } from "@compliance/permissions/permissions.service";
+import { Injectable } from "@nestjs/common";
+import {
+  AccessReportData,
+  ActivityReportData,
+  ComplianceReportDto,
+  ConflictsReportData,
+  EthicalWallsReportData,
+  GenerateAccessReportDto,
+  GenerateActivityReportDto,
+  GenerateConflictsReportDto,
+  GenerateEthicalWallsReportDto,
+  ReportType,
+} from "./dto/compliance-report.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -130,8 +130,8 @@ export class ComplianceReportingService {
 
     const { data: auditLogs } = await this.auditLogsService.findAll({
       userId: dto.userId,
-      entityType: dto.entityType,
-      action: dto.action,
+      entityType: dto.entityType as any,
+      action: dto.action as any,
       startDate,
       endDate,
     });
@@ -215,8 +215,8 @@ export class ComplianceReportingService {
     const endDate = dto.endDate || new Date();
 
     const { data: conflicts } = await this.conflictChecksService.findAll({
-      status: dto.status,
-      checkType: dto.checkType,
+      status: dto.status as any,
+      checkType: dto.checkType as any,
       startDate,
       endDate,
     });
@@ -285,7 +285,7 @@ export class ComplianceReportingService {
     const endDate = dto.endDate || new Date();
 
     const { data: walls } = await this.ethicalWallsService.findAll({
-      status: dto.status,
+      status: dto.status as any,
       userId: dto.userId,
     });
 
@@ -339,8 +339,21 @@ export class ComplianceReportingService {
     };
   }
 
-  private generateTimeline(startDate: Date, endDate: Date): unknown[] {
-    const timeline = [];
+  private generateTimeline(
+    startDate: Date,
+    endDate: Date
+  ): Array<{
+    date: string;
+    count: number;
+    successful: number;
+    denied: number;
+  }> {
+    const timeline: Array<{
+      date: string;
+      count: number;
+      successful: number;
+      denied: number;
+    }> = [];
     const dayInMs = 24 * 60 * 60 * 1000;
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / dayInMs);
 

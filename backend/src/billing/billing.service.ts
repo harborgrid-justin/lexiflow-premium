@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Not, Repository } from "typeorm";
+import { Not, Repository, FindOptionsWhere } from "typeorm";
 import { Expense, ExpenseStatus } from "./expenses/entities/expense.entity";
 import { Invoice, InvoiceStatus } from "./invoices/entities/invoice.entity";
 import {

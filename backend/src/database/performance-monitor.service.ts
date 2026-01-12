@@ -233,7 +233,7 @@ export class DatabasePerformanceMonitor {
         waiting_connections: string;
       }
 
-      const [result] = await this.dataSource.query<PoolQueryResult>(query);
+      const [result] = await this.dataSource.query<PoolQueryResult[]>(query);
       if (!result) {
         throw new Error("Failed to retrieve pool stats");
       }
@@ -275,7 +275,7 @@ export class DatabasePerformanceMonitor {
         table_size: string;
       }
 
-      const results = await this.dataSource.query<TableQueryResult>(query, [
+      const results = await this.dataSource.query<TableQueryResult[]>(query, [
         schemaName,
       ]);
 
@@ -319,7 +319,7 @@ export class DatabasePerformanceMonitor {
         idx_tup_fetch: string;
       }
 
-      const results = await this.dataSource.query<IndexQueryResult>(query, [
+      const results = await this.dataSource.query<IndexQueryResult[]>(query, [
         schemaName,
       ]);
 
@@ -356,7 +356,7 @@ export class DatabasePerformanceMonitor {
         index_name: string;
       }
 
-      const results = await this.dataSource.query<UnusedIndexResult>(query, [
+      const results = await this.dataSource.query<UnusedIndexResult[]>(query, [
         schemaName,
       ]);
       return results.map((row) => String(row.index_name));
@@ -564,7 +564,7 @@ export class DatabasePerformanceMonitor {
       }
 
       const results =
-        await this.dataSource.query<LongRunningQueryResult>(query);
+        await this.dataSource.query<LongRunningQueryResult[]>(query);
 
       return results.map((row) => ({
         pid: Number(row.pid),

@@ -1,9 +1,9 @@
-import { DataSource } from "typeorm";
+import * as PathsConfig from "@config/paths.config";
 import * as fs from "fs";
 import * as path from "path";
-import * as PathsConfig from "@config/paths.config";
-import { Document } from "../../documents/entities/document.entity";
+import { DataSource } from "typeorm";
 import { Case } from "../../cases/entities/case.entity";
+import { Document } from "../../documents/entities/document.entity";
 import { User } from "../../users/entities/user.entity";
 
 export async function seedDocuments(dataSource: DataSource): Promise<void> {
@@ -57,7 +57,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
 
       const document = documentRepository.create({
         ...documentData,
-        type: documentType,
+        type: documentType as any,
         caseId,
         creatorId: uploadedBy?.id,
         createdAt: new Date(),

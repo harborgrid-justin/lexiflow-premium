@@ -93,3 +93,4 @@ export const Pagination = React.memo<PaginationProps>(({ currentPage, totalPages
     </div>
   );
 });
+Pagination.displayName = 'Pagination';

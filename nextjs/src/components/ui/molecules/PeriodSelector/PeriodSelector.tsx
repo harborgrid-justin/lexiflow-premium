@@ -77,3 +77,4 @@ export const PeriodSelector = React.memo<PeriodSelectorProps>(({
     </div>
   );
 });
+PeriodSelector.displayName = 'PeriodSelector';

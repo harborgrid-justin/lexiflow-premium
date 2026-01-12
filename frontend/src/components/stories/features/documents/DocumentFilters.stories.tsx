@@ -7,7 +7,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentFilters } from '@features/operations';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 
 const meta: Meta<typeof DocumentFilters> = {
   title: 'Documents/Document Filters',

@@ -1,7 +1,7 @@
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { Button } from '@/shared/ui/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { Clause } from '@/types';
 import { cn } from '@/shared/lib/cn';

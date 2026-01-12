@@ -28,7 +28,7 @@ import { CitationDetail } from './CitationDetail';
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 
 // Services & Utils

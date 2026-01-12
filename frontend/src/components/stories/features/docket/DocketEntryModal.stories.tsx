@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketEntryModal } from '@/features/cases/components/docket/DocketEntryModal';
 import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketEntryModal displays detailed information about a docket entry

@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
@@ -41,7 +41,7 @@ export const PipelineDAG = React.memo(function PipelineDAG() {
 
     return (
         <div className={cn("flex flex-col h-full bg-slate-50 dark:bg-slate-900 overflow-hidden relative", theme.surface.default)}>
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: `radial-gradient(${mode === 'dark' ? '#334155' : '#cbd5e1'} 1px, transparent 1px)`, backgroundSize: '24px 24px' }}></div>
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: `radial-gradient(${theme.colors.border} 1px, transparent 1px)`, backgroundSize: '24px 24px' }}></div>
 
             <div className="relative z-10 flex flex-1 items-center justify-center p-10 overflow-auto">
                 <div className="flex items-center gap-4 min-w-max">

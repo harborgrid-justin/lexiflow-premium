@@ -5,7 +5,7 @@
  * Displays comprehensive performance metrics with benchmarks and trends
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import type { BaseDashboardProps, PerformanceMetric } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';

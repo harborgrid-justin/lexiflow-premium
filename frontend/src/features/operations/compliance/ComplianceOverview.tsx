@@ -1,7 +1,7 @@
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { ComplianceMetrics } from '@/types';

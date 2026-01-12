@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useChartTheme } from './ChartHelpers';
 
 // This module exports hooks, not components. Story disabled.

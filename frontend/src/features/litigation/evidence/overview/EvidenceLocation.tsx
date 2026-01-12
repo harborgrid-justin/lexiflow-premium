@@ -13,7 +13,7 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface EvidenceLocationProps {

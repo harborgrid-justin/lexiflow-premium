@@ -1,7 +1,7 @@
 // components/layout/Sidebar.tsx
 import React from 'react';
 import { User, AppView } from '@/types';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { SidebarHeader } from '@/components';
 import { SidebarNav } from './SidebarNav';

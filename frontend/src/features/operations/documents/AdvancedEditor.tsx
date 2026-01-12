@@ -1,5 +1,5 @@
 import { EditorToolbar } from '@/features/discovery/ui/components/EditorToolbar/EditorToolbar';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';

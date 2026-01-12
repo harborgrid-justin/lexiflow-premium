@@ -15,7 +15,7 @@
 import { api } from '@/api';
 import { PartyTypeBackend } from '@/api/litigation/parties-api';
 import { AI_CONFIG } from '@/config/features/ai.config';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';
 import { cn } from '@/shared/lib/cn';

@@ -1,6 +1,6 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { FileText, Landmark } from 'lucide-react';

@@ -6,7 +6,9 @@
 /**
  * Query key type - array of serializable values
  */
-export type QueryKey = ReadonlyArray<string | number | boolean | Record<string, unknown> | null | undefined>;
+export type QueryKey = ReadonlyArray<
+  string | number | boolean | Record<string, unknown> | null | undefined
+>;
 
 /**
  * Query function type with abort signal support
@@ -16,7 +18,7 @@ export type QueryFunction<T = unknown> = (signal: AbortSignal) => Promise<T>;
 /**
  * Query state status
  */
-export type QueryStatus = 'idle' | 'loading' | 'success' | 'error';
+export type QueryStatus = "idle" | "loading" | "success" | "error";
 
 /**
  * Query state interface
@@ -27,6 +29,9 @@ export interface QueryState<T = unknown> {
   error: Error | null;
   dataUpdatedAt: number;
   isFetching: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  isError?: boolean;
 }
 
 /**
@@ -56,10 +61,25 @@ export interface MutationContext {
  * Mutation options
  */
 export interface UseMutationOptions<T = unknown, V = unknown> {
-  onMutate?: (variables: V) => Promise<MutationContext> | MutationContext | void;
-  onSuccess?: (data: T, variables: V, context: MutationContext) => Promise<void> | void;
-  onError?: (error: Error, variables: V, context: MutationContext) => Promise<void> | void;
-  onSettled?: (data: T | undefined, error: Error | null, variables: V, context: MutationContext) => Promise<void> | void;
+  onMutate?: (
+    variables: V
+  ) => Promise<MutationContext> | MutationContext | void;
+  onSuccess?: (
+    data: T,
+    variables: V,
+    context: MutationContext
+  ) => Promise<void> | void;
+  onError?: (
+    error: Error,
+    variables: V,
+    context: MutationContext
+  ) => Promise<void> | void;
+  onSettled?: (
+    data: T | undefined,
+    error: Error | null,
+    variables: V,
+    context: MutationContext
+  ) => Promise<void> | void;
   invalidateKeys?: QueryKey[];
 }
 

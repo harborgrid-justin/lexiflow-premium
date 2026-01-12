@@ -1,7 +1,5 @@
 /**
- * Theme Provider for React Router v7
- *
- * Re-exports the ThemeProvider from context for use in root layout
+ * @deprecated This module has moved to @/features/theme
+ * Please update your imports to use @/features/theme
  */
-
-export { ThemeProvider } from './ThemeContext';
+export { ThemeProvider } from '@/features/theme';

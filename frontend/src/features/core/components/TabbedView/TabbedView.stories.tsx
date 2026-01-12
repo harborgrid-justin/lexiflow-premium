@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedView } from './TabbedView';
 
 const meta: Meta<typeof TabbedView> = {

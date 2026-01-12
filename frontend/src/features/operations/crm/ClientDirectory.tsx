@@ -3,7 +3,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Currency } from '@/shared/ui/atoms/Currency';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useClients } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';

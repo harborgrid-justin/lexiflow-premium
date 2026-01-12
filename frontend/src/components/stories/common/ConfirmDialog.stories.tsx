@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 

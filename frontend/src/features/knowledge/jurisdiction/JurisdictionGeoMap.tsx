@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Map, RefreshCw, Layers, Navigation } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { DataService } from '@/services/data/dataService';
 import { useWindow } from '@/providers';

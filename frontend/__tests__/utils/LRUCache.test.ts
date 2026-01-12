@@ -202,16 +202,16 @@ describe("LRUCache", () => {
   describe("size", () => {
     it("should return 0 for empty cache", () => {
       const cache = new LRUCache<string>(5);
-      expect(cache.size()).toBe(0);
+      expect(cache.size).toBe(0);
     });
 
     it("should return correct size", () => {
       const cache = new LRUCache<string>(5);
       cache.put("a", "1");
-      expect(cache.size()).toBe(1);
+      expect(cache.size).toBe(1);
 
       cache.put("b", "2");
-      expect(cache.size()).toBe(2);
+      expect(cache.size).toBe(2);
     });
 
     it("should not exceed capacity", () => {
@@ -221,17 +221,17 @@ describe("LRUCache", () => {
       cache.put("c", "3");
       cache.put("d", "4");
 
-      expect(cache.size()).toBe(3);
+      expect(cache.size).toBe(3);
     });
 
     it("should decrease on delete", () => {
       const cache = new LRUCache<string>(5);
       cache.put("a", "1");
       cache.put("b", "2");
-      expect(cache.size()).toBe(2);
+      expect(cache.size).toBe(2);
 
       cache.delete("a");
-      expect(cache.size()).toBe(1);
+      expect(cache.size).toBe(1);
     });
 
     it("should be 0 after clear", () => {
@@ -240,7 +240,7 @@ describe("LRUCache", () => {
       cache.put("b", "2");
       cache.clear();
 
-      expect(cache.size()).toBe(0);
+      expect(cache.size).toBe(0);
     });
   });
 
@@ -356,7 +356,7 @@ describe("LRUCache", () => {
       for (let i = 0; i < 5000; i++) {
         cache.put(`key${i}`, `value${i}`);
       }
-      expect(cache.size()).toBe(5000);
+      expect(cache.size).toBe(5000);
     });
 
     it("should handle rapid put/get operations", () => {
@@ -365,7 +365,7 @@ describe("LRUCache", () => {
         cache.put(`key${i % 50}`, i);
         cache.get(`key${(i - 10) % 50}`);
       }
-      expect(cache.size()).toBeLessThanOrEqual(100);
+      expect(cache.size).toBeLessThanOrEqual(100);
     });
 
     it("should handle special characters in keys", () => {
@@ -448,7 +448,7 @@ describe("LRUCache", () => {
         }
       }
 
-      expect(cache.size()).toBe(10);
+      expect(cache.size).toBe(10);
     });
 
     it("should maintain consistency with updates", () => {
@@ -460,7 +460,7 @@ describe("LRUCache", () => {
       cache.put("c", 3);
 
       expect(cache.get("a")).toBe(10);
-      expect(cache.size()).toBe(3);
+      expect(cache.size).toBe(3);
     });
   });
 });

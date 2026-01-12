@@ -20,7 +20,7 @@ import type { WorkflowInstance } from '@/api/workflow/core';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import type { User } from '@/types';
 import { cn } from '@/shared/lib/cn';

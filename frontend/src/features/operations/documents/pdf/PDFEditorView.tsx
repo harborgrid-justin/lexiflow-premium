@@ -3,7 +3,7 @@ import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/Si
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';

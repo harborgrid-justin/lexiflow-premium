@@ -16,7 +16,7 @@ import React, { forwardRef, useDeferredValue, useEffect, useImperativeHandle, us
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

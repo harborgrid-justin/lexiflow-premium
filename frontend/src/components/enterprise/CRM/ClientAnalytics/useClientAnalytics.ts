@@ -3,11 +3,10 @@
  * @description Headless hook for Client Analytics state management
  */
 
-import { useTheme } from "@/contexts/theme/ThemeContext";
+import { ChartColorService, useTheme } from "@/features/theme";
 import { useQuery } from "@/hooks/backend";
 import { DataService } from "@/services/data/dataService";
 import { QUERY_KEYS } from "@/services/data/queryKeys";
-import { ChartColorService } from "@/services/theme/chartColorService";
 import { getChartTheme } from "@/utils/chartConfig";
 import { useState } from "react";
 import type { TabType } from "./types";

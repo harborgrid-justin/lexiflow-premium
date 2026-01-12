@@ -18,7 +18,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';

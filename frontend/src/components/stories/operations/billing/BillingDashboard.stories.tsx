@@ -8,7 +8,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import BillingDashboard from '../../../../features/operations/billing/BillingDashboard';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@providers/ToastContext';
 
 const meta: Meta<typeof BillingDashboard> = {
@@ -40,16 +40,7 @@ const meta: Meta<typeof BillingDashboard> = {
       clearMocks: true,
       restoreMocks: true,
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <Story />
-        </ToastProvider>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     initialTab: {
       control: 'select',

@@ -4,7 +4,7 @@
  * @description Storybook stories for MegaMenu component
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MegaMenu } from './MegaMenu';
 import {
   Briefcase, FileText, Users, Calendar, Clock,

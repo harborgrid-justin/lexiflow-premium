@@ -3,7 +3,7 @@
  * @description Client lifetime value card component
  */
 
-import type { ThemeObject } from '@/contexts/theme/ThemeContext';
+import type { ThemeObject } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { ClientLifetimeValue } from './types';
 

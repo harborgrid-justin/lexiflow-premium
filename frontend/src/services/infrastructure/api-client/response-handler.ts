@@ -9,9 +9,9 @@ import {
   ValidationError,
 } from "@/services/core/errors";
 import { keysToCamel } from "@/utils/caseConverter";
-import type { ApiError } from "./types";
-import { getRefreshToken, clearAuthTokens } from "./auth-manager";
+import { clearAuthTokens, getRefreshToken } from "./auth-manager";
 import { refreshAccessToken } from "./token-refresh";
+import type { ApiError } from "./types";
 
 /**
  * Handle API response with error management
@@ -73,9 +73,7 @@ export async function handleResponse<T>(response: Response): Promise<T> {
           if (!isSSR) {
             window.location.href = "/login";
           }
-          throw new AuthenticationError(
-            "Session expired. Please login again."
-          );
+          throw new AuthenticationError("Session expired. Please login again.");
         }
       } else {
         console.warn("[ResponseHandler] No refresh token available");
@@ -84,9 +82,7 @@ export async function handleResponse<T>(response: Response): Promise<T> {
           console.log("[ResponseHandler] Redirecting to login");
           window.location.href = "/login";
         }
-        throw new AuthenticationError(
-          "Authentication required. Please login."
-        );
+        throw new AuthenticationError("Authentication required. Please login.");
       }
     }
 
@@ -98,11 +94,19 @@ export async function handleResponse<T>(response: Response): Promise<T> {
       message: errorData.message,
     });
 
-    throw new ExternalServiceError(
+    // Create error object with response details attached
+    const error: any = new ExternalServiceError(
       "API",
       errorData.message || `HTTP ${response.status}: ${response.statusText}`,
       response.status
     );
+
+    // Attach response details for test assertions
+    error.response = errorData;
+    error.status = response.status;
+    error.statusCode = response.status;
+
+    throw error;
   }
 
   // Handle 204 No Content

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SystemHealthDisplay } from './SystemHealthDisplay';
 
 const meta: Meta<typeof SystemHealthDisplay> = {

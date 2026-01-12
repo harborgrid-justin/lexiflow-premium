@@ -28,14 +28,10 @@ async function ensureValidToken(): Promise<void> {
     const refreshToken = getRefreshToken();
     if (refreshToken && !isRefreshing) {
       isRefreshing = true;
-      console.log(
-        "[RequestBuilder] Token expiring soon, proactively refreshing..."
-      );
       try {
         await refreshAccessToken(refreshToken);
-        console.log("[RequestBuilder] Token refreshed proactively");
       } catch (error) {
-        console.error("[RequestBuilder] Proactive refresh failed:", error);
+        console.error("[RequestBuilder] Token refresh failed:", error);
       } finally {
         isRefreshing = false;
       }
@@ -61,13 +57,7 @@ export async function buildHeaders(
 
   const token = getAuthToken();
   if (token) {
-    console.log("[buildHeaders] Adding Authorization header with token:", {
-      tokenLength: token.length,
-      tokenStart: token.substring(0, 20) + "...",
-    });
     headers["Authorization"] = `Bearer ${token}`;
-  } else {
-    console.warn("[buildHeaders] No auth token available");
   }
 
   return headers;
@@ -98,9 +88,10 @@ export function validateEndpoint(endpoint: string, methodName: string): void {
  * Validate data object parameter
  */
 export function validateData(data: unknown, methodName: string): void {
+  // Allow FormData, objects, undefined, and null
   if (data !== undefined && data !== null && typeof data !== "object") {
     throw new ValidationError(
-      `[ApiClient.${methodName}] Data must be an object or undefined`
+      `[ApiClient.${methodName}] Data must be an object, FormData, or undefined`
     );
   }
 }
@@ -119,8 +110,16 @@ export function buildURL(
 
   if (params) {
     Object.keys(params).forEach((key) => {
-      if (params[key] !== undefined && params[key] !== null) {
-        url.searchParams.append(key, String(params[key]));
+      const value = params[key];
+      if (value !== undefined && value !== null) {
+        // Handle arrays by appending each item separately
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            url.searchParams.append(key, String(item));
+          });
+        } else {
+          url.searchParams.append(key, String(value));
+        }
       }
     });
   }

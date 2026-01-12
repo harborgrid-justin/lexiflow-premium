@@ -21,7 +21,7 @@ import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
 import { PATHS } from '@/config/paths.config';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

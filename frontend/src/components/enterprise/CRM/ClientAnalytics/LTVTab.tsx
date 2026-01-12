@@ -3,7 +3,7 @@
  */
 
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import type { ThemeObject } from '@/contexts/theme/ThemeContext';
+import type { ThemeObject } from '@/features/theme';
 import { LTVCard } from './LTVCard';
 import type { ClientLifetimeValue } from './types';
 

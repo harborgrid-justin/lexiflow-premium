@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
 import React from 'react';

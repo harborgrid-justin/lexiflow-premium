@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
 
 const DemoTable = () => (

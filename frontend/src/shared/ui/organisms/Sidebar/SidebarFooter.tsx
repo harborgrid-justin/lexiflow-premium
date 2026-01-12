@@ -17,7 +17,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
 
 // This module exports helper functions, not components. Story disabled.

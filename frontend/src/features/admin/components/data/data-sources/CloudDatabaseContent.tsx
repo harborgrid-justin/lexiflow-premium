@@ -1,5 +1,5 @@
 import { DataSource } from '@/api/data-platform/data-sources-api';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';

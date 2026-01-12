@@ -5,7 +5,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { LegalEntity } from '@/types';
 import { cn } from '@/shared/lib/cn';

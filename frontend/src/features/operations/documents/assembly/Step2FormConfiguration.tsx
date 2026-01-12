@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';

@@ -9,7 +9,7 @@
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 

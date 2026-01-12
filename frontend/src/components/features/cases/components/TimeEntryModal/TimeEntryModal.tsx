@@ -20,7 +20,7 @@ import React, { useState } from 'react';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button';

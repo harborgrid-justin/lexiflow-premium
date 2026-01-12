@@ -23,14 +23,14 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { ClientStatus } from '@/types/financial';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { ChartColorService } from '@/services/theme/chartColorService';
+import { ChartColorService } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { getChartTheme } from '@/utils/chartConfig';
 

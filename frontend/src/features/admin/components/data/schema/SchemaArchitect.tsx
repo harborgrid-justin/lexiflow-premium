@@ -6,7 +6,7 @@ import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import React, { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';

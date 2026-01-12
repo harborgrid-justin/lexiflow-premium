@@ -1,6 +1,15 @@
-export type ThemeDensity = "compact" | "normal" | "comfortable";
-export type FontMode = "sans" | "serif";
-export type ThemeMode = "light" | "dark";
+/**
+ * @deprecated This module has been moved to @/features/theme/tokens
+ * Please update your imports:
+ *
+ * Old: import { ThemeMode, tokens } from '@/shared/theme/tokens';
+ * New: import { ThemeMode, DEFAULT_LIGHT_TOKENS } from '@/features/theme';
+ *
+ * This re-export will be removed in a future version.
+ */
+
+// Re-export everything from centralized location
+export * from "@/features/theme/tokens";
 
 export interface DesignTokens {
   fontMode: FontMode;
@@ -67,6 +76,28 @@ export interface DesignTokens {
       "2xl": string;
       "3xl": string;
     };
+    // Aliases for compatibility
+    fontSize: {
+      xs: string;
+      sm: string;
+      base: string;
+      lg: string;
+      xl: string;
+      "2xl": string;
+      "3xl": string;
+      "4xl": string;
+    };
+    fontWeight: {
+      normal: string;
+      medium: string;
+      semibold: string;
+      bold: string;
+    };
+    lineHeight: {
+      tight: string;
+      normal: string;
+      relaxed: string;
+    };
   };
   transitions: {
     fast: string;
@@ -106,7 +137,7 @@ export const DEFAULT_TOKENS: DesignTokens = {
       unit: "4px",
       gutter: "16px",
       container: "1280px",
-      inputPadding: "6px 12px",
+      inputPadding: "12px",
       cardPadding: "12px",
       rowHeight: "32px",
     },
@@ -114,7 +145,7 @@ export const DEFAULT_TOKENS: DesignTokens = {
       unit: "6px",
       gutter: "24px", // Matches AdminPanel px-6
       container: "1920px", // Matches AdminPanel max-w
-      inputPadding: "8px 16px",
+      inputPadding: "16px",
       cardPadding: "24px",
       rowHeight: "48px",
     },
@@ -122,7 +153,7 @@ export const DEFAULT_TOKENS: DesignTokens = {
       unit: "8px",
       gutter: "32px",
       container: "2400px",
-      inputPadding: "12px 24px",
+      inputPadding: "24px",
       cardPadding: "32px",
       rowHeight: "64px",
     },
@@ -162,6 +193,28 @@ export const DEFAULT_TOKENS: DesignTokens = {
       "2xl": "1.5rem",
       "3xl": "1.875rem",
     },
+    // Aliases
+    fontSize: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+    },
+    fontWeight: {
+      normal: "400",
+      medium: "500",
+      semibold: "600",
+      bold: "700",
+    },
+    lineHeight: {
+      tight: "1.25",
+      normal: "1.5",
+      relaxed: "1.75",
+    },
   },
   transitions: {
     fast: "150ms cubic-bezier(0.4, 0, 0.2, 1)",
@@ -176,4 +229,41 @@ export const DEFAULT_TOKENS: DesignTokens = {
     overlay: "90",
   },
 };
+
 export const tokens = DEFAULT_TOKENS;
+
+/**
+ * Get design tokens based on theme mode, density, and font mode
+ * @param mode - Theme mode (light or dark)
+ * @param density - Spacing density (compact, normal, or comfortable)
+ * @param fontMode - Font family preference (sans or serif)
+ * @returns Complete design tokens object
+ */
+export function getTokens(
+  mode: ThemeMode = "light",
+  density: ThemeDensity = "normal",
+  fontMode: FontMode = "sans"
+): DesignTokens {
+  const baseTokens = { ...DEFAULT_TOKENS };
+
+  // Apply dark mode colors if needed
+  if (mode === "dark") {
+    baseTokens.colors = {
+      ...baseTokens.colors,
+      primary: "#f1f5f9", // Light text on dark
+      primaryDark: "#f8fafc",
+      primaryLight: "#334155",
+      background: "#0f172a", // Dark background
+      surface: "#1e293b", // Slightly lighter surface
+      border: "#334155",
+      borderLight: "#1e293b",
+      text: "#f1f5f9",
+      textMuted: "#94a3b8",
+    };
+  }
+
+  // Set font mode
+  baseTokens.fontMode = fontMode;
+
+  return baseTokens;
+}

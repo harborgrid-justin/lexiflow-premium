@@ -8,7 +8,7 @@
 
 import React, { useCallback, useMemo, useRef } from 'react';
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { MinimapProps } from './types';
 import {

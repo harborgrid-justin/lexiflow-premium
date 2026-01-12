@@ -20,7 +20,7 @@ import { EvidenceOverview } from './EvidenceOverview';
 import { EvidenceStructure } from './EvidenceStructure';
 
 // Context & Utils
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/shared/lib/cn';

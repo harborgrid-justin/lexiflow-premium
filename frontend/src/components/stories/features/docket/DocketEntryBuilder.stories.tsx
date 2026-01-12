@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
 import { ToastProvider } from '@/providers';
 import { DocketEntry, DocketEntryType } from '@/types';

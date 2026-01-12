@@ -1,5 +1,5 @@
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BarChart3, Calendar, FileText, Users } from 'lucide-react';
 import React, { useState } from 'react';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketTableSkeleton } from './DocketSkeleton';
 
 const meta: Meta<typeof DocketTableSkeleton> = {

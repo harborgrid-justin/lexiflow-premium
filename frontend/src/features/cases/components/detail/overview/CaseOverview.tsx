@@ -22,7 +22,7 @@ import { MatterInfo } from './MatterInfo';
 import { OverviewSidebar } from './OverviewSidebar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 import { useQuery } from '@/hooks/useQueryHooks';
 

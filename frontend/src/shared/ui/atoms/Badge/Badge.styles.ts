@@ -1,4 +1,4 @@
-import type { ThemeContextValue } from "@/contexts/theme/ThemeContext.types";
+import type { ThemeContextValue } from "@/features/theme";
 import { cn } from "@/shared/lib/cn";
 
 export const baseBadgeStyles =

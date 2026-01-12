@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import { Activity } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useDataSource } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { calculateCoverage } from './utils';

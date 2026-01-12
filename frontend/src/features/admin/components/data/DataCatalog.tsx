@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';

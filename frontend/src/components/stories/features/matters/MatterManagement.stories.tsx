@@ -7,7 +7,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 const meta: Meta<typeof MatterManagement> = {
@@ -21,16 +21,7 @@ const meta: Meta<typeof MatterManagement> = {
         component: 'Comprehensive matter management hub with tabbed navigation for all cases, calendar view, analytics, and intake pipeline. Provides centralized case oversight and resource coordination.'
       }
     }
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <Story />
-        </ToastProvider>
-      </ThemeProvider>
-    )
-  ]
+  }
 };
 
 export default meta;

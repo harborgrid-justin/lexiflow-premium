@@ -5,7 +5,7 @@ import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';

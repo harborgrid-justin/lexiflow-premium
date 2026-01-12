@@ -1,5 +1,5 @@
 import { FileUploadZone } from '@/shared/ui/molecules/FileUploadZone/FileUploadZone';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
 

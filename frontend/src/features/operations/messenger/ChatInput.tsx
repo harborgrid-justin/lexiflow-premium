@@ -24,7 +24,7 @@ import React, { useEffect, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { Attachment } from '@/hooks/useSecureMessenger';
 
 // Utils & Constants

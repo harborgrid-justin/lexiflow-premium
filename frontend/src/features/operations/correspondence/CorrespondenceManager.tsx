@@ -22,7 +22,7 @@ import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';

@@ -4,7 +4,7 @@
  * @description Team productivity metrics and performance widget
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Award, BarChart3, Clock, Target, TrendingUp, Users } from 'lucide-react';

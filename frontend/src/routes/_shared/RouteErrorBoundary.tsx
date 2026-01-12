@@ -54,6 +54,9 @@ export function NotFoundError({
   backTo = '/',
   backLabel = 'Go Home',
 }: NotFoundErrorProps) {
+  // Ensure backTo is always a valid path string
+  const safePath = backTo && typeof backTo === 'string' && backTo.trim() !== '' ? backTo : '/';
+
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
       <div className="text-center">
@@ -67,7 +70,7 @@ export function NotFoundError({
           {message}
         </p>
         <Link
-          to={backTo}
+          to={safePath}
           className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,6 +100,9 @@ export function ForbiddenError({
   backTo = '/',
   backLabel = 'Go Home',
 }: ForbiddenErrorProps) {
+  // Ensure backTo is always a valid path string
+  const safePath = backTo && typeof backTo === 'string' && backTo.trim() !== '' ? backTo : '/';
+
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
       <div className="text-center">
@@ -122,7 +128,7 @@ export function ForbiddenError({
           {message}
         </p>
         <Link
-          to={backTo}
+          to={safePath}
           className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           {backLabel}
@@ -157,6 +163,9 @@ export function GenericError({
 }: GenericErrorProps) {
   const errorMessage = error instanceof Error ? error.message : String(error);
   const errorStack = error instanceof Error ? error.stack : undefined;
+
+  // Ensure backTo is always a valid path string
+  const safePath = backTo && typeof backTo === 'string' && backTo.trim() !== '' ? backTo : '/';
 
   return (
     <div className="flex min-h-[400px] items-center justify-center p-8">
@@ -199,7 +208,7 @@ export function GenericError({
               </button>
             )}
             <Link
-              to={backTo}
+              to={safePath}
               className="inline-flex items-center gap-2 rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 shadow-sm transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-700 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/40"
             >
               {backLabel}

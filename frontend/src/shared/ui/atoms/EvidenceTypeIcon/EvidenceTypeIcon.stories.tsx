@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EvidenceTypeIcon } from './EvidenceTypeIcon';
 
 const meta: Meta<typeof EvidenceTypeIcon> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocumentAssemblyPage } from './DocumentAssemblyPage';
 
 const meta: Meta<typeof DocumentAssemblyPage> = {

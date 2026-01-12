@@ -18,25 +18,9 @@ export function getAuthToken(): string | null {
       const now = Math.floor(Date.now() / 1000);
       const isExpired = decoded?.exp && decoded.exp < now;
 
-      console.log("[AuthManager.getAuthToken] Retrieved token:", {
-        key: AUTH_TOKEN_KEY,
-        length: token.length,
-        start: token.substring(0, 30) + "...",
-        payload: decoded,
-        isExpired,
-        expiresAt: decoded?.exp
-          ? new Date(decoded.exp * 1000).toISOString()
-          : null,
-      });
-
       if (isExpired) {
-        console.warn("[AuthManager.getAuthToken] Token is expired!");
+        console.warn("[AuthManager] Token is expired");
       }
-    } else {
-      console.warn(
-        "[AuthManager.getAuthToken] No token found with key:",
-        AUTH_TOKEN_KEY
-      );
     }
     return token;
   } catch (error) {

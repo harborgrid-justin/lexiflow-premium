@@ -24,7 +24,7 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';

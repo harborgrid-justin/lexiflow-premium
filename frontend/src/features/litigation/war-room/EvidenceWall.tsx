@@ -19,7 +19,7 @@ import React, { useMemo, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useWindow } from '@/providers';
 

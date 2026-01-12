@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@providers/ToastContext';
 
 /**
@@ -44,18 +44,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
 } satisfies Meta<typeof ComplianceDashboard>;
 
 export default meta;

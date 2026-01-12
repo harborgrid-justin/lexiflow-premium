@@ -2,7 +2,7 @@ import { EmptyListState } from '@/shared/ui/organisms/_legacy/RefactoredCommon';
 import { Button } from '@/shared/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';
 import { queryClient, useMutation, useQuery } from '@/hooks/backend';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { RLSPolicy } from '@/types';
 import { cn } from '@/shared/lib/cn';

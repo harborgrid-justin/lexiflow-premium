@@ -1,14 +1,15 @@
 /**
- * ChartColorService
+ * @deprecated This module has been moved to @/features/theme/services/chartColorService
+ * Please update your imports:
  *
- * Centralized service for theme-aware chart colors and color palettes.
- * Eliminates hardcoded hex values and provides consistent color mapping
- * across all chart components and data services.
+ * Old: import { ChartColorService } from '@/services/theme/chartColorService';
+ * New: import { ChartColorService } from '@/features/theme';
  *
- * @module services/theme/chartColorService
+ * This re-export will be removed in a future version.
  */
 
-import { ThemeMode, tokens } from "@theme/tokens";
+// Re-export from centralized location
+export { ChartColorService } from "@/features/theme/services/chartColorService";
 
 export class ChartColorService {
   /**

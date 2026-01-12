@@ -7,7 +7,7 @@ import {
 } from '@/api/domains/drafting';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation/TabNavigation';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useToast } from '@/contexts/toast/ToastContext';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';

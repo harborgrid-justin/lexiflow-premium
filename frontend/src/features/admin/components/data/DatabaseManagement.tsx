@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { useModalState } from '@/hooks/core';
 import { DataService } from '@/services/data/dataService';

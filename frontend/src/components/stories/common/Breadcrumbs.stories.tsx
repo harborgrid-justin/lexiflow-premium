@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs/Breadcrumbs';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**

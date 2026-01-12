@@ -24,7 +24,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';

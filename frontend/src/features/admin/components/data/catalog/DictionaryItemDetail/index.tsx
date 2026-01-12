@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/backend';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';

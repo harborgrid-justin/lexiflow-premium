@@ -17,7 +17,7 @@ import React, { useId } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar';

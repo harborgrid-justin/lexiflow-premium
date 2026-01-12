@@ -24,7 +24,7 @@ import { DataService } from '@/services/data/dataService';
 // Hooks & Context
 import { useModalState } from '@/hooks/core';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { getTodayString } from '@/shared/lib/dateUtils';
 
 // Components

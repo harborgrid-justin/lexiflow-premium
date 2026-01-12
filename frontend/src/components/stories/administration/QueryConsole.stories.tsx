@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QueryConsole } from '@/features/admin/components/data/QueryConsole';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**
@@ -30,18 +30,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
 } satisfies Meta<typeof QueryConsole>;
 
 export default meta;

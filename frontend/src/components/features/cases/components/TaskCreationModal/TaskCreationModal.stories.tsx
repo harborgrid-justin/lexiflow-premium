@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TaskCreationModal } from './TaskCreationModal';
 
 const meta: Meta<typeof TaskCreationModal> = {

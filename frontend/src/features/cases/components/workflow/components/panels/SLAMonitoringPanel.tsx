@@ -3,7 +3,7 @@
  * @description SLA monitoring dashboard with escalation policies
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, CheckCircle2, Clock } from 'lucide-react';

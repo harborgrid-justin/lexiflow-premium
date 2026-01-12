@@ -1,6 +1,6 @@
 import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
 import { useCanvasDrag } from '@/hooks/ui';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Database, Edit2, Key, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';

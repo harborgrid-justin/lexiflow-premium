@@ -17,7 +17,7 @@ import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';

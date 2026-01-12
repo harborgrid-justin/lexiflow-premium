@@ -18,16 +18,17 @@ import { handleResponse } from "./response-handler";
  */
 export async function get<T>(
   endpoint: string,
-  params?: Record<string, unknown>
+  options?: { params?: Record<string, unknown>; headers?: HeadersInit }
 ): Promise<T> {
   validateEndpoint(endpoint, "get");
   try {
     const baseURL = buildBaseURL();
+    const params = options?.params;
     const url = buildURL(baseURL, endpoint, getOrigin(), params);
 
     const response = await fetch(url.toString(), {
       method: "GET",
-      headers: await buildHeaders(),
+      headers: await buildHeaders(options?.headers),
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 
@@ -37,7 +38,7 @@ export async function get<T>(
       error instanceof AuthenticationError &&
       error.message === "TOKEN_REFRESHED"
     ) {
-      return get<T>(endpoint, params);
+      return get<T>(endpoint, options);
     }
     console.error("[HttpMethods.get] Error:", error);
     throw error;
@@ -58,12 +59,30 @@ export async function post<T>(
     const baseURL = buildBaseURL();
     const url = buildURL(baseURL, endpoint, getOrigin());
 
+    // Handle FormData separately (don't JSON stringify it)
+    const isFormData = data instanceof FormData;
+    const headers = await buildHeaders(options?.headers);
+
+    // Remove Content-Type header for FormData (browser sets it with boundary)
+    if (
+      isFormData &&
+      headers &&
+      typeof headers === "object" &&
+      "Content-Type" in headers
+    ) {
+      delete (headers as Record<string, string>)["Content-Type"];
+    }
+
     const response = await fetch(url.toString(), {
-      method: "POST",
-      headers: await buildHeaders(options?.headers),
-      body: data ? JSON.stringify(data) : undefined,
+      ...options, // Spread options first
+      method: "POST", // Then override specific properties
+      headers,
+      body: isFormData
+        ? (data as FormData)
+        : data
+          ? JSON.stringify(data)
+          : undefined,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
-      ...options,
     });
 
     return await handleResponse<T>(response);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, GripVertical} from 'lucide-react';
 import { NodeType, getNodeIcon } from './types';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface BuilderPaletteProps {

@@ -109,6 +109,17 @@ export class QueryClient {
   // =============================================================================
 
   /**
+   * Subscribe to all query updates (alias)
+   * @param listener - Callback receiving fetching count
+   * @returns Unsubscribe function
+   */
+  public subscribeToAll(
+    listener: (status: { isFetching: number }) => void
+  ): () => void {
+    return this.subscribeToGlobalUpdates(listener);
+  }
+
+  /**
    * Subscribe to global query status updates
    * Useful for showing global loading indicators
    *
@@ -220,6 +231,9 @@ export class QueryClient {
         error: null,
         dataUpdatedAt: Date.now(),
         isFetching: false,
+        isLoading: false,
+        isSuccess: true,
+        isError: false,
       };
 
       this.cache.set(hashedKey, newState);
@@ -234,6 +248,29 @@ export class QueryClient {
   // =============================================================================
   // QUERY FETCHING
   // =============================================================================
+
+  /**
+   * Fetch data with caching and deduplication
+   * Implements stale-while-revalidate pattern
+   *
+   * @param key - Query key for cache identification
+   * @param fn - Query function returning Promise<T>
+   * @param options - Query options including staleTime
+   * @returns Promise with data property - Resolved result
+   * @throws Error if query function fails
+   */
+  public async fetchQuery<T>(
+    key: QueryKey,
+    fn: QueryFunction<T>,
+    options?: { staleTime?: number }
+  ): Promise<{ data: T }> {
+    const data = await this.fetch(
+      key,
+      fn,
+      options?.staleTime ?? this.DEFAULT_STALE_TIME
+    );
+    return { data };
+  }
 
   /**
    * Fetch data with caching and deduplication
@@ -285,6 +322,9 @@ export class QueryClient {
         dataUpdatedAt: 0,
       }),
       isFetching: true,
+      isLoading: true,
+      isSuccess: false,
+      isError: false,
     };
     this.cache.set(hashedKey, fetchingState);
     this.notify(hashedKey, fetchingState);
@@ -309,6 +349,9 @@ export class QueryClient {
           status: "error",
           error: err instanceof Error ? err : new Error(String(err)),
           isFetching: false,
+          isLoading: false,
+          isSuccess: false,
+          isError: true,
         };
         this.cache.set(hashedKey, errorState);
         this.notify(hashedKey, errorState);
@@ -326,6 +369,18 @@ export class QueryClient {
   // =============================================================================
 
   /**
+   * Invalidate queries matching pattern (alias)
+   * Marks queries as stale, triggering background refetch
+   *
+   * @param keyPattern - String pattern or query key to match
+   * @example
+   * queryClient.invalidateQueries(['cases']) // Invalidates all case queries
+   */
+  public invalidateQueries(keyPattern: string | QueryKey): void {
+    return this.invalidate(keyPattern);
+  }
+
+  /**
    * Invalidate queries matching pattern
    * Marks queries as stale, triggering background refetch
    *
@@ -336,27 +391,43 @@ export class QueryClient {
    */
   public invalidate(keyPattern: string | QueryKey): void {
     try {
-      const search =
-        typeof keyPattern === "string" ? keyPattern : this.hashKey(keyPattern);
       const invalidatedKeys: string[] = [];
 
-      this.cache.forEach((state, key) => {
-        if (key.includes(search)) {
-          // Mark as stale by resetting timestamp
-          this.cache.set(key, { ...state, dataUpdatedAt: 0 });
-          invalidatedKeys.push(key);
-        }
-      });
+      if (Array.isArray(keyPattern)) {
+        // For array patterns, check if the cached key contains all elements
+        const patternStr = JSON.stringify(keyPattern);
+        this.cache.forEach((state, key) => {
+          // Check if key starts with the pattern
+          if (key.startsWith(patternStr.slice(0, -1))) {
+            // Remove trailing ]
+            this.cache.set(key, { ...state, dataUpdatedAt: 0 });
+            invalidatedKeys.push(key);
+          }
+        });
+      } else if (typeof keyPattern === "string") {
+        // For string patterns, use includes
+        this.cache.forEach((state, key) => {
+          if (key.includes(keyPattern)) {
+            this.cache.set(key, { ...state, dataUpdatedAt: 0 });
+            invalidatedKeys.push(key);
+          }
+        });
+      }
 
       this.notifyGlobal();
 
       // Log for debugging
+      const patternDisplay = Array.isArray(keyPattern)
+        ? JSON.stringify(keyPattern)
+        : keyPattern;
       if (invalidatedKeys.length > 0) {
         console.debug(
-          `[QueryClient] Invalidated ${invalidatedKeys.length} queries matching: ${search}`
+          `[QueryClient] Invalidated ${invalidatedKeys.length} queries matching: ${patternDisplay}`
         );
       } else {
-        console.debug(`[QueryClient] No queries matched pattern: ${search}`);
+        console.debug(
+          `[QueryClient] No queries matched pattern: ${patternDisplay}`
+        );
       }
     } catch (error) {
       console.error("[QueryClient.invalidate] Error:", error);
@@ -436,6 +507,18 @@ export class QueryClient {
       inflightCount: this.inflight.size,
       listenerCount: this.listeners.size,
     };
+  }
+
+  /**
+   * Get full cache state
+   * @returns Cache state with all queries
+   */
+  public getState(): { cache: Array<{ key: string; state: QueryState }> } {
+    const cacheArray: Array<{ key: string; state: QueryState }> = [];
+    this.cache.forEach((state, key) => {
+      cacheArray.push({ key, state });
+    });
+    return { cache: cacheArray };
   }
 }
 

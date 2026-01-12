@@ -17,7 +17,7 @@ import React, { Suspense, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';

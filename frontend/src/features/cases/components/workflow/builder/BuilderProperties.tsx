@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/core';
 import { WorkflowNode, getNodeIcon } from './types';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface BuilderPropertiesProps {

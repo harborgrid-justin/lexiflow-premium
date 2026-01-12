@@ -29,7 +29,7 @@ interface FirmProcess {
   owner: string;
 }
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';

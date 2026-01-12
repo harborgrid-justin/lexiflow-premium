@@ -4,7 +4,7 @@
  * Individual document row for table view with actions.
  */
 
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';

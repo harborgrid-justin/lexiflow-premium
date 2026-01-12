@@ -20,7 +20,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useInterval } from '@/shared/hooks/useInterval';
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';

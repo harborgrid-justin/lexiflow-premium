@@ -4,7 +4,7 @@
  * Provides shimmer effects for better perceived performance
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import React from 'react';
 

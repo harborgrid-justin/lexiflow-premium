@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AsyncBoundary } from './AsyncBoundary';
 
 const meta: Meta<typeof AsyncBoundary> = {

@@ -1,15 +1,15 @@
 /**
  * chartConfig.ts
- * 
+ *
  * Shared chart configuration and theming utilities
  * Eliminates repeated chart setup across components
- * 
+ *
  * ✅ REFACTORED: Now uses centralized theme tokens instead of hardcoded colors
  */
 
-import { CSSProperties } from 'react';
-import { ChartColorService } from '@/services/theme/chartColorService';
-import { ThemeMode } from '@theme/tokens';
+import { ChartColorService } from "@/features/theme";
+import { ThemeMode } from "@theme/tokens";
+import { CSSProperties } from "react";
 
 // ============================================================================
 // TYPES
@@ -58,13 +58,13 @@ export const getChartTheme = (mode: ThemeMode): ChartTheme => {
       danger: themeConfig.colors.danger,
       info: themeConfig.colors.primary, // Using primary as info fallback
       secondary: themeConfig.colors.secondary,
-      neutral: themeConfig.colors.neutral
+      neutral: themeConfig.colors.neutral,
     },
     text: themeConfig.text,
     grid: themeConfig.grid,
     tooltipBg: themeConfig.tooltip.bg,
     tooltipBorder: themeConfig.tooltip.border,
-    tooltipStyle
+    tooltipStyle,
   };
 };
 
@@ -73,7 +73,7 @@ export const getChartTheme = (mode: ThemeMode): ChartTheme => {
  * @deprecated Use getChartTheme(mode: ThemeMode) instead
  */
 export const getChartThemeFromDark = (isDark: boolean): ChartTheme => {
-  return getChartTheme(isDark ? 'dark' : 'light');
+  return getChartTheme(isDark ? "dark" : "light");
 };
 
 // ============================================================================
@@ -87,7 +87,7 @@ export const DEFAULT_MARGINS: ChartMargins = {
   top: 20,
   right: 30,
   left: 0,
-  bottom: 5
+  bottom: 5,
 };
 
 /**
@@ -97,7 +97,7 @@ export const COMPACT_MARGINS: ChartMargins = {
   top: 10,
   right: 10,
   left: 0,
-  bottom: 5
+  bottom: 5,
 };
 
 /**
@@ -107,16 +107,16 @@ export const getAxisConfig = (theme: ChartTheme) => ({
   fontSize: 12,
   tickLine: false,
   axisLine: false,
-  tick: { fill: theme.text }
+  tick: { fill: theme.text },
 });
 
 /**
  * Standard grid configuration
  */
 export const getGridConfig = (theme: ChartTheme) => ({
-  strokeDasharray: '3 3',
+  strokeDasharray: "3 3",
   vertical: false,
-  stroke: theme.grid
+  stroke: theme.grid,
 });
 
 /**
@@ -124,5 +124,5 @@ export const getGridConfig = (theme: ChartTheme) => ({
  */
 export const getTooltipConfig = (theme: ChartTheme) => ({
   contentStyle: theme.tooltipStyle,
-  cursor: { fill: theme.grid }
+  cursor: { fill: theme.grid },
 });

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileAttachment } from './FileAttachment';
 
 const meta: Meta<typeof FileAttachment> = {

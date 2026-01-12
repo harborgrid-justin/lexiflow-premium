@@ -13,7 +13,7 @@ import { CheckCircle, DollarSign, ExternalLink, ShieldAlert, TrendingUp } from '
 import React from 'react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 import { useQuery } from '@/hooks/useQueryHooks';
 

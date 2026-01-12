@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketToolbar } from '@/features/cases/components/docket/DocketToolbar';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketToolbar is a sticky toolbar component for the docket sheet that

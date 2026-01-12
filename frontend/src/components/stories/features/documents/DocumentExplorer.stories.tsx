@@ -6,7 +6,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocumentExplorer } from '../../../../features/operations/documents/DocumentExplorer';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import { WindowProvider } from '@/providers';
 

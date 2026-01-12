@@ -39,7 +39,7 @@ import { FixedSizeList as List } from 'react-window';
 // ============================================================================
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================

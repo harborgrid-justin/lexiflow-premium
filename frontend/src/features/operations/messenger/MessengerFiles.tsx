@@ -2,7 +2,7 @@ import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { FileAttachment } from '@/shared/ui/molecules/FileAttachment/FileAttachment';
 import { Attachment } from '@/hooks/useSecureMessenger';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { FolderOpen } from 'lucide-react';
 

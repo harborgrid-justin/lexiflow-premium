@@ -6,7 +6,7 @@ import { JSX } from 'react/jsx-runtime';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataAnomaly, QualityMetricHistory } from '@/types';

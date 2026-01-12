@@ -4,8 +4,7 @@
  * @description Enterprise notification center with filtering, categorization, and real-time updates.
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { ThemeStateValue } from '@/contexts/theme/ThemeContext.types';
+import { ThemeStateValue, useTheme } from '@/features/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { cn } from '@/shared/lib/cn';
 import {

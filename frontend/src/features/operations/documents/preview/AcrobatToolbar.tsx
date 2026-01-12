@@ -4,7 +4,7 @@ import {
   Stamp, FileSignature, Calendar, RotateCw, RotateCcw,
   ChevronLeft, ChevronRight, ZoomIn, ZoomOut
 } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 export type PDFTool = 'select' | 'pen' | 'highlight' | 'text' | 'signature' | 'date' | 'initials';

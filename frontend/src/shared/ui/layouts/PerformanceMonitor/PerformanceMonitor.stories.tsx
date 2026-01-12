@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PerformanceMonitor } from './PerformanceMonitor';
 
 const meta: Meta<typeof PerformanceMonitor> = {

@@ -7,7 +7,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { GeminiService } from '@/services/features/research/geminiService';
 import type { Case, DocketEntry, Party } from '@/types';

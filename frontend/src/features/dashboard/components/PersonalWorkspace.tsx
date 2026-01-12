@@ -24,7 +24,7 @@ import { queryClient, useQuery } from '@/hooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';

@@ -5,18 +5,18 @@
  * deleting, and testing connections.
  */
 
-import React from 'react';
-import { Plus, X, RefreshCw, Database } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import type { ThemeContextValue } from '@/contexts/theme/ThemeContext.types';
+import type { ThemeContextValue } from '@/features/theme';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Database, Plus, RefreshCw, X } from 'lucide-react';
+import React from 'react';
 import { ConnectionCard } from './ConnectionCard';
+import { DataSourceSelector } from './DataSourceSelector';
 import { SystemHealthDisplay } from './SystemHealthDisplay';
 import { DATA_PROVIDERS } from './constants';
-import { useDataSourceConnections, useConnectionForm } from './hooks';
-import { DataSourceSelector } from './DataSourceSelector';
-import type { DataProvider, ConnectionFormData } from './types';
+import { useConnectionForm, useDataSourceConnections } from './hooks';
+import type { ConnectionFormData, DataProvider } from './types';
 
 /**
  * Main view for managing cloud database connections - React 18 optimized with React.memo

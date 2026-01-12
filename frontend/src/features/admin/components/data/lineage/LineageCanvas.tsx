@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { LineageLink, LineageNode } from '@/types';
 import { cn } from '@/shared/lib/cn';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CategoryFilter } from './SearchComponents';
 
 const meta: Meta<typeof CategoryFilter> = {

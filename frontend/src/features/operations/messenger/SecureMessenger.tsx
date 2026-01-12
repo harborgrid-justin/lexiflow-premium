@@ -17,7 +17,7 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useSecureMessenger } from '@/hooks/domain';
 
 // Components

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SwipeableItem } from './SwipeableItem';
 
 const meta: Meta<typeof SwipeableItem> = {

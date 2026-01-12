@@ -51,8 +51,8 @@ export {
 export type { SyncContextType } from "./sync/SyncContext";
 export type { SyncStatus } from "./sync/SyncContext.types";
 
-// ThemeContext exports
-export { ThemeProvider, useTheme } from "./theme/ThemeContext";
+// ThemeContext exports (re-exported from centralized location)
+export { ThemeProvider, useTheme } from "@/features/theme";
 
 // ToastContext exports
 export {
@@ -155,4 +155,4 @@ export type * from "./types";
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from "../shared/theme/tokens";
+export type { ThemeMode } from "@/features/theme";

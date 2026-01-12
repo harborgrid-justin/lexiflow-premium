@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import type { PleadingDocument } from '@/types';
 import type { CaseId, DocumentId } from '@/types/primitives';

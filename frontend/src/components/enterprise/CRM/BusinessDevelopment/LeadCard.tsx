@@ -3,7 +3,7 @@
  * @description Individual lead card component
  */
 
-import type { ThemeObject } from '@/contexts/theme/ThemeContext';
+import type { ThemeObject } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Clock } from 'lucide-react';
 import type { Lead } from './types';

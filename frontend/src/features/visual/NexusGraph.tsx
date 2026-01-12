@@ -24,7 +24,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useResizeObserver } from '@/shared/hooks/useResizeObserver';
 import { useViewportTransform } from '@/hooks/useViewportTransform';

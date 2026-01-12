@@ -3,7 +3,7 @@
  * Display and filter invoices with status tracking
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/lib/utils';
 import type { Invoice } from '@/types/financial';
 import { FileText, Filter, Send } from 'lucide-react';

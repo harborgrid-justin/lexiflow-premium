@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ActionRow } from './ActionRow';
 
 const meta: Meta<typeof ActionRow> = {

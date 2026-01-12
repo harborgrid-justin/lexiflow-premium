@@ -1,7 +1,6 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartColorService, useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { ChartColorService } from '@/services/theme/chartColorService';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 import React from 'react';

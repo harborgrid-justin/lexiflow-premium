@@ -30,7 +30,7 @@ import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 
 // Utils & Constants

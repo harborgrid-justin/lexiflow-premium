@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GlobalHotkeys } from './GlobalHotkeys';
 
 const meta: Meta<typeof GlobalHotkeys> = {

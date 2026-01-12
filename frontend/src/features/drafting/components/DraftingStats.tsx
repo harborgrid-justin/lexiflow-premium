@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DraftingStats as StatsType } from '@api/domains/drafting';
 import { CheckSquare, FileCode, FileText } from 'lucide-react';
 import React from 'react';

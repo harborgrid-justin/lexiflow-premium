@@ -3,7 +3,7 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { MessageSquare } from 'lucide-react';
 

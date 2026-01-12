@@ -7,7 +7,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 const meta: Meta<typeof DiscoveryPlatform> = {
@@ -30,16 +30,7 @@ const meta: Meta<typeof DiscoveryPlatform> = {
     test: {
       clearMocks: true,
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <Story />
-        </ToastProvider>
-      </ThemeProvider>
-    )
-  ]
+  }
 };
 
 export default meta;

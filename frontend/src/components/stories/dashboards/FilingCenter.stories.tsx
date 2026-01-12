@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { FilingCenter } from '@features/litigation/pleadings/modules/FilingCenter';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 
 /**
  * FilingCenter provides a pre-flight check interface and export capabilities

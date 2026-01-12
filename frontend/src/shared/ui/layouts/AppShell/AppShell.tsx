@@ -26,7 +26,7 @@ import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
 // Hooks & Context
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs';
 
 // Utils & Constants

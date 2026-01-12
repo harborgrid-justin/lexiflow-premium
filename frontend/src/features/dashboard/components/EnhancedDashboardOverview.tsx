@@ -6,7 +6,7 @@
  */
 
 import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import {
@@ -224,27 +224,28 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={billingData || []}>
-              <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
+              <CartesianGrid strokeDasharray="3 3" stroke={theme.colors.border} />
               <XAxis
                 dataKey="period"
-                stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'}
-                style={{ fontSize: '12px' }}
+                stroke={theme.colors.textMuted}
+                style={{ fontSize: theme.typography.sizes.xs }}
               />
               <YAxis
-                stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'}
-                style={{ fontSize: '12px' }}
+                stroke={theme.colors.textMuted}
+                style={{ fontSize: theme.typography.sizes.xs }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: mode === 'dark' ? '#1f2937' : '#ffffff',
-                  border: `1px solid ${mode === 'dark' ? '#374151' : '#e5e7eb'}`,
-                  borderRadius: '8px',
+                  backgroundColor: theme.colors.surface,
+                  border: `1px solid ${theme.colors.border}`,
+                  borderRadius: theme.borderRadius.md,
+                  color: theme.colors.text,
                 }}
               />
               <Legend />
-              <Bar dataKey="billed" fill="#3b82f6" name="Billed" />
-              <Bar dataKey="collected" fill="#10b981" name="Collected" />
-              <Bar dataKey="outstanding" fill="#f59e0b" name="Outstanding" />
+              <Bar dataKey="billed" fill={theme.colors.info} name="Billed" />
+              <Bar dataKey="collected" fill={theme.colors.success} name="Collected" />
+              <Bar dataKey="outstanding" fill={theme.colors.warning} name="Outstanding" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

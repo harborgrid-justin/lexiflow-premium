@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { apiClient, type SystemHealth } from '@/services/infrastructure/apiClient';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

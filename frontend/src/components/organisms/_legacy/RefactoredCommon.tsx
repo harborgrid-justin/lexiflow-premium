@@ -17,7 +17,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 // Re-export StatusBadge for compatibility (commented out - component doesn't exist)

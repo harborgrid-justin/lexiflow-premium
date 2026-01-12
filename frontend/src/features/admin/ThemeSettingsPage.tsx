@@ -8,10 +8,9 @@
  * - Testing component theme consistency
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
+import { ChartColorService, useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { getChartTheme } from '@/utils/chartConfig';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

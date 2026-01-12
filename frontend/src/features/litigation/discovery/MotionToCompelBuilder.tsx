@@ -4,7 +4,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { sanitizeHtml } from '@/shared/lib/sanitize';
 import { GeminiService } from '@/services/features/research/geminiService';

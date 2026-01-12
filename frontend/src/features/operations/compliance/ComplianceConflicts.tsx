@@ -17,7 +17,7 @@ import React, { memo, useMemo, useState, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';

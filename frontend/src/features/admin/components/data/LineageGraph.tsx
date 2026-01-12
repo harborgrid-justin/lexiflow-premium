@@ -5,7 +5,7 @@ import { JSX } from 'react/jsx-runtime';
 
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useQuery } from '@/hooks/backend';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { LineageLink, LineageNode } from '@/types';
 import { cn } from '@/shared/lib/cn';

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketSheet } from '@/features/cases/components/docket/DocketSheet';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { WindowProvider } from '@/providers';
 
 /**

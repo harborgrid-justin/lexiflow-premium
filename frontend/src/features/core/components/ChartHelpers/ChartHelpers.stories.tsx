@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useChartTheme } from './ChartHelpers';
 
 // Wrapper component for stories since useChartTheme is a hook

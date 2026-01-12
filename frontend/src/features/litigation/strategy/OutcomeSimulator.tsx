@@ -18,7 +18,7 @@ import { Input } from '@/shared/ui/atoms/Input';
 import { Card } from '@/shared/ui/molecules/Card';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Utils
 import { cn } from '@/shared/lib/cn';

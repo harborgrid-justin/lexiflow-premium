@@ -17,7 +17,7 @@ import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangl
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { FileIcon } from '@/shared/ui/atoms/FileIcon';

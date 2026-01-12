@@ -25,7 +25,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 
 // Components

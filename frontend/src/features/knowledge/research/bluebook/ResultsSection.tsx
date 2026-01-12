@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
 import { cn } from '@/shared/lib/cn';
 import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';

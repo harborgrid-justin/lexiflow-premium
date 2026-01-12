@@ -13,7 +13,7 @@
  */
 
 import React, { memo } from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
 import { cn } from '@/shared/lib/cn';

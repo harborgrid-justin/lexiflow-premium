@@ -23,7 +23,7 @@ import { getChartTheme } from '@/utils/chartConfig';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Utils
 import { cn } from '@/shared/lib/cn';

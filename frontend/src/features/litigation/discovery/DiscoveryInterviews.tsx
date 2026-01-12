@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { CaseId, CustodianInterview } from '@/types';

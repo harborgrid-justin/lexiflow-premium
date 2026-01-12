@@ -23,7 +23,7 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { DiscoveryNavigation, getFirstTabOfParent, getParentTabForView } from './layout/DiscoveryNavigation';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';

@@ -21,7 +21,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveCo
 import { useBillingOverviewData } from './hooks/useBillingOverviewData';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers';
 
 // Components

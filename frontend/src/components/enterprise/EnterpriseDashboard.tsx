@@ -13,7 +13,7 @@
  */
 
 import { DashboardKPIs, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { ActivityFeed } from '@/features/dashboard/widgets/ActivityFeed';
 import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { KPICard } from '@/features/dashboard/widgets/KPICard';

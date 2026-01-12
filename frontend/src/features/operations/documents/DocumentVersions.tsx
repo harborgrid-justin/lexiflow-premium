@@ -1,6 +1,6 @@
 import { LegalDocument, DocumentVersion, UserRole } from '@/types';
 import { History, RotateCcw, AlertTriangle, X } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface DocumentVersionsProps {

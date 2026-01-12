@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, Camera, Database, Download, RefreshCw } from 'lucide-react';
 import React from 'react';

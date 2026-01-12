@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { FileText, Mail, FileSignature, Scale, Building2, Users, BookOpen, Gavel, Loader2 } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

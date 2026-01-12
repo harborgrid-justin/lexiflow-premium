@@ -23,7 +23,7 @@ import { DataService } from '@/services/data/dataService';
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';

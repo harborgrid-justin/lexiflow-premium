@@ -19,7 +19,7 @@ import {
   type ClientAcquisitionData,
   type PracticeAreaPerformanceData,
 } from '@/api/intelligence/enterprise-analytics.service';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { ChartCard } from '@/features/dashboard/widgets/ChartCard';
 import { cn } from '@/shared/lib/cn';
 import {

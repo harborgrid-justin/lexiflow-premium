@@ -5,7 +5,7 @@ import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { useMutation } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { StaffMember, UserId } from '@/types';
 import { cn } from '@/shared/lib/cn';

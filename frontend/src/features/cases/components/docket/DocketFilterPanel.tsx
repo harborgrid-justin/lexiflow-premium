@@ -15,7 +15,7 @@ import { Filter } from 'lucide-react';
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

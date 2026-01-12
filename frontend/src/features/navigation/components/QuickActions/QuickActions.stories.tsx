@@ -4,7 +4,7 @@
  * @description Storybook stories for QuickActions component
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QuickActions } from './QuickActions';
 import {
   Clock, FileText, UserPlus, Briefcase, Calendar,

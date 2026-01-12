@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { DocketTable } from '@/features/cases/components/docket/DocketTable';
 import { CaseId, DocketEntry, DocketEntryType, DocketId, DocumentId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';

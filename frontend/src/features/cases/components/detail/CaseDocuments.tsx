@@ -17,7 +17,7 @@ import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationMo
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 

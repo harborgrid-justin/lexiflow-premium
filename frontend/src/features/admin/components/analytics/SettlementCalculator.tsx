@@ -26,8 +26,8 @@ import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import type { ThemeStateValue } from '@/contexts/theme/ThemeContext.types';
+import type { ThemeStateValue } from '@/features/theme';
+import { useTheme } from '@/features/theme';
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services

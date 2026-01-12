@@ -16,7 +16,7 @@ import React from 'react';
 import { Card } from '@/shared/ui/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';

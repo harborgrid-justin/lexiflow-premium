@@ -31,7 +31,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
 

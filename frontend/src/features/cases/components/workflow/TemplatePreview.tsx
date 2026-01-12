@@ -16,7 +16,7 @@ import { ArrowRight, BarChart, Clock, ShieldCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ClauseLibraryPage } from './ClauseLibraryPage';
 
 const meta: Meta<typeof ClauseLibraryPage> = {

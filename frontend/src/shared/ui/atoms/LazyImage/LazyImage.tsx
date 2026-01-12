@@ -14,7 +14,7 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback, ImgHTMLAttributes } from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { 
   containerStyles, 

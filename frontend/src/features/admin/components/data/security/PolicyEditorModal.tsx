@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { Modal } from '@/shared/ui/molecules/Modal';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { RLSPolicy, SqlCmd } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Check, Code, Shield } from 'lucide-react';

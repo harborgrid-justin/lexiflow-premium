@@ -1,7 +1,7 @@
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';

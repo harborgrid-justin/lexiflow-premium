@@ -13,13 +13,36 @@
  * cache.clear();
  * ```
  */
-export class LRUCache<T> {
-  private readonly capacity: number;
-  private cache: Map<string, T>;
 
-  constructor(capacity: number) {
-    this.capacity = capacity;
+interface LRUCacheOptions<T> {
+  onEvict?: (key: string, value: T) => void;
+  ttl?: number; // Time to live in milliseconds
+  resetTTLOnAccess?: boolean;
+}
+
+interface CacheEntry<T> {
+  value: T;
+  timestamp?: number;
+}
+
+export class LRUCache<T> {
+  private readonly _capacity: number;
+  private cache: Map<string, CacheEntry<T>>;
+  private readonly options: LRUCacheOptions<T>;
+  private hits: number = 0;
+  private misses: number = 0;
+
+  constructor(capacity: number, options: LRUCacheOptions<T> = {}) {
+    this._capacity = capacity;
     this.cache = new Map();
+    this.options = options;
+  }
+
+  /**
+   * Get current cache size as a property (standard Map API).
+   */
+  get size(): number {
+    return this.cache.size;
   }
 
   /**
@@ -28,12 +51,34 @@ export class LRUCache<T> {
    */
   get(key: string): T | undefined {
     if (!this.cache.has(key)) {
+      this.misses++;
       return undefined;
     }
-    const value = this.cache.get(key)!;
+
+    const entry = this.cache.get(key)!;
+
+    // Check TTL expiration
+    if (this.options.ttl && entry.timestamp) {
+      const age = Date.now() - entry.timestamp;
+      if (age > this.options.ttl) {
+        this.cache.delete(key);
+        this.misses++;
+        return undefined;
+      }
+
+      // Reset TTL on access if enabled
+      if (this.options.resetTTLOnAccess) {
+        entry.timestamp = Date.now();
+      }
+    }
+
+    this.hits++;
+    const value = entry.value;
+
     // Move to end (most recently used)
     this.cache.delete(key);
-    this.cache.set(key, value);
+    this.cache.set(key, entry);
+
     return value;
   }
 
@@ -45,20 +90,36 @@ export class LRUCache<T> {
   put(key: string, value: T): void {
     if (this.cache.has(key)) {
       this.cache.delete(key);
-    } else if (this.cache.size >= this.capacity) {
+    } else if (this.cache.size >= this._capacity) {
       // Evict oldest (first) entry
       const oldestKey = this.cache.keys().next().value;
       if (oldestKey !== undefined) {
+        const oldEntry = this.cache.get(oldestKey);
         this.cache.delete(oldestKey);
+
+        // Call eviction callback
+        if (this.options.onEvict && oldEntry) {
+          this.options.onEvict(oldestKey, oldEntry.value);
+        }
       }
     }
-    this.cache.set(key, value);
+
+    const entry: CacheEntry<T> = {
+      value,
+      timestamp: this.options.ttl ? Date.now() : undefined,
+    };
+
+    this.cache.set(key, entry);
   }
 
   /**
    * Delete a specific key from the cache.
    */
   delete(key: string): void {
+    const entry = this.cache.get(key);
+    if (entry && this.options.onEvict) {
+      this.options.onEvict(key, entry.value);
+    }
     this.cache.delete(key);
   }
 
@@ -66,42 +127,111 @@ export class LRUCache<T> {
    * Clear all entries from the cache.
    */
   clear(): void {
+    if (this.options.onEvict) {
+      for (const [key, entry] of this.cache.entries()) {
+        this.options.onEvict(key, entry.value);
+      }
+    }
     this.cache.clear();
   }
 
   /**
-   * Get current cache size.
+   * Alias for put() to match Map API.
    */
-  get size(): number {
-    return this.cache.size;
+  set(key: string, value: T): void {
+    this.put(key, value);
   }
 
   /**
-   * Get cache capacity.
+   * Get cache capacity as a property.
+   */
+  get capacity(): number {
+    return this._capacity;
+  }
+
+  /**
+   * Get cache capacity as a method.
    */
   getCapacity(): number {
-    return this.capacity;
+    return this._capacity;
   }
 
   /**
-   * Check if cache contains a key.
+   * Check if cache contains a key (respects TTL).
    */
   has(key: string): boolean {
-    return this.cache.has(key);
+    if (!this.cache.has(key)) {
+      return false;
+    }
+
+    // Check TTL if enabled
+    if (this.options.ttl) {
+      const entry = this.cache.get(key)!;
+      if (entry.timestamp) {
+        const age = Date.now() - entry.timestamp;
+        if (age > this.options.ttl) {
+          this.cache.delete(key);
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   /**
-   * Get all keys in the cache (from oldest to newest).
+   * Get all keys in the cache as an array (from oldest to newest).
    */
-  keys(): IterableIterator<string> {
-    return this.cache.keys();
+  keys(): string[] {
+    return Array.from(this.cache.keys());
   }
 
   /**
-   * Get all values in the cache (from oldest to newest).
+   * Get all values in the cache as an array (from oldest to newest).
    */
-  values(): IterableIterator<T> {
-    return this.cache.values();
+  values(): T[] {
+    return Array.from(this.cache.values()).map((entry) => entry.value);
+  }
+
+  /**
+   * Iterate over cache entries.
+   */
+  forEach(callback: (value: T, key: string, cache: this) => void): void {
+    this.cache.forEach((entry, key) => {
+      callback(entry.value, key, this);
+    });
+  }
+
+  /**
+   * Get all entries as an iterator.
+   */
+  entries(): IterableIterator<[string, T]> {
+    const entries: [string, T][] = [];
+    for (const [key, entry] of this.cache.entries()) {
+      entries.push([key, entry.value]);
+    }
+    return entries[Symbol.iterator]();
+  }
+
+  /**
+   * Make the cache iterable.
+   */
+  [Symbol.iterator](): IterableIterator<[string, T]> {
+    return this.entries();
+  }
+
+  /**
+   * Get cache statistics.
+   */
+  getStats() {
+    return {
+      size: this.cache.size,
+      capacity: this._capacity,
+      hits: this.hits,
+      misses: this.misses,
+      hitRate:
+        this.hits + this.misses > 0 ? this.hits / (this.hits + this.misses) : 0,
+    };
   }
 
   /**
@@ -112,12 +242,12 @@ export class LRUCache<T> {
     // Rough estimate: ~100 bytes per entry overhead + value size
     const entryOverhead = 100;
     let totalSize = this.cache.size * entryOverhead;
-    
+
     // Try to estimate value sizes (rough approximation)
     for (const value of this.cache.values()) {
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         totalSize += value.length * 2; // UTF-16 encoding
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         try {
           totalSize += JSON.stringify(value).length * 2;
         } catch {
@@ -127,7 +257,10 @@ export class LRUCache<T> {
         totalSize += 8; // Primitive types (number, boolean, etc.)
       }
     }
-    
+
     return totalSize;
   }
 }
+
+// Export default that creates proxied instances
+export default LRUCache;

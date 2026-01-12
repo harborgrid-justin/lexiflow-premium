@@ -5,7 +5,7 @@
  */
 
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';

@@ -4,7 +4,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { User, Calendar, CheckSquare } from 'lucide-react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 
 interface InterviewListProps {

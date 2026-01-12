@@ -16,7 +16,7 @@ import React, { useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';

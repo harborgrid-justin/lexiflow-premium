@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { cn } from '@/shared/lib/cn';
 

@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { BookOpen, Filter, Loader2, Search, Sparkles } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

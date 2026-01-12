@@ -3,7 +3,7 @@ import { Bell, Check, X, BellOff } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { SystemNotification } from '@/types';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

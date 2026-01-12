@@ -24,7 +24,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';

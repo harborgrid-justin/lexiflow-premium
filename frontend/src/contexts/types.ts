@@ -7,13 +7,13 @@
  * This barrel file provides a single import point for all provider types
  */
 
-// Theme types
+// Theme types (from centralized location)
 export type {
   ThemeActionsValue,
   ThemeContextValue,
   ThemeProviderProps,
   ThemeStateValue,
-} from "./theme/ThemeContext.types";
+} from "@/features/theme";
 
 // Toast types
 export type {

@@ -1,24 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatabaseManagement } from '@/features/admin/components/data/DatabaseManagement';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 const meta = {
   title: 'Pages/Database Management',
   component: DatabaseManagement,
   parameters: { layout: 'fullscreen' },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
 } satisfies Meta<typeof DatabaseManagement>;
 
 export default meta;

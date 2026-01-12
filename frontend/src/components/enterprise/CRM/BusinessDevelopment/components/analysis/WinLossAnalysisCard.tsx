@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { WinLossAnalysis } from '../../types';

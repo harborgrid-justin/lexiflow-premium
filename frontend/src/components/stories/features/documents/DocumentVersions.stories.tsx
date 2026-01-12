@@ -7,7 +7,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentVersions } from '../../../../features/operations/documents/DocumentVersions';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentVersions> = {
@@ -29,14 +29,7 @@ const meta: Meta<typeof DocumentVersions> = {
         component: 'Version history modal showing document revisions with restore capability for authorized users.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <Story />
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     userRole: {
       control: 'select',

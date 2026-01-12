@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { TrustAccountType } from '@/types/trust-accounts';
 import { FormInput } from './FormInput';
 import React from 'react';

@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';

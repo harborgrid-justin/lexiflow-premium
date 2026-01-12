@@ -20,7 +20,7 @@ import React, { useId, useRef, useState } from 'react';
 import { SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
 // Utils & Constants

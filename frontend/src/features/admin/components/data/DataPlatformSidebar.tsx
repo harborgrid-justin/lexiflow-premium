@@ -1,5 +1,5 @@
 import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';

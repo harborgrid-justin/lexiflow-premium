@@ -4,7 +4,7 @@
  * @description Loading skeleton components for correspondence lists
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import React from 'react';
 

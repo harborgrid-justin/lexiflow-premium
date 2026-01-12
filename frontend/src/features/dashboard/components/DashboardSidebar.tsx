@@ -20,7 +20,7 @@ import React from 'react';
 import { useBillingStats } from '../hooks/useDashboardData';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';

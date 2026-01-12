@@ -3,8 +3,8 @@
  * Manage annotations, notes, and comments on documents
  */
 
-import { useState } from 'react';
 import { formatDate } from '@/utils/formatters';
+import { useState } from 'react';
 
 export interface Annotation {
   id: string;
@@ -33,6 +33,7 @@ export function DocumentAnnotations({
   onDelete,
   currentPage = 1
 }: DocumentAnnotationsProps) {
+  const { theme } = useTheme();
   const [isAdding, setIsAdding] = useState(false);
   const [newAnnotation, setNewAnnotation] = useState({
     page: currentPage,
@@ -131,11 +132,10 @@ export function DocumentAnnotations({
                     <button
                       key={color.value}
                       onClick={() => setNewAnnotation({ ...newAnnotation, color: color.value })}
-                      className={`w-8 h-8 rounded-full border-2 ${
-                        newAnnotation.color === color.value
-                          ? 'border-gray-900 dark:border-gray-100 scale-110'
-                          : 'border-gray-300 dark:border-gray-600'
-                      }`}
+                      className={`w-8 h-8 rounded-full border-2 ${newAnnotation.color === color.value
+                        ? 'border-gray-900 dark:border-gray-100 scale-110'
+                        : 'border-gray-300 dark:border-gray-600'
+                        }`}
                       style={{ backgroundColor: color.value }}
                       title={color.name}
                     />
@@ -177,7 +177,7 @@ export function DocumentAnnotations({
             <div
               key={annotation.id}
               className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border-l-4"
-              style={{ borderLeftColor: annotation.color || '#9CA3AF' }}
+              style={{ borderLeftColor: annotation.color || theme.colors.textMuted }}
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">

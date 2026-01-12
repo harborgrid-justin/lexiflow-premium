@@ -23,7 +23,7 @@ import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { useWindow } from '@/providers';

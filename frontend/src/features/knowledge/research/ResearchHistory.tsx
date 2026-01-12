@@ -3,7 +3,7 @@ import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoa
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '@/types';
 import { cn } from '@/shared/lib/cn';

@@ -15,18 +15,43 @@ export interface VirtualListOptions {
 
 export const useVirtualList = <T>(items: T[], options: VirtualListOptions) => {
   const { itemHeight, containerHeight, overscan = 3 } = options;
-  const [scrollTop, setScrollTop] = useState(0);
+  // State only stores the render range, not the exact pixel scroll
+  const [renderRange, setRenderRange] = useState({ start: 0, end: 10 });
 
-  // Calculations
+  // Calculations that don't depend on exact scroll state, but on items/config
   const totalHeight = items.length * itemHeight;
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const visibleItemCount =
-    Math.ceil(containerHeight / itemHeight) + 2 * overscan;
-  const endIndex = Math.min(items.length, startIndex + visibleItemCount);
+
+  const onScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const scrollTop = e.currentTarget.scrollTop;
+
+      // Calculate indices based on scroll position
+      const newStart = Math.max(
+        0,
+        Math.floor(scrollTop / itemHeight) - overscan
+      );
+      const visibleItemCount =
+        Math.ceil(containerHeight / itemHeight) + 2 * overscan;
+      const newEnd = Math.min(items.length, newStart + visibleItemCount);
+
+      // OPTIMIZATION: Only trigger re-render if the set of visible items changes
+      // This implements "Scroll Performance Isolation" effectively
+      setRenderRange((prev) => {
+        if (prev.start === newStart && prev.end === newEnd) {
+          return prev;
+        }
+        return { start: newStart, end: newEnd };
+      });
+    },
+    [itemHeight, containerHeight, overscan, items.length]
+  );
 
   const virtualItems = useMemo(() => {
     const result = [];
-    for (let i = startIndex; i < endIndex; i++) {
+    for (let i = renderRange.start; i < renderRange.end; i++) {
+      // Validation: Ensure we don't access out of bounds
+      if (!items[i]) continue;
+
       result.push({
         index: i,
         data: items[i],
@@ -36,20 +61,20 @@ export const useVirtualList = <T>(items: T[], options: VirtualListOptions) => {
           height: itemHeight,
           width: "100%",
           left: 0,
+          // VISUAL STABILITY: Use transform for better composite performance?
+          // Actually absolute top is fine for lists, but transform: translate3d is hardware accelerated
+          // transform: `translate3d(0, ${i * itemHeight}px, 0)`
         },
       });
     }
     return result;
-  }, [items, startIndex, endIndex, itemHeight]);
-
-  const onScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop);
-  }, []);
+  }, [renderRange.start, renderRange.end, items, itemHeight]);
 
   return {
     virtualItems,
     totalHeight,
     onScroll,
-    scrollTop,
+    // scrollTop is no longer exposed as state since we decouple it
+    // If needed, consumer can use e.currentTarget.scrollTop
   };
 };

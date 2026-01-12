@@ -1,5 +1,5 @@
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Settings, Users } from 'lucide-react';
 import React, { useState } from 'react';

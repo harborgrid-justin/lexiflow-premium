@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { VirtualList } from './VirtualList';
 
 const meta: Meta<typeof VirtualList> = {

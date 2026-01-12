@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
 import { Pitch } from '../../types';

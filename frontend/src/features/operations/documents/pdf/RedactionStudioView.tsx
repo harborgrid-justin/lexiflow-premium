@@ -2,7 +2,7 @@ import { PDFViewer } from '@/features/discovery/ui/components/PDFViewer/PDFViewe
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { BlobManager } from '@/services/infrastructure/blobManager';

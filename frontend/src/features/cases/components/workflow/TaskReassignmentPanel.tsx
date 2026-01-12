@@ -17,7 +17,7 @@ import { User, ArrowRight, RefreshCcw } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button';

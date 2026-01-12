@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RateTableManagement } from '@features/operations/billing/rate-tables/RateTableManagement';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@providers/ToastContext';
 
 /**
@@ -30,18 +30,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
 } satisfies Meta<typeof RateTableManagement>;
 
 export default meta;

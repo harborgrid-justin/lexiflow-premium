@@ -19,7 +19,7 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils

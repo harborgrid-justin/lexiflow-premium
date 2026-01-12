@@ -5,11 +5,10 @@
  * lifetime value calculation, risk assessment, and satisfaction tracking.
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { ChartColorService, useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
-import { ChartColorService } from '@/services/theme/chartColorService';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';

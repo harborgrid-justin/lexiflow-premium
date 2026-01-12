@@ -1,5 +1,5 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
 import React, { useState } from 'react';

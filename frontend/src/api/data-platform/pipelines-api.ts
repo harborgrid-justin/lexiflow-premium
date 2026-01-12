@@ -2,11 +2,14 @@
  * @module services/api/data-platform/pipelines-api
  * @description ETL/ELT pipeline management API service
  * Handles pipeline creation, execution, and monitoring
- * 
+ *
  * @responsibility Manage data integration pipelines
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 /**
  * Pipeline interface
@@ -14,11 +17,11 @@ import { apiClient, type PaginatedResponse } from '@/services/infrastructure/api
 export interface Pipeline {
   id: string;
   name: string;
-  type: 'ETL' | 'ELT' | 'Streaming' | 'Batch';
+  type: "ETL" | "ELT" | "Streaming" | "Batch";
   sourceConnector: string;
   targetConnector: string;
   configuration: Record<string, unknown>;
-  status: 'Running' | 'Active' | 'Paused' | 'Failed' | 'Draft' | 'Success';
+  status: "Running" | "Active" | "Paused" | "Failed" | "Draft" | "Success";
   schedule?: string;
   recordsProcessed: number;
   lastRun?: string;
@@ -38,12 +41,16 @@ export class PipelinesApiService {
   /**
    * Get all pipelines with optional filters
    */
-  async getAll(filters?: Record<string, unknown>): Promise<PaginatedResponse<Pipeline>> {
-    console.log('[PipelinesApi] getAll called with filters:', filters);
+  async getAll(
+    filters?: Record<string, unknown>
+  ): Promise<PaginatedResponse<Pipeline>> {
     try {
-      return await apiClient.get<PaginatedResponse<Pipeline>>('/pipelines', filters);
+      return await apiClient.get<PaginatedResponse<Pipeline>>(
+        "/pipelines",
+        filters
+      );
     } catch (error) {
-      console.error('[PipelinesApi] Error fetching pipelines:', error);
+      console.error("[PipelinesApi] Error fetching pipelines:", error);
       return { data: [], total: 0, page: 1, limit: 50, totalPages: 0 };
     }
   }
@@ -59,7 +66,7 @@ export class PipelinesApiService {
    * Create a new pipeline
    */
   async create(data: Partial<Pipeline>): Promise<Pipeline> {
-    return await apiClient.post<Pipeline>('/pipelines', data);
+    return await apiClient.post<Pipeline>("/pipelines", data);
   }
 
   /**
@@ -94,9 +101,15 @@ export class PipelinesApiService {
     totalRecordsProcessed: number;
   }> {
     try {
-      return await apiClient.get('/pipelines/stats');
+      return await apiClient.get("/pipelines/stats");
     } catch {
-      return { total: 0, active: 0, failed: 0, paused: 0, totalRecordsProcessed: 0 };
+      return {
+        total: 0,
+        active: 0,
+        failed: 0,
+        paused: 0,
+        totalRecordsProcessed: 0,
+      };
     }
   }
 }

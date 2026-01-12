@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import { CaseStatus, MatterType } from '@/types/enums';
 import type { CaseId } from '@/types/primitives';
 import { CommandCenter } from '@features/litigation/war-room';
@@ -32,18 +32,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
 } satisfies Meta<typeof CommandCenter>;
 
 export default meta;

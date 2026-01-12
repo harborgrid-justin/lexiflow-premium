@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AutocompleteSelect } from './AutocompleteSelect';
 
 const meta: Meta<typeof AutocompleteSelect> = {

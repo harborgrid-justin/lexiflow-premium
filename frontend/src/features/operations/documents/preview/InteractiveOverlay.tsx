@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Move, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';

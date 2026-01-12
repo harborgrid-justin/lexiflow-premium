@@ -4,7 +4,7 @@
  * ✅ Backend-ready with proper data handling (2025-12-21)
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { getTodayString } from '@/shared/lib/dateUtils';
 import { Calendar, FileText, Sparkles, User } from 'lucide-react';

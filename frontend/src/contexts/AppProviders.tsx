@@ -18,11 +18,11 @@
  * - BP13: Document provider dependencies
  */
 
+import { ThemeProvider } from '@/features/theme';
 import React from 'react';
 import { CaseProvider } from './case/CaseContext';
 import { DataSourceProvider } from './data/DataSourceContext';
 import { SyncProvider } from './sync/SyncContext';
-import { ThemeProvider } from './theme/ThemeContext';
 import { ToastProvider as ToastProviderBase, useToast } from './toast/ToastContext';
 import { WindowProvider } from './window/WindowContext';
 

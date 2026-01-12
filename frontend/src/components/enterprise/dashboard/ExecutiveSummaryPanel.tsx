@@ -5,7 +5,7 @@
  * Displays high-level metrics for executive decision-making
  */
 
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';

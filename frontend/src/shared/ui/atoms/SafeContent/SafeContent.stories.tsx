@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SafeContent } from './SafeContent';
 
 const meta: Meta<typeof SafeContent> = {

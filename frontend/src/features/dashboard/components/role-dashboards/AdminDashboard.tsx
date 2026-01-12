@@ -5,7 +5,7 @@
  */
 
 import { type AdminDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';

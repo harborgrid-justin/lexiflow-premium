@@ -4,7 +4,7 @@
  * @description Storybook stories for CommandPalette component
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { CommandPalette } from './CommandPalette';
 import {

@@ -4,7 +4,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { AlertCircle } from 'lucide-react';
 import React from 'react';
 

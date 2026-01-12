@@ -1,6 +1,6 @@
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { SearchResult } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ExternalLink } from 'lucide-react';

@@ -16,7 +16,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/';
+import { useTheme } from '@/features/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -34,11 +34,11 @@ interface SplitViewProps {
 /**
  * SplitView - React 18 optimized with React.memo
  */
-export const SplitView = React.memo<SplitViewProps>(({ 
-  sidebar, 
-  content, 
-  showSidebarOnMobile = true, 
-  className = '' 
+export const SplitView = React.memo<SplitViewProps>(({
+  sidebar,
+  content,
+  showSidebarOnMobile = true,
+  className = ''
 }) => {
   const { theme } = useTheme();
 

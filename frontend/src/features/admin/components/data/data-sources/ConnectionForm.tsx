@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, HardDrive, Cloud } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { ConnectionFormData, CloudProvider } from './types';
 

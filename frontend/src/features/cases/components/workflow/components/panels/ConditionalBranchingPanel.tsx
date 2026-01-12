@@ -5,7 +5,7 @@
 
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle2, GitBranch } from 'lucide-react';
 import React from 'react';

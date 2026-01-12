@@ -20,8 +20,7 @@ import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Toolti
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { ChartColorService } from '@/services/theme/chartColorService';
+import { ChartColorService, useTheme } from '@/features/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';

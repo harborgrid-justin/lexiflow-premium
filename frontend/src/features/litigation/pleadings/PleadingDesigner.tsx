@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';

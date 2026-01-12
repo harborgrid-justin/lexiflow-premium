@@ -21,7 +21,7 @@ import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 

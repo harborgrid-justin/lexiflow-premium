@@ -28,7 +28,7 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';

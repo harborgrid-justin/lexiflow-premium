@@ -1,5 +1,5 @@
 import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Copy, Edit, Trash2 } from 'lucide-react';
 import React from 'react';

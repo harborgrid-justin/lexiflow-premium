@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // This module has no exports. Story disabled.
 const DisabledStory = () => <div>No primitives exported from this file</div>;

@@ -1,7 +1,7 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CategoryFilter, SuggestionItem } from './SearchComponents';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import type { SearchCategory } from './types';
 
 const DemoComponent = () => {

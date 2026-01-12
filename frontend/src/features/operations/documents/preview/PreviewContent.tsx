@@ -3,7 +3,7 @@ import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/Si
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { useState } from 'react';

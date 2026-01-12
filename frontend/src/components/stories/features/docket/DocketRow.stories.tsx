@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketRow } from '@/features/cases/components/docket/DocketRow';
 import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketRow displays an individual docket entry row with type icons, 

@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';

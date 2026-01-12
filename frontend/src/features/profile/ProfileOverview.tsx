@@ -16,7 +16,7 @@ import { Mail, MapPin, Phone, Scale, ShieldCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useTheme } from '@/features/theme';
 
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';

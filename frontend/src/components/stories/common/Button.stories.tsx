@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import React from "react";

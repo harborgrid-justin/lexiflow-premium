@@ -810,7 +810,7 @@ class ConflictCheckServiceClass {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchClients(): Promise<any[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/clients`, {
       credentials: "include",
     });
@@ -825,7 +825,7 @@ class ConflictCheckServiceClass {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchClient(clientId: string): Promise<any> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/clients/${clientId}`, {
       credentials: "include",
     });
@@ -840,7 +840,7 @@ class ConflictCheckServiceClass {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchCases(): Promise<any[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/cases`, {
       credentials: "include",
     });
@@ -855,7 +855,7 @@ class ConflictCheckServiceClass {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async fetchCase(caseId: string): Promise<any> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/cases/${caseId}`, {
       credentials: "include",
     });

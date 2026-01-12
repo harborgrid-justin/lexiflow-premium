@@ -21,8 +21,7 @@ export default async function CourtDatesPage(): Promise<React.JSX.Element> {
   try {
     const data = await apiFetch(API_ENDPOINTS.COURT_DATES.LIST).catch(() => ({ data: [] })) as any;
     courtDates = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load court dates:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

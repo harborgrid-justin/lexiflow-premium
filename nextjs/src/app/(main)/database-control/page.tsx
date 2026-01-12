@@ -19,8 +19,7 @@ export default async function DatabaseControlPage(): Promise<React.JSX.Element> 
 
   try {
     schemaInfo = await apiFetch(API_ENDPOINTS.SCHEMA.TABLES);
-  } catch (error) {
-    console.error('Failed to load schema:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

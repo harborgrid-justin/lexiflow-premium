@@ -20,8 +20,7 @@ export default async function AdmissionsPage(): Promise<React.JSX.Element> {
 
   try {
     admissions = (await apiFetch(API_ENDPOINTS.ADMISSIONS.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load admissions:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

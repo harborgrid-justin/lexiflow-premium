@@ -20,8 +20,7 @@ export default async function ProductionRequestsPage(): Promise<React.JSX.Elemen
 
   try {
     productionRequests = (await apiFetch(API_ENDPOINTS.PRODUCTION_REQUESTS.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load production requests:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

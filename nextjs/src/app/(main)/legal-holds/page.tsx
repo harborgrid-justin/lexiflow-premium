@@ -20,8 +20,7 @@ export default async function LegalHoldsPage(): Promise<React.JSX.Element> {
 
   try {
     legalHolds = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load legal holds:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

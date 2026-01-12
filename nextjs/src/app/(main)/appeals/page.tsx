@@ -19,8 +19,7 @@ export default async function AppealsPage(): Promise<React.JSX.Element> {
 
   try {
     appeals = await apiFetch(API_ENDPOINTS.APPEALS.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load appeals:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

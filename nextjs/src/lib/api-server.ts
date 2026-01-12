@@ -83,7 +83,7 @@ export async function apiFetch<T>(
     ) {
       throw error;
     }
-    console.error("API fetch error:", error);
+    // Silent error handling - caller should handle display (logging disabled to reduce console noise)
     throw error;
   }
 }

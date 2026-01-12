@@ -30,8 +30,7 @@ export default async function SettlementsPage(): Promise<React.JSX.Element> {
 
   try {
     settlements = await apiFetch(API_ENDPOINTS.SETTLEMENTS.LIST);
-  } catch (error) {
-    console.error('Failed to load settlements:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

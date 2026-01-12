@@ -20,8 +20,7 @@ export default async function OrganizationsPage(): Promise<React.JSX.Element> {
 
   try {
     organizations = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.LIST);
-  } catch (error) {
-    console.error('Failed to load organizations:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -135,7 +135,7 @@ class FileDownloadServiceClass {
     try {
       // Build API URL
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
       const url = `${baseUrl}${endpoint}`;
 
       // Get auth token from localStorage

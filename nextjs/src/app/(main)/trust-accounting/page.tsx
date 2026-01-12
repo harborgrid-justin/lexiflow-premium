@@ -31,8 +31,7 @@ export default async function TrustAccountingPage(): Promise<React.JSX.Element> 
 
   try {
     accounts = await apiFetch(API_ENDPOINTS.TRUST_ACCOUNTING.LIST);
-  } catch (error) {
-    console.error('Failed to load trust accounts:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   const totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);

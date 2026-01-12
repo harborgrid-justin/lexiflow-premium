@@ -19,8 +19,7 @@ export default async function ConflictsPage(): Promise<React.JSX.Element> {
 
   try {
     conflicts = await apiFetch(API_ENDPOINTS.CONFLICTS.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load conflicts:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -369,7 +369,7 @@ class RedactionServiceClass {
    */
   private async fetchDocumentContent(documentId: string): Promise<string> {
     // In production, this would fetch from backend API
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const url = `${baseUrl}/api/documents/${documentId}/content`;
 
     const response = await fetch(url, {
@@ -393,7 +393,7 @@ class RedactionServiceClass {
     documentId: string,
     content: string
   ): Promise<string> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const url = `${baseUrl}/api/documents/${documentId}/versions`;
 
     const response = await fetch(url, {
@@ -424,7 +424,7 @@ class RedactionServiceClass {
     documentId: string,
     content: string
   ): Promise<string> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const url = `${baseUrl}/api/documents/${documentId}`;
 
     const response = await fetch(url, {

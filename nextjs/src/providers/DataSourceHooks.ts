@@ -9,7 +9,7 @@ import type {
 } from "./DataSourceContext.types";
 
 const contextId = Math.random().toString(36).substring(7);
-console.log("[DataSourceHooks] Module loaded, ID:", contextId);
+// Module loaded (logging disabled to reduce console noise)
 
 // BP4: Export only custom hooks, not raw contexts
 export function useDataSourceState(): DataSourceStateValue {

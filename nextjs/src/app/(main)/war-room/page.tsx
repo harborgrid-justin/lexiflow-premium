@@ -20,8 +20,7 @@ export default async function WarRoomPage(): Promise<React.JSX.Element> {
 
   try {
     warRoomData = await apiFetch(API_ENDPOINTS.WAR_ROOM.ROOT);
-  } catch (error) {
-    console.error('Failed to load war room:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

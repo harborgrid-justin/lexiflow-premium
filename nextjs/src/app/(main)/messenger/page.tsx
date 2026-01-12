@@ -20,8 +20,7 @@ export default async function MessengerPage(): Promise<React.JSX.Element> {
 
   try {
     messages = await apiFetch(API_ENDPOINTS.MESSAGING.LIST);
-  } catch (error) {
-    console.error('Failed to load messages:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

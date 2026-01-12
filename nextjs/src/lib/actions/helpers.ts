@@ -12,7 +12,9 @@ import type {
   CacheProfile,
 } from "./errors";
 import { ActionError, failure, success } from "./errors";
-import { getActionContext, checkPermissions, invalidateTags } from "./index";
+
+// Import server functions dynamically to avoid circular dependency issues
+// with the "use server" directive in index.ts
 
 // These will be provided by the server actions module
 type GetActionContextFn = () => Promise<ActionContext>;
@@ -37,7 +39,9 @@ let isInitialized = false;
 async function ensureInitialized(): Promise<void> {
   if (isInitialized) return;
 
-  // Static import ensures dependencies are loaded
+  // Dynamic import to avoid circular dependency with "use server" directive
+  const { getActionContext, checkPermissions, invalidateTags } =
+    await import("./index");
   getActionContextFn = getActionContext;
   checkPermissionsFn = checkPermissions;
   invalidateTagsFn = invalidateTags;

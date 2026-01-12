@@ -24,32 +24,32 @@
  * - Type-safe operations
  */
 
-import { delay } from "@/utils/async";
-import {
-  Deposition,
-  ESISource,
-  ProductionSet,
-  CustodianInterview,
-  DiscoveryRequest,
-  PrivilegeLogEntry,
-  LegalHold,
-  Examination,
-  Vendor,
-  Transcript,
-  SanctionMotion,
-  StipulationRequest,
-  ReviewBatch,
-  ProcessingJob,
-  LegalDocument,
-} from "@/types";
-import { db, STORES } from "@/services/data/db";
-import { isBackendApiEnabled } from "@/config/network/api.config";
 import { discoveryApi } from "@/api/domains/discovery.api";
+import { isBackendApiEnabled } from "@/config/network/api.config";
 import {
+  EntityNotFoundError,
   OperationError,
   ValidationError,
-  EntityNotFoundError,
 } from "@/services/core/errors";
+import { db, STORES } from "@/services/data/db";
+import {
+  CustodianInterview,
+  Deposition,
+  DiscoveryRequest,
+  ESISource,
+  Examination,
+  LegalDocument,
+  LegalHold,
+  PrivilegeLogEntry,
+  ProcessingJob,
+  ProductionSet,
+  ReviewBatch,
+  SanctionMotion,
+  StipulationRequest,
+  Transcript,
+  Vendor,
+} from "@/types";
+import { delay } from "@/utils/async";
 
 /**
  * Query keys for React Query integration
@@ -174,10 +174,7 @@ export class DiscoveryRepository {
    * @private
    */
   private logInitialization(): void {
-    const mode = this.useBackend
-      ? "Backend API (PostgreSQL)"
-      : "IndexedDB (Local)";
-    console.log(`[DiscoveryRepository] Initialized with ${mode}`);
+    // Initialization complete (logging disabled to reduce console noise)
   }
 
   /**

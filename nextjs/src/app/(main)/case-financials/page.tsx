@@ -19,8 +19,7 @@ export default async function CaseFinancialsPage(): Promise<React.JSX.Element> {
 
   try {
     financials = await apiFetch(API_ENDPOINTS.BILLING.ROOT);
-  } catch (error) {
-    console.error('Failed to load case financials:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

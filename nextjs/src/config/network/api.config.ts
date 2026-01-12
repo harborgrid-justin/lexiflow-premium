@@ -9,7 +9,7 @@ import { isBrowser } from "@rendering/utils";
 export const getApiBaseUrl = () => {
   // Server-side always requires absolute URL
   if (typeof window === "undefined") {
-    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
   }
 
   // In development, use relative path to leverage Next.js proxy (fixes CORS in Codespaces)

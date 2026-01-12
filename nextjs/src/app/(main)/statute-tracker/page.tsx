@@ -19,8 +19,7 @@ export default async function StatuteTrackerPage(): Promise<React.JSX.Element> {
 
   try {
     statutes = await apiFetch(API_ENDPOINTS.STATUTE_TRACKER.LIST);
-  } catch (error) {
-    console.error('Failed to load statute tracker:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -20,8 +20,7 @@ export default async function InterrogatoriesPage(): Promise<React.JSX.Element> 
 
   try {
     interrogatories = (await apiFetch(API_ENDPOINTS.INTERROGATORIES.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load interrogatories:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

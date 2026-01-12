@@ -20,8 +20,7 @@ export default async function CaseOverviewPage(): Promise<React.JSX.Element> {
 
   try {
     cases = await apiFetch(API_ENDPOINTS.CASES.LIST);
-  } catch (error) {
-    console.error('Failed to load cases:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -21,8 +21,7 @@ export default async function ClientPortalPage(): Promise<React.JSX.Element> {
   try {
     const data = await apiFetch(API_ENDPOINTS.CLIENT_PORTAL.LIST).catch(() => ({ data: [] }));
     clients = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load client portal data:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

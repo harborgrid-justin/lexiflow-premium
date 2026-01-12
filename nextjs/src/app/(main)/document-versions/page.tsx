@@ -21,8 +21,7 @@ export default async function DocumentVersionsPage(): Promise<React.JSX.Element>
   try {
     const data: unknown = await apiFetch(API_ENDPOINTS.DOCUMENT_VERSIONS.ALL).catch(() => ({ data: [] }));
     versions = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load document versions:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

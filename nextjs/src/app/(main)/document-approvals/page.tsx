@@ -21,8 +21,7 @@ export default async function DocumentApprovalsPage(): Promise<React.JSX.Element
   try {
     const data = await apiFetch(API_ENDPOINTS.DOCUMENT_APPROVALS.LIST).catch(() => ({ data: [] }));
     approvals = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load document approvals:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

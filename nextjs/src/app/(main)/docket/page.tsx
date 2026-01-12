@@ -20,8 +20,7 @@ export default async function DocketPage(): Promise<React.JSX.Element> {
 
   try {
     docketEntries = await apiFetch(API_ENDPOINTS.DOCKET.LIST);
-  } catch (error) {
-    console.error('Failed to load docket entries:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

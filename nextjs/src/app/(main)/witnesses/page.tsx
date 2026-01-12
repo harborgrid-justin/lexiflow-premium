@@ -20,8 +20,7 @@ export default async function WitnessesPage(): Promise<React.JSX.Element> {
 
   try {
     witnesses = await apiFetch(API_ENDPOINTS.WITNESSES.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load witnesses:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

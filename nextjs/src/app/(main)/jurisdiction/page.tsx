@@ -19,8 +19,7 @@ export default async function JurisdictionPage(): Promise<React.JSX.Element> {
 
   try {
     jurisdictions = await apiFetch(API_ENDPOINTS.JURISDICTIONS.LIST);
-  } catch (error) {
-    console.error('Failed to load jurisdictions:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

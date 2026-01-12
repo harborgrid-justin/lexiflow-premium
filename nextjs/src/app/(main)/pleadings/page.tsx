@@ -20,8 +20,7 @@ export default async function PleadingsPage(): Promise<React.JSX.Element> {
 
   try {
     pleadings = await apiFetch(API_ENDPOINTS.PLEADINGS.LIST);
-  } catch (error) {
-    console.error('Failed to load pleadings:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

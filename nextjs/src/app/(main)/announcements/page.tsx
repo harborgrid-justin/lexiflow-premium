@@ -21,8 +21,7 @@ export default async function AnnouncementsPage(): Promise<React.JSX.Element> {
   try {
     const data = await apiFetch(API_ENDPOINTS.ANNOUNCEMENTS.LIST).catch(() => ({ data: [] })) as any;
     announcements = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load announcements:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

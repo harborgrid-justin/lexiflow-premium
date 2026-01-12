@@ -19,8 +19,7 @@ export default async function CaseIntakePage(): Promise<React.JSX.Element> {
 
   try {
     templates = await apiFetch(API_ENDPOINTS.WORKFLOW.TEMPLATES);
-  } catch (error) {
-    console.error('Failed to load intake templates:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

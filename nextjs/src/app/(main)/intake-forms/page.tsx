@@ -19,8 +19,7 @@ export default async function IntakeFormsPage(): Promise<React.JSX.Element> {
 
   try {
     intakeForms = await apiFetch(API_ENDPOINTS.INTAKE_FORMS.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load intake forms:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

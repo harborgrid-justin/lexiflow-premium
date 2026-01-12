@@ -10,50 +10,50 @@
  * - CSRF validation
  */
 
-import { cookies, headers } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { cache } from 'react';
-import type { User, Session, UserRole } from './(auth)/types';
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { cache } from "react";
+import type { Session, User, UserRole } from "./(auth)/types";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const AUTH_COOKIE_NAME = 'auth_token';
-const REFRESH_COOKIE_NAME = 'refresh_token';
+const AUTH_COOKIE_NAME = "auth_token";
+const REFRESH_COOKIE_NAME = "refresh_token";
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
-  '/login',
-  '/login-enhanced',
-  '/login-enterprise',
-  '/register',
-  '/forgot-password',
-  '/reset-password',
-  '/verify-email',
-  '/api/auth',
-  '/api/health',
+  "/login",
+  "/login-enhanced",
+  "/login-enterprise",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+  "/api/auth",
+  "/api/health",
 ];
 
 // Routes that authenticated users should be redirected away from
 const AUTH_ROUTES = [
-  '/login',
-  '/login-enhanced',
-  '/login-enterprise',
-  '/register',
-  '/forgot-password',
-  '/reset-password',
+  "/login",
+  "/login-enhanced",
+  "/login-enterprise",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
 ];
 
 // Role hierarchy for permission checks
 const ROLE_HIERARCHY: Record<UserRole, number> = {
-  'super_admin': 100,
-  'admin': 80,
-  'manager': 60,
-  'attorney': 50,
-  'paralegal': 40,
-  'staff': 30,
-  'guest': 10,
+  super_admin: 100,
+  admin: 80,
+  manager: 60,
+  attorney: 50,
+  paralegal: 40,
+  staff: 30,
+  guest: 10,
 };
 
 // ============================================================================
@@ -73,11 +73,11 @@ export const getSession = cache(async (): Promise<Session | null> => {
 
   try {
     // Decode JWT payload
-    const parts = token.split('.');
+    const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const payload = JSON.parse(
-      Buffer.from(parts[1], 'base64').toString('utf8')
+      Buffer.from(parts[1], "base64").toString("utf8")
     );
 
     // Check expiration
@@ -89,9 +89,9 @@ export const getSession = cache(async (): Promise<Session | null> => {
     const user: User = payload.user || {
       id: payload.sub,
       email: payload.email,
-      firstName: payload.firstName || '',
-      lastName: payload.lastName || '',
-      role: payload.role || 'guest',
+      firstName: payload.firstName || "",
+      lastName: payload.lastName || "",
+      role: payload.role || "guest",
       permissions: payload.permissions || [],
       mfaEnabled: payload.mfaEnabled || false,
       emailVerified: payload.emailVerified || false,
@@ -135,8 +135,8 @@ export async function isAuthenticated(): Promise<boolean> {
  * Check if a path is public (doesn't require authentication)
  */
 export function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_ROUTES.some(route =>
-    pathname === route || pathname.startsWith(`${route}/`)
+  return PUBLIC_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 }
 
@@ -144,8 +144,8 @@ export function isPublicRoute(pathname: string): boolean {
  * Check if a path is an auth route (login, register, etc.)
  */
 export function isAuthRoute(pathname: string): boolean {
-  return AUTH_ROUTES.some(route =>
-    pathname === route || pathname.startsWith(`${route}/`)
+  return AUTH_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 }
 
@@ -153,14 +153,19 @@ export function isAuthRoute(pathname: string): boolean {
  * Protect a route - redirects to login if not authenticated
  * Use this in page components that require authentication
  */
-export async function protectRoute(redirectTo: string = '/login'): Promise<Session> {
+export async function protectRoute(
+  redirectTo: string = "/login"
+): Promise<Session> {
   const session = await getSession();
 
   if (!session) {
     // Get current path for redirect after login
     const headersList = await headers();
-    const pathname = headersList.get('x-pathname') || headersList.get('x-invoke-path') || '';
-    const searchParams = pathname ? `?from=${encodeURIComponent(pathname)}` : '';
+    const pathname =
+      headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
+    const searchParams = pathname
+      ? `?from=${encodeURIComponent(pathname)}`
+      : "";
 
     redirect(`${redirectTo}${searchParams}`);
   }
@@ -173,12 +178,12 @@ export async function protectRoute(redirectTo: string = '/login'): Promise<Sessi
  */
 export async function protectRouteWithRole(
   requiredRole: UserRole,
-  redirectTo: string = '/login'
+  redirectTo: string = "/login"
 ): Promise<Session> {
   const session = await protectRoute(redirectTo);
 
   if (!hasRole(session.user, requiredRole)) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   return session;
@@ -189,12 +194,12 @@ export async function protectRouteWithRole(
  */
 export async function protectRouteWithPermission(
   requiredPermission: string,
-  redirectTo: string = '/login'
+  redirectTo: string = "/login"
 ): Promise<Session> {
   const session = await protectRoute(redirectTo);
 
   if (!hasPermission(session.user, requiredPermission)) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   return session;
@@ -204,7 +209,9 @@ export async function protectRouteWithPermission(
  * Redirect authenticated users away from auth pages
  * Use this in login/register pages
  */
-export async function redirectIfAuthenticated(redirectTo: string = '/dashboard'): Promise<void> {
+export async function redirectIfAuthenticated(
+  redirectTo: string = "/dashboard"
+): Promise<void> {
   const session = await getSession();
 
   if (session) {
@@ -235,7 +242,7 @@ export function hasPermission(user: User | null, permission: string): boolean {
   if (!user) return false;
 
   // Super admin has all permissions
-  if (user.role === 'super_admin') return true;
+  if (user.role === "super_admin") return true;
 
   return user.permissions?.includes(permission) || false;
 }
@@ -243,21 +250,27 @@ export function hasPermission(user: User | null, permission: string): boolean {
 /**
  * Check if user has any of the specified permissions
  */
-export function hasAnyPermission(user: User | null, permissions: string[]): boolean {
+export function hasAnyPermission(
+  user: User | null,
+  permissions: string[]
+): boolean {
   if (!user) return false;
-  if (user.role === 'super_admin') return true;
+  if (user.role === "super_admin") return true;
 
-  return permissions.some(p => user.permissions?.includes(p));
+  return permissions.some((p) => user.permissions?.includes(p));
 }
 
 /**
  * Check if user has all of the specified permissions
  */
-export function hasAllPermissions(user: User | null, permissions: string[]): boolean {
+export function hasAllPermissions(
+  user: User | null,
+  permissions: string[]
+): boolean {
   if (!user) return false;
-  if (user.role === 'super_admin') return true;
+  if (user.role === "super_admin") return true;
 
-  return permissions.every(p => user.permissions?.includes(p));
+  return permissions.every((p) => user.permissions?.includes(p));
 }
 
 // ============================================================================
@@ -270,9 +283,9 @@ export function hasAllPermissions(user: User | null, permissions: string[]): boo
 export async function getClientIP(): Promise<string> {
   const headersList = await headers();
   return (
-    headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headersList.get('x-real-ip') ||
-    'unknown'
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headersList.get("x-real-ip") ||
+    "unknown"
   );
 }
 
@@ -281,7 +294,7 @@ export async function getClientIP(): Promise<string> {
  */
 export async function getUserAgent(): Promise<string> {
   const headersList = await headers();
-  return headersList.get('user-agent') || 'unknown';
+  return headersList.get("user-agent") || "unknown";
 }
 
 /**
@@ -289,7 +302,7 @@ export async function getUserAgent(): Promise<string> {
  */
 export async function getOrigin(): Promise<string | null> {
   const headersList = await headers();
-  return headersList.get('origin');
+  return headersList.get("origin");
 }
 
 /**
@@ -297,7 +310,7 @@ export async function getOrigin(): Promise<string | null> {
  */
 export async function getReferer(): Promise<string | null> {
   const headersList = await headers();
-  return headersList.get('referer');
+  return headersList.get("referer");
 }
 
 // ============================================================================
@@ -311,7 +324,7 @@ export async function validateCSRF(token: string): Promise<boolean> {
   if (!token) return false;
 
   const cookieStore = await cookies();
-  const storedToken = cookieStore.get('csrf_token')?.value;
+  const storedToken = cookieStore.get("csrf_token")?.value;
 
   return storedToken === token;
 }
@@ -321,7 +334,7 @@ export async function validateCSRF(token: string): Promise<boolean> {
  */
 export async function getCSRFToken(): Promise<string | null> {
   const cookieStore = await cookies();
-  return cookieStore.get('csrf_token')?.value || null;
+  return cookieStore.get("csrf_token")?.value || null;
 }
 
 // ============================================================================
@@ -387,9 +400,9 @@ export async function withPermission(permission: string): Promise<Session> {
  */
 export async function validateApiAuth(): Promise<Session | null> {
   const headersList = await headers();
-  const authHeader = headersList.get('authorization');
+  const authHeader = headersList.get("authorization");
 
-  if (!authHeader?.startsWith('Bearer ')) {
+  if (!authHeader?.startsWith("Bearer ")) {
     // Fall back to cookie auth
     return getSession();
   }
@@ -397,11 +410,11 @@ export async function validateApiAuth(): Promise<Session | null> {
   const token = authHeader.slice(7);
 
   try {
-    const parts = token.split('.');
+    const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const payload = JSON.parse(
-      Buffer.from(parts[1], 'base64').toString('utf8')
+      Buffer.from(parts[1], "base64").toString("utf8")
     );
 
     if (payload.exp && payload.exp * 1000 < Date.now()) {
@@ -411,9 +424,9 @@ export async function validateApiAuth(): Promise<Session | null> {
     const user: User = payload.user || {
       id: payload.sub,
       email: payload.email,
-      firstName: payload.firstName || '',
-      lastName: payload.lastName || '',
-      role: payload.role || 'guest',
+      firstName: payload.firstName || "",
+      lastName: payload.lastName || "",
+      role: payload.role || "guest",
       permissions: payload.permissions || [],
       mfaEnabled: payload.mfaEnabled || false,
       emailVerified: payload.emailVerified || false,
@@ -441,7 +454,7 @@ export async function requireApiAuth(): Promise<Session> {
   const session = await validateApiAuth();
 
   if (!session) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
 
   return session;
@@ -454,7 +467,7 @@ export async function requireApiRole(role: UserRole): Promise<Session> {
   const session = await requireApiAuth();
 
   if (!hasRole(session.user, role)) {
-    throw new Error('Forbidden');
+    throw new Error("Forbidden");
   }
 
   return session;
@@ -463,11 +476,13 @@ export async function requireApiRole(role: UserRole): Promise<Session> {
 /**
  * Require specific permission for API routes
  */
-export async function requireApiPermission(permission: string): Promise<Session> {
+export async function requireApiPermission(
+  permission: string
+): Promise<Session> {
   const session = await requireApiAuth();
 
   if (!hasPermission(session.user, permission)) {
-    throw new Error('Forbidden');
+    throw new Error("Forbidden");
   }
 
   return session;
@@ -504,7 +519,10 @@ export async function getActionAuthContext(): Promise<{
 
   return {
     userId: session.user.id,
-    organizationId: (session.user as Record<string, unknown>).organizationId as string | null ?? null,
+    organizationId:
+      ((session.user as Record<string, unknown>).organizationId as
+        | string
+        | null) ?? null,
     role: session.user.role,
     permissions: session.user.permissions ?? [],
     isAuthenticated: true,
@@ -526,7 +544,7 @@ export async function requireActionAuth(): Promise<{
   const context = await getActionAuthContext();
 
   if (!context.isAuthenticated || !context.session) {
-    throw new Error('Authentication required');
+    throw new Error("Authentication required");
   }
 
   return {
@@ -550,7 +568,7 @@ export async function requireActionRole(requiredRole: UserRole): Promise<{
   const context = await requireActionAuth();
 
   if (!hasRole(context.session.user, requiredRole)) {
-    throw new Error('Insufficient permissions');
+    throw new Error("Insufficient permissions");
   }
 
   return context;
@@ -559,7 +577,9 @@ export async function requireActionRole(requiredRole: UserRole): Promise<{
 /**
  * Require specific permission for Server Actions
  */
-export async function requireActionPermission(requiredPermission: string): Promise<{
+export async function requireActionPermission(
+  requiredPermission: string
+): Promise<{
   userId: string;
   organizationId: string | null;
   role: string;
@@ -568,7 +588,7 @@ export async function requireActionPermission(requiredPermission: string): Promi
   const context = await requireActionAuth();
 
   if (!hasPermission(context.session.user, requiredPermission)) {
-    throw new Error('Insufficient permissions');
+    throw new Error("Insufficient permissions");
   }
 
   return context;
@@ -588,14 +608,14 @@ export async function setAuthCookies(
   options: {
     maxAge?: number;
     secure?: boolean;
-    sameSite?: 'lax' | 'strict' | 'none';
+    sameSite?: "lax" | "strict" | "none";
   } = {}
 ): Promise<void> {
   const cookieStore = await cookies();
   const {
     maxAge = 60 * 60 * 24 * 7, // 7 days
-    secure = process.env.NODE_ENV === 'production',
-    sameSite = 'lax',
+    secure = process.env.NODE_ENV === "production",
+    sameSite = "lax",
   } = options;
 
   cookieStore.set(AUTH_COOKIE_NAME, accessToken, {
@@ -603,7 +623,7 @@ export async function setAuthCookies(
     secure,
     sameSite,
     maxAge,
-    path: '/',
+    path: "/",
   });
 
   if (refreshToken) {
@@ -612,7 +632,7 @@ export async function setAuthCookies(
       secure,
       sameSite,
       maxAge: 60 * 60 * 24 * 30, // 30 days
-      path: '/',
+      path: "/",
     });
   }
 }
@@ -626,8 +646,8 @@ export async function clearAuthCookies(): Promise<void> {
 
   cookieStore.delete(AUTH_COOKIE_NAME);
   cookieStore.delete(REFRESH_COOKIE_NAME);
-  cookieStore.delete('csrf_token');
-  cookieStore.delete('session_id');
+  cookieStore.delete("csrf_token");
+  cookieStore.delete("session_id");
 }
 
 /**
@@ -643,11 +663,11 @@ export async function refreshAccessToken(): Promise<string | null> {
   }
 
   try {
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:3000";
     const response = await fetch(`${backendUrl}/api/auth/refresh`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ refreshToken }),
     });
@@ -687,43 +707,87 @@ export interface RouteProtectionConfig {
  */
 export const ROUTE_PROTECTION_CONFIG: RouteProtectionConfig[] = [
   // Dashboard
-  { pattern: '/dashboard', requireAuth: true },
-  { pattern: '/dashboard/*', requireAuth: true },
+  { pattern: "/dashboard", requireAuth: true },
+  { pattern: "/dashboard/*", requireAuth: true },
 
   // Cases - all authenticated users
-  { pattern: '/cases', requireAuth: true },
-  { pattern: '/cases/*', requireAuth: true },
+  { pattern: "/cases", requireAuth: true },
+  { pattern: "/cases/*", requireAuth: true },
 
   // Documents - all authenticated users
-  { pattern: '/documents', requireAuth: true },
-  { pattern: '/documents/*', requireAuth: true },
+  { pattern: "/documents", requireAuth: true },
+  { pattern: "/documents/*", requireAuth: true },
 
   // Clients - attorneys and above
-  { pattern: '/clients', requireAuth: true, roles: ['attorney', 'manager', 'admin', 'super_admin'] },
-  { pattern: '/clients/*', requireAuth: true, roles: ['attorney', 'manager', 'admin', 'super_admin'] },
+  {
+    pattern: "/clients",
+    requireAuth: true,
+    roles: ["attorney", "manager", "admin", "super_admin"],
+  },
+  {
+    pattern: "/clients/*",
+    requireAuth: true,
+    roles: ["attorney", "manager", "admin", "super_admin"],
+  },
 
   // Matters - attorneys and above
-  { pattern: '/matters', requireAuth: true, roles: ['attorney', 'manager', 'admin', 'super_admin'] },
-  { pattern: '/matters/*', requireAuth: true, roles: ['attorney', 'manager', 'admin', 'super_admin'] },
+  {
+    pattern: "/matters",
+    requireAuth: true,
+    roles: ["attorney", "manager", "admin", "super_admin"],
+  },
+  {
+    pattern: "/matters/*",
+    requireAuth: true,
+    roles: ["attorney", "manager", "admin", "super_admin"],
+  },
 
   // Billing - managers and above
-  { pattern: '/billing', requireAuth: true, roles: ['manager', 'admin', 'super_admin'] },
-  { pattern: '/billing/*', requireAuth: true, roles: ['manager', 'admin', 'super_admin'] },
-  { pattern: '/invoices', requireAuth: true, roles: ['manager', 'admin', 'super_admin'] },
-  { pattern: '/invoices/*', requireAuth: true, roles: ['manager', 'admin', 'super_admin'] },
+  {
+    pattern: "/billing",
+    requireAuth: true,
+    roles: ["manager", "admin", "super_admin"],
+  },
+  {
+    pattern: "/billing/*",
+    requireAuth: true,
+    roles: ["manager", "admin", "super_admin"],
+  },
+  {
+    pattern: "/invoices",
+    requireAuth: true,
+    roles: ["manager", "admin", "super_admin"],
+  },
+  {
+    pattern: "/invoices/*",
+    requireAuth: true,
+    roles: ["manager", "admin", "super_admin"],
+  },
 
   // Trust accounting - admin only
-  { pattern: '/trust-accounting', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/trust-accounting/*', requireAuth: true, roles: ['admin', 'super_admin'] },
+  {
+    pattern: "/trust-accounting",
+    requireAuth: true,
+    roles: ["admin", "super_admin"],
+  },
+  {
+    pattern: "/trust-accounting/*",
+    requireAuth: true,
+    roles: ["admin", "super_admin"],
+  },
 
   // Admin routes
-  { pattern: '/admin', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/admin/*', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/users', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/users/*', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/permissions', requireAuth: true, roles: ['super_admin'] },
-  { pattern: '/audit-logs', requireAuth: true, roles: ['admin', 'super_admin'] },
-  { pattern: '/system-settings', requireAuth: true, roles: ['super_admin'] },
+  { pattern: "/admin", requireAuth: true, roles: ["admin", "super_admin"] },
+  { pattern: "/admin/*", requireAuth: true, roles: ["admin", "super_admin"] },
+  { pattern: "/users", requireAuth: true, roles: ["admin", "super_admin"] },
+  { pattern: "/users/*", requireAuth: true, roles: ["admin", "super_admin"] },
+  { pattern: "/permissions", requireAuth: true, roles: ["super_admin"] },
+  {
+    pattern: "/audit-logs",
+    requireAuth: true,
+    roles: ["admin", "super_admin"],
+  },
+  { pattern: "/system-settings", requireAuth: true, roles: ["super_admin"] },
 ];
 
 /**
@@ -731,7 +795,7 @@ export const ROUTE_PROTECTION_CONFIG: RouteProtectionConfig[] = [
  */
 function matchRoutePath(path: string, pattern: string): boolean {
   if (pattern === path) return true;
-  if (pattern.endsWith('/*')) {
+  if (pattern.endsWith("/*")) {
     const base = pattern.slice(0, -2);
     return path === base || path.startsWith(`${base}/`);
   }
@@ -741,7 +805,9 @@ function matchRoutePath(path: string, pattern: string): boolean {
 /**
  * Get protection config for a specific path
  */
-export function getRouteProtection(pathname: string): RouteProtectionConfig | null {
+export function getRouteProtection(
+  pathname: string
+): RouteProtectionConfig | null {
   for (const config of ROUTE_PROTECTION_CONFIG) {
     if (matchRoutePath(pathname, config.pattern)) {
       return config;
@@ -755,7 +821,7 @@ export function getRouteProtection(pathname: string): RouteProtectionConfig | nu
  */
 export async function checkRouteAccess(pathname: string): Promise<{
   allowed: boolean;
-  reason?: 'unauthenticated' | 'role' | 'permission';
+  reason?: "unauthenticated" | "role" | "permission";
   redirectTo?: string;
 }> {
   const config = getRouteProtection(pathname);
@@ -771,31 +837,36 @@ export async function checkRouteAccess(pathname: string): Promise<{
   if (!session) {
     return {
       allowed: false,
-      reason: 'unauthenticated',
-      redirectTo: config.redirectTo || '/login',
+      reason: "unauthenticated",
+      redirectTo: config.redirectTo || "/login",
     };
   }
 
   // Check roles
   if (config.roles && config.roles.length > 0) {
-    const hasRequiredRole = config.roles.some(role => hasRole(session.user, role));
+    const hasRequiredRole = config.roles.some((role) =>
+      hasRole(session.user, role)
+    );
     if (!hasRequiredRole) {
       return {
         allowed: false,
-        reason: 'role',
-        redirectTo: '/unauthorized',
+        reason: "role",
+        redirectTo: "/unauthorized",
       };
     }
   }
 
   // Check permissions
   if (config.permissions && config.permissions.length > 0) {
-    const hasRequiredPermission = hasAnyPermission(session.user, config.permissions);
+    const hasRequiredPermission = hasAnyPermission(
+      session.user,
+      config.permissions
+    );
     if (!hasRequiredPermission) {
       return {
         allowed: false,
-        reason: 'permission',
-        redirectTo: '/unauthorized',
+        reason: "permission",
+        redirectTo: "/unauthorized",
       };
     }
   }

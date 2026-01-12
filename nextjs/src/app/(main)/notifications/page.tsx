@@ -21,8 +21,7 @@ export default async function NotificationsPage(): Promise<React.JSX.Element> {
   try {
     const data = await apiFetch(API_ENDPOINTS.NOTIFICATIONS.LIST).catch(() => ({ data: [] }));
     notifications = data?.data || [];
-  } catch (error) {
-    console.error('Failed to load notifications:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

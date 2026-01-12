@@ -25,8 +25,7 @@ export default async function CaseInsightsPage(): Promise<React.JSX.Element> {
     ]);
     insights = analyticsData;
     predictions = predictionsData;
-  } catch (error) {
-    console.error('Failed to load case insights:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

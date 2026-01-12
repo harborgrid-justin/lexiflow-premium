@@ -20,8 +20,7 @@ export default async function ExhibitsPage(): Promise<React.JSX.Element> {
 
   try {
     exhibits = await apiFetch(API_ENDPOINTS.EXHIBITS.LIST);
-  } catch (error) {
-    console.error('Failed to load exhibits:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

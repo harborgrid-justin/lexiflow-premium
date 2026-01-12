@@ -32,8 +32,7 @@ export default async function WriteOffsPage(): Promise<React.JSX.Element> {
 
   try {
     writeOffs = await apiFetch(API_ENDPOINTS.WRITE_OFFS.LIST);
-  } catch (error) {
-    console.error('Failed to load write-offs:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   const totalWriteOffs = writeOffs.reduce((sum, wo) => sum + wo.amount, 0);

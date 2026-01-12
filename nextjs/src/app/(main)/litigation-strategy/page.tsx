@@ -25,8 +25,7 @@ export default async function LitigationStrategyPage(): Promise<React.JSX.Elemen
     ]);
     trialData = trial;
     risks = risksData;
-  } catch (error) {
-    console.error('Failed to load litigation strategy:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

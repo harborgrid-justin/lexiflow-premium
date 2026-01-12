@@ -2,11 +2,10 @@
  * Drafting Page - Server Component with Data Fetching
  * Fetches drafting templates from backend
  */
-import React from 'react';
 import { API_ENDPOINTS } from '@/lib/api-config';
 import { apiFetch } from '@/lib/api-server';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Drafting | LexiFlow',
@@ -20,7 +19,8 @@ export default async function DraftingPage(): Promise<React.JSX.Element> {
   try {
     templates = await apiFetch(API_ENDPOINTS.DRAFTING.TEMPLATES);
   } catch (error) {
-    console.error('Failed to load templates:', error);
+    // Silent error handling when backend is unavailable (logging disabled to reduce console noise)
+    // Templates will remain empty array and UI will show "No templates available"
   }
 
   return (

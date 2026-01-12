@@ -19,8 +19,7 @@ export default async function EntityDirectorPage(): Promise<React.JSX.Element> {
 
   try {
     entities = await apiFetch(API_ENDPOINTS.LEGAL_ENTITIES.LIST);
-  } catch (error) {
-    console.error('Failed to load entities:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

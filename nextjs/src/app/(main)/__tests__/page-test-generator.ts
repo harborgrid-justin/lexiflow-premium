@@ -54,7 +54,7 @@ jest.mock('@/components/${path.slice(1)}/${comp}', () => ({
   ${comp}: () => <div data-testid="${comp.toLowerCase()}">${comp} Component</div>,
 }));`
     )
-    .join('\n');
+    .join("\n");
 
   return `/**
  * Enterprise Test Suite: ${name} List Page
@@ -90,7 +90,7 @@ jest.mock('@/lib/api-config', () => ({
     },
   },
   apiFetch: jest.fn().mockResolvedValue([]),
-  API_BASE_URL: 'http://localhost:3001/api',
+  API_BASE_URL: 'http://localhost:3000/api',
 }));
 ${componentMocks}
 
@@ -112,8 +112,8 @@ describe('${name}Page', () => {
   describe('Metadata', () => {
     it('should export correct page metadata', () => {
       expect(pageMetadata).toBeDefined();
-      ${metadata ? `expect(pageMetadata.title).toBe('${metadata.title}');` : ''}
-      ${metadata ? `expect(pageMetadata.description).toContain('${metadata.description.split(' ')[0]}');` : ''}
+      ${metadata ? `expect(pageMetadata.title).toBe('${metadata.title}');` : ""}
+      ${metadata ? `expect(pageMetadata.description).toContain('${metadata.description.split(" ")[0]}');` : ""}
     });
   });
 
@@ -132,7 +132,7 @@ describe('${name}Page', () => {
       render(PageComponent);
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('${expectedHeading}');
     });`
-        : ''
+        : ""
     }
   });
 
@@ -207,8 +207,8 @@ jest.mock('@/lib/api-config', () => ({
 
 describe('${name}DetailPage', () => {
   let ${name}DetailPage: (props: { params: Promise<{ id: string }> }) => Promise<React.JSX.Element>;
-  ${hasMetadata ? `let generateMetadata: (props: { params: Promise<{ id: string }> }) => Promise<{ title: string }>;` : ''}
-  ${hasStaticParams ? `let generateStaticParams: () => Promise<{ id: string }[]>;` : ''}
+  ${hasMetadata ? `let generateMetadata: (props: { params: Promise<{ id: string }> }) => Promise<{ title: string }>;` : ""}
+  ${hasStaticParams ? `let generateStaticParams: () => Promise<{ id: string }[]>;` : ""}
   let apiFetch: jest.Mock;
 
   const mockData = { id: 'test-1', name: 'Test ${name}' };
@@ -216,8 +216,8 @@ describe('${name}DetailPage', () => {
   beforeAll(async () => {
     const pageModule = await import('../../../${path.slice(1)}/[id]/page');
     ${name}DetailPage = pageModule.default;
-    ${hasMetadata ? `generateMetadata = pageModule.generateMetadata;` : ''}
-    ${hasStaticParams ? `generateStaticParams = pageModule.generateStaticParams;` : ''}
+    ${hasMetadata ? `generateMetadata = pageModule.generateMetadata;` : ""}
+    ${hasStaticParams ? `generateStaticParams = pageModule.generateStaticParams;` : ""}
     const apiConfig = await import('@/lib/api-config');
     apiFetch = apiConfig.apiFetch as jest.Mock;
   });
@@ -251,7 +251,7 @@ describe('${name}DetailPage', () => {
       expect(params).toEqual([]);
     });
   });`
-      : ''
+      : ""
   }
 
   ${
@@ -273,7 +273,7 @@ describe('${name}DetailPage', () => {
       expect(metadata.title).toBeDefined();
     });
   });`
-      : ''
+      : ""
   }
 
   describe('Page Rendering', () => {
@@ -326,74 +326,74 @@ describe('${name}DetailPage', () => {
  */
 export const PAGE_CONFIGS: Record<string, PageTestConfig> = {
   documents: {
-    name: 'Documents',
-    path: '/documents',
-    apiEndpoint: 'DOCUMENTS',
-    expectedHeading: 'Documents',
-    metadata: { title: 'Documents', description: 'Document management' },
+    name: "Documents",
+    path: "/documents",
+    apiEndpoint: "DOCUMENTS",
+    expectedHeading: "Documents",
+    metadata: { title: "Documents", description: "Document management" },
   },
   tasks: {
-    name: 'Tasks',
-    path: '/tasks',
-    apiEndpoint: 'TASKS',
-    expectedHeading: 'Tasks',
-    metadata: { title: 'Tasks', description: 'Task management' },
+    name: "Tasks",
+    path: "/tasks",
+    apiEndpoint: "TASKS",
+    expectedHeading: "Tasks",
+    metadata: { title: "Tasks", description: "Task management" },
   },
   invoices: {
-    name: 'Invoices',
-    path: '/invoices',
-    apiEndpoint: 'INVOICES',
-    expectedHeading: 'Invoices',
-    metadata: { title: 'Invoices', description: 'Invoice management' },
+    name: "Invoices",
+    path: "/invoices",
+    apiEndpoint: "INVOICES",
+    expectedHeading: "Invoices",
+    metadata: { title: "Invoices", description: "Invoice management" },
   },
   matters: {
-    name: 'Matters',
-    path: '/matters',
-    apiEndpoint: 'MATTERS',
-    expectedHeading: 'Matters',
-    metadata: { title: 'Matters', description: 'Matter management' },
+    name: "Matters",
+    path: "/matters",
+    apiEndpoint: "MATTERS",
+    expectedHeading: "Matters",
+    metadata: { title: "Matters", description: "Matter management" },
   },
   depositions: {
-    name: 'Depositions',
-    path: '/depositions',
-    apiEndpoint: 'DEPOSITIONS',
-    expectedHeading: 'Depositions',
-    metadata: { title: 'Depositions', description: 'Deposition management' },
+    name: "Depositions",
+    path: "/depositions",
+    apiEndpoint: "DEPOSITIONS",
+    expectedHeading: "Depositions",
+    metadata: { title: "Depositions", description: "Deposition management" },
   },
   motions: {
-    name: 'Motions',
-    path: '/motions',
-    apiEndpoint: 'MOTIONS',
-    expectedHeading: 'Motions',
-    metadata: { title: 'Motions', description: 'Motion management' },
+    name: "Motions",
+    path: "/motions",
+    apiEndpoint: "MOTIONS",
+    expectedHeading: "Motions",
+    metadata: { title: "Motions", description: "Motion management" },
   },
   evidence: {
-    name: 'Evidence',
-    path: '/evidence',
-    apiEndpoint: 'EVIDENCE',
-    expectedHeading: 'Evidence',
-    metadata: { title: 'Evidence', description: 'Evidence management' },
+    name: "Evidence",
+    path: "/evidence",
+    apiEndpoint: "EVIDENCE",
+    expectedHeading: "Evidence",
+    metadata: { title: "Evidence", description: "Evidence management" },
   },
   discovery: {
-    name: 'Discovery',
-    path: '/discovery',
-    apiEndpoint: 'DISCOVERY',
-    expectedHeading: 'Discovery',
-    metadata: { title: 'Discovery', description: 'Discovery management' },
+    name: "Discovery",
+    path: "/discovery",
+    apiEndpoint: "DISCOVERY",
+    expectedHeading: "Discovery",
+    metadata: { title: "Discovery", description: "Discovery management" },
   },
   expenses: {
-    name: 'Expenses',
-    path: '/expenses',
-    apiEndpoint: 'EXPENSES',
-    expectedHeading: 'Expenses',
-    metadata: { title: 'Expenses', description: 'Expense management' },
+    name: "Expenses",
+    path: "/expenses",
+    apiEndpoint: "EXPENSES",
+    expectedHeading: "Expenses",
+    metadata: { title: "Expenses", description: "Expense management" },
   },
   witnesses: {
-    name: 'Witnesses',
-    path: '/witnesses',
-    apiEndpoint: 'WITNESSES',
-    expectedHeading: 'Witnesses',
-    metadata: { title: 'Witnesses', description: 'Witness management' },
+    name: "Witnesses",
+    path: "/witnesses",
+    apiEndpoint: "WITNESSES",
+    expectedHeading: "Witnesses",
+    metadata: { title: "Witnesses", description: "Witness management" },
   },
 };
 
@@ -402,33 +402,33 @@ export const PAGE_CONFIGS: Record<string, PageTestConfig> = {
  */
 export const DETAIL_PAGE_CONFIGS: Record<string, PageTestConfig> = {
   documents: {
-    name: 'Document',
-    path: '/documents',
-    apiEndpoint: 'DOCUMENTS',
+    name: "Document",
+    path: "/documents",
+    apiEndpoint: "DOCUMENTS",
     isDynamic: true,
     hasStaticParams: true,
     hasMetadata: true,
   },
   matters: {
-    name: 'Matter',
-    path: '/matters',
-    apiEndpoint: 'MATTERS',
+    name: "Matter",
+    path: "/matters",
+    apiEndpoint: "MATTERS",
     isDynamic: true,
     hasStaticParams: true,
     hasMetadata: true,
   },
   tasks: {
-    name: 'Task',
-    path: '/tasks',
-    apiEndpoint: 'TASKS',
+    name: "Task",
+    path: "/tasks",
+    apiEndpoint: "TASKS",
     isDynamic: true,
     hasStaticParams: true,
     hasMetadata: true,
   },
   invoices: {
-    name: 'Invoice',
-    path: '/invoices',
-    apiEndpoint: 'INVOICES',
+    name: "Invoice",
+    path: "/invoices",
+    apiEndpoint: "INVOICES",
     isDynamic: true,
     hasStaticParams: true,
     hasMetadata: true,

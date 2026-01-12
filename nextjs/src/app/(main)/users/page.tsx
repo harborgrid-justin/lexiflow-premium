@@ -20,8 +20,7 @@ export default async function UsersPage(): Promise<React.JSX.Element> {
 
   try {
     users = (await apiFetch(API_ENDPOINTS.USERS.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load users:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

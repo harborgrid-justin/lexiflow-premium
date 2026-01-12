@@ -40,7 +40,7 @@ class BackendDiscoveryService {
    * Start auto-discovery service
    */
   start(): void {
-    console.log("[BackendDiscovery] Starting auto-discovery service");
+    // Auto-discovery service started (logging disabled to reduce console noise)
 
     // Perform initial check immediately
     this.checkBackend();

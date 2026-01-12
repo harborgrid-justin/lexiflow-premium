@@ -100,7 +100,7 @@ export class ErrorHandler {
   public static getInstance(): ErrorHandler {
     if (!ErrorHandler.instance) {
       ErrorHandler.instance = new ErrorHandler();
-      console.log('[ErrorHandler] Initialized singleton instance');
+      // Initialization complete (logging disabled to reduce console noise)
     }
     return ErrorHandler.instance;
   }
@@ -110,7 +110,7 @@ export class ErrorHandler {
    * @private
    */
   private startCleanupInterval(): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setInterval(() => {
         this.cleanupExpiredEntries();
       }, this.CLEANUP_INTERVAL_MS);
@@ -131,10 +131,12 @@ export class ErrorHandler {
       }
     });
 
-    expiredKeys.forEach(key => this.errorLogCache.delete(key));
+    expiredKeys.forEach((key) => this.errorLogCache.delete(key));
 
     if (expiredKeys.length > 0) {
-      console.log(`[ErrorHandler] Cleaned up ${expiredKeys.length} expired error entries`);
+      console.log(
+        `[ErrorHandler] Cleaned up ${expiredKeys.length} expired error entries`
+      );
     }
   }
 
@@ -145,7 +147,9 @@ export class ErrorHandler {
    */
   private validateError(error: unknown, methodName: string): void {
     if (!error) {
-      throw new Error(`[ErrorHandler.${methodName}] Error parameter is required`);
+      throw new Error(
+        `[ErrorHandler.${methodName}] Error parameter is required`
+      );
     }
   }
 
@@ -153,9 +157,14 @@ export class ErrorHandler {
    * Validate context parameter
    * @private
    */
-  private validateContext(context: string | undefined, methodName: string): void {
+  private validateContext(
+    context: string | undefined,
+    methodName: string
+  ): void {
     if (context !== undefined && false) {
-      console.warn(`[ErrorHandler.${methodName}] Context should be a string, got ${typeof context}`);
+      console.warn(
+        `[ErrorHandler.${methodName}] Context should be a string, got ${typeof context}`
+      );
     }
   }
 
@@ -164,8 +173,8 @@ export class ErrorHandler {
    * @private
    */
   private generateErrorKey(error: Error | AppError, context?: string): string {
-    const contextStr = context || 'General';
-    const messageStr = error.message || 'Unknown error';
+    const contextStr = context || "General";
+    const messageStr = error.message || "Unknown error";
     return `${contextStr}:${messageStr}`;
   }
 
@@ -175,12 +184,15 @@ export class ErrorHandler {
    */
   private enforceCacheLimit(): void {
     if (this.errorLogCache.size >= this.MAX_CACHE_SIZE) {
-      console.warn(`[ErrorHandler] Cache size limit reached (${this.MAX_CACHE_SIZE}), clearing oldest entries`);
+      console.warn(
+        `[ErrorHandler] Cache size limit reached (${this.MAX_CACHE_SIZE}), clearing oldest entries`
+      );
 
       // Remove oldest 20% of entries
       const entriesToRemove = Math.floor(this.MAX_CACHE_SIZE * 0.2);
-      const sortedEntries = Array.from(this.errorLogCache.entries())
-        .sort((a, b) => a[1].timestamp - b[1].timestamp);
+      const sortedEntries = Array.from(this.errorLogCache.entries()).sort(
+        (a, b) => a[1].timestamp - b[1].timestamp
+      );
 
       sortedEntries.slice(0, entriesToRemove).forEach(([key]) => {
         this.errorLogCache.delete(key);
@@ -216,15 +228,15 @@ export class ErrorHandler {
    */
   public logError(error: Error | AppError, context?: string): void {
     try {
-      this.validateError(error, 'logError');
-      this.validateContext(context, 'logError');
+      this.validateError(error, "logError");
+      this.validateContext(context, "logError");
 
       const errorKey = this.generateErrorKey(error, context);
       const now = Date.now();
       const existing = this.errorLogCache.get(errorKey);
 
       // Check for duplicate within aggregation window
-      if (existing && (now - existing.timestamp < this.AGGREGATION_WINDOW_MS)) {
+      if (existing && now - existing.timestamp < this.AGGREGATION_WINDOW_MS) {
         // Increment count, suppress log
         existing.count++;
         existing.timestamp = now; // Extend window
@@ -233,7 +245,9 @@ export class ErrorHandler {
 
       // If we had previous suppressions, log summary
       if (existing && existing.count > 1) {
-        console.warn(`[ErrorHandler] Previous error repeated ${existing.count} times: ${errorKey}`);
+        console.warn(
+          `[ErrorHandler] Previous error repeated ${existing.count} times: ${errorKey}`
+        );
       }
 
       // Enforce cache size limit
@@ -244,21 +258,24 @@ export class ErrorHandler {
 
       const timestamp = new Date().toISOString();
       const errorDetails: ErrorDetails = {
-        message: error.message || 'Unknown error',
+        message: error.message || "Unknown error",
         stack: this.sanitizeStackTrace(error.stack),
-        context: context || 'General',
+        context: context || "General",
         code: (error as AppError).code,
         meta: this.sanitizeErrorContext((error as AppError).context),
       };
 
       // In production, this would send to Sentry/LogRocket
-      console.error(`[${timestamp}] [${context || 'App'}] Error:`, errorDetails);
+      console.error(
+        `[${timestamp}] [${context || "App"}] Error:`,
+        errorDetails
+      );
 
       // External monitoring service integration point
       this.sendToMonitoringService(errorDetails);
     } catch (loggingError) {
       // Prevent error logging from causing additional errors
-      console.error('[ErrorHandler] Failed to log error:', loggingError);
+      console.error("[ErrorHandler] Failed to log error:", loggingError);
     }
   }
 
@@ -284,20 +301,20 @@ export class ErrorHandler {
    */
   public handleFatalError(error: Error): void {
     try {
-      this.validateError(error, 'handleFatalError');
+      this.validateError(error, "handleFatalError");
 
-      console.error('[ErrorHandler] FATAL ERROR:', error);
+      console.error("[ErrorHandler] FATAL ERROR:", error);
 
-      this.logError(error, 'FATAL');
+      this.logError(error, "FATAL");
 
       // Mark as fatal for monitoring
       const fatalError: AppError = Object.assign(error, { isFatal: true });
 
       // Send fatal error to monitoring service with special handling
       const fatalDetails: ErrorDetails = {
-        message: fatalError.message || 'Fatal error',
+        message: fatalError.message || "Fatal error",
         stack: this.sanitizeStackTrace(fatalError.stack),
-        context: 'FATAL',
+        context: "FATAL",
         code: fatalError.code,
         meta: {
           ...this.sanitizeErrorContext(fatalError.context),
@@ -309,7 +326,10 @@ export class ErrorHandler {
 
       // For now, rely on React ErrorBoundary to catch this in the UI tree
     } catch (fatalHandlingError) {
-      console.error('[ErrorHandler] Failed to handle fatal error:', fatalHandlingError);
+      console.error(
+        "[ErrorHandler] Failed to handle fatal error:",
+        fatalHandlingError
+      );
     }
   }
 
@@ -335,26 +355,32 @@ export class ErrorHandler {
   public formatErrorMessage(error: unknown): string {
     try {
       if (error instanceof Error) {
-        return error.message || 'An unexpected error occurred.';
+        return error.message || "An unexpected error occurred.";
       }
 
-      if (typeof error === 'string') {
-        return error || 'An unexpected error occurred.';
+      if (typeof error === "string") {
+        return error || "An unexpected error occurred.";
       }
 
-      if (typeof error === 'object' && error !== null) {
+      if (typeof error === "object" && error !== null) {
         try {
           return JSON.stringify(error);
         } catch (stringifyError) {
-          console.warn('[ErrorHandler] Failed to stringify error object:', stringifyError);
+          console.warn(
+            "[ErrorHandler] Failed to stringify error object:",
+            stringifyError
+          );
           return String(error);
         }
       }
 
-      return 'An unexpected error occurred.';
+      return "An unexpected error occurred.";
     } catch (formattingError) {
-      console.error('[ErrorHandler] Failed to format error message:', formattingError);
-      return 'An unexpected error occurred.';
+      console.error(
+        "[ErrorHandler] Failed to format error message:",
+        formattingError
+      );
+      return "An unexpected error occurred.";
     }
   }
 
@@ -370,11 +396,13 @@ export class ErrorHandler {
   public getUserFriendlyMessage(error: Error | AppError): string {
     try {
       const knownErrors: Record<string, string> = {
-        'NetworkError': 'Unable to connect to the server. Please check your internet connection.',
-        'AuthenticationError': 'Your session has expired. Please log in again.',
-        'ValidationError': 'The information provided is invalid. Please check your input.',
-        'NotFoundError': 'The requested resource could not be found.',
-        'PermissionError': 'You do not have permission to perform this action.',
+        NetworkError:
+          "Unable to connect to the server. Please check your internet connection.",
+        AuthenticationError: "Your session has expired. Please log in again.",
+        ValidationError:
+          "The information provided is invalid. Please check your input.",
+        NotFoundError: "The requested resource could not be found.",
+        PermissionError: "You do not have permission to perform this action.",
       };
 
       const code = (error as AppError).code;
@@ -384,8 +412,11 @@ export class ErrorHandler {
 
       return this.formatErrorMessage(error);
     } catch (formattingError) {
-      console.error('[ErrorHandler] Failed to get user-friendly message:', formattingError);
-      return 'An unexpected error occurred.';
+      console.error(
+        "[ErrorHandler] Failed to get user-friendly message:",
+        formattingError
+      );
+      return "An unexpected error occurred.";
     }
   }
 
@@ -401,8 +432,8 @@ export class ErrorHandler {
     if (!stack) return undefined;
 
     // In production, remove absolute file paths
-    if (process.env.NODE_ENV === 'production') {
-      return stack.replace(/\(.*?:\d+:\d+\)/g, '(...)');
+    if (process.env.NODE_ENV === "production") {
+      return stack.replace(/\(.*?:\d+:\d+\)/g, "(...)");
     }
 
     return stack;
@@ -412,15 +443,26 @@ export class ErrorHandler {
    * Sanitize error context to remove sensitive data
    * @private
    */
-  private sanitizeErrorContext(context?: Record<string, unknown>): Record<string, unknown> | undefined {
+  private sanitizeErrorContext(
+    context?: Record<string, unknown>
+  ): Record<string, unknown> | undefined {
     if (!context) return undefined;
 
-    const sensitiveKeys = ['password', 'token', 'apiKey', 'secret', 'ssn', 'creditCard'];
+    const sensitiveKeys = [
+      "password",
+      "token",
+      "apiKey",
+      "secret",
+      "ssn",
+      "creditCard",
+    ];
     const sanitized: Record<string, unknown> = {};
 
-    Object.keys(context).forEach(key => {
-      if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
-        sanitized[key] = '[REDACTED]';
+    Object.keys(context).forEach((key) => {
+      if (
+        sensitiveKeys.some((sensitive) => key.toLowerCase().includes(sensitive))
+      ) {
+        sanitized[key] = "[REDACTED]";
       } else {
         sanitized[key] = context[key];
       }
@@ -449,11 +491,11 @@ export class ErrorHandler {
     //   }
     // });
 
-    if (process.env.NODE_ENV === 'development') {
-      console.debug('[ErrorHandler] Would send to monitoring:', {
+    if (process.env.NODE_ENV === "development") {
+      console.debug("[ErrorHandler] Would send to monitoring:", {
         message: errorDetails.message,
         context: errorDetails.context,
-        code: errorDetails.code
+        code: errorDetails.code,
       });
     }
   }
@@ -473,14 +515,14 @@ export class ErrorHandler {
     cacheSize: number;
   } {
     const now = Date.now();
-    const recentErrors = Array.from(this.errorLogCache.values())
-      .filter(entry => now - entry.timestamp < this.AGGREGATION_WINDOW_MS)
-      .length;
+    const recentErrors = Array.from(this.errorLogCache.values()).filter(
+      (entry) => now - entry.timestamp < this.AGGREGATION_WINDOW_MS
+    ).length;
 
     return {
       totalCached: this.errorLogCache.size,
       recentErrors,
-      cacheSize: this.errorLogCache.size
+      cacheSize: this.errorLogCache.size,
     };
   }
 
@@ -492,7 +534,7 @@ export class ErrorHandler {
    */
   public clearCache(): void {
     this.errorLogCache.clear();
-    console.log('[ErrorHandler] Error cache cleared');
+    console.log("[ErrorHandler] Error cache cleared");
   }
 }
 

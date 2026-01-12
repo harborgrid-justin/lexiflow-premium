@@ -19,8 +19,7 @@ export default async function CorrespondencePage(): Promise<React.JSX.Element> {
 
   try {
     correspondence = await apiFetch(API_ENDPOINTS.CORRESPONDENCE.LIST);
-  } catch (error) {
-    console.error('Failed to load correspondence:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -30,8 +30,7 @@ export default async function BriefsPage(): Promise<React.JSX.Element> {
 
   try {
     briefs = await apiFetch(API_ENDPOINTS.BRIEFS.LIST);
-  } catch (error) {
-    console.error('Failed to load briefs:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

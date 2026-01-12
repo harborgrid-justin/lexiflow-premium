@@ -20,8 +20,7 @@ export default async function InvoicesPage(): Promise<React.JSX.Element> {
 
   try {
     invoices = await apiFetch(API_ENDPOINTS.INVOICES.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load invoices:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

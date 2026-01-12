@@ -529,7 +529,7 @@ class AuditTrailServiceClass {
   private async persistLog(entry: AuditLogEntry): Promise<void> {
     try {
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
       const url = `${baseUrl}/api/audit/logs`;
 
       await fetch(url, {

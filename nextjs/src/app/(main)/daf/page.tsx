@@ -20,8 +20,7 @@ export default async function DafPage(): Promise<React.JSX.Element> {
 
   try {
     syncStatus = await apiFetch(API_ENDPOINTS.SYNC.STATUS);
-  } catch (error) {
-    console.error('Failed to load DAF status:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

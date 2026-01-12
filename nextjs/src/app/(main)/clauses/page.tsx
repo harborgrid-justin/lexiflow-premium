@@ -19,8 +19,7 @@ export default async function ClausesPage(): Promise<React.JSX.Element> {
 
   try {
     clauses = await apiFetch(API_ENDPOINTS.CLAUSES.LIST);
-  } catch (error) {
-    console.error('Failed to load clauses:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

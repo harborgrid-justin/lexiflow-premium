@@ -20,8 +20,7 @@ export default async function MattersPage(): Promise<React.JSX.Element> {
 
   try {
     matters = await apiFetch(API_ENDPOINTS.MATTERS.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load matters:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

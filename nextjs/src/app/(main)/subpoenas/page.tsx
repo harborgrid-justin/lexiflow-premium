@@ -20,8 +20,7 @@ export default async function SubpoenasPage(): Promise<React.JSX.Element> {
 
   try {
     subpoenas = (await apiFetch(API_ENDPOINTS.SUBPOENAS.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load subpoenas:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

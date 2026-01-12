@@ -20,8 +20,7 @@ export default async function PartiesPage(): Promise<React.JSX.Element> {
 
   try {
     parties = await apiFetch(API_ENDPOINTS.PARTIES.LIST);
-  } catch (error) {
-    console.error('Failed to load parties:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

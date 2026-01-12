@@ -18,8 +18,7 @@ export default async function CaseOperationsPage(): Promise<React.JSX.Element> {
 
   try {
     operations = await apiFetch('/case-operations');
-  } catch (error) {
-    console.error('Failed to load case operations:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

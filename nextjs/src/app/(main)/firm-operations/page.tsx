@@ -25,8 +25,7 @@ export default async function FirmOperationsPage(): Promise<React.JSX.Element> {
     ]);
     hrData = hr;
     orgData = org;
-  } catch (error) {
-    console.error('Failed to load firm operations:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

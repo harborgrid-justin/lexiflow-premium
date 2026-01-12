@@ -20,8 +20,7 @@ export default async function CaseCalendarPage(): Promise<React.JSX.Element> {
 
   try {
     events = await apiFetch(API_ENDPOINTS.CALENDAR.EVENTS);
-  } catch (error) {
-    console.error('Failed to load calendar events:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

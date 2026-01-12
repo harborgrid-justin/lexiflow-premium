@@ -152,10 +152,7 @@ class ApiClient {
    * @private
    */
   private logInitialization(): void {
-    console.log("[ApiClient] Initialized", {
-      baseURL: this.baseURL,
-      authEnabled: !!this.getAuthToken(),
-    });
+    // Initialization complete (logging disabled to reduce console noise)
   }
 
   /**

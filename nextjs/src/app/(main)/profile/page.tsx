@@ -20,8 +20,7 @@ export default async function ProfilePage(): Promise<React.JSX.Element> {
 
   try {
     userProfile = await apiFetch(API_ENDPOINTS.AUTH.ME);
-  } catch (error) {
-    console.error('Failed to load user profile:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

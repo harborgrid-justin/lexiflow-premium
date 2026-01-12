@@ -20,8 +20,7 @@ export default async function TimeEntriesPage(): Promise<React.JSX.Element> {
 
   try {
     timeEntries = await apiFetch(API_ENDPOINTS.TIME_ENTRIES.LIST);
-  } catch (error) {
-    console.error('Failed to load time entries:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

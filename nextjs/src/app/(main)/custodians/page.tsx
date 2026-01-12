@@ -20,8 +20,7 @@ export default async function CustodiansPage(): Promise<React.JSX.Element> {
 
   try {
     custodians = (await apiFetch(API_ENDPOINTS.CUSTODIANS.LIST)) as any[];
-  } catch (error) {
-    console.error('Failed to load custodians:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

@@ -30,8 +30,7 @@ export default async function RetainersPage(): Promise<React.JSX.Element> {
 
   try {
     retainers = await apiFetch(API_ENDPOINTS.RETAINERS.LIST);
-  } catch (error) {
-    console.error('Failed to load retainers:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

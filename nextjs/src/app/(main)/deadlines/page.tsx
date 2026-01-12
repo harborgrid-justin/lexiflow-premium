@@ -19,8 +19,7 @@ export default async function DeadlinesPage(): Promise<React.JSX.Element> {
 
   try {
     deadlines = await apiFetch(API_ENDPOINTS.DEADLINES.LIST) as any[];
-  } catch (error) {
-    console.error('Failed to load deadlines:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

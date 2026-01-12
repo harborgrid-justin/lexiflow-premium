@@ -20,8 +20,7 @@ export default async function CrmPage(): Promise<React.JSX.Element> {
 
   try {
     clients = await apiFetch(API_ENDPOINTS.CLIENTS.LIST);
-  } catch (error) {
-    console.error('Failed to load clients:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

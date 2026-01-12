@@ -20,8 +20,7 @@ export default async function CitationsPage(): Promise<React.JSX.Element> {
 
   try {
     citations = await apiFetch(API_ENDPOINTS.CITATIONS.LIST);
-  } catch (error) {
-    console.error('Failed to load citations:', error);
+  } catch (error) {    // Silent error handling (logging disabled to reduce console noise)
   }
 
   return (

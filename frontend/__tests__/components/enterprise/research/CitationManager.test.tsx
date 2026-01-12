@@ -2,17 +2,13 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
 import {
   CitationManager,
-  type CitationManagerProps,
   type Citation,
-  type CitationFormat,
-  type CitationStatus,
+  type CitationManagerProps
 } from '@/components/enterprise/Research/CitationManager';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
@@ -20,6 +16,13 @@ jest.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
+}));
+
+// Mock useToastNotifications
+jest.mock('@/components/enterprise/notifications/ToastContainer', () => ({
+  useToastNotifications: () => ({
+    addToast: jest.fn(),
+  }),
 }));
 
 describe('CitationManager', () => {

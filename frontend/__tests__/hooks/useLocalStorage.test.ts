@@ -1,48 +1,52 @@
 /**
  * useLocalStorage.test.ts
  * Tests for the useLocalStorage hook
+ *
+ * STATUS: PENDING IMPLEMENTATION
+ * TODO: Implement actual hook tests using @testing-library/react
+ * Priority: Medium - Needed for localStorage functionality coverage
  */
 
-describe('useLocalStorage', () => {
+describe.skip("useLocalStorage - PENDING IMPLEMENTATION", () => {
   beforeEach(() => {
     localStorage.clear();
     jest.clearAllMocks();
   });
 
-  describe('initialization', () => {
-    it('should return initial value when key does not exist', () => {
+  describe("initialization", () => {
+    it("should return initial value when key does not exist", () => {
       expect(true).toBe(true);
     });
 
-    it('should return stored value when key exists', () => {
+    it("should return stored value when key exists", () => {
       expect(true).toBe(true);
     });
 
-    it('should handle complex objects', () => {
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('setter', () => {
-    it('should update localStorage on value change', () => {
-      expect(true).toBe(true);
-    });
-
-    it('should serialize objects to JSON', () => {
-      expect(true).toBe(true);
-    });
-
-    it('should support functional updates', () => {
+    it("should handle complex objects", () => {
       expect(true).toBe(true);
     });
   });
 
-  describe('error handling', () => {
-    it('should handle localStorage quota exceeded', () => {
+  describe("setter", () => {
+    it("should update localStorage on value change", () => {
       expect(true).toBe(true);
     });
 
-    it('should handle corrupted JSON data', () => {
+    it("should serialize objects to JSON", () => {
+      expect(true).toBe(true);
+    });
+
+    it("should support functional updates", () => {
+      expect(true).toBe(true);
+    });
+  });
+
+  describe("error handling", () => {
+    it("should handle localStorage quota exceeded", () => {
+      expect(true).toBe(true);
+    });
+
+    it("should handle corrupted JSON data", () => {
       expect(true).toBe(true);
     });
   });

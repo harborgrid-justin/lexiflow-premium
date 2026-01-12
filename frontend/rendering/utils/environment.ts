@@ -37,6 +37,10 @@ export const isNode = (): boolean => {
  */
 export const isDevelopment = (): boolean => {
   if (isBrowser()) {
+    // Use process.env in test environments, import.meta.env in browser
+    if (typeof process !== "undefined" && process.env.NODE_ENV) {
+      return process.env.NODE_ENV === "development";
+    }
     return (
       (import.meta as unknown as { env: Record<string, boolean> }).env?.DEV ??
       false
@@ -50,6 +54,10 @@ export const isDevelopment = (): boolean => {
  */
 export const isProduction = (): boolean => {
   if (isBrowser()) {
+    // Use process.env in test environments, import.meta.env in browser
+    if (typeof process !== "undefined" && process.env.NODE_ENV) {
+      return process.env.NODE_ENV === "production";
+    }
     return (
       (import.meta as unknown as { env: Record<string, boolean> }).env?.PROD ??
       false

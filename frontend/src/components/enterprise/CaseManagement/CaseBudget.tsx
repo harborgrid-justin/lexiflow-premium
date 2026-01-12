@@ -160,7 +160,6 @@ export const CaseBudget: React.FC<CaseBudgetProps> = ({
   // Calculate metrics
   const metrics = useMemo(() => {
     const utilized = calculatePercentage(totalActual, totalBudget);
-    console.log('metrics data:', metrics);
     const remaining = totalBudget - totalActual;
     const variance = calculateVariance(totalActual, totalBudget);
     const totalForecasted = categories.reduce((sum, cat) => sum + (cat.forecasted || cat.actual), 0);

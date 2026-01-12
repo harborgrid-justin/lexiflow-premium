@@ -1,9 +1,11 @@
 /**
  * Integration test example - Data fetching
+ * NOTE: This uses deprecated transition folder queryClient
+ * TODO: Update to use @/services/infrastructure/queryClient
  */
 
+import { queryClient } from "@/services/infrastructure/queryClient";
 import { describe, expect, it, vi } from "vitest";
-import { queryClient } from "../../../src/services/data/client/queryClient";
 
 describe("Data Fetching Integration", () => {
   beforeEach(() => {

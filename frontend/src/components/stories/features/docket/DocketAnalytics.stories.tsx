@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketAnalytics } from '@/features/cases/components/docket/DocketAnalytics';
-import { ThemeProvider } from '@/features/theme';
 
 
 /**
@@ -27,16 +26,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-7xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 } satisfies Meta<typeof DocketAnalytics>;
 
 export default meta;
@@ -51,30 +41,12 @@ export const Default: Story = {};
  * Analytics in light theme
  */
 export const LightTheme: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-7xl bg-white p-6 rounded">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * Analytics in dark theme
  */
 export const DarkTheme: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-7xl bg-slate-900 p-6 rounded">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
@@ -85,16 +57,7 @@ export const Mobile: Story = {
     viewport: {
       defaultViewport: 'mobile1',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-sm">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -105,29 +68,11 @@ export const Tablet: Story = {
     viewport: {
       defaultViewport: 'tablet',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-3xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
  * Wide desktop view showing all charts
  */
 export const WideDesktop: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-full min-w-[1400px] p-8">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };

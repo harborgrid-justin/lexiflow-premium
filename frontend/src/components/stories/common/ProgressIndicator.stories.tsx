@@ -1,5 +1,4 @@
 import { ProgressIndicator } from '@/shared/ui/atoms/ProgressIndicator/ProgressIndicator';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 
@@ -28,16 +27,7 @@ const meta: Meta<typeof ProgressIndicator> = {
       control: 'text',
       description: 'Status label text',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 w-[400px]">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

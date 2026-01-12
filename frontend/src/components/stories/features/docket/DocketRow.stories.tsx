@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketRow } from '@/features/cases/components/docket/DocketRow';
 import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketRow displays an individual docket entry row with type icons, 
@@ -27,16 +26,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-6xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     entry: {
       description: 'The docket entry data object',

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketImportModal } from '@/features/cases/components/docket/DocketImportModal';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketImportModal provides a multi-step wizard for importing docket data
@@ -27,16 +26,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-screen h-screen flex items-center justify-center">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     isOpen: {
       description: 'Whether the modal is open',

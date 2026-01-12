@@ -7,7 +7,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentTable } from '@features/operations/documents/table/DocumentTable';
-import { ThemeProvider } from '@/features/theme';
 import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentTable> = {
@@ -29,16 +28,7 @@ const meta: Meta<typeof DocumentTable> = {
         component: 'Sortable document table with selection, virtual scrolling, and row actions.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="h-screen">
-          <Story />
-        </div>
-      </ThemeProvider>
-    )
-  ]
+  }
 };
 
 export default meta;

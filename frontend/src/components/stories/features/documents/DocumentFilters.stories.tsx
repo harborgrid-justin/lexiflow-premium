@@ -7,7 +7,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentFilters } from '@features/operations';
-import { ThemeProvider } from '@/features/theme';
 
 const meta: Meta<typeof DocumentFilters> = {
   title: 'Documents/Document Filters',
@@ -28,16 +27,7 @@ const meta: Meta<typeof DocumentFilters> = {
         component: 'Sidebar filter panel with smart views, folder navigation, and faceted search for document browsing.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-64 h-screen border-r">
-          <Story />
-        </div>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     currentFolder: {
       control: 'text',
@@ -99,14 +89,5 @@ export const Compact: Story = {
   args: {
     currentFolder: 'root',
     setCurrentFolder: fn()
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-48 h-screen border-r">
-          <Story />
-        </div>
-      </ThemeProvider>
-    )
-  ]
+  }
 };

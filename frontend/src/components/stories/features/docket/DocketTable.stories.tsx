@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/features/theme';
 import { DocketTable } from '@/features/cases/components/docket/DocketTable';
 import { CaseId, DocketEntry, DocketEntryType, DocketId, DocumentId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
@@ -44,16 +43,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="h-screen p-4">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     entries: {
       description: 'Array of docket entries to display',

@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 const meta = {
   title: 'Pages/Notification Center',

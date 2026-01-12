@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/features/theme';
 import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
 import { ToastProvider } from '@/providers';
 import { DocketEntry, DocketEntryType } from '@/types';
@@ -50,18 +49,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="w-full max-w-4xl">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     initialData: {
       description: 'Initial data for editing an existing entry',

@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -42,16 +41,7 @@ const meta: Meta<typeof Modal> = {
       control: 'text',
       description: 'Footer content',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

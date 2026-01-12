@@ -73,7 +73,7 @@ export class DocketApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[DocketApiService] Initialized with Backend API (PostgreSQL)");
+    // Initialized with Backend API (PostgreSQL)
   }
 
   /**

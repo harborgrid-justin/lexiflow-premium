@@ -272,7 +272,7 @@ export class ADRApiService {
   private readonly baseUrl = "/adr";
 
   constructor() {
-    console.log("[ADRApiService] Initialized with Backend API (PostgreSQL)");
+    // Initialized with Backend API (PostgreSQL)
   }
 
   // ─────────────────────────────────────────────────────────────────────────

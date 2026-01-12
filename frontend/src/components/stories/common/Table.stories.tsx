@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -75,16 +74,7 @@ const meta: Meta<typeof TableDemo> = {
       action: 'rowClick',
       description: 'Callback when a row is clicked',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

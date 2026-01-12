@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * ComplianceDashboard provides comprehensive compliance monitoring, trust accounting,

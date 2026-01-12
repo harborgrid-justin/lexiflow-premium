@@ -83,18 +83,7 @@ const metaWarRoom = {
         component: 'Comprehensive war room interface for trial preparation and team coordination.',
       },
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-900">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 } satisfies Meta<typeof WarRoom>;
 
 export default metaWarRoom;

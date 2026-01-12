@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowAnalyticsDashboard } from '@features/cases';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * WorkflowAnalyticsDashboard provides workflow performance analytics including

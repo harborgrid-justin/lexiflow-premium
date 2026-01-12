@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs/Breadcrumbs';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -24,16 +23,7 @@ const meta: Meta<typeof Breadcrumbs> = {
       control: 'object',
       description: 'Array of breadcrumb items',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

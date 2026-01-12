@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketSheet } from '@/features/cases/components/docket/DocketSheet';
-import { ThemeProvider } from '@/features/theme';
 import { WindowProvider } from '@/providers';
 
 /**
@@ -30,18 +29,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     filterType: {
       description: 'Type of entries to display',
@@ -87,18 +75,7 @@ export const OrdersOnly: Story = {
 export const LightTheme: Story = {
   args: {
     filterType: 'all',
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen bg-white">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -107,18 +84,7 @@ export const LightTheme: Story = {
 export const DarkTheme: Story = {
   args: {
     filterType: 'all',
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen bg-slate-900">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**

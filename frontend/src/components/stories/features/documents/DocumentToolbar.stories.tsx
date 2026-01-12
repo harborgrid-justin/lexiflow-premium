@@ -7,7 +7,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentToolbar } from '../../../../features/operations/documents/DocumentToolbar';
-import { ThemeProvider } from '@/features/theme';
 import { WindowProvider } from '@/providers';
 
 const meta: Meta<typeof DocumentToolbar> = {
@@ -29,16 +28,7 @@ const meta: Meta<typeof DocumentToolbar> = {
         component: 'Document toolbar with search, view mode toggle, selection counter, and bulk action buttons.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <Story />
-        </WindowProvider>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     selectedDocsCount: {
       control: 'number',

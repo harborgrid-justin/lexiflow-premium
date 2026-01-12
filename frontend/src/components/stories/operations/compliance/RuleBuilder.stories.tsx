@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RuleBuilder } from '@features/admin/components/data/quality/RuleBuilder';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 const meta = {
   title: 'Pages/Rule Builder',

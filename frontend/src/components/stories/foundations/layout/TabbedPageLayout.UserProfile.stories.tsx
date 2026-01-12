@@ -1,5 +1,4 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
 import React, { useState } from 'react';
@@ -22,16 +21,7 @@ const meta: Meta<typeof TabbedPageLayout> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="h-screen bg-slate-100">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

@@ -1,5 +1,4 @@
 import { FileUploadZone } from '@/shared/ui/molecules/FileUploadZone/FileUploadZone';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
 
@@ -40,16 +39,7 @@ const meta: Meta<typeof FileUploadZone> = {
       control: 'text',
       description: 'Generated hash for uploaded file',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-slate-50 dark:bg-slate-800 w-[500px]">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

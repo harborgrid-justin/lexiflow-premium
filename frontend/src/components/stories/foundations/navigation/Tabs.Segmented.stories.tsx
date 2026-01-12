@@ -1,5 +1,4 @@
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -21,16 +20,7 @@ const meta: Meta<typeof Tabs> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="min-h-[300px] bg-slate-50 p-8">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

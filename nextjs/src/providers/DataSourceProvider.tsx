@@ -202,12 +202,10 @@ export const DataSourceProvider = ({
 
     // Start backend health monitoring service
     // This enables real-time backend availability tracking
-    console.log('[DataSourceProvider] Starting backend health monitoring...');
     backendDiscovery.start();
 
     // Cleanup: Stop monitoring on unmount
     return () => {
-      console.log('[DataSourceProvider] Stopping backend health monitoring...');
       backendDiscovery.stop();
     };
   }, [currentSource, config]);

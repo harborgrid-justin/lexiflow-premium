@@ -1,5 +1,4 @@
 import { TagInput } from '@/shared/ui/molecules/TagInput/TagInput';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -36,16 +35,7 @@ const meta: Meta<typeof TagInput> = {
       action: 'remove',
       description: 'Callback when tag is removed',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 w-[500px]">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

@@ -46,18 +46,7 @@ const metaBuilder = {
         component: 'Advanced pleading builder with AI assistance and visual design tools.',
       },
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 } satisfies Meta<typeof PleadingBuilder>;
 
 export default metaBuilder;

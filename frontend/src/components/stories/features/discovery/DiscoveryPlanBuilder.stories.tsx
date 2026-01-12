@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlanBuilder } from '@/features/cases/components/detail/collaboration/DiscoveryPlanBuilder';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**

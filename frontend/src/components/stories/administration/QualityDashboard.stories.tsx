@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QualityDashboard } from '@/features/admin/components/data/quality/QualityDashboard';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import type { DataAnomaly, QualityMetricHistory } from '@/types';
 

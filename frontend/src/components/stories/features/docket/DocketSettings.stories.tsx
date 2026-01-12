@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketSettings } from '@/features/cases/components/docket/DocketSettings';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketSettings provides configuration for court integrations and
@@ -26,16 +25,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-6xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 } satisfies Meta<typeof DocketSettings>;
 
 export default meta;
@@ -50,30 +40,12 @@ export const Default: Story = {};
  * Settings in light theme
  */
 export const LightTheme: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-6xl bg-white p-4 rounded">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * Settings in dark theme
  */
 export const DarkTheme: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-6xl bg-slate-900 p-4 rounded">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
@@ -84,16 +56,7 @@ export const Mobile: Story = {
     viewport: {
       defaultViewport: 'mobile1',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-sm">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -104,14 +67,5 @@ export const Tablet: Story = {
     viewport: {
       defaultViewport: 'tablet',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-3xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };

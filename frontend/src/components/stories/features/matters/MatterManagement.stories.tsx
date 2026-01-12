@@ -7,7 +7,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 const meta: Meta<typeof MatterManagement> = {

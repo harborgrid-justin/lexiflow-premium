@@ -48,18 +48,7 @@ const metaVault = {
         component: 'Secure evidence vault with comprehensive tracking and management capabilities.',
       },
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 } satisfies Meta<typeof EvidenceVault>;
 
 export default metaVault;

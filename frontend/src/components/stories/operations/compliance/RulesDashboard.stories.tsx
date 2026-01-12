@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RulesDashboard } from '@features/knowledge/rules';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * RulesDashboard provides centralized court rules management with jurisdiction

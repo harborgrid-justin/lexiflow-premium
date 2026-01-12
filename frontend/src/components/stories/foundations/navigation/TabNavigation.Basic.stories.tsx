@@ -1,5 +1,4 @@
 import { TabNavigation } from '@/shared/ui/organisms/TabNavigation';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BarChart3, Calendar, FileText, Users } from 'lucide-react';
 import React, { useState } from 'react';
@@ -22,16 +21,7 @@ const meta: Meta<typeof TabNavigation> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="min-h-[300px] bg-slate-50 p-6">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

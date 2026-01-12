@@ -7,7 +7,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import DocumentManager from '../../../../features/operations/documents/DocumentManager';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import { WindowProvider } from '@/providers';
 import type { UserRole } from '@/types';
@@ -34,18 +33,7 @@ const meta: Meta<typeof DocumentManager> = {
         component: 'Comprehensive document management system with file browsing, version control, templates, and automated assembly features. Includes PDF editing, redaction, form signing, and batch processing capabilities.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <WindowProvider>
-            <Story />
-          </WindowProvider>
-        </ToastProvider>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     currentUserRole: {
       control: 'select',

@@ -1,8 +1,8 @@
-import { Card } from '@/shared/ui/molecules/Card/Card';
-import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useTheme } from '@/features/theme';
+import { ChartColorService, useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { Clause } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, FileText, ShieldAlert, TrendingUp } from 'lucide-react';
@@ -12,6 +12,9 @@ import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 
 export const ClauseAnalytics: React.FC = () => {
     const { mode } = useTheme();
+    const chartTheme = ChartColorService.getChartTheme(mode);
+    const tooltipStyle = ChartColorService.getTooltipStyle(mode);
+    const chartColors = ChartColorService.getChartColors(mode);
 
     // Load clauses from IndexedDB via useQuery for accurate, cached data
     const { data: clausesData = [] } = useQuery<Clause[]>(
@@ -70,7 +73,7 @@ export const ClauseAnalytics: React.FC = () => {
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    contentStyle={tooltipStyle}
                                 />
                                 <Legend verticalAlign="bottom" height={36} />
                             </PieChart>
@@ -82,11 +85,11 @@ export const ClauseAnalytics: React.FC = () => {
                     <div className="h-72 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={usageData} layout="vertical" margin={{ left: 40, right: 20, top: 10, bottom: 5 }}>
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
+                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={chartTheme.grid} />
                                 <XAxis type="number" hide />
-                                <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 11, fill: '#64748b' }} />
-                                <Tooltip cursor={{ fill: '#f8fafc' }} />
-                                <Bar dataKey="usage" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={24} />
+                                <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 11, fill: chartTheme.text }} />
+                                <Tooltip cursor={{ fill: 'transparent' }} contentStyle={tooltipStyle} />
+                                <Bar dataKey="usage" fill={chartColors.primary} radius={[0, 4, 4, 0]} barSize={24} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

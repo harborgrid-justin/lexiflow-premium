@@ -1,5 +1,4 @@
 import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 
@@ -36,16 +35,7 @@ const meta: Meta<typeof ProgressBar> = {
       control: 'boolean',
       description: 'Show percentage value',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 w-[400px]">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

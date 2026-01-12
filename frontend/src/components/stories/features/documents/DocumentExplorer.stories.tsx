@@ -6,7 +6,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocumentExplorer } from '../../../../features/operations/documents/DocumentExplorer';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import { WindowProvider } from '@/providers';
 
@@ -32,20 +31,7 @@ const meta: Meta<typeof DocumentExplorer> = {
         component: 'Document explorer with advanced filtering, search, drag-drop upload, and preview capabilities. Supports both list and grid view modes.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <WindowProvider>
-            <div className="h-screen">
-              <Story />
-            </div>
-          </WindowProvider>
-        </ToastProvider>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     currentUserRole: {
       control: 'select',

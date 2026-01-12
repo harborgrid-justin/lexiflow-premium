@@ -116,7 +116,7 @@ export class CasesApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[CasesApiService] Initialized with Backend API (PostgreSQL)");
+    // Initialization complete (logging disabled to reduce console noise)
   }
 
   /**

@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowTemplateBuilder } from '@features/cases';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * WorkflowTemplateBuilder provides visual workflow design tools for creating

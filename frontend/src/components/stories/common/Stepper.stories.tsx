@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -29,16 +28,7 @@ const meta: Meta<typeof Stepper> = {
       control: 'object',
       description: 'Array of step objects',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 w-[600px]">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

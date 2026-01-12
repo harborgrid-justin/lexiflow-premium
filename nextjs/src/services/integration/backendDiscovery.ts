@@ -74,7 +74,7 @@ class BackendDiscoveryService {
   private async checkBackend(): Promise<void> {
     const startTime = Date.now();
     const endpoint = this.getHealthEndpoint();
-    console.log("[BackendDiscovery] Checking health at:", endpoint);
+    // Silently check health (logs only on status changes)
 
     try {
       const controller = new AbortController();
@@ -110,9 +110,7 @@ class BackendDiscoveryService {
           error: undefined,
         });
 
-        console.log(
-          `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`
-        );
+        // Backend healthy (logging disabled to reduce console noise)
       } else {
         this.updateStatus({
           available: true,
@@ -122,9 +120,7 @@ class BackendDiscoveryService {
           error: `HTTP ${response.status}: ${response.statusText}`,
         });
 
-        console.warn(
-          `[BackendDiscovery] Backend returned error: ${response.status}`
-        );
+        // Error status logged only if state changes (see updateStatus)
       }
     } catch (error) {
       const errorMessage =

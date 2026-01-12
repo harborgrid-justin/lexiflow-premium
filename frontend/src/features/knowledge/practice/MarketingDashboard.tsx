@@ -22,7 +22,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { ChartColorService, useTheme } from '@/features/theme';
 
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';
@@ -38,7 +38,11 @@ import { MarketingCampaign, MarketingMetric } from '@/types';
 // ============================================================================
 
 export const MarketingDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
+  const chartColors = ChartColorService.getChartColors(mode);
+  const chartTheme = ChartColorService.getChartTheme(mode);
+  const tooltipStyle = ChartColorService.getTooltipStyle(mode);
+  const palette = ChartColorService.getPalette(mode);
 
   // Enterprise Data Access
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(
@@ -98,15 +102,15 @@ export const MarketingDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={metrics} layout="vertical" margin={{ left: 20 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="source" type="category" width={100} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                <YAxis dataKey="source" type="category" width={100} tick={{ fontSize: 11, fill: chartTheme.text }} />
                 <Tooltip
                   cursor={{ fill: 'transparent' }}
                   formatter={(value: number | undefined) => value !== undefined ? `$${value.toLocaleString()}` : '$0'}
-                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  contentStyle={tooltipStyle}
                 />
                 <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
                   {metrics.map((entry, index) => (
-                    <Cell key={`revenue-cell-${entry.source || index}`} fill={['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'][index % 4]} />
+                    <Cell key={`revenue-cell-${entry.source || index}`} fill={ChartColorService.getColorByIndex(index, mode)} />
                   ))}
                 </Bar>
               </BarChart>

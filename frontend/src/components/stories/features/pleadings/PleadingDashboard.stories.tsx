@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PleadingDashboard } from '@features/litigation/pleadings/PleadingDashboard';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**

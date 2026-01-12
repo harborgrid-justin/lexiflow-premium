@@ -7,7 +7,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 const meta: Meta<typeof DiscoveryPlatform> = {

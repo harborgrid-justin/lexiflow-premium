@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketEntryModal } from '@/features/cases/components/docket/DocketEntryModal';
 import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketEntryModal displays detailed information about a docket entry
@@ -44,16 +43,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-screen h-screen">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     entry: {
       description: 'The docket entry to display (null to close modal)',

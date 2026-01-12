@@ -40,16 +40,7 @@ const meta: Meta<typeof SearchToolbar> = {
       action: 'change',
       description: 'Callback when search query changes',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

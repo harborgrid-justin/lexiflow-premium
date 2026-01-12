@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/features/theme';
 import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
 import { Case, CaseId, CaseStatus, MatterType, PartyId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
@@ -26,16 +25,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-md">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     searchTerm: {
       description: 'Current search term',

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -32,16 +31,7 @@ const meta: Meta<typeof ErrorState> = {
       action: 'retry',
       description: 'Callback for retry action',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 min-h-[300px] flex items-center justify-center">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

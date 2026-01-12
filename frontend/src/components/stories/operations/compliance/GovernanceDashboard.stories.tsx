@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GovernanceDashboard } from '@features/admin/components/data/governance/GovernanceDashboard';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * GovernanceDashboard provides comprehensive data governance oversight with

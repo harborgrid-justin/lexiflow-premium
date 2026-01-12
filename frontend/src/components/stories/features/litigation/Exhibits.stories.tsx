@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**
@@ -39,18 +38,7 @@ const metaManager = {
         component: 'Comprehensive exhibit management system for trial preparation.',
       },
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 } satisfies Meta<typeof ExhibitManager>;
 
 export default metaManager;

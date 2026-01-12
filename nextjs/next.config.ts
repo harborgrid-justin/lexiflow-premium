@@ -23,6 +23,14 @@ const nextConfig: NextConfig = {
   },
   // Transpile packages if needed
   transpilePackages: [],
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://localhost:3001/api/:path*", // Proxy to NestJS backend
+      },
+    ];
+  },
 };
 
 export default nextConfig;

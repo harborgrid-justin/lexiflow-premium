@@ -69,7 +69,7 @@ export class KnowledgeRepository {
    * @private
    */
   constructor() {
-    console.log("[KnowledgeRepository] Initialized with backend API");
+    // Initialized with backend API
   }
 
   /**

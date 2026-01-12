@@ -5,8 +5,8 @@
  */
 
 import { type PartnerDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
-import { useTheme } from '@/features/theme';
 import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
+import { ChartColorService, useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
@@ -27,6 +27,8 @@ import {
 
 export const PartnerDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
+  const chartTheme = ChartColorService.getChartTheme(mode);
+  const chartColors = ChartColorService.getChartColors(mode);
 
   const { data, isLoading } = useQuery<PartnerDashboardData>(
     ['dashboard', 'partner'],
@@ -106,13 +108,13 @@ export const PartnerDashboard: React.FC = () => {
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={revenueTrends}>
-            <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
-            <XAxis dataKey="month" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
-            <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+            <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
+            <XAxis dataKey="month" stroke={chartTheme.text} />
+            <YAxis stroke={chartTheme.text} />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} name="Actual Revenue" />
-            <Line type="monotone" dataKey="target" stroke="#f59e0b" strokeWidth={2} strokeDasharray="5 5" name="Target" />
+            <Line type="monotone" dataKey="revenue" stroke={chartColors.success} strokeWidth={3} name="Actual Revenue" />
+            <Line type="monotone" dataKey="target" stroke={chartColors.warning} strokeWidth={2} strokeDasharray="5 5" name="Target" />
           </LineChart>
         </ResponsiveContainer>
       </ChartCard>
@@ -127,11 +129,11 @@ export const PartnerDashboard: React.FC = () => {
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={caseOutcomes}>
-              <CartesianGrid strokeDasharray="3 3" stroke={mode === 'dark' ? '#374151' : '#e5e7eb'} />
-              <XAxis dataKey="outcome" stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
-              <YAxis stroke={mode === 'dark' ? '#9ca3af' : '#6b7280'} />
+              <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
+              <XAxis dataKey="outcome" stroke={chartTheme.text} />
+              <YAxis stroke={chartTheme.text} />
               <Tooltip />
-              <Bar dataKey="count" fill="#8b5cf6" name="Cases" />
+              <Bar dataKey="count" fill={chartColors.secondary} name="Cases" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

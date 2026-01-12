@@ -1,5 +1,4 @@
 import { ContextMenu } from '@/shared/ui/molecules/ContextMenu/ContextMenu';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Copy, Edit, Trash2 } from 'lucide-react';
 import React from 'react';
@@ -33,16 +32,7 @@ const meta: Meta<typeof ContextMenu> = {
       control: 'number',
       description: 'Y coordinate for menu position',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

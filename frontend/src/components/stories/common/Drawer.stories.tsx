@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Drawer } from '@/shared/ui/molecules/Drawer/Drawer';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -37,16 +36,7 @@ const meta: Meta<typeof Drawer> = {
       control: 'text',
       description: 'Drawer content',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-slate-50 dark:bg-slate-800 min-h-screen">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

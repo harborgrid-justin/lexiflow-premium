@@ -4,18 +4,18 @@
  * @deprecated Import from './documents' instead
  */
 
-import * as crud from './documents/crud';
-import * as fileOps from './documents/fileOps';
-import * as versions from './documents/versions';
-import * as queries from './documents/queries';
-import * as annotations from './documents/annotations';
+import * as annotations from "./documents/annotations";
+import * as crud from "./documents/crud";
+import * as fileOps from "./documents/fileOps";
+import * as queries from "./documents/queries";
+import * as versions from "./documents/versions";
 
-export { DOCUMENTS_QUERY_KEYS } from './documents';
+export { DOCUMENTS_QUERY_KEYS } from "./documents";
 
 /** Documents API Service Class */
 export class DocumentsApiService {
   constructor() {
-    console.log('[DocumentsApiService] Initialized with Backend API (PostgreSQL)');
+    // Initialized with Backend API (PostgreSQL)
   }
 
   // CRUD Operations

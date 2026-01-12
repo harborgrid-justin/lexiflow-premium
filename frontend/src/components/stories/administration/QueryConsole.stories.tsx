@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QueryConsole } from '@/features/admin/components/data/QueryConsole';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**

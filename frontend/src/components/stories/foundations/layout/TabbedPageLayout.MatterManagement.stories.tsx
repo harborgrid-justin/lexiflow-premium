@@ -1,7 +1,5 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus, Settings, TrendingUp } from 'lucide-react';
 import React, { Suspense, useState } from 'react';
@@ -29,18 +27,7 @@ const meta: Meta<typeof TabbedPageLayout> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="h-screen bg-slate-100">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

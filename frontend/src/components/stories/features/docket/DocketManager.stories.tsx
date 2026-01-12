@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketManager } from '@/features/cases/components/docket/DocketManager';
-import { ThemeProvider } from '@/features/theme';
 
 import { WindowProvider } from '@/providers';
 
@@ -45,18 +44,7 @@ const meta = {
       restoreMocks: true,
     },
   },
-  tags: ['autodocs', 'page'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen w-screen">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs', 'page']
   argTypes: {
     initialTab: {
       description: 'Initial view/tab to display',
@@ -147,18 +135,7 @@ export const SyncSettings: Story = {
 export const LightTheme: Story = {
   args: {
     initialTab: 'all',
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen w-screen bg-white">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -167,18 +144,7 @@ export const LightTheme: Story = {
 export const DarkTheme: Story = {
   args: {
     initialTab: 'all',
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <WindowProvider>
-          <div className="h-screen w-screen bg-slate-900">
-            <Story />
-          </div>
-        </WindowProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**

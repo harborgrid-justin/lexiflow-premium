@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion, AccordionItem } from '@/shared/ui/molecules/Accordion/Accordion';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -18,16 +17,7 @@ const meta: Meta<typeof Accordion> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 max-w-2xl w-full">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

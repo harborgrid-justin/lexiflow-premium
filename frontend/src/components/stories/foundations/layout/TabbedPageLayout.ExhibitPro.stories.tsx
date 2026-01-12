@@ -1,6 +1,5 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ThemeProvider } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
@@ -46,16 +45,7 @@ const meta: Meta<typeof TabbedPageLayout> = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="h-screen bg-slate-100">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 };
 
 export default meta;

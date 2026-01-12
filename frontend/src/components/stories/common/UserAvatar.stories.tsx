@@ -1,5 +1,4 @@
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 
@@ -34,16 +33,7 @@ const meta: Meta<typeof UserAvatar> = {
       options: ['online', 'offline', 'away', 'busy'],
       description: 'Status indicator',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

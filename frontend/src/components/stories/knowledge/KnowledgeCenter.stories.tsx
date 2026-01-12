@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { KnowledgeCenter } from '@features/knowledge/practice';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * KnowledgeCenter is the firm's legal research and knowledge management platform

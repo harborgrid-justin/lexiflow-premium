@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Stats } from '@/shared/ui/molecules/Stats/Stats';
-import { ThemeProvider } from '@/features/theme';
 import { Briefcase, FileText, Users, DollarSign } from 'lucide-react';
 import React from "react";
 
@@ -25,16 +24,7 @@ const meta: Meta<typeof Stats> = {
       control: 'object',
       description: 'Array of stat items with label, value, icon, color, and bg',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-slate-50 dark:bg-slate-800">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

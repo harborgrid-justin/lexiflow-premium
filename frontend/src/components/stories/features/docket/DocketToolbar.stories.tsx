@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketToolbar } from '@/features/cases/components/docket/DocketToolbar';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * DocketToolbar is a sticky toolbar component for the docket sheet that
@@ -25,16 +24,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-full">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     activeCaseTitle: {
       description: 'Title of the currently active case',

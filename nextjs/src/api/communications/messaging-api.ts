@@ -12,7 +12,10 @@
  * - Message search and advanced filters
  */
 
-import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
+import {
+  apiClient,
+  type PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 // ============================================================================
 // Core Types
@@ -25,8 +28,8 @@ export interface Message {
   senderName: string;
   senderAvatar?: string;
   content: string;
-  type: 'text' | 'file' | 'system';
-  status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
+  type: "text" | "file" | "system";
+  status: "sending" | "sent" | "delivered" | "read" | "failed";
   attachments?: MessageAttachment[];
   metadata?: Record<string, unknown>;
   replyTo?: string;
@@ -42,7 +45,7 @@ export interface Message {
   body?: string;
   threadId?: string;
   read?: boolean;
-  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  priority?: "low" | "normal" | "high" | "urgent";
   sentAt?: string;
 }
 
@@ -57,7 +60,7 @@ export interface MessageAttachment {
 
 export interface Conversation {
   id: string;
-  type: 'direct' | 'group' | 'case' | 'matter';
+  type: "direct" | "group" | "case" | "matter";
   name?: string;
   participants: ConversationParticipant[];
   lastMessage?: Message;
@@ -80,7 +83,7 @@ export interface ConversationParticipant {
   userName: string;
   userAvatar?: string;
   userEmail?: string;
-  role: 'owner' | 'admin' | 'member';
+  role: "owner" | "admin" | "member";
   isOnline: boolean;
   lastSeen?: string;
   isTyping: boolean;
@@ -107,7 +110,7 @@ export interface MessageFilters {
   // Legacy
   threadId?: string;
   read?: boolean;
-  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  priority?: "low" | "normal" | "high" | "urgent";
 }
 
 export interface ConversationFilters {
@@ -119,7 +122,7 @@ export interface ConversationFilters {
 }
 
 export interface CreateConversationDto {
-  type: 'direct' | 'group' | 'case' | 'matter';
+  type: "direct" | "group" | "case" | "matter";
   name?: string;
   participantIds: string[];
   caseId?: string;
@@ -133,13 +136,13 @@ export interface CreateConversationDto {
 export interface SendMessageDto {
   conversationId: string;
   content: string;
-  type?: 'text' | 'file' | 'system';
+  type?: "text" | "file" | "system";
   attachments?: File[];
   replyTo?: string;
   metadata?: Record<string, unknown>;
   // Legacy
   body?: string;
-  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  priority?: "low" | "normal" | "high" | "urgent";
 }
 
 export interface TypingIndicator {
@@ -161,19 +164,20 @@ export interface OnlinePresence {
 
 export const MESSAGING_QUERY_KEYS = {
   conversations: {
-    all: () => ['conversations'] as const,
-    byId: (id: string) => ['conversations', id] as const,
-    messages: (id: string) => ['conversations', id, 'messages'] as const,
-    unread: () => ['conversations', 'unread'] as const,
+    all: () => ["conversations"] as const,
+    byId: (id: string) => ["conversations", id] as const,
+    messages: (id: string) => ["conversations", id, "messages"] as const,
+    unread: () => ["conversations", "unread"] as const,
   },
   messages: {
-    all: () => ['messages'] as const,
-    byId: (id: string) => ['messages', id] as const,
-    byConversation: (conversationId: string) => ['messages', 'conversation', conversationId] as const,
+    all: () => ["messages"] as const,
+    byId: (id: string) => ["messages", id] as const,
+    byConversation: (conversationId: string) =>
+      ["messages", "conversation", conversationId] as const,
   },
   contacts: {
-    all: () => ['contacts'] as const,
-    byId: (id: string) => ['contacts', id] as const,
+    all: () => ["contacts"] as const,
+    byId: (id: string) => ["contacts", id] as const,
   },
 } as const;
 
@@ -182,27 +186,35 @@ export const MESSAGING_QUERY_KEYS = {
 // ============================================================================
 
 export class MessagingApiService {
-  private readonly baseUrl = '/messenger';
+  private readonly baseUrl = "/messenger";
 
   constructor() {
-    console.log('[MessagingApiService] Initialized with Backend API');
+    // Initialized with Backend API
   }
 
   /**
    * Validate ID parameter
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
-      throw new Error(`[MessagingApiService.${methodName}] Invalid id parameter`);
+    if (!id || typeof id !== "string" || id.trim() === "") {
+      throw new Error(
+        `[MessagingApiService.${methodName}] Invalid id parameter`
+      );
     }
   }
 
   /**
    * Validate object parameter
    */
-  private validateObject(obj: unknown, paramName: string, methodName: string): void {
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
-      throw new Error(`[MessagingApiService.${methodName}] Invalid ${paramName} parameter`);
+  private validateObject(
+    obj: unknown,
+    paramName: string,
+    methodName: string
+  ): void {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
+      throw new Error(
+        `[MessagingApiService.${methodName}] Invalid ${paramName} parameter`
+      );
     }
   }
 
@@ -226,11 +238,14 @@ export class MessagingApiService {
    */
   async getContacts(filters?: Record<string, unknown>): Promise<Contact[]> {
     try {
-      const response = await apiClient.get<PaginatedResponse<Contact>>(`${this.baseUrl}/contacts`, filters);
+      const response = await apiClient.get<PaginatedResponse<Contact>>(
+        `${this.baseUrl}/contacts`,
+        filters
+      );
       return response.data;
     } catch (error) {
-      console.error('[MessagingApiService.getContacts] Error:', error);
-      throw new Error('Failed to fetch contacts');
+      console.error("[MessagingApiService.getContacts] Error:", error);
+      throw new Error("Failed to fetch contacts");
     }
   }
 
@@ -238,11 +253,11 @@ export class MessagingApiService {
    * Get contact by ID
    */
   async getContact(id: string): Promise<Contact> {
-    this.validateId(id, 'getContact');
+    this.validateId(id, "getContact");
     try {
       return await apiClient.get<Contact>(`${this.baseUrl}/contacts/${id}`);
     } catch (error) {
-      console.error('[MessagingApiService.getContact] Error:', error);
+      console.error("[MessagingApiService.getContact] Error:", error);
       throw new Error(`Failed to fetch contact: ${id}`);
     }
   }
@@ -254,7 +269,9 @@ export class MessagingApiService {
   /**
    * Get all conversations with optional filters
    */
-  async getConversations(filters?: ConversationFilters): Promise<Conversation[]> {
+  async getConversations(
+    filters?: ConversationFilters
+  ): Promise<Conversation[]> {
     try {
       const response = await apiClient.get<PaginatedResponse<Conversation>>(
         `${this.baseUrl}/conversations`,
@@ -262,8 +279,8 @@ export class MessagingApiService {
       );
       return response.data;
     } catch (error) {
-      console.error('[MessagingApiService.getConversations] Error:', error);
-      throw new Error('Failed to fetch conversations');
+      console.error("[MessagingApiService.getConversations] Error:", error);
+      throw new Error("Failed to fetch conversations");
     }
   }
 
@@ -271,11 +288,13 @@ export class MessagingApiService {
    * Get conversation by ID
    */
   async getConversation(id: string): Promise<Conversation> {
-    this.validateId(id, 'getConversation');
+    this.validateId(id, "getConversation");
     try {
-      return await apiClient.get<Conversation>(`${this.baseUrl}/conversations/${id}`);
+      return await apiClient.get<Conversation>(
+        `${this.baseUrl}/conversations/${id}`
+      );
     } catch (error) {
-      console.error('[MessagingApiService.getConversation] Error:', error);
+      console.error("[MessagingApiService.getConversation] Error:", error);
       throw new Error(`Failed to fetch conversation: ${id}`);
     }
   }
@@ -284,35 +303,46 @@ export class MessagingApiService {
    * Create a new conversation
    */
   async createConversation(data: CreateConversationDto): Promise<Conversation> {
-    this.validateObject(data, 'data', 'createConversation');
+    this.validateObject(data, "data", "createConversation");
 
     // Support both new and legacy formats
     const participantIds = data.participantIds || data.participants || [];
     if (participantIds.length === 0) {
-      throw new Error('[MessagingApiService.createConversation] participants are required');
+      throw new Error(
+        "[MessagingApiService.createConversation] participants are required"
+      );
     }
 
     try {
-      return await apiClient.post<Conversation>(`${this.baseUrl}/conversations`, {
-        ...data,
-        participantIds,
-      });
+      return await apiClient.post<Conversation>(
+        `${this.baseUrl}/conversations`,
+        {
+          ...data,
+          participantIds,
+        }
+      );
     } catch (error) {
-      console.error('[MessagingApiService.createConversation] Error:', error);
-      throw new Error('Failed to create conversation');
+      console.error("[MessagingApiService.createConversation] Error:", error);
+      throw new Error("Failed to create conversation");
     }
   }
 
   /**
    * Update conversation
    */
-  async updateConversation(id: string, data: Partial<Conversation>): Promise<Conversation> {
-    this.validateId(id, 'updateConversation');
-    this.validateObject(data, 'data', 'updateConversation');
+  async updateConversation(
+    id: string,
+    data: Partial<Conversation>
+  ): Promise<Conversation> {
+    this.validateId(id, "updateConversation");
+    this.validateObject(data, "data", "updateConversation");
     try {
-      return await apiClient.patch<Conversation>(`${this.baseUrl}/conversations/${id}`, data);
+      return await apiClient.patch<Conversation>(
+        `${this.baseUrl}/conversations/${id}`,
+        data
+      );
     } catch (error) {
-      console.error('[MessagingApiService.updateConversation] Error:', error);
+      console.error("[MessagingApiService.updateConversation] Error:", error);
       throw new Error(`Failed to update conversation: ${id}`);
     }
   }
@@ -321,11 +351,11 @@ export class MessagingApiService {
    * Delete conversation
    */
   async deleteConversation(id: string): Promise<void> {
-    this.validateId(id, 'deleteConversation');
+    this.validateId(id, "deleteConversation");
     try {
       await apiClient.delete(`${this.baseUrl}/conversations/${id}`);
     } catch (error) {
-      console.error('[MessagingApiService.deleteConversation] Error:', error);
+      console.error("[MessagingApiService.deleteConversation] Error:", error);
       throw new Error(`Failed to delete conversation: ${id}`);
     }
   }
@@ -379,8 +409,11 @@ export class MessagingApiService {
   /**
    * Get messages for a conversation
    */
-  async getMessages(conversationId: string, filters?: MessageFilters): Promise<Message[]> {
-    this.validateId(conversationId, 'getMessages');
+  async getMessages(
+    conversationId: string,
+    filters?: MessageFilters
+  ): Promise<Message[]> {
+    this.validateId(conversationId, "getMessages");
     try {
       const response = await apiClient.get<PaginatedResponse<Message>>(
         `${this.baseUrl}/conversations/${conversationId}/messages`,
@@ -388,8 +421,8 @@ export class MessagingApiService {
       );
       return response.data;
     } catch (error) {
-      console.error('[MessagingApiService.getMessages] Error:', error);
-      throw new Error('Failed to fetch messages');
+      console.error("[MessagingApiService.getMessages] Error:", error);
+      throw new Error("Failed to fetch messages");
     }
   }
 
@@ -397,11 +430,11 @@ export class MessagingApiService {
    * Get message by ID
    */
   async getMessage(id: string): Promise<Message> {
-    this.validateId(id, 'getMessage');
+    this.validateId(id, "getMessage");
     try {
       return await apiClient.get<Message>(`${this.baseUrl}/messages/${id}`);
     } catch (error) {
-      console.error('[MessagingApiService.getMessage] Error:', error);
+      console.error("[MessagingApiService.getMessage] Error:", error);
       throw new Error(`Failed to fetch message: ${id}`);
     }
   }
@@ -410,32 +443,38 @@ export class MessagingApiService {
    * Send a message
    */
   async sendMessage(data: SendMessageDto): Promise<Message> {
-    this.validateObject(data, 'data', 'sendMessage');
+    this.validateObject(data, "data", "sendMessage");
 
-    const content = data.content || data.body || '';
+    const content = data.content || data.body || "";
     if (!data.conversationId) {
-      throw new Error('[MessagingApiService.sendMessage] conversationId is required');
+      throw new Error(
+        "[MessagingApiService.sendMessage] conversationId is required"
+      );
     }
-    if (!content || content.trim() === '') {
-      throw new Error('[MessagingApiService.sendMessage] content is required');
+    if (!content || content.trim() === "") {
+      throw new Error("[MessagingApiService.sendMessage] content is required");
     }
 
     try {
       // Handle file attachments if present
       if (data.attachments && data.attachments.length > 0) {
         const formData = new FormData();
-        formData.append('conversationId', data.conversationId);
-        formData.append('content', content);
-        if (data.type) formData.append('type', data.type);
-        if (data.replyTo) formData.append('replyTo', data.replyTo);
-        if (data.metadata) formData.append('metadata', JSON.stringify(data.metadata));
-        if (data.priority) formData.append('priority', data.priority);
+        formData.append("conversationId", data.conversationId);
+        formData.append("content", content);
+        if (data.type) formData.append("type", data.type);
+        if (data.replyTo) formData.append("replyTo", data.replyTo);
+        if (data.metadata)
+          formData.append("metadata", JSON.stringify(data.metadata));
+        if (data.priority) formData.append("priority", data.priority);
 
         data.attachments.forEach((file) => {
-          formData.append('attachments', file);
+          formData.append("attachments", file);
         });
 
-        return await apiClient.post<Message>(`${this.baseUrl}/messages`, formData);
+        return await apiClient.post<Message>(
+          `${this.baseUrl}/messages`,
+          formData
+        );
       }
 
       return await apiClient.post<Message>(`${this.baseUrl}/messages`, {
@@ -443,8 +482,8 @@ export class MessagingApiService {
         content,
       });
     } catch (error) {
-      console.error('[MessagingApiService.sendMessage] Error:', error);
-      throw new Error('Failed to send message');
+      console.error("[MessagingApiService.sendMessage] Error:", error);
+      throw new Error("Failed to send message");
     }
   }
 
@@ -452,14 +491,18 @@ export class MessagingApiService {
    * Update message (edit)
    */
   async updateMessage(id: string, content: string): Promise<Message> {
-    this.validateId(id, 'updateMessage');
-    if (!content || content.trim() === '') {
-      throw new Error('[MessagingApiService.updateMessage] content is required');
+    this.validateId(id, "updateMessage");
+    if (!content || content.trim() === "") {
+      throw new Error(
+        "[MessagingApiService.updateMessage] content is required"
+      );
     }
     try {
-      return await apiClient.patch<Message>(`${this.baseUrl}/messages/${id}`, { content });
+      return await apiClient.patch<Message>(`${this.baseUrl}/messages/${id}`, {
+        content,
+      });
     } catch (error) {
-      console.error('[MessagingApiService.updateMessage] Error:', error);
+      console.error("[MessagingApiService.updateMessage] Error:", error);
       throw new Error(`Failed to update message: ${id}`);
     }
   }
@@ -468,11 +511,11 @@ export class MessagingApiService {
    * Delete message
    */
   async deleteMessage(id: string): Promise<void> {
-    this.validateId(id, 'deleteMessage');
+    this.validateId(id, "deleteMessage");
     try {
       await apiClient.delete(`${this.baseUrl}/messages/${id}`);
     } catch (error) {
-      console.error('[MessagingApiService.deleteMessage] Error:', error);
+      console.error("[MessagingApiService.deleteMessage] Error:", error);
       throw new Error(`Failed to delete message: ${id}`);
     }
   }
@@ -481,12 +524,15 @@ export class MessagingApiService {
    * Mark message as read
    */
   async markAsRead(messageId: string): Promise<Message> {
-    this.validateId(messageId, 'markAsRead');
+    this.validateId(messageId, "markAsRead");
     try {
-      return await apiClient.post<Message>(`${this.baseUrl}/messages/${messageId}/mark-read`, {});
+      return await apiClient.post<Message>(
+        `${this.baseUrl}/messages/${messageId}/mark-read`,
+        {}
+      );
     } catch (error) {
-      console.error('[MessagingApiService.markAsRead] Error:', error);
-      throw new Error('Failed to mark message as read');
+      console.error("[MessagingApiService.markAsRead] Error:", error);
+      throw new Error("Failed to mark message as read");
     }
   }
 
@@ -494,12 +540,15 @@ export class MessagingApiService {
    * Mark all messages in conversation as read
    */
   async markAllAsRead(conversationId: string): Promise<void> {
-    this.validateId(conversationId, 'markAllAsRead');
+    this.validateId(conversationId, "markAllAsRead");
     try {
-      await apiClient.post(`${this.baseUrl}/conversations/${conversationId}/mark-all-read`, {});
+      await apiClient.post(
+        `${this.baseUrl}/conversations/${conversationId}/mark-all-read`,
+        {}
+      );
     } catch (error) {
-      console.error('[MessagingApiService.markAllAsRead] Error:', error);
-      throw new Error('Failed to mark all messages as read');
+      console.error("[MessagingApiService.markAllAsRead] Error:", error);
+      throw new Error("Failed to mark all messages as read");
     }
   }
 
@@ -508,19 +557,24 @@ export class MessagingApiService {
    */
   async getUnreadCount(): Promise<{ count: number }> {
     try {
-      return await apiClient.get<{ count: number }>(`${this.baseUrl}/unread-count`);
+      return await apiClient.get<{ count: number }>(
+        `${this.baseUrl}/unread-count`
+      );
     } catch (error) {
-      console.error('[MessagingApiService.getUnreadCount] Error:', error);
-      throw new Error('Failed to fetch unread count');
+      console.error("[MessagingApiService.getUnreadCount] Error:", error);
+      throw new Error("Failed to fetch unread count");
     }
   }
 
   /**
    * Search messages
    */
-  async searchMessages(query: string, filters?: MessageFilters): Promise<Message[]> {
-    if (!query || query.trim() === '') {
-      throw new Error('[MessagingApiService.searchMessages] query is required');
+  async searchMessages(
+    query: string,
+    filters?: MessageFilters
+  ): Promise<Message[]> {
+    if (!query || query.trim() === "") {
+      throw new Error("[MessagingApiService.searchMessages] query is required");
     }
     try {
       const response = await apiClient.get<PaginatedResponse<Message>>(
@@ -529,8 +583,8 @@ export class MessagingApiService {
       );
       return response.data;
     } catch (error) {
-      console.error('[MessagingApiService.searchMessages] Error:', error);
-      throw new Error('Failed to search messages');
+      console.error("[MessagingApiService.searchMessages] Error:", error);
+      throw new Error("Failed to search messages");
     }
   }
 
@@ -542,12 +596,18 @@ export class MessagingApiService {
    * Send typing indicator
    * Note: This should be handled via Socket.io in production
    */
-  async sendTypingIndicator(conversationId: string, isTyping: boolean): Promise<void> {
-    this.validateId(conversationId, 'sendTypingIndicator');
+  async sendTypingIndicator(
+    conversationId: string,
+    isTyping: boolean
+  ): Promise<void> {
+    this.validateId(conversationId, "sendTypingIndicator");
     try {
-      await apiClient.post(`${this.baseUrl}/conversations/${conversationId}/typing`, { isTyping });
+      await apiClient.post(
+        `${this.baseUrl}/conversations/${conversationId}/typing`,
+        { isTyping }
+      );
     } catch (error) {
-      console.error('[MessagingApiService.sendTypingIndicator] Error:', error);
+      console.error("[MessagingApiService.sendTypingIndicator] Error:", error);
       // Don't throw - typing indicators are non-critical
     }
   }
@@ -560,7 +620,7 @@ export class MessagingApiService {
     try {
       await apiClient.post(`${this.baseUrl}/presence`, { isOnline });
     } catch (error) {
-      console.error('[MessagingApiService.updatePresence] Error:', error);
+      console.error("[MessagingApiService.updatePresence] Error:", error);
       // Don't throw - presence updates are non-critical
     }
   }
@@ -592,8 +652,8 @@ export class MessagingApiService {
    */
   async send(data: Partial<Message>): Promise<Message> {
     const messageData: SendMessageDto = {
-      conversationId: data.threadId || data.conversationId || '',
-      content: data.body || data.content || '',
+      conversationId: data.threadId || data.conversationId || "",
+      content: data.body || data.content || "",
       type: data.type,
       priority: data.priority,
       metadata: data.metadata,

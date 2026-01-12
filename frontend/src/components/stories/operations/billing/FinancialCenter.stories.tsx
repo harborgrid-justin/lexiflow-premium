@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FinancialCenter } from '@features/knowledge/practice';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 const meta = {
   title: 'Pages/Financial Center',

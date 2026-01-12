@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WebhookManagement } from '@features/admin/components/webhooks/WebhookManagement';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 const meta = {
   title: 'Pages/Webhook Management',

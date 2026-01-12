@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RulesPlatform } from '@/features/knowledge/rules/RulesPlatform';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * RulesPlatform provides comprehensive court rules, procedures, and jurisdiction-specific

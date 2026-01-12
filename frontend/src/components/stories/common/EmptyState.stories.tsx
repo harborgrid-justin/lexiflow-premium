@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Inbox, Search } from 'lucide-react';
 import React from "react";
@@ -34,16 +33,7 @@ const meta: Meta<typeof EmptyState> = {
       control: 'text',
       description: 'Action button or element',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-slate-50 dark:bg-slate-800 min-h-[400px] flex items-center justify-center">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

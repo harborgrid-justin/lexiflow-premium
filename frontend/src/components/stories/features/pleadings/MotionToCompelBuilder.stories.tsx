@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MotionToCompelBuilder } from '@features/litigation/discovery/MotionToCompelBuilder';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import { CaseId } from '@/types';
 

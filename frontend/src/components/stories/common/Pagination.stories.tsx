@@ -1,5 +1,4 @@
 import { Pagination } from '@/shared/ui/molecules/Pagination/Pagination';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
@@ -32,16 +31,7 @@ const meta: Meta<typeof Pagination> = {
       action: 'pageChange',
       description: 'Callback when page changes',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

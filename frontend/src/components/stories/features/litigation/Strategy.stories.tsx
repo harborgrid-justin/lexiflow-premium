@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
@@ -40,18 +39,7 @@ const metaCanvas = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 } satisfies Meta<typeof StrategyCanvas>;
 
 export default metaCanvas;

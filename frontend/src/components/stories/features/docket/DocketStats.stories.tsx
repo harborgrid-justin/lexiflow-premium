@@ -1,6 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { DocketStats } from '@/features/cases/components/docket/DocketStats';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Download, FileText, Plus, RefreshCw } from 'lucide-react';
 import { fn } from 'storybook/test';
@@ -40,16 +39,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-6xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
 } satisfies Meta<typeof DocketStats>;
 
 export default meta;
@@ -100,162 +90,41 @@ export const TabletCustom: Story = {
     viewport: {
       defaultViewport: 'tablet',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="max-w-3xl">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
  * With action buttons - Primary variant
  */
 export const WithPrimaryButtons: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end">
-            <Button variant="primary" icon={RefreshCw} onClick={fn()}>
-              Refresh Stats
-            </Button>
-            <Button variant="primary" icon={Plus} onClick={fn()}>
-              Add Entry
-            </Button>
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * With action buttons - Multiple variants
  */
 export const WithActionButtons: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end flex-wrap">
-            <Button variant="primary" icon={Plus} onClick={fn()}>
-              Add Entry
-            </Button>
-            <Button variant="secondary" icon={RefreshCw} onClick={fn()}>
-              Refresh
-            </Button>
-            <Button variant="outline" icon={Download} onClick={fn()}>
-              Export
-            </Button>
-            <Button variant="ghost" icon={FileText} onClick={fn()}>
-              View All
-            </Button>
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * With loading state buttons
  */
 export const WithLoadingButtons: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end">
-            <Button variant="primary" isLoading onClick={fn()}>
-              Syncing...
-            </Button>
-            <Button variant="secondary" icon={Download} onClick={fn()}>
-              Export
-            </Button>
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * With icon-only buttons
  */
 export const WithIconButtons: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end">
-            <Button variant="primary" size="icon" icon={Plus} onClick={fn()} aria-label="Add entry" />
-            <Button variant="secondary" size="icon" icon={RefreshCw} onClick={fn()} aria-label="Refresh" />
-            <Button variant="outline" size="icon" icon={Download} onClick={fn()} aria-label="Download" />
-            <Button variant="ghost" size="icon" icon={FileText} onClick={fn()} aria-label="View details" />
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * With button sizes
  */
 export const WithButtonSizes: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end items-center">
-            <Button variant="primary" size="xs" icon={Plus} onClick={fn()}>
-              Extra Small
-            </Button>
-            <Button variant="primary" size="sm" icon={Plus} onClick={fn()}>
-              Small
-            </Button>
-            <Button variant="primary" size="md" icon={Plus} onClick={fn()}>
-              Medium
-            </Button>
-            <Button variant="primary" size="lg" icon={Plus} onClick={fn()}>
-              Large
-            </Button>
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };
 
 /**
  * With danger action button
  */
 export const WithDangerButton: Story = {
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="space-y-4">
-          <Story />
-          <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={fn()}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={fn()}>
-              Clear All Stats
-            </Button>
-          </div>
-        </div>
-      </ThemeProvider>
-    ),
-  ],
 };

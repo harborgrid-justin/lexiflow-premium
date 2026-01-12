@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { FilingCenter } from '@features/litigation/pleadings/modules/FilingCenter';
-import { ThemeProvider } from '@/features/theme';
 
 /**
  * FilingCenter provides a pre-flight check interface and export capabilities
@@ -28,16 +27,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-96 h-[600px] bg-white rounded-lg shadow-lg">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  tags: ['autodocs']
   argTypes: {
     isReady: {
       description: 'Whether the document is ready for filing (all checks passed)',
@@ -76,16 +66,7 @@ export const PendingReview: Story = {
 export const LightTheme: Story = {
   args: {
     isReady: true,
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-96 h-[600px] bg-white rounded-lg shadow-lg">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -94,16 +75,7 @@ export const LightTheme: Story = {
 export const DarkTheme: Story = {
   args: {
     isReady: true,
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-96 h-[600px] bg-slate-900 rounded-lg shadow-lg">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -112,16 +84,7 @@ export const DarkTheme: Story = {
 export const WideLayout: Story = {
   args: {
     isReady: true,
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-[600px] h-[700px] bg-white rounded-lg shadow-lg">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -135,16 +98,7 @@ export const Mobile: Story = {
     viewport: {
       defaultViewport: 'mobile1',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-full max-w-sm h-screen bg-white">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**
@@ -158,16 +112,7 @@ export const Tablet: Story = {
     viewport: {
       defaultViewport: 'tablet',
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="w-full max-w-md h-screen bg-white">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 /**

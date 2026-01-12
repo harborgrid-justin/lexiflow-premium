@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -33,16 +32,7 @@ const meta: Meta<typeof RiskMeter> = {
       options: ['strength', 'risk'],
       description: 'Meter type (affects color interpretation)',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

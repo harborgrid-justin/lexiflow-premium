@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LoadingState } from '@/shared/ui/molecules/LoadingState/LoadingState';
-import { ThemeProvider } from '@/features/theme';
 import React from "react";
 
 /**
@@ -24,16 +23,7 @@ const meta: Meta<typeof LoadingState> = {
       control: 'text',
       description: 'Loading message text',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900 min-h-[300px] flex items-center justify-center">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

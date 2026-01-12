@@ -138,7 +138,7 @@ export class TasksApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log("[TasksApiService] Initialized with Backend API (PostgreSQL)");
+    // Initialized with Backend API (PostgreSQL)
   }
 
   /**

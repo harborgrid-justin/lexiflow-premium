@@ -1,5 +1,4 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
-import { ThemeProvider } from '@/features/theme';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import React from "react";
@@ -43,16 +42,7 @@ const meta: Meta<typeof Button> = {
       control: 'text',
       description: 'Button content',
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <div className="p-8 bg-white dark:bg-slate-900">
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
-  ],
+  }
 };
 
 export default meta;

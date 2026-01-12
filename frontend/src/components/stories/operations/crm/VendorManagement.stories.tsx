@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { VendorManagement } from '@/features/litigation/discovery/VendorManagement';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * VendorManagement provides e-discovery and litigation support vendor management

@@ -96,9 +96,10 @@ export class ComplianceApiService {
    * @private
    */
   private logInitialization(): void {
-    console.log(
-      "[ComplianceApiService] Initialized with Backend API (PostgreSQL)"
-    );
+    console
+      .log
+      // Initialized with Backend API (PostgreSQL)
+      ();
   }
 
   /**

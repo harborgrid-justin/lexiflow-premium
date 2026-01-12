@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnalyticsDashboard } from '@/features/admin/components/analytics/AnalyticsDashboard';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * AnalyticsDashboard provides comprehensive business intelligence and performance

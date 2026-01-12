@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '@features/litigation/discovery/DiscoveryPlatform';
-import { ThemeProvider } from '@/features/theme';
 import { ToastProvider } from '@/providers';
 
 /**
@@ -40,18 +39,7 @@ const metaPlatform = {
         component: 'Comprehensive discovery management platform with requests, productions, and ESI tools.',
       },
     },
-  },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <ThemeProvider>
-        <ToastProvider>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-          </div>
-        </ToastProvider>
-      </ThemeProvider>
-    ),
-  ],
+  }
 } satisfies Meta<typeof DiscoveryPlatform>;
 
 export default metaPlatform;

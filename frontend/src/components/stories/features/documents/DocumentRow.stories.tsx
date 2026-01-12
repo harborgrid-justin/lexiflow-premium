@@ -4,7 +4,6 @@
  * Individual document row for table view with actions.
  */
 
-import { ThemeProvider } from '@/features/theme';
 import { CaseId, DocumentId, LegalDocument, UserId } from '@/types';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
@@ -34,16 +33,7 @@ const meta: Meta<typeof DocumentRowWrapper> = {
         component: 'Document row component with selection, status badges, and action buttons.'
       }
     },
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <div className="border rounded-lg p-2">
-          <Story />
-        </div>
-      </ThemeProvider>
-    )
-  ],
+  }
   argTypes: {
     isSelected: {
       control: 'boolean',

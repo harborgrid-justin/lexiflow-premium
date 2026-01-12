@@ -7,7 +7,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentVersions } from '../../../../features/operations/documents/DocumentVersions';
-import { ThemeProvider } from '@/features/theme';
 import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentVersions> = {

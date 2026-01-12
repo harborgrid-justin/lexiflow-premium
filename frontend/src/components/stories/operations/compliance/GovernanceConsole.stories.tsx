@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GovernanceConsole } from '@/features/admin/components/data/GovernanceConsole';
-import { ThemeProvider } from '@/features/theme';
-import { ToastProvider } from '@providers/ToastContext';
 
 /**
  * GovernanceConsole provides data governance tools including data classification,

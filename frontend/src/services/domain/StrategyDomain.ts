@@ -56,17 +56,57 @@ export const StrategyService = {
   },
 
   add: async (item: unknown) => {
-    return apiClient.post("/strategies", {
-      ...(item && typeof item === "object" ? item : {}),
-      createdAt: new Date().toISOString(),
-    });
+    // Extract only the fields that the backend DTO expects
+    const payload = item && typeof item === "object" ? item : {};
+    const cleanPayload: Record<string, unknown> = {};
+
+    // Only include fields that are part of CreateStrategyItemDto
+    const allowedFields = [
+      "type",
+      "caseId",
+      "title",
+      "citation",
+      "description",
+      "defenseType",
+      "status",
+      "court",
+      "year",
+    ];
+
+    for (const key of allowedFields) {
+      if (key in payload) {
+        cleanPayload[key] = (payload as Record<string, unknown>)[key];
+      }
+    }
+
+    return apiClient.post("/strategies", cleanPayload);
   },
 
   update: async (id: string, updates: unknown) => {
-    return apiClient.patch(`/strategies/${id}`, {
-      ...(updates && typeof updates === "object" ? updates : {}),
-      updatedAt: new Date().toISOString(),
-    });
+    // Extract only the fields that the backend DTO expects
+    const payload = updates && typeof updates === "object" ? updates : {};
+    const cleanPayload: Record<string, unknown> = {};
+
+    // Only include fields that are part of UpdateStrategyItemDto
+    const allowedFields = [
+      "type",
+      "caseId",
+      "title",
+      "citation",
+      "description",
+      "defenseType",
+      "status",
+      "court",
+      "year",
+    ];
+
+    for (const key of allowedFields) {
+      if (key in payload) {
+        cleanPayload[key] = (payload as Record<string, unknown>)[key];
+      }
+    }
+
+    return apiClient.patch(`/strategies/${id}`, cleanPayload);
   },
 
   delete: async (id: string, type?: string) => {

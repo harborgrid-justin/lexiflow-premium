@@ -9,8 +9,8 @@ export { ApiClient, apiClient } from "./api-client";
 // Export types
 export type {
   ApiError,
-  PaginatedResponse,
   PaginatedApiResponse,
+  PaginatedResponse,
   ServiceHealth,
   ServiceHealthStatus,
   SystemHealth,
@@ -21,9 +21,10 @@ export { buildBaseURL, getOrigin } from "./config";
 
 // Export auth utilities (for direct use if needed)
 export {
+  clearAuthTokens,
   getAuthToken,
   getRefreshToken,
-  setAuthTokens,
-  clearAuthTokens,
   isAuthenticated,
+  isTokenExpiringSoon,
+  setAuthTokens,
 } from "./auth-manager";

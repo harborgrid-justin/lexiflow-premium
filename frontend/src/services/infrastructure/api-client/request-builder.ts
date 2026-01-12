@@ -4,13 +4,55 @@
  */
 
 import { ValidationError } from "@/services/core/errors";
-import { getAuthToken } from "./auth-manager";
+import {
+  getAuthToken,
+  getRefreshToken,
+  isTokenExpiringSoon,
+} from "./auth-manager";
+import { refreshAccessToken } from "./token-refresh";
+
+let isRefreshing = false;
+
+/**
+ * Ensure token is valid before building headers
+ * Proactively refreshes if token is expiring soon
+ */
+async function ensureValidToken(): Promise<void> {
+  if (isRefreshing) {
+    // Already refreshing, wait a moment and continue
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    return;
+  }
+
+  if (isTokenExpiringSoon(5)) {
+    const refreshToken = getRefreshToken();
+    if (refreshToken && !isRefreshing) {
+      isRefreshing = true;
+      console.log(
+        "[RequestBuilder] Token expiring soon, proactively refreshing..."
+      );
+      try {
+        await refreshAccessToken(refreshToken);
+        console.log("[RequestBuilder] Token refreshed proactively");
+      } catch (error) {
+        console.error("[RequestBuilder] Proactive refresh failed:", error);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+  }
+}
 
 /**
  * Build headers for requests
  * Includes authentication token if available
  */
-export function buildHeaders(customHeaders: HeadersInit = {}): HeadersInit {
+export async function buildHeaders(
+  customHeaders: HeadersInit = {}
+): Promise<HeadersInit> {
+  // Try to refresh token if needed
+  await ensureValidToken();
+
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest", // CSRF protection
@@ -19,7 +61,13 @@ export function buildHeaders(customHeaders: HeadersInit = {}): HeadersInit {
 
   const token = getAuthToken();
   if (token) {
+    console.log("[buildHeaders] Adding Authorization header with token:", {
+      tokenLength: token.length,
+      tokenStart: token.substring(0, 20) + "...",
+    });
     headers["Authorization"] = `Bearer ${token}`;
+  } else {
+    console.warn("[buildHeaders] No auth token available");
   }
 
   return headers;

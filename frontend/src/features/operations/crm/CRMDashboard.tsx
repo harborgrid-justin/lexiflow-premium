@@ -31,11 +31,11 @@ import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 import { cn } from '@/shared/lib/cn';
+import { getChartTheme } from '@/utils/chartConfig';
 
 // Types
-import type { Case, Client, CRMAnalytics, CRMLead } from '@/types';
+import type { CRMAnalytics, CRMLead } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -58,18 +58,26 @@ export function CRMDashboard() {
     sources: []
   };
 
-  const { data: clients = [] } = useQuery<Client[]>(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
-  const { data: cases = [] } = useQuery<Case[]>(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
+  const { data: clientsResponse } = useQuery<any>(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  const { data: casesResponse } = useQuery<any>(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
   const { data: leads = [] } = useQuery<CRMLead[]>(QUERY_KEYS.CRM.LEADS, () => DataService.crm.getLeads());
 
+  // Handle paginated response format from backend
+  const clients = Array.isArray(clientsResponse)
+    ? clientsResponse
+    : (clientsResponse?.data || []);
+  const cases = Array.isArray(casesResponse)
+    ? casesResponse
+    : (casesResponse?.data || []);
+
   // Calculate dynamic metrics
-  const activeClients = clients.filter((c) =>
+  const activeClients = (Array.isArray(clients) ? clients : []).filter((c) =>
     c.status === ClientStatus.ACTIVE
   ).length;
 
-  const lifetimeRevenue = clients.reduce((acc, c) => acc + (c.totalBilled || 0), 0);
+  const lifetimeRevenue = (Array.isArray(clients) ? clients : []).reduce((acc, c) => acc + (c.totalBilled || 0), 0);
 
-  const activeMatters = cases.filter((c) =>
+  const activeMatters = (Array.isArray(cases) ? cases : []).filter((c) =>
     c.status !== 'Closed' && c.status !== 'Settled' && c.status !== 'Archived'
   ).length;
 

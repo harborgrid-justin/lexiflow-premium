@@ -4,8 +4,13 @@
  */
 
 import { AuthenticationError } from "@/services/core/errors";
-import { buildBaseURL, getOrigin, DEFAULT_TIMEOUT } from "./config";
-import { buildHeaders, validateEndpoint, validateData, buildURL } from "./request-builder";
+import { buildBaseURL, DEFAULT_TIMEOUT, getOrigin } from "./config";
+import {
+  buildHeaders,
+  buildURL,
+  validateData,
+  validateEndpoint,
+} from "./request-builder";
 import { handleResponse } from "./response-handler";
 
 /**
@@ -22,7 +27,7 @@ export async function get<T>(
 
     const response = await fetch(url.toString(), {
       method: "GET",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 
@@ -55,7 +60,7 @@ export async function post<T>(
 
     const response = await fetch(url.toString(), {
       method: "POST",
-      headers: buildHeaders(options?.headers),
+      headers: await buildHeaders(options?.headers),
       body: data ? JSON.stringify(data) : undefined,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
       ...options,
@@ -86,7 +91,7 @@ export async function put<T>(endpoint: string, data?: unknown): Promise<T> {
 
     const response = await fetch(url.toString(), {
       method: "PUT",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       body: data ? JSON.stringify(data) : undefined,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
@@ -116,7 +121,7 @@ export async function patch<T>(endpoint: string, data?: unknown): Promise<T> {
 
     const response = await fetch(url.toString(), {
       method: "PATCH",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       body: data ? JSON.stringify(data) : undefined,
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
@@ -145,7 +150,7 @@ export async function deleteFn<T>(endpoint: string): Promise<T> {
 
     const response = await fetch(url.toString(), {
       method: "DELETE",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 

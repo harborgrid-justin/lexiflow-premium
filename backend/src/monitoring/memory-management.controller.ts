@@ -5,36 +5,37 @@
  * @module monitoring/memory-management.controller
  */
 
-import {
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  HttpCode,
-  Query,
-  Body,
-} from "@nestjs/common";
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from "@nestjs/swagger";
-import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import { Roles } from "@common/decorators/roles.decorator";
+import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import { RolesGuard } from "@common/guards/roles.guard";
 import {
-  getMemoryStats,
+  MemoryLeak,
+  MemoryLeakDetectorService,
+} from "@common/services/memory-leak-detector.service";
+import {
+  bytesToMB,
   checkMemoryThresholds,
+  DEFAULT_MEMORY_THRESHOLDS,
   forceGarbageCollection,
+  getMemoryStats,
   MemoryStats,
   MemoryThresholds,
-  DEFAULT_MEMORY_THRESHOLDS,
 } from "@common/utils/memory-management.utils";
 import {
-  MemoryLeakDetectorService,
-  MemoryLeak,
-} from "@common/services/memory-leak-detector.service";
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import * as v8 from "v8";
 
 // Local interfaces removed in favor of service types
@@ -221,10 +222,16 @@ export class MemoryManagementController {
     snapshot: MemorySnapshot;
     message: string;
   } {
-    const snapshot = this.leakDetector.takeSnapshot();
+    const heapSnapshot = this.leakDetector.takeSnapshot();
 
     return {
-      snapshot: snapshot as MemorySnapshot,
+      snapshot: {
+        timestamp: new Date(heapSnapshot.timestamp),
+        heapUsedMB: heapSnapshot.stats.heapUsedMB,
+        heapTotalMB: heapSnapshot.stats.heapTotalMB,
+        rssMB: heapSnapshot.stats.rssMB,
+        externalMB: bytesToMB(heapSnapshot.stats.external),
+      },
       message: "Memory snapshot taken",
     };
   }

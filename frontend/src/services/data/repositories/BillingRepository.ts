@@ -107,30 +107,46 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async getWIPStats(): Promise<WIPStat[]> {
     try {
-      const [clients, entries] = await Promise.all([
+      const [clientsResponse, entriesResponse] = await Promise.all([
         this.clientsApi.getAll(),
         this.timeApi.getAll(),
       ]);
 
+      // Handle paginated response format
+      const clients = Array.isArray(clientsResponse)
+        ? clientsResponse
+        : clientsResponse?.data || [];
+
+      // Handle entries response format
+      const entries = Array.isArray(entriesResponse)
+        ? entriesResponse
+        : entriesResponse?.data || [];
+
       // Aggregate WIP by Client
       const caseToClientMap: Record<string, string> = {};
-      clients.forEach((c: Client) => {
-        (c.matters || []).forEach((m: string) => {
-          caseToClientMap[m] = c.id;
+      if (Array.isArray(clients)) {
+        clients.forEach((c: Client) => {
+          (c.matters || []).forEach((m: string) => {
+            caseToClientMap[m] = c.id;
+          });
         });
-      });
+      }
       const wipMap: Record<string, number> = {};
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      entries.forEach((e: any) => {
-        if (e.status === "Unbilled") {
-          const clientId = caseToClientMap[e.caseId];
-          if (clientId) {
-            wipMap[clientId] = (wipMap[clientId] || 0) + e.total;
+      if (Array.isArray(entries)) {
+        entries.forEach((e: any) => {
+          if (e.status === "Unbilled") {
+            const clientId = caseToClientMap[e.caseId];
+            if (clientId) {
+              wipMap[clientId] = (wipMap[clientId] || 0) + e.total;
+            }
           }
-        }
-      });
+        });
+      }
       const stats = Object.keys(wipMap).map((clientId: string) => {
-        const client = clients.find((c: Client) => c.id === clientId);
+        const client = Array.isArray(clients)
+          ? clients.find((c: Client) => c.id === clientId)
+          : undefined;
         return {
           name: client
             ? (client.name || "").split(" ")[0] || "Unknown"
@@ -140,15 +156,17 @@ export class BillingRepository extends Repository<TimeEntry> {
         };
       });
       if (stats.length === 0) {
-        return clients.slice(0, 3).map((c: Client) => ({
-          name: (c.name || "").split(" ")[0] || "Unknown",
-          wip: 0,
-          billed: c.totalBilled,
-          totalHours: 0,
-          totalFees: 0,
-          totalExpenses: 0,
-          unbilledCount: 0,
-        }));
+        return (Array.isArray(clients) ? clients : [])
+          .slice(0, 3)
+          .map((c: Client) => ({
+            name: (c.name || "").split(" ")[0] || "Unknown",
+            wip: 0,
+            billed: c.totalBilled,
+            totalHours: 0,
+            totalFees: 0,
+            totalExpenses: 0,
+            unbilledCount: 0,
+          }));
       }
       return stats.sort((a, b) => (b.wip || 0) - (a.wip || 0)).slice(0, 5);
     } catch (error) {
@@ -308,7 +326,16 @@ export class BillingRepository extends Repository<TimeEntry> {
 
   async getTopAccounts(): Promise<Client[]> {
     try {
-      const clients = await this.clientsApi.getAll();
+      const clientsResponse = await this.clientsApi.getAll();
+      // Handle paginated response format
+      const clients = Array.isArray(clientsResponse)
+        ? clientsResponse
+        : clientsResponse?.data || [];
+
+      if (!Array.isArray(clients)) {
+        return [];
+      }
+
       return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     } catch (error) {
       console.error("[BillingRepository] Failed to get top accounts", error);

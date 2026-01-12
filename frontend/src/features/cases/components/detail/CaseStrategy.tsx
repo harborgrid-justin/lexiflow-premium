@@ -81,20 +81,36 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   // Mutation for saving strategy items
   const { mutate: saveStrategyItem, isLoading: isSaving } = useMutation(
     async ({ type, item }: { type: string; item: Citation | LegalArgument | Defense }) => {
-      const itemWithMeta = {
-        ...item,
-        strategyType: type,
-        defenseType: type === 'Defense' ? (item as Defense).type : undefined,
+      // Build payload that matches CreateStrategyItemDto
+      const payload: Record<string, unknown> = {
+        type, // Must be "Argument", "Defense", or "Citation"
         caseId,
-        userId: 'current-user',
-        createdAt: item.createdAt || new Date().toISOString(),
-        updatedAt: new Date().toISOString()
       };
 
+      // Add type-specific fields
+      if (type === 'Citation') {
+        const citation = item as Citation;
+        payload.citation = citation.citation || citation.title;
+        payload.title = citation.title;
+        payload.court = citation.court;
+        payload.year = citation.year;
+      } else if (type === 'Defense') {
+        const defense = item as Defense;
+        payload.title = defense.title;
+        payload.description = defense.description;
+        payload.defenseType = defense.type; // Maps Defense.type to defenseType field
+        payload.status = defense.status;
+      } else if (type === 'Argument') {
+        const argument = item as LegalArgument;
+        payload.title = argument.title;
+        payload.description = argument.description;
+        payload.status = argument.status;
+      }
+
       if (editingItem) {
-        return await DataService.strategy.update(item.id, itemWithMeta);
+        return await DataService.strategy.update(item.id, payload);
       } else {
-        return await DataService.strategy.add(itemWithMeta);
+        return await DataService.strategy.add(payload);
       }
     },
     {

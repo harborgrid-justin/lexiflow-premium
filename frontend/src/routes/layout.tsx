@@ -17,15 +17,15 @@
  * @module routes/layout
  */
 
+import { useAuthState } from '@/contexts/auth/AuthProvider';
+import { useAppController } from '@/hooks/core';
+import type { GlobalSearchResult } from '@/services/search/searchService';
+import { AppShell } from '@/shared/ui/layouts/AppShell/AppShell';
+import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { AppHeader } from '@/shared/ui/organisms/AppHeader/AppHeader';
 import { ErrorBoundary as ComponentErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
 import { GlobalHotkeys } from '@/shared/ui/organisms/GlobalHotkeys/GlobalHotkeys';
 import { Sidebar } from '@/shared/ui/organisms/Sidebar/Sidebar';
-import { AppShell } from '@/shared/ui/layouts/AppShell/AppShell';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { useAuthState } from '@/contexts/auth/AuthProvider';
-import { useAppController } from '@/hooks/core';
-import type { GlobalSearchResult } from '@/services/search/searchService';
 import type { AppView } from '@/types';
 import type { IntentResult } from '@/types/intelligence';
 import React, { useCallback, useMemo } from 'react';
@@ -54,6 +54,8 @@ export function meta() {
  * - Authentication verification
  * - Pre-fetching common data
  * - Setting up server-side context
+ *
+ * Note: In development mode, auto-login is attempted if VITE_AUTO_LOGIN=true
  */
 export async function loader({ request }: Route.LoaderArgs) {
   // Check for authentication token in localStorage (client-side check)
@@ -63,6 +65,28 @@ export async function loader({ request }: Route.LoaderArgs) {
     const userJson = localStorage.getItem('lexiflow_auth_user');
 
     if (!token || !userJson) {
+      // In development with auto-login enabled, try to auto-login
+      if (import.meta.env.DEV) {
+        // Import dynamically to avoid bundle bloat in production
+        const { performAutoLogin } = await import('@/utils/dev-auto-login');
+        const autoLoginSuccess = await performAutoLogin();
+
+        if (autoLoginSuccess) {
+          // Auto-login successful, re-check authentication
+          const newToken = localStorage.getItem('lexiflow_auth_token');
+          const newUserJson = localStorage.getItem('lexiflow_auth_user');
+
+          if (newToken && newUserJson) {
+            try {
+              const user = JSON.parse(newUserJson);
+              return { authenticated: true, user };
+            } catch {
+              // Fall through to login redirect
+            }
+          }
+        }
+      }
+
       // Not authenticated - redirect to login
       const url = new URL(request.url);
       throw new Response(null, {

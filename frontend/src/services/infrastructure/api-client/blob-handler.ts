@@ -4,8 +4,8 @@
  */
 
 import { AuthenticationError } from "@/services/core/errors";
-import { buildBaseURL, getOrigin, DEFAULT_TIMEOUT } from "./config";
-import { buildHeaders, validateEndpoint, buildURL } from "./request-builder";
+import { buildBaseURL, DEFAULT_TIMEOUT, getOrigin } from "./config";
+import { buildHeaders, buildURL, validateEndpoint } from "./request-builder";
 import { handleResponse } from "./response-handler";
 
 /**
@@ -22,7 +22,7 @@ export async function getBlob(
 
     const response = await fetch(url.toString(), {
       method: "GET",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT),
     });
 

@@ -14,6 +14,8 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
+import { AUTH_REFRESH_TOKEN_STORAGE_KEY, AUTH_TOKEN_STORAGE_KEY } from '@/config/security/security.config';
+import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-client/auth-manager';
 import type { User } from '@/types';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AuthActionsContext, AuthStateContext } from './authContexts';
@@ -30,7 +32,8 @@ interface LoginUserResponse extends User {
 // Constants
 // ============================================================================
 
-const AUTH_STORAGE_KEY = 'lexiflow_auth_token';
+const AUTH_STORAGE_KEY = AUTH_TOKEN_STORAGE_KEY;
+const REFRESH_STORAGE_KEY = AUTH_REFRESH_TOKEN_STORAGE_KEY;
 const AUTH_USER_KEY = 'lexiflow_auth_user';
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 const SESSION_WARNING_TIME = 5 * 60 * 1000; // 5 minutes before timeout
@@ -129,6 +132,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
 
+      // Also clear tokens from API client's auth-manager
+      clearAuthTokens();
+
       clearSessionTimers();
       setUser(null);
       setSession(null);
@@ -216,6 +222,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
           }
 
           setUser(parsedUser);
+
+          // Sync token with API client's auth-manager for backend API calls
+          const storedRefreshToken = localStorage.getItem(REFRESH_STORAGE_KEY);
+          if (storedRefreshToken) {
+            setAuthTokens(storedToken, storedRefreshToken);
+          } else {
+            // If no refresh token, clear auth state - session is invalid
+            console.warn('[AuthProvider] No refresh token found during init, clearing auth state');
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            localStorage.removeItem(AUTH_USER_KEY);
+            clearAuthTokens();
+            return;
+          }
+
           startSession();
 
           // Start automatic token refresh
@@ -304,7 +324,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // Store token and user
       localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
+      localStorage.setItem(REFRESH_STORAGE_KEY, response.refreshToken);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
+      // Also store in API client's auth-manager for backend API calls
+      setAuthTokens(response.accessToken, response.refreshToken);
 
       setUser(authUser);
       startSession();
@@ -355,8 +378,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const authApi = new AuthApiService();
       const response = await authApi.verifyMFA(code);
 
-      if (response.verified) {
+      if (response.verified && response.accessToken && response.refreshToken && response.user) {
+        // Store tokens and user
+        localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
+        localStorage.setItem(REFRESH_STORAGE_KEY, response.refreshToken);
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(response.user));
+
+        // Sync with API client's auth-manager
+        setAuthTokens(response.accessToken, response.refreshToken);
+
         setRequiresMFA(false);
+        setUser(response.user as AuthUser);
         startSession();
 
         // Start automatic token refresh
@@ -366,7 +398,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             logAuditEvent({
               type: 'token_refresh',
               timestamp: new Date(),
-              userId: user.id,
+              userId: response.user?.id,
             });
           } catch (error) {
             console.error('Token refresh failed:', error);
@@ -376,7 +408,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         logAuditEvent({
           type: 'login',
           timestamp: new Date(),
-          userId: user.id,
+          userId: response.user.id,
           metadata: { mfaVerified: true },
         });
 
@@ -395,6 +427,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const authApi = new AuthApiService();
       const response = await authApi.refreshToken();
       localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
+      localStorage.setItem(REFRESH_STORAGE_KEY, response.refreshToken);
+
+      // Also sync new token with API client's auth-manager
+      setAuthTokens(response.accessToken, response.refreshToken);
 
       if (user) {
         logAuditEvent({

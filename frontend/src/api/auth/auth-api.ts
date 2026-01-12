@@ -3,6 +3,7 @@
  * API service split from apiServices.ts
  */
 
+import { REFRESH_TOKEN_KEY } from "@/services/infrastructure/api-client/config";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { User } from "@/types";
 
@@ -25,6 +26,12 @@ export class AuthApiService {
     const { accessToken, refreshToken, user } = data;
 
     // Store tokens
+    console.log("[AuthApiService.login] Storing tokens:", {
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+      accessTokenLength: accessToken?.length || 0,
+      refreshTokenLength: refreshToken?.length || 0,
+    });
     apiClient.setAuthTokens(accessToken, refreshToken);
 
     return { accessToken, refreshToken, user };
@@ -63,7 +70,7 @@ export class AuthApiService {
   }
 
   async refreshToken(): Promise<{ accessToken: string; refreshToken: string }> {
-    const refreshToken = localStorage.getItem("lexiflow_refresh_token");
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
     if (!refreshToken) {
       throw new Error("No refresh token available");
     }
@@ -119,13 +126,20 @@ export class AuthApiService {
     );
   }
 
-  async verifyMFA(
-    code: string
-  ): Promise<{ verified: boolean; backupCodes?: string[] }> {
-    return apiClient.post<{ verified: boolean; backupCodes?: string[] }>(
-      "/auth/verify-mfa",
-      { code }
-    );
+  async verifyMFA(code: string): Promise<{
+    verified: boolean;
+    backupCodes?: string[];
+    accessToken?: string;
+    refreshToken?: string;
+    user?: User;
+  }> {
+    return apiClient.post<{
+      verified: boolean;
+      backupCodes?: string[];
+      accessToken?: string;
+      refreshToken?: string;
+      user?: User;
+    }>("/auth/verify-mfa", { code });
   }
 
   async disableMFA(): Promise<{ message: string }> {

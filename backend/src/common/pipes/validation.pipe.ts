@@ -13,10 +13,9 @@ export class ValidationPipe implements PipeTransform {
     value: unknown,
     { metatype }: ArgumentMetadata
   ): Promise<unknown> {
-    if (!metatype || !this.toValidate(metatype)) {
+    if (!metatype || !this.toValidate(metatype as any)) {
       return value;
     }
-
     const object = plainToInstance(metatype, value);
     const errors = await validate(object);
 

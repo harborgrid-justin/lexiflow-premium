@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, IsNull, DeepPartial } from "typeorm";
+import { Repository, IsNull } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { DiscoveryRequest } from "./entities/discovery-request.entity";
 import { CreateDiscoveryRequestDto } from "./dto/create-discovery-request.dto";

@@ -53,7 +53,7 @@ export class CaseResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as unknown as CaseFilterInput);
+    } as any);
 
     return {
       edges: result.data.map((caseItem) => ({
@@ -90,7 +90,7 @@ export class CaseResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(
-      input as unknown as CreateCaseInput
+      input as any
     );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown as CaseType;
@@ -105,7 +105,7 @@ export class CaseResolver {
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.update(
       id,
-      input as unknown as UpdateCaseInput
+      input as any
     );
     pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
     return caseEntity as unknown as CaseType;

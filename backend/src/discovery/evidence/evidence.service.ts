@@ -42,7 +42,7 @@ export class EvidenceService {
   ) {}
 
   async findAll(query?: QueryEvidenceDto): Promise<Evidence[]> {
-    const where: unknown = {};
+    const where: any = {};
 
     if (query?.caseId) {
       where.caseId = query.caseId;

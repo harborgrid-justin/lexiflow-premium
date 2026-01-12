@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, IsNull, DeepPartial } from "typeorm";
+import { Repository, IsNull } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { Examination } from "./entities/examination.entity";
 import { CreateExaminationDto } from "./dto/create-examination.dto";

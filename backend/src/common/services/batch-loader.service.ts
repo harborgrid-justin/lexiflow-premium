@@ -212,12 +212,13 @@ export class BatchLoaderService {
       const queryBuilder = repository.createQueryBuilder("entity");
 
       // Build OR conditions
-      batch.forEach((condition: Record<string, unknown>, idx: number) => {
-        const whereClause = Object.entries(condition)
+      batch.forEach((condition: unknown, idx: number) => {
+        const record = condition as Record<string, unknown>;
+        const whereClause = Object.entries(record)
           .map(([key, _value]) => `entity.${key} = :${key}_${idx}`)
           .join(" AND ");
 
-        const parameters = Object.entries(condition).reduce(
+        const parameters = Object.entries(record).reduce(
           (acc, [key, value]) => {
             acc[`${key}_${idx}`] = value;
             return acc;

@@ -366,10 +366,7 @@ export class DistributedTracingService implements OnModuleInit {
   ): void {
     const activeSpan = trace.getActiveSpan();
     if (activeSpan) {
-      activeSpan.recordException(
-        error,
-        attributes as Record<string, string | number | boolean>
-      );
+      activeSpan.recordException(error, attributes as any);
       activeSpan.setStatus({
         code: SpanStatusCode.ERROR,
         message: error.message,

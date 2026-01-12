@@ -34,7 +34,6 @@ import {
 import {
   MemoryLeakDetectorService,
   MemoryLeak,
-  HeapSnapshot as MemorySnapshot,
 } from "@common/services/memory-leak-detector.service";
 import * as v8 from "v8";
 

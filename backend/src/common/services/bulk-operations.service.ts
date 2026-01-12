@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import * as MasterConfig from "@config/master.config";
-import { Repository, ObjectLiteral } from "typeorm";
+import { Repository, ObjectLiteral, DeepPartial } from "typeorm";
 
 /**
  * Bulk Operation Result
@@ -223,9 +223,9 @@ export class BulkOperationsService {
           });
         } else {
           if (options.softDelete) {
-            await repository.softDelete(batch as Array<string | number>);
+            await repository.softDelete(batch as string[] | number[]);
           } else {
-            await repository.delete(batch as Array<string | number>);
+            await repository.delete(batch as string[] | number[]);
           }
         }
 

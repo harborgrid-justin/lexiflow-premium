@@ -4,42 +4,22 @@
  * @description Admin-specific dashboard focused on firm-wide metrics, user activity, and system health
  */
 
-import { type AdminDashboardData, dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/features/theme';
 import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
 import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { useAdminDashboardData } from '../hooks/useAdminDashboardData';
 
 export const AdminDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
-
-  const { data, isLoading } = useQuery<AdminDashboardData>(
-    ['dashboard', 'admin'],
-    () => dashboardMetricsService.getRoleDashboard('admin') as Promise<AdminDashboardData>
-  );
+  const { kpis, userActivity, systemStats, isLoading } = useAdminDashboardData();
 
   if (isLoading) {
     return <LazyLoader message="Loading admin dashboard..." />;
   }
-
-  // Fallback data
-  const kpis = data?.kpis || {
-    totalUsers: { value: 0, previousValue: 0 },
-    activeUsers: { value: 0, subtitle: '0% of users' },
-    systemHealth: { value: 100, previousValue: 100 },
-    openIssues: { value: 0, subtitle: '0 critical' },
-  };
-
-  const userActivity = data?.userActivity || [];
-  const systemStats = data?.systemStats || {
-    storageUsage: { value: 0, total: 100, unit: 'TB' },
-    apiLatency: { value: 0, unit: 'ms' },
-    errorRate: { value: 0, unit: '%' },
-  };
 
   return (
     <div className="space-y-6">

@@ -390,7 +390,16 @@ export const CalendarService = {
         validateEventType(filters.type, "getEvents");
       }
 
-      const events = await workflowApi.calendar.getAll(filters);
+      const response = await workflowApi.calendar.getAll(filters);
+
+      // Handle paginated response format { data: [], total: 0 }
+      const events = Array.isArray(response) ? response : response?.data || [];
+
+      // Ensure events is an array
+      if (!Array.isArray(events)) {
+        console.warn('[CalendarService.getEvents] Expected array, got:', typeof events, events);
+        return [];
+      }
 
       // Map API events to domain events
       return events.map((e: ApiCalendarEvent) => ({

@@ -4,4 +4,4 @@
  * Re-exports the ThemeProvider from context for use in root layout
  */
 
-export { ThemeProvider } from './ThemeContext';
+export { ThemeProvider, useTheme } from './ThemeContext';

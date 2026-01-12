@@ -23,7 +23,7 @@ import { ArgumentCoreInfo } from './ArgumentCoreInfo';
 import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces

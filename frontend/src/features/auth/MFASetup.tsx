@@ -7,8 +7,9 @@
  * @module components/auth/MFASetup
  */
 
-import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
-import { useState } from 'react';
+import { useAuthState } from '@/contexts/auth/AuthProvider';
+import { useMFAFlow } from './hooks/useMFAFlow';
+import { formatBackupCodes } from './utils/authFormatters';
 
 interface MFASetupProps {
   onComplete?: () => void;
@@ -16,59 +17,26 @@ interface MFASetupProps {
 }
 
 export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
-  const { enableMFA } = useAuthActions();
   const { user } = useAuthState();
-  const [step, setStep] = useState<'initial' | 'scan' | 'verify' | 'complete'>('initial');
-  const [qrCode, setQrCode] = useState<string>('');
-  const [secret, setSecret] = useState<string>('');
-  const [backupCodes, setBackupCodes] = useState<string[]>([]);
-  const [verificationCode, setVerificationCode] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleStartSetup = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const setup = await enableMFA();
-      setQrCode(setup.qrCode);
-      setSecret(setup.secret);
-      setBackupCodes(setup.backupCodes || []);
-      setStep('scan');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to enable MFA');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerify = async () => {
-    if (verificationCode.length !== 6) {
-      setError('Please enter a 6-digit code');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Verification happens when logging in, but we show the backup codes
-      setStep('complete');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Verification failed');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleComplete = () => {
-    onComplete?.();
-  };
+  const {
+    step,
+    qrCode,
+    secret,
+    backupCodes,
+    verificationCode,
+    isLoading,
+    error,
+    startSetup,
+    verifyCode,
+    completeSetup,
+    reset,
+    setVerificationCode
+  } = useMFAFlow(onComplete);
 
   const copyBackupCodes = () => {
-    navigator.clipboard.writeText(backupCodes.join('\n'));
+    navigator.clipboard.writeText(formatBackupCodes(backupCodes));
   };
+
 
   if (!user) {
     return null;
@@ -109,7 +77,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
           <div className="flex gap-3">
             <button
-              onClick={handleStartSetup}
+              onClick={startSetup}
               disabled={isLoading}
               className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
             >
@@ -179,7 +147,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
                 id="verification-code"
                 type="text"
                 value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                onChange={(e) => setVerificationCode(e.target.value)}
                 placeholder="000000"
                 maxLength={6}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg font-mono text-lg text-center tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -189,14 +157,14 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
 
           <div className="flex gap-3">
             <button
-              onClick={handleVerify}
+              onClick={verifyCode}
               disabled={isLoading || verificationCode.length !== 6}
               className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
             >
               {isLoading ? 'Verifying...' : 'Verify & Continue'}
             </button>
             <button
-              onClick={() => setStep('initial')}
+              onClick={reset}
               className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
             >
               Back
@@ -251,7 +219,7 @@ export function MFASetup({ onComplete, onCancel }: MFASetupProps) {
           </div>
 
           <button
-            onClick={handleComplete}
+            onClick={completeSetup}
             className="w-full px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
           >
             Done

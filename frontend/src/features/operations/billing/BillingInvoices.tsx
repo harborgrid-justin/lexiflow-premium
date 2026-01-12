@@ -17,13 +17,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/features/theme';
+import { useBillingInvoices } from './hooks/useBillingInvoices';
+import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Components
 import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
@@ -53,14 +54,15 @@ interface MutationContext {
 const BillingInvoicesComponent: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('All');
-
-  // Enterprise Data Access with query keys
-  const { data: invoices = [] } = useQuery<Invoice[]>(
-    billingQueryKeys.billing.invoices(),
-    () => (DataService && DataService.billing) ? DataService.billing.getInvoices() : Promise.resolve([])
-  );
+  const { 
+    filteredInvoices, 
+    searchTerm, 
+    setSearchTerm, 
+    filterStatus, 
+    setFilterStatus, 
+    sendInvoice, 
+    markPaid 
+  } = useBillingInvoices();
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -71,89 +73,6 @@ const BillingInvoicesComponent: React.FC = () => {
       notify.info('Mark invoice as paid (to be implemented)');
     }
   });
-
-  const { mutate: sendInvoice } = useMutation(
-    (id: string) => (DataService && DataService.billing) ? DataService.billing.sendInvoice(id) : Promise.resolve(false),
-    {
-      // Concurrent-safe optimistic update: Functional state ensures latest data (Principle #5)
-      onMutate: async (id: string) => {
-        const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
-
-        // Optimistically update to "Sent" - functional update pattern
-        queryClient.setQueryData<Invoice[]>(
-          billingQueryKeys.billing.invoices(),
-          (old = []) => old.map(inv =>
-            inv.id === id ? { ...inv, status: InvoiceStatusEnum.SENT } : inv
-          )
-        );
-
-        return { previousInvoices };
-      },
-      onSuccess: (_, id) => {
-        notify.success(`Invoice ${id} sent successfully.`);
-      },
-      onError: (_, __, context?: MutationContext) => {
-        // Rollback on error
-        if (context?.previousInvoices) {
-          queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
-        }
-        notify.error('Failed to send invoice');
-      },
-      onSettled: () => {
-        queryClient.invalidate(billingQueryKeys.billing.invoices());
-      }
-    }
-  );
-
-  // Mark Paid Mutation with concurrent-safe optimistic updates (Principle #5)
-  const { mutate: markPaid } = useMutation(
-    (id: string) => DataService.billing.updateInvoice(id, { status: InvoiceStatusEnum.PAID }),
-    {
-      // Functional update pattern prevents stale closures
-      onMutate: async (id: string) => {
-        const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
-
-        // Optimistically update to "Paid"
-        queryClient.setQueryData<Invoice[]>(
-          billingQueryKeys.billing.invoices(),
-          (old = []) => old.map(inv =>
-            inv.id === id ? { ...inv, status: InvoiceStatusEnum.PAID } : inv
-          )
-        );
-
-        return { previousInvoices };
-      },
-      onSuccess: () => {
-        notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");
-      },
-      onError: (_, __, context?: MutationContext) => {
-        // Rollback on error
-        if (context?.previousInvoices) {
-          queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
-        }
-        notify.error("Failed to update invoice.");
-      },
-      onSettled: () => {
-        queryClient.invalidate(billingQueryKeys.billing.invoices());
-      }
-    }
-  );
-
-  // Memoization with purpose: Filter recalc only on data/filter changes (Principle #13)
-  const filteredInvoices = useMemo(() => {
-    return invoices.filter(inv => {
-      const matchesSearch = (inv.client || '').toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filterStatus === 'All' || inv.status === filterStatus;
-      return matchesSearch && matchesStatus;
-    });
-  }, [invoices, searchTerm, filterStatus]);
-
-  const getBadgeVariant = useCallback((status: string) => {
-    if (status === InvoiceStatusEnum.PAID) return 'success';
-    if (status === InvoiceStatusEnum.OVERDUE) return 'error';
-    if (status === InvoiceStatusEnum.DRAFT) return 'neutral';
-    return 'info';
-  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -208,7 +127,7 @@ const BillingInvoicesComponent: React.FC = () => {
                 {Formatters.currency(inv.amount)}
               </TableCell>
               <TableCell>
-                <Badge variant={getBadgeVariant(inv.status)}>
+                <Badge variant={getInvoiceBadgeVariant(inv.status)}>
                   {inv.status}
                 </Badge>
               </TableCell>

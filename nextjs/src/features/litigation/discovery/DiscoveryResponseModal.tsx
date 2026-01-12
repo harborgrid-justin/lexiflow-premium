@@ -5,7 +5,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/utils/cn';
 import { Wand2 } from 'lucide-react';

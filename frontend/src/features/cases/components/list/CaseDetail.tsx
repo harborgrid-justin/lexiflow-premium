@@ -20,34 +20,22 @@ import {
   Trash2,
   Users
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MatterForm } from './matter-form';
+import { useCaseNavigation } from '@/features/cases/hooks/useCaseNavigation';
 
 export const CaseDetail: React.FC = () => {
-  // Extract matterId from hash
-  const matterId = window.location.hash.split('/matters/')[1]?.split('?')[0];
-  const navigate = useCallback((path: string) => {
-    window.location.hash = `#/${path}`;
-    console.log('useNavigate:', path);
-  }, []);
+  const { matterId, navigate, backToMatters, isValidMatter } = useCaseNavigation();
 
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const deleteModal = useModalState();
 
-  // Validate UUID format before making API call
-  const isValidUUID = (id: string) => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(id);
-  };
-
-  const isValidMatterId = !!(matterId && isValidUUID(matterId));
-
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matter, isLoading: loading, error } = useQuery<Matter | null>(
     queryKeys.cases.matters.detail(matterId!),
     () => DataService.cases.getById(matterId!),
-    { enabled: isValidMatterId }
+    { enabled: isValidMatter }
   );
 
   const updateMutation = useMutation(
@@ -65,24 +53,24 @@ export const CaseDetail: React.FC = () => {
     () => DataService.cases.delete(matterId!),
     {
       onSuccess: () => {
-        navigate(PATHS.MATTERS);
+        backToMatters();
       }
     }
   );
 
   // Navigate to matters list if invalid - moved before conditional return
   useEffect(() => {
-    if (!isValidMatterId || error || (!loading && !matter)) {
-      if (!isValidMatterId && matterId) {
+    if (!isValidMatter || error || (!loading && !matter)) {
+      if (!isValidMatter && matterId) {
         console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
       }
-      navigate(PATHS.MATTERS);
+      backToMatters();
     }
-  }, [isValidMatterId, error, loading, matter, matterId, navigate]);
+  }, [isValidMatter, error, loading, matter, matterId, backToMatters]);
 
   // PREDICTABLE ERROR STATE: Render structured error view instead of null
   // Prevents hydration mismatch and provides user feedback
-  if (!isValidMatterId || error || (!loading && !matter)) {
+  if (!isValidMatter || error || (!loading && !matter)) {
     return (
       <div className="flex items-center justify-center h-full p-8">
         <div className="text-center max-w-md">
@@ -193,7 +181,7 @@ export const CaseDetail: React.FC = () => {
       <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6">
         <div className="flex items-center justify-between mb-4">
           <button
-            onClick={() => navigate(PATHS.MATTERS)}
+            onClick={backToMatters}
             className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
           >
             <ArrowLeft className="w-5 h-5" />

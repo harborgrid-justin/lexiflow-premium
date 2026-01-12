@@ -20,6 +20,7 @@ import type { WorkflowInstance } from '@/api/workflow/core';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
+import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import type { User } from '@/types';
@@ -40,6 +41,7 @@ export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
   const { isDark } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
   // Fetch tasks from workflow API with error handling
   const { data: tasks, isLoading: tasksLoading } = useQuery(
@@ -115,7 +117,11 @@ export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
                 <Calendar className="w-4 h-4" />
               </button>
             </div>
-            <Button variant="primary" size="sm">
+            <Button 
+              variant="primary" 
+              size="sm"
+              onClick={() => setShowTaskModal(true)}
+            >
               <Plus className="w-4 h-4 mr-2" />
               New Task
             </Button>
@@ -236,6 +242,14 @@ const TaskItem: React.FC<{ task: WorkflowInstance; isDark: boolean }> = ({ task,
           </div>
         </div>
       </div>
+
+      {showTaskModal && (
+        <TaskCreationModal
+          isOpen={showTaskModal}
+          onClose={() => setShowTaskModal(false)}
+          caseId={caseId}
+        />
+      )}
     </div>
   </div>
 );

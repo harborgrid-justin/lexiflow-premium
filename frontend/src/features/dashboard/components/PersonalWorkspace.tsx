@@ -25,6 +25,7 @@ import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useBackendHealth } from '@/hooks/useBackendHealth';
 
 // Components
 import { NotificationCenter } from '@/shared/ui/organisms/notifications/NotificationCenter';
@@ -65,6 +66,7 @@ interface PersonalWorkspaceProps {
 
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
+    const { isHealthy, isAvailable } = useBackendHealth();
     // const queryClient = useQueryClient(); // Removed as we import the singleton directly
 
     const { data: notifications = [] } = useQuery<DomainNotification[]>(
@@ -118,8 +120,11 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
             }
         };
 
-        loadData();
-    }, []);
+        // Only load if backend is available, otherwise retry when it becomes available
+        if (isAvailable && isHealthy) {
+            loadData();
+        }
+    }, [isAvailable, isHealthy]);
 
     // Ensure allTasks and allEvents are arrays even if API fails
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
@@ -128,7 +133,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const myTasks = safeAllTasks.filter((t: WorkflowTask) => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task');
 
-    const hasError = error;
+    const hasError = error || (!isAvailable || !isHealthy);
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">

@@ -276,4 +276,17 @@ export class DiscoveryApiService {
       return [];
     }
   }
+
+  /**
+   * Get all court reporters
+   * @returns Promise<unknown[]> Array of reporters
+   */
+  async getReporters(): Promise<unknown[]> {
+    try {
+      return await apiClient.get<unknown[]>(`${this.baseUrl}/reporters`);
+    } catch (error) {
+      console.error("[DiscoveryApiService.getReporters] Error:", error);
+      return [];
+    }
+  }
 }

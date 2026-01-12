@@ -32,36 +32,3 @@ export class VectorEmbedding {
   @UpdateDateColumn()
   updatedAt!: Date;
 }
-
-@Entity('ai_models')
-export class AIModel {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @Column()
-  name!: string;
-
-  @Column()
-  type!: string;
-
-  @Column()
-  version!: string;
-
-  @Column({ type: 'text', nullable: true })
-  description!: string;
-
-  @Column({ type: 'jsonb' })
-  config!: Record<string, unknown>;
-
-  @Column({ type: 'varchar', length: 20, default: 'active' })
-  status!: 'active' | 'inactive' | 'training';
-
-  @Column({ type: 'jsonb', nullable: true })
-  performance: Record<string, unknown> | null = null;
-
-  @CreateDateColumn()
-  createdAt!: Date;
-
-  @UpdateDateColumn()
-  updatedAt!: Date;
-}

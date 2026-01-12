@@ -91,6 +91,21 @@ export class DocumentsController {
     return await this.documentsService.findAll(filterDto);
   }
 
+  @Public()
+  @Get("stats")
+  @ApiOperation({ summary: "Get document statistics" })
+  @ApiResponse({ status: 200, description: "Stats retrieved successfully" })
+  async getStats() {
+    // Return mock stats for now - TODO: implement actual stats
+    return {
+      smartViews: [],
+      facets: {
+        fileType: [],
+        status: [],
+      },
+    };
+  }
+
   @Get(":id")
   @ApiOperation({ summary: "Get document metadata by ID" })
   @ApiResponse({ status: 200, description: "Document found" })

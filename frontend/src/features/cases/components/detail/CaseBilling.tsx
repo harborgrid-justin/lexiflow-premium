@@ -20,6 +20,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useCaseFinancials } from '@/features/cases/hooks/useCaseFinancials';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
@@ -35,17 +36,7 @@ interface CaseBillingProps {
 
 export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, entries }) => {
     const { theme } = useTheme();
-
-    // Calculate totals dynamically based on props
-    const unbilledTotal = entries
-        .filter(e => e.status === 'Unbilled')
-        .reduce((sum, e) => sum + e.total, 0);
-
-    const billedTotal = entries
-        .filter(e => e.status === 'Billed')
-        .reduce((sum, e) => sum + e.total, 0);
-
-    const totalHours = entries.reduce((sum, e) => sum + (e.duration / 60), 0);
+    const { unbilledTotal, billedTotal, totalHours, ledgerTotal } = useCaseFinancials(entries);
 
     return (
         <div className="space-y-6">
@@ -123,7 +114,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <tfoot className={cn("border-t", theme.border.default, theme.surface.highlight)}>
                             <tr>
                                 <td colSpan={4} data-label="" className={cn("px-6 py-3 text-right text-xs font-bold uppercase", theme.text.secondary)}>Ledger Total</td>
-                                <td data-label="Total" className={cn("px-6 py-3 text-right text-sm font-mono font-bold", theme.text.primary)}>${(unbilledTotal + billedTotal).toFixed(2)}</td>
+                                <td data-label="Total" className={cn("px-6 py-3 text-right text-sm font-mono font-bold", theme.text.primary)}>${ledgerTotal.toFixed(2)}</td>
                                 <td data-label=""></td>
                             </tr>
                         </tfoot>

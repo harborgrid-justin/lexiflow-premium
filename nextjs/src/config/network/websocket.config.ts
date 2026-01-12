@@ -9,7 +9,7 @@ export const WS_ENABLED = false; // Set to true when backend WebSocket is ready
 export const getWsUrl = () => {
   if (!isBrowser()) return "";
   return (
-    import.meta.env.VITE_WS_URL ||
+    process.env.NEXT_PUBLIC_WS_URL ||
     (window.location.protocol === "https:" ? "wss://" : "ws://") +
       window.location.host +
       "/ws"

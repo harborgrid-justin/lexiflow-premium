@@ -162,7 +162,7 @@ export class CasesApiService {
   }
 
   // Map backend status to frontend CaseStatus enum
-  private mapBackendStatusToFrontend = (backendStatus: string): string => {
+  private mapBackendStatusToFrontend(backendStatus: string): string {
     const backendToFrontendStatusMap: Record<string, string> = {
       pending: "Pre-Filing",
       Open: "Open",
@@ -175,10 +175,10 @@ export class CasesApiService {
       "On Hold": "On Hold",
     };
     return backendToFrontendStatusMap[backendStatus] || "Active";
-  };
+  }
 
   // Transform case data from backend to frontend format
-  private transformCase = (backendCase: unknown): Case => {
+  private transformCase(backendCase: unknown): Case {
     const caseData =
       backendCase && typeof backendCase === "object"
         ? (backendCase as Record<string, unknown>)
@@ -190,7 +190,7 @@ export class CasesApiService {
       ) as Case["status"],
       matterType: (caseData.practiceArea || "General") as Case["matterType"],
     } as Case;
-  };
+  }
 
   async getAll(filters?: {
     status?: string;

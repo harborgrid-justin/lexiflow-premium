@@ -1,7 +1,7 @@
 // components/DocumentAssembly.tsx
 import { useState } from 'react';
 import { X, Wand2, Minus } from 'lucide-react';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { LegalDocument, DocumentId, CaseId } from '@/types';
 import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
@@ -38,12 +38,15 @@ export function DocumentAssembly({ onClose, caseTitle, onSave, windowId }: Docum
 
     const context = `Template: ${template}. Case: ${caseTitle}. Recipient: ${formData.recipient}. Point: ${formData.mainPoint}.`;
 
-    const stream = GeminiService.streamDraft(context, 'Document');
-
-    for await (const chunk of stream) {
-        setResult(prev => prev + chunk);
+    try {
+      const draft = await generateDraft(context, 'Document');
+      setResult(draft);
+    } catch (error) {
+      console.error('Draft generation failed:', error);
+      setResult('Failed to generate draft. Please try again.');
+    } finally {
+      setIsStreaming(false);
     }
-    setIsStreaming(false);
   };
 
   const { mutate: saveDocument, isLoading: isSaving } = useMutation(

@@ -207,7 +207,7 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
             key={deadline.id}
             className={cn(
               'relative flex gap-3 p-3 rounded-lg border transition-all duration-200',
-              theme.surface.default,
+              'bg-surface', // Fixed: Use Tailwind class "bg-surface"
               priorityConfig.border,
               deadline.computedStatus === 'completed' && 'opacity-60',
               onDeadlineClick && 'cursor-pointer hover:shadow-md hover:scale-[1.01]'
@@ -231,18 +231,18 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
               <div className="flex items-start justify-between gap-2 mb-1">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className={cn('text-sm font-semibold truncate', theme.text.primary)}>
+                    <h4 className={cn('text-sm font-semibold truncate text-text')}>
                       {deadline.title}
                     </h4>
                     <div className={cn('w-2 h-2 rounded-full flex-shrink-0', priorityConfig.dot)} />
                   </div>
                   {deadline.description && (
-                    <p className={cn('text-xs mb-1', theme.text.secondary)}>
+                    <p className={cn('text-xs mb-1 text-text-muted')}>
                       {deadline.description}
                     </p>
                   )}
                   {deadline.caseName && (
-                    <p className={cn('text-xs', theme.text.tertiary)}>
+                    <p className={cn('text-xs text-text-muted')}>
                       {deadline.caseName}
                     </p>
                   )}
@@ -256,13 +256,13 @@ export const DeadlinesList: React.FC<DeadlinesListProps> = ({
               {/* Footer */}
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className={cn('capitalize', theme.text.tertiary)}>
+                  <span className={cn('capitalize text-text-muted')}>
                     {deadline.type}
                   </span>
                   {deadline.assignee && (
                     <>
-                      <span className={theme.text.tertiary}>•</span>
-                      <span className={theme.text.secondary}>
+                      <span className="text-text-muted">•</span>
+                      <span className="text-text-muted">
                         {deadline.assignee.name}
                       </span>
                     </>

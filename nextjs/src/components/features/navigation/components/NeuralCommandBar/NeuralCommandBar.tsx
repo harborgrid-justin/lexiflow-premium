@@ -20,7 +20,7 @@ import React, { useDeferredValue, useEffect, useRef, useState } from 'react';
 // ============================================================================
 // Services & Data
 import type { IntentResult } from '@/services/features/research/geminiService';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { predictIntent } from '@/app/actions/ai/gemini';
 import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 

@@ -88,15 +88,10 @@ export const CaseImporter: React.FC = () => {
       }
 
       // Get API key from storage if available
-      const apiKey = aiProvider === 'gemini'
-        ? (localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY)
-        : (localStorage.getItem('openai_api_key') || import.meta.env.VITE_OPENAI_API_KEY);
-
-      // Call backend API for parsing
+      // Use server action for AI parsing (API keys stored server-side)
       const parsed = await api.cases.parse(trimmedInput, {
         useAI,
         provider: aiProvider,
-        apiKey: apiKey || undefined
       });
 
       if (parsed && Object.keys(parsed).length > 0) {

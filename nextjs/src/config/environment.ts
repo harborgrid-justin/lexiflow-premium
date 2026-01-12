@@ -40,7 +40,7 @@ export interface EnvironmentConfig {
  * Parse environment from env vars
  */
 const getEnvironment = (): Environment => {
-  const env = import.meta.env.VITE_ENV || import.meta.env.MODE || 'development';
+  const env = process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV || 'development';
   const validEnvs: Environment[] = ['development', 'staging', 'production', 'test'];
   return validEnvs.includes(env as Environment) ? (env as Environment) : 'development';
 };
@@ -70,17 +70,17 @@ let _envConfig: EnvironmentConfig | null = null;
 const createEnvConfig = (): EnvironmentConfig => ({
   environment: getEnvironment(),
   dataSource: 'backend',
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || '/api',
-  apiTimeout: parseNumber(import.meta.env.VITE_API_TIMEOUT, 30000),
+  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
+  apiTimeout: parseNumber(process.env.NEXT_PUBLIC_API_TIMEOUT, 30000),
   features: {
     useBackendApi: true,
-    enableAnalytics: parseBoolean(import.meta.env.VITE_ENABLE_ANALYTICS, false),
-    enableErrorReporting: parseBoolean(import.meta.env.VITE_ENABLE_ERROR_REPORTING, true),
-    enableDebugMode: parseBoolean(import.meta.env.VITE_ENABLE_DEBUG_MODE, false),
+    enableAnalytics: parseBoolean(process.env.NEXT_PUBLIC_ENABLE_ANALYTICS, false),
+    enableErrorReporting: parseBoolean(process.env.NEXT_PUBLIC_ENABLE_ERROR_REPORTING, true),
+    enableDebugMode: parseBoolean(process.env.NEXT_PUBLIC_ENABLE_DEBUG_MODE, false),
   },
   security: {
-    enableCSP: parseBoolean(import.meta.env.VITE_ENABLE_CSP, true),
-    enableHTTPSOnly: parseBoolean(import.meta.env.VITE_ENABLE_HTTPS_ONLY, false),
+    enableCSP: parseBoolean(process.env.NEXT_PUBLIC_ENABLE_CSP, true),
+    enableHTTPSOnly: parseBoolean(process.env.NEXT_PUBLIC_ENABLE_HTTPS_ONLY, false),
   },
 });
 

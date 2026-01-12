@@ -78,21 +78,30 @@ export class TrustAccountsService {
   }
 
   async findAll(clientId?: string, status?: TrustAccountStatus): Promise<TrustAccount[]> {
-    const query = this.trustAccountRepository.createQueryBuilder('trustAccount');
+    try {
+      const query = this.trustAccountRepository.createQueryBuilder('trustAccount');
 
-    if (clientId) {
-      query.where('trustAccount.clientId = :clientId', { clientId });
+      if (clientId) {
+        query.where('trustAccount.clientId = :clientId', { clientId });
+      }
+
+      if (status) {
+        query.andWhere('trustAccount.status = :status', { status });
+      }
+
+      query
+        .andWhere('trustAccount.deletedAt IS NULL')
+        .orderBy('trustAccount.createdAt', 'DESC');
+
+      return await query.getMany();
+    } catch (error) {
+      // If table doesn't exist, return empty array instead of crashing
+      if (error instanceof Error && error.message.includes('relation "trust_accounts" does not exist')) {
+        console.warn('[TrustAccountsService] trust_accounts table does not exist yet. Run migrations or enable DB_SYNCHRONIZE=true');
+        return [];
+      }
+      throw error;
     }
-
-    if (status) {
-      query.andWhere('trustAccount.status = :status', { status });
-    }
-
-    query
-      .andWhere('trustAccount.deletedAt IS NULL')
-      .orderBy('trustAccount.createdAt', 'DESC');
-
-    return await query.getMany();
   }
 
   async findOne(id: string): Promise<TrustAccount> {

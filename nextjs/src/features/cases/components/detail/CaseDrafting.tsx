@@ -20,7 +20,7 @@ import { ClauseList as ClausePanel } from '@features/knowledge';
 import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

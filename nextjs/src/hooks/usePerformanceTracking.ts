@@ -44,7 +44,7 @@ export function usePerformanceTracking(
   const {
     componentName,
     enabled = import.meta.env.DEV ||
-      import.meta.env.VITE_ENABLE_PERF_TRACKING === "true",
+      process.env.NEXT_PUBLIC_ENABLE_PERF_TRACKING === "true",
     warnThreshold = 16,
   } = options;
 

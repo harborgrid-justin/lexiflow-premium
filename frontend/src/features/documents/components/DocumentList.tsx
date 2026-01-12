@@ -7,10 +7,15 @@ import { useState } from 'react';
 import { DocumentCard } from './DocumentCard';
 import { DocumentRow } from './DocumentRow';
 import type { LegalDocument } from '@/types/documents';
+import { useSortableList } from '../hooks/useSortableList';
+import { sortDocuments, SortField, SortOrder } from '../utils/documentUtils';
 
 export type ViewMode = 'grid' | 'list';
-export type SortField = 'title' | 'type' | 'uploadDate' | 'lastModified' | 'fileSize' | 'status';
-export type SortOrder = 'asc' | 'desc';
+// Exporting types from utils now to avoid duplication if needed elsewhere, 
+// or re-exporting if they were used by other components. 
+// For now, keeping the types here if they are part of the component's public API, 
+// but referencing the utils types.
+export { type SortField, type SortOrder } from '../utils/documentUtils';
 
 interface DocumentListProps {
   documents: LegalDocument[];
@@ -34,10 +39,13 @@ export function DocumentList({
   loading = false
 }: DocumentListProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [sortField, setSortField] = useState<SortField>('lastModified');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = viewMode === 'grid' ? 12 : 20;
+
+  const {
+    paginatedItems: paginatedDocuments,
+    sortConfig: { field: sortField, order: sortOrder },
+    handleSort
+  } = useSortableList(documents, 'lastModified', itemsPerPage, sortDocuments);
 
   // Selection handlers
   const toggleSelection = (id: string) => {
@@ -57,54 +65,6 @@ export function DocumentList({
       setSelectedIds(new Set(documents.map(d => d.id)));
     }
   };
-
-  // Sorting
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
-    }
-  };
-
-  const sortedDocuments = [...documents].sort((a, b) => {
-    let aVal: string | number = '';
-    let bVal: string | number = '';
-
-    switch (sortField) {
-      case 'title':
-        aVal = a.title.toLowerCase();
-        bVal = b.title.toLowerCase();
-        break;
-      case 'type':
-        aVal = a.type.toLowerCase();
-        bVal = b.type.toLowerCase();
-        break;
-      case 'uploadDate':
-        aVal = new Date(a.uploadDate).getTime();
-        bVal = new Date(b.uploadDate).getTime();
-        break;
-      case 'lastModified':
-        aVal = new Date(a.lastModified).getTime();
-        bVal = new Date(b.lastModified).getTime();
-        break;
-      case 'status':
-        aVal = (a.status || '').toLowerCase();
-        bVal = (b.status || '').toLowerCase();
-        break;
-    }
-
-    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
-    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
-    return 0;
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(sortedDocuments.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedDocuments = sortedDocuments.slice(startIndex, endIndex);
 
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) {

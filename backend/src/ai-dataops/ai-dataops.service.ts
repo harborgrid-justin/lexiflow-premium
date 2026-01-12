@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { VectorEmbedding, AIModel } from './entities/ai.entity';
+import { VectorEmbedding } from './entities/ai.entity';
+import { AIModel } from '@ai-ops/entities/ai-model.entity';
 import { StoreDataOpsEmbeddingDto } from './dto/store-embedding.dto';
 import { SearchEmbeddingsDto } from './dto/search-embeddings.dto';
 import { RegisterDataOpsModelDto } from './dto/register-model.dto';

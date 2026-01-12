@@ -1,4 +1,5 @@
 import { Public } from "@common/decorators/public.decorator";
+import { JwtAuthGuard } from "@common/guards/jwt-auth.guard";
 import {
   Body,
   Controller,
@@ -9,6 +10,7 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ConflictChecksService } from "./conflict-checks.service";
@@ -22,6 +24,7 @@ import {
 @ApiTags("Compliance - Conflict Checks")
 @ApiBearerAuth("JWT-auth")
 @Controller("compliance/conflicts")
+@UseGuards(JwtAuthGuard)
 export class ConflictChecksController {
   constructor(private readonly conflictChecksService: ConflictChecksService) {}
 

@@ -139,7 +139,7 @@ export function useWebSocket(options: WebSocketOptions = {}) {
 
     // Construct WebSocket URL
     const wsUrl =
-      import.meta.env.VITE_WS_URL ||
+      process.env.NEXT_PUBLIC_WS_URL ||
       (window.location.protocol === "https:" ? "wss://" : "ws://") +
         window.location.host;
 

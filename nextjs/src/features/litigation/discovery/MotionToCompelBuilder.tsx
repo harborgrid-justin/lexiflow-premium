@@ -7,7 +7,7 @@ import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } fr
 import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { useNotify } from '@/hooks/useNotify';
 import { useMultiSelection } from '@/hooks/useMultiSelection';
 

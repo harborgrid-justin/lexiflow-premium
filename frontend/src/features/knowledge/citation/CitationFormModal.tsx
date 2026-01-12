@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // import { BookOpen, AlertCircle } from 'lucide-react';
 
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
@@ -18,13 +18,12 @@ interface CitationFormModalProps {
 
 export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, onClose, caseId }) => {
   const notify = useNotify();
-  const queryClient = useQueryClient();
   const [citationText, setCitationText] = useState('');
   const [title, setTitle] = useState('');
   const [type, setType] = useState<Citation['citationType']>('case_law');
   const [notes, setNotes] = useState('');
 
-  const { mutate: createCitation, isLoading } = useMutation(
+  const { mutate: createCitation, loading: isLoading } = useMutation(
     async () => {
       return DataService.citations.create({
         citationText,
@@ -40,14 +39,15 @@ export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, on
     {
       onSuccess: () => {
         notify.success('Citation created successfully');
-        queryClient.invalidateQueries(['citations']);
+        queryClient.invalidate(['citations']);
         onClose();
         resetForm();
       },
       onError: (err) => {
         notify.error('Failed to create citation');
         console.error(err);
-      }
+      },
+      invalidateKeys: [['citations']]
     }
   );
 

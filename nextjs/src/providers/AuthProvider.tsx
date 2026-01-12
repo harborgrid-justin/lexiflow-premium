@@ -1,26 +1,27 @@
 /**
- * Auth Provider for React Router v7
+ * Auth Provider for Next.js 16
  *
  * Provides authentication context throughout the application with:
- * - User state management
- * - Authentication status tracking
- * - Login/logout functionality
- * - Session persistence
+ * - User state management via server actions
+ * - Authentication status tracking with HttpOnly cookies
+ * - Login/logout functionality using secure server-side sessions
+ * - Session persistence without localStorage
  *
  * @module providers/AuthProvider
+ * @security Uses HttpOnly cookies and server actions
  */
 
-import { AuthApiService } from '@/api/auth/auth-api';
+'use client';
+
+import {
+  loginAction,
+  logoutAction,
+  refreshTokenAction,
+  validateSession,
+} from '@/app/actions/auth/session';
 import { useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AuthActionsContext, AuthStateContext } from './authContexts';
 import type { AuthActionsValue, AuthStateValue, AuthUser } from './authTypes';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-const AUTH_STORAGE_KEY = 'lexiflow_auth_token';
-const AUTH_USER_KEY = 'lexiflow_auth_user';
 
 // ============================================================================
 // Provider Component
@@ -39,47 +40,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Computed values
   const isAuthenticated = user !== null;
 
-  // Initialize auth state from storage on mount
+  // Initialize auth state from server session
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Check for stored token and user
-        const storedToken = localStorage.getItem(AUTH_STORAGE_KEY);
-        const storedUser = localStorage.getItem(AUTH_USER_KEY);
-
-        if (storedToken && storedUser) {
-          // Optimistically set user to avoid flicker
-          try {
-            const parsedUser = JSON.parse(storedUser);
-            setUser(parsedUser);
-
-            // Validate token with backend
-            const authApi = new AuthApiService();
-            const freshUser = await authApi.getCurrentUser();
-
-            // Convert to AuthUser format
-            const authUser: AuthUser = {
-              id: freshUser.id,
-              email: freshUser.email,
-              name: freshUser.firstName ? `${freshUser.firstName} ${freshUser.lastName}`.trim() : freshUser.email.split('@')[0],
-              role: (freshUser.role || 'attorney') as AuthUser['role'],
-              avatarUrl: freshUser.avatarUrl,
-              permissions: freshUser.permissions || [],
-            };
-
-            setUser(authUser); // Update with fresh data
-            localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
-          } catch (validationError) {
-            console.warn('[AuthProvider] Session validation failed:', validationError);
-            // Token invalid or refresh failed, clear storage
-            localStorage.removeItem(AUTH_STORAGE_KEY);
-            localStorage.removeItem(AUTH_USER_KEY);
-            setUser(null);
-          }
+        const sessionData = await validateSession();
+        
+        if (sessionData.valid && sessionData.user) {
+          setUser(sessionData.user);
+        } else {
+          setUser(null);
         }
       } catch (err) {
-        console.error('Failed to initialize auth:', err);
+        console.error('[AuthProvider] Failed to initialize auth:', err);
         setError('Failed to restore session');
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -88,34 +63,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     initializeAuth();
   }, []);
 
-  // Stable action callbacks (BP10)
+  // Stable action callbacks using server actions
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
     try {
       console.log('[AuthProvider] Starting login for:', email);
-      const authApi = new AuthApiService();
-      const response = await authApi.login(email, password);
-      console.log('[AuthProvider] Login response received:', { hasToken: !!response.accessToken, userId: response.user?.id });
-
-      // Convert API user response to AuthUser format
-      const authUser: AuthUser = {
-        id: response.user.id,
-        email: response.user.email,
-        name: response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0],
-        role: (response.user.role || 'attorney') as AuthUser['role'],
-        avatarUrl: response.user.avatarUrl,
-        permissions: response.user.permissions || [],
-      };
-
-      // Store token and user
-      localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
-
-      setUser(authUser);
-      console.log('[AuthProvider] Login successful');
-      return true;
+      const result = await loginAction(email, password);
+      
+      if (result.success && result.user) {
+        setUser(result.user);
+        console.log('[AuthProvider] Login successful');
+        return true;
+      } else {
+        setError(result.error || 'Login failed');
+        return false;
+      }
     } catch (err) {
       console.error('[AuthProvider] Login error:', err);
       const message = err instanceof Error ? err.message : 'Login failed';
@@ -128,25 +92,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async (): Promise<void> => {
     try {
-      const authApi = new AuthApiService();
-      await authApi.logout();
-
-      // Clear storage
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem(AUTH_USER_KEY);
-
+      await logoutAction();
       setUser(null);
       setError(null);
     } catch (err) {
-      console.error('Logout error:', err);
-      // Still clear local state even if API fails
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem(AUTH_USER_KEY);
+      console.error('[AuthProvider] Logout error:', err);
       setUser(null);
     }
   }, []);
 
   const refreshToken = useCallback(async (): Promise<boolean> => {
+    try {
+      const result = await refreshTokenAction();
+      return result.success;
+    } catch (error) {
+      console.error('[AuthProvider] Token refresh error:', error);
+      return false;
+    }
+  }, []);
+
+  const validateToken = useCallback(async (): Promise<boolean> => {
     try {
       const authApi = new AuthApiService();
       const response = await authApi.refreshToken();

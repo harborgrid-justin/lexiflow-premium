@@ -22,7 +22,7 @@ import { RiskMatrix } from './RiskMatrix';
 import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
+import { analyzeDocument } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces

@@ -25,7 +25,7 @@ import { useTheme } from '@/providers';
 // Internal Dependencies - Services & Utils
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { parseDocket } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 
 interface DocketImportModalProps {

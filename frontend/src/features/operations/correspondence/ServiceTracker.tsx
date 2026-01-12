@@ -67,7 +67,7 @@ export const ServiceTracker = React.memo<ServiceTrackerProps>(({ jobs, onSelect,
         }
     }, []);
 
-    const memoizedJobs = useMemo(() => jobs, [jobs]);
+    const memoizedJobs = useMemo(() => Array.isArray(jobs) ? jobs : [], [jobs]);
 
     return (
         <div className="flex-1 overflow-auto custom-scrollbar p-6 bg-slate-50/50">

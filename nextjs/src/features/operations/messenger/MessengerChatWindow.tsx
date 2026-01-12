@@ -17,7 +17,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateReply } from '@/app/actions/ai/gemini';
 
 // Hooks & Context
 import { useInterval } from '@/hooks/useInterval';

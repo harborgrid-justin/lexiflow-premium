@@ -71,7 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     // Let's fetch upcoming deadlines separately as they might be outside the current view
     const upcomingDeadlines = await DataService.calendar.getAll({
-      eventType: 'deadline',
+      eventType: 'Deadline' as CalendarEventType,
       startDate: new Date().toISOString(),
       // Default to 30 days ahead for upcoming
       endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()

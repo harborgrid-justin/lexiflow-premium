@@ -5,6 +5,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/features/theme';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 

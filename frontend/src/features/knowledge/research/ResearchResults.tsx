@@ -12,12 +12,17 @@ interface ResearchResultsProps {
 }
 
 // Simple Typewriter Effect Component
-const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
+const TypewriterText: React.FC<{ text?: string }> = ({ text }) => {
     const [displayedText, setDisplayedText] = useState('');
     const { theme } = useTheme();
     const index = useRef(0);
 
     useEffect(() => {
+        if (!text) {
+            setDisplayedText('');
+            return;
+        }
+
         setDisplayedText('');
         index.current = 0;
 
@@ -34,6 +39,10 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
 
         return () => clearInterval(intervalId);
     }, [text]);
+
+    if (!text) {
+        return null;
+    }
 
     return (
         <div className={cn("prose prose-sm max-w-none leading-relaxed whitespace-pre-line font-serif", theme.text.primary)}>

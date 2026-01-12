@@ -2,19 +2,126 @@
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║                    LEXIFLOW GEMINI AI SERVICE                             ║
- * ║         Google Gemini API Integration for Legal Intelligence v2.0         ║
- * ║                       PhD-Level Systems Architecture                      ║
+ * ║                    DEPRECATED - DO NOT USE                                ║
+ * ║         This file is deprecated - Use server actions instead              ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  *
- * Next.js 16: Client-only (uses localStorage for API key)
+ * @deprecated This client-side service is deprecated.
+ * Use server actions from @/app/actions/ai/gemini instead.
  *
  * @module services/features/research/geminiService
- * @architecture Singleton Factory with Retry Logic & Streaming Support
- * @author LexiFlow Engineering Team
- * @since 2025-12-18 (Enterprise AI Integration)
- * @status PRODUCTION READY
- * @sdk @google/genai (Google Generative AI SDK)
+ * @status DEPRECATED - Remove in v2.0.0
+ *
+ * Migration Guide:
+ * ----------------
+ * Old: import { GeminiService } from '@/services/features/research/geminiService';
+ * New: import { analyzeDocument, generateDraft, etc } from '@/app/actions/ai/gemini';
+ *
+ * All functions now use secure server-side API keys and proper authentication.
+ */
+
+// Re-export types for backward compatibility
+export type {
+  IntentResult,
+  ShepardizeResult,
+  TreatmentType,
+} from "@/types/intelligence";
+
+/**
+ * @deprecated Use server actions from @/app/actions/ai/gemini
+ */
+export const GeminiService = {
+  analyzeDocument: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { analyzeDocument } from "@/app/actions/ai/gemini"'
+    );
+  },
+  critiqueBrief: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { critiqueBrief } from "@/app/actions/ai/gemini"'
+    );
+  },
+  reviewContract: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { reviewContract } from "@/app/actions/ai/gemini"'
+    );
+  },
+  streamDraft: () => {
+    throw new Error(
+      'GeminiService.streamDraft is deprecated. Use server action: import { generateDraft } from "@/app/actions/ai/gemini"'
+    );
+  },
+  refineTimeEntry: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { refineTimeEntry } from "@/app/actions/ai/gemini"'
+    );
+  },
+  generateDraft: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { generateDraft } from "@/app/actions/ai/gemini"'
+    );
+  },
+  predictIntent: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { predictIntent } from "@/app/actions/ai/gemini"'
+    );
+  },
+  parseDocket: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { parseDocket } from "@/app/actions/ai/gemini"'
+    );
+  },
+  conductResearch: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { conductResearch } from "@/app/actions/ai/gemini"'
+    );
+  },
+  generateReply: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { generateReply } from "@/app/actions/ai/gemini"'
+    );
+  },
+  shepardizeCitation: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { shepardizeCitation } from "@/app/actions/ai/gemini"'
+    );
+  },
+  generateStrategyFromPrompt: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { generateStrategyFromPrompt } from "@/app/actions/ai/gemini"'
+    );
+  },
+  lintStrategy: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { lintStrategy } from "@/app/actions/ai/gemini"'
+    );
+  },
+  extractCaseData: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { extractCaseData } from "@/app/actions/ai/gemini"'
+    );
+  },
+  legalResearch: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { legalResearch } from "@/app/actions/ai/gemini"'
+    );
+  },
+  validateCitations: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { validateCitations } from "@/app/actions/ai/gemini"'
+    );
+  },
+  draftDocument: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { draftDocument } from "@/app/actions/ai/gemini"'
+    );
+  },
+  suggestReply: () => {
+    throw new Error(
+      'GeminiService is deprecated. Use server action: import { suggestReply } from "@/app/actions/ai/gemini"'
+    );
+  },
+};
  *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW

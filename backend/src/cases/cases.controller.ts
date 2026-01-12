@@ -17,6 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { Public } from "@common/decorators/public.decorator";
 import { CaseImportService, ImportOptions } from "./case-import.service";
 import { CasesService } from "./cases.service";
 import { CaseFilterDto } from "./dto/case-filter.dto";
@@ -45,6 +46,7 @@ export class CasesController {
     return this.caseImportService.parse(body.content, body.options);
   }
 
+  @Public()
   @Get("stats")
   @ApiOperation({ summary: "Get case statistics and KPIs" })
   @ApiResponse({
@@ -58,6 +60,7 @@ export class CasesController {
     return this.casesService.getStats();
   }
 
+  @Public()
   @Get()
   @ApiOperation({ summary: "List all cases" })
   @ApiResponse({

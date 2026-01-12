@@ -3,7 +3,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/backend';
 import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 import { ArrowLeft, Save } from 'lucide-react';
 import React, { useState } from 'react';

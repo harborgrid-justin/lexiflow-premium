@@ -48,31 +48,15 @@ interface ChatInputProps {
   isAiThinking?: boolean;
 }
 
+import { useChatInput } from './hooks/useChatInput';
+
 export const ChatInput = ({
   inputText, setInputText, pendingAttachments, setPendingAttachments,
   isPrivilegedMode, setIsPrivilegedMode, onSend, onFileSelect, draft, recipientName,
   onAiAssist, isAiThinking
 }: ChatInputProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { theme } = useTheme();
-
-  // Effect discipline: Synchronize textarea height with content (Principle #6)
-  // useLayoutEffect would block paint - useEffect is correct here (Principle #8)
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
-    }
-    // No cleanup needed - style mutation is idempotent
-  }, [inputText]);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      onSend();
-    }
-  };
+  const { fileInputRef, textareaRef, handleKeyDown, triggerFileInput } = useChatInput({ inputText, onSend });
 
   return (
     <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
@@ -121,7 +105,7 @@ export const ChatInput = ({
       <div className={cn("flex items-end gap-2 border rounded-xl px-2 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all shadow-sm", theme.surface.highlight, theme.border.default)}>
         <input type="file" ref={fileInputRef} className="hidden" onChange={onFileSelect} />
         <button
-          onClick={() => fileInputRef.current?.click()}
+          onClick={triggerFileInput}
           className={cn("p-2 rounded-full transition-colors mb-0.5", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface.default}`)}
           title="Attach File"
         >

@@ -160,8 +160,8 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   if (displayActivities.length === 0) {
     return (
       <div className={cn('text-center py-12', className)}>
-        <FileText className={cn('h-12 w-12 mx-auto mb-3', theme.text.tertiary)} />
-        <p className={cn('text-sm', theme.text.tertiary)}>{emptyMessage}</p>
+        <FileText className={cn('h-12 w-12 mx-auto mb-3 text-text-muted')} />
+        <p className={cn('text-sm text-text-muted')}>{emptyMessage}</p>
       </div>
     );
   }
@@ -177,7 +177,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
             key={activity.id}
             className={cn(
               'relative flex gap-3 p-3 rounded-lg border-l-4 transition-all duration-200',
-              theme.surface.default,
+              'bg-surface', // Fixed: Use Tailwind class "bg-surface" (white/slate-800)
               getPriorityColor(activity.priority),
               onActivityClick && 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50',
               index < displayActivities.length - 1 && 'border-b border-gray-100 dark:border-gray-800'
@@ -202,18 +202,18 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-1">
-                <p className={cn('text-sm font-medium', theme.text.primary)}>
+                <p className={cn('text-sm font-medium text-text')}>
                   {activity.title}
                 </p>
-                <time className={cn('text-xs whitespace-nowrap', theme.text.tertiary)}>
+                <time className={cn('text-xs whitespace-nowrap text-text-muted')}>
                   {formatTimestamp(activity.timestamp)}
                 </time>
               </div>
-              <p className={cn('text-sm mb-1', theme.text.secondary)}>
+              <p className={cn('text-sm mb-1 text-text-muted')}>
                 {activity.description}
               </p>
               {activity.user && (
-                <p className={cn('text-xs', theme.text.tertiary)}>
+                <p className={cn('text-xs text-text-muted')}>
                   by {activity.user.name}
                 </p>
               )}

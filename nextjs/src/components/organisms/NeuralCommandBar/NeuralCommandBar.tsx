@@ -17,7 +17,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
+import { predictIntent, IntentResult } from '@/app/actions/ai/gemini';
 import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 

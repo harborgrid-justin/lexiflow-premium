@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { extractCaseData } from '@/app/actions/ai/gemini';
 import type { Case, DocketEntry, Party } from '@/types';
 import { cn } from '@/utils/cn';
 import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';

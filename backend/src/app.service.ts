@@ -69,23 +69,43 @@ export class AppService {
   /* ------------------------------------------------------------------ */
 
   async getHealth() {
-    const database = await this.checkDatabase();
+    try {
+      const database = await this.checkDatabase();
 
-    return {
-      status: database.connected ? 'ok' : 'degraded',
-      timestamp: new Date().toISOString(),
-      uptimeSeconds: Math.floor(process.uptime()),
-      environment: this.getEnvironment(),
-      service: 'LexiFlow Enterprise API',
-      version: this.getServiceVersion(),
-      components: {
-        database: {
-          type: 'PostgreSQL',
-          connected: database.connected,
-          initialized: this.dataSource.isInitialized,
+      return {
+        status: database.connected ? 'ok' : 'degraded',
+        timestamp: new Date().toISOString(),
+        uptimeSeconds: Math.floor(process.uptime()),
+        environment: this.getEnvironment(),
+        service: 'LexiFlow Enterprise API',
+        version: this.getServiceVersion(),
+        components: {
+          database: {
+            type: 'PostgreSQL',
+            connected: database.connected,
+            initialized: this.dataSource.isInitialized,
+          },
         },
-      },
-    };
+      };
+    } catch (error) {
+      // Fallback health response if any error occurs
+      return {
+        status: 'degraded',
+        timestamp: new Date().toISOString(),
+        uptimeSeconds: Math.floor(process.uptime()),
+        environment: this.getEnvironment(),
+        service: 'LexiFlow Enterprise API',
+        version: this.getServiceVersion(),
+        components: {
+          database: {
+            type: 'PostgreSQL',
+            connected: false,
+            initialized: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        },
+      };
+    }
   }
 
   /* ------------------------------------------------------------------ */

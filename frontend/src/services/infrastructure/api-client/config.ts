@@ -12,7 +12,7 @@ import {
   AUTH_REFRESH_TOKEN_STORAGE_KEY,
   AUTH_TOKEN_STORAGE_KEY,
 } from "@/config/security/security.config";
-import { TIMEOUTS } from "@/config/ports.config";
+import { TIMEOUTS, URLS, HOSTS } from "@/config/ports.config";
 
 export const DEFAULT_TIMEOUT = API_TIMEOUT_MS;
 export const HEALTH_CHECK_TIMEOUT = TIMEOUTS.HEALTH_CHECK;
@@ -49,8 +49,6 @@ export function buildBaseURL(): string {
  * Get current origin safely (handles SSR)
  */
 export function getOrigin(): string {
-  // Dynamically import to avoid circular dependency
-  const { URLS, HOSTS } = require("../../../config/ports.config");
   if (typeof window !== "undefined") {
     return window.location.origin;
   }

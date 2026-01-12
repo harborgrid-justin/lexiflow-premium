@@ -38,7 +38,7 @@ import { useWindow } from '@/providers';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { critiqueBrief } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 
 // ============================================================================

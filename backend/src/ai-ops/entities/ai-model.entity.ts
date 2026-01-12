@@ -11,17 +11,23 @@ export class AIModel {
   @Column()
   type!: string; // 'embedding', 'classification', 'generation', etc.
 
-  @Column()
+  @Column({ nullable: true })
   provider!: string; // 'openai', 'google', 'anthropic', etc.
 
   @Column()
   version!: string;
 
+  @Column({ type: 'text', nullable: true })
+  description!: string;
+
   @Column('jsonb')
   configuration!: Record<string, unknown>;
 
-  @Column({ default: true })
-  active!: boolean;
+  @Column({ type: 'varchar', length: 20, default: 'active' })
+  status!: 'active' | 'inactive' | 'training';
+
+  @Column({ type: 'jsonb', nullable: true })
+  performance: Record<string, unknown> | null = null;
 
   @Column({ type: 'bigint', default: 0 })
   usageCount!: number;

@@ -25,7 +25,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers';
 
 // Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
+import { analyzeDocument } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
 

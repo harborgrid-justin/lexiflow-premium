@@ -16,7 +16,7 @@ import { ShieldAlert, Upload, FileText, Cpu, AlertTriangle } from 'lucide-react'
 import { useTheme } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '@/services/features/research/geminiService';
+import { reviewContract } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 
 export const CaseContractReview: React.FC = () => {

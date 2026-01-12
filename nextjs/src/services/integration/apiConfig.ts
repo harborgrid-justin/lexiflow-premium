@@ -49,8 +49,7 @@ const DEPRECATION_WARNING = `
  */
 export function isBackendApiEnabled(storage: IStorageAdapter = defaultStorage): boolean {
   // Check if explicitly disabled via environment variable
-  const envDisabled = import.meta.env.VITE_USE_BACKEND_API === 'false' ||
-                      import.meta.env.VITE_USE_BACKEND_API === false;
+  const envDisabled = process.env.NEXT_PUBLIC_USE_BACKEND_API === 'false';
 
   // Check for storage override
   const localDisabled = storage.getItem('VITE_USE_BACKEND_API') === 'false';
@@ -117,7 +116,7 @@ export function forceBackendMode(storage: IStorageAdapter = defaultStorage): voi
  * @param storage - Storage adapter interface (injected for testing)
  */
 export function enableLegacyIndexedDB(storage: IStorageAdapter = defaultStorage): void {
-  if (import.meta.env.PROD) {
+  if (process.env.NODE_ENV === 'production') {
     console.error('[API Config] Cannot enable IndexedDB mode in production build');
     return;
   }
@@ -133,7 +132,7 @@ export function enableLegacyIndexedDB(storage: IStorageAdapter = defaultStorage)
  * Check if running in production build
  */
 export function isProduction(): boolean {
-  return import.meta.env.PROD;
+  return process.env.NODE_ENV === 'production';
 }
 
 /**
@@ -148,7 +147,7 @@ export function getBackendUrl(): string {
  */
 export function logApiConfig(): void {
   console.group('[LexiFlow API Configuration]');
-  console.log('Environment:', import.meta.env.MODE);
+  console.log('Environment:', process.env.NODE_ENV);
   console.log('Production Build:', isProduction());
   console.log('Data Mode:', getDataMode());
   console.log('Backend API:', isBackendApiEnabled() ? '✅ Enabled' : '❌ Disabled');
@@ -160,6 +159,6 @@ export function logApiConfig(): void {
 }
 
 // Log configuration on module load (development only)
-if (import.meta.env.DEV) {
+if (process.env.NODE_ENV === 'development') {
   logApiConfig();
 }

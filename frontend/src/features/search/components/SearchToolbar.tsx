@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, Search } from 'lucide-react';
-import React, { useId, useRef, useState } from 'react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,7 +21,7 @@ import { SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useSearchToolbar } from '../hooks/useSearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -39,51 +39,16 @@ interface SearchToolbarProps {
 
 export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)...", actions, className = "" }: SearchToolbarProps) {
   const { theme } = useTheme();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputId = useId();
-  // HYDRATION-SAFE: Track mounted state for browser-only event listeners
-  const [isMounted, setIsMounted] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
-  const history = SearchService.getHistory();
-
-  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setShowHistory(false));
-
-  // Set mounted flag
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // HYDRATION-SAFE: Only attach keyboard listener after mount
-  React.useEffect(() => {
-    if (!isMounted || typeof document === 'undefined') return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === '/' && document.activeElement !== inputRef.current) {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isMounted]);
-
-  const handleFocus = () => {
-    if (history.length > 0) setShowHistory(true);
-  };
-
-  const handleHistorySelect = (term: string) => {
-    onChange(term);
-    setShowHistory(false);
-    inputRef.current?.focus();
-  };
-
-  const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      SearchService.saveHistory(value);
-      setShowHistory(false);
-    }
-  };
+  const {
+    inputRef,
+    containerRef,
+    inputId,
+    showHistory,
+    history,
+    handleFocus,
+    handleHistorySelect,
+    handleKeyUp
+  } = useSearchToolbar({ value, onChange });
 
   return (
     <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default, className)}>

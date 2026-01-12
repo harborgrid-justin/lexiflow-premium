@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, Calendar, Clock, Download, Gavel, Layers, Plus, RefreshCw, Settings, Users } from 'lucide-react';
-import React, { lazy, Suspense, useTransition } from 'react';
+import React, { lazy, Suspense, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -26,6 +26,7 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/shared/lib/cn';
+import type { CalendarEventType } from '@/types';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));
@@ -35,6 +36,9 @@ const CalendarHearings = lazy(() => import('./CalendarHearings').then(m => ({ de
 const CalendarSOL = lazy(() => import('./CalendarSOL').then(m => ({ default: m.CalendarSOL })));
 const CalendarRules = lazy(() => import('./CalendarRules').then(m => ({ default: m.CalendarRules })));
 const CalendarSync = lazy(() => import('./CalendarSync').then(m => ({ default: m.CalendarSync })));
+
+// Import modal directly (not lazy) for better UX
+import { NewEventModal } from './NewEventModal';
 
 const TAB_CONFIG: TabConfigItem[] = [
   {
@@ -64,11 +68,20 @@ const TAB_CONFIG: TabConfigItem[] = [
 export const CalendarView: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('calendar_active_tab', 'master');
+  const [showNewEventModal, setShowNewEventModal] = useState(false);
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
       _setActiveTab(tab);
     });
+  };
+
+  const handleNewEvent = () => {
+    setShowNewEventModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowNewEventModal(false);
   };
 
   const renderContent = () => {
@@ -85,25 +98,34 @@ export const CalendarView: React.FC = () => {
   };
 
   return (
-    <TabbedPageLayout
-      pageTitle="Master Calendar"
-      pageSubtitle="Deadlines, Court Filings, and Compliance Schedules."
-      pageActions={
-        <div className="flex gap-2">
-          <Button variant="secondary" size="sm" icon={Download}>Sync to Outlook</Button>
-          <Button variant="primary" size="sm" icon={Plus}>New Event</Button>
-        </div>
-      }
-      tabConfig={TAB_CONFIG}
-      activeTabId={activeTab}
-      onTabChange={setActiveTab}
-    >
-      <Suspense fallback={<LazyLoader message="Loading Calendar Module..." />}>
-        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-          {renderContent()}
-        </div>
-      </Suspense>
-    </TabbedPageLayout>
+    <>
+      <TabbedPageLayout
+        pageTitle="Master Calendar"
+        pageSubtitle="Deadlines, Court Filings, and Compliance Schedules."
+        pageActions={
+          <div className="flex gap-2">
+            <Button variant="secondary" size="sm" icon={Download}>Sync to Outlook</Button>
+            <Button variant="primary" size="sm" icon={Plus} onClick={handleNewEvent}>New Event</Button>
+          </div>
+        }
+        tabConfig={TAB_CONFIG}
+        activeTabId={activeTab}
+        onTabChange={setActiveTab}
+      >
+        <Suspense fallback={<LazyLoader message="Loading Calendar Module..." />}>
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+          </div>
+        </Suspense>
+      </TabbedPageLayout>
+
+      {showNewEventModal && (
+        <NewEventModal 
+          isOpen={showNewEventModal}
+          onClose={handleCloseModal}
+        />
+      )}
+    </>
   );
 };
 

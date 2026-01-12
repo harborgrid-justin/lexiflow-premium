@@ -18,7 +18,7 @@ import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 
 // Services
-import { GeminiService } from '@/services/features/research/geminiService';
+import { analyzeDocument } from '@/app/actions/ai/gemini';
 
 // Types
 import { EvidenceItem } from '@/types';

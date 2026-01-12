@@ -1,7 +1,7 @@
 import { EditorToolbar } from '@/components/features/discovery/components/EditorToolbar/EditorToolbar';
 import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { generateDraft } from '@/app/actions/ai/gemini';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
 import { RotateCcw, Wand2 } from 'lucide-react';

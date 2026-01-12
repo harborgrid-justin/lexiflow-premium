@@ -573,7 +573,7 @@ export class AiOpsService implements OnModuleDestroy {
     const [totalEmbeddings, totalModels, activeModels] = await Promise.all([
       this.embeddingRepository.count(),
       this.modelRepository.count(),
-      this.modelRepository.count({ where: { active: true } }),
+      this.modelRepository.count({ where: { status: 'active' } }),
     ]);
 
     const result = await this.modelRepository

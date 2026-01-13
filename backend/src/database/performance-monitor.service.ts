@@ -378,8 +378,11 @@ export class DatabasePerformanceMonitor {
         ? `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`
         : `EXPLAIN (FORMAT JSON) ${query}`;
 
-      const result = await this.dataSource.query(explainQuery) as any[];
-      return result[0]["QUERY PLAN"] as Record<string, unknown>[];
+      interface ExplainResult {
+        "QUERY PLAN": Record<string, unknown>[];
+      }
+      const result = await this.dataSource.query(explainQuery) as ExplainResult[];
+      return result[0]["QUERY PLAN"];
     } catch (error) {
       this.logger.error("Failed to explain query", error);
       throw error;

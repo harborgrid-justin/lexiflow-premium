@@ -140,7 +140,7 @@ export class OcrServiceEnhanced {
         return r.value;
       } else {
         return {
-          filePath: filePaths[i]!,
+          filePath: filePaths[i] ?? 'unknown',
           error: r.reason instanceof Error ? r.reason.message : 'Unknown error',
         };
       }

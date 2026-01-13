@@ -275,7 +275,11 @@ export class IndexAnalyzerService {
         HAVING count(*) > 1
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]) as any[];
+      interface DuplicateIndexRow {
+        tablename: string;
+        index_names: string[];
+      }
+      const results = await this.dataSource.query(query, [schemaName]) as DuplicateIndexRow[];
 
       return results.map((row: Record<string, unknown>) => ({
         tableName: String(row.tablename),

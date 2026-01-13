@@ -168,7 +168,10 @@ async function main() {
 
     if (result.rows.length === 2) {
       console.log("✅ Verification successful:");
-      result.rows.forEach((row: any) => {
+      interface TableRow {
+        table_name: string;
+      }
+      (result.rows as TableRow[]).forEach((row) => {
         console.log(`   ✓ ${row.table_name}`);
       });
     } else {
@@ -191,7 +194,11 @@ async function main() {
       WHERE table_name = 'generated_documents';
     `;
     const stats = await client.query(statsQuery);
-    stats.rows.forEach((row: any) => {
+    interface StatsRow {
+      table_name: string;
+      column_count: number;
+    }
+    (stats.rows as StatsRow[]).forEach((row) => {
       console.log(`   ${row.table_name}: ${row.column_count} columns`);
     });
 

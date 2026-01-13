@@ -100,9 +100,12 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     request: Request,
     status: number
   ): EnhancedErrorResponse {
-    const req = request as unknown as Record<string, any>;
+    interface RequestWithCorrelation extends Request {
+      correlationId?: string;
+    }
+    const req = request as RequestWithCorrelation;
     const correlationId =
-      req.correlationId || this.generateCorrelationId();
+      req.correlationId ?? this.generateCorrelationId();
     const timestamp = new Date().toISOString();
     const path = request.url;
     const method = request.method;
@@ -355,12 +358,15 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     userAgent?: string;
     userId?: string;
   } {
-    const user = (request as unknown as Record<string, any>).user;
+    interface RequestWithUser extends Request {
+      user?: { id?: string; userId?: string };
+    }
+    const user = (request as RequestWithUser).user;
 
     return {
       ip: this.getClientIp(request),
       userAgent: request.headers["user-agent"],
-      userId: user?.id || user?.userId,
+      userId: user?.id ?? user?.userId,
     };
   }
 

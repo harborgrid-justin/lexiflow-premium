@@ -235,7 +235,7 @@ export function CaseInsensitiveUnique(columnName: string): ClassDecorator {
     Reflect.defineMetadata(
       "typeorm:indices",
       [
-        ...((Reflect.getMetadata("typeorm:indices", target) as any[]) || []),
+        ...((Reflect.getMetadata("typeorm:indices", target) as unknown[]) ?? []),
         {
           name: `IDX_${columnName}_lower_unique`,
           columns: [columnName],
@@ -290,7 +290,7 @@ export function PartialUnique(
     Reflect.defineMetadata(
       "typeorm:indices",
       [
-        ...((Reflect.getMetadata("typeorm:indices", target) as any[]) || []),
+        ...((Reflect.getMetadata("typeorm:indices", target) as unknown[]) ?? []),
         {
           name: `IDX_${columnName}_partial_unique`,
           columns: [columnName],

@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule as NestGraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { ApolloServerPlugin } from "@apollo/server";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import * as PathsConfig from "@config/paths.config";
 import { DateTimeScalar } from "./scalars/date.scalar";
@@ -39,7 +38,7 @@ import { DiscoveryModule } from "@discovery/discovery.module";
       sortSchema: true,
       playground: false,
       plugins: [
-        ApolloServerPluginLandingPageLocalDefault() as any,
+        ApolloServerPluginLandingPageLocalDefault() as unknown as Parameters<typeof NestGraphQLModule.forRoot>[0]['plugins'][number],
       ],
 
       // Enable introspection and playground in development

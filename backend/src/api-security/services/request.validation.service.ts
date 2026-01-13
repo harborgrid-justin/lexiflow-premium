@@ -86,10 +86,11 @@ export class RequestValidationService {
   ];
 
   validateWithSchema(data: unknown, schema: Joi.Schema): ValidationResult {
-    const { error, value } = schema.validate(data, {
+    const result = schema.validate(data, {
       abortEarly: false,
       stripUnknown: true,
-    }) as Joi.ValidationResult;
+    });
+    const { error, value } = result;
 
     if (error) {
       const errors = error.details.map((detail) => detail.message);

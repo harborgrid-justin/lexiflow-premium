@@ -1,7 +1,6 @@
 // Load .env BEFORE any other imports to ensure env vars are available
 import * as dotenv from "dotenv";
 import * as path from "path";
-import * as zlib from "zlib";
 
 // In production, .env is in parent directory of dist/
 // In development with ts-node, .env is in current directory
@@ -202,7 +201,7 @@ function registerShutdownHandlers(app: INestApplication, logger: Logger): void {
 
 // Only load source-map-support in development (saves memory in production)
 if (process.env.NODE_ENV !== "production") {
-  require("source-map-support").install();
+  import("source-map-support").then((module) => module.install()).catch(() => {});
 }
 
 bootstrap().catch((error) => {

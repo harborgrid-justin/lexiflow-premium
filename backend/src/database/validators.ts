@@ -87,8 +87,9 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    type EntityConstructor = new (...constructorArgs: unknown[]) => unknown;
     const [entityClass, property, exceptId] = args.constraints as [
-      new (...args: any[]) => any,
+      EntityConstructor,
       string,
       string,
     ];
@@ -237,8 +238,9 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    type EntityClass = (new (...constructorArgs: unknown[]) => unknown) | string;
     const [entityClass, property = "id"] = args.constraints as [
-      Function | string,
+      EntityClass,
       string,
     ];
 
@@ -295,8 +297,9 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    type EntityClass = (new (...constructorArgs: unknown[]) => unknown) | string;
     const [entityClass, relationProperty, min, max] = args.constraints as [
-      Function | string,
+      EntityClass,
       string,
       number,
       number,
@@ -312,7 +315,10 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
 
     if (!entity) return false;
 
-    const count = (entity as Record<string, any[]>)[relationProperty]?.length ?? 0;
+    interface EntityWithRelations {
+      [key: string]: unknown[] | undefined;
+    }
+    const count = (entity as EntityWithRelations)[relationProperty]?.length ?? 0;
 
     if (min !== undefined && count < min) return false;
     if (max !== undefined && count > max) return false;

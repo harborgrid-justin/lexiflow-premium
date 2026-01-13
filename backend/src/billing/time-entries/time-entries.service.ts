@@ -225,7 +225,8 @@ export class TimeEntriesService {
       throw new NotFoundException(`Time entry with ID ${id} not found`);
     }
 
-    return result.raw[0] as TimeEntry;
+    const rawResult = result.raw as unknown[];
+    return rawResult[0] as TimeEntry;
   }
 
   async remove(id: string): Promise<void> {

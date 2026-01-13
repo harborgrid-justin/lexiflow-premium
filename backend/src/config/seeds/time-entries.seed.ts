@@ -42,8 +42,19 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
   const userMap = new Map();
   users.forEach((u) => userMap.set(u.email, u.id));
 
+  interface TimeEntryData {
+    caseNumber: string | number;
+    userEmail: string;
+    hours: string | number;
+    billableRate: string | number;
+    date: string;
+    description?: string;
+    isBillable: boolean | string;
+    taskType?: string;
+  }
+
   // Insert time entries
-  for (const timeEntryData of (timeEntriesData as any[])) {
+  for (const timeEntryData of (timeEntriesData as TimeEntryData[])) {
     try {
       const caseId = caseMap.get(String(timeEntryData.caseNumber));
       const userId = userMap.get(String(timeEntryData.userEmail));

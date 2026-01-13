@@ -348,7 +348,7 @@ export const creditCard = (
 export const matchField = (
   fieldName: string,
   message?: string
-): Validator<unknown> => {
+): Validator => {
   return (
     value: unknown,
     formData?: Record<string, unknown>

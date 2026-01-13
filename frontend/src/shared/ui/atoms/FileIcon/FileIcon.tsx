@@ -6,6 +6,7 @@
 
 import { FileText, Image, Film, Music, Box, Shield } from 'lucide-react';
 import { iconColors, getIconClass } from './FileIcon.styles';
+import React from "react";
 
 export interface FileIconProps {
   type: string;

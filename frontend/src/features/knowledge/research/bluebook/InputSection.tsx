@@ -5,6 +5,7 @@ import { cn } from '@/shared/lib/cn';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
 import { FormatOptionsCard } from './FormatOptionsCard';
 import type { FormatOptions } from './types';
+import React from "react";
 
 interface InputSectionProps {
   inputText: string;

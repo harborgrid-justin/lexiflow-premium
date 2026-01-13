@@ -6,6 +6,7 @@
 
 import { CaseOverviewDashboard } from '@/features/cases/components/overview/CaseOverviewDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from "react";
 
 interface CaseOverviewPageProps {
   caseId?: string;

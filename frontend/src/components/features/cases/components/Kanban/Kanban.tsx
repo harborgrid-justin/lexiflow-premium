@@ -18,6 +18,7 @@ import { useTheme } from '@/features/theme';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 // ============================================================================
 // COMPONENT

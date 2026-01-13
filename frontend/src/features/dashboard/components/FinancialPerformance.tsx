@@ -4,6 +4,7 @@ import { DataService } from '@/services/data/dataService';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { FinancialPerformanceData } from '@/types';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import React from "react";
 
 export const FinancialPerformance: React.FC = () => {
     const { mode, theme: _theme } = useTheme();

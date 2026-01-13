@@ -16,7 +16,7 @@
 import { PermissionsApiService } from '@/api/auth/access-rights-api';
 import type { Permission } from '@/types';
 import { TIMEOUTS } from '@/config/ports.config';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export interface RoleManagerProps {
   roleId: string;

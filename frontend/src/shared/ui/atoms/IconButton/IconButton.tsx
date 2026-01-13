@@ -7,6 +7,7 @@
 
 import { LucideIcon } from 'lucide-react';
 import { getButtonClasses, getIconClasses, variantClasses, sizeClasses } from './IconButton.styles';
+import React from "react";
 
 // ============================================================================
 // TYPES

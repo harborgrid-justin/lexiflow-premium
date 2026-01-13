@@ -18,6 +18,7 @@ import { cn } from '@/shared/lib/cn';
 import type { WizardConfig } from '@/types/forms';
 import { FormField } from './FormField';
 import { FormSectionComponent } from './FormSection';
+import React from "react";
 
 // ============================================================================
 // TYPES

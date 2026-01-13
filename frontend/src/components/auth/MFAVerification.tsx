@@ -7,7 +7,7 @@
  */
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface MFAVerificationProps {
   onSuccess?: () => void;

@@ -9,6 +9,7 @@ import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
 import { RFP } from '../../types';
 import { RFPCard } from './RFPCard';
+import React from "react";
 
 interface RFPsListProps {
   rfps: RFP[];

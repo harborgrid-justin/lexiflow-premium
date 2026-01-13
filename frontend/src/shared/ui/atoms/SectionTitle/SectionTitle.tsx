@@ -5,6 +5,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 export interface SectionTitleProps {
   children: React.ReactNode;

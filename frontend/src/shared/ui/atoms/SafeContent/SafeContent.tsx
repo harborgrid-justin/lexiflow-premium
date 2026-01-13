@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * @module components/atoms/SafeContent
  * @description Implements Principle XXVIII: Sink-Level Security.

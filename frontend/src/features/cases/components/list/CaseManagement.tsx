@@ -24,7 +24,7 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { CaseStatus, type Case, type Invoice } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
-import { Suspense, useMemo, useTransition } from 'react';
+import React, { Suspense, useMemo, useTransition } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CaseManagerContent } from './CaseManagerContent';
 

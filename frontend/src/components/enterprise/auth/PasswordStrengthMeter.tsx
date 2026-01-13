@@ -11,7 +11,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 export interface PasswordStrength {
   score: 0 | 1 | 2 | 3 | 4;

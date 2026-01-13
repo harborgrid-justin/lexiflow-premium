@@ -9,6 +9,7 @@ import { Lead } from '../../types';
 import { LeadCard } from './LeadCard';
 import { LeadFilters } from './LeadFilters';
 import { LeadPipelineChart } from './LeadPipelineChart';
+import React from "react";
 
 interface LeadsListProps {
   leads: Lead[];

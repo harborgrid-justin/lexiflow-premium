@@ -6,6 +6,7 @@
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { DataSourceSelector } from '@/shared/ui/molecules/DataSourceSelector/DataSourceSelector';
 import { Database, Settings, Zap } from 'lucide-react';
+import React from "react";
 export const SystemSettings: React.FC = () => {
   return (
     <div className="space-y-6">

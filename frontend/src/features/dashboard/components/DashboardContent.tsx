@@ -19,6 +19,7 @@ import { PersonalWorkspace } from './PersonalWorkspace';
 
 // Types
 import type { User } from '@/types';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

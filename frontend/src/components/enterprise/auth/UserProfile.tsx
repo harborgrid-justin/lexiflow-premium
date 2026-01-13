@@ -13,7 +13,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import {useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {z} from 'zod';
 import {UsersApiService} from '@/api/auth/users-api';
 import {AuthApiService} from '@/api/auth/auth-api';

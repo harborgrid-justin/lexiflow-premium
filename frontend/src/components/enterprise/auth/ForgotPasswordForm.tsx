@@ -12,7 +12,7 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { z } from 'zod';
 
 const forgotPasswordSchema = z.object({

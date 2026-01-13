@@ -24,7 +24,7 @@ import {
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Bar,
   BarChart,

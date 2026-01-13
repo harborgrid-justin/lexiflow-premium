@@ -280,7 +280,7 @@ export interface DataSourceConfig {
  * Provides sensible defaults with override capability
  */
 export class DataSourceConfigBuilder {
-  private config: Partial<DataSourceConfig> = {};
+  private readonly config: Partial<DataSourceConfig> = {};
   
   constructor(environment: DataSourceEnvironmentConfig['environment'] = 'development') {
     // Start with environment defaults

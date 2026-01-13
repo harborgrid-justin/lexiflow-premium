@@ -15,7 +15,7 @@
 
 import { AuthApiService } from '@/api/auth/auth-api';
 import type { User } from '@/types';
-import { memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { z } from 'zod';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 

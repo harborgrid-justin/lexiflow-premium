@@ -2,6 +2,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { FormatStats } from './types';
+import React from "react";
 
 interface StatsBarProps {
   stats: FormatStats;

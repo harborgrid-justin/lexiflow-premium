@@ -15,7 +15,7 @@ import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Loader2, X, XCircle } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

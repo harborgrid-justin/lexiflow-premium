@@ -13,7 +13,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export interface BrandingConfig {
   // Logo

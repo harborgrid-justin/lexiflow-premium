@@ -2,6 +2,7 @@ import { CopyButton } from '@/shared/ui/atoms/CopyButton/CopyButton';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { encodeHtmlEntities } from '@/shared/lib/sanitize';
+import React from "react";
 interface SchemaCodeEditorProps {
     ddl: string;
 }

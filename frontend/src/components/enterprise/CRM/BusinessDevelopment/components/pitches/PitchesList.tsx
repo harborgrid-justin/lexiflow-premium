@@ -9,6 +9,7 @@ import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
 import { Pitch } from '../../types';
 import { PitchCard } from './PitchCard';
+import React from "react";
 
 interface PitchesListProps {
   pitches: Pitch[];

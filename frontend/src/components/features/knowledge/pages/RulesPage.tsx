@@ -7,6 +7,7 @@
 import { RulesDashboard } from '@/features/knowledge/rules/RulesDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { RulesView } from '@/config/tabs.config';
+import React from "react";
 
 interface RulesPageProps {
   onNavigate: (view: RulesView) => void;

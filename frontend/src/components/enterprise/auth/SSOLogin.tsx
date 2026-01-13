@@ -12,7 +12,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { User } from '@/types';
 
 export type SSOProvider =

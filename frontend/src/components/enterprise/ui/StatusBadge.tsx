@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 // ============================================================================
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

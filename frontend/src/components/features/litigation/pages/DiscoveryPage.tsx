@@ -7,6 +7,7 @@
 import DiscoveryDashboard from '@/features/litigation/discovery/dashboard/DiscoveryDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
+import React from "react";
 
 interface DiscoveryPageProps {
   onNavigate: (view: DiscoveryView, id?: string) => void;

@@ -24,6 +24,7 @@ import { cn } from '@/shared/lib/cn';
 
 // Types
 import { LegalEntity } from '@/types';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

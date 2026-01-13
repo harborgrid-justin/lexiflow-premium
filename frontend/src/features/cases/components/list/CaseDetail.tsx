@@ -19,7 +19,7 @@ import {
   Trash2,
   Users
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MatterForm } from './matter-form';
 import { useCaseNavigation } from '@/features/cases/hooks/useCaseNavigation';
 

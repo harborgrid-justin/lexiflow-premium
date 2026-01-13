@@ -4,7 +4,7 @@
  * @description User preferences panel for notification settings
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Bell,

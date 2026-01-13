@@ -12,6 +12,7 @@ import type { Case } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router';
 import { CaseStatusBadge } from '../CaseStatusBadge';
+import React from "react";
 
 interface CaseCardContainerProps {
   children: React.ReactNode;

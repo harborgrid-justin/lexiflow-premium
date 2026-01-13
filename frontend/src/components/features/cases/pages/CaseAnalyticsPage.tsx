@@ -6,6 +6,7 @@
 
 import { CaseAnalyticsDashboard } from '@/features/cases/components/analytics/CaseAnalyticsDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from "react";
 
 interface CaseAnalyticsPageProps {
   caseId?: string;

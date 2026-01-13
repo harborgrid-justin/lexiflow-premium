@@ -7,6 +7,7 @@
 import { Dashboard } from '@/features/dashboard/components/Dashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { User } from '@/types/system';
+import React from "react";
 
 interface DashboardPageProps {
   onSelectCase: (caseId: string) => void;

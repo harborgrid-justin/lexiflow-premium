@@ -28,6 +28,7 @@ import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

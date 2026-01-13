@@ -3,6 +3,7 @@ import { Case } from '@/types';
 import { CaseListActive, CaseListArchived, CaseListClosing, CaseListConflicts, CaseListDocket, CaseListIntake, CaseListResources } from '@features/cases';
 import { CaseListTasks } from './CaseListTasks';
 import { CaseListTrust } from './CaseListTrust';
+import React from "react";
 
 interface CaseListContentProps {
   activeTab: string;

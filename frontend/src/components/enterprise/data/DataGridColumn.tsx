@@ -10,6 +10,7 @@
  * - Inline editing
  * - Column width and alignment
  */
+import React from "react";
 
 // ============================================================================
 // EXTERNAL DEPENDENCIES
@@ -38,7 +39,7 @@ export interface ColumnDefinition<T extends Record<string, unknown>> {
   accessorKey?: string; // Path to the data (e.g., "user.name")
 
   // Rendering
-  cell?: (context: CellContext<T, unknown>) => React.ReactNode;
+  cell?: (context: CellContext<T>) => React.ReactNode;
   footer?: string | ((rows: T[]) => React.ReactNode);
 
   // Sizing

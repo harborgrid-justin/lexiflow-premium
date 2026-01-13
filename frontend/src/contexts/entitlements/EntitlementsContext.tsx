@@ -1,7 +1,7 @@
 // src/contexts/entitlements/EntitlementsContext.tsx
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { Organization } from "@/types";
-import { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { freezeInDev } from "../utils/immutability";
 

@@ -20,6 +20,7 @@ import { EvidenceFRCPStatus } from './overview/EvidenceFRCPStatus';
 
 // Types
 import { EvidenceItem } from '@/types';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

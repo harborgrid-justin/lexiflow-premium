@@ -20,6 +20,7 @@ import {
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
+import React from "react";
 interface FinancialReportsProps {
   firmId?: string;
   dateRange?: { start: string; end: string };

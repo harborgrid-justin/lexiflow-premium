@@ -5,6 +5,7 @@ import { StatusBadge } from '@/shared/ui/atoms/StatusBadge';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Archive, Clock, Database, Download } from 'lucide-react';
+import React from "react";
 interface SnapshotListProps {
     snapshots: BackupSnapshot[];
     isLoading: boolean;

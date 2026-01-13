@@ -21,6 +21,7 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+import React from "react";
 
 interface WinLossAnalysisChartsProps {
   conversionTrend: ConversionTrend[];

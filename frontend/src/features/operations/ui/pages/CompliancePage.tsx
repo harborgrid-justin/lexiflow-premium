@@ -6,6 +6,7 @@
 
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from "react";
 
 type ComplianceView = 'overview' | 'conflicts' | 'walls' | 'policies';
 

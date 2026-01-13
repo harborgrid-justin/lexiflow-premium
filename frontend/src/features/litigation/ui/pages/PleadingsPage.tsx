@@ -7,6 +7,7 @@
 import { PleadingDashboard } from '@/features/litigation/pleadings/PleadingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { PleadingDocument } from '@/types';
+import React from "react";
 
 interface PleadingsPageProps {
   onCreate: (newDoc: PleadingDocument) => void;

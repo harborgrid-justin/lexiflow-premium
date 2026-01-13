@@ -8,6 +8,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { WinLossAnalysis } from '../../types';
+import React from "react";
 
 interface WinLossMetricsSummaryProps {
   winLossData: WinLossAnalysis[];

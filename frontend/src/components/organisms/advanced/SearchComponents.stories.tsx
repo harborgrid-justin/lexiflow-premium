@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CategoryFilter, SuggestionItem } from './SearchComponents';
 import { useTheme } from '@/features/theme';
 import type { SearchCategory } from './types';
+import React from "react";
 
 const DemoComponent = () => {
   const { theme } = useTheme();

@@ -4,6 +4,7 @@
  * @description Simple page container with responsive max-width and consistent spacing.
  * Ideal for standard content pages that need scrolling and centered content.
  */
+import React from "react";
 
 interface PageContainerLayoutProps {
   children: React.ReactNode;

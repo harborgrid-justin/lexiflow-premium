@@ -1,6 +1,7 @@
 import { Database, Clock, Star, Table } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface SchemaColumn {
   name: string;

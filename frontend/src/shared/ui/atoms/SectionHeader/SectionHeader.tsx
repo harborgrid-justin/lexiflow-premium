@@ -4,7 +4,7 @@
  * @description Section header with title, subtitle, and optional action button
  */
 
-import { useId } from 'react';
+import React, { useId } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 export interface SectionHeaderProps {

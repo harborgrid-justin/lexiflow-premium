@@ -140,6 +140,6 @@ export function DiscoveryTimeline({ caseId }: DiscoveryTimelineProps) {
       </div>
     </div>
   );
-};
+}
 
 export default DiscoveryTimeline;

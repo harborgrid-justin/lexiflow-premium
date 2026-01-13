@@ -13,7 +13,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // UserSecurityProfile type reserved for future API integration
 
 export interface Session {

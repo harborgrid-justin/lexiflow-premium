@@ -31,7 +31,7 @@ import {
   UserPlus,
   Users
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces

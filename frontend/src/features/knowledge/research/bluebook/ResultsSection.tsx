@@ -6,6 +6,7 @@ import { cn } from '@/shared/lib/cn';
 import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';
 import { ResultItem } from './ResultItem';
 import type { FilterOptions, FormattingResult } from './types';
+import React from "react";
 
 interface ResultsSectionProps {
   results: FormattingResult[];

@@ -4,6 +4,7 @@
  */
 
 import { Download, RefreshCw, Maximize2 } from 'lucide-react';
+import React from "react";
 
 export interface ChartCardProps {
   title: string;

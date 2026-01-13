@@ -20,7 +20,7 @@ import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repos
 import { ESISource } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, Mail, Plus, Server, Smartphone } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface ESISourcesListProps {
   caseId?: string;
@@ -320,6 +320,6 @@ export function ESISourcesList({ caseId }: ESISourcesListProps) {
       </Modal>
     </div>
   );
-};
+}
 
 export default ESISourcesList;

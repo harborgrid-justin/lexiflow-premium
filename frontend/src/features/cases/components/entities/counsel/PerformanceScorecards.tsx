@@ -5,6 +5,7 @@ import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface PerformanceScorecardsProps {
   entities: LegalEntity[];

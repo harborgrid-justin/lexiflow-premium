@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { BookOpen, FileText, Plus } from 'lucide-react';
-import { lazy, Suspense, useTransition } from 'react';
+import React, { lazy, Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

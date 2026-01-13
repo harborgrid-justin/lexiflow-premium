@@ -1,6 +1,7 @@
 import { Search, Tag, Calendar, Hash } from 'lucide-react';
 import * as styles from './SearchComponents.styles';
 import type { SearchCategory } from './types';
+import React from "react";
 
 interface CategoryFilterProps {
   activeCategory: SearchCategory;

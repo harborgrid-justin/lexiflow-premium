@@ -13,7 +13,7 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
-import { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { z } from 'zod';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
 

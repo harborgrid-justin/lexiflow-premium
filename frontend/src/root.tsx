@@ -39,6 +39,7 @@ import { QueryClientProvider } from "@/contexts/query/QueryClientProvider";
 import { AppProviders } from "@/providers/AppProviders";
 
 import { APP_DESCRIPTION, APP_NAME } from '@/config/app.config';
+import React from "react";
 
 // ============================================================================
 // Meta Tags

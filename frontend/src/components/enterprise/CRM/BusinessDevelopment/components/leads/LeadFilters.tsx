@@ -7,6 +7,7 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Search, Plus } from 'lucide-react';
+import React from "react";
 
 interface LeadFiltersProps {
   onAddLead?: () => void;

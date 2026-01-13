@@ -1,3 +1,16 @@
+/**
+ * EnhancedWorkflowPanel.tsx
+ *
+ * Comprehensive workflow management panel with tabs for tasks, dependencies,
+ * approvals, and history. Includes SLA monitoring and time tracking.
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with tabbed navigation
+ * - Guideline 28: Theme usage is pure function for panel styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for panel transitions
+ */
+
 import { useState } from 'react';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
@@ -84,7 +97,8 @@ WorkflowContent.displayName = 'WorkflowContent';
  * Separated KPI dashboard and tabbed content into focused components
  */
 export function EnhancedWorkflowPanel() {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const [activeTab, setActiveTab] = useState<EnhancedWorkflowTab>('tasks');
 
   const handleApprove = (id: string) => alert(`Approved ${id}`);

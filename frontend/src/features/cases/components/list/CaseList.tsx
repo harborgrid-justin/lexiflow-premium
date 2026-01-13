@@ -7,6 +7,12 @@
  *
  * @module components/case-list/CaseList
  * @category Case Management - List Views
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with useTransition for smooth tab switching
+ * - Guideline 33: Uses isPendingThemeChange for dashboard transitions
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 38: startTransition wraps non-urgent tab state updates
  */
 
 // ============================================================================

@@ -3,6 +3,12 @@
  * @category Rules & Procedures
  * @description Procedural rules platform with federal, state, and local rules.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with lazy loading
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for UI transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */

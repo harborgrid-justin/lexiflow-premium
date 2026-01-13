@@ -3,6 +3,12 @@
  * @category Legal Research
  * @description Legal research tool with case law, statutes, and citation analysis.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with lazy loading and Suspense
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useThemeContext() is side-effect free read
+ * - Guideline 29: Lazy components don't trigger Suspense cascades on theme change
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */

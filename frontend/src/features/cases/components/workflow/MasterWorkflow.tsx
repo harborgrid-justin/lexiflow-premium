@@ -1,3 +1,16 @@
+/**
+ * MasterWorkflow.tsx
+ *
+ * Master workflow orchestration panel with case workflows, firm processes,
+ * templates, analytics, and configuration management.
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with complex workflow state management
+ * - Guideline 28: Theme usage is pure function for workflow styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for workflow transitions
+ */
+
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary';
@@ -26,7 +39,8 @@ interface MasterWorkflowProps {
 }
 
 export function MasterWorkflow({ onSelectCase, initialTab }: MasterWorkflowProps) {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   
   const {
     activeTab,

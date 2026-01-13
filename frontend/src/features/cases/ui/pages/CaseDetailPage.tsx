@@ -6,6 +6,13 @@
  *
  * @module components/case-detail/CaseDetail
  * @category Case Management - Core
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with memoized tab content
+ * - Guideline 28: Theme usage is pure function for tab styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for detail view transitions
+ * - Guideline 24: Tab configuration and callbacks are memoized (useMemo/useCallback)
  */
 
 // ============================================================================

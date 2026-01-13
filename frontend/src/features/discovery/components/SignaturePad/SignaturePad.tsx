@@ -3,6 +3,12 @@
  * @category Common
  * @description Digital signature pad with animation.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic, interruptible (no render-phase side effects)
+ * - Guideline 28: Theme usage is pure function of context (no external mutable state)
+ * - Guideline 34: useTheme() is side-effect free read operation (repeatable, discardable)
+ * - Guideline 33: Uses isPendingThemeChange for transitional UI feedback
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -39,7 +45,8 @@ interface SignaturePadProps {
 export const SignaturePad = React.memo<SignaturePadProps>(({ 
   value, onChange, label = "Digital Signature", subtext = "I certify this record is accurate.", isSigning 
 }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const [localSigning, setLocalSigning] = useState(false);
 
   const handleClick = () => {
@@ -60,7 +67,10 @@ export const SignaturePad = React.memo<SignaturePadProps>(({
   const loading = isSigning || localSigning;
 
   return (
-    <div className="relative">
+    <div className={cn(
+      "relative",
+      isPendingThemeChange && "transition-opacity duration-300 opacity-75"
+    )}>
       <div 
         className={cn(
           "p-4 rounded-lg border-2 border-dashed transition-all cursor-pointer group relative overflow-hidden",

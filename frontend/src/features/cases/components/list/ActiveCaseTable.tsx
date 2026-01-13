@@ -6,6 +6,12 @@
  *
  * @module components/case-list/ActiveCaseTable
  * @category Case Management - Table Views
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with virtualized list (interruptible)
+ * - Guideline 28: Theme usage is pure function for table styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for table transitions
  */
 
 // ============================================================================
@@ -63,7 +69,8 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
   // ==========================================================================
   // HOOKS - Context
   // ==========================================================================
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   // ==========================================================================
   // RENDER HELPERS

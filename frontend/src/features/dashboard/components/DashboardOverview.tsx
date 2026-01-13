@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useDeferredValue } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -29,9 +29,6 @@ import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardSidebar } from './DashboardSidebar';
 
-// Utils & Constants
-import { Scheduler } from '@/utils/scheduler';
-
 // Types
 import type { CaseId, TaskId, WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
@@ -39,11 +36,6 @@ import { TaskStatusBackend } from '@/types';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface DashboardOverviewProps {
-  /** Callback when a case is selected. */
-  onSelectCase: (caseId: string) => void;
-}
-
 interface ActiveProject {
   id: TaskId;
   title: string;
@@ -57,7 +49,7 @@ interface ActiveProject {
 // COMPONENT
 // ============================================================================
 
-export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
+export const DashboardOverview: React.FC = () => {
   // Enterprise Data Access: Parallel Queries with Caching
   const { stats, isLoading: statsLoading } = useDashboardStats();
   const { tasks } = useDashboardTasks();
@@ -67,28 +59,25 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   // Transform chart data from { name, value } to { name, count } for DashboardAnalytics
   const chartData = rawChartData.map(item => ({ name: item.name, count: item.value }));
 
-  // Optimization: Defer heavy processing of tasks to idle time
-  const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);
-
-  useEffect(() => {
-    if (tasks.length > 0) {
-      // Process heavy filtering/mapping in idle time to unblock initial paint
-      Scheduler.defer(() => {
-        const processed = tasks
-          .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
-          .slice(0, 5)
-          .map((t: WorkflowTask) => ({
-            id: t.id,
-            title: t.title,
-            case: t.caseId || 'General',
-            progress: t.status === 'In Progress' ? 50 : 10,
-            status: t.status,
-            due: t.dueDate || 'No due date'
-          }));
-        setActiveProjects(processed);
-      });
-    }
-  }, [tasks]);
+  // Optimization: Use useDeferredValue to prioritize UI responsiveness over derived data calculation
+  // (Rule 21 & 33: Interruptible renders and transitional states)
+  const deferredTasks = useDeferredValue(tasks);
+  
+  const activeProjects = useMemo(() => {
+    if (!deferredTasks || deferredTasks.length === 0) return [];
+    
+    return deferredTasks
+      .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
+      .slice(0, 5)
+      .map((t: WorkflowTask) => ({
+        id: t.id,
+        title: t.title,
+        case: t.caseId || 'General',
+        progress: t.status === 'In Progress' ? 50 : 10,
+        status: t.status,
+        due: t.dueDate || 'No due date'
+      }));
+  }, [deferredTasks]);
 
   if (statsLoading) return <LazyLoader message="Aggregating Firm Intelligence..." />;
 
@@ -97,7 +86,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
       <DashboardMetrics stats={stats || null} />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <DashboardAnalytics activeProjects={activeProjects} chartData={chartData} />
-        <DashboardSidebar onSelectCase={onSelectCase} alerts={alerts} />
+        <DashboardSidebar alerts={alerts} />
       </div>
     </div>
   );

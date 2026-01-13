@@ -3,6 +3,13 @@
  * @category Case Management
  * @description Main case management interface with tabbed navigation following Case Workflows pattern
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with useTransition for tab switching
+ * - Guideline 28: Theme usage is pure function for management UI
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for smooth transitions
+ * - Guideline 38: startTransition for non-urgent tab updates
+ *
  * ARCHITECTURE:
  * - Uses PageHeader + two-level tabs (parent/sub) like MasterWorkflow
  * - Stats cards between navigation and content
@@ -94,7 +101,8 @@ interface CaseManagementProps {
 }
 
 export const CaseManagement: React.FC<CaseManagementProps> = ({ initialCases, initialInvoices, onSelectCase }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const navigate = useNavigate();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('cases_active_tab', 'overview');

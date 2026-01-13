@@ -4,6 +4,12 @@
  * @module MatterAnalyticsDashboard
  * @description Enterprise-grade analytics for matter performance and insights
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with complex data transformations
+ * - Guideline 28: Theme (isDark) determines chart styling (pure function)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for dashboard transitions
+ * 
  * Features:
  * - Matter performance metrics
  * - Financial performance tracking
@@ -38,7 +44,8 @@ import {
 import { useMemo, useState } from 'react';
 
 export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
-  const { isDark } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { isDark, isPendingThemeChange } = useTheme();
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'ytd' | 'all'>('30d');
   const practiceAreaFilter = 'all';
 

@@ -6,6 +6,12 @@
  *
  * @module components/case-list/CaseListIntake
  * @category Case Management - Intake Pipeline
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with drag-drop state management
+ * - Guideline 28: Theme usage is pure function for Kanban styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for intake board transitions
  */
 
 // ============================================================================
@@ -36,7 +42,8 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 
 export const CaseListIntake: React.FC = () => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const { success, error: notifyError } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);

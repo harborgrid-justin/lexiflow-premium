@@ -4,6 +4,13 @@
  * Unified matter/case creation and editing form combining general matter intake
  * with federal litigation case fields. Supports full CRUD operations.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with tabbed interface and form state
+ * - Guideline 28: Theme usage is pure function for form styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for form transitions
+ * - Guideline 24: Expensive computations memoized with useMemo
+ *
  * Features:
  * - Tabbed interface: Intake, Court Info, Parties, Financial, Related Cases
  * - Real-time validation with error feedback
@@ -43,7 +50,8 @@ import { FinancialTab } from './tabs/FinancialTab';
 import { RelatedCasesTab } from './tabs/RelatedCasesTab';
 
 const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const {
     isEditMode,

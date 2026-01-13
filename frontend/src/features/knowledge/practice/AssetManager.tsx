@@ -3,6 +3,12 @@
  * @category Practice Management
  * @description IT asset tracking and management with off-thread search.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with worker-based search
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for UI feedback
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */

@@ -3,6 +3,12 @@
  * @category Practice Management
  * @description Financial management with operating and trust accounts.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic, interruptible
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for smooth transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */

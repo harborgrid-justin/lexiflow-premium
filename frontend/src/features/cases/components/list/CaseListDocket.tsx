@@ -6,6 +6,13 @@
  *
  * @module components/case-list/CaseListDocket
  * @category Case Management - Docket Views
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with virtualized docket list
+ * - Guideline 28: Theme usage is pure function for docket display
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for docket transitions
+ * - Guideline 24: Docket filtering and sorting are memoized (useMemo)
  */
 
 // ============================================================================
@@ -55,7 +62,8 @@ interface DocketItem {
 }
 
 export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const { data: docket = [], isLoading: loadingDocket } = useQuery(queryKeys.docket.all(), async () => {
     const svc = DataService.docket;

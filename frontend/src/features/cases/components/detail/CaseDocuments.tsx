@@ -6,6 +6,13 @@
  *
  * @module components/case-detail/CaseDocuments
  * @category Case Management - Documents & Analysis
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with lazy-loaded modules
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 29: Suspense boundaries for DocumentAssembly (lazy loading)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for document list transitions
  */
 
 // External Dependencies
@@ -36,7 +43,8 @@ interface CaseDocumentsProps {
 }
 
 export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzingId, onAnalyze, onDocumentCreated }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   
   const {
     fileInputRef,

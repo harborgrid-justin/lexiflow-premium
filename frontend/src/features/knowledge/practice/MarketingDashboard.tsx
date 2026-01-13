@@ -3,6 +3,12 @@
  * @category Practice Management
  * @description Marketing analytics with campaigns and conversion tracking.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic, interruptible
+ * - Guideline 28: Theme & chart colors memoized (pure derivations)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for smooth chart transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -11,6 +17,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowRight, Megaphone, Target, Users } from 'lucide-react';
+import { useMemo } from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
@@ -37,11 +44,14 @@ import { MarketingCampaign, MarketingMetric } from '@/types';
 // ============================================================================
 
 export const MarketingDashboard: React.FC = () => {
-  const { theme, mode } = useTheme();
-  const _chartColors = ChartColorService.getChartColors(mode);
-  const chartTheme = ChartColorService.getChartTheme(mode);
-  const tooltipStyle = ChartColorService.getTooltipStyle(mode);
-  const _palette = ChartColorService.getPalette(mode);
+  // Guideline 34: Side-effect free context read
+  const { theme, mode, isPendingThemeChange } = useTheme();
+  
+  // Guideline 28: Memoize chart theme values (pure function of mode)
+  const chartColors = useMemo(() => ChartColorService.getChartColors(mode), [mode]);
+  const chartTheme = useMemo(() => ChartColorService.getChartTheme(mode), [mode]);
+  const tooltipStyle = useMemo(() => ChartColorService.getTooltipStyle(mode), [mode]);
+  const palette = useMemo(() => ChartColorService.getPalette(mode), [mode]);
 
   // Enterprise Data Access
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(

@@ -20,6 +20,8 @@ import { useBillingStats } from '../hooks/useDashboardData';
 // Hooks & Context
 import { useTheme } from '@/features/theme';
 
+import { useDashboardActions } from '../contexts/DashboardContext';
+
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { DateText } from '@/shared/ui/atoms/DateText/DateText';
@@ -42,8 +44,6 @@ export interface DashboardAlert {
 }
 
 interface DashboardSidebarProps {
-    /** Callback when a case is selected from an alert. */
-    onSelectCase: (caseId: string) => void;
     /** Array of dashboard alerts to display. */
     alerts: DashboardAlert[];
 }
@@ -52,7 +52,8 @@ interface DashboardSidebarProps {
 // COMPONENT
 // ============================================================================
 
-export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase, alerts }) => {
+export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ alerts }) => {
+    const { onSelectCase } = useDashboardActions();
     const { theme } = useTheme();
 
     // Data Fetching via the centralized hook system

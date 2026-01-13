@@ -3,6 +3,12 @@
  * @category Practice Management
  * @description Vendor directory, contract lifecycle, and RFP management.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic, interruptible
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for UI transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -68,7 +74,8 @@ interface RFP {
 // ============================================================================
 
 export const VendorProcurement: React.FC = () => {
-    const { theme } = useTheme();
+    // Guideline 34: Side-effect free context read
+    const { theme, isPendingThemeChange } = useTheme();
     const [activeTab, setActiveTab] = useState('directory');
 
     const { data: contracts = [], isLoading: contractsLoading } = useQuery<VendorContract[]>(

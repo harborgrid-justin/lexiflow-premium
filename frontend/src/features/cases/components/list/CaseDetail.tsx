@@ -1,3 +1,16 @@
+/**
+ * CaseDetail.tsx
+ *
+ * Detailed view of a single case/matter with CRUD operations and comprehensive
+ * information display.
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with React Query data fetching
+ * - Guideline 28: Theme usage is pure function for detail view styling
+ * - Guideline 34: useTheme() is side-effect free read (if used)
+ * - Guideline 33: Ready for isPendingThemeChange integration
+ */
+
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/useModalState';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';

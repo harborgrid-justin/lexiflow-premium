@@ -16,12 +16,12 @@ import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
 
 // Hooks & Context
+import { useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 import { useToggle } from '@/shared/hooks/useToggle';
 
 // Types
 import { NodeType } from '@/types/workflow-types';
 import { LITIGATION_DESCRIPTIONS } from './constants';
-import { StrategyCanvasProps } from './types';
 import {
   calculateCanvasMousePosition,
   calculateDropPosition,
@@ -29,10 +29,9 @@ import {
   generateNodeContextMenuItems
 } from './utils';
 
-export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
-  nodes, connections, addNode, updateNode, deleteNode,
-  addConnection, updateConnection, deleteConnection
-}) => {
+export const StrategyCanvas: React.FC = () => {
+  const { nodes, connections } = useLitigationState();
+  const { addNode, updateNode, deleteNode, addConnection, updateConnection, deleteConnection } = useLitigationActions();
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(null);

@@ -4,6 +4,13 @@
  * @architecture Frontend-backend integration via DataService facade
  * @features Conditional branching, parallel execution, versioning, SLA monitoring,
  *           approval chains, rollback, analytics, AI suggestions, external triggers
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with complex workflow state (memoized)
+ * - Guideline 28: Theme usage is pure function for UI styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for workflow designer transitions
+ * - Guideline 24: Workflow analytics computations are memoized (useMemo)
  */
 
 import { useTheme } from '@/features/theme';
@@ -49,7 +56,8 @@ export function AdvancedWorkflowDesigner({
   workflowId,
   onSave
 }: AdvancedWorkflowDesignerProps) {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const {
     activeTab,

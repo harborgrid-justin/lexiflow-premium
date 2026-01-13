@@ -17,7 +17,7 @@ import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 
 // Hooks & Context
-import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
+import { LitigationProvider, useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 import { useTheme } from '@/features/theme';
 
 // Utils
@@ -33,13 +33,10 @@ const PlaybookLibrary = lazy(() => import('./PlaybookLibrary').then(m => ({ defa
 const OutcomeSimulator = lazy(() => import('./OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
 const LitigationScheduleView = lazy(() => import('./LitigationScheduleView').then(m => ({ default: m.LitigationScheduleView })));
 
-export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
+const LitigationBuilderContent: React.FC = () => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState('canvas');
-
-  // LIFTED STATE: `useLitigationBuilder` now lives here as the source of truth
-  const builderProps = useLitigationBuilder({ navigateToCaseTab });
-  const { cases, selectedCaseId, setSelectedCaseId, deployToCase, isDeploying } = builderProps;
+  const { activeTab, nodes, connections, cases, selectedCaseId, isDeploying } = useLitigationState();
+  const { setActiveTab, setSelectedCaseId, deployToCase, loadPlaybook } = useLitigationActions();
 
   // Ensure cases is always an array
   const safeCases = Array.isArray(cases) ? cases : [];
@@ -71,14 +68,22 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
       <div className={cn("h-full w-full", theme.background)}>
         <ErrorBoundary>
           <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
-            {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
-            {activeTab === 'timeline' && <LitigationScheduleView {...builderProps} />}
-            {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadPlaybook(p)} />}
+            {activeTab === 'canvas' && <StrategyCanvas />}
+            {activeTab === 'timeline' && <LitigationScheduleView />}
+            {activeTab === 'templates' && <PlaybookLibrary />}
             {activeTab === 'simulate' && <OutcomeSimulator />}
           </Suspense>
         </ErrorBoundary>
       </div>
     </TabbedPageLayout>
+  );
+};
+
+export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
+  return (
+    <LitigationProvider navigateToCaseTab={navigateToCaseTab}>
+      <LitigationBuilderContent />
+    </LitigationProvider>
   );
 };
 export default LitigationBuilder;

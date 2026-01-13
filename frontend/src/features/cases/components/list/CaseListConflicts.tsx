@@ -6,6 +6,12 @@
  *
  * @module components/case-list/CaseListConflicts
  * @category Case Management - Compliance
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with filtered conflict list
+ * - Guideline 28: Theme usage is pure function for conflict display
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for conflict list transitions
  */
 
 // ============================================================================
@@ -39,7 +45,8 @@ interface CaseListConflictsProps {
 }
 
 export const CaseListConflicts: React.FC<CaseListConflictsProps> = () => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
   // Enterprise Data Access

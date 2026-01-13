@@ -46,7 +46,8 @@ const sanitizeHtml = (html: string) => {
 };
 
 export const WikiView: React.FC = () => {
-  const { theme, mode } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, mode, isPendingThemeChange } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
   const [isPending, startTransition] = useTransition();
 

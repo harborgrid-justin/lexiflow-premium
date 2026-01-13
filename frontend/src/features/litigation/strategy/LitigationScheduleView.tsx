@@ -15,17 +15,20 @@ import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/de
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useLitigationState, useLitigationActions } from '../contexts/LitigationContext';
 
 // Utils
 import { cn } from '@/shared/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types
-import { LitigationScheduleViewProps, ZoomLevel } from './types';
+import { ZoomLevel } from './types';
 import { calculateNodePositionFromDate, calculatePixelsPerDay, transformNodesToSchedule } from './utils';
 
-export const LitigationScheduleView: React.FC<LitigationScheduleViewProps> = ({ nodes, connections, updateNode, addNode }) => {
+export const LitigationScheduleView: React.FC = () => {
   const { theme } = useTheme();
+  const { nodes, connections } = useLitigationState();
+  const { updateNode, addNode } = useLitigationActions();
 
   const [zoom, setZoom] = useState<ZoomLevel>('Month');
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);

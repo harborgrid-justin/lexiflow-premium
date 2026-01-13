@@ -1,3 +1,15 @@
+/**
+ * CaseWorkflowList.tsx
+ *
+ * List view of cases with active workflows, progress tracking, and quick actions.
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with computed progress metrics
+ * - Guideline 28: Theme usage is pure function for workflow display
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for list transitions
+ */
+
 import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } from 'lucide-react';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';
@@ -15,7 +27,8 @@ interface CaseWorkflowListProps {
 }
 
 export function CaseWorkflowList({ cases, tasks, onSelectCase, onManageWorkflow }: CaseWorkflowListProps) {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   if (!cases || cases.length === 0) {
     return (

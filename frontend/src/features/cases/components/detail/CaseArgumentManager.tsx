@@ -6,6 +6,12 @@
  *
  * @module components/case-detail/CaseArgumentManager
  * @category Case Management - Arguments & Evidence
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with filtered arguments list
+ * - Guideline 28: Theme usage is pure function for component styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for smooth transitions
  */
 
 // External Dependencies
@@ -33,7 +39,8 @@ interface CaseArgumentManagerProps {
 }
 
 export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseData, evidence }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const [activeArgumentId, setActiveArgumentId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('All');

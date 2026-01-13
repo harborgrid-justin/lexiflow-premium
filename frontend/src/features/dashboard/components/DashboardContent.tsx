@@ -16,33 +16,25 @@
 // Components
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
+import { useDashboardState, useDashboardActions } from '../contexts/DashboardContext';
 
 // Types
 import type { User } from '@/types';
 import React from "react";
 
 // ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-interface DashboardContentProps {
-  /** Currently active tab identifier. */
-  activeTab: string;
-  /** Callback when a case is selected. */
-  onSelectCase: (caseId: string) => void;
-  /** Current user information. */
-  currentUser: User;
-}
-
-// ============================================================================
 // COMPONENT
 // ============================================================================
 
-export const DashboardContent: React.FC<DashboardContentProps> = ({ activeTab, onSelectCase, currentUser }) => {
+export const DashboardContent: React.FC = () => {
+  const { activeTab, currentUser } = useDashboardState();
+  const { onSelectCase } = useDashboardActions();
+
   switch (activeTab) {
-    case 'overview': return <DashboardOverview onSelectCase={onSelectCase} />;
+    case 'overview': return <DashboardOverview />;
     case 'tasks': return <PersonalWorkspace activeTab="tasks" currentUser={currentUser} />;
     case 'notifications': return <PersonalWorkspace activeTab="notifications" currentUser={currentUser} />;
     // Fallback
-    default: return <DashboardOverview onSelectCase={onSelectCase} />;
+    default: return <DashboardOverview />;
   }
 };

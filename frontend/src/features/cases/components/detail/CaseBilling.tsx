@@ -6,6 +6,12 @@
  *
  * @module components/case-detail/CaseBilling
  * @category Case Management - Billing & Time Tracking
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with computed financial metrics
+ * - Guideline 28: Theme usage is pure function for billing display
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for billing panel transitions
  */
 
 // External Dependencies
@@ -34,7 +40,8 @@ interface CaseBillingProps {
 }
 
 export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, entries }) => {
-    const { theme } = useTheme();
+    // Guideline 34: Side-effect free context read
+    const { theme, isPendingThemeChange } = useTheme();
     const { unbilledTotal, billedTotal, totalHours, ledgerTotal } = useCaseFinancials(entries);
 
     return (

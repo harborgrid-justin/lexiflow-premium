@@ -24,6 +24,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // Hooks & Context
 import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
+import { useLitigationActions } from '../contexts/LitigationContext';
 
 // Components
 import { VirtualGrid } from '@/shared/ui/organisms/VirtualGrid';
@@ -34,16 +35,14 @@ import { Playbook } from '@/types/playbook';
 import { cn } from '@/shared/lib/cn';
 import { extractCategories, filterPlaybooks, getDifficultyBorderColor, getDifficultyColor } from './utils';
 
-// Types
-import { PlaybookLibraryProps } from './types';
-
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
-export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => {
+export const PlaybookLibrary: React.FC = () => {
     const { theme } = useTheme();
     const { openWindow, closeWindow } = useWindow();
+    const { loadPlaybook } = useLitigationActions();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
@@ -66,7 +65,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
         openWindow(
             winId,
             `Strategy: ${pb.title}`,
-            <PlaybookDetail playbook={pb} onClose={() => closeWindow(winId)} onApply={(p) => { onApply(p); closeWindow(winId); }} />
+            <PlaybookDetail playbook={pb} onClose={() => closeWindow(winId)} onApply={(p) => { loadPlaybook(p); closeWindow(winId); }} />
         );
     };
 

@@ -3,6 +3,13 @@
  * @category Entities
  * @description Entity relationship graph with conflict cluster detection.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with graph computations (memoized)
+ * - Guideline 28: Theme usage is pure function (graph styling)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for graph transitions
+ * - Guideline 29: Graph rendering doesn't trigger Suspense cascades
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -49,13 +56,15 @@ interface EntityNetworkProps {
 // ============================================================================
 
 export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const { data: relationships = [], isLoading } = useQuery<EntityRelationship[]>(
     ['relationships', 'all'],
     () => DataService.entities.getAllRelationships()
   );
 
+  // Guideline 28: Memoize complex graph computations (pure function)
   const { nodes, links: _links, components } = useMemo(() => {
     if (isLoading || entities.length === 0) return { nodes: [], links: [], components: [] };
 

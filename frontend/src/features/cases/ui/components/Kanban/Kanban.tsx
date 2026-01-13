@@ -3,6 +3,12 @@
  * @category Common
  * @description Kanban board with drag-and-drop columns and cards.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic, interruptible (drag-drop state managed)
+ * - Guideline 28: Theme usage is pure function of context
+ * - Guideline 34: useTheme() is side-effect free read operation
+ * - Guideline 33: Uses isPendingThemeChange for smooth transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -51,14 +57,16 @@ interface KanbanColumnProps {
  * KanbanColumn - React 18 optimized with React.memo
  */
 export const KanbanColumn = React.memo<KanbanColumnProps>(({ title, count, children, onDrop, isDragOver, action }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   
   return (
     <div 
       className={cn(
         "flex flex-col w-[85vw] md:w-80 rounded-lg h-full border-2 transition-colors duration-200 snap-center shrink-0",
         theme.surface.highlight,
-        isDragOver ? cn(theme.primary.border, theme.primary.light) : "border-transparent"
+        isDragOver ? cn(theme.primary.border, theme.primary.light) : "border-transparent",
+        isPendingThemeChange && "opacity-75"
       )}
       onDragOver={(e) => { e.preventDefault(); }}
       onDrop={onDrop}

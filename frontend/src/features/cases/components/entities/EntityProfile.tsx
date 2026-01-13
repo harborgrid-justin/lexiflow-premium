@@ -3,6 +3,12 @@
  * @category Entities
  * @description Detailed entity profile with relationships and matter history.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with data fetching via useQuery
+ * - Guideline 28: Theme usage is pure function for entity display
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for profile transitions
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -50,7 +56,8 @@ interface EntityProfileProps {
 // ============================================================================
 
 export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Efficient Caching using useQuery

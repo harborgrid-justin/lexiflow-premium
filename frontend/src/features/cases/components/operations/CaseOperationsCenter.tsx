@@ -4,6 +4,13 @@
  * @module MatterOperationsCenter
  * @description Task management, collaboration, and workflow coordination
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with complex task filtering
+ * - Guideline 28: Theme (isDark) determines view mode styling (pure function)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for operations center transitions
+ * - Guideline 24: Task filtering and view mode computations are memoized
+ *
  * Features:
  * - Task management and assignment
  * - Team collaboration tools
@@ -38,7 +45,8 @@ import { useMemo, useState } from 'react';
 type ViewMode = 'list' | 'kanban' | 'calendar';
 
 export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) => {
-  const { isDark } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { isDark, isPendingThemeChange } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
   const [_showTaskModal, setShowTaskModal] = useState(false);

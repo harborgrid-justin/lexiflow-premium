@@ -3,6 +3,12 @@
  * @category Common
  * @description Visual risk/strength meter with percentage bar.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with memoized color calculations
+ * - Guideline 28: Theme-based color derivation (pure function via useCallback)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for visual feedback
+ * 
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic chart colors.
  */
@@ -10,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -34,8 +40,10 @@ interface RiskMeterProps {
  * RiskMeter - React 18 optimized with React.memo and useCallback
  */
 export const RiskMeter = React.memo<RiskMeterProps>(({ value, label, type = 'strength' }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
+  // Guideline 28: Memoize color function (pure derivation from theme)
   const getColor = useCallback((val: number) => {
     if (type === 'strength') {
       if (val >= 80) return theme.chart.colors.success; // Green
@@ -48,8 +56,13 @@ export const RiskMeter = React.memo<RiskMeterProps>(({ value, label, type = 'str
     }
   }, [type, theme]);
 
+  const barColor = useMemo(() => getColor(value), [getColor, value]);
+
   return (
-    <div className="space-y-2">
+    <div className={cn(
+      "space-y-2",
+      isPendingThemeChange && "transition-opacity duration-300 opacity-75"
+    )}>
       {label && (
         <div className="flex items-center justify-between text-xs">
           <span className={cn("font-semibold uppercase", theme.text.secondary)}>{label}</span>

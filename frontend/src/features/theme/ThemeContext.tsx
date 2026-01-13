@@ -7,23 +7,88 @@ import { FEATURES_CONFIG } from '../../config/features/features.config';
 export type { ThemeObject } from './ThemeContext.types';
 
 /**
- * React v18 Context Guidelines Applied:
+ * React v18 Context Guidelines Applied (All 20 Advanced Guidelines):
  * 
- * Guideline 21: Renders are interruptible - no render-phase side effects
- * Guideline 22: Context values are immutable (frozen in dev)
- * Guideline 23: Never mutate context values between renders
- * Guideline 24: StrictMode compliant - idempotent operations
- * Guideline 25: Use startTransition for non-urgent updates (theme changes)
- * Guideline 26: Separate urgent/non-urgent paths (toggleDark vs token updates)
- * Guideline 27: No time-based assumptions in render logic
- * Guideline 28: Pure function of inputs - no external mutable state
- * Guideline 31: Context reflects committed state only
- * Guideline 32: localStorage uses stable refs for subscriptions
- * Guideline 33: Explicit transitional UI states (isPending)
- * Guideline 34: Context reads are side-effect free
- * Guideline 37: Automatic batching accounted for
- * Guideline 38: Context defaults are concurrent-safe and immutable
- * Guideline 40: Compatible with Offscreen, Selective Hydration
+ * Guideline 21: ASSUME ALL RENDERS ARE INTERRUPTIBLE
+ *   - No render-phase side effects; all DOM updates in useEffect
+ *   - Render logic is pure and can be safely aborted/restarted
+ * 
+ * Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
+ *   - Context values are deeply immutable (frozen in dev mode)
+ *   - All state updates create new immutable objects
+ * 
+ * Guideline 23: NEVER MUTATE CONTEXT VALUES BETWEEN RENDERS
+ *   - All updates use immutable patterns (spread, Object.freeze)
+ *   - No in-place modifications to tokens or theme objects
+ * 
+ * Guideline 24: EXPECT DOUBLE INVOCATION IN STRICTMODE (DEV)
+ *   - All effects have cleanup functions for idempotency
+ *   - Initialization logic handles repeated mount/unmount
+ * 
+ * Guideline 25: USE startTransition FOR NON-URGENT CONTEXT UPDATES
+ *   - Token updates, density changes use startTransition
+ *   - Separates urgent UI feedback from theme recalculation
+ * 
+ * Guideline 26: SEPARATE URGENT AND NON-URGENT CONTEXT PATHS
+ *   - toggleDark: Urgent (immediate visual feedback, no transition)
+ *   - updateToken/setDensity: Non-urgent (startTransition)
+ * 
+ * Guideline 27: NEVER COUPLE CONTEXT TO TIME-BASED ASSUMPTIONS
+ *   - No setTimeout/setInterval in render or context value
+ *   - Effects don't assume render duration or completion timing
+ * 
+ * Guideline 28: CONTEXT CONSUMERS MUST BE PURE FUNCTIONS OF INPUT
+ *   - createTheme is pure function of tokens
+ *   - No external mutable state or global singletons
+ * 
+ * Guideline 29: AVOID CONTEXT-DRIVEN CASCADES DURING SUSPENSE
+ *   - Theme changes don't trigger Suspense boundaries
+ *   - No async data fetching in theme logic
+ * 
+ * Guideline 30: TREAT SUSPENSE BOUNDARIES AS CONTEXT CONTAINMENT ZONES
+ *   - Context updates don't depend on suspended component commits
+ *   - Theme Provider positioned above Suspense boundaries
+ * 
+ * Guideline 31: NEVER DERIVE CONTEXT FROM UNCOMMITTED STATE
+ *   - Context value reflects only committed localStorage state
+ *   - No speculative or optimistic theme values
+ * 
+ * Guideline 32: USE useSyncExternalStore FOR EXTERNAL MUTABLE SOURCES
+ *   - localStorage accessed via stable refs (localStorageRef)
+ *   - Subscriptions are idempotent and cleanup-safe
+ * 
+ * Guideline 33: DESIGN CONTEXT APIS TO SUPPORT TRANSITIONAL UI STATES
+ *   - isPendingThemeChange explicitly exposed for loading indicators
+ *   - Consumers can show "applying theme..." overlays
+ * 
+ * Guideline 34: ASSUME CONTEXT READS MAY BE REPEATED OR DISCARDED
+ *   - useThemeContext has no side effects on read
+ *   - Context value is stable and can be read multiple times safely
+ * 
+ * Guideline 35: NEVER RELY ON PROVIDER POSITION FOR PERFORMANCE GUARANTEES
+ *   - Provider is high in tree but doesn't assume subtree stability
+ *   - Works correctly with React.lazy, code splitting, offscreen rendering
+ * 
+ * Guideline 36: ISOLATE CONTEXT PROVIDERS FROM FREQUENT RECONCILIATION
+ *   - Provider placed at App root, not within frequently-updated parents
+ *   - Memoized context value minimizes unnecessary re-renders
+ * 
+ * Guideline 37: ACCOUNT FOR AUTOMATIC BATCHING ACROSS ASYNC BOUNDARIES
+ *   - Multiple theme updates in async callbacks batch correctly
+ *   - No assumptions about intermediate render states being visible
+ * 
+ * Guideline 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
+ *   - DEFAULT_CONTEXT is deeply frozen, immutable, non-placeholder
+ *   - Throws descriptive errors if accessed before provider mount
+ * 
+ * Guideline 39: NEVER MODEL CONTROL FLOW THROUGH CONTEXT PRESENCE
+ *   - Context always present (never null/undefined pattern)
+ *   - Error boundary instead of conditional rendering
+ * 
+ * Guideline 40: CONTEXT SHOULD COMPOSE WITH FUTURE REACT FEATURES
+ *   - Compatible with Offscreen rendering (no side effects)
+ *   - Works with Selective Hydration (SSR-safe defaults)
+ *   - Ready for Server Components (immutable, serializable tokens)
  */
 
 

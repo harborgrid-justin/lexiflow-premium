@@ -3,6 +3,13 @@
  * @category Common
  * @description PDF viewer with canvas rendering.
  *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with interruptible canvas updates
+ * - Guideline 28: Theme usage is pure function (memoized canvas styles)
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for visual feedback
+ * - Uses useDeferredValue for non-urgent canvas style updates
+ *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
  */
@@ -11,7 +18,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, useDeferredValue } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -73,7 +80,19 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   onPageLoad,
   children
 }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
+  
+  // Guideline 28 & 33: Use deferred value for non-urgent canvas style updates
+  const deferredTheme = useDeferredValue(theme);
+  
+  // Guideline 28: Memoize canvas styles (pure function of deferred theme)
+  const canvasStyles = useMemo(() => ({
+    border: `1px solid ${deferredTheme.border.default}`,
+    backgroundColor: deferredTheme.surface.default,
+    boxShadow: deferredTheme.shadows?.sm || '0 1px 3px rgba(0,0,0,0.12)',
+  }), [deferredTheme]);
+  
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -206,7 +225,14 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   if (!url) return null;
 
   return (
-    <div ref={containerRef} className={cn("flex flex-col items-center p-8 min-h-full relative overflow-auto w-full", theme.background)}>
+    <div 
+      ref={containerRef} 
+      className={cn(
+        "flex flex-col items-center p-8 min-h-full relative overflow-auto w-full",
+        theme.background,
+        isPendingThemeChange && "transition-colors duration-300"
+      )}
+    >
       {loading && (
         <div className={cn("absolute inset-0 flex flex-col items-center justify-center z-20 backdrop-blur-sm", theme.surface.default, "bg-opacity-80")}>
           <Loader2 className="h-10 w-10 animate-spin text-blue-600 mb-3" />
@@ -221,8 +247,16 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
         </div>
       ) : (
         <div
-          className={cn("relative shadow-2xl border transition-all duration-200 ease-out origin-top", theme.surface.default, theme.border.default)}
-          style={{ width: dimensions.width, height: dimensions.height }}
+          className={cn(
+            "relative shadow-2xl border transition-all duration-200 ease-out origin-top",
+            deferredTheme.surface.default,
+            deferredTheme.border.default
+          )}
+          style={{ 
+            width: dimensions.width, 
+            height: dimensions.height,
+            ...canvasStyles
+          }}
         >
           <canvas ref={canvasRef} className="block absolute inset-0" />
           <div className="absolute inset-0 z-10">

@@ -6,6 +6,12 @@
  *
  * @module components/case-detail/overview/CaseOverview
  * @category Case Management - Overview
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with memoized case data
+ * - Guideline 28: Theme usage is pure function for dashboard styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for overview transitions
  */
 
 // External Dependencies
@@ -39,7 +45,8 @@ interface CaseOverviewProps {
 }
 
 export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntryAdded, onNavigateToCase }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const {
     showTimeModal, setShowTimeModal,

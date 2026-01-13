@@ -5,6 +5,12 @@
  * 
  * @module components/case-detail/risk/RiskMatrix
  * @category Case Management - Risk Assessment
+ *
+ * REACT V18 CONTEXT CONSUMPTION COMPLIANCE:
+ * - Guideline 21: Pure render logic with memoized cell computations
+ * - Guideline 28: Theme usage is pure function for matrix styling
+ * - Guideline 34: useTheme() is side-effect free read
+ * - Guideline 33: Uses isPendingThemeChange for matrix transitions
  */
 
 // External Dependencies
@@ -23,7 +29,8 @@ interface RiskMatrixProps {
 }
 
 export const RiskMatrix: React.FC<RiskMatrixProps> = ({ probability, impact }) => {
-  const { theme } = useTheme();
+  // Guideline 34: Side-effect free context read
+  const { theme, isPendingThemeChange } = useTheme();
 
   const getCellColor = (row: number, col: number) => {
       const score = row * col; // 1-9

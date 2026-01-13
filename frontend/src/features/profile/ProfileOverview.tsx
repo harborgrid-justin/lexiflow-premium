@@ -18,13 +18,15 @@ import { Mail, MapPin, Phone, Scale, ShieldCheck } from 'lucide-react';
 // Hooks & Context
 import { useTheme } from '@/features/theme';
 
+// Utils & Constants
+import { cn } from '@/shared/lib/cn';
+
 // Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/shared/lib/cn';
 
 // Types
 import { ExtendedUserProfile } from '@/types';
@@ -64,10 +66,10 @@ export const ProfileOverview = ({ profile }: ProfileOverviewProps) => {
               <Mail className="h-4 w-4" /> {profile.email}
             </div>
             <div className="flex items-center gap-2 text-slate-500">
-              <Phone className="h-4 w-4" /> (555) 123-4567
+              <Phone className="h-4 w-4" /> {FormattersService.phone(profile.phone) || '(555) 123-4567'}
             </div>
             <div className="flex items-center gap-2 text-slate-500">
-              <MapPin className="h-4 w-4" /> {profile.office}
+              <MapPin className="h-4 w-4" /> {profile.office || 'N/A'}
             </div>
           </div>
         </div>

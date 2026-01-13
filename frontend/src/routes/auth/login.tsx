@@ -6,10 +6,11 @@
 
 import { useAuthActions } from '@/contexts/auth/AuthProvider';
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuthActions();
 
   const [email, setEmail] = useState('');
@@ -34,7 +35,9 @@ export default function LoginPage() {
       const result = await login(email, password);
       console.log('[Login] Login result:', result);
       if (result.success) {
-        navigate('/dashboard');
+        // Redirect to the original destination or dashboard
+        const redirect = searchParams.get('redirect') || '/dashboard';
+        navigate(redirect);
       } else if (result.mfaRequired) {
         setError('Multi-factor verification required. Please complete MFA using the enterprise login experience.');
       } else {

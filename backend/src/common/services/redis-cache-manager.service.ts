@@ -95,10 +95,16 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     try {
       const redisUrl = this.configService.get<string>("redis.url");
-      const redisHost = this.configService.get<string>("redis.host", "localhost");
+      const redisHost = this.configService.get<string>(
+        "redis.host",
+        "localhost"
+      );
       const redisPort = this.configService.get<number>("redis.port", 6379);
       const redisPassword = this.configService.get<string>("redis.password");
-      const redisUsername = this.configService.get<string>("redis.username", "default");
+      const redisUsername = this.configService.get<string>(
+        "redis.username",
+        "default"
+      );
 
       this.redisClient = redisUrl
         ? createClient({
@@ -239,7 +245,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 
     if (this.useRedis()) {
       try {
-        let cursor = 0;
+        let cursor: string = "0";
         const keys: string[] = [];
 
         do {
@@ -248,9 +254,9 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
             MATCH: pattern,
             COUNT: 100,
           });
-          cursor = result.cursor;
+          cursor = result.cursor.toString();
           keys.push(...result.keys);
-        } while (cursor !== 0);
+        } while (cursor !== "0");
 
         if (keys.length > 0) {
           const redisClient = this.getRedisClient();
@@ -408,7 +414,10 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   }
 
   private buildKey(key: string, namespace?: string): string {
-    const prefix = this.configService.get<string>("REDIS_KEY_PREFIX", "lexiflow:");
+    const prefix = this.configService.get<string>(
+      "REDIS_KEY_PREFIX",
+      "lexiflow:"
+    );
     return namespace ? `${prefix}${namespace}:${key}` : `${prefix}${key}`;
   }
 

@@ -12,7 +12,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserPreferencesDto } from "./dto/update-user-preferences.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserPreferences } from "./entities/user-preferences.entity";
 import { UserProfile } from "./entities/user-profile.entity";
 import { User, UserRole, UserStatus } from "./entities/user.entity";
 
@@ -64,7 +66,9 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserProfile)
-    private readonly userProfileRepository: Repository<UserProfile>
+    private readonly userProfileRepository: Repository<UserProfile>,
+    @InjectRepository(UserPreferences)
+    private readonly userPreferencesRepository: Repository<UserPreferences>
   ) {}
 
   async onModuleInit() {
@@ -430,6 +434,44 @@ export class UsersService implements OnModuleInit {
     const userRole = this.mapToUserRole(role);
     const users = await this.userRepository.find({ where: { role: userRole } });
     return users.map((u) => this.toAuthenticatedUser(u));
+  }
+
+  async getPreferences(userId: string): Promise<UserPreferences> {
+    let preferences = await this.userPreferencesRepository.findOne({
+      where: { userId },
+    });
+
+    if (!preferences) {
+      // Create default preferences if not exists
+      preferences = this.userPreferencesRepository.create({
+        userId,
+        theme: "light",
+        language: "en",
+      });
+      await this.userPreferencesRepository.save(preferences);
+    }
+
+    return preferences;
+  }
+
+  async updatePreferences(
+    userId: string,
+    preferencesDto: UpdateUserPreferencesDto
+  ): Promise<UserPreferences> {
+    let preferences = await this.userPreferencesRepository.findOne({
+      where: { userId },
+    });
+
+    if (!preferences) {
+      preferences = this.userPreferencesRepository.create({
+        userId,
+        ...preferencesDto,
+      });
+    } else {
+      this.userPreferencesRepository.merge(preferences, preferencesDto);
+    }
+
+    return this.userPreferencesRepository.save(preferences);
   }
 
   private toAuthenticatedUser(user: User): AuthenticatedUser {

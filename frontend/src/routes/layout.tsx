@@ -1,347 +1,84 @@
-/**
- * App Layout Route
- *
- * Provides the main application shell with:
- * - Sidebar navigation
- * - Header with search
- * - Global hotkeys
- * - Error boundaries for main content
- * - Authentication check via loader
- *
- * React Router v7 Best Practices:
- * - Uses loader for authentication check
- * - Uses useLoaderData for type-safe data access
- * - Uses useNavigate for programmatic navigation (search results, etc.)
- * - Sidebar/navigation uses NavLink components for proper active states
- *
- * @module routes/layout
- */
+import { AppShell } from "@/components/layouts/AppShell";
+import { AppSidebar } from "@/components/navigation/Sidebar/AppSidebar";
+import { TopBar } from "@/components/navigation/TopBar/TopBar";
+import { ThemeProvider } from "@/features/theme";
+import { useAppShellLogic } from "@/hooks/useAppShellLogic";
+import { RouteErrorBoundary } from "@/routes/_shared/RouteErrorBoundary";
+import { requireAuthLoader } from "@/routes/route-guards";
+import { Outlet, useRouteError } from "react-router";
 
-import { useAuthState } from '@/contexts/auth/AuthProvider';
-import { useAppController } from '@/hooks/core';
-import type { GlobalSearchResult } from '@/services/search/searchService';
-import { AppShell } from '@/shared/ui/layouts/AppShell/AppShell';
-import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
-import { AppHeader } from '@/shared/ui/organisms/AppHeader/AppHeader';
-import { ErrorBoundary as ComponentErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
-import { GlobalHotkeys } from '@/shared/ui/organisms/GlobalHotkeys/GlobalHotkeys';
-import { Sidebar } from '@/shared/ui/organisms/Sidebar/Sidebar';
-import type { AppView } from '@/types';
-import type { IntentResult } from '@/types/intelligence';
-import React, { useCallback, useMemo } from 'react';
-import { Outlet, useLocation, useNavigate, useParams } from "react-router";
-import type { Route } from "./+types/layout";
-
-// ============================================================================
-// Meta Tags
-// ============================================================================
+// Export the loader for the router to use
+export const loader = requireAuthLoader;
 
 /**
- * Meta tags for the authenticated layout
- * Child routes will override/merge their own meta tags
- */
-export function meta() {
-  return [{ title: "LexiFlow AI Legal Suite" }];
-}
-
-// ============================================================================
-// Loader - Authentication Check
-// ============================================================================
-
-/**
- * Loader runs on every navigation to a child route
- * Used for:
- * - Authentication verification
- * - Pre-fetching common data
- * - Setting up server-side context
+ * Root Layout Component
  *
- * Note: In development mode, auto-login is attempted if VITE_AUTO_LOGIN=true
+ * This component acts as the "View" in the MVC pattern for the application shell.
+ * It strictly handles rendering and composition, delegating all logic to the
+ * useAppShellLogic hook (Controller).
  */
-export async function loader({ request }: Route.LoaderArgs) {
-  // Check for authentication token in localStorage (client-side check)
-  // Note: In SSR context, this would check cookies/headers
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('lexiflow_auth_token');
-    const userJson = localStorage.getItem('lexiflow_auth_user');
-
-    if (!token || !userJson) {
-      // In development with auto-login enabled, try to auto-login
-      if (import.meta.env.DEV) {
-        // Import dynamically to avoid bundle bloat in production
-        const { performAutoLogin } = await import('@/utils/dev-auto-login');
-        const autoLoginSuccess = await performAutoLogin();
-
-        if (autoLoginSuccess) {
-          // Auto-login successful, re-check authentication
-          const newToken = localStorage.getItem('lexiflow_auth_token');
-          const newUserJson = localStorage.getItem('lexiflow_auth_user');
-
-          if (newToken && newUserJson) {
-            try {
-              const user = JSON.parse(newUserJson);
-              return { authenticated: true, user };
-            } catch {
-              // Fall through to login redirect
-            }
-          }
-        }
-      }
-
-      // Not authenticated - redirect to login
-      const url = new URL(request.url);
-      throw new Response(null, {
-        status: 302,
-        headers: {
-          Location: `/login?redirect=${encodeURIComponent(url.pathname)}`,
-        },
-      });
-    }
-
-    try {
-      const user = JSON.parse(userJson);
-      return { authenticated: true, user };
-    } catch {
-      // Invalid user data - redirect to login
-      throw new Response(null, {
-        status: 302,
-        headers: { Location: '/login' },
-      });
-    }
-  }
-
-  // Server-side: Allow through (will be checked client-side)
-  return { authenticated: true };
-}
-
-// ============================================================================
-// Layout Component
-// ============================================================================
-
 export default function Layout() {
-  // React Router hooks
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { caseId } = useParams();
-
-  // Auth state
-  const { isLoading: authIsLoading } = useAuthState();
-
-  // App controller provides global state
-  const {
-    isSidebarOpen,
-    toggleSidebar,
-    currentUser,
-    globalSearch,
-    updateSearch,
-    switchUser,
-    isAppLoading,
-    appStatusMessage,
-  } = useAppController();
-
-  // Derive activeView from current location
-  // e.g., /cases/123 -> 'cases', /documents -> 'documents'
-  const activeView = useMemo<AppView>(() => {
-    const pathSegment = location.pathname.split('/')[1];
-    return (pathSegment || 'dashboard') as AppView;
-  }, [location.pathname]);
-
-  // Memoized handlers to prevent unnecessary re-renders
-  const handleSwitchUser = useCallback(() => {
-    switchUser(0);
-  }, [switchUser]);
-
-  const handleNavigate = useCallback((view: string) => {
-    navigate(`/${view}`);
-  }, [navigate]);
-
-  const handleToggleSidebar = useCallback(() => {
-    toggleSidebar();
-  }, [toggleSidebar]);
-
-  const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
-    // Navigate to the case detail page
-    navigate(`/cases/${result.id}`);
-  }, [navigate]);
-
-  const handleNeuralCommand = useCallback((intent: IntentResult) => {
-    console.log('Neural command:', intent);
-
-    if (intent.confidence < 0.7) {
-      return;
-    }
-
-    switch (intent.action) {
-      case 'NAVIGATE':
-        if (intent.targetModule) {
-          navigate(`/${intent.targetModule.toLowerCase()}`);
-        }
-        break;
-      case 'CREATE':
-        if (intent.targetModule === 'Case') {
-          navigate('/cases/new');
-        } else if (intent.targetModule === 'Document') {
-          navigate('/documents/upload');
-        }
-        break;
-      case 'SEARCH':
-        if (intent.context) {
-          // Navigate to search with query parameter
-          navigate(`/search?q=${encodeURIComponent(intent.context)}`);
-        }
-        break;
-    }
-  }, [navigate]);
-
-  const handleGlobalSearch = useCallback(() => {
-    // Focus search bar or open search modal
-    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
-    if (searchInput) {
-      searchInput.focus();
-    }
-  }, []);
-
-  const handleResetMainContent = useCallback(() => {
-    navigate('/');
-  }, [navigate]);
-
-  // Loading state while app initializes
-  // Add safety timeout - but exclude auth loading from timeout
-  React.useEffect(() => {
-    if (isAppLoading && !authIsLoading) {
-      const timeout = setTimeout(() => {
-        console.error('[Layout] App loading timeout - redirecting to login');
-        navigate('/login');
-      }, 15000); // 15 second timeout (increased from 10s)
-      return () => clearTimeout(timeout);
-    }
-    return undefined;
-  }, [isAppLoading, authIsLoading, navigate]);
-
-  if (isAppLoading || !currentUser) {
-    return (
-      <div
-        className="h-screen w-screen overflow-hidden"
-        role="status"
-        aria-label={appStatusMessage || "Loading application"}
-      >
-        <LazyLoader message={appStatusMessage} />
-      </div>
-    );
-  }
+  // Controller: Handles all state, navigation, and business logic
+  const { state, handlers } = useAppShellLogic();
 
   return (
-    <AppShell
-      activeView={activeView}
-      onNavigate={handleNavigate}
-      selectedCaseId={caseId || null}
-      sidebar={
-        <ComponentErrorBoundary scope="Sidebar">
-          <Sidebar
-            activeView={activeView}
-            setActiveView={handleNavigate}
-            isOpen={isSidebarOpen}
-            onClose={handleToggleSidebar}
-            currentUser={currentUser}
-            onSwitchUser={handleSwitchUser}
-          />
-        </ComponentErrorBoundary>
-      }
-      headerContent={
-        <ComponentErrorBoundary scope="Header">
-          <AppHeader
-            onToggleSidebar={handleToggleSidebar}
-            globalSearch={globalSearch}
-            setGlobalSearch={updateSearch}
-            onGlobalSearch={handleGlobalSearch}
-            currentUser={currentUser}
-            onSwitchUser={handleSwitchUser}
-            onSearchResultClick={handleSearchResultClick}
-            onNeuralCommand={handleNeuralCommand}
-          />
-        </ComponentErrorBoundary>
-      }
-    >
-      {/* Global keyboard shortcuts */}
-      <GlobalHotkeys
-        onToggleCommand={() => updateSearch('')}
-        onNavigate={handleNavigate}
-      />
+    <ThemeProvider>
+      <AppShell
+        // Active State
+        activeView={state.activeView}
+        selectedCaseId={state.selectedCaseId}
 
-      {/* Main content area with error boundary */}
-      <ComponentErrorBoundary scope="MainContent" onReset={handleResetMainContent}>
+        // Data & UI State
+        isFetching={state.isQueryFetching}
+        breadcrumbs={state.breadcrumbs}
+        timeTracker={state.timeTracker}
+
+        // Action Handlers
+        onNavigate={handlers.handleNavigate}
+
+        // Composed Slots
+        sidebar={
+          <AppSidebar
+            isOpen={state.isSidebarOpen}
+            onToggle={handlers.handleToggleSidebar}
+            activeItem={state.activeView}
+            userName={state.currentUser?.name}
+            userEmail={state.currentUser?.email}
+            userRole={state.currentUser?.role}
+            onNavigate={handlers.handleNavigate}
+          />
+        }
+        headerContent={
+          <TopBar
+            onSearch={handlers.handleGlobalSearch}
+            onNeuralCommand={handlers.handleNeuralCommand}
+            onResultClick={handlers.handleSearchResultClick}
+            onToggleSidebar={handlers.handleToggleSidebar}
+          />
+        }
+      >
+        {/* Child Routes */}
         <Outlet />
-      </ComponentErrorBoundary>
-    </AppShell>
+      </AppShell>
+    </ThemeProvider>
   );
 }
 
-// ============================================================================
-// Error Boundary
-// ============================================================================
-
 /**
- * Layout-level error boundary
- * Catches errors from child routes and provides recovery options
+ * Layout Error Boundary
  */
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  console.error("Layout Error Boundary:", error);
-
+export function ErrorBoundary() {
+  const error = useRouteError();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-8 dark:bg-gray-900">
-      <div className="w-full max-w-md rounded-lg border border-red-200 bg-white p-6 shadow-lg dark:border-red-800 dark:bg-gray-800">
-        <div className="mb-4 flex items-center gap-3">
-          <div className="rounded-full bg-red-100 p-2 dark:bg-red-900/20">
-            <svg
-              className="h-6 w-6 text-red-600 dark:text-red-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            Page Error
-          </h1>
-        </div>
-
-        <p className="mb-4 text-gray-600 dark:text-gray-400">
-          An error occurred while loading this page. Please try again.
-        </p>
-
-        {error instanceof Error && (
-          <details className="mb-4">
-            <summary className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
-              Error Details
-            </summary>
-            <pre className="mt-2 overflow-auto rounded bg-gray-100 p-3 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-              {error.message}
-            </pre>
-          </details>
-        )}
-
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-          >
-            Refresh
-          </button>
-          <a
-            href="/"
-            className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Go to Dashboard
-          </a>
-        </div>
-      </div>
+    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+      <RouteErrorBoundary
+        error={error}
+        title="Application Error"
+        message="Something went wrong in the application layout. Please try refreshing."
+        backTo="/"
+        backLabel="Return to Dashboard"
+        onRetry={() => window.location.reload()}
+      />
     </div>
   );
 }

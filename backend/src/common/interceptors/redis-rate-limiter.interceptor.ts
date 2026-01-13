@@ -15,9 +15,9 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
+import { Request, Response } from "express";
 import { createClient, RedisClientType } from "redis";
 import { Observable } from "rxjs";
-import { Request, Response } from "express";
 
 /**
  * Redis Rate Limiter Interceptor
@@ -73,10 +73,16 @@ export class RedisRateLimiterInterceptor
 
     try {
       const redisUrl = this.configService.get<string>("redis.url");
-      const redisHost = this.configService.get<string>("redis.host", "localhost");
+      const redisHost = this.configService.get<string>(
+        "redis.host",
+        "localhost"
+      );
       const redisPort = this.configService.get<number>("redis.port", 6379);
       const redisPassword = this.configService.get<string>("redis.password");
-      const redisUsername = this.configService.get<string>("redis.username", "default");
+      const redisUsername = this.configService.get<string>(
+        "redis.username",
+        "default"
+      );
 
       this.redisClient = redisUrl
         ? createClient({ url: redisUrl })
@@ -125,8 +131,14 @@ export class RedisRateLimiterInterceptor
       this.checkRateLimit(key, rateLimitOptions)
         .then(({ allowed, remaining, resetTime }) => {
           // Set rate limit headers
-          response.setHeader("X-RateLimit-Limit", rateLimitOptions.points.toString());
-          response.setHeader("X-RateLimit-Remaining", Math.max(0, remaining).toString());
+          response.setHeader(
+            "X-RateLimit-Limit",
+            rateLimitOptions.points.toString()
+          );
+          response.setHeader(
+            "X-RateLimit-Remaining",
+            Math.max(0, remaining).toString()
+          );
           response.setHeader("X-RateLimit-Reset", resetTime.toString());
 
           if (!allowed) {
@@ -212,7 +224,7 @@ export class RedisRateLimiterInterceptor
       const results = await multi.exec();
 
       // Count is at index 1 (after zRemRangeByScore)
-      const count = (results[1] as number) || 0;
+      const count = (results[1] as unknown as number) || 0;
       const allowed = count < options.points;
       const remaining = Math.max(0, options.points - count - 1);
 
@@ -255,7 +267,9 @@ export class RedisRateLimiterInterceptor
    */
   private getKey(request: Request, options: RateLimitOptions): string {
     const ip = request.ip;
-    const userId = (request as unknown as { user?: { id?: string } }).user?.id || "anonymous";
+    const userId =
+      (request as unknown as { user?: { id?: string } }).user?.id ||
+      "anonymous";
     const endpoint = `${request.method}:${request.url}`;
     const prefix = options.keyPrefix || "rl";
 

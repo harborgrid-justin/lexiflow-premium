@@ -1,8 +1,11 @@
-import React from 'react';
-import { PATHS } from '../paths.config';
-import * as Components from './lazyComponents';
+import React from "react";
+import { PATHS } from "../paths.config";
+import * as Components from "./lazyComponents";
 
-export const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentType<unknown>>> = {
+export const COMPONENT_MAP: Record<
+  string,
+  React.LazyExoticComponent<React.ComponentType<unknown>>
+> = {
   [PATHS.DASHBOARD]: Components.Dashboard,
   [PATHS.CREATE_CASE]: Components.NewCasePage,
   [PATHS.CASES]: Components.CaseModule,
@@ -28,7 +31,7 @@ export const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.Compo
   [PATHS.CRM]: Components.ClientCRM,
   [PATHS.COMPLIANCE]: Components.ComplianceDashboard,
   [PATHS.ADMIN]: Components.AdminPanel,
-  '/admin/theme-settings': Components.ThemeSettings,
+  "/admin/theme-settings": Components.ThemeSettings,
   [PATHS.MESSAGES]: Components.SecureMessenger,
   [PATHS.ENTITIES]: Components.EntityDirector,
   [PATHS.DATA_PLATFORM]: Components.AdminDatabaseControl,
@@ -43,4 +46,5 @@ export const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.Compo
   [PATHS.LITIGATION_BUILDER]: Components.LitigationBuilder,
   [PATHS.CLAUSES]: Components.ClauseLibrary,
   [PATHS.CITATIONS]: Components.CitationManager,
+  [PATHS.THEME]: Components.ThemeCustomizer,
 };

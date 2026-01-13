@@ -63,6 +63,11 @@ export class AuthApiService {
   }
 
   async getCurrentUser(): Promise<User> {
+    // Check if user is authenticated before making request
+    if (!apiClient.isAuthenticated()) {
+      throw new Error("User is not authenticated");
+    }
+
     const response = await apiClient.get<{ success: boolean; data: User }>(
       "/auth/profile"
     );

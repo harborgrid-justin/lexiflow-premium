@@ -1,17 +1,24 @@
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { useTheme } from '@/features/theme';
-import { EthicalWall } from '@/types';
-import { cn } from '@/shared/lib/cn';
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
 import { memo } from 'react';
+import { useComplianceWalls } from './hooks/useComplianceWalls';
 
-interface ComplianceWallsProps {
-    walls: EthicalWall[];
-}
-
-const ComplianceWallsComponent: React.FC<ComplianceWallsProps> = ({ walls }) => {
+const ComplianceWallsComponent: React.FC = () => {
     const { theme } = useTheme();
+
+    // Feature Hook
+    const [state, actions] = useComplianceWalls();
+    const { walls, status } = state;
+    const { createWall, manageWall } = actions;
+
+    const isLoading = status === 'loading';
+
+    if (isLoading) {
+        return <div className="p-8 text-center text-slate-500">Loading information barriers...</div>;
+    }
 
     return (
         <div className="space-y-6 animate-fade-in">

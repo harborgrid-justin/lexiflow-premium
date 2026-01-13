@@ -256,3 +256,12 @@ export const DraftingDashboard = lazyWithPreload(
       default: React.ComponentType<unknown>;
     }>
 );
+
+export const ThemeCustomizer = lazyWithPreload(
+  () =>
+    import("../../features/theme/components/ThemeCustomizer").then((m) => ({
+      default: m.ThemeCustomizer,
+    })) as Promise<{
+      default: React.ComponentType<unknown>;
+    }>
+);

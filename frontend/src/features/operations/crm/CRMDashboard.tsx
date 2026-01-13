@@ -127,8 +127,8 @@ export function CRMDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Growth Chart */}
         <Card title="Client Acquisition Growth" className="lg:col-span-2">
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-72 w-full" style={{ minHeight: '288px', height: '288px' }}>
+            <ResponsiveContainer width="100%" height={288}>
               <AreaChart data={analytics.growth} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorClients" x1="0" y1="0" x2="0" y2="1">
@@ -151,8 +151,8 @@ export function CRMDashboard() {
 
         {/* Industry Breakdown */}
         <Card title="Portfolio by Industry">
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-72 w-full" style={{ minHeight: '288px', height: '288px' }}>
+            <ResponsiveContainer width="100%" height={288}>
               <BarChart data={analytics.industry} layout="vertical" margin={{ left: 0, right: 20 }}>
                 <XAxis type="number" hide />
                 <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 11, fill: '#64748b' }} />

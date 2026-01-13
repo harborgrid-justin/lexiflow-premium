@@ -400,4 +400,44 @@ export class UsersApiService {
     }
     return this.getAll({ department });
   }
+
+  /**
+   * Get user preferences
+   * @param userId User ID
+   * @returns User preferences
+   */
+  async getPreferences(userId: string): Promise<any> {
+    this.validateId(userId, "getPreferences");
+    try {
+      return await apiClient.get<any>(`${this.baseUrl}/${userId}/preferences`);
+    } catch (error) {
+      console.error(
+        `[UsersApiService] Failed to fetch preferences for user ${userId}`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Update user preferences
+   * @param userId User ID
+   * @param preferences Preferences data
+   * @returns Updated preferences
+   */
+  async updatePreferences(userId: string, preferences: any): Promise<any> {
+    this.validateId(userId, "updatePreferences");
+    try {
+      return await apiClient.put<any>(
+        `${this.baseUrl}/${userId}/preferences`,
+        preferences
+      );
+    } catch (error) {
+      console.error(
+        `[UsersApiService] Failed to update preferences for user ${userId}`,
+        error
+      );
+      throw error;
+    }
+  }
 }

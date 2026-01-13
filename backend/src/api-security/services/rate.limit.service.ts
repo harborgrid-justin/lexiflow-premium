@@ -1,13 +1,18 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { createClient, RedisClientType } from 'redis';
-import * as MasterConfig from '@config/master.config';
+import * as MasterConfig from "@config/master.config";
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from "@nestjs/common";
+import { createClient, RedisClientType } from "redis";
 
 export enum UserRole {
-  ADMIN = 'admin',
-  ENTERPRISE = 'enterprise',
-  PROFESSIONAL = 'professional',
-  BASIC = 'basic',
-  GUEST = 'guest',
+  ADMIN = "admin",
+  ENTERPRISE = "enterprise",
+  PROFESSIONAL = "professional",
+  BASIC = "basic",
+  GUEST = "guest",
 }
 
 export interface RateLimitConfig {
@@ -70,18 +75,18 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
 
   // Endpoint-specific rate limits (requests per minute)
   private readonly endpointLimits: Record<string, RateLimitConfig> = {
-    '/api/v1/auth/login': { limit: 5, windowMs: 300000 }, // 5 per 5 minutes
-    '/api/v1/auth/register': { limit: 3, windowMs: 3600000 }, // 3 per hour
-    '/api/v1/auth/forgot-password': { limit: 3, windowMs: 3600000 }, // 3 per hour
-    '/api/v1/auth/reset-password': { limit: 5, windowMs: 3600000 }, // 5 per hour
-    '/api/v1/documents/upload': { limit: 20, windowMs: 60000 }, // 20 per minute
-    '/api/v1/documents/*/download': { limit: 50, windowMs: 60000 }, // 50 per minute
-    '/api/v1/search': { limit: 60, windowMs: 60000 }, // 60 per minute
-    '/api/v1/webhooks/trigger': { limit: 100, windowMs: 60000 }, // 100 per minute
-    '/api/v1/api-keys': { limit: 10, windowMs: 60000 }, // 10 per minute
-    '/api/v1/users/*/delete': { limit: 5, windowMs: 60000 }, // 5 per minute
-    '/api/v1/documents/*/delete': { limit: 10, windowMs: 60000 }, // 10 per minute
-    '/api/v1/bulk/*': { limit: 5, windowMs: 300000 }, // 5 per 5 minutes
+    "/api/v1/auth/login": { limit: 5, windowMs: 300000 }, // 5 per 5 minutes
+    "/api/v1/auth/register": { limit: 3, windowMs: 3600000 }, // 3 per hour
+    "/api/v1/auth/forgot-password": { limit: 3, windowMs: 3600000 }, // 3 per hour
+    "/api/v1/auth/reset-password": { limit: 5, windowMs: 3600000 }, // 5 per hour
+    "/api/v1/documents/upload": { limit: 20, windowMs: 60000 }, // 20 per minute
+    "/api/v1/documents/*/download": { limit: 50, windowMs: 60000 }, // 50 per minute
+    "/api/v1/search": { limit: 60, windowMs: 60000 }, // 60 per minute
+    "/api/v1/webhooks/trigger": { limit: 100, windowMs: 60000 }, // 100 per minute
+    "/api/v1/api-keys": { limit: 10, windowMs: 60000 }, // 10 per minute
+    "/api/v1/users/*/delete": { limit: 5, windowMs: 60000 }, // 5 per minute
+    "/api/v1/documents/*/delete": { limit: 10, windowMs: 60000 }, // 10 per minute
+    "/api/v1/bulk/*": { limit: 5, windowMs: 300000 }, // 5 per 5 minutes
   };
 
   // IP-based rate limits (requests per minute)
@@ -94,7 +99,7 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     if (MasterConfig.REDIS_ENABLED) {
       try {
-        const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+        const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
 
         this.redisClient = createClient({
           url: redisUrl,
@@ -102,33 +107,39 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
             connectTimeout: MasterConfig.REDIS_CONNECT_TIMEOUT,
             reconnectStrategy: (retries: number) => {
               if (retries > MasterConfig.REDIS_MAX_RETRIES_PER_REQUEST) {
-                this.logger.error('Max Redis reconnection attempts reached');
-                return new Error('Max retries reached');
+                this.logger.error("Max Redis reconnection attempts reached");
+                return new Error("Max retries reached");
               }
               return Math.min(retries * 100, 3000);
             },
           },
         });
 
-        this.redisClient.on('error', (err: any) => {
-          this.logger.error('Redis Client Error', err);
+        this.redisClient.on("error", (err: any) => {
+          this.logger.error("Redis Client Error", err);
         });
 
-        this.redisClient.on('connect', () => {
-          this.logger.log('Redis client connected successfully');
+        this.redisClient.on("connect", () => {
+          this.logger.log("Redis client connected successfully");
         });
 
         await this.redisClient.connect();
       } catch (error) {
-        this.logger.error('Failed to connect to Redis, falling back to in-memory store', error);
+        this.logger.error(
+          "Failed to connect to Redis, falling back to in-memory store",
+          error
+        );
         this.redisClient = null;
       }
     } else {
-      this.logger.warn('Redis is disabled, using in-memory rate limiting');
+      this.logger.warn("Redis is disabled, using in-memory rate limiting");
     }
 
     // Cleanup fallback store every 5 minutes
-    this.cleanupInterval = setInterval(() => this.cleanupFallbackStore(), 300000);
+    this.cleanupInterval = setInterval(
+      () => this.cleanupFallbackStore(),
+      300000
+    );
   }
 
   async onModuleDestroy() {
@@ -152,14 +163,16 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
     }
 
     if (removedCount > 0) {
-      this.logger.debug(`Cleaned up ${removedCount} expired rate limit entries from fallback store`);
+      this.logger.debug(
+        `Cleaned up ${removedCount} expired rate limit entries from fallback store`
+      );
     }
   }
 
   async checkRateLimit(
     identifier: string,
-    type: 'user' | 'ip' | 'endpoint' | 'role',
-    config?: RateLimitConfig,
+    type: "user" | "ip" | "endpoint" | "role",
+    config?: RateLimitConfig
   ): Promise<RateLimitResult> {
     const key = `${MasterConfig.REDIS_KEY_PREFIX}ratelimit:${type}:${identifier}`;
     const limitConfig = config || this.getDefaultConfig(type);
@@ -173,22 +186,31 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async checkRoleBased(userId: string, role: UserRole): Promise<RateLimitResult> {
+  async checkRoleBased(
+    userId: string,
+    role: UserRole
+  ): Promise<RateLimitResult> {
     const config = this.roleLimits[role] || this.roleLimits[UserRole.BASIC];
-    return this.checkRateLimit(userId, 'role', config);
+    return this.checkRateLimit(userId, "role", config);
   }
 
-  async checkEndpointLimit(endpoint: string, userId: string): Promise<RateLimitResult> {
+  async checkEndpointLimit(
+    endpoint: string,
+    userId: string
+  ): Promise<RateLimitResult> {
     const config = this.getEndpointConfig(endpoint);
     const identifier = `${endpoint}:${userId}`;
-    return this.checkRateLimit(identifier, 'endpoint', config);
+    return this.checkRateLimit(identifier, "endpoint", config);
   }
 
   async checkIpLimit(ip: string): Promise<RateLimitResult> {
-    return this.checkRateLimit(ip, 'ip', this.ipLimits);
+    return this.checkRateLimit(ip, "ip", this.ipLimits);
   }
 
-  async checkBurst(identifier: string, role: UserRole): Promise<RateLimitResult> {
+  async checkBurst(
+    identifier: string,
+    role: UserRole
+  ): Promise<RateLimitResult> {
     const config = this.roleLimits[role];
     const burstLimit = config.burstLimit || config.limit;
 
@@ -198,14 +220,14 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
     };
 
     const key = `${identifier}:burst`;
-    return this.checkRateLimit(key, 'user', burstConfig);
+    return this.checkRateLimit(key, "user", burstConfig);
   }
 
   private async checkRateLimitRedis(
     key: string,
     config: RateLimitConfig,
     now: number,
-    windowStart: number,
+    windowStart: number
   ): Promise<RateLimitResult> {
     try {
       if (!this.redisClient) {
@@ -227,12 +249,14 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
       multi.expire(key, Math.ceil(config.windowMs / 1000));
 
       const results = await multi.exec();
-      const count = (results[1] as number) || 0;
+      const count = (results[1] as unknown as number) || 0;
 
       const allowed = count < config.limit;
       const remaining = Math.max(0, config.limit - count - 1);
       const resetAt = new Date(now + config.windowMs);
-      const retryAfter = allowed ? undefined : Math.ceil(config.windowMs / 1000);
+      const retryAfter = allowed
+        ? undefined
+        : Math.ceil(config.windowMs / 1000);
 
       return {
         allowed,
@@ -242,7 +266,10 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
         retryAfter,
       };
     } catch (error) {
-      this.logger.error('Redis rate limit check failed, falling back to in-memory', error);
+      this.logger.error(
+        "Redis rate limit check failed, falling back to in-memory",
+        error
+      );
       return this.checkRateLimitFallback(key, config, now);
     }
   }
@@ -250,7 +277,7 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
   private checkRateLimitFallback(
     key: string,
     config: RateLimitConfig,
-    now: number,
+    now: number
   ): RateLimitResult {
     const data = this.fallbackStore.get(key);
     const resetAt = now + config.windowMs;
@@ -285,10 +312,10 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
 
   private getDefaultConfig(type: string): RateLimitConfig {
     switch (type) {
-      case 'ip':
+      case "ip":
         return this.ipLimits;
-      case 'role':
-      case 'user':
+      case "role":
+      case "user":
         return this.roleLimits[UserRole.BASIC];
       default:
         return { limit: 100, windowMs: 60000 };
@@ -303,8 +330,8 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
 
     // Try pattern matching
     for (const [pattern, config] of Object.entries(this.endpointLimits)) {
-      if (pattern.includes('*')) {
-        const regex = new RegExp('^' + pattern.replace(/\*/g, '[^/]+') + '$');
+      if (pattern.includes("*")) {
+        const regex = new RegExp("^" + pattern.replace(/\*/g, "[^/]+") + "$");
         if (regex.test(endpoint)) {
           return config;
         }
@@ -315,7 +342,10 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
     return { limit: 100, windowMs: 60000 };
   }
 
-  async resetRateLimit(identifier: string, type: 'user' | 'ip' | 'endpoint' | 'role'): Promise<void> {
+  async resetRateLimit(
+    identifier: string,
+    type: "user" | "ip" | "endpoint" | "role"
+  ): Promise<void> {
     const key = `${MasterConfig.REDIS_KEY_PREFIX}ratelimit:${type}:${identifier}`;
 
     if (this.redisClient) {
@@ -323,17 +353,22 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
         await this.redisClient.del(key);
         this.logger.log(`Reset rate limit for ${type}:${identifier}`);
       } catch (error) {
-        this.logger.error(`Failed to reset rate limit in Redis for ${type}:${identifier}`, error);
+        this.logger.error(
+          `Failed to reset rate limit in Redis for ${type}:${identifier}`,
+          error
+        );
       }
     } else {
       this.fallbackStore.delete(key);
-      this.logger.log(`Reset rate limit for ${type}:${identifier} in fallback store`);
+      this.logger.log(
+        `Reset rate limit for ${type}:${identifier} in fallback store`
+      );
     }
   }
 
   async getRateLimitInfo(
     identifier: string,
-    type: 'user' | 'ip' | 'endpoint' | 'role',
+    type: "user" | "ip" | "endpoint" | "role"
   ): Promise<{ count: number; limit: number; resetAt: Date }> {
     const key = `${MasterConfig.REDIS_KEY_PREFIX}ratelimit:${type}:${identifier}`;
     const config = this.getDefaultConfig(type);
@@ -351,7 +386,7 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
           resetAt: new Date(now + config.windowMs),
         };
       } catch (error) {
-        this.logger.error('Failed to get rate limit info from Redis', error);
+        this.logger.error("Failed to get rate limit info from Redis", error);
       }
     }
 
@@ -373,11 +408,15 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
 
   setEndpointLimit(endpoint: string, config: RateLimitConfig): void {
     this.endpointLimits[endpoint] = config;
-    this.logger.log(`Set custom rate limit for endpoint ${endpoint}: ${config.limit} requests per ${config.windowMs}ms`);
+    this.logger.log(
+      `Set custom rate limit for endpoint ${endpoint}: ${config.limit} requests per ${config.windowMs}ms`
+    );
   }
 
   setRoleLimit(role: UserRole, config: RateLimitConfig): void {
     this.roleLimits[role] = config;
-    this.logger.log(`Set custom rate limit for role ${role}: ${config.limit} requests per ${config.windowMs}ms`);
+    this.logger.log(
+      `Set custom rate limit for role ${role}: ${config.limit} requests per ${config.windowMs}ms`
+    );
   }
 }

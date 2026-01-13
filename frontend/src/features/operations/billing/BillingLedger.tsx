@@ -12,13 +12,13 @@ const BillingLedgerComponent: React.FC = () => {
   const { openWindow } = useWindow();
   const { error: notifyError } = useNotify();
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
-  const { addTransaction } = useLedgerTransactions();
+  const [, { addTransaction }] = useLedgerTransactions();
 
   const handleRecordTransaction = useCallback(() => {
     const winId = `txn-new-${crypto.randomUUID()}`.slice(0, 32);
 
     const handleSubmit = async (data: TransactionData) => {
-        await addTransaction(data, winId);
+      await addTransaction(data, winId);
     };
 
     openWindow(

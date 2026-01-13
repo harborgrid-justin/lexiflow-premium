@@ -32,183 +32,38 @@ import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow 
 import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Utils & Constants
-import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
-import { TimeEntryInput, validateTimeEntrySafe } from '@/services/validation/billingSchemas';
-import { WIPStatusEnum } from '@/types/enums';
 import { cn } from '@/shared/lib/cn';
 
 // Types
-import { TimeEntry } from '@/types';
-
-// ============================================================================
-// TYPE DEFINITIONS
-// ============================================================================
-interface Invoice {
-    id: string;
-    amount: number;
-    clientName: string;
-    caseId: string;
-    entries: TimeEntry[];
-    createdAt: string;
-}
-
-interface QueueItem {
-    entries: TimeEntry[];
-    resolve: (value: Invoice) => void;
-    reject: (error: Error) => void;
-}
-
-// ============================================================================
-// INVOICE GENERATION QUEUE
-// ============================================================================
-class InvoiceGenerationQueue {
-    private queue: QueueItem[] = [];
-    private processing = 0;
-    private readonly maxConcurrent = 2; // PDF generation is CPU-intensive
-
-    async add(entries: TimeEntry[]): Promise<Invoice> {
-        return new Promise((resolve, reject) => {
-            this.queue.push({ entries, resolve, reject });
-            this.processQueue();
-        });
-    }
-
-    private async processQueue() {
-        if (this.processing >= this.maxConcurrent || this.queue.length === 0) return;
-
-        this.processing++;
-        const item = this.queue.shift();
-        if (!item) {
-            this.processing--;
-            return;
-        }
-
-        try {
-            if (item.entries.length === 0) {
-                throw new Error("No entries to process");
-            }
-            const primaryCase = item.entries[0]!.caseId;
-            const clientName = "Client Ref " + primaryCase;
-            const invoice = await DataService.billing.createInvoice(clientName, primaryCase, item.entries);
-            item.resolve(invoice);
-        } catch (error) {
-            item.reject(error as Error);
-        } finally {
-            this.processing--;
-            await this.processQueue();
-        }
-    }
-}
-
-const invoiceQueue = new InvoiceGenerationQueue();
+import { useBillingWIP } from './hooks/useBillingWIP';
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 const BillingWIPComponent: React.FC = () => {
     const { theme } = useTheme();
-    const notify = useNotify();
-    const [searchTerm, setSearchTerm] = useState('');
-    // Concurrent-safe: Set operations need functional updates (Principle #5)
-    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-    const [draftEntry] = useState<Partial<TimeEntry> | null>(null);
 
-    // Enterprise Data Access with query keys
-    const { data: entries = [] } = useQuery<TimeEntry[]>(
-        billingQueryKeys.billing.wip(),
-        () => (DataService && DataService.billing) ? DataService.billing.getTimeEntries() : Promise.resolve([])
-    );
+    // Explicit State State (Rule 43: Tuples)
+    const [state, actions] = useBillingWIP();
 
-    // Auto-save draft time entry
-    useAutoSave({
-        data: draftEntry,
-        onSave: useCallback(async (entry: Partial<TimeEntry> | null) => {
-            if (!entry || !entry.description) return;
-            localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
-        }, []),
-        delay: 2000
-    });
+    const {
+        filteredEntries,
+        selectedIds,
+        totalUnbilled,
+        selectedTotal,
+        searchTerm,
+        status
+    } = state;
 
-    // Keyboard shortcuts
-    useKeyboardShortcuts({
-        'mod+n': () => {
-            notify.info('New time entry form (to be implemented)');
-        },
-        'mod+g': () => {
-            if (selectedIds.size > 0) {
-                handleGenerateClick();
-            }
-        }
-    });
+    const {
+        setSearchTerm,
+        toggleSelection,
+        toggleAll,
+        generateInvoice
+    } = actions;
 
-    // Memoization with purpose: Filter only recalculates on deps change (Principle #13)
-    const filteredEntries = useMemo(() => {
-        return entries.filter(e =>
-            e.status === WIPStatusEnum.UNBILLED &&
-            (e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                e.caseId.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-    }, [entries, searchTerm]);
-
-    const { mutate: generateInvoice, isLoading: isGenerating } = useMutation(
-        async (selectedEntries: TimeEntry[]) => {
-            if (!DataService || !DataService.billing) throw new Error("Billing service unavailable");
-            if (selectedEntries.length === 0) throw new Error("No entries selected");
-
-            // Validate all entries before invoicing
-            const validationErrors: string[] = [];
-            selectedEntries.forEach((entry, index) => {
-                const result = validateTimeEntrySafe(entry as unknown as TimeEntryInput);
-                if (!result.valid) {
-                    validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
-                }
-            });
-
-            if (validationErrors.length > 0) {
-                notify.error(`Validation failed: ${validationErrors[0]}`);
-                throw new Error('Validation failed');
-            }
-
-            // Use queue for PDF generation
-            return invoiceQueue.add(selectedEntries);
-        },
-        {
-            invalidateKeys: [billingQueryKeys.billing.wip(), billingQueryKeys.billing.invoices()],
-            onSuccess: (invoice: Invoice) => {
-                notify.success(`Invoice ${invoice.id} generated for $${invoice.amount.toFixed(2)}`);
-                setSelectedIds(new Set());
-                localStorage.removeItem('billing-wip-draft');
-            },
-            onError: () => notify.error("Failed to generate invoice.")
-        }
-    );
-
-    const handleGenerateClick = useCallback(() => {
-        const selected = filteredEntries.filter(e => selectedIds.has(e.id));
-        if (selected.length === 0) {
-            notify.warning("Please select at least one time entry.");
-            return;
-        }
-        generateInvoice(selected);
-    }, [filteredEntries, selectedIds, generateInvoice, notify]);
-
-    const toggleSelection = useCallback((id: string) => {
-        const newSet = new Set(selectedIds);
-        if (newSet.has(id)) newSet.delete(id);
-        else newSet.add(id);
-        setSelectedIds(newSet);
-    }, [selectedIds]);
-
-    const toggleAll = useCallback(() => {
-        if (selectedIds.size === filteredEntries.length) {
-            setSelectedIds(new Set());
-        } else {
-            setSelectedIds(new Set(filteredEntries.map(e => e.id)));
-        }
-    }, [selectedIds, filteredEntries]);
-
-    const totalUnbilled = filteredEntries.reduce((acc, curr) => acc + curr.total, 0);
-    const selectedTotal = filteredEntries.filter(e => selectedIds.has(e.id)).reduce((acc, curr) => acc + curr.total, 0);
+    const isGenerating = status === 'submitting';
+    const isLoading = status === 'loading';
 
     return (
         <div className="space-y-6 animate-fade-in">

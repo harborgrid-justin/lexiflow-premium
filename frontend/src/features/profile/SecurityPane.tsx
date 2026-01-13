@@ -23,6 +23,9 @@ import { Clock, Globe, Key, LogOut, Monitor, Smartphone } from 'lucide-react';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
+// Hooks
+import { useSecuritySettings } from './hooks/useSecuritySettings';
+
 // Types
 import { ExtendedUserProfile } from '@/types';
 
@@ -37,6 +40,14 @@ interface SecurityPaneProps {
 // COMPONENT
 // ========================================
 export const SecurityPane = ({ profile }: SecurityPaneProps) => {
+    // Refactored to use custom hook (Rules 41-60)
+    const [
+        { activeSessions, status },
+        { revokeSession, signOutAllOthers, changePassword, configureMFA }
+    ] = useSecuritySettings(profile.security.activeSessions);
+
+    const isWorking = status === 'revoking';
+
     return (
         <div className="p-6 space-y-6 overflow-y-auto h-full animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -49,7 +60,7 @@ export const SecurityPane = ({ profile }: SecurityPaneProps) => {
                                 <p className="text-xs text-green-700">Method: Authenticator App</p>
                             </div>
                         </div>
-                        <Button size="sm" variant="outline" className="bg-white border-green-300 text-green-800">Configure</Button>
+                        <Button size="sm" variant="outline" className="bg-white border-green-300 text-green-800" onClick={configureMFA}>Configure</Button>
                     </div>
                 </Card>
 
@@ -57,20 +68,20 @@ export const SecurityPane = ({ profile }: SecurityPaneProps) => {
                     <div className="space-y-4">
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-slate-500">Last Changed</span>
-                            <span className="font-medium">{profile.security.lastPasswordChange}</span>
+                            <span className="font-medium">{formatDateDisplay(profile.security.lastPasswordChange)}</span>
                         </div>
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-slate-500">Expires</span>
-                            <span className="font-medium text-amber-600">{profile.security.passwordExpiry}</span>
+                            <span className="font-medium text-amber-600">{formatDateDisplay(profile.security.passwordExpiry)}</span>
                         </div>
-                        <Button className="w-full" variant="secondary" icon={Key}>Change Password</Button>
+                        <Button className="w-full" variant="secondary" icon={Key} onClick={changePassword}>Change Password</Button>
                     </div>
                 </Card>
             </div>
 
             <Card title="Active Sessions">
                 <div className="divide-y border rounded-lg overflow-hidden">
-                    {profile.security.activeSessions.map(session => (
+                    {activeSessions.map(session => (
                         <div key={session.id} className="p-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="p-2 bg-slate-100 rounded text-slate-600">
@@ -83,18 +94,33 @@ export const SecurityPane = ({ profile }: SecurityPaneProps) => {
                                     </h4>
                                     <div className="flex gap-3 text-xs text-slate-500 mt-1">
                                         <span className="flex items-center"><Globe className="h-3 w-3 mr-1" /> {session.ip}</span>
-                                        <span className="flex items-center"><Clock className="h-3 w-3 mr-1" /> {session.lastActive}</span>
+                                        <span className="flex items-center"><Clock className="h-3 w-3 mr-1" /> {getRelativeTimeString(session.lastActive)}</span>
                                     </div>
                                 </div>
                             </div>
                             {!session.current && (
-                                <Button size="sm" variant="ghost" className="text-red-600 hover:bg-red-50">Revoke</Button>
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="text-red-600 hover:bg-red-50"
+                                    onClick={() => revokeSession(session.id)}
+                                    disabled={isWorking}
+                                >
+                                    Revoke
+                                </Button>
                             )}
                         </div>
                     ))}
                 </div>
                 <div className="mt-4 flex justify-end">
-                    <Button variant="danger" icon={LogOut}>Sign out all other sessions</Button>
+                    <Button
+                        variant="danger"
+                        icon={LogOut}
+                        onClick={signOutAllOthers}
+                        disabled={isWorking}
+                    >
+                        Sign out all other sessions
+                    </Button>
                 </div>
             </Card>
         </div>

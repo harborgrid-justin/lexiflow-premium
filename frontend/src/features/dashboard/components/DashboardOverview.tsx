@@ -62,10 +62,11 @@ export const DashboardOverview: React.FC = () => {
   // Optimization: Use useDeferredValue to prioritize UI responsiveness over derived data calculation
   // (Rule 21 & 33: Interruptible renders and transitional states)
   const deferredTasks = useDeferredValue(tasks);
-  
+
   const activeProjects = useMemo(() => {
-    if (!deferredTasks || deferredTasks.length === 0) return [];
-    
+    // Ensure deferredTasks is always an array
+    if (!Array.isArray(deferredTasks) || deferredTasks.length === 0) return [];
+
     return deferredTasks
       .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
       .slice(0, 5)

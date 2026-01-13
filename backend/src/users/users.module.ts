@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
-import { UserProfile } from './entities/user-profile.entity';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UserPreferences } from "./entities/user-preferences.entity";
+import { UserProfile } from "./entities/user-profile.entity";
+import { User } from "./entities/user.entity";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
 
 /**
  * Users Module
@@ -16,9 +17,7 @@ import { UserProfile } from './entities/user-profile.entity';
  * - Activity tracking and audit logs
  */
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, UserProfile]),
-  ],
+  imports: [TypeOrmModule.forFeature([User, UserProfile, UserPreferences])],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

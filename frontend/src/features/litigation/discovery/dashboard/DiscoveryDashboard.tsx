@@ -1,10 +1,10 @@
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Button } from '@/shared/ui/atoms/Button';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, ArrowRight, CheckCircle, Database, FileText, Scale } from 'lucide-react';
 
 // ✅ Migrated to backend API (2025-12-21)
@@ -18,7 +18,7 @@ interface DiscoveryDashboardProps {
     caseId?: string;
 }
 
-function DiscoveryDashboard({ onNavigate, caseId }: DiscoveryDashboardProps) {
+export function DiscoveryDashboard({ onNavigate, caseId }: DiscoveryDashboardProps) {
     const { theme } = useTheme();
 
     // Parallel Queries for Dashboard Stats

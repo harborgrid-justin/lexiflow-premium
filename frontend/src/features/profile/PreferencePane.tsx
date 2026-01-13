@@ -23,8 +23,8 @@ import { Bell, Monitor, Moon, Sun } from 'lucide-react';
 // Components
 import { Card } from '@/shared/ui/molecules/Card/Card';
 
-// Hooks & Context
-import { useTheme } from '@/features/theme';
+// Hooks
+import { useProfilePreferences } from './hooks/useProfilePreferences';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
@@ -44,14 +44,18 @@ interface PreferencePaneProps {
 // COMPONENT
 // ========================================
 export const PreferencePane = ({ profile }: PreferencePaneProps) => {
-    const { setTheme, mode } = useTheme();
+    // Refactored to use custom hook (Rules 41-60)
+    const [
+        { mode, locale, timezone, emailNotifications, pushNotifications },
+        { setThemeMode, updateLocale, updateTimezone, toggleEmailNotifications, togglePushNotifications }
+    ] = useProfilePreferences(profile);
 
     return (
         <div className="p-6 space-y-6 overflow-y-auto h-full animate-fade-in">
             <Card title="Appearance">
                 <div className="grid grid-cols-3 gap-4">
                     <button
-                        onClick={() => setTheme('light')}
+                        onClick={() => setThemeMode('light')}
                         className={cn(
                             "p-4 rounded-lg border-2 flex flex-col items-center gap-3 transition-all",
                             mode === 'light' ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"
@@ -61,7 +65,7 @@ export const PreferencePane = ({ profile }: PreferencePaneProps) => {
                         <span className="text-sm font-bold">Light</span>
                     </button>
                     <button
-                        onClick={() => setTheme('dark')}
+                        onClick={() => setThemeMode('dark')}
                         className={cn(
                             "p-4 rounded-lg border-2 flex flex-col items-center gap-3 transition-all",
                             mode === 'dark' ? "border-blue-600 bg-slate-800 text-white" : "border-slate-200 hover:border-blue-300"
@@ -85,7 +89,11 @@ export const PreferencePane = ({ profile }: PreferencePaneProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Language</label>
-                        <select className="w-full p-2 border rounded bg-white text-sm" defaultValue={profile.preferences.locale}>
+                        <select
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={locale}
+                            onChange={(e) => updateLocale(e.target.value)}
+                        >
                             <option value="en-US">English (US)</option>
                             <option value="es-ES">Español</option>
                             <option value="fr-FR">Français</option>
@@ -93,7 +101,11 @@ export const PreferencePane = ({ profile }: PreferencePaneProps) => {
                     </div>
                     <div>
                         <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Timezone</label>
-                        <select className="w-full p-2 border rounded bg-white text-sm" defaultValue={profile.preferences.timezone}>
+                        <select
+                            className="w-full p-2 border rounded bg-white text-sm"
+                            value={timezone}
+                            onChange={(e) => updateTimezone(e.target.value)}
+                        >
                             <option value="America/New_York">Eastern Time (US & Canada)</option>
                             <option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
                             <option value="Europe/London">London</option>
@@ -112,7 +124,12 @@ export const PreferencePane = ({ profile }: PreferencePaneProps) => {
                                 <p className="text-xs text-slate-500">Receive daily digests and critical alerts.</p>
                             </div>
                         </div>
-                        <input type="checkbox" defaultChecked={profile.preferences.notifications.email} className="w-5 h-5 rounded text-blue-600" />
+                        <input
+                            type="checkbox"
+                            checked={emailNotifications}
+                            onChange={(e) => toggleEmailNotifications(e.target.checked)}
+                            className="w-5 h-5 rounded text-blue-600"
+                        />
                     </div>
                     <div className="flex items-center justify-between p-2">
                         <div className="flex items-center gap-3">
@@ -122,7 +139,12 @@ export const PreferencePane = ({ profile }: PreferencePaneProps) => {
                                 <p className="text-xs text-slate-500">Real-time browser alerts.</p>
                             </div>
                         </div>
-                        <input type="checkbox" defaultChecked={profile.preferences.notifications.push} className="w-5 h-5 rounded text-blue-600" />
+                        <input
+                            type="checkbox"
+                            checked={pushNotifications}
+                            onChange={(e) => togglePushNotifications(e.target.checked)}
+                            className="w-5 h-5 rounded text-blue-600"
+                        />
                     </div>
                 </div>
             </Card>

@@ -429,12 +429,19 @@ export function useUsersQuery() {
 
 /**
  * Fetch current user
+ * Only runs if authenticated (enabled option)
  */
-export function useCurrentUserQuery() {
+export function useCurrentUserQuery(options?: { enabled?: boolean }) {
+  // Check if user is authenticated before attempting query
+  const isAuthenticated = enterpriseApi.isAuthenticated();
+
   return useQuery<User>(
     enterpriseQueryKeys.users.current(),
     (signal) => enterpriseApi.get<User>("/auth/profile", undefined, { signal }),
-    { staleTime: 300000 }
+    {
+      staleTime: 300000,
+      enabled: isAuthenticated && options?.enabled !== false, // Only run if authenticated AND not explicitly disabled
+    }
   );
 }
 

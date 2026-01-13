@@ -335,3 +335,61 @@ export function hasAnyPermission(permissions: string[]): boolean {
   if (!user) return false;
   return permissions.some((perm) => user.permissions.includes(perm));
 }
+
+// ============================================================================
+// Loaders
+// ============================================================================
+
+/**
+ * Standard authentication guard for React Router loaders.
+ * Checks for stored credentials and redirects to login if missing.
+ * Supports auto-login in generic development environment.
+ */
+export async function requireAuthLoader({ request }: { request: Request }) {
+  // Client-side check only
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem(AUTH_STORAGE_KEY);
+    const userJson = localStorage.getItem(AUTH_USER_KEY);
+
+    if (!token || !userJson) {
+      // In development, try to auto-login
+      if (import.meta.env.DEV) {
+        try {
+          const { performAutoLogin } = await import('@/utils/dev-auto-login');
+          const autoLoginSuccess = await performAutoLogin();
+
+          if (autoLoginSuccess) {
+            const newToken = localStorage.getItem(AUTH_STORAGE_KEY);
+            const newUserJson = localStorage.getItem(AUTH_USER_KEY);
+            
+            if (newToken && newUserJson) {
+               return { authenticated: true, user: JSON.parse(newUserJson) };
+            }
+          }
+        } catch (e) {
+          console.warn('Auto-login failed', e);
+        }
+      }
+
+      const url = new URL(request.url);
+      throw new Response(null, {
+        status: 302,
+        headers: {
+          Location: `/login?redirect=${encodeURIComponent(url.pathname)}`,
+        },
+      });
+    }
+
+    try {
+      const user = JSON.parse(userJson);
+      return { authenticated: true, user };
+    } catch {
+       throw new Response(null, {
+        status: 302,
+        headers: { Location: '/login' },
+      });
+    }
+  }
+  
+  return { authenticated: true };
+}

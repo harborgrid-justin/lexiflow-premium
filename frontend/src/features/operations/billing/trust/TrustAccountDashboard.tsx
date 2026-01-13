@@ -16,21 +16,16 @@
  * 5. Memoized computed values prevent expensive recalculations on re-render
  */
 
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
-import { useMutation } from '@/hooks/useQueryHooks';
-import { useTrustAccounts } from '@/hooks/useTrustAccounts';
-import { DataService } from '@/services/data/dataService';
-import { queryClient } from '@/services/infrastructure/queryClient';
-import type { CreateTrustAccountDto, TrustAccount } from '@/types/trust-accounts';
-import { TrustAccountStatus } from '@/types/trust-accounts';
 import { cn } from '@/shared/lib/cn';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import type { TrustAccount } from '@/types/trust-accounts';
+import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Formatters } from '@/utils/formatters';
-import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 /**
  * Dashboard Statistics Card Props
@@ -316,98 +311,42 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
 
 AccountListItem.displayName = 'AccountListItem';
 
+import { useTrustDashboard } from './hooks/useTrustDashboard';
+
 /**
  * Main Dashboard Component
  */
 export const TrustAccountDashboard: React.FC = () => {
   const { theme } = useTheme();
-  const [selectedView, setSelectedView] = useState<'all' | 'iolta' | 'client'>('all');
 
-  // Fetch trust accounts with computed values
+  // Use Feature Hook
+  const [state, actions] = useTrustDashboard();
+
   const {
     accounts,
-    isLoading,
-    isError,
-    error,
-    totalBalance,
-    ioltaAccounts,
-    activeAccounts,
-    accountsNeedingReconciliation,
+    filteredAccounts,
+    selectedView,
+    stats,
     complianceIssues,
-    refetch,
-  } = useTrustAccounts();
+    accountsNeedingReconciliation,
+    ioltaAccounts,
+    status,
+    error
+  } = state;
+
+  const {
+    setSelectedView,
+    createAccount,
+    reconcileAccount,
+    refresh
+  } = actions;
 
   /**
-   * COMPUTED VALUES: Memoized dashboard statistics
-   * WHY: Prevent recalculation on every render, only when accounts change
+   * EVENT HANDLERS
    */
-  const stats = useMemo(() => {
-    const errorCount = complianceIssues.filter((i) => i.severity === 'error').length;
-    const warningCount = complianceIssues.filter((i) => i.severity === 'warning').length;
-    const ioltaBalance = ioltaAccounts.reduce((sum, acc) => sum + acc.balance, 0);
-
-    return {
-      totalBalance,
-      totalAccounts: accounts.length,
-      activeAccounts: activeAccounts.length,
-      ioltaBalance,
-      needsReconciliation: accountsNeedingReconciliation.length,
-      errorCount,
-      warningCount,
-    };
-  }, [accounts, activeAccounts, ioltaAccounts, totalBalance, accountsNeedingReconciliation, complianceIssues]);
-
-  /**
-   * FILTERED ACCOUNTS: Based on selected view
-   * WHY: Memoized filtering prevents recalculation on every render
-   */
-  const filteredAccounts = useMemo(() => {
-    switch (selectedView) {
-      case 'iolta':
-        return accounts.filter((acc) => acc.accountType === 'iolta');
-      case 'client':
-        return accounts.filter((acc) => acc.accountType === 'client_trust');
-      default:
-        return accounts;
-    }
-  }, [accounts, selectedView]);
-
-  /**
-   * EVENT HANDLERS: Memoized callbacks prevent child re-renders
-   * WHY: useCallback ensures function identity stability
-   */
-  const notify = useNotify();
+  const notify = useNotify(); // Used by actions mostly, but maybe local UI
   const createModal = useModalState();
   const reconcileModal = useModalState();
-
-  const { mutate: _createTrustAccount } = useMutation(
-    (data: CreateTrustAccountDto) => DataService.billing.trustAccounts.create(data),
-    {
-      onSuccess: () => {
-        notify.success('Trust account created successfully');
-        queryClient.invalidate(queryKeys.billing.trustAccounts());
-        createModal.close();
-      },
-      onError: (error: Error) => {
-        notify.error(error?.message || 'Failed to create trust account');
-      }
-    }
-  );
-
-  const { mutate: _reconcileTrustAccount } = useMutation(
-    (accountId: string) => DataService.billing.trustAccounts.reconcile(accountId),
-    {
-      onSuccess: () => {
-        notify.success('Reconciliation initiated successfully');
-        queryClient.invalidate(queryKeys.billing.trustAccounts());
-        reconcileModal.close();
-        refetch();
-      },
-      onError: (error: Error) => {
-        notify.error(error?.message || 'Failed to initiate reconciliation');
-      }
-    }
-  );
 
   const handleViewAccount = useCallback((accountId: string) => {
     window.location.hash = `#/billing/trust-accounts/${accountId}`;
@@ -417,14 +356,15 @@ export const TrustAccountDashboard: React.FC = () => {
     createModal.open();
   }, [createModal]);
 
-  const handleReconcileAccount = useCallback((_accountId: string) => {
+  const handleReconcileAccount = useCallback((accountId?: string) => {
     reconcileModal.open();
+    // If accountId is passed, we might want to set it in modal state
   }, [reconcileModal]);
 
   /**
    * LOADING STATE
    */
-  if (isLoading) {
+  if (status === 'loading') {
     return (
       <div className={cn('flex items-center justify-center h-64', theme.surface.default)}>
         <div className="text-center">
@@ -438,7 +378,7 @@ export const TrustAccountDashboard: React.FC = () => {
   /**
    * ERROR STATE
    */
-  if (isError) {
+  if (status === 'error') {
     return (
       <div className={cn('p-6 rounded-lg border', theme.status.error.bg, theme.status.error.border)}>
         <div className="flex items-start gap-3">
@@ -451,7 +391,7 @@ export const TrustAccountDashboard: React.FC = () => {
               {error?.message || 'An unknown error occurred'}
             </p>
             <button
-              onClick={() => refetch()}
+              onClick={() => refresh()}
               className={cn(
                 'mt-3 px-4 py-2 text-sm font-medium rounded-lg',
                 'bg-rose-600 text-white hover:bg-rose-700'

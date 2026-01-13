@@ -18,6 +18,7 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserPreferencesDto } from "./dto/update-user-preferences.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersService } from "./users.service";
 
@@ -55,6 +56,23 @@ export class UsersController {
     // For now, return user details as profile
     // In a real app, this would fetch from a separate profile table
     return this.usersService.findById(id);
+  }
+
+  @Get(":id/preferences")
+  @Permissions(Permission.USER_MANAGE) // Adjust permission as needed, usually users manage their own
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  async getPreferences(@Param("id") id: string) {
+    return this.usersService.getPreferences(id);
+  }
+
+  @Put(":id/preferences")
+  @Permissions(Permission.USER_MANAGE) // Adjust permission as needed
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  async updatePreferences(
+    @Param("id") id: string,
+    @Body() preferencesDto: UpdateUserPreferencesDto
+  ) {
+    return this.usersService.updatePreferences(id, preferencesDto);
   }
 
   @Public() // TODO: Remove in production - add proper auth  @Get(":id")

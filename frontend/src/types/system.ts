@@ -242,6 +242,7 @@ export interface GranularPermission {
 
 export interface UserPreferences {
   theme: "light" | "dark" | "system";
+  customTheme?: Record<string, unknown>; // Stores DesignTokens overrides
   notifications: {
     email: boolean;
     push: boolean;

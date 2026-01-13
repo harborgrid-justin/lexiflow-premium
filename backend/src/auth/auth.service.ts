@@ -90,13 +90,20 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token with TTL
+    // Store refresh token with TTL using jti as key
     const ttlDays = parseInt(
       this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
       10
     );
+    const refreshSecret = this.configService.get<string>(
+      "app.jwt.refreshSecret"
+    );
+    const refreshPayload = await this.jwtService.verifyAsync<JwtPayload>(
+      tokens.refreshToken,
+      { secret: refreshSecret }
+    );
     await this.tokenStorage.storeRefreshToken(
-      user.id,
+      refreshPayload.jti,
       {
         userId: user.id,
         token: tokens.refreshToken,
@@ -132,13 +139,20 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token with TTL
+    // Store refresh token with TTL using jti as key
     const ttlDays = parseInt(
       this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
       10
     );
+    const refreshSecret = this.configService.get<string>(
+      "app.jwt.refreshSecret"
+    );
+    const refreshPayload = await this.jwtService.verifyAsync<JwtPayload>(
+      tokens.refreshToken,
+      { secret: refreshSecret }
+    );
     await this.tokenStorage.storeRefreshToken(
-      user.id,
+      refreshPayload.jti,
       {
         userId: user.id,
         token: tokens.refreshToken,
@@ -180,9 +194,9 @@ export class AuthService {
         throw new UnauthorizedException("Invalid token type");
       }
 
-      // Verify refresh token is in storage
+      // Verify refresh token is in storage using jti
       const storedTokenData = await this.tokenStorage.getRefreshToken(
-        payload.sub
+        payload.jti
       );
       if (!storedTokenData || storedTokenData.token !== refreshToken) {
         throw new UnauthorizedException("Invalid refresh token");
@@ -195,13 +209,20 @@ export class AuthService {
 
       const tokens = await this.generateTokens(user);
 
-      // Update stored refresh token with TTL
+      // Delete old refresh token (token rotation for security)
+      await this.tokenStorage.deleteRefreshToken(payload.jti);
+
+      // Store new refresh token with TTL using new jti
       const ttlDays = parseInt(
         this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
         10
       );
+      const newRefreshPayload = await this.jwtService.verifyAsync<JwtPayload>(
+        tokens.refreshToken,
+        { secret: refreshSecret }
+      );
       await this.tokenStorage.storeRefreshToken(
-        user.id,
+        newRefreshPayload.jti,
         {
           userId: user.id,
           token: tokens.refreshToken,
@@ -224,8 +245,8 @@ export class AuthService {
   }
 
   async logout(userId: string, jti?: string, exp?: number) {
-    // Remove refresh token from storage
-    await this.tokenStorage.deleteRefreshToken(userId);
+    // Remove all refresh tokens for the user from storage
+    await this.tokenStorage.deleteUserRefreshTokens(userId);
 
     // Blacklist the current access token if JTI is provided
     if (jti && exp) {
@@ -489,13 +510,20 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token with TTL
+    // Store refresh token with TTL using jti as key
     const ttlDays = parseInt(
       this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
       10
     );
+    const refreshSecret = this.configService.get<string>(
+      "app.jwt.refreshSecret"
+    );
+    const refreshPayload = await this.jwtService.verifyAsync<JwtPayload>(
+      tokens.refreshToken,
+      { secret: refreshSecret }
+    );
     await this.tokenStorage.storeRefreshToken(
-      user.id,
+      refreshPayload.jti,
       {
         userId: user.id,
         token: tokens.refreshToken,
@@ -576,9 +604,12 @@ export class AuthService {
 
     // Handle both string durations ('1h', '7d') and numeric seconds
     const accessExpiresIn =
-      Number(this.configService.get<string | number>("app.jwt.expiresIn")) || 900; // 15m default
+      Number(this.configService.get<string | number>("app.jwt.expiresIn")) ||
+      900; // 15m default
     const refreshExpiresIn =
-      Number(this.configService.get<string | number>("app.jwt.refreshExpiresIn")) || 604800; // 7d default
+      Number(
+        this.configService.get<string | number>("app.jwt.refreshExpiresIn")
+      ) || 604800; // 7d default
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessPayload, {

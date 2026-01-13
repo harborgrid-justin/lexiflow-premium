@@ -52,6 +52,7 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
   const chartTheme = useChartTheme();
 
   // Integrated Data Hook
+  const [state] = useBillingOverviewData();
   const {
     wipData,
     realizationData,
@@ -61,7 +62,7 @@ const BillingOverviewComponent: React.FC<BillingOverviewProps> = ({ onNavigate }
     outstandingAmount,
     overdueCount, // Using total overdue count for trend context
     isLoading
-  } = useBillingOverviewData();
+  } = state;
 
   if (isLoading) {
     return (

@@ -5,6 +5,7 @@
  * Displays high-level metrics, charts, and recent activity for evidence items.
  */
 
+import React from 'react';
 import { Activity, AlertTriangle, Box, HardDrive, ShieldCheck } from 'lucide-react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 

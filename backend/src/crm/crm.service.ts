@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { ClientRelationship } from "./entities/client-relationship.entity";
 import { Lead } from "./entities/lead.entity";
 import { Opportunity } from "./entities/opportunity.entity";
-import { ClientRelationship } from "./entities/client-relationship.entity";
 
 @Injectable()
 export class CrmService {
@@ -53,6 +53,39 @@ export class CrmService {
   ): Promise<ClientRelationship> {
     const rel = this.relationshipsRepository.create(data);
     return this.relationshipsRepository.save(rel);
+  }
+
+  // Analytics
+  async getAnalytics() {
+    return {
+      growth: [
+        { month: "Jan", clients: 65 },
+        { month: "Feb", clients: 78 },
+        { month: "Mar", clients: 85 },
+        { month: "Apr", clients: 92 },
+        { month: "May", clients: 98 },
+        { month: "Jun", clients: 105 },
+      ],
+      industry: [
+        { name: "Corporate", value: 45 },
+        { name: "Litigation", value: 38 },
+        { name: "Real Estate", value: 22 },
+        { name: "IP", value: 18 },
+        { name: "Tax", value: 12 },
+      ],
+      revenue: [
+        { quarter: "Q1", revenue: 2.4 },
+        { quarter: "Q2", revenue: 2.8 },
+        { quarter: "Q3", revenue: 3.1 },
+        { quarter: "Q4", revenue: 3.5 },
+      ],
+      sources: [
+        { source: "Referrals", count: 45 },
+        { source: "Website", count: 32 },
+        { source: "Events", count: 18 },
+        { source: "Partners", count: 12 },
+      ],
+    };
   }
 
   // Business Development Metrics

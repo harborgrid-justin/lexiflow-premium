@@ -1,34 +1,21 @@
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { useTheme } from '@/features/theme';
+import { useWindow } from '@/providers';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { useTheme } from '@/features/theme';
-import { DataService } from '@/services/data/dataService';
-import { cn } from '@/shared/lib/cn';
-import { Calendar, Download, Eye, FileText } from 'lucide-react';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { CaseId, DocumentId } from '@/types';
+import { Calendar, FileText, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
-// ✅ Migrated to backend API (2025-12-21)
-import { useWindow } from '@/providers';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
+import { PolicyItem, useCompliancePolicies } from './hooks/useCompliancePolicies';
 
-interface PolicyItem {
-    id: string;
-    title: string;
-    version: string;
-    date: string;
-    status: string;
-}
-
-const CompliancePoliciesComponent = () => {
+export const CompliancePolicies = memo(() => {
     const { theme } = useTheme();
     const { openWindow } = useWindow();
 
-    // Performance Engine: Caching
-    const { data: policies = [], isLoading } = useQuery<PolicyItem[]>(
-        ['policies', 'all'],
-        DataService.compliance.getPolicies
-    );
+    const [{ policies, status }, { refresh }] = useCompliancePolicies();
 
     const handleViewPolicy = (policy: PolicyItem) => {
         const winId = `policy-${policy.id}`;
@@ -38,7 +25,7 @@ const CompliancePoliciesComponent = () => {
             <div className="h-full bg-white">
                 <DocumentPreviewPanel
                     document={{
-                        id: policy.id as import('@/types').DocumentId,
+                        id: policy.id as DocumentId,
                         title: policy.title,
                         type: 'Policy',
                         content: 'Policy Content Preview...',
@@ -46,7 +33,7 @@ const CompliancePoliciesComponent = () => {
                         lastModified: policy.date,
                         tags: ['Compliance', 'Policy'],
                         versions: [],
-                        caseId: 'General' as import('@/types').CaseId,
+                        caseId: 'General' as CaseId,
                         status: policy.status
                     }}
                     onViewHistory={() => { }}
@@ -56,7 +43,17 @@ const CompliancePoliciesComponent = () => {
         );
     };
 
-    if (isLoading) return <AdaptiveLoader contentType="list" shimmer itemCount={5} />;
+    if (status === 'loading') return <AdaptiveLoader contentType="list" shimmer itemCount={5} />;
+
+    if (status === 'error') {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 space-y-4">
+                <ShieldAlert className="h-12 w-12 text-red-500" />
+                <p className="text-red-500">Failed to load policies</p>
+                <Button onClick={refresh} variant="primary">Retry</Button>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -99,10 +96,9 @@ const CompliancePoliciesComponent = () => {
                                 <Badge variant={p.status === 'Active' ? 'success' : 'warning'}>{p.status}</Badge>
                             </TableCell>
                             <TableCell className="text-right">
-                                <div className="flex justify-end gap-2">
-                                    <Button size="sm" variant="ghost" icon={Eye} onClick={() => handleViewPolicy(p)}>View</Button>
-                                    <Button size="sm" variant="ghost" icon={Download}>PDF</Button>
-                                </div>
+                                <Button size="sm" variant="ghost" onClick={() => handleViewPolicy(p)}>
+                                    View
+                                </Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -110,7 +106,6 @@ const CompliancePoliciesComponent = () => {
             </TableContainer>
         </div>
     );
-}
+});
 
-export const CompliancePolicies = memo(CompliancePoliciesComponent);
 CompliancePolicies.displayName = 'CompliancePolicies';

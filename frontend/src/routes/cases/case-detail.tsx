@@ -21,9 +21,9 @@
 
 import { CaseDetail } from '@/features/cases/ui/pages/CaseDetailPage';
 import { DataService } from '@/services/data/dataService';
-import { LegalDocument, Party } from '@/types';
+import { Case, LegalDocument, Party } from '@/types';
 import { Suspense, useCallback } from 'react';
-import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
+import { Await, defer, redirect, useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createCaseMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/case-detail";
@@ -93,12 +93,12 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const documentsPromise = DataService.documents.getByCaseId(caseId);
   const partiesPromise = DataService.parties.getByCaseId(caseId);
 
-  return {
+  return defer({
     caseData,
     // Return promises - Await component will handle resolution
     documents: documentsPromise,
     parties: partiesPromise,
-  };
+  });
 }
 
 // Force client-side execution for hydration (needed for localStorage auth)
@@ -240,7 +240,11 @@ function StreamedDataLoading({ label }: { label: string }) {
 // ============================================================================
 
 export default function CaseDetailRoute() {
-  const { caseData, documents, parties } = useLoaderData() as Awaited<ReturnType<typeof clientLoader>>;
+  const { caseData, documents, parties } = useLoaderData() as unknown as {
+    caseData: Case;
+    documents: Promise<LegalDocument[]>;
+    parties: Promise<Party[]>;
+  };
   const navigate = useNavigate();
 
   // Memoized navigation handlers

@@ -16,9 +16,9 @@ import {
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { CrmService } from "./crm.service";
 import { CreateLeadDto } from "./dto/create-lead.dto";
-import { Lead } from "./entities/lead.entity";
 import { CreateOpportunityDto } from "./dto/create-opportunity.dto";
 import { CreateRelationshipDto } from "./dto/create-relationship.dto";
+import { Lead } from "./entities/lead.entity";
 
 @ApiTags("CRM")
 @ApiBearerAuth("JWT-auth")
@@ -100,6 +100,13 @@ export class CrmController {
   @ApiResponse({ status: 200, description: "Returns business dev data." })
   async getBusinessDevelopmentData() {
     return this.crmService.getBusinessDevelopmentData();
+  }
+
+  @Get("analytics")
+  @ApiOperation({ summary: "Get CRM analytics data" })
+  @ApiResponse({ status: 200, description: "Returns CRM analytics data." })
+  async getAnalytics() {
+    return this.crmService.getAnalytics();
   }
 
   @Get("pitches")

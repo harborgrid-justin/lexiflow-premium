@@ -20,8 +20,8 @@ import { Suspense } from 'react';
 import { useBillingDashboard } from './hooks/useBillingDashboard';
 
 // Components
-import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
 import { Button } from '@/shared/ui/atoms/Button';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader';
 import { PeriodSelector } from '@/shared/ui/molecules/PeriodSelector';
@@ -46,16 +46,11 @@ interface BillingDashboardProps {
 // COMPONENT
 // ============================================================================
 const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
-  const {
-    activeTab,
-    setActiveTab,
-    period,
-    setPeriod,
-    syncFinancials,
-    isSyncing,
-    exportReport,
-    isPending
-  } = useBillingDashboard(initialTab, navigateTo);
+  const [state, actions] = useBillingDashboard(initialTab, navigateTo);
+  const { activeTab, period, status, isPending } = state;
+  const { setActiveTab, setPeriod, syncFinancials, exportReport } = actions;
+
+  const isSyncing = status === 'syncing';
 
   const renderContent = () => {
     // Delegation to BillingDashboardContent
@@ -70,7 +65,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
         <div className="flex gap-3 items-center">
           <PeriodSelector selected={period} onChange={setPeriod} />
           <ExportMenu onExport={(format) => exportReport(format)} />
-          <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
+          <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials()} isLoading={isSyncing}>Sync</Button>
         </div>
       }
       tabConfig={BILLING_TAB_CONFIG as TabConfigItem[]}

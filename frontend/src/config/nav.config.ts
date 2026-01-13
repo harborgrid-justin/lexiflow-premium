@@ -34,6 +34,7 @@ import {
   Milestone,
   Network,
   Package,
+  Palette,
   PenTool,
   PieChart,
   Receipt,
@@ -95,6 +96,12 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
     id: PATHS.MESSAGES,
     label: "Secure Messenger",
     icon: MessageSquare,
+    category: "Main",
+  },
+  {
+    id: PATHS.THEME,
+    label: "Theme Settings",
+    icon: Palette,
     category: "Main",
   },
 

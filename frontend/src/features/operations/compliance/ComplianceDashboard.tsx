@@ -11,13 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download } from 'lucide-react';
-import { Suspense, useTransition } from 'react';
+import { Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { ComplianceView, useComplianceDashboard } from './hooks/useComplianceDashboard';
 
 // Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
@@ -33,7 +33,6 @@ import { cn } from '@/shared/lib/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-type ComplianceView = 'overview' | 'conflicts' | 'walls' | 'policies';
 
 interface ComplianceDashboardProps {
   /** Optional initial tab to display. */
@@ -45,14 +44,11 @@ interface ComplianceDashboardProps {
 // ============================================================================
 
 export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initialTab }) => {
-  const [isPending, startTransition] = useTransition();
-  const [activeTab, setActiveTabState] = useSessionStorage<string>('compliance_active_tab', initialTab || 'overview');
+  const [state, actions] = useComplianceDashboard(initialTab);
+  const { activeTab, status } = state;
+  const { setActiveTab } = actions;
 
-  const setActiveTab = (tab: string) => {
-    startTransition(() => {
-      setActiveTabState(tab);
-    });
-  };
+  const isPending = status === 'pending';
 
   return (
     <TabbedPageLayout
@@ -61,11 +57,11 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
       pageActions={<Button variant="secondary" icon={Download}>Audit Report</Button>}
       tabConfig={COMPLIANCE_TAB_CONFIG as TabConfigItem[]}
       activeTabId={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={(id) => setActiveTab(id as ComplianceView)}
     >
       <Suspense fallback={<LazyLoader message="Loading Compliance Module..." />}>
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-          <ComplianceDashboardContent activeTab={activeTab as ComplianceView} />
+          <ComplianceDashboardContent activeTab={activeTab} />
         </div>
       </Suspense>
     </TabbedPageLayout>

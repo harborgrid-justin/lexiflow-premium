@@ -1,38 +1,36 @@
-import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
+import { useTheme } from '@/features/theme';
+import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
-import { useTheme } from '@/features/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { ComplianceMetrics } from '@/types';
-import { cn } from '@/shared/lib/cn';
+import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { Activity, AlertTriangle, CheckCircle, FileText, Loader2, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-
-interface RiskChartData {
-    name: string;
-    value: number;
-    color: string;
-    [key: string]: unknown;
-}
+import { useComplianceOverview } from './hooks/useComplianceOverview';
 
 export const ComplianceOverview = memo(() => {
-    const { theme, mode } = useTheme();
+    const { theme } = useTheme();
     const chartTheme = useChartTheme();
 
-    const { data: riskData = [], isLoading: loadingRiskData } = useQuery<RiskChartData[]>(
-        ['compliance', 'riskStats'],
-        () => DataService.compliance.getRiskStats(mode) as unknown as Promise<RiskChartData[]>
-    );
+    const [{ metrics, chartData, status }, { refresh }] = useComplianceOverview();
 
-    const { data: metrics, isLoading: loadingMetrics } = useQuery<ComplianceMetrics>(
-        ['compliance', 'riskMetrics'],
-        DataService.compliance.getRiskMetrics
-    );
-
-    if (loadingRiskData || loadingMetrics) {
+    if (status === 'loading') {
         return <div className="flex justify-center p-12"><Loader2 className="animate-spin h-6 w-6 text-blue-600" /></div>
+    }
+
+    if (status === 'error') {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 space-y-4">
+                <ShieldAlert className="h-12 w-12 text-red-500" />
+                <p className="text-red-500">Failed to load compliance data</p>
+                <button
+                    onClick={refresh}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
     return (
@@ -41,7 +39,7 @@ export const ComplianceOverview = memo(() => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <MetricCard
                     label="Compliance Score"
-                    value={`${metrics?.score}/100`}
+                    value={`${metrics?.score || 0}/100`}
                     icon={ShieldAlert}
                     trend="+2% vs Last Qtr"
                     trendUp={true}
@@ -77,13 +75,13 @@ export const ComplianceOverview = memo(() => {
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
-                                        data={riskData}
+                                        data={chartData}
                                         innerRadius={60}
                                         outerRadius={80}
                                         paddingAngle={5}
                                         dataKey="value"
                                     >
-                                        {riskData.map((entry, index) => (
+                                        {chartData.map((entry, index) => (
                                             <Cell key={`compliance-risk-${entry.name}-${index}`} fill={entry.color} />
                                         ))}
                                     </Pie>

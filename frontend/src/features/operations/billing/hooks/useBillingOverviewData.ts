@@ -1,13 +1,18 @@
 import { useTheme } from "@/features/theme";
-import { useQuery } from "@/hooks/useQueryHooks";
+import { useQuery, useQueryClient } from "@/hooks/useQueryHooks";
 import { DataService } from "@/services/data/dataService";
 import { Client, Invoice, WIPStat } from "@/types";
+import { useCallback } from "react";
 
-interface RealizationStat {
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface RealizationStat {
   name: string;
   value: number;
   color: string;
-  [key: string]: string | number; // Index signature for Recharts compatibility
+  [key: string]: string | number;
 }
 
 interface OverviewStats {
@@ -16,50 +21,84 @@ interface OverviewStats {
   month: string;
 }
 
-export const useBillingOverviewData = () => {
+export type BillingOverviewStatus = "idle" | "loading" | "success" | "error";
+
+export interface BillingOverviewState {
+  wipData: WIPStat[];
+  realizationData: RealizationStat[];
+  topClients: Client[];
+  totalWip: number;
+  realizationRate: number;
+  outstandingAmount: number;
+  overdueCount: number;
+  status: BillingOverviewStatus;
+  isLoading: boolean; // Keep for backward compat/convenience
+}
+
+export interface BillingOverviewActions {
+  refresh: () => void;
+}
+
+// ============================================================================
+// Hook
+// ============================================================================
+
+export const useBillingOverviewData = (): [
+  BillingOverviewState,
+  BillingOverviewActions,
+] => {
   const { mode } = useTheme();
+  const queryClient = useQueryClient();
 
   // 1. Fetch WIP Stats
-  const { data: rawWipData = [], isLoading: isLoadingWip } = useQuery<
-    WIPStat[]
-  >(["billing", "wipStats"], () =>
+  const {
+    data: rawWipData = [],
+    isLoading: isLoadingWip,
+    isError: isErrorWip,
+  } = useQuery<WIPStat[]>(["billing", "wipStats"], () =>
     DataService.billing
       ? DataService.billing.getWIPStats()
       : Promise.resolve([])
   );
 
   // 2. Fetch Realization Stats (Chart Data)
-  const { data: rawRealizationData = [], isLoading: isLoadingRealization } =
-    useQuery<RealizationStat[]>(["billing", "realization"], () =>
-      DataService.billing
-        ? (DataService.billing.getRealizationStats(mode) as Promise<
-            RealizationStat[]
-          >)
-        : Promise.resolve([])
-    );
+  const {
+    data: rawRealizationData = [],
+    isLoading: isLoadingRealization,
+    isError: isErrorRealization,
+  } = useQuery<RealizationStat[]>(["billing", "realization"], () =>
+    DataService.billing
+      ? (DataService.billing.getRealizationStats(mode) as Promise<
+          RealizationStat[]
+        >)
+      : Promise.resolve([])
+  );
 
   // 3. Fetch Top Accounts
-  const { data: rawTopClients = [], isLoading: isLoadingClients } = useQuery<
-    Client[]
-  >(["billing", "topAccounts"], () =>
+  const {
+    data: rawTopClients = [],
+    isLoading: isLoadingClients,
+    isError: isErrorClients,
+  } = useQuery<Client[]>(["billing", "topAccounts"], () =>
     DataService.billing
       ? DataService.billing.getTopAccounts()
       : Promise.resolve([])
   );
 
   // 4. Fetch Overview Stats (Quick Metrics)
-  const { data: overviewStats } = useQuery<OverviewStats | null>(
-    ["billing", "overviewStats"],
-    () =>
+  const { data: overviewStats, isError: isErrorStats } =
+    useQuery<OverviewStats | null>(["billing", "overviewStats"], () =>
       DataService.billing
         ? (DataService.billing.getOverviewStats() as unknown as Promise<OverviewStats>)
         : Promise.resolve(null)
-  );
+    );
 
   // 5. Fetch Invoices for Outstanding Calculation
-  const { data: invoices = [], isLoading: isLoadingInvoices } = useQuery<
-    Invoice[]
-  >(["billing", "invoices"], () =>
+  const {
+    data: invoices = [],
+    isLoading: isLoadingInvoices,
+    isError: isErrorInvoices,
+  } = useQuery<Invoice[]>(["billing", "invoices"], () =>
     DataService.billing
       ? DataService.billing.getInvoices()
       : Promise.resolve([])
@@ -120,15 +159,37 @@ export const useBillingOverviewData = () => {
     isLoadingRealization ||
     isLoadingClients ||
     isLoadingInvoices;
+  const isError =
+    isErrorWip ||
+    isErrorRealization ||
+    isErrorClients ||
+    isErrorStats ||
+    isErrorInvoices;
 
-  return {
-    wipData,
-    realizationData,
-    topClients,
-    totalWip,
-    realizationRate,
-    outstandingAmount,
-    overdueCount,
-    isLoading,
-  };
+  const status: BillingOverviewStatus = isLoading
+    ? "loading"
+    : isError
+      ? "error"
+      : "success";
+
+  const refresh = useCallback(() => {
+    queryClient.invalidateQueries(["billing"]);
+  }, [queryClient]);
+
+  return [
+    {
+      wipData,
+      realizationData,
+      topClients,
+      totalWip,
+      realizationRate,
+      outstandingAmount,
+      overdueCount,
+      status,
+      isLoading,
+    },
+    {
+      refresh,
+    },
+  ];
 };

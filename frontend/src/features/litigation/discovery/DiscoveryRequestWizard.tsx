@@ -1,20 +1,20 @@
-import { useState, useTransition, useCallback } from 'react';
 import { useTheme } from '@/features/theme';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea/TextArea';
-import { DataService } from '@/services/data/dataService';
-import { useNotify } from '@/hooks/useNotify';
-import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
-import type { DiscoveryRequest, CaseId } from '@/types';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import type { CaseId, DiscoveryRequest } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Save, X } from 'lucide-react';
-import { cn } from '@/shared/lib/cn';
+import { useCallback, useState, useTransition } from 'react';
 
 /**
  * React v18 Concurrent-Safe Discovery Request Wizard
- * 
+ *
  * Guidelines Applied:
  * - G21: Tolerates interruptible renders, no render-phase side effects
  * - G22: Context (theme) values treated as immutable
@@ -36,10 +36,10 @@ export function DiscoveryRequestWizard({ caseId, onComplete, onCancel }: Discove
     // G22 & G28: Immutable context read, pure function of context
     const { theme } = useTheme();
     const notify = useNotify();
-    
+
     // G25 & G33: startTransition for non-urgent form state updates
     const [isPending, startTransition] = useTransition();
-    
+
     // G24: Initial state is deterministic and concurrent-safe
     const [formData, setFormData] = useState<Partial<DiscoveryRequest>>({
         caseId: (caseId || '') as CaseId,
@@ -109,9 +109,9 @@ export function DiscoveryRequestWizard({ caseId, onComplete, onCancel }: Discove
                             <select
                                 value={formData.type}
                                 onChange={(e) => handleChange('type', e.target.value)}
-                                className={cn("w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-2", 
-                                    theme.surface.input, 
-                                    theme.border.default, 
+                                className={cn("w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-2",
+                                    theme.surface.input,
+                                    theme.border.default,
                                     theme.text.primary
                                 )}
                             >
@@ -164,9 +164,9 @@ export function DiscoveryRequestWizard({ caseId, onComplete, onCancel }: Discove
                             <select
                                 value={formData.status}
                                 onChange={(e) => handleChange('status', e.target.value)}
-                                className={cn("w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-2", 
-                                    theme.surface.input, 
-                                    theme.border.default, 
+                                className={cn("w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-2",
+                                    theme.surface.input,
+                                    theme.border.default,
                                     theme.text.primary
                                 )}
                             >
@@ -200,3 +200,5 @@ export function DiscoveryRequestWizard({ caseId, onComplete, onCancel }: Discove
         </div>
     );
 }
+
+export default DiscoveryRequestWizard;

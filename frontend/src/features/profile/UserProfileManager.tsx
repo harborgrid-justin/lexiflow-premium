@@ -36,7 +36,7 @@ import { useUserProfileManager } from './hooks/useUserProfileManager';
 // COMPONENT
 // ========================================
 export const UserProfileManager = () => {
-  const { activeTab, setActiveTab, profile, isLoading } = useUserProfileManager();
+  const [{ activeTab, profile, isLoading }, { setActiveTab }] = useUserProfileManager();
 
   const renderContent = () => {
     // LAYOUT-STABLE: Always render something to prevent layout shift

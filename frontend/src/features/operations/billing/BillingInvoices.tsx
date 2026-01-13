@@ -18,17 +18,17 @@ import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
 // Removed unused DataService
 
 // Hooks & Context
+import { useThemeContext } from '@/features/theme';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useThemeContext } from '@/features/theme';
 import { useBillingInvoices } from './hooks/useBillingInvoices';
 import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
 // Components
-import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/shared/ui/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Utils & Constants
 // Removed unused billingQueryKeys and InvoiceStatusEnum
@@ -49,15 +49,12 @@ import { Formatters } from '@/utils/formatters';
 const BillingInvoicesComponent: React.FC = () => {
   const { theme } = useThemeContext();
   const notify = useNotify();
-  const { 
-    filteredInvoices, 
-    searchTerm, 
-    setSearchTerm, 
-    filterStatus, 
-    setFilterStatus, 
-    sendInvoice, 
-    markPaid 
-  } = useBillingInvoices();
+
+  // Updated Hook Usage (Rule 43: Stable/Tuple Return)
+  const [
+    { filteredInvoices, searchTerm, filterStatus }, // State
+    { setSearchTerm, setFilterStatus, sendInvoice, markPaid } // Actions
+  ] = useBillingInvoices();
 
   // Keyboard shortcuts
   useKeyboardShortcuts({

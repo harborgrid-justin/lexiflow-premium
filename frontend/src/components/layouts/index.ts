@@ -1,24 +1,12 @@
 /**
- * Layouts Layer - Re-export from ui/layouts
- *
- * This is a convenience re-export layer. Actual components live in /components/ui/layouts/
- *
- * Usage:
- * import { AppShellLayout } from '@/components/layouts';  // ← This works
- * import { AppShellLayout } from '@/shared/ui/layouts';  // ← This also works
+ * @module components/layouts
+ * @description Centralized Public API for Application Layouts.
+ * 
+ * This module serves as the primary entry point for all layout components used in the application.
+ * It Re-exports from the shared UI library to ensure consistency across the platform.
+ * 
+ * Use this path for imports:
+ * import { AppShellLayout, PageContainerLayout } from '@/components/layouts';
  */
 
-export * from "../../shared/ui/layouts";
-
-// Re-export from ui/layouts - these are already exported via the wildcard above
-// export { StackLayout } from '../ui/layouts/StackLayout';
-// export { CenteredLayout } from '../ui/layouts/CenteredLayout';
-// export * from '../ui/layouts/withErrorBoundary';
-// export * from '../ui/layouts/AsyncBoundary';
-// export * from '../ui/layouts/LayoutComposer';
-// export * from '../ui/layouts/PerformanceMonitor';
-
-// ============================================================================
-// TYPE RE-EXPORTS
-// ============================================================================
-export type { TabConfigItem } from "@/types/layout";
+export * from '../../shared/ui/layouts';

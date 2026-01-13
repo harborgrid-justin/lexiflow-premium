@@ -1,90 +1,144 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState, useTransition, useRef, useCallback } from 'react';
-import { ThemeObject } from './ThemeContext.types';
-import { DEFAULT_TOKENS, DesignTokens, ThemeDensity, getTokens } from './tokens';
-import { UI_CONFIG } from '../../config/features/ui.config';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, useTransition } from 'react';
 import { FEATURES_CONFIG } from '../../config/features/features.config';
+import { UI_CONFIG } from '../../config/features/ui.config';
+// DataService imported for hydration
+import { DataService } from '@/services/data/dataService';
+import { ThemeObject } from './ThemeContext.types';
+import { DEFAULT_TOKENS, DesignTokens, getTokens, ThemeDensity } from './tokens';
 
 export type { ThemeObject } from './ThemeContext.types';
 
+// ============================================================================
+// Internal Hook: useSyncLocalStorage
+// Guideline 32: USE useSyncExternalStore FOR EXTERNAL MUTABLE SOURCES
+// ============================================================================
+function useSyncLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+  // Snapshot must return immutable string representation for stability
+  const getSnapshot = useCallback(() => {
+    if (typeof window === 'undefined') return JSON.stringify(initialValue);
+    try {
+      const item = localStorage.getItem(key);
+      return item === null ? JSON.stringify(initialValue) : item;
+    } catch {
+      return JSON.stringify(initialValue);
+    }
+  }, [key, initialValue]);
+
+  const getServerSnapshot = useCallback(() => JSON.stringify(initialValue), [initialValue]);
+
+  const subscribe = useCallback((callback: () => void) => {
+    if (typeof window === 'undefined') return () => { };
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === key) callback();
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [key]);
+
+  const storeValueString = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  const value = useMemo(() => {
+    try {
+      return JSON.parse(storeValueString) as T;
+    } catch {
+      return initialValue;
+    }
+  }, [storeValueString, initialValue]);
+
+  const setValue = useCallback((newValue: T) => {
+    try {
+      const newString = JSON.stringify(newValue);
+      localStorage.setItem(key, newString);
+      // Manually dispatch storage event for same-tab updates (storage event only fires for other tabs)
+      window.dispatchEvent(new StorageEvent('storage', { key, newValue: newString, storageArea: localStorage }));
+    } catch (e) {
+      console.warn('LocalStorage Write Failed', e);
+    }
+  }, [key]);
+
+  return [value, setValue];
+}
+
+
 /**
  * React v18 Context Guidelines Applied (All 20 Advanced Guidelines):
- * 
+ *
  * Guideline 21: ASSUME ALL RENDERS ARE INTERRUPTIBLE
  *   - No render-phase side effects; all DOM updates in useEffect
  *   - Render logic is pure and can be safely aborted/restarted
- * 
+ *
  * Guideline 22: DESIGN CONTEXT VALUES TO BE CONCURRENT-SAFE
  *   - Context values are deeply immutable (frozen in dev mode)
  *   - All state updates create new immutable objects
- * 
+ *
  * Guideline 23: NEVER MUTATE CONTEXT VALUES BETWEEN RENDERS
  *   - All updates use immutable patterns (spread, Object.freeze)
  *   - No in-place modifications to tokens or theme objects
- * 
+ *
  * Guideline 24: EXPECT DOUBLE INVOCATION IN STRICTMODE (DEV)
  *   - All effects have cleanup functions for idempotency
  *   - Initialization logic handles repeated mount/unmount
- * 
+ *
  * Guideline 25: USE startTransition FOR NON-URGENT CONTEXT UPDATES
  *   - Token updates, density changes use startTransition
  *   - Separates urgent UI feedback from theme recalculation
- * 
+ *
  * Guideline 26: SEPARATE URGENT AND NON-URGENT CONTEXT PATHS
  *   - toggleDark: Urgent (immediate visual feedback, no transition)
  *   - updateToken/setDensity: Non-urgent (startTransition)
- * 
+ *
  * Guideline 27: NEVER COUPLE CONTEXT TO TIME-BASED ASSUMPTIONS
  *   - No setTimeout/setInterval in render or context value
  *   - Effects don't assume render duration or completion timing
- * 
+ *
  * Guideline 28: CONTEXT CONSUMERS MUST BE PURE FUNCTIONS OF INPUT
  *   - createTheme is pure function of tokens
  *   - No external mutable state or global singletons
- * 
+ *
  * Guideline 29: AVOID CONTEXT-DRIVEN CASCADES DURING SUSPENSE
  *   - Theme changes don't trigger Suspense boundaries
  *   - No async data fetching in theme logic
- * 
+ *
  * Guideline 30: TREAT SUSPENSE BOUNDARIES AS CONTEXT CONTAINMENT ZONES
  *   - Context updates don't depend on suspended component commits
  *   - Theme Provider positioned above Suspense boundaries
- * 
+ *
  * Guideline 31: NEVER DERIVE CONTEXT FROM UNCOMMITTED STATE
  *   - Context value reflects only committed localStorage state
  *   - No speculative or optimistic theme values
- * 
+ *
  * Guideline 32: USE useSyncExternalStore FOR EXTERNAL MUTABLE SOURCES
  *   - localStorage accessed via stable refs (localStorageRef)
  *   - Subscriptions are idempotent and cleanup-safe
- * 
+ *
  * Guideline 33: DESIGN CONTEXT APIS TO SUPPORT TRANSITIONAL UI STATES
  *   - isPendingThemeChange explicitly exposed for loading indicators
  *   - Consumers can show "applying theme..." overlays
- * 
+ *
  * Guideline 34: ASSUME CONTEXT READS MAY BE REPEATED OR DISCARDED
  *   - useThemeContext has no side effects on read
  *   - Context value is stable and can be read multiple times safely
- * 
+ *
  * Guideline 35: NEVER RELY ON PROVIDER POSITION FOR PERFORMANCE GUARANTEES
  *   - Provider is high in tree but doesn't assume subtree stability
  *   - Works correctly with React.lazy, code splitting, offscreen rendering
- * 
+ *
  * Guideline 36: ISOLATE CONTEXT PROVIDERS FROM FREQUENT RECONCILIATION
  *   - Provider placed at App root, not within frequently-updated parents
  *   - Memoized context value minimizes unnecessary re-renders
- * 
+ *
  * Guideline 37: ACCOUNT FOR AUTOMATIC BATCHING ACROSS ASYNC BOUNDARIES
  *   - Multiple theme updates in async callbacks batch correctly
  *   - No assumptions about intermediate render states being visible
- * 
+ *
  * Guideline 38: ENSURE CONTEXT DEFAULTS ARE CONCURRENT-SAFE
  *   - DEFAULT_CONTEXT is deeply frozen, immutable, non-placeholder
  *   - Throws descriptive errors if accessed before provider mount
- * 
+ *
  * Guideline 39: NEVER MODEL CONTROL FLOW THROUGH CONTEXT PRESENCE
  *   - Context always present (never null/undefined pattern)
  *   - Error boundary instead of conditional rendering
- * 
+ *
  * Guideline 40: CONTEXT SHOULD COMPOSE WITH FUTURE REACT FEATURES
  *   - Compatible with Offscreen rendering (no side effects)
  *   - Works with Selective Hydration (SSR-safe defaults)
@@ -100,13 +154,13 @@ interface ThemeContextType {
   readonly mode: 'light' | 'dark';
   readonly ui: typeof UI_CONFIG;
   readonly features: typeof FEATURES_CONFIG;
-  
+
   // Guideline 22 & 28: Computed helper - pure function of tokens/isDark
   readonly theme: ThemeObject;
-  
+
   // Guideline 33: Explicit transitional states
   readonly isPendingThemeChange: boolean;
-  
+
   // Guideline 26: Actions separated by urgency
   readonly setDensity: (d: ThemeDensity) => void;
   readonly toggleDark: () => void; // Urgent - immediate visual feedback
@@ -129,17 +183,11 @@ const createTheme = (tokens: DesignTokens): ThemeObject => ({
     primary: tokens.colors.primary,
     secondary: tokens.colors.surface,
     subtle: tokens.colors.background,
-    muted: tokens.colors.background,
   },
   interactive: {
     primary: tokens.colors.secondary,
     success: tokens.colors.success,
     hover: tokens.colors.primaryDark,
-  },
-  accent: {
-    primary: tokens.colors.accent,
-    secondary: tokens.colors.primaryLight,
-    muted: tokens.colors.textMuted,
   },
   border: {
     input: (_arg0: string, _input: string, _input1: unknown, _primary: string) => tokens.colors.border,
@@ -279,131 +327,195 @@ export const useThemeContext = (): ThemeContextType => {
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Guideline 25: Use startTransition for non-urgent updates
   const [isPending, startTransition] = useTransition();
-  
-  // Guideline 32: Stable refs for external storage subscriptions
-  const localStorageRef = useRef<Storage | null>(null);
-  
-  // Guideline 24: StrictMode-safe initialization (idempotent)
-  const [tokens, setTokens] = useState<DesignTokens>(() => {
-    if (typeof window === 'undefined') return DEFAULT_TOKENS;
-    try {
-      const saved = localStorage.getItem('lexiflow_tokens_v4');
-      return saved ? JSON.parse(saved) : DEFAULT_TOKENS;
-    } catch {
-      return DEFAULT_TOKENS;
-    }
-  });
 
-  const [density, setDensityState] = useState<ThemeDensity>(() => {
-    if (typeof window === 'undefined') return 'normal';
-    const saved = localStorage.getItem('lexiflow_density');
-    return (saved as ThemeDensity) || 'normal';
-  });
+  // Guideline 32: Use useSyncExternalStore (via custom hook) for localStorage
+  const [tokens, setTokensExternal] = useSyncLocalStorage<DesignTokens>('lexiflow_tokens_v4', DEFAULT_TOKENS);
+  const [density, setDensityExternal] = useSyncLocalStorage<ThemeDensity>('lexiflow_density', 'normal');
+  // Store boolean as string 'true'/'false' to match existing pattern, then parse
+  const [isDarkString, setIsDarkExternal] = useSyncLocalStorage<string>('lexiflow_dark', 'false');
 
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('lexiflow_dark') === 'true';
-  });
-  
-  // Guideline 24: Effect cleanup for StrictMode
-  useEffect(() => {
-    localStorageRef.current = typeof window !== 'undefined' ? localStorage : null;
-    return () => {
-      localStorageRef.current = null;
-    };
-  }, []);
-  
+  const isDark = isDarkString === 'true';
+
   // Guideline 25 & 26: Non-urgent update using transition
   const setDensity = useCallback((d: ThemeDensity) => {
     startTransition(() => {
-      setDensityState(d);
-      if (localStorageRef.current) {
-        localStorageRef.current.setItem('lexiflow_density', d);
-      }
+      setDensityExternal(d);
     });
-  }, [startTransition]);
+  }, [startTransition, setDensityExternal]);
 
   // Guideline 26: Urgent update for immediate visual feedback (dark mode toggle)
   const toggleDark = useCallback(() => {
-    setIsDark(prev => {
-      const next = !prev;
-      if (localStorageRef.current) {
-        localStorageRef.current.setItem('lexiflow_dark', String(next));
-      }
-      return next;
-    });
-  }, []);
+    const next = !isDark;
+    setIsDarkExternal(String(next));
+  }, [isDark, setIsDarkExternal]);
 
   // Guideline 26: Add setTheme and toggleTheme as aliases for consistency
   const setTheme = useCallback((mode: 'light' | 'dark') => {
-    setIsDark(mode === 'dark');
-    if (localStorageRef.current) {
-      localStorageRef.current.setItem('lexiflow_dark', String(mode === 'dark'));
-    }
-  }, []);
+    setIsDarkExternal(String(mode === 'dark'));
+  }, [setIsDarkExternal]);
 
   const toggleTheme = toggleDark; // Alias for backward compatibility
 
+  // Guideline 41: Hydrate from Backend
+  useEffect(() => {
+    let mounted = true;
+
+    const hydrateTheme = async () => {
+      // Skip if server-side
+      if (typeof window === 'undefined') return;
+
+      // Skip if user is not authenticated
+      try {
+        const token = localStorage.getItem('lexiflow_auth_token');
+        if (!token) {
+          // console.log('[ThemeContext] Skipping theme hydration - not authenticated');
+          return;
+        }
+      } catch (error) {
+        console.warn('[ThemeContext] Failed to check authentication:', error);
+        return;
+      }
+
+      try {
+        // Attempt to get profile (will throw/fail if not logged in)
+        const profile = await DataService.profile.getCurrentProfile();
+        if (!mounted) return;
+
+        const { preferences } = profile;
+
+        // 1. Sync Theme Mode
+        if (preferences.theme === 'dark' || preferences.theme === 'light') {
+          // Only update if different
+          if ((preferences.theme === 'dark') !== isDark) {
+            setIsDarkExternal(String(preferences.theme === 'dark'));
+          }
+        }
+
+        // 2. Sync Custom Tokens
+        if (preferences.customTheme) {
+          startTransition(() => {
+            if (mounted) {
+              // Merge with current tokens
+              const next = { ...tokens, ...preferences.customTheme } as DesignTokens;
+              setTokensExternal(next);
+            }
+          });
+        }
+
+        // 3. Sync Density
+        if (preferences.density) {
+          startTransition(() => {
+            if (mounted) {
+              const d = preferences.density as ThemeDensity;
+              if (d !== density) setDensityExternal(d);
+            }
+          });
+        }
+
+      } catch {
+        // User likely not logged in or backend unavailable
+        // Fallback to localStorage (already loaded)
+      }
+    };
+
+    // Using simple timeout to not block main thread on init
+    const timer = setTimeout(hydrateTheme, 100);
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
+  }, [density, isDark, tokens, setDensityExternal, setIsDarkExternal, setTokensExternal]); // Run on mount (localStorage initial read is handled by useSyncExternalStore)
+
   // Guideline 21 & 27: Effect is pure, no time-based assumptions
   // Guideline 24: Idempotent under StrictMode double-invocation
+  // NOTE: In the original code, this effect updated `tokens` based on mode/density.
+  // With useSyncLocalStorage, we must be careful not to create infinite loops.
+  // We only want to update tokens if the calculated tokens (from mode/density) are different from stored tokens.
+  // BUT: `tokens` object contains customizations. If we recalculate based on defaults, we lose customizations.
+  // The original code:
+  //   setTokens(getTokens(mode, density, tokens.fontMode));
+  // This resets tokens to default for that mode/density, preserving fontMode.
+  // We should preserve customizations if possible, but the original logic seemed to reset them on mode switch.
+  // Let's replicate original behavior but using the external setter.
+
+  // Ref to track if this is the initial render to avoid double-set
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    const mode = isDark ? 'dark' : 'light';
-    // Guideline 23: Create new immutable tokens instead of mutating
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Calculate expected tokens for current mode/density
+    // const newTokens = getTokens(mode, density, tokens.fontMode);
+    // If we just set it, it overwrites customizations.
+    // The original code did overwrite customizations on mode change.
+
+    const modeStr = isDark ? 'dark' : 'light';
     startTransition(() => {
-      setTokens(getTokens(mode, density, tokens.fontMode));
+      // Use functional update or direct set.
+      // We need to merge existing customizations?
+      // Original logic: setTokens(getTokens(mode, density, tokens.fontMode));
+      // implementation of getTokens returns a FRESH set of tokens.
+
+      // Ideally we should apply customizations ON TOP of the new base.
+      // But for now, let's stick to original behavior to avoid regressions, just using the new setter.
+      setTokensExternal(getTokens(modeStr, density, tokens.fontMode));
     });
-  }, [isDark, density, tokens.fontMode, startTransition]);
+  }, [isDark, density, tokens.fontMode, setTokensExternal]);
 
   // Guideline 25 & 23: Non-urgent update with immutable pattern
   const updateToken = useCallback((category: keyof DesignTokens | 'root', key: string, value: string, subKey?: string) => {
     startTransition(() => {
-      setTokens(prev => {
-        // Guideline 23: Never mutate - create new immutable object
-        const next = { ...prev };
+      // Guideline 23: Never mutate - create new immutable object
+      // useSyncLocalStorage setter automatically persists
+      // We need to get the *current* value.
+      // Since we are inside a callback, and 'tokens' is a dependency (if we added it), we could use it.
+      // But better is to use functional update if our hook supported it.
+      // Our simple hook returns [value, setValue]. It doesn't support functional updates in setValue currently.
 
-        if (category === 'root') {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (next as any)[key] = value;
-        } else {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const categoryObj = { ...(next as any)[category] };
+      // We can just use the 'tokens' from closure IF we add it to dependency array.
+      const prev = tokens;
+      const next = { ...prev };
 
-          if (subKey) {
-            if (categoryObj[key] && typeof categoryObj[key] === 'object') {
-              const subObj = { ...categoryObj[key] };
-              subObj[subKey] = value;
-              categoryObj[key] = subObj;
-            }
-          } else {
-            categoryObj[key] = value;
+      if (category === 'root') {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (next as any)[key] = value;
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const categoryObj = { ...(next as any)[category] };
+
+        if (subKey) {
+          if (categoryObj[key] && typeof categoryObj[key] === 'object') {
+            const subObj = { ...categoryObj[key] };
+            subObj[subKey] = value;
+            categoryObj[key] = subObj;
           }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (next as any)[category] = categoryObj;
+        } else {
+          categoryObj[key] = value;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (next as any)[category] = categoryObj;
+      }
 
-        if (localStorageRef.current) {
-          localStorageRef.current.setItem('lexiflow_tokens_v4', JSON.stringify(next));
-        }
-        return next;
-      });
+      setTokensExternal(next);
     });
-  }, [startTransition]);
+  }, [startTransition, tokens, setTokensExternal]);
 
   // Guideline 25: Non-urgent reset using transition
   const resetTokens = useCallback(() => {
     startTransition(() => {
-      setTokens(DEFAULT_TOKENS);
-      if (localStorageRef.current) {
-        localStorageRef.current.removeItem('lexiflow_tokens_v4');
-      }
+      setTokensExternal(DEFAULT_TOKENS);
+      // useSyncLocalStorage handles the write
     });
-  }, [startTransition]);
+  }, [startTransition, setTokensExternal]);
   // Guideline 22 & 28: Immutable, pure context value
   // Guideline 7 & 10: Explicit memoization with stable references
   const value = useMemo(() => {
     // Guideline 28: Compute theme as pure function of tokens/isDark
     const theme: ThemeObject = createTheme(tokens);
-    
+
     const contextValue: ThemeContextType = {
       tokens,
       density,
@@ -420,7 +532,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       theme, // Guideline 22: Computed theme object
       isPendingThemeChange: isPending,
     };
-    
+
     // Guideline 22: Freeze in development for immutability enforcement
     if (process.env.NODE_ENV === 'development') {
       return Object.freeze(contextValue);
@@ -437,7 +549,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // Guideline 24: Cleanup for StrictMode - remove previous values
     const cleanupCallbacks: Array<() => void> = [];
-    
+
     // Inject Colors
     Object.entries(colors).forEach(([key, val]) => {
       root.style.setProperty(`--color-${key}`, val as string);
@@ -455,7 +567,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     root.style.setProperty('--font-serif', typography.fontSerif);
     root.style.setProperty('--font-mono', typography.fontMono);
     root.style.setProperty('--font-app', fontMode === 'sans' ? typography.fontSans : typography.fontSerif);
-    
+
     cleanupCallbacks.push(
       () => root.style.removeProperty('--font-sans'),
       () => root.style.removeProperty('--font-serif'),
@@ -495,7 +607,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty(`--layout-${key}`, String(val));
       cleanupCallbacks.push(() => root.style.removeProperty(`--layout-${key}`));
     });
-    
+
     // Guideline 24: Cleanup for StrictMode double-invocation
     return () => {
       cleanupCallbacks.forEach(cleanup => cleanup());

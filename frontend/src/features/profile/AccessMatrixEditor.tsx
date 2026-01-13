@@ -16,28 +16,29 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { Clock, Edit2, Globe, Lock, Plus, Shield, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
+import { useAccessMatrix } from './hooks/useAccessMatrix';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
 
 // Types
-import { AccessEffect, ExtendedUserProfile, GranularPermission } from '@/types';
+import { AccessEffect, ExtendedUserProfile } from '@/types';
 
 
 // ========================================
@@ -52,43 +53,48 @@ interface AccessMatrixEditorProps {
 // ========================================
 export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
     const { theme } = useTheme();
-    const [permissions, setPermissions] = useState<GranularPermission[]>(profile.accessMatrix);
+
+    // Refactored to use custom hook (Rule 41-60)
+    const [
+        { permissions, newPerm, status, message },
+        { addPermission, deletePermission, updateNewPermField, resetNewPerm }
+    ] = useAccessMatrix(profile.accessMatrix);
+
     const permModal = useModalState();
     const deleteModal = useModalState();
     const [permToDelete, setPermToDelete] = useState<string | null>(null);
-    const [newPerm, setNewPerm] = useState<Partial<GranularPermission>>({ effect: 'Allow', scope: 'Global' });
+
+    // Effect to handle success/close modal (Rule 48 consideration: Syncing UI state to Logic state)
+    useEffect(() => {
+        if (status === 'success' && permModal.isOpen) {
+            permModal.close();
+        }
+    }, [status, permModal]);
 
     const getEffectColor = (effect: AccessEffect) => {
         return effect === 'Allow' ? 'success' : 'error';
     };
 
-    const handleDelete = (id: string) => {
+    const handleDeleteClick = (id: string) => {
         setPermToDelete(id);
         deleteModal.open();
     };
 
     const confirmDeletePermission = () => {
         if (permToDelete) {
-            setPermissions(prev => prev.filter(p => p.id !== permToDelete));
+            deletePermission(permToDelete);
             setPermToDelete(null);
+            deleteModal.close();
         }
     };
 
-    const handleAdd = () => {
-        if (!newPerm.resource || !newPerm.action) return;
+    const handleSaveRule = () => {
+        addPermission();
+    };
 
-        const perm: GranularPermission = {
-            id: `perm-${Date.now()}`,
-            resource: newPerm.resource,
-            action: newPerm.action as 'read' | 'create' | 'update' | 'delete' | '*' | 'export' | 'approve',
-            effect: newPerm.effect as AccessEffect,
-            scope: newPerm.scope as 'Global' | 'Region' | 'Office' | 'Personal',
-            expiration: newPerm.expiration,
-            conditions: []
-        };
-        setPermissions([...permissions, perm]);
-        permModal.close();
-        setNewPerm({ effect: 'Allow', scope: 'Global' });
+    const handleOpenAdd = () => {
+        resetNewPerm();
+        permModal.open();
     };
 
     return (
@@ -102,8 +108,15 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                         Fine-grained permissions overriding standard role-based access. Evaluation order: Deny {'>'} Allow.
                     </p>
                 </div>
-                <Button variant="primary" icon={Plus} onClick={permModal.open}>Add Permission</Button>
+                <Button variant="primary" icon={Plus} onClick={handleOpenAdd}>Add Permission</Button>
             </div>
+
+            {/* Status Message Display */}
+            {message && status === 'error' && (
+                <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded border border-red-200">
+                    {message}
+                </div>
+            )}
 
             <div className="flex-1 overflow-hidden rounded-lg border shadow-sm bg-white">
                 <TableContainer className="h-full border-0 rounded-none shadow-none">
@@ -144,14 +157,14 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                                 <TableCell>
                                     {perm.expiration ? (
                                         <div className="flex items-center text-xs text-red-600 font-medium">
-                                            <Clock className="h-3 w-3 mr-1" /> {perm.expiration}
+                                            <Clock className="h-3 w-3 mr-1" /> {formatDateDisplay(perm.expiration)}
                                         </div>
                                     ) : <span className="text-slate-400 text-xs">Never</span>}
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
                                         <button className="p-1 hover:bg-slate-100 rounded text-blue-600"><Edit2 className="h-4 w-4" /></button>
-                                        <button onClick={() => handleDelete(perm.id)} className="p-1 hover:bg-red-50 rounded text-red-600"><Trash2 className="h-4 w-4" /></button>
+                                        <button onClick={() => handleDeleteClick(perm.id)} className="p-1 hover:bg-red-50 rounded text-red-600"><Trash2 className="h-4 w-4" /></button>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -172,12 +185,21 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
 
             <Modal isOpen={permModal.isOpen} onClose={permModal.close} title="Grant Granular Permission" size="md">
                 <div className="p-6 space-y-4">
-                    <Input label="Resource Identifier" placeholder="e.g. billing.invoices" value={newPerm.resource || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({ ...newPerm, resource: e.target.value })} />
+                    <Input
+                        label="Resource Identifier"
+                        placeholder="e.g. billing.invoices"
+                        value={newPerm.resource || ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateNewPermField('resource', e.target.value)}
+                    />
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Action</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, action: e.target.value as GranularPermission['action'] })}>
+                            <select
+                                className="w-full p-2 border rounded text-sm"
+                                value={newPerm.action}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateNewPermField('action', e.target.value)}
+                            >
                                 <option value="read">Read</option>
                                 <option value="create">Create</option>
                                 <option value="update">Update</option>
@@ -188,7 +210,11 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                         </div>
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Effect</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, effect: e.target.value as GranularPermission['effect'] })}>
+                            <select
+                                className="w-full p-2 border rounded text-sm"
+                                value={newPerm.effect}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateNewPermField('effect', e.target.value)}
+                            >
                                 <option value="Allow">Allow</option>
                                 <option value="Deny">Deny</option>
                             </select>
@@ -198,19 +224,28 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Scope</label>
-                            <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewPerm({ ...newPerm, scope: e.target.value as GranularPermission['scope'] })}>
+                            <select
+                                className="w-full p-2 border rounded text-sm"
+                                value={newPerm.scope}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateNewPermField('scope', e.target.value)}
+                            >
                                 <option value="Global">Global</option>
                                 <option value="Region">Region</option>
                                 <option value="Office">Office</option>
                                 <option value="Personal">Personal</option>
                             </select>
                         </div>
-                        <Input type="date" label="Expiration (Optional)" value={newPerm.expiration || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({ ...newPerm, expiration: e.target.value })} />
+                        <Input
+                            type="date"
+                            label="Expiration (Optional)"
+                            value={newPerm.expiration || ''}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateNewPermField('expiration', e.target.value)}
+                        />
                     </div>
 
                     <div className="flex justify-end pt-4 border-t mt-2 gap-2">
                         <Button variant="secondary" onClick={permModal.close}>Cancel</Button>
-                        <Button variant="primary" onClick={handleAdd}>Save Rule</Button>
+                        <Button variant="primary" onClick={handleSaveRule}>Save Rule</Button>
                     </div>
                 </div>
             </Modal>

@@ -118,7 +118,8 @@ export default [
 
     // Profile & Settings
     route("profile", "routes/profile/index.tsx"),
-    route("settings", "routes/settings/index.tsx"), // Redirects to profile
+    route("settings", "routes/settings/index.tsx"),
+    route("settings/theme", "routes/settings/theme.tsx"),
 
     // Admin Routes (Admin Only)
     route("admin", "routes/admin/index.tsx"),

@@ -1,9 +1,4 @@
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
 import { lazy, memo } from 'react';
-// ✅ Migrated to backend API (2025-12-21)
-import { ConflictCheck, EthicalWall } from '@/types';
-import { queryKeys } from '@/utils/queryKeys';
 
 // Sub-components
 const ComplianceOverview = lazy(() => import('./ComplianceOverview').then(m => ({ default: m.ComplianceOverview })));
@@ -18,13 +13,10 @@ interface ComplianceDashboardContentProps {
 }
 
 const ComplianceDashboardContentComponent: React.FC<ComplianceDashboardContentProps> = ({ activeTab }) => {
-  const { data: conflicts = [] } = useQuery<ConflictCheck[]>(queryKeys.compliance.conflicts(), () => DataService.compliance.getConflicts());
-  const { data: walls = [] } = useQuery<EthicalWall[]>(queryKeys.compliance.ethicalWalls(), () => DataService.compliance.getEthicalWalls());
-
   switch (activeTab) {
     case 'overview': return <ComplianceOverview />;
-    case 'conflicts': return <ComplianceConflicts conflicts={conflicts} />;
-    case 'walls': return <ComplianceWalls walls={walls} />;
+    case 'conflicts': return <ComplianceConflicts />;
+    case 'walls': return <ComplianceWalls />;
     case 'policies': return <CompliancePolicies />;
     default: return <ComplianceOverview />;
   }

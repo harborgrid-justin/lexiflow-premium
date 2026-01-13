@@ -26,7 +26,7 @@ interface SLAItemCardProps {
 /**
  * SLAHeader - Title and live indicator
  */
-function SLAHeader({}: SLAHeaderProps) {
+function SLAHeader() {
   return (
   <h3 className={cn("font-bold mb-4 flex items-center justify-between text-text")}>
     <span className="flex items-center">

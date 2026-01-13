@@ -246,6 +246,9 @@ export class DiscoveryRepository {
       legalHoldPrivilegeService
     );
 
+  createLegalHold = legalHoldPrivilegeService.createLegalHold.bind(legalHoldPrivilegeService);
+  sendReminder = legalHoldPrivilegeService.sendReminder.bind(legalHoldPrivilegeService);
+
   // =============================================================================
   // UTILITY OPERATIONS - Delegated to TimelineService & CollectionService
   // =============================================================================

@@ -27,7 +27,7 @@ interface CollectionsProps {
   caseId?: string;
 }
 
-export const Collections: React.FC<CollectionsProps> = ({ caseId }) => {
+export function Collections({ caseId }: CollectionsProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const createModal = useModalState();

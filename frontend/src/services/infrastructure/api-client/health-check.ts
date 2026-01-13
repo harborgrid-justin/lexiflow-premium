@@ -39,7 +39,7 @@ export async function checkServiceHealth(endpoint: string): Promise<ServiceHealt
 
     const response = await fetch(url.toString(), {
       method: "HEAD",
-      headers: buildHeaders(),
+      headers: await buildHeaders(),
       signal: AbortSignal.timeout(HEALTH_CHECK_TIMEOUT),
     });
 

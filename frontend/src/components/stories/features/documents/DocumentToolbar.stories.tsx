@@ -7,7 +7,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentToolbar } from '../../../../features/operations/documents/DocumentToolbar';
-import { WindowProvider } from '@/providers';
 
 const meta: Meta<typeof DocumentToolbar> = {
   title: 'Documents/Document Toolbar',

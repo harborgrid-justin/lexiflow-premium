@@ -4,6 +4,17 @@ import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { Card } from '@/shared/ui/molecules/Card';
 import { Modal } from '@/shared/ui/molecules/Modal';
+/**
+ * MotionForSanctions.tsx
+ * Motion for sanctions builder for discovery violations
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: No render-phase side effects
+ * - G22: Context (theme) treated as immutable
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states
+ */
+
 import { useTheme } from '@/features/theme';
 import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
@@ -19,7 +30,7 @@ interface MotionForSanctionsProps {
     caseId?: string;
 }
 
-export const MotionForSanctions: React.FC<MotionForSanctionsProps> = ({ caseId }) => {
+export function MotionForSanctions({ caseId }: MotionForSanctionsProps) {
     const { theme } = useTheme();
     const sanctionModal = useModalState();
     const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});

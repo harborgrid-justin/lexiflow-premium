@@ -42,7 +42,7 @@ import { DiscoveryProductionsProps } from './types';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = ({ onCreateClick, caseId }) => {
+export function DiscoveryProductions({ onCreateClick, caseId }: DiscoveryProductionsProps) {
     const { theme } = useTheme();
     const notify = useNotify();
     const { openWindow, closeWindow } = useWindow();

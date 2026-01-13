@@ -18,7 +18,7 @@ interface DiscoveryDashboardProps {
     caseId?: string;
 }
 
-const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate, caseId }) => {
+function DiscoveryDashboard({ onNavigate, caseId }: DiscoveryDashboardProps) {
     const { theme } = useTheme();
 
     // Parallel Queries for Dashboard Stats

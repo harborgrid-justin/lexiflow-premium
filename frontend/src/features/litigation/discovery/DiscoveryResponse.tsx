@@ -37,7 +37,7 @@ import { cn } from '@/shared/lib/cn';
 // ============================================================================
 import { DiscoveryResponseProps } from "./types";
 
-export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
+export function DiscoveryResponse({
   request,
   onBack,
   onSave,

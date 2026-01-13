@@ -5,6 +5,15 @@
  *
  * THEME SYSTEM USAGE:
  * Uses useTheme hook to apply semantic colors.
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: No render-phase side effects, pure rendering only
+ * - G22: Context (theme) treated as immutable, never mutated
+ * - G28: Pure function of props (items, onNavigate) and context
+ * - G29: No Suspense dependencies, safe for parent Suspense boundaries
+ * - G33: Explicit empty state handling via VirtualList emptyMessage
+ * - G34: All callbacks (getDaysRemaining, getBadgeVariant) side-effect free
+ * - G38: Default props ensure concurrent-safe rendering
  */
 
 // ============================================================================
@@ -39,11 +48,12 @@ import { DiscoveryRequest } from '@/types';
 import { DiscoveryRequestsProps } from './types';
 
 const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
+    // G22 & G28: Immutable context read - pure function of context
     const { theme } = useTheme();
     const { openWindow, closeWindow } = useWindow();
     const filtersToggle = useToggle();
 
-    // Memoized: Calculate days remaining
+    // G28 & G34: Pure memoized calculation - no side effects, can be repeated/discarded
     const getDaysRemaining = useCallback((dueDate: string) => {
         if (!dueDate) return 0;
         const due = new Date(dueDate);
@@ -52,7 +62,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
         return diff;
     }, []);
 
-    // Memoized: Badge variant logic
+    // G28 & G34: Pure badge variant mapping - idempotent, no mutations
     const getBadgeVariant = useCallback((status: string) => {
         switch (status) {
             case DiscoveryRequestStatusEnum.OVERDUE: return 'error';

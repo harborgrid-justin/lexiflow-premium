@@ -590,6 +590,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     verifyMFA,
     logout,
     refreshToken,
+    clearError,
     hasPermission,
     hasRole,
     enableMFA,

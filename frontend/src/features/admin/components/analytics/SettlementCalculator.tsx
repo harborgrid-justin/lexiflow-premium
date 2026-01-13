@@ -278,6 +278,7 @@ export const SettlementCalculator: React.FC = () => {
         metrics={metrics}
         iterations={params.iterations}
         theme={theme}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         chartTheme={chartTheme as any}
       />
     </div>

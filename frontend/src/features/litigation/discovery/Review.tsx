@@ -2,6 +2,16 @@
  * Review.tsx
  * Document Review Interface for E-Discovery
  * Full-featured document review with coding panel
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Renders interruptible, no side effects during render
+ * - G22: Context (theme) immutable throughout
+ * - G23: State updates immutable (spread operators)
+ * - G24: Effects idempotent for StrictMode
+ * - G25: Already uses useTransition for concurrent updates
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading/pending states exposed
+ * - G34: Query reads side-effect free
  */
 
 import { Button } from '@/shared/ui/atoms/Button';
@@ -21,7 +31,7 @@ interface ReviewProps {
   caseId?: string;
 }
 
-export const Review: React.FC<ReviewProps> = ({ caseId }) => {
+export function Review({ caseId }: ReviewProps) {
   const { theme } = useTheme();
   const notify = useNotify();
 

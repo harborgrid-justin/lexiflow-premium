@@ -15,7 +15,7 @@ interface DiscoveryInterviewsProps {
   caseId?: string;
 }
 
-export const DiscoveryInterviews: React.FC<DiscoveryInterviewsProps> = ({ caseId }) => {
+export function DiscoveryInterviews({ caseId }: DiscoveryInterviewsProps) {
   const { theme } = useTheme();
   const interviewModal = useModalState();
 
@@ -72,7 +72,10 @@ export const DiscoveryInterviews: React.FC<DiscoveryInterviewsProps> = ({ caseId
 
       <InterviewList
         interviews={interviews}
-        onManage={(interview) => console.log('Manage', interview)}
+        onManage={(interview) => {
+          notify.info(`Managing interview: ${interview.title}`);
+          // TODO: Implement interview management modal
+        }}
       />
 
       <InterviewModal

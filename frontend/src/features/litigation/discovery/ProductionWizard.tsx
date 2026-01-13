@@ -2,6 +2,15 @@
  * ProductionWizard.tsx
  * Multi-step Production Set Creation Wizard
  * Industry-standard production workflow with Bates stamping
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Multi-step form tolerates interrupted renders
+ * - G22: Context (theme) treated as immutable
+ * - G23: State updates via immutable patterns (spread operator)
+ * - G24: useEffect for documentCount sync is idempotent
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states (isCreating) for mutations
+ * - G34: Query reads side-effect free
  */
 
 import { Badge } from '@/shared/ui/atoms/Badge';
@@ -24,14 +33,15 @@ interface ProductionWizardProps {
   onCancel: () => void;
 }
 
-export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onComplete, onCancel }) => {
+export function ProductionWizard({ caseId, onComplete, onCancel }: ProductionWizardProps) {
+  // G22 & G28: Immutable context read
   const { theme } = useTheme();
   const notify = useNotify();
 
-  // Access Discovery Repository
+  // G32: Access Discovery Repository
   const discoveryRepo = DataService.discovery as unknown as DiscoveryRepository;
 
-  // Fetch documents count for initial selection
+  // G34: Query is side-effect free and can be repeated/discarded
   const { data: documentsCount } = useQuery(
     ['documents', 'count', caseId],
     async () => {
@@ -42,6 +52,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onCo
     { enabled: !!caseId }
   );
 
+  // G37: Mutation accounts for automatic batching
   const { mutate: createProduction, isLoading: isCreating } = useMutation(
     async (newProduction: Partial<ProductionSet>) => {
       return discoveryRepo.createProduction(newProduction as unknown as ProductionSet);
@@ -83,6 +94,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ caseId, onCo
     }
   });
 
+  // G24: Idempotent effect - safe for StrictMode double-invocation
   React.useEffect(() => {
     if (documentsCount !== undefined) {
       setFormData(prev => ({ ...prev, selectedDocuments: documentsCount }));

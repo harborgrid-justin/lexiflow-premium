@@ -12,7 +12,7 @@ interface InterviewListProps {
   onManage: (interview: CustodianInterview) => void;
 }
 
-export const InterviewList: React.FC<InterviewListProps> = ({ interviews, onManage }) => {
+export function InterviewList({ interviews, onManage }: InterviewListProps) {
   const { theme } = useTheme();
 
   return (

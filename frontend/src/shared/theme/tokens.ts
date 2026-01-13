@@ -241,7 +241,8 @@ export const tokens = DEFAULT_TOKENS;
  */
 export function getTokens(
   mode: ThemeMode = "light",
-  density: ThemeDensity = "normal",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _density: ThemeDensity = "normal",
   fontMode: FontMode = "sans"
 ): DesignTokens {
   const baseTokens = { ...DEFAULT_TOKENS };

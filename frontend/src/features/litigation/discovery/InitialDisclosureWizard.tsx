@@ -11,7 +11,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
 import { InitialDisclosureWizardProps } from './types';
 
-export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = ({ onComplete }) => {
+export function InitialDisclosureWizard({ onComplete }: InitialDisclosureWizardProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const wizard = useWizard(4);

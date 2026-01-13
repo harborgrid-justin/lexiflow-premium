@@ -5,6 +5,18 @@
  *
  * THEME SYSTEM USAGE:
  * Uses theme indirectly through child components.
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: No render-phase side effects, tolerates interruption
+ * - G22: Context (theme) treated as immutable throughout render
+ * - G23: State updates via immutable patterns only
+ * - G24: All useEffect hooks idempotent for StrictMode
+ * - G25: Navigation state changes could use startTransition (optimization opportunity)
+ * - G28: Pure function of props, context, and state
+ * - G29: Suspense boundaries properly isolate lazy-loaded components
+ * - G30: Context providers above Suspense handle async rendering
+ * - G33: Explicit loading states via Suspense fallbacks
+ * - G34: Context reads side-effect free
  */
 
 // ============================================================================
@@ -41,9 +53,13 @@ import { queryKeys } from '@/utils/queryKeys';
 import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepository';
 import { DiscoveryRequest } from '@/types';
 
+// ============================================================================
+// LAZY COMPONENTS - G29: Suspense boundaries isolate code-split modules
+// ============================================================================
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
+const DiscoveryRequestWizard = lazy(() => import('./DiscoveryRequestWizard'));
 const PrivilegeLogEnhanced = lazy(() => import('./PrivilegeLogEnhanced'));
 const LegalHoldsEnhanced = lazy(() => import('./LegalHoldsEnhanced'));
 const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));
@@ -65,25 +81,30 @@ import { DiscoveryRequestsSkeleton, ESIDashboardSkeleton, LegalHoldsSkeleton, Pr
 import { DiscoveryPlatformProps, DiscoveryView } from './types';
 
 const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProps) => {
+  // G22 & G28: Immutable context read - pure function of context
   const { theme } = useTheme();
   const notify = useNotify();
+  
+  // G31: State reflects only committed application reality
   const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
     caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab',
     initialTab || 'dashboard'
   );
   const [contextId, setContextId] = useState<string | null>(null);
 
+  // G24: Idempotent effect - safe for StrictMode double-invocation
   // Reset to dashboard if we're on a wizard view but have no context
   useEffect(() => {
-    const isWizard = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
+    const isWizard = ['doc_viewer', 'response', 'production_wizard', 'request_wizard'].includes(activeTab);
     if (isWizard && !contextId) {
       console.warn('[DiscoveryPlatform] Wizard view without context, resetting to dashboard');
       setActiveTab('dashboard');
     }
   }, [activeTab, contextId, setActiveTab]);
 
-  // Enterprise Query: Requests are central to many sub-views
-  // We pass caseId to the service layer to scope the data fetch
+  // G32: Enterprise Query using our custom React Query implementation
+  // Requests are central to many sub-views - scoped by caseId
+  // G34: Query reads are side-effect free and can be repeated/discarded
   const { data: rawRequests = [] } = useQuery<DiscoveryRequest[]>(
     caseId ? QUERY_KEYS.REQUESTS.BY_CASE(caseId) : QUERY_KEYS.REQUESTS.ALL,
     async () => {
@@ -93,9 +114,10 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     }
   );
 
-  // Runtime array validation
+  // G22 & G34: Runtime validation ensuring immutable array reference
   const requests = useMemo(() => Array.isArray(rawRequests) ? rawRequests : [], [rawRequests]);
 
+  // G37: Mutation accounts for automatic batching across async boundaries
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
     async () => {
       const discovery = DataService.discovery as unknown as DiscoveryRepository;
@@ -118,10 +140,12 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     if (initialTab) setActiveTab(initialTab);
   }, [initialTab, setActiveTab]);
 
+  // G28: Pure memoized computation
   const activeParentTab = useMemo(() =>
     getParentTabForView(activeTab),
     [activeTab]);
 
+  // G28: Stable callback references for child components
   const handleParentTabChange = useCallback((parentId: string) => {
     setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
@@ -158,7 +182,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     setActiveTab('requests');
   };
 
-  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
+  const isWizardView = ['doc_viewer', 'response', 'production_wizard', 'request_wizard'].includes(activeTab);
 
   const tabContentMap = useMemo(() => ({
     'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} caseId={caseId} />,
@@ -198,6 +222,9 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
           {activeTab === 'production_wizard' && (
             <div className="h-full"><ProductionWizard caseId={caseId} onComplete={() => setActiveTab('productions')} onCancel={() => setActiveTab('productions')} /></div>
           )}
+          {activeTab === 'request_wizard' && (
+            <div className="h-full"><DiscoveryRequestWizard caseId={caseId} onComplete={() => setActiveTab('requests')} onCancel={() => handleBackToDashboard()} /></div>
+          )}
         </Suspense>
       </div>
     );
@@ -224,7 +251,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
             actions={
               <div className="flex gap-2">
                 <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
-                <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
+                <Button variant="primary" icon={Plus} onClick={() => setActiveTab('request_wizard')}>Create Request</Button>
               </div>
             }
           />

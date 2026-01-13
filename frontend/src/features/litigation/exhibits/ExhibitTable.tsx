@@ -63,6 +63,7 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
             `Exhibit ${ex.exhibitNumber}`,
             <div className={cn("h-full", theme.surface.default)}>
                 <DocumentPreviewPanel
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     document={{ id: ex.id as string } as any}
                     onViewHistory={() => { }}
                 />

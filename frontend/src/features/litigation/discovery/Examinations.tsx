@@ -18,7 +18,7 @@ interface ExaminationsProps {
     caseId?: string;
 }
 
-export const Examinations: React.FC<ExaminationsProps> = ({ caseId }) => {
+export function Examinations({ caseId }: ExaminationsProps) {
     const { theme } = useTheme();
     const examModal = useModalState();
     const [newExam, setNewExam] = useState<Partial<Examination>>({});

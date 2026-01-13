@@ -20,6 +20,7 @@ export type DiscoveryView =
   | "doc_viewer"
   | "response"
   | "production_wizard"
+  | "request_wizard"
   | "productions"
   | "depositions"
   | "esi"

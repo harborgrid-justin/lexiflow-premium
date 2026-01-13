@@ -14,9 +14,9 @@ interface DiscoveryNavigationProps {
 
 const PARENT_TABS = DISCOVERY_TAB_CONFIG;
 
-export const DiscoveryNavigation: React.FC<DiscoveryNavigationProps> = ({
+export function DiscoveryNavigation({
   activeTab, setActiveTab, activeParentTabId, onParentTabChange
-}) => {
+}: DiscoveryNavigationProps) {
   const { theme } = useTheme();
 
   const activeParentTab = PARENT_TABS.find(p => p.id === activeParentTabId) || PARENT_TABS[0];

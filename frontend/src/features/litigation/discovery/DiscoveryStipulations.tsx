@@ -92,7 +92,7 @@ const INITIAL_STIPULATION_STATE: Partial<StipulationRequest> = {
  * @param props - Component props
  * @param props.caseId - Optional case ID to filter stipulations
  */
-export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ caseId }) => {
+export function DiscoveryStipulations({ caseId }: DiscoveryStipulationsProps) {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================

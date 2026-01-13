@@ -11,7 +11,7 @@ interface InterviewModalProps {
   onSave: (interview: Partial<CustodianInterview>) => void;
 }
 
-export const InterviewModal: React.FC<InterviewModalProps> = ({ isOpen, onClose, onSave }) => {
+export function InterviewModal({ isOpen, onClose, onSave }: InterviewModalProps) {
   const [interview, setInterview] = useState<Partial<CustodianInterview>>({});
 
   const handleSave = () => {

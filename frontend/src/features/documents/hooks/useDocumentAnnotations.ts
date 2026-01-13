@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Annotation } from '../types/DocumentAnnotationsProps';
 import { DocumentsApiService } from '@/api/admin/documents-api';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
@@ -20,7 +20,7 @@ export const useDocumentAnnotations = ({
   currentPage = 1
 }: UseDocumentAnnotationsProps) => {
   // Fetch annotations from backend
-  const { data: backendAnnotations = [], isLoading } = useQuery(
+  const { data: backendAnnotations = [] } = useQuery(
     queryKeys.documents.annotations(documentId),
     async () => {
       try {
@@ -38,6 +38,7 @@ export const useDocumentAnnotations = ({
   // Add annotation mutation
   const { mutate: addAnnotationMutation } = useMutation(
     async (annotation: Omit<Annotation, 'id' | 'createdAt'>) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await documentsApi.addAnnotation(documentId, annotation as any);
     },
     {

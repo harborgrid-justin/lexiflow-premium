@@ -2,6 +2,15 @@
  * LegalHoldsEnhanced.tsx
  * Enhanced Legal Hold Management with Notification Tracking
  * Tracks custodian acknowledgments and escalations
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: No render-phase side effects
+ * - G22: Context (theme) immutable throughout render
+ * - G23: State updates via immutable patterns
+ * - G24: All effects idempotent for StrictMode
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states (isLoading)
+ * - G34: Query reads side-effect free
  */
 
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
@@ -19,14 +28,17 @@ import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, BarChart, CheckCircle, Clock, Eye, Mail, Plus, Send } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { LegalHoldWizard } from './LegalHoldWizard';
+
 interface LegalHoldsEnhancedProps {
   caseId?: string;
 }
 
-export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }) => {
+export function LegalHoldsEnhanced({ caseId }: LegalHoldsEnhancedProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const detailsModal = useModalState();
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const [selectedHold, setSelectedHold] = useState<LegalHoldEnhanced | null>(null);
 
@@ -149,7 +161,7 @@ export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }
             <h3 className={cn("font-bold text-lg", theme.text.primary)}>Legal Holds</h3>
             <p className={cn("text-sm", theme.text.secondary)}>Track preservation obligations and custodian acknowledgments</p>
           </div>
-          <Button variant="primary" icon={Plus}>
+          <Button variant="primary" icon={Plus} onClick={() => setIsWizardOpen(true)}>
             Issue New Hold
           </Button>
         </div>
@@ -292,6 +304,14 @@ export const LegalHoldsEnhanced: React.FC<LegalHoldsEnhancedProps> = ({ caseId }
           </div>
         )}
       </Modal>
+
+      {isWizardOpen && (
+        <LegalHoldWizard 
+          caseId={caseId} 
+          onComplete={() => setIsWizardOpen(false)} 
+          onCancel={() => setIsWizardOpen(false)} 
+        />
+      )}
     </div>
   );
 };

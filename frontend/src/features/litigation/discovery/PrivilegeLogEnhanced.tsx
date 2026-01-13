@@ -2,6 +2,14 @@
  * PrivilegeLogEnhanced.tsx
  * Enhanced Privilege Log with Export Capability
  * Comprehensive privilege assertion and logging
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Tolerates interrupted renders
+ * - G22: Context (theme) treated as immutable
+ * - G23: Filter state updates via immutable patterns
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states (isLoading)
+ * - G34: Query reads side-effect free, can be repeated
  */
 
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
@@ -21,7 +29,7 @@ interface PrivilegeLogEnhancedProps {
   caseId?: string;
 }
 
-export const PrivilegeLogEnhanced: React.FC<PrivilegeLogEnhancedProps> = ({ caseId }) => {
+export function PrivilegeLogEnhanced({ caseId }: PrivilegeLogEnhancedProps) {
   const { theme } = useTheme();
   const notify = useNotify();
 

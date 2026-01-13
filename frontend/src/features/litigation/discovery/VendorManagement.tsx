@@ -21,6 +21,13 @@
  * Convention: Use semantic tokens from theme, NOT raw Tailwind colors
  * ✅ className={theme.text.primary}
  * ❌ className="text-slate-900 dark:text-white"
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Pure rendering, no render-phase mutations
+ * - G22: Context (theme) immutable throughout
+ * - G23: State updates immutable
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states
  */
 
 // ============================================================================

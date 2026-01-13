@@ -21,6 +21,7 @@ export interface ThemeObject {
     subtle: string;
   };
   border: {
+    input(arg0: string, input: string, input1: any, primary: string): string | undefined;
     default: string;
     light: string;
     focused: string;

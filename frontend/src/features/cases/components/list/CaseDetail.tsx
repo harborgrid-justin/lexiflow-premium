@@ -24,7 +24,7 @@ import { MatterForm } from './matter-form';
 import { useCaseNavigation } from '@/features/cases/hooks/useCaseNavigation';
 
 export const CaseDetail: React.FC = () => {
-  const { matterId, navigate, backToMatters, isValidMatter } = useCaseNavigation();
+  const { matterId, backToMatters, isValidMatter } = useCaseNavigation();
 
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);

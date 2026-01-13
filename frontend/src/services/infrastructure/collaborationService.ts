@@ -112,19 +112,12 @@ import {
 import { OperationError, ValidationError } from "@/services/core/errors";
 import EventEmitter from "eventemitter3";
 import type {
-  CollaborationConfig,
   CollaborativeEdit,
+  CollaborationConfig,
   CursorPosition,
   DocumentLock,
-  EditConflict,
   UserPresence,
-  WSMessage,
-  WSMessageType,
 } from "./collaboration/types";
-import { COLLABORATION_MAX_PENDING_EDITS } from '@/config/features/services.config';
-
-// Import types from separate file
-export * from "./collaboration/types";
 
 /**
  * Union type for all possible WebSocket message payloads

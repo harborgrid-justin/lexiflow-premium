@@ -18,7 +18,7 @@ interface DiscoveryTimelineProps {
   caseId?: string;
 }
 
-export const DiscoveryTimeline: React.FC<DiscoveryTimelineProps> = ({ caseId }) => {
+export function DiscoveryTimeline({ caseId }: DiscoveryTimelineProps) {
   const { theme } = useTheme();
 
   const { data: events = [], isLoading } = useQuery<DiscoveryTimelineEvent[]>(

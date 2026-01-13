@@ -78,9 +78,9 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Use the custom hook for document loading
-  const { pdfDoc, loading, error, pdfjsReady } = usePDFViewer(url);
+  const { pdfDoc, loading, error } = usePDFViewer(url);
   
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum] = useState(1);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [containerWidth, setContainerWidth] = useState<number>(0);
 

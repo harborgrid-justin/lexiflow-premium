@@ -147,6 +147,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
             `Evidence Preview: ${item.title}`,
             <div className={cn("h-full", theme.background)}>
                 <DocumentPreviewPanel
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     document={{ id: item.id } as any} onViewHistory={() => { }}
 
                 />

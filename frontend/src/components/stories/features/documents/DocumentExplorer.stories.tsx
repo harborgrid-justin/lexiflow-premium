@@ -6,8 +6,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocumentExplorer } from '../../../../features/operations/documents/DocumentExplorer';
-import { ToastProvider } from '@/providers';
-import { WindowProvider } from '@/providers';
 
 const meta: Meta<typeof DocumentExplorer> = {
   title: 'Documents/Document Explorer',

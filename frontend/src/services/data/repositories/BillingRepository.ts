@@ -382,6 +382,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         invoiceNumber: inv.invoiceNumber,
         amount: inv.total,
         daysOverdue: Math.floor(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (new Date().getTime() - new Date(inv.dueDate as any).getTime()) /
             (1000 * 60 * 60 * 24)
         ),

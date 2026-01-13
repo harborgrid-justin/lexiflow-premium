@@ -38,7 +38,7 @@ import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 
 // Types
-import { Invoice } from '@/types';
+// Removed unused Invoice import
 
 // ============================================================================
 // TYPES

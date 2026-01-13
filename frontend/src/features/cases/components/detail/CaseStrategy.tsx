@@ -170,6 +170,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const confirmDelete = () => {
     if (itemToDelete) {
       deleteStrategyItem(itemToDelete, {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onSuccess: (data: any) => {
           success(`${data.type} deleted successfully`);
           

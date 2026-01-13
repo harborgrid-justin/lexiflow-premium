@@ -64,6 +64,7 @@ export class BillingRepository extends BillingRepositoryBase {
   // =============================================================================
 
   override async getAll(): Promise<TimeEntry[]> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return timeEntryOps.getAllTimeEntries(this.billingApi as any);
   }
 

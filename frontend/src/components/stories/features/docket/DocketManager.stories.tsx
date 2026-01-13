@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DocketManager } from '@/features/cases/components/docket/DocketManager';
 
-import { WindowProvider } from '@/providers';
-
 /**
  * DocketManager is the top-level docket management page that provides
  * comprehensive docket functionality including sheet view, calendar, analytics,

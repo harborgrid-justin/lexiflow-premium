@@ -1,5 +1,15 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button';
+/**
+ * TranscriptManager.tsx
+ * Deposition transcript management and search
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Renders interruptible
+ * - G22: Context immutable read
+ * - G28: Pure function of context
+ */
+
 import { useTheme } from '@/features/theme';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

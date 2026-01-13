@@ -42,7 +42,7 @@ const loadDocumentService = async () => {
 // ============================================================================
 import { DiscoveryProductionProps } from './types';
 
-export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ request, onBack }) => {
+export function DiscoveryProduction({ request, onBack }: DiscoveryProductionProps) {
   const { theme } = useTheme();
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);

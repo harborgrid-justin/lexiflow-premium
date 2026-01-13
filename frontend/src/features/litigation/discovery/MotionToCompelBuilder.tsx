@@ -4,6 +4,16 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
+/**
+ * MotionToCompelBuilder.tsx
+ * Automated motion to compel discovery builder
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Pure rendering, interruptible
+ * - G22: Context immutable throughout
+ * - G28: Pure function of props and context
+ */
+
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { sanitizeHtml } from '@/shared/lib/sanitize';
@@ -16,7 +26,7 @@ interface MotionToCompelBuilderProps {
   onCancel: () => void;
 }
 
-export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ requests, onCancel }) => {
+export function MotionToCompelBuilder({ requests, onCancel }: MotionToCompelBuilderProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const deficientRequests = requests.filter(r => r.status === 'Overdue' || r.status === 'Responded');

@@ -18,7 +18,7 @@ interface DiscoveryResponseModalProps {
   onClose: () => void;
 }
 
-export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ request, onClose }) => {
+export function DiscoveryResponseModal({ request, onClose }: DiscoveryResponseModalProps) {
   const [draftResponse, setDraftResponse] = useState('');
   const [isDrafting, setIsDrafting] = useState(false);
   const { theme } = useTheme();

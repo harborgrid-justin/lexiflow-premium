@@ -5,7 +5,6 @@
  * Displays real-time metrics, activity feeds, deadlines, and analytics
  */
 
-import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/features/theme';
 import { useDashboardOverview } from '../hooks/useDashboardOverview';
 import { CHART_COLORS } from '@/config/dashboard.config';

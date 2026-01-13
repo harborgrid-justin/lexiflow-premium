@@ -1,6 +1,16 @@
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
+/**
+ * RequestForAdmission.tsx
+ * Request for admission builder and tracker
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Pure rendering
+ * - G22: Context immutable
+ * - G28: Pure function of context
+ */
+
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

@@ -1,5 +1,4 @@
 import { REPOSITORY_CACHE_MAX_SIZE } from "@/config/database/cache.config";
-import { REPOSITORY_MAX_LISTENERS } from '@/config/features/services.config';
 import { queryClient } from "@/services/infrastructure/queryClient";
 import { BaseEntity, UserId } from "@/types";
 import { errorHandler } from "@/utils/errorHandler";

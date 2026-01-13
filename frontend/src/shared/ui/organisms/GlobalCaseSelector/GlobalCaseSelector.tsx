@@ -6,7 +6,6 @@ import { Briefcase } from 'lucide-react';
 import React, { useCallback } from 'react';
 
 export const GlobalCaseSelector: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { selectedCaseId, selectCase } = useCaseContext();
 
   const fetchCases = useCallback(async (query: string): Promise<Case[]> => {

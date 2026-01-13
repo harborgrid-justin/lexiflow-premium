@@ -1,3 +1,18 @@
+/**
+ * Custodians.tsx
+ * Custodian Management for Legal Holds and Discovery
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: No render-phase side effects, pure rendering
+ * - G22: Context (theme) immutable read
+ * - G23: State mutations via immutable patterns (spread)
+ * - G24: All effects idempotent for StrictMode
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading/pending states
+ * - G34: Queries side-effect free
+ * - G37: Mutations handle automatic batching
+ */
+
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
@@ -33,7 +48,7 @@ interface CustodiansProps {
   caseId?: string;
 }
 
-export const Custodians: React.FC<CustodiansProps> = ({ caseId }) => {
+export function Custodians({ caseId }: CustodiansProps) {
   const { theme } = useTheme();
   const notify = useNotify();
 

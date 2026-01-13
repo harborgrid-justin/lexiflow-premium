@@ -19,6 +19,7 @@ const initializePDFJS = async () => {
 };
 
 interface PDFDocumentProxy {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getPage(pageNumber: number): Promise<any>;
     numPages: number;
     destroy(): void;

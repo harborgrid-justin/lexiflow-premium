@@ -91,6 +91,32 @@ export class LegalHoldPrivilegeService {
       return [];
     }
   }
+
+  /**
+   * Create a new legal hold
+   *
+   * @param data - Legal hold data
+   * @returns Promise<LegalHold> Created legal hold
+   */
+  async createLegalHold(data: Partial<LegalHold>): Promise<LegalHold> {
+    try {
+      return (await discoveryApi.legalHolds.create(data)) as unknown as LegalHold;
+    } catch (error) {
+      console.error("[LegalHoldPrivilegeService.createLegalHold] Error:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send reminder to custodians
+   * 
+   * @param holdId - ID of the legal hold
+   */
+  async sendReminder(holdId: string): Promise<void> {
+      // Mock implementation for now as API doesn't have specific endpoint exposed in snippets
+      console.log(`[LegalHoldPrivilegeService] Sending reminder for hold ${holdId}`);
+      return Promise.resolve();
+  }
 }
 
 export const legalHoldPrivilegeService = new LegalHoldPrivilegeService();

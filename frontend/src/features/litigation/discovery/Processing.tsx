@@ -2,6 +2,14 @@
  * Processing.tsx
  * Processing Queue Management for E-Discovery
  * Manage document processing jobs and workflows
+ * 
+ * REACT V18 CONCURRENT-SAFE:
+ * - G21: Pure rendering, no render-phase mutations
+ * - G22: Context (theme) treated as immutable
+ * - G28: Pure function of props and context
+ * - G33: Explicit loading states (isLoading, mutation loading)
+ * - G34: Query reads are side-effect free
+ * - G37: Mutations account for automatic batching
  */
 
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
@@ -22,7 +30,7 @@ interface ProcessingProps {
   caseId?: string;
 }
 
-export const Processing: React.FC<ProcessingProps> = ({ caseId }) => {
+export function Processing({ caseId }: ProcessingProps) {
   const { theme } = useTheme();
   const notify = useNotify();
 

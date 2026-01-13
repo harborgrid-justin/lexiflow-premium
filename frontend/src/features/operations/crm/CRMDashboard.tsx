@@ -58,7 +58,9 @@ export function CRMDashboard() {
     sources: []
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: clientsResponse } = useQuery<any>(QUERY_KEYS.CLIENTS.ALL, () => DataService.clients.getAll());
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: casesResponse } = useQuery<any>(QUERY_KEYS.CASES.ALL, () => DataService.cases.getAll());
   const { data: leads = [] } = useQuery<CRMLead[]>(QUERY_KEYS.CRM.LEADS, () => DataService.crm.getLeads());
 

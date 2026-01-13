@@ -26,7 +26,7 @@ interface ESISourcesListProps {
   caseId?: string;
 }
 
-export const ESISourcesList: React.FC<ESISourcesListProps> = ({ caseId }) => {
+export function ESISourcesList({ caseId }: ESISourcesListProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const createModal = useModalState();

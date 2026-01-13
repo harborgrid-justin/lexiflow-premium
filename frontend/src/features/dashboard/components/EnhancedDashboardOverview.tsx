@@ -19,7 +19,6 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
-import React from 'react';
 import {
   Bar,
   BarChart,

@@ -5,7 +5,6 @@
  * Includes functionality to request a transfer.
  */
 
-import React from 'react';
 import { MapPin } from 'lucide-react';
 
 // Common Components

@@ -5,7 +5,7 @@ import { DataService } from '@/services/data/dataService';
 import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
-import React, { Suspense, lazy, useCallback, useState } from 'react';
+import { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';

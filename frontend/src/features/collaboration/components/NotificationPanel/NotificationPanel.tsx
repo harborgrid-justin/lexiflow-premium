@@ -11,7 +11,7 @@ import type { NotificationGroup, UINotification } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Clock, Info, X } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Use the Notification type from NotificationDomain service
 interface Notification {

@@ -9,7 +9,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Wand2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 

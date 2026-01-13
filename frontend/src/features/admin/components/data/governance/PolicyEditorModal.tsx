@@ -5,7 +5,7 @@ import { useTheme } from '@/features/theme';
 import { RLSPolicy, SqlCmd } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Check, Code, Shield } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface PolicyEditorModalProps {
     isOpen: boolean;

@@ -6,7 +6,7 @@
  */
 
 import { AlertOctagon, Layers, Link, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Common Components
 import { SignaturePad } from '@/features/discovery/ui/components/SignaturePad/SignaturePad';

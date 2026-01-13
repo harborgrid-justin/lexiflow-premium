@@ -9,7 +9,7 @@ import { CaseId, CommunicationItem, DocketEntry, DocketId, DocumentId, EvidenceI
 import { ServiceStatus } from '@/types/enums';
 import { cn } from '@/shared/lib/cn';
 import { Archive, BookOpen, Briefcase, CheckSquare, Download, FileText, Mail, MapPin, Navigation, PenTool, Truck, UploadCloud, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Discriminated union type for correspondence items
 type CorrespondenceItem =

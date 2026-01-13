@@ -27,7 +27,7 @@ import {
   TrendingUp,
   Users
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // COMPONENT

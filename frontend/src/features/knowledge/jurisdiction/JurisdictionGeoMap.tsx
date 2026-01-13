@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Map, RefreshCw, Layers, Navigation } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

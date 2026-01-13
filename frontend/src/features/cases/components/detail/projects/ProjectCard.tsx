@@ -8,7 +8,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Calendar, CheckCircle, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components

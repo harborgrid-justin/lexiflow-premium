@@ -4,7 +4,6 @@
  * @description Case analytics and reporting page - data-driven case insights
  */
 
-import React from 'react';
 import { CaseAnalyticsDashboard } from '@/features/cases/components/analytics/CaseAnalyticsDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

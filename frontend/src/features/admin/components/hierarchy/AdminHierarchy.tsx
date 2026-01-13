@@ -6,7 +6,7 @@ import { Group, GroupId, Organization, User as UserType } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Loader2, Plus, Shield, Users } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { HierarchyColumn } from './HierarchyColumn';
 import { GroupListItem, OrgListItem, UserListItem } from './HierarchyRows';
 

@@ -1,8 +1,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { BarChart3, Briefcase, Building, Database, DollarSign, FileCheck, GraduationCap, Import, Map as MapIcon, Network, Scale, Share2, ShieldAlert, Users } from 'lucide-react';
-import React from 'react';
-
 export type DirectorView =
   | 'directory' | 'network' | 'hierarchy' | 'conflicts' | 'map' | 'analytics' | 'ingestion' | 'governance' | 'vendors'
   | 'ubo_register' | 'kyc_docs'

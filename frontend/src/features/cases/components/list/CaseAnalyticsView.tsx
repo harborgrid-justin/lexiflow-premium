@@ -10,7 +10,7 @@ import { DataService } from '@/services/data/dataService';
 import { Matter } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { BarChart3, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 export const CaseAnalyticsView: React.FC = React.memo(() => {
   const { data: matters = [] } = useQuery<Matter[]>(

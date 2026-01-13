@@ -1,8 +1,6 @@
 import { SLAItem, useSLAMonitoring } from '@/hooks/useSLAMonitoring';
 import { cn } from '@/shared/lib/cn';
 import { Clock, Loader2 } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // TYPES
 // ============================================================================

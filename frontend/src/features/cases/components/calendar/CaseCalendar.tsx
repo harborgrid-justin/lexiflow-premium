@@ -31,7 +31,7 @@ import {
   Download,
   MapPin
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type CalendarView = 'month' | 'week' | 'day' | 'agenda';
 

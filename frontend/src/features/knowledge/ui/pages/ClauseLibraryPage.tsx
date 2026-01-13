@@ -7,8 +7,6 @@
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import ClauseLibrary from '@/features/knowledge/clauses/ClauseLibrary';
 import type { Clause } from '@/types/pleadings';
-import React from 'react';
-
 /**
  * ClauseLibraryPage - React 18 optimized with React.memo
  */

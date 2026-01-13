@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { MessageSquare } from 'lucide-react';

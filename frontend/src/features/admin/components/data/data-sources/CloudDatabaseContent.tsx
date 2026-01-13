@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
 import type { ConnectionFormData, ConnectionStatus, DataConnection } from './types';

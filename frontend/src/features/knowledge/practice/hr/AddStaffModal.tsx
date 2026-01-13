@@ -4,7 +4,7 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/features/theme';
 import { StaffMember } from '@/types';
 import { cn } from '@/shared/lib/cn';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface AddStaffModalProps {
   isOpen: boolean;

@@ -13,7 +13,7 @@ import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
-import React, { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
 import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
 import { Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
 

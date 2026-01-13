@@ -11,7 +11,7 @@ import { LegalEntity } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertTriangle, Building, Download, Network, Plus, ShieldCheck, User } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 interface UboRegisterProps {
   entities: LegalEntity[];

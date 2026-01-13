@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play, Plus, RefreshCw, Server, Settings } from 'lucide-react';
 

@@ -11,7 +11,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
-import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const AdminDashboard: React.FC = () => {

@@ -3,8 +3,6 @@ import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/features/theme';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
-
 interface DocumentGridCardProps {
     doc: LegalDocument;
     isSelected: boolean;

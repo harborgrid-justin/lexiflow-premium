@@ -6,7 +6,7 @@
  * - ApiGateway: Data-fetching view (uses query hook, renders only)
  * - All browser interactions delegated to callbacks
  */
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { ChevronRight, Loader2, Server } from 'lucide-react';
 

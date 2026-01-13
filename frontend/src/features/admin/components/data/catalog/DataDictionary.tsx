@@ -9,7 +9,7 @@ import { DataService } from '@/services/data/dataService';
 import { DataDictionaryItem } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Eye, Filter, Loader2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DictionaryItemDetail } from './DictionaryItemDetail';
 
 export const DataDictionary: React.FC = () => {

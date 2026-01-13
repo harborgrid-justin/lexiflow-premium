@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   Bar,
   BarChart,

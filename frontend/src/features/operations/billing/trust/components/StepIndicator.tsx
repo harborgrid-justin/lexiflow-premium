@@ -6,8 +6,6 @@
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
 import type { LucideIcon } from 'lucide-react';
-import React from 'react';
-
 export interface Step {
   id: number;
   label: string;

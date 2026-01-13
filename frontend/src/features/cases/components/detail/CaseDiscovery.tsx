@@ -9,8 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
-
 // Internal Dependencies - Components
 import { DiscoveryPlatform } from '@features/litigation';
 

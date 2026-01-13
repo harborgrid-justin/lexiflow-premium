@@ -1,4 +1,3 @@
-import React from 'react';
 import { Variable, Database, RefreshCw } from 'lucide-react';
 import { PleadingVariable } from '@/types';
 import { useTheme } from '@/features/theme';

@@ -8,8 +8,6 @@
  */
 
 // External Dependencies
-import React from 'react';
-
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
 

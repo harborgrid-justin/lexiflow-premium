@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components

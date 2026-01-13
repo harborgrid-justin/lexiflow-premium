@@ -11,8 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, Loader2, MapPin, ShieldAlert } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================

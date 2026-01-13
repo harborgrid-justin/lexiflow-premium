@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { DollarSign } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';

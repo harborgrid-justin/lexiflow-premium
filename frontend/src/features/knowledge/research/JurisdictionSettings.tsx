@@ -2,8 +2,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Globe } from 'lucide-react';
-import React from 'react';
-
 export const JurisdictionSettings: React.FC = () => {
     const { theme } = useTheme();
 

@@ -6,7 +6,6 @@ import { DataService } from '@/services/data/dataService';
 import { DataProfile } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, AlignLeft, Calendar, CheckCircle2, Hash, Loader2 } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 /**

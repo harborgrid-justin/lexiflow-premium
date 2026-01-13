@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { ParallelTasksManager } from './ParallelTasksManager';

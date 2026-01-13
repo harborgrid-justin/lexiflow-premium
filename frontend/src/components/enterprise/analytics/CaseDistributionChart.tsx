@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Cell,
   Legend,

@@ -10,7 +10,7 @@ import { useModalState, useNotify } from '@/hooks/core';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const webhooksApi = new WebhooksApiService();
 

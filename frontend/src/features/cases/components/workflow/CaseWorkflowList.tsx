@@ -1,4 +1,3 @@
-import React from 'react';
 import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } from 'lucide-react';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';

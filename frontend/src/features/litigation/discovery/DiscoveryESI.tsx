@@ -11,8 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { CheckCircle, Database, HardDrive, Loader2, Mail, Play, Plus, Server, Shield } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================

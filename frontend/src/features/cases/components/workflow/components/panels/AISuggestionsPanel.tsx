@@ -8,7 +8,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Sparkles } from 'lucide-react';
-import React from 'react';
 import type { AIWorkflowSuggestion } from '@/types/workflow-advanced-types';
 
 interface AISuggestionsPanelProps {

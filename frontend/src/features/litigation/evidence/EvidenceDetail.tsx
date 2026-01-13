@@ -6,8 +6,6 @@
  */
 
 import { ArrowLeft, ExternalLink, FileSearch, Lock, Stamp } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';

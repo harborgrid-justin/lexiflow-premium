@@ -9,7 +9,7 @@ import { BluebookFormatter as Formatter } from '@/services/features/bluebook/blu
 import { BluebookParser } from '@/services/features/bluebook/bluebookParser';
 import { CitationFormat, ExportFormat } from '@/types/bluebook';
 import { BookOpen } from 'lucide-react';
-import React, { useCallback, useDeferredValue, useState } from 'react';
+import { useCallback, useDeferredValue, useState } from 'react';
 import { exportToHTML, exportToJSON, exportToText, generateTableOfAuthorities } from './exportUtils';
 import { HelpSection } from './HelpSection';
 import { InputSection } from './InputSection';

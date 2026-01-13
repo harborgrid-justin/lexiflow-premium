@@ -8,7 +8,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Filter } from 'lucide-react';
 
 // Internal Dependencies - Components

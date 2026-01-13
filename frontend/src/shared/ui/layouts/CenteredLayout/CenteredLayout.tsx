@@ -4,7 +4,6 @@
  * @description Centered content layout for auth pages, empty states, and focused content.
  */
 
-import React from 'react';
 import { cn } from '@/shared/lib/cn';
 
 interface CenteredLayoutProps {

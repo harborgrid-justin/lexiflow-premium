@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { FormattingRule } from '@/types';
 import { cn } from '@/shared/lib/cn';
 

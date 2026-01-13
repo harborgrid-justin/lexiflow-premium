@@ -4,7 +4,7 @@ import { useTheme } from '@/features/theme';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface AIDraftingAssistantProps {
     onInsert: (text: string) => void;

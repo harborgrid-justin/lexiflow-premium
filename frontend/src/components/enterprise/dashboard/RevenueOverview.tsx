@@ -4,11 +4,11 @@
  * @description Revenue and billing overview widget with charts
  */
 
+import React, { useState } from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';
 import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
-import React, { useState } from 'react';
 import {
   Area,
   AreaChart,

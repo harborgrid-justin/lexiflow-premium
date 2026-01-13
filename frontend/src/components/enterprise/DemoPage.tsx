@@ -13,7 +13,7 @@
  */
 
 import { Activity, BarChart3, LineChart } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AnalyticsWidgets } from './AnalyticsWidgets';
 import { EnterpriseDashboard } from './EnterpriseDashboard';
 

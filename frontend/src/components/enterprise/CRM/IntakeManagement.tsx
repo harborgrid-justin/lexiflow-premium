@@ -26,7 +26,7 @@ import {
   UserPlus,
   XCircle
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // TYPES

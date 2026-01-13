@@ -12,8 +12,6 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React from 'react';
-
 export type SecurityLevel = 'secure' | 'warning' | 'danger';
 
 export interface SecurityStatus {

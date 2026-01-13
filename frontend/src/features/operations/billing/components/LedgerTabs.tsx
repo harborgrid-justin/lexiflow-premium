@@ -1,7 +1,5 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
-
 interface LedgerTabsProps {
   activeTab: 'operating' | 'trust';
   onTabChange: (tab: 'operating' | 'trust') => void;

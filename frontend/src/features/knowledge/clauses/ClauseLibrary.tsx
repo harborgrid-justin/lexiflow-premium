@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { FileText, Plus, Search, Tag } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

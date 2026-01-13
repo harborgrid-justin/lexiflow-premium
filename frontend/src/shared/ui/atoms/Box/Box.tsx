@@ -7,7 +7,6 @@
  * abstraction over div elements with design system integration.
  */
 
-import React from 'react';
 import { cn } from '@/shared/lib/cn';
 import { 
   spacingClasses, 

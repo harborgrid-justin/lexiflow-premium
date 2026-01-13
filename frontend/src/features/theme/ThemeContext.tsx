@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState, useTransition, useRef, useCallback } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState, useTransition, useRef, useCallback } from 'react';
 import { ThemeObject } from './ThemeContext.types';
 import { DEFAULT_TOKENS, DesignTokens, ThemeDensity, getTokens } from './tokens';
 import { UI_CONFIG } from '../../config/features/ui.config';
@@ -77,7 +77,7 @@ const createTheme = (tokens: DesignTokens): ThemeObject => ({
     muted: tokens.colors.textMuted,
   },
   border: {
-    input: (arg0: string, input: string, input1: unknown, primary: string) => tokens.colors.border,
+    input: (_arg0: string, _input: string, _input1: unknown, _primary: string) => tokens.colors.border,
     default: tokens.colors.border,
     light: tokens.colors.borderLight,
     focused: tokens.colors.primary,
@@ -157,6 +157,29 @@ const createTheme = (tokens: DesignTokens): ThemeObject => ({
       border: tokens.colors.border,
       text: tokens.colors.text,
     }
+  },
+  colors: {
+    border: tokens.colors.border,
+    textMuted: tokens.colors.textMuted,
+    info: tokens.colors.info,
+    success: tokens.colors.success,
+    warning: tokens.colors.warning,
+    surface: tokens.colors.surface,
+    text: tokens.colors.text,
+  },
+  typography: {
+    sizes: {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+    },
+  },
+  borderRadius: {
+    sm: '0.25rem',
+    md: '0.375rem',
+    lg: '0.5rem',
   }
 });
 

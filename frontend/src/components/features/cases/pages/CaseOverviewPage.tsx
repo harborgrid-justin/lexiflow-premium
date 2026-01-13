@@ -4,7 +4,6 @@
  * @description Case overview dashboard page - comprehensive case insights and status
  */
 
-import React from 'react';
 import { CaseOverviewDashboard } from '@/features/cases/components/overview/CaseOverviewDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

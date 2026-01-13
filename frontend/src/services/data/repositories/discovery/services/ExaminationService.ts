@@ -72,7 +72,7 @@ export class ExaminationService {
 
     try {
       return await apiClient.get<Transcript[]>("/discovery/transcripts", {
-        { params: { caseId } }
+        params: { caseId }
       });
     } catch (error) {
       console.error("[ExaminationService.getTranscripts] Error:", error);

@@ -9,7 +9,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { AuditLogEntry } from '@/types';
 import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AuditLogControls } from './audit/AuditLogControls';
 import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 

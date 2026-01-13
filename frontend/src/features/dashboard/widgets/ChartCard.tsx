@@ -9,7 +9,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

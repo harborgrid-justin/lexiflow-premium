@@ -15,8 +15,8 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { Clock, FileText, Menu, PlusCircle, UserPlus } from 'lucide-react';
 import React, { useState } from 'react';
+import { Clock, FileText, Menu, PlusCircle, UserPlus } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

@@ -11,8 +11,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { AlertTriangle, CheckCircle2, Clock, FileText } from 'lucide-react';
-import React from 'react';
-
 export const ParalegalDashboard: React.FC = () => {
   const { theme } = useTheme();
 

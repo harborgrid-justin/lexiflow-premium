@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { MapPin, Truck, User } from 'lucide-react';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

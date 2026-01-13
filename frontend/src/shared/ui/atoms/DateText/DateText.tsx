@@ -4,8 +4,8 @@
  * @description Formatted date display with optional calendar icon
  */
 
-import React from 'react';
 import { Calendar } from 'lucide-react';
+import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';

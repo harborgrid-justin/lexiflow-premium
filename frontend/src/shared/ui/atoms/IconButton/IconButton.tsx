@@ -5,7 +5,6 @@
  * Replaces repeated inline button patterns
  */
 
-import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { getButtonClasses, getIconClasses, variantClasses, sizeClasses } from './IconButton.styles';
 

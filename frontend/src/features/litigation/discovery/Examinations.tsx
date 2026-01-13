@@ -7,7 +7,7 @@ import { DataService } from '@/services/data/dataService';
 import { Examination } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, Plus, Stethoscope, User } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';

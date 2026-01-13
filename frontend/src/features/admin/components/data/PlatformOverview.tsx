@@ -8,7 +8,6 @@ import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { useChartTheme } from '@/shared/ui/organisms/ChartHelpers/ChartHelpers';
 import { TenantConfig } from '@/types';
 import { Activity, Database, HardDrive, Server } from 'lucide-react';
-import React from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 /**

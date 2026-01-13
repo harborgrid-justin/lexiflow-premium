@@ -7,7 +7,7 @@
  */
 
 import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/shared/ui/atoms/Button';
 import { useTheme } from '@/features/theme';

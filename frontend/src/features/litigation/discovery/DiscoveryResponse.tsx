@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowLeft, Clock, Save, Wand2 } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

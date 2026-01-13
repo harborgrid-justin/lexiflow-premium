@@ -12,8 +12,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Filter } from 'lucide-react';
-import React from 'react';
-
 import { ActiveCaseTable } from './ActiveCaseTable';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';

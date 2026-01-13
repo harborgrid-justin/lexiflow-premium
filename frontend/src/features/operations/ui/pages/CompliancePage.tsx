@@ -4,7 +4,6 @@
  * @description Compliance monitoring page - conflict checks and ethics management
  */
 
-import React from 'react';
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

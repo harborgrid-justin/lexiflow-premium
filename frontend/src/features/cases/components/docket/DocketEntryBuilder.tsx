@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { CheckSquare, Save } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/shared/ui/atoms/Button/Button';

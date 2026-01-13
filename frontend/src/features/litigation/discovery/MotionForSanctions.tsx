@@ -23,7 +23,7 @@ import { SanctionMotion } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { FileWarning, Gavel, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 
 interface MotionForSanctionsProps {

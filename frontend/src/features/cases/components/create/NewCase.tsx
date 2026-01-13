@@ -16,7 +16,6 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import React from 'react';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';

@@ -16,7 +16,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { AlertTriangle, CheckCircle, Clock, FileText, Globe, Lock, Shield, Smartphone } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

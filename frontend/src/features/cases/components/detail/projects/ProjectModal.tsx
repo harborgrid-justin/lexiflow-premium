@@ -8,7 +8,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';

@@ -6,7 +6,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Boxes, Clock, GitBranch, Sparkles, UserCheck } from 'lucide-react';
-import React from 'react';
 import type { AIWorkflowSuggestion, EnhancedWorkflowInstance } from '@/types/workflow-advanced-types';
 
 interface WorkflowFeatureStatsProps {

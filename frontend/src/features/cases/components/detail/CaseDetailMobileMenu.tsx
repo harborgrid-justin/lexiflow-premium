@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { FileText, Clock, Plus } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context

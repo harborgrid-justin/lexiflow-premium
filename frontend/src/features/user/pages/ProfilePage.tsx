@@ -4,7 +4,6 @@
  * @description User profile and settings page
  */
 
-import React from 'react';
 import { UserProfileManager } from '@/features/profile/UserProfileManager';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

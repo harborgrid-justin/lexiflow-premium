@@ -4,7 +4,7 @@ import { useTheme } from '@/features/theme';
 import { EthicalWall } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Briefcase, CheckCircle, Lock, Plus, Users } from 'lucide-react';
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 interface ComplianceWallsProps {
     walls: EthicalWall[];

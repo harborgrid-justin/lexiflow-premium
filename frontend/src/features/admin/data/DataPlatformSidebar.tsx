@@ -16,7 +16,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { ChevronDown, ChevronRight, Server } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

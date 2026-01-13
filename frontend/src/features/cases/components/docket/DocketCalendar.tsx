@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context

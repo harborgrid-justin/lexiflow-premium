@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, Save } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DefinitionCard } from './DefinitionCard';
 import { GovernanceCard } from './GovernanceCard';
 import { TechSpecsCard } from './TechSpecsCard';

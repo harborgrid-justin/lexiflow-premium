@@ -3,7 +3,6 @@
  * Summary card showing billing metrics and KPIs
  */
 
-import React from 'react';
 import { DollarSign, Clock, FileText, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface BillingSummaryCardProps {

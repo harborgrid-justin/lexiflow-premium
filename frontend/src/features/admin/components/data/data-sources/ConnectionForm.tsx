@@ -1,4 +1,3 @@
-import React from 'react';
 import { Database, HardDrive, Cloud } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/features/theme';

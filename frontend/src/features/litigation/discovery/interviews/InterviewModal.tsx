@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';

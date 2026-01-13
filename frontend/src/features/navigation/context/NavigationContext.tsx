@@ -8,7 +8,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -9,7 +9,7 @@
 import { useNotify } from '@/hooks/useNotify';
 import { BloomFilter } from '@/utils/bloomFilter';
 import { Shield } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AccessLogsTable } from './AccessLogsTable';
 import { SecurityControlsPanel } from './SecurityControlsPanel';
 import { SecurityMetrics } from './SecurityMetrics';

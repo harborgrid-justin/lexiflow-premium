@@ -6,8 +6,6 @@
  */
 
 import { AlertTriangle, CheckCircle, FileText, Wand2 } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

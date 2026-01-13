@@ -5,7 +5,7 @@
  */
 
 import type { TimeEntry } from '@/types/financial';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form } from 'react-router';
 import { RunningTimer } from './RunningTimer';
 

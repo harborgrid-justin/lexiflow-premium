@@ -2,8 +2,6 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, Camera, Database, Download, RefreshCw } from 'lucide-react';
-import React from 'react';
-
 /**
  * SchemaSnapshots - React 18 optimized with React.memo
  */

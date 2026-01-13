@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Filter, Layout, UserPlus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

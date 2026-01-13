@@ -5,7 +5,7 @@
  * are using the backend vs IndexedDB.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Activity } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { useDataSource } from '@/providers';

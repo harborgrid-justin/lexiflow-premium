@@ -5,8 +5,6 @@ import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Globe, Plane } from 'lucide-react';
-import React from 'react';
-
 export const JurisdictionInternational: React.FC = () => {
   const { theme } = useTheme();
 

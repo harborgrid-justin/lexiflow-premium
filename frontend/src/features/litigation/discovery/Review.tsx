@@ -25,7 +25,7 @@ import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepos
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
-import React, { useCallback, useMemo, useState, useTransition } from 'react';
+import { useCallback, useMemo, useState, useTransition } from 'react';
 
 interface ReviewProps {
   caseId?: string;

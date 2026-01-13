@@ -5,7 +5,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { RetryError, retryWithBackoff } from '@/utils/retryWithBackoff';
 import { AlertCircle, FileText, RefreshCw, Sparkles, Wand2, WifiOff } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface AIDraftingAssistantProps {
     onInsert: (text: string) => void;

@@ -9,7 +9,7 @@ import { useQuery } from '@/hooks/backend';
 import { cn } from '@/shared/lib/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { AlignLeft, Bot, Download, Play } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { QuerySidebar } from './query/QuerySidebar';
 

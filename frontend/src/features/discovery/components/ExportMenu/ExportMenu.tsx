@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Download, FileText, Table, FileCode } from 'lucide-react';
 
 // ============================================================================

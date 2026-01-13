@@ -4,7 +4,7 @@
  * @description Modal for creating new calendar events with validation.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { DataService } from '@/services/data/dataService';

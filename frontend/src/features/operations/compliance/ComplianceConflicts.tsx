@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download, Filter, Plus, User } from 'lucide-react';
-import React, { memo, useMemo, useState, useTransition } from 'react';
+import { memo, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

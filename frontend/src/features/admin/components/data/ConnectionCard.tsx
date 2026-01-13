@@ -5,7 +5,6 @@
  * metrics, and action buttons.
  */
 
-import React from 'react';
 import {
   RefreshCw, Trash2, ShieldCheck, Activity,
   Database, Cloud, Server, AlertTriangle, X

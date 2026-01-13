@@ -1,4 +1,3 @@
-import React from 'react';
 import { LegalRule } from '@/types';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';

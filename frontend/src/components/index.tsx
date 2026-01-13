@@ -50,14 +50,14 @@
 // ============================================================================
 // NAVIGATION COMPONENTS
 // ============================================================================
+import React from 'react';
+
 export { SidebarFooter } from './organisms/Sidebar/SidebarFooter';
 export { SidebarHeader } from './organisms/Sidebar/SidebarHeader';
 
 // ============================================================================
 // STUB COMPONENTS (temporary - to be implemented)
 // ============================================================================
-import React from 'react';
-
 export const NotificationCenter: React.FC<{ className?: string }> = ({ className }) => {
     return <div className={className}>Notification Center (stub)</div>;
 };

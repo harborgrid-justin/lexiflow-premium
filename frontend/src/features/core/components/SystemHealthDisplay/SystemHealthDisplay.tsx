@@ -1,6 +1,4 @@
 import { CheckCircle, Cloud, XCircle } from 'lucide-react';
-import React from 'react';
-
 interface ServiceCoverageProps {
   className?: string;
   compact?: boolean;

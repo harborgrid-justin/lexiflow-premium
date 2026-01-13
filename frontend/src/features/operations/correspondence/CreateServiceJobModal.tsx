@@ -10,7 +10,7 @@ import { validateServiceJobSafe } from '@/services/validation/correspondenceSche
 import { CaseId, ServiceJob, UserId } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface CreateServiceJobModalProps {
     isOpen: boolean;

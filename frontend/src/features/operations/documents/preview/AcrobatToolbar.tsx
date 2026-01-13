@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   MousePointer2, PenTool, Highlighter, Type,
   Stamp, FileSignature, Calendar, RotateCw, RotateCcw,

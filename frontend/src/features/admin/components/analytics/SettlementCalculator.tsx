@@ -13,7 +13,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
-import React from 'react';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

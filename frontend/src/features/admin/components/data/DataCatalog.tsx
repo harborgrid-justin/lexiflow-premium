@@ -6,7 +6,7 @@ import { useWindow } from '@/providers';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, ChevronRight, Database, Loader2, Maximize2, Tag } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
 

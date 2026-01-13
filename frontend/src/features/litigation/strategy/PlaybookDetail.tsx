@@ -7,7 +7,7 @@
  */
 
 import { BookOpen, CheckCircle, Clock, ExternalLink, FileText, Layers, Scale, Shield, Target } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';

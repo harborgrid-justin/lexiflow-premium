@@ -8,7 +8,7 @@
  */
 
 import { TrendingUp } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 // Internal Components
 import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/detail/planning';

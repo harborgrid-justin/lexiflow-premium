@@ -5,8 +5,6 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { CheckCircle, Clock, FileCode, Loader2, RotateCcw, XCircle } from 'lucide-react';
-import React from 'react';
-
 /**
  * MigrationHistory - React 18 optimized with React.memo
  */

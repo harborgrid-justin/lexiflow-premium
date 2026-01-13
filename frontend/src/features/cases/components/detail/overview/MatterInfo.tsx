@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { AlertCircle, BookOpen, Briefcase, Calendar, DollarSign, Gavel, Globe, Scale } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { Card } from '@/shared/ui/molecules/Card';
 

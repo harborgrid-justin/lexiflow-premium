@@ -12,7 +12,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
-import React, { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 
 interface RateTable {
   id: string;

@@ -6,7 +6,6 @@
  */
 
 import { Activity, AlertTriangle, Box, HardDrive, ShieldCheck } from 'lucide-react';
-import React from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Common Components

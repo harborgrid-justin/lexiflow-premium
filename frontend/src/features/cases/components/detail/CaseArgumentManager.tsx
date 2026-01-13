@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components

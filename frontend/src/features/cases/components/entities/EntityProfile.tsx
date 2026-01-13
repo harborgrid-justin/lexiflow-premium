@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, MapPin, Mail, ShieldAlert, Link, Briefcase, GitBranch } from 'lucide-react';
 
 // ============================================================================

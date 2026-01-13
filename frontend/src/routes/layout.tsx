@@ -28,7 +28,7 @@ import { GlobalHotkeys } from '@/shared/ui/organisms/GlobalHotkeys/GlobalHotkeys
 import { Sidebar } from '@/shared/ui/organisms/Sidebar/Sidebar';
 import type { AppView } from '@/types';
 import type { IntentResult } from '@/types/intelligence';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from "react-router";
 import type { Route } from "./+types/layout";
 

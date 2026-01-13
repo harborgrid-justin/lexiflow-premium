@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Clause, ClauseVersion } from '@/types';
 import { History, ArrowLeftRight, X } from 'lucide-react';
 import { DiffViewer } from '@/features/discovery/ui/components/DiffViewer/DiffViewer';

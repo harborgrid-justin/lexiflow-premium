@@ -4,10 +4,10 @@
  * @description Bell icon with animated badge counter for real-time notifications
  */
 
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

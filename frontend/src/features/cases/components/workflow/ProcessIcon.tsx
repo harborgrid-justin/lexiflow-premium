@@ -4,7 +4,6 @@
  * @description Icon component for firm process visualization
  */
 
-import React from 'react';
 import { 
   UserPlus, FileCheck, RefreshCw, Database, ShieldAlert, 
   Scale, Archive, Lock 

@@ -5,7 +5,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { sanitizeHtml } from '@/shared/lib/sanitize';
 import { RotateCcw, Wand2 } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface AdvancedEditorProps {
   initialContent: string;

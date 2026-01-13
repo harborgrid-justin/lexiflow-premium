@@ -3,9 +3,9 @@
  * Display and filter time entries with bulk operations
  */
 
+import React, { useState } from 'react';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
-import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface TimeEntryListProps {

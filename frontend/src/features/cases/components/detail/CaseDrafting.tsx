@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Cpu, AlertTriangle, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components

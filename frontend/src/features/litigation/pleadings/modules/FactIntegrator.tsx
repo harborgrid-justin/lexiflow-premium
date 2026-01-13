@@ -1,7 +1,6 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { TimelineEvent } from '@/types';
-import React from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

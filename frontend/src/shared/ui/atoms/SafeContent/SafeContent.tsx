@@ -3,8 +3,6 @@
  * @description Implements Principle XXVIII: Sink-Level Security.
  * Enforces Trusted Types and avoids dangerouslySetInnerHTML to prevent XSS.
  */
-import React from 'react';
-
 interface SafeContentProps {
   content: string;
   as?: 'div' | 'span' | 'p';

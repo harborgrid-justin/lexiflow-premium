@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2, Radio } from 'lucide-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -21,7 +21,7 @@ import {
   UserCheck,
   Webhook,
 } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   AISuggestionsPanel,
   AnalyticsPanel,

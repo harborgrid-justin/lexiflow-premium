@@ -5,7 +5,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
 import { Book, Loader2, MapPin } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';
 // ✅ Migrated to backend API (2025-12-21)
 

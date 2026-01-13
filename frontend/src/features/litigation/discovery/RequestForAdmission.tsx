@@ -17,7 +17,6 @@ import { DataService } from '@/services/data/dataService';
 import { DiscoveryRequest } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckSquare, Plus } from 'lucide-react';
-import React from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const RequestForAdmission: React.FC = () => {

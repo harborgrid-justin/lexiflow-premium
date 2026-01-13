@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components

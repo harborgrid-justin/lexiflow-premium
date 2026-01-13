@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ChevronDown, Download, FileSpreadsheet, FileText, Filter, RefreshCcw, SlidersHorizontal } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

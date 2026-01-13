@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;

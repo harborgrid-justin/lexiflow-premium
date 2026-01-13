@@ -15,6 +15,7 @@
  * Uses useTheme hook to apply semantic colors.
  */
 
+import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { LucideIcon } from 'lucide-react';

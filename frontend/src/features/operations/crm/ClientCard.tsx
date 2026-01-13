@@ -5,8 +5,6 @@ import { useTheme } from '@/features/theme';
 import { Client, ClientStatus } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Building, Lock, PieChart } from 'lucide-react';
-import React from 'react';
-
 interface ClientCardProps {
     client: Client;
     onGenerateToken: (id: string) => void;

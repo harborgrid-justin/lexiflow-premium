@@ -28,7 +28,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Building2, Edit, Mail, Plus, Trash2, Users } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface Custodian {
   id: string;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HardDrive, Trash2 } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/shared/ui/molecules/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { DataService } from '@/services/data/dataService';

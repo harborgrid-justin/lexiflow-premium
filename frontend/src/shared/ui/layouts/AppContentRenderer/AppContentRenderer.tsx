@@ -13,7 +13,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { HelpCircle, Lock } from 'lucide-react';
 
 // ========================================

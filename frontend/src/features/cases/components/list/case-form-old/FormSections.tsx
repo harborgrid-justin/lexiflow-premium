@@ -1,4 +1,3 @@
-import React from 'react';
 import { Building2, Users, Calendar, DollarSign } from 'lucide-react';
 import type { MatterFormData, FormErrors } from './types';
 

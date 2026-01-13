@@ -4,7 +4,6 @@
  * @description Client relationship management page - contacts, clients, and leads
  */
 
-import React from 'react';
 import { CRMDashboard } from '@/features/operations/crm/CRMDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

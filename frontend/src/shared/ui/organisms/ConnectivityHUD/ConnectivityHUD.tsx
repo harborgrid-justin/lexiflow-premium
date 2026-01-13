@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react';
 
 // ============================================================================

@@ -4,7 +4,6 @@
  * @description Rules and procedures page - federal and local rules library
  */
 
-import React from 'react';
 import { RulesDashboard } from '@/features/knowledge/rules/RulesDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { RulesView } from '@/config/tabs.config';

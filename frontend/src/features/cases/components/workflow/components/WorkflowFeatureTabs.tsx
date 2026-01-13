@@ -5,7 +5,6 @@
 
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 
 export type FeatureTab =

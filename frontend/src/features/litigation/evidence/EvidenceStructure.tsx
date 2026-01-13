@@ -6,8 +6,6 @@
  */
 
 import { FileText, Link, Split } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

@@ -5,7 +5,6 @@
  * Tracks self-authenticating documents, testimony requirements, and stipulations.
  */
 
-import React from 'react';
 import { CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
 // Common Components

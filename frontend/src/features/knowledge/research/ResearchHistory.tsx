@@ -9,8 +9,6 @@ import { ResearchSession } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Clock, ExternalLink } from 'lucide-react';
-import React from 'react';
-
 export const ResearchHistory: React.FC = () => {
   const { theme } = useTheme();
 

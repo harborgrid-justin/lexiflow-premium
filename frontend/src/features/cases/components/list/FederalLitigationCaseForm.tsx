@@ -23,7 +23,7 @@ import { useAutoSave } from '@/hooks/useAutoSave';
 import { DataService } from '@/services/data/dataService';
 import { Case, CaseStatus, CaseType } from '@/types';
 import { AlertCircle, Building, Calendar, FileText, Scale, Users } from 'lucide-react';
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 // CreateCaseDto interface matching backend API expectations
 interface CreateCaseDto {

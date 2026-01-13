@@ -6,7 +6,6 @@ import { Conversation } from '@/hooks/useSecureMessenger';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { MoreVertical } from 'lucide-react';
-import React from 'react';
 import { ConversationRow } from './ConversationRow';
 import { PopoutChatWindow } from './PopoutChatWindow';
 

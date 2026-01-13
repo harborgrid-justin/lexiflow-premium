@@ -6,8 +6,6 @@
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
 import { FormInput } from './FormInput';
-import React from 'react';
-
 interface FormState {
   primarySignatory?: string;
   authorizedSignatories?: string[];

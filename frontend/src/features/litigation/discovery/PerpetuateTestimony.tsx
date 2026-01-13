@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';

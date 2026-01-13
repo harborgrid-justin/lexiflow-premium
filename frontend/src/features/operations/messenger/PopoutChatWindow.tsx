@@ -1,7 +1,7 @@
 import { useNotify } from '@/hooks/useNotify';
 import { Attachment, Conversation } from '@/hooks/useSecureMessenger';
 import { DataService } from '@/services/data/dataService';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MessengerChatWindow } from './MessengerChatWindow';
 
 interface PopoutChatWindowProps {

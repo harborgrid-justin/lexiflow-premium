@@ -29,7 +29,7 @@ import {
   X,
   XCircle
 } from 'lucide-react';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 // ============================================================================

@@ -4,7 +4,6 @@
  * @description Filter and search UI for leads
  */
 
-import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Search, Plus } from 'lucide-react';

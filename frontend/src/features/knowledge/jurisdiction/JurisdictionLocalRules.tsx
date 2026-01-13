@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, Edit2, Trash2, Book } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button/Button';

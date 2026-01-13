@@ -6,7 +6,7 @@ import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface StoreInfo {
   name: string;

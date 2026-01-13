@@ -1,4 +1,3 @@
-import React from 'react';
 import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';

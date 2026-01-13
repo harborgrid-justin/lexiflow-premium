@@ -28,7 +28,7 @@ import {
   Brain, Download,
   Target
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export const CaseInsightsDashboard: React.FC<{ caseId?: string }> = () => {
   const { isDark } = useTheme();

@@ -1,4 +1,3 @@
-import React from 'react';
 import { History, User, Check, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

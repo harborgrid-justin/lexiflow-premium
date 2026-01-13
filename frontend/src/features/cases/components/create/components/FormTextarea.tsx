@@ -2,7 +2,6 @@
  * Reusable textarea field with label
  */
 
-import React from 'react';
 import { cn } from '@/shared/lib/cn';
 
 export interface FormTextareaProps {

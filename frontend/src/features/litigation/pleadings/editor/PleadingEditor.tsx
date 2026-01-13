@@ -7,7 +7,7 @@ import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } 
 import { cn } from '@/shared/lib/cn';
 import jsPDF from 'jspdf';
 import { ArrowLeft, BookOpen, Download, FileText, LayoutTemplate, Link, MessageSquare, Save, UploadCloud } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
 // ✅ Migrated to backend API (2025-12-21)

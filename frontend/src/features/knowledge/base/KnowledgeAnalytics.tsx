@@ -11,7 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { BookOpen, Search, TrendingUp, Users } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

@@ -21,7 +21,7 @@ import type { DataCollection } from '@/types/discovery-enhanced';
 import { CaseId } from '@/types/primitives';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle, Clock, Database, Download, Pause, Play, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface CollectionsProps {
   caseId?: string;

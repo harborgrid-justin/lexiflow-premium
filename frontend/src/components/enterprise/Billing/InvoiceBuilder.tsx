@@ -16,7 +16,7 @@ import {
   Save,
   Send
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Types
 interface InvoiceLineItem {

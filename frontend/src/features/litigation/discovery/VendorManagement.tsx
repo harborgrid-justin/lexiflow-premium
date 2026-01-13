@@ -34,7 +34,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Briefcase, Plus, Star } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

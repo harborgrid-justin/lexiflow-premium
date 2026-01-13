@@ -10,8 +10,6 @@ import { Citation } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Bookmark, BookmarkMinus, FileText, Scale } from 'lucide-react';
-import React from 'react';
-
 export const SavedAuthorities: React.FC = () => {
     const { theme } = useTheme();
 

@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 import { Clause } from '@/types';
 
 const ActiveResearch = lazy(() => import('./ActiveResearch').then(m => ({ default: m.ActiveResearch })));

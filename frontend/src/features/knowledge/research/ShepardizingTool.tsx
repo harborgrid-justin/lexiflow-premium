@@ -6,7 +6,7 @@ import { useTheme } from '@/features/theme';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle, HelpCircle, Loader2, Scale, XCircle } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export const ShepardizingTool: React.FC = () => {
   const { theme } = useTheme();

@@ -4,8 +4,6 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertTriangle, CheckCircle, Gavel, Loader2 } from 'lucide-react';
-import React from 'react';
-
 interface JurisdictionRulesProps {
   jurisdiction?: string;
 }

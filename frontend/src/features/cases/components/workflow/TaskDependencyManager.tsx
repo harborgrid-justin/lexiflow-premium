@@ -5,7 +5,6 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckSquare, Lock } from 'lucide-react';
-import React from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const TaskDependencyManager = () => {

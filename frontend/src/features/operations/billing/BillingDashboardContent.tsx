@@ -1,5 +1,5 @@
 import { BillingView } from '@/config/tabs.config';
-import React, { lazy, memo } from 'react';
+import { lazy, memo } from 'react';
 
 const BillingOverview = lazy(() => import('./BillingOverview').then(m => ({ default: m.BillingOverview })));
 const BillingInvoices = lazy(() => import('./BillingInvoices').then(m => ({ default: m.BillingInvoices })));

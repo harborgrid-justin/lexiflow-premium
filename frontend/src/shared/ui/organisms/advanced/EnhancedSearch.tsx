@@ -1,7 +1,7 @@
 import { useTheme } from '@/features/theme';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { Command, Search, X } from 'lucide-react';
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import * as styles from './EnhancedSearch.styles';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
 import { useKeyboardNav, useSearchHandlers } from './hooks';

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { WorkflowNode, WorkflowConnection, getNodeIcon, getNodeStyles, NodeType } from './types';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

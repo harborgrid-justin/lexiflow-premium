@@ -7,7 +7,7 @@ import { useDebounce } from '@/shared/hooks/useDebounce';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, Loader2, Plus, ShieldCheck, UserPlus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ClientIntakeModalProps {
   onClose: () => void;

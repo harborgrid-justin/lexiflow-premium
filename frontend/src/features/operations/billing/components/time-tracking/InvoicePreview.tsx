@@ -3,7 +3,6 @@
  * PDF-like preview of invoice with professional formatting
  */
 
-import React from 'react';
 import type { Invoice } from '@/types/financial';
 
 interface InvoicePreviewProps {

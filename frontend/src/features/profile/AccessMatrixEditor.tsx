@@ -16,7 +16,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { Clock, Edit2, Globe, Lock, Plus, Shield, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

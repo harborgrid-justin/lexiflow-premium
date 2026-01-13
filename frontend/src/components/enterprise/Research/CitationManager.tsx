@@ -26,7 +26,7 @@ import {
   XCircle,
   Zap
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useToastNotifications } from '../notifications';
 
 // ============================================================================

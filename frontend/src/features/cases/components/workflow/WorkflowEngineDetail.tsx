@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2} from 'lucide-react';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangle } from 'lucide-react';
 
 // ============================================================================

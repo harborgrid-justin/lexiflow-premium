@@ -12,7 +12,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
-import React, { useDeferredValue, useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 
 interface UserData {
   id: string;

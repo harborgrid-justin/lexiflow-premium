@@ -12,7 +12,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, Gavel, Scale } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

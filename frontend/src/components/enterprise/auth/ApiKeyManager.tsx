@@ -16,7 +16,7 @@
 
 import { ApiKeysApiService } from '@/api/auth/security-credentials-api';
 import type { ApiKey } from '@/types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';
 
 const apiKeySchema = z.object({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MessageSquare, CheckCircle, Send, MessagesSquare } from 'lucide-react';
 import { PleadingComment } from '@/types';
 import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';

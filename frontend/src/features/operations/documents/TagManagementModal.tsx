@@ -4,7 +4,7 @@ import { useTheme } from '@/features/theme';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Plus, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface TagManagementModalProps {
     document: LegalDocument;

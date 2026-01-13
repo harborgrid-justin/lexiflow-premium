@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
 
 // Internal Dependencies - Components

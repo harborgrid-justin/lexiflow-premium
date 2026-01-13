@@ -12,7 +12,7 @@ import { useToast } from '@/contexts/toast/ToastContext';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface DocumentGeneratorProps {
   templateId?: string;

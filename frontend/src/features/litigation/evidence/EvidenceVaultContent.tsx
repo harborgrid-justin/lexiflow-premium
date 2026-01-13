@@ -5,7 +5,7 @@
  * Renders the appropriate sub-component based on the current view mode.
  */
 
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 
 // Types
 import { EvidenceFilters, ViewMode } from '@/hooks/useEvidenceManager';

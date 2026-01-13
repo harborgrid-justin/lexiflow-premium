@@ -9,7 +9,7 @@
 
 // External Dependencies
 import { AlertTriangle, CheckCircle, Key } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Internal Dependencies - Components
 import { Button } from '@/shared/ui/atoms/Button/Button';

@@ -15,7 +15,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 // import { BillingOverview, dashboardMetricsService } from '../../../services/api/dashboard-metrics.service';
 
 // Types

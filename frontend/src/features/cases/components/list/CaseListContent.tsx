@@ -1,7 +1,6 @@
 import { UseCaseListReturn } from '@/hooks/useCaseList';
 import { Case } from '@/types';
 import { CaseListActive, CaseListArchived, CaseListClosing, CaseListConflicts, CaseListDocket, CaseListIntake, CaseListResources } from '@features/cases';
-import React from 'react';
 import { CaseListTasks } from './CaseListTasks';
 import { CaseListTrust } from './CaseListTrust';
 

@@ -4,7 +4,6 @@
  * @description Litigation strategy canvas page - visual strategy planning and execution
  */
 
-import React from 'react';
 import { LitigationBuilder } from '@/features/litigation/strategy/LitigationBuilder';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

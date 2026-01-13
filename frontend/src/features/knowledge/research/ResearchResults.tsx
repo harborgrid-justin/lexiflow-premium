@@ -3,7 +3,6 @@ import { useTheme } from '@/features/theme';
 import { ResearchSession } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Bookmark, BookOpen, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
-import React from 'react';
 import { ResearchResultCard } from './ResearchResultCard';
 import { TypewriterText } from '@/shared/ui/atoms/TypewriterText';
 

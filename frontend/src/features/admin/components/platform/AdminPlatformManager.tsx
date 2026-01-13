@@ -4,7 +4,7 @@ import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus, Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { EMPTY_TEMPLATES } from './AdminConfig';
 import { EntityList } from './EntityList';
 import { Category, EntitySidebar } from './EntitySidebar';

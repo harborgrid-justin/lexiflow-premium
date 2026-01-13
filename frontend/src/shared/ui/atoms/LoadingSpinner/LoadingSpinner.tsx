@@ -4,7 +4,6 @@
  * @description Simple loading spinner with optional text label
  */
 
-import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { containerStyles, getSpinnerClass, textStyles } from './LoadingSpinner.styles';
 

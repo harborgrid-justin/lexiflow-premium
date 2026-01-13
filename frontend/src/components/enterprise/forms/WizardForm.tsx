@@ -12,7 +12,6 @@
  * - Keyboard shortcuts
  */
 
-import React from 'react';
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

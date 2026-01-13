@@ -12,7 +12,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { BrainCircuit, TrendingUp } from 'lucide-react';
-import React from 'react';
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 // ============================================================================

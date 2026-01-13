@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { useTheme } from '@/features/theme';

@@ -8,7 +8,7 @@ import { DataService } from '@/services/data/dataService';
 import { Client, ClientStatus, EntityId, PaymentTerms } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { UserPlus } from 'lucide-react';
-import React, { Suspense, useState, useTransition } from 'react';
+import { Suspense, useState, useTransition } from 'react';
 import { ClientCRMContent } from './ClientCRMContent';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';

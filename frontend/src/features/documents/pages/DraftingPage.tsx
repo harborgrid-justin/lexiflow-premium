@@ -4,7 +4,6 @@
  * @description Document drafting page - AI-powered legal document generation
  */
 
-import React from 'react';
 import DraftingDashboard from '@/features/drafting/DraftingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

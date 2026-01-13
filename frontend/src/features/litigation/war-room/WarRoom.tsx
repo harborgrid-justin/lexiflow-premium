@@ -21,7 +21,7 @@ import {
   Shield,
   Target,
 } from "lucide-react";
-import React, {
+import {
   Suspense,
   lazy,
   useCallback,

@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download, ShieldCheck } from 'lucide-react';
-import React, { Suspense, useTransition } from 'react';
+import { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

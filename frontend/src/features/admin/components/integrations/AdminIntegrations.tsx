@@ -6,8 +6,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Link as LinkIcon, Loader2, RefreshCw, Settings } from 'lucide-react';
-import React from 'react';
-
 interface Integration {
     id: string;
     name: string;

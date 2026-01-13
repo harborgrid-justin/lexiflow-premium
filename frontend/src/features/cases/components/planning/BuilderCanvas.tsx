@@ -1,7 +1,5 @@
 import { cn } from '@/shared/lib/cn';
 import { Plus } from 'lucide-react';
-import React from 'react';
-
 interface BuilderCanvasProps {
   className?: string;
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Trash2, GripVertical } from 'lucide-react';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileText, Users, Calendar, Tag, Hash, Search } from 'lucide-react';
 import type { SearchCategory } from './types';
 import * as styles from './helpers.styles';

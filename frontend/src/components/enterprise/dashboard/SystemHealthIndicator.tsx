@@ -19,7 +19,7 @@ import {
   Wifi,
   XCircle,
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type HealthStatus = 'healthy' | 'warning' | 'critical' | 'offline';
 

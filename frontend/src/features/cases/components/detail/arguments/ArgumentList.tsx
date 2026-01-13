@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Scale, Fingerprint, ChevronRight } from 'lucide-react';
 
 // Internal Dependencies - Components

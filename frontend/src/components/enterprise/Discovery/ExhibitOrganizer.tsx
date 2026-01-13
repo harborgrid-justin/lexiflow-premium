@@ -32,7 +32,7 @@ import {
   Trash2,
   Video
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // TYPES

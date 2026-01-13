@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2 } from 'lucide-react';
-import React, { useMemo, useTransition } from 'react';
+import { useMemo, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

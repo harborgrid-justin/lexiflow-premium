@@ -1,4 +1,3 @@
-import React from 'react';
 import { Settings } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

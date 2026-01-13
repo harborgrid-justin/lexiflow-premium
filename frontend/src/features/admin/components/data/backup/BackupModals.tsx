@@ -4,8 +4,6 @@ import { Modal } from '@/shared/ui/molecules/Modal';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Clock, Database } from 'lucide-react';
-import React from 'react';
-
 interface CreateSnapshotModalProps {
     isOpen: boolean;
     onClose: () => void;

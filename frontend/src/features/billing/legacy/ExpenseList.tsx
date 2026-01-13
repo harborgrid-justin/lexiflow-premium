@@ -7,7 +7,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/lib/utils';
 import type { FirmExpense } from '@/types/financial';
 import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 

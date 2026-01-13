@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { CleansingRule } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * StandardizationConsole - React 18 optimized with React.memo

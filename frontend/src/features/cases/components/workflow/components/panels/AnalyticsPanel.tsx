@@ -8,7 +8,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, TrendingUp } from 'lucide-react';
-import React from 'react';
 import type { WorkflowAnalytics } from '@/types/workflow-advanced-types';
 
 interface AnalyticsPanelProps {

@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { BookOpen, Building2, Laptop, MapPin, ShieldAlert, ShoppingCart, Target, TrendingUp, Users, Wallet } from 'lucide-react';
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

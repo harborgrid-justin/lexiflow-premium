@@ -8,8 +8,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Settings, UserCheck } from 'lucide-react';
-import React from 'react';
-
 interface ApprovalChainsPanelProps {
   onAddApprovalChain: () => void;
 }

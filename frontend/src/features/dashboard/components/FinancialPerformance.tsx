@@ -3,7 +3,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { FinancialPerformanceData } from '@/types';
-import React from 'react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const FinancialPerformance: React.FC = () => {

@@ -6,8 +6,6 @@
  */
 
 import { Copy, Plus } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';

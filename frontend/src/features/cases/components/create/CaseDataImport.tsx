@@ -13,7 +13,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import type { Case, DocketEntry, Party } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface ParsedCaseData {
   caseInfo?: Partial<Case>;

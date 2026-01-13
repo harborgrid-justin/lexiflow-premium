@@ -56,6 +56,7 @@ export interface ThemeObject {
   interactive: {
     primary: string;
     success?: string;
+    hover: string;
   };
   status: {
     success: { bg: string; text: string; icon: string; border: string };
@@ -105,6 +106,29 @@ export interface ThemeObject {
       border: string;
       text: string;
     };
+  };
+  colors: {
+    border: string;
+    textMuted: string;
+    info: string;
+    success: string;
+    warning: string;
+    surface: string;
+    text: string;
+  };
+  typography: {
+    sizes: {
+      xs: string;
+      sm: string;
+      base: string;
+      lg: string;
+      xl: string;
+    };
+  };
+  borderRadius: {
+    sm: string;
+    md: string;
+    lg: string;
   };
 }
 

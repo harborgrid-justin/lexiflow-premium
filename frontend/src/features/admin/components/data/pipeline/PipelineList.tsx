@@ -1,4 +1,3 @@
-import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

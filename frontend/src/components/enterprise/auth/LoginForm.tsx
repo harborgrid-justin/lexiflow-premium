@@ -14,7 +14,7 @@
 
 import { AuthApiService } from '@/api/auth/auth-api';
 import type { User } from '@/types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { z } from 'zod';
 
 // Validation schemas

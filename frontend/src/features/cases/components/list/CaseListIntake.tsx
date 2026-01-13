@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Calendar, DollarSign, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

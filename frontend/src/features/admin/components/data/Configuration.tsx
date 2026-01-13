@@ -8,7 +8,7 @@ import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ConfigurationProps {
   initialTab?: string;

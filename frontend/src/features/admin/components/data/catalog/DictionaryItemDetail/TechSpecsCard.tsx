@@ -3,8 +3,6 @@ import { Card } from '@/shared/ui/molecules/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { DataDictionaryItem } from '@/types';
-import React from 'react';
-
 interface TechSpecsCardProps {
   formData: DataDictionaryItem;
 }

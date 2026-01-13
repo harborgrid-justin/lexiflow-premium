@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Building2, User } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

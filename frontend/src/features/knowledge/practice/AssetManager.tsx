@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Edit2, Laptop, Loader2, Monitor, Plus, RefreshCw, Smartphone, Trash2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

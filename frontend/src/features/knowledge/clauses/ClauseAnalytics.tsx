@@ -6,7 +6,6 @@ import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { Clause } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, FileText, ShieldAlert, TrendingUp } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 

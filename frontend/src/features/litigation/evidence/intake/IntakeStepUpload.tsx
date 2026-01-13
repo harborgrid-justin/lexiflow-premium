@@ -6,8 +6,6 @@
  */
 
 import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { Button } from '@/shared/ui/atoms/Button/Button';
 

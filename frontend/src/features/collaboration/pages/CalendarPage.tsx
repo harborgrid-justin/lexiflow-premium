@@ -4,7 +4,6 @@
  * @description Calendar and scheduling page - deadline tracking and event management
  */
 
-import React from 'react';
 import { CalendarMaster } from '@/features/cases/components/calendar/CalendarMaster';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

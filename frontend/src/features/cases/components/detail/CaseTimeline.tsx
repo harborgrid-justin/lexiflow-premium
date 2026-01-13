@@ -8,7 +8,6 @@
  * @category Case Management - Timeline & Events
  */
 
-import React from 'react';
 import { BookOpen, Filter, List } from 'lucide-react';
 
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';

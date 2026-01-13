@@ -1,4 +1,3 @@
-import React from 'react';
 import { Copy, Eye, EyeOff, Trash2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { useTheme } from '@/features/theme';

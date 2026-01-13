@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { AlertCircle, FileText, Gavel, RefreshCw } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 

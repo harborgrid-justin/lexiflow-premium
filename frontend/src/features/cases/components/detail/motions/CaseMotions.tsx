@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components

@@ -8,8 +8,6 @@ import { FirmExpense, OperatingSummary } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
-import React from 'react';
-
 interface OperatingLedgerProps {
   expenses: FirmExpense[];
 }

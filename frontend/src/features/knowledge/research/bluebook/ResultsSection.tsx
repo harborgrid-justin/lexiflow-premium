@@ -4,7 +4,6 @@ import { useTheme } from '@/features/theme';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
 import { cn } from '@/shared/lib/cn';
 import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';
-import React from 'react';
 import { ResultItem } from './ResultItem';
 import type { FilterOptions, FormattingResult } from './types';
 

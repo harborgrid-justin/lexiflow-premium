@@ -7,7 +7,6 @@
  * @module components/litigation/LitigationPalette
  */
 
-import React from 'react';
 import { X, GripVertical } from 'lucide-react';
 
 // Hooks & Context

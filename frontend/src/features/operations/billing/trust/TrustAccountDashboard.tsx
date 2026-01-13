@@ -30,7 +30,7 @@ import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertCircle, Clock, FileText, Landmark, TrendingUp, Users } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 /**
  * Dashboard Statistics Card Props

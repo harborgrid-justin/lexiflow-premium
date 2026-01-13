@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Card } from '@/shared/ui/molecules/Card/Card';

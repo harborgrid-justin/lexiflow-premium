@@ -6,8 +6,6 @@ import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle } from 'lucide-react';
-import React from 'react';
-
 export const JurisdictionArbitration: React.FC = () => {
   const { theme } = useTheme();
 

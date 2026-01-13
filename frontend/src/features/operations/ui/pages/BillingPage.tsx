@@ -4,7 +4,6 @@
  * @description Billing and invoicing page - comprehensive financial management
  */
 
-import React from 'react';
 import BillingDashboard from '@/features/operations/billing/BillingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

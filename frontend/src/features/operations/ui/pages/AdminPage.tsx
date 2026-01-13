@@ -4,7 +4,6 @@
  * @description System administration page - security, data management, and configuration
  */
 
-import React from 'react';
 import { AdminPanel } from '@/features/admin/AdminPanel';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

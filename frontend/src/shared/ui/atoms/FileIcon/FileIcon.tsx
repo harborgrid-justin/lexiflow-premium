@@ -4,7 +4,6 @@
  * @description File type icon selector based on MIME type or extension
  */
 
-import React from 'react';
 import { FileText, Image, Film, Music, Box, Shield } from 'lucide-react';
 import { iconColors, getIconClass } from './FileIcon.styles';
 

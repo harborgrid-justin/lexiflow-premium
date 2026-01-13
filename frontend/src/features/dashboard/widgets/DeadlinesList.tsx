@@ -9,8 +9,6 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { format, formatDistanceToNow, isPast, isThisWeek, isToday, isTomorrow } from 'date-fns';
 import { AlertCircle, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

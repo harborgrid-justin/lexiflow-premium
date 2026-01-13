@@ -7,7 +7,7 @@ import { useQuery } from '@/hooks/backend';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface DataStream {
   id: string;

@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { CheckSquare, FileText, Loader2, Wand2 } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { Button } from '@/shared/ui/atoms/Button';
 import { TagList } from '@/shared/ui/molecules/TagList/TagList';

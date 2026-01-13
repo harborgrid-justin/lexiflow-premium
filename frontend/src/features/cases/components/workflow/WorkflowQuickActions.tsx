@@ -1,7 +1,5 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { CheckSquare, FastForward, Pause, Play } from 'lucide-react';
-import React from 'react';
-
 interface WorkflowQuickActionsProps {
   caseId: string;
   onAction: (action: string) => void;

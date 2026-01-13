@@ -3,7 +3,6 @@ import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Edit2, Trash2 } from 'lucide-react';
-import React from 'react';
 import { Category } from './EntitySidebar';
 
 // Generic interface to cover the varying shapes of entities in the list

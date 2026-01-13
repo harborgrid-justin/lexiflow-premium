@@ -33,7 +33,7 @@ import {
   Plus,
   Search
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 

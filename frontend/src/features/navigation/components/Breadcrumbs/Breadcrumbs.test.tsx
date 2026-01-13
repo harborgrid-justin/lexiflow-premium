@@ -4,7 +4,6 @@
  * @description Unit tests for Breadcrumbs component
  */
 
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ThemeProvider } from '@/features/theme';

@@ -3,7 +3,7 @@ import { useTheme } from '@/features/theme';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import React, { useCallback, useMemo, useState, useTransition } from 'react';
+import { useCallback, useMemo, useState, useTransition } from 'react';
 import { DocumentRow } from './DocumentRow';
 
 interface DocumentTableProps {

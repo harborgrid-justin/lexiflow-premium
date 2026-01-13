@@ -4,7 +4,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Download, Search } from 'lucide-react';
-import React from 'react';
 import type { AccessLogEntry } from './types';
 
 interface AccessLogsTableProps {

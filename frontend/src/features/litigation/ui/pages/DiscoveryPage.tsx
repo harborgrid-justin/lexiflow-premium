@@ -4,7 +4,6 @@
  * @description Discovery management page - comprehensive e-discovery platform
  */
 
-import React from 'react';
 import DiscoveryDashboard from '@/features/litigation/discovery/dashboard/DiscoveryDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';

@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { BookOpen, ExternalLink, Loader2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

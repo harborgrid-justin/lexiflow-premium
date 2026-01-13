@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PenTool, CheckCircle, RefreshCcw, X } from 'lucide-react';
 
 // ============================================================================

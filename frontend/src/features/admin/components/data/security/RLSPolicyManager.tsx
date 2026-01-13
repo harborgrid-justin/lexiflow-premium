@@ -8,7 +8,7 @@ import { RLSPolicy } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit2, Pause, Play, Plus, Shield, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PolicyEditorModal } from './PolicyEditorModal';
 
 export const RLSPolicyManager: React.FC = () => {

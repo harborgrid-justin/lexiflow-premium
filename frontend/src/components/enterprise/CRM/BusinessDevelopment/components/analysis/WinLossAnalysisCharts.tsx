@@ -8,7 +8,6 @@ import { ChartColorService, useTheme } from '@/features/theme';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { ConversionTrend, LeadsBySource } from '@/types/crm';
 import { getChartTheme } from '@/utils/chartConfig';
-import React from 'react';
 import {
   CartesianGrid,
   Cell,

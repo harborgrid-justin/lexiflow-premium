@@ -4,7 +4,6 @@
  * @description Marketing and business development page - client acquisition and tracking
  */
 
-import React from 'react';
 import { MarketingDashboard } from '@/features/knowledge/practice/MarketingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

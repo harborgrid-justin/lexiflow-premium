@@ -6,7 +6,7 @@ import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useNotify } from '@/hooks/core';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Play, RefreshCw, Server, ShieldCheck } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
 import { SnapshotList } from './backup/SnapshotList';

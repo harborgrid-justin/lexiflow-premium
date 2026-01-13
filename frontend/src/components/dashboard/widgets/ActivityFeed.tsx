@@ -5,6 +5,7 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
+import React from 'react';
 import { useTheme } from '@/features/theme';
 import { Activity, ActivityType } from '@/types/dashboard';
 import { cn } from '@/shared/lib/cn';
@@ -21,8 +22,6 @@ import {
   Upload,
   UserPlus,
 } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

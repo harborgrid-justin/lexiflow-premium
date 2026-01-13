@@ -12,7 +12,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Folder, FileText, ChevronRight, Gavel, Plus, File, Scale, MoreVertical } from 'lucide-react';
 
 // ============================================================================

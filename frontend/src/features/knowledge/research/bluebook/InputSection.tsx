@@ -3,7 +3,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
-import React from 'react';
 import { FormatOptionsCard } from './FormatOptionsCard';
 import type { FormatOptions } from './types';
 

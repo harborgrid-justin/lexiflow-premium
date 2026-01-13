@@ -6,7 +6,7 @@ import { DataService } from '@/services/data/dataService';
 import { Clause } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { BookOpen, Check, Copy, History, Loader2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { filterClauses } from './clauseList.utils';
 // ✅ Migrated to backend API (2025-12-21)
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';

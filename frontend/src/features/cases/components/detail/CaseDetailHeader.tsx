@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { ArrowLeft, ArrowUpRight, Calendar, CheckSquare, MapPin, MessageCircle, Users } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';

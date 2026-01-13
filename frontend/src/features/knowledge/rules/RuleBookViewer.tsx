@@ -3,7 +3,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { LegalRule } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';

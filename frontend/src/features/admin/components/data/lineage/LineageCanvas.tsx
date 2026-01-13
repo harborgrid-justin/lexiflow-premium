@@ -4,7 +4,7 @@ import { LineageLink, LineageNode } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { NODE_STRIDE, SimulationNode } from '@/utils/nexusPhysics';
 import { Pause, Play, RefreshCw } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface LineageCanvasProps {
     data?: { nodes: LineageNode[], links: LineageLink[] };

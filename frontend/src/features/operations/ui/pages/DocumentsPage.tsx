@@ -4,7 +4,6 @@
  * @description Document management page - enterprise document repository
  */
 
-import React from 'react';
 import { DocumentManager } from '@/features/operations/documents/DocumentManager';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

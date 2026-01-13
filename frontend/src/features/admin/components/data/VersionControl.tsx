@@ -7,7 +7,7 @@ import { useTheme } from '@/features/theme';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface HistoryEntry {
   id: string;

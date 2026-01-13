@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, Calendar, Clock, Download, Gavel, Layers, Plus, RefreshCw, Settings, Users } from 'lucide-react';
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

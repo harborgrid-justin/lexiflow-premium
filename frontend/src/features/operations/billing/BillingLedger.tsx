@@ -3,7 +3,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers';
 import { OperatingLedger, TrustLedger } from '@features/knowledge';
 import { Plus } from 'lucide-react';
-import React, { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { LedgerTabs } from './components/LedgerTabs';
 import { TransactionForm, TransactionData } from './components/TransactionForm';
 import { useLedgerTransactions } from './hooks/useLedgerTransactions';

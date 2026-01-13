@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 // Internal Dependencies - Components
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';

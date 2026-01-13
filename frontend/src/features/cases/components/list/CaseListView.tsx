@@ -5,7 +5,7 @@
  * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

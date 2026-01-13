@@ -31,7 +31,7 @@ export class ReviewBatchService {
 
     try {
       return await apiClient.get<ReviewBatch[]>("/discovery/review/batches", {
-        { params: { caseId } }
+        params: { caseId }
       });
     } catch (error) {
       console.error("[ReviewBatchService.getReviewBatches] Error:", error);

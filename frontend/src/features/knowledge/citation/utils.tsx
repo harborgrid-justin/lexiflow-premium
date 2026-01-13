@@ -3,7 +3,6 @@
  * Extracted from individual component files for better organization and reusability
  */
 
-import React from 'react';
 import { CheckCircle, AlertTriangle, X, Book, Scale, FileText } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';
 

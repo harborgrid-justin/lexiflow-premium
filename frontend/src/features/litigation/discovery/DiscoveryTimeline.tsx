@@ -12,7 +12,7 @@ import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepos
 import type { DiscoveryTimelineEvent } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Flag } from 'lucide-react';
-import { useMemo, useState } from 'react';
+
 
 interface DiscoveryTimelineProps {
   caseId?: string;

@@ -3,9 +3,9 @@
  * Display and filter invoices with status tracking
  */
 
+import React, { useState } from 'react';
 import type { Invoice } from '@/types/financial';
 import { FileText, Filter, Send } from 'lucide-react';
-import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface InvoiceListProps {

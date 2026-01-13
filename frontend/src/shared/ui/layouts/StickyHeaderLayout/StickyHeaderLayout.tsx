@@ -5,7 +5,6 @@
  * Ideal for long-form content with persistent navigation.
  */
 
-import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 

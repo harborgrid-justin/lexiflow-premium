@@ -9,7 +9,6 @@ import { ChartCard, KPICard, StatWidget } from '@/features/dashboard/widgets';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Activity, AlertCircle, Server, Users } from 'lucide-react';
-import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useAdminDashboardData } from '../hooks/useAdminDashboardData';
 

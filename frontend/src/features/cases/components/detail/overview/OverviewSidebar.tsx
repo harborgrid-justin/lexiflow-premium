@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context

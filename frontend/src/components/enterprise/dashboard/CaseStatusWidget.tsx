@@ -8,7 +8,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 export interface CaseStatusData {

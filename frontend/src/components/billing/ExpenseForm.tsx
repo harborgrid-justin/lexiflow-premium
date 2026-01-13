@@ -3,9 +3,9 @@
  * Form for creating/editing expenses with receipt upload
  */
 
+import React, { useState } from 'react';
 import type { FirmExpense } from '@/types/financial';
 import { FileText, Upload, X } from 'lucide-react';
-import React, { useState } from 'react';
 import { Form } from 'react-router';
 
 interface ExpenseFormProps {

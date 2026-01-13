@@ -1,5 +1,5 @@
 // src/app/App.tsx
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "../contexts/auth/AuthContext";

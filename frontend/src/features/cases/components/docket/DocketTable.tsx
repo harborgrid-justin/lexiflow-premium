@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Bell, FileText, Gavel } from 'lucide-react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

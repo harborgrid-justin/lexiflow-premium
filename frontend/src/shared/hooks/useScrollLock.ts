@@ -15,6 +15,41 @@
  * - Locking: Only first lock applies CSS, only last unlock removes CSS
  * - Cleanup: useEffect return function ensures unlock on unmount
  * 
+ * GLOBAL SINGLETON DEPENDENCIES (G55):
+ * WARNING: This hook uses module-level global state:
+ * - lockStack: Global Set shared across all instances
+ * - document: Global DOM singleton
+ * 
+ * RATIONALE FOR GLOBALS (G55):
+ * - lockStack: NECESSARY for cross-component coordination
+ * - document: Browser API, cannot be avoided
+ * - Alternative: Context provider, but adds complexity for edge cases
+ * 
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Lock activates: On mount if isLocked=true, or when isLocked changes to true
+ * - Lock persists: Until component unmounts or isLocked changes to false
+ * - Lock stacks: Multiple components can lock simultaneously
+ * - Lock clears: Only when last lock in stack is removed
+ * - Cleanup guarantee: Effect cleanup removes lock on unmount
+ * 
+ * TEMPORAL COHERENCE (G41):
+ * - Encodes stack-based locking temporal model
+ * - First lock applies CSS, intermediate locks stack, last unlock removes CSS
+ * - Identity: lockId represents unique lock instance
+ * 
+ * PURE COMPUTATION + EFFECT BOUNDARY (G42):
+ * - Pure: Stack size checks, lockId validation
+ * - Effect boundary: DOM manipulation, Set operations
+ * - No render-phase side effects
+ * 
+ * CONCURRENCY SAFETY (G49, G50):
+ * - Idempotent: Effect cleanup ensures lock removal even under re-execution
+ * - Render-count independent: Stack in module scope, not render-dependent
+ * 
+ * FAIL-FAST GUARDS (G54):
+ * - Runtime validation of lockId and isLocked parameters
+ * - Throws on invalid inputs in development mode
+ * 
  * @performance
  * - Lock/unlock: O(1) via Set operations
  * - Memory: O(k) where k = number of active locks

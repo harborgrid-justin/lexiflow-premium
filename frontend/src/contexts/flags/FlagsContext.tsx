@@ -1,7 +1,7 @@
 // src/contexts/flags/FlagsContext.tsx
 import { FEATURES_CONFIG } from "@/config/features/features.config";
 import { apiClient } from "@/services/infrastructure/apiClient";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, useTransition } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import { freezeInDev } from "../utils/immutability";
 
 export type Flags = {

@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { Users } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Button } from '@/shared/ui/atoms/Button';

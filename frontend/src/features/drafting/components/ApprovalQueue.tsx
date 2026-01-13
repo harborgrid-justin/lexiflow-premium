@@ -2,7 +2,6 @@ import { useTheme } from '@/features/theme';
 import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';
 import { AlertCircle, CheckCircle } from 'lucide-react';
-import React from 'react';
 import * as styles from '../DraftingDashboard.styles';
 
 interface ApprovalQueueProps {

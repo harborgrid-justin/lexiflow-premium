@@ -8,7 +8,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash, ExternalLink } from 'lucide-react';
 
 // Internal Dependencies - Components

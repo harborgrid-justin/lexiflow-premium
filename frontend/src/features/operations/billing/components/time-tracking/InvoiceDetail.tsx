@@ -3,7 +3,7 @@
  * Display invoice details with payment tracking and PDF preview
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form } from 'react-router';
 import { Download, Send, CreditCard } from 'lucide-react';
 import type { Invoice } from '@/types/financial';

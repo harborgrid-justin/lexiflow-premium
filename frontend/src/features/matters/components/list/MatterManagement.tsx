@@ -14,7 +14,7 @@ import { EmptyState } from '@/shared/ui/molecules/EmptyState/EmptyState';
 import { Matter } from '@/types';
 import { format } from 'date-fns';
 import { Briefcase, Calendar, LayoutGrid, List, MoreVertical, Plus, Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export const MatterManagement: React.FC = () => {
   const { theme } = useTheme();

@@ -10,7 +10,6 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Database, Plus, RefreshCw, X } from 'lucide-react';
-import React from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { DataSourceSelector } from './DataSourceSelector';
 import { SystemHealthDisplay } from './SystemHealthDisplay';

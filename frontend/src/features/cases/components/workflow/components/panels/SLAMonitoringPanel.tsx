@@ -7,8 +7,6 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
-import React from 'react';
-
 export function SLAMonitoringPanel() {
   const { theme } = useTheme();
 

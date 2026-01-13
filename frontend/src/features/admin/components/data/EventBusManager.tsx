@@ -7,7 +7,7 @@ import { DataService } from '@/services/data/dataService';
 import { QUERY_KEYS } from '@/services/data/queryKeys';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // interface EventBusEvent {
 //   id: string;

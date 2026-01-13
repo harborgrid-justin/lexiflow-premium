@@ -6,8 +6,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
-import React from 'react';
-
 interface FormNavigationProps {
   currentStep: number;
   totalSteps: number;

@@ -29,7 +29,7 @@ import {
   Trash2,
   TrendingUp
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces

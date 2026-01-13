@@ -4,8 +4,6 @@ import { useTheme } from '@/features/theme';
 import { LegalEntity } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Clock, Plus, TrendingDown } from 'lucide-react';
-import React from 'react';
-
 interface Rate {
     firm: string;
     role: string;

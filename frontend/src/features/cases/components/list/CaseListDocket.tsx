@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, ArrowRight, Calendar, Link, Plus, RefreshCcw } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

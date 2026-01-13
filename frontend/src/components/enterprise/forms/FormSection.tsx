@@ -10,7 +10,7 @@
  * - Smooth animations
  */
 
-import React, { useState, useId } from 'react';
+import { useState, useId } from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { FormSection as FormSectionType } from '@/types/forms';

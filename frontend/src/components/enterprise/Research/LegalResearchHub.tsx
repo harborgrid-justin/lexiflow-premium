@@ -28,7 +28,7 @@ import {
   Sparkles,
   Star
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // ============================================================================
 // Internal Dependencies

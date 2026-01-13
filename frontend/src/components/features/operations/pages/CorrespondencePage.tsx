@@ -4,7 +4,6 @@
  * @description Correspondence management page - email and communication tracking
  */
 
-import React from 'react';
 import { CorrespondenceManager } from '@/features/operations/correspondence/CorrespondenceManager';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

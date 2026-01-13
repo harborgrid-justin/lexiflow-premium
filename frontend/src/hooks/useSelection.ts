@@ -16,6 +16,38 @@
  * - Range algorithm: Slice-based index calculation
  * - Deduplication: Set-based merge for range selections
  *
+ * DATA-ORIENTED RETURNS (G44):
+ * - Returns STATE (selectedIds, isAllSelected, isIndeterminate) + actions
+ * - Declarative: Consumers query selection state and invoke operations
+ * - NOT action-oriented: Provides selection data + manipulation controls
+ *
+ * STABLE CONTRACT (G43):
+ * - Public API: { selectedIds, toggleSelection, selectAll, isSelected, etc }
+ * - Implementation can change (array → Set) without breaking consumers
+ * - Return shape remains stable
+ *
+ * PURE COMPUTATION (G42):
+ * - isSelected, isAllSelected, isIndeterminate: Synchronous derivations
+ * - Range calculation: Pure slice-based algorithm
+ * - No side effects in calculations
+ *
+ * SEMANTIC MEMOIZATION (G53):
+ * - useCallback ensures methods are referentially stable
+ * - Critical for prop passing to memoized children
+ * - NOT for micro-optimization: Semantic intent is stability
+ *
+ * CONCURRENCY SAFETY (G49, G50):
+ * - Idempotent: Functional state updates
+ * - Render-count independent: No internal render tracking
+ *
+ * FAIL-FAST GUARDS (G54):
+ * - Runtime validation of items array and ID parameters
+ * - Throws on invalid inputs in development mode
+ *
+ * DOMAIN PRIMITIVE (G48):
+ * - Encodes multi-select semantics
+ * - Abstracts Shift+click range selection pattern
+ *
  * @performance
  * - Selection toggle: O(n) where n = selectedIds.length
  * - Range selection: O(k) where k = range size

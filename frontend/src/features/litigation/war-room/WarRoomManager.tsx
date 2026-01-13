@@ -5,7 +5,7 @@
  * Shows available cases ready for War Room strategic planning.
  */
 
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { useQuery } from '@/hooks/useQueryHooks';

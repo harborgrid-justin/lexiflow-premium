@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download } from 'lucide-react';
-import React, { Suspense, useTransition } from 'react';
+import { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -5,7 +5,7 @@
  * Provides graceful error handling with recovery options
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, ChevronDown, ChevronUp } from 'lucide-react';
 

@@ -4,7 +4,6 @@
  * @description Enterprise dashboard page - aggregates dashboard features into a standardized page
  */
 
-import React from 'react';
 import { Dashboard } from '@/features/dashboard/components/Dashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { User } from '@/types/system';

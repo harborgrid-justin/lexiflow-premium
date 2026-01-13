@@ -4,8 +4,6 @@ import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { HardDrive, Loader2, Server } from 'lucide-react';
-import React from 'react';
-
 interface DataFile {
   name: string;
   type: string;

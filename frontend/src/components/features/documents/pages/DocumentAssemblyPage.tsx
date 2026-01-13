@@ -4,7 +4,6 @@
  * @description Document assembly page - automated document generation from templates
  */
 
-import React from 'react';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface DocumentAssemblyPageProps {

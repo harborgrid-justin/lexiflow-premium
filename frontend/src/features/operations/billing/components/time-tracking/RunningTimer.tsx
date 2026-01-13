@@ -5,7 +5,7 @@
  */
 
 import { Clock, Pause, Play, Square } from 'lucide-react';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface RunningTimerProps {
   onComplete?: (elapsedHours: number) => void;

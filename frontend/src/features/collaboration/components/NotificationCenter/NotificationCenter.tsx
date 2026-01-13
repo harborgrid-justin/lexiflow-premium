@@ -7,7 +7,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useDeferredValue } from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
 import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 
 // ============================================================================

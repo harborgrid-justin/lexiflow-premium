@@ -7,8 +7,6 @@ import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
 import { TrustAccountType } from '@/types/trust-accounts';
 import { FormInput } from './FormInput';
-import React from 'react';
-
 interface FormState {
   jurisdiction?: string;
   accountType?: string;

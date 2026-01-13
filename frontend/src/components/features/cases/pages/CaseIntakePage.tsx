@@ -4,7 +4,6 @@
  * @description New case intake and onboarding page - form-based case creation
  */
 
-import React from 'react';
 import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
 import { CenteredLayout } from '@/shared/ui/layouts/CenteredLayout/CenteredLayout';
 

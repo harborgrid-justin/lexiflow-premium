@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileText } from 'lucide-react';
 import type { MatterFormData, FormErrors } from './types';
 import { PracticeArea, MatterType, MatterStatus, MatterPriority } from '@/types';

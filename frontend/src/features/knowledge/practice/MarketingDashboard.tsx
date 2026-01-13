@@ -11,7 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowRight, Megaphone, Target, Users } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================

@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
 
 // Internal Dependencies - Components

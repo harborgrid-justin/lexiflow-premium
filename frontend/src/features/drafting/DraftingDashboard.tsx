@@ -5,7 +5,7 @@ import { useTheme } from '@/features/theme';
 import { useToast } from '@/contexts/toast/ToastContext';
 import { cn } from '@/shared/lib/cn';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ApprovalQueue } from './components/ApprovalQueue';
 import { DocumentGenerator } from './components/DocumentGenerator';
 import { DraftingStats } from './components/DraftingStats';

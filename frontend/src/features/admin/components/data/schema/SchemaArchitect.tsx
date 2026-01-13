@@ -8,7 +8,7 @@ import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { SchemaSnapshots } from './SchemaSnapshots';

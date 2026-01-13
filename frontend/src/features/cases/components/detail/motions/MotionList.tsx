@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { Calendar, FileText, Gavel, GitBranch, MessageSquare, Users } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge, BadgeProps } from '@/shared/ui/atoms/Badge';

@@ -13,7 +13,7 @@
  * - Accessibility features
  */
 
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useEnhancedFormValidation } from '@/hooks/useEnhancedFormValidation';
 import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
 import { useTheme } from '@/features/theme';

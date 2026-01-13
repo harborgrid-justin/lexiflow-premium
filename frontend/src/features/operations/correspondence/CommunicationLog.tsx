@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowDownLeft, ArrowUpRight, Mail, Paperclip, Shield } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

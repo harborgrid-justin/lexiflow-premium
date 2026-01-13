@@ -13,7 +13,7 @@
 // ============================================================================
 import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { Eye, User } from 'lucide-react';
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

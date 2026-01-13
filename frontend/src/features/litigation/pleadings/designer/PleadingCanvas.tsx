@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, PleadingSection, Case, Party } from '@/types';
 import { GripVertical } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';

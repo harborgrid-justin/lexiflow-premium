@@ -6,8 +6,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle } from 'lucide-react';
-import React from 'react';
-
 interface FormInputProps {
   label: string;
   field: string;

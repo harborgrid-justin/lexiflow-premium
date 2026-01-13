@@ -5,7 +5,6 @@
  * Lightweight alternative to KPICard for simpler metrics
  */
 
-import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

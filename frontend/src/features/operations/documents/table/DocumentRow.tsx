@@ -4,8 +4,6 @@ import { TagList } from '@/shared/ui/molecules/TagList/TagList';
 import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Book, CheckSquare, Clock, Download, Eye, MoreVertical, Tag } from 'lucide-react';
-import React from 'react';
-
 interface DocumentRowProps {
     doc: LegalDocument;
     isSelected: boolean;

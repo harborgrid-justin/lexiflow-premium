@@ -8,8 +8,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { motion } from 'framer-motion';
-import React from 'react';
-
 interface SkeletonProps {
   className?: string;
   variant?: 'text' | 'circular' | 'rectangular' | 'rounded';

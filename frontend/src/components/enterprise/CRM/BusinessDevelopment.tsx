@@ -6,7 +6,7 @@
  * RFP response tracking, and win / loss analysis.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { ChartColorService, useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';

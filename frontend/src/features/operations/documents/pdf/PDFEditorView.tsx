@@ -12,7 +12,7 @@ import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Loader2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
 import { Field, InteractiveOverlay } from '../preview/InteractiveOverlay';
 

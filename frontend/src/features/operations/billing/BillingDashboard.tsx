@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { RefreshCw } from 'lucide-react';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

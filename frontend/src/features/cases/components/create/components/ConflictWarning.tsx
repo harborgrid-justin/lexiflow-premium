@@ -2,7 +2,6 @@
  * Conflict warning banner component
  */
 
-import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
 export interface ConflictWarningProps {

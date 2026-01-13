@@ -4,7 +4,7 @@ import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, Code, Database, Play, Plus, Save, Trash2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export interface RuleCondition {
     id: string;

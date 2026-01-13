@@ -9,8 +9,6 @@
 
 // External Dependencies
 import { Plus } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { Button } from '@/shared/ui/atoms/Button';
 

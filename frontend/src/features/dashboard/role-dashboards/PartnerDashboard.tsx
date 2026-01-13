@@ -11,7 +11,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Award, DollarSign, Target, TrendingUp, Users } from 'lucide-react';
-import React from 'react';
 import {
   Bar,
   BarChart,

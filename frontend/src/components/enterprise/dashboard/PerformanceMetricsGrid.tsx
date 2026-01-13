@@ -23,7 +23,7 @@ import {
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export interface PerformanceMetricsGridProps extends BaseDashboardProps {
   metrics: PerformanceMetric[];

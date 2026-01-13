@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 /**
  * LegalHoldWizard.tsx
  * Multi-step wizard for creating new legal holds

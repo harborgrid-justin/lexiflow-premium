@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+
 import { MetricCard } from '@/shared/ui/molecules/MetricCard/MetricCard';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 

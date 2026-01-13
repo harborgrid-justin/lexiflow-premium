@@ -5,7 +5,6 @@
  * Tracks Daubert/Frye challenges and expert qualifications.
  */
 
-import React from 'react';
 import { UserCheck, FileText, Gavel } from 'lucide-react';
 
 // Common Components

@@ -6,8 +6,6 @@
 import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/features/theme';
 import { AlertCircle } from 'lucide-react';
-import React from 'react';
-
 interface FormState {
   accountNumber?: string;
   accountName?: string;

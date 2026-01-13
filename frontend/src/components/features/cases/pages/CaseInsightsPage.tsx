@@ -4,7 +4,6 @@
  * @description Strategic case insights page - AI-powered case analysis and recommendations
  */
 
-import React from 'react';
 import { CaseInsightsDashboard } from '@/features/cases/components/insights/CaseInsightsDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

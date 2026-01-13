@@ -1,7 +1,7 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { BookOpen, Filter, Loader2, Search, Sparkles } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ResearchInputProps {
     query: string;

@@ -13,7 +13,7 @@
  * - Required field indicators
  */
 
-import React, { useId } from 'react';
+import { useId } from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
  

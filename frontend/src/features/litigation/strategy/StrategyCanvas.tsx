@@ -7,7 +7,7 @@
  * Uses useTheme hook to apply semantic colors.
  */
 
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 // Internal Components
 import { ContextMenu, type ContextMenuItem } from '@/shared/ui/molecules/ContextMenu';

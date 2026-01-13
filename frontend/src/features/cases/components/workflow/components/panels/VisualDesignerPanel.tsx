@@ -8,8 +8,6 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Boxes, Clock, Database, GitBranch, Layers, UserCheck, Webhook } from 'lucide-react';
-import React from 'react';
-
 interface VisualDesignerPanelProps {
   onAddConditionalBranch: () => void;
   onAddParallelExecution: () => void;

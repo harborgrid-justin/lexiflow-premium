@@ -11,7 +11,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/shared/lib/cn';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { Briefcase, Calendar, Clock, FileText, Target, TrendingUp } from 'lucide-react';
-import React from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const AttorneyDashboard: React.FC = () => {

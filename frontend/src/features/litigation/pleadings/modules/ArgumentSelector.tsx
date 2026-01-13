@@ -1,4 +1,3 @@
-import React from 'react';
 import { Target, GripVertical, ArrowRight } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

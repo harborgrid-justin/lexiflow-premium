@@ -3,7 +3,6 @@
  * Wrapper component for Recharts with consistent styling
  */
 
-import React from 'react';
 import { Download, RefreshCw, Maximize2 } from 'lucide-react';
 
 export interface ChartCardProps {

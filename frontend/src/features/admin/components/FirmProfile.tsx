@@ -26,7 +26,7 @@ import {
   Upload,
   Users
 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface FirmDetails {
   name: string;

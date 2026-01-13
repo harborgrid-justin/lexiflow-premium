@@ -2,7 +2,7 @@ import { useTheme } from '@/features/theme';
 import { useWindow } from '@/providers';
 import { cn } from '@/shared/lib/cn';
 import { Loader2, Maximize2, Menu, X } from 'lucide-react';
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { DataPlatformSidebar } from './DataPlatformSidebar';
 import { PlatformView } from './types';
 

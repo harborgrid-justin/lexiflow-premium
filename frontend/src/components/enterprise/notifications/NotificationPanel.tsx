@@ -4,6 +4,7 @@
  * @description Dropdown panel for displaying and managing notifications
  */
 
+import React, { useMemo } from 'react';
 import type { UINotification } from '@/types/notifications';
 import { cn } from '@/shared/lib/cn';
 import { formatDistanceToNow } from 'date-fns';
@@ -23,7 +24,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

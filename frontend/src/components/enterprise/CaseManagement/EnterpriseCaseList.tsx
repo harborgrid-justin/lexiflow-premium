@@ -27,7 +27,7 @@ import {
   Upload,
   UserPlus
 } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // Types & Interfaces

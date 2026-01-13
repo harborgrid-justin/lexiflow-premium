@@ -7,7 +7,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/lib/utils';
 import type { TimeEntry } from '@/types/financial';
 import { Check, Clock, DollarSign, Filter } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 

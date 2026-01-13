@@ -18,7 +18,7 @@ import {
     Network, Save,
     Scale
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

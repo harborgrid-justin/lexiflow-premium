@@ -4,7 +4,6 @@
  * @description Jurisdiction management page - court rules and local procedures
  */
 
-import React from 'react';
 import { JurisdictionManager } from '@/features/knowledge/jurisdiction/JurisdictionManager';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

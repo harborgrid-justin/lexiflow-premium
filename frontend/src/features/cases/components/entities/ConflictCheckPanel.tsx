@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, CheckCircle, Loader2, Shield } from 'lucide-react';
-import React, { useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -13,7 +13,7 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 const verificationSchema = z.object({

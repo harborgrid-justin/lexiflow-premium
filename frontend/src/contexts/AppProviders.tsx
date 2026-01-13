@@ -19,7 +19,6 @@
  */
 
 import { ThemeProvider } from '@/features/theme';
-import React from 'react';
 import { CaseProvider } from './case/CaseContext';
 import { DataSourceProvider } from './data/DataSourceContext';
 import { SyncProvider } from './sync/SyncContext';

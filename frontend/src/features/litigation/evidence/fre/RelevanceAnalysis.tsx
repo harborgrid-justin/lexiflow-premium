@@ -6,8 +6,6 @@
  */
 
 import { Filter, Scale, Wand2 } from 'lucide-react';
-import React from 'react';
-
 // Common Components
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/shared/ui/atoms/Badge';

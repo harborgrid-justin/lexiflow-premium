@@ -9,8 +9,6 @@ import { DedupeCluster } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
-import React from 'react';
-
 /**
  * DeduplicationManager - React 18 optimized with React.memo
  */

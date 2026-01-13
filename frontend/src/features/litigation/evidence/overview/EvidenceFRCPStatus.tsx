@@ -4,7 +4,6 @@
  * @description Displays the FRCP 26(a) disclosure status of an evidence item.
  */
 
-import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 // Common Components

@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 import { CRMView } from '@/config/tabs.config';
 import { Client } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';

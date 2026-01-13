@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { RiskMeter } from '@/features/cases/ui/components/RiskMeter/RiskMeter';
 import { Badge } from '@/shared/ui/atoms/Badge';

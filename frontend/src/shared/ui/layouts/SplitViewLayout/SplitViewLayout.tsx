@@ -10,7 +10,6 @@
  * - theme.border.default - Border colors
  */
 
-import React from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 

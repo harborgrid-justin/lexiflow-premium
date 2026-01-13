@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { Client } from '@/types';
 import { X, Lock, FileText, MessageSquare, UploadCloud, Activity, Shield } from 'lucide-react';
 import { Button } from '@/shared/ui/atoms/Button';

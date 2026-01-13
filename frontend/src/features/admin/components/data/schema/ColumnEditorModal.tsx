@@ -3,8 +3,6 @@ import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
-
 interface ColumnData {
     name?: string;
     type?: string;

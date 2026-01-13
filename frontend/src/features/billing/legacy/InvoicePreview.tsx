@@ -6,8 +6,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { Invoice } from '@/types/financial';
-import React from 'react';
-
 interface InvoicePreviewProps {
   invoice: Invoice;
 }

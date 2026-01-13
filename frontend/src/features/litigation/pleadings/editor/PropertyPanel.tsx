@@ -3,8 +3,6 @@ import { useTheme } from '@/features/theme';
 import { PleadingSection } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold } from 'lucide-react';
-import React from 'react';
-
 interface PropertyPanelProps {
     section?: PleadingSection;
     onUpdate: (updates: Partial<PleadingSection>) => void;

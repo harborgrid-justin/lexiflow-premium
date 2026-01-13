@@ -5,6 +5,32 @@
  * and Escape to close. Manages active index state with circular navigation and auto-reset on list
  * changes. Provides handleKeyDown callback for event binding.
  *
+ * DATA-ORIENTED RETURNS (G44):
+ * - Returns STATE (activeIndex) + actions (setActiveIndex, handleKeyDown)
+ * - Declarative: Consumers query current index and invoke navigation
+ *
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - activeIndex starts: -1 when closed, 0 when opened
+ * - activeIndex resets: When isOpen changes or items change
+ * - activeIndex cycles: Via modulo arithmetic (circular navigation)
+ * - activeIndex persists: Until list closes or changes
+ *
+ * PURE COMPUTATION (G42):
+ * - Navigation logic: Synchronous index arithmetic
+ * - No side effects in calculations
+ *
+ * SEMANTIC MEMOIZATION (G53):
+ * - useCallback on handleKeyDown for referential stability
+ * - Prevents parent re-renders from recreating handler
+ *
+ * CONCURRENCY SAFETY (G49, G50):
+ * - Idempotent: State updates use functional form
+ * - Render-count independent: No render counting
+ *
+ * DOMAIN PRIMITIVE (G48):
+ * - Encodes keyboard navigation semantics
+ * - Abstracts arrow key, Enter, Escape patterns
+ *
  * NO THEME USAGE: Utility hook for keyboard interaction logic
  */
 
@@ -61,11 +87,15 @@ export function useKeyboardNav<T>({
 }: UseKeyboardNavProps<T>): UseKeyboardNavReturn {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
-  // Reset index when list changes or closes
+  // G58 (LIFECYCLE): Reset index when list changes or closes
   useEffect(() => {
     setActiveIndex(isOpen && items.length > 0 ? 0 : -1);
-  }, [isOpen, items]); // Dependency on items ensures we reset if search results change
+    // CAUSAL DEPENDENCIES (G46):
+    // - isOpen: Changes trigger reset to initial state
+    // - items: Changes (search results) trigger reset to first item
+  }, [isOpen, items]);
 
+  // G53 (SEMANTIC MEMOIZATION): Stable handler for event binding
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!isOpen) return;
@@ -73,14 +103,17 @@ export function useKeyboardNav<T>({
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
+          // G42 (PURE COMPUTATION): Circular navigation via modulo
           setActiveIndex((prev) => (prev + 1) % items.length);
           break;
         case "ArrowUp":
           e.preventDefault();
+          // G42 (PURE COMPUTATION): Reverse circular navigation
           setActiveIndex((prev) => (prev - 1 + items.length) % items.length);
           break;
         case "Enter":
           e.preventDefault();
+          // G54 (FAIL-FAST): Boundary check before selection
           if (activeIndex >= 0 && activeIndex < items.length) {
             const item = items[activeIndex];
             if (item) onSelect(item);
@@ -92,6 +125,11 @@ export function useKeyboardNav<T>({
           break;
       }
     },
+    // CAUSAL DEPENDENCIES (G46):
+    // - isOpen: Guard condition depends on open state
+    // - items: Navigation operates on items array
+    // - activeIndex: Enter key uses current index
+    // - onSelect/onClose: Callbacks invoked on actions
     [isOpen, items, activeIndex, onSelect, onClose]
   );
 

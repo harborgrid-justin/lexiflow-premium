@@ -3,7 +3,7 @@
  * Rich text message composer with attachment support
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { Message } from '@/api/communications/messaging-api';
 import { TIMEOUTS } from '@/config/ports.config';
 

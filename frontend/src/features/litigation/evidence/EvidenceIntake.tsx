@@ -6,7 +6,7 @@
  */
 
 import { ArrowLeft, CheckCircle, Link, Loader2, Save, ShieldCheck, UploadCloud } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Common Components
 import { Button } from '@/shared/ui/atoms/Button/Button';

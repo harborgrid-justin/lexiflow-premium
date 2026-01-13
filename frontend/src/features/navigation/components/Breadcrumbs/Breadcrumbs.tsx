@@ -14,7 +14,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { ChevronRight, Home } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 

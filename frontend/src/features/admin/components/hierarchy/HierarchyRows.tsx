@@ -3,8 +3,6 @@ import { useTheme } from '@/features/theme';
 import { Group, Organization, User as UserType } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Building2, Globe, MoreVertical, Shield } from 'lucide-react';
-import React from 'react';
-
 interface OrgListItemProps {
     org: Organization;
     isSelected: boolean;

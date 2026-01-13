@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Clock, Search } from 'lucide-react';
 import React, { useId, useRef, useState } from 'react';
+import { Clock, Search } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

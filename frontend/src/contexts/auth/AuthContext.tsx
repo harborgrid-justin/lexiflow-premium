@@ -2,7 +2,7 @@
 import { authApi } from "@/api/domains/auth.api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { User } from "@/types";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 export type AuthState =
   | { status: "anonymous"; user: null }

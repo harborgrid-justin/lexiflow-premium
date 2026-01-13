@@ -12,8 +12,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================

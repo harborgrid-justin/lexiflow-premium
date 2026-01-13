@@ -13,7 +13,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

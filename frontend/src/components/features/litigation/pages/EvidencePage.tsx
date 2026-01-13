@@ -4,7 +4,6 @@
  * @description Evidence vault page - secure evidence management and chain of custody
  */
 
-import React from 'react';
 import { EvidenceDashboard } from '@/features/litigation/evidence/EvidenceDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { ViewMode } from '@/hooks/useEvidenceManager';

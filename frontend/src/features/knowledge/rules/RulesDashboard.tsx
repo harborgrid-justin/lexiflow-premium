@@ -9,8 +9,6 @@ import { DataService } from '@/services/data/dataService';
 import type { JudgeProfile } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, ArrowRight, BookOpen, Clock, Gavel, MapPin, Scale } from 'lucide-react';
-import React from 'react';
-
 interface RulesDashboardProps {
     onNavigate: (view: RulesView) => void;
 }

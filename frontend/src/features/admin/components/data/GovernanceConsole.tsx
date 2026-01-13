@@ -10,7 +10,7 @@ import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
 import { cn } from '@/shared/lib/cn';
 import { FileText, Plus } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AccessGovernance } from './governance/AccessGovernance';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
 

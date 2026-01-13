@@ -6,8 +6,6 @@
 
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import React from 'react';
-
 // ============================================================================
 // DOCKET TABLE SKELETON
 // ============================================================================

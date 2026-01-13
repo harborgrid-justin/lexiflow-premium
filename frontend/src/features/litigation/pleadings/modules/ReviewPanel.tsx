@@ -5,7 +5,7 @@ import { CaseId, TaskId, TaskPriorityBackend, TaskStatusBackend, UserId, Workflo
 import { PleadingComment } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { CheckCircle, MessageSquare, MessagesSquare, Send } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface ReviewPanelProps {
     comments: PleadingComment[];

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/shared/ui/molecules/Card';
 import { Button } from '@/shared/ui/atoms/Button';
 import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';

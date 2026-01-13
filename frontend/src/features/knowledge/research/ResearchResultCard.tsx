@@ -4,8 +4,6 @@ import { useTheme } from '@/features/theme';
 import { SearchResult } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { ExternalLink } from 'lucide-react';
-import React from 'react';
-
 interface ResearchResultCardProps {
     source: SearchResult;
     onView: () => void;

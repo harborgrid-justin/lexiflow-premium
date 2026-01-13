@@ -8,9 +8,10 @@ export const CASE_STATUS_VARIANTS: Record<CaseStatus, 'success' | 'warning' | 'e
     [CaseStatus.Discovery]: 'info',
     [CaseStatus.Active]: 'neutral',
     [CaseStatus.Open]: 'neutral',
-    [CaseStatus.Pending]: 'neutral',
+    [CaseStatus.OnHold]: 'neutral',
     [CaseStatus.Archived]: 'neutral',
-    [CaseStatus.Stayed]: 'neutral'
+    [CaseStatus.PreFiling]: 'neutral',
+    [CaseStatus.Transferred]: 'neutral'
 };
 
 export const CASE_TYPES = [

@@ -1,5 +1,4 @@
 // src/app/AppGate.tsx
-import React from "react";
 import { useAuth } from "../contexts/auth/AuthContext";
 import { useEntitlements } from "../contexts/entitlements/EntitlementsContext";
 import { useFlags } from "../contexts/flags/FlagsContext";

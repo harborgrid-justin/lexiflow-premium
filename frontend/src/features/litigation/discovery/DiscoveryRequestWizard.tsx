@@ -1,4 +1,4 @@
-import React, { useState, useTransition, useCallback } from 'react';
+import { useState, useTransition, useCallback } from 'react';
 import { useTheme } from '@/features/theme';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';

@@ -9,7 +9,6 @@
  */
 
 // External Dependencies
-import React from 'react';
 import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
 
 // Internal Dependencies - Components

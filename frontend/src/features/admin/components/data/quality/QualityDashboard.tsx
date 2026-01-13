@@ -9,7 +9,6 @@ import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { AlertOctagon, Check, CheckCircle2, RefreshCw } from 'lucide-react';
-import React from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface QualityDashboardProps {

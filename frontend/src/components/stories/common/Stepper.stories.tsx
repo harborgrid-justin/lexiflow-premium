@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Stepper } from '@/shared/ui/molecules/Stepper/Stepper';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /**
  * Stepper component for multi-step processes.

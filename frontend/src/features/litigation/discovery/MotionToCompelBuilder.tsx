@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DiscoveryRequest } from '@/types';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Button } from '@/shared/ui/atoms/Button';

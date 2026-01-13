@@ -8,8 +8,6 @@
  */
 
 import { BookOpen, Settings, X } from 'lucide-react';
-import React from 'react';
-
 // Internal Components
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';

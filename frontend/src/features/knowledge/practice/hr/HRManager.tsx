@@ -10,7 +10,6 @@ import { DataService } from '@/services/data/dataService';
 import { StaffMember, UserId } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
-import React from 'react';
 import { AddStaffModal } from './AddStaffModal';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';

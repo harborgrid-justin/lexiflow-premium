@@ -3,8 +3,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Briefcase, File, FileText, Loader2, Scale } from 'lucide-react';
-import React from 'react';
-
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
 }

@@ -6,8 +6,6 @@ import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { CheckCircle, Clock, Loader2, User, XCircle } from 'lucide-react';
-import React from 'react';
-
 export const AccessRequestManager: React.FC = () => {
     const { theme } = useTheme();
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId } from 'react';
+import { useState, useEffect, useId } from 'react';
 import { 
   Activity, CheckCircle, AlertTriangle, XCircle, RefreshCw, X, 
   TrendingUp, Clock, Zap

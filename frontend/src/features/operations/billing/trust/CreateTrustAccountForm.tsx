@@ -21,7 +21,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { CreateTrustAccountDto, TrustAccountStatus } from '@/types/trust-accounts';
 import { TrustAccountType as AccountType } from '@/types/trust-accounts';
 import { Building, CheckCircle, Landmark, Shield, Users } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AccountInfoStep } from './components/AccountInfoStep';
 import { BankDetailsStep } from './components/BankDetailsStep';
 import { ComplianceStep } from './components/ComplianceStep';

@@ -15,7 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react';
 
 // ========================================

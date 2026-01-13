@@ -4,7 +4,6 @@
  * @description Workflow and automation page - process management and task automation
  */
 
-import React from 'react';
 import { MasterWorkflow } from '@/features/cases/components/workflow/MasterWorkflow';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

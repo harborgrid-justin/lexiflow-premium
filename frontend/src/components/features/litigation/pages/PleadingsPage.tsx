@@ -4,7 +4,6 @@
  * @description Pleadings management page - automated legal document drafting
  */
 
-import React from 'react';
 import { PleadingDashboard } from '@/features/litigation/pleadings/PleadingDashboard';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 import type { PleadingDocument } from '@/types';

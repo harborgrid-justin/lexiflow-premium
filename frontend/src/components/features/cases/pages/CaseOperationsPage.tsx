@@ -4,7 +4,6 @@
  * @description Case operations and task management page - operational view of case activities
  */
 
-import React from 'react';
 import { CaseOperationsCenter } from '@/features/cases/components/operations/CaseOperationsCenter';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

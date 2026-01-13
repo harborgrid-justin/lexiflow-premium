@@ -4,8 +4,8 @@
  * Stores state in localStorage to persist across page reloads
  */
 
-import { Clock, Pause, Play, Square } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Clock, Pause, Play, Square } from 'lucide-react';
 
 interface RunningTimerProps {
   onComplete?: (elapsedHours: number) => void;

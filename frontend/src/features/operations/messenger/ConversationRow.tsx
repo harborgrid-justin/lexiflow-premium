@@ -3,8 +3,6 @@ import { useTheme } from '@/features/theme';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { cn } from '@/shared/lib/cn';
 import { Briefcase, ExternalLink } from 'lucide-react';
-import React from 'react';
-
 interface ConversationRowProps {
   conv: Conversation;
   isActive: boolean;

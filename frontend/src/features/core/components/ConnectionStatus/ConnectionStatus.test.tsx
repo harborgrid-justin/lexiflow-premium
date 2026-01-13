@@ -2,7 +2,6 @@ import { DataSourceProvider } from '@/providers';
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { ConnectionStatus } from './ConnectionStatus';
 
 // Mock apiClient

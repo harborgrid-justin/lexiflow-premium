@@ -5,8 +5,6 @@
  * Ideal for standard content pages that need scrolling and centered content.
  */
 
-import React from 'react';
-
 interface PageContainerLayoutProps {
   children: React.ReactNode;
   className?: string;

@@ -6,8 +6,6 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Clock, DollarSign, FileText, TrendingDown, TrendingUp } from 'lucide-react';
-import React from 'react';
-
 interface BillingSummaryCardProps {
   title: string;
   value: string | number;

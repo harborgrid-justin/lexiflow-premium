@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';

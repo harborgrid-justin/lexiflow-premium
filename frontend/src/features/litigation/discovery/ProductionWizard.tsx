@@ -25,7 +25,7 @@ import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repos
 import { ProductionSet } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface ProductionWizardProps {
   caseId?: string;

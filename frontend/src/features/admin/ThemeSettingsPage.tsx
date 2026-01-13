@@ -12,7 +12,7 @@ import { ChartColorService, useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { getChartTheme } from '@/utils/chartConfig';
 import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {

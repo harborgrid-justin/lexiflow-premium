@@ -8,7 +8,6 @@ import { ChartColorService, useTheme } from '@/features/theme';
 import { Card } from '@/shared/ui/molecules/Card/Card';
 import type { LeadsByStatus } from '@/types/crm';
 import { getChartTheme } from '@/utils/chartConfig';
-import React from 'react';
 import {
   Bar,
   BarChart,

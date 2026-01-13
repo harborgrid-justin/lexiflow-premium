@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { ArrowLeft, FileText, Link as LinkIcon, Plus } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

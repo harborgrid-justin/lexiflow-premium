@@ -34,7 +34,7 @@ import {
   Target,
   Users,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Area,
   AreaChart,

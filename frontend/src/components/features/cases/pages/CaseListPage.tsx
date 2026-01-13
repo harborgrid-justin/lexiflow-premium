@@ -4,7 +4,6 @@
  * @description Case list and management page - standardized list view for case management
  */
 
-import React from 'react';
 import { CaseManagement } from '@/features/cases/components/list/CaseManagement';
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
 

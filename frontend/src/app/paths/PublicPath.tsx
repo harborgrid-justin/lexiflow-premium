@@ -1,5 +1,5 @@
 // src/app/paths/PublicPath.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { OptimisticInput } from "../../components/performance/OptimisticInput";
 import { useAuth } from "../../contexts/auth/AuthContext";
 import { useData } from "../../contexts/data/DataContext";

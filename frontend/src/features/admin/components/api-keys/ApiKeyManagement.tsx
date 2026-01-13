@@ -10,7 +10,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { Copy, Eye, EyeOff, Key, Plus, RefreshCw, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface ApiKey {
   id: string;

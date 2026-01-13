@@ -10,7 +10,7 @@ import { LegalDocument } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Eraser, Loader2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PIIPanel } from '../preview/PIIPanel';
 
 export function RedactionStudioView() {

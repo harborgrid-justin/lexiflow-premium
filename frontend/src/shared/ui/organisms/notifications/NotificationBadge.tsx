@@ -15,7 +15,7 @@
  * @module NotificationBadge
  */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Badge props

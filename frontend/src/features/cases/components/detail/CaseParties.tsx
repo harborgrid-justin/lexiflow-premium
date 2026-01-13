@@ -10,8 +10,6 @@
 
 // External Dependencies
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
-import React from 'react';
-
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';

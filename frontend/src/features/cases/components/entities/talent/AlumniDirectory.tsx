@@ -8,7 +8,7 @@ import { MetricTile, SearchInputBar } from '@/shared/ui/organisms/_legacy/Refact
 import { LegalEntity } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Briefcase, Building, GraduationCap, Linkedin, Mail, Network } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface AlumniDirectoryProps {
   entities: LegalEntity[];

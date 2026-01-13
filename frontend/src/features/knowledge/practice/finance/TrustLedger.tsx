@@ -4,8 +4,6 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 import { FileText, Landmark } from 'lucide-react';
-import React from 'react';
-
 interface TrustLedgerAccount {
     client: string;
     matterId: string;

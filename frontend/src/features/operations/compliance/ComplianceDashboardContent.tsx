@@ -1,6 +1,6 @@
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import React, { lazy, memo } from 'react';
+import { lazy, memo } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { ConflictCheck, EthicalWall } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';

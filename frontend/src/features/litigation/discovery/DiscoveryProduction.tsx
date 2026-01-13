@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, Upload, FileText, Check, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
 
 // ============================================================================

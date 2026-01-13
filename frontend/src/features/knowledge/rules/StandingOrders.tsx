@@ -6,8 +6,6 @@ import { DataService } from '@/services/data/dataService';
 import type { JudgeProfile } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
-import React from 'react';
-
 export const StandingOrders: React.FC = () => {
     const { theme } = useTheme();
 

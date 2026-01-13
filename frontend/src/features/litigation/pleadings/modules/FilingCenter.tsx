@@ -2,8 +2,6 @@ import { Button } from '@/shared/ui/atoms/Button/Button';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { FileCheck, Printer, Stamp, UploadCloud } from 'lucide-react';
-import React from 'react';
-
 interface FilingCenterProps {
     onExport: (format: 'pdf' | 'docx') => void;
     isReady: boolean;

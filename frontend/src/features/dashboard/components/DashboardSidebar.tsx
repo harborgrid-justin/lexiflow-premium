@@ -11,8 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertCircle, ArrowRight, FileText, TrendingUp } from 'lucide-react';
-import React from 'react';
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================

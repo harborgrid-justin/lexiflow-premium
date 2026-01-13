@@ -4,11 +4,11 @@
  * @description Real-time metrics widget with live updates
  */
 
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertCircle, LucideIcon, RefreshCw } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
 
 export interface MetricItem {
   id: string;

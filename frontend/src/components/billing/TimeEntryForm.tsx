@@ -4,8 +4,8 @@
  * Includes LEDES code support and validation
  */
 
-import type { TimeEntry } from '@/types/financial';
 import React, { useState } from 'react';
+import type { TimeEntry } from '@/types/financial';
 import { Form } from 'react-router';
 import { RunningTimer } from './RunningTimer';
 

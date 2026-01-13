@@ -3,9 +3,9 @@
  * Display and filter expenses with receipt viewing
  */
 
+import React, { useState } from 'react';
 import type { FirmExpense } from '@/types/financial';
 import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
-import React, { useState } from 'react';
 import { Form, Link } from 'react-router';
 
 interface ExpenseListProps {

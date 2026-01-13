@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components

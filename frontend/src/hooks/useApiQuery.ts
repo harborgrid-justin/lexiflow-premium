@@ -3,6 +3,7 @@
  *
  * @module useApiQuery
  * @description React hook for data fetching with caching, similar to React Query's useQuery
+ * 
  * Provides:
  * - Automatic data fetching on mount
  * - Caching with configurable stale time
@@ -11,6 +12,34 @@
  * - Subscription to query updates
  * - Request cancellation on unmount
  * - TypeScript type safety
+ *
+ * EXPLICIT ASYNC STATE (G51):
+ * - loading: Initial fetch in progress (first-class state)
+ * - error: Explicit error state, not inferred from nullability
+ * - success: Explicit success indicator (isSuccess)
+ * - status: Discriminated union ('idle' | 'loading' | 'success' | 'error')
+ * - NOT inferred: States are explicit, not based on data presence or timing
+ *
+ * PURE COMPUTATION + EFFECT BOUNDARY (G42):
+ * - Pure: select transform, status derivation
+ * - Effect boundary: fetch operation, cache access
+ * - No render-phase side effects: All async in effects/callbacks
+ *
+ * REF USAGE (G45 - Identity, not data flow):
+ * - retryCount: Models IDENTITY of retry attempt sequence
+ * - isMounted: Models IDENTITY of component lifecycle
+ * - abortControllerRef: Models IDENTITY of cancellable request
+ *
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Data stabilizes: After successful fetch
+ * - Data resets: On refetch or queryKey change
+ * - Data persists: In cache according to staleTime
+ * - Cleanup: AbortController cancels in-flight requests on unmount
+ *
+ * CONCURRENCY SAFETY (G49, G50, G57):
+ * - Suspense-safe: Explicit loading states, no synchronous assumptions
+ * - Tearing-safe: AbortController prevents stale responses
+ * - Idempotent: Multiple renders don't duplicate fetches (cache layer)
  *
  * @example
  * ```tsx
@@ -83,6 +112,14 @@ export interface UseQueryOptions<TData = unknown> {
 
 /**
  * Query result
+ * 
+ * G51 (EXPLICIT ASYNC STATES): All async states are first-class, not inferred
+ * - data: May be undefined (explicit nullability)
+ * - error: Explicit error state (not inferred from !data)
+ * - isLoading: Explicit initial fetch indicator
+ * - isFetching: Explicit background refetch indicator
+ * - isSuccess/isError: Explicit outcome indicators
+ * - status: Discriminated union for type-safe state matching
  */
 export interface UseQueryResult<TData = unknown> {
   data: TData | undefined;

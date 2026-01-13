@@ -7,8 +7,6 @@ import React from 'react';
 // TYPES
 // ============================================================================
 
-interface SLAHeaderProps { }
-
 interface SLAListProps {
   slas: SLAItem[];
   formatDeadline: (dueTime: number) => string;

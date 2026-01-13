@@ -6,6 +6,7 @@ import { LRUCache } from "@/utils/LRUCache";
 import { MicroORM } from "./microORM";
 
 type Listener<T> = (item: T) => void;
+const MAX_LISTENERS_PER_REPO = 1000; // Safety limit to prevent runaway listener accumulation
 
 export abstract class Repository<T extends BaseEntity> {
   private cache: LRUCache<T>;

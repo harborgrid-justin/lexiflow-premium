@@ -27,7 +27,7 @@ export const FormsSigningView = () => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isPending, startTransition] = useTransition();
+    const [_isPending, _startTransition] = useTransition();
 
     // Defer search for better input responsiveness
     const deferredSearchTerm = useDeferredValue(searchTerm);

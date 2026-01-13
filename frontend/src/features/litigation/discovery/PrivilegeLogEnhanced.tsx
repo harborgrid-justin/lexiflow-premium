@@ -23,7 +23,7 @@ import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepos
 import type { PrivilegeLogEntryEnhanced } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';
 import { Download, Edit, Eye, FileText, Plus, Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface PrivilegeLogEnhancedProps {
   caseId?: string;

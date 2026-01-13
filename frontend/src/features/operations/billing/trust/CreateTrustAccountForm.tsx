@@ -210,14 +210,12 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
   ], []);
 
   const renderStepContent = useCallback(() => {
-    interface StepCommonProps {
-      formData: FormState;
-      getFieldError: (field: keyof FormState) => string | undefined;
-      updateField: <K extends keyof FormState>(field: K, value: FormState[K]) => void;
-      handleFieldBlur: (field: keyof FormState) => void;
-    }
-    
-    const commonProps: StepCommonProps = { formData, getFieldError, updateField, handleFieldBlur };
+    const commonProps = { 
+      formData, 
+      getFieldError: (field: string) => getFieldError(field as keyof FormState), 
+      updateField, 
+      handleFieldBlur: (field: string) => handleFieldBlur(field as keyof FormState)
+    };
 
     switch (currentStep) {
       case FormStep.ACCOUNT_INFO:

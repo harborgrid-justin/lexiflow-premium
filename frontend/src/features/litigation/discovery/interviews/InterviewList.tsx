@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { CustodianInterview } from '@/types';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';

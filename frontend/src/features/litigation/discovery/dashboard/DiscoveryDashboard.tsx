@@ -6,7 +6,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, ArrowRight, CheckCircle, Database, FileText, Scale } from 'lucide-react';
-import React from 'react';
+import { useState, useEffect, useTransition, useDeferredValue } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { DiscoveryRequest, LegalHold, PrivilegeLogEntry } from '@/types';

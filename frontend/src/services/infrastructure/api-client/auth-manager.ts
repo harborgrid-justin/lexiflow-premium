@@ -38,7 +38,7 @@ function tryDecodeJwt(
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
-    const decoded = JSON.parse(atob(parts[1]));
+    const decoded = JSON.parse(atob(parts[1] || ''));
     return {
       type: decoded.type,
       sub: decoded.sub,

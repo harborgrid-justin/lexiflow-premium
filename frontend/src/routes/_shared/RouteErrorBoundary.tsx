@@ -74,7 +74,7 @@ export function NotFoundError({
         <Link
           to={safePath}
           className="inline-flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
-          style={{ backgroundColor: theme.accent.primary }}
+          style={{ backgroundColor: theme.primary.DEFAULT }}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

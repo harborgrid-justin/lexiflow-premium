@@ -28,7 +28,7 @@ export class SanctionStipulationService {
 
     try {
       return await apiClient.get<SanctionMotion[]>("/discovery/sanctions", {
-        caseId,
+        { params: { caseId } }
       });
     } catch (error) {
       console.error("[SanctionStipulationService.getSanctions] Error:", error);
@@ -81,7 +81,7 @@ export class SanctionStipulationService {
     try {
       return await apiClient.get<StipulationRequest[]>(
         "/discovery/stipulations",
-        { caseId }
+        { params: { caseId } }
       );
     } catch (error) {
       console.error(

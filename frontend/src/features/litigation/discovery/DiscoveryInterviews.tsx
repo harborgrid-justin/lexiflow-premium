@@ -5,7 +5,8 @@ import { DataService } from '@/services/data/dataService';
 import { CaseId, CustodianInterview } from '@/types';
 import { cn } from '@/shared/lib/cn';
 import { MessageSquare, Plus } from 'lucide-react';
-import React from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
+import { useNotify } from '@/hooks/useNotify';
 import { InterviewList } from './interviews/InterviewList';
 import { InterviewModal } from './interviews/InterviewModal';
 // ✅ Migrated to backend API (2025-12-21)
@@ -73,7 +74,7 @@ export function DiscoveryInterviews({ caseId }: DiscoveryInterviewsProps) {
       <InterviewList
         interviews={interviews}
         onManage={(interview) => {
-          notify.info(`Managing interview: ${interview.title}`);
+          notify.info(`Managing interview: ${interview.name || interview.id}`);
           // TODO: Implement interview management modal
         }}
       />

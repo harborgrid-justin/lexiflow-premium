@@ -24,7 +24,7 @@ import { DISCOVERY_QUERY_KEYS, DiscoveryRepository } from '@/services/data/repos
 import type { ProcessingJob } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';
 import { AlertCircle, CheckCircle2, Clock, Pause, Play, RotateCcw, TrendingUp, Zap } from 'lucide-react';
-import React from 'react';
+import { useState, useMemo } from 'react';
 
 interface ProcessingProps {
   caseId?: string;

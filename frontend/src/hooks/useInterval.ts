@@ -5,6 +5,27 @@
  * Enterprise-grade interval timing with automatic cleanup.
  * Provides stable callback references and pause/resume support.
  * 
+ * TEMPORAL COHERENCE (G41):
+ * - Encodes periodic temporal assumption: callback fires every `delay` ms
+ * - Identity: interval ID persists across renders until delay changes
+ * - Lifecycle: interval created on delay change, destroyed on unmount/delay change
+ * 
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Interval starts: On mount if delay is non-null
+ * - Interval pauses: When delay becomes null
+ * - Interval resets: When delay value changes
+ * - Interval stops: On unmount (guaranteed cleanup)
+ * 
+ * REF USAGE (G45 - Identity, not data flow):
+ * - savedCallback: Models IDENTITY of latest callback (not state)
+ * - Ensures interval always invokes current callback without recreating timer
+ * - Preserves continuity: same interval ID, different callback over time
+ * 
+ * CONCURRENCY SAFETY (G49, G50, G57):
+ * - Idempotent: StrictMode double-invoke cleans up first interval
+ * - Render-count independent: No assumptions about render frequency
+ * - Suspense-safe: No synchronous completion expectations
+ * 
  * @example
  * ```typescript
  * // Basic interval
@@ -101,15 +122,20 @@ export function useInterval(callback: () => void, delay: number | null): void {
 
   /**
    * Remember the latest callback without recreating interval
-   * This prevents stale closures while avoiding unnecessary effect re-runs
+   * G45 (REF IDENTITY): savedCallback models continuity of callback identity
+   * across renders, NOT data flow. This preserves interval stability while
+   * allowing callback logic to change.
    */
   useEffect(() => {
     savedCallback.current = callback;
+    // CAUSAL DEPENDENCY (G46): callback changes update ref identity
   }, [callback]);
 
   /**
    * Set up the interval with automatic cleanup
-   * Only re-runs when delay changes (not when callback changes)
+   * G49 (IDEMPOTENCY): Safe under re-execution - cleanup function prevents
+   * multiple concurrent intervals in StrictMode
+   * G50 (RENDER COUNT): Independent of render frequency
    */
   useEffect(() => {
     /**

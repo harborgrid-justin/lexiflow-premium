@@ -41,7 +41,7 @@ export function DiscoveryResponse({
   request,
   onBack,
   onSave,
-}) => {
+}: DiscoveryResponseProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const [draftResponse, setDraftResponse] = useState("");

@@ -10,6 +10,34 @@
  *
  * This is the main hook for notification management in the application.
  *
+ * EXPLICIT ASYNC STATE (G51):
+ * - isLoading: First-class loading indicator
+ * - error: Explicit error state (not inferred from data nullability)
+ * - connectionState: Explicit WebSocket connection status
+ * - NOT inferred: All states explicit, not based on timing
+ *
+ * TEMPORAL COHERENCE (G41):
+ * - Encodes real-time + polling temporal model
+ * - WebSocket: Push-based immediate updates
+ * - Polling: Interval-based periodic fetching
+ * - Identity: Notification list persists across renders
+ *
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Notifications fetch: On mount if autoFetch enabled
+ * - Notifications update: Via WebSocket or polling
+ * - Notifications persist: Until manual refresh or mutation
+ * - Cleanup: WebSocket disconnects on unmount
+ *
+ * GLOBAL SINGLETON DEPENDENCIES (G55):
+ * WARNING: Hidden dependency on notificationsApi singleton
+ * - notificationsApi: Imported module-level constant
+ * - IMPROVEMENT NEEDED: Inject as parameter or context
+ * - Reduces testability and isolation
+ *
+ * PURE COMPUTATION + EFFECT BOUNDARY (G42):
+ * - Pure: unreadCount, unreadNotifications derivations
+ * - Effect boundary: API calls, WebSocket handlers, toasts
+ *
  * @module useNotifications
  */
 

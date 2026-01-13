@@ -120,7 +120,7 @@ export class BillingRepository extends Repository<TimeEntry> {
       // Handle entries response format
       const entries = Array.isArray(entriesResponse)
         ? entriesResponse
-        : entriesResponse?.data || [];
+        : (entriesResponse as { data?: unknown[] })?.data || [];
 
       // Aggregate WIP by Client
       const caseToClientMap: Record<string, string> = {};

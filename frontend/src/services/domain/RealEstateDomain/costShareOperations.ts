@@ -16,7 +16,7 @@ export async function getCostShares(filters?: {
   try {
     return await apiClient.get<RealEstateCostShare[]>(
       "/real-estate/cost-shares",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getCostShares] Error:", error);

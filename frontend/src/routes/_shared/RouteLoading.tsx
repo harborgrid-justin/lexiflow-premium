@@ -34,7 +34,7 @@ const SkeletonBase = memo(function SkeletonBase({
   return (
     <div
       className={`rounded ${animate ? 'animate-pulse' : ''} ${className}`}
-      style={{ backgroundColor: theme.surface.muted }}
+      style={{ backgroundColor: theme.surface.default }}
       aria-hidden="true"
     />
   );
@@ -63,7 +63,7 @@ const Spinner = memo(function Spinner({
   return (
     <svg
       className={`animate-spin ${sizeClasses[size]} ${className}`}
-      style={{ color: theme.accent.primary }}
+      style={{ color: theme.primary.DEFAULT }}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

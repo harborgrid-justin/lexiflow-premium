@@ -30,7 +30,7 @@ export class ApiClient {
   private _baseURL: string | null = null;
   private _authToken: string | null = null;
   private requestInterceptors: Array<(config: RequestConfig) => RequestConfig> = [];
-  private responseInterceptors: Array<<T>(response: T) => T> = [];
+  private responseInterceptors: Array<<T = unknown>(response: T) => T> = [];
   private _retryAttempts: number = 0;
   private _timeout: number = API_CLIENT_DEFAULT_TIMEOUT_MS;
 

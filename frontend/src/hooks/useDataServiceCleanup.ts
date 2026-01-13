@@ -14,6 +14,7 @@ import {
   cleanupDataService,
   logDataServiceMemory,
 } from "@/services/data/dataService";
+import { DATA_SERVICE_MEMORY_REFRESH_INTERVAL_MS } from "@/config/features/hooks.config";
 import { useEffect } from "react";
 
 interface UseDataServiceCleanupOptions {

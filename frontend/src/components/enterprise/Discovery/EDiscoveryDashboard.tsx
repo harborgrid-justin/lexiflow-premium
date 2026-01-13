@@ -130,7 +130,6 @@ export const EDiscoveryDashboard: React.FC<EDiscoveryDashboardProps> = ({
 
         setCustodians(custodiansData.map((c: Custodian) => {
           let status: Custodian['status'] = 'active';
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const s = ((c as unknown as Record<string, unknown>).status as string || 'active').toLowerCase();
           if (s === 'on hold') status = 'hold';
           else if (s === 'released') status = 'released';

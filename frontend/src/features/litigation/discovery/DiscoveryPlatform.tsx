@@ -59,7 +59,7 @@ import { DiscoveryRequest } from '@/types';
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
-const DiscoveryRequestWizard = lazy(() => import('./DiscoveryRequestWizard'));
+const DiscoveryRequestWizard = lazy(() => import('./DiscoveryRequestWizard').then(module => ({ default: module.DiscoveryRequestWizard || module.default })));
 const PrivilegeLogEnhanced = lazy(() => import('./PrivilegeLogEnhanced'));
 const LegalHoldsEnhanced = lazy(() => import('./LegalHoldsEnhanced'));
 const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));

@@ -20,7 +20,7 @@ export async function getAuditItems(filters?: {
   try {
     return await apiClient.get<RealEstateAuditItem[]>(
       "/real-estate/audit-items",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getAuditItems] Error:", error);

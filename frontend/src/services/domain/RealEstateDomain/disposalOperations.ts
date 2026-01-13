@@ -16,7 +16,7 @@ export async function getDisposals(filters?: {
   try {
     return await apiClient.get<RealEstateDisposal[]>(
       "/real-estate/disposals",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getDisposals] Error:", error);

@@ -393,7 +393,7 @@ export const CalendarService = {
       const response = await workflowApi.calendar.getAll(filters);
 
       // Handle paginated response format { data: [], total: 0 }
-      const events = Array.isArray(response) ? response : response?.data || [];
+      const events = Array.isArray(response) ? response : (response as { data?: unknown[] })?.data || [];
 
       // Ensure events is an array
       if (!Array.isArray(events)) {

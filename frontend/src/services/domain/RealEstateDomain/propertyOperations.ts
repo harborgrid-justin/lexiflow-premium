@@ -17,7 +17,7 @@ export async function getAllProperties(filters?: {
   try {
     return await apiClient.get<RealEstateProperty[]>(
       "/real-estate/properties",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getAllProperties] Error:", error);

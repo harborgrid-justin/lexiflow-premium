@@ -163,7 +163,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p) => p.subTabs.some((s) => s.id === activeTab)) ||
+      PARENT_TABS.find((p) => p.subTabs?.some((s) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );
@@ -173,7 +173,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = PARENT_TABS.find((p) => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
+    if (parent && parent.subTabs && parent.subTabs.length > 0) {
       setActiveTab(parent.subTabs[0]!.id as WarRoomView);
     }
   }, []);

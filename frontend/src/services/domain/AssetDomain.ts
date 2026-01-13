@@ -60,7 +60,7 @@ export const AssetService = {
     status?: string;
     assignedTo?: string;
   }): Promise<Asset[]> => {
-    return apiClient.get<Asset[]>("/assets", filters);
+    return apiClient.get<Asset[]>("/assets", { params: filters });
   },
 
   assignAsset: async (assetId: string, userId: string): Promise<boolean> => {

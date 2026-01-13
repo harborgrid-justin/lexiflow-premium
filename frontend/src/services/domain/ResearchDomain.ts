@@ -69,7 +69,7 @@ export const ResearchService = {
   searchCases: async (query: string): Promise<ResearchResult[]> => {
     try {
       return await apiClient.get<ResearchResult[]>("/research/cases", {
-        q: query,
+        params: { q: query },
       });
     } catch (error) {
       console.error("[ResearchService.searchCases] Backend error:", error);
@@ -80,7 +80,7 @@ export const ResearchService = {
   searchStatutes: async (query: string): Promise<ResearchResult[]> => {
     try {
       return await apiClient.get<ResearchResult[]>("/research/statutes", {
-        q: query,
+        params: { q: query },
       });
     } catch (error) {
       console.error("[ResearchService.searchStatutes] Backend error:", error);

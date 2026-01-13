@@ -75,7 +75,7 @@ export async function download(id: string): Promise<Blob> {
   try {
     const response = await fetch(
       `${apiClient.getBaseUrl()}/documents/${id}/download`,
-      { headers: (apiClient as any)["getHeaders"]() }
+      { headers: (apiClient as { getHeaders: () => Record<string, string> })["getHeaders"]() }
     );
     if (!response.ok) throw new Error(`Download failed: ${response.status}`);
     return await response.blob();

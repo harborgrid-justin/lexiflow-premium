@@ -65,7 +65,7 @@ export const DataSourceService = {
     type?: string;
     connected?: boolean;
   }): Promise<DataSource[]> => {
-    return apiClient.get<DataSource[]>("/data-sources", filters);
+    return apiClient.get<DataSource[]>("/data-sources", { params: filters });
   },
 
   connect: async (sourceId: string): Promise<boolean> => {

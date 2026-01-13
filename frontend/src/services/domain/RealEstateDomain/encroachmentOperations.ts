@@ -16,7 +16,7 @@ export async function getEncroachments(filters?: {
   try {
     return await apiClient.get<RealEstateEncroachment[]>(
       "/real-estate/encroachments",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getEncroachments] Error:", error);

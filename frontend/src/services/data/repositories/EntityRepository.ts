@@ -76,7 +76,7 @@ export class EntityRepository extends Repository<LegalEntity> {
       roles: (entityAny.roles as unknown as EntityRole[]) || [],
       riskScore: (entityAny.riskScore as number) || 0,
       tags: (entityAny.tags as string[]) || [],
-      status: (entity.status as any) || "Active",
+      status: ((entity.status as string) || "Active") as "Prospect" | "Active" | "Inactive" | "Blacklisted" | "Deceased",
       createdAt: entity.createdAt || new Date().toISOString(),
       updatedAt: entity.updatedAt || new Date().toISOString(),
       // Mapped to available fields

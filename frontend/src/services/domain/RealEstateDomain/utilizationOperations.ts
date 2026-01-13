@@ -17,7 +17,7 @@ export async function getUtilization(filters?: {
   try {
     return await apiClient.get<RealEstateUtilization[]>(
       "/real-estate/utilization",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getUtilization] Error:", error);

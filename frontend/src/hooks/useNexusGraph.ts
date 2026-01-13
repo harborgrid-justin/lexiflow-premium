@@ -24,6 +24,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 // ============================================================================
 // Utils & Constants
 import {
+  NEXUS_GRAPH_REPULSION,
+  NEXUS_GRAPH_SPRING_LENGTH,
+  NEXUS_GRAPH_SPRING_STRENGTH,
+  NEXUS_GRAPH_DAMPING,
+  NEXUS_GRAPH_CENTER_PULL,
+  NEXUS_GRAPH_ALPHA_DECAY
+} from "@/config/features/hooks.config";
+import {
   NODE_STRIDE,
   NexusLink,
   NexusPhysics,

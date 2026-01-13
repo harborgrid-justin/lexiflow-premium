@@ -3,6 +3,31 @@
  *
  * React hook for checking user permissions
  * Provides easy access to permission checking functions
+ * 
+ * PURE COMPUTATION + EFFECT BOUNDARY (G42):
+ * - Pure: All permission checks are synchronous derivations
+ * - No effects: This is a pure transformation hook
+ * - Memoized: Results cached based on user identity
+ * 
+ * DATA-ORIENTED RETURNS (G44):
+ * - Returns declarative checkers (can, canAny, canAll)
+ * - NOT imperative: Provides query functions, not commands
+ * - Stable contract: Return shape independent of implementation
+ * 
+ * SEMANTIC MEMOIZATION (G53):
+ * - useMemo prevents re-creating permission checkers on every render
+ * - Semantic intent: Permission checkers should be referentially stable
+ * - NOT for micro-optimization: Prevents child re-renders when passed as props
+ * 
+ * CONCURRENCY SAFETY (G49, G50):
+ * - Pure computation: No side effects to accumulate
+ * - Render-count independent: No internal state
+ * - Suspense-safe: Synchronous, no async operations
+ * 
+ * DOMAIN PRIMITIVE (G48):
+ * - Encodes permission domain semantics
+ * - Abstract permission checking logic from components
+ * - Composable: Can be used with other hooks
  */
 
 import { useAuthState } from '@/contexts/auth/AuthProvider';
@@ -110,6 +135,9 @@ export function usePermissions() {
        */
       canManageOrganization: () => canManageOrganization(user),
     }),
+    // CAUSAL DEPENDENCIES (G46):
+    // - user: Changes trigger permission recalculation
+    // - Memoization ensures referential stability for semantic reasons (G53)
     [user]
   );
 }

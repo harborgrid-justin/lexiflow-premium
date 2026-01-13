@@ -16,7 +16,7 @@ export async function getOutgrants(filters?: {
   try {
     return await apiClient.get<RealEstateOutgrant[]>(
       "/real-estate/outgrants",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getOutgrants] Error:", error);

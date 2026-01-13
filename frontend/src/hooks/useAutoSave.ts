@@ -4,6 +4,34 @@
  * Provides automatic data persistence with race condition prevention.
  * Debounces save operations and handles concurrent save attempts.
  *
+ * TEMPORAL COHERENCE (G41):
+ * - Encodes delay-based persistence: saves occur `delay` ms after last change
+ * - Race condition handling: queue model for concurrent save attempts
+ * - Identity: saveInProgressRef tracks save operation continuity
+ *
+ * PURE COMPUTATION + EFFECT BOUNDARY (G42):
+ * - Pure: Data comparison (JSON.stringify) happens synchronously
+ * - Effect boundary: Async save operation isolated in performSave
+ * - No render-phase side effects: All mutations in callbacks/effects
+ *
+ * REF USAGE (G45 - Identity, not data flow):
+ * - saveInProgressRef: Models IDENTITY of ongoing save operation
+ * - pendingSaveRef: Models IDENTITY of queued save request
+ * - lastSavedDataRef: Models IDENTITY of successfully saved snapshot
+ * - mountedRef: Models IDENTITY of component lifecycle
+ * - CRITICAL: These are NOT state - they track operation identity across renders
+ *
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Save triggers: After `delay` ms of data inactivity
+ * - Save completes: Asynchronously, may span multiple renders
+ * - Save persists: lastSavedDataRef holds last successful save
+ * - Cleanup: mountedRef prevents post-unmount state updates
+ *
+ * FAIL-FAST GUARDS (G54):
+ * - Validates enabled state before saving
+ * - Checks mounted state before callbacks
+ * - Wraps errors in domain-specific AutoSaveError
+ *
  * @example
  * ```typescript
  * const { forceSave, isSaving } = useAutoSave({
@@ -78,14 +106,29 @@ export interface UseAutoSaveReturn {
 /**
  * Automatically saves data with debouncing and race condition prevention.
  *
+ * G54 (FAIL-FAST): Runtime guards ensure correct usage and prevent silent corruption
+ * G49 (IDEMPOTENCY): Race condition handling via refs makes this safe under re-execution
+ * G50 (RENDER COUNT): Uses refs to avoid render count assumptions
+ *
  * @param options - Configuration options
  * @returns Object with forceSave method and isSaving state
  */
 export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveReturn {
-  const saveInProgressRef = useRef(false);
-  const pendingSaveRef = useRef(false);
-  const lastSavedDataRef = useRef<T>(options.data);
-  const mountedRef = useRef(true);
+  // G54: Fail-fast validation
+  if (process.env.NODE_ENV !== 'production') {
+    if (!options.data) {
+      throw new Error('[useAutoSave] options.data is required');
+    }
+    if (typeof options.onSave !== 'function') {
+      throw new Error('[useAutoSave] options.onSave must be a function');
+    }
+  }
+
+  // G45: Refs model IDENTITY, not data flow
+  const saveInProgressRef = useRef(false);  // Identity: ongoing save operation
+  const pendingSaveRef = useRef(false);     // Identity: queued save request
+  const lastSavedDataRef = useRef<T>(options.data);  // Identity: last saved snapshot
+  const mountedRef = useRef(true);          // Identity: component lifecycle
 
   const { data, onSave, delay = FORM_AUTO_SAVE_DELAY_MS, enabled = true, onSuccess, onError } = options;
 
@@ -94,6 +137,7 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveRetur
     return () => {
       mountedRef.current = false;
     };
+    // CAUSAL DEPENDENCIES (G46): Empty deps = mount/unmount lifecycle only
   }, []);
 
   const performSave = useCallback(async (dataToSave: T) => {

@@ -50,6 +50,25 @@ export type EventListener<T = unknown> = (data: T) => void;
  * - Type-safe event emissions
  * - Cleanup on unmount
  *
+ * GLOBAL SINGLETON DEPENDENCIES (G55):
+ * WARNING: This hook has hidden dependencies on global singletons:
+ * - localStorage (auth token retrieval)
+ * - window.location (WS URL construction)
+ * - import.meta.env (environment config)
+ * 
+ * IMPROVEMENT NEEDED (G55): Make these explicit parameters:
+ * - Pass auth token via options.auth.token (not localStorage)
+ * - Pass wsUrl via options.url (not window.location)
+ * - Inject config via options (not import.meta.env)
+ * 
+ * Current design reduces testability and breaks isolation under parallel rendering.
+ * TODO: Refactor to dependency injection pattern
+ *
+ * EXPLICIT ASYNC STATE (G51):
+ * - status: Discriminated union of connection states
+ * - error: First-class error state
+ * - reconnectAttempt: Explicit retry count
+ *
  * @example
  * ```tsx
  * const { socket, status, isConnected, emit, on, off } = useWebSocket({

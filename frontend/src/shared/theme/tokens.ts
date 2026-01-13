@@ -10,6 +10,7 @@
 
 // Re-export everything from centralized location
 export * from "@/features/theme/tokens";
+export type { FontMode, ThemeMode, ThemeDensity } from "@/features/theme/tokens";
 
 export interface DesignTokens {
   fontMode: FontMode;
@@ -241,7 +242,6 @@ export const tokens = DEFAULT_TOKENS;
  */
 export function getTokens(
   mode: ThemeMode = "light",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _density: ThemeDensity = "normal",
   fontMode: FontMode = "sans"
 ): DesignTokens {

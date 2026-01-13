@@ -173,7 +173,7 @@ export const CRMService = {
 
   getAnalytics: async (mode: "light" | "dark" = "light") => {
     try {
-      return await apiClient.get("/crm/analytics", { mode });
+      return await apiClient.get("/crm/analytics", { params: { mode } });
     } catch (e) {
       console.warn("Backend analytics failed", e);
       return {

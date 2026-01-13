@@ -3,7 +3,7 @@ import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
 import { DISCOVERY_TAB_CONFIG } from '@/config/tabs.config';
-import React from 'react';
+import { useState, useMemo } from 'react';
 
 interface DiscoveryNavigationProps {
   activeTab: DiscoveryView;
@@ -43,7 +43,7 @@ export function DiscoveryNavigation({
       </div>
 
       {/* Sub-Navigation (Pills) */}
-      {activeParentTab && activeParentTab.subTabs.length > 1 && (
+      {activeParentTab && activeParentTab.subTabs && activeParentTab.subTabs.length > 1 && (
         <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
           {activeParentTab.subTabs.map(tab => (
             <button

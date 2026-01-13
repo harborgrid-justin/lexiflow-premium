@@ -95,7 +95,7 @@ export function BusinessDevelopmentView() {
             leadsByStatus={analyticsData.leadsByStatus}
             onLeadClick={setSelectedLead}
             theme={theme}
-            chartTheme={chartTheme as any}
+            chartTheme={chartTheme as Record<string, string>}
             chartColors={chartColors}
           />
         )}
@@ -110,7 +110,7 @@ export function BusinessDevelopmentView() {
             winRate={metrics.winRate}
             avgSalesCycle={metrics.avgSalesCycle}
             theme={theme}
-            chartTheme={chartTheme as any}
+            chartTheme={chartTheme as Record<string, string>}
             chartColors={chartColors}
           />
         )}

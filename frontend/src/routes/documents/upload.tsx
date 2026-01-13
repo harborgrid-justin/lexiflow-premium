@@ -64,7 +64,7 @@ export default function DocumentUploadRoute() {
       <div className="mb-8">
         <button
           onClick={() => navigate(-1)}
-          className={`inline-flex items-center gap-2 text-sm mb-4 ${theme.text.secondary} ${theme.interactive.hover}`}
+          className={`inline-flex items-center gap-2 text-sm mb-4 ${theme.text.secondary} ${theme.primary.hover}`}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -91,7 +91,7 @@ export default function DocumentUploadRoute() {
         </div>
 
         {/* Help Text */}
-        <div className={`mt-6 rounded-lg border p-4 ${theme.border.default}`} style={{ backgroundColor: theme.accent.primary + '10' }}>
+        <div className={`mt-6 rounded-lg border p-4 ${theme.border.default}`} style={{ backgroundColor: theme.primary.light }}>
           <h4 className={`text-sm font-medium mb-2 ${theme.text.primary}`}>
             Upload Guidelines
           </h4>

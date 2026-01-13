@@ -124,12 +124,12 @@ export const StrategyService = {
       arguments: LegalArgument[];
       defenses: Defense[];
       citations: Citation[];
-    }>("/strategies", { caseId });
+    }>("/strategies", { params: { caseId } });
   },
 
   getStrategies: async (caseId?: string): Promise<Strategy[]> => {
     const params = caseId ? { caseId } : {};
-    return apiClient.get<Strategy[]>("/strategies", params);
+    return apiClient.get<Strategy[]>("/strategies", { params });
   },
 
   createStrategy: async (strategy: Partial<Strategy>): Promise<Strategy> => {
@@ -156,7 +156,7 @@ export const StrategyService = {
     try {
       return await apiClient.get<Recommendation[]>(
         "/strategies/recommendations",
-        { caseId }
+        { params: { caseId } }
       );
     } catch (error) {
       console.error(

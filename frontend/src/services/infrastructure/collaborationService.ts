@@ -131,6 +131,12 @@ type WSMessagePayload =
   | { documentId: string }
   | { userId: string };
 
+type WSMessageType = 'presence_update' | 'cursor_move' | 'edit_operation' | 'lock_request' | 'lock_release' | 'conflict_detected';
+type WSMessage = { type: WSMessageType; payload: WSMessagePayload };
+type EditConflict = { editId: string; reason: string };
+
+const MAX_PENDING_EDITS = 1000;
+
 /**
  * Real-Time Collaboration Service
  * Manages WebSocket connection, presence, cursors, locks, and edits

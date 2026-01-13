@@ -172,7 +172,7 @@ export function CRMDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Recent Client Interactions">
           <div className="space-y-4">
-            {cases.slice(0, 3).map((caseItem, idx) => (
+            {cases.slice(0, 3).map((caseItem: { id: string; caseNumber?: string; title: string; status?: string }, idx: number) => (
               <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
                 <div className="flex items-center gap-3">
                   <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
@@ -197,9 +197,9 @@ export function CRMDashboard() {
         <Card title="Key Accounts (Top Revenue)">
           <div className="space-y-4">
             {clients
-              .sort((a, b) => (b.totalBilled || 0) - (a.totalBilled || 0))
+              .sort((a: { totalBilled?: number }, b: { totalBilled?: number }) => (b.totalBilled || 0) - (a.totalBilled || 0))
               .slice(0, 3)
-              .map((client, idx) => (
+              .map((client: { id: string; name: string; totalBilled?: number }, idx: number) => (
                 <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
                   <div>
                     <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name || 'Unknown'}</p>

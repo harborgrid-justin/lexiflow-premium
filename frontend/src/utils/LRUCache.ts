@@ -246,7 +246,7 @@ export class LRUCache<T> {
     // Try to estimate value sizes (rough approximation)
     for (const value of this.cache.values()) {
       if (typeof value === "string") {
-        totalSize += value.length * 2; // UTF-16 encoding
+        totalSize += typeof value === 'string' ? value.length * 2 : 0; // UTF-16 encoding
       } else if (typeof value === "object" && value !== null) {
         try {
           totalSize += JSON.stringify(value).length * 2;

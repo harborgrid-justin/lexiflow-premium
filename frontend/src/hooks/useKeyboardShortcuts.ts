@@ -5,6 +5,35 @@
  * Provides keyboard shortcut registration and handling.
  * Supports modifier keys and prevents conflicts with input fields.
  * 
+ * COMPOSITION OVER CONFIGURATION (G56, G60):
+ * WARNING: This hook is monolithic with complex option objects.
+ * 
+ * REFACTORING NEEDED:
+ * - Split into: useKeyPress, useModifierKeys, useShortcutRegistry
+ * - Compose smaller hooks: useKeyPress + useModifierKeys = useShortcut
+ * - Current design: Opaque, hard to test, configuration-heavy
+ * - Desired design: Small orthogonal hooks that compose
+ * 
+ * Example refactor:
+ * ```typescript
+ * // Instead of:
+ * useKeyboardShortcuts({ onUndo, onRedo, onDelete, ... });
+ * 
+ * // Prefer:
+ * useShortcut('ctrl+z', handleUndo);
+ * useShortcut('ctrl+shift+z', handleRedo);
+ * useShortcut('delete', handleDelete);
+ * ```
+ * 
+ * FAIL-FAST GUARDS (G54):
+ * - Should validate shortcut format (currently implicit)
+ * - Should throw on invalid key combinations
+ * - Should warn on conflicting shortcuts
+ * 
+ * GLOBAL SINGLETON DEPENDENCIES (G55):
+ * - Hidden dependency on document.addEventListener (implicit global)
+ * - Should accept target element as parameter
+ * 
  * @example
  * ```typescript
  * useKeyboardShortcuts({

@@ -105,7 +105,7 @@ export const MatterManagement: React.FC = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className={cn("p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm", theme.surface.default, (theme.border as Record<string, string>).default)}>
+      <div className={cn("p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input

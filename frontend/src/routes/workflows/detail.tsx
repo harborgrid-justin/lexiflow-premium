@@ -8,6 +8,7 @@
 
 import { requireAuthentication } from '@/utils/route-guards';
 import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
+import { useTheme } from '@/features/theme';
 import { api } from '../../api';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";
@@ -103,6 +104,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 export default function WorkflowDetailRoute() {
   const { template } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

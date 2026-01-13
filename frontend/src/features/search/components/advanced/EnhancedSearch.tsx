@@ -49,7 +49,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     debounceDelay
   });
 
-  useClickOutside(containerRef, () => setIsOpen(false));
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
     <div ref={containerRef} className={styles.searchContainer(className)}>

@@ -45,11 +45,11 @@ export function useClientAnalytics() {
 
   // Calculated metrics
   const metrics = {
-    totalProfit: calculateTotalProfit(profitabilityData as any),
-    avgProfitMargin: calculateAvgProfitMargin(profitabilityData as any),
-    totalLTV: calculateTotalLTV(ltvData as any),
-    avgNPS: calculateAvgNPS(satisfactionData as any),
-    highRiskClients: countHighRiskClients(riskData as any),
+    totalProfit: calculateTotalProfit(profitabilityData as Record<string, unknown>),
+    avgProfitMargin: calculateAvgProfitMargin(profitabilityData as Record<string, unknown>),
+    totalLTV: calculateTotalLTV(ltvData as Record<string, unknown>),
+    avgNPS: calculateAvgNPS(satisfactionData as Record<string, unknown>),
+    highRiskClients: countHighRiskClients(riskData as Record<string, unknown>),
   };
 
   return {

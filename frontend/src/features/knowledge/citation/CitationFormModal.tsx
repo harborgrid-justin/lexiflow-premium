@@ -23,7 +23,7 @@ export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, on
   const [type, setType] = useState<Citation['citationType']>('case_law');
   const [notes, setNotes] = useState('');
 
-  const { mutate: createCitation, loading: isLoading } = useMutation(
+  const { mutate: createCitation, isLoading } = useMutation(
     async () => {
       return DataService.citations.create({
         citationText,
@@ -61,7 +61,7 @@ export const CitationFormModal: React.FC<CitationFormModalProps> = ({ isOpen, on
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!citationText) return;
-    createCitation();
+    createCitation(formState);
   };
 
   return (

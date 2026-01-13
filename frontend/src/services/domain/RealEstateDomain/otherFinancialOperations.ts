@@ -23,7 +23,7 @@ export async function getSolicitations(filters?: {
   try {
     return await apiClient.get<RealEstateSolicitation[]>(
       "/real-estate/solicitations",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getSolicitations] Error:", error);
@@ -56,7 +56,7 @@ export async function getRelocations(filters?: {
   try {
     return await apiClient.get<RealEstateRelocation[]>(
       "/real-estate/relocations",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getRelocations] Error:", error);

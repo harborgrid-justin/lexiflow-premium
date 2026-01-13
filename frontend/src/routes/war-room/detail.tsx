@@ -9,6 +9,7 @@
 import { DataService } from '@/services/data/dataService';
 import type { Advisor, Case, Expert, WarRoom } from '@/types';
 import { useLoaderData, useNavigate } from 'react-router';
+import { useTheme } from '@/features/theme';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/detail";
@@ -111,6 +112,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function WarRoomDetailRoute() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { item, advisors, experts } = useLoaderData() as { item: Case, advisors: Advisor[], experts: Expert[] };
 
   return (

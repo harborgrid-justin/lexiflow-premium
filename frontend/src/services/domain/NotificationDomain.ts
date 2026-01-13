@@ -67,7 +67,7 @@ export const NotificationService = {
   }): Promise<Notification[]> => {
     return apiClient.get<Notification[]>(
       "/communications/notifications",
-      filters
+      { params: filters }
     );
   },
 

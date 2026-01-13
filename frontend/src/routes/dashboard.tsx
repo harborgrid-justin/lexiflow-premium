@@ -61,7 +61,7 @@ export default function DashboardRoute({ loaderData: _loaderData }: DashboardRou
         role="status"
         aria-label="Loading dashboard"
       >
-        <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: theme.accent.primary + '33', borderTopColor: theme.accent.primary }} />
+        <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: theme.primary.DEFAULT + '33', borderTopColor: theme.primary.DEFAULT }} />
       </div>
     );
   }
@@ -103,8 +103,8 @@ export function ErrorBoundary({ error }: { error: unknown }) {
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className={`rounded-md px-4 py-2 text-white ${theme.interactive.hover}`}
-          style={{ backgroundColor: theme.status.error }}
+          className={`rounded-md px-4 py-2 text-white ${theme.primary.hover}`}
+          style={{ backgroundColor: theme.status.error.bg }}
         >
           Reload Dashboard
         </button>

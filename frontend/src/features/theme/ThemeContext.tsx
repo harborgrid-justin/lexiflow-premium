@@ -45,6 +45,8 @@ interface ThemeContextType {
   // Guideline 26: Actions separated by urgency
   readonly setDensity: (d: ThemeDensity) => void;
   readonly toggleDark: () => void; // Urgent - immediate visual feedback
+  readonly setTheme: (mode: 'light' | 'dark') => void;
+  readonly toggleTheme: () => void;
   readonly updateToken: (category: keyof DesignTokens | 'root', key: string, value: string, subKey?: string) => void; // Non-urgent
   readonly resetTokens: () => void; // Non-urgent
 }
@@ -62,12 +64,20 @@ const createTheme = (tokens: DesignTokens): ThemeObject => ({
     primary: tokens.colors.primary,
     secondary: tokens.colors.surface,
     subtle: tokens.colors.background,
+    muted: tokens.colors.background,
   },
   interactive: {
     primary: tokens.colors.secondary,
     success: tokens.colors.success,
+    hover: tokens.colors.primaryDark,
+  },
+  accent: {
+    primary: tokens.colors.accent,
+    secondary: tokens.colors.primaryLight,
+    muted: tokens.colors.textMuted,
   },
   border: {
+    input: (arg0: string, input: string, input1: unknown, primary: string) => tokens.colors.border,
     default: tokens.colors.border,
     light: tokens.colors.borderLight,
     focused: tokens.colors.primary,
@@ -162,6 +172,8 @@ const DEFAULT_CONTEXT: ThemeContextType = Object.freeze({
   isPendingThemeChange: false,
   setDensity: () => { throw new Error('ThemeProvider not mounted'); },
   toggleDark: () => { throw new Error('ThemeProvider not mounted'); },
+  setTheme: () => { throw new Error('ThemeProvider not mounted'); },
+  toggleTheme: () => { throw new Error('ThemeProvider not mounted'); },
   updateToken: () => { throw new Error('ThemeProvider not mounted'); },
   resetTokens: () => { throw new Error('ThemeProvider not mounted'); },
 });
@@ -234,6 +246,16 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   }, []);
 
+  // Guideline 26: Add setTheme and toggleTheme as aliases for consistency
+  const setTheme = useCallback((mode: 'light' | 'dark') => {
+    setIsDark(mode === 'dark');
+    if (localStorageRef.current) {
+      localStorageRef.current.setItem('lexiflow_dark', String(mode === 'dark'));
+    }
+  }, []);
+
+  const toggleTheme = toggleDark; // Alias for backward compatibility
+
   // Guideline 21 & 27: Effect is pure, no time-based assumptions
   // Guideline 24: Idempotent under StrictMode double-invocation
   useEffect(() => {
@@ -301,6 +323,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       isDark,
       mode: isDark ? 'dark' : 'light',
       toggleDark,
+      setTheme,
+      toggleTheme,
       updateToken,
       resetTokens,
       ui: UI_CONFIG,
@@ -314,7 +338,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return Object.freeze(contextValue);
     }
     return contextValue;
-  }, [tokens, density, setDensity, isDark, toggleDark, updateToken, resetTokens, isPending]);
+  }, [tokens, density, setDensity, isDark, toggleDark, setTheme, toggleTheme, updateToken, resetTokens, isPending]);
 
   // Guideline 21 & 24: DOM effects must be idempotent and concurrent-safe
   // Guideline 27: No time-based assumptions
@@ -380,7 +404,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       cleanupCallbacks.push(() => root.style.removeProperty(`--z-${key}`));
     });
     Object.entries(layout).forEach(([key, val]) => {
-      root.style.setProperty(`--layout-${key}`, val as string);
+      root.style.setProperty(`--layout-${key}`, String(val));
       cleanupCallbacks.push(() => root.style.removeProperty(`--layout-${key}`));
     });
     
@@ -405,3 +429,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     </ThemeContext.Provider>
   );
 };
+
+// Export useTheme hook
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+}

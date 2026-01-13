@@ -26,7 +26,7 @@ import { DiscoveryRepository } from '@/services/data/repositories/DiscoveryRepos
 import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, BarChart, CheckCircle, Clock, Eye, Mail, Plus, Send } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { LegalHoldWizard } from './LegalHoldWizard';
 

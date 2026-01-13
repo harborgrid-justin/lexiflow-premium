@@ -15,6 +15,30 @@
  * - Callbacks: Memoized via useCallback for performance
  * - Data lifecycle: Set on open, cleared on close
  * 
+ * DATA-ORIENTED RETURNS (G44):
+ * - Returns STATE (isOpen, data) + declarative actions (open, close)
+ * - NOT action-oriented: Consumers get state snapshot + controls
+ * - Data descriptor: Provides payload alongside modal state
+ * 
+ * STABLE CONTRACT (G43):
+ * - Public API: { isOpen, open, close, data }
+ * - Implementation can switch from useState to useReducer without breaking consumers
+ * - Referential stability: Callbacks memoized for prop identity
+ * 
+ * SEMANTIC MEMOIZATION (G53):
+ * - useCallback ensures open/close are referentially stable
+ * - NOT for micro-optimization: prevents child re-renders when passed as props
+ * - Semantic intent: Modal component shouldn't re-render on parent re-render
+ * 
+ * LIFECYCLE ASSUMPTIONS (G58):
+ * - Data persists: Until modal closes (explicit close() call)
+ * - Data resets: Automatically on close (prevents stale payloads)
+ * - Modal state: Controlled, can be opened/closed independently of data
+ * 
+ * FAIL-FAST GUARDS (G54):
+ * - Runtime validation in development mode
+ * - Type safety via TypeScript generics
+ * 
  * @performance
  * - Callback stability: useCallback prevents re-renders of child components
  * - State updates: Batched by React (open + setData = single render)
@@ -58,7 +82,7 @@
  * ```
  * 
  * @created 2024-06-15
- * @modified 2025-12-22
+ * @modified 2025-01-12
  */
 
 // =============================================================================
@@ -157,7 +181,7 @@ function validateInitialState(initialState: unknown): void {
  * - No manual cleanup needed (React handles unmount)
  */
 export function useModal<T = unknown>(initialState: boolean = false): UseModalReturn<T> {
-  // Validate inputs in development
+  // G54 (FAIL-FAST): Validate inputs in development
   if (process.env.NODE_ENV !== 'production') {
     validateInitialState(initialState);
   }
@@ -167,6 +191,11 @@ export function useModal<T = unknown>(initialState: boolean = false): UseModalRe
 
   /**
    * Open modal with optional data payload
+   * 
+   * G53 (SEMANTIC MEMOIZATION): useCallback for referential stability,
+   * not micro-optimization. Prevents child re-renders when passed as prop.
+   * 
+   * G49 (IDEMPOTENCY): Safe under re-execution, no side effect accumulation
    * 
    * @param modalData - Optional data to associate with modal
    * 
@@ -179,11 +208,15 @@ export function useModal<T = unknown>(initialState: boolean = false): UseModalRe
       setData(modalData);
     }
     setIsOpen(true);
+    // EMPTY DEPS (G46): No external dependencies, always stable
   }, []);
 
   /**
    * Close modal and clear associated data
    * Prevents stale data from persisting after close
+   * 
+   * G53 (SEMANTIC MEMOIZATION): Stable reference for prop passing
+   * G58 (LIFECYCLE): Data cleared on close (explicit cleanup)
    * 
    * @example
    * modal.close();
@@ -191,6 +224,7 @@ export function useModal<T = unknown>(initialState: boolean = false): UseModalRe
   const close = useCallback(() => {
     setIsOpen(false);
     setData(null);
+    // EMPTY DEPS (G46): No external dependencies, always stable
   }, []);
 
   return { isOpen, open, close, data };

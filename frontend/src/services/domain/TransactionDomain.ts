@@ -127,7 +127,7 @@ export const TransactionService = {
     endDate?: string;
   }): Promise<Transaction[]> => {
     try {
-      return apiClient.get<Transaction[]>("/billing/transactions", filters);
+      return apiClient.get<Transaction[]>("/billing/transactions", { params: filters });
     } catch (error) {
       console.error("[TransactionService.getTransactions] Error:", error);
       return [];

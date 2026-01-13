@@ -5,6 +5,28 @@
  * Advanced memoization hooks for React performance optimization.
  * Provides enhanced versions of useMemo and useCallback with performance tracking.
  *
+ * SEMANTIC MEMOIZATION GUIDELINES (G53):
+ * - Use for SEMANTIC STABILITY (referential identity), not micro-optimization
+ * - Default React.memo/useMemo/useCallback are sufficient for most cases
+ * - Only use this when you need performance tracking/debugging
+ *
+ * WHEN TO USE (G53 - Semantic Reasons):
+ * ✅ Callback passed to optimized child (React.memo)
+ * ✅ Dependency of other hooks (useEffect, useMemo)
+ * ✅ Value stored in ref or context
+ * ✅ Performance debugging (track expensive computations)
+ *
+ * WHEN NOT TO USE (G53 - Premature Optimization):
+ * ❌ "This calculation looks expensive" (measure first!)
+ * ❌ Every calculation (overhead > benefit)
+ * ❌ Simple derivations (object creation, array map)
+ * ❌ Values not used in dependencies or comparisons
+ *
+ * AVOID MAGIC (G60):
+ * - This hook adds instrumentation, making behavior observable
+ * - Performance warnings are explicit, not hidden
+ * - Consumers must understand performance implications
+ *
  * @example
  * ```tsx
  * function ExpensiveComponent({ data }: Props) {

@@ -74,7 +74,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataService } from "@/services/data/dataService";
 
 // Configuration
-import { TIME_TRACKER_DEFAULT_RATE } from "@/config/features/hooks.config";
+import { TIME_TRACKER_DEFAULT_RATE, TIME_TRACKER_MIN_BILLABLE_SECONDS, TIME_TRACKER_INTERVAL_MS as TIMER_INTERVAL_MS } from "@/config/features/hooks.config";
 
 // Hooks
 import { useNotify } from "./useNotify";

@@ -95,6 +95,11 @@ export async function handleResponse<T>(response: Response): Promise<T> {
     });
 
     // Create error object with response details attached
+    interface ErrorResponse {
+      data?: { message?: string; details?: unknown };
+      status?: number;
+    }
+    
     interface ErrorWithResponse extends ExternalServiceError {
       response?: ErrorResponse;
       status?: number;

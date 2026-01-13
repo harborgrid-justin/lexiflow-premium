@@ -25,6 +25,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { IMAGE_OPTIMIZATION_DEFAULT_WIDTH, IMAGE_OPTIMIZATION_DEFAULT_HEIGHT } from '@/config/features/hooks.config';
 
 /**
  * Image loading state

@@ -15,7 +15,7 @@ export async function getAcquisitions(filters?: {
   try {
     return await apiClient.get<RealEstateAcquisition[]>(
       "/real-estate/acquisitions",
-      filters
+      { params: filters }
     );
   } catch (error) {
     console.error("[RealEstateService.getAcquisitions] Error:", error);

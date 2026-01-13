@@ -121,7 +121,7 @@ export class KnowledgeRepository {
   getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
     try {
       return await apiClient.get<WikiArticle[]>("/knowledge/wiki", {
-        q: query,
+        { params: { q: query } },
       });
     } catch (error) {
       console.warn("Failed to fetch wiki articles", error);

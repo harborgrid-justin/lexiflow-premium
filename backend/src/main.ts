@@ -201,7 +201,6 @@ function registerShutdownHandlers(app: INestApplication, logger: Logger): void {
 
 // Only load source-map-support in development (saves memory in production)
 if (process.env.NODE_ENV !== "production") {
-  // @ts-ignore
   import("source-map-support").then((module) => module.install()).catch(() => {});
 }
 

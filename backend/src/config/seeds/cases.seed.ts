@@ -46,6 +46,8 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
     try {
       // Assign random attorney and client
       const attorney = users[Math.floor(Math.random() * users.length)];
+      if (!attorney) continue;
+
       const client = clients[Math.floor(Math.random() * clients.length)];
 
       const statusMapping: Record<string, CaseStatus> = {

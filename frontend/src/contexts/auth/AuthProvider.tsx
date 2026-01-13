@@ -115,7 +115,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Computed values
   const isAuthenticated = user !== null;
 
-    clearError,
   // Session management functions
   const clearSessionTimers = useCallback(() => {
     if (sessionTimeoutRef.current) clearTimeout(sessionTimeoutRef.current);
@@ -129,7 +128,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const authApi = new AuthApiService();
       await authApi.logout();
 
-    clearError,
       // Clear storage
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(AUTH_USER_KEY);

@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Loader2, Radio } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -28,7 +28,7 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useThemeContext } from '@/features/theme';
 import { useWindow } from '@/providers';
 import { useDocketSheet } from '@/features/cases/hooks/useDocketSheet';
 
@@ -36,14 +36,14 @@ import { useDocketSheet } from '@/features/cases/hooks/useDocketSheet';
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
-import { Case, CaseId, DocketEntry } from '@/types';
+import { CaseId, DocketEntry } from '@/types';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
 }
 
 export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
-  const { theme } = useTheme();
+  const { theme } = useThemeContext();
   const { openWindow, closeWindow } = useWindow();
   
   const {
@@ -58,7 +58,6 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       caseParties,
       addModal,
       deleteModal,
-      entryToDelete, setEntryToDelete,
       handleLoadMore,
       handleSaveEntry,
       confirmDelete,

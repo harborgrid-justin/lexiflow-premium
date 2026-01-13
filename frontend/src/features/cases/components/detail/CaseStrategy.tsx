@@ -21,12 +21,11 @@ import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useCaseStrategy } from '@/features/cases/hooks/useCaseStrategy';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
 // import { queryKeys } from '@/utils/queryKeys';
 
@@ -55,11 +54,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [defenses, setDefenses] = useState(initialDefenses);
 
   // Fetch strategy data
-  const { data: strategyData } = useQuery(
-    ['case-strategy', caseId],
-    () => DataService.strategy.getCaseStrategy(caseId),
-    { enabled: !!caseId }
-  );
+  const { strategyData, saveStrategyItem, deleteStrategyItem, isSaving } = useCaseStrategy(caseId);
 
   useEffect(() => {
     if (strategyData) {
@@ -78,80 +73,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{ type: string; id: string } | null>(null);
 
-  // Mutation for saving strategy items
-  const { mutate: saveStrategyItem, isLoading: isSaving } = useMutation(
-    async ({ type, item }: { type: string; item: Citation | LegalArgument | Defense }) => {
-      // Build payload that matches CreateStrategyItemDto
-      const payload: Record<string, unknown> = {
-        type, // Must be "Argument", "Defense", or "Citation"
-        caseId,
-      };
 
-      // Add type-specific fields
-      if (type === 'Citation') {
-        const citation = item as Citation;
-        payload.citation = citation.citation || citation.title;
-        payload.title = citation.title;
-        payload.court = citation.court;
-        payload.year = citation.year;
-      } else if (type === 'Defense') {
-        const defense = item as Defense;
-        payload.title = defense.title;
-        payload.description = defense.description;
-        payload.defenseType = defense.type; // Maps Defense.type to defenseType field
-        payload.status = defense.status;
-      } else if (type === 'Argument') {
-        const argument = item as LegalArgument;
-        payload.title = argument.title;
-        payload.description = argument.description;
-        payload.status = argument.status;
-      }
-
-      if (editingItem) {
-        return await DataService.strategy.update(item.id, payload);
-      } else {
-        return await DataService.strategy.add(payload);
-      }
-    },
-    {
-      onSuccess: (_data, variables) => {
-        success(`${variables.type} ${editingItem ? 'updated' : 'saved'} successfully`);
-        queryClient.invalidate(['case-strategy', caseId]);
-      },
-      onError: (error: Error) => {
-        notifyError(`Failed to save: ${error.message}`);
-      }
-    }
-  );
-
-  // Mutation for deleting strategy items
-  const { mutate: deleteStrategyItem } = useMutation(
-    async ({ type, id }: { type: string; id: string }) => {
-      await DataService.strategy.delete(id, type as 'Argument' | 'Defense' | 'Citation');
-      return { type, id };
-    },
-    {
-      onSuccess: (data) => {
-        success(`${data.type} deleted successfully`);
-        queryClient.invalidate(['case-strategy', caseId]);
-
-        // Update local state
-        if (data.type === 'Citation') {
-          setCitations(citations.filter(c => c.id !== data.id));
-        } else if (data.type === 'Argument') {
-          setArgs(args.filter(a => a.id !== data.id));
-        } else {
-          setDefenses(defenses.filter(d => d.id !== data.id));
-        }
-
-        setIsDeleteConfirmOpen(false);
-        setItemToDelete(null);
-      },
-      onError: (error: Error) => {
-        notifyError(`Failed to delete: ${error.message}`);
-      }
-    }
-  );
 
   const handleSave = () => {
     const id = editingItem?.id || crypto.randomUUID();
@@ -215,7 +137,18 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     }
 
     // Persist to DataService
-    saveStrategyItem({ type: modalType, item: itemToSave });
+    saveStrategyItem({ 
+      type: modalType, 
+      item: itemToSave, 
+      isEditing: !!editingItem 
+    }, {
+      onSuccess: () => {
+        success(`${modalType} ${editingItem ? 'updated' : 'saved'} successfully`);
+      },
+      onError: (error: Error) => {
+        notifyError(`Failed to save: ${error.message}`);
+      }
+    });
 
     strategyModal.close();
     setNewItem({});
@@ -236,7 +169,26 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      deleteStrategyItem(itemToDelete);
+      deleteStrategyItem(itemToDelete, {
+        onSuccess: (data: any) => {
+          success(`${data.type} deleted successfully`);
+          
+          // Update local state
+          if (data.type === 'Citation') {
+            setCitations(citations.filter(c => c.id !== data.id));
+          } else if (data.type === 'Argument') {
+            setArgs(args.filter(a => a.id !== data.id));
+          } else {
+            setDefenses(defenses.filter(d => d.id !== data.id));
+          }
+
+          setIsDeleteConfirmOpen(false);
+          setItemToDelete(null);
+        },
+        onError: (error: Error) => {
+          notifyError(`Failed to delete: ${error.message}`);
+        }
+      });
     }
   };
 

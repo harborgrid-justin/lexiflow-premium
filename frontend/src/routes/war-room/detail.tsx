@@ -8,7 +8,6 @@
 
 import { DataService } from '@/services/data/dataService';
 import type { Advisor, Case, Expert, WarRoom } from '@/types';
-import { useTheme } from '@/features/theme';
 import { useLoaderData, useNavigate } from 'react-router';
 import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';

@@ -2,10 +2,16 @@ import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { Citation, Defense, LegalArgument } from '@/types';
 
+interface StrategyData {
+    arguments: LegalArgument[];
+    defenses: Defense[];
+    citations: Citation[];
+}
+
 export const useCaseStrategy = (caseId: string) => {
-    const { data: strategyData, isLoading } = useQuery(
+    const { data: strategyData, isLoading } = useQuery<StrategyData>(
         ['case-strategy', caseId],
-        () => DataService.strategy.getCaseStrategy(caseId),
+        () => DataService.strategy.getCaseStrategy(caseId) as Promise<StrategyData>,
         { enabled: !!caseId }
     );
 
@@ -44,7 +50,7 @@ export const useCaseStrategy = (caseId: string) => {
             }
         },
         {
-            onSuccess: (_data, variables) => {
+            onSuccess: () => {
                 queryClient.invalidate(['case-strategy', caseId]);
             }
         }
@@ -56,14 +62,14 @@ export const useCaseStrategy = (caseId: string) => {
             return { type, id };
         },
         {
-            onSuccess: (data) => {
+            onSuccess: () => {
                 queryClient.invalidate(['case-strategy', caseId]);
             }
         }
     );
 
     return {
-        strategyData: strategyData as any, // Cast to any to handle the loose structure returned by service
+        strategyData,
         isLoading,
         saveStrategyItem,
         isSaving,

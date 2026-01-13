@@ -5,7 +5,6 @@
 
 import { DateRangeSelector } from '@/components/enterprise/analytics';
 import type { AuditLog } from '@/types/analytics-enterprise';
-import { useTheme } from '@/features/theme';
 import { subDays } from 'date-fns';
 import { AlertCircle, Download, Search, Shield, User } from 'lucide-react';
 import { useState } from 'react';
@@ -43,7 +42,6 @@ clientLoader.hydrate = true as const;
 
 export default function AuditTrailRoute() {
   const { logs } = useLoaderData<typeof clientLoader>();
-  const { theme } = useTheme();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState('all');

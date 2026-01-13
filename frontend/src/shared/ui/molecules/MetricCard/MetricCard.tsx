@@ -5,7 +5,6 @@
  */
 
 import { cn } from '@/shared/lib/cn';
-import { useTheme } from '@/features/theme';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -30,7 +29,6 @@ export const MetricCard = React.memo<MetricCardProps>(({
   isLive = false,
   sparklineData
 }) => {
-  const { theme } = useTheme();
 
   // Normalize value to handle undefined, null, and NaN
   const normalizedValue = React.useMemo(() => {

@@ -20,18 +20,16 @@ import { ScheduleTimeline } from './planning/ScheduleTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useCasePlanning } from '@/features/cases/hooks/useCasePlanning';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/shared/lib/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types & Interfaces
-import { Case, CasePhase, WorkflowTask } from '@/types';
+import { Case } from '@/types';
 
 interface CasePlanningProps {
     caseData: Case;
@@ -53,27 +51,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
     const [viewStartDate] = useState(new Date(new Date().setMonth(new Date().getMonth() - 1)));
 
     // Data Queries
-    const { data: phases = [] } = useQuery<CasePhase[]>(
-        ['cases', caseData.id, 'phases'],
-        () => DataService.phases.getByCaseId(caseData.id)
-    );
-    const { data: tasks = [] } = useQuery<WorkflowTask[]>(
-        ['tasks', caseData.id],
-        () => DataService.tasks.getByCaseId(caseData.id)
-    );
-
-    const { mutate: updateTask } = useMutation(
-        (task: WorkflowTask) => DataService.tasks.update(task.id, task),
-        {
-            invalidateKeys: [['tasks', caseData.id]],
-            // Optimistic Update
-            onSuccess: (updatedTask: WorkflowTask) => {
-                const current = queryClient.getQueryState<WorkflowTask[]>(['tasks', caseData.id])?.data || [];
-                const newTasks = current.map(t => t.id === updatedTask.id ? updatedTask : t);
-                queryClient.setQueryData(['tasks', caseData.id], newTasks);
-            }
-        }
-    );
+    const { phases, tasks, updateTask } = useCasePlanning(caseData.id);
 
     const pixelsPerDay = useMemo(() => {
         switch (zoom) {

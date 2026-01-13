@@ -12,7 +12,7 @@ export * from "./ThemeContext.types";
 export * from "./tokens";
 
 // Theme context and provider
-export { ThemeProvider, useTheme } from "./ThemeContext";
+export { ThemeProvider, useThemeContext } from "./ThemeContext";
 export type { ThemeObject } from "./ThemeContext";
 
 // Theme services (chart colors, utilities, etc.)

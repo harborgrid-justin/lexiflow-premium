@@ -3,18 +3,20 @@
  * Advanced financial reporting with profitability analysis, realization rates, and revenue forecasting
  */
 
-import {
-  type MatterProfitability,
-  type ProfitabilityMetrics,
-  type RealizationMetrics,
-  type RevenueForecasting,
-  type TimekeeperPerformance,
-  type WorkInProgressMetrics
+import type {
+  MatterProfitability,
+  ProfitabilityMetrics,
+  RealizationMetrics,
+  RevenueForecasting,
+  TimekeeperPerformance,
+  WorkInProgressMetrics
 } from '@/api/billing/enterprise-billing.service';
+import type {
+  FinancialReportTab,
+} from '@/config/billing.config';
 import {
   FINANCIAL_REPORT_TAB_LABELS,
   FINANCIAL_REPORT_TABS,
-  FinancialReportTab,
   REPORT_PERIODS,
   ReportPeriod
 } from '@/config/billing.config';

@@ -15,7 +15,6 @@
 
 import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
-import { useTheme } from '@/features/theme';
 import { DataService } from '@/services/data/dataService';
 import { Suspense } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';

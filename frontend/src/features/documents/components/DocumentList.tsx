@@ -3,7 +3,6 @@
  * Comprehensive document list with sorting, filtering, pagination, and bulk actions
  */
 
-import { useState } from 'react';
 import { DocumentCard } from './DocumentCard';
 import { DocumentRow } from './DocumentRow';
 import type { LegalDocument } from '@/types/documents';

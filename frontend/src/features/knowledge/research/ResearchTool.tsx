@@ -19,7 +19,7 @@ import React, { Suspense, lazy } from 'react';
 import { useResearchTool } from './hooks/useResearchTool';
 
 // Hooks & Context
-import { useTheme } from '@/features/theme';
+import { useThemeContext } from '@/features/theme';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
@@ -29,7 +29,6 @@ import { cn } from '@/shared/lib/cn';
 import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
-import { Clause } from '@/types';
 
 const ClauseHistoryModal = lazy(async () => {
   const module = await import('../clauses/ClauseHistoryModal');
@@ -37,13 +36,12 @@ const ClauseHistoryModal = lazy(async () => {
 });
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
-  const { theme } = useTheme();
+  const { theme } = useThemeContext();
   
   const {
       activeView,
       setActiveView,
       clauseSelection,
-      selectedJudgeId,
   } = useResearchTool(initialTab, caseId);
 
   const renderContent = () => {

@@ -17,12 +17,12 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+// Removed unused DataService
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
-import { useTheme } from '@/features/theme';
+import { useThemeContext } from '@/features/theme';
 import { useBillingInvoices } from './hooks/useBillingInvoices';
 import { getInvoiceBadgeVariant } from './utils/invoiceUtils';
 
@@ -33,8 +33,7 @@ import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 
 // Utils & Constants
-import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
-import { InvoiceStatusEnum } from '@/types/enums';
+// Removed unused billingQueryKeys and InvoiceStatusEnum
 import { cn } from '@/shared/lib/cn';
 import { Formatters } from '@/utils/formatters';
 
@@ -44,15 +43,13 @@ import { Invoice } from '@/types';
 // ============================================================================
 // TYPES
 // ============================================================================
-interface MutationContext {
-  previousInvoices?: Invoice[];
-}
+// Removed MutationContext interface
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 const BillingInvoicesComponent: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme } = useThemeContext();
   const notify = useNotify();
   const { 
     filteredInvoices, 

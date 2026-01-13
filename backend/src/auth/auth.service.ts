@@ -9,6 +9,7 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "@users/users.service";
 import * as bcrypt from "bcrypt";
+// @ts-ignore
 import { authenticator } from "otplib";
 import * as qrcode from "qrcode";
 import { v4 as uuidv4 } from "uuid";

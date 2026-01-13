@@ -85,7 +85,7 @@ export class RedisIoAdapter extends IoAdapter {
 
       // Publisher client
       this.pubClient = createClient(clientOptions);
-      this.pubClient.on("error", (err) => {
+      this.pubClient.on("error", (err: any) => {
         this.logger.error("Redis Pub Client Error:", err);
       });
       this.pubClient.on("connect", () => {
@@ -98,7 +98,7 @@ export class RedisIoAdapter extends IoAdapter {
 
       // Subscriber client (must be a separate connection)
       this.subClient = this.pubClient.duplicate();
-      this.subClient.on("error", (err) => {
+      this.subClient.on("error", (err: any) => {
         this.logger.error("Redis Sub Client Error:", err);
       });
       this.subClient.on("connect", () => {

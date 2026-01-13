@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, MoreThan } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Session } from '@auth/entities/session.entity';
-import UAParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
 interface UAParserResult {
   name?: string;

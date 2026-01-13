@@ -100,7 +100,7 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
           url: redisUrl,
           socket: {
             connectTimeout: MasterConfig.REDIS_CONNECT_TIMEOUT,
-            reconnectStrategy: (retries) => {
+            reconnectStrategy: (retries: number) => {
               if (retries > MasterConfig.REDIS_MAX_RETRIES_PER_REQUEST) {
                 this.logger.error('Max Redis reconnection attempts reached');
                 return new Error('Max retries reached');
@@ -110,7 +110,7 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
           },
         });
 
-        this.redisClient.on('error', (err) => {
+        this.redisClient.on('error', (err: any) => {
           this.logger.error('Redis Client Error', err);
         });
 

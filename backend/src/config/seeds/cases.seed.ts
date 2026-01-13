@@ -60,7 +60,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
         status: (statusMapping[caseData.status] || CaseStatus.OPEN) as CaseStatus,
         type: caseData.type as any,
         practiceArea: caseData.practiceArea as string,
-        assignedAttorney: attorney,
+        leadAttorneyId: attorney?.id,
         client: client,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),

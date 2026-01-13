@@ -272,7 +272,7 @@ export class AbacGuard implements CanActivate {
     // In a real implementation, you would fetch resource from database
     // For now, return a basic context
     return {
-      id: resourceId,
+      id: (Array.isArray(resourceId) ? resourceId[0] : resourceId) || '',
       type: this.getResourceTypeFromPath(request.path),
       attributes: {},
     };

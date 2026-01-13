@@ -367,7 +367,12 @@ export class CalendarIntegrationService {
             location: event.location,
             start: { dateTime: event.start.dateTime },
             end: { dateTime: event.end.dateTime },
-            attendees: event.attendees,
+            attendees: event.attendees?.map(attendee => ({
+              emailAddress: {
+                address: attendee.emailAddress?.address || '',
+              },
+              type: attendee.type || 'required',
+            })) || [],
           })
         );
     } catch (error) {

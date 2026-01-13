@@ -89,7 +89,7 @@ export class RedisRateLimiterInterceptor
             password: redisPassword,
           }) as RedisClientType);
 
-      this.redisClient.on("error", (err) => {
+      this.redisClient.on("error", (err: any) => {
         this.logger.error("Redis connection error:", err);
         this.isRedisConnected = false;
       });

@@ -71,12 +71,13 @@ export async function streamQueryResults<T extends ObjectLiteral>(
   return new Promise((resolve, reject) => {
     let batch: T[] = [];
 
-    stream.on('data', async (row: T) => {
+    stream.on('data', async (row: any) => {
       try {
+        const item = row as T;
         // Pause stream while processing to prevent overwhelming memory
         stream.pause();
 
-        batch.push(row);
+        batch.push(item);
 
         // Process in batches for efficiency
         if (batch.length >= batchSize) {
@@ -149,8 +150,8 @@ export async function streamQueryToResponse<T extends ObjectLiteral>(
   const stream = await queryBuilder.stream();
 
   return new Promise((resolve, reject) => {
-    stream.on('data', (row: T) => {
-      const formatted = formatter(row);
+    stream.on('data', (row: any) => {
+      const formatted = formatter(row as T);
       const canContinue = writableStream.write(formatted);
 
       // Back-pressure handling

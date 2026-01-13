@@ -104,7 +104,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
         ? createClient({
             url: redisUrl,
             socket: {
-              reconnectStrategy: (retries) => {
+              reconnectStrategy: (retries: number) => {
                 if (retries > this.MAX_RECONNECT_ATTEMPTS) {
                   this.logger.error("Max Redis reconnection attempts reached");
                   return new Error("Max reconnection attempts exceeded");
@@ -118,7 +118,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
             socket: {
               host: redisHost,
               port: redisPort,
-              reconnectStrategy: (retries) => {
+              reconnectStrategy: (retries: number) => {
                 if (retries > this.MAX_RECONNECT_ATTEMPTS) {
                   return new Error("Max reconnection attempts exceeded");
                 }
@@ -129,7 +129,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
             password: redisPassword,
           }) as RedisClientType);
 
-      this.redisClient.on("error", (err) => {
+      this.redisClient.on("error", (err: any) => {
         this.logger.error(`Redis connection error: ${err.message}`);
         this.isRedisConnected = false;
       });

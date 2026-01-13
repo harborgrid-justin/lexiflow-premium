@@ -26,7 +26,7 @@ export class ExistsValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     const [entityClass, property = "id"] = args.constraints as [
-      new (...args: any[]) => any,
+      new (...constructorArgs: unknown[]) => object,
       string,
     ];
 
@@ -34,7 +34,7 @@ export class ExistsValidator implements ValidatorConstraintInterface {
 
     const repository = this.dataSource.getRepository(entityClass);
     const entity = await repository.findOne({
-      where: { [property]: value },
+      where: { [property]: value } as Record<string, unknown>,
     });
 
     return !!entity;
@@ -165,24 +165,24 @@ export class IsCompositeUniqueValidator implements ValidatorConstraintInterface 
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(_value: unknown, args: ValidationArguments): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const [entityClass, properties, exceptId] = args.constraints;
+    const [entityClass, properties, exceptId] = args.constraints as [
+      new (...constructorArgs: unknown[]) => object,
+      string[],
+      string | undefined
+    ];
 
     const repository = this.dataSource.getRepository(entityClass);
     const queryBuilder = repository.createQueryBuilder("entity");
     const obj = args.object as Record<string, unknown>;
 
     // Build WHERE clause for all properties
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    properties.forEach((prop: string) => {
+    (properties as string[]).forEach((prop: string) => {
       const propValue = obj[prop];
       queryBuilder.andWhere(`entity.${prop} = :${prop}`, { [prop]: propValue });
     });
 
     // Exclude current entity if updating
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (exceptId && obj[exceptId]) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       queryBuilder.andWhere(`entity.id != :id`, { id: obj[exceptId] });
     }
 

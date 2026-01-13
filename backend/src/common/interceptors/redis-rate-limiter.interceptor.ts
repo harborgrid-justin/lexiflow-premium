@@ -17,7 +17,7 @@ import { ConfigService } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
 import { createClient, RedisClientType } from "redis";
 import { Observable } from "rxjs";
-import type { Request, Response } from "express";
+import { Request, Response } from "express";
 
 /**
  * Redis Rate Limiter Interceptor
@@ -117,17 +117,17 @@ export class RedisRateLimiterInterceptor
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
-    const response = context.switchToHttp().getResponse<FastifyReply>();
+    const request = context.switchToHttp().getRequest<Request>();
+    const response = context.switchToHttp().getResponse<Response>();
     const key = this.getKey(request, rateLimitOptions);
 
     return new Observable((observer) => {
       this.checkRateLimit(key, rateLimitOptions)
         .then(({ allowed, remaining, resetTime }) => {
           // Set rate limit headers
-          void response.header("X-RateLimit-Limit", rateLimitOptions.points);
-          void response.header("X-RateLimit-Remaining", Math.max(0, remaining));
-          void response.header("X-RateLimit-Reset", resetTime);
+          response.setHeader("X-RateLimit-Limit", rateLimitOptions.points.toString());
+          response.setHeader("X-RateLimit-Remaining", Math.max(0, remaining).toString());
+          response.setHeader("X-RateLimit-Reset", resetTime.toString());
 
           if (!allowed) {
             const retryAfter = Math.ceil(
@@ -253,7 +253,7 @@ export class RedisRateLimiterInterceptor
   /**
    * Generate rate limit key
    */
-  private getKey(request: FastifyRequest, options: RateLimitOptions): string {
+  private getKey(request: Request, options: RateLimitOptions): string {
     const ip = request.ip;
     const userId = (request as unknown as { user?: { id?: string } }).user?.id || "anonymous";
     const endpoint = `${request.method}:${request.url}`;

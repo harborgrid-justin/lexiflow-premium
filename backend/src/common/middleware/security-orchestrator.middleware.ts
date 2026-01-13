@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
-import { IncomingMessage, ServerResponse } from 'http';
+import { Request, Response, NextFunction } from 'express';
 
 interface SecurityContext {
   ip: string;
@@ -13,24 +13,14 @@ interface SecurityContext {
   timestamp: string;
 }
 
-interface ExtendedRequest extends IncomingMessage {
+interface ExtendedRequest extends Request {
   requestId?: string;
   startTime?: number;
   securityContext?: SecurityContext;
-  ip?: string;
-  path?: string;
-  protocol?: string;
-  secure?: boolean;
   user?: { id: string };
-  [key: string]: any;
 }
 
-interface ExtendedResponse extends ServerResponse {
-  // ServerResponse has setHeader, statusCode, on
-  [key: string]: any; 
-}
-
-type NextFunction = (error?: unknown) => void;
+type ExtendedResponse = Response;
 
 /**
  * Security Orchestrator Middleware
@@ -91,12 +81,12 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
   /**
    * Setup security context for the request
    */
-  private setupSecurityContext(req: Request): void {
+  private setupSecurityContext(req: ExtendedRequest): void {
     const securityContext = {
       ip: this.getClientIp(req),
       userAgent: req.headers['user-agent'] || 'unknown',
-      origin: req.headers.origin || null,
-      referer: req.headers.referer || null,
+      origin: (req.headers.origin as string) || null,
+      referer: (req.headers.referer as string) || null,
       method: req.method,
       path: req.path,
       protocol: req.protocol,
@@ -104,14 +94,14 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
       timestamp: new Date().toISOString(),
     };
 
-    (req as any).securityContext = securityContext;
+    req.securityContext = securityContext;
   }
 
   /**
    * Log security-relevant information
    */
-  private logSecurityInfo(req: Request, requestId: string): void {
-    const context = (req as any).securityContext;
+  private logSecurityInfo(req: ExtendedRequest, requestId: string): void {
+    const context = req.securityContext;
 
     // Log potentially suspicious requests
     if (this.isSuspiciousRequest(req)) {
@@ -146,15 +136,15 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
    * Setup response listeners for audit logging
    */
   private setupResponseListeners(
-    req: Request,
-    res: Response,
+    req: ExtendedRequest,
+    res: ExtendedResponse,
     startTime: number,
     requestId: string,
   ): void {
     // Listen for response finish
     res.on('finish', () => {
       const duration = Date.now() - startTime;
-      const context = (req as any).securityContext;
+      const context = req.securityContext;
 
       // Log slow requests (potential DoS)
       if (duration > 5000) {
@@ -183,7 +173,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
           requestId,
           ip: context.ip,
           path: req.path,
-          userId: (req as any).user?.id,
+          userId: req.user?.id,
         });
       }
 
@@ -214,7 +204,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
   /**
    * Add security metadata to response
    */
-  private addSecurityMetadata(res: Response): void {
+  private addSecurityMetadata(res: ExtendedResponse): void {
     // Add security policy identifier
     res.setHeader('X-Security-Policy', 'LexiFlow-Enterprise-v1');
 
@@ -225,7 +215,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
   /**
    * Get client IP address
    */
-  private getClientIp(req: Request): string {
+  private getClientIp(req: ExtendedRequest): string {
     // Check various headers for IP (in order of trust)
     const cfConnectingIp = req.headers['cf-connecting-ip'] as string;
     const xRealIp = req.headers['x-real-ip'] as string;
@@ -250,7 +240,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
   /**
    * Check if request is suspicious
    */
-  private isSuspiciousRequest(req: Request): boolean {
+  private isSuspiciousRequest(req: ExtendedRequest): boolean {
     const path = req.path.toLowerCase();
     const userAgent = (req.headers['user-agent'] || '').toLowerCase();
 
@@ -295,7 +285,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
   /**
    * Check if request is an authentication request
    */
-  private isAuthenticationRequest(req: Request): boolean {
+  private isAuthenticationRequest(req: ExtendedRequest): boolean {
     const authPaths = [
       '/auth/login',
       '/auth/register',

@@ -192,7 +192,8 @@ export function sanitizeSearchQuery(
   }
 
   // Remove null bytes and other control characters
-  const cleaned = search.replace(/[\x00-\x1F\x7F]/g, "");
+  // eslint-disable-next-line no-control-regex
+  const cleaned = search.replace(/[\u0000-\u001F\u007F]/g, "");
 
   // Trim and return undefined if empty
   const trimmed = cleaned.trim();

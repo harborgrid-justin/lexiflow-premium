@@ -29,7 +29,7 @@ export class DocumentResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as any);
+    });
 
     return {
       edges: result.data.map((doc) => ({
@@ -68,7 +68,7 @@ export class DocumentResolver {
     // Note: File upload through GraphQL requires multipart form data
     // This creates document metadata only, actual file should be uploaded via REST API
     const document = await this.documentService.create(
-      input as any,
+      input as unknown as Parameters<DocumentsService['create']>[0],
       undefined,
       user.id
     );

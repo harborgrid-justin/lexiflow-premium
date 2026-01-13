@@ -306,7 +306,7 @@ export class AuthService {
       { sub: user.id, type: "reset" },
       {
         secret: jwtSecret,
-        expiresIn: `${ttlHours}h`,
+        expiresIn: ttlHours * 60 * 60, // hours to seconds
       }
     );
 
@@ -575,9 +575,9 @@ export class AuthService {
 
     // Handle both string durations ('1h', '7d') and numeric seconds
     const accessExpiresIn =
-      this.configService.get<string>("app.jwt.expiresIn") || "15m";
+      Number(this.configService.get<string | number>("app.jwt.expiresIn")) || 900; // 15m default
     const refreshExpiresIn =
-      this.configService.get<string>("app.jwt.refreshExpiresIn") || "7d";
+      Number(this.configService.get<string | number>("app.jwt.refreshExpiresIn")) || 604800; // 7d default
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessPayload, {
@@ -610,7 +610,7 @@ export class AuthService {
       { sub: userId, type: "mfa" },
       {
         secret: jwtSecret,
-        expiresIn: `${ttlMinutes}m`,
+        expiresIn: ttlMinutes * 60, // minutes to seconds
       }
     );
 

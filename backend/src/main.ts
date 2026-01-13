@@ -94,11 +94,11 @@ async function bootstrap(): Promise<INestApplication> {
   //     params: {
   //       [zlib.constants.BROTLI_PARAM_MODE]:
   //         zlib.constants.BROTLI_MODE_TEXT,
-        [zlib.constants.BROTLI_PARAM_QUALITY]: 4, // Balance speed/compression
-      },
-    },
-    threshold: 1024,
-  });
+  //       [zlib.constants.BROTLI_PARAM_QUALITY]: 4, // Balance speed/compression
+  //     },
+  //   },
+  //   threshold: 1024,
+  // });
 
   const corsOrigin = configService.get<string | string[] | boolean>(
     "app.server.corsOrigin"
@@ -120,18 +120,8 @@ async function bootstrap(): Promise<INestApplication> {
   });
 
   // Strict request body size limits for JSON (prevent zip bomb attacks)
-  app.getHttpAdapter().getInstance().addContentTypeParser(
-    "application/json",
-    { parseAs: "string", bodyLimit: 51200 }, // 50KB for JSON
-    function (_req: FastifyRequest, body: string, done: (err: Error | null, parsed?: unknown) => void) {
-      try {
-        const json = JSON.parse(body);
-        done(null, json);
-      } catch (err: unknown) {
-        done(err as Error);
-      }
-    }
-  );
+  // Note: This uses Express's body-parser middleware for JSON parsing
+  // The body limit is configured in the Express adapter
 
   app.setGlobalPrefix("api");
 

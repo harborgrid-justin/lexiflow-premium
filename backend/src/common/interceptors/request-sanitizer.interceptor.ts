@@ -5,7 +5,6 @@ import {
   Logger,
   NestInterceptor,
 } from "@nestjs/common";
-import type { Request } from "express";
 import { Observable } from "rxjs";
 
 /**
@@ -28,21 +27,25 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const request = context.switchToHttp().getRequest<{
+      body?: Record<string, unknown>;
+      query?: Record<string, unknown>;
+      params?: Record<string, unknown>;
+    }>();
 
     // Sanitize request body
     if (request.body && typeof request.body === "object") {
-      request.body = this.sanitizeObject(request.body);
+      request.body = this.sanitizeObject(request.body) as Record<string, unknown>;
     }
 
     // Sanitize query parameters
     if (request.query && typeof request.query === "object") {
-      request.query = this.sanitizeObject(request.query);
+      request.query = this.sanitizeObject(request.query) as Record<string, unknown>;
     }
 
     // Sanitize route parameters
     if (request.params && typeof request.params === "object") {
-      request.params = this.sanitizeObject(request.params);
+      request.params = this.sanitizeObject(request.params) as Record<string, unknown>;
     }
 
     return next.handle();

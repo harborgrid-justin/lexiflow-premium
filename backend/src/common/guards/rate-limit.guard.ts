@@ -3,7 +3,8 @@ import {
   RATE_LIMIT_KEY,
   RateLimitOptions,
 } from "@common/decorators/rate-limit.decorator";
-import { UserRole } from "@common/enums/role.enum";
+import { UserRole as AppUserRole } from "@common/enums/role.enum";
+import { UserRole as RateLimitUserRole } from "@api-security/services/rate.limit.service";
 import {
   CanActivate,
   ExecutionContext,
@@ -96,6 +97,33 @@ export class RateLimitGuard implements CanActivate {
   ): Promise<void> {
     const userId = request.user?.id || "anonymous";
     const userRole = request.user?.role || "guest";
+
+    // Map app UserRole to rate limit UserRole
+    function mapToRateLimitUserRole(role: string): RateLimitUserRole {
+      switch (role) {
+        case AppUserRole.SUPER_ADMIN:
+        case AppUserRole.ADMIN:
+        case AppUserRole.IT_ADMIN:
+          return RateLimitUserRole.ADMIN;
+        case AppUserRole.PARTNER:
+        case AppUserRole.SENIOR_ASSOCIATE:
+        case AppUserRole.ASSOCIATE:
+        case AppUserRole.JUNIOR_ASSOCIATE:
+        case AppUserRole.ATTORNEY:
+        case AppUserRole.PARALEGAL:
+        case AppUserRole.LEGAL_ASSISTANT:
+        case AppUserRole.CLERK:
+        case AppUserRole.INTERN:
+        case AppUserRole.ACCOUNTANT:
+        case AppUserRole.BILLING_SPECIALIST:
+        case AppUserRole.STAFF:
+        case AppUserRole.USER:
+        case AppUserRole.CLIENT:
+          return RateLimitUserRole.BASIC;
+        default:
+          return RateLimitUserRole.GUEST;
+      }
+    }
     const ip = this.getClientIp(request);
     const endpoint = `${request.method}:${request.path}`;
 
@@ -148,7 +176,7 @@ export class RateLimitGuard implements CanActivate {
     if (request.user) {
       const roleResult = await this.rateLimitService.checkRoleBased(
         userId,
-        userRole as UserRole
+        mapToRateLimitUserRole(userRole)
       );
 
       this.setRateLimitHeaders(response, roleResult, "role");
@@ -163,7 +191,7 @@ export class RateLimitGuard implements CanActivate {
       // 4. Check burst protection
       const burstResult = await this.rateLimitService.checkBurst(
         userId,
-        userRole as UserRole
+        mapToRateLimitUserRole(userRole)
       );
 
       if (!burstResult.allowed) {

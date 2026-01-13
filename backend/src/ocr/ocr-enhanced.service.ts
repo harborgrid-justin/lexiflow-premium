@@ -80,6 +80,9 @@ export class OcrServiceEnhanced {
       this.logger.log(`Starting OCR processing (worker thread): ${ocrRequest.documentId}`);
 
       // Process in worker thread - memory is isolated
+      if (!this.workerPool) {
+        throw new Error('Worker pool is not initialized');
+      }
       const result = await this.workerPool.run({
         filePath,
         language: ocrRequest.languages?.[0] || 'eng',
@@ -154,8 +157,7 @@ export class OcrServiceEnhanced {
       threads: this.workerPool.threads.length,
       queueSize: this.workerPool.queueSize,
       completed: this.workerPool.completed,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-      waitTime: (this.workerPool as any).waitTime,
+      waitTime: (this.workerPool as unknown as { waitTime?: { average: number } }).waitTime,
     };
   }
 

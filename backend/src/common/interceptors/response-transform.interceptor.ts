@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import type { Request } from 'express';
 
 /**
  * Response Transform Interceptor
@@ -21,11 +20,11 @@ export class ResponseTransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<ApiResponse<T>> {
-    const request = context.switchToHttp().getRequest<FastifyRequest & { correlationId?: string }>();
+    const request = context.switchToHttp().getRequest<{ correlationId?: string; url?: string; method?: string }>();
     const startTime = Date.now();
 
     return next.handle().pipe(
-      map((data) => {
+      map((data: T) => {
         const responseTime = Date.now() - startTime;
         
         return {

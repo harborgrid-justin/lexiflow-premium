@@ -13,8 +13,7 @@ export class ValidationPipe implements PipeTransform {
     value: unknown,
     { metatype }: ArgumentMetadata
   ): Promise<unknown> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (!metatype || !this.toValidate(metatype as any)) {
+    if (!metatype || !this.toValidate(metatype as new (...args: unknown[]) => unknown)) {
       return value;
     }
     const object = plainToInstance(metatype, value);
@@ -37,8 +36,14 @@ export class ValidationPipe implements PipeTransform {
     return object;
   }
 
-  private toValidate(metatype: (...args: unknown[]) => unknown): boolean {
-    const types: Function[] = [String, Boolean, Number, Array, Object];
+  private toValidate(metatype: new (...args: unknown[]) => unknown): boolean {
+    const types: Array<new (...args: unknown[]) => unknown> = [
+      String as new (...args: unknown[]) => string,
+      Boolean as new (...args: unknown[]) => boolean,
+      Number as new (...args: unknown[]) => number,
+      Array as new (...args: unknown[]) => unknown[],
+      Object as new (...args: unknown[]) => object
+    ];
     return !types.includes(metatype);
   }
 }

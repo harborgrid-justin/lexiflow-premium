@@ -53,7 +53,7 @@ export class CaseResolver {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as any);
+    });
 
     return {
       edges: result.data.map((caseItem) => ({
@@ -201,7 +201,6 @@ export class CaseResolver {
     },
   })
   caseUpdated(@Args("id", { type: () => ID }) _id: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (pubSub as any).asyncIterator("caseUpdated");
+    return (pubSub as unknown as { asyncIterator: (event: string) => AsyncIterator<unknown> }).asyncIterator("caseUpdated");
   }
 }

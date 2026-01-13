@@ -5,7 +5,6 @@ import {
   Logger,
   NestInterceptor,
 } from "@nestjs/common";
-import type { Response } from "express";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -42,7 +41,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const response = context.switchToHttp().getResponse<Response>();
+    const response = context.switchToHttp().getResponse<{ setHeader: (key: string, value: string) => void; getHeader: (key: string) => string | string[] | undefined }>();
 
     // Set XSS protection header
     response.setHeader("X-XSS-Protection", "1; mode=block");

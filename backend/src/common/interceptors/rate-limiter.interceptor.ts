@@ -10,7 +10,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { RATE_LIMIT_KEY, RateLimitOptions } from '@common/decorators/rate-limit.decorator';
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 /**
  * Rate Limiter Interceptor
@@ -43,7 +43,7 @@ export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy 
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const request = context.switchToHttp().getRequest<Request>();
     const key = this.getKey(request, rateLimitOptions);
 
     if (!this.checkRateLimit(key, rateLimitOptions)) {
@@ -59,17 +59,17 @@ export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy 
 
     this.recordRequest(key);
 
-    const response = context.switchToHttp().getResponse<FastifyReply>();
+    const response = context.switchToHttp().getResponse<Response>();
     const remaining = this.getRemainingRequests(key, rateLimitOptions);
     
-    void response.header('X-RateLimit-Limit', rateLimitOptions.points);
-    void response.header('X-RateLimit-Remaining', remaining);
-    void response.header('X-RateLimit-Reset', this.getResetTime(rateLimitOptions.duration));
+    response.setHeader('X-RateLimit-Limit', rateLimitOptions.points.toString());
+    response.setHeader('X-RateLimit-Remaining', remaining.toString());
+    response.setHeader('X-RateLimit-Reset', this.getResetTime(rateLimitOptions.duration).toString());
 
     return next.handle();
   }
 
-  private getKey(request: FastifyRequest, options: RateLimitOptions): string {
+  private getKey(request: Request, options: RateLimitOptions): string {
     const ip = request.ip;
     const userId = (request as unknown as { user?: { id?: string } }).user?.id || 'anonymous';
     const endpoint = `${request.method}:${request.url}`;

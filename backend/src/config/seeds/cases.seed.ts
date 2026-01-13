@@ -48,10 +48,10 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       const attorney = users[Math.floor(Math.random() * users.length)];
       const client = clients[Math.floor(Math.random() * clients.length)];
 
-      const statusMapping: Record<string, any> = {
-        OPEN: "Open",
-        IN_PROGRESS: "Active",
-        CLOSED: "Closed",
+      const statusMapping: Record<string, CaseStatus> = {
+        OPEN: CaseStatus.OPEN,
+        IN_PROGRESS: CaseStatus.ACTIVE,
+        CLOSED: CaseStatus.CLOSED,
       };
 
       const caseEntity = caseRepository.create({
@@ -65,7 +65,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
         clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
-      } as any);
+      });
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

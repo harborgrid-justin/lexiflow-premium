@@ -88,17 +88,11 @@ export class BatchLoaderService {
     for (let i = 0; i < uniqueIds.length; i += batchSize) {
       const batch = uniqueIds.slice(i, i + batchSize);
 
-      const findOptions: any = {
-        where: { id: In(batch) },
+      const findOptions = {
+        where: { id: In(batch) } as Record<string, unknown>,
+        ...(options.relations && { relations: options.relations }),
+        ...(options.cache && { cache: 60000 })
       };
-
-      if (options.relations) {
-        findOptions.relations = options.relations;
-      }
-
-      if (options.cache) {
-        findOptions.cache = 60000; // 1 minute
-      }
 
       const entities = await repository.find(findOptions);
       allEntities.push(...entities);

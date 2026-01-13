@@ -35,8 +35,8 @@ export class DiscoveryResolver {
     @Args("caseId", { type: () => ID }) caseId: string
   ): Promise<DiscoveryRequestType[]> {
     const requests = await this.discoveryService.findRequestsByCaseId(caseId);
-    return ((requests as unknown as any).data ||
-      requests) as DiscoveryRequestType[];
+    const data = (requests as { data?: unknown[] }).data || requests;
+    return data as DiscoveryRequestType[];
   }
 
   @Query(() => DiscoveryRequestType, {
@@ -61,7 +61,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.createRequest(input as any);
+    const request = await this.discoveryService.createRequest(input as unknown as Parameters<DiscoveryService['createRequest']>[0]);
     return request as unknown as DiscoveryRequestType;
   }
 
@@ -72,7 +72,7 @@ export class DiscoveryResolver {
     @Args("input") input: UpdateDiscoveryRequestInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DiscoveryRequestType> {
-    const request = await this.discoveryService.updateRequest(id, input as any);
+    const request = await this.discoveryService.updateRequest(id, input as unknown as Parameters<DiscoveryService['updateRequest']>[1]);
     return request as unknown as DiscoveryRequestType;
   }
 
@@ -104,7 +104,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.create(input as any);
+    const deposition = await this.depositionsService.create(input as unknown as Parameters<DepositionsService['create']>[0]);
     return deposition as unknown as DepositionType;
   }
 
@@ -115,7 +115,7 @@ export class DiscoveryResolver {
     @Args("input") input: UpdateDepositionInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<DepositionType> {
-    const deposition = await this.depositionsService.update(id, input as any);
+    const deposition = await this.depositionsService.update(id, input as unknown as Parameters<DepositionsService['update']>[1]);
     return deposition as unknown as DepositionType;
   }
 
@@ -134,7 +134,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreateLegalHoldInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<LegalHoldType> {
-    const hold = await this.discoveryService.createHold(input as any);
+    const hold = await this.discoveryService.createHold(input as unknown as Parameters<DiscoveryService['createHold']>[0]);
     return hold as unknown as LegalHoldType;
   }
 

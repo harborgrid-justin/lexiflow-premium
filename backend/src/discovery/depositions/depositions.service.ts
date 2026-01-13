@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
+import type { FindOptionsOrder } from 'typeorm';
 import { Deposition } from './entities/deposition.entity';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';

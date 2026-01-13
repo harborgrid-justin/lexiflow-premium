@@ -34,15 +34,16 @@ import { TokenStorageService } from "./token-storage.service";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const expiresIn =
-          configService.get<string>("app.jwt.expiresIn") ?? "900";
+        // Always use seconds for expiresIn
+        const expiresInRaw = configService.get<string | number>("app.jwt.expiresIn") ?? 900;
+        const expiresIn = typeof expiresInRaw === "string"
+          ? parseInt(expiresInRaw, 10)
+          : expiresInRaw;
         return {
           secret:
             configService.get<string>("app.jwt.secret") ?? "default-jwt-secret",
           signOptions: {
-            expiresIn: (isNaN(Number(expiresIn))
-              ? expiresIn
-              : parseInt(expiresIn, 10)),
+            expiresIn: isNaN(Number(expiresIn)) ? 900 : Number(expiresIn),
           },
         };
       },

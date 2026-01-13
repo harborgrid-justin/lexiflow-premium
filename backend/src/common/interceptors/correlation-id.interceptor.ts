@@ -17,8 +17,8 @@ import type { Request, Response } from 'express';
 @Injectable()
 export class CorrelationIdInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest<FastifyRequest & { correlationId: string }>();
-    const response = context.switchToHttp().getResponse<FastifyReply>();
+    const request = context.switchToHttp().getRequest<Request & { correlationId: string }>();
+    const response = context.switchToHttp().getResponse<Response>();
 
     // Extract or generate correlation ID
     const headerCorrelationId = request.headers['x-correlation-id'];
@@ -33,14 +33,14 @@ export class CorrelationIdInterceptor implements NestInterceptor {
     request.correlationId = correlationId;
 
     // Set response header for client tracking
-    void response.header('X-Correlation-ID', correlationId);
+    response.setHeader('X-Correlation-ID', correlationId);
 
     const startTime = Date.now();
 
     return next.handle().pipe(
       tap(() => {
         const duration = Date.now() - startTime;
-        void response.header('X-Response-Time', `${duration}ms`);
+        response.setHeader('X-Response-Time', `${duration}ms`);
       }),
     );
   }

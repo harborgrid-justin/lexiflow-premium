@@ -278,7 +278,7 @@ export const EnhancedCaseTimeline: React.FC<EnhancedCaseTimelineProps> = ({
       id: name,
       name,
       events,
-      expanded: groupExpanded[name] !== false,
+      expanded: groupExpanded[name],
     }));
   }, [filteredEvents, currentViewMode, groupExpanded]);
 

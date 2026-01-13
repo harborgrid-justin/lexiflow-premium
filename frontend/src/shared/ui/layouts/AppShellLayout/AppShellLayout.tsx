@@ -12,7 +12,7 @@
  * - theme.border.default - Header border
  */
 
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { useTheme } from '@/features/theme';
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';

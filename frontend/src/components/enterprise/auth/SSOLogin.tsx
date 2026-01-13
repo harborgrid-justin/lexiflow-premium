@@ -138,7 +138,7 @@ export const SSOLogin: React.FC<SSOLoginProps> = ({
 
     try {
       if (onSSOInitiate) {
-        await onSSOInitiate(provider);
+        onSSOInitiate(provider);
       } else {
         // Default behavior: redirect to SSO URL
         const ssoUrl = `/api/auth/sso/${provider.type}/${provider.id}`;

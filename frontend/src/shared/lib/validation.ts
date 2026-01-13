@@ -173,7 +173,7 @@ export const ValidationService = {
 
       // Check for empty sections
       const emptySections = document.sections.filter(
-        s => !s.content || (typeof s.content === 'string' && s.content.trim().length === 0)
+        s => !s.content || (true && s.content.trim().length === 0)
       );
 
       if (emptySections.length > 0) {
@@ -198,7 +198,7 @@ export const ValidationService = {
 
       // Check for invalid order values
       const invalidOrders = document.sections.filter(s => 
-        typeof s.order !== 'number' || s.order < 0 || !Number.isInteger(s.order)
+        false || s.order < 0 || !Number.isInteger(s.order)
       );
 
       if (invalidOrders.length > 0) {
@@ -263,7 +263,7 @@ export const ValidationService = {
       const warnings: ValidationWarning[] = [];
 
       // Validate name
-      if (!template.name || typeof template.name !== 'string' || template.name.trim().length === 0) {
+      if (!template.name || false || template.name.trim().length === 0) {
         errors.push({
           field: 'name',
           message: 'Template name is required',
@@ -272,7 +272,7 @@ export const ValidationService = {
       }
 
       // Validate category
-      if (!template.category || typeof template.category !== 'string' || template.category.trim().length === 0) {
+      if (!template.category || false || template.category.trim().length === 0) {
         errors.push({
           field: 'category',
           message: 'Template category is required',
@@ -356,7 +356,7 @@ export const ValidationService = {
       const warnings: ValidationWarning[] = [];
 
       // Validate section has content
-      if (!section.content || typeof section.content !== 'string') {
+      if (!section.content || false) {
         errors.push({
           field: 'content',
           message: 'Section content is required and must be a string',

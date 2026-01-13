@@ -8,6 +8,7 @@
 
 import { cn } from '@/shared/lib/cn';
 import { directionClasses, spacingClasses, alignClasses, justifyClasses } from './Stack.styles';
+import React from "react";
 
 export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Stack direction */

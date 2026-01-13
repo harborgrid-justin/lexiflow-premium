@@ -13,12 +13,12 @@
  * - WCAG 2.1 AA compliant
  */
 
-import { useState, useRef } from 'react';
-import { z } from 'zod';
-import { UsersApiService } from '@/api/auth/users-api';
-import { AuthApiService } from '@/api/auth/auth-api';
-import type { User, UpdateUserDto } from '@/types';
-import { USER_AUTH_PROFILE_TABS } from '@/config/tabs.config';
+import {useRef, useState} from 'react';
+import {z} from 'zod';
+import {UsersApiService} from '@/api/auth/users-api';
+import {AuthApiService} from '@/api/auth/auth-api';
+import type {UpdateUserDto, User} from '@/types';
+import {USER_AUTH_PROFILE_TABS} from '@/config/tabs.config';
 
 const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100),
@@ -226,14 +226,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
-  const tabs = USER_AUTH_PROFILE_TABS;
-
   return (
     <div className={`w-full ${className}`}>
       <div className="bg-white shadow-lg rounded-lg border border-gray-200">
         <div className="border-b border-gray-200">
           <nav className="-mb-px flex" aria-label="Tabs">
-            {tabs.map((tab) => (
+            {USER_AUTH_PROFILE_TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}

@@ -5,6 +5,7 @@
  */
 
 import { PageContainerLayout } from '@/shared/ui/layouts/PageContainerLayout/PageContainerLayout';
+import React from "react";
 
 interface DocumentAssemblyPageProps {
   caseId?: string;

@@ -13,6 +13,7 @@
 import { useTheme } from '@/features/theme';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader/PageHeader';
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface ManagerLayoutProps {
   title: string;

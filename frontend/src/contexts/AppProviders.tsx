@@ -24,6 +24,7 @@ import { DataSourceProvider } from './data/DataSourceContext';
 import { SyncProvider } from './sync/SyncContext';
 import { ToastProvider as ToastProviderBase, useToast } from './toast/ToastContext';
 import { WindowProvider } from './window/WindowContext';
+import React from "react";
 
 // Wrapper to ensure ToastProvider returns ReactNode
 const ToastProvider = ToastProviderBase as unknown as React.FC<{

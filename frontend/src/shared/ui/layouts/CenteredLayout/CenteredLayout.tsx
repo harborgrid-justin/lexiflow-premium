@@ -5,6 +5,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface CenteredLayoutProps {
   children: React.ReactNode;

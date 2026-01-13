@@ -136,4 +136,4 @@ export function useHoverIntent<T>(
 
   // Return a stable function factory to be spread onto the element
   return { onMouseEnter, onMouseLeave };
-};
+}

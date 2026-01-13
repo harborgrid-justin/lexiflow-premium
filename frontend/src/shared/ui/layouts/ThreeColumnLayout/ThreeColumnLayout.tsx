@@ -6,6 +6,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface ThreeColumnLayoutProps {
   leftColumn: React.ReactNode;

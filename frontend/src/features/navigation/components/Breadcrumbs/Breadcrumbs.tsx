@@ -30,6 +30,7 @@ import * as styles from './Breadcrumbs.styles';
 
 // Types
 import type { UserRole } from '@/types';
+import React from "react";
 
 // ============================================================================
 // TYPES & INTERFACES

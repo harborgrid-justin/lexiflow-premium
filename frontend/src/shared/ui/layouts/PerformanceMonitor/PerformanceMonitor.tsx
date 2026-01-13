@@ -19,7 +19,7 @@
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

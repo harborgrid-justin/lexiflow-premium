@@ -305,13 +305,13 @@ export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
  * Returns the value from the first render and never updates.
  * Useful for values that should remain constant throughout component lifecycle.
  *
- * @param value - Value to memoize
- * @returns First render value
  *
  * @example
  * ```tsx
  * const initialId = useConstant(() => generateUniqueId());
  * ```
+ * @param factory
+ * @param factory
  */
 export function useConstant<T>(factory: () => T): T {
   const ref = useRef<T | undefined>(undefined);

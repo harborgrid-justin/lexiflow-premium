@@ -16,84 +16,34 @@ jest.mock('@/services/integration/backendDiscovery', () => ({
 //                    PROVIDER EXPORTS VALIDATION
 // ═══════════════════════════════════════════════════════════════════════════
 
-// Providers and hooks
-import {
-  AppProviders,
-  useDataSource,
-  useTheme,
-  useToast,
-  useSync,
-  useWindow,
-} from '../index';
-
 // ═══════════════════════════════════════════════════════════════════════════
 //                    REPOSITORY EXPORTS VALIDATION
 // ═══════════════════════════════════════════════════════════════════════════
-
 // Repository interfaces
-import type {
-  BaseRepository,
-  BatchRepository,
-  SearchableRepository,
-  SearchOptions,
-  SearchResult,
-  CaseRepository,
-  DocumentRepository,
-  ComplianceRepository,
-  ConflictResult,
-  ScanResult,
-  RepositoryRegistry,
-  RepositoryFactory,
-  RepositoryConfig,
-  RepositoryLogger,
-  RepositoryTracer,
-  RepositoryMetrics,
-  Span,
-  AuthProvider,
-  DataOwnership,
-} from '../index';
-
 // Configuration
-import type {
-  DataSourceConfig,
-  DataSourceEnvironmentConfig,
-  TimeoutConfig,
-  RetryConfig,
-  ObservabilityConfig,
-} from '../index';
-
-import {
-  DataSourceConfigBuilder,
-  createConfigFromEnv,
-  createTestConfig,
-  DEFAULT_TIMEOUTS,
-  DEFAULT_RETRY,
-  DEFAULT_OBSERVABILITY,
-  ENVIRONMENT_CONFIGS,
-} from '../index';
-
+import type {BaseRepository, RepositoryRegistry,} from '../index';
+// Providers and hooks
 // Errors
 import {
-  RepositoryError,
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-  NetworkError,
-  TimeoutError,
-  ServerError,
-  RateLimitError,
-  BusinessRuleError,
-  ConcurrencyError,
-  ErrorFactory,
+  createConfigFromEnv,
+  createTestConfig,
+  DataSourceConfigBuilder,
+  DEFAULT_RETRY,
+  DEFAULT_TIMEOUTS,
+  ENVIRONMENT_CONFIGS,
+  getErrorSeverity,
+  getUserMessage,
   isRepositoryError,
   isRetryableError,
-  getUserMessage,
-  getErrorSeverity,
+  NotFoundError,
+  UnauthorizedError,
+  useDataSource,
+  useSync,
+  useTheme,
+  useToast,
+  useWindow,
+  ValidationError,
 } from '../index';
-
-import type { ValidationFailure } from '../index';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                    VALIDATION TESTS
@@ -104,14 +54,13 @@ import type { ValidationFailure } from '../index';
  */
 function testProviderHooks() {
   // Type check only - these would be used in components
-  const hooks = {
+  return {
     useDataSource,
     useTheme,
     useToast,
     useSync,
     useWindow,
   };
-  return hooks;
 }
 
 /**

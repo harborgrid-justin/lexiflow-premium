@@ -7,6 +7,7 @@
 
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import React from "react";
 
 interface TwoColumnLayoutProps {
   leftColumn: React.ReactNode;

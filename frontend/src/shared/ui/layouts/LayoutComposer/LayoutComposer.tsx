@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { ReactNode, createContext, useContext, useMemo } from 'react';
+import React, { ReactNode, createContext, useContext, useMemo } from 'react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
 

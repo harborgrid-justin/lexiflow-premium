@@ -111,11 +111,9 @@ export function AuditTrail({
     if (dateFrom && new Date(event.timestamp) < new Date(dateFrom)) {
       return false;
     }
-    if (dateTo && new Date(event.timestamp) > new Date(dateTo)) {
-      return false;
-    }
+    return !(dateTo && new Date(event.timestamp) > new Date(dateTo));
 
-    return true;
+
   });
 
   // Toggle event expansion

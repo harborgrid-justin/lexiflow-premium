@@ -15,7 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

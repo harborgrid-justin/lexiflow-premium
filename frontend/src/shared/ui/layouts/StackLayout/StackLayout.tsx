@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/shared/lib/cn';
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 interface StackLayoutProps {
   children: React.ReactNode;

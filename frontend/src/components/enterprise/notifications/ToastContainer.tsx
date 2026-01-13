@@ -143,7 +143,8 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
       };
 
       setToasts((prev) => {
-        const updated = [newToast, ...prev].slice(0, maxVisible);
+        let updated: ToastNotification[];
+        updated = [newToast, ...prev].slice(0, maxVisible);
         return updated;
       });
 

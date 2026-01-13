@@ -17,6 +17,7 @@ import {
   alignClasses, 
   gapClasses 
 } from './Box.styles';
+import React from "react";
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Spacing preset from design system */

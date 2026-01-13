@@ -236,7 +236,7 @@ export const tokens = DEFAULT_TOKENS;
 /**
  * Get design tokens based on theme mode, density, and font mode
  * @param mode - Theme mode (light or dark)
- * @param density - Spacing density (compact, normal, or comfortable)
+ * @param _density
  * @param fontMode - Font family preference (sans or serif)
  * @returns Complete design tokens object
  */

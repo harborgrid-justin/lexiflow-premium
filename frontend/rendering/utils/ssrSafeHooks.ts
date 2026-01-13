@@ -7,7 +7,7 @@
  * @module rendering/utils/ssrSafeHooks
  */
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isBrowser } from "./environment";
 
 /**

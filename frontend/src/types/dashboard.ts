@@ -5,6 +5,7 @@
  */
 
 import { LucideIcon } from 'lucide-react';
+import React from "react";
 
 // ============================================================================
 // CORE DASHBOARD TYPES

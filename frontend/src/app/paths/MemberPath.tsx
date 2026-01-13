@@ -1,5 +1,5 @@
 // src/app/paths/MemberPath.tsx
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DeterministicLoader } from "../../components/performance/DeterministicLoader";
 import { OptimisticInput } from "../../components/performance/OptimisticInput";
 import { ZeroClsWrapper } from "../../components/performance/ZeroClsWrapper";

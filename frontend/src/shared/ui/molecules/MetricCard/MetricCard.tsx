@@ -39,7 +39,7 @@ export const MetricCard = React.memo<MetricCardProps>(({
 
   const [displayValue, setDisplayValue] = useState<string | number>(() => {
     if (typeof normalizedValue === 'number') return 0;
-    if (typeof normalizedValue === 'string') return '';
+
     return '';
   });
   const prevValueRef = useRef(normalizedValue);

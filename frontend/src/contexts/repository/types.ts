@@ -77,6 +77,7 @@ export interface SearchableRepository<T, TId = string> extends BaseRepository<T,
   /**
    * Search entities using domain-specific criteria
    * @param query Domain search query (NOT SQL/HTTP query)
+   * @param options
    */
   search(query: string, options?: SearchOptions): Promise<SearchResult<T>>;
 }

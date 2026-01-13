@@ -15,7 +15,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
+import React, { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
 import { ErrorBoundary } from '@/shared/ui/organisms/ErrorBoundary/ErrorBoundary';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/features/theme';

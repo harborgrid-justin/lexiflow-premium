@@ -8,7 +8,7 @@ import { useBackendHealth } from '@/hooks/useBackendHealth';
 import type { DataSourceType } from '@/providers';
 import { useDataSource } from '@/providers';
 import { AlertCircle, CheckCircle, Cloud, Database, HardDrive, RefreshCw, Wifi, WifiOff } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 interface DataSourceOption {
   value: DataSourceType;
@@ -73,7 +73,7 @@ export function DataSourceSelector() {
     const confirmMessage = `Switch to ${option?.label}? This will reload the application and clear cached data.`;
     if (!confirm(confirmMessage)) return;
 
-    await switchDataSource(source);
+    switchDataSource(source);
   }, [currentSource, isAvailable, switchDataSource]);
 
   const handleRefresh = useCallback(async () => {

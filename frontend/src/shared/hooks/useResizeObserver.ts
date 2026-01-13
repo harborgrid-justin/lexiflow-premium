@@ -90,4 +90,4 @@ export function useResizeObserver<T extends HTMLElement>(
   }, [ref]);
   
   return dimensions;
-};
+}

@@ -23,7 +23,7 @@ export const DEFAULT_STREAM_TIMEOUT = 5000;
  * @param responseStatusCode - Initial HTTP status code for the response
  * @param responseHeaders - HTTP headers to include in the response
  * @param routerContext - React Router context containing route information
- * @param loadContext - Application-specific context (e.g., database connections)
+ * @param _loadContext
  * @returns Promise resolving to a Response object
  */
 export default async function handleRequest(

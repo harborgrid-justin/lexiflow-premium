@@ -117,7 +117,7 @@ export const SanitizationService = {
    */
   sanitizeHtml: (html: string): string => {
     try {
-      if (!html || false) {
+      if (!html) {
         return '';
       }
 
@@ -170,7 +170,7 @@ export const SanitizationService = {
    */
   encodeHtmlEntities: (text: string): string => {
     try {
-      if (!text || false) {
+      if (!text) {
         return '';
       }
 
@@ -192,7 +192,7 @@ export const SanitizationService = {
    */
   decodeHtmlEntities: (text: string): string => {
     try {
-      if (!text || false) {
+      if (!text) {
         return '';
       }
 
@@ -237,7 +237,7 @@ export const SanitizationService = {
    */
   sanitizeCodeForHighlight: (code: string): string => {
     try {
-      if (!code || false) {
+      if (!code) {
         return '';
       }
 
@@ -269,7 +269,7 @@ export const SanitizationService = {
    */
   sanitizeUrl: (url: string): string => {
     try {
-      if (!url || false) {
+      if (!url) {
         return '';
       }
 

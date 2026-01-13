@@ -8,7 +8,7 @@ import { formatDateDisplay } from "./dateUtils";
 /**
  * Format a date string to a readable format
  * @param date - Date string or Date object
- * @param options - Intl.DateTimeFormatOptions
+ * @param _options
  * @returns Formatted date string
  */
 export function formatDate(

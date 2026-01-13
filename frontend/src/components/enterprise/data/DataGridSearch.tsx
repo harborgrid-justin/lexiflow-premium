@@ -19,15 +19,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
-import type { ColumnDefinition } from './DataGridColumn';
-import { fuzzySearch, type FuzzySearchOptions } from './FuzzySearch';
+import {useTheme} from '@/features/theme';
+import {cn} from '@/shared/lib/cn';
+import type {ColumnDefinition} from './DataGridColumn';
+import {fuzzySearch, type FuzzySearchOptions} from './FuzzySearch';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -140,7 +140,7 @@ export function DataGridSearch<T extends Record<string, unknown>>({
     // Add to history
     if (enableHistory && searchQuery.trim()) {
       setSearchHistory(prev => {
-        const newHistory = [
+        return [
           {
             query: searchQuery,
             timestamp: Date.now(),
@@ -148,8 +148,6 @@ export function DataGridSearch<T extends Record<string, unknown>>({
           },
           ...prev.filter(h => h.query !== searchQuery),
         ].slice(0, maxHistoryItems);
-
-        return newHistory;
       });
     }
   }, [

@@ -20,20 +20,20 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useCallback, useMemo, useRef, useState } from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/features/theme';
-import { cn } from '@/shared/lib/cn';
-import { ColumnDefinition } from './DataGridColumn';
-import { ColumnResizer } from './DataGridColumnResizer';
-import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
-import { DataGridFilters, FilterConfig, FilterValue } from './DataGridFilters';
-import { DataGridPagination } from './DataGridPagination';
-import { DataGridToolbar } from './DataGridToolbar';
-import { InlineEditor } from './InlineEditor';
+import {useTheme} from '@/features/theme';
+import {cn} from '@/shared/lib/cn';
+import {ColumnDefinition} from './DataGridColumn';
+import {ColumnResizer} from './DataGridColumnResizer';
+import {exportToCSV, exportToExcel, exportToPDF} from './DataGridExport';
+import {DataGridFilters, FilterConfig, FilterValue} from './DataGridFilters';
+import {DataGridPagination} from './DataGridPagination';
+import {DataGridToolbar} from './DataGridToolbar';
+import {InlineEditor} from './InlineEditor';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -256,8 +256,8 @@ export function DataGrid<T extends Record<string, unknown>>({
             case 'date': {
               const dateValue = new Date(cellValue as string);
               if (filter.min && dateValue < new Date(filter.min)) return false;
-              if (filter.max && dateValue > new Date(filter.max)) return false;
-              return true;
+              return !(filter.max && dateValue > new Date(filter.max));
+
             }
 
             case 'select':
@@ -297,7 +297,8 @@ export function DataGrid<T extends Record<string, unknown>>({
   }, [filteredData, sortState, columns, enableSorting]);
 
   // Paginate data
-  const paginatedData = useMemo(() => {
+  // Display data (what actually gets rendered)
+  const displayData = useMemo(() => {
     if (!enablePagination) {
       return sortedData;
     }
@@ -306,9 +307,6 @@ export function DataGrid<T extends Record<string, unknown>>({
     const end = start + pageSize;
     return sortedData.slice(start, end);
   }, [sortedData, currentPage, pageSize, enablePagination]);
-
-  // Display data (what actually gets rendered)
-  const displayData = paginatedData;
   const totalRows = sortedData.length;
   const totalPages = enablePagination ? Math.ceil(totalRows / pageSize) : 1;
 

@@ -91,7 +91,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       outDir: "dist",
       sourcemap: mode === "development",
       minify: mode === "production" ? "esbuild" : false,
-      cssMinify: mode === "production" ? true : false, // Use esbuild for CSS minification
+      cssMinify: mode === "production", // Use esbuild for CSS minification
       chunkSizeWarningLimit: 800,
       rollupOptions: {
         output: {

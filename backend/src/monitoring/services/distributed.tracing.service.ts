@@ -129,7 +129,7 @@ export class DistributedTracingService implements OnModuleInit {
 
     // Initialize SDK
     this.sdk = new NodeSDK({
-      resource: resource as any,
+      resource: resource as Resource,
       spanProcessors: [spanProcessor],
     });
 
@@ -368,7 +368,7 @@ export class DistributedTracingService implements OnModuleInit {
     if (activeSpan) {
       activeSpan.recordException(error);
       if (attributes) {
-        activeSpan.setAttributes(attributes as any);
+        activeSpan.setAttributes(attributes as Attributes);
       }
       activeSpan.setStatus({
         code: SpanStatusCode.ERROR,

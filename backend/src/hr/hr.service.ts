@@ -94,16 +94,16 @@ export class HRService {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-            const { sum } = await this.timeEntryRepository
+            const result = await this.timeEntryRepository
               .createQueryBuilder("entry")
               .select("SUM(entry.duration)", "sum")
               .where("entry.userId = :userId", { userId: user.id })
               .andWhere("entry.date >= :startDate", {
                 startDate: thirtyDaysAgo,
               })
-              .getRawOne();
+              .getRawOne<{ sum: string | null }>();
 
-            totalHours = Number(sum || 0);
+            totalHours = Number(result?.sum || 0);
           }
         } catch (error) {
           // Error ignoredd during time entry calculation
@@ -395,8 +395,8 @@ export class HRService {
             if (startDate)
               qb.andWhere("entry.date >= :startDate", { startDate });
             if (endDate) qb.andWhere("entry.date <= :endDate", { endDate });
-            const { sum } = await qb.getRawOne();
-            billableHours = Number(sum || 0);
+            const result = await qb.getRawOne<{ sum: string | null }>();
+            billableHours = Number(result?.sum || 0);
           }
         } catch (error) {
           // Error ignored during billable hours calculation

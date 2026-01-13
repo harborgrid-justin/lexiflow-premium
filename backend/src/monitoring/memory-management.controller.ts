@@ -39,7 +39,12 @@ import {
 import * as v8 from "v8";
 
 // Local interfaces removed in favor of service types
-export type MemoryLeakStatistics = any;
+export interface MemoryLeakStatistics {
+  totalLeaks: number;
+  leaksPerHour: number;
+  avgLeakSize: number;
+  [key: string]: unknown;
+}
 
 export interface MemorySnapshot {
   timestamp: Date;
@@ -188,8 +193,8 @@ export class MemoryManagementController {
     const leakLimit = limit ? Number(limit) : 10;
 
     return {
-      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as unknown as MemoryLeak[],
-      statistics: this.leakDetector.getStatistics() as unknown as MemoryLeakStatistics,
+      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as MemoryLeak[],
+      statistics: this.leakDetector.getStatistics() as MemoryLeakStatistics,
       snapshots: this.leakDetector.getSnapshots().length,
     };
   }

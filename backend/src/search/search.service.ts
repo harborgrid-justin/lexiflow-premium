@@ -144,7 +144,7 @@ export class SearchService implements OnModuleDestroy {
 
     // Execute and cache
     const data = await fn();
-    this.searchCache.set(key, { data: data as any, timestamp: now });
+    this.searchCache.set(key, { data: data as unknown, timestamp: now });
 
     // Enforce LRU limit
     this.enforceCacheLRU();

@@ -171,7 +171,7 @@ async function main() {
       interface TableRow {
         table_name: string;
       }
-      (result.rows as TableRow[]).forEach((row) => {
+      (result.rows as TableRow[]).forEach((row: TableRow) => {
         console.log(`   ✓ ${row.table_name}`);
       });
     } else {

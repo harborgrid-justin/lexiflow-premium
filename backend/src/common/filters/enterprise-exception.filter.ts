@@ -104,7 +104,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       correlationId?: string;
     }
     const req = request as RequestWithCorrelation;
-    const correlationId =
+    const correlationId: string =
       req.correlationId ?? this.generateCorrelationId();
     const timestamp = new Date().toISOString();
     const path = request.url;
@@ -362,10 +362,11 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       user?: { id?: string; userId?: string };
     }
     const user = (request as RequestWithUser).user;
+    const userAgent = request.headers["user-agent"];
 
     return {
       ip: this.getClientIp(request),
-      userAgent: request.headers["user-agent"],
+      userAgent: typeof userAgent === 'string' ? userAgent : undefined,
       userId: user?.id ?? user?.userId,
     };
   }

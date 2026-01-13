@@ -76,7 +76,7 @@ export function IsNotPastDate(validationOptions?: ValidationOptions) {
 @ValidatorConstraint({ name: "isAfterDate", async: false })
 export class IsAfterDateConstraint implements ValidatorConstraintInterface {
   validate(value: Date, args: ValidationArguments): boolean {
-    const [relatedPropertyName] = args.constraints;
+    const relatedPropertyName = args.constraints[0] as string;
     const relatedValue = (args.object as Record<string, unknown>)[
       relatedPropertyName
     ];
@@ -238,8 +238,8 @@ export class IsAlphanumericWithSpecialConstraint implements ValidatorConstraintI
       return false;
     }
 
-    const [allowedSpecialChars = ""] = args.constraints;
-    const escapedSpecialChars = allowedSpecialChars.replace(
+    const allowedSpecialChars = (args.constraints[0] as string) || "";
+    const escapedSpecialChars = (allowedSpecialChars as string).replace(
       /[.*+?^${}()|[\]\\]/g,
       "\\$&"
     );

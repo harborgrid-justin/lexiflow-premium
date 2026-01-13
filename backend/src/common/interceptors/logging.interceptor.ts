@@ -35,7 +35,10 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest<ExtendedRequest>();
     const response = context.switchToHttp().getResponse<Response>();
-    const { method, url, body, headers } = request;
+    const method = request.method;
+    const url = request.url;
+    const body = request.body as Record<string, unknown>;
+    const headers = request.headers as Record<string, unknown>;
     // Safe logging of body
     try {
       console.log(`[LoggingInterceptor] ${method} ${url}`, JSON.stringify(body));

@@ -7,8 +7,8 @@ interface RequestWithUser {
 export const CurrentUser = createParamDecorator(
   (data: string | undefined, ctx: ExecutionContext): unknown => {
     const request = ctx.switchToHttp().getRequest<RequestWithUser>();
-    const user = request.user;
+    const user = request.user as Record<string, unknown> | undefined;
 
-    return data ? user?.[data] : user;
+    return data && user ? user[data] : user;
   },
 );

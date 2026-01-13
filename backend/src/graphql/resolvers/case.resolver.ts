@@ -90,7 +90,7 @@ export class CaseResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(
-      input as any
+      input as unknown as Record<string, unknown>
     );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown as CaseType;
@@ -105,7 +105,7 @@ export class CaseResolver {
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.update(
       id,
-      input as any
+      input as unknown as Record<string, unknown>
     );
     pubSub.publish("caseUpdated", { caseUpdated: caseEntity, id });
     return caseEntity as unknown as CaseType;

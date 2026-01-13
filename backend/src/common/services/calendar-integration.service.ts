@@ -344,8 +344,17 @@ export class CalendarIntegrationService {
       }
 
       const response = await client.api(query).get();
+      interface OutlookEvent {
+        subject?: string;
+        body?: { content?: string };
+        location?: { displayName?: string };
+        start?: { dateTime?: string; timeZone?: string };
+        end?: { dateTime?: string; timeZone?: string };
+        attendees?: Array<{ emailAddress?: { address?: string }; type?: string }>;
+      }
 
-      return (response.value || []).map((event: OutlookEvent) =>
+      const events = (response.value || []) as OutlookEvent[];
+      return events.map((event) =>
         this.mapOutlookEvent(event)
       );
     } catch (error) {
@@ -404,7 +413,7 @@ export class CalendarIntegrationService {
     try {
       const client = this.createOutlookClient(accessToken);
 
-      const outlookUpdates: any = {};
+      const outlookUpdates: Record<string, unknown> = {};
 
       if (updates.summary) outlookUpdates.subject = updates.summary;
       if (updates.description) {
@@ -429,7 +438,7 @@ export class CalendarIntegrationService {
         };
       }
       if (updates.attendees) {
-        outlookUpdates.attendees = updates.attendees.map((email) => ({
+        outlookUpdates.attendees = updates.attendees.map((email: string) => ({
           emailAddress: { address: email },
           type: "required",
         }));

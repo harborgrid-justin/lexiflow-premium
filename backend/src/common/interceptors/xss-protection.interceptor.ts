@@ -87,11 +87,11 @@ export class XssProtectionInterceptor implements NestInterceptor {
     }
 
     if (typeof data === "string") {
-      return this.sanitizeString(data) as T;
+      return this.sanitizeString(data) as unknown as T;
     }
 
     if (Array.isArray(data)) {
-      return data.map((item) => this.sanitizeData(item)) as T;
+      return data.map((item) => this.sanitizeData(item)) as unknown as T;
     }
 
     if (typeof data === "object" && data !== null) {
@@ -185,7 +185,7 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
     }
 
     if (Array.isArray(data)) {
-      return data.map((item) => this.selectivelySanitize(item)) as T;
+      return data.map((item) => this.selectivelySanitize(item)) as unknown as T;
     }
 
     if (typeof data === "object" && data !== null) {

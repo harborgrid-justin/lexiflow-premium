@@ -16,7 +16,7 @@ export class ValidationPipe implements PipeTransform {
     if (!metatype || !this.toValidate(metatype as new (...args: unknown[]) => unknown)) {
       return value;
     }
-    const object = plainToInstance(metatype, value);
+    const object = plainToInstance(metatype, value) as object;
     const errors = await validate(object);
 
     if (errors.length > 0) {

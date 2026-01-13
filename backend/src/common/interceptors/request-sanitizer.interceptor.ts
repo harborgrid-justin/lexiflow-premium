@@ -60,7 +60,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
     }
 
     if (Array.isArray(obj)) {
-      return obj.map((item) => this.sanitizeObject(item)) as unknown as T;
+      return obj.map((item) => this.sanitizeObject(item)) as T;
     }
 
     if (typeof obj === "object") {

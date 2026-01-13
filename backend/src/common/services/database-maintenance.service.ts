@@ -50,7 +50,12 @@ export class DatabaseMaintenanceService {
         WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
       `);
 
-      for (const table of tables) {
+      interface TableRow {
+        schemaname: string;
+        tablename: string;
+      }
+
+      for (const table of (tables as TableRow[])) {
         const fullTableName = `"${table.schemaname}"."${table.tablename}"`;
         this.logger.debug(`VACUUM ANALYZE ${fullTableName}`);
 
@@ -230,7 +235,13 @@ export class DatabaseMaintenanceService {
           `Found ${slowQueries.length} slow queries in the last 24 hours`
         );
 
-        for (const query of slowQueries.slice(0, 5)) {
+        interface SlowQueryRow {
+          query_text: string;
+          avg_time_ms: number;
+          execution_count: number;
+        }
+
+        for (const query of (slowQueries as SlowQueryRow[]).slice(0, 5)) {
           this.logger.warn(
             `Slow query: ${query.query_text.substring(0, 100)}... ` +
               `Avg: ${query.avg_time_ms}ms, Count: ${query.execution_count}`

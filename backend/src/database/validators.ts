@@ -88,11 +88,9 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     type EntityConstructor = new (...constructorArgs: unknown[]) => unknown;
-    const [entityClass, property, exceptId] = args.constraints as [
-      EntityConstructor,
-      string,
-      string,
-    ];
+    const entityClass = args.constraints[0] as EntityConstructor;
+    const property = args.constraints[1] as string;
+    const exceptId = args.constraints[2] as string | undefined;
 
     if (!value) return true; // Let @IsNotEmpty handle empty values
 
@@ -239,10 +237,8 @@ export class NotDeletedValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     type EntityClass = (new (...constructorArgs: unknown[]) => unknown) | string;
-    const [entityClass, property = "id"] = args.constraints as [
-      EntityClass,
-      string,
-    ];
+    const entityClass = args.constraints[0] as EntityClass;
+    const property = (args.constraints[1] as string) || "id";
 
     if (!value) return true;
 
@@ -298,12 +294,10 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     type EntityClass = (new (...constructorArgs: unknown[]) => unknown) | string;
-    const [entityClass, relationProperty, min, max] = args.constraints as [
-      EntityClass,
-      string,
-      number,
-      number,
-    ];
+    const entityClass = args.constraints[0] as EntityClass;
+    const relationProperty = args.constraints[1] as string;
+    const min = args.constraints[2] as number | undefined;
+    const max = args.constraints[3] as number | undefined;
 
     if (!value) return true;
 
@@ -327,9 +321,9 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [, relationProperty, min, max] = args.constraints as [
-      unknown,
-      string,
+    const relationProperty = args.constraints[1] as string;
+    const min = args.constraints[2] as number | undefined;
+    const max = args.constraints[3] as number | undefined;
       number,
       number,
     ];
@@ -382,7 +376,8 @@ export class MatchesDbEnumValidator implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
-    const [tableName, columnName] = args.constraints;
+    const tableName = args.constraints[0] as string;
+    const columnName = args.constraints[1] as string;
 
     if (!value) return true;
 

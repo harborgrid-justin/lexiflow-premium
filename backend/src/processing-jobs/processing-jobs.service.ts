@@ -324,7 +324,7 @@ export class ProcessingJobsService {
     result: ProcessingResult
   ): Promise<ProcessingJob> {
     await this.jobRepository.update(id, {
-      result: result as any,
+      result: result as unknown as Record<string, unknown>,
       status: JobStatus.COMPLETED,
       completedAt: new Date(),
     });

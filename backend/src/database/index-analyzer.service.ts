@@ -281,7 +281,7 @@ export class IndexAnalyzerService {
       }
       const results = await this.dataSource.query(query, [schemaName]) as DuplicateIndexRow[];
 
-      return results.map((row: Record<string, unknown>) => ({
+      return results.map((row: DuplicateIndexRow) => ({
         tableName: String(row.tablename),
         indexes: (row.index_names as string[]).map(
           (name: string, idx: number) => ({

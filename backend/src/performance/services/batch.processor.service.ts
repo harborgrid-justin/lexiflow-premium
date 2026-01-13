@@ -592,7 +592,9 @@ export class BatchProcessorService implements OnModuleDestroy {
   ): Promise<void> {
     if (options.useTransaction) {
       // @ts-expect-error - Transaction manager delete types are limited in TypeORM
-      await repository.manager.transaction(async (manager) => {
+      await repository.manager.transaction(async (manager: {
+        delete: (target: unknown, criteria: string[] | number[]) => Promise<unknown>;
+      }) => {
         await manager.delete(repository.target, chunk as string[] | number[]);
       });
     } else {

@@ -44,7 +44,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
   for (const documentData of documentsData) {
     try {
       const caseId = caseMap.get(String(documentData.caseNumber));
-      const uploadedBy = users[Math.floor(Math.random() * users.length)];
+      const uploadedBy: User | undefined = users[Math.floor(Math.random() * users.length)];
 
       // Convert uppercase enum string from JSON to title-case to match the entity enum
       const toTitleCase = (str: string) =>

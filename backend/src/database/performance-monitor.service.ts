@@ -382,7 +382,8 @@ export class DatabasePerformanceMonitor {
         "QUERY PLAN": Record<string, unknown>[];
       }
       const result = await this.dataSource.query(explainQuery) as ExplainResult[];
-      return result[0]["QUERY PLAN"];
+      const queryPlan = result[0]["QUERY PLAN"];
+      return queryPlan;
     } catch (error) {
       this.logger.error("Failed to explain query", error);
       throw error;

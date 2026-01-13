@@ -180,7 +180,8 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
 
       if (!cacheStrategy) {
         // Fallback to original method if no cache service
-        return await originalMethod.apply(this, args);
+        const result = await (originalMethod as (...a: unknown[]) => Promise<unknown>).apply(this, args);
+        return result;
       }
 
       // Generate cache key
@@ -190,7 +191,7 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
       return await cacheStrategy.get(
         cacheKey,
         async () => {
-          const result = (await originalMethod.apply(this, args)) as unknown;
+          const result = await (originalMethod as (...a: unknown[]) => Promise<unknown>).apply(this, args);
 
           // Check condition
           if (options.condition && !options.condition(result)) {
@@ -263,7 +264,8 @@ export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
       const cacheStrategy = this.cacheStrategy || this.cacheStrategyService;
 
       if (!cacheStrategy) {
-        return (await originalMethod.apply(this, args)) as unknown;
+        const result = await (originalMethod as (...a: unknown[]) => Promise<unknown>).apply(this, args);
+        return result;
       }
 
       // Evict before invocation if specified
@@ -272,7 +274,7 @@ export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
       }
 
       // Execute original method
-      const result = (await originalMethod.apply(this, args)) as unknown;
+      const result = await (originalMethod as (...a: unknown[]) => Promise<unknown>).apply(this, args);
 
       // Evict after invocation (default)
       if (!options.beforeInvocation) {
@@ -332,7 +334,7 @@ export function CachePut(options: CachePutOptions = {}): MethodDecorator {
       const cacheStrategy = this.cacheStrategy || this.cacheStrategyService;
 
       // Execute original method
-      const result = (await originalMethod.apply(this, args)) as unknown;
+      const result = await (originalMethod as (...a: unknown[]) => Promise<unknown>).apply(this, args);
 
       // Update cache if service available and condition met
       if (cacheStrategy) {

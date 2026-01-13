@@ -232,10 +232,11 @@ export function JsonNotEmpty(columnName: string): ClassDecorator {
 export function CaseInsensitiveUnique(columnName: string): ClassDecorator {
   return function (target: object) {
     // This creates a unique index on LOWER(column)
+    const existingIndices = (Reflect.getMetadata("typeorm:indices", target) as Array<Record<string, unknown>>) ?? [];
     Reflect.defineMetadata(
       "typeorm:indices",
       [
-        ...((Reflect.getMetadata("typeorm:indices", target) as unknown[]) ?? []),
+        ...existingIndices,
         {
           name: `IDX_${columnName}_lower_unique`,
           columns: [columnName],
@@ -287,10 +288,11 @@ export function PartialUnique(
   whereClause: string
 ): ClassDecorator {
   return function (target: object) {
+    const existingIndices = (Reflect.getMetadata("typeorm:indices", target) as Array<Record<string, unknown>>) ?? [];
     Reflect.defineMetadata(
       "typeorm:indices",
       [
-        ...((Reflect.getMetadata("typeorm:indices", target) as unknown[]) ?? []),
+        ...existingIndices,
         {
           name: `IDX_${columnName}_partial_unique`,
           columns: [columnName],

@@ -18,11 +18,17 @@ export class E2ETestHelper {
     email: string = "admin@lexiflow.com",
     password: string = "Admin123!"
   ): Promise<string> {
+    interface AuthResponseBody {
+      data: { accessToken: string };
+    }
+    interface AuthResponse {
+      body: AuthResponseBody;
+    }
     const server = app.getHttpServer();
-    const response = (await request(server)
+    const response = await request(server)
       .post("/auth/login")
       .send({ email, password })
-      .expect(200)) as unknown as AuthResponse;
+      .expect(200) as unknown as AuthResponse;
 
     return response.body.data.accessToken;
   }

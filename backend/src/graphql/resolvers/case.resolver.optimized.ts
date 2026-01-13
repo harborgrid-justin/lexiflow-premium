@@ -62,7 +62,7 @@ export class CaseResolverOptimized {
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
       sortOrder: pagination?.sortOrder,
-    } as any);
+    } as Record<string, unknown>);
 
     return {
       edges: result.data.map((caseItem) => ({
@@ -100,7 +100,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(
-      input as any
+      input as unknown as Record<string, unknown>
     );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown as CaseType;
@@ -220,14 +220,22 @@ export class CaseResolverOptimized {
       activeCases: parseInt(metrics.active_cases) || 0,
       closedCases: parseInt(metrics.closed_cases) || 0,
       pendingCases: parseInt(metrics.pending_cases) || 0,
-      byType: typeDistribution.map((row: unknown) => ({
-        type: (row as any).type,
-        count: parseInt((row as any).count),
-      })),
-      byStatus: statusDistribution.map((row: unknown) => ({
-        status: (row as any).status,
-        count: parseInt((row as any).count),
-      })),
+      byType: typeDistribution.map((row: unknown) => {
+        interface TypeRow { type: string; count: string; }
+        const typedRow = row as TypeRow;
+        return {
+          type: typedRow.type,
+          count: parseInt(typedRow.count),
+        };
+      }),
+      byStatus: statusDistribution.map((row: unknown) => {
+        interface StatusRow { status: string; count: string; }
+        const typedRow = row as StatusRow;
+        return {
+          status: typedRow.status,
+          count: parseInt(typedRow.count),
+        };
+      }),
     };
   }
 

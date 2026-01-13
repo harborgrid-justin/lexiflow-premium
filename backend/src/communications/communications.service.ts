@@ -171,8 +171,8 @@ export class CommunicationsService {
   async getCommunicationStats(caseId: string): Promise<unknown> {
     const result = await this.findByCaseId(caseId);
     const all = result.data;
-    const byType: any = {};
-    const byStatus: any = {};
+    const byType: Record<string, number> = {};
+    const byStatus: Record<string, number> = {};
     let sent = 0;
     let draft = 0;
 
@@ -207,7 +207,7 @@ export class CommunicationsService {
   }
 
   async createTemplate(data: unknown): Promise<Template> {
-    const template = this.templateRepository.create(data as any);
+    const template = this.templateRepository.create(data as Partial<Template>);
     const saved = await this.templateRepository.save(template);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) throw new Error("Failed to save template");
@@ -263,7 +263,13 @@ export class CommunicationsService {
   }
 
   async createFromTemplate(params: unknown): Promise<Communication> {
-    const { templateId, caseId, variables, ...otherData } = params as any;
+    interface TemplateParams {
+      templateId: string;
+      caseId: string;
+      variables: Record<string, string>;
+      [key: string]: unknown;
+    }
+    const { templateId, caseId, variables, ...otherData } = params as TemplateParams;
     const rendered = await this.renderTemplate(templateId, variables);
 
     const communication = this.communicationRepository.create({

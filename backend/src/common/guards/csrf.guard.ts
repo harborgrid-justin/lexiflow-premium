@@ -116,7 +116,8 @@ export class CsrfGuard implements CanActivate {
    * Ensure a CSRF token cookie is set for the response
    */
   private ensureTokenCookie(request: Request, response: Response): void {
-    const existingToken = request.cookies?.[this.TOKEN_COOKIE];
+    const cookies = request.cookies as Record<string, string> | undefined;
+    const existingToken = cookies?.[this.TOKEN_COOKIE];
 
     if (!existingToken || !this.isValidTokenFormat(existingToken)) {
       this.setTokenCookie(response);

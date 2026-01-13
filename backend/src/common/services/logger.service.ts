@@ -37,8 +37,8 @@ export class LoggerService {
   private context: string = 'App';
 
   constructor(private readonly configService: ConfigService) {
-    const logLevel = this.configService.get('LOG_LEVEL', 'info');
-    const logDir = this.configService.get('LOG_DIR', 'logs');
+    const logLevel = this.configService.get<string>('LOG_LEVEL', 'info');
+    const logDir = this.configService.get<string>('LOG_DIR', 'logs');
 
     this.logger = winston.createLogger({
       level: logLevel,

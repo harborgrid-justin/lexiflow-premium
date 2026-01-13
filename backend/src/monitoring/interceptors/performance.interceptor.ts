@@ -201,7 +201,7 @@ export class PerformanceInterceptor implements NestInterceptor {
         // End tracing span
         this.tracingService.endHttpRequestSpan(span, httpResponse);
 
-        return data;
+        return data as unknown;
       }),
       catchError((error: Error & { status?: number; statusCode?: number }) => {
         const duration = Date.now() - startTime;

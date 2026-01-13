@@ -277,9 +277,16 @@ export class NotificationsService implements OnModuleDestroy {
     };
 
     // Add to priority queue (circular buffer)
+    interface QueueEntry {
+      notificationId: string;
+      userId: string;
+      createdAt: Date;
+      status: string;
+      [key: string]: unknown;
+    }
     this.notificationQueue[this.queueWriteIndex] = {
       priority,
-      notification: queueEntry as any,
+      notification: queueEntry as QueueEntry,
     };
     this.queueWriteIndex = (this.queueWriteIndex + 1) % this.MAX_QUEUE_SIZE;
 

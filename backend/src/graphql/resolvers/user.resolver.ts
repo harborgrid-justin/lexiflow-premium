@@ -83,13 +83,16 @@ export class UserResolver {
   @Mutation(() => AuthPayload)
   @Public()
   async register(@Args("input") input: RegisterInput): Promise<AuthPayload> {
+    interface RegisterInputWithRole extends RegisterInput {
+      role?: string;
+    }
+    const inputWithRole = input as RegisterInputWithRole;
     const registerDto = {
       email: input.email,
       password: input.password,
       firstName: input.firstName,
       lastName: input.lastName,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      role: (input as any).role,
+      role: inputWithRole.role,
     };
     const result = await this.authService.register(registerDto);
     return {
@@ -107,17 +110,20 @@ export class UserResolver {
     @Args("input") input: UpdateUserInput
   ): Promise<UserType> {
     // Verify user has permission to update (simplified for now)
+    interface UpdateInputWithFields extends UpdateUserInput {
+      email?: string;
+      role?: string;
+      isActive?: boolean;
+      mfaEnabled?: boolean;
+    }
+    const inputWithFields = input as UpdateInputWithFields;
     const updateDto = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      email: (input as any).email,
+      email: inputWithFields.email,
       firstName: input.firstName,
       lastName: input.lastName,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      role: (input as any).role,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      isActive: (input as any).isActive,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mfaEnabled: (input as any).mfaEnabled,
+      role: inputWithFields.role,
+      isActive: inputWithFields.isActive,
+      mfaEnabled: inputWithFields.mfaEnabled,
     };
     const updatedUser = await this.userService.update(id, updateDto);
     return updatedUser as unknown as UserType;

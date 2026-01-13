@@ -139,8 +139,8 @@ export class DepositionsService {
     if (!result.affected) {
       throw new NotFoundException(`Deposition with ID ${id} not found`);
     }
-    const rawResult = result.raw as unknown[];
-    return rawResult[0] as Deposition;
+    const rawResult = result.raw as Deposition[];
+    return rawResult[0];
   }
 
   async remove(id: string): Promise<void> {

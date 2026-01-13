@@ -8,18 +8,18 @@ import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/shared/ui/molecules/Tabs/Tabs';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
+import { ENHANCED_WORKFLOW_TABS, type EnhancedWorkflowTab } from './constants';
 
 // ============================================================================
 // TYPES
 // ============================================================================
-type WorkflowTab = 'tasks' | 'dependencies' | 'approvals' | 'history';
 
 interface KPIDashboardProps {
   // No props needed
 }
 
 interface WorkflowContentProps {
-  activeTab: WorkflowTab;
+  activeTab: EnhancedWorkflowTab;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
 }
@@ -27,13 +27,12 @@ interface WorkflowContentProps {
 // ============================================================================
 // TAB CONFIGURATION
 // ============================================================================
-const WORKFLOW_TABS: WorkflowTab[] = ['tasks', 'dependencies', 'approvals', 'history'];
 
-const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
-  tasks: ParallelTasksManager as unknown as React.FC<Record<string, unknown>>,
-  dependencies: TaskDependencyManager as unknown as React.FC<Record<string, unknown>>,
-  approvals: ApprovalWorkflow as unknown as React.FC<Record<string, unknown>>,
-  history: AuditTrailViewer as unknown as React.FC<Record<string, unknown>>
+const TAB_COMPONENTS: Record<EnhancedWorkflowTab, React.ComponentType<Record<string, unknown>>> = {
+  tasks: ParallelTasksManager as unknown as React.ComponentType<Record<string, unknown>>,
+  dependencies: TaskDependencyManager as unknown as React.ComponentType<Record<string, unknown>>,
+  approvals: ApprovalWorkflow as unknown as React.ComponentType<Record<string, unknown>>,
+  history: AuditTrailViewer as unknown as React.ComponentType<Record<string, unknown>>
 };
 
 // ============================================================================
@@ -43,7 +42,8 @@ const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
 /**
  * KPIDashboard - Monitoring widgets for SLA and time tracking
  */
-const KPIDashboard: React.FC<KPIDashboardProps> = () => (
+function KPIDashboard(_props: KPIDashboardProps) {
+  return (
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div className="lg:col-span-2">
       <SLAMonitor />
@@ -52,12 +52,15 @@ const KPIDashboard: React.FC<KPIDashboardProps> = () => (
       <TimeTrackingPanel />
     </div>
   </div>
-);
+  );
+}
+
+KPIDashboard.displayName = 'KPIDashboard';
 
 /**
  * WorkflowContent - Dynamic content based on active tab using composition
  */
-const WorkflowContent: React.FC<WorkflowContentProps> = ({ activeTab, onApprove, onReject }) => {
+function WorkflowContent({ activeTab, onApprove, onReject }: WorkflowContentProps) {
   const ContentComponent = TAB_COMPONENTS[activeTab];
 
   // Special handling for approvals which needs callbacks
@@ -66,7 +69,9 @@ const WorkflowContent: React.FC<WorkflowContentProps> = ({ activeTab, onApprove,
   }
 
   return <ContentComponent />;
-};
+}
+
+WorkflowContent.displayName = 'WorkflowContent';
 
 // ============================================================================
 // CONTAINER COMPONENT
@@ -78,13 +83,13 @@ const WorkflowContent: React.FC<WorkflowContentProps> = ({ activeTab, onApprove,
  * Uses composition pattern instead of conditional rendering
  * Separated KPI dashboard and tabbed content into focused components
  */
-export const EnhancedWorkflowPanel: React.FC = () => {
+export function EnhancedWorkflowPanel() {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<WorkflowTab>('tasks');
+  const [activeTab, setActiveTab] = useState<EnhancedWorkflowTab>('tasks');
 
   const handleApprove = (id: string) => alert(`Approved ${id}`);
   const handleReject = (id: string) => alert(`Rejected ${id}`);
-  const handleTabChange = (tab: string) => setActiveTab(tab as WorkflowTab);
+  const handleTabChange = (tab: string) => setActiveTab(tab as EnhancedWorkflowTab);
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -93,7 +98,7 @@ export const EnhancedWorkflowPanel: React.FC = () => {
       <div className={cn("rounded-lg border shadow-sm flex flex-col flex-1 overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default)}>
           <Tabs
-            tabs={WORKFLOW_TABS}
+            tabs={ENHANCED_WORKFLOW_TABS}
             activeTab={activeTab}
             onChange={handleTabChange}
           />
@@ -109,4 +114,6 @@ export const EnhancedWorkflowPanel: React.FC = () => {
       </div>
     </div>
   );
-};
+}
+
+EnhancedWorkflowPanel.displayName = 'EnhancedWorkflowPanel';

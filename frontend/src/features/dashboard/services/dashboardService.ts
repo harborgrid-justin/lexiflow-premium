@@ -59,8 +59,7 @@ export const dashboardService = {
             endDate: endOfMonth,
           })
           .catch(() => []),
-        // @ts-expect-error - RiskImpact enum mismatch
-        DataService.risks.getAll({ impact: RiskImpact.High }).catch(() => []),
+        DataService.risks.getAll({ impact: RiskImpact.High as string }).catch(() => []),
       ]);
 
       // Calculate derived stats

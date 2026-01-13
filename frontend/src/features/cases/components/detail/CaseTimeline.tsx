@@ -8,22 +8,14 @@
  * @category Case Management - Timeline & Events
  */
 
-// External Dependencies
-import { BookOpen, Briefcase, Calendar, CheckCircle, DollarSign, FileText, Filter, Flag, Gavel, List, Scroll } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
+import { BookOpen, Filter, List } from 'lucide-react';
 
-// Internal Dependencies - Components
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { TimelineItem } from '@/shared/ui/molecules/TimelineItem/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-
-// Internal Dependencies - Hooks & Context
-import { useTheme } from '@/features/theme';
-
-// Internal Dependencies - Services & Utils
+import { useCaseTimeline } from '@/features/cases/hooks/useCaseTimeline';
 import { cn } from '@/shared/lib/cn';
-
-// Types & Interfaces
 import { TimelineEvent } from '@/types';
 
 interface CaseTimelineProps {
@@ -32,46 +24,16 @@ interface CaseTimelineProps {
 }
 
 export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick }) => {
-  // ============================================================================
-  // HOOKS & CONTEXT
-  // ============================================================================
-  const { theme } = useTheme();
-
-  // ============================================================================
-  // STATE MANAGEMENT
-  // ============================================================================
-  const [viewMode, setViewMode] = useState<'list' | 'story'>('list');
-  const [filterType, setFilterType] = useState<string>('All');
-
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'document': return <FileText className="h-3 w-3" />;
-      case 'task': return <CheckCircle className="h-3 w-3" />;
-      case 'billing': return <DollarSign className="h-3 w-3" />;
-      case 'milestone': return <Flag className="h-3 w-3" />;
-      case 'motion': return <Gavel className="h-3 w-3" />;
-      case 'hearing': return <Calendar className="h-3 w-3" />;
-      case 'docket': return <Scroll className="h-3 w-3" />;
-      default: return <Briefcase className="h-3 w-3" />;
-    }
-  };
-
-  const getColor = (type: string) => {
-    switch (type) {
-      case 'document': return cn(theme.status.info.bg, theme.status.info.border, theme.status.info.text);
-      case 'task': return cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text);
-      case 'billing': return cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text);
-      case 'milestone': return cn(theme.surface.highlight, theme.border.default, theme.action.primary.text);
-      case 'motion': return "bg-indigo-100 border-indigo-500 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400";
-      case 'hearing': return cn(theme.status.error.bg, theme.status.error.border, theme.status.error.text);
-      case 'docket': return cn(theme.surface.highlight, theme.border.default, theme.text.primary);
-      default: return cn(theme.surface.highlight, theme.border.default, theme.text.tertiary);
-    }
-  };
-
-  const filteredEvents = useMemo(() => {
-    return events.filter(e => filterType === 'All' || e.type === filterType);
-  }, [events, filterType]);
+  const {
+    viewMode,
+    setViewMode,
+    filterType,
+    setFilterType,
+    filteredEvents,
+    getIcon,
+    getColor,
+    theme
+  } = useCaseTimeline(events);
 
   const renderRow = (event: TimelineEvent, idx: number) => (
     <div key={event.id} className="h-[60px] px-4">

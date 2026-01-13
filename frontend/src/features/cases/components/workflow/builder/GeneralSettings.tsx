@@ -7,7 +7,7 @@ interface GeneralSettingsProps {
   setTemplateName: (name: string) => void;
 }
 
-export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ templateName, setTemplateName }) => {
+export function GeneralSettings({ templateName, setTemplateName }: GeneralSettingsProps) {
   const { theme } = useTheme();
 
   return (
@@ -37,4 +37,6 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ templateName, 
         </div>
     </div>
   );
-};
+}
+
+GeneralSettings.displayName = 'GeneralSettings';

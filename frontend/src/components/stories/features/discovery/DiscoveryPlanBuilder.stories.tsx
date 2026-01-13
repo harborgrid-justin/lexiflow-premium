@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlanBuilder } from '@/features/cases/components/detail/collaboration/DiscoveryPlanBuilder';
-import { ToastProvider } from '@/providers';
 
 /**
  * DiscoveryPlanBuilder provides collaborative discovery planning tools including

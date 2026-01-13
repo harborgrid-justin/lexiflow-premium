@@ -131,7 +131,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   target,
   currency = '$',
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [displayValue, setDisplayValue] = useState<number>(0);
 
   // Calculate change if previous value provided

@@ -14,9 +14,9 @@ interface ApprovalChainsPanelProps {
   onAddApprovalChain: () => void;
 }
 
-export const ApprovalChainsPanel: React.FC<ApprovalChainsPanelProps> = ({
+export function ApprovalChainsPanel({
   onAddApprovalChain,
-}) => {
+}: ApprovalChainsPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -52,4 +52,6 @@ export const ApprovalChainsPanel: React.FC<ApprovalChainsPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
+
+ApprovalChainsPanel.displayName = 'ApprovalChainsPanel';

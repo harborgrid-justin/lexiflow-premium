@@ -1,7 +1,7 @@
 import { DataService } from '@/services/data/dataService';
 import { SyncEngine } from '@/services/data/syncEngine';
 import { SYNC_MAX_RETRIES, SYNC_BASE_DELAY_MS } from '@/config/features/contexts.config';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type {
   SyncActionsValue,
   SyncProviderProps,
@@ -12,6 +12,48 @@ import type {
 // Extend SyncProviderProps to include initialOnlineStatus for testing
 interface ExtendedSyncProviderProps extends SyncProviderProps {
   initialOnlineStatus?: boolean;
+}
+
+/**
+ * GUIDELINE #32: Use useSyncExternalStore for External Mutable Sources
+ * 
+ * Hook to subscribe to navigator.onLine in a concurrent-safe manner.
+ * Uses useSyncExternalStore to prevent tearing during interrupted renders.
+ * 
+ * @see https://react.dev/reference/react/useSyncExternalStore
+ */
+function useOnlineStatus(initialStatus?: boolean): boolean {
+  const subscribe = useCallback((callback: () => void) => {
+    // Subscribe to online/offline events
+    window.addEventListener('online', callback);
+    window.addEventListener('offline', callback);
+    
+    // Return cleanup function
+    return () => {
+      window.removeEventListener('online', callback);
+      window.removeEventListener('offline', callback);
+    };
+  }, []);
+
+  const getSnapshot = useCallback(() => {
+    // SSR-safe: default to true if navigator is unavailable
+    return typeof navigator !== 'undefined' ? navigator.onLine : true;
+  }, []);
+
+  const getServerSnapshot = useCallback(() => {
+    // SSR always returns true to avoid hydration mismatch
+    return true;
+  }, []);
+
+  // Use external store subscription for concurrent-safe reads
+  const isOnline = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  );
+
+  // Override with test value if provided
+  return initialStatus !== undefined ? initialStatus : isOnline;
 }
 
 /**
@@ -115,20 +157,16 @@ export const SyncProvider = ({
   onSyncSuccess: _onSyncSuccess,
   onSyncError
 }: ExtendedSyncProviderProps) => {
-  // HYDRATION-SAFE: Check for browser environment before accessing navigator
-  // Default to true for SSR to prevent server/client mismatch
-  const [isOnline, setIsOnline] = useState(
-    initialOnlineStatus !== undefined
-      ? initialOnlineStatus
-      : (typeof navigator !== 'undefined' ? navigator.onLine : true)
-  );
+  // GUIDELINE #32: Use useSyncExternalStore for concurrent-safe external reads
+  const isOnline = useOnlineStatus(initialOnlineStatus);
+  
   const [pendingCount, setPendingCount] = useState(0);
   const [failedCount, setFailedCount] = useState(0);
-  // HYDRATION-SAFE: Sync status initialization also checks environment
+  // Derive sync status from online state (no race conditions)
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(
     initialOnlineStatus !== undefined
       ? (initialOnlineStatus ? 'idle' : 'offline')
-      : (typeof navigator !== 'undefined' && navigator.onLine ? 'idle' : 'offline')
+      : (isOnline ? 'idle' : 'offline')
   );
 
   // BP6: Ref to prevent concurrent queue processing (not high-frequency state)
@@ -224,46 +262,30 @@ export const SyncProvider = ({
   }, [refreshCounts]);
 
   useEffect(() => {
-    // BP13: Lifecycle - initialize counts and event listeners
+    // BP13: Lifecycle - initialize counts
     refreshCounts();
 
-    const handleOnline = () => {
-      setIsOnline(true);
-      setSyncStatus('syncing');
-      if (onSyncSuccessRef.current) {
-        onSyncSuccessRef.current('Connection restored. Syncing changes...');
-      }
-      processQueue();
-    };
+    // GUIDELINE #32: useSyncExternalStore handles online/offline subscriptions
+    // This effect reacts to isOnline changes from the external store
 
-    const handleOffline = () => {
-      setIsOnline(false);
-      setSyncStatus('offline');
-      if (onSyncErrorRef.current) {
-        onSyncErrorRef.current('You are offline. Changes will be saved locally.');
-      }
-    };
+    // Update sync status based on online state
+    setSyncStatus(isOnline ? 'syncing' : 'offline');
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
+    // Notify callbacks
+    if (isOnline && onSyncSuccessRef.current) {
+      onSyncSuccessRef.current('Connection restored. Syncing changes...');
+    } else if (!isOnline && onSyncErrorRef.current) {
+      onSyncErrorRef.current('You are offline. Changes will be saved locally.');
     }
 
-    // Initial check
-    if (SyncEngine.count() > 0 && (typeof navigator === 'undefined' || navigator.onLine)) {
+    // Process queue when online
+    if (isOnline && SyncEngine.count() > 0) {
       processQueue();
     }
 
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('online', handleOnline);
-        window.removeEventListener('offline', handleOffline);
-      }
-    };
-    // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally
-    // exclude them from dependencies to avoid recreating event handlers on every render
-
-  }, [processQueue, refreshCounts]);
+    // GUIDELINE #24: No cleanup needed - external store handles subscriptions
+    // Note: onSyncSuccessRef and onSyncErrorRef are stable refs updated in separate effect
+  }, [isOnline, processQueue, refreshCounts]);
 
   // BP10: Stabilize function references with useCallback
   const performMutation = useCallback(async <T = unknown>(type: string, payload: T, apiCall: () => Promise<T>) => {

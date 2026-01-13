@@ -16,10 +16,10 @@ interface VersionControlPanelProps {
   onCreateVersion: (message: string) => void;
 }
 
-export const VersionControlPanel: React.FC<VersionControlPanelProps> = ({
+export function VersionControlPanel({
   versions,
   onCreateVersion,
-}) => {
+}: VersionControlPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -69,4 +69,6 @@ export const VersionControlPanel: React.FC<VersionControlPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
+
+VersionControlPanel.displayName = 'VersionControlPanel';

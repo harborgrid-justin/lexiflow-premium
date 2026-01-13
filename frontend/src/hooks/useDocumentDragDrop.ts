@@ -28,9 +28,11 @@ import React, { useRef, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { DocumentService } from "@/services/features/documents/documentService";
+import { DocumentsApiService } from "@/api/admin/documents-api";
 import { queryClient } from "@/services/infrastructure/queryClient";
 import { queryKeys } from "@/utils/queryKeys";
+
+const documentsApi = new DocumentsApiService();
 
 // Hooks & Context
 import { useNotify } from "./useNotify";
@@ -106,10 +108,12 @@ export function useDocumentDragDrop(
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
           const file = e.dataTransfer.files[i];
           if (file) {
-            await DocumentService.uploadDocument(file, {
-              sourceModule:
-                currentFolder === "root" ? "General" : currentFolder,
+            await documentsApi.upload(file, {
               caseId: "General" as CaseId,
+              type: file.type.split('/')[1]?.toUpperCase() || 'FILE',
+              title: file.name,
+              status: 'Draft',
+              tags: [currentFolder === "root" ? "General" : currentFolder]
             });
           }
         }

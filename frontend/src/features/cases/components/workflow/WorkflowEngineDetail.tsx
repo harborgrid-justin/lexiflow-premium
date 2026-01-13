@@ -34,7 +34,7 @@ interface WorkflowEngineDetailProps {
   onBack: () => void;
 }
 
-export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, type, onBack }) => {
+export function WorkflowEngineDetail({ id, type, onBack }: WorkflowEngineDetailProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useState<'visualizer' | 'tasks' | 'audit' | 'settings'>('visualizer');
@@ -188,4 +188,6 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
       </div>
     </div>
   );
-};
+}
+
+WorkflowEngineDetail.displayName = 'WorkflowEngineDetail';

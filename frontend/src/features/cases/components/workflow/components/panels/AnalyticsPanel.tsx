@@ -15,7 +15,7 @@ interface AnalyticsPanelProps {
   analytics: WorkflowAnalytics | undefined;
 }
 
-export const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }) => {
+export function AnalyticsPanel({ analytics }: AnalyticsPanelProps) {
   const { theme } = useTheme();
 
   if (!analytics) {
@@ -143,4 +143,6 @@ export const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }) => 
       </div>
     </Card>
   );
-};
+}
+
+AnalyticsPanel.displayName = 'AnalyticsPanel';

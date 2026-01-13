@@ -77,7 +77,11 @@ const MAX_STRING_LENGTH = 100_000;
  * Validate numeric input for formatters
  * @private
  */
-const validateNumber = (value: number | string | undefined | null, methodName: string, defaultValue: number = 0): number => {
+const validateNumber = (
+  value: number | string | undefined | null,
+  methodName: string,
+  defaultValue: number = 0
+): number => {
   // Return default for null/undefined without throwing
   if (value === undefined || value === null || value === '') {
     return defaultValue;

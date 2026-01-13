@@ -15,19 +15,11 @@
 // ============================================================================
 import { queryKeys } from '@/utils/queryKeys';
 import {
-  Briefcase,
   CheckCircle,
   ChevronDown,
-  FileText,
-  Gavel,
-  Layers,
   Loader2,
-  Mic2,
-  Monitor,
   Shield,
-  Swords,
   Target,
-  Users,
 } from "lucide-react";
 import React, {
   Suspense,

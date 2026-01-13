@@ -29,7 +29,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const TaskReassignmentPanel: React.FC = () => {
+export function TaskReassignmentPanel() {
   const { theme } = useTheme();
 
   return (
@@ -70,4 +70,6 @@ export const TaskReassignmentPanel: React.FC = () => {
       </div>
     </div>
   );
-};
+}
+
+TaskReassignmentPanel.displayName = 'TaskReassignmentPanel';

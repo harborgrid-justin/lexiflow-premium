@@ -10,7 +10,7 @@ import React from 'react';
  * PipelineDAG - React 18 optimized with React.memo, real backend data
  */
 export const PipelineDAG = React.memo(function PipelineDAG() {
-    const { theme, mode } = useTheme();
+    const { theme, mode: _mode } = useTheme();
 
     // Fetch pipeline stages from backend
     const { data: pipelineData, isLoading } = useQuery(

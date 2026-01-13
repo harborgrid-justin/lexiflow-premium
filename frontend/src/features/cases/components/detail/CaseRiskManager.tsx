@@ -20,12 +20,10 @@ import { RiskList } from './risk/RiskList';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
+import { useCaseRisks } from '@/features/cases/hooks/useCaseRisks';
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
@@ -40,31 +38,10 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
     const { openWindow, closeWindow } = useWindow();
 
     // Enterprise Data Access
-    const { data: risks = [], isLoading } = useQuery<Risk[]>(
-        ['risks', caseData.id],
-        () => DataService.risks.getByCaseId(caseData.id)
-    );
-
-    const { mutate: addRisk } = useMutation(
-        DataService.risks.add,
-        { invalidateKeys: [['risks', caseData.id]] }
-    );
-
-    const { mutate: updateRisk } = useMutation(
-        (updated: Risk) => DataService.risks.update(updated.id, updated),
-        {
-            invalidateKeys: [['risks', caseData.id]],
-            onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
-        }
-    );
-
-    const { mutate: deleteRisk } = useMutation(
-        DataService.risks.delete,
-        {
-            invalidateKeys: [['risks', caseData.id]],
-            onSuccess: (_, id) => closeWindow(`risk-detail-${id}`)
-        }
-    );
+    const { risks, isLoading, addRisk, updateRisk, deleteRisk } = useCaseRisks(caseData.id, {
+        onUpdateSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`),
+        onDeleteSuccess: (_, id) => closeWindow(`risk-detail-${id}`)
+    });
 
     const handleAddRisk = () => {
         const newRisk: Risk = {

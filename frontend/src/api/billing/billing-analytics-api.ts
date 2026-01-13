@@ -49,7 +49,7 @@ export class BillingAnalyticsApiService {
     endDate: string
   ): Promise<BillingAnalytics> {
     // The backend returns aggregated metrics from the /metrics endpoint
-    const result = await apiClient.get<{
+    const _result = await apiClient.get<{
       wip: unknown;
       realization: unknown;
       operatingSummary: unknown;

@@ -29,9 +29,9 @@ export default function EnterpriseLoginPage() {
 
     try {
       console.log('[Login] Attempting login with:', email);
-      const success = await login(email, password);
+      const result = await login(email, password);
 
-      if (success) {
+      if (result.success) {
         // Check if account is locked
         if (user?.accountLocked) {
           setAccountLocked(true);
@@ -40,12 +40,8 @@ export default function EnterpriseLoginPage() {
 
         // Login successful, redirect
         navigate('/dashboard');
-      } else {
-        // Login returned false - could be MFA required or failed
-        // If requiresMFA is true, the MFAVerification component will show
-        if (!requiresMFA) {
-          setError('Login failed. Please check your credentials.');
-        }
+      } else if (!result.mfaRequired && !requiresMFA) {
+        setError('Login failed. Please check your credentials.');
       }
     } catch (err) {
       console.error('[Login] Login error:', err);

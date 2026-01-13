@@ -33,7 +33,7 @@ const meta: Meta<typeof DocumentRowWrapper> = {
         component: 'Document row component with selection, status badges, and action buttons.'
       }
     },
-  }
+  },
   argTypes: {
     isSelected: {
       control: 'boolean',

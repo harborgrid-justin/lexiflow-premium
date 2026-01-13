@@ -26,7 +26,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     isOpen: {
       description: 'Whether the modal is open',

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QueryConsole } from '@/features/admin/components/data/QueryConsole';
-import { ToastProvider } from '@/providers';
 
 /**
  * QueryConsole provides advanced database query interface for administrators

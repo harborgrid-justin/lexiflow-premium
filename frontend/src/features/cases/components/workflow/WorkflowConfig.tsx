@@ -12,7 +12,7 @@ interface WorkflowSetting {
   enabled: boolean;
 }
 
-export const WorkflowConfig: React.FC = () => {
+export function WorkflowConfig() {
   const { theme } = useTheme();
   const notify = useNotify();
 
@@ -78,4 +78,6 @@ export const WorkflowConfig: React.FC = () => {
       </div>
     </Card>
   );
-};
+}
+
+WorkflowConfig.displayName = 'WorkflowConfig';

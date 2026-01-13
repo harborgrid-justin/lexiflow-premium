@@ -25,7 +25,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     searchTerm: {
       description: 'Current search term',

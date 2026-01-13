@@ -27,7 +27,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     isReady: {
       description: 'Whether the document is ready for filing (all checks passed)',

@@ -3,28 +3,10 @@
  * Manage annotations, notes, and comments on documents
  */
 
+import { useTheme } from '@/features/theme';
 import { formatDate } from '@/utils/formatters';
-import { useState } from 'react';
-
-export interface Annotation {
-  id: string;
-  documentId: string;
-  page: number;
-  text: string;
-  author: string;
-  createdAt: string;
-  x?: number;
-  y?: number;
-  color?: string;
-}
-
-interface DocumentAnnotationsProps {
-  documentId: string;
-  annotations: Annotation[];
-  onAdd?: (annotation: Omit<Annotation, 'id' | 'createdAt'>) => void;
-  onDelete?: (id: string) => void;
-  currentPage?: number;
-}
+import { DocumentAnnotationsProps } from '../types/DocumentAnnotationsProps';
+import { useDocumentAnnotations } from '../hooks/useDocumentAnnotations';
 
 export function DocumentAnnotations({
   documentId,
@@ -34,39 +16,21 @@ export function DocumentAnnotations({
   currentPage = 1
 }: DocumentAnnotationsProps) {
   const { theme } = useTheme();
-  const [isAdding, setIsAdding] = useState(false);
-  const [newAnnotation, setNewAnnotation] = useState({
-    page: currentPage,
-    text: '',
-    author: 'Current User',
-    color: '#FCD34D'
+  
+  const {
+    isAdding,
+    setIsAdding,
+    newAnnotation,
+    setNewAnnotation,
+    filteredAnnotations,
+    handleAdd,
+    colors
+  } = useDocumentAnnotations({
+    documentId,
+    annotations,
+    onAdd,
+    currentPage
   });
-
-  const filteredAnnotations = currentPage
-    ? annotations.filter(a => a.page === currentPage)
-    : annotations;
-
-  const handleAdd = () => {
-    if (newAnnotation.text.trim()) {
-      onAdd?.({
-        documentId,
-        page: newAnnotation.page,
-        text: newAnnotation.text,
-        author: newAnnotation.author,
-        color: newAnnotation.color
-      });
-      setNewAnnotation({ page: currentPage, text: '', author: 'Current User', color: '#FCD34D' });
-      setIsAdding(false);
-    }
-  };
-
-  const colors = [
-    { value: '#FCD34D', name: 'Yellow' },
-    { value: '#34D399', name: 'Green' },
-    { value: '#60A5FA', name: 'Blue' },
-    { value: '#F87171', name: 'Red' },
-    { value: '#A78BFA', name: 'Purple' },
-  ];
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
@@ -177,7 +141,7 @@ export function DocumentAnnotations({
             <div
               key={annotation.id}
               className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border-l-4"
-              style={{ borderLeftColor: annotation.color || theme.colors.textMuted }}
+              style={{ borderLeftColor: annotation.color || theme.text.muted }}
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">

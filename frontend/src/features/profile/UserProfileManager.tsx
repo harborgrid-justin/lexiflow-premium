@@ -14,8 +14,6 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { Activity, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
-import { useState } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -29,25 +27,16 @@ import { ProfileOverview } from './ProfileOverview';
 import { SecurityPane } from './SecurityPane';
 
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { USER_PROFILE_TAB_CONFIG } from '@/config/tabs.config';
 
-// Hooks & Context
-import { useQuery } from '@/hooks/useQueryHooks';
-
-// Types
-import { ExtendedUserProfile } from '@/types';
+// Hooks
+import { useUserProfileManager } from './hooks/useUserProfileManager';
 
 // ========================================
 // COMPONENT
 // ========================================
 export const UserProfileManager = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-
-  const { data: profile, isLoading } = useQuery<ExtendedUserProfile>(
-    ['profile', 'current'],
-    DataService.profile.getCurrentProfile
-  );
+  const { activeTab, setActiveTab, profile, isLoading } = useUserProfileManager();
 
   const renderContent = () => {
     // LAYOUT-STABLE: Always render something to prevent layout shift

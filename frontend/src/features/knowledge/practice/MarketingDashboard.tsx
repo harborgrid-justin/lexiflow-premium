@@ -39,10 +39,10 @@ import { MarketingCampaign, MarketingMetric } from '@/types';
 
 export const MarketingDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
-  const chartColors = ChartColorService.getChartColors(mode);
+  const _chartColors = ChartColorService.getChartColors(mode);
   const chartTheme = ChartColorService.getChartTheme(mode);
   const tooltipStyle = ChartColorService.getTooltipStyle(mode);
-  const palette = ChartColorService.getPalette(mode);
+  const _palette = ChartColorService.getPalette(mode);
 
   // Enterprise Data Access
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(

@@ -9,9 +9,9 @@ interface BuilderToolbarProps {
   onToggleSidebar: () => void;
 }
 
-export const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
+export function BuilderToolbar({
   scale, setScale, onToggleSidebar
-}) => {
+}: BuilderToolbarProps) {
   const { theme } = useTheme();
 
   return (
@@ -31,4 +31,6 @@ export const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
       </div>
     </div>
   );
-};
+}
+
+BuilderToolbar.displayName = 'BuilderToolbar';

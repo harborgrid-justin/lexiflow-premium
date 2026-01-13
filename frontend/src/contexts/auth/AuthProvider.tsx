@@ -19,7 +19,7 @@ import { clearAuthTokens, setAuthTokens } from '@/services/infrastructure/api-cl
 import type { User } from '@/types';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AuthActionsContext, AuthStateContext } from './authContexts';
-import type { AuthActionsValue, AuthEvent, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';
+import type { AuthActionsValue, AuthEvent, AuthLoginResult, AuthStateValue, AuthUser, MFASetup, PasswordPolicy, SessionInfo } from './authTypes';
 
 interface LoginUserResponse extends User {
   permissions?: string[];
@@ -115,6 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Computed values
   const isAuthenticated = user !== null;
 
+    clearError,
   // Session management functions
   const clearSessionTimers = useCallback(() => {
     if (sessionTimeoutRef.current) clearTimeout(sessionTimeoutRef.current);
@@ -128,6 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const authApi = new AuthApiService();
       await authApi.logout();
 
+    clearError,
       // Clear storage
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
@@ -269,9 +271,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [startSession, clearSessionTimers]);
 
   // Stable action callbacks (BP10)
-  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+  const login = useCallback(async (
+    email: string,
+    password: string,
+    _rememberMe?: boolean,
+    _mfaCode?: string
+  ): Promise<AuthLoginResult> => {
     setIsLoading(true);
     setError(null);
+    setRequiresMFA(false);
 
     try {
       console.log('[AuthProvider] Starting login for:', email);
@@ -286,7 +294,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id: response.user.id,
         email: response.user.email,
         name: (response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0]) || 'Unknown User',
-        role: (response.user.role || 'attorney') as AuthUser['role'],
+        role: ((response.user.role as AuthUser['role']) || 'attorney') as AuthUser['role'],
         avatarUrl: response.user.avatarUrl,
         permissions: userResponse.permissions || [],
         mfaEnabled: userResponse.mfaEnabled,
@@ -294,6 +302,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         passwordExpiresAt: userResponse.passwordExpiresAt,
         lastLoginAt: new Date(),
         failedLoginAttempts: 0,
+        organizationId: response.user.organizationId || response.user.orgId,
+        orgId: response.user.orgId,
+        organizationName: response.user.organizationName,
+        department: response.user.department,
+        title: response.user.title,
+        phone: response.user.phone,
       };
 
       // Check if account is locked
@@ -305,7 +319,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           userId: authUser.id,
           metadata: { reason: 'account_locked' },
         });
-        return false;
+        return { success: false };
       }
 
       // Check if MFA is required
@@ -319,7 +333,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           userId: authUser.id,
           metadata: { mfaRequired: true },
         });
-        return false; // MFA verification needed
+        return { success: false, mfaRequired: true };
       }
 
       // Store token and user
@@ -353,7 +367,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
 
       console.log('[AuthProvider] Login successful');
-      return true;
+      return { success: true };
     } catch (err) {
       console.error('[AuthProvider] Login error:', err);
       const message = err instanceof Error ? err.message : 'Login failed';
@@ -363,7 +377,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         timestamp: new Date(),
         metadata: { reason: 'login_failed', error: message },
       });
-      return false;
+      return { success: false };
     } finally {
       setIsLoading(false);
     }
@@ -446,6 +460,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return false;
     }
   }, [logout, user]);
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
   const hasPermission = useCallback((permission: string): boolean => {
     if (!user) return false;
@@ -560,6 +578,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     verifyMFA,
     logout,
     refreshToken,
+    clearError,
     hasPermission,
     hasRole,
     enableMFA,

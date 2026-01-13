@@ -16,10 +16,10 @@ interface ExternalTriggersPanelProps {
   onCreateWebhook: () => void;
 }
 
-export const ExternalTriggersPanel: React.FC<ExternalTriggersPanelProps> = ({
+export function ExternalTriggersPanel({
   externalTrigger,
   onCreateWebhook,
-}) => {
+}: ExternalTriggersPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -92,4 +92,6 @@ export const ExternalTriggersPanel: React.FC<ExternalTriggersPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
+
+ExternalTriggersPanel.displayName = 'ExternalTriggersPanel';

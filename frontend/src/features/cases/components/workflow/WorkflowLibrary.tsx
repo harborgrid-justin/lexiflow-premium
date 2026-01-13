@@ -47,7 +47,7 @@ interface WorkflowLibraryProps {
 // COMPONENT
 // ============================================================================
 
-export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) => {
+export function WorkflowLibrary({ onCreate }: WorkflowLibraryProps) {
   const { theme } = useTheme();
 
   const { data: templatesData = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
@@ -146,5 +146,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
       </div>
     </div>
   );
-};
+}
+
+WorkflowLibrary.displayName = 'WorkflowLibrary';
 

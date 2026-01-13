@@ -53,3 +53,18 @@ export type {
   SyncStateValue,
   SyncStatus,
 } from "./sync/SyncContext.types";
+
+// Data context types (dashboard data)
+export type { DashboardItem, DataContextValue } from "./data/DataContext";
+
+// Case context types
+export type { CaseContextValue } from "./case/CaseContext";
+
+// Entitlements context types
+export type { Entitlements, EntitlementsContextValue, Plan } from "./entitlements/EntitlementsContext";
+
+// Flags context types
+export type { Flags, FlagsContextValue } from "./flags/FlagsContext";
+
+// Auth context types (re-exported from enterprise location)
+export type { AuthUser, AuthActionsValue, AuthStateValue } from "./auth/authTypes";

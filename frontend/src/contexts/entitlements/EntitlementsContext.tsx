@@ -1,8 +1,9 @@
 // src/contexts/entitlements/EntitlementsContext.tsx
 import { apiClient } from "@/services/infrastructure/apiClient";
 import type { Organization } from "@/types";
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import { useAuth } from "../auth/AuthContext";
+import { freezeInDev } from "../utils/immutability";
 
 export type Plan = "free" | "pro" | "enterprise";
 
@@ -13,12 +14,20 @@ export type Entitlements = {
   storageLimitGB: number;
 };
 
-export type EntitlementsContextValue = {
+interface EntitlementsStateValue {
   entitlements: Entitlements;
   isLoading: boolean;
-};
+  isPending: boolean; // GUIDELINE #33: Expose transitional state
+}
 
-const EntitlementsContext = createContext<EntitlementsContextValue | null>(null);
+interface EntitlementsActionsValue {
+  // No actions needed for now - entitlements are computed from auth state
+}
+
+export type EntitlementsContextValue = EntitlementsStateValue & EntitlementsActionsValue;
+
+const EntitlementsStateContext = createContext<EntitlementsStateValue | undefined>(undefined);
+const EntitlementsActionsContext = createContext<EntitlementsActionsValue | undefined>(undefined);
 
 const DEFAULT_ENTITLEMENTS: Entitlements = {
   plan: "free",
@@ -27,10 +36,13 @@ const DEFAULT_ENTITLEMENTS: Entitlements = {
   storageLimitGB: 1,
 };
 
-export const EntitlementsProvider: React.FC<React.PropsWithChildren> = () => {
+export const EntitlementsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth();
   const [entitlements, setEntitlements] = useState<Entitlements>(DEFAULT_ENTITLEMENTS);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // GUIDELINE #25-26: Use startTransition for non-urgent context updates
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchEntitlements = async () => {
@@ -67,11 +79,15 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = () => {
           }
         }
 
-        setEntitlements({
-          plan,
-          canUseAdminTools,
-          maxCases,
-          storageLimitGB
+        // GUIDELINE #25: Wrap non-urgent state updates in startTransition
+        // Entitlement changes are not urgent - UI can remain interactive during fetch
+        startTransition(() => {
+          setEntitlements({
+            plan,
+            canUseAdminTools,
+            maxCases,
+            storageLimitGB
+          });
         });
       } catch (err) {
         console.error("Failed to calculate entitlements", err);
@@ -84,13 +100,41 @@ export const EntitlementsProvider: React.FC<React.PropsWithChildren> = () => {
     fetchEntitlements();
   }, [auth.status, auth.user]);
 
-  const value = useMemo(() => ({ entitlements, isLoading }), [entitlements, isLoading]);
+  // GUIDELINE #33: Expose isPending to consumers for transitional UI
+  const stateValue = useMemo<EntitlementsStateValue>(
+    () => freezeInDev({ entitlements, isLoading, isPending }),
+    [entitlements, isLoading, isPending]
+  );
+  const actionsValue = useMemo<EntitlementsActionsValue>(() => freezeInDev({}), []);
 
-  return <EntitlementsContext.Provider value={value}>{null}</EntitlementsContext.Provider>;
+  return (
+    <EntitlementsStateContext.Provider value={stateValue}>
+      <EntitlementsActionsContext.Provider value={actionsValue}>
+        {children}
+      </EntitlementsActionsContext.Provider>
+    </EntitlementsStateContext.Provider>
+  );
 };
 
-export const useEntitlements = (): EntitlementsContextValue => {
-  const ctx = useContext(EntitlementsContext);
-  if (!ctx) throw new Error("useEntitlements must be used within EntitlementsProvider");
-  return ctx;
-};
+export function useEntitlementsState(): EntitlementsStateValue {
+  const context = useContext(EntitlementsStateContext);
+  if (!context) {
+    throw new Error("useEntitlementsState must be used within EntitlementsProvider");
+  }
+  return context;
+}
+
+export function useEntitlementsActions(): EntitlementsActionsValue {
+  const context = useContext(EntitlementsActionsContext);
+  if (!context) {
+    throw new Error("useEntitlementsActions must be used within EntitlementsProvider");
+  }
+  return context;
+}
+
+export function useEntitlements(): EntitlementsContextValue {
+  return {
+    ...useEntitlementsState(),
+    ...useEntitlementsActions(),
+  };
+}

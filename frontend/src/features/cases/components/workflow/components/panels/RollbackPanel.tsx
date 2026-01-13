@@ -17,11 +17,11 @@ interface RollbackPanelProps {
   onRollback: (snapshotId: string) => void;
 }
 
-export const RollbackPanel: React.FC<RollbackPanelProps> = ({
+export function RollbackPanel({
   snapshots,
   onCreateSnapshot,
   onRollback,
-}) => {
+}: RollbackPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -75,4 +75,6 @@ export const RollbackPanel: React.FC<RollbackPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
+
+RollbackPanel.displayName = 'RollbackPanel';

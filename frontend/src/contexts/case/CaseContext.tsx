@@ -1,13 +1,19 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { StorageUtils } from '@/utils/storage';
 
-interface CaseContextType {
+interface CaseStateValue {
   selectedCaseId: string | null;
+}
+
+interface CaseActionsValue {
   selectCase: (caseId: string | null) => void;
   clearSelection: () => void;
 }
 
-const CaseContext = createContext<CaseContextType | null>(null);
+export type CaseContextValue = CaseStateValue & CaseActionsValue;
+
+const CaseStateContext = createContext<CaseStateValue | undefined>(undefined);
+const CaseActionsContext = createContext<CaseActionsValue | undefined>(undefined);
 
 const STORAGE_KEY = 'lexiflow_global_context_case_id';
 
@@ -30,24 +36,43 @@ export const CaseProvider: React.FC<{ children: React.ReactNode }> = ({ children
     selectCase(null);
   }, [selectCase]);
 
-  // Context value memoization to prevent unnecessary re-renders
-  const value = useMemo(() => ({
+  const stateValue = useMemo<CaseStateValue>(() => ({
     selectedCaseId,
+  }), [selectedCaseId]);
+
+  const actionsValue = useMemo<CaseActionsValue>(() => ({
     selectCase,
-    clearSelection
-  }), [selectedCaseId, selectCase, clearSelection]);
+    clearSelection,
+  }), [selectCase, clearSelection]);
 
   return (
-    <CaseContext.Provider value={value}>
-      {children}
-    </CaseContext.Provider>
+    <CaseStateContext.Provider value={stateValue}>
+      <CaseActionsContext.Provider value={actionsValue}>
+        {children}
+      </CaseActionsContext.Provider>
+    </CaseStateContext.Provider>
   );
 };
 
-export const useCaseContext = () => {
-  const context = useContext(CaseContext);
+export function useCaseState(): CaseStateValue {
+  const context = useContext(CaseStateContext);
   if (!context) {
-    throw new Error('useCaseContext must be used within a CaseProvider');
+    throw new Error('useCaseState must be used within a CaseProvider');
   }
   return context;
-};
+}
+
+export function useCaseActions(): CaseActionsValue {
+  const context = useContext(CaseActionsContext);
+  if (!context) {
+    throw new Error('useCaseActions must be used within a CaseProvider');
+  }
+  return context;
+}
+
+export function useCaseContext(): CaseContextValue {
+  return {
+    ...useCaseState(),
+    ...useCaseActions(),
+  };
+}

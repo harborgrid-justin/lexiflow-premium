@@ -1,6 +1,5 @@
 import { ProgressBar } from '@/shared/ui/atoms/ProgressBar/ProgressBar';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React from "react";
 
 /**
  * ProgressBar component for displaying progress indicators.

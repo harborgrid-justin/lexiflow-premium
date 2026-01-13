@@ -1,6 +1,13 @@
 /**
  * Workflow Builder Module
- * Visual workflow designer components for case workflows
+ * 
+ * Modular components for visual workflow design:
+ * - BuilderCanvas: Main drag-drop canvas for node placement
+ * - BuilderPalette: Node type palette (sidebar)
+ * - BuilderProperties: Node property editor
+ * - BuilderToolbar: Zoom, pan, and view controls
+ * - GeneralSettings: Workflow-level configuration
+ * - SimulationView: Test workflow execution
  */
 
 export { BuilderCanvas } from './BuilderCanvas';
@@ -10,5 +17,5 @@ export { BuilderToolbar } from './BuilderToolbar';
 export { GeneralSettings } from './GeneralSettings';
 export { SimulationView } from './SimulationView';
 
-// Types
+// Types (re-exported from central workflow types)
 export type * from './types';

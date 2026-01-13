@@ -31,7 +31,7 @@ const meta: Meta<typeof DocumentExplorer> = {
         component: 'Document explorer with advanced filtering, search, drag-drop upload, and preview capabilities. Supports both list and grid view modes.'
       }
     },
-  }
+  },
   argTypes: {
     currentUserRole: {
       control: 'select',

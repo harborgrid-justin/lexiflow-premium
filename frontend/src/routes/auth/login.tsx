@@ -31,10 +31,12 @@ export default function LoginPage() {
 
     try {
       console.log('[Login] Attempting login with:', email);
-      const success = await login(email, password);
-      console.log('[Login] Login result:', success);
-      if (success) {
+      const result = await login(email, password);
+      console.log('[Login] Login result:', result);
+      if (result.success) {
         navigate('/dashboard');
+      } else if (result.mfaRequired) {
+        setError('Multi-factor verification required. Please complete MFA using the enterprise login experience.');
       } else {
         setError('Login failed. Please check your credentials.');
       }

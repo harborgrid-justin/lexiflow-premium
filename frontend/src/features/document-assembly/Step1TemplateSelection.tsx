@@ -1,100 +1,16 @@
-/**
- * @module components/document-assembly/Step1TemplateSelection
- * @description Template selection step for document assembly wizard
- * ✅ Backend-connected with query keys (2025-12-21)
- */
-
 import React from 'react';
-import { FileText, Mail, FileSignature, Scale, Building2, Users, BookOpen, Gavel, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useTheme } from '@/features/theme';
 import { cn } from '@/shared/lib/cn';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { useDocumentTemplates } from './hooks/useDocumentTemplates';
 
 interface Step1TemplateSelectionProps {
   onSelectTemplate: (templateName: string) => void;
 }
 
-interface DocumentTemplate {
-  name: string;
-  description: string;
-  icon: React.ElementType;
-  category: string;
-}
-
-const DOCUMENT_TEMPLATES: DocumentTemplate[] = [
-  {
-    name: 'Motion to Dismiss',
-    description: 'Standard motion to dismiss with legal grounds and supporting arguments',
-    icon: Gavel,
-    category: 'Motions'
-  },
-  {
-    name: 'Discovery Request',
-    description: 'Interrogatories, requests for production, or requests for admission',
-    icon: FileText,
-    category: 'Discovery'
-  },
-  {
-    name: 'Demand Letter',
-    description: 'Formal demand letter outlining claims and settlement demands',
-    icon: Mail,
-    category: 'Correspondence'
-  },
-  {
-    name: 'Contract Review Memo',
-    description: 'Analysis and recommendations for contract terms and conditions',
-    icon: FileSignature,
-    category: 'Contracts'
-  },
-  {
-    name: 'Legal Brief',
-    description: 'Comprehensive legal brief with case law and statutory analysis',
-    icon: BookOpen,
-    category: 'Litigation'
-  },
-  {
-    name: 'Settlement Agreement',
-    description: 'Mutual settlement and release agreement template',
-    icon: Scale,
-    category: 'Settlement'
-  },
-  {
-    name: 'Corporate Resolution',
-    description: 'Board resolution or shareholder consent document',
-    icon: Building2,
-    category: 'Corporate'
-  },
-  {
-    name: 'Witness Statement',
-    description: 'Structured witness affidavit or declaration template',
-    icon: Users,
-    category: 'Evidence'
-  }
-];
-
 export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ onSelectTemplate }) => {
   const { theme } = useTheme();
-
-  // Fetch templates from backend
-  const { data: backendTemplates, isLoading } = useQuery(
-    queryKeys.documents.templates(),
-    async () => {
-      // Try to fetch from backend, fallback to local templates
-      try {
-        
-        // const templates = await api.documents.getTemplates();
-        // return templates;
-        return DOCUMENT_TEMPLATES;
-      } catch (error) {
-        console.warn('Failed to fetch templates from backend, using local templates:', error);
-        return DOCUMENT_TEMPLATES;
-      }
-    },
-    { staleTime: 10 * 60 * 1000 } // Cache for 10 minutes
-  );
-
-  const templates = backendTemplates || DOCUMENT_TEMPLATES;
+  const { templates, isLoading } = useDocumentTemplates();
 
   if (isLoading) {
     return (

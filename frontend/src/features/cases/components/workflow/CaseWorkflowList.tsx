@@ -15,7 +15,7 @@ interface CaseWorkflowListProps {
   onManageWorkflow?: (id: string) => void;
 }
 
-export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks, onSelectCase, onManageWorkflow }) => {
+export function CaseWorkflowList({ cases, tasks, onSelectCase, onManageWorkflow }: CaseWorkflowListProps) {
   const { theme } = useTheme();
 
   if (!cases || cases.length === 0) {
@@ -103,4 +103,6 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
         })}
     </div>
   );
-};
+}
+
+CaseWorkflowList.displayName = 'CaseWorkflowList';

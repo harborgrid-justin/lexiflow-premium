@@ -95,11 +95,17 @@ export async function handleResponse<T>(response: Response): Promise<T> {
     });
 
     // Create error object with response details attached
-    const error: any = new ExternalServiceError(
+    interface ErrorWithResponse extends ExternalServiceError {
+      response?: ErrorResponse;
+      status?: number;
+      statusCode?: number;
+    }
+    
+    const error: ErrorWithResponse = new ExternalServiceError(
       "API",
       errorData.message || `HTTP ${response.status}: ${response.statusText}`,
       response.status
-    );
+    ) as ErrorWithResponse;
 
     // Attach response details for test assertions
     error.response = errorData;

@@ -1,13 +1,14 @@
 import { useTheme } from '@/features/theme';
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '@/shared/hooks/useClickOutside'; // Assuming shared hook
 import { Command, Search, X } from 'lucide-react';
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import * as styles from './EnhancedSearch.styles';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
-import { useKeyboardNav, useSearchHandlers } from './hooks';
-import { getRecentSearches, parseSearchSyntax } from './storage';
-import type { EnhancedSearchProps, SearchCategory, SearchResult } from './types';
-import { filterSuggestions, highlightMatch } from './utils';
+import type { EnhancedSearchProps } from './types';
+
+// New Imports
+import { SEARCH_CATEGORIES } from '@/config/search.config';
+import { useEnhancedSearch } from '../../hooks/useEnhancedSearch';
 
 /**
  * EnhancedSearch - React 18 optimized with useId
@@ -24,92 +25,31 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   debounceDelay = 300
 }) => {
   const { theme } = useTheme();
-  const [query, setQuery] = useState('');
-  const deferredQuery = useDeferredValue(query);
-  const [category, setCategory] = useState<SearchCategory>('all');
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Load recent searches on mount
-  useEffect(() => {
-    setRecentSearches(getRecentSearches());
-  }, []);
-
-  // Custom hooks for handlers
-  const { handleSearch: performSearch, handleSuggestionClick: selectSuggestion } = useSearchHandlers(
+  const {
+    query,
+    category,
+    setCategory,
+    isOpen,
+    setIsOpen,
+    selectedIndex,
+    setSelectedIndex,
+    inputRef,
+    containerRef,
+    dropdownRef,
+    displayItems,
+    handleInputChange,
+    handleSuggestionClick,
+    handleClear,
+    handleKeyDown
+  } = useEnhancedSearch({
     onSearch,
     onSuggestionSelect,
+    suggestions,
     debounceDelay
-  );
+  });
 
-  // Filter and highlight suggestions
-  const filteredSuggestions = useMemo(() => {
-    const categoryFiltered = category === 'all'
-      ? suggestions
-      : suggestions.filter(s => s.category === category);
-    return filterSuggestions(categoryFiltered, deferredQuery, 10);
-  }, [suggestions, deferredQuery, category]);
-
-  const displayItems = useMemo(() => {
-    if (!deferredQuery) {
-      return recentSearches.map(text => ({
-        id: `recent-${text}`,
-        text,
-        category: 'all' as SearchCategory,
-        icon: <Search className="h-4 w-4" />,
-        score: 1.0
-      }));
-    }
-    return filteredSuggestions.map(item => ({
-      ...item,
-      highlightedText: highlightMatch(item.text, deferredQuery)
-    }));
-  }, [deferredQuery, filteredSuggestions, recentSearches]);
-
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    setIsOpen(true);
-    setSelectedIndex(-1);
-
-    // Parse syntax (e.g., "case:12345")
-    const parsed = parseSearchSyntax(value);
-    if (parsed.filters.category && parsed.filters.category !== category) {
-      setCategory(parsed.filters.category as SearchCategory);
-    }
-
-    performSearch(value, category);
-  }, [category, performSearch]);
-
-  const handleSuggestionClick = useCallback((suggestion: SearchResult) => {
-    selectSuggestion(suggestion, setQuery, setRecentSearches, setIsOpen, setSelectedIndex);
-  }, [selectSuggestion]);
-
-  const handleClear = useCallback(() => {
-    setQuery('');
-    setIsOpen(false);
-    setSelectedIndex(-1);
-    inputRef.current?.focus();
-  }, []);
-
-  const handleKeyDown = useKeyboardNav(
-    isOpen,
-    displayItems.length,
-    () => performSearch(query, category),
-    () => {
-      if (selectedIndex >= 0) {
-        const item = displayItems[selectedIndex];
-        if (item) handleSuggestionClick(item);
-      }
-    }
-  );
-
-  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
+  useClickOutside(containerRef, () => setIsOpen(false));
 
   return (
     <div ref={containerRef} className={styles.searchContainer(className)}>
@@ -150,7 +90,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
       {/* Categories */}
       {showCategories && (
         <div className={styles.categoriesContainer}>
-          {(['all', 'cases', 'documents', 'people', 'dates', 'tags'] as SearchCategory[]).map(cat => (
+          {SEARCH_CATEGORIES.map(cat => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}

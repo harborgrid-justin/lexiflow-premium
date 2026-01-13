@@ -3,8 +3,10 @@
  * @module hooks/useDocumentManager/useDragDropHandlers
  */
 
-import { DocumentService } from "@/services/features/documents/documentService";
+import { DocumentsApiService } from "@/api/admin/documents-api";
 import type { CaseId } from "@/types";
+
+const documentsApi = new DocumentsApiService();
 import { queryKeys } from "@/utils/queryKeys";
 import React, { useCallback, useRef, useState } from "react";
 import type { UseNotifyReturn } from "../useNotify";
@@ -100,10 +102,12 @@ export function useDragDropHandlers({
           }
 
           try {
-            await DocumentService.uploadDocument(file, {
-              sourceModule:
-                currentFolder === "root" ? "General" : currentFolder,
+            await documentsApi.upload(file, {
               caseId: "General" as CaseId,
+              type: file.type.split('/')[1]?.toUpperCase() || 'FILE',
+              title: file.name,
+              status: 'Draft',
+              tags: [currentFolder === "root" ? "General" : currentFolder]
             });
             successCount++;
           } catch (error) {

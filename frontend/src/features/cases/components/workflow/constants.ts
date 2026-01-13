@@ -12,3 +12,19 @@ export const getChartColors = (mode: 'light' | 'dark') => ({
   tooltipBg: mode === 'dark' ? '#1e293b' : '#ffffff',
   tooltipBorder: mode === 'dark' ? '#334155' : '#e2e8f0'
 });
+
+/**
+ * Enhanced Workflow Panel Tab Types
+ * Used for internal task management within a workflow
+ */
+export type EnhancedWorkflowTab = 'tasks' | 'dependencies' | 'approvals' | 'history';
+
+/**
+ * Enhanced Workflow Panel Tab Configuration
+ */
+export const ENHANCED_WORKFLOW_TABS: EnhancedWorkflowTab[] = [
+  'tasks',
+  'dependencies',
+  'approvals',
+  'history'
+];

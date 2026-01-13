@@ -13,36 +13,15 @@
 import { AlertCircle, Loader2 } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-// Dynamic import for pdfjs-dist to avoid DOMMatrix issues in SSR
-type PDFJSType = typeof import('pdfjs-dist');
-let pdfjsLib: PDFJSType | null = null;
-
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/features/theme';
+import { usePDFViewer } from '../../hooks/usePDFViewer';
 
 // Utils & Constants
 import { cn } from '@/shared/lib/cn';
-
-// ============================================================================
-// CONFIGURATION
-// ============================================================================
-// Initialize PDF.js when the component mounts (browser-only)
-const initializePDFJS = async () => {
-  if (pdfjsLib) return pdfjsLib;
-
-  try {
-    const pdfjs = await import('pdfjs-dist');
-    pdfjs.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
-    pdfjsLib = pdfjs;
-    return pdfjs;
-  } catch (error) {
-    console.error('Failed to load PDF.js:', error);
-    throw error;
-  }
-};
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -67,14 +46,12 @@ interface PDFPageProxy {
   render(params: PDFRenderParams): PDFRenderTask;
 }
 
+// PDFDocumentProxy is now used from the hook return type implicitly or we can redefine it/import it
+// For now, keeping the interface here to satisfy the render logic, 
+// though we'll cast the hook result if needed.
 interface PDFDocumentProxy {
   getPage(pageNumber: number): Promise<PDFPageProxy>;
   numPages: number;
-  destroy(): void;
-}
-
-interface PDFLoadingTask {
-  promise: Promise<PDFDocumentProxy>;
   destroy(): void;
 }
 
@@ -100,42 +77,21 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
+  // Use the custom hook for document loading
+  const { pdfDoc, loading, error, pdfjsReady } = usePDFViewer(url);
+  
   const [pageNum, setPageNum] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [containerWidth, setContainerWidth] = useState<number>(0);
-  const [pdfjsReady, setPdfjsReady] = useState(false);
 
   // Refs for tracking async state
   const renderTaskRef = useRef<PDFRenderTask | null>(null);
-  const loadingTaskRef = useRef<PDFLoadingTask | null>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     isMounted.current = true;
     return () => { isMounted.current = false; };
-  }, []);
-
-  // Initialize PDF.js on mount
-  useEffect(() => {
-    const init = async () => {
-      try {
-        await initializePDFJS();
-        if (isMounted.current) {
-          setPdfjsReady(true);
-        }
-      } catch (err) {
-        console.error('Failed to initialize PDF.js:', err);
-        if (isMounted.current) {
-          setError('Failed to initialize PDF viewer');
-        }
-      }
-    };
-
-    init();
   }, []);
 
   // Resize Observer
@@ -167,46 +123,12 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
     };
   }, []);
 
-  // Load Document
-  useEffect(() => {
-    if (!url || !pdfjsReady || !pdfjsLib) return;
+  // Document loading is now handled by usagePDFViewer hook
 
-    // Cleanup previous task if any
-    if (loadingTaskRef.current) {
-      loadingTaskRef.current.destroy();
-      loadingTaskRef.current = null;
-    }
-
-    const loadPdf = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const loadingTask = pdfjsLib!.getDocument(url);
-        loadingTaskRef.current = loadingTask as unknown as PDFLoadingTask;
-        const doc = await loadingTask.promise;
-
-        if (isMounted.current) {
-          setPdfDoc(doc as unknown as PDFDocumentProxy);
-          setPageNum(1);
-        }
-      } catch (err: unknown) {
-        console.error("Error loading PDF:", err);
-        if (isMounted.current) setError("Failed to load document. File may be corrupted or restricted.");
-      } finally {
-        if (isMounted.current) setLoading(false);
-      }
-    };
-
-    loadPdf();
-
-    return () => {
-      if (loadingTaskRef.current) {
-        loadingTaskRef.current.destroy();
-      }
-    };
-  }, [url, pdfjsReady]);
   const renderPage = useCallback(async () => {
+    // Cast pdfDoc to local interface if needed, or rely on duck typing
     if (!pdfDoc || !canvasRef.current || containerWidth === 0) return;
+    const doc = pdfDoc as unknown as PDFDocumentProxy;
 
     // Cancel any pending render
     if (renderTaskRef.current) {
@@ -219,7 +141,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
     }
 
     try {
-      const page = await pdfDoc.getPage(pageNum);
+      const page = await doc.getPage(pageNum);
 
       // Calculate scale to fit width, considering the external scale prop
       const unscaledViewport = page.getViewport({ scale: 1, rotation: rotation });

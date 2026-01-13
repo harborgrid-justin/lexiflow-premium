@@ -3,11 +3,13 @@
  * @module hooks/useDocumentManager/useDocumentData
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DocumentsApiService } from "@/api/admin/documents-api";
 import type { LegalDocument } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
 import { useMemo } from "react";
 import { useQuery } from "../useQueryHooks";
+
+const documentsApi = new DocumentsApiService();
 
 /**
  * Hook for fetching and managing document data
@@ -17,7 +19,7 @@ export function useDocumentData() {
     queryKeys.documents.all(),
     async () => {
       try {
-        return await DataService.documents.getAll();
+        return await documentsApi.getAll();
       } catch (error) {
         console.error("[useDocumentManager] Error fetching documents:", error);
         throw error;

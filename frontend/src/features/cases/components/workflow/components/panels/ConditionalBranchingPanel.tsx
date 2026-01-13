@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/cn';
 import { AlertTriangle, CheckCircle2, GitBranch } from 'lucide-react';
 import React from 'react';
 
-export const ConditionalBranchingPanel: React.FC = () => {
+export function ConditionalBranchingPanel() {
   const { theme } = useTheme();
 
   return (
@@ -56,4 +56,6 @@ export const ConditionalBranchingPanel: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
+
+ConditionalBranchingPanel.displayName = 'ConditionalBranchingPanel';

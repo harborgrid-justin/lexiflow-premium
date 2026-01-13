@@ -5,7 +5,7 @@
  * Provides enterprise-grade access control functions
  */
 
-import type { AuthUser } from '@/contexts/AuthContext';
+import type { AuthUser } from '@/contexts/auth/authTypes';
 
 /**
  * Permission resource types

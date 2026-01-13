@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -15,6 +15,14 @@ interface SyncConnectionResult {
   recordsSynced: number;
 }
 
+interface ConnectionPayload {
+  name: string;
+  host: string;
+  region: string;
+  providerId?: string;
+  type?: string;
+}
+
 const PROVIDERS = [
   { id: 'snowflake', name: 'Snowflake' },
   { id: 'postgres', name: 'PostgreSQL' },
@@ -25,10 +33,8 @@ const PROVIDERS = [
 const toDataConnection = (ds: DataSource): DataConnection => ({
   id: ds.id,
   name: ds.name,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type: (ds.metadata as any)?.providerName || ds.type,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  region: (ds.metadata as any)?.region || (ds.config as any)?.region || 'us-east-1',
+  type: (ds.metadata as Record<string, unknown>)?.providerName as string || ds.type,
+  region: (ds.metadata as Record<string, unknown>)?.region as string || (ds.config as Record<string, unknown>)?.region as string || 'us-east-1',
   status: (ds.status as ConnectionStatus) || 'disconnected',
   lastSync: ds.config?.lastSync,
 });
@@ -58,8 +64,7 @@ export const CloudDatabaseContent: React.FC = () => {
 
   // Concurrent-safe: Functional state updates in cache (Principle #5)
   const addConnectionMutation = useMutation(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (data: any) => {
+    async (data: ConnectionPayload) => {
       const payload: Partial<DataSource> = {
         name: data.name,
         type: 'database',

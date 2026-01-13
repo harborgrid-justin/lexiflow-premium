@@ -11,151 +11,50 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useCallback } from 'react';
 import { Filter } from 'lucide-react';
+import React from 'react';
 
-// ============================================================================
-// INTERNAL DEPENDENCIES
-// ============================================================================
-// Components
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { SwipeableItem } from '@/shared/ui/organisms/SwipeableItem';
-import { Button } from '@/shared/ui/atoms/Button';
-import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
-import { SearchInput } from '@/shared/ui/molecules/SearchInput/SearchInput';
-import { Input } from '@/shared/ui/atoms/Input';
-import { Badge } from '@/shared/ui/atoms/Badge';
-import { Currency } from '@/shared/ui/atoms/Currency/Currency';
 import { ActiveCaseTable } from './ActiveCaseTable';
+import { Badge } from '@/shared/ui/atoms/Badge';
+import { Button } from '@/shared/ui/atoms/Button';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { Currency } from '@/shared/ui/atoms/Currency/Currency';
+import { FilterPanel } from '@/shared/ui/organisms/FilterPanel';
+import { Input } from '@/shared/ui/atoms/Input';
+import { SearchInput } from '@/shared/ui/molecules/SearchInput/SearchInput';
+import { SwipeableItem } from '@/shared/ui/organisms/SwipeableItem';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 
-// Hooks & Context
-import { useSort } from '@/hooks/useSort';
-import { useTheme } from '@/features/theme';
-import { useNotify } from '@/hooks/useNotify';
-import { useToggle } from '@/shared/hooks/useToggle';
+import { CASE_STATUS_VARIANTS, CASE_TYPES } from '@/config/cases.config';
+import { useCaseListActive } from '../../hooks/useCaseListActive';
 import { UseCaseListReturn } from '@/hooks/useCaseList';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useModalState } from '@/hooks/useModalState';
-
-// Services & Utils
-import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
-// ✅ Migrated to backend API (2025-12-21)
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
 import { Case, CaseStatus } from '@/types';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;
 };
 
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-/**
- * Maps case status to badge variant for consistent visual representation
- */
-const getCaseStatusVariant = (status: CaseStatus): 'success' | 'warning' | 'error' | 'info' | 'neutral' => {
-  switch (status) {
-    case CaseStatus.Settled:
-    case CaseStatus.Closed:
-      return 'success';
-    case CaseStatus.Trial:
-      return 'warning';
-    case CaseStatus.Appeal:
-      return 'error';
-    case CaseStatus.Discovery:
-      return 'info';
-    default:
-      return 'neutral';
-  }
-};
-
-// ============================================================================
-// MAIN COMPONENT
-// ============================================================================
-
-/**
- * CaseListActive - Active cases list with filtering and sorting
- *
- * Features:
- * - Multi-criteria filtering (status, type, date range, search)
- * - Desktop table view with virtual scrolling
- * - Mobile swipeable card view with archive action
- * - Real-time search and filter panel
- * - Case prefetching on hover
- */
 export const CaseListActive: React.FC<CaseListActiveProps> = ({
   filteredCases,
   statusFilter, setStatusFilter, typeFilter, setTypeFilter,
   searchTerm, setSearchTerm, dateFrom, setDateFrom, dateTo, setDateTo,
   resetFilters, onSelectCase
 }) => {
-  // ==========================================================================
-  // HOOKS - Context & Custom Hooks
-  // ==========================================================================
-  const { theme } = useTheme();
-  const notify = useNotify();
-  const { isOpen: showFilters, toggle: toggleFilters } = useToggle(false);
-  const archiveModal = useModalState();
-  const [archiveCaseData, setArchiveCaseData] = React.useState<Case | null>(null);
-
-  const { items: sortedCases, requestSort, sortConfig } = useSort(filteredCases as unknown as Record<string, unknown>[], 'filingDate', 'desc');
-
-  // ==========================================================================
-  // HOOKS - Mutations
-  // ==========================================================================
-  const { mutate: archiveCase } = useMutation(
-      DataService.cases.archive,
-      {
-          onSuccess: () => {
-              notify.success("Case archived successfully");
-              queryClient.invalidate(queryKeys.cases.all());
-          }
-      }
-  );
-
-  const { mutate: flagCase } = useMutation(
-      DataService.cases.flag,
-      {
-          onSuccess: () => {
-              notify.warning("Case flagged for risk review");
-          }
-      }
-  );
-
-  const prefetchCaseDetails = useCallback((caseId: string) => {
-    // Prefetch case-related data on hover for better UX
-    // Wrapped in try-catch to prevent errors from missing API methods
-    try {
-      if (DataService.documents?.getByCaseId) {
-        queryClient.fetch(['documents', caseId], () => DataService.documents.getByCaseId(caseId));
-      }
-    } catch {
-      // Silently fail - prefetch is optional
-    }
-  }, []);
-
-  const handleArchiveCase = (c: Case) => {
-     setArchiveCaseData(c);
-     archiveModal.open();
-  };
-
-  const confirmArchive = () => {
-     if (archiveCaseData) {
-         archiveCase(archiveCaseData.id);
-         setArchiveCaseData(null);
-     }
-  };
-
-  const handleFlagCase = (c: Case) => {
-      flagCase(c.id);
-  };
+  const {
+    theme,
+    showFilters,
+    toggleFilters,
+    archiveModal,
+    archiveCaseData,
+    sortedCases,
+    requestSort,
+    sortConfig,
+    prefetchCaseDetails,
+    handleArchiveCase,
+    confirmArchive,
+    handleFlagCase
+  } = useCaseListActive(filteredCases);
 
   // Virtualized Row Renderer (Mobile)
   const renderMobileRow = (c: Case) => (
@@ -183,7 +82,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
                 <h4 className={cn("font-bold text-base leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             </div>
             <div className={cn("flex items-center justify-between pl-2 pt-2 border-t", theme.border.default)}>
-                <Badge variant={getCaseStatusVariant(c.status)} className="text-[10px] px-2 py-0.5">{c.status}</Badge>
+                <Badge variant={CASE_STATUS_VARIANTS[c.status]} className="text-[10px] px-2 py-0.5">{c.status}</Badge>
                 <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>
             </div>
@@ -218,10 +117,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
               <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={typeFilter} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTypeFilter(e.target.value)} aria-label="Type Filter">
                   <option value="All">All Types</option>
-                  <option value="Litigation">Litigation</option>
-                  <option value="Appeal">Appeal</option>
-                  <option value="M&A">M&A</option>
-                  <option value="IP">IP</option>
+                  {CASE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
           </div>
           <Input type="date" label="Filed After" value={dateFrom} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateFrom(e.target.value)} />
@@ -230,7 +126,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
 
       <ActiveCaseTable
         filteredCases={filteredCases}
-        sortedCases={sortedCases as unknown as Case[]}
+        sortedCases={sortedCases}
         requestSort={requestSort}
         sortConfig={sortConfig as { key: keyof Case; direction: 'asc' | 'desc' }}
         onSelectCase={onSelectCase}
@@ -240,7 +136,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       {/* Mobile Virtualized Card View */}
       <div className="md:hidden flex-1 min-h-0 relative -mx-2">
          <VirtualList
-            items={sortedCases as unknown as Case[]}
+            items={sortedCases}
             height="100%"
             itemHeight={120}
             renderItem={renderMobileRow}

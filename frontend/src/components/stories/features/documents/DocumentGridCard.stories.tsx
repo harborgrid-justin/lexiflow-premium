@@ -29,7 +29,7 @@ const meta: Meta<typeof DocumentGridCard> = {
         component: 'Document card component for grid view display with selection, preview, and metadata.'
       }
     },
-  }
+  },
   argTypes: {
     isSelected: {
       control: 'boolean',

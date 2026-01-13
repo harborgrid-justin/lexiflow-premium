@@ -28,7 +28,7 @@ const meta: Meta<typeof DocumentVersions> = {
         component: 'Version history modal showing document revisions with restore capability for authorized users.'
       }
     },
-  }
+  },
   argTypes: {
     userRole: {
       control: 'select',

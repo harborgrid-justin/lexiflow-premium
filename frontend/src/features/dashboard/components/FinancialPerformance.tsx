@@ -7,7 +7,7 @@ import React from 'react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const FinancialPerformance: React.FC = () => {
-    const { mode, theme } = useTheme();
+    const { mode, theme: _theme } = useTheme();
     const chartColors = ChartColorService.getChartColors(mode);
     const chartTheme = ChartColorService.getChartTheme(mode);
     const tooltipStyle = ChartColorService.getTooltipStyle(mode);

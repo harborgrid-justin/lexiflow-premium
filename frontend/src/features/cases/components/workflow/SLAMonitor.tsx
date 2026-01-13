@@ -26,19 +26,22 @@ interface SLAItemCardProps {
 /**
  * SLAHeader - Title and live indicator
  */
-const SLAHeader: React.FC<SLAHeaderProps> = () => (
+function SLAHeader({}: SLAHeaderProps) {
+  return (
   <h3 className={cn("font-bold mb-4 flex items-center justify-between text-text")}>
     <span className="flex items-center">
       <Clock className="h-5 w-5 mr-2 text-blue-600" /> SLA Live Monitor
     </span>
     <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" title="Live Tracking" />
   </h3>
-);
+  );
+}
+SLAHeader.displayName = 'SLAHeader';
 
 /**
  * SLAItemCard - Individual SLA display with progress bar
  */
-const SLAItemCard: React.FC<SLAItemCardProps> = ({ sla, formatDeadline }) => {
+function SLAItemCard({ sla, formatDeadline }: SLAItemCardProps) {
   const statusClasses = {
     'Breached': 'bg-error/10 text-error',
     'At Risk': 'bg-warning/10 text-warning',
@@ -77,12 +80,13 @@ const SLAItemCard: React.FC<SLAItemCardProps> = ({ sla, formatDeadline }) => {
       </div>
     </div>
   );
-};
+}
+SLAItemCard.displayName = 'SLAItemCard';
 
 /**
  * SLAList - List of SLA items or empty state
  */
-const SLAList: React.FC<SLAListProps> = ({ slas, formatDeadline }) => {
+function SLAList({ slas, formatDeadline }: SLAListProps) {
   if (slas.length === 0) {
     return (
       <div className="text-center text-xs text-slate-400 py-4">
@@ -98,7 +102,8 @@ const SLAList: React.FC<SLAListProps> = ({ slas, formatDeadline }) => {
       ))}
     </div>
   );
-};
+}
+SLAList.displayName = 'SLAList';
 
 // ============================================================================
 // CONTAINER COMPONENT
@@ -110,7 +115,7 @@ const SLAList: React.FC<SLAListProps> = ({ slas, formatDeadline }) => {
  * Uses useSLAMonitoring hook for all business logic
  * Composed of presentation components for clean separation
  */
-export const SLAMonitor: React.FC = () => {
+export function SLAMonitor() {
   const { slas, isLoading, formatDeadline } = useSLAMonitoring();
 
   if (isLoading) {
@@ -127,4 +132,6 @@ export const SLAMonitor: React.FC = () => {
       <SLAList slas={slas} formatDeadline={formatDeadline} />
     </div>
   );
-};
+}
+
+SLAMonitor.displayName = 'SLAMonitor';

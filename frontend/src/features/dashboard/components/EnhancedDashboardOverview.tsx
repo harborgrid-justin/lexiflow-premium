@@ -7,7 +7,8 @@
 
 import { dashboardMetricsService } from '@/api/intelligence/legacy-dashboard-metrics.service';
 import { useTheme } from '@/features/theme';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useDashboardOverview } from '../hooks/useDashboardOverview';
+import { CHART_COLORS } from '@/config/dashboard.config';
 import { cn } from '@/shared/lib/cn';
 import {
   AlertCircle,
@@ -19,7 +20,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Bar,
   BarChart,
@@ -50,57 +51,23 @@ interface EnhancedDashboardOverviewProps {
 }
 
 // ============================================================================
-// CHART COLORS
-// ============================================================================
-
-const CHART_COLORS = {
-  primary: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'],
-  status: {
-    discovery: '#3b82f6',
-    trial: '#8b5cf6',
-    settlement: '#10b981',
-    appeal: '#f59e0b',
-    closed: '#6b7280',
-  },
-};
-
-// ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps> = ({
   onSelectCase,
 }) => {
-  const { theme, mode } = useTheme();
-  const [dateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
-
-  // Fetch dashboard data
-  const { data: kpis, isLoading: kpisLoading } = useQuery(
-    ['dashboard', 'kpis', dateRange],
-    () => dashboardMetricsService.getKPIs()
-  );
-
-  const { data: caseBreakdown, isLoading: casesLoading } = useQuery(
-    ['dashboard', 'cases', dateRange],
-    () => dashboardMetricsService.getCaseStatusBreakdown()
-  );
-
-  const { data: billingData, isLoading: billingLoading } = useQuery(
-    ['dashboard', 'billing', dateRange],
-    () => dashboardMetricsService.getBillingOverview()
-  );
-
-  const { data: activities, isLoading: activitiesLoading } = useQuery(
-    ['dashboard', 'activity'],
-    () => dashboardMetricsService.getRecentActivity(15)
-  );
-
-  const { data: deadlines, isLoading: deadlinesLoading } = useQuery(
-    ['dashboard', 'deadlines'],
-    () => dashboardMetricsService.getUpcomingDeadlines({ days: 30 })
-  );
-
-  const isLoading = kpisLoading || casesLoading || billingLoading;
+  const { theme, mode: _mode } = useTheme();
+  
+  const {
+      kpis,
+      caseBreakdown,
+      billingData,
+      activities,
+      deadlines,
+      isLoading,
+      loadingState
+  } = useDashboardOverview();
 
   if (isLoading) {
     return <LazyLoader message="Loading dashboard data..." />;
@@ -189,7 +156,7 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
           title="Case Status Distribution"
           subtitle="Current caseload by status"
           icon={Briefcase}
-          isLoading={casesLoading}
+          isLoading={loadingState.cases}
           height={350}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -219,7 +186,7 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
           title="Billing Overview"
           subtitle="Monthly billing trends"
           icon={DollarSign}
-          isLoading={billingLoading}
+          isLoading={loadingState.billing}
           height={350}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -268,7 +235,7 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
           </div>
           <ActivityFeed
             activities={activities || []}
-            isLoading={activitiesLoading}
+            isLoading={loadingState.activities}
             maxItems={8}
             onActivityClick={(activity) => {
               if (activity.link) {
@@ -293,7 +260,7 @@ export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps>
           </div>
           <DeadlinesList
             deadlines={deadlines || []}
-            isLoading={deadlinesLoading}
+            isLoading={loadingState.deadlines}
             maxItems={8}
             onDeadlineClick={(deadline) => {
               if (deadline.caseId && onSelectCase) {

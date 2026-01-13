@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatabaseManagement } from '@/features/admin/components/data/DatabaseManagement';
-import { ToastProvider } from '@/providers';
 
 const meta = {
   title: 'Pages/Database Management',

@@ -9,7 +9,7 @@ import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
-export const NotificationCenter: React.FC = () => {
+export function NotificationCenter() {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery with Polling
@@ -84,6 +84,8 @@ export const NotificationCenter: React.FC = () => {
       </div>
     </div>
   );
-};
+}
+
+NotificationCenter.displayName = 'NotificationCenter';
 
 

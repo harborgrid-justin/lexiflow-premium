@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ToastProvider } from '@/providers';
 
 /**
  * MatterOperationsCenter provides centralized matter operations management including

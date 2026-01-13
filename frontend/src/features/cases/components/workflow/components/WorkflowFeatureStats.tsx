@@ -14,10 +14,10 @@ interface WorkflowFeatureStatsProps {
   aiSuggestions: AIWorkflowSuggestion[];
 }
 
-export const WorkflowFeatureStats: React.FC<WorkflowFeatureStatsProps> = ({
+export function WorkflowFeatureStats({
   workflow,
   aiSuggestions,
-}) => {
+}: WorkflowFeatureStatsProps) {
   const { theme } = useTheme();
 
   const stats = [
@@ -68,4 +68,6 @@ export const WorkflowFeatureStats: React.FC<WorkflowFeatureStatsProps> = ({
       </div>
     </div>
   );
-};
+}
+
+WorkflowFeatureStats.displayName = 'WorkflowFeatureStats';

@@ -15,16 +15,13 @@ import type {
 const toDataSourceConnection = (ds: DataSource): DataSourceConnection => ({
   id: ds.id,
   name: ds.name,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type: (ds.metadata as any)?.providerName || ds.type,
+  type: (ds.metadata as Record<string, unknown>)?.providerName as string || ds.type,
   region:
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ds.metadata as any)?.region || (ds.config as any)?.region || "us-east-1",
+    (ds.metadata as Record<string, unknown>)?.region as string || (ds.config as Record<string, unknown>)?.region as string || "us-east-1",
   status: (ds.status as ConnectionStatus) || "disconnected",
   lastSync: ds.config?.lastSync || null,
   host: ds.config?.url,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  providerId: (ds.metadata as any)?.providerId,
+  providerId: (ds.metadata as Record<string, unknown>)?.providerId as string,
 });
 
 export function useDataSourceConnections() {
@@ -42,8 +39,13 @@ export function useDataSourceConnections() {
   );
 
   const addConnectionMutation = useMutation(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (data: any) => {
+    async (data: {
+      name: string;
+      host: string;
+      region: string;
+      providerId?: string;
+      type?: string;
+    }) => {
       const payload: Partial<DataSource> = {
         name: data.name,
         type: "database",

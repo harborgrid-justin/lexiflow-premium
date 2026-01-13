@@ -11,19 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { RefreshCw } from 'lucide-react';
-import React, { Suspense, useState, useTransition } from 'react';
+import React, { Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Services & Data
-import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-
 // Hooks
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useNotify } from '@/hooks/useNotify';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useBillingDashboard } from './hooks/useBillingDashboard';
 
 // Components
 import { ExportMenu } from '@/features/discovery/ui/components/ExportMenu/ExportMenu';
@@ -35,7 +29,7 @@ import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
-import { BILLING_TAB_CONFIG, BillingView } from '@/config/tabs.config';
+import { BILLING_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
@@ -52,59 +46,20 @@ interface BillingDashboardProps {
 // COMPONENT
 // ============================================================================
 const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
-  const notify = useNotify();
-  const [isPending, startTransition] = useTransition();
-  const [activeTab, setActiveTabState] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
-  const [period, setPeriod] = useState('30d');
-
-  // Concurrent-safe: Non-urgent tab changes wrapped in transition (Principle #3)
-  // Keeps UI responsive during tab transitions
-  const setActiveTab = (tab: string) => {
-    startTransition(() => {
-      setActiveTabState(tab);
-    });
-  };
-
-  // Keyboard shortcuts
-  useKeyboardShortcuts({
-    'mod+w': () => setActiveTab('wip'),
-    'mod+i': () => setActiveTab('invoices'),
-    'mod+e': () => setActiveTab('expenses'),
-    'mod+l': () => setActiveTab('ledger'),
-    'mod+t': () => setActiveTab('trust')
-  });
-
-  const { mutate: syncFinancials, isLoading: isSyncing } = useMutation(
-    async () => {
-      // Retry logic: 3 attempts with exponential backoff
-      let lastError;
-      for (let attempt = 1; attempt <= 3; attempt++) {
-        try {
-          return await DataService.billing.sync();
-        } catch (error) {
-          lastError = error;
-          if (attempt < 3) {
-            const delay = Math.min(1000 * Math.pow(2, attempt - 1), 30000); // 1s, 2s, 4s (max 30s)
-            await new Promise(resolve => setTimeout(resolve, delay));
-          }
-        }
-      }
-      throw lastError;
-    },
-    {
-      onSuccess: () => notify.success("Financial data synced."),
-      onError: () => notify.error("Sync failed after 3 attempts. Please try again later.")
-    }
-  );
-
-  const { mutate: exportReport } = useMutation(
-    (format: string) => DataService.billing.export(format),
-    { onSuccess: (_result, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
-  );
+  const {
+    activeTab,
+    setActiveTab,
+    period,
+    setPeriod,
+    syncFinancials,
+    isSyncing,
+    exportReport,
+    isPending
+  } = useBillingDashboard(initialTab, navigateTo);
 
   const renderContent = () => {
     // Delegation to BillingDashboardContent
-    return <BillingDashboardContent activeTab={activeTab as BillingView} navigateTo={navigateTo} />;
+    return <BillingDashboardContent activeTab={activeTab} navigateTo={navigateTo} />;
   };
 
   return (

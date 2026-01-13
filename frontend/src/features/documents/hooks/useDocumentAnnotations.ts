@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Annotation } from '../types/DocumentAnnotationsProps';
+import { DocumentsApiService } from '@/api/admin/documents-api';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+
+const documentsApi = new DocumentsApiService();
 
 interface UseDocumentAnnotationsProps {
   documentId: string;
@@ -10,10 +15,37 @@ interface UseDocumentAnnotationsProps {
 
 export const useDocumentAnnotations = ({
   documentId,
-  annotations,
+  annotations: propAnnotations,
   onAdd,
   currentPage = 1
 }: UseDocumentAnnotationsProps) => {
+  // Fetch annotations from backend
+  const { data: backendAnnotations = [], isLoading } = useQuery(
+    queryKeys.documents.annotations(documentId),
+    async () => {
+      try {
+        return await documentsApi.getAnnotations(documentId);
+      } catch (error) {
+        console.error('Error fetching annotations:', error);
+        return propAnnotations || [];
+      }
+    }
+  );
+
+  // Use backend annotations if available, otherwise fall back to props
+  const annotations = backendAnnotations.length > 0 ? backendAnnotations : propAnnotations;
+
+  // Add annotation mutation
+  const { mutate: addAnnotationMutation } = useMutation(
+    async (annotation: Omit<Annotation, 'id' | 'createdAt'>) => {
+      return await documentsApi.addAnnotation(documentId, annotation as any);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKeys.documents.annotations(documentId));
+      }
+    }
+  );
   const [isAdding, setIsAdding] = useState(false);
   const [newAnnotation, setNewAnnotation] = useState({
     page: currentPage,
@@ -28,13 +60,17 @@ export const useDocumentAnnotations = ({
 
   const handleAdd = () => {
     if (newAnnotation.text.trim()) {
-      onAdd?.({
+      const annotationToAdd = {
         documentId,
         page: newAnnotation.page,
         text: newAnnotation.text,
         author: newAnnotation.author,
         color: newAnnotation.color
-      });
+      };
+      // Use backend mutation first, fallback to prop callback
+      addAnnotationMutation(annotationToAdd);
+      onAdd?.(annotationToAdd);
+      
       setNewAnnotation({ page: currentPage, text: '', author: 'Current User', color: '#FCD34D' });
       setIsAdding(false);
     }

@@ -11,13 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { AlertTriangle, Calendar, Clock, Download, Gavel, Layers, Plus, RefreshCw, Settings, Users } from 'lucide-react';
-import React, { lazy, Suspense, useState, useTransition } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useCalendarView } from './hooks/useCalendarView';
 
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
@@ -26,7 +26,6 @@ import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/shared/lib/cn';
-import type { CalendarEventType } from '@/types';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));
@@ -66,23 +65,14 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const CalendarView: React.FC = () => {
-  const [isPending, startTransition] = useTransition();
-  const [activeTab, _setActiveTab] = useSessionStorage<string>('calendar_active_tab', 'master');
-  const [showNewEventModal, setShowNewEventModal] = useState(false);
-
-  const setActiveTab = (tab: string) => {
-    startTransition(() => {
-      _setActiveTab(tab);
-    });
-  };
-
-  const handleNewEvent = () => {
-    setShowNewEventModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowNewEventModal(false);
-  };
+  const {
+    isPending,
+    activeTab,
+    setActiveTab,
+    showNewEventModal,
+    handleNewEvent,
+    handleCloseModal
+  } = useCalendarView();
 
   const renderContent = () => {
     switch (activeTab) {

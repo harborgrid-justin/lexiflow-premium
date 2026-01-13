@@ -137,7 +137,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   emptyMessage = 'No recent activity',
   className,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   const displayActivities = activities.slice(0, maxItems);
 

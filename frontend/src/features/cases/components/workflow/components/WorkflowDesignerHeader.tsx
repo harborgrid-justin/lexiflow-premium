@@ -15,10 +15,10 @@ interface WorkflowDesignerHeaderProps {
   onSave?: (workflow: EnhancedWorkflowInstance) => void;
 }
 
-export const WorkflowDesignerHeader: React.FC<WorkflowDesignerHeaderProps> = ({
+export function WorkflowDesignerHeader({
   workflow,
   onSave,
-}) => {
+}: WorkflowDesignerHeaderProps) {
   const { theme } = useTheme();
 
   return (
@@ -43,4 +43,6 @@ export const WorkflowDesignerHeader: React.FC<WorkflowDesignerHeaderProps> = ({
       </div>
     </div>
   );
-};
+}
+
+WorkflowDesignerHeader.displayName = 'WorkflowDesignerHeader';

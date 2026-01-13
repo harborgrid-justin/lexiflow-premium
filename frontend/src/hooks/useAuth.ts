@@ -5,5 +5,5 @@
  * Re-exports from AuthContext for backward compatibility
  */
 
-export { useAuth, useAuthState, useAuthActions } from '@/contexts/AuthContext';
-export type { AuthUser, Organization } from '@/contexts/AuthContext';
+export { useAuth, useAuthState, useAuthActions } from '@/contexts/auth/AuthProvider';
+export type { AuthUser } from '@/contexts/auth/authTypes';

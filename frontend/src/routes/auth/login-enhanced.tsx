@@ -12,7 +12,7 @@
  * - Loading states
  */
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthActions, useAuthState } from '@/contexts/auth/AuthProvider';
 import {
   loginSchema,
   mfaCodeSchema,
@@ -25,7 +25,8 @@ import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { mfaRequired: _mfaRequired, login, clearError, error: authError } = useAuth();
+  const { requiresMFA, error: authError } = useAuthState();
+  const { login, verifyMFA, clearError } = useAuthActions();
 
   const [showMfa, setShowMfa] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
@@ -37,7 +38,6 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema) as unknown as Resolver<LoginFormData>,
     defaultValues: {
@@ -57,8 +57,7 @@ export default function LoginPage() {
       const result = await login(
         data.email,
         data.password,
-        data.rememberMe,
-        showMfa ? mfaCode : undefined
+        data.rememberMe
       );
 
       if (result.mfaRequired) {
@@ -94,12 +93,13 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const { email, password, rememberMe } = getValues();
-      const result = await login(email, password, rememberMe, mfaCode);
+      const verified = await verifyMFA(mfaCode);
 
-      if (result.success) {
+      if (verified) {
         const from = new URLSearchParams(window.location.search).get('from');
         navigate(from || '/dashboard');
+      } else {
+        setMfaError('Verification failed. Please try again.');
       }
     } catch (err) {
       console.error('[Login] MFA error:', err);

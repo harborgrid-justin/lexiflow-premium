@@ -29,7 +29,7 @@ import { cn } from '@/shared/lib/cn';
 // COMPONENT
 // ============================================================================
 
-export const StageEditor: React.FC = () => {
+export function StageEditor() {
   const { theme } = useTheme();
   const [stages, setStages] = useState(['Intake', 'Discovery', 'Pre-Trial', 'Trial', 'Closing']);
 
@@ -63,4 +63,6 @@ export const StageEditor: React.FC = () => {
       </div>
     </div>
   );
-};
+}
+
+StageEditor.displayName = 'StageEditor';

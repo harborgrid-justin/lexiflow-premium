@@ -16,10 +16,10 @@ interface AISuggestionsPanelProps {
   onApplySuggestion: (suggestionId: string) => void;
 }
 
-export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
+export function AISuggestionsPanel({
   suggestions,
   onApplySuggestion,
-}) => {
+}: AISuggestionsPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -102,4 +102,6 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
       </div>
     </Card>
   );
-};
+}
+
+AISuggestionsPanel.displayName = 'AISuggestionsPanel';

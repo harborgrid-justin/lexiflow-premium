@@ -1,23 +1,31 @@
 // src/contexts/data/DataContext.tsx
 import { adminApi } from "@/api/domains/admin.api";
 import { litigationApi } from "@/api/domains/litigation.api";
-import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useEntitlements } from "../entitlements/EntitlementsContext";
+import { freezeInDev } from "../utils/immutability";
 
 export type DashboardItem =
   | { type: 'case'; id: string; label: string; status: string }
   | { type: 'audit'; id: string; label: string; action: string }
   | { type: 'public'; id: string; label: string };
 
-type DataContextValue = {
+interface DataStateValue {
   items: DashboardItem[];
   isLoading: boolean;
+  isPending: boolean; // GUIDELINE #33: Expose transitional state
   error: string | null;
-  refresh: () => Promise<void>;
-};
+}
 
-const DataContext = createContext<DataContextValue | null>(null);
+interface DataActionsValue {
+  refresh: () => Promise<void>;
+}
+
+export type DataContextValue = DataStateValue & DataActionsValue;
+
+const DataStateContext = createContext<DataStateValue | undefined>(undefined);
+const DataActionsContext = createContext<DataActionsValue | undefined>(undefined);
 
 export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth();
@@ -25,13 +33,19 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [items, setItems] = useState<DashboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // GUIDELINE #25-26: Use startTransition for non-urgent context updates
+  const [isPending, startTransition] = useTransition();
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       if (auth.status === "anonymous") {
-        setItems([{ type: 'public', id: "p1", label: "Welcome to LexiFlow Public Portal" }]);
+        // GUIDELINE #25: Wrap non-urgent state updates in startTransition
+        startTransition(() => {
+          setItems([{ type: 'public', id: "p1", label: "Welcome to LexiFlow Public Portal" }]);
+        });
         return;
       }
 
@@ -48,7 +62,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             label: `Audit: ${log.action} by ${log.userId}`,
             action: log.action as string
           }));
-          setItems(mappedLogs);
+          
+          // GUIDELINE #25: Dashboard data refresh is not urgent
+          startTransition(() => {
+            setItems(mappedLogs);
+          });
           return;
         } catch (e) {
           console.warn("Failed to fetch admin data", e);
@@ -68,7 +86,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
           label: (c.title || c.caseNumber || "Untitled Case") as string,
           status: c.status as string
         }));
-        setItems(mappedCases);
+        
+        // GUIDELINE #25: Dashboard refresh is not urgent - UI can show stale data during transition
+        startTransition(() => {
+          setItems(mappedCases);
+        });
       } catch (e) {
         console.error("Failed to fetch cases", e);
         setError("Failed to load dashboard data");
@@ -81,12 +103,41 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }
   }, [auth.status, auth.user, entitlements.plan]);
 
-  const value = useMemo(() => ({ items, isLoading, error, refresh }), [items, isLoading, error, refresh]);
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  // GUIDELINE #33: Expose isPending to consumers for transitional UI
+  const stateValue = useMemo<DataStateValue>(
+    () => freezeInDev({ items, isLoading, isPending, error }),
+    [items, isLoading, isPending, error]
+  );
+  const actionsValue = useMemo<DataActionsValue>(() => freezeInDev({ refresh }), [refresh]);
+
+  return (
+    <DataStateContext.Provider value={stateValue}>
+      <DataActionsContext.Provider value={actionsValue}>
+        {children}
+      </DataActionsContext.Provider>
+    </DataStateContext.Provider>
+  );
 };
 
-export const useData = (): DataContextValue => {
-  const ctx = useContext(DataContext);
-  if (!ctx) throw new Error("useData must be used within DataProvider");
-  return ctx;
-};
+export function useDataState(): DataStateValue {
+  const context = useContext(DataStateContext);
+  if (!context) {
+    throw new Error("useDataState must be used within DataProvider");
+  }
+  return context;
+}
+
+export function useDataActions(): DataActionsValue {
+  const context = useContext(DataActionsContext);
+  if (!context) {
+    throw new Error("useDataActions must be used within DataProvider");
+  }
+  return context;
+}
+
+export function useData(): DataContextValue {
+  return {
+    ...useDataState(),
+    ...useDataActions(),
+  };
+}

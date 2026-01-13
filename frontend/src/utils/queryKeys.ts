@@ -42,6 +42,7 @@ export const queryKeys = {
     detail: (id: string) => ["documents", "detail", id] as const,
     byCaseId: (caseId: string) => ["documents", "byCaseId", caseId] as const,
     templates: () => ["documents", "templates"] as const,
+    annotations: (documentId: string) => ["documents", "annotations", documentId] as const,
   },
 
   // Docket Entries

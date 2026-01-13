@@ -21,10 +21,9 @@ import { FileText, Database, Users, Layout } from 'lucide-react';
 // Helpers
 // ============================================================================
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function setDeepValue(obj: any, path: string, value: any) {
+function setDeepValue(obj: Record<string, unknown>, path: string, value: unknown): void {
   const parts = path.split(/[.[\]]/).filter(Boolean);
-  let current = obj;
+  let current: Record<string, unknown> = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     const key = parts[i] as string;
     // Create object or array if missing, simplistic approach
@@ -33,7 +32,7 @@ function setDeepValue(obj: any, path: string, value: any) {
       const nextKey = parts[i + 1] as string;
       current[key] = isNaN(Number(nextKey)) ? {} : [];
     }
-    current = current[key];
+    current = current[key] as Record<string, unknown>;
   }
   current[parts[parts.length - 1] as string] = value;
 }

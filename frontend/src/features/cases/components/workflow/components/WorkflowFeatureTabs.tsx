@@ -32,11 +32,11 @@ interface WorkflowFeatureTabsProps {
   tabs: FeatureTabConfig[];
 }
 
-export const WorkflowFeatureTabs: React.FC<WorkflowFeatureTabsProps> = ({
+export function WorkflowFeatureTabs({
   activeTab,
   onTabChange,
   tabs,
-}) => {
+}: WorkflowFeatureTabsProps) {
   const { theme } = useTheme();
 
   return (
@@ -60,4 +60,6 @@ export const WorkflowFeatureTabs: React.FC<WorkflowFeatureTabsProps> = ({
       </div>
     </div>
   );
-};
+}
+
+WorkflowFeatureTabs.displayName = 'WorkflowFeatureTabs';

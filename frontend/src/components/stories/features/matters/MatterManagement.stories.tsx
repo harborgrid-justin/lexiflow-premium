@@ -7,7 +7,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
-import { ToastProvider } from '@/providers';
 
 const meta: Meta<typeof MatterManagement> = {
   title: 'Pages/Matter Management',

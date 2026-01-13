@@ -9,7 +9,7 @@ import { Card } from '@/shared/ui/molecules/Card/Card';
 import { AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import React from 'react';
 
-export const SLAMonitoringPanel: React.FC = () => {
+export function SLAMonitoringPanel() {
   const { theme } = useTheme();
 
   return (

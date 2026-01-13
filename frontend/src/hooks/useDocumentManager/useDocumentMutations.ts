@@ -3,11 +3,13 @@
  * @module hooks/useDocumentManager/useDocumentMutations
  */
 
-import { DataService } from "@/services/data/dataService";
+import { DocumentsApiService } from "@/api/admin/documents-api";
 import type { LegalDocument } from "@/types";
 import { queryKeys } from "@/utils/queryKeys";
 import { useCallback } from "react";
 import { queryClient, useMutation } from "../useQueryHooks";
+
+const documentsApi = new DocumentsApiService();
 
 /**
  * Hook for document mutation operations
@@ -16,7 +18,7 @@ export function useDocumentMutations() {
   const { mutate: performUpdate } = useMutation(
     async (payload: { id: string; updates: Partial<LegalDocument> }) => {
       try {
-        return await DataService.documents.update(payload.id, payload.updates);
+        return await documentsApi.update(payload.id, payload.updates);
       } catch (error) {
         console.error("[useDocumentManager] Update mutation error:", error);
         throw error;

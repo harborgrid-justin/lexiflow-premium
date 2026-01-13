@@ -12,14 +12,25 @@ import * as HttpMethods from "./http-methods";
 import { API_CLIENT_DEFAULT_TIMEOUT_MS } from '@/config/features/services.config';
 
 /**
+ * API Request Configuration
+ */
+interface RequestConfig {
+  url: string;
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  data?: unknown;
+  headers?: Record<string, string>;
+  params?: Record<string, unknown>;
+}
+
+/**
  * ApiClient Class
  * Aggregates all API client functionality
  */
 export class ApiClient {
   private _baseURL: string | null = null;
   private _authToken: string | null = null;
-  private requestInterceptors: Array<(config: any) => any> = [];
-  private responseInterceptors: Array<(response: any) => any> = [];
+  private requestInterceptors: Array<(config: RequestConfig) => RequestConfig> = [];
+  private responseInterceptors: Array<<T>(response: T) => T> = [];
   private _retryAttempts: number = 0;
   private _timeout: number = API_CLIENT_DEFAULT_TIMEOUT_MS;
 
@@ -51,11 +62,11 @@ export class ApiClient {
     endpoint: string,
     options?: { params?: Record<string, unknown>; headers?: HeadersInit }
   ): Promise<T> => {
-    let config: any = {
+    let config: RequestConfig = {
       url: endpoint,
       method: "GET",
       params: options?.params,
-      headers: options?.headers || {},
+      headers: (options?.headers as Record<string, string>) || {},
     };
 
     // Apply request interceptors
@@ -81,12 +92,11 @@ export class ApiClient {
     data?: unknown,
     options?: RequestInit
   ): Promise<T> => {
-    let config: any = {
+    let config: RequestConfig = {
       url: endpoint,
       method: "POST",
       data,
-      headers: options?.headers || {},
-      ...options,
+      headers: (options?.headers as Record<string, string>) || {},
     };
 
     // Apply request interceptors
@@ -108,7 +118,7 @@ export class ApiClient {
   };
 
   public put = async <T>(endpoint: string, data?: unknown): Promise<T> => {
-    let config: any = { url: endpoint, method: "PUT", data, headers: {} };
+    let config: RequestConfig = { url: endpoint, method: "PUT", data, headers: {} };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
@@ -126,7 +136,7 @@ export class ApiClient {
   };
 
   public patch = async <T>(endpoint: string, data?: unknown): Promise<T> => {
-    let config: any = { url: endpoint, method: "PATCH", data, headers: {} };
+    let config: RequestConfig = { url: endpoint, method: "PATCH", data, headers: {} };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
@@ -144,7 +154,7 @@ export class ApiClient {
   };
 
   public delete = async <T>(endpoint: string): Promise<T> => {
-    let config: any = { url: endpoint, method: "DELETE", headers: {} };
+    let config: RequestConfig = { url: endpoint, method: "DELETE", headers: {} };
 
     // Apply request interceptors
     for (const interceptor of this.requestInterceptors) {
@@ -200,22 +210,22 @@ export class ApiClient {
   }
 
   // Interceptor management
-  public addRequestInterceptor(interceptor: (config: any) => any): void {
+  public addRequestInterceptor(interceptor: (config: RequestConfig) => RequestConfig): void {
     this.requestInterceptors.push(interceptor);
   }
 
-  public removeRequestInterceptor(interceptor: (config: any) => any): void {
+  public removeRequestInterceptor(interceptor: (config: RequestConfig) => RequestConfig): void {
     const index = this.requestInterceptors.indexOf(interceptor);
     if (index > -1) {
       this.requestInterceptors.splice(index, 1);
     }
   }
 
-  public addResponseInterceptor(interceptor: (response: any) => any): void {
+  public addResponseInterceptor<T>(interceptor: (response: T) => T): void {
     this.responseInterceptors.push(interceptor);
   }
 
-  public removeResponseInterceptor(interceptor: (response: any) => any): void {
+  public removeResponseInterceptor<T>(interceptor: (response: T) => T): void {
     const index = this.responseInterceptors.indexOf(interceptor);
     if (index > -1) {
       this.responseInterceptors.splice(index, 1);
@@ -223,11 +233,11 @@ export class ApiClient {
   }
 
   // Internal accessor for interceptors
-  public getRequestInterceptors(): Array<(config: any) => any> {
+  public getRequestInterceptors(): Array<(config: RequestConfig) => RequestConfig> {
     return this.requestInterceptors;
   }
 
-  public getResponseInterceptors(): Array<(response: any) => any> {
+  public getResponseInterceptors(): Array<<T>(response: T) => T> {
     return this.responseInterceptors;
   }
 

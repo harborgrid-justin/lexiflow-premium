@@ -32,7 +32,7 @@ const meta: Meta<typeof Dashboard> = {
     test: {
       clearMocks: true,
     },
-  }
+  },
   argTypes: {
     initialTab: {
       control: 'select',

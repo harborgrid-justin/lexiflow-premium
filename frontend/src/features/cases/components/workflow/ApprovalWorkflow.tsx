@@ -15,11 +15,11 @@ interface ApprovalWorkflowProps {
   onReject: (id: string) => void;
 }
 
-export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
+export function ApprovalWorkflow({
   requests: propRequests,
   onApprove,
   onReject
-}) => {
+}: ApprovalWorkflowProps) {
   const { theme } = useTheme();
 
   // Load approvals from IndexedDB via useQuery when not provided as props
@@ -80,4 +80,6 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
       )}
     </div>
   );
-};
+}
+
+ApprovalWorkflow.displayName = 'ApprovalWorkflow';

@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import React from 'react';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -19,12 +19,13 @@ import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
+import { useCaseWorkflow } from '@/features/cases/hooks/useCaseWorkflow';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
-import { WorkflowStage, StageStatus, TaskStatusBackend } from '@/types';
+import { WorkflowStage } from '@/types';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];
@@ -35,31 +36,16 @@ interface CaseWorkflowProps {
 
 export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStages, generatingWorkflow, onGenerateWorkflow, onNavigateToModule }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'timeline' | 'automation'>('timeline');
-  const [stages, setStages] = useState(initialStages);
+  
+  const {
+      stages,
+      activeTab,
+      setActiveTab,
+      handleToggleTask,
+      stats
+  } = useCaseWorkflow(initialStages);
 
-  const handleToggleTask = (stageId: string, taskId: string) => {
-    setStages(prevStages => prevStages.map(stage => {
-        if (stage.id !== stageId) return stage;
-
-        const newTasks = stage.tasks.map(task =>
-            task.id === taskId ? { ...task, status: (task.status === TaskStatusBackend.COMPLETED ? TaskStatusBackend.TODO : TaskStatusBackend.COMPLETED) } : task
-        );
-
-        const allDone = newTasks.every(t => t.status === TaskStatusBackend.COMPLETED);
-        const anyInProgress = newTasks.some(t => t.status === TaskStatusBackend.IN_PROGRESS);
-
-        let newStageStatus: StageStatus = stage.status as StageStatus;
-        if (allDone) newStageStatus = 'Completed';
-        else if (anyInProgress || newTasks.some(t => t.status === TaskStatusBackend.COMPLETED)) newStageStatus = 'Active';
-
-        return { ...stage, tasks: newTasks, status: newStageStatus };
-    }));
-  };
-
-  const totalTasks = stages.reduce((acc: number, s) => acc + s.tasks.length, 0);
-  const completedTasks = stages.reduce((acc: number, s) => acc + s.tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length, 0);
-  const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+  const { totalTasks, completedTasks, progress } = stats;
 
   return (
     <div className="space-y-6 animate-fade-in">

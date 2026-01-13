@@ -219,7 +219,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {connectors.map((conn: any) => {
+                            {connectors.map((conn: { id: string; type: string; name: string; color?: string; status?: string }) => {
                                 const Icon = getIcon(conn.type);
                                 return (
                                     <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>

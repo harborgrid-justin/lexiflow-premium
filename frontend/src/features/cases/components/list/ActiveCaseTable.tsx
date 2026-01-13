@@ -11,6 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import React, { useCallback } from 'react';
 
@@ -18,8 +19,8 @@ import React, { useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { EmptyListState } from '@/shared/ui/molecules/EmptyListState/EmptyListState';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
@@ -84,10 +85,16 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
   return (
     <div className="hidden md:flex flex-1 min-h-0 flex-col border rounded-lg overflow-hidden shadow-sm bg-white">
       <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50 shrink-0", theme.border.default, theme.text.secondary)}>
-        <div className="w-[35%] cursor-pointer flex items-center group" onClick={() => requestSort('title')}>Matter <SortIcon column="title" /></div>
-        <div className="w-[15%] cursor-pointer flex items-center group" onClick={() => requestSort('matterType')}>Type <SortIcon column="matterType" /></div>
-        <div className="w-[20%] cursor-pointer flex items-center group" onClick={() => requestSort('client')}>Client <SortIcon column="client" /></div>
-        <div className="w-[15%] cursor-pointer flex items-center group" onClick={() => requestSort('value')}>Value <SortIcon column="value" /></div>
+        {ACTIVE_CASE_COLUMNS.map((col) => (
+          <div
+            key={col.key}
+            className="cursor-pointer flex items-center group"
+            style={{ width: col.width }}
+            onClick={() => requestSort(col.key as keyof Case)}
+          >
+            {col.label} <SortIcon column={col.key as keyof Case} />
+          </div>
+        ))}
         <div className="w-[10%]">Status</div>
         <div className="w-[5%] text-right"></div>
       </div>

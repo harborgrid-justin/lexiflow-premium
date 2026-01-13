@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { Activity, Edit2, FileSearch, GitMerge, Loader2, Plus, RefreshCw, Settings, Sparkles, Wand2 } from 'lucide-react';
+import { Edit2, Loader2, Plus, RefreshCw, Sparkles } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
 import { Button } from '@/shared/ui/atoms/Button';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
 import { useTheme } from '@/features/theme';
-import { useQuery } from '@/hooks/backend';
-import { DataService } from '@/services/data/dataService';
-import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { cn } from '@/shared/lib/cn';
 
+import { QUALITY_TABS } from '@/config/quality.config';
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';
 import { QualityDashboard } from './quality/QualityDashboard';
-import { QualityRule, RuleBuilder } from './quality/RuleBuilder';
+import { RuleBuilder } from './quality/RuleBuilder';
 import { StandardizationConsole } from './quality/StandardizationConsole';
+import { useDataQualityStudio } from '../../hooks/useDataQualityStudio';
 
 // Helper function for severity styling
 const getSeverityClassName = (severity: string) => {
@@ -40,83 +37,22 @@ interface DataQualityStudioProps {
 
 export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudioProps): JSX.Element {
     const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState(initialTab);
-    const [isScanning, setIsScanning] = useState(false);
-    const [scanProgress, setScanProgress] = useState(0);
-
-    // Timer Ref for Cleanup
-    const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-    // Builder State
-    const [isRuleBuilderOpen, setIsRuleBuilderOpen] = useState(false);
-    const [editingRule, setEditingRule] = useState<QualityRule | undefined>(undefined);
-
-    useEffect(() => {
-        if (initialTab !== '') { setActiveTab(initialTab); }
-    }, [initialTab]);
-
-    // Clean up interval on unmount
-    useEffect(() => {
-        return () => {
-            if (scanIntervalRef.current !== null) { clearInterval(scanIntervalRef.current); }
-        };
-    }, []);
-
-    // Integrated Data Query
-    const { data: fetchedAnomalies = [], isLoading } = useQuery<DataAnomaly[]>(
-        ['admin', 'anomalies'],
-        async () => await DataService.admin.getAnomalies() as DataAnomaly[]
-    );
-
-    const { data: history = [] } = useQuery<QualityMetricHistory[]>(
-        ['quality', 'history'],
-        async () => await DataService.quality.getHistory() as QualityMetricHistory[]
-    );
-
-    const [anomalies, setAnomalies] = useState<DataAnomaly[]>([]);
-
-    useEffect(() => {
-        if (fetchedAnomalies.length > 0) { setAnomalies(fetchedAnomalies); }
-    }, [fetchedAnomalies]);
-
-    const [rules, setRules] = useState<QualityRule[]>([
-        {
-            id: 'r1',
-            name: 'Email Completeness',
-            description: 'Ensure user emails follow standard format',
-            severity: 'Critical',
-            action: 'Block',
-            enabled: true,
-            conditions: [{ id: 'c1', field: 'users.email', operator: 'LIKE', value: '%_@__%.__%' }]
-        },
-        {
-            id: 'r2',
-            name: 'Case Value Range',
-            description: 'Case value cannot be negative',
-            severity: 'High',
-            action: 'Warn',
-            enabled: true,
-            conditions: [{ id: 'c1', field: 'cases.value', operator: '>', value: '0' }]
-        }
-    ]);
-
-    const handleScan = (): void => {
-        if (scanIntervalRef.current !== null) { clearInterval(scanIntervalRef.current); }
-
-        setIsScanning(true);
-        setScanProgress(0);
-
-        scanIntervalRef.current = setInterval(() => {
-            setScanProgress(p => {
-                if (p >= 100) {
-                    if (scanIntervalRef.current !== null) { clearInterval(scanIntervalRef.current); }
-                    setIsScanning(false);
-                    return 100;
-                }
-                return p + 5;
-            });
-        }, 100);
-    };
+    const {
+        activeTab,
+        setActiveTab,
+        isScanning,
+        scanProgress,
+        handleScan,
+        isLoading,
+        anomalies,
+        history,
+        rules,
+        setRules,
+        isRuleBuilderOpen, // Note: The Modal below uses this successfully
+        setIsRuleBuilderOpen,
+        editingRule,
+        openRuleBuilder
+    } = useDataQualityStudio(initialTab);
 
     if (isLoading) { return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)} /></div>; }
 
@@ -138,13 +74,7 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
                     </div>
                 </div>
                 <Tabs
-                    tabs={[
-                        { id: 'dashboard', label: 'Dashboard', icon: Activity },
-                        { id: 'standardization', label: 'Standardization', icon: Wand2 },
-                        { id: 'dedupe', label: 'Deduplication', icon: GitMerge },
-                        { id: 'profiler', label: 'Profiler', icon: FileSearch },
-                        { id: 'rules', label: 'Validation Rules', icon: Settings }
-                    ]}
+                    tabs={QUALITY_TABS}
                     activeTab={activeTab}
                     onChange={(t: string) => setActiveTab(t)}
                 />
@@ -163,7 +93,7 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
                     <div className="space-y-4 animate-fade-in">
                         <div className="flex justify-between items-center">
                             <h4 className={cn("font-bold text-lg", theme.text.primary)}>Validation Logic</h4>
-                            <Button size="sm" icon={Plus} onClick={() => { setEditingRule(undefined); setIsRuleBuilderOpen(true); }}>Add Rule</Button>
+                            <Button size="sm" icon={Plus} onClick={() => openRuleBuilder()}>Add Rule</Button>
                         </div>
                         <div className="grid grid-cols-1 gap-3">
                             {rules.map(rule => (
@@ -184,7 +114,7 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
                                         <div className={cn("w-10 h-5 rounded-full p-1 cursor-pointer transition-colors", rule.enabled ? theme.status.success.text.replace('text-', 'bg-') : cn(theme.status.neutral.bg, "dark:bg-slate-700"))}>
                                             <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface.default, rule.enabled ? "translate-x-5" : "")} />
                                         </div>
-                                        <Button size="sm" variant="ghost" icon={Edit2} onClick={() => { setEditingRule(rule); setIsRuleBuilderOpen(true); }} />
+                                        <Button size="sm" variant="ghost" icon={Edit2} onClick={() => openRuleBuilder(rule)} />
                                     </div>
                                 </div>
                             ))}

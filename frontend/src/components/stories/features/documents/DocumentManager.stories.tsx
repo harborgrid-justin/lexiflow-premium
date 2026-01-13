@@ -33,7 +33,7 @@ const meta: Meta<typeof DocumentManager> = {
         component: 'Comprehensive document management system with file browsing, version control, templates, and automated assembly features. Includes PDF editing, redaction, form signing, and batch processing capabilities.'
       }
     },
-  }
+  },
   argTypes: {
     currentUserRole: {
       control: 'select',

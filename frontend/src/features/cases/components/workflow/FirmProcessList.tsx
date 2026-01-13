@@ -15,7 +15,7 @@ interface FirmProcessListProps {
     onCreateProcess?: () => void;
 }
 
-export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onSelectProcess, onCreateProcess }) => {
+export function FirmProcessList({ processes, onSelectProcess, onCreateProcess }: FirmProcessListProps) {
     const { theme } = useTheme();
 
     if (!processes || processes.length === 0) {

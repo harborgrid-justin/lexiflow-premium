@@ -29,16 +29,11 @@ import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useModalState } from '@/hooks/core';
-import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { useToggle } from '@/shared/hooks/useToggle';
 import { useWindow } from '@/providers';
+import { useDocketSheet } from '@/features/cases/hooks/useDocketSheet';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
 import { cn } from '@/shared/lib/cn';
-import { IdGenerator } from '@/shared/lib/idGenerator';
 
 // Types & Interfaces
 import { Case, CaseId, DocketEntry } from '@/types';
@@ -50,166 +45,32 @@ interface DocketSheetProps {
 export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'all' | 'filings' | 'orders'>(filterType);
-  const liveModeToggle = useToggle();
-
-  // Defer search term for better typing responsiveness
-  // const deferredSearchTerm = useDeferredValue(searchTerm);
-
-  const addModal = useModalState();
-  const deleteModal = useModalState();
-  const [entryToDelete, setEntryToDelete] = React.useState<string | null>(null);
-
-  // --- PAGINATION STATE ---
-  const [entries, setEntries] = useState<DocketEntry[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-
-  // Fetch logic
-  const fetchPage = async (pageNum: number, isReset: boolean) => {
-    try {
-      if (!isReset) setIsFetchingMore(true);
-      const limit = 20;
-      const service = DataService.docket as { getAll: (params: { page: number; limit: number; type?: string; caseId?: string }) => Promise<{ data?: unknown[]; items?: unknown[] } | unknown[]> };
-
-      // Determine type filter
-      let typeFilter: string | undefined = undefined;
-      if (activeTab === 'orders') typeFilter = 'Order';
-      else if (activeTab === 'filings') typeFilter = 'Filing';
-
-      const result = await service.getAll({
-        page: pageNum,
-        limit,
-        caseId: selectedCaseId || undefined,
-        type: typeFilter
-      });
-
-      const newEntries = Array.isArray(result) ? result : (result.data || []);
-
-      setEntries(prev => isReset ? (newEntries as DocketEntry[]) : [...prev, ...(newEntries as DocketEntry[])]);
-      setHasMore(newEntries.length === limit);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsFetchingMore(false);
-      setInitialLoading(false);
-    }
-  };
-
-  // Reset and fetch when filters change
-  useEffect(() => {
-    // Debounce search slightly or just fire. For now direct effect.
-    const timeoutId = setTimeout(() => {
-      setPage(1);
-      setEntries([]);
-      setHasMore(true);
-      setInitialLoading(true);
-      fetchPage(1, true);
-    }, 300);
-    return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCaseId, activeTab, searchTerm]);
-
-  const handleLoadMore = () => {
-    if (!isFetchingMore && hasMore) {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      fetchPage(nextPage, false);
-    }
-  };
-
-  const docketEntries = entries; // Compatibility alias
-  const isLoading = initialLoading; // Compatibility alias
-
-  const { data: casesData = [] } = useQuery<Case[]>(
-    ['cases', 'all'],
-    async () => {
-      const casesService = DataService.cases as { getAll: () => Promise<Case[]> };
-      const result = await casesService.getAll();
-      return Array.isArray(result) ? result : [];
-    }
-  );
-
-  // Ensure cases is always an array
-  const cases = Array.isArray(casesData) ? casesData : [];
-
-  // Helper to get parties for the builder
-  const activeCase = cases.find(c => c.id === selectedCaseId);
-  const caseParties = activeCase?.parties?.map(p => p.name) || [];
-
-  const { mutate: addEntry } = useMutation(
-    async (entry: DocketEntry) => {
-      const docketService = DataService.docket as { add: (entry: DocketEntry) => Promise<DocketEntry> };
-      return docketService.add(entry);
-    },
-    {
-      invalidateKeys: [['docket', 'all']],
-      onSuccess: () => {
-        addModal.close();
-      }
-    }
-  );
-
-  // Live Feed with WebSocket connection management
-  const { status: liveFeedStatus, reconnect: reconnectLiveFeed } = useLiveDocketFeed({
-    caseId: selectedCaseId || undefined,
-    enabled: liveModeToggle.isOpen,
-    onNewEntry: (entry) => {
-      // Use type-safe ID generation and ensure all required fields are present
-      const now = new Date().toISOString();
-      const entryWithId: DocketEntry = {
-        ...(entry && typeof entry === 'object' ? entry as Partial<DocketEntry> : {}),
-        id: IdGenerator.docket(),
-        caseId: (selectedCaseId as CaseId) || (entry && typeof entry === 'object' && 'caseId' in entry ? entry.caseId as CaseId : '' as CaseId),
-        sequenceNumber: docketEntries.length + 100,
-        dateFiled: now.split('T')[0],
-        entryDate: now.split('T')[0],
-        description: entry && typeof entry === 'object' && 'description' in entry ? String(entry.description) : 'New Entry',
-        type: entry && typeof entry === 'object' && 'type' in entry ? entry.type as DocketEntry['type'] : 'Notice',
-        createdAt: now,
-        updatedAt: now
-      } as DocketEntry;
-      addEntry(entryWithId);
-    },
-    reconnectInterval: 5000,
-    maxReconnectAttempts: 5
-  });
-
-  const { mutate: deleteEntry } = useMutation(
-    async (id: string) => {
-      const docketService = DataService.docket as { delete: (id: string) => Promise<void> };
-      return docketService.delete(id);
-    },
-    {
-      invalidateKeys: [['docket', 'all']]
-    }
-  );
+  
+  const {
+      searchTerm, setSearchTerm,
+      selectedCaseId, setSelectedCaseId,
+      activeTab, setActiveTab,
+      entries: docketEntries,
+      isLoading,
+      hasMore,
+      isFetchingMore,
+      cases,
+      caseParties,
+      addModal,
+      deleteModal,
+      entryToDelete, setEntryToDelete,
+      handleLoadMore,
+      handleSaveEntry,
+      confirmDelete,
+      liveModeToggle,
+      liveFeedStatus,
+      reconnectLiveFeed
+  } = useDocketSheet(filterType);
 
   // Sync filter prop to internal state
   useEffect(() => {
     setActiveTab(filterType);
-  }, [filterType]);
-
-  const handleSaveEntry = (entry: Partial<DocketEntry>) => {
-    const finalEntry = {
-      ...entry,
-      caseId: selectedCaseId || entry.caseId,
-      sequenceNumber: entry.sequenceNumber || docketEntries.filter(d => d.caseId === selectedCaseId).length + 1
-    } as DocketEntry;
-
-    addEntry(finalEntry);
-  };
-
-  const confirmDelete = () => {
-    if (entryToDelete) {
-      deleteEntry(entryToDelete);
-      setEntryToDelete(null);
-    }
-  };
+  }, [filterType, setActiveTab]);
 
   const openOrbitalEntry = (entry: DocketEntry) => {
     const winId = `docket-${entry.id}`;
@@ -226,7 +87,6 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     );
   };
 
-  // Filters are now handled server-side in fetchPage
   const sortedEntries = docketEntries;
   const isSearching = isLoading;
 

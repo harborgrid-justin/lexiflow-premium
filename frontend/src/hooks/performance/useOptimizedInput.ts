@@ -22,7 +22,7 @@ import {
 export function useOptimizedInput<T = string>(
   initialValue: T,
   onChange?: (value: T) => void,
-  options: {
+  _options: {
     debounceMs?: number;
     priority?: "urgent" | "normal" | "low"; // unused for now but good for API design
   } = {}

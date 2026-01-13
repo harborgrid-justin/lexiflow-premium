@@ -9,6 +9,10 @@
 // Composed Provider Tree (recommended way to use all providers)
 export { AppProviders } from "./AppProviders";
 
+// Case context exports
+export { CaseProvider, useCaseContext, useCaseState, useCaseActions } from "./case/CaseContext";
+export type { CaseContextValue } from "./case/CaseContext";
+
 // AuthContext exports
 export {
   AuthProvider,
@@ -19,13 +23,15 @@ export {
 export type { AuthUser, Organization } from "./AuthContext";
 
 // DataContext exports
-export { DataProvider, useData } from "./data/DataContext";
-export type { DashboardItem } from "./data/DataContext";
+export { DataProvider, useData, useDataState, useDataActions } from "./data/DataContext";
+export type { DashboardItem, DataContextValue } from "./data/DataContext";
 
 // Entitlements exports
 export {
   EntitlementsProvider,
   useEntitlements,
+  useEntitlementsState,
+  useEntitlementsActions,
 } from "./entitlements/EntitlementsContext";
 export type {
   Entitlements,
@@ -34,8 +40,8 @@ export type {
 } from "./entitlements/EntitlementsContext";
 
 // Feature flag exports
-export { FlagsProvider, useFlags } from "./flags/FlagsContext";
-export type { Flags } from "./flags/FlagsContext";
+export { FlagsProvider, useFlags, useFlagsState, useFlagsActions } from "./flags/FlagsContext";
+export type { Flags, FlagsContextValue } from "./flags/FlagsContext";
 
 // Query Client provider export
 export { QueryClientProvider } from "./query/QueryClientProvider";

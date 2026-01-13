@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { DocumentCard } from './DocumentCard';
 import { DocumentRow } from './DocumentRow';
 import type { LegalDocument } from '@/types/documents';
-import { useSortableList } from '../hooks/useSortableList';
-import { sortDocuments, SortField, SortOrder } from '../utils/documentUtils';
+import { useDocumentList } from '../hooks/useDocumentList';
+import { DOCUMENT_LIST_COLUMNS } from '@/config/documents.config';
 
 export type ViewMode = 'grid' | 'list';
 // Exporting types from utils now to avoid duplication if needed elsewhere, 
@@ -16,6 +16,7 @@ export type ViewMode = 'grid' | 'list';
 // For now, keeping the types here if they are part of the component's public API, 
 // but referencing the utils types.
 export { type SortField, type SortOrder } from '../utils/documentUtils';
+import { type SortField } from '../utils/documentUtils';
 
 interface DocumentListProps {
   documents: LegalDocument[];
@@ -38,33 +39,20 @@ export function DocumentList({
   onBulkDownload,
   loading = false
 }: DocumentListProps) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const itemsPerPage = viewMode === 'grid' ? 12 : 20;
-
   const {
-    paginatedItems: paginatedDocuments,
-    sortConfig: { field: sortField, order: sortOrder },
-    handleSort
-  } = useSortableList(documents, 'lastModified', itemsPerPage, sortDocuments);
-
-  // Selection handlers
-  const toggleSelection = (id: string) => {
-    const newSelection = new Set(selectedIds);
-    if (newSelection.has(id)) {
-      newSelection.delete(id);
-    } else {
-      newSelection.add(id);
-    }
-    setSelectedIds(newSelection);
-  };
-
-  const toggleSelectAll = () => {
-    if (selectedIds.size === documents.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(documents.map(d => d.id)));
-    }
-  };
+      paginatedDocuments,
+      sortConfig: { field: sortField, order: sortOrder },
+      handleSort,
+      currentPage,
+      totalPages,
+      setCurrentPage,
+      startIndex,
+      endIndex,
+      selectedIds,
+      setSelectedIds,
+      toggleSelection,
+      toggleSelectAll
+  } = useDocumentList(documents, viewMode);
 
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) {
@@ -185,48 +173,21 @@ export function DocumentList({
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                 </th>
-                <th className="px-6 py-3 text-left">
-                  <button
-                    onClick={() => handleSort('title')}
-                    className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    Title
-                    <SortIcon field="title" />
-                  </button>
-                </th>
-                <th className="px-6 py-3 text-left">
-                  <button
-                    onClick={() => handleSort('type')}
-                    className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    Type
-                    <SortIcon field="type" />
-                  </button>
-                </th>
-                <th className="px-6 py-3 text-left">
-                  <button
-                    onClick={() => handleSort('status')}
-                    className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    Status
-                    <SortIcon field="status" />
-                  </button>
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                  Indicators
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                  Size
-                </th>
-                <th className="px-6 py-3 text-left">
-                  <button
-                    onClick={() => handleSort('lastModified')}
-                    className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    Modified
-                    <SortIcon field="lastModified" />
-                  </button>
-                </th>
+                {DOCUMENT_LIST_COLUMNS.map((col) => (
+                  <th key={col.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
+                    {col.sortable ? (
+                      <button
+                        onClick={() => handleSort(col.key as SortField)}
+                        className="flex items-center gap-2 hover:text-gray-700 dark:hover:text-gray-200"
+                      >
+                        {col.label}
+                        <SortIcon field={col.key as SortField} />
+                      </button>
+                    ) : (
+                      col.label
+                    )}
+                  </th>
+                ))}
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
                   Actions
                 </th>

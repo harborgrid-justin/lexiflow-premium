@@ -44,7 +44,7 @@ import { WorkflowAnalyticsData } from './types';
 // COMPONENT
 // ============================================================================
 
-export const WorkflowAnalyticsDashboard: React.FC = () => {
+export function WorkflowAnalyticsDashboard() {
   const { mode } = useTheme();
 
   // Load analytics from IndexedDB via useQuery for accurate, cached data
@@ -91,4 +91,6 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
+
+WorkflowAnalyticsDashboard.displayName = 'WorkflowAnalyticsDashboard';

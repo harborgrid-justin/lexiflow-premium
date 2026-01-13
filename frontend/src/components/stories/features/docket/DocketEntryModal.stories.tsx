@@ -43,7 +43,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     entry: {
       description: 'The docket entry to display (null to close modal)',

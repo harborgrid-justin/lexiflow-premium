@@ -25,7 +25,7 @@ interface FirmProcessDetailProps {
   onBack: () => void;
 }
 
-export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId, onBack }) => {
+export function FirmProcessDetail({ processId, onBack }: FirmProcessDetailProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'designer' | 'instances' | 'analytics'>('overview');
 
@@ -168,5 +168,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
       </div>
     </div>
   );
-};
+}
+
+FirmProcessDetail.displayName = 'FirmProcessDetail';
 

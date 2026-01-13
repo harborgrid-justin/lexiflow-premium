@@ -18,7 +18,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Clock, FileText, Loader2, Paperclip, Send, Sparkles, X } from 'lucide-react';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

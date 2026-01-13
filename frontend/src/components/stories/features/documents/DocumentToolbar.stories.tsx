@@ -28,7 +28,7 @@ const meta: Meta<typeof DocumentToolbar> = {
         component: 'Document toolbar with search, view mode toggle, selection counter, and bulk action buttons.'
       }
     },
-  }
+  },
   argTypes: {
     selectedDocsCount: {
       control: 'number',

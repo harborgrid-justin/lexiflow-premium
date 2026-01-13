@@ -18,7 +18,7 @@ const createSearchWorker = (): Worker | null => {
 
       // Advanced Levenshtein Distance for fuzzy matching
       // Implemented in Worker to avoid main-thread blocking during matrix calculation
-      function levenshtein(a, b) {
+      function levenshtein(a: string, b: string): number {
         if (a.length === 0) return b.length;
         if (b.length === 0) return a.length;
 
@@ -50,7 +50,7 @@ const createSearchWorker = (): Worker | null => {
         return matrix[b.length][a.length];
       }
 
-      function calculateScore(text, query) {
+      function calculateScore(text: string | unknown, query: string): number {
           const t = String(text).toLowerCase();
           const q = query.toLowerCase();
 

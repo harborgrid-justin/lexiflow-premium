@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PleadingBuilder } from '@features/litigation/pleadings/PleadingBuilder';
-import { ToastProvider } from '@/providers';
 
 /**
  * PleadingBuilder is the comprehensive pleading document creation and management

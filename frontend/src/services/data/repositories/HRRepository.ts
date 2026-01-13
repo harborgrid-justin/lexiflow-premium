@@ -24,8 +24,7 @@ class HRRepositoryClass {
         const userEntries = timeEntries.filter((t) => t.userId === s.userId);
         // Fallback: check hours or duration/60
         const totalHours = userEntries.reduce((acc, t) => {
-          // @ts-expect-error - hours property might be missing on type
-          const hours = t.hours || (t.duration ? t.duration / 60 : 0);
+          const hours = (t as { hours?: number; duration?: number }).hours || (t.duration ? t.duration / 60 : 0);
           return acc + hours;
         }, 0);
 

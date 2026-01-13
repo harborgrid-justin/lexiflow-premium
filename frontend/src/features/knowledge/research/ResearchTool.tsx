@@ -10,32 +10,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { queryKeys } from '@/utils/queryKeys';
+import { useResearchTool } from './hooks/useResearchTool';
 
 // Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 import { ResearchToolContent } from './ResearchToolContent';
-
-// Utils & Config
-import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 import { cn } from '@/shared/lib/cn';
+import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
-import { Clause, JudgeProfile } from '@/types';
+import { Clause } from '@/types';
 
 const ClauseHistoryModal = lazy(async () => {
   const module = await import('../clauses/ClauseHistoryModal');
@@ -44,26 +38,13 @@ const ClauseHistoryModal = lazy(async () => {
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
-  // Scope session storage key if in case context
-  const storageKey = caseId ? `research_active_view_${caseId}` : 'research_active_view';
-  const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
-
-  const clauseSelection = useSingleSelection<Clause>(null, (a, b) => a.id === b.id);
-  const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
-
-  // Load judges from IndexedDB via useQuery for accurate, cached data
-  const { data: judges = [] } = useQuery<JudgeProfile[]>(
-    queryKeys.adminExtended.judgeProfiles(),
-    () => DataService.analysis.getJudgeProfiles(),
-    { enabled: activeView.startsWith('analytics_') }
-  );
-
-  // Set initial judge selection when data loads
-  useEffect(() => {
-    if (judges.length > 0 && !selectedJudgeId) {
-      setSelectedJudgeId(judges[0]?.id || '');
-    }
-  }, [judges, selectedJudgeId]);
+  
+  const {
+      activeView,
+      setActiveView,
+      clauseSelection,
+      selectedJudgeId,
+  } = useResearchTool(initialTab, caseId);
 
   const renderContent = () => {
     // Delegation to ResearchToolContent

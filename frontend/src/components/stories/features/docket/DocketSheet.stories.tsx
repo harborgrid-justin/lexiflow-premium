@@ -29,7 +29,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     filterType: {
       description: 'Type of entries to display',

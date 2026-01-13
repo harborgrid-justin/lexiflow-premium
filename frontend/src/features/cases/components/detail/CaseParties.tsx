@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 // Internal Dependencies - Components
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
@@ -22,17 +22,13 @@ import { Modal } from '@/shared/ui/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useModalState } from '@/hooks/core';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useCaseParties, GroupByOption } from '@/features/cases/hooks/useCaseParties';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/shared/lib/cn';
-import { Scheduler } from '@/utils/scheduler';
 
 // Types & Interfaces
-import { CaseId, Organization, Party, PartyId } from '@/types';
+import { Party } from '@/types';
 import { OrgId } from '@/types/primitives';
 
 interface CasePartiesProps {
@@ -40,106 +36,24 @@ interface CasePartiesProps {
     onUpdate: (parties: Party[]) => void;
 }
 
-type GroupByOption = 'none' | 'role' | 'group';
-
 export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate }) => {
     const { theme } = useTheme();
-    const partyModal = useModalState();
-    const deleteModal = useModalState();
-    const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
-    const [groupBy, setGroupBy] = useState<GroupByOption>('group');
-    const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
-    const [deletePartyId, setDeletePartyId] = useState<string | null>(null);
 
-    const { data: orgs = [] } = useQuery<Organization[]>(['organizations', 'all'], () => DataService.organization.getOrgs());
-
-    useEffect(() => {
-        Scheduler.defer(() => {
-            if (groupBy === 'none') {
-                setGrouped({ 'All Parties': Array.isArray(parties) ? parties : [] });
-                return;
-            }
-            const groups: Record<string, Party[]> = {};
-            if (Array.isArray(parties)) {
-                parties.forEach(p => {
-                    const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
-                    if (!groups[key]) groups[key] = [];
-                    groups[key].push(p);
-                });
-            } else {
-                console.warn('CaseParties: parties prop is not an array', parties);
-                // Attempt to handle if it's a paginated response object wrapper
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const safeParties = (parties as any)?.data && Array.isArray((parties as any).data)
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    ? (parties as any).data
-                    : [];
-
-                safeParties.forEach((p: Party) => {
-                    const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
-                    if (!groups[key]) groups[key] = [];
-                    groups[key].push(p);
-                });
-            }
-            setGrouped(groups);
-        });
-    }, [parties, groupBy]);
-
-    const handleSave = () => {
-        if (!currentParty.name || !currentParty.role) return;
-
-        let newParties = [...parties];
-        if (currentParty.id) {
-            // Edit
-            newParties = newParties.map(p => p.id === currentParty.id ? { ...p, ...currentParty } as Party : p);
-        } else {
-            // Add - use existing party's caseId or empty string as fallback
-            const caseId = (parties.length > 0 ? parties[0]?.caseId : '') as CaseId;
-            console.log('case ID:', caseId);
-            const newParty: Party = {
-                id: `p-${Date.now()}` as PartyId,
-                name: currentParty.name,
-                role: currentParty.role,
-                partyGroup: currentParty.partyGroup,
-                contact: currentParty.contact || '',
-                type: currentParty.type || 'Individual',
-                counsel: currentParty.counsel,
-                linkedOrgId: currentParty.linkedOrgId,
-                address: currentParty.address,
-                phone: currentParty.phone,
-                email: currentParty.email,
-                representationType: currentParty.representationType,
-                attorneys: currentParty.attorneys,
-                caseId
-            };
-            newParties.push(newParty);
-        }
-        onUpdate(newParties);
-        partyModal.close();
-        setCurrentParty({});
-    };
-
-    const handleDelete = (id: string) => {
-        setDeletePartyId(id);
-        deleteModal.open();
-    };
-
-    const confirmDelete = () => {
-        if (deletePartyId) {
-            onUpdate(parties.filter(p => p.id !== deletePartyId));
-            setDeletePartyId(null);
-        }
-    };
-
-    const openEdit = (party: Party) => {
-        setCurrentParty(party);
-        partyModal.open();
-    };
-
-    const openNew = () => {
-        setCurrentParty({ type: 'Individual' });
-        partyModal.open();
-    };
+    const {
+      partyModal,
+      deleteModal,
+      currentParty,
+      setCurrentParty,
+      groupBy,
+      setGroupBy,
+      grouped,
+      orgs,
+      handleSave,
+      handleDelete,
+      confirmDelete,
+      openEdit,
+      openNew
+    } = useCaseParties(parties, onUpdate);
 
     const getIcon = (type: string) => {
         if (type === 'Corporation') return <Building className={cn("h-4 w-4", theme.text.secondary)} />;

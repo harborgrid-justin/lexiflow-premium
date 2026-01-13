@@ -44,7 +44,7 @@ const meta = {
       restoreMocks: true,
     },
   },
-  tags: ['autodocs', 'page']
+  tags: ['autodocs', 'page'],
   argTypes: {
     initialTab: {
       description: 'Initial view/tab to display',

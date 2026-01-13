@@ -95,8 +95,9 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
   className = '' }) => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
-  // @ts-expect-error - Used in development/debugging
-  const _ignore = [showAddDialog, selectedCitation];
+  // Preserve state for future development features
+  void showAddDialog;
+  void selectedCitation;
   const [citations] = useState<Citation[]>(
     initialCitations.length > 0
       ? initialCitations

@@ -38,7 +38,7 @@ const meta: Meta<typeof BillingDashboard> = {
       clearMocks: true,
       restoreMocks: true,
     },
-  }
+  },
   argTypes: {
     initialTab: {
       control: 'select',

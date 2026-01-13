@@ -82,7 +82,7 @@ export class DiscoveryApiService {
   }
 
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === "") {
+    if (!id || id.trim() === "") {
       throw new Error(
         `[DiscoveryApiService.${methodName}] Invalid id parameter`
       );

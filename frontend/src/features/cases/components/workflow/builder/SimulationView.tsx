@@ -2,7 +2,7 @@ import React from 'react';
 import { Terminal, PlayCircle } from 'lucide-react';
 import { Button } from '@/shared/ui/atoms/Button';
 
-export const SimulationView: React.FC = () => {
+export function SimulationView() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-slate-400">
         <Terminal className="h-16 w-16 mb-4 opacity-50"/>
@@ -11,4 +11,6 @@ export const SimulationView: React.FC = () => {
         <Button variant="primary" className="mt-6" icon={PlayCircle}>Start Simulation</Button>
     </div>
   );
-};
+}
+
+SimulationView.displayName = 'SimulationView';

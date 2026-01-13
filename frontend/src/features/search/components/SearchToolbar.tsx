@@ -16,9 +16,6 @@ import React from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Services/Data
-import { SearchService } from '@/services/search/searchService';
-
 // Hooks & Context
 import { useTheme } from '@/features/theme';
 import { useSearchToolbar } from '../hooks/useSearchToolbar';

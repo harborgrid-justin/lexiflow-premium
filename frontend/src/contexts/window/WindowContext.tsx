@@ -1,6 +1,6 @@
 import { ErrorBoundary } from "@/shared/ui/organisms/ErrorBoundary";
 import { cn } from '@/shared/lib/cn';
-import { WINDOW_MAX_INSTANCES, WINDOW_BASE_Z_INDEX, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT } from '@/config/features/contexts.config';
+import { WINDOW_MAX_INSTANCES, WINDOW_BASE_Z_INDEX } from '@/config/features/contexts.config';
 import { Maximize2, Minus, X } from 'lucide-react';
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';

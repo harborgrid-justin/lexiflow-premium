@@ -85,8 +85,8 @@ export function ProfitabilityTab({ profitabilityData, segmentData, revenueTrendD
                   cy="50%"
                   outerRadius={100}
                   label={(props: { payload?: ClientSegment; segment?: string; revenue?: number }) => {
-                    const { segment, revenue } = props.payload || props;
-                    return segment && revenue ? `${segment}: $${(revenue / 1000).toFixed(0)}k` : '';
+                    const entry = props.payload || props;
+                    return entry.segment && entry.revenue ? `${entry.segment}: $${(entry.revenue / 1000).toFixed(0)}k` : '';
                   }}
                 >
                   {segmentData.map((entry, index) => (

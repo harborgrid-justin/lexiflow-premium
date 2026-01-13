@@ -26,7 +26,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     entry: {
       description: 'The docket entry data object',

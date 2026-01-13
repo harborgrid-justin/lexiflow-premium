@@ -24,7 +24,7 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     activeCaseTitle: {
       description: 'Title of the currently active case',

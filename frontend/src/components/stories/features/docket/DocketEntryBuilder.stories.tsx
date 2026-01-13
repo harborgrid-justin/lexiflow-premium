@@ -49,7 +49,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     initialData: {
       description: 'Initial data for editing an existing entry',

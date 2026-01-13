@@ -9,7 +9,7 @@ import { cn } from '@/shared/lib/cn';
 import { Boxes } from 'lucide-react';
 import React from 'react';
 
-export const ParallelExecutionPanel: React.FC = () => {
+export function ParallelExecutionPanel() {
   const { theme } = useTheme();
 
   return (
@@ -42,4 +42,6 @@ export const ParallelExecutionPanel: React.FC = () => {
       </div>
     </Card>
   );
-};
+}
+
+ParallelExecutionPanel.displayName = 'ParallelExecutionPanel';

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
-import { ToastProvider } from '@/providers';
 
 /**
  * Exhibit components provide tools for managing trial exhibits including

@@ -30,7 +30,7 @@
  */
 
 import { DependencyList, useCallback, useRef } from "react";
-import { MEMOIZATION_MAX_CACHE_SIZE, MEMOIZATION_WARN_THRESHOLD_MS } from '@/config/features/hooks.config';
+import { MEMOIZATION_MAX_CACHE_SIZE } from '@/config/features/hooks.config';
 
 /**
  * Configuration options for memoization

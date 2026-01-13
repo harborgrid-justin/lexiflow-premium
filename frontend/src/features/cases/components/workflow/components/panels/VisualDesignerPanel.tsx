@@ -19,14 +19,14 @@ interface VisualDesignerPanelProps {
   onCreateWebhook: () => void;
 }
 
-export const VisualDesignerPanel: React.FC<VisualDesignerPanelProps> = ({
+export function VisualDesignerPanel({
   onAddConditionalBranch,
   onAddParallelExecution,
   onAddSLA,
   onAddApprovalChain,
   onCreateSnapshot,
   onCreateWebhook,
-}) => {
+}: VisualDesignerPanelProps) {
   const { theme } = useTheme();
 
   return (
@@ -67,4 +67,6 @@ export const VisualDesignerPanel: React.FC<VisualDesignerPanelProps> = ({
       </div>
     </div>
   );
-};
+}
+
+VisualDesignerPanel.displayName = 'VisualDesignerPanel';

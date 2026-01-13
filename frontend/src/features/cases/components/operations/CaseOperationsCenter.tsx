@@ -41,7 +41,7 @@ export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) 
   const { isDark } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [_showTaskModal, setShowTaskModal] = useState(false);
 
   // Fetch tasks from workflow API with error handling
   const { data: tasks, isLoading: tasksLoading } = useQuery(

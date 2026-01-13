@@ -43,7 +43,7 @@ const meta = {
       clearMocks: true,
     },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
   argTypes: {
     entries: {
       description: 'Array of docket entries to display',

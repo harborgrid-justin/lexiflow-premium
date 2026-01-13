@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ApiKeyManagement } from '@/features/admin/components/api-keys/ApiKeyManagement';
-import { ToastProvider } from '@/providers';
 
 /**
  * ApiKeyManagement provides secure API key administration for external integrations

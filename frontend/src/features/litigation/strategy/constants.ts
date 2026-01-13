@@ -7,7 +7,7 @@
  */
 
 import { 
-  GitMerge, Milestone, FileText, Play, 
+  Milestone, FileText, 
   Gavel, Scale, AlertTriangle, Flag, Mic2, Search, Users, 
   MessageSquare, ScrollText, ClipboardCheck, ArrowUpRightSquare 
 } from 'lucide-react';

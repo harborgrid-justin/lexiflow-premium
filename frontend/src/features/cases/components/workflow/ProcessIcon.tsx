@@ -18,7 +18,7 @@ export interface ProcessIconProps {
 /**
  * Get the appropriate icon component for a firm process based on its name
  */
-export const ProcessIcon: React.FC<ProcessIconProps> = ({ processName, className }) => {
+export function ProcessIcon({ processName, className }: ProcessIconProps) {
   const name = processName.toLowerCase();
   
   if (name.includes('client') || name.includes('onboarding')) {
@@ -44,4 +44,7 @@ export const ProcessIcon: React.FC<ProcessIconProps> = ({ processName, className
   }
   
   return <RefreshCw className={className || "h-5 w-5 text-gray-600"}/>;
-};
+}
+
+// Memoized for performance (icon selection is pure)
+ProcessIcon.displayName = 'ProcessIcon';

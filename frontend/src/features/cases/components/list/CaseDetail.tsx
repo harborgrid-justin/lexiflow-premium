@@ -1,5 +1,4 @@
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { PATHS } from '@/config/paths.config';
 import { useModalState } from '@/hooks/useModalState';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

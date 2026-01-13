@@ -10,7 +10,7 @@
 
 // External Dependencies
 import { Loader2, Plus, ShieldCheck, Wand2 } from 'lucide-react';
-import React, { lazy, Suspense, useRef, useState } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/features/cases/ui/components/TaskCreationModal/TaskCreationModal';
@@ -18,21 +18,13 @@ import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/features/theme';
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '@/providers';
+import { useCaseDocuments } from '@/features/cases/hooks/useCaseDocuments';
 
 // Internal Dependencies - Services & Utils
-import { queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { DocumentService } from '@/services/features/documents/documentService';
-// ✅ Migrated to backend API (2025-12-21)
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { cn } from '@/shared/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { CaseId, EvidenceId, EvidenceItem, LegalDocument, UUID, WorkflowTask } from '@/types';
-import { SystemEventType } from '@/types/integration-types';
+import { LegalDocument } from '@/types';
 
 const DocumentAssembly = lazy(() => import('@/features/operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
@@ -44,20 +36,20 @@ interface CaseDocumentsProps {
 }
 
 export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzingId, onAnalyze, onDocumentCreated }) => {
-  // ============================================================================
-  // HOOKS & CONTEXT
-  // ============================================================================
   const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
-  const notify = useNotify();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // ============================================================================
-  // STATE MANAGEMENT
-  // ============================================================================
-  const [taskModalDoc, setTaskModalDoc] = useState<LegalDocument | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [logAsEvidence, setLogAsEvidence] = useState(false);
+  
+  const {
+    fileInputRef,
+    taskModalDoc,
+    setTaskModalDoc,
+    isUploading,
+    logAsEvidence,
+    setLogAsEvidence,
+    handleTaskSaved,
+    handleFileSelect,
+    openWindow,
+    closeWindow
+  } = useCaseDocuments(documents, onDocumentCreated);
 
   const handleOpenWizard = () => {
     const id = 'doc-assembly-wizard';
@@ -75,75 +67,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         />
       </Suspense>
     );
-  };
-
-  const handleTaskSaved = (task: WorkflowTask) => {
-    DataService.tasks.add(task);
-    queryClient.invalidate(queryKeys.tasks.all());
-    queryClient.invalidate(queryKeys.dashboard.stats());
-    notify.success(`Task "${task.title}" created.`);
-  };
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0 && onDocumentCreated) {
-      setIsUploading(true);
-      try {
-        const files = e.target.files;
-        if (!files || files.length === 0) return;
-        const file = files[0];
-        if (!file) return;
-        // Upload to IDB via DocumentService
-        const savedDoc = await DocumentService.uploadDocument(file, {
-          caseId: (documents.length > 0 ? documents[0]?.caseId : 'General') as CaseId,
-          sourceModule: 'General',
-          tags: logAsEvidence ? ['Evidence'] : []
-        });
-
-        // INTEGRATION POINT: Trigger orchestrator
-        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
-
-        if (logAsEvidence) {
-          // Auto-create Evidence Item
-          const evidence: EvidenceItem = {
-            id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID() as UUID,
-            caseId: savedDoc.caseId,
-            title: savedDoc.title,
-            type: 'Document',
-            description: 'Auto-logged via Document Upload',
-            collectionDate: new Date().toISOString().split('T')[0] || '',
-            collectedBy: 'System',
-            custodian: 'Firm DMS',
-            location: 'Evidence Vault',
-            admissibility: 'Pending',
-            chainOfCustody: [{
-              id: `cc-${Date.now()}`,
-              date: new Date().toISOString(),
-              action: 'Intake from DMS',
-              actor: 'System',
-              notes: 'Linked from Case Documents'
-            }],
-            tags: ['Document'],
-            fileSize: typeof savedDoc.fileSize === 'string' ? savedDoc.fileSize : String(savedDoc.fileSize)
-          };
-          await DataService.evidence.add(evidence);
-          // INVALIDATE EVIDENCE CACHE
-          queryClient.invalidate(queryKeys.evidence.all());
-          notify.success("Document uploaded and logged to Evidence Vault.");
-        } else {
-          notify.success(`Uploaded ${file.name} successfully.`);
-        }
-
-        onDocumentCreated(savedDoc);
-      } catch (error) {
-        notify.error("Failed to upload document.");
-        console.error(error);
-      } finally {
-        setIsUploading(false);
-        setLogAsEvidence(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-      }
-    }
   };
 
   return (
@@ -201,9 +124,14 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
             doc={doc}
             analyzingId={analyzingId}
             onAnalyze={onAnalyze}
-            onTaskClick={setTaskModalDoc}
+            onAddTask={() => setTaskModalDoc(doc)}
           />
         ))}
+        {documents.length === 0 && (
+          <div className={cn("text-center py-12 rounded-lg border border-dashed", theme.border.default, theme.text.tertiary)}>
+            No documents found. Upload new or assemble from template.
+          </div>
+        )}
       </div>
     </div>
   );

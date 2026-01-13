@@ -25,31 +25,26 @@ export function useBusinessDevelopment() {
   const [selectedLead, setSelectedLead] = useState<string | null>(null);
 
   // Queries
-  const { data: leads = [] } = useQuery(
+  const { data: leads = [] } = useQuery<unknown[]>(
     ["crm", "leads"],
     () => DataService.crm.getLeads()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as { data: any[] };
-  const { data: pitches = [] } = useQuery(
+  );
+  const { data: pitches = [] } = useQuery<unknown[]>(
     ["crm", "pitches"],
     () => DataService.crm.getPitches()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as { data: any[] };
-  const { data: rfps = [] } = useQuery(
+  );
+  const { data: rfps = [] } = useQuery<unknown[]>(
     ["crm", "rfps"],
     () => DataService.crm.getRFPs()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as { data: any[] };
-  const { data: winLossData = [] } = useQuery(
+  );
+  const { data: winLossData = [] } = useQuery<unknown[]>(
     ["crm", "win-loss"],
     () => DataService.crm.getWinLossAnalysis()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as { data: any[] };
-  const { data: analyticsData = {} } = useQuery(
+  );
+  const { data: analyticsData = {} } = useQuery<Record<string, unknown>>(
     ["crm", "business-metrics"],
     () => DataService.crm.getBusinessDevelopmentMetrics()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as { data: any };
+  );
 
   // Calculated metrics
   const metrics = {

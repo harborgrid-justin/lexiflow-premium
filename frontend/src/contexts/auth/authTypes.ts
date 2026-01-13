@@ -10,11 +10,24 @@
 /**
  * Represents an authenticated user
  */
+export type AuthRole =
+  | 'admin'
+  | 'attorney'
+  | 'paralegal'
+  | 'staff'
+  | 'Administrator'
+  | 'Senior Partner'
+  | 'Partner'
+  | 'Associate'
+  | 'Paralegal'
+  | 'Client User'
+  | 'Guest';
+
 export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "attorney" | "paralegal" | "staff";
+  role: AuthRole;
   avatarUrl?: string;
   permissions: string[];
   mfaEnabled?: boolean;
@@ -22,6 +35,12 @@ export interface AuthUser {
   passwordExpiresAt?: Date;
   lastLoginAt?: Date;
   failedLoginAttempts?: number;
+  organizationId?: string;
+  orgId?: string;
+  organizationName?: string;
+  department?: string;
+  title?: string;
+  phone?: string;
 }
 
 /**
@@ -53,6 +72,11 @@ export interface PasswordPolicy {
   requireSpecialChars: boolean;
   expiryDays?: number;
   preventReuse?: number;
+}
+
+export interface AuthLoginResult {
+  success: boolean;
+  mfaRequired?: boolean;
 }
 
 /**
@@ -102,7 +126,12 @@ export interface AuthStateValue {
  */
 export interface AuthActionsValue {
   /** Login with credentials */
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    rememberMe?: boolean,
+    mfaCode?: string
+  ) => Promise<AuthLoginResult>;
   /** Verify MFA code during login */
   verifyMFA: (code: string) => Promise<boolean>;
   /** Logout current user */
@@ -125,4 +154,6 @@ export interface AuthActionsValue {
   logAuthEvent: (event: AuthEvent) => void;
   /** Extend current session */
   extendSession: () => Promise<void>;
+  /** Clear the current auth error state */
+  clearError: () => void;
 }

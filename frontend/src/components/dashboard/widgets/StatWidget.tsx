@@ -47,7 +47,7 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
   className,
   onClick,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   const variantClasses = {
     default: 'border-gray-200 dark:border-gray-700 bg-surface',

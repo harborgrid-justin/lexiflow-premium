@@ -132,9 +132,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         });
       }
       const wipMap: Record<string, number> = {};
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (Array.isArray(entries)) {
-        entries.forEach((e: any) => {
+        entries.forEach((e: TimeEntry) => {
           if (e.status === "Unbilled") {
             const clientId = caseToClientMap[e.caseId];
             if (clientId) {

@@ -9,9 +9,16 @@ import {
   type RealizationMetrics,
   type RevenueForecasting,
   type TimekeeperPerformance,
-  type WorkInProgressMetrics,
-  billingApiService
+  type WorkInProgressMetrics
 } from '@/api/billing/enterprise-billing.service';
+import {
+  FINANCIAL_REPORT_TAB_LABELS,
+  FINANCIAL_REPORT_TABS,
+  FinancialReportTab,
+  REPORT_PERIODS,
+  ReportPeriod
+} from '@/config/billing.config';
+import { useFinancialHelpers, useFinancialReports } from '@/features/billing/hooks/useFinancialReports';
 import {
   Activity,
   BarChart3,
@@ -22,7 +29,7 @@ import {
   TrendingDown,
   TrendingUp
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface FinancialReportsProps {
   firmId?: string;
@@ -34,77 +41,28 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
   dateRange,
   onExport,
 }) => {
-  const [selectedTab, setSelectedTab] = useState<'profitability' | 'realization' | 'wip' | 'forecasting' | 'performance'>('profitability');
-  const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
-  const [showFilters, setShowFilters] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    selectedTab,
+    setSelectedTab,
+    selectedPeriod,
+    setSelectedPeriod,
+    showFilters,
+    setShowFilters,
+    isLoading,
+    error,
+    data
+  } = useFinancialReports({ dateRange });
 
-  // State for API data
-  const [profitability, setProfitability] = useState<ProfitabilityMetrics | null>(null);
-  const [realization, setRealization] = useState<RealizationMetrics | null>(null);
-  const [wipMetrics, setWipMetrics] = useState<WorkInProgressMetrics | null>(null);
-  const [revenueForecast, setRevenueForecast] = useState<RevenueForecasting[]>([]);
-  const [timekeeperPerformance, setTimekeeperPerformance] = useState<TimekeeperPerformance[]>([]);
-  const [matterProfitability, setMatterProfitability] = useState<MatterProfitability[]>([]);
+  const { formatCurrency, formatPercent, getPerformanceColor } = useFinancialHelpers();
 
-  // Fetch data from API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const filters = dateRange
-          ? { startDate: dateRange.start, endDate: dateRange.end }
-          : undefined;
-
-        const [
-          profitabilityData,
-          realizationData,
-          wipData,
-          forecastData,
-          performanceData,
-          matterData,
-        ] = await Promise.all([
-          billingApiService.getProfitabilityMetrics(filters),
-          billingApiService.getRealizationMetrics(filters),
-          billingApiService.getWIPMetrics(filters),
-          billingApiService.getRevenueForecast(filters),
-          billingApiService.getTimekeeperPerformance(filters),
-          billingApiService.getMatterProfitability(filters),
-        ]);
-
-        setProfitability(profitabilityData);
-        setRealization(realizationData);
-        setWipMetrics(wipData);
-        setRevenueForecast(forecastData);
-        setTimekeeperPerformance(performanceData);
-        setMatterProfitability(matterData);
-      } catch (err) {
-        console.error('Failed to fetch financial reports:', err);
-        setError('Failed to load financial data. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [dateRange]);
-
-  const getPerformanceColor = (value: number, threshold: number = 90) => {
-    if (value >= threshold) return 'text-green-600 dark:text-green-400';
-    if (value >= threshold - 10) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
-  };
-
-  const formatCurrency = (amount: number) => {
-    return `$${amount.toLocaleString()}`;
-  };
-
-  const formatPercent = (value: number) => {
-    return `${value.toFixed(1)}%`;
-  };
+  const {
+    profitability,
+    realization,
+    wipMetrics: wipMetrics,
+    revenueForecast,
+    timekeeperPerformance,
+    matterProfitability
+  } = data;
 
   if (isLoading) {
     return (
@@ -137,12 +95,12 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         <div className="flex gap-3">
           <select
             value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value as 'monthly' | 'quarterly' | 'yearly')}
+            onChange={(e) => setSelectedPeriod(e.target.value as ReportPeriod)}
             className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
           >
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="yearly">Yearly</option>
+            {REPORT_PERIODS.map(period => (
+              <option key={period.value} value={period.value}>{period.label}</option>
+            ))}
           </select>
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -164,7 +122,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
       {/* Tabs */}
       <div className="border-b border-gray-200 dark:border-gray-700">
         <nav className="-mb-px flex space-x-8">
-          {(['profitability', 'realization', 'wip', 'forecasting', 'performance'] as const).map((tab) => (
+          {FINANCIAL_REPORT_TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
@@ -173,7 +131,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
             >
-              {tab === 'wip' ? 'WIP' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {FINANCIAL_REPORT_TAB_LABELS[tab]}
             </button>
           ))}
         </nav>

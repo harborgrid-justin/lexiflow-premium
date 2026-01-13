@@ -210,8 +210,14 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
   ], []);
 
   const renderStepContent = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const commonProps: any = { formData, getFieldError, updateField, handleFieldBlur };
+    interface StepCommonProps {
+      formData: FormState;
+      getFieldError: (field: keyof FormState) => string | undefined;
+      updateField: <K extends keyof FormState>(field: K, value: FormState[K]) => void;
+      handleFieldBlur: (field: keyof FormState) => void;
+    }
+    
+    const commonProps: StepCommonProps = { formData, getFieldError, updateField, handleFieldBlur };
 
     switch (currentStep) {
       case FormStep.ACCOUNT_INFO:

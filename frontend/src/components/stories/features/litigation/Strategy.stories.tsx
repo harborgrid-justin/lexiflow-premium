@@ -1,4 +1,3 @@
-import { ToastProvider } from '@/providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 import type { NodeType, WorkflowConnection, WorkflowNode } from '../../../../features/cases/components/workflow/builder/types';

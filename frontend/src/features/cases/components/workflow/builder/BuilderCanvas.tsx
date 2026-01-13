@@ -19,10 +19,10 @@ interface BuilderCanvasProps {
   onAddConnection: (from: string, to: string, fromPort?: string) => void;
 }
 
-export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
+export function BuilderCanvas({
   nodes, connections, selectedNodeId, selectedConnectionId, onSelectConnection,
   scale, pan, setPan, canvasRef, onMouseDownNode, onBackgroundClick, onAddConnection
-}) => {
+}: BuilderCanvasProps) {
   const { theme, mode } = useTheme();
   const notify = useNotify();
   const [isPanning, setIsPanning] = useState(false);

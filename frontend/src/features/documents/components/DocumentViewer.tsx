@@ -4,7 +4,7 @@
  */
 
 import type { LegalDocument } from '@/types/documents';
-import { useState } from 'react';
+import { useDocumentViewer } from '../hooks/useDocumentViewer';
 
 interface DocumentViewerProps {
   document: LegalDocument;
@@ -13,23 +13,17 @@ interface DocumentViewerProps {
 }
 
 export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: DocumentViewerProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [zoom, setZoom] = useState(100);
-  const totalPages = document.pageCount || 1;
-
-  const handleAnnotationAdd = () => {
-    if (onAddAnnotation && showAnnotations) {
-      onAddAnnotation({
-        page: currentPage,
-        text: 'New annotation',
-        x: 100,
-        y: 100
-      });
-    }
-  };
-
-  const zoomIn = () => setZoom(prev => Math.min(prev + 25, 200));
-  const zoomOut = () => setZoom(prev => Math.max(prev - 25, 50));
+  const {
+    currentPage,
+    zoom,
+    totalPages,
+    handleAnnotationAdd,
+    zoomIn,
+    zoomOut,
+    nextPage,
+    prevPage,
+    setPage
+  } = useDocumentViewer({ document, showAnnotations, onAddAnnotation });
 
   return (
     <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-900">
@@ -47,7 +41,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
           {/* Page Navigation */}
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={prevPage}
               disabled={currentPage === 1}
               className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
             >
@@ -59,7 +53,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
               Page {currentPage} / {totalPages}
             </span>
             <button
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={nextPage}
               disabled={currentPage === totalPages}
               className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:text-gray-100"
             >
@@ -167,7 +161,7 @@ export function DocumentViewer({ document, showAnnotations, onAddAnnotation }: D
           min="1"
           max={totalPages}
           value={currentPage}
-          onChange={(e) => setCurrentPage(parseInt(e.target.value))}
+          onChange={(e) => setPage(parseInt(e.target.value))}
           className="w-64"
         />
       </div>

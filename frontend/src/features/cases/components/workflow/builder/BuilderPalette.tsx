@@ -10,7 +10,7 @@ interface BuilderPaletteProps {
   onAddNode: (type: NodeType) => void;
 }
 
-export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose, onAddNode }) => {
+export function BuilderPalette({ isOpen, onClose, onAddNode }: BuilderPaletteProps) {
   const { theme } = useTheme();
 
   const handleDragStart = (e: React.DragEvent, type: NodeType) => {
@@ -73,4 +73,6 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
       </div>
     </div>
   );
-};
+}
+
+BuilderPalette.displayName = 'BuilderPalette';

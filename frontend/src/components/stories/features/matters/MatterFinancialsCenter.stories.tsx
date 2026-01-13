@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { ToastProvider } from '@/providers';
-
 /**
  * MatterFinancialsCenter provides comprehensive case-level financial management
  * including billing, expenses, budgets, and financial reporting per matter.

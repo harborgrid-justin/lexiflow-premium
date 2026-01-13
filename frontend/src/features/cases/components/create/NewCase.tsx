@@ -16,29 +16,19 @@
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Breadcrumbs } from '@/shared/ui/molecules/Breadcrumbs';
-import { PATHS } from '@/config/paths.config';
 import { useTheme } from '@/features/theme';
-import { useNotify } from '@/hooks/useNotify';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
-import { Case, Matter } from '@/types';
 import { cn } from '@/shared/lib/cn';
-import { queryKeys } from '@/utils/queryKeys';
 import { Save, Trash2, FileText, Scale, Users, DollarSign, Link2 } from 'lucide-react';
 
 // Types
 import { NewMatterProps, TabId } from './types/newCaseTypes';
 
 // Hooks
-import { useNewCaseForm } from './hooks/useNewCaseForm';
-import { useNewCaseMutations } from './hooks/useNewCaseMutations';
-import { useConflictCheck } from './hooks/useConflictCheck';
-import { useRelatedCases } from './hooks/useRelatedCases';
-import { useFormValidation } from './hooks/useFormValidation';
+import { useNewCaseController } from './hooks/useNewCaseController';
 
 // Components
 import { TabBar } from './components/TabBar';
@@ -55,116 +45,28 @@ import { RelatedCasesTab } from './tabs/RelatedCasesTab';
 
 const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser }) => {
   const { theme } = useTheme();
-  const notify = useNotify();
-  const isEditMode = Boolean(id);
 
-  // UI State
-  const [activeTab, setActiveTab] = useState<TabId>('intake');
-  const [saving, setSaving] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  // Data Fetching
-  const { data: existingMatters = [] } = useQuery<Matter[]>(
-    queryKeys.cases.matters.all(),
-    () => DataService.cases.getAll(),
-    { staleTime: 60000 }
-  );
-
-  // Form Management Hook
-  const { formData, setFormData, handleChange, loadFormData, generatedNumber } = useNewCaseForm(
-    existingMatters.length
-  );
-
-  // Conflict Checking Hook
-  const { conflictStatus } = useConflictCheck(formData.clientName, existingMatters, id);
-
-  // Form Validation Hook
-  const { errors, validate, clearFieldError } = useFormValidation(formData, conflictStatus);
-
-  // Related Cases Management Hook
-  const { addRelatedCase, removeRelatedCase, updateRelatedCase } = useRelatedCases(
-    formData.relatedCases,
-    (cases) => setFormData(prev => ({ ...prev, relatedCases: cases }))
-  );
-
-  // Mutations Hook
-  const { createMatter, updateMatter, deleteMatter, isDeleting } = useNewCaseMutations(
-    id,
-    onSaved,
-    onBack
-  );
-
-  // Load existing matter/case if editing
-  const { isLoading } = useQuery<Matter | Case | null>(
-    id ? queryKeys.cases.matters.detail(id) : ['no-matter'],
-    () => {
-      if (!id) return Promise.resolve(null);
-      return DataService.cases.getById(id);
-    },
-    {
-      staleTime: 30000,
-      enabled: !!id,
-      onSuccess: (data: Matter | Case | null) => {
-        if (data) {
-          loadFormData(data);
-        }
-      }
-    }
-  );
-
-  // Handlers
-  const handleFieldChange = useCallback((field: keyof typeof formData, value: unknown) => {
-    handleChange(field, value);
-    if (errors[field]) {
-      clearFieldError(field);
-    }
-  }, [handleChange, errors, clearFieldError]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validate()) {
-      notify.error('Please fix validation errors');
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const dataToSave = {
-        ...formData,
-        matterNumber: generatedNumber,
-        caseNumber: generatedNumber,
-        id: id || crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        userId: currentUser?.id || 'current-user',
-      } as Matter & Case;
-
-      if (isEditMode && id) {
-        await updateMatter(id, dataToSave);
-      } else {
-        await createMatter(dataToSave as Matter);
-      }
-    } catch (error) {
-      console.error('Save failed:', error);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = useCallback(async () => {
-    if (!id) return;
-    await deleteMatter(id);
-    setShowDeleteConfirm(false);
-  }, [id, deleteMatter]);
-
-  const handleCancel = useCallback(() => {
-    if (onBack) {
-      onBack();
-    } else {
-      window.location.hash = `#/${PATHS.MATTERS}`;
-    }
-  }, [onBack]);
+  const {
+    isEditMode,
+    activeTab,
+    setActiveTab,
+    saving,
+    showDeleteConfirm,
+    setShowDeleteConfirm,
+    isLoading,
+    formData,
+    conflictStatus,
+    errors,
+    handleFieldChange,
+    handleSubmit,
+    handleDelete,
+    handleCancel,
+    addRelatedCase,
+    removeRelatedCase,
+    updateRelatedCase,
+    isDeleting,
+    generatedNumber
+  } = useNewCaseController({ id, onBack, onSaved, currentUser });
 
   // Tabs Configuration
   const tabs = [

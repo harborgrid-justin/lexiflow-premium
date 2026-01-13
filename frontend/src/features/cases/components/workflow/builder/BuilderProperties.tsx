@@ -17,9 +17,9 @@ interface BuilderPropertiesProps {
   onDeleteNode: (id: string) => void;
 }
 
-export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
+export function BuilderProperties({
   isOpen, onClose, selectedNode, onUpdateNode, onDeleteNode
-}) => {
+}: BuilderPropertiesProps) {
   const { theme } = useTheme();
   const deleteModal = useModalState();
   const [nodeToDelete, setNodeToDelete] = React.useState<string | null>(null);

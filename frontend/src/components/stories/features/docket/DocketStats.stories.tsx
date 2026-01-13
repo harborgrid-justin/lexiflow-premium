@@ -1,8 +1,5 @@
-import { Button } from '@/shared/ui/atoms/Button/Button';
 import { DocketStats } from '@/features/cases/components/docket/DocketStats';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Download, FileText, Plus, RefreshCw } from 'lucide-react';
-import { fn } from 'storybook/test';
 
 /**
  * DocketStats displays summary metric cards showing key docket activity

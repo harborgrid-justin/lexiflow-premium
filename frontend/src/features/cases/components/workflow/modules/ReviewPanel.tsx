@@ -15,7 +15,7 @@ interface ReviewPanelProps {
   onResolveComment: (id: string) => void;
 }
 
-export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docId, onAddComment, onResolveComment }) => {
+export function ReviewPanel({ comments, caseId, docId, onAddComment, onResolveComment }: ReviewPanelProps) {
   const { theme } = useTheme();
   const [newComment, setNewComment] = useState('');
 
@@ -108,4 +108,6 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
         </div>
     </div>
   );
-};
+}
+
+ReviewPanel.displayName = 'ReviewPanel';

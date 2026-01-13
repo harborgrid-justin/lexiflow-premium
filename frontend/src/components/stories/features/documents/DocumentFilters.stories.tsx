@@ -27,7 +27,7 @@ const meta: Meta<typeof DocumentFilters> = {
         component: 'Sidebar filter panel with smart views, folder navigation, and faceted search for document browsing.'
       }
     },
-  }
+  },
   argTypes: {
     currentFolder: {
       control: 'text',

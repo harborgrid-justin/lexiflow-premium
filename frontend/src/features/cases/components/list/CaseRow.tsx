@@ -11,6 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { ACTIVE_CASE_COLUMNS } from '@/config/cases.config';
 import { Eye, User } from 'lucide-react';
 import React, { memo } from 'react';
 
@@ -62,7 +63,7 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
                 containIntrinsicSize: '0 64px'
             }}
         >
-            <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
+            <div style={{ width: ACTIVE_CASE_COLUMNS[0].width }} className="flex flex-col items-start pr-4 min-w-0">
                 <span
                     className={cn("font-bold text-sm transition-colors flex items-center hover:underline cursor-pointer truncate w-full", theme.primary.text)}
                     title={caseData.title}
@@ -71,12 +72,12 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
                 </span>
                 <span className={cn("text-xs font-mono mt-0.5 opacity-70", theme.text.secondary)}>{caseData.id}</span>
             </div>
-            <div className="w-[15%]"><StatusBadge status={caseData.matterType} /></div>
-            <div className="w-[20%] flex items-center text-sm text-slate-500 min-w-0 pr-2">
+            <div style={{ width: ACTIVE_CASE_COLUMNS[1].width }}><StatusBadge status={caseData.matterType} /></div>
+            <div style={{ width: ACTIVE_CASE_COLUMNS[2].width }} className="flex items-center text-sm text-slate-500 min-w-0 pr-2">
                 <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0" />
                 <span className="truncate" title={caseData.client}>{caseData.client}</span>
             </div>
-            <div className="w-[15%]"><Currency value={caseData.value || 0} className={cn("font-medium text-sm", theme.text.primary)} /></div>
+            <div style={{ width: ACTIVE_CASE_COLUMNS[3].width }}><Currency value={caseData.value || 0} className={cn("font-medium text-sm", theme.text.primary)} /></div>
             <div className="w-[10%]">
                 <StatusBadge status={caseData.status} />
             </div>

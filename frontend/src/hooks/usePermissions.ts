@@ -5,7 +5,7 @@
  * Provides easy access to permission checking functions
  */
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthState } from '@/contexts/auth/AuthProvider';
 import {
   hasPermission,
   hasAnyPermission,
@@ -45,7 +45,7 @@ import { useMemo } from 'react';
  * ```
  */
 export function usePermissions() {
-  const { user } = useAuth();
+  const { user } = useAuthState();
 
   return useMemo(
     () => ({

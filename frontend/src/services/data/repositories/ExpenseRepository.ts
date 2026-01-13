@@ -34,8 +34,8 @@ export class ExpenseRepository extends Repository<FirmExpense> {
 
   override async add(item: Partial<FirmExpense>): Promise<FirmExpense> {
     try {
-      // @ts-expect-error - mismatch or missing properties in Partial type vs expected DTO
-      return await this.expensesApi.create(item);
+      // Cast to ensure required fields are present for API call
+      return await this.expensesApi.create(item as Parameters<typeof this.expensesApi.create>[0]);
     } catch (error) {
       console.error("[ExpenseRepository] Error creating expense:", error);
       throw error;

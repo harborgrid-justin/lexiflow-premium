@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ToastProvider } from '@/providers';
 
 /**
  * MatterOverviewDashboard provides comprehensive case overview with key metrics,

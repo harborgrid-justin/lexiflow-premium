@@ -147,7 +147,7 @@ export class BackupsService {
     const result = await this.snapshotRepository
       .createQueryBuilder('snapshot')
       .select('SUM(snapshot.size)', 'totalSize')
-      .getRawOne();
+      .getRawOne<{ totalSize: string }>();
 
     const activeSchedules = await this.scheduleRepository.count({ where: { enabled: true } });
 

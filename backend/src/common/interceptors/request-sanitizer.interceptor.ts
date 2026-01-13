@@ -5,7 +5,7 @@ import {
   Logger,
   NestInterceptor,
 } from "@nestjs/common";
-import { Request } from "express";
+import type { Request } from "express";
 import { Observable } from "rxjs";
 
 /**
@@ -28,7 +28,7 @@ export class RequestSanitizerInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
 
     // Sanitize request body
     if (request.body && typeof request.body === "object") {

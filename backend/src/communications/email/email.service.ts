@@ -142,6 +142,7 @@ export class EmailService {
       return this.sendEmail({
         ...options,
         html,
+        attachments: options.attachments as EmailAttachment[] | undefined,
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

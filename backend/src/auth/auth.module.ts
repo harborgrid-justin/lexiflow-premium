@@ -42,7 +42,7 @@ import { TokenStorageService } from "./token-storage.service";
           signOptions: {
             expiresIn: (isNaN(Number(expiresIn))
               ? expiresIn
-              : parseInt(expiresIn, 10)) as any,
+              : parseInt(expiresIn, 10)),
           },
         };
       },

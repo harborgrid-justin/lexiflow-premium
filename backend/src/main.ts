@@ -16,11 +16,12 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from "@nestjs/platform-fastify";
-import type { FastifyReply, FastifyRequest } from "fastify";
+// Fastify support disabled - using Express adapter
+// import {
+//   FastifyAdapter,
+//   NestFastifyApplication,
+// } from "@nestjs/platform-fastify";
+// import type { FastifyReply, FastifyRequest } from "fastify";
 
 import { AppModule } from "./app.module";
 import { SystemStartupReporter } from "./bootstrap/system-startup.reporter";
@@ -54,24 +55,21 @@ async function bootstrap(): Promise<INestApplication> {
     (global as Record<string, unknown>).__OTEL_INITIALIZED__ = true;
   }
 
-  // Fastify adapter with optimized settings
-  const fastifyAdapter = new FastifyAdapter({
-    logger: false,
-    trustProxy: true,
-    bodyLimit: 52428800, // 50MB for file uploads
-    // Connection keep-alive optimization
-    keepAliveTimeout: 72000,
-    maxParamLength: 500,
-    // HTTP/2 support
-    http2: false,
-    // Optimize for high throughput
-    ignoreTrailingSlash: true,
-    caseSensitive: false,
-  });
+  // Fastify adapter with optimized settings - DISABLED
+  // const fastifyAdapter = new FastifyAdapter({
+  //   logger: false,
+  //   trustProxy: true,
+  //   bodyLimit: 52428800,
+  //   keepAliveTimeout: 72000,
+  //   maxParamLength: 500,
+  //   http2: false,
+  //   ignoreTrailingSlash: true,
+  //   caseSensitive: false,
+  // });
 
-  const app = await NestFactory.create<NestFastifyApplication>(
+  const app = await NestFactory.create(
     AppModule,
-    fastifyAdapter,
+    // fastifyAdapter,
     {
       logger: ["error", "warn", "log"],
       abortOnError: false,
@@ -82,22 +80,20 @@ async function bootstrap(): Promise<INestApplication> {
 
   const configService = app.get(ConfigService);
 
-  // Register Fastify plugins for optimized performance
-  // Lean helmet configuration - only essential security headers
-  await app.register(import("@fastify/helmet"), {
-    global: true,
-    contentSecurityPolicy: false, // Disable CSP for API-only
-    crossOriginEmbedderPolicy: false,
-  });
+  // Register Fastify plugins - DISABLED, using Express
+  // await app.register(import("@fastify/helmet"), {
+  //   global: true,
+  //   contentSecurityPolicy: false,
+  //   crossOriginEmbedderPolicy: false,
+  // });
 
-  // Brotli compression with aggressive settings
-  await app.register(import("@fastify/compress"), {
-    global: true,
-    encodings: ["br", "gzip", "deflate"],
-    brotliOptions: {
-      params: {
-        [zlib.constants.BROTLI_PARAM_MODE]:
-          zlib.constants.BROTLI_MODE_TEXT,
+  // await app.register(import("@fastify/compress"), {
+  //   global: true,
+  //   encodings: ["br", "gzip", "deflate"],
+  //   brotliOptions: {
+  //     params: {
+  //       [zlib.constants.BROTLI_PARAM_MODE]:
+  //         zlib.constants.BROTLI_MODE_TEXT,
         [zlib.constants.BROTLI_PARAM_QUALITY]: 4, // Balance speed/compression
       },
     },

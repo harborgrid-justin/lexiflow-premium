@@ -1,5 +1,36 @@
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { IncomingMessage, ServerResponse } from 'http';
+
+interface SecurityContext {
+  ip: string;
+  userAgent: string;
+  origin: string | null;
+  referer: string | null;
+  method?: string;
+  path?: string;
+  protocol?: string;
+  isSecure: boolean;
+  timestamp: string;
+}
+
+interface ExtendedRequest extends IncomingMessage {
+  requestId?: string;
+  startTime?: number;
+  securityContext?: SecurityContext;
+  ip?: string;
+  path?: string;
+  protocol?: string;
+  secure?: boolean;
+  user?: { id: string };
+  [key: string]: any;
+}
+
+interface ExtendedResponse extends ServerResponse {
+  // ServerResponse has setHeader, statusCode, on
+  [key: string]: any; 
+}
+
+type NextFunction = (error?: unknown) => void;
 
 /**
  * Security Orchestrator Middleware
@@ -25,15 +56,15 @@ import { Request, Response, NextFunction } from 'express';
 export class SecurityOrchestratorMiddleware implements NestMiddleware {
   private readonly logger = new Logger(SecurityOrchestratorMiddleware.name);
 
-  use(req: Request, res: Response, next: NextFunction): void {
+  use(req: ExtendedRequest, res: ExtendedResponse, next: NextFunction): void {
     // 1. Generate unique request ID for tracking
     const requestId = this.generateRequestId();
-    (req as any).requestId = requestId;
+    req.requestId = requestId;
     res.setHeader('X-Request-ID', requestId);
 
     // 2. Record request start time for performance monitoring
     const startTime = Date.now();
-    (req as any).startTime = startTime;
+    req.startTime = startTime;
 
     // 3. Extract and store security context
     this.setupSecurityContext(req);

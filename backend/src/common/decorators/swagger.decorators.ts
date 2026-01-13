@@ -1,4 +1,4 @@
-import { applyDecorators } from "@nestjs/common";
+import { applyDecorators, Type } from "@nestjs/common";
 import {
   ApiResponse,
   ApiOperation,
@@ -142,9 +142,9 @@ export const ApiReadOperation = (
     ApiResponse({
       status: 200,
       description: "Success",
-      type: type as any,
+      type: type as Type<unknown>,
     }),
-    isPaginated ? ApiPaginationQuery() : () => {},
+    isPaginated ? ApiPaginationQuery() : () => { /* no-op */ },
     ApiStandardResponses()
   );
 };

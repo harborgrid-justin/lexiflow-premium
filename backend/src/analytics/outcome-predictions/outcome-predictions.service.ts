@@ -41,11 +41,11 @@ export class OutcomePredictionsService {
   private readonly logger = new Logger(OutcomePredictionsService.name);
   private readonly MODEL_VERSION = 'v1.0.0';
 
-  constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
-    // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<unknown>,
-    // Inject repositories when entities are available
-  ) {}
+  // constructor(
+  //   // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+  //   // @InjectRepository(OutcomePredictionData) private predictionRepository: Repository<unknown>,
+  //   // Inject repositories when entities are available
+  // ) {}
 
   /**
    * Get outcome prediction for a specific case

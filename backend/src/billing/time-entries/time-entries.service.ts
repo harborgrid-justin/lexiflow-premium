@@ -209,7 +209,7 @@ export class TimeEntriesService {
       const discount = updateTimeEntryDto.discount ?? timeEntry.discount;
       const discountedTotal = discount ? total * (1 - discount / 100) : total;
 
-      updateData = { ...(updateData as any), total, discountedTotal };
+      updateData = { ...(updateData as Record<string, unknown>), total, discountedTotal };
     }
 
     const result = await this.timeEntryRepository
@@ -225,7 +225,7 @@ export class TimeEntriesService {
       throw new NotFoundException(`Time entry with ID ${id} not found`);
     }
 
-    return result.raw[0];
+    return result.raw[0] as TimeEntry;
   }
 
   async remove(id: string): Promise<void> {

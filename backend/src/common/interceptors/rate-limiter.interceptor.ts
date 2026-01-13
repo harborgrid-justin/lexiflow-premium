@@ -10,6 +10,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { RATE_LIMIT_KEY, RateLimitOptions } from '@common/decorators/rate-limit.decorator';
+import type { Request, Response } from 'express';
 
 /**
  * Rate Limiter Interceptor
@@ -42,7 +43,7 @@ export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy 
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
     const key = this.getKey(request, rateLimitOptions);
 
     if (!this.checkRateLimit(key, rateLimitOptions)) {
@@ -58,21 +59,20 @@ export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy 
 
     this.recordRequest(key);
 
-    const response = context.switchToHttp().getResponse();
+    const response = context.switchToHttp().getResponse<FastifyReply>();
     const remaining = this.getRemainingRequests(key, rateLimitOptions);
     
-    response.setHeader('X-RateLimit-Limit', rateLimitOptions.points);
-    response.setHeader('X-RateLimit-Remaining', remaining);
-    response.setHeader('X-RateLimit-Reset', this.getResetTime(rateLimitOptions.duration));
+    void response.header('X-RateLimit-Limit', rateLimitOptions.points);
+    void response.header('X-RateLimit-Remaining', remaining);
+    void response.header('X-RateLimit-Reset', this.getResetTime(rateLimitOptions.duration));
 
     return next.handle();
   }
 
-  private getKey(request: unknown, options: RateLimitOptions): string {
-    const req = request as { ip?: string; connection?: { remoteAddress?: string }; user?: { id?: string }; method?: string; path?: string };
-    const ip = req.ip || req.connection?.remoteAddress || 'unknown';
-    const userId = req.user?.id || 'anonymous';
-    const endpoint = `${req.method}:${req.path}`;
+  private getKey(request: FastifyRequest, options: RateLimitOptions): string {
+    const ip = request.ip;
+    const userId = (request as unknown as { user?: { id?: string } }).user?.id || 'anonymous';
+    const endpoint = `${request.method}:${request.url}`;
     const prefix = options.keyPrefix || 'rl';
 
     return `${prefix}:${endpoint}:${userId}:${ip}`;

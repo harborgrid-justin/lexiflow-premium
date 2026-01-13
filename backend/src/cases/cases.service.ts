@@ -186,15 +186,16 @@ export class CasesService implements OnModuleDestroy {
     const totalValue = 0;
     const utilizationRate = 0;
 
-    const { avgAge } = await this.caseRepository
+    const result = await this.caseRepository
       .createQueryBuilder("case")
       .select(
         "AVG(EXTRACT(EPOCH FROM (NOW() - case.createdAt)) / 86400)",
         "avgAge"
       )
       .where("case.status = :status", { status: CaseStatus.ACTIVE })
-      .getRawOne();
+      .getRawOne<{ avgAge: string }>();
 
+    const avgAge = result?.avgAge || '0';
     const conversionRate = 0;
 
     const stats: CaseStatsDto = {
@@ -532,7 +533,11 @@ export class CasesService implements OnModuleDestroy {
     // Invalidate caches after update
     this.invalidateCaches();
 
-    return this.toCaseResponse(result.raw[0] as Case);
+    const updatedCase = (result.raw as Case[])[0];
+    if (!updatedCase) {
+      throw new NotFoundException(`Case with ID ${id} not found after update`);
+    }
+    return this.toCaseResponse(updatedCase);
   }
 
   async remove(id: string): Promise<void> {

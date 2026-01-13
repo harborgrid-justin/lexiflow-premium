@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Not, Repository, FindOptionsWhere } from "typeorm";
+import { Not, Repository, FindOptionsWhere, DeepPartial } from "typeorm";
 import { Expense, ExpenseStatus } from "./expenses/entities/expense.entity";
 import { Invoice, InvoiceStatus } from "./invoices/entities/invoice.entity";
 import {
@@ -92,7 +92,7 @@ export class BillingService {
 
   async createInvoice(data: unknown): Promise<Invoice> {
     const invoice = this.invoiceRepository.create(
-      data as any
+      data as DeepPartial<Invoice>
     ) as unknown as Invoice;
     return this.invoiceRepository.save(invoice);
   }
@@ -130,7 +130,7 @@ export class BillingService {
 
   async createTimeEntry(data: unknown): Promise<TimeEntry> {
     const timeEntry = this.timeEntryRepository.create(
-      data as any
+      data as DeepPartial<TimeEntry>
     ) as unknown as TimeEntry;
     const timeData = data as { duration?: number; rate?: number };
     if (timeData.duration && timeData.rate) {
@@ -171,14 +171,14 @@ export class BillingService {
 
   async createExpense(data: unknown): Promise<Expense> {
     const expense = this.expenseRepository.create(
-      data as any
+      data as DeepPartial<Expense>
     ) as unknown as Expense;
     return this.expenseRepository.save(expense);
   }
 
   async getUnbilledExpenses(caseId: string): Promise<Expense[]> {
     return this.expenseRepository.find({
-      where: { caseId, status: Not(ExpenseStatus.BILLED) } as any,
+      where: { caseId, status: Not(ExpenseStatus.BILLED) } as FindOptionsWhere<Expense>,
     });
   }
 

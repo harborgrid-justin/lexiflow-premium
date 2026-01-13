@@ -100,8 +100,9 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     request: Request,
     status: number
   ): EnhancedErrorResponse {
+    const req = request as unknown as Record<string, any>;
     const correlationId =
-      (request as any).correlationId || this.generateCorrelationId();
+      req.correlationId || this.generateCorrelationId();
     const timestamp = new Date().toISOString();
     const path = request.url;
     const method = request.method;
@@ -132,10 +133,10 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     // Add validation errors if present
     if (exception instanceof HttpException) {
       const response = exception.getResponse();
-      if (typeof response === "object" && "message" in response) {
-        const msg = (response as any).message;
+      if (typeof response === "object" && response !== null && "message" in response) {
+        const msg = (response as Record<string, unknown>).message;
         if (Array.isArray(msg)) {
-          errorResponse.validationErrors = msg;
+          errorResponse.validationErrors = msg as string[];
         }
       }
     }
@@ -250,9 +251,9 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       return response;
     }
 
-    if (typeof response === "object" && "message" in response) {
-      const msg = (response as any).message;
-      return Array.isArray(msg) ? msg.join(", ") : msg;
+    if (typeof response === "object" && response !== null && "message" in response) {
+      const msg = (response as Record<string, unknown>).message;
+      return Array.isArray(msg) ? msg.join(", ") : String(msg);
     }
 
     return exception.message;
@@ -283,10 +284,10 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    * Get database error code
    */
   private getDatabaseErrorCode(exception: QueryFailedError): string {
-    const driverError = exception.driverError as any;
+    const driverError = exception.driverError as unknown as Record<string, unknown>;
 
     // PostgreSQL error codes
-    if (driverError?.code) {
+    if (driverError?.code && typeof driverError.code === 'string') {
       switch (driverError.code) {
         case "23505": // unique_violation
           return "DB_DUPLICATE_ENTRY";
@@ -314,7 +315,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    * Get status from database error
    */
   private getStatusFromDatabaseError(exception: QueryFailedError): number {
-    const driverError = exception.driverError as any;
+    const driverError = exception.driverError as unknown as Record<string, unknown>;
 
     if (driverError?.code === "23505") {
       return HttpStatus.CONFLICT;
@@ -323,7 +324,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     if (driverError?.code === "23503" || driverError?.code === "23502") {
       return HttpStatus.BAD_REQUEST;
     }
-
+    
     if (driverError?.code === "57014") {
       return HttpStatus.REQUEST_TIMEOUT;
     }
@@ -354,7 +355,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     userAgent?: string;
     userId?: string;
   } {
-    const user = (request as any).user;
+    const user = (request as unknown as Record<string, any>).user;
 
     return {
       ip: this.getClientIp(request),
@@ -442,7 +443,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   private sanitizeDatabaseError(
     exception: QueryFailedError
   ): Record<string, unknown> {
-    const driverError = exception.driverError as any;
+    const driverError = exception.driverError as unknown as Record<string, unknown>;
 
     // Log detailed database error for debugging (server-side only)
     this.logger.debug("Database error details", {

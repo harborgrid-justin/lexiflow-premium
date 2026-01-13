@@ -11,6 +11,16 @@ import { Request, Response } from "express";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 
+interface ExtendedRequest extends Request {
+  correlationId?: string;
+  user?: { id: string };
+}
+
+interface HttpError extends Error {
+  status?: number;
+  statusCode?: number;
+}
+
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   constructor(
@@ -23,24 +33,28 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<ExtendedRequest>();
     const response = context.switchToHttp().getResponse<Response>();
     const { method, url, body, headers } = request;
-    console.log(`[LoggingInterceptor] ${method} ${url}`, JSON.stringify(body));
+    // Safe logging of body
+    try {
+      console.log(`[LoggingInterceptor] ${method} ${url}`, JSON.stringify(body));
+    } catch {
+      console.log(`[LoggingInterceptor] ${method} ${url}`, '[Circular or Non-serializable Body]');
+    }
 
     if (!this.logger) {
       return next.handle();
     }
     const userAgent = headers["user-agent"] || "";
     const ip = request.ip;
-    const correlationId = (request as unknown as Record<string, unknown>)
-      .correlationId as string;
-    const userId = (request as unknown as { user?: { id: string } }).user?.id;
+    const correlationId = request.correlationId;
+    const userId = request.user?.id;
     const now = Date.now();
 
     // Set context for this request
     this.logger.setContext({
-      correlationId,
+      correlationId: correlationId || '',
       userId,
       method,
       url,
@@ -59,7 +73,7 @@ export class LoggingInterceptor implements NestInterceptor {
     });
 
     // Log request body if present (with PII redaction handled by structured logger)
-    if (Object.keys(body || {}).length > 0) {
+    if (body && typeof body === 'object' && Object.keys(body).length > 0) {
       this.logger.debug("Request body", {
         body,
         method,
@@ -69,7 +83,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap({
-        next: (_data) => {
+        next: (_data: unknown) => {
           const responseTime = Date.now() - now;
 
           if (this.logger) {
@@ -83,7 +97,7 @@ export class LoggingInterceptor implements NestInterceptor {
             });
           }
         },
-        error: (error) => {
+        error: (error: HttpError) => {
           const responseTime = Date.now() - now;
 
           if (this.logger) {

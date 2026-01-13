@@ -366,7 +366,6 @@ export class DistributedTracingService implements OnModuleInit {
   ): void {
     const activeSpan = trace.getActiveSpan();
     if (activeSpan) {
-      // @ts-expect-error - OpenTelemetry types mismatch
       activeSpan.recordException(error);
       if (attributes) {
         activeSpan.setAttributes(attributes as any);

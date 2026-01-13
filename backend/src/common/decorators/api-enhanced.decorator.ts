@@ -365,7 +365,7 @@ export function ApiCrudController(tag: string, description?: string) {
   return applyDecorators(
     ApiTags(tag),
     ApiBearerAuth('JWT-auth'),
-    description ? ApiOperation({ description }) : () => {},
+    description ? ApiOperation({ description }) : () => { /* no-op */ },
   );
 }
 

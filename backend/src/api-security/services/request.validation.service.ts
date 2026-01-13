@@ -89,7 +89,7 @@ export class RequestValidationService {
     const { error, value } = schema.validate(data, {
       abortEarly: false,
       stripUnknown: true,
-    });
+    }) as Joi.ValidationResult;
 
     if (error) {
       const errors = error.details.map((detail) => detail.message);

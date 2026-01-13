@@ -17,14 +17,14 @@ export class TransformInterceptor<T>
     next: CallHandler,
   ): Observable<ApiResponseDto<T>> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: unknown) => {
         // If data is already an ApiResponseDto, return as is
         if (data && typeof data === 'object' && 'success' in data) {
-          return data;
+          return data as ApiResponseDto<T>;
         }
 
         // Otherwise, wrap in ApiResponseDto
-        return ApiResponseDto.success(data);
+        return ApiResponseDto.success(data as T);
       }),
     );
   }

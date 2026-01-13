@@ -13,6 +13,7 @@ export class ValidationPipe implements PipeTransform {
     value: unknown,
     { metatype }: ArgumentMetadata
   ): Promise<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!metatype || !this.toValidate(metatype as any)) {
       return value;
     }

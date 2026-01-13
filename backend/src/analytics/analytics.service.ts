@@ -491,30 +491,36 @@ export class AnalyticsService implements OnModuleDestroy {
   async bulkImportEvents(importDto: {
     events?: unknown[];
   }): Promise<{
-    importedCount: number;
+    successCount: number;
     failedCount: number;
+    totalProcessed: number;
+    jobId: string;
     timestamp: string;
   }> {
     const { events = [] } = importDto;
     return {
-      importedCount: events.length,
+      successCount: events.length,
       failedCount: 0,
+      totalProcessed: events.length,
+      jobId: `import-${Date.now()}`,
       timestamp: new Date().toISOString(),
     };
   }
 
   async bulkRecalculateMetrics(recalculateDto: {
-    metricIds?: string[];
+    metricTypes?: string[];
   }): Promise<{
-    recalculatedCount: number;
-    failedCount: number;
-    timestamp: string;
+    jobId: string;
+    status: 'pending' | 'processing' | 'completed' | 'failed';
+    metricsRecalculated: string[];
+    startedAt: string;
   }> {
-    const { metricIds = [] } = recalculateDto;
+    const { metricTypes = [] } = recalculateDto;
     return {
-      recalculatedCount: metricIds.length,
-      failedCount: 0,
-      timestamp: new Date().toISOString(),
+      jobId: `recalc-${Date.now()}`,
+      status: 'pending',
+      metricsRecalculated: metricTypes,
+      startedAt: new Date().toISOString(),
     };
   }
 
@@ -523,6 +529,7 @@ export class AnalyticsService implements OnModuleDestroy {
   }): Promise<{
     archivedCount: number;
     failedCount: number;
+    archivedIds: string[];
     failedIds: string[];
     timestamp: string;
   }> {
@@ -530,6 +537,7 @@ export class AnalyticsService implements OnModuleDestroy {
     return {
       archivedCount: eventIds.length,
       failedCount: 0,
+      archivedIds: eventIds,
       failedIds: [],
       timestamp: new Date().toISOString(),
     };
@@ -540,6 +548,7 @@ export class AnalyticsService implements OnModuleDestroy {
   }): Promise<{
     deletedCount: number;
     failedCount: number;
+    deletedIds: string[];
     failedIds: string[];
     timestamp: string;
   }> {
@@ -547,6 +556,7 @@ export class AnalyticsService implements OnModuleDestroy {
     return {
       deletedCount: eventIds.length,
       failedCount: 0,
+      deletedIds: eventIds,
       failedIds: [],
       timestamp: new Date().toISOString(),
     };

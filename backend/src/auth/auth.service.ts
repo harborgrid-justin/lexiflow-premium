@@ -580,13 +580,13 @@ export class AuthService {
       this.configService.get<string>("app.jwt.refreshExpiresIn") || "7d";
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(accessPayload as any, {
+      this.jwtService.signAsync(accessPayload, {
         secret: jwtSecret,
-        expiresIn: accessExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
+        expiresIn: accessExpiresIn,
       }),
-      this.jwtService.signAsync(refreshPayload as any, {
+      this.jwtService.signAsync(refreshPayload, {
         secret: refreshSecret,
-        expiresIn: refreshExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
+        expiresIn: refreshExpiresIn,
       }),
     ]);
 

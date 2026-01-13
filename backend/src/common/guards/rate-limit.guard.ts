@@ -3,6 +3,7 @@ import {
   RATE_LIMIT_KEY,
   RateLimitOptions,
 } from "@common/decorators/rate-limit.decorator";
+import { UserRole } from "@common/enums/role.enum";
 import {
   CanActivate,
   ExecutionContext,
@@ -147,7 +148,7 @@ export class RateLimitGuard implements CanActivate {
     if (request.user) {
       const roleResult = await this.rateLimitService.checkRoleBased(
         userId,
-        userRole as any
+        userRole as UserRole
       );
 
       this.setRateLimitHeaders(response, roleResult, "role");
@@ -162,7 +163,7 @@ export class RateLimitGuard implements CanActivate {
       // 4. Check burst protection
       const burstResult = await this.rateLimitService.checkBurst(
         userId,
-        userRole as any
+        userRole as UserRole
       );
 
       if (!burstResult.allowed) {

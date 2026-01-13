@@ -137,6 +137,7 @@ export interface DbContext {
  * Extend Express Request type to include DB context
  */
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       dbContext?: DbContext;

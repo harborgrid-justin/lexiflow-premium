@@ -42,12 +42,12 @@ import {
 export class JudgeStatsService {
   private readonly logger = new Logger(JudgeStatsService.name);
 
-  constructor(
-    // @InjectRepository(Judge) private judgeRepository: Repository<unknown>,
-    // @InjectRepository(Case) private caseRepository: Repository<unknown>,
-    // @InjectRepository(Motion) private motionRepository: Repository<unknown>,
-    // Inject repositories when entities are available
-  ) {}
+  // constructor(
+  //   // @InjectRepository(Judge) private judgeRepository: Repository<unknown>,
+  //   // @InjectRepository(Case) private caseRepository: Repository<unknown>,
+  //   // @InjectRepository(Motion) private motionRepository: Repository<unknown>,
+  //   // Inject repositories when entities are available
+  // ) {}
 
   /**
    * Get list of all judges with basic statistics

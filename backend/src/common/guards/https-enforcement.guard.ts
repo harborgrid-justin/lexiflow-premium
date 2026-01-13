@@ -91,7 +91,7 @@ export class HttpsEnforcementGuard implements CanActivate {
     const cfVisitor = request.headers['cf-visitor'] as string;
     if (cfVisitor) {
       try {
-        const visitor = JSON.parse(cfVisitor);
+        const visitor = JSON.parse(cfVisitor) as { scheme?: string };
         if (visitor.scheme === 'https') {
           return true;
         }

@@ -17,6 +17,7 @@ import { ConfigService } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
 import { createClient, RedisClientType } from "redis";
 import { Observable } from "rxjs";
+import type { Request, Response } from "express";
 
 /**
  * Redis Rate Limiter Interceptor
@@ -116,23 +117,23 @@ export class RedisRateLimiterInterceptor
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest();
-    const response = context.switchToHttp().getResponse();
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const response = context.switchToHttp().getResponse<FastifyReply>();
     const key = this.getKey(request, rateLimitOptions);
 
     return new Observable((observer) => {
       this.checkRateLimit(key, rateLimitOptions)
         .then(({ allowed, remaining, resetTime }) => {
           // Set rate limit headers
-          response.setHeader("X-RateLimit-Limit", rateLimitOptions.points);
-          response.setHeader("X-RateLimit-Remaining", Math.max(0, remaining));
-          response.setHeader("X-RateLimit-Reset", resetTime);
+          void response.header("X-RateLimit-Limit", rateLimitOptions.points);
+          void response.header("X-RateLimit-Remaining", Math.max(0, remaining));
+          void response.header("X-RateLimit-Reset", resetTime);
 
           if (!allowed) {
             const retryAfter = Math.ceil(
               (resetTime - Date.now() / 1000) / 1000
             );
-            response.setHeader("Retry-After", retryAfter);
+            void response.header("Retry-After", retryAfter);
 
             observer.error(
               new HttpException(
@@ -252,17 +253,10 @@ export class RedisRateLimiterInterceptor
   /**
    * Generate rate limit key
    */
-  private getKey(request: unknown, options: RateLimitOptions): string {
-    const req = request as {
-      ip?: string;
-      connection?: { remoteAddress?: string };
-      user?: { id?: string };
-      method?: string;
-      path?: string;
-    };
-    const ip = req.ip || req.connection?.remoteAddress || "unknown";
-    const userId = req.user?.id || "anonymous";
-    const endpoint = `${req.method}:${req.path}`;
+  private getKey(request: FastifyRequest, options: RateLimitOptions): string {
+    const ip = request.ip;
+    const userId = (request as unknown as { user?: { id?: string } }).user?.id || "anonymous";
+    const endpoint = `${request.method}:${request.url}`;
     const prefix = options.keyPrefix || "rl";
 
     return `${prefix}:${endpoint}:${userId}:${ip}`;

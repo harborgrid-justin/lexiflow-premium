@@ -53,7 +53,7 @@ export class ResponseSerializerInterceptor implements NestInterceptor {
     const allExcludedFields = [...this.globalExcludedFields, ...excludeFields];
 
     return next.handle().pipe(
-      map((data) => {
+      map((data: unknown) => {
         if (data === null || data === undefined) {
           return data;
         }
@@ -131,7 +131,7 @@ export class DataMaskingInterceptor implements NestInterceptor {
 
   intercept(_context: ExecutionContext, next: CallHandler): Observable<unknown> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: unknown) => {
         if (data === null || data === undefined) {
           return data;
         }

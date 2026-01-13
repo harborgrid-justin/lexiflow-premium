@@ -7,6 +7,7 @@ import {
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -50,6 +51,8 @@ import { TimeOffRequest } from "./entities/time-off-request.entity";
 
 @Injectable()
 export class HRService {
+  private readonly logger = new Logger(HRService.name);
+
   constructor(
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,

@@ -344,16 +344,16 @@ export class PolicyService {
         return actualValue !== expectedValue;
 
       case ConditionOperator.GREATER_THAN:
-        return (actualValue as any) > (expectedValue as any);
+        return (actualValue as string | number) > (expectedValue as string | number);
 
       case ConditionOperator.LESS_THAN:
-        return (actualValue as any) < (expectedValue as any);
+        return (actualValue as string | number) < (expectedValue as string | number);
 
       case ConditionOperator.GREATER_THAN_OR_EQUALS:
-        return (actualValue as any) >= (expectedValue as any);
+        return (actualValue as string | number) >= (expectedValue as string | number);
 
       case ConditionOperator.LESS_THAN_OR_EQUALS:
-        return (actualValue as any) <= (expectedValue as any);
+        return (actualValue as string | number) <= (expectedValue as string | number);
 
       case ConditionOperator.IN:
         return Array.isArray(expectedValue) && expectedValue.includes(actualValue);
@@ -399,8 +399,8 @@ export class PolicyService {
       case ConditionOperator.BETWEEN:
         if (Array.isArray(expectedValue) && expectedValue.length === 2) {
           return (
-            (actualValue as any) >= (expectedValue[0] as any) &&
-            (actualValue as any) <= (expectedValue[1] as any)
+            (actualValue as string | number) >= (expectedValue[0] as string | number) &&
+            (actualValue as string | number) <= (expectedValue[1] as string | number)
           );
         }
         return false;

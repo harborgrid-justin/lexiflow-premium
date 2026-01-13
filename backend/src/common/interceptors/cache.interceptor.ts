@@ -5,6 +5,7 @@ import {
   CallHandler,
   Logger,
 } from "@nestjs/common";
+import { Request } from "express";
 import { Observable, of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Reflector } from "@nestjs/core";
@@ -33,7 +34,7 @@ export class CacheInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const cacheKey =
       cacheOptions.key ||
       `${request.method}:${request.url}:${JSON.stringify(request.query)}`;

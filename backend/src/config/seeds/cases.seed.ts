@@ -55,13 +55,17 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       };
 
       const caseEntity = caseRepository.create({
-        ...caseData,
+        caseNumber: caseData.caseNumber,
+        title: caseData.title as string,
+        description: caseData.description as string,
         status: (statusMapping[caseData.status] || CaseStatus.OPEN) as CaseStatus,
+        type: caseData.type as string,
+        practiceArea: caseData.practiceArea as string,
         assignedAttorneyId: attorney?.id,
         clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
-      });
+      } as any);
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

@@ -5,6 +5,7 @@ import {
   Logger,
   NestInterceptor,
 } from "@nestjs/common";
+import type { Response } from "express";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -41,7 +42,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const response = context.switchToHttp().getResponse();
+    const response = context.switchToHttp().getResponse<Response>();
 
     // Set XSS protection header
     response.setHeader("X-XSS-Protection", "1; mode=block");
@@ -170,7 +171,7 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const response = context.switchToHttp().getResponse();
+    const response = context.switchToHttp().getResponse<Response>();
     response.setHeader("X-XSS-Protection", "1; mode=block");
 
     return next.handle().pipe(map((data) => this.selectivelySanitize(data)));

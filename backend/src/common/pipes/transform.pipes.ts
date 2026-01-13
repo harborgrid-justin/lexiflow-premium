@@ -318,7 +318,7 @@ export class ParseJsonPipe implements PipeTransform<string, unknown> {
 
     try {
       return JSON.parse(value);
-    } catch (_error) {
+    } catch {
       throw new BadRequestException(
         this.options.errorMessage ||
           `Invalid ${metadata.data || "json"}: Must be a valid JSON string`

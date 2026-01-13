@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Between } from "typeorm";
-import { CalendarEvent } from "./entities/calendar-event.entity";
+import { Repository, Between, FindOptionsWhere } from "typeorm";
+import { CalendarEvent, CalendarEventType } from "./entities/calendar-event.entity";
 import {
   CreateCalendarEventDto,
   UpdateCalendarEventDto,
@@ -67,8 +67,8 @@ export class CalendarService {
     };
     const skip = (page - 1) * limit;
 
-    const where: any = {};
-    if (eventType) where.eventType = eventType;
+    const where: FindOptionsWhere<CalendarEvent> = {};
+    if (eventType) where.eventType = eventType as CalendarEventType;
     if (caseId) where.caseId = caseId;
     if (startDate && endDate) {
       where.startDate = Between(new Date(startDate), new Date(endDate));

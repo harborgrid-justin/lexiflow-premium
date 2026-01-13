@@ -26,13 +26,13 @@ export class ExistsValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     const [entityClass, property = "id"] = args.constraints as [
-      Function | string | { name: string },
+      new (...args: any[]) => any,
       string,
     ];
 
     if (!value) return false;
 
-    const repository = this.dataSource.getRepository(entityClass as any);
+    const repository = this.dataSource.getRepository(entityClass);
     const entity = await repository.findOne({
       where: { [property]: value },
     });
@@ -88,7 +88,7 @@ export class IsUniqueValidator implements ValidatorConstraintInterface {
 
   async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
     const [entityClass, property, exceptId] = args.constraints as [
-      Function | string,
+      new (...args: any[]) => any,
       string,
       string,
     ];
@@ -312,7 +312,7 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
 
     if (!entity) return false;
 
-    const count = (entity as any)[relationProperty]?.length ?? 0;
+    const count = (entity as Record<string, any[]>)[relationProperty]?.length ?? 0;
 
     if (min !== undefined && count < min) return false;
     if (max !== undefined && count > max) return false;
@@ -385,9 +385,9 @@ export class MatchesDbEnumValidator implements ValidatorConstraintInterface {
     `;
 
     try {
-      const result = await this.dataSource.query(query);
+      const result = await this.dataSource.query(query) as [{ enum_values: string[] } | undefined];
       const enumValues = result[0]?.enum_values || [];
-      return enumValues.includes(value);
+      return enumValues.includes(value as string);
     } catch {
       // If enum type doesn't exist, validation passes (let TypeORM handle it)
       return true;

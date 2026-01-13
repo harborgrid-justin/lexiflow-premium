@@ -358,7 +358,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
 
   async validateConnection(): Promise<boolean> {
     try {
-      const result = await this.dataSource.query("SELECT 1");
+      const result = await this.dataSource.query("SELECT 1") as unknown;
       return result !== null && result !== undefined;
     } catch (error) {
       this.logger.error("Connection validation failed", error);

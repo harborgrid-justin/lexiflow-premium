@@ -46,7 +46,7 @@ export class PerformanceInterceptor implements NestInterceptor {
     // Extract request details
     const method = request.method;
     const url = request.url;
-    const path = request.route?.path || url;
+    const path = (request as unknown as { route: { path: string } }).route?.path || url;
 
     interface RequestWithExtras extends Request {
       correlationId?: string;

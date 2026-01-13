@@ -1,3 +1,4 @@
+import React from 'react';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { UserAvatar } from '@/shared/ui/atoms/UserAvatar/UserAvatar';

@@ -1,7 +1,7 @@
 import { Injectable, Logger} from '@nestjs/common';
 import {
   CaseMetricsQueryDto,
-  AnalyticsCaseMetricsDto,
+  DetailedCaseMetricsDto,
   CaseTrendDataPoint,
   CaseSpecificMetricsDto,
   PracticeAreaBreakdownDto,
@@ -47,7 +47,7 @@ export class CaseAnalyticsService {
   /**
    * Get overall case metrics
    */
-  async getCaseMetrics(query: CaseMetricsQueryDto): Promise<AnalyticsCaseMetricsDto> {
+  async getCaseMetrics(query: CaseMetricsQueryDto): Promise<DetailedCaseMetricsDto> {
     // Query filters available but not used in mock implementation
 
     try {
@@ -84,7 +84,7 @@ export class CaseAnalyticsService {
       */
 
       // Mock data
-      const metrics: AnalyticsCaseMetricsDto = {
+      const metrics: DetailedCaseMetricsDto = {
         totalCases: 150,
         activeCases: 85,
         closedCases: 65,

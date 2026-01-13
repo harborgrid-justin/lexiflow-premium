@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useState } from 'react';
 import { Briefcase, Calendar, CheckSquare, Link } from 'lucide-react';
-import { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

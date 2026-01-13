@@ -303,7 +303,7 @@ export class BootstrapService implements OnApplicationBootstrap {
       };
 
       const allHealthy = Object.values(checks).every(
-        (check) => (check as any).healthy
+        (check) => (check as { healthy: boolean }).healthy
       );
 
       this.startupResults.push({

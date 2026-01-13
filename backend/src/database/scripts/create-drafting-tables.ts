@@ -168,7 +168,7 @@ async function main() {
 
     if (result.rows.length === 2) {
       console.log("✅ Verification successful:");
-      result.rows.forEach((row) => {
+      result.rows.forEach((row: any) => {
         console.log(`   ✓ ${row.table_name}`);
       });
     } else {
@@ -191,7 +191,7 @@ async function main() {
       WHERE table_name = 'generated_documents';
     `;
     const stats = await client.query(statsQuery);
-    stats.rows.forEach((row) => {
+    stats.rows.forEach((row: any) => {
       console.log(`   ${row.table_name}: ${row.column_count} columns`);
     });
 

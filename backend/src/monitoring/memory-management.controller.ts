@@ -188,8 +188,8 @@ export class MemoryManagementController {
     const leakLimit = limit ? Number(limit) : 10;
 
     return {
-      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as MemoryLeak[],
-      statistics: this.leakDetector.getStatistics() as MemoryLeakStatistics,
+      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as unknown as MemoryLeak[],
+      statistics: this.leakDetector.getStatistics() as unknown as MemoryLeakStatistics,
       snapshots: this.leakDetector.getSnapshots().length,
     };
   }

@@ -1,6 +1,7 @@
 // Load .env BEFORE any other imports to ensure env vars are available
 import * as dotenv from "dotenv";
 import * as path from "path";
+import * as zlib from "zlib";
 
 // In production, .env is in parent directory of dist/
 // In development with ts-node, .env is in current directory
@@ -15,9 +16,11 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
-import compression from "compression";
-import { Request, Response } from "express";
-import helmet from "helmet";
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from "@nestjs/platform-fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
 
 import { AppModule } from "./app.module";
 import { SystemStartupReporter } from "./bootstrap/system-startup.reporter";
@@ -30,7 +33,7 @@ import { setupSwagger } from "./config/swagger.config";
 import { validationPipeConfig } from "./config/validation";
 
 import * as MasterConfig from "./config/master.config";
-import { initTelemetry, shutdownTelemetry } from "./telemetry";
+// import { initTelemetry, shutdownTelemetry } from "./telemetry";
 
 /* ------------------------------------------------------------------ */
 /* Bootstrap                                                           */
@@ -44,47 +47,71 @@ async function bootstrap(): Promise<INestApplication> {
 
   const logger = new Logger("bootstrap");
 
+  // Lazy-load telemetry only when enabled to avoid loading heavy OTel SDKs
   if (process.env.OTEL_ENABLED === "true") {
+    const { initTelemetry } = await import("./telemetry");
     initTelemetry();
     (global as Record<string, unknown>).__OTEL_INITIALIZED__ = true;
   }
 
-  const app = await NestFactory.create(AppModule, {
-    logger: ["error", "warn", "log"],
-    abortOnError: false,
+  // Fastify adapter with optimized settings
+  const fastifyAdapter = new FastifyAdapter({
+    logger: false,
+    trustProxy: true,
+    bodyLimit: 52428800, // 50MB for file uploads
+    // Connection keep-alive optimization
+    keepAliveTimeout: 72000,
+    maxParamLength: 500,
+    // HTTP/2 support
+    http2: false,
+    // Optimize for high throughput
+    ignoreTrailingSlash: true,
+    caseSensitive: false,
   });
+
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    fastifyAdapter,
+    {
+      logger: ["error", "warn", "log"],
+      abortOnError: false,
+    }
+  );
 
   app.enableShutdownHooks();
 
   const configService = app.get(ConfigService);
 
-  app.use(helmet());
-  app.use(
-    compression({
-      level: 6,
-      threshold: 1024,
-      filter: (req: Request, res: Response): boolean => {
-        if (req.headers["x-no-compression"]) {
-          return false;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const compressionFilter = compression.filter as (
-          req: Request,
-          res: Response
-        ) => boolean;
-        return compressionFilter(req, res);
+  // Register Fastify plugins for optimized performance
+  // Lean helmet configuration - only essential security headers
+  await app.register(import("@fastify/helmet"), {
+    global: true,
+    contentSecurityPolicy: false, // Disable CSP for API-only
+    crossOriginEmbedderPolicy: false,
+  });
+
+  // Brotli compression with aggressive settings
+  await app.register(import("@fastify/compress"), {
+    global: true,
+    encodings: ["br", "gzip", "deflate"],
+    brotliOptions: {
+      params: {
+        [zlib.constants.BROTLI_PARAM_MODE]:
+          zlib.constants.BROTLI_MODE_TEXT,
+        [zlib.constants.BROTLI_PARAM_QUALITY]: 4, // Balance speed/compression
       },
-    })
-  );
+    },
+    threshold: 1024,
+  });
 
   const corsOrigin = configService.get<string | string[] | boolean>(
-    "cors.origin"
+    "app.server.corsOrigin"
   );
   logger.log(`CORS Configuration: ${JSON.stringify(corsOrigin)}`);
 
   app.enableCors({
     origin: corsOrigin,
-    credentials: configService.get<boolean>("cors.credentials"),
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
@@ -95,6 +122,20 @@ async function bootstrap(): Promise<INestApplication> {
     exposedHeaders: ["X-Total-Count", "X-Page-Count", "X-Correlation-ID"],
     maxAge: 86400,
   });
+
+  // Strict request body size limits for JSON (prevent zip bomb attacks)
+  app.getHttpAdapter().getInstance().addContentTypeParser(
+    "application/json",
+    { parseAs: "string", bodyLimit: 51200 }, // 50KB for JSON
+    function (_req: FastifyRequest, body: string, done: (err: Error | null, parsed?: unknown) => void) {
+      try {
+        const json = JSON.parse(body);
+        done(null, json);
+      } catch (err: unknown) {
+        done(err as Error);
+      }
+    }
+  );
 
   app.setGlobalPrefix("api");
 
@@ -154,7 +195,9 @@ function registerShutdownHandlers(app: INestApplication, logger: Logger): void {
     logger.log(`shutdown signal received: ${signal}`);
     try {
       await app.close();
-      if (process.env.OTEL_ENABLED === "true") {
+      // Lazy-load telemetry shutdown only if enabled
+      if (process.env.OTEL_ENABLED === "true" && (global as Record<string, unknown>).__OTEL_INITIALIZED__) {
+        const { shutdownTelemetry } = await import("./telemetry");
         await shutdownTelemetry();
       }
       process.exit(0);
@@ -168,6 +211,13 @@ function registerShutdownHandlers(app: INestApplication, logger: Logger): void {
 }
 
 /* ------------------------------------------------------------------ */
+/* Main                                                                */
+/* ------------------------------------------------------------------ */
+
+// Only load source-map-support in development (saves memory in production)
+if (process.env.NODE_ENV !== "production") {
+  require("source-map-support").install();
+}
 
 bootstrap().catch((error) => {
   console.error("fatal startup error");

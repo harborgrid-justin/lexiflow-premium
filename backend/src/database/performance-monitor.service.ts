@@ -378,7 +378,7 @@ export class DatabasePerformanceMonitor {
         ? `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`
         : `EXPLAIN (FORMAT JSON) ${query}`;
 
-      const result = await this.dataSource.query(explainQuery);
+      const result = await this.dataSource.query(explainQuery) as any[];
       return result[0]["QUERY PLAN"] as Record<string, unknown>[];
     } catch (error) {
       this.logger.error("Failed to explain query", error);
@@ -446,7 +446,7 @@ export class DatabasePerformanceMonitor {
         FROM pg_statio_user_tables
       `;
 
-      const [result] = await this.dataSource.query(query);
+      const [result] = await this.dataSource.query(query) as [{ cache_hit_ratio: string }];
       return parseFloat(result.cache_hit_ratio) || 0;
     } catch (error) {
       this.logger.error("Failed to get cache hit ratio", error);
@@ -511,7 +511,7 @@ export class DatabasePerformanceMonitor {
         ORDER BY bloat_ratio DESC
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      const results = await this.dataSource.query(query, [schemaName]) as BloatResult[];
 
       interface BloatResult {
         table_name: string;

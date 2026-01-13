@@ -104,9 +104,8 @@ export class HRService {
           }
         } catch (error) {
           // Error ignoredd during time entry calculation
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          this.logger.debug("Failed to calculate total hours", error);
+          const err = error as Error;
+          this.logger.debug("Failed to calculate total hours", err.message);
         }
 
         let targetMonthly = employee.targetBillableHours || 160;

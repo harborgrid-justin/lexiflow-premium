@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 // Dynamic import for pdfjs-dist to avoid DOMMatrix issues in SSR
 type PDFJSType = typeof import('pdfjs-dist');

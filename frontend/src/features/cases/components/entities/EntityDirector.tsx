@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

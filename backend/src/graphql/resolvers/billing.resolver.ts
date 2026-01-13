@@ -164,7 +164,7 @@ export class BillingResolver {
     // Filter by caseId if provided
     if (caseId) {
       return agreements.filter(
-        (a: unknown) => (a as any).caseId === caseId
+        (a) => a.caseId === caseId
       ) as unknown as FeeAgreementType[];
     }
     return agreements as unknown as FeeAgreementType[];

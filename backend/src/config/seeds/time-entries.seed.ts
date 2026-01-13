@@ -43,7 +43,7 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
   users.forEach((u) => userMap.set(u.email, u.id));
 
   // Insert time entries
-  for (const timeEntryData of timeEntriesData) {
+  for (const timeEntryData of (timeEntriesData as any[])) {
     try {
       const caseId = caseMap.get(String(timeEntryData.caseNumber));
       const userId = userMap.get(String(timeEntryData.userEmail));

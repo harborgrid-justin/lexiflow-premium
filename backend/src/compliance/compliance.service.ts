@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Between, DeepPartial, Repository } from "typeorm";
 import { AuditLog } from "./entities/audit-log.entity";
 import { ComplianceCheck } from "./entities/compliance-check.entity";
-import { ComplianceRule } from "./entities/compliance-rule.entity";
+import { ComplianceRule, ComplianceCategory } from "./entities/compliance-rule.entity";
 
 /**
  * ╔=================================================================================================================╗
@@ -262,7 +262,7 @@ export class ComplianceService {
 
   async getRulesByCategory(category: string): Promise<ComplianceRule[]> {
     return this.complianceRuleRepository.find({
-      where: { category: category as any },
+      where: { category: category as ComplianceCategory },
       order: { createdAt: "DESC" },
     });
   }
@@ -279,9 +279,7 @@ export class ComplianceService {
     return {
       caseId,
       generatedAt: new Date(),
-      checks: Array.isArray(checksResult)
-        ? checksResult
-        : (checksResult as any).data,
+      checks: checksResult.data,
       summary: score,
     };
   }

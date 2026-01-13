@@ -5,6 +5,7 @@ import { DataSource } from "typeorm";
 import { Case } from "../../cases/entities/case.entity";
 import { Document } from "../../documents/entities/document.entity";
 import { User } from "../../users/entities/user.entity";
+import { DocumentType } from "../../documents/interfaces/document.interface";
 
 export async function seedDocuments(dataSource: DataSource): Promise<void> {
   console.log("Seeding documents...");
@@ -57,7 +58,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
 
       const document = documentRepository.create({
         ...documentData,
-        type: documentType as any,
+        type: documentType as unknown as DocumentType,
         caseId,
         creatorId: uploadedBy?.id,
         createdAt: new Date(),

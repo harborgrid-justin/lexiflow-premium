@@ -19,8 +19,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useCallback } from 'react';
 import { CheckSquare, Upload, Wand2 } from 'lucide-react';
-import { useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

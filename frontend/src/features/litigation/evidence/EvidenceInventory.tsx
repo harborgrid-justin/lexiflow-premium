@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useCallback, useState } from 'react';
 import { CheckSquare, Filter, Loader2, Plus } from 'lucide-react';
-import { useCallback, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

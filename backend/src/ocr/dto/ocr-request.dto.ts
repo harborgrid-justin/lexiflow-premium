@@ -13,6 +13,11 @@ export class OcrRequestDto {
   @IsOptional()
   languages?: string[];
 
+  @ApiPropertyOptional({ description: 'Page segmentation mode (0-13)', default: 3 })
+  @IsOptional()
+  @IsNumber()
+  pageSegmentationMode?: number;
+
   @ApiPropertyOptional({ description: 'Enable preprocessing' })
   @IsOptional()
   enablePreprocessing?: boolean;

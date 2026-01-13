@@ -1,3 +1,4 @@
+import React from 'react';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { FileIcon } from '@/shared/ui/atoms/FileIcon/FileIcon';
 import { TagList } from '@/shared/ui/molecules/TagList/TagList';

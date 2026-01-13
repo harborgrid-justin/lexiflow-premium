@@ -16,6 +16,7 @@ import { Like, Repository } from "typeorm";
 import { CreateDocumentDto } from "./dto/create-document.dto";
 import { DocumentFilterDto } from "./dto/document-filter.dto";
 import { Document } from "./entities/document.entity";
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -270,7 +271,7 @@ export class DocumentsService implements OnModuleDestroy {
     const result = await this.documentRepository
       .createQueryBuilder()
       .update(Document)
-      .set(updateData as any)
+      .set(updateData as unknown as QueryDeepPartialEntity<Document>)
       .where("id = :id", { id })
       .returning("*")
       .execute();

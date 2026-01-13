@@ -439,12 +439,15 @@ export const useNotifications = (
 
   /**
    * Initial fetch
+   * Only fetch if autoFetch is enabled AND we have an auth token
    */
   useEffect(() => {
-    if (autoFetch) {
+    if (autoFetch && token) {
       fetchNotifications();
+    } else if (autoFetch && !token) {
+      log('Skipping notifications fetch - no auth token provided');
     }
-  }, [autoFetch, fetchNotifications]);
+  }, [autoFetch, token, fetchNotifications, log]);
 
   /**
    * Polling

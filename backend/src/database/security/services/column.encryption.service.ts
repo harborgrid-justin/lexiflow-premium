@@ -74,7 +74,7 @@ export class ColumnEncryptionService {
     );
     if (previousKeys) {
       try {
-        const keys = JSON.parse(previousKeys);
+        const keys = JSON.parse(previousKeys) as string[];
         keys.forEach((key: string, index: number) => {
           const version = this.currentKeyVersion - (index + 1);
           if (version > 0) {
@@ -142,7 +142,7 @@ export class ColumnEncryptionService {
     try {
       const encryptedValue: EncryptedValue = JSON.parse(
         Buffer.from(encryptedData, "base64").toString("utf8")
-      );
+      ) as EncryptedValue;
 
       const key = this.encryptionKeys.get(encryptedValue.keyVersion);
 

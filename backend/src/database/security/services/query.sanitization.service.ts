@@ -335,7 +335,9 @@ export class QuerySanitizationService {
       .replace(/"/g, '\\"')
       .replace(/\n/g, "\\n")
       .replace(/\r/g, "\\r")
+      // eslint-disable-next-line no-control-regex
       .replace(new RegExp("\\x00", "g"), "\\0")
+      // eslint-disable-next-line no-control-regex
       .replace(new RegExp("\\x1a", "g"), "\\Z");
   }
 }

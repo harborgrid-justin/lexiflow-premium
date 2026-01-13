@@ -15,6 +15,9 @@ import {
   GenerateEthicalWallsReportDto,
   ReportType,
 } from "./dto/compliance-report.dto";
+import { AuditEntityType, AuditAction } from "@compliance/audit-logs/dto/audit-log.dto";
+import { ConflictCheckStatus, ConflictCheckType } from "@compliance/conflict-checks/dto/conflict-check.dto";
+import { EthicalWallStatus } from "@compliance/ethical-walls/dto/ethical-wall.dto";
 
 /**
  * ╔=================================================================================================================╗
@@ -130,8 +133,8 @@ export class ComplianceReportingService {
 
     const { data: auditLogs } = await this.auditLogsService.findAll({
       userId: dto.userId,
-      entityType: dto.entityType as any,
-      action: dto.action as any,
+      entityType: dto.entityType as unknown as AuditEntityType,
+      action: dto.action as unknown as AuditAction,
       startDate,
       endDate,
     });
@@ -215,8 +218,8 @@ export class ComplianceReportingService {
     const endDate = dto.endDate || new Date();
 
     const { data: conflicts } = await this.conflictChecksService.findAll({
-      status: dto.status as any,
-      checkType: dto.checkType as any,
+      status: dto.status as unknown as ConflictCheckStatus,
+      checkType: dto.checkType as unknown as ConflictCheckType,
       startDate,
       endDate,
     });
@@ -285,7 +288,7 @@ export class ComplianceReportingService {
     const endDate = dto.endDate || new Date();
 
     const { data: walls } = await this.ethicalWallsService.findAll({
-      status: dto.status as any,
+      status: dto.status as unknown as EthicalWallStatus,
       userId: dto.userId,
     });
 

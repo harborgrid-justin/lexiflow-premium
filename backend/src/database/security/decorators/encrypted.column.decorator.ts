@@ -70,13 +70,19 @@ export interface SensitiveFieldOptions {
   auditAccess?: boolean;
 }
 
+interface SensitiveFieldMetadata {
+  propertyKey: string | symbol;
+  maskInLogs: boolean;
+  auditAccess: boolean;
+}
+
 export function SensitiveField(
   options?: SensitiveFieldOptions
 ): PropertyDecorator {
   return (target: unknown, propertyKey: string | symbol) => {
     const metadataKey = "sensitiveFields";
     const constructor = (target as { constructor: object }).constructor;
-    const existingFields = Reflect.getMetadata(metadataKey, constructor) || [];
+    const existingFields = (Reflect.getMetadata(metadataKey, constructor) as SensitiveFieldMetadata[]) || [];
 
     existingFields.push({
       propertyKey,
@@ -91,8 +97,8 @@ export function SensitiveField(
 export function getSensitiveFields(target: unknown): string[] {
   const metadataKey = "sensitiveFields";
   const constructor = (target as { constructor: object }).constructor;
-  const fields = Reflect.getMetadata(metadataKey, constructor) || [];
-  return fields.map((f: unknown) => (f as { propertyKey: string }).propertyKey);
+  const fields = (Reflect.getMetadata(metadataKey, constructor) as SensitiveFieldMetadata[]) || [];
+  return fields.map((f) => String(f.propertyKey));
 }
 
 export function EncryptedSSN(

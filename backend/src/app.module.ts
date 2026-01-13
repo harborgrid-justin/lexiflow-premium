@@ -231,6 +231,6 @@ export class AppModule implements NestModule, OnModuleInit {
   configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(SanitizationMiddleware, StreamProcessingMiddleware)
-      .forRoutes("*");
+      .forRoutes("*path");
   }
 }

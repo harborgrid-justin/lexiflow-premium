@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useId } from 'react';
+import React, { useId } from 'react';
 import { Bold, Italic, Underline, List, AlignLeft, AlignCenter, AlignRight, Highlighter, Save } from 'lucide-react';
 
 // ============================================================================

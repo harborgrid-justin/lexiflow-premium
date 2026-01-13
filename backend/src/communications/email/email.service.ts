@@ -1,5 +1,15 @@
 import { Injectable, Logger } from "@nestjs/common";
 
+interface EmailAttachment {
+  filename?: string;
+  content?: Buffer | string;
+  path?: string;
+  contentType?: string;
+  cid?: string;
+  encoding?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Email Service
  *
@@ -66,13 +76,13 @@ export class EmailService {
     from?: string;
     cc?: string[];
     bcc?: string[];
-    attachments?: unknown[];
+    attachments?: EmailAttachment[];
   }): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
       // Memory optimization: Check attachment size before processing
       if (options.attachments && options.attachments.length > 0) {
-        const totalSize = (options.attachments as any[]).reduce(
-          (acc: number, att: { content?: Buffer | string }) => {
+        const totalSize = (options.attachments).reduce(
+          (acc: number, att: EmailAttachment) => {
             // Handle Buffer, string, or stream
             if (att.content) {
               return acc + (att.content.length || 0);

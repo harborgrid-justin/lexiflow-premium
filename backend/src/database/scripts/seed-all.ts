@@ -590,7 +590,7 @@ async function main(): Promise<void> {
       dataSource.query('SELECT COUNT(*) FROM "docket_entry"'),
       dataSource.query('SELECT COUNT(*) FROM "evidence_item"'),
       dataSource.query('SELECT COUNT(*) FROM "case_phase"'),
-    ]);
+    ]) as { count: string }[][];
 
     console.log(`
   ${Colors.bright}Entity Counts:${Colors.reset}

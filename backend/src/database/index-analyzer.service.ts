@@ -275,7 +275,7 @@ export class IndexAnalyzerService {
         HAVING count(*) > 1
       `;
 
-      const results = await this.dataSource.query(query, [schemaName]);
+      const results = await this.dataSource.query(query, [schemaName]) as any[];
 
       return results.map((row: Record<string, unknown>) => ({
         tableName: String(row.tablename),

@@ -39,7 +39,7 @@ import { DiscoveryModule } from "@discovery/discovery.module";
       sortSchema: true,
       playground: false,
       plugins: [
-        ApolloServerPluginLandingPageLocalDefault() as unknown as ApolloServerPlugin<any>,
+        ApolloServerPluginLandingPageLocalDefault() as unknown as ApolloServerPlugin<unknown>,
       ],
 
       // Enable introspection and playground in development

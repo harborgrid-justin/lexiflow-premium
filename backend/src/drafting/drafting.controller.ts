@@ -18,6 +18,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { DraftingService } from "./drafting.service";
 import { CreateTemplateDto } from "./dto/create-template.dto";
 import { GenerateDocumentDto } from "./dto/generate-document.dto";
+import { GeneratedDocumentStatus } from "./entities/generated-document.entity";
 import { UpdateGeneratedDocumentDto } from "./dto/update-generated-document.dto";
 import { UpdateTemplateDto } from "./dto/update-template.dto";
 
@@ -211,7 +212,7 @@ export class DraftingController {
     const userId = req.user?.id || "00000000-0000-0000-0000-000000000001";
     return this.draftingService.getAllGeneratedDocuments(
       userId,
-      status as any,
+      status as GeneratedDocumentStatus,
       caseId
     );
   }

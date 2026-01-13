@@ -84,7 +84,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
       timeout(this.timeoutMs),
 
       // Cache successful responses
-      map((data) => {
+      map((data: unknown) => {
         this.cacheResponse(metadata.url, data);
         return data;
       }),

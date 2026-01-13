@@ -153,11 +153,11 @@ export function PublicEndpoint(options?: {
   > = [SetMetadata(PUBLIC_KEY, true)];
 
   if (audit) {
-    decorators.push(UseInterceptors(AuditLogInterceptor) as any);
+    decorators.push(UseInterceptors(AuditLogInterceptor));
   }
 
   if (performanceTrack) {
-    decorators.push(UseInterceptors(PerformanceInterceptor) as any);
+    decorators.push(UseInterceptors(PerformanceInterceptor));
   }
 
   return applyDecorators(...decorators);

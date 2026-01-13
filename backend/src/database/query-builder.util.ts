@@ -178,8 +178,8 @@ export class AdvancedQueryBuilder<T extends ObjectLiteral> {
           this.queryBuilder.andWhere(
             `${fieldPath} BETWEEN :${paramName}_start AND :${paramName}_end`,
             {
-              [`${paramName}_start`]: value[0],
-              [`${paramName}_end`]: value[1],
+              [`${paramName}_start`]: (value as unknown[])[0],
+              [`${paramName}_end`]: (value as unknown[])[1],
             },
           );
         }

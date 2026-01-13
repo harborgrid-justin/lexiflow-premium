@@ -2,9 +2,9 @@ import * as PathsConfig from "@config/paths.config";
 import * as fs from "fs";
 import * as path from "path";
 import { DataSource } from "typeorm";
-import { Case } from "../../cases/entities/case.entity";
+import { Case, CaseStatus } from "../../cases/entities/case.entity";
 import { Client } from "../../clients/entities/client.entity";
-import { User } from "../../users/entities/user.entity";
+import { User, UserRole } from "../../users/entities/user.entity";
 
 export async function seedCases(dataSource: DataSource): Promise<void> {
   console.log("Seeding cases...");
@@ -32,7 +32,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
 
   // Get all users and clients for random assignment
   const users = await userRepository.find({
-    where: { role: "senior_associate" as any },
+    where: { role: UserRole.SENIOR_ASSOCIATE },
   });
   const clients = await clientRepository.find();
 
@@ -56,12 +56,12 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
 
       const caseEntity = caseRepository.create({
         ...caseData,
-        status: (statusMapping[caseData.status] || "Open") as any,
+        status: (statusMapping[caseData.status] || CaseStatus.OPEN) as CaseStatus,
         assignedAttorneyId: attorney?.id,
         clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
-      } as any);
+      });
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

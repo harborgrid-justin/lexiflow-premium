@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import React, { useCallback, useMemo } from 'react';
 import { MapPin, Truck, User } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

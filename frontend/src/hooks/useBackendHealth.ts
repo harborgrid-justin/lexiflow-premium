@@ -154,11 +154,10 @@ export function useBackendHealth(): UseBackendHealthReturn {
   const [status, setStatus] = useState<BackendStatus>(() => {
     try {
       const initialStatus = backendDiscovery.getStatus();
-      console.log('[useBackendHealth] Initialized with status:', {
-        available: initialStatus.available,
-        healthy: initialStatus.healthy,
-        lastChecked: initialStatus.lastChecked
-      });
+      // Only log in development or on significant state changes
+      if (process.env.NODE_ENV === 'development' && !initialStatus.available) {
+        console.warn('[useBackendHealth] Backend unavailable on initialization');
+      }
       return initialStatus;
     } catch (error) {
       console.error('[useBackendHealth] Error initializing status:', error);
@@ -192,9 +191,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
    */
   useEffect(() => {
     try {
-      console.log('[useBackendHealth] Setting up status subscription');
-
-      // Subscribe to status changes
+      // Subscribe to status changes - only once on mount
       const unsubscribe = backendDiscovery.subscribe((newStatus: BackendStatus) => {
         try {
           // Validate status object structure
@@ -203,16 +200,22 @@ export function useBackendHealth(): UseBackendHealthReturn {
             return;
           }
 
-          // Log significant status changes
-          if (status.available !== newStatus.available) {
-            console.log(`[useBackendHealth] Availability changed: ${status.available} → ${newStatus.available}`);
+          // Only log in development on significant changes
+          if (process.env.NODE_ENV === 'development') {
+            setStatus((prevStatus) => {
+              // Log significant status changes
+              if (prevStatus.available !== newStatus.available) {
+                console.log(`[useBackendHealth] Availability: ${prevStatus.available} → ${newStatus.available}`);
+              }
+              if (prevStatus.healthy !== newStatus.healthy) {
+                console.log(`[useBackendHealth] Health: ${prevStatus.healthy} → ${newStatus.healthy}`);
+              }
+              return newStatus;
+            });
+          } else {
+            // Update local state without logging
+            setStatus(newStatus);
           }
-          if (status.healthy !== newStatus.healthy) {
-            console.log(`[useBackendHealth] Health changed: ${status.healthy} → ${newStatus.healthy}`);
-          }
-
-          // Update local state
-          setStatus(newStatus);
         } catch (error) {
           console.error('[useBackendHealth] Error processing status update:', error);
         }
@@ -221,7 +224,6 @@ export function useBackendHealth(): UseBackendHealthReturn {
       // Cleanup subscription on unmount
       return () => {
         try {
-          console.log('[useBackendHealth] Cleaning up status subscription');
           unsubscribe();
         } catch (error) {
           console.error('[useBackendHealth] Error during cleanup:', error);
@@ -232,7 +234,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
       // Return empty cleanup function on subscription failure
       return () => {};
     }
-  }, [status.available, status.healthy]); // Empty dependency array - subscribe once on mount
+  }, []); // Empty dependency array - subscribe once on mount (React 18 StrictMode safe)
 
   // ============================================================================
   // MANUAL REFRESH
@@ -260,7 +262,6 @@ export function useBackendHealth(): UseBackendHealthReturn {
    */
   const refresh = useCallback(async (): Promise<BackendStatus> => {
     try {
-      console.log('[useBackendHealth] Manual refresh triggered');
       setIsLoading(true);
 
       // Trigger health check via service
@@ -271,11 +272,14 @@ export function useBackendHealth(): UseBackendHealthReturn {
         throw new Error('Invalid status response from refresh');
       }
 
-      console.log('[useBackendHealth] Manual refresh completed:', {
-        available: updatedStatus.available,
-        healthy: updatedStatus.healthy,
-        latency: updatedStatus.latency
-      });
+      // Only log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[useBackendHealth] Refresh completed:', {
+          available: updatedStatus.available,
+          healthy: updatedStatus.healthy,
+          latency: updatedStatus.latency
+        });
+      }
 
       return updatedStatus;
     } catch (error) {

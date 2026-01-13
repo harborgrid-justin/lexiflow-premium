@@ -140,6 +140,9 @@ export class DepositionsService {
       throw new NotFoundException(`Deposition with ID ${id} not found`);
     }
     const rawResult = result.raw as Deposition[];
+    if (!rawResult[0]) {
+      throw new NotFoundException(`Deposition with ID ${id} not found`);
+    }
     return rawResult[0];
   }
 

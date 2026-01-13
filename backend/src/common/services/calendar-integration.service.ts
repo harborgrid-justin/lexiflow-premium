@@ -344,7 +344,8 @@ export class CalendarIntegrationService {
       }
 
       const response = await client.api(query).get();
-      interface OutlookEvent {
+      interface OutlookEventResponse {
+        id?: string;
         subject?: string;
         body?: { content?: string };
         location?: { displayName?: string };
@@ -353,10 +354,22 @@ export class CalendarIntegrationService {
         attendees?: Array<{ emailAddress?: { address?: string }; type?: string }>;
       }
 
-      const events = (response.value || []) as OutlookEvent[];
-      return events.map((event) =>
-        this.mapOutlookEvent(event)
-      );
+      const events = (response.value || []) as OutlookEventResponse[];
+      return events
+        .filter((event): event is OutlookEventResponse & { id: string; start: { dateTime: string }; end: { dateTime: string } } => 
+          Boolean(event.id && event.start?.dateTime && event.end?.dateTime)
+        )
+        .map((event) =>
+          this.mapOutlookEvent({
+            id: event.id,
+            subject: event.subject,
+            body: event.body,
+            location: event.location,
+            start: { dateTime: event.start.dateTime },
+            end: { dateTime: event.end.dateTime },
+            attendees: event.attendees,
+          })
+        );
     } catch (error) {
       this.logger.error("Failed to list Outlook events", error);
       throw new Error("Failed to fetch Outlook events");

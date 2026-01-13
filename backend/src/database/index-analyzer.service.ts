@@ -286,7 +286,7 @@ export class IndexAnalyzerService {
         indexes: (row.index_names as string[]).map(
           (name: string, idx: number) => ({
             indexName: name,
-            definition: ((row.index_defs as string[])[idx]) || '',
+            definition: ((row as any).index_defs as string[])[idx] || '',
           })
         ),
         reason: "Identical index definitions found",

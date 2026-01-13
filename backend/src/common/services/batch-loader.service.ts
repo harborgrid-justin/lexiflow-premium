@@ -89,7 +89,7 @@ export class BatchLoaderService {
       const batch = uniqueIds.slice(i, i + batchSize);
 
       const findOptions = {
-        where: { id: In(batch) } as Record<string, unknown>,
+        where: { id: In(batch) } as any,
         ...(options.relations && { relations: options.relations }),
         ...(options.cache && { cache: 60000 })
       };

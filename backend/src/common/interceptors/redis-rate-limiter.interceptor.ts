@@ -133,7 +133,7 @@ export class RedisRateLimiterInterceptor
             const retryAfter = Math.ceil(
               (resetTime - Date.now() / 1000) / 1000
             );
-            void response.header("Retry-After", retryAfter);
+            void response.header("Retry-After", String(retryAfter));
 
             observer.error(
               new HttpException(

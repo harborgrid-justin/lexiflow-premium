@@ -1,14 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";
 
-interface AuthResponse {
-  body: {
-    data: {
-      accessToken: string;
-    };
-  };
-}
-
 export class E2ETestHelper {
   /**
    * Authenticate and get JWT token

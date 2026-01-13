@@ -49,7 +49,9 @@ export class LoggingInterceptor implements NestInterceptor {
     if (!this.logger) {
       return next.handle();
     }
-    const userAgent = headers["user-agent"] || "";
+    const userAgent = (Array.isArray(headers["user-agent"]) 
+      ? headers["user-agent"][0] 
+      : headers["user-agent"]) || "";
     const ip = request.ip;
     const correlationId = request.correlationId;
     const userId = request.user?.id;
@@ -62,7 +64,7 @@ export class LoggingInterceptor implements NestInterceptor {
       method,
       url,
       ip,
-      userAgent,
+      userAgent: String(userAgent),
     });
 
     // Log incoming request
@@ -70,7 +72,7 @@ export class LoggingInterceptor implements NestInterceptor {
       method,
       url,
       ip,
-      userAgent,
+      userAgent: String(userAgent),
       correlationId,
       userId,
     });
@@ -78,7 +80,7 @@ export class LoggingInterceptor implements NestInterceptor {
     // Log request body if present (with PII redaction handled by structured logger)
     if (body && typeof body === 'object' && Object.keys(body).length > 0) {
       this.logger.debug("Request body", {
-        body,
+        body: JSON.stringify(body),
         method,
         url,
       });

@@ -324,9 +324,7 @@ export class RelationCountValidator implements ValidatorConstraintInterface {
     const relationProperty = args.constraints[1] as string;
     const min = args.constraints[2] as number | undefined;
     const max = args.constraints[3] as number | undefined;
-      number,
-      number,
-    ];
+
     if (min !== undefined && max !== undefined) {
       return `${relationProperty} count must be between ${min} and ${max}`;
     }

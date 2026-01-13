@@ -69,8 +69,8 @@ export class CaseTeamsService {
     const { permissions, metadata, ...restDto } = updateCaseTeamDto;
     await this.caseTeamRepository.update(id, {
       ...restDto,
-      ...(permissions ? { permissions } : {}),
-      ...(metadata ? { metadata } : {})
+      ...(permissions ? { permissions: JSON.stringify(permissions) as unknown as () => string } : {}),
+      ...(metadata ? { metadata: JSON.stringify(metadata) as unknown as () => string } : {})
     });
     return this.findOne(id);
   }

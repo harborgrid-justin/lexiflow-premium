@@ -90,7 +90,8 @@ export class RequestValidationService {
       abortEarly: false,
       stripUnknown: true,
     });
-    const { error, value } = result;
+    const error = result.error as Joi.ValidationError | undefined;
+    const value = result.value as unknown;
 
     if (error) {
       const errors = error.details.map((detail) => detail.message);

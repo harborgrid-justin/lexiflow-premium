@@ -194,7 +194,7 @@ export class MemoryManagementController {
 
     return {
       recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as MemoryLeak[],
-      statistics: this.leakDetector.getStatistics() as MemoryLeakStatistics,
+      statistics: this.leakDetector.getStatistics() as unknown as MemoryLeakStatistics,
       snapshots: this.leakDetector.getSnapshots().length,
     };
   }

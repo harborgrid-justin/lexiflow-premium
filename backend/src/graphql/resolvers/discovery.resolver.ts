@@ -163,7 +163,7 @@ export class DiscoveryResolver {
     @Args("input") input: CreatePrivilegeLogEntryInput,
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<PrivilegeLogEntryType> {
-    const entry = await this.privilegeLogService.create(input as unknown as Record<string, unknown>);
+    const entry = await this.privilegeLogService.create(input as any);
     return entry as unknown as PrivilegeLogEntryType;
   }
 }

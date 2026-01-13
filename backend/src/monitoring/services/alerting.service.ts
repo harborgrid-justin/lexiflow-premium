@@ -646,7 +646,7 @@ export class AlertingService {
     // For now, just log that we would send an email
     this.logger.log("Email alert would be sent", {
       alertId: alert.id,
-      recipients: Array.isArray(config.recipients) ? config.recipients : [config.recipients],
+      recipients: (Array.isArray(config.recipients) ? config.recipients : [config.recipients]).join(', '),
     });
   }
 

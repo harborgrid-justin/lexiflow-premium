@@ -1,1 +1,0 @@
-const r=(o,s)=>{const e=s.toLowerCase();return o.filter(t=>t.name.toLowerCase().includes(e)||t.region.toLowerCase().includes(e))},n=(o,s)=>{const e=s.toLowerCase();return o.filter(t=>t.code.toLowerCase().includes(e)||t.name.toLowerCase().includes(e)||t.type.toLowerCase().includes(e))};export{n as a,r as f};

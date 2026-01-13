@@ -100,7 +100,7 @@ export class CaseResolverOptimized {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(
-      input as unknown as Record<string, unknown>
+      input as any
     );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown as CaseType;

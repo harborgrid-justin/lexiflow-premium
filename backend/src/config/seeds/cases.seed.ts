@@ -55,14 +55,13 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       };
 
       const caseEntity = caseRepository.create({
-        caseNumber: caseData.caseNumber,
         title: caseData.title as string,
         description: caseData.description as string,
         status: (statusMapping[caseData.status] || CaseStatus.OPEN) as CaseStatus,
-        type: caseData.type as string,
+        type: caseData.type as any,
         practiceArea: caseData.practiceArea as string,
-        assignedAttorneyId: attorney?.id,
-        clientId: client?.id,
+        assignedAttorney: attorney,
+        client: client,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
       });

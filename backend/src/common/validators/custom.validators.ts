@@ -89,7 +89,7 @@ export class IsAfterDateConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [relatedPropertyName] = args.constraints;
+    const relatedPropertyName = args.constraints[0] as string;
     return `${args.property} must be after ${relatedPropertyName}`;
   }
 }
@@ -118,7 +118,7 @@ export function IsAfterDate(
 @ValidatorConstraint({ name: "isBeforeDate", async: false })
 export class IsBeforeDateConstraint implements ValidatorConstraintInterface {
   validate(value: Date, args: ValidationArguments): boolean {
-    const [relatedPropertyName] = args.constraints;
+    const relatedPropertyName = args.constraints[0] as string;
     const relatedValue = (args.object as Record<string, unknown>)[
       relatedPropertyName
     ];

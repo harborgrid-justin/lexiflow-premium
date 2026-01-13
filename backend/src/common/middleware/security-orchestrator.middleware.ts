@@ -107,10 +107,10 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
     if (this.isSuspiciousRequest(req)) {
       this.logger.warn('Suspicious request detected', {
         requestId,
-        ip: context.ip,
+        ip: context?.ip || '',
         method: req.method,
         path: req.path,
-        userAgent: context.userAgent,
+        userAgent: context?.userAgent || '',
       });
     }
 
@@ -118,7 +118,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
     if (this.isAuthenticationRequest(req)) {
       this.logger.log('Authentication request', {
         requestId,
-        ip: context.ip,
+        ip: context?.ip || '',
         path: req.path,
       });
     }
@@ -126,8 +126,8 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
     // Debug logging in development
     if (process.env.NODE_ENV === 'development') {
       this.logger.debug(`[${requestId}] ${req.method} ${req.path}`, {
-        ip: context.ip,
-        userAgent: context.userAgent,
+        ip: context?.ip || '',
+        userAgent: context?.userAgent || '',
       });
     }
   }
@@ -161,9 +161,9 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
       if (this.isAuthenticationRequest(req) && res.statusCode === 401) {
         this.logger.warn('Failed authentication attempt', {
           requestId,
-          ip: context.ip,
+          ip: context?.ip || '',
           path: req.path,
-          userAgent: context.userAgent,
+          userAgent: context?.userAgent || '',
         });
       }
 
@@ -171,7 +171,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
       if (res.statusCode === 403) {
         this.logger.warn('Access denied', {
           requestId,
-          ip: context.ip,
+          ip: context?.ip || '',
           path: req.path,
           userId: req.user?.id,
         });
@@ -184,7 +184,7 @@ export class SecurityOrchestratorMiddleware implements NestMiddleware {
           statusCode: res.statusCode,
           method: req.method,
           path: req.path,
-          ip: context.ip,
+          ip: context?.ip || '',
         });
       }
     });

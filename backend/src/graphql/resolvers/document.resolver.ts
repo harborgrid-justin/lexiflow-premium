@@ -24,7 +24,7 @@ export class DocumentResolver {
     @Args("pagination", { nullable: true }) pagination?: PaginationInput
   ): Promise<DocumentConnection> {
     const result = await this.documentService.findAll({
-      ...filter,
+      ...(filter as any),
       page: pagination?.page,
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,

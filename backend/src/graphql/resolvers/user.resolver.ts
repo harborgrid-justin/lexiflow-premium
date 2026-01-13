@@ -92,7 +92,7 @@ export class UserResolver {
       password: input.password,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: inputWithRole.role,
+      role: inputWithRole.role as any,
     };
     const result = await this.authService.register(registerDto);
     return {
@@ -121,7 +121,7 @@ export class UserResolver {
       email: inputWithFields.email,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: inputWithFields.role,
+      role: inputWithFields.role as any,
       isActive: inputWithFields.isActive,
       mfaEnabled: inputWithFields.mfaEnabled,
     };

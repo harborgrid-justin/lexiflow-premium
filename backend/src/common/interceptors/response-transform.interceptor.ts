@@ -34,8 +34,8 @@ export class ResponseTransformInterceptor<T>
             timestamp: new Date().toISOString(),
             correlationId: request.correlationId || 'N/A',
             responseTime: `${responseTime}ms`,
-            path: request.url,
-            method: request.method,
+            path: request.url || '',
+            method: request.method || '',
           },
         };
       }),

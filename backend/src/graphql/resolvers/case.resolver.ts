@@ -48,7 +48,7 @@ export class CaseResolver {
     @Args("pagination", { nullable: true }) pagination?: PaginationInput
   ): Promise<CaseConnection> {
     const result = await this.caseService.findAll({
-      ...filter,
+      ...(filter as any),
       page: pagination?.page,
       limit: pagination?.limit,
       sortBy: pagination?.sortBy,
@@ -90,7 +90,7 @@ export class CaseResolver {
     @CurrentUser() _user: AuthenticatedUser
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(
-      input as unknown as Record<string, unknown>
+      input as any
     );
     pubSub.publish("caseCreated", { caseCreated: caseEntity });
     return caseEntity as unknown as CaseType;

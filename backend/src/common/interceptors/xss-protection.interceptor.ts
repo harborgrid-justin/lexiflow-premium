@@ -170,7 +170,7 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
   ];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const response = context.switchToHttp().getResponse<Response>();
+    const response = context.switchToHttp().getResponse();
     response.setHeader("X-XSS-Protection", "1; mode=block");
 
     return next.handle().pipe(map((data) => this.selectivelySanitize(data)));

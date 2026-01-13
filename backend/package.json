@@ -1,7 +1,12 @@
 {
   "name": "lexiflow-backend",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "LexiFlow Enterprise Backend - Document Management System",
+  "private": true,
+  "engines": {
+    "node": ">=20.11.0",
+    "npm": ">=10.2.0"
+  },
   "main": "dist/main.js",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -24,13 +29,12 @@
     "validate": "npm run typecheck && npm run lint:check && npm run test",
     "validate:full": "npm run typecheck && npm run lint:check && npm run test:cov && npm run test:e2e"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@apollo/server": "^5.2.0",
     "@as-integrations/express5": "^1.1.2",
-    "@faker-js/faker": "^10.2.0",
+    "@fastify/compress": "^8.3.1",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/multipart": "^9.3.0",
     "@google/generative-ai": "^0.24.1",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@nestjs/apollo": "^13.2.3",
@@ -44,10 +48,8 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.1.11",
     "@nestjs/platform-fastify": "^11.1.11",
-    "@fastify/compress": "^8.3.1",
-    "@fastify/helmet": "^13.0.2",
-    "@fastify/multipart": "^9.3.0",
     "@nestjs/platform-socket.io": "^11.1.11",
     "@nestjs/schedule": "^6.1.0",
     "@nestjs/swagger": "^11.2.4",
@@ -63,9 +65,9 @@
     "@opentelemetry/sdk-metrics": "^2.3.0",
     "@opentelemetry/sdk-node": "^0.209.0",
     "@opentelemetry/semantic-conventions": "^1.38.0",
-    "@socket-io/redis-adapter": "*",
-    "@types/pdfkit": "^0.17.4",
+    "@socket.io/redis-adapter": "^8.3.0",
     "argon2": "^0.44.0",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.0",
     "bull": "^4.16.5",
@@ -95,7 +97,6 @@
     "pg": "^8.16.3",
     "piscina": "^5.1.4",
     "qrcode": "^1.5.4",
-    "react-hot-toast": "^2.6.0",
     "redis": "^5.10.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
@@ -110,7 +111,7 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@faker-js/faker": "^10.2.0",
     "@nestjs/cli": "^11.0.14",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.11",
@@ -119,9 +120,8 @@
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/mime-types": "^3.0.1",
-    "@types/mocha": "^10.0.10",
     "@types/multer": "^2.0.0",
-    "@types/node": "^25.0.7",
+    "@types/node": "^20.11.30",
     "@types/nodemailer": "^7.0.5",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
@@ -148,7 +148,6 @@
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.0"
+    "typescript": "^5.9.3"
   }
 }

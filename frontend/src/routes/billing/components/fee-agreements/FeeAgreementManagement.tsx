@@ -1,4 +1,3 @@
-import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/shared/lib/cn';
@@ -8,6 +7,7 @@ import { Input } from '@/shared/ui/atoms/Input';
 import { TextArea } from '@/shared/ui/atoms/TextArea';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table';
+import { useTheme } from '@/theme';
 import { AlertTriangle, CheckCircle, Clock, Edit, FileText, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { FeeAgreement, useFeeAgreements } from './hooks/useFeeAgreements';
@@ -18,7 +18,7 @@ export function FeeAgreementManagement() {
 
   // Feature Hook
   const [state, actions] = useFeeAgreements();
-  const { agreements, status } = state;
+  const { agreements, status: _status } = state;
   const { createAgreement, updateAgreement, deleteAgreement } = actions;
 
   const createModal = useModalState();

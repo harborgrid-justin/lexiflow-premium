@@ -1,4 +1,3 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/backend';
 import { useToast, useWindow } from '@/providers';
 import { DataService } from '@/services/data/data-service.service';
@@ -7,6 +6,7 @@ import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
+import { useTheme } from '@/theme';
 import { AuditLogEntry } from '@/types';
 import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ interface AdminAuditLogProps {
     // logs prop is removed; component will fetch its own data.
 }
 
-export function AdminAuditLog({ }: AdminAuditLogProps) {
+export function AdminAuditLog() {
     const { theme } = useTheme();
     const { addToast } = useToast();
     const { openWindow, closeWindow } = useWindow();

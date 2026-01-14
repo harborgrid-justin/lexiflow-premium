@@ -6,7 +6,7 @@
  */
 
 import { useTheme } from '@/theme';
-import { useDashboardOverview } from '../hooks/useDashboardOverview';
+import { useDashboardOverview } from '../_hooks/useDashboardOverview';
 import { CHART_COLORS } from '@/config/dashboard.config';
 import { cn } from '@/shared/lib/cn';
 import {

@@ -23,7 +23,7 @@ import { HelpCircle, Lock } from 'lucide-react';
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';
 
 // Services & Data
-import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
+import { ModuleRegistry } from '@/services/infrastructure/module-registry.service';
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';

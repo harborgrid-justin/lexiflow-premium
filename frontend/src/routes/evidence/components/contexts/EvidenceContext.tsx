@@ -23,7 +23,7 @@ export interface EvidenceState {
     readonly activeTab: DetailTab;
     readonly selectedItem: EvidenceItem | null;
     readonly evidenceItems: readonly EvidenceItem[];
-    readonly filters: Readonly<Record<string, any>>;
+    readonly filters: Readonly<Record<string, unknown>>;
     readonly filteredItems: readonly EvidenceItem[];
     readonly isLoading: boolean;
     readonly isPending: boolean; // For concurrent transitions
@@ -32,7 +32,7 @@ export interface EvidenceState {
 export interface EvidenceActions {
     setView: (view: ViewMode) => void;
     setActiveTab: (tab: DetailTab) => void;
-    setFilters: (filters: Record<string, any>) => void;
+    setFilters: (filters: Record<string, unknown>) => void;
     handleItemClick: (item: EvidenceItem) => void;
     handleBack: () => void;
     handleIntakeComplete: () => void;

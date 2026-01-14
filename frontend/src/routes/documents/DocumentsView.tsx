@@ -1,15 +1,7 @@
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { FileText, Grid, List } from 'lucide-react';
-import { Button } from '../../components/organisms/_legacy/Button';
-import { PageHeader } from '../../components/organisms/PageHeader';
 import { useDocuments } from './DocumentsProvider';
-
-type Document = {
-  id: string;
-  title: string;
-  type: string;
-  uploadDate: string;
-  size?: number;
-};
 
 export function DocumentsView() {
   const { documents, metrics, activeView, setActiveView } = useDocuments();
@@ -70,7 +62,7 @@ function MetricCard({ title, value }: { title: string; value: number }) {
   );
 }
 
-function DocumentCard({ document }: { document: any }) {
+function DocumentCard({ document }: { document: Document }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 transition-colors cursor-pointer">
       <FileText className="w-8 h-8 text-blue-600 mb-2" />
@@ -80,7 +72,7 @@ function DocumentCard({ document }: { document: any }) {
   );
 }
 
-function DocumentRow({ document }: { document: any }) {
+function DocumentRow({ document }: { document: Document }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between hover:border-blue-500 transition-colors cursor-pointer">
       <div className="flex items-center gap-3">

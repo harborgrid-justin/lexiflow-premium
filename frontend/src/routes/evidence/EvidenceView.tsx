@@ -3,10 +3,10 @@
  * Enterprise React Architecture Pattern
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { CheckCircle, Clock, Shield, Tag } from 'lucide-react';
 import React, { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
 import { useEvidence } from './EvidenceProvider';
 
 export function EvidenceView() {
@@ -166,10 +166,10 @@ function EvidenceCard({ evidence }: { evidence: EvidenceItem }) {
           </div>
         </div>
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${evidence.status === 'Reviewed'
-            ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
-            : evidence.status === 'Pending'
-              ? 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'
-              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+          ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+          : evidence.status === 'Pending'
+            ? 'bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'
+            : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
           }`}>
           {evidence.status}
         </span>

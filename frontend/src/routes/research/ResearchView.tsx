@@ -3,11 +3,11 @@
  * Enterprise React Architecture Pattern
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
+import type { Citation, ResearchQuery } from '@/types';
 import { BookOpen, History, Scale, Search } from 'lucide-react';
 import React, { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
-import type { Citation, ResearchQuery } from '../../types';
 import { useResearch } from './ResearchProvider';
 
 export function ResearchView() {
@@ -190,8 +190,8 @@ function TabButton({ active, onClick, children }: {
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 font-medium border-b-2 transition-colors ${active
-          ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-          : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+        ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+        : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
         }`}
     >
       {children}

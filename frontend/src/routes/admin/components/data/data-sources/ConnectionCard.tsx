@@ -2,14 +2,13 @@ import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import { motion } from 'framer-motion';
 import { Activity, AlertTriangle, Cloud, Database, RefreshCw, Server, ShieldCheck, Trash2, X } from 'lucide-react';
-import type { DataConnection } from './types';
 
-interface ConnectionCardProps {
-  connection: DataConnection;
-  onSync: (id: string) => void;
-  onDelete: (id: string) => void;
-  onTest: (connection: DataConnection) => void;
-}
+// interface ConnectionCardProps {
+//   connection: DataConnection;
+//   onSync: (id: string) => void;
+//   onDelete: (id: string) => void;
+//   onTest: (connection: DataConnection) => void;
+// }
 
 export function ConnectionCard({
   connection,

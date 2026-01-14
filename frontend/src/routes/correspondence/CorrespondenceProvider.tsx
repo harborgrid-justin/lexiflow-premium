@@ -1,9 +1,35 @@
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 
+
+export interface CorrespondenceEmail {
+  id: string;
+  read: boolean;
+  from: string;
+  date: string;
+  subject: string;
+  preview: string;
+  [key: string]: unknown;
+}
+
+export interface CorrespondenceLetter {
+  id: string;
+  title: string;
+  recipient: string;
+  date: string;
+  [key: string]: unknown;
+}
+
+export interface CorrespondenceTemplate {
+  id: string;
+  name: string;
+  category: string;
+  [key: string]: unknown;
+}
+
 interface CorrespondenceContextValue {
-  emails: any[];
-  letters: any[];
-  templates: any[];
+  emails: CorrespondenceEmail[];
+  letters: CorrespondenceLetter[];
+  templates: CorrespondenceTemplate[];
   metrics: {
     totalEmails: number;
     unreadEmails: number;
@@ -19,9 +45,9 @@ const CorrespondenceContext = createContext<CorrespondenceContextValue | null>(n
 
 export function CorrespondenceProvider({ children, initialEmails, initialLetters, initialTemplates }: {
   children: React.ReactNode;
-  initialEmails: any[];
-  initialLetters: any[];
-  initialTemplates: any[];
+  initialEmails: CorrespondenceEmail[];
+  initialLetters: CorrespondenceLetter[];
+  initialTemplates: CorrespondenceTemplate[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTabState] = useState<'emails' | 'letters' | 'templates'>('emails');

@@ -74,7 +74,9 @@ export async function getCaseAnalytics(
   if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
     return {
       ok: false,
-      error: new ValidationError("Valid case ID is required") as any,
+      error: new ValidationError(
+        "Valid case ID is required"
+      ) as unknown as ApiError,
     };
   }
 
@@ -125,7 +127,9 @@ export async function getCustomReport(
   if (!reportId || typeof reportId !== "string" || reportId.trim() === "") {
     return {
       ok: false,
-      error: new ValidationError("Valid report ID is required") as any,
+      error: new ValidationError(
+        "Valid report ID is required"
+      ) as unknown as ApiError,
     };
   }
 

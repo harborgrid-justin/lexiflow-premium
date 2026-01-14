@@ -3,8 +3,8 @@
  * @updated 2025-12-19
  */
 
-import { api } from '@/lib/frontend-api';
 import type { Conversation, Message } from "@/api/communications/messaging-api";
+import { api } from "@/lib/frontend-api";
 
 export const MessengerService = {
   getAll: async () => {

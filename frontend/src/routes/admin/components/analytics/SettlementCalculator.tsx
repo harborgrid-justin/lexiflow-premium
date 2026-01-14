@@ -51,25 +51,25 @@ interface SimulationResult {
   count: number;
 }
 
-interface SimulationParametersPanelProps {
-  low: number;
-  high: number;
-  liabilityProb: number;
-  isCalculating: boolean;
-  onLowChange: (value: number) => void;
-  onHighChange: (value: number) => void;
-  onLiabilityProbChange: (value: number) => void;
-  onRunSimulation: () => void;
-  theme: ThemeStateValue['theme'];
-}
-
-interface SimulationResultsChartProps {
-  results: SimulationResult[];
-  metrics: { ev: number; p25: number; p75: number };
-  iterations: number;
-  theme: ThemeStateValue['theme'];
-  chartTheme: ChartTheme;
-}
+// interface SimulationParametersPanelProps {
+//   low: number;
+//   high: number;
+//   liabilityProb: number;
+//   isCalculating: boolean;
+//   onLowChange: (value: number) => void;
+//   onHighChange: (value: number) => void;
+//   onLiabilityProbChange: (value: number) => void;
+//   onRunSimulation: () => void;
+//   theme: ThemeStateValue['theme'];
+// }
+//
+// interface SimulationResultsChartProps {
+//   results: SimulationResult[];
+//   metrics: { ev: number; p25: number; p75: number };
+//   iterations: number;
+//   theme: ThemeStateValue['theme'];
+//   chartTheme: ChartTheme;
+// }
 
 interface SimulationMetricsDisplayProps {
   metrics: { ev: number; p25: number; p75: number };

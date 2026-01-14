@@ -26,7 +26,7 @@ export function BankDetailsStep({
   getFieldError,
   updateField,
   handleFieldBlur,
-}) => {
+}: BankDetailsStepProps) {
   const { theme } = useTheme();
 
   return (

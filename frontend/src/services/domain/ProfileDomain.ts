@@ -1,6 +1,6 @@
-import { authApi } from '@/lib/frontend-api';
 import { AuditLog } from "@/api/admin/audit-logs-api";
 import { adminApi } from "@/api/domains/admin.api";
+import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   ExtendedUserProfile,

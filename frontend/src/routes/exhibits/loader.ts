@@ -3,8 +3,8 @@
  * Enterprise React Architecture Pattern
  */
 
+import { DataService } from "@/services/data/data-service.service";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
 
 type Exhibit = {
   id: string;

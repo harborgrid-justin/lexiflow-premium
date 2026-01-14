@@ -1,7 +1,16 @@
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 
+
+export interface Document {
+  id: string;
+  title: string;
+  category: string;
+  uploadedAt: string;
+  [key: string]: unknown;
+}
+
 interface DocumentsContextValue {
-  documents: any[];
+  documents: Document[];
   metrics: {
     total: number;
     pleadings: number;
@@ -15,7 +24,7 @@ interface DocumentsContextValue {
 
 const DocumentsContext = createContext<DocumentsContextValue | null>(null);
 
-export function DocumentsProvider({ children, initialDocuments }: { children: React.ReactNode; initialDocuments: any[] }) {
+export function DocumentsProvider({ children, initialDocuments }: { children: React.ReactNode; initialDocuments: Document[] }) {
   const [isPending, startTransition] = useTransition();
   const [activeView, setActiveViewState] = useState<'grid' | 'list'>('grid');
 

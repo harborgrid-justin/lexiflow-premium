@@ -4,8 +4,8 @@
  * @description Enterprise toast notification system with sound, animations, and priority handling
  */
 
-import type { UINotification } from '@/types/notifications';
 import { cn } from '@/shared/lib/cn';
+import type { UINotification } from '@/types/notifications';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -143,8 +143,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
       };
 
       setToasts((prev) => {
-        let updated: ToastNotification[];
-        updated = [newToast, ...prev].slice(0, maxVisible);
+        const updated: ToastNotification[] = [newToast, ...prev].slice(0, maxVisible);
         return updated;
       });
 

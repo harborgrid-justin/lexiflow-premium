@@ -1,7 +1,7 @@
+import { DataService } from "@/services/data/data-service.service";
+import type { Case, DocketEntry, Task, TimeEntry } from "@/types";
 import type { LoaderFunctionArgs } from "react-router";
 import { defer } from "react-router";
-import { DataService } from "../../services/dataService";
-import type { Case, DocketEntry, Task, TimeEntry } from "../../types";
 
 export interface DashboardLoaderData {
   cases: Case[];

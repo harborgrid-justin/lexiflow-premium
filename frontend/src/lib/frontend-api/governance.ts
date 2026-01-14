@@ -163,13 +163,6 @@ export const ESLINT_CONFIG = {
 };
 
 /**
- * Type-only import checker for build-time validation
- */
-type AssertNoReactTypes<T> = T extends { React: unknown }
-  ? "ERROR: Frontend API cannot depend on React types"
-  : T;
-
-/**
  * Test helper: validate entire API module
  */
 export async function validateApiModule<T extends Record<string, unknown>>(

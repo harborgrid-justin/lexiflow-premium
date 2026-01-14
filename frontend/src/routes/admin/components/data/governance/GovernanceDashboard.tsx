@@ -1,8 +1,8 @@
-import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
-import { Card } from '@/shared/ui/molecules/Card';
-import { Button } from '@/shared/ui/atoms/Button';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card';
+import { useTheme } from '@/theme';
+import { AlertTriangle, Edit2, FileSearch, Scale, ShieldCheck } from 'lucide-react';
 
 interface GovernanceRule {
     id: string;
@@ -11,13 +11,13 @@ interface GovernanceRule {
     impact: string;
 }
 
-interface GovernanceDashboardProps {
-    rules: GovernanceRule[];
-    isScanning: boolean;
-    scanProgress: number;
-    handleScan: () => void;
-    setEditingRule: (rule: GovernanceRule) => void;
-}
+// interface GovernanceDashboardProps {
+//     rules: GovernanceRule[];
+//     isScanning: boolean;
+//     scanProgress: number;
+//     handleScan: () => void;
+//     setEditingRule: (rule: GovernanceRule) => void;
+// }
 
 export function GovernanceDashboard({
     rules, isScanning, scanProgress, handleScan, setEditingRule

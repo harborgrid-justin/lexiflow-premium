@@ -2,10 +2,10 @@
  * Pleadings Domain - View Component
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { FileCheck, FilePenLine, FileText, Plus } from 'lucide-react';
 import React, { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
 import { usePleadings } from './PleadingsProvider';
 
 export function PleadingsView() {
@@ -123,8 +123,8 @@ function FilterButton({ active, onClick, children }: {
     <button
       onClick={onClick}
       className={`px-4 py-2 rounded-lg font-medium transition-colors ${active
-          ? 'bg-blue-600 text-white'
-          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
         }`}
     >
       {children}

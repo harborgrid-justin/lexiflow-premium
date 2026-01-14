@@ -37,7 +37,7 @@ export function ProfileView() {
       pageSubtitle="Manage identity, granular permissions, and workspace preferences."
       tabConfig={USER_PROFILE_TAB_CONFIG}
       activeTabId={activeTab}
-      onTabChange={(tab) => setActiveTab(tab as any)}
+      onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
     >
       <div className="h-full">
         <Suspense fallback={<LazyLoader />}>

@@ -21,7 +21,7 @@ interface BackendPrediction {
   created_at?: string;
 }
 
-export const normalizePrediction: Normalizer<BackendPrediction, any> = (
+export const normalizePrediction: Normalizer<BackendPrediction, unknown> = (
   backend
 ) => {
   return {
@@ -34,6 +34,6 @@ export const normalizePrediction: Normalizer<BackendPrediction, any> = (
   };
 };
 
-export function normalizePredictions(backendPredictions: unknown): any[] {
+export function normalizePredictions(backendPredictions: unknown): unknown[] {
   return normalizeArray(backendPredictions, normalizePrediction);
 }

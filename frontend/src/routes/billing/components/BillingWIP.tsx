@@ -53,11 +53,11 @@ function BillingWIPComponent() {
         setSearchTerm,
         toggleSelection,
         toggleAll,
-        generateInvoice
+        // generateInvoice
     } = actions;
 
     const isGenerating = status === 'submitting';
-    const isLoading = status === 'loading';
+    // const isLoading = status === 'loading';
 
     return (
         <div className="space-y-6 animate-fade-in">

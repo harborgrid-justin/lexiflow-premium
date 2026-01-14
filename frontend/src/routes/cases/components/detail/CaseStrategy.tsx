@@ -20,10 +20,10 @@ import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
-import { useCaseStrategy } from '@/routes/cases/hooks/useCaseStrategy';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
+import { useCaseStrategy } from '@/routes/cases/_hooks/useCaseStrategy';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
@@ -137,10 +137,10 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     }
 
     // Persist to DataService
-    saveStrategyItem({ 
-      type: modalType, 
-      item: itemToSave, 
-      isEditing: !!editingItem 
+    saveStrategyItem({
+      type: modalType,
+      item: itemToSave,
+      isEditing: !!editingItem
     }, {
       onSuccess: () => {
         success(`${modalType} ${editingItem ? 'updated' : 'saved'} successfully`);
@@ -173,7 +173,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onSuccess: (data: any) => {
           success(`${data.type} deleted successfully`);
-          
+
           // Update local state
           if (data.type === 'Citation') {
             setCitations(citations.filter(c => c.id !== data.id));

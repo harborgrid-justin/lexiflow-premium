@@ -23,7 +23,7 @@ interface BackendUser {
   updated_at?: string;
 }
 
-export const normalizeUser: Normalizer<BackendUser, any> = (backend) => {
+export const normalizeUser: Normalizer<BackendUser, unknown> = (backend) => {
   return {
     id: normalizeId(backend.id),
     email: normalizeString(backend.email),
@@ -36,6 +36,6 @@ export const normalizeUser: Normalizer<BackendUser, any> = (backend) => {
   };
 };
 
-export function normalizeUsers(backendUsers: unknown): any[] {
+export function normalizeUsers(backendUsers: unknown): unknown[] {
   return normalizeArray(backendUsers, normalizeUser);
 }

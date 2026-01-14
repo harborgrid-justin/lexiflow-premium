@@ -25,7 +25,7 @@ interface BackendEmployee {
   created_at?: string;
 }
 
-export const normalizeEmployee: Normalizer<BackendEmployee, any> = (
+export const normalizeEmployee: Normalizer<BackendEmployee, unknown> = (
   backend
 ) => {
   return {
@@ -42,6 +42,6 @@ export const normalizeEmployee: Normalizer<BackendEmployee, any> = (
   };
 };
 
-export function normalizeEmployees(backendEmployees: unknown): any[] {
+export function normalizeEmployees(backendEmployees: unknown): unknown[] {
   return normalizeArray(backendEmployees, normalizeEmployee);
 }

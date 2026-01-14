@@ -1,6 +1,6 @@
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Briefcase, UserPlus, Users } from 'lucide-react';
-import { Button } from '../../components/common/Button';
-import { PageHeader } from '../../components/common/PageHeader';
 import { useCRM } from './CRMProvider';
 
 export function CRMView() {
@@ -75,7 +75,7 @@ function MetricCard({ title, value, icon }: { title: string; value: number; icon
   );
 }
 
-function TabButton({ active, onClick, disabled, children }: any) {
+function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
     <button onClick={onClick} disabled={disabled}
       className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${active ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-600 dark:text-slate-400'
@@ -85,7 +85,7 @@ function TabButton({ active, onClick, disabled, children }: any) {
   );
 }
 
-function ClientCard({ client }: { client: any }) {
+function ClientCard({ client }: { client: CRMClient }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="font-medium text-slate-900 dark:text-white mb-2">{client.name}</div>
@@ -101,7 +101,7 @@ function ClientCard({ client }: { client: any }) {
   );
 }
 
-function ContactRow({ contact }: { contact: any }) {
+function ContactRow({ contact }: { contact: CRMContact }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center justify-between">
@@ -115,7 +115,7 @@ function ContactRow({ contact }: { contact: any }) {
   );
 }
 
-function OpportunityRow({ opportunity }: { opportunity: any }) {
+function OpportunityRow({ opportunity }: { opportunity: CRMOpportunity }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center justify-between">

@@ -37,12 +37,11 @@ import {
 import {
   client,
   failure,
+  NotFoundError,
   type PaginatedResult,
   type Result,
   success,
   ValidationError,
-  NotFoundError,
-  ConflictError,
 } from "./index";
 
 /**
@@ -136,7 +135,9 @@ export async function getAllEvidence(
 /**
  * Get evidence by ID
  */
-export async function getEvidenceById(id: string): Promise<Result<EvidenceItem>> {
+export async function getEvidenceById(
+  id: string
+): Promise<Result<EvidenceItem>> {
   if (!id || typeof id !== "string" || id.trim() === "") {
     return failure(new ValidationError("Valid evidence ID is required"));
   }
@@ -193,9 +194,7 @@ export async function updateEvidence(
   }
 
   if (!input || typeof input !== "object" || Object.keys(input).length === 0) {
-    return failure(
-      new ValidationError("At least one field must be updated")
-    );
+    return failure(new ValidationError("At least one field must be updated"));
   }
 
   const result = await client.patch<unknown>(`/evidence/${id}`, input);
@@ -298,9 +297,7 @@ export async function exportEvidence(
   format: "csv" | "json" | "pdf"
 ): Promise<Result<Blob>> {
   if (!Array.isArray(ids) || ids.length === 0) {
-    return failure(
-      new ValidationError("At least one evidence ID is required")
-    );
+    return failure(new ValidationError("At least one evidence ID is required"));
   }
 
   if (!["csv", "json", "pdf"].includes(format)) {

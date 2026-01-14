@@ -1,5 +1,5 @@
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Gavel } from 'lucide-react';
-import { PageHeader } from '../../components/common/PageHeader';
 import { useDocket } from './DocketProvider';
 
 export function DocketView() {
@@ -33,7 +33,7 @@ function MetricCard({ title, value }: { title: string; value: number }) {
   );
 }
 
-function DocketEntryRow({ entry }: { entry: any }) {
+function DocketEntryRow({ entry }: { entry: DocketEntry }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-start gap-3">

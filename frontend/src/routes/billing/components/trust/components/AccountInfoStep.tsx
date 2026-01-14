@@ -28,7 +28,7 @@ export function AccountInfoStep({
   getFieldError,
   updateField,
   handleFieldBlur,
-}) => {
+}: AccountInfoStepProps) {
   const { theme } = useTheme();
 
   return (

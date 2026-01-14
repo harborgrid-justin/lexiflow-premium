@@ -45,18 +45,18 @@ export const CloudDatabaseView = React.memo(function CloudDatabaseView() {
 
 CloudDatabaseView.displayName = 'CloudDatabaseView';
 
-interface CloudDatabaseContentProps {
-  theme: ThemeContextValue['theme'];
-  isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
-  selectedProvider: string | null;
-  setSelectedProvider: (value: string | null) => void;
-
-  formData: ConnectionFormData;
-
-  setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
-  resetForm: () => void;
-}
+// interface CloudDatabaseContentProps {
+//   theme: ThemeContextValue['theme'];
+//   isAdding: boolean;
+//   setIsAdding: (value: boolean) => void;
+//   selectedProvider: string | null;
+//   setSelectedProvider: (value: string | null) => void;
+//
+//   formData: ConnectionFormData;
+//
+//   setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
+//   resetForm: () => void;
+// }
 
 const CloudDatabaseContent = ({
   theme,
@@ -231,17 +231,18 @@ const ProviderSelection = function ProviderSelection({ providers, onSelect, them
   );
 };
 
-interface ConnectionFormProps {
-  selectedProvider: string;
-  providers: readonly DataProvider[];
-
-  formData: ConnectionFormData;
-
-  setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
-  onCancel: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmitting: boolean;
-  theme: ThemeContextValue['theme'];
+// interface ConnectionFormProps {
+//   selectedProvider: string;
+//   providers: readonly DataProvider[];
+//
+//   formData: ConnectionFormData;
+//
+//   setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
+// }
+onCancel: () => void;
+onSubmit: (e: React.FormEvent) => void;
+isSubmitting: boolean;
+theme: ThemeContextValue['theme'];
 }
 
 const ConnectionForm = ({

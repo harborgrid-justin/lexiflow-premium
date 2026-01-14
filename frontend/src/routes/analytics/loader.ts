@@ -1,5 +1,5 @@
+import { DataService } from "@/services/data/data-service.service";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
 
 export async function clientLoader() {
   const [caseMetrics, financialMetrics, performanceMetrics] = await Promise.all(

@@ -2,9 +2,9 @@
  * DataSourceContext Type Definitions
  */
 
+import type { DataSourceConfig } from "@/contexts/repository/config";
+import type { RepositoryRegistry } from "@/contexts/repository/types";
 import type { ReactNode } from "react";
-import type { DataSourceConfig } from "../repository/config";
-import type { RepositoryRegistry } from "../repository/types";
 
 export type DataSourceType = "indexeddb" | "postgresql" | "cloud";
 

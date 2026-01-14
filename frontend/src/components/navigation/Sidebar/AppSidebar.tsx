@@ -12,20 +12,20 @@ export interface AppSidebarProps {
   onNavigate?: (view: string) => void;
 }
 
-export const AppSidebar = memo<AppSidebarProps>(({ 
-  isOpen, 
-  onToggle, 
-  activeItem, 
-  userName, 
-  userEmail, 
+export const AppSidebar = memo<AppSidebarProps>(({
+  isOpen,
+  onToggle,
+  activeItem,
+  userName,
+  userEmail,
   userRole,
-  onNavigate 
+  onNavigate
 }) => {
   const currentUser: User = {
     id: 'current',
     name: userName || 'User',
     email: userEmail || '',
-    role: (userRole as any) || 'user',
+    role: (userRole as UserRole) || 'Guest',
     firstName: userName?.split(' ')[0] || 'User',
     lastName: userName?.split(' ')[1] || '',
     preferences: {},
@@ -35,12 +35,12 @@ export const AppSidebar = memo<AppSidebarProps>(({
 
   return (
     <Sidebar
-      activeView={(activeItem as AppView) || 'dashboard'} 
+      activeView={(activeItem as AppView) || 'dashboard'}
       setActiveView={(view) => {
-         // If onNavigate is provided, use it. logic implies view is string.
-         if (onNavigate) {
-            onNavigate(view as string);
-         }
+        // If onNavigate is provided, use it. logic implies view is string.
+        if (onNavigate) {
+          onNavigate(view as string);
+        }
       }}
       isOpen={isOpen}
       onClose={onToggle}

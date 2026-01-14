@@ -3,8 +3,8 @@
  * Reusable form input with validation and error display
  */
 
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
 import { AlertCircle } from 'lucide-react';
 interface FormInputProps {
   label: string;
@@ -29,7 +29,7 @@ export function FormInput({
   error,
   onChange,
   onBlur,
-}) => {
+}: FormInputProps) {
   const { theme } = useTheme();
 
   return (

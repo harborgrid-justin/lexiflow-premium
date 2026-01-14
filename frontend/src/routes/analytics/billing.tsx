@@ -29,25 +29,25 @@ export async function loader() {
     const invoices = invoicesResult.ok ? invoicesResult.data.data : [];
 
     // Calculate billing metrics
-    const totalBilled = timeEntries.reduce((sum: number, entry: any) => {
-      const rate = entry.rate || 0;
-      const hours = entry.hours || 0;
+    const totalBilled = timeEntries.reduce((sum: number, entry: Record<string, unknown>) => {
+      const rate = (entry.rate as number) || 0;
+      const hours = (entry.hours as number) || 0;
       return sum + (rate * hours);
     }, 0);
 
-    const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid');
-    const totalCollected = paidInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
+    const paidInvoices = invoices.filter((inv: Record<string, unknown>) => inv.status === 'paid');
+    const totalCollected = paidInvoices.reduce((sum: number, inv: Record<string, unknown>) => sum + ((inv.amount as number) || 0), 0);
 
-    const pendingInvoices = invoices.filter((inv: any) => inv.status === 'sent' || inv.status === 'overdue');
-    const outstandingAR = pendingInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
+    const pendingInvoices = invoices.filter((inv: Record<string, unknown>) => inv.status === 'sent' || inv.status === 'overdue');
+    const outstandingAR = pendingInvoices.reduce((sum: number, inv: Record<string, unknown>) => sum + ((inv.amount as number) || 0), 0);
 
     const realizationRate = totalBilled > 0 ? (totalCollected / totalBilled) * 100 : 0;
 
     // Calculate collection days
-    const collectedInvoices = invoices.filter((inv: any) => inv.status === 'paid' && inv.paidDate);
-    const collectionDays = collectedInvoices.map((inv: any) => {
+    const collectedInvoices = invoices.filter((inv: Record<string, unknown>) => inv.status === 'paid' && inv.paidDate);
+    const collectionDays = collectedInvoices.map((inv: Record<string, unknown>) => {
       if (!inv.createdAt || !inv.paidDate) return 0;
-      const issued = new Date(inv.createdAt).getTime();
+      const issued = new Date(inv.createdAt as string).getTime();
       const paid = new Date(inv.paidDate).getTime();
       return Math.floor((paid - issued) / (1000 * 60 * 60 * 24));
     });

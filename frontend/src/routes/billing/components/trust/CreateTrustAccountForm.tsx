@@ -75,7 +75,7 @@ interface CreateTrustAccountFormProps {
 export function CreateTrustAccountForm({
   onSuccess,
   onCancel,
-}) => {
+}: CreateTrustAccountFormProps) {
   const { createAccount, isCreating, error: apiError } = useCreateTrustAccount();
   const { validateAccountTitle } = useTrustAccountValidation();
 

@@ -3,9 +3,9 @@
  * Enterprise React Architecture Pattern
  */
 
+import { DataService } from "@/services/data/data-service.service";
+import type { Citation, ResearchQuery } from "@/types";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
-import type { Citation, ResearchQuery } from "../../types";
 
 export interface ResearchLoaderData {
   recentSearches: ResearchQuery[];

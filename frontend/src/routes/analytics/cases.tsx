@@ -5,7 +5,6 @@
 
 import { casesApi } from '@/lib/frontend-api';
 import { CaseAnalytics } from '@/routes/analytics/cases/CaseAnalytics';
-import type { Case } from '@/types';
 import { CaseStatus } from '@/types/enums';
 import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -19,12 +18,12 @@ export function meta() {
 }
 
 // Type-safe helper for accessing optional case metadata
-type CaseWithAnalytics = Case & {
-  metadata?: {
-    outcome?: 'Won' | 'Lost' | 'Settled' | 'Dismissed';
-    settlementAmount?: number;
-  };
-};
+// type CaseWithAnalytics = Case & {
+//   metadata?: {
+//     outcome?: 'Won' | 'Lost' | 'Settled' | 'Dismissed';
+//     settlementAmount?: number;
+//   };
+// };
 
 export async function loader() {
   try {

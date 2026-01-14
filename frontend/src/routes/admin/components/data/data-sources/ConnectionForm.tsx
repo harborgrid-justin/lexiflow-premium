@@ -4,15 +4,16 @@ import { motion } from 'framer-motion';
 import { Cloud, Database, HardDrive } from 'lucide-react';
 import type { CloudProvider, ConnectionFormData } from './types';
 
-interface ConnectionFormProps {
-  isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
-  selectedProvider: string | null;
-  setSelectedProvider: (value: string | null) => void;
-  formData: ConnectionFormData;
-  setFormData: (value: ConnectionFormData) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isLoading: boolean;
+// interface ConnectionFormProps {
+//   isAdding: boolean;
+//   setIsAdding: (value: boolean) => void;
+//   selectedProvider: string | null;
+//   setSelectedProvider: (value: string | null) => void;
+//   formData: ConnectionFormData;
+//   setFormData: (value: ConnectionFormData) => void;
+//   onSubmit: (e: React.FormEvent) => void;
+//   isLoading: boolean;
+// }
 }
 
 const PROVIDERS: CloudProvider[] = [

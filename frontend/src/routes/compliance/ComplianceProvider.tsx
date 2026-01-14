@@ -1,9 +1,32 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
+
+export interface ComplianceCheck {
+  id: string;
+  clientName: string;
+  date: string;
+  result: string;
+  [key: string]: unknown;
+}
+
+export interface ComplianceConflict {
+  id: string;
+  status: string;
+  description: string;
+  parties: string[];
+  [key: string]: unknown;
+}
+
+export interface ComplianceDeadline {
+  id: string;
+  date: string;
+  [key: string]: unknown;
+}
+
 interface ComplianceContextValue {
-  checks: any[];
-  conflicts: any[];
-  deadlines: any[];
+  checks: ComplianceCheck[];
+  conflicts: ComplianceConflict[];
+  deadlines: ComplianceDeadline[];
   metrics: {
     totalChecks: number;
     pendingConflicts: number;
@@ -15,9 +38,9 @@ const ComplianceContext = createContext<ComplianceContextValue | null>(null);
 
 export function ComplianceProvider({ children, initialChecks, initialConflicts, initialDeadlines }: {
   children: React.ReactNode;
-  initialChecks: any[];
-  initialConflicts: any[];
-  initialDeadlines: any[];
+  initialChecks: ComplianceCheck[];
+  initialConflicts: ComplianceConflict[];
+  initialDeadlines: ComplianceDeadline[];
 }) {
   const metrics = useMemo(() => ({
     totalChecks: initialChecks.length,

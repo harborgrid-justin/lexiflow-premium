@@ -1,18 +1,18 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
 interface AnalyticsContextValue {
-  caseMetrics: any;
-  financialMetrics: any;
-  performanceMetrics: any;
+  caseMetrics: unknown;
+  financialMetrics: unknown;
+  performanceMetrics: unknown;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextValue | null>(null);
 
 export function AnalyticsProvider({ children, initialCaseMetrics, initialFinancialMetrics, initialPerformanceMetrics }: {
   children: React.ReactNode;
-  initialCaseMetrics: any;
-  initialFinancialMetrics: any;
-  initialPerformanceMetrics: any;
+  initialCaseMetrics: unknown;
+  initialFinancialMetrics: unknown;
+  initialPerformanceMetrics: unknown;
 }) {
   const value = useMemo<AnalyticsContextValue>(() => ({
     caseMetrics: initialCaseMetrics,

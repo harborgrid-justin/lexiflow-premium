@@ -1,8 +1,8 @@
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { Input } from '@/shared/ui/atoms/Input/Input';
 import { Modal } from '@/shared/ui/molecules/Modal/Modal';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 interface ColumnData {
     name?: string;
     type?: string;
@@ -27,7 +27,7 @@ const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC
 
 export function ColumnEditorModal({
     isOpen, onClose, onSave, tableName, columnName, data, setData
-}) => {
+}: ColumnEditorModalProps) {
     const { theme } = useTheme();
 
     return (

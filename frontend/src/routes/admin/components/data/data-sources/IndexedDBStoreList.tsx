@@ -1,8 +1,7 @@
-import { Database } from 'lucide-react';
-import { useTheme } from '@/theme';
 import { cn } from '@/shared/lib/cn';
+import { useTheme } from '@/theme';
+import { Database } from 'lucide-react';
 import type { StoreInfo } from './types';
-import React from "react";
 
 interface IndexedDBStoreListProps {
   stores: StoreInfo[];
@@ -14,7 +13,7 @@ export function IndexedDBStoreList({
   stores,
   isLoading,
   onStoreClick
-}) => {
+}: IndexedDBStoreListProps) {
   const { theme } = useTheme();
 
   if (isLoading) {

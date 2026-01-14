@@ -11,16 +11,16 @@
 // External Dependencies
 import { Briefcase, Building, Edit2, Gavel, Layers, Link, Mail, MapPin, Phone, Plus, Trash2, User } from 'lucide-react';
 // Internal Dependencies - Components
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Input } from '@/shared/ui/atoms/Input';
 import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { Modal } from '@/shared/ui/molecules/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
+import { GroupByOption, useCaseParties } from '@/routes/cases/_hooks/useCaseParties';
 import { useTheme } from '@/theme';
-import { useCaseParties, GroupByOption } from '@/routes/cases/hooks/useCaseParties';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
@@ -38,19 +38,19 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     const { theme } = useTheme();
 
     const {
-      partyModal,
-      deleteModal,
-      currentParty,
-      setCurrentParty,
-      groupBy,
-      setGroupBy,
-      grouped,
-      orgs,
-      handleSave,
-      handleDelete,
-      confirmDelete,
-      openEdit,
-      openNew
+        partyModal,
+        deleteModal,
+        currentParty,
+        setCurrentParty,
+        groupBy,
+        setGroupBy,
+        grouped,
+        orgs,
+        handleSave,
+        handleDelete,
+        confirmDelete,
+        openEdit,
+        openNew
     } = useCaseParties(parties, onUpdate);
 
     const getIcon = (type: string) => {

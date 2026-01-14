@@ -1,9 +1,9 @@
+import type { DataSourceConfig } from '@/contexts/repository/config';
+import { createConfigFromEnv } from '@/contexts/repository/config';
+import type { RepositoryRegistry } from '@/contexts/repository/types';
 import { DataService } from '@/services/data/data-service.service';
-import { backendDiscovery } from '@/services/integration/backendDiscovery';
+import { backendDiscovery } from '@/services/integration/backend-discovery.service';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { DataSourceConfig } from '../repository/config';
-import { createConfigFromEnv } from '../repository/config';
-import type { RepositoryRegistry } from '../repository/types';
 import type {
   DataSourceActionsValue,
   DataSourceProviderProps,

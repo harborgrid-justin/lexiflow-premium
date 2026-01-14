@@ -1,6 +1,6 @@
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { AlertCircle, CheckCircle, Clock, DollarSign } from 'lucide-react';
-import { Button } from '../../components/organisms/_legacy/Button';
-import { PageHeader } from '../../components/organisms/PageHeader';
 import { useBilling } from './BillingProvider';
 
 /**

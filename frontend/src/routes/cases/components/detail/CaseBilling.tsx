@@ -15,23 +15,23 @@
  */
 
 // External Dependencies
-import { Download, Clock, TrendingUp } from 'lucide-react';
+import { Clock, Download, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/ui/organisms/Table/Table';
-import { Card } from '@/shared/ui/molecules/Card/Card';
 import { Badge } from '@/shared/ui/atoms/Badge';
 import { Button } from '@/shared/ui/atoms/Button';
+import { Card } from '@/shared/ui/molecules/Card/Card';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
 
 // Internal Dependencies - Hooks & Context
+import { useCaseFinancials } from '@/routes/cases/_hooks/useCaseFinancials';
 import { useTheme } from '@/theme';
-import { useCaseFinancials } from '@/routes/cases/hooks/useCaseFinancials';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces
-import { TimeEntry, BillingModel } from '@/types';
+import { BillingModel, TimeEntry } from '@/types';
 
 interface CaseBillingProps {
     billingModel: BillingModel;
@@ -50,7 +50,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                 <div className={cn("p-5 rounded-lg shadow-md flex flex-col justify-between bg-slate-900 text-white border border-slate-800")}>
                     <div>
                         <p className="text-xs opacity-70 uppercase font-bold tracking-wider">Unbilled WIP</p>
-                        <p className="text-2xl font-mono font-bold mt-1">${unbilledTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                        <p className="text-2xl font-mono font-bold mt-1">${unbilledTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                     </div>
                     <div className="w-full bg-slate-700 h-1 mt-4 rounded-full overflow-hidden">
                         <div className={cn("h-full w-[65%]", theme.action.primary.bg)}></div>
@@ -59,15 +59,15 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Total Billed</p>
                     <div className="flex items-end justify-between">
-                        <p className={cn("text-2xl font-mono font-bold", theme.text.primary)}>${billedTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
-                        <TrendingUp className="h-5 w-5 text-green-600 mb-1"/>
+                        <p className={cn("text-2xl font-mono font-bold", theme.text.primary)}>${billedTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                        <TrendingUp className="h-5 w-5 text-green-600 mb-1" />
                     </div>
                 </div>
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Hours Logged</p>
                     <div className="flex items-end justify-between">
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>{totalHours.toFixed(1)} <span className={cn("text-sm font-normal", theme.text.tertiary)}>hrs</span></p>
-                        <Clock className={cn("h-5 w-5 mb-1", theme.text.link)}/>
+                        <Clock className={cn("h-5 w-5 mb-1", theme.text.link)} />
                     </div>
                 </div>
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
@@ -97,16 +97,16 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         {entries.length > 0 ? entries.map((entry) => {
                             const e = entry as TimeEntry;
                             return (
-                            <TableRow key={e.id}>
-                                <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>
-                                <TableCell className={cn("font-medium", theme.text.primary)}>{e.description}</TableCell>
-                                <TableCell className={cn("text-right font-mono", theme.text.secondary)}>${e.rate}/hr</TableCell>
-                                <TableCell className={cn("text-right font-bold", theme.text.primary)}>{(e.duration/60).toFixed(1)}</TableCell>
-                                <TableCell className={cn("text-right font-mono", theme.text.primary)}>${e.total.toFixed(2)}</TableCell>
-                                <TableCell className="text-center">
-                                    <Badge variant={e.status === 'Billed' ? 'success' : 'warning'}>{e.status}</Badge>
-                                </TableCell>
-                            </TableRow>
+                                <TableRow key={e.id}>
+                                    <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>
+                                    <TableCell className={cn("font-medium", theme.text.primary)}>{e.description}</TableCell>
+                                    <TableCell className={cn("text-right font-mono", theme.text.secondary)}>${e.rate}/hr</TableCell>
+                                    <TableCell className={cn("text-right font-bold", theme.text.primary)}>{(e.duration / 60).toFixed(1)}</TableCell>
+                                    <TableCell className={cn("text-right font-mono", theme.text.primary)}>${e.total.toFixed(2)}</TableCell>
+                                    <TableCell className="text-center">
+                                        <Badge variant={e.status === 'Billed' ? 'success' : 'warning'}>{e.status}</Badge>
+                                    </TableCell>
+                                </TableRow>
                             );
                         }) : (
                             <TableRow>

@@ -2,8 +2,8 @@
  * Reports & Analytics Domain - Data Loader
  */
 
+import { DataService } from "@/services/data/data-service.service";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
 
 type Report = {
   id: string;

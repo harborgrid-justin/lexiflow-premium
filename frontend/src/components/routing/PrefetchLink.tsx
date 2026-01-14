@@ -24,7 +24,6 @@ export interface PrefetchLinkProps extends Omit<LinkProps, 'prefetch'> {
 export function PrefetchLink({
   to,
   prefetch = 'hover',
-  prefetchDelay,
   trackIntent = true,
   onMouseEnter,
   onMouseLeave,
@@ -43,13 +42,12 @@ export function PrefetchLink({
 
   // Set up viewport-based prefetching
   useEffect(() => {
-    if ((prefetch === 'viewport' || prefetch === 'both') && elementRef.current) {
-      observeElement(elementRef.current, path);
+    const el = elementRef.current;
+    if ((prefetch === 'viewport' || prefetch === 'both') && el) {
+      observeElement(el, path);
 
       return () => {
-        if (elementRef.current) {
-          unobserveElement(elementRef.current);
-        }
+        unobserveElement(el);
       };
     }
   }, [path, prefetch, observeElement, unobserveElement]);

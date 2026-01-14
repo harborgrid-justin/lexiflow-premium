@@ -4,7 +4,7 @@
  */
 
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
+import { DataService } from "@/services/data/data-service.service";
 
 type CourtRule = {
   id: string;

@@ -17,11 +17,11 @@ import { RiskDetail } from './risk/RiskDetail';
 import { RiskList } from './risk/RiskList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { useTheme } from '@/theme';
 
 // Internal Dependencies - Services & Utils
-import { useCaseRisks } from '@/routes/cases/hooks/useCaseRisks';
+import { useCaseRisks } from '@/routes/cases/_hooks/useCaseRisks';
 import { cn } from '@/shared/lib/cn';
 
 // Types & Interfaces

@@ -1,10 +1,10 @@
 // src/contexts/data/DataContext.tsx
 import { adminApi } from "@/api/domains/admin.api";
 import { litigationApi } from "@/api/domains/litigation.api";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEntitlements } from "@/contexts/entitlements/EntitlementsContext";
+import { freezeInDev } from "@/contexts/utils/immutability";
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from "react";
-import { useAuth } from "../auth/AuthContext";
-import { useEntitlements } from "../entitlements/EntitlementsContext";
-import { freezeInDev } from "../utils/immutability";
 
 export type DashboardItem =
   | { type: 'case'; id: string; label: string; status: string }
@@ -28,7 +28,7 @@ const DataStateContext = createContext<DataStateValue | undefined>(undefined);
 const DataActionsContext = createContext<DataActionsValue | undefined>(undefined);
 
 export function DataProvider({ children }: React.PropsWithChildren) {
-  const { auth } = useAuth();
+  const auth = useAuth();
   const { entitlements } = useEntitlements();
   const [items, setItems] = useState<DashboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +41,7 @@ export function DataProvider({ children }: React.PropsWithChildren) {
     setIsLoading(true);
     setError(null);
     try {
-      if (auth.status === "anonymous") {
+      if (!auth.isAuthenticated) {
         // GUIDELINE #25: Wrap non-urgent state updates in startTransition
         startTransition(() => {
           setItems([{ type: 'public', id: "p1", label: "Welcome to LexiFlow Public Portal" }]);
@@ -101,7 +101,7 @@ export function DataProvider({ children }: React.PropsWithChildren) {
     } finally {
       setIsLoading(false);
     }
-  }, [auth.status, auth.user, entitlements.plan]);
+  }, [auth.isAuthenticated, auth.user, entitlements.plan]);
 
   // GUIDELINE #33: Expose isPending to consumers for transitional UI
   const stateValue = useMemo<DataStateValue>(

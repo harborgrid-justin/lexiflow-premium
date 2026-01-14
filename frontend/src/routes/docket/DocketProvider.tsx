@@ -1,7 +1,17 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
+
+export interface DocketEntry {
+  id: string;
+  filingDate: string;
+  status: string;
+  entryNumber: string | number;
+  description: string;
+  [key: string]: unknown;
+}
+
 interface DocketContextValue {
-  entries: any[];
+  entries: DocketEntry[];
   metrics: {
     total: number;
     thisWeek: number;
@@ -11,7 +21,7 @@ interface DocketContextValue {
 
 const DocketContext = createContext<DocketContextValue | null>(null);
 
-export function DocketProvider({ children, initialEntries }: { children: React.ReactNode; initialEntries: any[] }) {
+export function DocketProvider({ children, initialEntries }: { children: React.ReactNode; initialEntries: DocketEntry[] }) {
   const metrics = useMemo(() => {
     const today = new Date();
     const weekAgo = new Date(today);

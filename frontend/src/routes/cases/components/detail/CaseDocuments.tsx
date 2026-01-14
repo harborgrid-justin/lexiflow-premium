@@ -24,8 +24,8 @@ import { TaskCreationModal } from '@/routes/cases/ui/components/TaskCreationModa
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context
+import { useCaseDocuments } from '@/routes/cases/_hooks/useCaseDocuments';
 import { useTheme } from '@/theme';
-import { useCaseDocuments } from '@/routes/cases/hooks/useCaseDocuments';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
@@ -45,7 +45,7 @@ interface CaseDocumentsProps {
 export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzingId, onAnalyze, onDocumentCreated }) => {
   // Guideline 34: Side-effect free context read
   const { theme, isPendingThemeChange } = useTheme();
-  
+
   const {
     fileInputRef,
     taskModalDoc,

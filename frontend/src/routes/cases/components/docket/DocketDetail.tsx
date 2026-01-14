@@ -99,8 +99,113 @@ function EditableMetadataField({
   );
 }
 
+
+interface Attorney {
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  name?: string;
+  noticeInfo?: string;
+  title?: string;
+  type?: string;
+  office?: string;
+  address1?: string;
+  address2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  businessPhone?: string;
+  email?: string;
+  fax?: string;
+  terminationDate?: string;
+  [key: string]: unknown;
+}
+
+interface Party {
+  name?: string;
+  type?: string;
+  prisonerNumber?: string;
+  partyText?: string;
+  alias?: string;
+  dateTerminated?: string;
+  attorneys?: Attorney[];
+  [key: string]: unknown;
+}
+
+interface AssociatedCase {
+  caseNumber?: string;
+  associatedType?: string;
+  status?: string;
+  shortTitle?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  leadCaseNumber?: string;
+  memberCaseNumber?: string;
+  [key: string]: unknown;
+}
+
+interface PriorCase {
+  caseNumber?: string;
+  dateFiled?: string;
+  dateDisposed?: string;
+  disposition?: string;
+  [key: string]: unknown;
+}
+
+interface AppellateData {
+  caseQuery?: {
+    associatedCases?: AssociatedCase[];
+    parties?: Party[];
+    originatingCase?: {
+      leadCaseNumber?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+  fullDocket?: {
+    priorCases?: PriorCase[];
+    caption?: string;
+    panel?: {
+      panelType?: string;
+      enbanc?: boolean;
+      dateHearing?: string;
+      dateComplete?: string;
+      dateDecision?: string;
+      panelists?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+  caseSummary?: {
+    stub?: {
+      natureOfSuit?: string;
+      caseType?: string;
+      subType?: string;
+      origCourt?: string;
+      [key: string]: unknown;
+    };
+    originatingCourt?: {
+      dateDecided?: string;
+      dateRecdCoa?: string;
+      dateSentence?: string;
+      district?: string;
+      division?: string;
+      [key: string]: unknown;
+    };
+    originatingPerson?: {
+      firstName?: string;
+      lastName?: string;
+      role?: string;
+      title?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
 interface DocketDetailProps {
-  initialItem: any; // Using any to avoid complex type reconstruction just for refactor
+  initialItem: Record<string, unknown>; // Using strict Record type
 }
 
 export function DocketDetail({ initialItem }: DocketDetailProps) {
@@ -364,7 +469,7 @@ export function DocketDetail({ initialItem }: DocketDetailProps) {
           {/* Associated Cases */}
           <div className="lg:col-span-2 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Associated Cases</h3>
-            {item.appellateData?.caseQuery?.associatedCases?.map((associated: any, idx: number) => (
+            {(item.appellateData as unknown as AppellateData)?.caseQuery?.associatedCases?.map((associated, idx) => (
               <div key={idx} className="mb-4 p-4 border rounded bg-gray-50 dark:bg-gray-700/50">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <EditableMetadataField label="Case Number" value={associated.caseNumber} path={`caseQuery.associatedCases[${idx}].caseNumber`} onSave={handleMetadataUpdate} />
@@ -414,7 +519,7 @@ export function DocketDetail({ initialItem }: DocketDetailProps) {
 
       {activeTab === 'parties' && (
         <div className="space-y-6">
-          {(item.appellateData?.caseQuery?.parties || []).map((party: any, idx: number) => (
+          {((item.appellateData as unknown as AppellateData)?.caseQuery?.parties || []).map((party, idx) => (
             <div key={idx} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
               <div className="flex justify-between items-start mb-4 border-b pb-2">
                 <div className="flex-1 space-y-2">
@@ -440,7 +545,7 @@ export function DocketDetail({ initialItem }: DocketDetailProps) {
               <div className="pl-4 border-l-2 border-gray-100 dark:border-gray-700">
                 <h4 className="text-sm font-semibold uppercase text-gray-500 mb-3">Attorneys</h4>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {(party.attorneys || []).map((attorney: any, aIdx: number) => (
+                  {(party.attorneys || []).map((attorney, aIdx) => (
                     <div key={aIdx} className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-md">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1 space-y-1">
@@ -514,7 +619,7 @@ export function DocketDetail({ initialItem }: DocketDetailProps) {
 
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Prior Cases</h3>
-            {item.appellateData?.fullDocket?.priorCases?.map((prior: any, idx: number) => (
+            {(item.appellateData as unknown as AppellateData)?.fullDocket?.priorCases?.map((prior, idx) => (
               <div key={idx} className="mb-4 p-4 border rounded bg-gray-50 dark:bg-gray-700/50">
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <EditableMetadataField label="Case Number" value={prior.caseNumber} path={`fullDocket.priorCases[${idx}].caseNumber`} onSave={handleMetadataUpdate} />

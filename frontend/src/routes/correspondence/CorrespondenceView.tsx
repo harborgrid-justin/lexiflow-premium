@@ -1,6 +1,6 @@
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { FileText, Layout, Mail } from 'lucide-react';
-import { Button } from '../../components/common/Button';
-import { PageHeader } from '../../components/common/PageHeader';
 import { useCorrespondence } from './CorrespondenceProvider';
 
 export function CorrespondenceView() {
@@ -75,7 +75,7 @@ function MetricCard({ title, value, icon }: { title: string; value: number; icon
   );
 }
 
-function TabButton({ active, onClick, disabled, children }: any) {
+function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
     <button onClick={onClick} disabled={disabled}
       className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${active ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-600 dark:text-slate-400'
@@ -85,7 +85,7 @@ function TabButton({ active, onClick, disabled, children }: any) {
   );
 }
 
-function EmailRow({ email }: { email: any }) {
+function EmailRow({ email }: { email: CorrespondenceEmail }) {
   return (
     <div className={`bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 ${!email.read ? 'border-l-4 border-l-blue-500' : ''
       }`}>
@@ -101,7 +101,7 @@ function EmailRow({ email }: { email: any }) {
   );
 }
 
-function LetterRow({ letter }: { letter: any }) {
+function LetterRow({ letter }: { letter: CorrespondenceLetter }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center justify-between">
@@ -117,7 +117,7 @@ function LetterRow({ letter }: { letter: any }) {
   );
 }
 
-function TemplateCard({ template }: { template: any }) {
+function TemplateCard({ template }: { template: CorrespondenceTemplate }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-500 transition-colors cursor-pointer">
       <Layout className="w-8 h-8 text-emerald-600 mb-2" />

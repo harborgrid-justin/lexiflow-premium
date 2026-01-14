@@ -10,12 +10,12 @@
 
 import { BookOpen, Filter, List } from 'lucide-react';
 
-import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
-import { TimelineItem } from '@/shared/ui/molecules/TimelineItem/TimelineItem';
-import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-import { useCaseTimeline } from '@/routes/cases/hooks/useCaseTimeline';
+import { useCaseTimeline } from '@/routes/cases/_hooks/useCaseTimeline';
 import { cn } from '@/shared/lib/cn';
+import { TimelineItem } from '@/shared/ui/molecules/TimelineItem/TimelineItem';
+import { VirtualList } from '@/shared/ui/organisms/VirtualList/VirtualList';
 import { TimelineEvent } from '@/types';
+import { StoryModeTimeline } from './timeline/StoryModeTimeline';
 
 interface CaseTimelineProps {
   events: TimelineEvent[];

@@ -406,10 +406,12 @@ export class UsersApiService {
    * @param userId User ID
    * @returns User preferences
    */
-  async getPreferences(userId: string): Promise<any> {
+  async getPreferences(userId: string): Promise<UserPreferences> {
     this.validateId(userId, "getPreferences");
     try {
-      return await apiClient.get<any>(`${this.baseUrl}/${userId}/preferences`);
+      return await apiClient.get<UserPreferences>(
+        `${this.baseUrl}/${userId}/preferences`
+      );
     } catch (error) {
       console.error(
         `[UsersApiService] Failed to fetch preferences for user ${userId}`,
@@ -425,10 +427,13 @@ export class UsersApiService {
    * @param preferences Preferences data
    * @returns Updated preferences
    */
-  async updatePreferences(userId: string, preferences: any): Promise<any> {
+  async updatePreferences(
+    userId: string,
+    preferences: Partial<UserPreferences>
+  ): Promise<UserPreferences> {
     this.validateId(userId, "updatePreferences");
     try {
-      return await apiClient.put<any>(
+      return await apiClient.put<UserPreferences>(
         `${this.baseUrl}/${userId}/preferences`,
         preferences
       );

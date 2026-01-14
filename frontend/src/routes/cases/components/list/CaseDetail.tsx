@@ -11,11 +11,12 @@
  * - Guideline 33: Ready for isPendingThemeChange integration
  */
 
-import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks/useModalState';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useCaseNavigation } from '@/routes/cases/_hooks/useCaseNavigation';
 import { DataService } from '@/services/data/data-service.service';
 import { queryClient } from '@/services/infrastructure/queryClient';
+import { ConfirmDialog } from '@/shared/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { Matter, MatterPriority, MatterStatus } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import {
@@ -34,7 +35,6 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { MatterForm } from './matter-form';
-import { useCaseNavigation } from '@/routes/cases/hooks/useCaseNavigation';
 
 export const CaseDetail: React.FC = () => {
   const { matterId, backToMatters, isValidMatter } = useCaseNavigation();

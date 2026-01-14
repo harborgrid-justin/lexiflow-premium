@@ -19,15 +19,14 @@ import {
   Trash2,
   X
 } from 'lucide-react';
-import type { DataSourceConnection } from './types';
 import { formatLastSync, getStatusColor, getStatusLabel } from './utils';
 
-interface ConnectionCardProps {
-  connection: DataSourceConnection;
-  onSync: (id: string) => void;
-  onDelete: (id: string) => void;
-  onTest: (connection: DataSourceConnection) => void;
-}
+// interface ConnectionCardProps {
+//   connection: DataSourceConnection;
+//   onSync: (id: string) => void;
+//   onDelete: (id: string) => void;
+//   onTest: (connection: DataSourceConnection) => void;
+// }
 
 /**
  * Card component for displaying data source connection

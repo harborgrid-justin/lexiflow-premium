@@ -44,7 +44,7 @@ export function RouteSkeleton({ title = 'Loading' }: RouteSkeletonProps) {
 /**
  * Table Route Skeleton - For list/table routes
  */
-export function TableRouteSkeleton({ title = 'Loading' }: RouteSkeletonProps) {
+export function TableRouteSkeleton({ title: _title = 'Loading' }: RouteSkeletonProps) {
   return (
     <div
       className="min-h-screen bg-slate-50 dark:bg-slate-900 animate-pulse"

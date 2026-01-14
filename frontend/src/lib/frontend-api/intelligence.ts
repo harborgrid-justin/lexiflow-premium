@@ -15,7 +15,9 @@ import {
   ValidationError,
 } from "./index";
 
-export async function getPredictions(caseId?: string): Promise<Result<any[]>> {
+export async function getPredictions(
+  caseId?: string
+): Promise<Result<unknown[]>> {
   const params = caseId ? { caseId } : {};
   const result = await client.get<unknown>("/intelligence/predictions", {
     params,
@@ -33,7 +35,7 @@ export async function requestPrediction(input: {
   type: string;
   caseId: string;
   parameters?: Record<string, unknown>;
-}): Promise<Result<any>> {
+}): Promise<Result<unknown>> {
   if (!input.type || !input.caseId) {
     return failure(
       new ValidationError("Prediction type and case ID are required")
@@ -49,7 +51,9 @@ export async function requestPrediction(input: {
   return success(normalizePrediction(result.data));
 }
 
-export async function getLegalResearch(query: string): Promise<Result<any>> {
+export async function getLegalResearch(
+  query: string
+): Promise<Result<unknown>> {
   if (!query || query.trim() === "") {
     return failure(new ValidationError("Search query is required"));
   }

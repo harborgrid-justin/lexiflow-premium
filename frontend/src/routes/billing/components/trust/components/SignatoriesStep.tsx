@@ -23,7 +23,7 @@ export function SignatoriesStep({
   getFieldError,
   updateField,
   handleFieldBlur,
-}) => {
+}: SignatoriesStepProps) {
   const { theme } = useTheme();
 
   return (

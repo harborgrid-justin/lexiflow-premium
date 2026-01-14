@@ -3,9 +3,9 @@
  * Enterprise React Architecture Pattern
  */
 
+import { DataService } from "@/services/data/data-service.service";
 import type { ExtendedUserProfile } from "@/types/system";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
 
 export interface ProfileLoaderData {
   profile: ExtendedUserProfile | null;

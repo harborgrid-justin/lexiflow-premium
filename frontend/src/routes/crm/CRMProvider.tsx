@@ -1,9 +1,38 @@
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 
+
+export interface CRMClient {
+  id: string;
+  name: string;
+  industry: string;
+  contactCount: number;
+  status: string;
+  [key: string]: unknown;
+}
+
+export interface CRMContact {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  clientName: string;
+  [key: string]: unknown;
+}
+
+export interface CRMOpportunity {
+  id: string;
+  title: string;
+  clientName: string;
+  value: number;
+  stage: string;
+  status: string;
+  [key: string]: unknown;
+}
+
 interface CRMContextValue {
-  clients: any[];
-  contacts: any[];
-  opportunities: any[];
+  clients: CRMClient[];
+  contacts: CRMContact[];
+  opportunities: CRMOpportunity[];
   metrics: {
     totalClients: number;
     activeClients: number;
@@ -19,9 +48,9 @@ const CRMContext = createContext<CRMContextValue | null>(null);
 
 export function CRMProvider({ children, initialClients, initialContacts, initialOpportunities }: {
   children: React.ReactNode;
-  initialClients: any[];
-  initialContacts: any[];
-  initialOpportunities: any[];
+  initialClients: CRMClient[];
+  initialContacts: CRMContact[];
+  initialOpportunities: CRMOpportunity[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTabState] = useState<'clients' | 'contacts' | 'opportunities'>('clients');

@@ -28,7 +28,7 @@ export function ComplianceStep({
   getFieldError,
   updateField,
   handleFieldBlur,
-}) => {
+}: ComplianceStepProps) {
   const { theme } = useTheme();
 
   return (

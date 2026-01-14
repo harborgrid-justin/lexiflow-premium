@@ -21,6 +21,22 @@ import { useLoaderData, useNavigate } from 'react-router';
 import type { Route } from "./+types/home";
 import { createMeta } from './_shared/meta-utils';
 
+interface DashboardCase {
+  id?: string;
+  status?: string;
+  updatedAt?: string;
+  createdAt?: string;
+  [key: string]: unknown;
+}
+
+interface DashboardTask {
+  id?: string;
+  status?: string;
+  priority?: string;
+  dueDate?: string;
+  [key: string]: unknown;
+}
+
 // ============================================================================
 // Meta Tags
 // ============================================================================
@@ -59,27 +75,28 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
     const tasksResult = await workflowApi.getAllTasks({ page: 1, limit: 100 });
 
     // Handle Result<T> returns - check for ok flag
-    let casesArray = [];
-    let tasksArray = [];
+    let casesArray: DashboardCase[] = [];
+    let tasksArray: DashboardTask[] = [];
 
     if (casesResult.ok) {
-      casesArray = casesResult.data.data || [];
+      // Cast to expected structure
+      casesArray = (casesResult.data as { data: DashboardCase[] })?.data || [];
     }
 
     if (tasksResult.ok) {
-      tasksArray = tasksResult.data.data || [];
+      tasksArray = (tasksResult.data as { data: DashboardTask[] })?.data || [];
     }
 
     // Calculate metrics
-    const activeCases = casesArray.filter((c: any) => c.status === 'Active').length;
-    const pendingTasks = tasksArray.filter((t: any) => t.status !== 'Completed').length;
-    const highPriorityTasks = tasksArray.filter((t: any) => t.priority === 'High' && t.status !== 'Completed').length;
+    const activeCases = casesArray.filter(c => c.status === 'Active').length;
+    const pendingTasks = tasksArray.filter(t => t.status !== 'Completed').length;
+    const highPriorityTasks = tasksArray.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
 
     // Get recent items
     const recentCases = casesArray
-      .sort((a: any, b: any) => {
-        const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
-        const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      .sort((a, b) => {
+        const dateA = new Date((a.updatedAt || a.createdAt || 0) as string | number).getTime();
+        const dateB = new Date((b.updatedAt || b.createdAt || 0) as string | number).getTime();
         return dateB - dateA;
       })
       .slice(0, 5);
@@ -87,8 +104,8 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
     console.log('recent cases data:', recentCases);
 
     const upcomingTasks = tasksArray
-      .filter((t: any) => t.dueDate && t.status !== 'Completed')
-      .sort((a: any, b: any) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
+      .filter(t => t.dueDate && t.status !== 'Completed')
+      .sort((a, b) => new Date((a.dueDate || 0) as string | number).getTime() - new Date((b.dueDate || 0) as string | number).getTime())
       .slice(0, 5);
 
     return {

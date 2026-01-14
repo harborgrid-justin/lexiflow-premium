@@ -16,7 +16,7 @@ import { useMemo, useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
+import { ModuleRegistry } from '@/services/infrastructure/module-registry.service';
 import { queryClient } from '@/hooks/useQueryHooks';
 
 // Hooks & Context

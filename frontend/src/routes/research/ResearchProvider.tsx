@@ -3,9 +3,9 @@
  * Enterprise React Architecture Pattern
  */
 
+import type { Citation, ResearchQuery } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 import { useLoaderData } from 'react-router';
-import type { Citation, ResearchQuery } from '../../types';
 import type { ResearchLoaderData } from './loader';
 
 interface ResearchMetrics {

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useDeferredValue } from 'react';
+import React, { useDeferredValue, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,7 +21,7 @@ import {
   useDashboardCharts,
   useDashboardStats,
   useDashboardTasks
-} from '../hooks/useDashboardData';
+} from '../_hooks/useDashboardData';
 
 // Components
 import { LazyLoader } from '@/shared/ui/molecules/LazyLoader/LazyLoader';

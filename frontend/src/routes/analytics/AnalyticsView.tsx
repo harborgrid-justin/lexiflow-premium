@@ -1,5 +1,5 @@
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { BarChart3, Clock, DollarSign, TrendingUp } from 'lucide-react';
-import { PageHeader } from '../../components/organisms/PageHeader';
 import { useAnalytics } from './AnalyticsProvider';
 
 export function AnalyticsView() {

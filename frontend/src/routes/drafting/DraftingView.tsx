@@ -2,10 +2,10 @@
  * Drafting Domain - View Component
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Eye, FileCheck, FileEdit, PenTool, Plus } from 'lucide-react';
 import React, { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
 import { useDrafting } from './DraftingProvider';
 
 export function DraftingView() {
@@ -123,8 +123,8 @@ function FilterButton({ active, onClick, children }: {
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${active
-          ? 'bg-blue-600 text-white'
-          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
         }`}
     >
       {children}

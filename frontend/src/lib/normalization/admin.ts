@@ -22,7 +22,7 @@ interface BackendAuditLog {
   ip_address?: string;
 }
 
-export const normalizeAuditLog: Normalizer<BackendAuditLog, any> = (
+export const normalizeAuditLog: Normalizer<BackendAuditLog, unknown> = (
   backend
 ) => {
   return {
@@ -36,7 +36,7 @@ export const normalizeAuditLog: Normalizer<BackendAuditLog, any> = (
   };
 };
 
-export function normalizeAuditLogs(backendLogs: unknown): any[] {
+export function normalizeAuditLogs(backendLogs: unknown): unknown[] {
   return normalizeArray(backendLogs, normalizeAuditLog);
 }
 
@@ -48,9 +48,10 @@ interface BackendSystemMetrics {
   timestamp?: string;
 }
 
-export const normalizeSystemMetrics: Normalizer<BackendSystemMetrics, any> = (
-  backend
-) => {
+export const normalizeSystemMetrics: Normalizer<
+  BackendSystemMetrics,
+  unknown
+> = (backend) => {
   return {
     cpuUsage: normalizeNumber(backend.cpu_usage),
     memoryUsage: normalizeNumber(backend.memory_usage),

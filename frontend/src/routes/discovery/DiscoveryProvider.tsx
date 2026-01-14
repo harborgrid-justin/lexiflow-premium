@@ -1,5 +1,5 @@
+import type { DiscoveryRequest, Evidence, ProductionSet } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
-import type { DiscoveryRequest, Evidence, ProductionSet } from '../../types';
 
 interface DiscoveryMetrics {
   totalEvidence: number;
@@ -17,7 +17,7 @@ interface DiscoveryContextValue {
   activeTab: 'evidence' | 'requests' | 'productions';
   filters: { tag?: string; status?: string };
   setActiveTab: (tab: 'evidence' | 'requests' | 'productions') => void;
-  setFilters: (filters: any) => void;
+  setFilters: (filters: { tag?: string; status?: string }) => void;
   isPending: boolean;
 }
 

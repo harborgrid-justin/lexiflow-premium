@@ -2,18 +2,19 @@ import { cn } from '@/shared/lib/cn';
 import { useTheme } from '@/theme';
 import type { StoreRecord } from './types';
 
-interface IndexedDBDataTableProps {
-  data: StoreRecord[];
-  isLoading: boolean;
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  editingId: string | null;
-  editingData: StoreRecord | null;
-  setEditingData: (value: StoreRecord | null) => void;
-  onEdit: (item: StoreRecord) => void;
-  onSave: () => void;
-  onDelete: (id: string) => void;
-  onCancel: () => void;
+// interface IndexedDBDataTableProps {
+//   data: StoreRecord[];
+//   isLoading: boolean;
+//   searchTerm: string;
+//   setSearchTerm: (value: string) => void;
+//   editingId: string | null;
+//   editingData: StoreRecord | null;
+//   setEditingData: (value: StoreRecord | null) => void;
+//   onEdit: (item: StoreRecord) => void;
+//   onSave: () => void;
+//   onDelete: (id: string) => void;
+// }
+onCancel: () => void;
 }
 
 export function IndexedDBDataTable({

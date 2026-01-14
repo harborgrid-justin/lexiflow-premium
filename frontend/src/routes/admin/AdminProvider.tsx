@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react';
 
 interface AdminContextValue {
-  users: any[];
-  settings: any;
-  auditLogs: any[];
+  users: unknown[];
+  settings: unknown;
+  auditLogs: unknown[];
   activeTab: 'users' | 'settings' | 'audit';
   setActiveTab: (tab: 'users' | 'settings' | 'audit') => void;
   isPending: boolean;
@@ -13,9 +13,9 @@ const AdminContext = createContext<AdminContextValue | null>(null);
 
 export function AdminProvider({ children, initialUsers, initialSettings, initialAuditLogs }: {
   children: React.ReactNode;
-  initialUsers: any[];
-  initialSettings: any;
-  initialAuditLogs: any[];
+  initialUsers: unknown[];
+  initialSettings: unknown;
+  initialAuditLogs: unknown[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTabState] = useState<'users' | 'settings' | 'audit'>('users');

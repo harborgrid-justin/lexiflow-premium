@@ -56,9 +56,6 @@ export function useRouteTransition(
   };
 
   useEffect(() => {
-    // Detect if we're navigating forward or backward
-    const isForward = !navigation.state || navigation.state === 'loading';
-
     if (location.pathname !== previousLocation.current) {
       // Start exit transition
       setTransitionStage('exiting');

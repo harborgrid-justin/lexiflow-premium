@@ -28,13 +28,13 @@ export type Validator<T> = (value: unknown) => Result<T>;
  * Schema definition for an object
  */
 export type Schema<T> = {
-  [K in keyof T]: FieldValidator<T[K]>;
+  [K in keyof T]: FieldValidator;
 };
 
 /**
  * Field validator configuration
  */
-export interface FieldValidator<T = unknown> {
+export interface FieldValidator {
   type: "string" | "number" | "boolean" | "date" | "array" | "object";
   required?: boolean;
   min?: number;

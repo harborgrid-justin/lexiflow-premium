@@ -1,7 +1,7 @@
+import { DataService } from "@/services/data/data-service.service";
+import type { DiscoveryRequest, Evidence, ProductionSet } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
-import type { DiscoveryRequest, Evidence, ProductionSet } from "../../types";
 
 export interface DiscoveryLoaderData {
   evidence: Evidence[];

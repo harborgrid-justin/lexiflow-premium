@@ -1,19 +1,19 @@
 import { Edit2, Loader2, Plus, RefreshCw, Sparkles } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button';
 import { Modal } from '@/shared/ui/molecules/Modal';
 import { Tabs } from '@/shared/ui/molecules/Tabs';
 import { useTheme } from '@/theme';
-import { cn } from '@/shared/lib/cn';
 
 import { QUALITY_TABS } from '@/config/quality.config';
+import { useDataQualityStudio } from '../../_hooks/useDataQualityStudio';
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';
 import { QualityDashboard } from './quality/QualityDashboard';
 import { RuleBuilder } from './quality/RuleBuilder';
 import { StandardizationConsole } from './quality/StandardizationConsole';
-import { useDataQualityStudio } from '../../hooks/useDataQualityStudio';
 
 // Helper function for severity styling
 const getSeverityClassName = (severity: string) => {

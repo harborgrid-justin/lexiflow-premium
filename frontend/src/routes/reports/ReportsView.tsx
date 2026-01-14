@@ -2,10 +2,10 @@
  * Reports & Analytics Domain - View Component
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Calendar, FileText, Plus, TrendingUp } from 'lucide-react';
 import { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
 import { useReports } from './ReportsProvider';
 
 export function ReportsView() {

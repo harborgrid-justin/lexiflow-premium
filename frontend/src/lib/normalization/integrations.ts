@@ -23,7 +23,7 @@ interface BackendIntegration {
   created_at?: string;
 }
 
-export const normalizeIntegration: Normalizer<BackendIntegration, any> = (
+export const normalizeIntegration: Normalizer<BackendIntegration, unknown> = (
   backend
 ) => {
   return {
@@ -38,6 +38,6 @@ export const normalizeIntegration: Normalizer<BackendIntegration, any> = (
   };
 };
 
-export function normalizeIntegrations(backendIntegrations: unknown): any[] {
+export function normalizeIntegrations(backendIntegrations: unknown): unknown[] {
   return normalizeArray(backendIntegrations, normalizeIntegration);
 }

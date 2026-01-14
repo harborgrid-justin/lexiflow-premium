@@ -65,10 +65,9 @@ export const NotificationService = {
     type?: string;
     limit?: number;
   }): Promise<Notification[]> => {
-    return apiClient.get<Notification[]>(
-      "/communications/notifications",
-      { params: filters }
-    );
+    return apiClient.get<Notification[]>("/communications/notifications", {
+      params: filters,
+    });
   },
 
   markAsRead: async (notificationId: string): Promise<boolean> => {

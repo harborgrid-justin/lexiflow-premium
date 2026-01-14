@@ -162,10 +162,13 @@ export class NotificationsApiService {
         filters as Record<string, unknown>
       );
       return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Gracefully handle auth errors - return empty array instead of throwing
-      if (error?.status === 403 || error?.status === 401) {
-        console.warn('[NotificationsApiService.getAll] Authentication required - returning empty notifications');
+      const err = error as { status?: number };
+      if (err?.status === 403 || err?.status === 401) {
+        console.warn(
+          "[NotificationsApiService.getAll] Authentication required - returning empty notifications"
+        );
         return [];
       }
       console.error("[NotificationsApiService.getAll] Error:", error);

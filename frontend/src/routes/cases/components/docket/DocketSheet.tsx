@@ -28,9 +28,9 @@ import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useThemeContext } from '@/theme';
 import { useWindow } from '@/providers';
-import { useDocketSheet } from '@/routes/cases/hooks/useDocketSheet';
+import { useDocketSheet } from '@/routes/cases/_hooks/useDocketSheet';
+import { useThemeContext } from '@/theme';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/shared/lib/cn';
@@ -45,25 +45,25 @@ interface DocketSheetProps {
 export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const { theme } = useThemeContext();
   const { openWindow, closeWindow } = useWindow();
-  
+
   const {
-      searchTerm, setSearchTerm,
-      selectedCaseId, setSelectedCaseId,
-      activeTab, setActiveTab,
-      entries: docketEntries,
-      isLoading,
-      hasMore,
-      isFetchingMore,
-      cases,
-      caseParties,
-      addModal,
-      deleteModal,
-      handleLoadMore,
-      handleSaveEntry,
-      confirmDelete,
-      liveModeToggle,
-      liveFeedStatus,
-      reconnectLiveFeed
+    searchTerm, setSearchTerm,
+    selectedCaseId, setSelectedCaseId,
+    activeTab, setActiveTab,
+    entries: docketEntries,
+    isLoading,
+    hasMore,
+    isFetchingMore,
+    cases,
+    caseParties,
+    addModal,
+    deleteModal,
+    handleLoadMore,
+    handleSaveEntry,
+    confirmDelete,
+    liveModeToggle,
+    liveFeedStatus,
+    reconnectLiveFeed
   } = useDocketSheet(filterType);
 
   // Sync filter prop to internal state

@@ -15,8 +15,8 @@ import {
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { authApi } from '@/lib/frontend-api';
 import { adminApi } from "@/api/domains/admin.api";
+import { authApi } from "@/lib/frontend-api";
 import { apiClient } from "@/services/infrastructure/apiClient";
 
 export const AdminService = {

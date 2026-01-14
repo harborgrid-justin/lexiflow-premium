@@ -1,7 +1,7 @@
+import { DataService } from "@/services/data/data-service.service";
+import type { BillingRate, Invoice, TimeEntry, Transaction } from "@/types";
 import type { ActionFunctionArgs } from "react-router";
 import { defer } from "react-router";
-import { DataService } from "../../services/data/dataService";
-import type { BillingRate, Invoice, TimeEntry, Transaction } from "../../types";
 
 export interface BillingLoaderData {
   invoices: Invoice[];

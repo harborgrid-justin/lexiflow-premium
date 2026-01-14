@@ -1,5 +1,5 @@
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { AlertCircle, Calendar, Shield } from 'lucide-react';
-import { PageHeader } from '../../components/common/PageHeader';
 import { useCompliance } from './ComplianceProvider';
 
 export function ComplianceView() {
@@ -57,7 +57,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function CheckRow({ check }: { check: any }) {
+function CheckRow({ check }: { check: ComplianceCheck }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-3">
       <div className="flex items-center justify-between">
@@ -74,7 +74,7 @@ function CheckRow({ check }: { check: any }) {
   );
 }
 
-function ConflictRow({ conflict }: { conflict: any }) {
+function ConflictRow({ conflict }: { conflict: ComplianceConflict }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-3">
       <div className="flex items-start gap-3">

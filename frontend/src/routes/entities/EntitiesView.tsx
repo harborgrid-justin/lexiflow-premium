@@ -2,10 +2,10 @@
  * Entities Domain - View Component
  */
 
+import { Button } from '@/components/organisms/_legacy/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Building, Plus, User } from 'lucide-react';
 import React, { useId } from 'react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/organisms/_legacy/Button';
 import { useEntities } from './EntitiesProvider';
 
 export function EntitiesView() {
@@ -93,8 +93,8 @@ function FilterButton({ active, onClick, children }: {
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors text-sm ${active
-          ? 'bg-blue-600 text-white'
-          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
+        ? 'bg-blue-600 text-white'
+        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
         }`}
     >
       {children}
@@ -132,8 +132,8 @@ function EntityCard({ entity }: { entity: Entity }) {
               {entity.type}
             </span>
             <span className={`px-2 py-1 rounded text-xs font-medium ${entity.status === 'Active'
-                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
-                : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-400'
+              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+              : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-400'
               }`}>
               {entity.status}
             </span>

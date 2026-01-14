@@ -15,7 +15,18 @@ export interface RouteAnalyticsEvent {
   previousPath?: string;
   timestamp: number;
   loadTime?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
+}
+
+interface WindowAnalytics {
+  gtag?: (
+    command: string,
+    action: string,
+    params?: Record<string, unknown>
+  ) => void;
+  mixpanel?: {
+    track: (event: string, properties?: Record<string, unknown>) => void;
+  };
 }
 
 export interface UserJourney {
@@ -93,7 +104,7 @@ class RouteAnalyticsService {
   /**
    * Track page view
    */
-  trackPageView(path: string, metadata?: Record<string, any>): void {
+  trackPageView(path: string, metadata?: Record<string, unknown>): void {
     if (!this.enabled) return;
 
     const event: RouteAnalyticsEvent = {
@@ -186,9 +197,11 @@ class RouteAnalyticsService {
    * Send event to external analytics services
    */
   private sendToExternalAnalytics(event: RouteAnalyticsEvent): void {
+    const win = window as unknown as WindowAnalytics;
+
     // Google Analytics 4
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", event.type, {
+    if (typeof window !== "undefined" && win.gtag) {
+      win.gtag("event", event.type, {
         page_path: event.path,
         previous_path: event.previousPath,
         load_time: event.loadTime,
@@ -197,8 +210,8 @@ class RouteAnalyticsService {
     }
 
     // Mixpanel
-    if (typeof window !== "undefined" && (window as any).mixpanel) {
-      (window as any).mixpanel.track(event.type, {
+    if (typeof window !== "undefined" && win.mixpanel) {
+      win.mixpanel.track(event.type, {
         path: event.path,
         previousPath: event.previousPath,
         loadTime: event.loadTime,

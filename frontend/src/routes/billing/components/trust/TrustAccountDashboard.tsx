@@ -16,11 +16,11 @@
  * 5. Memoized computed values prevent expensive recalculations on re-render
  */
 
-import { useTheme } from '@/theme';
 import { useModalState } from '@/hooks/useModalState';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
+import { useTheme } from '@/theme';
 import type { TrustAccount } from '@/types/trust-accounts';
 import { TrustAccountStatus } from '@/types/trust-accounts';
 import { Formatters } from '@/utils/formatters';
@@ -336,15 +336,15 @@ export function TrustAccountDashboard() {
 
   const {
     setSelectedView,
-    createAccount,
-    reconcileAccount,
+    createAccount: _createAccount,
+    reconcileAccount: _reconcileAccount,
     refresh
   } = actions;
 
   /**
    * EVENT HANDLERS
    */
-  const notify = useNotify(); // Used by actions mostly, but maybe local UI
+  const _notify = useNotify(); // Used by actions mostly, but maybe local UI
   const createModal = useModalState();
   const reconcileModal = useModalState();
 
@@ -356,7 +356,7 @@ export function TrustAccountDashboard() {
     createModal.open();
   }, [createModal]);
 
-  const handleReconcileAccount = useCallback((accountId?: string) => {
+  const handleReconcileAccount = useCallback((_accountId?: string) => {
     reconcileModal.open();
     // If accountId is passed, we might want to set it in modal state
   }, [reconcileModal]);

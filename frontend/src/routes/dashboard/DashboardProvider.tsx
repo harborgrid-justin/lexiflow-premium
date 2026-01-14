@@ -1,7 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
-import type { User } from '@/types';
+import type { Case, DocketEntry, Task, TimeEntry, User } from '@/types';
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import type { Case, DocketEntry, Task, TimeEntry } from '../../types';
 
 interface DashboardMetrics {
   totalCases: number;

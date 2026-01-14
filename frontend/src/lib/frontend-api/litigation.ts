@@ -34,14 +34,12 @@
  * - Pure and deterministic
  */
 
-import {
   client,
-  failure,
   success,
-  ValidationError,
-  NotFoundError,
   type Result,
-} from './index';
+  ValidationError,
+  failure,
+} from "./index";
 
 /**
  * Fetch all items
@@ -60,17 +58,13 @@ import {
  * ```
  */
 export async function getAll(
-  filters?: Record<string, any>
+  filters?: Record<string, unknown>
 ): Promise<Result<unknown[]>> {
-  // TODO: Implement getAll
-  // Example: GET /...
-
-  // if (!id) return failure(new ValidationError("ID is required"));
-  // const result = await client.get(`/.../...`);
-  // if (!result.ok) return result;
-  // return success(normalizeLitigation(result.data));
-
-  return failure(new ValidationError("Not implemented"));
+  const result = await client.get<unknown[]>("/litigation", filters || {});
+  if (!result.ok) {
+    return result;
+  }
+  return success(result.data);
 }
 
 /**
@@ -89,18 +83,15 @@ export async function getAll(
  * // Use result.data
  * ```
  */
-export async function getById(
-  id: string
-): Promise<Result<unknown>> {
-  // TODO: Implement getById
-  // Example: GET /.../id
-
-  // if (!id) return failure(new ValidationError("ID is required"));
-  // const result = await client.get(`/.../...`);
-  // if (!result.ok) return result;
-  // return success(normalizeLitigation(result.data));
-
-  return failure(new ValidationError("Not implemented"));
+export async function getById(id: string): Promise<Result<unknown>> {
+  if (!id) {
+    return failure(new ValidationError("ID is required"));
+  }
+  const result = await client.get<unknown>(`/litigation/${id}`);
+  if (!result.ok) {
+    return result;
+  }
+  return success(result.data);
 }
 
 /**
@@ -119,18 +110,15 @@ export async function getById(
  * // Use result.data
  * ```
  */
-export async function create(
-  input: unknown
-): Promise<Result<unknown>> {
-  // TODO: Implement create
-  // Example: POST /...
-
-  // if (!id) return failure(new ValidationError("ID is required"));
-  // const result = await client.get(`/.../...`);
-  // if (!result.ok) return result;
-  // return success(normalizeLitigation(result.data));
-
-  return failure(new ValidationError("Not implemented"));
+export async function create(input: unknown): Promise<Result<unknown>> {
+  if (!input) {
+    return failure(new ValidationError("Input is required"));
+  }
+  const result = await client.post<unknown>("/litigation", input);
+  if (!result.ok) {
+    return result;
+  }
+  return success(result.data);
 }
 
 /**
@@ -150,17 +138,17 @@ export async function create(
  * ```
  */
 export async function update(
-  id: string, input: unknown
+  id: string,
+  input: unknown
 ): Promise<Result<unknown>> {
-  // TODO: Implement update
-  // Example: PATCH /.../id
-
-  // if (!id) return failure(new ValidationError("ID is required"));
-  // const result = await client.get(`/.../...`);
-  // if (!result.ok) return result;
-  // return success(normalizeLitigation(result.data));
-
-  return failure(new ValidationError("Not implemented"));
+  if (!id) {
+    return failure(new ValidationError("ID is required"));
+  }
+  const result = await client.patch<unknown>(`/litigation/${id}`, input);
+  if (!result.ok) {
+    return result;
+  }
+  return success(result.data);
 }
 
 /**
@@ -179,17 +167,13 @@ export async function update(
  * // Use result.data
  * ```
  */
-export async function deleteLitigation(
-  id: string
-): Promise<Result<void>> {
-  // TODO: Implement delete
-  // Example: DELETE /.../id
-
-  // if (!id) return failure(new ValidationError("ID is required"));
-  // const result = await client.get(`/.../...`);
-  // if (!result.ok) return result;
-  // return success(normalizeLitigation(result.data));
-
-  return failure(new ValidationError("Not implemented"));
+export async function deleteLitigation(id: string): Promise<Result<void>> {
+  if (!id) {
+    return failure(new ValidationError("ID is required"));
+  }
+  const result = await client.delete<void>(`/litigation/${id}`);
+  if (!result.ok) {
+    return result;
+  }
+  return success(undefined);
 }
-

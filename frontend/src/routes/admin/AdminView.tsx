@@ -1,6 +1,6 @@
+import { Button } from '@/shared/ui/atoms/Button/Button';
+import { PageHeader } from '@/shared/ui/organisms/PageHeader';
 import { Settings, Shield, Users } from 'lucide-react';
-import { Button } from '../../components/common/Button';
-import { PageHeader } from '../../components/common/PageHeader';
 import { useAdmin } from './AdminProvider';
 
 export function AdminView() {
@@ -62,7 +62,7 @@ export function AdminView() {
   );
 }
 
-function TabButton({ active, onClick, disabled, children }: any) {
+function TabButton({ active, onClick, disabled, children }: { active: boolean; onClick: () => void; disabled: boolean; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
@@ -75,7 +75,13 @@ function TabButton({ active, onClick, disabled, children }: any) {
   );
 }
 
-function UserCard({ user }: { user: any }) {
+interface AdminUser {
+  name: string;
+  email: string;
+  role: string;
+}
+
+function UserCard({ user }: { user: AdminUser }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center gap-3 mb-3">
@@ -103,7 +109,7 @@ function SettingRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function AuditLogRow({ log }: { log: any }) {
+function AuditLogRow({ log }: { log: Record<string, unknown> }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center justify-between">

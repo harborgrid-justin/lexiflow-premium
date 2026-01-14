@@ -8,6 +8,12 @@
  */
 
 import {
+  calculateCanvasMousePosition,
+  calculateDropPosition,
+  generateCanvasContextMenuItems,
+  generateNodeContextMenuItems,
+} from "@/routes/litigation/components/strategy/utils";
+import {
   AddConnectionCommand,
   AddNodeCommand,
   DeleteConnectionCommand,
@@ -23,12 +29,6 @@ import {
   TypedWorkflowNode,
   WorkflowConnection,
 } from "@/types/workflow-types";
-import {
-  calculateCanvasMousePosition,
-  calculateDropPosition,
-  generateCanvasContextMenuItems,
-  generateNodeContextMenuItems,
-} from "@features/litigation/strategy/utils";
 import React, { useCallback, useRef, useState } from "react";
 import { useCommandHistory } from "./useCommandHistory";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";

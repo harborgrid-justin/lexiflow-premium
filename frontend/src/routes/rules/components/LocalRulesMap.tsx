@@ -1,9 +1,9 @@
-import { useTheme } from '@/theme';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { JurisdictionGeoMap } from '@/routes/jurisdiction/components/JurisdictionGeoMap';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Card } from '@/shared/ui/molecules/Card/Card';
-import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
+import { useTheme } from '@/theme';
 import { Book, Loader2, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
 import { CourtLevel, groupJurisdictionsByState, Jurisdiction, StateGroup } from './localRulesMap.utils';

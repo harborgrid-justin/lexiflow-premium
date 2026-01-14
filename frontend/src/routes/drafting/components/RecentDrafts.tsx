@@ -2,7 +2,7 @@ import { useTheme } from '@/theme';
 import { GeneratedDocument } from '@api/domains/drafting';
 import { formatDistanceToNow } from 'date-fns';
 import { Clock, FileText } from 'lucide-react';
-import * as styles from '../DraftingDashboard.styles';
+import * as styles from './DraftingDashboard.styles';
 
 interface RecentDraftsProps {
   drafts: GeneratedDocument[];

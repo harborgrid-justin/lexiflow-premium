@@ -27,15 +27,9 @@ import {
   normalizeMessage,
   normalizeMessages,
 } from "../normalization/communications";
-import {
-  client,
-  failure,
-  NotFoundError,
-  type PaginatedResult,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { NotFoundError, ValidationError } from "./errors";
+import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Client query filters

@@ -18,14 +18,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // ============================================================================
 // Services & Data
 import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
-import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
+import { HolographicRouting } from '@/services/infrastructure/holographic-routing.service';
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '@/theme';
+import { useListNavigation } from '@/hooks/useListNavigation';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useListNavigation } from '@/hooks/useListNavigation';
+import { useTheme } from '@/theme';
 
 // Components
 import { HighlightedText } from '@/shared/ui/atoms/HighlightedText/HighlightedText';

@@ -1,12 +1,12 @@
 import { useQuery } from "@/hooks/useQueryHooks";
-import { WorkflowTask } from "@/types";
-import { ChartDataPoint } from "@/types/dashboard";
 import {
   BillingStats,
   DashboardAlert,
   dashboardService,
   DashboardStats,
-} from "../services/dashboardService";
+} from "@/services/domain/dashboard.service";
+import { WorkflowTask } from "@/types";
+import { ChartDataPoint } from "@/types/dashboard";
 
 /**
  * Hook to fetch dashboard statistics

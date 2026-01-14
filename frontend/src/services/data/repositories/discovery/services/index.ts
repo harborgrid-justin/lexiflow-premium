@@ -5,20 +5,20 @@
  * @module discovery/services
  */
 
-export { dashboardService } from "./DashboardService";
-export { custodianService } from "./CustodianService";
-export { depositionService } from "./DepositionService";
-export { esiSourceService } from "./ESISourceService";
-export { productionService } from "./ProductionService";
-export { interviewService } from "./InterviewService";
-export { discoveryRequestService } from "./DiscoveryRequestService";
-export { reviewBatchService } from "./ReviewBatchService";
-export { processingJobService } from "./ProcessingJobService";
-export { documentReviewService } from "./DocumentReviewService";
-export { examinationService } from "./ExaminationService";
-export { vendorService } from "./VendorService";
-export { sanctionStipulationService } from "./SanctionStipulationService";
-export { legalHoldPrivilegeService } from "./LegalHoldPrivilegeService";
-export { collectionService } from "./CollectionService";
-export { timelineService } from "./TimelineService";
-export { petitionService } from "./PetitionService";
+export { collectionService } from "./collection.service";
+export { custodianService } from "./custodian.service";
+export { dashboardService } from "./dashboard.service";
+export { depositionService } from "./deposition.service";
+export { discoveryRequestService } from "./discovery-request.service";
+export { documentReviewService } from "./document-review.service";
+export { esiSourceService } from "./e-s-i-source.service";
+export { examinationService } from "./examination.service";
+export { interviewService } from "./interview.service";
+export { legalHoldPrivilegeService } from "./legal-hold-privilege.service";
+export { petitionService } from "./petition.service";
+export { processingJobService } from "./processing-job.service";
+export { productionService } from "./production.service";
+export { reviewBatchService } from "./review-batch.service";
+export { sanctionStipulationService } from "./sanction-stipulation.service";
+export { timelineService } from "./timeline.service";
+export { vendorService } from "./vendor.service";

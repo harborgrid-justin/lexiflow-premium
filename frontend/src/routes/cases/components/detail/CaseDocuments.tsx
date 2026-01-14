@@ -33,7 +33,7 @@ import { cn } from '@/shared/lib/cn';
 // Types & Interfaces
 import { LegalDocument } from '@/types';
 
-const DocumentAssembly = lazy(() => import('@/features/operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
+const DocumentAssembly = lazy(() => import('@/routes/documents/components/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
 interface CaseDocumentsProps {
   documents: LegalDocument[];

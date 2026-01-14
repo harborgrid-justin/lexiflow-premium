@@ -46,9 +46,9 @@ import { DataSourceActionsContext, DataSourceStateContext } from './DataSourceHo
  */
 
 // Re-export types for convenience
-export type { DataSourceConfig } from '../repository/config';
-export * from '../repository/errors';
-export type { RepositoryRegistry } from '../repository/types';
+export type { DataSourceConfig } from '@/contexts/repository/config';
+export * from '@/contexts/repository/errors';
+export type { RepositoryRegistry } from '@/contexts/repository/types';
 export type { DataSourceType } from './DataSourceContext.types';
 export * from './DataSourceHooks';
 

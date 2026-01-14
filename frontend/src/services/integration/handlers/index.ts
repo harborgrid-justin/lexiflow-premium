@@ -6,32 +6,32 @@
  */
 
 // Export all handlers
-export { BaseEventHandler } from './BaseEventHandler';
-export { LeadStageChangedHandler } from './LeadStageChangedHandler';
-export { DocketIngestedHandler } from './DocketIngestedHandler';
-export { TaskCompletedHandler } from './TaskCompletedHandler';
-export { DocumentUploadedHandler } from './DocumentUploadedHandler';
-export { InvoiceStatusChangedHandler } from './InvoiceStatusChangedHandler';
-export { EvidenceStatusUpdatedHandler } from './EvidenceStatusUpdatedHandler';
-export { CitationSavedHandler } from './CitationSavedHandler';
-export { WallErectedHandler } from './WallErectedHandler';
-export { StaffHiredHandler } from './StaffHiredHandler';
-export { ServiceCompletedHandler } from './ServiceCompletedHandler';
-export { SourceLinkedHandler } from './SourceLinkedHandler';
+export { BaseEventHandler } from "./base-event.handler.service";
+export { CitationSavedHandler } from "./citation-saved.handler.service";
+export { DocketIngestedHandler } from "./docket-ingested.handler.service";
+export { DocumentUploadedHandler } from "./document-uploaded.handler.service";
+export { EvidenceStatusUpdatedHandler } from "./evidence-status-updated.handler.service";
+export { InvoiceStatusChangedHandler } from "./invoice-status-changed.handler.service";
+export { LeadStageChangedHandler } from "./lead-stage-changed.handler.service";
+export { ServiceCompletedHandler } from "./service-completed.handler.service";
+export { SourceLinkedHandler } from "./source-linked.handler.service";
+export { StaffHiredHandler } from "./staff-hired.handler.service";
+export { TaskCompletedHandler } from "./task-completed.handler.service";
+export { WallErectedHandler } from "./wall-erected.handler.service";
 
 // Import handlers for registry
-import { LeadStageChangedHandler } from './LeadStageChangedHandler';
-import { DocketIngestedHandler } from './DocketIngestedHandler';
-import { TaskCompletedHandler } from './TaskCompletedHandler';
-import { DocumentUploadedHandler } from './DocumentUploadedHandler';
-import { InvoiceStatusChangedHandler } from './InvoiceStatusChangedHandler';
-import { EvidenceStatusUpdatedHandler } from './EvidenceStatusUpdatedHandler';
-import { CitationSavedHandler } from './CitationSavedHandler';
-import { WallErectedHandler } from './WallErectedHandler';
-import { StaffHiredHandler } from './StaffHiredHandler';
-import { ServiceCompletedHandler } from './ServiceCompletedHandler';
-import { SourceLinkedHandler } from './SourceLinkedHandler';
-import type { BaseEventHandler } from './BaseEventHandler';
+import type { BaseEventHandler } from "./base-event.handler.service";
+import { CitationSavedHandler } from "./citation-saved.handler.service";
+import { DocketIngestedHandler } from "./docket-ingested.handler.service";
+import { DocumentUploadedHandler } from "./document-uploaded.handler.service";
+import { EvidenceStatusUpdatedHandler } from "./evidence-status-updated.handler.service";
+import { InvoiceStatusChangedHandler } from "./invoice-status-changed.handler.service";
+import { LeadStageChangedHandler } from "./lead-stage-changed.handler.service";
+import { ServiceCompletedHandler } from "./service-completed.handler.service";
+import { SourceLinkedHandler } from "./source-linked.handler.service";
+import { StaffHiredHandler } from "./staff-hired.handler.service";
+import { TaskCompletedHandler } from "./task-completed.handler.service";
+import { WallErectedHandler } from "./wall-erected.handler.service";
 
 /**
  * Registry of all event handlers
@@ -94,7 +94,7 @@ export class EventHandlerRegistry {
   static getStats() {
     return {
       totalHandlers: this.handlers.size,
-      registeredEvents: this.getRegisteredEvents()
+      registeredEvents: this.getRegisteredEvents(),
     };
   }
 }

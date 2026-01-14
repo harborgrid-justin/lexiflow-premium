@@ -4,7 +4,7 @@ import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader
 
 import { useQuery } from '@/hooks/backend';
 import { useWindow } from '@/providers';
-import { DocumentPreviewPanel } from '@/routes/documents/components/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { DataService } from '@/services/data/data-service.service';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/atoms/Button/Button';

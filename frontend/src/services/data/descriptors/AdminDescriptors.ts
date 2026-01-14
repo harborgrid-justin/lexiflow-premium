@@ -1,7 +1,7 @@
-import { adminApi, analyticsApi, api, complianceApi } from '@/lib/frontend-api';
+import { adminApi, analyticsApi, api, complianceApi } from "@/lib/frontend-api";
 import { AdminService } from "@/services/domain/admin.service";
 import { DataCatalogService } from "@/services/domain/data-catalog.service";
-import { getDataQualityService } from "../factories/RepositoryFactories";
+import { getDataQualityService } from "../factories/repository-factories.service";
 
 export const AdminDescriptors: PropertyDescriptorMap = {
   admin: { get: () => AdminService, enumerable: true },

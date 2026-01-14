@@ -10,7 +10,7 @@ import { discoveryApi } from "@/api/domains/discovery.api";
 import { OperationError } from "@/services/core/errors";
 import type { DiscoveryRequest } from "@/types";
 import type { DiscoveryTimelineEvent } from "@/types/discovery-enhanced";
-import { discoveryRequestService } from "./DiscoveryRequestService";
+import { discoveryRequestService } from "./discovery-request.service";
 
 /**
  * Timeline Service Class
@@ -26,9 +26,7 @@ export class TimelineService {
    * @example
    * const events = await timelineService.getTimelineEvents('case-123');
    */
-  async getTimelineEvents(
-    caseId?: string
-  ): Promise<DiscoveryTimelineEvent[]> {
+  async getTimelineEvents(caseId?: string): Promise<DiscoveryTimelineEvent[]> {
     try {
       return await discoveryApi.timeline.getEvents(caseId);
     } catch (error) {
@@ -51,8 +49,7 @@ export class TimelineService {
     try {
       const requests = await discoveryRequestService.getRequests();
       const pending = requests.filter(
-        (r: DiscoveryRequest) =>
-          r.status === "Served" || r.status === "Overdue"
+        (r: DiscoveryRequest) => r.status === "Served" || r.status === "Overdue"
       );
 
       // Future integration: await apiClient.post('/calendar/sync', { requests: pending });

@@ -20,13 +20,9 @@
  * - Custom reports
  */
 
-import {
-  ApiError,
-  client,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { type Result, success } from "./types";
 
 export interface DashboardMetrics {
   totalCases: number;
@@ -80,9 +76,7 @@ export async function getCaseAnalytics(
   if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
     return {
       ok: false,
-      error: new ValidationError(
-        "Valid case ID is required"
-      ) as unknown as ApiError,
+      error: new ValidationError("Valid case ID is required"),
     };
   }
 
@@ -133,9 +127,7 @@ export async function getCustomReport(
   if (!reportId || typeof reportId !== "string" || reportId.trim() === "") {
     return {
       ok: false,
-      error: new ValidationError(
-        "Valid report ID is required"
-      ) as unknown as ApiError,
+      error: new ValidationError("Valid report ID is required"),
     };
   }
 

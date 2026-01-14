@@ -13,14 +13,9 @@
  * - Pure and deterministic
  */
 
-import {
-  client,
-  failure,
-  type PaginatedResult,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Exhibit filters

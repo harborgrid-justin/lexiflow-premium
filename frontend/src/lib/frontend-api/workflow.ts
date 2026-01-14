@@ -34,15 +34,9 @@
 
 import type { Task } from "@/types";
 import { normalizeTask, normalizeTasks } from "../normalization/workflow";
-import {
-  client,
-  failure,
-  type PaginatedResult,
-  type Result,
-  success,
-  ValidationError,
-  NotFoundError,
-} from "./index";
+import { client } from "./client";
+import { NotFoundError, ValidationError } from "./errors";
+import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Task query filters
@@ -190,9 +184,7 @@ export async function updateTask(
   }
 
   if (!input || typeof input !== "object" || Object.keys(input).length === 0) {
-    return failure(
-      new ValidationError("At least one field must be updated")
-    );
+    return failure(new ValidationError("At least one field must be updated"));
   }
 
   const result = await client.patch<unknown>(`/tasks/${id}`, input);
@@ -238,9 +230,7 @@ export async function assignTask(
   }
 
   if (!input.assignedTo || typeof input.assignedTo !== "string") {
-    return failure(
-      new ValidationError("Assigned user ID is required")
-    );
+    return failure(new ValidationError("Assigned user ID is required"));
   }
 
   const result = await client.patch<unknown>(`/tasks/${id}/assign`, input);
@@ -252,9 +242,7 @@ export async function assignTask(
 /**
  * Get tasks for a specific case
  */
-export async function getTasksByCase(
-  caseId: string
-): Promise<Result<Task[]>> {
+export async function getTasksByCase(caseId: string): Promise<Result<Task[]>> {
   if (!caseId || typeof caseId !== "string" || caseId.trim() === "") {
     return failure(new ValidationError("Valid case ID is required"));
   }
@@ -312,9 +300,7 @@ export async function getUpcomingTasks(
   days: number = 7
 ): Promise<Result<Task[]>> {
   if (typeof days !== "number" || days <= 0) {
-    return failure(
-      new ValidationError("Days must be a positive number")
-    );
+    return failure(new ValidationError("Days must be a positive number"));
   }
 
   const result = await client.get<unknown>("/tasks/upcoming", {
@@ -335,15 +321,15 @@ export async function bulkUpdateTasks(
   updates: Partial<UpdateTaskInput>
 ): Promise<Result<Task[]>> {
   if (!Array.isArray(ids) || ids.length === 0) {
-    return failure(
-      new ValidationError("At least one task ID is required")
-    );
+    return failure(new ValidationError("At least one task ID is required"));
   }
 
-  if (!updates || typeof updates !== "object" || Object.keys(updates).length === 0) {
-    return failure(
-      new ValidationError("At least one field must be updated")
-    );
+  if (
+    !updates ||
+    typeof updates !== "object" ||
+    Object.keys(updates).length === 0
+  ) {
+    return failure(new ValidationError("At least one field must be updated"));
   }
 
   const result = await client.post<unknown>("/tasks/bulk-update", {

@@ -19,13 +19,9 @@ import {
   normalizeTimeEntries,
   normalizeTimeEntry,
 } from "../normalization/billing";
-import {
-  client,
-  failure,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type Result, success } from "./types";
 
 export interface TimeEntryFilters {
   caseId?: string;

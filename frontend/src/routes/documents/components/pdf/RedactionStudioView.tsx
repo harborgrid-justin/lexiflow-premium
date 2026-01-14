@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { PDFViewer } from '@/routes/discovery/components/PDFViewer/PDFViewer';
 import { DataService } from '@/services/data/data-service.service';
 import { DocumentService } from '@/services/features/documents/documents';
-import { BlobManager } from '@/services/infrastructure/blobManager';
+import { BlobManager } from '@/services/infrastructure/blob-manager.service';
 import { cn } from '@/shared/lib/cn';
 import { ErrorState } from '@/shared/ui/molecules/ErrorState/ErrorState';
 import { useTheme } from '@/theme';
 import { LegalDocument } from '@/types';
 import { queryKeys } from '@/utils/queryKeys';
 import { Eraser, Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PIIPanel } from '../preview/PIIPanel';
 
 export function RedactionStudioView() {

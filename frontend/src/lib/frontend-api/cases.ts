@@ -44,9 +44,10 @@ import {
   normalizeCase,
   normalizeCases,
 } from "../normalization/case";
+import { client } from "./client";
 import { NotFoundError, ValidationError } from "./errors";
-import { client, success, type PaginatedResult, type Result } from "./index";
 import { validate, validators } from "./schemas";
+import { type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Query parameters for case listing

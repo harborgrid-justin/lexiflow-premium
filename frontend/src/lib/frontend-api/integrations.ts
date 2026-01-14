@@ -17,14 +17,9 @@ import {
   normalizeIntegration,
   normalizeIntegrations,
 } from "../normalization/integrations";
-import {
-  client,
-  failure,
-  type PaginatedResult,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type PaginatedResult, type Result, success } from "./types";
 
 /**
  * Integration filters

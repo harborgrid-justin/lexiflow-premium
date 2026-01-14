@@ -18,7 +18,7 @@ export interface DiscoveryOptions {
 class BackendDiscovery {
   private services: Map<string, BackendService> = new Map();
 
-  async discover(options: DiscoveryOptions = {}): Promise<BackendService[]> {
+  async discover(_options: DiscoveryOptions = {}): Promise<BackendService[]> {
     // Simulate service discovery
     const defaultService: BackendService = {
       name: "lexiflow-api",

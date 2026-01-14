@@ -29,14 +29,10 @@
  * ✗ UI navigation
  */
 
-import {
-  client,
-  failure,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
 import { validate, validators } from "./schemas";
+import { failure, type Result, success } from "./types";
 
 /**
  * Login input

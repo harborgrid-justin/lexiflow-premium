@@ -118,8 +118,8 @@ export { SyncEngine, type Mutation } from "./data/syncEngine";
 // import { SecurityDomain } from '@/services/domain/security.service';
 //
 // Safe exports (no dependencies on db.ts, DataService or IntegrationOrchestrator):
-export * from "./domain/AnalyticsDomain";
-export * from "./domain/BackupDomain";
+export * from "./domain/analytics.service";
+export * from "./domain/backup.service";
 export * from "./domain/JurisdictionDomain";
 export * from "./domain/MarketingDomain";
 export * from "./domain/OperationsDomain";
@@ -130,7 +130,6 @@ export * from "./infrastructure/api-client.service";
 // NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
 // Individual API services can be imported directly from '@/lib/frontend-api' when needed
 // export * from '@/lib/frontend-api';
-export { api } from '@/lib/frontend-api'; // Export the consolidated api object
 export {
   enableLegacyIndexedDB,
   forceBackendMode,
@@ -141,6 +140,7 @@ export {
   isProduction,
   logApiConfig,
 } from "@/config/network/api.config";
+export { api } from "@/lib/frontend-api"; // Export the consolidated api object
 
 // ==================== INTEGRATION & ORCHESTRATION ====================
 // DO NOT export integrationOrchestrator or handlers here - they cause circular dependencies
@@ -161,7 +161,7 @@ export * from "./infrastructure/module-registry.service";
 // Import directly: import { NotificationService } from '@/services/infrastructure/notificationService';
 export * from "./infrastructure/query-client.service";
 export * from "./infrastructure/query-keys.service";
-export * from "./infrastructure/schemaGenerator";
+export * from "./infrastructure/schema-utils.service";
 
 // ==================== SEARCH SERVICES ====================
 export { GraphValidationService } from "./search/graph-validation.service"; // Explicit export to avoid ValidationError conflict with bluebook types

@@ -18,13 +18,9 @@ import {
   normalizeDocketEntries,
   normalizeDocketEntry,
 } from "../normalization/docket";
-import {
-  client,
-  failure,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type Result, success } from "./types";
 
 export interface DocketFilters {
   caseId: string;

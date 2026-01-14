@@ -7,13 +7,9 @@ import {
   normalizePrediction,
   normalizePredictions,
 } from "../normalization/intelligence";
-import {
-  client,
-  failure,
-  type Result,
-  success,
-  ValidationError,
-} from "./index";
+import { client } from "./client";
+import { ValidationError } from "./errors";
+import { failure, type Result, success } from "./types";
 
 export async function getPredictions(
   caseId?: string

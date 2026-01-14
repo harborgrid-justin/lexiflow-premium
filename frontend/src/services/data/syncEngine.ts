@@ -19,7 +19,7 @@ class SyncEngine {
   private isSyncing = false;
   private pendingChanges: unknown[] = [];
 
-  async sync(options: SyncOptions = {}): Promise<SyncResult> {
+  async sync(_options: SyncOptions = {}): Promise<SyncResult> {
     if (this.isSyncing) {
       return {
         success: false,

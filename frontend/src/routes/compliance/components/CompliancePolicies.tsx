@@ -1,14 +1,14 @@
-import { useTheme } from '@/theme';
 import { useWindow } from '@/providers';
+import { DocumentPreviewPanel } from '@/routes/documents/components/viewer/DocumentPreviewPanel';
 import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/atoms/Badge/Badge';
 import { Button } from '@/shared/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/shared/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/shared/ui/organisms/Table/Table';
+import { useTheme } from '@/theme';
 import { CaseId, DocumentId } from '@/types';
 import { Calendar, FileText, ShieldAlert } from 'lucide-react';
 import { memo } from 'react';
-import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { PolicyItem, useCompliancePolicies } from './hooks/useCompliancePolicies';
 
 export const CompliancePolicies = memo(() => {
